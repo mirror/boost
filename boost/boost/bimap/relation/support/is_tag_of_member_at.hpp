@@ -140,6 +140,35 @@ struct is_tag_of_member_at_right
 > :
     ::boost::mpl::true_ {};
 
+
+// Metafunction is_tag_of_member_at_info
+// Easiear metaprogramming
+
+template
+<
+    class Tag,
+    class Relation,
+    class Enable = void
+>
+struct is_tag_of_member_at_info :
+    ::boost::mpl::false_ {};
+
+template< class Tag, class Relation >
+struct is_tag_of_member_at_info
+<
+    Tag, Relation,
+    BOOST_DEDUCED_TYPENAME enable_if
+    <
+        is_same
+        <
+            BOOST_DEDUCED_TYPENAME member_with_tag<Tag,Relation>::type,
+            member_at::info
+        >
+
+    >::type
+> :
+    ::boost::mpl::true_ {};
+
 } // namespace support
 } // namespace relation
 } // namespace bimaps

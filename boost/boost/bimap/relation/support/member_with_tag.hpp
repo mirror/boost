@@ -91,6 +91,16 @@ struct member_with_tag
     typedef member_at::right type;
 };
 
+template< class Relation >
+struct member_with_tag
+<
+    BOOST_DEDUCED_TYPENAME member_at::info, Relation, void
+>
+{
+    typedef member_at::info type;
+};
+
+
 template< class Tag, class Relation >
 struct member_with_tag
 <
@@ -136,6 +146,27 @@ struct member_with_tag
     typedef member_at::right type;
 };
 
+template< class Tag, class Relation >
+struct member_with_tag
+<
+    Tag, Relation,
+    BOOST_DEDUCED_TYPENAME enable_if
+    <
+        mpl::and_
+        <
+            mpl::not_< is_same<Tag,member_at::info> >,
+            is_same
+            <
+                Tag,
+                BOOST_DEDUCED_TYPENAME Relation::info_tag
+            >
+        >
+
+    >::type
+>
+{
+    typedef member_at::info type;
+};
 
 } // namespace support
 } // namespace relation

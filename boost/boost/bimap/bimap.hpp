@@ -82,7 +82,7 @@ namespace bimaps {
 /**
 This class manages the instantiation of the desired bimap type.
 As there are several types of bidirectional maps that can be
-created using it, the main job of it is to find the desired
+created using it. the main job of it is to find the desired
 type. This is done using metaprogramming to obtain the relation
 type that will be stored, the map_view type of each side and
 the set_view type of the general relationship. The instantiation
@@ -105,47 +105,22 @@ specification. Additionally this two parameters can be tagged
 to specify others tags instead of the usual \c member_at::{Side}
 ones.
 
-\code bimap<LeftKeyType,RightKeyType> \endcode
-       - \b set_of_relation_type: based on the left key type
-       - \b hook_data:            no additional data
-       - \b allocator:            default allocator
 
-\code bimap<LeftKeyType,RightKeyType> \endcode
-       - \b set_of_relation_type: based on the left key type
-       - \b hook_data:            no additional data
-       - \b allocator:            \c Allocator
+\code
 
-\code bimap<LeftKeyType,RightKeyType,SetOfRelationType> \endcode
-       - \b set_of_relation_type: \c SetOfRelationType
-       - \b hook_data:            no additional data
-       - \b allocator:            default allocator
+    typedef bimap
+    <
+        LeftCollectionType, RightCollectionType
 
-\code bimap<LeftKeyType,RightKeyType,SetOfRelationType,Allocator> \endcode
-       - \b set_of_relation_type: \c SetOfRelationType
-       - \b hook_data:            no additional data
-       - \b allocator:            \c Allocator
+        [ , SetTypeOfRelation  ]  // Default to left_based
+        [ , info_hook< Info >  ]  // Default to no info
+        [ , Allocator          ]  // Default to std::allocator<>
 
-\code bimap<LeftKeyType,RightKeyType,DataToHook> \endcode
-       - \b set_of_relation_type: based on the left key type
-       - \b hook_data:            \c DataToHook
-       - \b allocator:            default allocator
+    > bm;
 
-\code bimap<LeftKeyType,RightKeyType,DataToHook,Allocator> \endcode
-       - \b set_type_of_relation: based on the left key type
-       - \b hook_data:            \c DataToHook
-       - \b allocator:            \c Allocator
+\endcode
 
-\code bimap<LeftKeyType,RightKeyType,SetOfRelationType,DataToHook> \endcode
-       - \b set_of_relation_type: \c SetOfRelationType
-       - \b hook_data:            \c DataToHook
-       - \b allocator:            default allocator
-
-\code bimap<LeftKeyType,RightKeyType,SetOfRelationType,DataToHook,Allocator> \endcode
-       - \b set_of_relation_type: \c SetOfRelationType
-       - \b hook_data:            \c DataToHook
-       - \b allocator:            \c Allocator
-
-                                                                            **/
+                                                                       **/
 
 
 template

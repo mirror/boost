@@ -61,6 +61,26 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     right_value_type
 )
 
+// Add support for info tags to value_type_of
+
+template< class Tag, class SymmetricType >
+struct value_type_of
+<
+    Tag, SymmetricType,
+    BOOST_DEDUCED_TYPENAME enable_if
+    <
+        ::boost::bimaps::relation::support::is_tag_of_member_at_info
+        <
+            Tag,
+            SymmetricType
+        >
+
+    >::type
+>
+{
+    typedef BOOST_DEDUCED_TYPENAME SymmetricType::info_type type;
+};
+
 } // namespace support
 } // namespace relation
 } // namespace bimaps

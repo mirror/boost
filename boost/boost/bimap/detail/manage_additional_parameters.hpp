@@ -32,7 +32,7 @@ namespace boost {
 namespace bimaps {
 
 template< class Type >
-struct info_hook
+struct with_info
 {
     typedef Type value_type;
 };
@@ -42,10 +42,10 @@ namespace detail {
 /// \brief Metafunction to check if a given type is a data_hook specification.
 
 template< class Type >
-struct is_info_hook : ::boost::mpl::false_ {};
+struct is_with_info : ::boost::mpl::false_ {};
 
 template< class ValueType >
-struct is_info_hook< info_hook<ValueType> > : ::boost::mpl::true_ {};
+struct is_with_info< with_info<ValueType> > : ::boost::mpl::true_ {};
 
 /** \struct boost::bimaps::detail::manage_additional_parameters
 \brief Utility class to extract the additional parameters from the template parameters.
@@ -198,7 +198,7 @@ struct manage_additional_parameters
                 case_SNN, // (3)
                 BOOST_DEDUCED_TYPENAME mpl::if_
                 <
-                    is_info_hook<AP1>,
+                    is_with_info<AP1>,
                     case_HNN, // (5)
                     case_ANN  // (2)
 
@@ -210,11 +210,11 @@ struct manage_additional_parameters
                 ::boost::mpl::is_na<AP3>,
                 BOOST_DEDUCED_TYPENAME mpl::if_
                 <
-                    is_info_hook<AP1>,
+                    is_with_info<AP1>,
                     case_HAN, // (7)
                     BOOST_DEDUCED_TYPENAME mpl::if_
                     <
-                        is_info_hook<AP2>,
+                        is_with_info<AP2>,
                         case_SHN, // (6)
                         case_SAN  // (4)
 

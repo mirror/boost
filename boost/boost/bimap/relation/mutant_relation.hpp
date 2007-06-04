@@ -54,11 +54,11 @@ class relation_storage :
 {
     typedef symmetrical_base<LeftType,RightType,force_mutable> base_;
 
-	typedef relation_storage storage_;
+    typedef relation_storage storage_;
 
     public:
 
-	typedef relation_storage<LeftType,RightType,false> non_mutable_storage;
+    typedef relation_storage<LeftType,RightType,false> non_mutable_storage;
 
     typedef ::boost::mpl::vector2
     <
@@ -66,8 +66,6 @@ class relation_storage :
         relation_storage< LeftType, RightType, false >
 
     > mutant_views;
-
-	
 
     //@{
         /// data
@@ -101,8 +99,12 @@ class relation_info_hook : public
     typedef ::boost::bimaps::relation::detail::
                 relation_storage<TA,TB,force_mutable> base_;
 
+    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
+        default_tagged<Info,member_at::info>::type tagged_info_type;
+
     public:
-    typedef Info info_type;
+    typedef BOOST_DEDUCED_TYPENAME tagged_info_type::value_type info_type;
+    typedef BOOST_DEDUCED_TYPENAME tagged_info_type::tag        info_tag;
 
     info_type info;
 
@@ -155,6 +157,7 @@ class relation_info_hook<TA,TB,::boost::mpl::na,force_mutable> :
 
     public:
     typedef ::boost::mpl::na info_type;
+    typedef member_at::info info_tag;
 
     protected:
 
@@ -327,7 +330,7 @@ class mutant_relation : public
 
     template< class Tag >
     const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-        result_of::get<Tag,mutant_relation>::type
+        result_of::get<Tag,const mutant_relation>::type
     get(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag)) const
     {
         return ::boost::bimaps::relation::support::get<Tag>(*this);

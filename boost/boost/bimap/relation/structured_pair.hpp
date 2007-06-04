@@ -163,8 +163,12 @@ class pair_info_hook :
 {
     typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::detail::storage_finder<TA,TB,Layout>::type base_;
 
+    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
+        default_tagged<Info,member_at::info>::type tagged_info_type;
+
     public:
-    typedef Info info_type;
+    typedef BOOST_DEDUCED_TYPENAME tagged_info_type::value_type info_type;
+    typedef BOOST_DEDUCED_TYPENAME tagged_info_type::tag        info_tag;
 
     info_type info;
 
@@ -210,6 +214,7 @@ class pair_info_hook<TA,TB,::boost::mpl::na,Layout> :
 
     public:
     typedef ::boost::mpl::na info_type;
+    typedef member_at::info info_tag;
 
     protected:
 
@@ -331,7 +336,7 @@ class structured_pair :
 
     template< class Tag >
     const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-        result_of::get<Tag,structured_pair>::type
+        result_of::get<Tag,const structured_pair>::type
     get(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag)) const
     {
         return ::boost::bimaps::relation::support::get<Tag>(*this);

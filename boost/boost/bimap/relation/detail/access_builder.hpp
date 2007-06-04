@@ -105,26 +105,26 @@ typename result_of::NAME<Tag,SymmetricType>::type
                                                                               \
                                                                               \
     template< class TP_SYMMETRIC >                                            \
-    BOOST_DEDUCED_TYPENAME result_of::NAME                                                  \
+    BOOST_DEDUCED_TYPENAME result_of::NAME                                    \
     <                                                                         \
         ::boost::bimaps::relation::member_at::left,TP_SYMMETRIC               \
                                                                               \
     >::type                                                                   \
                                                                               \
-    NAME( ::boost::bimaps::relation::member_at::left,                 \
+    NAME( ::boost::bimaps::relation::member_at::left,                         \
                   TP_SYMMETRIC & PARAMETER_NAME )                             \
     {                                                                         \
         LEFT_BODY;                                                            \
     }                                                                         \
                                                                               \
     template< class TP_SYMMETRIC >                                            \
-    BOOST_DEDUCED_TYPENAME result_of::NAME                                                  \
+    BOOST_DEDUCED_TYPENAME result_of::NAME                                    \
     <                                                                         \
         ::boost::bimaps::relation::member_at::right,TP_SYMMETRIC              \
                                                                               \
     >::type                                                                   \
                                                                               \
-    NAME( ::boost::bimaps::relation::member_at::right,                \
+    NAME( ::boost::bimaps::relation::member_at::right,                        \
                   TP_SYMMETRIC & PARAMETER_NAME )                             \
     {                                                                         \
         RIGHT_BODY;                                                           \

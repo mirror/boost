@@ -22,6 +22,9 @@
 
 #include <boost/bimap/relation/detail/access_builder.hpp>
 
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_const.hpp>
 
 #ifdef BOOST_BIMAP_ONLY_DOXYGEN_WILL_PROCESS_THE_FOLLOWING_LINES
 
@@ -99,12 +102,23 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_RESULT_OF_BUILDER
 BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
 (
     get,
-    Relation,
-    rel,
-    return rel.get_left(),
-    return rel.get_right()
+    SymmetricType,
+    st,
+    return st.get_left(),
+    return st.get_right()
 )
 
+namespace detail {
+
+template< class SymmetricType >
+BOOST_DEDUCED_TYPENAME result_of::get<
+    ::boost::bimaps::relation::member_at::info, SymmetricType >::type
+get(::boost::bimaps::relation::member_at::info, SymmetricType & rel)
+{
+    return rel.info;
+}
+
+} // namespace detail
 
 // Interface
 //----------------------------------------------------------------------------
@@ -113,6 +127,7 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_INTERFACE_BUILDER
 (
     get
 )
+
 
 } // namespace support
 } // namespace relation

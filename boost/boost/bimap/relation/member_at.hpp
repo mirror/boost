@@ -55,6 +55,14 @@ namespace member_at {
                                             **/
 
     struct right {};
+
+    /// \brief Member info tag
+    /**
+    See also member_at, left, right.
+                                            **/
+
+    struct info  {};
+
 };
 
 } // namespace relation
