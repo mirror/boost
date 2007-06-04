@@ -79,8 +79,8 @@ void test_bimap()
     {
         typedef bimap
         <
-            multiset_of< tagged<int>, left_tag > >,
-            multiset_of< tagged<double>, right_tag > >,
+            multiset_of< tagged<int, left_tag > >,
+            multiset_of< tagged<double, right_tag > >,
             multiset_of_relation< std::less< _relation > >
 
         > bm_type;

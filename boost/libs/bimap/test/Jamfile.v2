@@ -65,3 +65,16 @@ test-suite "compile_fail_test"
     [ compile-fail compile_fail/test_bimap_info_2.cpp                         ]
     [ compile-fail compile_fail/test_bimap_info_3.cpp                         ]
     ;
+
+test-suite "bimap_and_boost"
+    :
+    [ run     ../example/bimap_and_boost/property_map.cpp                     ]
+    [ run     ../example/bimap_and_boost/range.cpp                            ]
+    [ run     ../example/bimap_and_boost/foreach.cpp                          ]
+    [ run     ../example/bimap_and_boost/lambda.cpp                           ]
+    [ run     ../example/bimap_and_boost/assign.cpp                           ]
+    [ run     ../example/bimap_and_boost/xpressive.cpp                        ]
+    [ run     ../example/bimap_and_boost/typeof.cpp                           ]
+    [ compile ../example/bimap_and_boost/serialization.cpp
+                    /boost/serialization//boost_serialization                 ]
+    ;

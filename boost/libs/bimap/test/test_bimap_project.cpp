@@ -35,8 +35,8 @@ void test_bimap_project()
 {
     typedef bimap
     <
-                 tagged< int         ,  left_tag >,
-        list_of< tagged< lstd::string, right_tag > >
+                 tagged< int        ,  left_tag >,
+        list_of< tagged< std::string, right_tag > >
 
     > bm_type;
 

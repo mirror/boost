@@ -29,7 +29,7 @@ void test_bimap_info_1()
 {
     using namespace boost::bimaps;
 
-    typedef bimap< int, list_of<int>, info_hook<int> > bm_type;
+    typedef bimap< int, list_of<int>, with_info<int> > bm_type;
     bm_type bm;
     bm.insert( bm_type::value_type(1,1) );
 
