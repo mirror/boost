@@ -1399,8 +1399,8 @@ boost::mpi::group `group`] class.
   [[`MPI_SIMILAR`] [operators `==` and `!=`]]
   [[`MPI_UNEQUAL`] [operators `==` and `!=`]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
-  `MPI_Comm_group`]] [[classref
-  boost::mpi::group `group`] constructor]]
+  `MPI_Comm_group`]] [[memberref
+  boost::mpi::communicator::group `communicator::group`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
   `MPI_Group_union`]] [operator `|` for groups]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
@@ -1445,21 +1445,22 @@ boost::mpi::communicator `communicator`] class.
   `MPI_Comm_free`]] [used automatically in Boost.MPI]]
 ]
 
-Boost.MPI currently provides no support for inter-communicators.
+Boost.MPI currently provides support for inter-communicators via the
+[classref boost::mpi::intercommunicator `intercommunicator`] class.
 
 [table Inter-communicator operations
   [[C Function] [Boost.MPI Equivalent]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node112.html#Node112
-  `MPI_Comm_test_inter`]] [use [memberref boost::mpi::communicator::as_intercommunicator communicator::as_intercommunicator]]]
+  `MPI_Comm_test_inter`]] [use [memberref boost::mpi::communicator::as_intercommunicator `communicator::as_intercommunicator`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node112.html#Node112
-  `MPI_Comm_remote_size`]] [[memberref boost::mpi::intercommunicator::remote_size] intercommunicator::remote_size]]
+  `MPI_Comm_remote_size`]] [[memberref boost::mpi::intercommunicator::remote_size] `intercommunicator::remote_size`]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node112.html#Node112
-  `MPI_Comm_remote_group`]] [[memberref boost::mpi::intercommunicator::remote_group intercommunicator::remote_group]]]
+  `MPI_Comm_remote_group`]] [[memberref boost::mpi::intercommunicator::remote_group `intercommunicator::remote_group`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node113.html#Node113
-  `MPI_Intercomm_create`]] [[classref boost::mpi::intercommunicator intercommunicator] constructor]]
+  `MPI_Intercomm_create`]] [[classref boost::mpi::intercommunicator `intercommunicator`] constructor]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node113.html#Node113
-  `MPI_Intercomm_merge`]] [[memberref boost::mpi::intercommunicator::merge intercommunicator::merge]]]
+  `MPI_Intercomm_merge`]] [[memberref boost::mpi::intercommunicator::merge `intercommunicator::merge`]]]
 ]
 
 Boost.MPI currently provides no support for attribute caching.

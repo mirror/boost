@@ -26,7 +26,27 @@ namespace boost { namespace mpi {
  * the description of the @c intercommunicator class.
  */ 
 class group;
-   
+
+/**
+ * @brief Communication facilities among processes in different
+ * groups.
+ *
+ * The @c intercommunicator class provides communication facilities
+ * among processes from different groups. An intercommunicator is
+ * always associated with two process groups: one "local" process
+ * group, containing the process that initiates an MPI operation
+ * (e.g., the sender in a @c send operation), and one "remote" process
+ * group, containing the process that is the target of the MPI
+ * operation.
+ *
+ * While intercommunicators have essentially the same point-to-point
+ * operations as intracommunicators (the latter communicate only
+ * within a single process group), all communication with
+ * intercommunicators occurs between the processes in the local group
+ * and the processes in the remote group; communication within a group
+ * must use a different (intra-)communicator.
+ * 
+ */   
 class intercommunicator : public communicator
 {
 private:
