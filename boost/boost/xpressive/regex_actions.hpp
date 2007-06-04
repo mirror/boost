@@ -619,12 +619,12 @@ namespace boost { namespace xpressive
     template<typename T, typename A0>
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_arg<A0>::type
-    >::type const construct(A0 &a0)
+      , typename proto::result_of::as_arg<A0 const>::type
+    >::type const construct(A0 const &a0)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_arg<A0>::type
+          , typename proto::result_of::as_arg<A0 const>::type
         >::type that = {{{}}, proto::as_arg(a0)};
         return that;
     }
@@ -634,14 +634,14 @@ namespace boost { namespace xpressive
     template<typename T, typename A0, typename A1>
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_arg<A0>::type
-      , typename proto::result_of::as_arg<A1>::type
-    >::type const construct(A0 &a0, A1 &a1)
+      , typename proto::result_of::as_arg<A0 const>::type
+      , typename proto::result_of::as_arg<A1 const>::type
+    >::type const construct(A0 const &a0, A1 const &a1)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_arg<A0>::type
-          , typename proto::result_of::as_arg<A1>::type
+          , typename proto::result_of::as_arg<A0 const>::type
+          , typename proto::result_of::as_arg<A1 const>::type
         >::type that = {{{}}, proto::as_arg(a0), proto::as_arg(a1)};
         return that;
     }
@@ -651,16 +651,16 @@ namespace boost { namespace xpressive
     template<typename T, typename A0, typename A1, typename A2>
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_arg<A0>::type
-      , typename proto::result_of::as_arg<A1>::type
-      , typename proto::result_of::as_arg<A2>::type
-    >::type const construct(A0 &a0, A1 &a1, A2 &a2)
+      , typename proto::result_of::as_arg<A0 const>::type
+      , typename proto::result_of::as_arg<A1 const>::type
+      , typename proto::result_of::as_arg<A2 const>::type
+    >::type const construct(A0 const &a0, A1 const &a1, A2 const &a2)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_arg<A0>::type
-          , typename proto::result_of::as_arg<A1>::type
-          , typename proto::result_of::as_arg<A2>::type
+          , typename proto::result_of::as_arg<A0 const>::type
+          , typename proto::result_of::as_arg<A1 const>::type
+          , typename proto::result_of::as_arg<A2 const>::type
         >::type that = {{{}}, proto::as_arg(a0), proto::as_arg(a1), proto::as_arg(a2)};
         return that;
     }
