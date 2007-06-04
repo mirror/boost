@@ -1451,15 +1451,15 @@ Boost.MPI currently provides no support for inter-communicators.
   [[C Function] [Boost.MPI Equivalent]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node112.html#Node112
-  `MPI_Comm_test_inter`]] [unsupported]]
+  `MPI_Comm_test_inter`]] [use [memberref boost::mpi::communicator::as_intercommunicator communicator::as_intercommunicator]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node112.html#Node112
-  `MPI_Comm_remote_size`]] [unsupported]]
+  `MPI_Comm_remote_size`]] [[memberref boost::mpi::intercommunicator::remote_size] intercommunicator::remote_size]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node112.html#Node112
-  `MPI_Comm_remote_group`]] [unsupported]]
+  `MPI_Comm_remote_group`]] [[memberref boost::mpi::intercommunicator::remote_group intercommunicator::remote_group]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node113.html#Node113
-  `MPI_Intercomm_create`]] [unsupported]]
+  `MPI_Intercomm_create`]] [[classref boost::mpi::intercommunicator intercommunicator] constructor]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node113.html#Node113
-  `MPI_Intercomm_merge`]] [unsupported]]
+  `MPI_Intercomm_merge`]] [[memberref boost::mpi::intercommunicator::merge intercommunicator::merge]]]
 ]
 
 Boost.MPI currently provides no support for attribute caching.

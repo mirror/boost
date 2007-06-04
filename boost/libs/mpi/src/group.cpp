@@ -19,15 +19,6 @@ group::group(const MPI_Group& in_group, bool adopt)
   }
 }
 
-group::group(const communicator& comm)
-{
-  MPI_Group gr;
-  BOOST_MPI_CHECK_RESULT(MPI_Comm_group, ((MPI_Comm)comm, &gr));
-
-  if (gr != MPI_GROUP_EMPTY)
-    group_ptr.reset(new MPI_Group(gr), group_free());
-}
-
 optional<int> group::rank() const
 {
   if (!group_ptr)

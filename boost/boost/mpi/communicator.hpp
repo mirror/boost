@@ -89,10 +89,18 @@ enum comm_create_kind { comm_duplicate, comm_take_ownership, comm_attach };
 /**
  * INTERNAL ONLY
  * 
- * Forward-declaration of @c group needed for the @c group
- * constructor.
+ * Forward declaration of @c group needed for the @c group
+ * constructor and accessor.
  */
 class group;
+
+/**
+ * INTERNAL ONLY
+ *
+ * Forward declaration of @c intercommunicator needed for the "cast"
+ * from a communicator to an intercommunicator.
+ */
+class intercommunicator;
 
 /**
  * @brief A communicator that permits communication and
@@ -126,9 +134,13 @@ class communicator
    * ignored. Otherwise, the @p kind parameters determines how the
    * Boost.MPI communicator will be related to @p comm:
    *
-   *   - If @p kind is @c comm_duplicate, duplicate @c comm to create a
-   *   new communicator. This new communicator will be freed when the
-   *   Boost.MPI communicator (and all copies of it) is destroyed.
+   *   - If @p kind is @c comm_duplicate, duplicate @c comm to create
+   *   a new communicator. This new communicator will be freed when
+   *   the Boost.MPI communicator (and all copies of it) is destroyed.
+   *   This option is only permitted if @p comm is a valid MPI
+   *   intracommunicator or if the underlying MPI implementation
+   *   supports MPI 2.0 (which supports duplication of
+   *   intercommunicators).
    *
    *   - If @p kind is @c comm_take_ownership, take ownership of @c
    *   comm. It will be freed automatically when all of the Boost.MPI
@@ -156,7 +168,7 @@ class communicator
    * @param subgroup A subgroup of the MPI communicator, @p comm, for
    * which we will construct a new communicator.
    */
-  communicator(const communicator& comm, const group& subgroup);
+  communicator(const communicator& comm, const boost::mpi::group& subgroup);
 
   /**
    * @brief Determine the rank of the executing process in a
@@ -177,6 +189,13 @@ class communicator
    *   @returns The number of processes in the communicator.
    */
   int size() const;
+
+  /**
+   * This routine constructs a new group whose members are the
+   * processes within this communicator. Equivalent to
+   * calling @c MPI_Comm_group.
+   */
+  boost::mpi::group group() const;
 
   // ----------------------------------------------------------------
   // Point-to-point communication
@@ -767,6 +786,16 @@ class communicator
   communicator split(int color, int key) const;
 
   /**
+   * Determine if the communicator is in fact an intercommunicator
+   * and, if so, return that intercommunicator.
+   *
+   * @returns an @c optional containing the intercommunicator, if this
+   * communicator is in fact an intercommunicator. Otherwise, returns
+   * an empty @c optional.
+   */
+  optional<intercommunicator> as_intercommunicator() const;
+
+  /**
    * Determines whether this communicator has a Cartesian topology.
    */
   bool has_cartesian_topology() const;
@@ -876,7 +905,7 @@ class communicator
     }
   };
 
- private:
+  
   /**
    * INTERNAL ONLY
    *

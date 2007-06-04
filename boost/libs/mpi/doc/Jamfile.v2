@@ -21,6 +21,7 @@ doxygen mpi_autodoc
     ../../../boost/mpi/exception.hpp
     ../../../boost/mpi/graph_topology.hpp
     ../../../boost/mpi/group.hpp
+    ../../../boost/mpi/intercommunicator.hpp
     ../../../boost/mpi/nonblocking.hpp
     ../../../boost/mpi/operations.hpp
     ../../../boost/mpi/packed_iarchive.hpp

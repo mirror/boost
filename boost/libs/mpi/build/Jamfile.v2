@@ -28,6 +28,7 @@ lib boost_mpi
     exception.cpp
     graph_topology.cpp
     group.cpp
+    intercommunicator.cpp
     mpi_datatype_cache.cpp
     mpi_datatype_oarchive.cpp
     packed_iarchive.cpp

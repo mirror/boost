@@ -23,14 +23,6 @@
 namespace boost { namespace mpi {
 
 /**
- * INTERNAL ONLY
- * 
- * Forward-declaration of @c communicator needed for the @c
- * communicator constructor.
- */
-class communicator;
-
-/**
  * @brief A @c group is a representation of a subset of the processes
  * within a @c communicator.
  *
@@ -67,18 +59,6 @@ public:
    * MPI_Group_free.
    */
   group(const MPI_Group& in_group, bool adopt);
-
-  /**
-   *
-   * @brief Constructs a group from a communicator.
-   *
-   * This routine constructs a new group whose members are the
-   * processes within the given communicator, @p comm. Equivalent to
-   * calling @c MPI_Comm_group.
-   *
-   * @param comm The communicator whose group we are constructing.
-   */
-  group(const communicator& comm);
 
   /**
    * @brief Determine the rank of the calling process in the group.
@@ -197,7 +177,7 @@ protected:
   /**
    * INTERNAL ONLY
    *
-   * Function object that frees an MPI communicator and deletes the
+   * Function object that frees an MPI group and deletes the
    * memory associated with it. Intended to be used as a deleter with
    * shared_ptr.
    */

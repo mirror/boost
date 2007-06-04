@@ -5,6 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/group.hpp>
+#include <boost/mpi/intercommunicator.hpp>
 #include <boost/mpi/skeleton_and_content.hpp>
 #include <boost/mpi/detail/point_to_point.hpp>
 
@@ -55,7 +56,8 @@ communicator::communicator(const MPI_Comm& comm, comm_create_kind kind)
   }
 }
 
-communicator::communicator(const communicator& comm, const group& subgroup)
+communicator::communicator(const communicator& comm, 
+                           const boost::mpi::group& subgroup)
 {
   MPI_Comm newcomm;
   BOOST_MPI_CHECK_RESULT(MPI_Comm_create, 
@@ -75,6 +77,13 @@ int communicator::rank() const
   int rank_;
   BOOST_MPI_CHECK_RESULT(MPI_Comm_rank, (MPI_Comm(*this), &rank_));
   return rank_;
+}
+
+boost::mpi::group communicator::group() const
+{
+  MPI_Group gr;
+  BOOST_MPI_CHECK_RESULT(MPI_Comm_group, ((MPI_Comm)*this, &gr));
+  return boost::mpi::group(gr, /*adopt=*/true);
 }
 
 void communicator::send(int dest, int tag) const
@@ -139,6 +148,16 @@ communicator communicator::split(int color, int key) const
   BOOST_MPI_CHECK_RESULT(MPI_Comm_split,
                          (MPI_Comm(*this), color, key, &newcomm));
   return communicator(newcomm, comm_take_ownership);
+}
+
+optional<intercommunicator> communicator::as_intercommunicator() const
+{
+  int flag;
+  BOOST_MPI_CHECK_RESULT(MPI_Comm_test_inter, ((MPI_Comm)*this, &flag));
+  if (flag)
+    return intercommunicator(comm_ptr);
+  else
+    return optional<intercommunicator>();
 }
 
 bool communicator::has_cartesian_topology() const
