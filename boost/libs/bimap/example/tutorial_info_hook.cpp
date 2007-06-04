@@ -36,9 +36,9 @@ void tutorial_about_info_hook()
     typedef bimap<
 
         multiset_of< std::string >, // author
-             set_of< std::string >, // book name
+             set_of< std::string >, // title
 
-          info_hook< std::string >  // abstract
+          with_info< std::string >  // abstract
 
     > bm_type;
     typedef bm_type::value_type book;
@@ -54,7 +54,7 @@ void tutorial_about_info_hook()
     );
 
 
-    // Print the abstract of the bible
+    // Print the author of the bible
     std::cout << bm.right.at("The C++ Programming Language");
 
     // Print the abstract of this book
@@ -81,6 +81,51 @@ void tutorial_about_info_hook()
     //]
 }
 
+struct author {};
+struct title {};
+struct abstract {};
+
+void tutorial_about_tagged_info_hook()
+{
+    //[ code_tutorial_info_hook_tagged_info
+
+    typedef bimap<
+
+        multiset_of< tagged< std::string, author   > >,
+             set_of< tagged< std::string, title    > >,
+
+          with_info< tagged< std::string, abstract > >
+
+    > bm_type;
+    typedef bm_type::value_type book;
+
+    bm_type bm;
+
+    bm.insert(
+
+        book( "Bjarne Stroustrup"   , "The C++ Programming Language",
+
+              "For C++ old-timers, the first edition of this book is"
+              "the one that started it all—the font of our knowledge." )
+    );
+
+    // Print the author of the bible
+    std::cout << bm.by<title>().at("The C++ Programming Language");
+
+    // Print the abstract of this book
+    bm_type::map_by<author>::iterator i = bm.by<author>().find("Bjarne Stroustrup");
+    std::cout << i->get<abstract>();
+
+    // Contrary to the two key types, the information will be mutable
+    // using iterators.
+
+    i->get<abstract>() += "More details about this book";
+
+    // Print the new abstract
+    std::cout << bm.by<title>().info_at("The C++ Programming Language");
+    //]
+}
+
 
 void bimap_without_an_info_hook()
 {
@@ -89,7 +134,7 @@ void bimap_without_an_info_hook()
     typedef bimap<
 
         multiset_of< std::string >, // author
-             set_of< std::string >  // book name
+             set_of< std::string >  // title
 
     > bm_type;
     typedef bm_type::value_type book;
@@ -109,6 +154,7 @@ void bimap_without_an_info_hook()
 int main()
 {
     tutorial_about_info_hook();
+    tutorial_about_tagged_info_hook();
     bimap_without_an_info_hook();
 
     return 0;

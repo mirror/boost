@@ -34,6 +34,8 @@ test-suite "bimap_and_boost"
     [ run     bimap_and_boost/foreach.cpp                             ]
     [ run     bimap_and_boost/lambda.cpp                              ]
     [ run     bimap_and_boost/assign.cpp                              ]
+    [ run     bimap_and_boost/xpressive.cpp                           ]
+    [ run     bimap_and_boost/typeof.cpp                              ]
     [ run     bimap_and_boost/serialization.cpp
                     /boost/serialization//boost_serialization         ]
     ;

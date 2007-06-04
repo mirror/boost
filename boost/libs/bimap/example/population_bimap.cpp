@@ -27,10 +27,56 @@
 #include <boost/bimap/unordered_set_of.hpp>
 #include <boost/bimap/multiset_of.hpp>
 
+#include <boost/optional.hpp>
+#include <boost/none.hpp>
+#include <boost/foreach.hpp>
+#include <boost/assign/list_inserter.hpp>
+
 using namespace boost::bimaps;
+using namespace boost;
+using namespace std;
 
 int main()
 {
+    {
+
+    typedef bimap<
+
+        string,
+        multiset_of< optional<string> >
+
+    > bm_type;
+
+    bm_type bm;
+
+    assign::insert( bm )
+
+        ( "John" , string("lazarus" ) )
+        ( "Peter", string("vinicius") )
+        ( "Simon", string("vinicius") )
+        ( "Brian", none               )
+    ;
+
+    cout << "John is working in "
+         << bm.left.at( "John" ).get_value_or( "no project" )
+         << endl;
+
+    cout << "Project vinicius is being developed by " << endl;
+    BOOST_FOREACH( bm_type::right_reference rp,
+                   bm.right.equal_range( std::string("vinicius") ) )
+    {
+        cout << rp.second << endl;
+    }
+
+    cout << "This workers need a project " << endl;
+    BOOST_FOREACH( bm_type::right_reference rp,
+                   bm.right.equal_range(none) )
+    {
+        cout << rp.second << endl;
+    }
+
+}
+
     //[ code_population_bimap
 
     typedef bimap<
