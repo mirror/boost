@@ -100,6 +100,14 @@ used in bimap documentation. Here is a list of them:
     foreach.cpp                                                           ]]
     [Bimap and Boost.Foreach: Iterating over bimaps                       ]]
 
+[[[@../../example/bimap_and_boost/typeof.cpp
+    typeof.cpp                                                            ]]
+    [Bimap and Boost.Typeof: using BOOST_AUTO while we wait for C++0x     ]]
+
+[[[@../../example/bimap_and_boost/xpressive.cpp
+    xpressive.cpp                                                         ]]
+    [Bimap and Boost.Xpressive: Inserting elements in a bimap             ]]
+
 [[[@../../example/bimap_and_boost/serialization.cpp
     serialization.cpp:                                                    ]]
     [Bimap and Boost.Serialization: Load and save bimaps and iterators    ]]

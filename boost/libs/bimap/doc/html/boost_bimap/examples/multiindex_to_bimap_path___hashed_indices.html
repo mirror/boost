@@ -13,7 +13,9 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
+<td valign="top">
+<img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"><img alt="Chapter Logo" src="../../images/bimap/boost.bimap.header.png">
+</td>
 <td align="center"><a href="../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../libraries.html">Libraries</a></td>
 <td align="center"><a href="../../../../people/people.htm">People</a></td>
@@ -40,7 +42,7 @@
         hashed index.
       </p></div>
 <a name="boost_bimap.examples.multiindex_to_bimap_path___hashed_indices.boost_multiindex"></a><h5>
-<a name="id2719232"></a>
+<a name="id2724811"></a>
         <a href="multiindex_to_bimap_path___hashed_indices.html#boost_bimap.examples.multiindex_to_bimap_path___hashed_indices.boost_multiindex">Boost.MultiIndex</a>
       </h5>
 <p>
@@ -148,7 +150,7 @@
 <p>
       </p>
 <a name="boost_bimap.examples.multiindex_to_bimap_path___hashed_indices.boost_bimap"></a><h5>
-<a name="id2720984"></a>
+<a name="id2726562"></a>
         <a href="multiindex_to_bimap_path___hashed_indices.html#boost_bimap.examples.multiindex_to_bimap_path___hashed_indices.boost_bimap">Boost.Bimap</a>
       </h5>
 <p>
@@ -177,14 +179,9 @@
 
 <span class="keyword">typedef</span> <span class="identifier">bimap</span>
 <span class="special">&lt;</span>
-    <span class="identifier">tagged</span><span class="special">&lt;</span>
-        <span class="identifier">multiset_of</span><span class="special">&lt;</span> <span class="keyword">unsigned</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">greater</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;,</span> 
-        <span class="identifier">occurrences</span>
-    <span class="special">&gt;,</span>
-    <span class="identifier">tagged</span><span class="special">&lt;</span>
-        <span class="identifier">unordered_set_of</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;,</span>
-        <span class="identifier">word</span>
-    <span class="special">&gt;</span>
+    
+     <span class="identifier">multiset_of</span><span class="special">&lt;</span> <span class="identifier">tagged</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="keyword">int</span><span class="special">,</span><span class="identifier">occurrences</span><span class="special">&gt;,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">greater</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;,</span> 
+<span class="identifier">unordered_set_of</span><span class="special">&lt;</span> <span class="identifier">tagged</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span>       <span class="identifier">word</span><span class="special">&gt;</span>                             <span class="special">&gt;</span>
 
 <span class="special">&gt;</span> <span class="identifier">word_counter</span><span class="special">;</span>
 

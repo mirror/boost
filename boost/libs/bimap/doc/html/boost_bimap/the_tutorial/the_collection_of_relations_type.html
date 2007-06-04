@@ -14,7 +14,9 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
+<td valign="top">
+<img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"><img alt="Chapter Logo" src="../../images/bimap/boost.bimap.header.png">
+</td>
 <td align="center"><a href="../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../libraries.html">Libraries</a></td>
 <td align="center"><a href="../../../../people/people.htm">People</a></td>
@@ -149,8 +151,8 @@
 
     <span class="keyword">typedef</span> <span class="identifier">bimap</span>
     <span class="special">&lt;</span>
-        <span class="identifier">tagged</span><span class="special">&lt;</span> <span class="identifier">unordered_set_of</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;,</span> <span class="identifier">spanish</span> <span class="special">&gt;,</span>
-        <span class="identifier">tagged</span><span class="special">&lt;</span> <span class="identifier">unordered_set_of</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;,</span> <span class="identifier">english</span> <span class="special">&gt;,</span>
+        <span class="identifier">unordered_set_of</span><span class="special">&lt;</span> <span class="identifier">tagged</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="identifier">spanish</span> <span class="special">&gt;</span> <span class="special">&gt;,</span>
+        <span class="identifier">unordered_set_of</span><span class="special">&lt;</span> <span class="identifier">tagged</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="identifier">english</span> <span class="special">&gt;</span> <span class="special">&gt;,</span>
         <span class="identifier">list_of_relation</span>
 
     <span class="special">&gt;</span> <span class="identifier">translator</span><span class="special">;</span>

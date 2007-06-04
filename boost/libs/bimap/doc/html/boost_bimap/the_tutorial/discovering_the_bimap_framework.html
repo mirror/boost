@@ -13,7 +13,9 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
+<td valign="top">
+<img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"><img alt="Chapter Logo" src="../../images/bimap/boost.bimap.header.png">
+</td>
 <td align="center"><a href="../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../libraries.html">Libraries</a></td>
 <td align="center"><a href="../../../../people/people.htm">People</a></td>
@@ -78,7 +80,7 @@
           containers.
         </p>
 <div class="table">
-<a name="id2619641"></a><p class="title"><b>Table 1.1. std associative containers</b></p>
+<a name="id2622003"></a><p class="title"><b>Table 1.1. std associative containers</b></p>
 <div class="table-contents"><table class="table" summary="std associative containers">
 <colgroup>
 <col>
@@ -198,9 +200,55 @@
           work directly with the whole relation.
         </p>
 <p>
+          The next diagram shows the layout of the relation and pairs of a bimap.
+          It is the one from the <span class="emphasis"><em>one minute tutorial</em></span>
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../images/bimap/relation.and.pair.png" alt="relation.and.pair"></span>
+        </p>
+<p>
+          Bimap pairs are signature-compatible with standard pairs but are different
+          from them. As you will see in other sections they can be tagged with user
+          defined names and additional information can be attached to them. You can
+          convert from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pairs</span></code> to bimap pairs directly but the
+          reverse conversion is not provided. This mean that you can insert elements
+          in a bimap using algorithms like <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span></code>
+          from containers <code class="computeroutput"><span class="identifier">like</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span></code>,
+          or use <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">make_pair</span></code> to add new elements. However
+          it is best to use <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_value_type</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">s</span><span class="special">)</span> <span class="special">)</span></code> instead
+          of <code class="computeroutput"><span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">make_pair</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">s</span><span class="special">)</span> <span class="special">)</span></code> to avoid
+          an extra call to the copy constructor of each type.
+        </p>
+<p>
           The following code snippet shows the relation between a bimap and standard
           maps.
         </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+            </p>
+<p>
+              You have to used references to views, and not directly views object.
+              Views cannot be constructed as separate objects from the container
+              they belong to, so the following: 
+</p>
+<pre class="programlisting">
+<span class="comment">// Wrong: we forgot the &amp; after bm_type::left_type
+</span><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_map</span> <span class="identifier">lm</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">;</span>
+</pre>
+<p>
+              does not compile, since it is trying to construct the view object
+              <code class="computeroutput"><span class="identifier">lm</span></code>. This is a common
+              source of errors in user code.
+            </p>
+<p>
+          </p>
+</td></tr>
+</table></div>
 <p>
           <a href="../../../../example/standard_map_comparison.cpp" target="_top">Go to source code</a>
         </p>

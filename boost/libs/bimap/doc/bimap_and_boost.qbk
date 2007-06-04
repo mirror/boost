@@ -83,7 +83,7 @@ fits nicely here.
 ]
 
 You can also read 
-[link boost_bimap.the_tutorial.hooking_information Hooking Information] for more
+[link boost_bimap.the_tutorial.additional_information Additional Information] for more
 information about the relation of this two libraries.
 
 [endsect]
@@ -125,6 +125,16 @@ iterator concepts]
 BOOST_FOREACH macro for easily iterating over the elements of a sequence]
 [Eric Niebler]
 [Iteration]]
+
+[[ __BOOST_TYPEOF__ ][
+Typeof operator emulation]
+[Arkadiy Vertleyb, Peder Holt]
+[Using BOOST_AUTO while we wait for C++0x]]
+
+[[ __BOOST_XPRESSIVE__ ][
+Regular expressions that can be written as strings or as expression templates]
+[Eric Niebler]
+[Help to fill a bimap from a string]]
 
 [[ __BOOST_PROPERTY_MAP__ ][
 Concepts defining interfaces which map key objects to value objects]
@@ -292,6 +302,51 @@ You can use it directly with ranges too:
 [code_bimap_and_boost_foreach_using_range]
 
 [@../../example/bimap_and_boost/foreach.cpp Go to source code]
+
+[endsect]
+
+[section Boost.Typeof]
+
+[import ../example/bimap_and_boost/typeof.cpp]
+
+Once C++0x is out we are going to be able to write code like:
+
+    auto iter = bm.by<name>().find("john");
+
+instead of the more verbose
+
+    bm_type::map_by<name>::iterator iter = bm.by<name>().find("john");
+
+Boost.Typeof defines a macro BOOST_AUTO that can be used as a library
+solution to the auto keyword while we wait for the next standard.
+
+If we have
+
+[code_bimap_and_boost_typeof_first]
+
+The following code snippet
+
+[code_bimap_and_boost_typeof_not_using_auto]
+
+can be rewrited as
+
+[code_bimap_and_boost_typeof_using_auto]
+
+[@../../example/bimap_and_boost/typeof.cpp Go to source code]
+
+[endsect]
+
+[section Boost.Xpressive]
+
+[import ../example/bimap_and_boost/xpressive.cpp]
+
+Using Boost.Xpressive we can parse a file and insert the relations in a bimap
+in the same step. It is just amazing the power of four lines of code.
+Here is an example (it is just beatifull)
+
+[code_bimap_and_boost_xpressive]
+
+[@../../example/bimap_and_boost/xpressive.cpp Go to source code]
 
 [endsect]
 

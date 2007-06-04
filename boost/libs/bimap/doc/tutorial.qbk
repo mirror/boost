@@ -50,8 +50,8 @@ how to use this feature.
 mapping containers as a particular case. The section
 [link boost_bimap.the_tutorial.unconstrained_sets Unconstrained Sets] explains how they work.
 
-# The section [link boost_bimap.the_tutorial.hooking_information Hooking Information]
-explains how to hook additional information to each relation of a bimap.
+# The section [link boost_bimap.the_tutorial.additional_information Additional information]
+explains how to attach information to each relation of a bimap.
 
 # The final section
 ([link boost_bimap.the_tutorial.complete_instantiation_scheme Complete Instantiation Scheme])
@@ -112,8 +112,34 @@ allows the user to view the relationship from three viewpoints.
 You can view it from one side, obtaining a `std::map` compatible
 container, or you can work directly with the whole relation.
 
+The next diagram shows the layout of the relation and pairs of a bimap. It is
+the one from the ['one minute tutorial]
+
+__RELATION_AND_PAIR__
+
+Bimap pairs are signature-compatible with standard pairs but are different
+from them. As you will see in other sections they can be tagged with user
+defined names and additional information can be attached to them. You can
+convert from `std::pairs` to bimap pairs directly but the reverse conversion
+is not provided. This mean that you can insert elements in a bimap using
+algorithms like `std::copy` from containers `like std::map`, or use `std::make_pair`
+to add new elements. However it is best to use `bm.left.insert( bm_type::left_value_type(f,s) )` instead of `bm.insert( std::make_pair(f,s) )` to avoid an extra call to the
+copy constructor of each type.
+
 The following code snippet shows the relation between a bimap and standard
 maps.
+
+[note
+You have to used references to views, and not directly views object. 
+Views cannot be constructed as separate objects from the container they 
+belong to, so the following:
+``
+// Wrong: we forgot the & after bm_type::left_type
+bm_type::left_map lm = bm.left;
+``
+does not compile, since it is trying to construct the view object `lm`. 
+This is a common source of errors in user code.
+]
 
 [@../../example/standard_map_comparison.cpp Go to source code]
 
@@ -752,8 +778,8 @@ A tagged type is a type that has been labelled using a tag. A tag is any
 valid C++ type. In a bimap, the types are always tagged. If you do not
 specify your own tag, the container uses `member_at::left` and
 `member_at::right` to tag the left and right sides respectively. In order
-to specify a custom tag, the collection type specification of each side has to
-be tagged. Tagging a type is very simple:
+to specify a custom tag, the type of each side has to be tagged. 
+Tagging a type is very simple:
 
     typedef tagged< int, a_tag > tagged_int;
 
@@ -770,7 +796,11 @@ the untagged version structures.
 
     struct Left  {};
     struct Right {};
-    typedef bimap< tagged< int, Left >, tagged< int, Right > bm_type;
+    typedef bimap< 
+             multiset_of< tagged< int, Left  > >,
+        unordered_set_of< tagged< int, Right > >
+    > bm_type;
+
     bm_type bm;
 
     //...
@@ -840,7 +870,7 @@ But using a bimap has some benefits
 
 [endsect]
 
-[section Hooking Information]
+[section Additional information]
 
 [import ../example/tutorial_info_hook.cpp]
 
@@ -873,12 +903,14 @@ want to index later (like the abstracts). Option 1 is not possible, option 2
 neither.
 
 Boost.Bimap provides support for this kind of situations by means of
-information hooking.
-You can pass an extra parameter to a bimap with the type `info_hook< InfoType >`
-and an `info` member of type `InfoType` will appear in the relation and bimap 
+an embedded information member.
+You can pass an extra parameter to a bimap: `with_info< InfoType >`
+and an `info` member of type `InfoType` will appear in the relation and bimap
 pairs.
 
-Relations and bimap pairs constructors can take an extra argument.
+__RELATION_AND_PAIR_WITH_INFO__
+
+Relations and bimap pairs constructors will take an extra argument.
 If only two arguments are used, the information will be initialized with
 their default constructor.
 
@@ -894,6 +926,11 @@ the data.
 
 [code_tutorial_info_hook_info_at]
 
+The info member can be tagged just as the left or the right member. The following
+is a rewrite of the above example using user defined names:
+
+[code_tutorial_info_hook_tagged_info]
+
 [@../../example/tutorial_info_hook.cpp Go to source code]
 
 [endsect]
@@ -907,15 +944,15 @@ To summarize, this is the complete instantiation scheme.
         LeftCollectionType, RightCollectionType
 
         [ , SetTypeOfRelation  ]  // Default to left_based
-        [ , info_hook< Info >  ]  // Default to no info
+        [ , with_info< Info >  ]  // Default to no info
         [ , Allocator          ]  // Default to std::allocator<>
 
     > bm;
 
 `{Side}CollectionType` can directly be a type. This defaults to
 `set_of<Type>`, or can be a `{CollectionType}_of<Type>` specification.
-Additionally, these two parameters can be tagged to specify other tags
-instead of the usual `member_at::-Side-` tags. 
+Additionally, the type of this two parameters can be tagged to specify 
+user defined names instead of the usual `member_at::-Side-` tags. 
 
 The possibles way to use the first parameter are:
 
@@ -937,7 +974,7 @@ The possibles way to use the first parameter are:
 * Left collection type:     `set_of< LeftType >`
 * Left tag:                 `Tag`
 
-    bimap< tagged< `['CollectionType]`_of< Type >, Tag >, R >
+    bimap< `['CollectionType]`_of< tagged< Type, Tag > >, R >
 
 * Left type:                `Type`
 * Left collection type:     ['CollectionType]`_of< LeftType >`
@@ -946,7 +983,8 @@ The possibles way to use the first parameter are:
 The same options are available for the second parameter.
 
 The last three parameters are used to specify the collection type of the relation,
-the information hook and the allocator type.
+the information member and the allocator type.
+
 If you want to specify a custom allocator type while relying on the default
 value of CollectionTypeOfRelation, you can do so by simply writing
 `bimap<LeftKeyType, RightKeyType, Allocator>`. Boost.Bimap's internal
@@ -971,14 +1009,14 @@ of a bimap. You can ignore some of the parameter but the order must be respected
 * allocator:            std::allocator
 
 
-    bimap< L, R , SetOfRelationType, info_hook<Info> >
+    bimap< L, R , SetOfRelationType, with_info<Info> >
 
 * set_of_relation_type: SetOfRelationType
 * info:                 Info
 * allocator:            std::allocator
 
 
-    bimap< L, R , SetOfRelationType, info_hook<Info>, Allocator>
+    bimap< L, R , SetOfRelationType, with_info<Info>, Allocator>
 
 * set_of_relation_type: SetOfRelationType
 * info:                 Info
@@ -992,14 +1030,14 @@ of a bimap. You can ignore some of the parameter but the order must be respected
 * allocator:            Allocator
 
 
-    bimap< L, R , info_hook<Info> >
+    bimap< L, R , with_info<Info> >
 
 * set_of_relation_type: based on the left key type
 * info:                 Info
 * allocator:            std::allocator
 
 
-    bimap< L, R , info_hook<Info>, Allocator>
+    bimap< L, R , with_info<Info>, Allocator>
 
 * set_of_relation_type: based on the left key type
 * allocator:            Allocator

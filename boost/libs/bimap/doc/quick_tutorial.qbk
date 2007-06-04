@@ -38,9 +38,6 @@ __SIMPLE_BIMAP__
 
 You can see how a bimap container offers three views over the same collection of bidirectional relations. 
 
-The `relation` class represents two related elements. The two values are
-named left and right to express the symmetry of this type.
-
 If we have any generic function that work with maps
 
     template< class MapType >
@@ -70,6 +67,14 @@ And the output will be
 [^two --> 2]
 ...
 ]
+
+[heading Layout of the relation and the pairs of a bimap]
+
+The `relation` class represents two related elements. The two values are
+named left and right to express the symmetry of this type.
+The bimap pair classes are signature-compatible with `std::pairs`.
+
+__RELATION_AND_PAIR__
 
 [heading Step by step]
 

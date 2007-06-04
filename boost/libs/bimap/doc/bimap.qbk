@@ -36,7 +36,8 @@ Distributed under the Boost Software License, Version 1.0.
 [def __BIMAP_STRUCTURES__ [$images/bimap/bimap.structures.png]]
 [def __TAGGED__ [$images/bimap/tagged.png]]
 [def __MORE_BIMAP_STRUCTURES__ [$images/bimap/more.bimap.structures.png]]
-
+[def __RELATION_AND_PAIR__ [$images/bimap/relation.and.pair.png]]
+[def __RELATION_AND_PAIR_WITH_INFO__ [$images/bimap/relation.and.pair.with.info.png]]
 
 
 [/ People ]
@@ -73,9 +74,9 @@ Distributed under the Boost Software License, Version 1.0.
 [def __BOOST_RANGE__ [@http://www.boost.org/doc/html/range.html [*Boost.Range]]]
 [def __BOOST_FOREACH__ [@http://www.boost.org/doc/html/foreach.html [*Boost.Foreach]]]
 [def __BOOST_TEST__ [@http://www.boost.org/libs/test/doc/index.html [*Boost.Test]]]
+[def __BOOST_TYPEOF__ [@http://www.boost.org/libs/typeof/doc/index.html [*Boost.Typeof]]]
+[def __BOOST_XPRESSIVE__ [@http://www.boost.org/libs/xpressive/doc/index.html [*Boost.Xpressive]]]
 
-
-[/extern links]
 
 [/ Extern Links ]
 
@@ -132,6 +133,8 @@ Distributed under the Boost Software License, Version 1.0.
 [section Preface]
 
 [heading Description]
+
+__BOOST_BIMAP_LOGO__
 
 Boost.Bimap is a bidirectional maps library for C++. With Boost.Bimap you can create associative containers in which both types can be used as key. A `bimap<X,Y>` 
 can be thought of as a combination of a `std::map<X,Y>` and a `std::map<Y,X>`. 

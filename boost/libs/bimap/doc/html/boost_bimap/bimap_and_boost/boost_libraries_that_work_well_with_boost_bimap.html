@@ -12,7 +12,9 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
+<td valign="top">
+<img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"><img alt="Chapter Logo" src="../../images/bimap/boost.bimap.header.png">
+</td>
 <td align="center"><a href="../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../libraries.html">Libraries</a></td>
 <td align="center"><a href="../../../../people/people.htm">People</a></td>
@@ -37,6 +39,8 @@
 <dt><span class="section"><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_lambda">Boost.Lambda</a></span></dt>
 <dt><span class="section"><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_range">Boost.Range</a></span></dt>
 <dt><span class="section"><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_foreach">Boost.Foreach</a></span></dt>
+<dt><span class="section"><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_typeof">Boost.Typeof</a></span></dt>
+<dt><span class="section"><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_xpressive">Boost.Xpressive</a></span></dt>
 <dt><span class="section"><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_property_map">Boost.Property_map</a></span></dt>
 </dl></div>
 <div class="section" lang="en">
@@ -207,6 +211,51 @@
 <td>
                 <p>
                   Iteration
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a href="http://www.boost.org/libs/typeof/doc/index.html" target="_top"><span class="bold"><strong>Boost.Typeof</strong></span></a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Typeof operator emulation
+                </p>
+                </td>
+<td>
+                <p>
+                  Arkadiy Vertleyb, Peder Holt
+                </p>
+                </td>
+<td>
+                <p>
+                  Using BOOST_AUTO while we wait for C++0x
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a href="http://www.boost.org/libs/xpressive/doc/index.html" target="_top"><span class="bold"><strong>Boost.Xpressive</strong></span></a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Regular expressions that can be written as strings or as expression
+                  templates
+                </p>
+                </td>
+<td>
+                <p>
+                  Eric Niebler
+                </p>
+                </td>
+<td>
+                <p>
+                  Help to fill a bimap from a string
                 </p>
                 </td>
 </tr>
@@ -767,6 +816,158 @@
         </p>
 <p>
           <a href="../../../../example/bimap_and_boost/foreach.cpp" target="_top">Go to source code</a>
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_typeof"></a><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_typeof" title="Boost.Typeof">Boost.Typeof</a>
+</h4></div></div></div>
+<p>
+          Once C++0x is out we are going to be able to write code like:
+        </p>
+<pre class="programlisting">
+<span class="keyword">auto</span> <span class="identifier">iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;().</span><span class="identifier">find</span><span class="special">(</span><span class="string">"john"</span><span class="special">);</span>
+</pre>
+<p>
+          instead of the more verbose
+        </p>
+<pre class="programlisting">
+<span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;::</span><span class="identifier">iterator</span> <span class="identifier">iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;().</span><span class="identifier">find</span><span class="special">(</span><span class="string">"john"</span><span class="special">);</span>
+</pre>
+<p>
+          Boost.Typeof defines a macro BOOST_AUTO that can be used as a library solution
+          to the auto keyword while we wait for the next standard.
+        </p>
+<p>
+          If we have
+        </p>
+<p>
+          </p>
+<p>
+            
+</p>
+<pre class="programlisting">
+<span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span> <span class="identifier">tagged</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span><span class="identifier">name</span><span class="special">&gt;,</span> <span class="identifier">tagged</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="identifier">number</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
+<span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
+<span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="string">"one"</span>  <span class="special">,</span><span class="number">1</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">(</span><span class="string">"two"</span>  <span class="special">,</span><span class="number">2</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+          </p>
+<p>
+          </p>
+<p>
+            </p>
+<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
+<p>
+          </p>
+<p>
+        </p>
+<p>
+          The following code snippet
+        </p>
+<p>
+          </p>
+<p>
+            
+</p>
+<pre class="programlisting">
+<span class="keyword">for</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;::</span><span class="identifier">iterator</span> <span class="identifier">iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;().</span><span class="identifier">begin</span><span class="special">();</span>
+     <span class="identifier">iter</span><span class="special">!=</span><span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;().</span><span class="identifier">end</span><span class="special">();</span> <span class="special">++</span><span class="identifier">iter</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">first</span> <span class="special">&lt;&lt;</span> <span class="string">" --&gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">second</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">map_by</span><span class="special">&lt;</span><span class="identifier">number</span><span class="special">&gt;::</span><span class="identifier">iterator</span> <span class="identifier">iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">number</span><span class="special">&gt;().</span><span class="identifier">find</span><span class="special">(</span><span class="number">2</span><span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"2: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;();</span>
+</pre>
+<p>
+          </p>
+<p>
+          </p>
+<p>
+            </p>
+<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
+<p>
+          </p>
+<p>
+        </p>
+<p>
+          can be rewrited as
+        </p>
+<p>
+          </p>
+<p>
+            
+</p>
+<pre class="programlisting">
+<span class="keyword">for</span><span class="special">(</span> <span class="identifier">BOOST_AUTO</span><span class="special">(</span><span class="identifier">iter</span><span class="special">,</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;().</span><span class="identifier">begin</span><span class="special">());</span> <span class="identifier">iter</span><span class="special">!=</span><span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;().</span><span class="identifier">end</span><span class="special">();</span> <span class="special">++</span><span class="identifier">iter</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">first</span> <span class="special">&lt;&lt;</span> <span class="string">" --&gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">second</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO</span><span class="special">(</span> <span class="identifier">iter</span><span class="special">,</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">by</span><span class="special">&lt;</span><span class="identifier">number</span><span class="special">&gt;().</span><span class="identifier">find</span><span class="special">(</span><span class="number">2</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"2: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">get</span><span class="special">&lt;</span><span class="identifier">name</span><span class="special">&gt;();</span>
+</pre>
+<p>
+          </p>
+<p>
+          </p>
+<p>
+            </p>
+<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
+<p>
+          </p>
+<p>
+        </p>
+<p>
+          <a href="../../../../example/bimap_and_boost/typeof.cpp" target="_top">Go to source code</a>
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_xpressive"></a><a href="boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_xpressive" title="Boost.Xpressive">Boost.Xpressive</a>
+</h4></div></div></div>
+<p>
+          Using Boost.Xpressive we can parse a file and insert the relations in a
+          bimap in the same step. It is just amazing the power of four lines of code.
+          Here is an example (it is just beatifull)
+        </p>
+<p>
+          </p>
+<p>
+            
+</p>
+<pre class="programlisting">
+<span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">,</span> <span class="keyword">int</span> <span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
+<span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
+
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">rel_str</span><span class="special">(</span><span class="string">"one &lt;--&gt; 1     two &lt;--&gt; 2      three &lt;--&gt; 3"</span><span class="special">);</span>
+
+<span class="identifier">sregex</span> <span class="identifier">rel</span> <span class="special">=</span> <span class="special">(</span> <span class="special">(</span><span class="identifier">s1</span><span class="special">=</span> <span class="special">+</span><span class="identifier">_w</span><span class="special">)</span> <span class="special">&gt;&gt;</span> <span class="string">" &lt;--&gt; "</span> <span class="special">&gt;&gt;</span> <span class="special">(</span><span class="identifier">s2</span><span class="special">=</span> <span class="special">+</span><span class="identifier">_d</span><span class="special">)</span> <span class="special">)</span>
+<span class="special">[</span>
+    <span class="identifier">xp</span><span class="special">::</span><span class="identifier">ref</span><span class="special">(</span><span class="identifier">bm</span><span class="special">)-&gt;*</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">construct</span><span class="special">&lt;</span><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">&gt;(</span><span class="identifier">s1</span><span class="special">,</span> <span class="identifier">as</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">s2</span><span class="special">))</span> <span class="special">)</span>
+<span class="special">];</span>
+
+<span class="identifier">sregex</span> <span class="identifier">relations</span> <span class="special">=</span> <span class="identifier">rel</span> <span class="special">&gt;&gt;</span> <span class="special">*(+</span><span class="identifier">_s</span> <span class="special">&gt;&gt;</span> <span class="identifier">rel</span><span class="special">);</span>
+
+<span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">rel_str</span><span class="special">,</span> <span class="identifier">relations</span><span class="special">);</span>
+
+<span class="identifier">assert</span><span class="special">(</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">==</span> <span class="number">3</span> <span class="special">);</span>
+</pre>
+<p>
+          </p>
+<p>
+          </p>
+<p>
+            </p>
+<div class="calloutlist"><table border="0" summary="Callout list"></table></div>
+<p>
+          </p>
+<p>
+        </p>
+<p>
+          <a href="../../../../example/bimap_and_boost/xpressive.cpp" target="_top">Go to source code</a>
         </p>
 </div>
 <div class="section" lang="en">

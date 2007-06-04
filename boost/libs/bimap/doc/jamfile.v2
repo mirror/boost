@@ -21,9 +21,10 @@ boostbook standalone
     :
         bimap
     :
-        <xsl:param>toc.max.depth=4
+        <xsl:param>toc.max.depth=2
         <xsl:param>toc.section.depth=4
         <xsl:param>chunk.section.depth=2
+        <xsl:param>logo.image.src="'images/bimap/boost.bimap.header.png'"
     ;
 
 
@@ -31,7 +32,6 @@ boostbook standalone
 # -----------------------------------------------------------------------------
 # This generate the doxydocs and write "bimap.hdt".
 # Delete this file if you want to regenerate the doxydocs again
-
 # import directdoxygen ;
 # html-doxydocs bimap.hdt : bimap.hdf ;
 

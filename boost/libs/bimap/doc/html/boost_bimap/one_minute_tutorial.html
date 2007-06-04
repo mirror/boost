@@ -11,7 +11,9 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../boost.png"></td>
+<td valign="top">
+<img alt="Boost C++ Libraries" width="277" height="86" src="../../../boost.png"><img alt="Chapter Logo" src="../images/bimap/boost.bimap.header.png">
+</td>
 <td align="center"><a href="../../../index.htm">Home</a></td>
 <td align="center"><a href="../libraries.html">Libraries</a></td>
 <td align="center"><a href="../../../people/people.htm">People</a></td>
@@ -27,7 +29,7 @@
 <a name="boost_bimap.one_minute_tutorial"></a><a href="one_minute_tutorial.html" title="One minute tutorial">One minute tutorial</a>
 </h2></div></div></div>
 <a name="boost_bimap.one_minute_tutorial.what_is_a_bimap_"></a><h4>
-<a name="id2567708"></a>
+<a name="id2567875"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.what_is_a_bimap_">What is a
       bimap?</a>
     </h4>
@@ -53,7 +55,7 @@
 <p>
       Given this code, the following is the complete description of the resulting
       bimap.
-      <sup>[<a name="id2614241" href="#ftn.id2614241">1</a>]</sup>
+      <sup>[<a name="id2616547" href="#ftn.id2616547">1</a>]</sup>
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
@@ -73,11 +75,6 @@
 <p>
       You can see how a bimap container offers three views over the same collection
       of bidirectional relations.
-    </p>
-<p>
-      The <code class="computeroutput"><span class="identifier">relation</span></code> class represents
-      two related elements. The two values are named left and right to express the
-      symmetry of this type.
     </p>
 <p>
       If we have any generic function that work with maps
@@ -113,8 +110,22 @@
 <code class="literal">two --&gt; 2</code>
 ...
 </pre>
+<a name="boost_bimap.one_minute_tutorial.layout_of_the_relation_and_the_pairs_of_a_bimap"></a><h4>
+<a name="id2617313"></a>
+      <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.layout_of_the_relation_and_the_pairs_of_a_bimap">Layout
+      of the relation and the pairs of a bimap</a>
+    </h4>
+<p>
+      The <code class="computeroutput"><span class="identifier">relation</span></code> class represents
+      two related elements. The two values are named left and right to express the
+      symmetry of this type. The bimap pair classes are signature-compatible with
+      <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pairs</span></code>.
+    </p>
+<p>
+      <span class="inlinemediaobject"><img src="../images/bimap/relation.and.pair.png" alt="relation.and.pair"></span>
+    </p>
 <a name="boost_bimap.one_minute_tutorial.step_by_step"></a><h4>
-<a name="id2615022"></a>
+<a name="id2617391"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.step_by_step">Step by step</a>
     </h4>
 <p>
@@ -147,7 +158,7 @@
 <p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.the_collection_of_relations_view"></a><h4>
-<a name="id2615199"></a>
+<a name="id2617568"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.the_collection_of_relations_view">The
       collection of relations view</a>
     </h4>
@@ -188,7 +199,7 @@
 <p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.the_left_map_view"></a><h4>
-<a name="id2615711"></a>
+<a name="id2618080"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.the_left_map_view">The left
       map view</a>
     </h4>
@@ -252,7 +263,7 @@
 <p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.the_right_map_view"></a><h4>
-<a name="id2616557"></a>
+<a name="id2618926"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.the_right_map_view">The right
       map view</a>
     </h4>
@@ -298,7 +309,7 @@
 <p>
     </p>
 <a name="boost_bimap.one_minute_tutorial.differences_with_std__map"></a><h4>
-<a name="id2617059"></a>
+<a name="id2619428"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.differences_with_std__map">Differences
       with std::map</a>
     </h4>
@@ -331,7 +342,7 @@
 <span class="identifier">assert</span><span class="special">(</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">==</span> <span class="number">1</span> <span class="special">);</span>
 </pre>
 <a name="boost_bimap.one_minute_tutorial.a_simple_example"></a><h4>
-<a name="id2617815"></a>
+<a name="id2620184"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.a_simple_example">A simple example</a>
     </h4>
 <p>
@@ -435,7 +446,7 @@
 <code class="literal">Spain ends in position 2</code>
 </pre>
 <a name="boost_bimap.one_minute_tutorial.continuing_the_journey"></a><h4>
-<a name="id2619252"></a>
+<a name="id2621622"></a>
       <a href="one_minute_tutorial.html#boost_bimap.one_minute_tutorial.continuing_the_journey">Continuing
       the journey</a>
     </h4>
@@ -467,7 +478,7 @@
 </table></div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id2614241" href="#id2614241">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id2616547" href="#id2616547">1</a>] </sup>
           A type is <span class="emphasis"><em>signature-compatible</em></span> with other type if
           it has the same signature for functions and metadata. Preconditions, postconditions
           and the order of operations need not be the same.
