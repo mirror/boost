@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> Phrase Level Elements</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
 <link rel="start" href="../../index.html" title="Quickbook 1.4">
 <link rel="up" href="../syntax.html" title=" Syntax Summary">
 <link rel="prev" href="comments.html" title="Comments">
@@ -24,7 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="quickbook.syntax.phrase"></a><a href="phrase.html" title=" Phrase Level Elements"> Phrase Level Elements</a></h3></div></div></div>
+<a name="quickbook.syntax.phrase"></a><a href="phrase.html" title=" Phrase Level Elements"> Phrase Level Elements</a>
+</h3></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.font_styles">Font Styles</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.replaceable">Replaceable</a></span></dt>
@@ -47,14 +48,15 @@
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.font_styles"></a><a href="phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font Styles</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.font_styles"></a><a href="phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font Styles</a>
+</h4></div></div></div>
 <pre class="programlisting">['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 </pre>
 <p>
           will generate:
         </p>
 <p>
-          <span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt>, <span class="strikethrough">strikethrough</span>
+          <span class="emphasis"><em>italic</em></span>, <span class="bold"><strong>bold</strong></span>, <span class="underline">underline</span>, <code class="literal">teletype</code>, <span class="strikethrough">strikethrough</span>
         </p>
 <p>
           Like all non-terminal phrase level elements, this can of course be nested:
@@ -65,12 +67,13 @@
           will generate:
         </p>
 <p>
-          <span class="bold"><b><span class="emphasis"><em>bold-italic</em></span></b></span>
+          <span class="bold"><strong><span class="emphasis"><em>bold-italic</em></span></strong></span>
         </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.replaceable"></a><a href="phrase.html#quickbook.syntax.phrase.replaceable" title="Replaceable">Replaceable</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.replaceable"></a><a href="phrase.html#quickbook.syntax.phrase.replaceable" title="Replaceable">Replaceable</a>
+</h4></div></div></div>
 <p>
           When you want content that may or must be replaced by the user, use the
           syntax:
@@ -81,14 +84,15 @@
           This will generate:
         </p>
 <p>
-          <i class="replaceable"><tt>
+          <em class="replaceable"><code>
             replacement
-          </tt></i>
+          </code></em>
         </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.quotations"></a><a href="phrase.html#quickbook.syntax.phrase.quotations" title="Quotations">Quotations</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.quotations"></a><a href="phrase.html#quickbook.syntax.phrase.quotations" title="Quotations">Quotations</a>
+</h4></div></div></div>
 <pre class="programlisting">["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 </pre>
 <p>
@@ -119,7 +123,8 @@ the true business precept.]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.simple_formatting"></a><a href="phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">Simple formatting</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.simple_formatting"></a><a href="phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">Simple formatting</a>
+</h4></div></div></div>
 <p>
           Simple markup for formatting text, common in many applications, is now
           supported:
@@ -130,12 +135,12 @@ the true business precept.]
           will generate:
         </p>
 <p>
-          <span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt>
+          <span class="emphasis"><em>italic</em></span>, <span class="bold"><strong>bold</strong></span>, <span class="underline">underline</span>, <code class="literal">teletype</code>
         </p>
 <p>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
           are much stricter
-          <sup>[<a name="id453495" href="#ftn.id453495">1</a>]</sup>
+          <sup>[<a name="id2614286" href="#ftn.id2614286">1</a>]</sup>
           .
         </p>
 <div class="itemizedlist"><ul type="disc">
@@ -171,8 +176,8 @@ the true business precept.]
           </li>
 </ul></div>
 <div class="table">
-<a name="id453578"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
-<table class="table" summary="More Formatting Samples">
+<a name="id2614374"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
+<div class="table-contents"><table class="table" summary="More Formatting Samples">
 <colgroup>
 <col>
 <col>
@@ -193,31 +198,31 @@ the true business precept.]
 <tr>
 <td>
               <p>
-                <tt class="literal">*Bold*</tt>
+                <code class="literal">*Bold*</code>
               </p>
               </td>
 <td>
               <p>
-                <span class="bold"><b>Bold</b></span>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="literal">*Is bold*</tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <span class="bold"><b>Is bold</b></span>
+                <span class="bold"><strong>Bold</strong></span>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="literal">* Not bold* *Not bold * * Not bold *</tt>
+                <code class="literal">*Is bold*</code>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><strong>Is bold</strong></span>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">* Not bold* *Not bold * * Not bold *</code>
               </p>
               </td>
 <td>
@@ -229,7 +234,7 @@ the true business precept.]
 <tr>
 <td>
               <p>
-                <tt class="literal">This*Isn't*Bold (no bold)</tt>
+                <code class="literal">This*Isn't*Bold (no bold)</code>
               </p>
               </td>
 <td>
@@ -241,31 +246,31 @@ the true business precept.]
 <tr>
 <td>
               <p>
-                <tt class="literal">(*Bold Inside*) (parenthesis not bold)</tt>
+                <code class="literal">(*Bold Inside*) (parenthesis not bold)</code>
               </p>
               </td>
 <td>
               <p>
-                (<span class="bold"><b>Bold Inside</b></span>) (parenthesis not bold)
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="literal">*(Bold Outside)* (parenthesis bold)</tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <span class="bold"><b>(Bold Outside)</b></span> (parenthesis bold)
+                (<span class="bold"><strong>Bold Inside</strong></span>) (parenthesis not bold)
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="literal">3*4*5 = 60 (no bold)</tt>
+                <code class="literal">*(Bold Outside)* (parenthesis bold)</code>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><strong>(Bold Outside)</strong></span> (parenthesis bold)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">3*4*5 = 60 (no bold)</code>
               </p>
               </td>
 <td>
@@ -277,7 +282,7 @@ the true business precept.]
 <tr>
 <td>
               <p>
-                <tt class="literal">3 * 4 * 5 = 60 (no bold)</tt>
+                <code class="literal">3 * 4 * 5 = 60 (no bold)</code>
               </p>
               </td>
 <td>
@@ -289,79 +294,79 @@ the true business precept.]
 <tr>
 <td>
               <p>
-                <tt class="literal">3 *4* 5 = 60 (4 is bold)</tt>
+                <code class="literal">3 *4* 5 = 60 (4 is bold)</code>
               </p>
               </td>
 <td>
               <p>
-                3 <span class="bold"><b>4</b></span> 5 = 60 (4 is bold)
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="literal">*This is bold* this is not *but this is*</tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <span class="bold"><b>This is bold</b></span> this is not <span class="bold"><b>but this is</b></span>
+                3 <span class="bold"><strong>4</strong></span> 5 = 60 (4 is bold)
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="literal">*This is bold*.</tt>
+                <code class="literal">*This is bold* this is not *but this is*</code>
               </p>
               </td>
 <td>
               <p>
-                <span class="bold"><b>This is bold</b></span>.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="literal">*B*. (bold B)</tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <span class="bold"><b>B</b></span>. (bold B)
+                <span class="bold"><strong>This is bold</strong></span> this is not <span class="bold"><strong>but this is</strong></span>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="literal">['*Bold-Italic*]</tt>
+                <code class="literal">*This is bold*.</code>
               </p>
               </td>
 <td>
               <p>
-                <span class="emphasis"><em><span class="bold"><b>Bold-Italic</b></span></em></span>
+                <span class="bold"><strong>This is bold</strong></span>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="literal">*side-by*/-side/</tt>
+                <code class="literal">*B*. (bold B)</code>
               </p>
               </td>
 <td>
               <p>
-                <span class="bold"><b>side-by</b></span><span class="emphasis"><em>-side</em></span>
+                <span class="bold"><strong>B</strong></span>. (bold B)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">['*Bold-Italic*]</code>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em><span class="bold"><strong>Bold-Italic</strong></span></em></span>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="literal">*side-by*/-side/</code>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><strong>side-by</strong></span><span class="emphasis"><em>-side</em></span>
               </p>
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<p>
+<br class="table-break"><p>
           As mentioned, simple markups cannot go past a single block. The text from
           "have" to "full" in the following paragraph will be
           rendered as bold:
@@ -372,8 +377,8 @@ One for the master, one for the dame,
 And one for the little boy who lives down the lane.
 </pre>
 <p>
-          Baa baa black sheep, <span class="bold"><b>have you any wool? Yes sir,
-          yes sir, three bags full!</b></span> One for the master, one for the dame,
+          Baa baa black sheep, <span class="bold"><strong>have you any wool? Yes sir,
+          yes sir, three bags full!</strong></span> One for the master, one for the dame,
           And one for the little boy who lives down the lane.
         </p>
 <p>
@@ -392,7 +397,8 @@ And one for the little boy who lives down the lane.
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.inline_code"></a><a href="phrase.html#quickbook.syntax.phrase.inline_code" title="Inline code">Inline code</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.inline_code"></a><a href="phrase.html#quickbook.syntax.phrase.inline_code" title="Inline code">Inline code</a>
+</h4></div></div></div>
 <p>
           Inlining code in paragraphs is quite common when writing C++ documentation.
           We provide a very simple markup for this. For example, this:
@@ -403,7 +409,7 @@ And one for the little boy who lives down the lane.
           will generate:
         </p>
 <p>
-          This text has inlined code <tt class="computeroutput"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span> <span class="special">}</span></tt>
+          This text has inlined code <code class="computeroutput"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span> <span class="special">}</span></code>
           in it. The code will be syntax highlighted.
         </p>
 <div class="note"><table border="0" summary="Note">
@@ -411,13 +417,13 @@ And one for the little boy who lives down the lane.
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
             </p>
 <p>
-              We simply enclose the code with the tick: <tt class="literal">"`"</tt>, not
-              the single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>.
-              Note too that <tt class="literal">`some code`</tt> is preferred over <tt class="literal">[^some code]</tt>.
+              We simply enclose the code with the tick: <code class="literal">"`"</code>, not
+              the single quote: <code class="computeroutput"><span class="string">"'"</span></code>.
+              Note too that <code class="literal">`some code`</code> is preferred over <code class="literal">[^some code]</code>.
             </p>
 <p>
           </p>
@@ -426,7 +432,8 @@ And one for the little boy who lives down the lane.
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.code_blocks"></a><a href="phrase.html#quickbook.syntax.phrase.code_blocks" title="Code blocks">Code blocks</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.code_blocks"></a><a href="phrase.html#quickbook.syntax.phrase.code_blocks" title="Code blocks">Code blocks</a>
+</h4></div></div></div>
 <p>
           Preformatted code simply starts with a space or a tab (See <a href="block.html#quickbook.syntax.block.code" title="Code">Code</a>).
           However, such a simple syntax cannot be used as phrase elements in lists
@@ -473,7 +480,8 @@ And one for the little boy who lives down the lane.
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.source_mode"></a><a href="phrase.html#quickbook.syntax.phrase.source_mode" title="Source Mode">Source Mode</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.source_mode"></a><a href="phrase.html#quickbook.syntax.phrase.source_mode" title="Source Mode">Source Mode</a>
+</h4></div></div></div>
 <p>
           If a document contains more than one type of source code then the source
           mode may be changed dynamically as the document is processed. All QuickBook
@@ -482,8 +490,8 @@ And one for the little boy who lives down the lane.
           section.
         </p>
 <p>
-          To change the source mode, use the <tt class="literal">[source-mode]</tt> markup,
-          where <tt class="literal">source-mode</tt> is one of the supported modes. For
+          To change the source mode, use the <code class="literal">[source-mode]</code> markup,
+          where <code class="literal">source-mode</code> is one of the supported modes. For
           example, this:
         </p>
 <pre class="programlisting">Python's [python] `import` is rather like C++'s [c++] `#include`. A
@@ -494,14 +502,14 @@ C++ comment `// looks like this` whereas a Python comment [python]
           will generate:
         </p>
 <p>
-          Python's <tt class="computeroutput"><span class="keyword">import</span></tt> is rather
-          like C++'s <tt class="computeroutput"><span class="preprocessor">#include</span></tt>.
-          A C++ comment <tt class="computeroutput"><span class="comment">// looks like this</span></tt>
-          whereas a Python comment <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.
+          Python's <code class="computeroutput"><span class="keyword">import</span></code> is rather
+          like C++'s <code class="computeroutput"><span class="preprocessor">#include</span></code>.
+          A C++ comment <code class="computeroutput"><span class="comment">// looks like this</span></code>
+          whereas a Python comment <code class="computeroutput"><span class="comment">#looks like this</span></code>.
         </p>
 <div class="table">
-<a name="id454552"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
-<table class="table" summary="Supported Source Modes">
+<a name="id2615277"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
+<div class="table-contents"><table class="table" summary="Supported Source Modes">
 <colgroup>
 <col>
 <col>
@@ -527,7 +535,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
               </td>
 <td>
               <p>
-                <tt class="literal">[c++]</tt>
+                <code class="literal">[c++]</code>
               </p>
               </td>
 </tr>
@@ -539,19 +547,19 @@ C++ comment `// looks like this` whereas a Python comment [python]
               </td>
 <td>
               <p>
-                <tt class="literal">[python]</tt>
+                <code class="literal">[python]</code>
               </p>
               </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
-<div class="note"><table border="0" summary="Note">
+<br class="table-break"><div class="note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
             </p>
 <p>
@@ -564,7 +572,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.line_break"></a><a href="phrase.html#quickbook.syntax.phrase.line_break" title="line-break">line-break</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.line_break"></a><a href="phrase.html#quickbook.syntax.phrase.line_break" title="line-break">line-break</a>
+</h4></div></div></div>
 <pre class="programlisting">[br]
 </pre>
 <div class="warning"><table border="0" summary="Warning">
@@ -572,11 +581,11 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
 <th align="left">Warning</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
             </p>
 <p>
-              <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt> is now deprecated. <a href="block.html#quickbook.syntax.block.blurbs" title="Blurbs">Blurbs</a>,
+              <code class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></code> is now deprecated. <a href="block.html#quickbook.syntax.block.blurbs" title="Blurbs">Blurbs</a>,
               <a href="block.html#quickbook.syntax.block.admonitions" title="Admonitions">Admonitions</a>
               and table cells (see <a href="block.html#quickbook.syntax.block.tables" title="Tables">Tables</a>)
               may now contain paragraphs.
@@ -588,27 +597,29 @@ C++ comment `// looks like this` whereas a Python comment [python]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.anchors"></a><a href="phrase.html#quickbook.syntax.phrase.anchors" title="Anchors">Anchors</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.anchors"></a><a href="phrase.html#quickbook.syntax.phrase.anchors" title="Anchors">Anchors</a>
+</h4></div></div></div>
 <pre class="programlisting">[#named_anchor]
 </pre>
 <p>
           A named anchor is a hook that can be referenced by a link elsewhere in
-          the document. You can then reference an anchor with <tt class="literal">[link named_anchor
-Some link text]</tt>.
+          the document. You can then reference an anchor with <code class="literal">[link named_anchor
+Some link text]</code>.
           See <a href="phrase.html#quickbook.syntax.phrase.anchor_links" title="Anchor links">Anchor links</a>,
           <a href="block.html#quickbook.syntax.block.section" title="Section">Section</a> and <a href="block.html#quickbook.syntax.block.headings" title="Headings">Heading</a>.
         </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.links"></a><a href="phrase.html#quickbook.syntax.phrase.links" title="Links">Links</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.links"></a><a href="phrase.html#quickbook.syntax.phrase.links" title="Links">Links</a>
+</h4></div></div></div>
 <pre class="programlisting">[@http://www.boost.org this is [*boost's] website....]
 </pre>
 <p>
           will generate:
         </p>
 <p>
-          <a href="http://www.boost.org" target="_top">this is <span class="bold"><b>boost's</b></span>
+          <a href="http://www.boost.org" target="_top">this is <span class="bold"><strong>boost's</strong></span>
           website....</a>
         </p>
 <p>
@@ -630,7 +641,8 @@ Some link text]</tt>.
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.anchor_links"></a><a href="phrase.html#quickbook.syntax.phrase.anchor_links" title="Anchor links">Anchor links</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.anchor_links"></a><a href="phrase.html#quickbook.syntax.phrase.anchor_links" title="Anchor links">Anchor links</a>
+</h4></div></div></div>
 <p>
           You can link within a document using:
         </p>
@@ -644,15 +656,16 @@ Some link text]</tt>.
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.refentry_links"></a><a href="phrase.html#quickbook.syntax.phrase.refentry_links" title="refentry links">refentry links</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.refentry_links"></a><a href="phrase.html#quickbook.syntax.phrase.refentry_links" title="refentry links">refentry links</a>
+</h4></div></div></div>
 <p>
           In addition, you can link internally to an XML refentry like:
         </p>
 <pre class="programlisting">[link xml.refentry The link text]
 </pre>
 <p>
-          This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;The
-          link text&lt;/link&gt;</tt>.
+          This gets converted into <code class="literal">&lt;link linkend="xml.refentry"&gt;The
+          link text&lt;/link&gt;</code>.
         </p>
 <p>
           Like URLs, the link text is optional. If this is not present, the link
@@ -661,12 +674,13 @@ Some link text]</tt>.
 <pre class="programlisting">[link xml.refentry]
 </pre>
 <p>
-          This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</tt>.
+          This gets converted into <code class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</code>.
         </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.code_links"></a><a href="phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links"> Code Links</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.code_links"></a><a href="phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links"> Code Links</a>
+</h4></div></div></div>
 <p>
           If you want to link to a function, class, member, enum, concept or header
           in the reference section, you can use:
@@ -692,7 +706,8 @@ Some link text]</tt>.
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.escape"></a><a href="phrase.html#quickbook.syntax.phrase.escape" title="Escape">Escape</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.escape"></a><a href="phrase.html#quickbook.syntax.phrase.escape" title="Escape">Escape</a>
+</h4></div></div></div>
 <p>
           The escape mark-up is used when we don't want to do any processing.
         </p>
@@ -709,14 +724,14 @@ escape (no processing/formatting)
 '''
 </pre>
 <p>
-          <span class="bold"><b>This is direct XML markup</b></span>
+          <span class="bold"><strong>This is direct XML markup</strong></span>
         </p>
 <div class="important"><table border="0" summary="Important">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../images/important.png"></td>
 <th align="left">Important</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
             </p>
 <p>
@@ -731,15 +746,16 @@ escape (no processing/formatting)
 <div class="titlepage"><div><div><h4 class="title">
 <a name="quickbook.syntax.phrase.single_char_escape"></a><a href="phrase.html#quickbook.syntax.phrase.single_char_escape" title="Single
         char escape">Single
-        char escape</a></h4></div></div></div>
+        char escape</a>
+</h4></div></div></div>
 <p>
           The backslash may be used to escape a single punctuation character. The
           punctuation immediately after the backslash is passed without any processing.
-          This is useful when we need to escape QuickBook punctuations such as <tt class="computeroutput"><span class="special">[</span></tt> and <tt class="computeroutput"><span class="special">]</span></tt>.
-          For example, how do you escape the triple quote? Simple: <tt class="literal">\'\'\'</tt>
+          This is useful when we need to escape QuickBook punctuations such as <code class="computeroutput"><span class="special">[</span></code> and <code class="computeroutput"><span class="special">]</span></code>.
+          For example, how do you escape the triple quote? Simple: <code class="literal">\'\'\'</code>
         </p>
 <p>
-          <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
+          <code class="computeroutput"><span class="special">\</span><span class="identifier">n</span></code>
           has a special meaning. It is used to generate line breaks.
         </p>
 <div class="warning"><table border="0" summary="Warning">
@@ -747,12 +763,12 @@ escape (no processing/formatting)
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
 <th align="left">Warning</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top">
+<tr><td align="left" valign="top">
 <p>
             </p>
 <p>
-              <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
-              and <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt> are now deprecated. <a href="block.html#quickbook.syntax.block.blurbs" title="Blurbs">Blurbs</a>,
+              <code class="computeroutput"><span class="special">\</span><span class="identifier">n</span></code>
+              and <code class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></code> are now deprecated. <a href="block.html#quickbook.syntax.block.blurbs" title="Blurbs">Blurbs</a>,
               <a href="block.html#quickbook.syntax.block.admonitions" title="Admonitions">Admonitions</a>
               and table cells (see <a href="block.html#quickbook.syntax.block.tables" title="Tables">Tables</a>)
               may now contain paragraphs.
@@ -762,19 +778,21 @@ escape (no processing/formatting)
 </td></tr>
 </table></div>
 <p>
-          The escaped space: <tt class="computeroutput"><span class="special">\</span> </tt> also
+          The escaped space: <code class="computeroutput"><span class="special">\</span> </code> also
           has a special meaning. The escaped space is removed from the output.
         </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.images"></a><a href="phrase.html#quickbook.syntax.phrase.images" title="Images">Images</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.images"></a><a href="phrase.html#quickbook.syntax.phrase.images" title="Images">Images</a>
+</h4></div></div></div>
 <pre class="programlisting">[$image.jpg]
 </pre>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.footnotes"></a><a href="phrase.html#quickbook.syntax.phrase.footnotes" title="Footnotes">Footnotes</a></h4></div></div></div>
+<a name="quickbook.syntax.phrase.footnotes"></a><a href="phrase.html#quickbook.syntax.phrase.footnotes" title="Footnotes">Footnotes</a>
+</h4></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.footnotes.macro_expansion">Macro
           Expansion</a></span></dt>
@@ -783,21 +801,22 @@ escape (no processing/formatting)
 </dl></div>
 <p>
           As of version 1.3, QuickBook supports footnotes. Just put the text of the
-          footnote in a <tt class="computeroutput"><span class="special">[</span><span class="identifier">footnote</span><span class="special">]</span></tt> block, and the text will be put at the
+          footnote in a <code class="computeroutput"><span class="special">[</span><span class="identifier">footnote</span><span class="special">]</span></code> block, and the text will be put at the
           bottom of the current page. For example, this:
         </p>
 <pre class="programlisting">[footnote A sample footnote]
 </pre>
 <p>
           will generate this
-          <sup>[<a name="id455391" href="#ftn.id455391">2</a>]</sup>
+          <sup>[<a name="id2616086" href="#ftn.id2616086">2</a>]</sup>
           .
         </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="quickbook.syntax.phrase.footnotes.macro_expansion"></a><a href="phrase.html#quickbook.syntax.phrase.footnotes.macro_expansion" title="Macro
           Expansion">Macro
-          Expansion</a></h5></div></div></div>
+          Expansion</a>
+</h5></div></div></div>
 <pre class="programlisting">__a_macro_identifier__
 </pre>
 <p>
@@ -808,7 +827,8 @@ escape (no processing/formatting)
 <div class="titlepage"><div><div><h5 class="title">
 <a name="quickbook.syntax.phrase.footnotes.template_expansion"></a><a href="phrase.html#quickbook.syntax.phrase.footnotes.template_expansion" title="Template
           Expansion">Template
-          Expansion</a></h5></div></div></div>
+          Expansion</a>
+</h5></div></div></div>
 <pre class="programlisting">[a_template_identifier]
 </pre>
 <p>
@@ -819,14 +839,14 @@ escape (no processing/formatting)
 </div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id453495" href="#id453495">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id2614286" href="#id2614286">1</a>] </sup>
               Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
               for sharing these samples and teaching me these obscure formatting
               rules. I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
               being more or less a formal EBNF parser, can handle the context sensitivity
               and ambiguity.
             </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id455391" href="#id455391">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id2616086" href="#id2616086">2</a>] </sup>
               A sample footnote
             </p></div>
 </div>

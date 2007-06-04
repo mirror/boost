@@ -1976,6 +1976,10 @@ comment.box.end.props=]
 [blurb __note__ Thanks to Rene Rivera for the above SciTE settings.]
 
 [endsect] [/scite]
+
+[/ KDE support (Kate, KWrite, Konqueror, KDevelop) ]
+[include ../extra/katepart/katepart.qbk]
+
 [endsect] [/editors]
 
 [section:faq Frequently Asked Questions]
