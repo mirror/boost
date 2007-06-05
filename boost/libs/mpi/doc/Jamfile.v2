@@ -19,7 +19,7 @@ doxygen mpi_autodoc
     ../../../boost/mpi/datatype_fwd.hpp
     ../../../boost/mpi/environment.hpp
     ../../../boost/mpi/exception.hpp
-    ../../../boost/mpi/graph_topology.hpp
+    ../../../boost/mpi/graph_communicator.hpp
     ../../../boost/mpi/group.hpp
     ../../../boost/mpi/intercommunicator.hpp
     ../../../boost/mpi/nonblocking.hpp

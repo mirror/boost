@@ -7,18 +7,19 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-/** @file graph_topology.hpp
+/** @file graph_communicator.hpp
  *
- *  This header defines facilities to support graph topologies, using
- *  the graph interface defined by the Boost Graph Library. One can
- *  construct a communicator whose topology is described by any graph
- *  meeting the requirements of the Boost Graph Library's graph
- *  concepts. Likewise, any communicator that has a graph topology can
- *  be viewed as a graph by the Boost Graph Library, permitting one to
- *  use the BGL's graph algorithms on the process topology.
+ *  This header defines facilities to support MPI communicators with
+ *  graph topologies, using the graph interface defined by the Boost
+ *  Graph Library. One can construct a communicator whose topology is
+ *  described by any graph meeting the requirements of the Boost Graph
+ *  Library's graph concepts. Likewise, any communicator that has a
+ *  graph topology can be viewed as a graph by the Boost Graph
+ *  Library, permitting one to use the BGL's graph algorithms on the
+ *  process topology.
  */
-#ifndef BOOST_MPI_TOPOLOGIES_HPP
-#define BOOST_MPI_TOPOLOGIES_HPP
+#ifndef BOOST_MPI_GRAPH_COMMUNICATOR_HPP
+#define BOOST_MPI_GRAPH_COMMUNICATOR_HPP
 
 #include <boost/mpi/communicator.hpp>
 #include <vector>
@@ -31,34 +32,190 @@
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/shared_array.hpp>
+#include <boost/assert.hpp>
 
 namespace boost { namespace mpi {
 
-/****************************************************************************
- *  Graph -> Communicator with Graph Topology                               *
- ****************************************************************************/
-template<typename Graph>
-inline communicator 
-communicator::with_graph_topology(const Graph& graph, bool reorder)
+/**
+ * @brief An MPI communicator with a graph topology.
+ *
+ * A @c graph_communicator is a communicator whose topology is
+ * expressed as a graph. Graph communicators have the same
+ * functionality as (intra)communicators, but also allow one to query
+ * the relationships among processes. Those relationships are
+ * expressed via a graph, using the interface defined by the Boost
+ * Graph Library. The @c graph_communicator class meets the
+ * requirements of the BGL Graph, Incidence Graph, Adjacency Graph,
+ * Vertex List Graph, and Edge List Graph concepts.
+ */
+class graph_communicator : public communicator
 {
-  return with_graph_topology(graph, reorder, get(vertex_index, graph));
+  friend class communicator;
+
+  /**
+   * INTERNAL ONLY
+   *
+   * Construct a graph communicator given a shared pointer to the
+   * underlying MPI_Comm. This operation is used for "casting" from a
+   * communicator to a graph communicator.
+   */
+  explicit graph_communicator(const shared_ptr<MPI_Comm>& comm_ptr)
+  {
+#ifndef BOOST_DISABLE_ASSERTS
+    int status;
+    BOOST_MPI_CHECK_RESULT(MPI_Topo_test, ((MPI_Comm)*this, &status));
+    BOOST_ASSERT(status == MPI_GRAPH);
+#endif
+    this->comm_ptr = comm_ptr;
+  }
+
+public:
+  /**
+   * Build a new Boost.MPI graph communicator based on the MPI
+   * communicator @p comm with graph topology.
+   *
+   * @p comm may be any valid MPI communicator. If @p comm is
+   * MPI_COMM_NULL, an empty communicator (that cannot be used for
+   * communication) is created and the @p kind parameter is
+   * ignored. Otherwise, the @p kind parameter determines how the
+   * Boost.MPI communicator will be related to @p comm:
+   *
+   *   - If @p kind is @c comm_duplicate, duplicate @c comm to create
+   *   a new communicator. This new communicator will be freed when
+   *   the Boost.MPI communicator (and all copies of it) is
+   *   destroyed. This option is only permitted if the underlying MPI
+   *   implementation supports MPI 2.0; duplication of
+   *   intercommunicators is not available in MPI 1.x.
+   *
+   *   - If @p kind is @c comm_take_ownership, take ownership of @c
+   *   comm. It will be freed automatically when all of the Boost.MPI
+   *   communicators go out of scope.
+   *
+   *   - If @p kind is @c comm_attach, this Boost.MPI communicator
+   *   will reference the existing MPI communicator @p comm but will
+   *   not free @p comm when the Boost.MPI communicator goes out of
+   *   scope. This option should only be used when the communicator is
+   *   managed by the user.
+   */
+  graph_communicator(const MPI_Comm& comm, comm_create_kind kind)
+    : communicator(comm, kind)
+  { 
+#ifndef BOOST_DISABLE_ASSERTS
+    int status;
+    BOOST_MPI_CHECK_RESULT(MPI_Topo_test, ((MPI_Comm)*this, &status));
+    BOOST_ASSERT(status == MPI_GRAPH);
+#endif
+  }
+
+  /**
+   *  Create a new communicator whose topology is described by the
+   *  given graph. The indices of the vertices in the graph will be
+   *  assumed to be the ranks of the processes within the
+   *  communicator. There may be fewer vertices in the graph than
+   *  there are processes in the communicator; in this case, the
+   *  resulting communicator will be a NULL communicator.
+   *
+   *  @param comm The communicator that the new, graph communicator
+   *  will be based on. 
+   * 
+   *  @param graph Any type that meets the requirements of the
+   *  Incidence Graph and Vertex List Graph concepts from the Boost Graph
+   *  Library. This structure of this graph will become the topology
+   *  of the communicator that is returned.
+   *
+   *  @param reorder Whether MPI is permitted to re-order the process
+   *  ranks within the returned communicator, to better optimize
+   *  communication. If false, the ranks of each process in the
+   *  returned process will match precisely the rank of that process
+   *  within the original communicator.
+   */
+  template<typename Graph>
+  explicit 
+  graph_communicator(const communicator& comm, const Graph& graph, 
+                     bool reorder = false);
+
+  /**
+   *  Create a new communicator whose topology is described by the
+   *  given graph. The rank map (@p rank) gives the mapping from
+   *  vertices in the graph to ranks within the communicator. There
+   *  may be fewer vertices in the graph than there are processes in
+   *  the communicator; in this case, the resulting communicator will
+   *  be a NULL communicator.
+   *
+   *  @param comm The communicator that the new, graph communicator
+   *  will be based on. The ranks in @c rank refer to the processes in
+   *  this communicator.
+   * 
+   *  @param graph Any type that meets the requirements of the
+   *  Incidence Graph and Vertex List Graph concepts from the Boost Graph
+   *  Library. This structure of this graph will become the topology
+   *  of the communicator that is returned.
+   *
+   *  @param rank This map translates vertices in the @c graph into
+   *  ranks within the current communicator. It must be a Readable
+   *  Property Map (see the Boost Property Map library) whose key type
+   *  is the vertex type of the @p graph and whose value type is @c
+   *  int.
+   *
+   *  @param reorder Whether MPI is permitted to re-order the process
+   *  ranks within the returned communicator, to better optimize
+   *  communication. If false, the ranks of each process in the
+   *  returned process will match precisely the rank of that process
+   *  within the original communicator.
+   */
+  template<typename Graph, typename RankMap>
+  explicit 
+  graph_communicator(const communicator& comm, const Graph& graph, 
+                     RankMap rank, bool reorder = false);
+
+protected:
+  /**
+   * INTERNAL ONLY
+   *
+   * Used by the constructors to create the new communicator with a
+   * graph topology.
+   */
+  template<typename Graph, typename RankMap>
+  void
+  setup_graph(const communicator& comm, const Graph& graph, RankMap rank, 
+              bool reorder);
+};
+
+/****************************************************************************
+ *  Implementation Details                                                  *
+ ****************************************************************************/
+
+template<typename Graph>
+graph_communicator::graph_communicator(const communicator& comm, 
+                                       const Graph& graph, 
+                                       bool reorder)
+{
+  this->setup_graph(comm, graph, get(vertex_index, graph), reorder);
 }
 
-template<typename Graph, typename VertexIndexMap>
-communicator 
-communicator::with_graph_topology(const Graph& graph, 
-                                  bool reorder, 
-                                  VertexIndexMap rank)
+template<typename Graph, typename RankMap>
+graph_communicator::graph_communicator(const communicator& comm, 
+                                       const Graph& graph, 
+                                       RankMap rank, bool reorder)
+{
+  this->setup_graph(comm, graph, rank, reorder);
+}
+
+
+template<typename Graph, typename RankMap>
+void
+graph_communicator::setup_graph(const communicator& comm, const Graph& graph, 
+                                RankMap rank, bool reorder)
 {
   typedef typename graph_traits<Graph>::vertex_descriptor vertex_descriptor;
 
   // Build a mapping from ranks to vertices
   std::vector<vertex_descriptor> vertex_with_rank(num_vertices(graph));
+  if (vertex_with_rank.empty())
+    return;
+
   BGL_FORALL_VERTICES_T(v, graph, Graph)
     vertex_with_rank[get(rank, v)] = v;
-
- if (vertex_with_rank.empty())
-    return communicator(MPI_COMM_NULL, comm_take_ownership);
 
   // Build the representation of the graph required by
   // MPI_Graph_create.
@@ -77,13 +234,13 @@ communicator::with_graph_topology(const Graph& graph,
   // Create the new communicator
   MPI_Comm newcomm;
   BOOST_MPI_CHECK_RESULT(MPI_Graph_create,
-                         ((MPI_Comm)*this, 
+                         ((MPI_Comm)comm, 
                           nvertices,
                           &indices[0],
                           edges.empty()? (int*)0 : &edges[0],
                           reorder,
                           &newcomm));
-  return communicator(newcomm, comm_take_ownership);
+  this->comm_ptr.reset(new MPI_Comm(newcomm), comm_free());
 }
 
 /****************************************************************************
@@ -243,7 +400,7 @@ namespace detail {
  * @brief Returns the source vertex from an edge in the graph topology
  * of a communicator.
  */
-inline int source(const std::pair<int, int>& edge, const communicator&)
+inline int source(const std::pair<int, int>& edge, const graph_communicator&)
 {
   return edge.first;
 }
@@ -252,7 +409,7 @@ inline int source(const std::pair<int, int>& edge, const communicator&)
  * @brief Returns the target vertex from an edge in the graph topology
  * of a communicator.
  */
-inline int target(const std::pair<int, int>& edge, const communicator&)
+inline int target(const std::pair<int, int>& edge, const graph_communicator&)
 {
   return edge.second;
 }
@@ -263,14 +420,14 @@ inline int target(const std::pair<int, int>& edge, const communicator&)
  * communicator.
  */
 std::pair<detail::comm_out_edge_iterator, detail::comm_out_edge_iterator>
-out_edges(int vertex, const communicator& comm);
+out_edges(int vertex, const graph_communicator& comm);
 
 
 /**
  * @brief Returns the out-degree of a vertex in the graph topology of
  * a communicator.
  */
-int out_degree(int vertex, const communicator& comm);
+int out_degree(int vertex, const graph_communicator& comm);
 
 // Adjacency Graph requirements
 
@@ -279,7 +436,7 @@ int out_degree(int vertex, const communicator& comm);
  * the given vertex in the communicator's graph topology.
  */
 std::pair<detail::comm_adj_iterator, detail::comm_adj_iterator>
-adjacent_vertices(int vertex, const communicator& comm);
+adjacent_vertices(int vertex, const graph_communicator& comm);
 
 // Vertex List Graph requirements
 
@@ -289,7 +446,7 @@ adjacent_vertices(int vertex, const communicator& comm);
  * ranks in the communicator.
  */
 inline std::pair<counting_iterator<int>, counting_iterator<int> >
-vertices(const communicator& comm)
+vertices(const graph_communicator& comm)
 {
   return std::make_pair(counting_iterator<int>(0),
                         counting_iterator<int>(comm.size()));
@@ -300,7 +457,7 @@ vertices(const communicator& comm)
  *  the communicator, i.e., the number of processes in the
  *  communicator.
  */
-inline int num_vertices(const communicator& comm) { return comm.size(); }
+inline int num_vertices(const graph_communicator& comm) { return comm.size(); }
 
 // Edge List Graph requirements
 
@@ -309,13 +466,13 @@ inline int num_vertices(const communicator& comm) { return comm.size(); }
  * with the communicator's graph topology.
  */
 std::pair<detail::comm_edge_iterator, detail::comm_edge_iterator>
-edges(const communicator& comm);
+edges(const graph_communicator& comm);
 
 /**
  * @brief Returns the number of edges in the communicator's graph
  * topology.
  */
-int num_edges(const communicator& comm);
+int num_edges(const graph_communicator& comm);
 
 // Property Graph requirements
 
@@ -326,7 +483,7 @@ int num_edges(const communicator& comm);
  *  Since the vertices are ranks in the communicator, the returned
  *  property map is the identity property map.
  */
-inline identity_property_map get(vertex_index_t, const communicator&)
+inline identity_property_map get(vertex_index_t, const graph_communicator&)
 {
   return identity_property_map();
 }
@@ -338,7 +495,7 @@ inline identity_property_map get(vertex_index_t, const communicator&)
  * Since the vertices are ranks in the communicator, this is the
  *  identity function.
  */
-inline int get(vertex_index_t, const communicator&, int vertex)
+inline int get(vertex_index_t, const graph_communicator&, int vertex)
 {
   return vertex;
 }
@@ -359,7 +516,7 @@ namespace boost {
  * Library.
  */
 template<>
-struct graph_traits<mpi::communicator> {
+struct graph_traits<mpi::graph_communicator> {
   // Graph concept requirements
   typedef int                        vertex_descriptor;
   typedef std::pair<int, int>        edge_descriptor;
@@ -405,7 +562,7 @@ struct graph_traits<mpi::communicator> {
  * INTERNAL ONLY
  */
 template<>
-struct property_map<mpi::communicator, vertex_index_t>
+struct property_map<mpi::graph_communicator, vertex_index_t>
 {
   typedef identity_property_map type;
   typedef identity_property_map const_type;
@@ -415,4 +572,4 @@ struct property_map<mpi::communicator, vertex_index_t>
 
 
 
-#endif // BOOST_MPI_TOPOLOGIES_HPP
+#endif // BOOST_MPI_GRAPH_COMMUNICATOR_HPP

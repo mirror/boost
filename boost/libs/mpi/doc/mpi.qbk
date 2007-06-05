@@ -1229,7 +1229,7 @@ operations are called internally by Boost.MPI.
 `MPI_Type_contiguous`]] [arrays]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node56.html#Node56
-`MPI_Type_extent`]] [unsupported]]
+`MPI_Type_extent`]] [used automatically in Boost.MPI]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node58.html#Node58
 `MPI_Type_free`]] [used automatically in Boost.MPI]]
@@ -1238,8 +1238,7 @@ operations are called internally by Boost.MPI.
 `MPI_Type_hindexed`]] [any type used as a subobject]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node55.html#Node55
-`MPI_Type_hvector`]] [unsupported unless equivalent to
-`MPI_Type_contiguous`]]
+`MPI_Type_hvector`]] [unused]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node55.html#Node55
 `MPI_Type_indexed`]] [any type used as a subobject]]
@@ -1248,7 +1247,7 @@ operations are called internally by Boost.MPI.
 `MPI_Type_lb`]] [unsupported]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node56.html#Node56
-`MPI_Type_size`]] [unsupported]]
+`MPI_Type_size`]] [used automatically in Boost.MPI]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node55.html#Node55
 `MPI_Type_struct`]] [user-defined classes and structs]]
@@ -1257,7 +1256,7 @@ operations are called internally by Boost.MPI.
 `MPI_Type_ub`]] [unsupported]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node55.html#Node55
-`MPI_Type_vector`]] [unsupported unless equivalent to `MPI_Type_contiguous`]]
+`MPI_Type_vector`]] [used automatically in Boost.MPI]]
 ]
 
 MPI's packing facilities store values into a contiguous buffer, which

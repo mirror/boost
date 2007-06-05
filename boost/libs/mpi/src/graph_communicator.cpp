@@ -6,13 +6,13 @@
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-#include <boost/mpi/graph_topology.hpp>
+#include <boost/mpi/graph_communicator.hpp>
 
 namespace boost { namespace mpi {
 
 // Incidence Graph requirements
 std::pair<detail::comm_out_edge_iterator, detail::comm_out_edge_iterator>
-out_edges(int vertex, const communicator& comm)
+out_edges(int vertex, const graph_communicator& comm)
 {
   int nneighbors = out_degree(vertex, comm);
   shared_array<int> neighbors(new int[nneighbors]);
@@ -23,7 +23,7 @@ out_edges(int vertex, const communicator& comm)
                                                        nneighbors));
 }
 
-int out_degree(int vertex, const communicator& comm)
+int out_degree(int vertex, const graph_communicator& comm)
 {
   int nneighbors;
   BOOST_MPI_CHECK_RESULT(MPI_Graph_neighbors_count, 
@@ -33,7 +33,7 @@ int out_degree(int vertex, const communicator& comm)
 
 // Adjacency Graph requirements
 std::pair<detail::comm_adj_iterator, detail::comm_adj_iterator>
-adjacent_vertices(int vertex, const communicator& comm)
+adjacent_vertices(int vertex, const graph_communicator& comm)
 {
   int nneighbors = out_degree(vertex, comm);
   shared_array<int> neighbors(new int[nneighbors]);
@@ -45,10 +45,10 @@ adjacent_vertices(int vertex, const communicator& comm)
 
 // Edge List Graph requirements
 std::pair<detail::comm_edge_iterator, detail::comm_edge_iterator>
-edges(const communicator& comm);
+edges(const graph_communicator& comm);
 
 std::pair<detail::comm_edge_iterator, detail::comm_edge_iterator>
-edges(const communicator& comm)
+edges(const graph_communicator& comm)
 {
   int nnodes, nedges;
   BOOST_MPI_CHECK_RESULT(MPI_Graphdims_get, ((MPI_Comm)comm, &nnodes, &nedges));
@@ -63,7 +63,7 @@ edges(const communicator& comm)
 }
 
 
-int num_edges(const communicator& comm)
+int num_edges(const graph_communicator& comm)
 {
   int nnodes, nedges;
   BOOST_MPI_CHECK_RESULT(MPI_Graphdims_get, ((MPI_Comm)comm, &nnodes, &nedges));

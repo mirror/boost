@@ -22,7 +22,7 @@
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/datatype.hpp>
 #include <boost/mpi/environment.hpp>
-#include <boost/mpi/graph_topology.hpp>
+#include <boost/mpi/graph_communicator.hpp>
 #include <boost/mpi/group.hpp>
 #include <boost/mpi/intercommunicator.hpp>
 #include <boost/mpi/nonblocking.hpp>

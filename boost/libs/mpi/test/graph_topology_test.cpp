@@ -11,7 +11,7 @@
 // verifies that the same data makes it all the way. Should test all
 // of the various kinds of data that can be sent (primitive types, POD
 // types, serializable objects, etc.)
-#include <boost/mpi/graph_topology.hpp>
+#include <boost/mpi/graph_communicator.hpp>
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -26,14 +26,15 @@
 #include <boost/mpi/collectives/broadcast.hpp>
 
 using boost::mpi::communicator;
+using boost::mpi::graph_communicator;
 using namespace boost;
 
 int test_main(int argc, char* argv[])
 {
-  boost::function_requires< IncidenceGraphConcept<communicator> >();
-  boost::function_requires< AdjacencyGraphConcept<communicator> >();
-  boost::function_requires< VertexListGraphConcept<communicator> >();
-  boost::function_requires< EdgeListGraphConcept<communicator> >();
+  boost::function_requires< IncidenceGraphConcept<graph_communicator> >();
+  boost::function_requires< AdjacencyGraphConcept<graph_communicator> >();
+  boost::function_requires< VertexListGraphConcept<graph_communicator> >();
+  boost::function_requires< EdgeListGraphConcept<graph_communicator> >();
 
   double prob = 0.1;
 
@@ -89,8 +90,7 @@ int test_main(int argc, char* argv[])
   }
 
   // Create a communicator with a topology equivalent to the graph
-  communicator graph_comm = world.with_graph_topology(graph, false, 
-                                                      graph_alt_index);
+  graph_communicator graph_comm(world, graph, graph_alt_index, false);
 
   // The communicator's topology should have the same number of
   // vertices and edges and the original graph
@@ -100,15 +100,15 @@ int test_main(int argc, char* argv[])
   // Display the communicator graph
   if (graph_comm.rank() == 0) {
     std::cout << "Communicator graph:\n";
-    BGL_FORALL_VERTICES(v, graph_comm, communicator) {
-      BGL_FORALL_OUTEDGES(v, e, graph_comm, communicator) {
+    BGL_FORALL_VERTICES(v, graph_comm, graph_communicator) {
+      BGL_FORALL_OUTEDGES(v, e, graph_comm, graph_communicator) {
         std::cout << source(e, graph_comm) << " -> " << target(e, graph_comm) 
                   << std::endl;
       }
     }
 
     std::cout << "Communicator graph via edges():\n";
-    BGL_FORALL_EDGES(e, graph_comm, communicator)
+    BGL_FORALL_EDGES(e, graph_comm, graph_communicator)
       std::cout << source(e, graph_comm) << " -> " << target(e, graph_comm) 
                 << std::endl;
   }

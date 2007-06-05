@@ -103,6 +103,14 @@ class group;
 class intercommunicator;
 
 /**
+ * INTERNAL ONLY
+ *
+ * Forward declaration of @c graph_communicator needed for the "cast"
+ * from a communicator to a graph communicator.
+ */
+class graph_communicator;
+
+/**
  * @brief A communicator that permits communication and
  * synchronization among a set of processes.
  *
@@ -796,79 +804,42 @@ class communicator
   optional<intercommunicator> as_intercommunicator() const;
 
   /**
+   * Determine if the communicator has a graph topology and, if so,
+   * return that @c graph_communicator. Even though the communicators
+   * have different types, they refer to the same underlying
+   * communication space and can be used interchangeably for
+   * communication.
+   *
+   * @returns an @c optional containing the graph communicator, if this
+   * communicator does in fact have a graph topology. Otherwise, returns
+   * an empty @c optional.
+   */
+  optional<graph_communicator> as_graph_communicator() const;
+
+  /**
    * Determines whether this communicator has a Cartesian topology.
    */
   bool has_cartesian_topology() const;
 
-  /**
-   *  Determines whether this communicator has a graph topology. If
-   *  the communicator does have a graph topology, the communicator
-   *  itself can be viewed as a graph by the algorithms in the Boost
-   *  Graph Library. The communicator then meets the requirements of
-   *  the @c Graph, @c Incidence Graph, @c Adjacency Graph, @c Vertex
-   *  List Graph, and @c Edge List Graph concepts.
-   */
-  bool has_graph_topology() const;
-
-  /**
-   *  Create a new communicator whose topology is described by the
-   *  given graph. The vertex index map (@p index) gives the mapping
-   *  from vertices in the graph to ranks within the
-   *  communicator. There may be fewer vertices in the graph than
-   *  there are processes in the communicator; in this case, this
-   *  routine will return a NULL communicator.
-   *
-   *  To use this function, you will need to have included either all
-   *  of the Boost.MPI library (@c boost/mpi.hpp) or the
-   *  graph topology header (@c boost/mpi/graph_topology.hpp).
-   *
-   *  @param graph Any type that meets the requirements of the
-   *  IncidenceGraph and VertexListGraph concepts from the Boost Graph
-   *  Library. This structure of this graph will become the topology
-   *  of the communicator that is returned.
-   *
-   *  @param reorder Whether MPI is permitted to re-order the process
-   *  ranks within the returned communicator, to better optimize
-   *  communication. If false, the ranks of each process in the
-   *  returned process will match precisely the rank of that process
-   *  within the original communicator.
-   *
-   *  @param rank This map translates vertices in the @c graph into
-   *  ranks within the current communicator. It must be a Readable
-   *  Property Map (see the Boost Property Map library) whose key type
-   *  is the vertex type of the @p graph and whose value type is @c
-   *  int.
-   */
-  template<typename Graph, typename VertexIndexMap>
+#if 0
+  template<typename Extents>
   communicator 
-  with_graph_topology(const Graph& graph, bool reorder, VertexIndexMap rank);
+  with_cartesian_topology(const Extents& extents, 
+                          bool periodic = false, 
+                          bool reorder = false) const;
 
-  /**
-   *  Create a new communicator whose topology is described by the
-   *  given graph. The mapping from vertices in the graph to ranks
-   *  within the communicator is provided by the internal @c
-   *  vertex_index property of the graph. There may be fewer vertices
-   *  in the graph than there are processes in the communicator; in
-   *  this case, this routine will return a NULL communicator.
-   *
-   *  To use this function, you will need to have included either all
-   *  of the Boost.MPI library (@c boost/mpi.hpp) or the
-   *  graph topology header (@c boost/mpi/graph_topology.hpp).
-   *
-   *  @param graph Any type that meets the requirements of the
-   *  IncidenceGraph and VertexListGraph concepts from the Boost Graph
-   *  Library. This structure of this graph will become the topology
-   *  of the communicator that is returned.
-   *
-   *  @param reorder Whether MPI is permitted to re-order the process
-   *  ranks within the returned communicator, to better optimize
-   *  communication. If false, the ranks of each process in the
-   *  returned process will match precisely the rank of that process
-   *  within the original communicator.
-   */
-  template<typename Graph>
-  communicator 
-  with_graph_topology(const Graph& graph, bool reorder = true);
+  template<typename DimInputIterator, typename PeriodicInputIterator>
+  communicator
+  with_cartesian_topology(DimInputIterator first_dim,
+                          DimInputIterator last_dim,
+                          PeriodicInputIterator first_periodic,
+                          bool reorder = false);
+
+  template<typename Allocator, std::size_t NumDims>
+  communicator
+  with_cartesian_topology(const multi_array<bool, NumDims, Allocator>& periods,
+                          bool reorder = false);
+#endif
 
   /** Abort all tasks in the group of this communicator.
    *
