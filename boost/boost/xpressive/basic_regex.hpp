@@ -15,10 +15,8 @@
 # pragma once
 #endif
 
-#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
-# include <iosfwd>
-#endif
 #include <boost/mpl/bool.hpp>
+#include <boost/xpressive/xpressive_fwd.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
@@ -27,6 +25,11 @@
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
 # include <boost/xpressive/detail/static/grammar.hpp>
 # include <boost/xpressive/proto/extends.hpp>
+#endif
+
+#if BOOST_XPRESSIVE_HAS_MS_STACK_GUARD
+# include <excpt.h>     // for _exception_code()
+# include <malloc.h>    // for _resetstkoflw()
 #endif
 
 namespace boost { namespace xpressive
@@ -181,18 +184,6 @@ public:
         return regex_compiler<BidiIter>().compile(begin, len, flags);
     }
 
-    //{{AFX_DEBUG
-    #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
-    // BUGBUG debug only
-    /// INTERNAL ONLY
-    friend std::ostream &operator <<(std::ostream &sout, basic_regex<BidiIter> const &rex)
-    {
-        rex.dump_(sout);
-        return sout;
-    }
-    #endif
-    //}}AFX_DEBUG
-
 private:
     friend struct detail::core_access<BidiIter>;
 
@@ -212,7 +203,22 @@ private:
     /// INTERNAL ONLY
     bool match_(detail::match_state<BidiIter> &state) const
     {
+        #if BOOST_XPRESSIVE_HAS_MS_STACK_GUARD
+        bool success = false, stack_error = false;
+        __try
+        {
+            success = proto::arg(*this)->xpr_->match(state);
+        }
+        __except(_exception_code() == 0xC00000FDUL)
+        {
+            stack_error = true;
+            _resetstkoflw();
+        }
+        detail::ensure(!stack_error, regex_constants::error_stack, "Regex stack space exhausted");
+        return success;
+        #else
         return proto::arg(*this)->xpr_->match(state);
+        #endif
     }
 
     // Returns true if this basic_regex object does not contain a valid regular expression.
@@ -240,26 +246,6 @@ private:
     /// INTERNAL ONLY
     void dump_(std::ostream &sout) const;
 };
-
-//{{AFX_DEBUG
-#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
-///////////////////////////////////////////////////////////////////////////////
-// dump_
-/// INTERNAL ONLY
-template<typename BidiIter>
-inline void basic_regex<BidiIter>::dump_(std::ostream &sout) const
-{
-    if(!proto::arg(*this))
-    {
-        sout << "<null> refs={} deps={}";
-    }
-    else
-    {
-        sout << *proto::arg(*this);
-    }
-}
-#endif
-//}}AFX_DEBUG
 
 ///////////////////////////////////////////////////////////////////////////////
 // swap

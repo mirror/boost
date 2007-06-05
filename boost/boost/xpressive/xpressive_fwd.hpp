@@ -37,6 +37,19 @@
 # endif
 #endif
 
+// Stack protection under MS Windows
+// Config logic taken from boost/regex/config.hpp
+#ifndef BOOST_XPRESSIVE_HAS_MS_STACK_GUARD
+# if (defined(_WIN32) || defined(_WIN64) || defined(_WINCE))                    \
+     && !defined(__GNUC__)                                                      \
+     && !(defined(__BORLANDC__) && (__BORLANDC__ >= 0x600))                     \
+     && !(defined(__MWERKS__) && (__MWERKS__ <= 0x3003))
+#  define BOOST_XPRESSIVE_HAS_MS_STACK_GUARD 1
+# else
+#  define BOOST_XPRESSIVE_HAS_MS_STACK_GUARD 0
+# endif
+#endif
+
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 
@@ -105,9 +118,6 @@ namespace boost { namespace xpressive
 
     template<typename BidiIter>
     struct sub_match;
-
-    template<typename Action, typename Saved = Action>
-    struct action;
 
     template<typename RegexTraits>
     struct compiler_traits;
