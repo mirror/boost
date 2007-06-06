@@ -334,3 +334,4 @@ test-suite "BOOST_NO_INTRINSIC_WCHAR_T" :
 [ compile-fail no_wchar_t_fail.cpp ] ;
 
 
+
