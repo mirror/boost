@@ -266,7 +266,7 @@ typename I::base_type root_aux_up(typename I::base_type const &x, int k)
 } // namespace interval_lib
 
 template< class T, class Policies > inline
-interval<T, Policies> root(interval<T, Policies> const &x, int k)
+interval<T, Policies> nth_root(interval<T, Policies> const &x, int k)
 {
   typedef interval<T, Policies> I;
   if (interval_lib::detail::test_input(x)) return I::empty();

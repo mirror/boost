@@ -300,12 +300,12 @@ template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; operator/(
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; operator/(const interval&lt;T, Policies&gt;&amp; x, const T&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; operator/(const T&amp; r, const interval&lt;T, Policies&gt;&amp; x);
 
-/* algebraic functions: sqrt, abs, square, pow, root */
+/* algebraic functions: sqrt, abs, square, pow, nth_root */
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; abs(const interval&lt;T, Policies&gt;&amp; x);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; sqrt(const interval&lt;T, Policies&gt;&amp; x);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; square(const interval&lt;T, Policies&gt;&amp; x);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; pow(const interval&lt;T, Policies&gt;&amp; x, int y);
-template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; root(const interval&lt;T, Policies&gt;&amp; x, int y);
+template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; nth_root(const interval&lt;T, Policies&gt;&amp; x, int y);
 
 /* transcendental functions: exp, log */
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; exp(const interval&lt;T, Policies&gt;&amp; x);
@@ -530,7 +530,7 @@ class interval
   numbers.</p>
 
   <h4><code>min</code> <code>max</code> <code>abs</code> <code>square</code>
-  <code>pow</code> <code>root</code> <code>division_part?</code>
+  <code>pow</code> <code>nth_root</code> <code>division_part?</code>
   <code>multiplicative_inverse</code></h4>
 
   <p>The functions <code>min</code>, <code>max</code> and <code>abs</code>
@@ -556,10 +556,10 @@ class interval
   <p>As for <code>square</code>, <code>pow</code> provides an efficient and
   more accurate way to compute the integer power of an interval. Please note:
   when the power is 0 and the interval is not empty, the result is 1, even if
-  the input interval contains 0. <code>root</code> computes the integer root
-  of an interval (<code>root(pow(x,k),k)</code> encloses <code>x</code> or
+  the input interval contains 0. <code>nth_root</code> computes the integer root
+  of an interval (<code>nth_root(pow(x,k),k)</code> encloses <code>x</code> or
   <code>abs(x)</code> depending on whether <code>k</code> is odd or even).
-  The behavior of <code>root</code> is not defined if the integer argument is
+  The behavior of <code>nth_root</code> is not defined if the integer argument is
   not positive. <code>multiplicative_inverse</code> computes
   <code>1/x</code>.</p>
 
