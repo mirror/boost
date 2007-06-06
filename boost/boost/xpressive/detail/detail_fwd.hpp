@@ -27,7 +27,7 @@ namespace boost { namespace xpressive { namespace detail
 {
     typedef unsigned int uint_t;
 
-    template<uint_t Min, uint_t Max>
+    template<uint_t Min, uint_t Max = Min>
     struct generic_quant_tag;
 
     struct modifier_tag;

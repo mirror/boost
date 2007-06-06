@@ -297,47 +297,6 @@ namespace boost { namespace xpressive
             }
         };
 
-        template<typename T>
-        struct as
-        {
-            typedef T result_type;
-
-            template<typename Value>
-            T operator()(Value const &val) const
-            {
-                return lexical_cast<T>(val);
-            }
-        };
-
-        template<typename T>
-        struct construct
-        {
-            typedef T result_type;
-
-            T operator()() const
-            {
-                return T();
-            }
-
-            template<typename A0>
-            T operator()(A0 const &a0) const
-            {
-                return T(a0);
-            }
-
-            template<typename A0, typename A1>
-            T operator()(A0 const &a0, A1 const &a1) const
-            {
-                return T(a0, a1);
-            }
-
-            template<typename A0, typename A1, typename A2>
-            T operator()(A0 const &a0, A1 const &a1, A2 const &a2) const
-            {
-                return T(a0, a1, a2);
-            }
-        };
-
         // This codifies the return types of the various insert member
         // functions found in sequence containers, the 2 flavors of
         // associative containers, and strings.
@@ -453,6 +412,76 @@ namespace boost { namespace xpressive
                 return std::make_pair(first, second);
             }
         };
+
+        template<typename T>
+        struct as
+        {
+            typedef T result_type;
+
+            template<typename Value>
+            T operator()(Value const &val) const
+            {
+                return lexical_cast<T>(val);
+            }
+        };
+
+        template<typename T>
+        struct construct
+        {
+            typedef T result_type;
+
+            T operator()() const
+            {
+                return T();
+            }
+
+            template<typename A0>
+            T operator()(A0 const &a0) const
+            {
+                return T(a0);
+            }
+
+            template<typename A0, typename A1>
+            T operator()(A0 const &a0, A1 const &a1) const
+            {
+                return T(a0, a1);
+            }
+
+            template<typename A0, typename A1, typename A2>
+            T operator()(A0 const &a0, A1 const &a1, A2 const &a2) const
+            {
+                return T(a0, a1, a2);
+            }
+        };
+
+        template<typename Except>
+        struct throw_
+        {
+            typedef void result_type;
+
+            void operator()() const
+            {
+                throw Except();
+            }
+
+            template<typename A0>
+            void operator()(A0 const &a0) const
+            {
+                throw Except(a0);
+            }
+
+            template<typename A0, typename A1>
+            void operator()(A0 const &a0, A1 const &a1) const
+            {
+                throw Except(a0, a1);
+            }
+
+            template<typename A0, typename A1, typename A2>
+            void operator()(A0 const &a0, A1 const &a1, A2 const &a2) const
+            {
+                throw Except(a0, a1, a2);
+            }
+        };
     }
 
     proto::terminal<op::push>::type const push = {{}};
@@ -550,18 +579,15 @@ namespace boost { namespace xpressive
         }
     };
 
-    template<typename T, typename D>
-    typename proto::function<
-        typename proto::terminal<op::as<T> >::type
-      , typename proto::result_of::as_arg<D const>::type
-    >::type const as(D const &d)
-    {
-        typename proto::function<
-            typename proto::terminal<op::as<T> >::type
-          , typename proto::result_of::as_arg<D const>::type
-        >::type that = {{{}}, proto::as_arg(d)};
-        return that;
-    }
+    /// as
+    ///
+    BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
+        1
+      , as
+      , boost::proto::default_domain
+      , (boost::proto::tag::function)
+      , ((op::as)(typename))
+    )
 
     template<typename T>
     value<T> const val(T const &t)
@@ -601,69 +627,23 @@ namespace boost { namespace xpressive
         BOOST_PROTO_EXTENDS_FUNCTION(action_arg_type, this_type, proto::default_domain)
     };
 
-    /// construct
+    /// Usage: construct<Type>(arg1, arg2)
     ///
-    template<typename T>
-    typename proto::function<
-        typename proto::terminal<op::construct<T> >::type
-    >::type const construct()
-    {
-        typename proto::function<
-            typename proto::terminal<op::construct<T> >::type
-        >::type that = {{{}}};
-        return that;
-    }
+    BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(
+        construct
+      , boost::proto::default_domain
+      , (boost::proto::tag::function)
+      , ((op::construct)(typename))
+    )
 
-    /// \overload
+    /// Usage: throw_<Exception>(arg1, arg2)
     ///
-    template<typename T, typename A0>
-    typename proto::function<
-        typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_arg<A0 const>::type
-    >::type const construct(A0 const &a0)
-    {
-        typename proto::function<
-            typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_arg<A0 const>::type
-        >::type that = {{{}}, proto::as_arg(a0)};
-        return that;
-    }
-
-    /// \overload
-    ///
-    template<typename T, typename A0, typename A1>
-    typename proto::function<
-        typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_arg<A0 const>::type
-      , typename proto::result_of::as_arg<A1 const>::type
-    >::type const construct(A0 const &a0, A1 const &a1)
-    {
-        typename proto::function<
-            typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_arg<A0 const>::type
-          , typename proto::result_of::as_arg<A1 const>::type
-        >::type that = {{{}}, proto::as_arg(a0), proto::as_arg(a1)};
-        return that;
-    }
-
-    /// \overload
-    ///
-    template<typename T, typename A0, typename A1, typename A2>
-    typename proto::function<
-        typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_arg<A0 const>::type
-      , typename proto::result_of::as_arg<A1 const>::type
-      , typename proto::result_of::as_arg<A2 const>::type
-    >::type const construct(A0 const &a0, A1 const &a1, A2 const &a2)
-    {
-        typename proto::function<
-            typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_arg<A0 const>::type
-          , typename proto::result_of::as_arg<A1 const>::type
-          , typename proto::result_of::as_arg<A2 const>::type
-        >::type that = {{{}}, proto::as_arg(a0), proto::as_arg(a1), proto::as_arg(a2)};
-        return that;
-    }
+    BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(
+        throw_
+      , boost::proto::default_domain
+      , (boost::proto::tag::function)
+      , ((op::throw_)(typename))
+    )
 
     namespace detail
     {

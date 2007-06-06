@@ -116,7 +116,12 @@ void test1()
 ////////////////////////////////////////////////////////////////////////
 // Test that EXTENDS expression wrappers are also valid fusion sequences
 
-struct MyDomain;
+template<typename Expr>
+struct My;
+
+struct MyDomain
+  : boost::proto::domain<boost::proto::pod_generator<My> >
+{};
 
 template<typename Expr>
 struct My
@@ -126,10 +131,6 @@ struct My
     BOOST_PROTO_EXTENDS_SUBSCRIPT(Expr, My<Expr>, MyDomain)
     BOOST_PROTO_EXTENDS_FUNCTION(Expr, My<Expr>, MyDomain)
 };
-
-struct MyDomain
-  : boost::proto::domain<boost::proto::pod_generator<My> >
-{};
 
 void test2()
 {

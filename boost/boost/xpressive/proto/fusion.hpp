@@ -185,9 +185,8 @@ namespace boost { namespace fusion
         {
             template<typename IteratorFrom, typename IteratorTo>
             struct apply
-            {
-                typedef mpl::long_<IteratorTo::index::value - IteratorFrom::index::value> type;
-            };
+              : mpl::long_<IteratorTo::index::value - IteratorFrom::index::value>
+            {};
         };
 
         template<typename Tag>
