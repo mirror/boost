@@ -8,12 +8,23 @@
 
 #include <boost/config.hpp>
 
+#ifdef BOOST_NO_CV_SPECIALIZATIONS
+#include <boost/mpl/at.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/multiplies.hpp>
+#include <boost/mpl/plus.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/type_traits/is_same.hpp>
+#endif
+
 // Should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
 
 namespace boost {
 
 namespace type_traits { namespace detail {
+
+#ifndef BOOST_NO_CV_SPECIALIZATIONS
 
 template<class T>
 struct floating_point_promotion
@@ -44,6 +55,25 @@ struct floating_point_promotion<float const volatile>
 {
     typedef double const volatile type;
 };
+
+#else
+
+template<class T>
+struct floating_point_promotion
+  : mpl::at<
+        mpl::vector< T, double, double const, double volatile,
+                     double const volatile >
+      , mpl::plus<
+            is_same<T, float>
+          , mpl::multiplies< is_same<T, float const>         , mpl::int_<2> >
+          , mpl::multiplies< is_same<T, float volatile>      , mpl::int_<3> >
+          , mpl::multiplies< is_same<T, float const volatile>, mpl::int_<4> >
+          >
+      >
+{
+};
+
+#endif
 
 } }
 
