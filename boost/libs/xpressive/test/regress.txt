@@ -1493,6 +1493,15 @@ br1=hello
 br2=ll
 [end]
 
+; test for quantified, non-capturing groups, bug report
+[test174]
+str=cabba\nabba\ndaba\n
+pat=^(c[^\r\n]*(?:\r?\n|\r)(?:(?!c)[^\r\n]*(?:\r?\n|\r))*)
+flg=
+br0=cabba\nabba\ndaba\n
+br1=cabba\nabba\ndaba\n
+[end]
+
 ; tests pilfered from Boost.Regex test_tricky_cases.cpp
 
 [tricky1]

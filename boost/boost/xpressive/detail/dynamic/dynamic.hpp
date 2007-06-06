@@ -108,10 +108,16 @@ private:
         // no-op
     }
 
-    void repeat_(quant_spec const &, sequence<BidiIter> &, mpl::int_<quant_none>, mpl::false_) const
+    void repeat_(quant_spec const &spec, sequence<BidiIter> &seq, mpl::int_<quant_none>, mpl::false_) const
     {
-        BOOST_ASSERT(false); // should never get here
-        throw regex_error(regex_constants::error_badrepeat, "expression cannot be quantified");
+        if(quant_none == seq.quant())
+        {
+            throw regex_error(regex_constants::error_badrepeat, "expression cannot be quantified");
+        }
+        else
+        {
+            this->repeat_(spec, seq, mpl::int_<quant_variable_width>(), mpl::false_());
+        }
     }
 
     void repeat_(quant_spec const &spec, sequence<BidiIter> &seq, mpl::int_<quant_fixed_width>, mpl::false_) const
