@@ -29,6 +29,7 @@ boostbook standalone
         <xsl:param>boost.root=../../../..
         <xsl:param>boost.libraries=../../../../libs/libraries.htm
         <xsl:param>navig.graphics=1
+        <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
 
         # PDF Options:
         # TOC Generation: this is needed for FOP-0.9 and later:
@@ -50,6 +51,8 @@ boostbook standalone
         # better use SVG's instead:
         #<xsl:param>admon.graphics.extension=".svg"
     ;
+
+
 
 
 
