@@ -121,7 +121,7 @@ namespace detail
     {
         typedef typename result_of::begin<Sequence>::type begin;
         typedef typename result_of::end<Sequence>::type end;
-        for_each_unrolled<result_of::distance<begin, end>::value>::call(fusion::begin(seq), f);
+        for_each_unrolled<result_of::distance<begin, end>::type::value>::call(fusion::begin(seq), f);
     }
 }}}
 

@@ -118,7 +118,7 @@ namespace boost { namespace fusion { namespace detail
     {
         typedef typename result_of::begin<Sequence>::type begin;
         typedef typename result_of::end<Sequence>::type end;
-        return detail::unrolled_all<result_of::distance<begin, end>::value>::call(
+        return detail::unrolled_all<result_of::distance<begin, end>::type::value>::call(
             fusion::begin(seq), f);
     }
 }}}

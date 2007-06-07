@@ -214,7 +214,7 @@ namespace detail
         typedef typename result_of::begin<Sequence>::type begin;
         typedef typename result_of::end<Sequence>::type end;
         typedef typename result_of_unrolled_fold<
-            begin, State, F, result_of::distance<begin, end>::value>::type type;
+            begin, State, F, result_of::distance<begin, end>::type::value>::type type;
     };
 
     template<typename Sequence, typename State, typename F>
@@ -251,7 +251,7 @@ namespace detail
     {
         typedef typename result_of::begin<Sequence>::type begin;
         typedef typename result_of::end<Sequence>::type end;
-        return unrolled_fold<result_of::distance<begin, end>::value>::call(
+        return unrolled_fold<result_of::distance<begin, end>::type::value>::call(
             fusion::begin(seq)
             , state
             , f);

@@ -161,7 +161,7 @@ namespace detail
     {
         typedef typename result_of::begin<Sequence>::type begin;
         typedef typename result_of::end<Sequence>::type end;
-        return detail::unrolled_count_if<result_of::distance<begin, end>::value>::
+        return detail::unrolled_count_if<result_of::distance<begin, end>::type::value>::
             call(fusion::begin(seq), f);
     }
 }}}
