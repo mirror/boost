@@ -459,21 +459,20 @@ namespace boost
         template<typename T, typename CharT>
         CharT* lcast_put_unsigned(T n, CharT* finish)
         {
-            typedef std::numpunct<CharT> numpunct;
-
             CharT thousands_sep = 0;
 
-#if !defined(MEASURE_LEXICAL_CAST_PERFORMANCE_WITHOUT_LOCALE_OVERHEAD)
+#ifdef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+            char const* grouping = "";
+            std::size_t const grouping_size = 0;
+#else
             std::locale loc;
+            typedef std::numpunct<CharT> numpunct;
             numpunct const& np = BOOST_USE_FACET(numpunct, loc);
             std::string const& grouping = np.grouping();
             std::string::size_type const grouping_size = grouping.size();
 
             if(grouping_size)
                 thousands_sep = np.thousands_sep();
-#else // dead branch in production code
-            char const* grouping = "";
-            std::size_t grouping_size = 0;
 #endif
 
             std::string::size_type group = 0; // current group number
