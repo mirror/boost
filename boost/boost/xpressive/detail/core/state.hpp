@@ -153,6 +153,9 @@ struct match_state
     void reset(match_results &what, regex_impl const &impl)
     {
         this->extras_ = &core_access<BidiIter>::get_extras(what);
+        this->action_list_.next = 0;
+        this->action_list_tail_ = &action_list_.next;
+        this->action_args_ = &core_access<BidiIter>::get_action_args(what);
         this->context_.prev_context_ = 0;
         this->found_partial_match_ = false;
         this->extras_->sub_match_stack_.unwind();
