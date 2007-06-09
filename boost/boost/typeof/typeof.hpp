@@ -105,6 +105,24 @@
 #       endif*/
 #   endif
 
+#elif defined(__HP_aCC)
+#   ifndef BOOST_TYPEOF_NATIVE
+#       ifndef BOOST_TYPEOF_EMULATION
+#           define BOOST_TYPEOF_EMULATION
+#       endif
+#   else
+#       error native typeof is not supported
+#   endif
+
+#elif defined(__DECCXX)
+#   ifndef BOOST_TYPEOF_NATIVE
+#       ifndef BOOST_TYPEOF_EMULATION
+#           define BOOST_TYPEOF_EMULATION
+#       endif
+#   else
+#       error native typeof is not supported
+#   endif
+
 #else //unknown compiler
 #   ifndef BOOST_TYPEOF_NATIVE
 #       ifndef BOOST_TYPEOF_EMULATION
