@@ -230,6 +230,8 @@ enum error_type
                                 ///<
     error_badarg,               ///< An argument to an action was unbound.
                                 ///<
+    error_badattr,              ///< Tried to read from an uninitialized attribute.
+                                ///<
     error_internal              ///< An internal error has occured.
                                 ///<
 };

@@ -610,6 +610,16 @@ imbue(Locale const &loc)
     return mod;
 }
 
+proto::terminal<detail::attribute_placeholder<mpl::int_<1> > >::type const a1 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<2> > >::type const a2 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<3> > >::type const a3 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<4> > >::type const a4 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<5> > >::type const a5 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<6> > >::type const a6 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<7> > >::type const a7 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<8> > >::type const a8 = {{}};
+proto::terminal<detail::attribute_placeholder<mpl::int_<9> > >::type const a9 = {{}};
+
 namespace detail
 {
     inline void ignore_unused_regex_primitives()

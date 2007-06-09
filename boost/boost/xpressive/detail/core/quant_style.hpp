@@ -64,13 +64,22 @@ struct quant_style
     }
 };
 
-#define BOOST_XPR_QUANT_STYLE(Style, Width, Pure)\
-    typedef void is_boost_xpressive_xpression_;\
-    BOOST_STATIC_CONSTANT(int, quant = Style);\
-    BOOST_STATIC_CONSTANT(std::size_t, width = Width);\
-    BOOST_STATIC_CONSTANT(bool, pure = Pure);\
-    static detail::width get_width() { return width; }\
+#define BOOST_XPR_QUANT_STYLE(Style, Width, Pure)                               \
+    typedef void is_boost_xpressive_xpression_;                                 \
+    BOOST_STATIC_CONSTANT(int, quant = Style);                                  \
+    BOOST_STATIC_CONSTANT(std::size_t, width = Width);                          \
+    BOOST_STATIC_CONSTANT(bool, pure = Pure);                                   \
+    static detail::width get_width() { return width; }                          \
     /**/
+
+//    // Replace transmogrify stupidity with rebindable matchers/placeholders
+//#define BOOST_XPR_IDENTITY_REBIND(TYPE)                                         \
+//    template<typename BidiIter, typename ICase, typename Traits>                \
+//    struct rebind                                                               \
+//    {                                                                           \
+//        typedef TYPE type;                                                      \
+//    };                                                                          \
+//    /**/
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style_none

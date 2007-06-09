@@ -144,6 +144,14 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr, bool Greedy>
     struct optional_mark_matcher;
 
+    template<typename Matcher, typename Traits, bool ICase>
+    struct attr_matcher;
+
+    template<typename Nbr>
+    struct attr_begin_matcher;
+
+    struct attr_end_matcher;
+
     template<typename Xpr>
     struct is_modifiable;
 

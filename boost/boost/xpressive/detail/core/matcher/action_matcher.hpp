@@ -89,6 +89,9 @@ namespace boost { namespace xpressive { namespace detail
     };
     #endif
 
+    struct attr_with_default_tag
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // action_context
     //
@@ -144,6 +147,28 @@ namespace boost { namespace xpressive { namespace detail
         struct eval<Expr, proto::tag::terminal>
           : eval_terminal<Expr>
         {};
+
+        // Evaluate attributes like a1|42
+        template<typename Expr>
+        struct eval<Expr, attr_with_default_tag>
+        {
+            typedef
+                typename proto::result_of::arg<
+                    typename proto::result_of::left<
+                        typename proto::result_of::arg<
+                            Expr
+                        >::type
+                    >::type
+                >::type::type
+            result_type;
+
+            result_type operator ()(Expr const &expr, action_context const &ctx) const
+            {
+                return proto::arg(proto::left(proto::arg(expr))).t_
+                    ? *proto::arg(proto::left(proto::arg(expr))).t_
+                    :  proto::eval(proto::right(proto::arg(expr)), ctx);
+            }
+        };
 
         #if BOOST_VERSION >= 103500
         template<typename Expr>
@@ -225,6 +250,95 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
+    // The attribute of optional<T> and smart pointers.
+    template<typename Attr>
+    struct attr_of
+      : remove_const<typename remove_reference<typename Attr::value_type>::type>
+    {};
+
+    // The attribute of bare pointers
+    template<typename Attr>
+    struct attr_of<Attr *>
+      : remove_const<Attr>
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // opt
+    //
+    template<typename T>
+    struct opt
+    {
+        typedef T type;
+        typedef T const &reference;
+
+        opt(T const *t)
+          : t_(t)
+        {}
+
+        operator reference() const
+        {
+            detail::ensure(0 != this->t_, regex_constants::error_badattr, "Use of uninitialized regex attribute");
+            return *this->t_;
+        }
+
+        T const *t_;
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // attr_transform
+    //
+    template<typename Grammar>
+    struct attr_transform
+      : Grammar
+    {
+        attr_transform();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : proto::result_of::as_expr<
+                opt<typename attr_of<typename Expr::arg0_type::matcher_type::result_type>::type>
+            >
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &)
+        {
+            typedef typename attr_of<typename Expr::arg0_type::matcher_type::result_type>::type attr_type;
+            int slot = typename Expr::arg0_type::nbr_type();
+            attr_type const *attr = static_cast<attr_type const *>(state.attr_context_.attr_slots_[slot-1]);
+            return proto::as_expr(opt<attr_type>(attr));
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // attr_with_default_transform
+    //
+    template<typename Grammar>
+    struct attr_with_default_transform
+      : Grammar
+    {
+        attr_with_default_transform();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : proto::unary_expr<
+                attr_with_default_tag
+              , typename Grammar::template apply<Expr, State, Visitor>::type
+            >
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            typename apply<Expr, State, Visitor>::type that = {
+                Grammar::call(expr, state, visitor)
+            };
+            return that;
+        }
+    };
+
     ///////////////////////////////////////////////////////////////////////////////
     // by_ref_transform
     //
@@ -254,7 +368,14 @@ namespace boost { namespace xpressive { namespace detail
       : proto::or_<
             subreg_transform<proto::terminal<any_matcher> >
           , mark_transform<proto::terminal<mark_placeholder> >
+          , attr_transform<proto::terminal<read_attr<proto::_, proto::_> > >
           , by_ref_transform<proto::terminal<proto::_> >
+          , attr_with_default_transform<
+                proto::bitwise_or<
+                    attr_transform<proto::terminal<read_attr<proto::_, proto::_> > >
+                  , BindActionArgs
+                >
+            >
           , proto::nary_expr<proto::_, proto::vararg<BindActionArgs> >
         >
     {};

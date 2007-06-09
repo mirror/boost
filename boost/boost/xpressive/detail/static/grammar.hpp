@@ -244,6 +244,7 @@ namespace boost { namespace xpressive
               : proto::or_<
                     proto::trans::compose<as_marker<proto::assign<basic_mark_tag, Grammar<Char> > >, Grammar<Char> >
                   , in_sequence<as_list_set<ListSet<Char> > >
+                  , in_sequence<as_attr_matcher<proto::assign<proto::terminal<attribute_placeholder<proto::_> >, proto::_> > >
                 >
             {};
 

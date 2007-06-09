@@ -27,6 +27,9 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
+#include <boost/xpressive/detail/core/matcher/attr_matcher.hpp>
+#include <boost/xpressive/detail/core/matcher/attr_end_matcher.hpp>
+#include <boost/xpressive/detail/core/matcher/attr_begin_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/typeof/std/string.hpp> // very often needed by client code.
@@ -426,6 +429,42 @@ namespace boost { namespace xpressive
         };
 
         template<typename T>
+        struct static_cast_
+        {
+            typedef T result_type;
+
+            template<typename Value>
+            T operator()(Value const &val) const
+            {
+                return static_cast<T>(val);
+            }
+        };
+
+        template<typename T>
+        struct dynamic_cast_
+        {
+            typedef T result_type;
+
+            template<typename Value>
+            T operator()(Value const &val) const
+            {
+                return dynamic_cast<T>(val);
+            }
+        };
+
+        template<typename T>
+        struct const_cast_
+        {
+            typedef T result_type;
+
+            template<typename Value>
+            T operator()(Value const &val) const
+            {
+                return const_cast<T>(val);
+            }
+        };
+
+        template<typename T>
         struct construct
         {
             typedef T result_type;
@@ -579,7 +618,7 @@ namespace boost { namespace xpressive
         }
     };
 
-    /// as
+    /// as (a.k.a., lexical_cast)
     ///
     BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
         1
@@ -587,6 +626,36 @@ namespace boost { namespace xpressive
       , boost::proto::default_domain
       , (boost::proto::tag::function)
       , ((op::as)(typename))
+    )
+
+    /// static_cast_
+    ///
+    BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
+        1
+      , static_cast_
+      , boost::proto::default_domain
+      , (boost::proto::tag::function)
+      , ((op::static_cast_)(typename))
+    )
+
+    /// dynamic_cast_
+    ///
+    BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
+        1
+      , dynamic_cast_
+      , boost::proto::default_domain
+      , (boost::proto::tag::function)
+      , ((op::dynamic_cast_)(typename))
+    )
+
+    /// const_cast_
+    ///
+    BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
+        1
+      , const_cast_
+      , boost::proto::default_domain
+      , (boost::proto::tag::function)
+      , ((op::const_cast_)(typename))
     )
 
     template<typename T>
@@ -627,7 +696,7 @@ namespace boost { namespace xpressive
         BOOST_PROTO_EXTENDS_FUNCTION(action_arg_type, this_type, proto::default_domain)
     };
 
-    /// Usage: construct<Type>(arg1, arg2)
+    /// Usage: construct\<Type\>(arg1, arg2)
     ///
     BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(
         construct
@@ -636,7 +705,7 @@ namespace boost { namespace xpressive
       , ((op::construct)(typename))
     )
 
-    /// Usage: throw_<Exception>(arg1, arg2)
+    /// Usage: throw_\<Exception\>(arg1, arg2)
     ///
     BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(
         throw_

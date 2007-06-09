@@ -55,6 +55,18 @@ struct match_context
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// attr_context
+//
+struct attr_context
+{
+    // Slots for holding type-erased pointers to attributes
+    void const **attr_slots_;
+
+    // The previous attr context, if one exists
+    attr_context *prev_attr_context_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // match_flags
 //
 struct match_flags
@@ -114,6 +126,7 @@ struct match_state
     actionable action_list_;
     actionable const **action_list_tail_;
     action_args_type *action_args_;
+    attr_context attr_context_;
 
     ///////////////////////////////////////////////////////////////////////////////
     //
@@ -137,6 +150,7 @@ struct match_state
       , action_list_()
       , action_list_tail_(&action_list_.next)
       , action_args_(&core_access<BidiIter>::get_action_args(what))
+      , attr_context_() // zero-initializes the fields of attr_context_
     {
         // reclaim any cached memory in the match_results struct
         this->extras_->sub_match_stack_.unwind();
@@ -156,6 +170,7 @@ struct match_state
         this->action_list_.next = 0;
         this->action_list_tail_ = &action_list_.next;
         this->action_args_ = &core_access<BidiIter>::get_action_args(what);
+        this->attr_context_ = attr_context();
         this->context_.prev_context_ = 0;
         this->found_partial_match_ = false;
         this->extras_->sub_match_stack_.unwind();
@@ -300,6 +315,7 @@ struct memento
     sub_match_impl<BidiIter> *old_sub_matches_;
     std::size_t nested_results_count_;
     actionable<BidiIter> const **action_list_tail_;
+    attr_context attr_context_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -313,6 +329,7 @@ inline memento<BidiIter> save_sub_matches(match_state<BidiIter> &state)
         state.extras_->sub_match_stack_.push_sequence(state.mark_count_, no_fill)
       , state.context_.results_ptr_->nested_results().size()
       , state.action_list_tail_
+      , state.attr_context_
     };
     std::copy(state.sub_matches_, state.sub_matches_ + state.mark_count_, mem.old_sub_matches_);
     return mem;
@@ -330,6 +347,7 @@ inline void restore_sub_matches(memento<BidiIter> const &mem, match_state<BidiIt
     state.extras_->results_cache_.reclaim_last_n(nested, count);
     std::copy(mem.old_sub_matches_, mem.old_sub_matches_ + state.mark_count_, state.sub_matches_);
     state.extras_->sub_match_stack_.unwind_to(mem.old_sub_matches_);
+    state.attr_context_ = mem.attr_context_;
     state.action_list_tail_ = mem.action_list_tail_;
     *state.action_list_tail_ = 0;
 }
@@ -350,6 +368,7 @@ inline void reclaim_sub_matches(memento<BidiIter> const &mem, match_state<BidiIt
 
     if(!success)
     {
+        state.attr_context_ = mem.attr_context_;
         state.action_list_tail_ = mem.action_list_tail_;
         *state.action_list_tail_ = 0;
     }

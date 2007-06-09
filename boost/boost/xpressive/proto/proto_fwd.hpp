@@ -106,32 +106,6 @@ namespace boost { namespace proto
     template<typename Expr>
     struct ref_;
 
-    template<typename OpTag, typename DomainTag, typename EnableIf = void>
-    struct compiler;
-
-    template<typename DomainTag>
-    struct fold_compiler;
-
-    template<typename DomainTag>
-    struct reverse_fold_compiler;
-
-    template<typename Lambda, typename DomainTag, typename Compiler = void>
-    struct transform_compiler;
-
-    template<typename Lambda, typename DomainTag>
-    struct branch_compiler;
-
-    template<typename Predicate, typename IfCompiler, typename ElseCompiler>
-    struct conditional_compiler;
-
-    template<typename Lambda, typename Map>
-    struct switch_compiler;
-
-    template<typename DomainTag>
-    struct pass_through_compiler;
-
-    struct error_compiler;
-
     struct identity_transform;
 
     struct arg_transform;
