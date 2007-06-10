@@ -10,7 +10,17 @@
 # http://www.boost.org/LICENSE_1_0.txt)                                        #
 ################################################################################
 
-DOCFILE="$1.html"
+CONTAINER=$1
+DOCFILE="$CONTAINER.html"
+XSLT="$CONTAINER.xslt"
+XHTML="$CONTAINER.xhtml"
+SPECIALIZATION=${CONTAINER#circular_buffer_}
+
+if [ ${#SPECIALIZATION} -gt 0 ]; then
+  DOCFILE=${DOCFILE#circular_buffer_}
+  XSLT=${XSLT#circular_buffer_}
+  XHTML=${XHTML#circular_buffer_}
+fi
 
 if [ -f $DOCFILE ]; then
 
@@ -18,16 +28,16 @@ if [ -f $DOCFILE ]; then
   doxygen
 
   echo Converting Doxygen generated source code documentation into XHTML ...
-  xsltproc --stringparam container $1 --stringparam xmldir srcdoc -o srcdoc/srcdoc.xhtml $1.xslt srcdoc/index.xml
+  xsltproc --stringparam container $CONTAINER --stringparam xmldir srcdoc -o srcdoc/srcdoc.xhtml $XSLT srcdoc/index.xml
 
   echo Preprocessing $DOCFILE ...
   sed 's/<a\s*id="[^"]*"/<a /g' $DOCFILE | sed 's/<a\s*\(name="[^"]*"\)\s*\(id="[^"]*"\)/<a \1/g' > srcdoc/$DOCFILE
 
   echo Converting preprocessed $DOCFILE into XHTML ...
-  xsltproc --html -o srcdoc/$1.xhtml html2xhtml.xslt srcdoc/$DOCFILE
+  xsltproc --html -o srcdoc/$XHTML html2xhtml.xslt srcdoc/$DOCFILE
 
   echo Generating $DOCFILE with updated source code documentation ...
-  xsltproc --stringparam srcdoc srcdoc/srcdoc.xhtml -o $DOCFILE update_srcdoc.xslt srcdoc/$1.xhtml
+  xsltproc --stringparam srcdoc srcdoc/srcdoc.xhtml -o $DOCFILE update_srcdoc.xslt srcdoc/$XHTML
 
   echo Correcting and pretty-printing $DOCFILE with HTML Tidy ...
   tidy -ashtml -config Tidy.conf $DOCFILE

@@ -139,7 +139,7 @@ public:
     //! The capacity type.
     /*!
         (Same as <code>size_type</code> - defined for consistency with the
-        <a href="circular_buffer_space_optimized.html"><code>circular_buffer_space_optimized</code></a>.)
+        <a href="space_optimized.html"><code>circular_buffer_space_optimized</code></a>.)
     */
     typedef size_type capacity_type;
 

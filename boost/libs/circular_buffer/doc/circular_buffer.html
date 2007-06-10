@@ -83,9 +83,9 @@
     <p>
       The <code>circular_buffer</code> only allocates memory when created, when the capacity is adjusted explicitly, or
       as necessary to accommodate resizing or assign operations. On the other hand, there is also a <code><a href=
-      "circular_buffer_space_optimized.html">circular_buffer_space_optimized</a></code> available. It is an adaptor of
-      the <code>circular_buffer</code> which does not allocate memory at once when created, rather it allocates memory
-      as needed.
+      "space_optimized.html">circular_buffer_space_optimized</a></code> available. It is an adaptor of the
+      <code>circular_buffer</code> which does not allocate memory at once when created, rather it allocates memory as
+      needed.
     </p>
     <h2>
       <a name="briefexample" id="briefexample">Introductory Example</a>
@@ -322,8 +322,7 @@ template &lt;class T, class Alloc&gt;
       <li>The behaviour of the buffer as <em>intuitive</em> as possible.
       </li>
       <li>Suitable for <em>specialization</em> by means of adaptors. (The <code><a href=
-      "circular_buffer_space_optimized.html">circular_buffer_space_optimized</a></code> is such an example of the
-      adaptor.)
+      "space_optimized.html">circular_buffer_space_optimized</a></code> is such an example of the adaptor.)
       </li>
       <li>Easy to <em>debug</em>. (See <a href="#debug">Debug Support</a> for details.)
       </li>
@@ -916,7 +915,7 @@ template &lt;class T, class Alloc&gt;
           </td>
           <td>
             The capacity type. (Same as <code>size_type</code> - defined for consistency with the <a href=
-            "circular_buffer_space_optimized.html"><code>circular_buffer_space_optimized</code></a>.)
+            "space_optimized.html"><code>circular_buffer_space_optimized</code></a>.)
           </td>
         </tr>
       </table>
@@ -6787,7 +6786,7 @@ template &lt;class T, class Alloc&gt;
       <a name="see" id="see">See also</a>
     </h2>
     <p>
-      <code><a href="circular_buffer_space_optimized.html">boost::circular_buffer_space_optimized</a>, <a href=
+      <code><a href="space_optimized.html">boost::circular_buffer_space_optimized</a>, <a href=
       "http://www.sgi.com/tech/stl/Vector.html">std::vector</a>, <a href=
       "http://www.sgi.com/tech/stl/List.html">std::list</a>, <a href=
       "http://www.sgi.com/tech/stl/Deque.html">std::deque</a></code>

@@ -36,9 +36,9 @@ Updating source code documentation:
 
 The source code documentation of the Circular Buffer library obeys the Doxygen
 syntax. The library documentation is written in HTML (files circular_buffer.html
-and circular_buffer_space_optimized.html). The generation of the source code
-documentation is performed by executing the update_srcdoc.sh script which relies
-mainly on Doxygen and several XSL transformations.
+and space_optimized.html). The generation of the source code documentation is
+performed by executing the update_srcdoc.sh script which relies mainly on
+Doxygen and several XSL transformations.
 
 After editing the source code documentation in the source file(s), update the
 library documentation by executing:

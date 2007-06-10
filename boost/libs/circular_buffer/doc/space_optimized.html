@@ -50,8 +50,7 @@
       <tr>
         <td></td>
         <td>
-          <img src="circular_buffer_space_optimized.png" width="700" height="350" alt="Space Optimized Circular Buffer"
-          border="0">
+          <img src="space_optimized.png" width="700" height="350" alt="Space Optimized Circular Buffer" border="0">
         </td>
       </tr>
       <tr>
@@ -186,6 +185,22 @@ public:
 "circular_buffer.html#classboost_1_1circular__buffer_157e2d506bc274b2a63fbe1b8fcafebd7">max_size</a>() const;
    bool <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_15be1c2a005ec9828549ef6dd7ebed583">empty</a>() const;
+   explicit <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_1e53e744d2f94a2bcbfcdb219a9d93300">circular_buffer</a>(const allocator_type&amp; alloc = allocator_type());
+   explicit <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_1862a64cbc6a49376ecbb8321c3b44974">circular_buffer</a>(capacity_type capacity, const allocator_type&amp; alloc = allocator_type());
+   <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_1fdace8f110d5b7a17c02020757f06fe8">circular_buffer</a>(size_type n, const_reference item, const allocator_type&amp; alloc = allocator_type());
+   <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_10c7e9286d8270357d7e369b183124239">circular_buffer</a>(capacity_type capacity, size_type n, const_reference item, const allocator_type&amp; alloc = allocator_type());
+   <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd">circular_buffer</a>(const circular_buffer&lt;T, Alloc&gt;&amp; cb);
+   template &lt;class InputIterator&gt;
+      <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_1744ec06b06a5a723386b645a29cb8ed2">circular_buffer</a>(InputIterator first, InputIterator last, const allocator_type&amp; alloc = allocator_type());
+   template &lt;class InputIterator&gt;
+      <a href=
+"circular_buffer.html#classboost_1_1circular__buffer_1a64dcad327971194a706d52487151eb7">circular_buffer</a>(capacity_type capacity, InputIterator first, InputIterator last, const allocator_type&amp; alloc = allocator_type());
    bool <a href="#classboost_1_1circular__buffer__space__optimized_142f4a13c50904a4ac0bf746c88451954">full</a>() const;
    size_type <a href=
 "#classboost_1_1circular__buffer__space__optimized_170eec72a6e8d088b58e26ac7e2dd7c9f">reserve</a>() const;

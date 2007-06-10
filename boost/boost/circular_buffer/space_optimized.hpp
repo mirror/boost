@@ -22,7 +22,7 @@ namespace boost {
     \brief Space optimized circular buffer container adaptor.
 
     For detailed documentation of the space_optimized_circular_buffer visit:
-    http://www.boost.org/libs/circular_buffer/doc/circular_buffer_space_optimized.html
+    http://www.boost.org/libs/circular_buffer/doc/space_optimized.html
 */
 template <class T, class Alloc>
 class circular_buffer_space_optimized :
