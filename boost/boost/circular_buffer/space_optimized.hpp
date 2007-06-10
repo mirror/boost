@@ -310,8 +310,7 @@ public:
         \par Complexity
              Constant.
     */
-    explicit circular_buffer_space_optimized(
-        const allocator_type& alloc = allocator_type())
+    explicit circular_buffer_space_optimized(const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(0, alloc)
     , m_capacity_ctrl(max_size()) {}
 
@@ -328,8 +327,7 @@ public:
         \par Complexity
              Constant.
     */
-    explicit circular_buffer_space_optimized(
-        capacity_type capacity_ctrl,
+    explicit circular_buffer_space_optimized(capacity_type capacity_ctrl,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(capacity_ctrl.min_capacity(), alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
@@ -350,9 +348,7 @@ public:
         \par Complexity
              Linear (in the <code>capacity_ctrl.%capacity()</code>).
     */
-    circular_buffer_space_optimized(
-        capacity_type capacity_ctrl,
-        param_value_type item,
+    circular_buffer_space_optimized(capacity_type capacity_ctrl, param_value_type item,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(capacity_ctrl.capacity(), item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
@@ -376,10 +372,7 @@ public:
         \par Complexity
              Linear (in the <code>n</code>).
     */
-    circular_buffer_space_optimized(
-        capacity_type capacity_ctrl,
-        size_type n,
-        param_value_type item,
+    circular_buffer_space_optimized(capacity_type capacity_ctrl, size_type n, param_value_type item,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(init_capacity(capacity_ctrl, n), n, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
@@ -392,22 +385,18 @@ public:
     , m_capacity_ctrl(cb.m_capacity_ctrl) {}
 
     template <class InputIterator>
-    circular_buffer_space_optimized(
-        InputIterator first,
-        InputIterator last)
+    circular_buffer_space_optimized(InputIterator first, InputIterator last)
     : circular_buffer<T, Alloc>(first, last)
     , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
 
     template <class InputIterator>
-    circular_buffer_space_optimized(
-        capacity_type capacity_ctrl,
-        InputIterator first,
-        InputIterator last)
+    circular_buffer_space_optimized(capacity_type capacity_ctrl, InputIterator first, InputIterator last)
     : circular_buffer<T, Alloc>(
         init_capacity(capacity_ctrl, first, last, is_integral<InputIterator>()),
         first, last)
     , m_capacity_ctrl(capacity_ctrl) {
-        reduce_capacity(is_same< BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type, std::input_iterator_tag >());
+        reduce_capacity(
+            is_same< BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type, std::input_iterator_tag >());
     }
     /*! \endcond */
 
@@ -448,9 +437,7 @@ public:
              Linear (in the <code>std::distance(first, last)</code>).
     */
     template <class InputIterator>
-    circular_buffer_space_optimized(
-        InputIterator first,
-        InputIterator last,
+    circular_buffer_space_optimized(InputIterator first, InputIterator last,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(first, last, alloc)
     , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
@@ -483,16 +470,14 @@ public:
              is a <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>).
     */
     template <class InputIterator>
-    circular_buffer_space_optimized(
-        capacity_type capacity_ctrl,
-        InputIterator first,
-        InputIterator last,
+    circular_buffer_space_optimized(capacity_type capacity_ctrl, InputIterator first, InputIterator last,
         const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(
         init_capacity(capacity_ctrl, first, last, is_integral<InputIterator>()),
         first, last, alloc)
     , m_capacity_ctrl(capacity_ctrl) {
-        reduce_capacity(is_same< BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type, std::input_iterator_tag >());
+        reduce_capacity(
+            is_same< BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type, std::input_iterator_tag >());
     }
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -1284,32 +1269,38 @@ private:
 
     //! Specialized method for determining the initial capacity.
     template <class IntegralType>
-    static size_type init_capacity(const capacity_type& capacity_ctrl, IntegralType n, IntegralType item, const true_type&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, IntegralType n, IntegralType item,
+        const true_type&) {
         return init_capacity(capacity_ctrl, static_cast<size_type>(n));
     }
 
     //! Specialized method for determining the initial capacity.
     template <class Iterator>
-    static size_type init_capacity(const capacity_type& capacity_ctrl, Iterator first, Iterator last, const false_type&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, Iterator first, Iterator last,
+        const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
         return init_capacity(capacity_ctrl, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #else
-        return init_capacity(capacity_ctrl, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+        return init_capacity(
+            capacity_ctrl, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #endif
     }
 
     //! Specialized method for determining the initial capacity.
     template <class InputIterator>
-    static size_type init_capacity(const capacity_type& capacity_ctrl, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, InputIterator first, InputIterator last,
+        const std::input_iterator_tag&) {
         return capacity_ctrl.capacity();
     }
 
     //! Specialized method for determining the initial capacity.
     template <class ForwardIterator>
-    static size_type init_capacity(const capacity_type& capacity_ctrl, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
+    static size_type init_capacity(const capacity_type& capacity_ctrl, ForwardIterator first, ForwardIterator last,
+        const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        return std::max(capacity_ctrl.min_capacity(), std::min(capacity_ctrl.capacity(), static_cast<size_type>(std::distance(first, last))));
+        return std::max(capacity_ctrl.min_capacity(),
+            std::min(capacity_ctrl.capacity(), static_cast<size_type>(std::distance(first, last))));
     }
 
     //! Specialized insert method.
@@ -1346,7 +1337,7 @@ private:
 //! Test two space optimized circular buffers for equality.
 template <class T, class Alloc>
 inline bool operator == (const circular_buffer_space_optimized<T, Alloc>& lhs,
-                         const circular_buffer_space_optimized<T, Alloc>& rhs) {
+    const circular_buffer_space_optimized<T, Alloc>& rhs) {
     return lhs.size() == rhs.size() &&
         std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
@@ -1354,7 +1345,7 @@ inline bool operator == (const circular_buffer_space_optimized<T, Alloc>& lhs,
 //! Lexicographical comparison.
 template <class T, class Alloc>
 inline bool operator < (const circular_buffer_space_optimized<T, Alloc>& lhs,
-                        const circular_buffer_space_optimized<T, Alloc>& rhs) {
+    const circular_buffer_space_optimized<T, Alloc>& rhs) {
     return std::lexicographical_compare(
         lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
@@ -1364,35 +1355,35 @@ inline bool operator < (const circular_buffer_space_optimized<T, Alloc>& lhs,
 //! Test two space optimized circular buffers for non-equality.
 template <class T, class Alloc>
 inline bool operator != (const circular_buffer_space_optimized<T, Alloc>& lhs,
-                         const circular_buffer_space_optimized<T, Alloc>& rhs) {
+    const circular_buffer_space_optimized<T, Alloc>& rhs) {
     return !(lhs == rhs);
 }
 
 //! Lexicographical comparison.
 template <class T, class Alloc>
 inline bool operator > (const circular_buffer_space_optimized<T, Alloc>& lhs,
-                        const circular_buffer_space_optimized<T, Alloc>& rhs) {
+    const circular_buffer_space_optimized<T, Alloc>& rhs) {
     return rhs < lhs;
 }
 
 //! Lexicographical comparison.
 template <class T, class Alloc>
 inline bool operator <= (const circular_buffer_space_optimized<T, Alloc>& lhs,
-                         const circular_buffer_space_optimized<T, Alloc>& rhs) {
+    const circular_buffer_space_optimized<T, Alloc>& rhs) {
     return !(rhs < lhs);
 }
 
 //! Lexicographical comparison.
 template <class T, class Alloc>
 inline bool operator >= (const circular_buffer_space_optimized<T, Alloc>& lhs,
-                         const circular_buffer_space_optimized<T, Alloc>& rhs) {
+    const circular_buffer_space_optimized<T, Alloc>& rhs) {
     return !(lhs < rhs);
 }
 
 //! Swap the contents of two space optimized circular buffers.
 template <class T, class Alloc>
 inline void swap(circular_buffer_space_optimized<T, Alloc>& lhs,
-                 circular_buffer_space_optimized<T, Alloc>& rhs) {
+    circular_buffer_space_optimized<T, Alloc>& rhs) {
     lhs.swap(rhs);
 }
 

@@ -40,7 +40,8 @@
 #endif
 
 // BOOST_CB_IS_CONVERTIBLE: Check if Iterator::value_type is convertible to Type.
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x0550) || BOOST_WORKAROUND(__MWERKS__, <= 0x2407) || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x0550) || BOOST_WORKAROUND(__MWERKS__, <= 0x2407) || \
+    BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     #define BOOST_CB_IS_CONVERTIBLE(Iterator, Type) ((void)0)
 #else
     #include <boost/detail/iterator.hpp>

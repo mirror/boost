@@ -61,7 +61,8 @@ void min_capacity_test() {
 void capacity_control_test() {
 
     circular_buffer_space_optimized<int>::capacity_type c1 = 10;
-    circular_buffer_space_optimized<int>::capacity_type c2 = circular_buffer_space_optimized<int>::capacity_type(20, 5);
+    circular_buffer_space_optimized<int>::capacity_type c2 =
+        circular_buffer_space_optimized<int>::capacity_type(20, 5);
     circular_buffer_space_optimized<int>::capacity_type c3 = c2;
 
     BOOST_CHECK(c1.capacity() == 10);

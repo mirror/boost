@@ -29,6 +29,9 @@
 #if BOOST_CB_ENABLE_DEBUG
     #include <cstring>
 #endif
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
+    #include <stddef.h>
+#endif
 
 namespace boost {
 
@@ -779,8 +782,8 @@ public:
         pointer buff = allocate(new_capacity);
         BOOST_TRY {
             reset(buff,
-                cb_details::uninitialized_copy(begin(), begin() + std::min(new_capacity, size()), buff, m_alloc),
-                new_capacity);
+                cb_details::uninitialized_copy_with_alloc(begin(),
+                    begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -848,8 +851,8 @@ public:
             return;
         pointer buff = allocate(new_capacity);
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy(end() - std::min(new_capacity, size()), end(), buff, m_alloc),
-                new_capacity);
+            reset(buff, cb_details::uninitialized_copy_with_alloc(end()
+                - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -981,7 +984,7 @@ public:
     : m_size(cb.size()), m_alloc(cb.get_allocator()) {
         m_first = m_last = m_buff = allocate(cb.capacity());
         BOOST_TRY {
-            m_end = cb_details::uninitialized_copy(cb.begin(), cb.end(), m_buff, m_alloc);
+            m_end = cb_details::uninitialized_copy_with_alloc(cb.begin(), cb.end(), m_buff, m_alloc);
         } BOOST_CATCH(...) {
             deallocate(m_buff, cb.capacity());
             BOOST_RETHROW
@@ -1108,7 +1111,7 @@ public:
             return *this;
         pointer buff = allocate(cb.capacity());
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy(cb.begin(), cb.end(), buff, m_alloc), cb.capacity());
+            reset(buff, cb_details::uninitialized_copy_with_alloc(cb.begin(), cb.end(), buff, m_alloc), cb.capacity());
         } BOOST_CATCH(...) {
             deallocate(buff, cb.capacity());
             BOOST_RETHROW
@@ -1983,7 +1986,7 @@ private:
     void initialize(capacity_type capacity, param_value_type item) {
         initialize(capacity);
         BOOST_TRY {
-            cb_details::uninitialized_fill_n(m_buff, size(), item, m_alloc);
+            cb_details::uninitialized_fill_n_with_alloc(m_buff, size(), item, m_alloc);
         } BOOST_CATCH(...) {
             deallocate(m_buff, size());
             BOOST_RETHROW
@@ -2002,7 +2005,7 @@ private:
     template <class Iterator>
     void initialize(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
         initialize(first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #else
         initialize(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
@@ -2039,7 +2042,7 @@ private:
     template <class Iterator>
     void initialize(capacity_type capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
         initialize(capacity, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #else
         initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
@@ -2094,7 +2097,7 @@ private:
                 m_last = m_buff + size();
         }
         BOOST_TRY {
-            cb_details::uninitialized_copy(first, last, m_buff, m_alloc);
+            cb_details::uninitialized_copy_with_alloc(first, last, m_buff, m_alloc);
         } BOOST_CATCH(...) {
             deallocate(m_buff, capacity);
             BOOST_RETHROW
@@ -2131,7 +2134,7 @@ private:
     template <class Iterator>
     void assign(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
         assign(first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #else
         assign(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
@@ -2168,7 +2171,7 @@ private:
     template <class Iterator>
     void assign(capacity_type new_capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
         assign(new_capacity, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #else
         assign(new_capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
@@ -2281,7 +2284,7 @@ private:
     template <class Iterator>
     void insert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
         insert(pos, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #else
         insert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
@@ -2372,7 +2375,7 @@ private:
     template <class Iterator>
     void rinsert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
-#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
         rinsert(pos, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
 #else
         rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());

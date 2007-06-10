@@ -107,7 +107,7 @@ struct assign_n {
     assign_n(size_type n, Value item, Alloc& alloc) : m_n(n), m_item(item), m_alloc(alloc) {}
     template <class Pointer>
     void operator () (Pointer p) const {
-        uninitialized_fill_n(p, m_n, m_item, m_alloc);
+        uninitialized_fill_n_with_alloc(p, m_n, m_item, m_alloc);
     }
 private:
     assign_n<Value, Alloc>& operator = (const assign_n<Value, Alloc>&); // do not generate
@@ -122,10 +122,11 @@ struct assign_range {
     const Iterator& m_first;
     const Iterator& m_last;
     Alloc& m_alloc;
-    assign_range(const Iterator& first, const Iterator& last, Alloc& alloc) : m_first(first), m_last(last), m_alloc(alloc) {}
+    assign_range(const Iterator& first, const Iterator& last, Alloc& alloc)
+    : m_first(first), m_last(last), m_alloc(alloc) {}
     template <class Pointer>
     void operator () (Pointer p) const {
-        uninitialized_copy(m_first, m_last, p, m_alloc);
+        uninitialized_copy_with_alloc(m_first, m_last, p, m_alloc);
     }
 private:
     assign_range<Iterator, Alloc>& operator = (const assign_range<Iterator, Alloc>&); // do not generate
@@ -467,11 +468,13 @@ inline typename Traits::difference_type* distance_type(const iterator<Buff, Trai
 #endif // #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
 
 /*!
-    \fn ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& alloc)
+    \fn ForwardIterator uninitialized_copy_with_alloc(InputIterator first, InputIterator last, ForwardIterator dest,
+            Alloc& alloc)
     \brief Equivalent of <code>std::uninitialized_copy</code> with allocator.
 */
 template<class InputIterator, class ForwardIterator, class Alloc>
-inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator dest, Alloc& alloc) {
+inline ForwardIterator uninitialized_copy_with_alloc(InputIterator first, InputIterator last, ForwardIterator dest,
+    Alloc& alloc) {
     ForwardIterator next = dest;
     BOOST_TRY {
         for (; first != last; ++first, ++dest)
@@ -486,11 +489,11 @@ inline ForwardIterator uninitialized_copy(InputIterator first, InputIterator las
 }
 
 /*!
-    \fn void uninitialized_fill_n(ForwardIterator first, Diff n, const T& item, Alloc& alloc)
+    \fn void uninitialized_fill_n_with_alloc(ForwardIterator first, Diff n, const T& item, Alloc& alloc)
     \brief Equivalent of <code>std::uninitialized_fill_n</code> with allocator.
 */
 template<class ForwardIterator, class Diff, class T, class Alloc>
-inline void uninitialized_fill_n(ForwardIterator first, Diff n, const T& item, Alloc& alloc) {
+inline void uninitialized_fill_n_with_alloc(ForwardIterator first, Diff n, const T& item, Alloc& alloc) {
     ForwardIterator next = first;
     BOOST_TRY {
         for (; n > 0; ++first, --n)
