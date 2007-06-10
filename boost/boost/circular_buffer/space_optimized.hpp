@@ -589,7 +589,7 @@ public:
     */
     void assign(capacity_type capacity_ctrl, size_type n, param_value_type item) {
        BOOST_CB_ASSERT(capacity_ctrl.capacity() >= n); // check for new capacity lower than n
-       circular_buffer<T, Alloc>::assign(std::max(capacity_ctrl.min_capacity(), n), n, item);
+       circular_buffer<T, Alloc>::assign((std::max)(capacity_ctrl.min_capacity(), n), n, item);
        m_capacity_ctrl = capacity_ctrl;
     }
 
@@ -1255,7 +1255,7 @@ private:
 
     //! Specialized method for reducing the capacity.
     void reduce_capacity(const true_type&) {
-        circular_buffer<T, Alloc>::set_capacity(std::max(m_capacity_ctrl.min_capacity(), size()));
+        circular_buffer<T, Alloc>::set_capacity((std::max)(m_capacity_ctrl.min_capacity(), size()));
     }
 
     //! Specialized method for reducing the capacity.
@@ -1264,7 +1264,7 @@ private:
     //! Determine the initial capacity.
     static size_type init_capacity(const capacity_type& capacity_ctrl, size_type n) {
         BOOST_CB_ASSERT(capacity_ctrl.capacity() >= n); // check for capacity lower than n
-        return std::max(capacity_ctrl.min_capacity(), n);
+        return (std::max)(capacity_ctrl.min_capacity(), n);
     }
 
     //! Specialized method for determining the initial capacity.
@@ -1299,8 +1299,8 @@ private:
     static size_type init_capacity(const capacity_type& capacity_ctrl, ForwardIterator first, ForwardIterator last,
         const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        return std::max(capacity_ctrl.min_capacity(),
-            std::min(capacity_ctrl.capacity(), static_cast<size_type>(std::distance(first, last))));
+        return (std::max)(capacity_ctrl.min_capacity(),
+            (std::min)(capacity_ctrl.capacity(), static_cast<size_type>(std::distance(first, last))));
     }
 
     //! Specialized insert method.

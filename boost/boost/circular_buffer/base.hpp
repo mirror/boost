@@ -696,7 +696,7 @@ public:
         \sa <code>size()</code>, <code>capacity()</code>, <code>reserve()</code>
     */
     size_type max_size() const {
-        return std::min<size_type>(m_alloc.max_size(), (std::numeric_limits<difference_type>::max)());
+        return (std::min<size_type>)(m_alloc.max_size(), (std::numeric_limits<difference_type>::max)());
     }
 
     //! Is the <code>circular_buffer</code> empty?
@@ -783,7 +783,7 @@ public:
         BOOST_TRY {
             reset(buff,
                 cb_details::uninitialized_copy_with_alloc(begin(),
-                    begin() + std::min(new_capacity, size()), buff, m_alloc), new_capacity);
+                    begin() + (std::min)(new_capacity, size()), buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -852,7 +852,7 @@ public:
         pointer buff = allocate(new_capacity);
         BOOST_TRY {
             reset(buff, cb_details::uninitialized_copy_with_alloc(end()
-                - std::min(new_capacity, size()), end(), buff, m_alloc), new_capacity);
+                - (std::min)(new_capacity, size()), end(), buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -2332,7 +2332,7 @@ private:
                 for (;ii < n; ++ii, increment(p))
                     replace(p, *wrapper());
             } BOOST_CATCH(...) {
-                size_type constructed = std::min(ii, construct);
+                size_type constructed = (std::min)(ii, construct);
                 m_last = add(m_last, constructed);
                 m_size += constructed;
                 BOOST_RETHROW
