@@ -173,7 +173,7 @@ namespace boost { namespace proto { namespace transform
     };
 
     // Apply an MPL lambda, passing just Expr
-    template<typename Grammar, typename Placeholder>
+    template<typename Grammar, typename Lambda>
     struct apply1
       : Grammar
     {
@@ -181,14 +181,54 @@ namespace boost { namespace proto { namespace transform
 
         template<typename Expr, typename, typename>
         struct apply
-          : mpl::apply1<Placeholder, Expr>
+          : mpl::apply1<Lambda, Expr>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &, Visitor &)
         {
-            return typename mpl::apply1<Placeholder, Expr>::type();
+            return typename mpl::apply1<Lambda, Expr>::type();
+        }
+    };
+
+    // Apply an MPL lambda, passing Expr and State
+    template<typename Grammar, typename Lambda>
+    struct apply2
+      : Grammar
+    {
+        apply2();
+
+        template<typename Expr, typename State, typename>
+        struct apply
+          : mpl::apply2<Lambda, Expr, State>
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &, Visitor &)
+        {
+            return typename mpl::apply2<Lambda, Expr, State>::type();
+        }
+    };
+
+    // Apply an MPL lambda, passing Expr and State
+    template<typename Grammar, typename Lambda>
+    struct apply3
+      : Grammar
+    {
+        apply3();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : mpl::apply3<Lambda, Expr, State, Visitor>
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &, Visitor &)
+        {
+            return typename mpl::apply3<Lambda, Expr, State, Visitor>::type();
         }
     };
 
