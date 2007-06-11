@@ -17,7 +17,48 @@
 
 namespace boost { namespace proto { namespace transform
 {
+    namespace detail
+    {
+        struct any
+        {
+            template<typename T>
+            any(T const &)
+            {}
+        };
 
+        struct default_factory
+        {
+            default_factory()
+            {}
+
+            default_factory const &operator()() const
+            {
+                return *this;
+            }
+
+            default_factory const &operator()(any) const
+            {
+                return *this;
+            }
+
+            default_factory const &operator()(any, any) const
+            {
+                return *this;
+            }
+
+            default_factory const &operator()(any, any, any) const
+            {
+                return *this;
+            }
+
+            template<typename T>
+            operator T() const
+            {
+                return T();
+            }
+        };
+    }
+    
     // A transform that simply extracts the arg from an expression
     template<typename Grammar, typename N>
     struct arg
@@ -173,47 +214,47 @@ namespace boost { namespace proto { namespace transform
     };
 
     // Apply an MPL lambda, passing just Expr
-    template<typename Grammar, typename Lambda>
+    template<typename Grammar, typename Lambda, typename Factory>
     struct apply1
       : Grammar
     {
         apply1();
 
-        template<typename Expr, typename, typename>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
-          : mpl::apply1<Lambda, Expr>
+          : mpl::apply1<Lambda, typename Grammar::template apply<Expr, State, Visitor>::type>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return typename mpl::apply1<Lambda, Expr>::type();
+            return Factory()(Grammar::call(expr, state, visitor));
         }
     };
 
     // Apply an MPL lambda, passing Expr and State
-    template<typename Grammar, typename Lambda>
+    template<typename Grammar, typename Lambda, typename Factory>
     struct apply2
       : Grammar
     {
         apply2();
 
-        template<typename Expr, typename State, typename>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
-          : mpl::apply2<Lambda, Expr, State>
+          : mpl::apply2<Lambda, typename Grammar::template apply<Expr, State, Visitor>::type, State>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return typename mpl::apply2<Lambda, Expr, State>::type();
+            return Factory()(Grammar::call(expr, state, visitor), state);
         }
     };
 
-    // Apply an MPL lambda, passing Expr and State
-    template<typename Grammar, typename Lambda>
+    // Apply an MPL lambda, passing Expr, State and Visitor
+    template<typename Grammar, typename Lambda, typename Factory>
     struct apply3
       : Grammar
     {
@@ -221,14 +262,14 @@ namespace boost { namespace proto { namespace transform
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : mpl::apply3<Lambda, Expr, State, Visitor>
+          : mpl::apply3<Lambda, typename Grammar::template apply<Expr, State, Visitor>::type, State, Visitor>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return typename mpl::apply3<Lambda, Expr, State, Visitor>::type();
+            return Factory()(Grammar::call(expr, state, visitor), state, visitor);
         }
     };
 

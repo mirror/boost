@@ -147,7 +147,8 @@ First, you should know that transforms are written so that they can be chained.
 So `trans::arg<>` invokes the transform associated with
 `unary_expr< _, CalculatorGrammar >` before it does anything else.
 
-Second, `unary_expr< _, CalculatorGrammar >`, has a default transform
+That begs the question, what does `unary_expr<>`'s transform do? Well,
+`unary_expr< _, CalculatorGrammar >` has a default transform
 associated with it. It is a /pass-through/ transform. When an expression
 of the form `expr< T, arg1< X > >` is passed to the transform, it's `apply<>`
 member template will invoke the `CalculatorGrammar` transform (which we haven't
@@ -157,7 +158,7 @@ reassemble the expression as `expr< T, arg1< Y > >`.
 [note You may have noticed that Proto types like `unary_expr<>` serve several
 different but related roles. In particular, `unary_expr<>` is ...
 
-... [*an expression generator]: `unary_expr<T, X>::type` is a typedef for
+... [*a meta-function]: `unary_expr<T, X>::type` is a typedef for
 `expr<T, args1<X> >`.
 
 ... [*a grammar]: `unary_expr<U, Y>` is a pattern that matches 
@@ -167,10 +168,10 @@ pattern that matches `X`.
 ... [*a transform]: `unary_expr<U, Y>::apply<expr<T, args1<X> >, S, V>::type`
 applies `unary_expr<>`'s pass-through transform to `expr<T, args1<X> >` with
 state `S` and visitor `V`. The result is 
-`expr<T, args1< Y::apply<X, S, V>::type> >`.
+`expr<T, args1< Y::apply<X, S, V>::type > >`.
 ]
 
-So, puting a few things together, consider the calculator expression `+ _1`,
+So, putting a few things together, consider the calculator expression `+_1`,
 which would have the following type:
 
     expr< tag::posit, arg1<
@@ -199,14 +200,15 @@ associated with them. Just as `unary_expr<>` has a pass-through transform,
 so too does `binary_expr<>`, `shift_right<>`, and all the others.
 `proto::or_<>` has a default transform which evaluates the transform of the
 branch that matched. `proto::and_<>`'s default transform evaluates the
-transform of the last branch that matched. Even `proto::expr<>`, `proto::if_<>`
+transform of the last branch. Even `proto::expr<>`, `proto::if_<>`
 `proto::not_<>` and `proto::_` have no-op default transforms that simply return
 unmodified the expressions passed to them.
 ]
 
 The arity of a binary operator is the maximum of the arity of the left and
-right operands. Proto does not provide a transform that can help us, so we must
-write our own. This is what it looks like, and we'll describe it below:
+right operands. Proto does not provide a transform that can help us directly,
+but we can easily write our own. This is what it looks like, and we'll describe
+it below:
 
     template<typename Grammar>
     struct binary_max
@@ -234,7 +236,7 @@ This transform will be used as follows:
 First, note that the transform is a template that takes a Grammar as a template
 parameter. It inherits from the Grammar, as all transforms must. Next, we
 define a nested `apply<>` template which calculates the return type. The first
-thing it does is invoke Grammar's transform. Recall that `binary_expr<>`
+thing it does is invoke `Grammar`'s transform. Recall that `binary_expr<>`
 has a pass-through transform. Given an expression like
 `expr< T, arg2< A, B > >`, it transforms it to `expr< T, arg2< X, Y > >`, where
 `X` and `Y` are the results of transforming `A` and `B` according to
@@ -462,42 +464,43 @@ The `apply1<>` transform invokes an MPL lambda expression with the Proto
 expression as the argument, `apply2<>` uses the expression and the state
 as arguments and `apply3<>` uses the expression, state and visitor.
 
-    template<typename Grammar, typename Lambda>
+    template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
     struct apply1;
 
-    template<typename Grammar, typename Lambda>
+    template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
     struct apply2;
 
-    template<typename Grammar, typename Lambda>
+    template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
     struct apply3;
 
 [table
     [   [Expression]
         [Returns]
     ]
-    [   [`transform::apply1<Grammar, Lambda>::apply<Expr, State, Visitor>::type`]
-        [`mpl::apply1<Lambda, Expr>::type`]
+    [   [`transform::apply1<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
+        [`mpl::apply1<Lambda, typename Grammar::apply<Expr, State, Visitor>::type>::type`]
     ]
-    [   [`transform::apply1<Grammar, Lambda>::call(expr, state, visitor)`]
-        [`mpl::apply1<Lambda, Expr>::type()`]
+    [   [`transform::apply1<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
+        [`Factory()(Grammar::call(expr, state, visitor))`]
     ]
-    [   [`transform::apply2<Grammar, Lambda>::apply<Expr, State, Visitor>::type`]
-        [`mpl::apply2<Lambda, Expr, State>::type`]
+    [   [`transform::apply2<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
+        [`mpl::apply2<Lambda, typename Grammar::apply<Expr, State, Visitor>::type, State>::type`]
     ]
-    [   [`transform::apply2<Grammar, Lambda>::call(expr, state, visitor)`]
-        [`mpl::apply2<Lambda, Expr, State>::type()`]
+    [   [`transform::apply2<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
+        [`Factory()(Grammar::call(expr, state, visitor), state)`]
     ]
-    [   [`transform::apply3<Grammar, Lambda>::apply<Expr, State, Visitor>::type`]
-        [`mpl::apply3<Lambda, Expr, State, Visitor>::type`]
+    [   [`transform::apply3<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
+        [`mpl::apply3<Lambda, typename Grammar::apply<Expr, State, Visitor>::type, State, Visitor>::type`]
     ]
-    [   [`transform::apply3<Grammar, Lambda>::apply<Expr, State, Visitor>::type`]
-        [`mpl::apply3<Lambda, Expr, State, Visitor>::type()`]
+    [   [`transform::apply3<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
+        [`Factory()(Grammar::call(expr, state, visitor), state, visitor)`]
     ]
 ]
 
-Proto's `applyN<>` transforms are generally only useful in purely compile-time
-transformations because their `call()` member functions simply return a default
-constructed object of the appropriate type.
+The `call()` member functions of Proto's `applyN<>` transforms simply return a
+default constructed object of the appropriate type by default. If you want a
+different behavior, you can specify a `Factory` type as the third template
+parameter.
 
 Example:
 
@@ -512,10 +515,7 @@ Example:
     struct BinaryCalculatorArity
       : transform::apply1<
             binary_expr<_, CalculatorArity, CalculatorArity>
-          , mpl::max<
-                mpl::apply_wrap3<CalculatorArity, result_of::left<mpl::_>, int, int>
-              , mpl::apply_wrap3<CalculatorArity, result_of::right<mpl::_>, int, int>
-            >
+          , mpl::max<result_of::left<mpl::_>, result_of::right<mpl::_> >
         >
     {};
 
