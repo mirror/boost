@@ -42,7 +42,9 @@ namespace BOOST_SIGNALS_NAMESPACE {
 
     trackable& operator=(const trackable&)
     {
+      dying = true;
       connected_signals.clear();
+      dying = false;
       return *this;
     }
 
