@@ -18,12 +18,6 @@
 #include <boost/xpressive/proto/transform/fold.hpp>
 using namespace boost;
 
-// Forward declaration of a meta-function for calculating
-// a calculator expression's arity; that is, the number of
-// arguments that it requires in order to be evaluated.
-template<typename Expr>
-struct calculator_arity;
-
 // Will be used to define the placeholders _1 and _2
 template<typename I> struct arg { typedef I arity; };
 
@@ -86,9 +80,9 @@ struct CalculatorGrammar
         // placeholders have a non-zero arity ...
         placeholder_arity< proto::terminal< arg<_> > >
 
-        // This accomplishes the same thing without the need to
-        // define a separate placeholder_arity<> transform, but
-        // is a little more cryptic.
+        //// This accomplishes the same thing without the need to
+        //// define a separate placeholder_arity<> transform, but
+        //// is a little more cryptic.
         //proto::trans::apply1<
         //    proto::terminal< arg<_> >
         //  , arg_arity< proto::result_of::arg<mpl::_> >
@@ -103,16 +97,18 @@ struct CalculatorGrammar
             // are themselves calculator expressions.
             proto::nary_expr<_, proto::vararg< max_arity< CalculatorGrammar > > >
 
-            // This accomplishes the same thing without the need to
-            // define a separate max_arity<> transform, but is a little
-            // more cryptic.
+            //// This accomplishes the same thing without the need to
+            //// define a separate max_arity<> transform, but is a little
+            //// more cryptic.
             //proto::nary_expr<
             //    _
             //  , proto::vararg<
-            //        proto::trans::apply2<
-            //            CalculatorGrammar
-            //          , mpl::max< calculator_arity<mpl::_1>, mpl::_2 >
-            //        >
+            //        // Here, mpl::_1 will be replaced with the result of applying
+            //        // the CalculatorGrammar transform (i.e., the arity of the
+            //        // child node), and mpl::_2 will be replaced with the State of
+            //        // the transformation so far (i.e., the maximum arity found so
+            //        // far).
+            //        proto::trans::apply2<CalculatorGrammar, mpl::max<mpl::_1, mpl::_2> >
             //    >
             //>
         >
