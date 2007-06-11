@@ -31,27 +31,27 @@
     </template></struct><struct-specialization name="callable_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>1</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>1</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name=""><paramtype>T const &amp;</paramtype></parameter></method><method name="check" cv=""><type>static no_type</type><parameter name=""><paramtype>typename inner_context::private_type_ const &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="callable_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name=""><paramtype>T const &amp;</paramtype></parameter></method><method name="check" cv=""><type>static no_type</type><parameter name=""><paramtype>typename inner_context::private_type_ const &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="callable_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>3</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 2 &gt;::const_reference)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>3</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 2 &gt;::const_reference)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name=""><paramtype>T const &amp;</paramtype></parameter></method><method name="check" cv=""><type>static no_type</type><parameter name=""><paramtype>typename inner_context::private_type_ const &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="callable_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>4</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 2 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 3 &gt;::const_reference)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>4</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 2 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 3 &gt;::const_reference)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name=""><paramtype>T const &amp;</paramtype></parameter></method><method name="check" cv=""><type>static no_type</type><parameter name=""><paramtype>typename inner_context::private_type_ const &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="callable_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>5</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 2 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 3 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 4 &gt;::const_reference)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>5</template-arg></specialization><typedef name="result_type"><type>boost::result_of&lt; Context(typename Expr::tag_type, typename proto::result_of::arg_c&lt; Expr, 0 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 1 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 2 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 3 &gt;::const_reference, typename proto::result_of::arg_c&lt; Expr, 4 &gt;::const_reference)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group><method-group name="private member functions"><method name="char" cv=""><type>typedef</type><parameter name="no_type"><paramtype>&amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::true_</paramtype></parameter></method><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><parameter name=""><paramtype>mpl::false_</paramtype></parameter></method></method-group><method-group name="private static functions"><method name="check" cv=""><type>static yes_type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name=""><paramtype>T const &amp;</paramtype></parameter></method><method name="check" cv=""><type>static no_type</type><parameter name=""><paramtype>typename inner_context::private_type_ const &amp;</paramtype></parameter></method></method-group></struct-specialization><struct name="default_context"><description><para>default_context </para></description><struct name="eval"><template>
       <template-type-parameter name="Expr"/>
@@ -176,7 +176,7 @@
     </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::bitwise_xor_assign</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::terminal</template-arg><template-arg>1</template-arg></specialization><typedef name="result_type"><type>mpl::if_&lt; is_const&lt; Expr &gt;, typename <classname>proto::result_of::arg</classname>&lt; Expr &gt;::const_reference, typename <classname>proto::result_of::arg</classname>&lt; Expr &gt;::reference &gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name=""><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::terminal</template-arg><template-arg>1</template-arg></specialization><typedef name="result_type"><type>mpl::if_&lt; is_const&lt; Expr &gt;, typename <classname>proto::result_of::arg</classname>&lt; Expr &gt;::const_reference, typename <classname>proto::result_of::arg</classname>&lt; Expr &gt;::reference &gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name=""><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
     </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::post_inc</template-arg><template-arg>1</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
@@ -188,22 +188,22 @@
     </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::subscript</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::comma</template-arg><template-arg>2</template-arg></specialization><typedef name="arg0_type"><type><classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 0 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname></type></typedef><typedef name="arg1_type"><type><classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname></type></typedef><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::comma</template-arg><template-arg>2</template-arg></specialization><typedef name="arg0_type"><type><classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 0 &gt;::type, Context &gt;::type</type></typedef><typedef name="arg1_type"><type><classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::type, Context &gt;::type</type></typedef><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>1</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type()&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>1</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type()&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>2</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>2</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::type, Context &gt;::type)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>3</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 2 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>3</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::type, Context &gt;::type, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 2 &gt;::type, Context &gt;::type)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>4</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 2 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 3 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>4</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::type, Context &gt;::type, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 2 &gt;::type, Context &gt;::type, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 3 &gt;::type, Context &gt;::type)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>5</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 2 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 3 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 4 &gt;::<classname>type</classname>, Context &gt;::<classname>type</classname>)&gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace></namespace></header><header name="boost/xpressive/proto/debug.hpp"><para>Utilities for debugging proto expression trees </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="display_expr"><method-group name="public member functions"><method name="operator()" cv="const"><type>void</type><template>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::function</template-arg><template-arg>5</template-arg></specialization><typedef name="function_type"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="result_type"><type>boost::result_of&lt; function_type(typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 1 &gt;::type, Context &gt;::type, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 2 &gt;::type, Context &gt;::type, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 3 &gt;::type, Context &gt;::type, typename <classname>proto::result_of::eval</classname>&lt; typename proto::result_of::arg_c&lt; Expr, 4 &gt;::type, Context &gt;::type)&gt;::type</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace></namespace></header><header name="boost/xpressive/proto/debug.hpp"><para>Utilities for debugging proto expression trees </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="display_expr"><method-group name="public member functions"><method name="operator()" cv="const"><type>void</type><template>
           <template-type-parameter name="Args"/>
         </template><parameter name="expr"><paramtype>expr&lt; <classname>tag::terminal</classname>, Args, 1 &gt; const &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>void</type><template>
           <template-type-parameter name="Tag"/>
@@ -222,26 +222,31 @@
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="sout"><paramtype>std::ostream &amp;</paramtype></parameter></function></namespace></namespace></header><header name="boost/xpressive/proto/deep_copy.hpp"><para>Replace all nodes stored by reference by nodes stored by value. </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="deep_copy"><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
-    </template><specialization><template-arg>This(Expr)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::deep_copy</classname>&lt; Expr &gt;::<classname>type</classname></type><template>
+    </template><specialization><template-arg>This(Expr)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::deep_copy</classname>&lt; Expr &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct></namespace><namespace name="result_of"><struct name="deep_copy"><template>
       <template-type-parameter name="Expr"/>
     </template></struct></namespace><data-member name="deep_copy"><type><classname>functional::deep_copy</classname> const</type></data-member></namespace></namespace></header><header name="boost/xpressive/proto/domain.hpp"><para>Contains definition of domain&lt;&gt; class template, for defining domains with a grammar for controlling operator overloading. </para><namespace name="boost"><namespace name="proto"><struct name="domain"><template>
       <template-type-parameter name="Generator"/>
       <template-type-parameter name="Grammar"/>
-    </template><typedef name="grammar"><type>Grammar</type></typedef></struct><struct name="is_domain"><template>
+    </template><inherit access="public">Generator</inherit><typedef name="grammar"><type>Grammar</type></typedef></struct><struct name="deduce_domain"><inherit access="public">boost::proto::domain&lt;  &gt;</inherit></struct><struct name="is_domain"><template>
       <template-type-parameter name="T"/>
       <template-type-parameter name="EnableIf"/>
-    </template></struct><struct-specialization name="is_domain"><template>
+    </template></struct><struct name="domain_of"><template>
       <template-type-parameter name="T"/>
-    </template><specialization><template-arg>T</template-arg><template-arg>typename T::boost_proto_is_domain_</template-arg></specialization></struct-specialization></namespace></namespace></header><header name="boost/xpressive/proto/eval.hpp"><para>Contains the eval() expression evaluator. </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="eval"><struct-specialization name="result"><template>
+      <template-type-parameter name="EnableIf"/>
+    </template><typedef name="type"><type><classname>default_domain</classname></type></typedef></struct><struct-specialization name="is_domain"><template>
+      <template-type-parameter name="T"/>
+    </template><specialization><template-arg>T</template-arg><template-arg>typename T::boost_proto_is_domain_</template-arg></specialization></struct-specialization><struct-specialization name="domain_of"><template>
+      <template-type-parameter name="T"/>
+    </template><specialization><template-arg>T</template-arg><template-arg>typename T::is_boost_proto_expr_</template-arg></specialization><typedef name="type"><type>T::domain</type></typedef></struct-specialization></namespace></namespace></header><header name="boost/xpressive/proto/eval.hpp"><para>Contains the eval() expression evaluator. </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="eval"><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>Context)</template-arg></specialization><inherit access="public">boost::proto::result_of::eval&lt; remove_reference&lt; Expr &gt;::type, remove_reference&lt; Context &gt;::type &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::<classname>type</classname></type><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>Context)</template-arg></specialization><inherit access="public">boost::proto::result_of::eval&lt; remove_reference&lt; Expr &gt;::type, remove_reference&lt; Context &gt;::type &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="Context"/>
-        </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::<classname>type</classname></type><template>
+        </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="Context"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context const &amp;</paramtype></parameter></method></method-group></struct></namespace><namespace name="result_of"><struct name="eval"><template>
@@ -728,7 +733,7 @@
       <template-type-parameter name="Tag"/>
     </template><struct name="result"><template>
       <template-type-parameter name="Expr"/>
-    </template></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::<classname>type</classname></type><template>
+    </template></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method></method-group></struct><struct-specialization name="is_view_impl"><template>
     </template><specialization><template-arg>proto::proto_ref_tag</template-arg></specialization><struct name="apply"><template>
@@ -750,7 +755,7 @@
     </template><specialization><template-arg>proto::proto_ref_iterator_tag</template-arg></specialization><struct name="apply"><template>
       <template-type-parameter name="IteratorFrom"/>
       <template-type-parameter name="IteratorTo"/>
-    </template><typedef name="type"><type>mpl::long_&lt; IteratorTo::index::value-IteratorFrom::index::value &gt;</type></typedef></struct></struct-specialization><struct-specialization name="next_impl"><template>
+    </template></struct></struct-specialization><struct-specialization name="next_impl"><template>
     </template><specialization><template-arg>proto::proto_ref_iterator_tag</template-arg></specialization><struct name="apply"><template>
       <template-type-parameter name="Iterator"/>
     </template></struct></struct-specialization><struct-specialization name="prior_impl"><template>
@@ -800,7 +805,7 @@
       <template-type-parameter name="Context"/>
     </template><struct name="result"><template>
       <template-type-parameter name="Expr"/>
-    </template><typedef name="type"><type>Context::template eval&lt; typename remove_reference&lt; Expr &gt;::type &gt;::result_type</type></typedef></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::<classname>type</classname></type><template>
+    </template><typedef name="type"><type>Context::template eval&lt; typename remove_reference&lt; Expr &gt;::type &gt;::result_type</type></typedef></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method></method-group><constructor><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></constructor></struct><function name="children_of"><type><classname>children</classname>&lt; Expr &gt;</type><template>
           <template-type-parameter name="Expr"/>
@@ -863,21 +868,23 @@
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, Domain, remove_reference&lt; A0 &gt;::type, remove_reference&lt; A1 &gt;::type, remove_reference&lt; A2 &gt;::type, remove_reference&lt; A3 &gt;::type, remove_reference&lt; A4 &gt;::type &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0 &gt;::<classname>type</classname> const</type><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, Domain, remove_reference&lt; A0 &gt;::type, remove_reference&lt; A1 &gt;::type, remove_reference&lt; A2 &gt;::type, remove_reference&lt; A3 &gt;::type, remove_reference&lt; A4 &gt;::type &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A &gt;::type const</type><template>
+          <template-type-parameter name="A"/>
+        </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0 &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1 &gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1 &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1, const A2 &gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1, const A2 &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
           <template-type-parameter name="A2"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1, const A2, const A3 &gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1, const A2, const A3 &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
           <template-type-parameter name="A2"/>
           <template-type-parameter name="A3"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><parameter name="a3"><paramtype>const A3 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1, const A2, const A3, const A4 &gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><parameter name="a3"><paramtype>const A3 &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1, const A2, const A3, const A4 &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
           <template-type-parameter name="A2"/>
@@ -891,14 +898,14 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Sequence"/>
-    </template><specialization><template-arg>This(Sequence)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::<classname>type</classname></type><template>
+    </template><specialization><template-arg>This(Sequence)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type</type><template>
           <template-type-parameter name="Sequence"/>
         </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></method></method-group></struct><struct name="unfused_expr_fun"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Domain"/>
     </template><struct name="result"><template>
       <template-type-parameter name="Sequence"/>
-    </template><inherit access="public">boost::proto::result_of::unpack_expr&lt; Tag, Domain, Sequence &gt;</inherit></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::<classname>type</classname></type><template>
+    </template><inherit access="public">boost::proto::result_of::unpack_expr&lt; Tag, Domain, Sequence &gt;</inherit></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type</type><template>
           <template-type-parameter name="Sequence"/>
         </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></method></method-group></struct><struct name="unfused_expr"><template>
       <template-type-parameter name="Tag"/>
@@ -910,9 +917,9 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A"/>
-    </template><specialization><template-arg>This(A)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; tag::terminal, Domain, A &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A &amp; &gt;::<classname>type</classname></type><template>
+    </template><specialization><template-arg>This(A)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; tag::terminal, Domain, A &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A &gt;::type</type><template>
           <template-type-parameter name="A"/>
-        </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A const &amp; &gt;::<classname>type</classname></type><template>
+        </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A const  &gt;::type</type><template>
           <template-type-parameter name="A"/>
         </template><parameter name="a"><paramtype>A const &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace><namespace name="result_of"><struct name="unpack_expr"><template>
       <template-type-parameter name="Tag"/>
@@ -928,7 +935,14 @@
       <template-type-parameter name="A4"/>
       <template-type-parameter name=""/>
       <template-type-parameter name=""/>
-    </template></struct><struct-specialization name="unpack_expr"><template>
+    </template></struct><struct-specialization name="make_expr"><template>
+      <template-type-parameter name="Tag"/>
+      <template-type-parameter name="A0"/>
+      <template-type-parameter name="A1"/>
+      <template-type-parameter name="A2"/>
+      <template-type-parameter name="A3"/>
+      <template-type-parameter name="A4"/>
+    </template><specialization><template-arg>Tag</template-arg><template-arg>deduce_domain</template-arg><template-arg>A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4</template-arg><template-arg>void</template-arg></specialization></struct-specialization><struct-specialization name="unpack_expr"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Domain"/>
       <template-type-parameter name="Sequence"/>
@@ -940,38 +954,76 @@
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>Tag</template-arg><template-arg>Domain</template-arg><template-arg>A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4</template-arg><template-arg>typename Domain::boost_proto_is_domain_</template-arg></specialization></struct-specialization></namespace><function name="make_expr"><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0 &gt;&gt;::<classname>type</classname> const</type><template>
+    </template><specialization><template-arg>Tag</template-arg><template-arg>Domain</template-arg><template-arg>A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4</template-arg><template-arg>typename Domain::boost_proto_is_domain_</template-arg></specialization></struct-specialization></namespace><overloaded-function name="unpack_expr"><signature><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence &gt;&gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Sequence"/>
+        </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></signature><signature><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence2 &gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="Sequence2"/>
+        </template><parameter name="sequence2"><paramtype>Sequence2 const &amp;</paramtype></parameter></signature><description><para>unpack_expr </para></description></overloaded-function><overloaded-function name="make_expr"><signature><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0 &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter></function><function name="make_expr"><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1 &gt;&gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, B0 &gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="B0"/>
+        </template><parameter name="b0"><paramtype>B0 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0 &gt;&gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="A0"/>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const B0 &gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="B0"/>
+        </template><parameter name="b0"><paramtype>const B0 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1 &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter></function><function name="make_expr"><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1, const A2 &gt;&gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const B0, const B1 &gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="B0"/>
+          <template-type-parameter name="B1"/>
+        </template><parameter name="b0"><paramtype>const B0 &amp;</paramtype></parameter><parameter name="b1"><paramtype>const B1 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1, const A2 &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
           <template-type-parameter name="A2"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter></function><function name="make_expr"><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1, const A2, const A3 &gt;&gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const B0, const B1, const B2 &gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="B0"/>
+          <template-type-parameter name="B1"/>
+          <template-type-parameter name="B2"/>
+        </template><parameter name="b0"><paramtype>const B0 &amp;</paramtype></parameter><parameter name="b1"><paramtype>const B1 &amp;</paramtype></parameter><parameter name="b2"><paramtype>const B2 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1, const A2, const A3 &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
           <template-type-parameter name="A2"/>
           <template-type-parameter name="A3"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><parameter name="a3"><paramtype>const A3 &amp;</paramtype></parameter></function><function name="make_expr"><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1, const A2, const A3, const A4 &gt;&gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><parameter name="a3"><paramtype>const A3 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const B0, const B1, const B2, const B3 &gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="B0"/>
+          <template-type-parameter name="B1"/>
+          <template-type-parameter name="B2"/>
+          <template-type-parameter name="B3"/>
+        </template><parameter name="b0"><paramtype>const B0 &amp;</paramtype></parameter><parameter name="b1"><paramtype>const B1 &amp;</paramtype></parameter><parameter name="b2"><paramtype>const B2 &amp;</paramtype></parameter><parameter name="b3"><paramtype>const B3 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1, const A2, const A3, const A4 &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
           <template-type-parameter name="A2"/>
           <template-type-parameter name="A3"/>
           <template-type-parameter name="A4"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><parameter name="a3"><paramtype>const A3 &amp;</paramtype></parameter><parameter name="a4"><paramtype>const A4 &amp;</paramtype></parameter></function><function name="unpack_expr"><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence &gt;&gt;::<classname>type</classname> const</type><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><parameter name="a3"><paramtype>const A3 &amp;</paramtype></parameter><parameter name="a4"><paramtype>const A4 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const B0, const B1, const B2, const B3, const B4 &gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
-          <template-type-parameter name="Sequence"/>
-        </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></function><function name="make_expr"><type>lazy_disable_if&lt; <classname>is_domain</classname>&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0 &gt;&gt;::<classname>type</classname> const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="A0"/>
-        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter></function></namespace></namespace></header><header name="boost/xpressive/proto/matches.hpp"><para>Contains definition of matches&lt;&gt; metafunction for determining if a given expression matches a given pattern. </para><namespace name="boost"><namespace name="proto"><struct name="matches"><template>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="B0"/>
+          <template-type-parameter name="B1"/>
+          <template-type-parameter name="B2"/>
+          <template-type-parameter name="B3"/>
+          <template-type-parameter name="B4"/>
+        </template><parameter name="b0"><paramtype>const B0 &amp;</paramtype></parameter><parameter name="b1"><paramtype>const B1 &amp;</paramtype></parameter><parameter name="b2"><paramtype>const B2 &amp;</paramtype></parameter><parameter name="b3"><paramtype>const B3 &amp;</paramtype></parameter><parameter name="b4"><paramtype>const B4 &amp;</paramtype></parameter></signature><description><para>make_expr </para></description></overloaded-function></namespace></namespace></header><header name="boost/xpressive/proto/matches.hpp"><para>Contains definition of matches&lt;&gt; metafunction for determining if a given expression matches a given pattern. </para><namespace name="boost"><namespace name="proto"><struct name="matches"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Grammar"/>
     </template></struct><struct name="or_"><template>
@@ -1669,9 +1721,9 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="T"/>
-    </template><specialization><template-arg>This(T)</template-arg></specialization><inherit access="public">boost::proto::result_of::as_arg&lt; remove_reference&lt; T &gt;::type, Domain &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::as_arg</classname>&lt; T, Domain &gt;::<classname>type</classname></type><template>
+    </template><specialization><template-arg>This(T)</template-arg></specialization><inherit access="public">boost::proto::result_of::as_arg&lt; remove_reference&lt; T &gt;::type, Domain &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::as_arg</classname>&lt; T, Domain &gt;::type</type><template>
           <template-type-parameter name="T"/>
-        </template><parameter name="t"><paramtype>T &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::as_arg</classname>&lt; T const, Domain &gt;::<classname>type</classname></type><template>
+        </template><parameter name="t"><paramtype>T &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::as_arg</classname>&lt; T const, Domain &gt;::type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></method></method-group></struct><struct name="arg_c"><template>
       <template-nontype-parameter name="N"><type>long</type></template-nontype-parameter>
@@ -1717,7 +1769,7 @@
       <template-type-parameter name="T"/>
       <template-type-parameter name="Domain"/>
       <template-type-parameter name="EnableIf"/>
-    </template><typedef name="arg0_type"><type>mpl::if_&lt; mpl::or_&lt; boost::is_array&lt; T &gt;, is_function&lt; T &gt; &gt;, T &amp;, typename remove_cv&lt; T &gt;::type &gt;::type</type></typedef><typedef name="expr_type"><type>expr&lt; <classname>proto::tag::terminal</classname>, <classname>args1</classname>&lt; arg0_type &gt; &gt;</type></typedef><typedef name="type"><type>Domain::template apply&lt; expr_type &gt;::type</type></typedef><typedef name="result_type"><type>type</type></typedef><typedef name="T2"><type>T</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static result_type</type><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct><struct name="as_arg"><template>
+    </template><typedef name="arg0_type"><type>mpl::eval_if&lt; mpl::or_&lt; boost::is_array&lt; T &gt;, is_function&lt; T &gt; &gt;, add_reference&lt; T &gt;, remove_cv&lt; T &gt;&gt;::type</type></typedef><typedef name="expr_type"><type>expr&lt; <classname>proto::tag::terminal</classname>, <classname>args1</classname>&lt; arg0_type &gt; &gt;</type></typedef><typedef name="type"><type>Domain::template apply&lt; expr_type &gt;::type</type></typedef><typedef name="result_type"><type>type</type></typedef><typedef name="T2"><type>T</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static result_type</type><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct><struct name="as_arg"><template>
       <template-type-parameter name="T"/>
       <template-type-parameter name="Domain"/>
       <template-type-parameter name="EnableIf"/>
@@ -1762,9 +1814,9 @@
           <template-type-parameter name="T"/>
         </template><parameter name="t"><paramtype>T &amp;</paramtype></parameter></signature><signature><type><classname>result_of::as_expr</classname>&lt; T const  &gt;::result_type</type><template>
           <template-type-parameter name="T"/>
-        </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></signature><description><para>as_expr </para></description></overloaded-function><overloaded-function name="as_arg"><signature><type><classname>result_of::as_arg</classname>&lt; T &gt;::<classname>type</classname></type><template>
+        </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></signature><description><para>as_expr </para></description></overloaded-function><overloaded-function name="as_arg"><signature><type><classname>result_of::as_arg</classname>&lt; T &gt;::type</type><template>
           <template-type-parameter name="T"/>
-        </template><parameter name="t"><paramtype>T &amp;</paramtype></parameter></signature><signature><type><classname>result_of::as_arg</classname>&lt; T const  &gt;::<classname>type</classname></type><template>
+        </template><parameter name="t"><paramtype>T &amp;</paramtype></parameter></signature><signature><type><classname>result_of::as_arg</classname>&lt; T const  &gt;::type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></signature><description><para>as_arg </para></description></overloaded-function><overloaded-function name="arg"><signature><type><classname>result_of::unref</classname>&lt; typename Expr::type::arg0_type &gt;::reference</type><template>
           <template-type-parameter name="Expr"/>
@@ -1783,7 +1835,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><inherit access="public">boost::proto::result_of::arg&lt; Grammar::template apply&lt; Expr, State, Visitor &gt;::type, N &gt;</inherit></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template><inherit access="public">boost::proto::result_of::arg&lt; Grammar::template apply&lt; Expr, State, Visitor &gt;::type, N &gt;</inherit></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1794,7 +1846,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1804,7 +1856,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><inherit access="public">boost::proto::result_of::left&lt; Grammar::template apply&lt; Expr, State, Visitor &gt;::type &gt;</inherit></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template><inherit access="public">boost::proto::result_of::left&lt; Grammar::template apply&lt; Expr, State, Visitor &gt;::type &gt;</inherit></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1814,7 +1866,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><inherit access="public">boost::proto::result_of::right&lt; Grammar::template apply&lt; Expr, State, Visitor &gt;::type &gt;</inherit></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template><inherit access="public">boost::proto::result_of::right&lt; Grammar::template apply&lt; Expr, State, Visitor &gt;::type &gt;</inherit></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1860,14 +1912,47 @@
           <template-type-parameter name="Expr_"/>
           <template-type-parameter name="State_"/>
           <template-type-parameter name="Visitor_"/>
-        </template><parameter name="expr_"><paramtype>Expr_ const &amp;</paramtype></parameter><parameter name=""><paramtype>State_ const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor_ &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/branch.hpp"><para>A special-purpose proto transform for transforming one branch of the expression tree separately from the rest. Given an expression and a new state, it transforms the expression using the new state. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="branch"><template>
+        </template><parameter name="expr_"><paramtype>Expr_ const &amp;</paramtype></parameter><parameter name=""><paramtype>State_ const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor_ &amp;</paramtype></parameter></method></method-group></struct><struct name="apply1"><template>
+      <template-type-parameter name="Grammar"/>
+      <template-type-parameter name="Lambda"/>
+    </template><struct name="apply"><template>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name=""/>
+      <template-type-parameter name=""/>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="apply2"><template>
+      <template-type-parameter name="Grammar"/>
+      <template-type-parameter name="Lambda"/>
+    </template><struct name="apply"><template>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="State"/>
+      <template-type-parameter name=""/>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="apply3"><template>
+      <template-type-parameter name="Grammar"/>
+      <template-type-parameter name="Lambda"/>
+    </template><struct name="apply"><template>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="State"/>
+      <template-type-parameter name="Visitor"/>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/branch.hpp"><para>A special-purpose proto transform for transforming one branch of the expression tree separately from the rest. Given an expression and a new state, it transforms the expression using the new state. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="branch"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="BranchState"/>
     </template><struct name="apply"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1878,7 +1963,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><typedef name="type"><type>Grammar2::template <classname>apply</classname>&lt; typename Grammar1::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type, State, Visitor &gt;::type</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template><typedef name="type"><type>Grammar2::template <classname>apply</classname>&lt; typename Grammar1::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type, State, Visitor &gt;::type</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1892,7 +1977,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1902,7 +1987,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1916,7 +2001,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><typedef name="type"><type>fusion::cons&lt; typename Grammar::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type, State &gt;</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template><typedef name="type"><type>fusion::cons&lt; typename Grammar::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type, State &gt;</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1926,7 +2011,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><typedef name="type"><type>Grammar::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type::cdr_type</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template><typedef name="type"><type>Grammar::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type::cdr_type</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1936,7 +2021,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1946,7 +2031,7 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+    </template></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
