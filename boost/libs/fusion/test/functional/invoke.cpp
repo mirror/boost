@@ -40,10 +40,27 @@ struct object_nc : boost::noncopyable {};
 
 struct fobj
 {
-    typedef int result_type;
+    // Handle nullary separately to exercise result_of support
+    template<typename T>
+    struct result;
 
-    int operator()()       { return 0; }
-    int operator()() const { return 1; }
+    template<typename T0>
+    struct result<fobj(T0)>
+    {
+        typedef int type;
+    };
+
+    template<typename T0, typename T1>
+    struct result<fobj(T0, T1)>
+    {
+        typedef int type;
+    };
+
+    template<typename T0, typename T1, typename T2>
+    struct result<fobj(T0, T1, T2)>
+    {
+        typedef int type;
+    };
 
     int operator()(int i)       { return 2 + i; }
     int operator()(int i) const { return 3 + i; }
@@ -57,16 +74,38 @@ struct fobj
     int operator()(int i, object &, object_nc &) const { return 11 + i; }
 };
 
+struct nullary_fobj
+{
+    typedef int result_type;
+
+    int operator()()       { return 0; }
+    int operator()() const { return 1; }
+};
+
 struct fobj_nc
+      : boost::noncopyable
+{
+    // Handle nullary separately to exercise result_of support
+    template<typename T>
+    struct result;
+
+    template<typename T0>
+    struct result<fobj_nc(T0)>
+    {
+        typedef int type;
+    };
+
+    int operator()(int i)       { return 14 + i; }
+    int operator()(int i) const { return 15 + i; }
+};
+
+struct nullary_fobj_nc
       : boost::noncopyable
 {
     typedef int result_type;
 
     int operator()()       { return 12; }
     int operator()() const { return 13; }
-
-    int operator()(int i)       { return 14 + i; }
-    int operator()(int i) const { return 15 + i; }
 };
 
 int nullary() { return 16; }
@@ -147,7 +186,7 @@ void test_sequence_n(Sequence & seq, mpl::int_<0>)
 {
     // Function Objects
 
-    fobj f;
+    nullary_fobj f;
 
     BOOST_TEST(f () == fusion::invoke(f ,        seq ));
     BOOST_TEST(f () == fusion::invoke(f , const_(seq)));
@@ -155,16 +194,16 @@ void test_sequence_n(Sequence & seq, mpl::int_<0>)
     // Note: The function object is taken by value, so we request the copy
     // to be const with an explicit template argument. We can also request
     // the function object to be pased by reference...
-    BOOST_TEST(const_(f)() == fusion::invoke<fobj const  >(const_(f),        seq ));
-    BOOST_TEST(const_(f)() == fusion::invoke<fobj const &>(const_(f), const_(seq)));
+    BOOST_TEST(const_(f)() == fusion::invoke<nullary_fobj const  >(const_(f),        seq ));
+    BOOST_TEST(const_(f)() == fusion::invoke<nullary_fobj const &>(const_(f), const_(seq)));
 
-    fobj_nc nc_f;
+    nullary_fobj_nc nc_f;
     // ...and we further ensure there is no copying in this case, using a
     // noncopyable function object.
-    BOOST_TEST(nc_f () == fusion::invoke<fobj_nc &>(nc_f ,        seq ));
-    BOOST_TEST(nc_f () == fusion::invoke<fobj_nc &>(nc_f , const_(seq)));
-    BOOST_TEST(const_(nc_f)() == fusion::invoke<fobj_nc const &>(const_(nc_f),        seq ));
-    BOOST_TEST(const_(nc_f)() == fusion::invoke<fobj_nc const &>(const_(nc_f), const_(seq)));
+    BOOST_TEST(nc_f () == fusion::invoke<nullary_fobj_nc &>(nc_f ,        seq ));
+    BOOST_TEST(nc_f () == fusion::invoke<nullary_fobj_nc &>(nc_f , const_(seq)));
+    BOOST_TEST(const_(nc_f)() == fusion::invoke<nullary_fobj_nc const &>(const_(nc_f),        seq ));
+    BOOST_TEST(const_(nc_f)() == fusion::invoke<nullary_fobj_nc const &>(const_(nc_f), const_(seq)));
 
     // Builtin Functions
 

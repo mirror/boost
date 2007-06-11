@@ -32,7 +32,11 @@ template <class Base = boost::blank, class RemoveNullary = mpl::false_>
 struct test_func
     : Base
 {
-    template <class Seq> struct result
+    template<typename T>
+    struct result;
+
+    template <typename B, typename RN, class Seq> 
+    struct result<test_func<B, RN>(Seq)>
         : mpl::if_< mpl::and_< fusion::result_of::empty<Seq>, RemoveNullary >, 
                     boost::blank, mpl::identity<long> >::type
     { };
@@ -55,15 +59,13 @@ struct test_func
 
     struct fold_op
     {
+        typedef long result_type;
+
         template <typename T>
         long operator()(T const & elem, long value) const
         {
           return value + sizeof(T) * elem;
         }
-
-        template <typename T0, typename T1> struct result
-            : mpl::identity<long>
-        { };
     };
 };
 
@@ -75,9 +77,9 @@ void result_type_tests()
     typedef fusion::unfused_rvalue_args< test_func<noncopyable, no_nullary_call> > test_func_1;
     typedef fusion::unfused_rvalue_args< test_func<noncopyable> > test_func_0;
 
-    BOOST_TEST(( has_type< test_func_0::result<> >::value ));
-    BOOST_TEST(( has_type< test_func_1::result<int> >::value ));
-    BOOST_TEST(( ! has_type< test_func_1::result<> >::value ));
+    BOOST_TEST(( has_type< test_func_0::result<test_func_0()> >::value ));
+    BOOST_TEST(( has_type< test_func_1::result<test_func_1(int)> >::value ));
+    BOOST_TEST(( ! has_type< test_func_1::result<test_func_1()> >::value ));
     BOOST_TEST(( is_same< boost::result_of< test_func_0() >::type, long >::value ));
     BOOST_TEST(( is_same< boost::result_of< test_func_1(int) >::type, long >::value ));
 }

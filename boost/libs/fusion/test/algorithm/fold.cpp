@@ -1,5 +1,6 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2007 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -23,8 +24,11 @@ using boost::is_same;
 
 struct add_ints_only
 {
+    template<typename T>
+    struct result;
+
     template <typename T, typename State>
-    struct result
+    struct result<add_ints_only(T,State)>
     {
         typedef State type;
     };
@@ -45,8 +49,11 @@ struct add_ints_only
 
 struct count_ints
 {
+    template<typename T>
+    struct result;
+
     template <typename T, typename CountT>
-    struct result
+    struct result<count_ints(T,CountT)>
     {
         typedef typename
             if_<
@@ -58,10 +65,10 @@ struct count_ints
     };
 
     template <typename T, typename CountT>
-    typename result<T, CountT>::type
+    typename result<count_ints(T, CountT)>::type
     operator()(T const&, CountT const&) const
     {
-        typedef typename result<T, CountT>::type result;
+        typedef typename result<count_ints(T, CountT)>::type result;
         return result();
     }
 };

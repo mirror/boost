@@ -22,8 +22,11 @@ template <class Base = boost::blank>
 struct test_func
     : Base
 {
-    template <typename T0, typename T1>
-    struct result
+    template<typename T>
+    struct result;
+
+    template<typename B, typename T0, typename T1>
+    struct result<test_func<B>(T0, T1)>
     {
         typedef int type;
     };

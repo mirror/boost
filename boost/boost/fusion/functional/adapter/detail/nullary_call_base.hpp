@@ -12,9 +12,12 @@
 #include <boost/blank.hpp>
 
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
 #include <boost/fusion/sequence/container/vector/vector10.hpp>
 #include <boost/fusion/functional/adapter/detail/has_type.hpp>
+
+#include <boost/utility/result_of.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {
@@ -22,7 +25,8 @@ namespace boost { namespace fusion { namespace detail
 
     template <class Derived, class Function, bool Enable = detail::has_type< 
         typename remove_reference<Function>::type
-          ::template result<fusion::vector0> >::value>
+          ::template result<
+        typename remove_const<typename remove_reference<Function>::type>::type(fusion::vector0)> >::value>
     struct nullary_call_base
     {
         template <typename T> inline void operator()(T reserved::*) const { }
@@ -34,19 +38,19 @@ namespace boost { namespace fusion { namespace detail
     struct nullary_call_base<Derived,Function,true>
     {
     private:
-        typedef typename remove_reference<Function>::type function;
+        typedef typename remove_const<typename remove_reference<Function>::type>::type function;
     protected:
-        typedef typename function::template result<fusion::vector0> r0;
+        typedef typename function::template result<function(vector0)> r0;
     public:
 
-        inline typename function::template result<fusion::vector0>::type
+        inline typename r0::type
         operator()() const
         {
             fusion::vector0 arg;
             return static_cast<Derived const *>(this)->fnc_transformed(arg);
         }
 
-        inline typename function::template result<fusion::vector0>::type
+        inline typename r0::type
         operator()() 
         {
             fusion::vector0 arg;

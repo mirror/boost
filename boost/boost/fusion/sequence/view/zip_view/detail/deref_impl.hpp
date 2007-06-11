@@ -25,15 +25,18 @@ namespace boost { namespace fusion {
     {
         struct poly_deref
         {
+            template<typename T>
+            struct result;
+
             template<typename It>
-            struct result
+            struct result<poly_deref(It)>
                 : mpl::eval_if<is_same<It, unused_type>,
                                mpl::identity<unused_type>,
                                result_of::deref<It> >
             {};
 
             template<typename It>
-            typename result<It>::type
+            typename result<poly_deref(It)>::type
             operator()(const It& it) const
             {
                 return fusion::deref(it);

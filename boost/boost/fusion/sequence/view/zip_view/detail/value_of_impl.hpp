@@ -25,8 +25,11 @@ namespace boost { namespace fusion {
     {
         struct poly_value_of
         {
+            template<typename T>
+            struct result;
+
             template<typename It>
-            struct result
+            struct result<poly_value_of(It)>
                 : mpl::eval_if<is_same<It, unused_type>,
                                mpl::identity<unused_type>,
                                result_of::value_of<It> >

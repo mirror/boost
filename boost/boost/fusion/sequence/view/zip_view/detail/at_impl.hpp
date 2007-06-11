@@ -30,8 +30,11 @@ namespace boost { namespace fusion
         template<typename N>
         struct poly_at
         {
-            template<typename SeqRef>
-            struct result
+            template<typename T>
+            struct result;
+
+            template<typename N1, typename SeqRef>
+            struct result<poly_at<N1>(SeqRef)>
                 : mpl::eval_if<is_same<SeqRef, unused_type const&>,
                                mpl::identity<unused_type>,
                                result_of::at<typename remove_reference<SeqRef>::type, N> >
@@ -40,14 +43,14 @@ namespace boost { namespace fusion
             };
 
             template<typename Seq>
-            typename result<Seq&>::type
+            typename result<poly_at(Seq&)>::type
             operator()(Seq& seq) const
             {
                 return fusion::at<N>(seq);
             }
 
             template<typename Seq>
-            typename result<Seq const&>::type
+            typename result<poly_at(Seq const&)>::type
             operator()(Seq const& seq) const
             {
                 return fusion::at<N>(seq);

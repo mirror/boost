@@ -41,8 +41,11 @@ namespace boost { namespace fusion {
         template<typename M>
         struct endpoints
         {
-            template<typename SeqRef>
-            struct result
+            template<typename T>
+            struct result;
+
+            template<typename M1, typename SeqRef>
+            struct result<endpoints<M1>(SeqRef)>
                 : mpl::eval_if<is_same<SeqRef, unused_type const&>,
                                mpl::identity<unused_type>,
                                get_endpoint<SeqRef, M> >
@@ -51,14 +54,14 @@ namespace boost { namespace fusion {
             };
 
             template<typename Seq>
-            typename result<Seq&>::type
+            typename result<endpoints(Seq&)>::type
             operator()(Seq& seq) const
             {
                 return fusion::advance<M>(fusion::begin(seq));
             }
 
             template<typename Seq>
-            typename result<Seq const&>::type
+            typename result<endpoints(Seq const&)>::type
             operator()(Seq const& seq)
             {
                 return fusion::advance<M>(fusion::begin(seq));

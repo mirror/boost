@@ -33,7 +33,8 @@ namespace boost { namespace fusion
 
     struct void_;
 
-    template <class Function> class unfused_generic
+    template <class Function> 
+    class unfused_generic
         : public detail::nullary_call_base<unfused_generic<Function>, Function>
     {
         Function fnc_transformed;
@@ -44,7 +45,7 @@ namespace boost { namespace fusion
         typedef detail::nullary_call_base<
             fusion::unfused_generic<Function>, Function > base;
 
-        typedef typename boost::remove_reference<Function>::type function;
+        typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
       public:
@@ -55,32 +56,26 @@ namespace boost { namespace fusion
 
         using base::operator();
 
-        template <
-            BOOST_PP_ENUM_BINARY_PARAMS(BOOST_FUSION_UNFUSED_GENERIC_MAX_ARITY,
-                typename T, = fusion::void_ BOOST_PP_INTERCEPT),
-                class _ = fusion::void_
-            >
+        template <typename T>
         struct result;
 
-        template <class _>
-        struct result<
-            BOOST_PP_ENUM_PARAMS(BOOST_FUSION_UNFUSED_GENERIC_MAX_ARITY,
-                fusion::void_ BOOST_PP_INTERCEPT),_>
+        template <typename Func>
+        struct result<unfused_generic<Func>()>
             : base::r0
         { };
 
         #define BOOST_FUSION_CODE(tpl_params,arg_types,params,args)             \
         template <tpl_params>                                                  \
-        inline typename function::template result<                             \
-            BOOST_PP_CAT(fusion::vector,N)<arg_types> >::type                  \
+        inline typename function::template result<function(                    \
+            BOOST_PP_CAT(fusion::vector,N)<arg_types>)>::type                  \
         operator()(params) const                                               \
         {                                                                      \
             BOOST_PP_CAT(fusion::vector,N)<arg_types> arg(args);               \
             return this->fnc_transformed(arg);                                 \
         }                                                                      \
         template <tpl_params>                                                  \
-        inline typename function::template result<                             \
-            BOOST_PP_CAT(fusion::vector,N)<arg_types> >::type                  \
+        inline typename function::template result<function(                    \
+            BOOST_PP_CAT(fusion::vector,N)<arg_types>)>::type                  \
         operator()(params)                                                     \
         {                                                                      \
             BOOST_PP_CAT(fusion::vector,N)<arg_types> arg(args);               \
@@ -100,10 +95,14 @@ namespace boost { namespace fusion
     };
 }}
 
-#define  BOOST_FUSION_CLASS_TPL_PARAMS class F
-#define  BOOST_FUSION_CLASS_TPL_SPEC fusion::unfused_generic<F>
-#define  BOOST_FUSION_FUNC_OBJ_ARITY BOOST_FUSION_UNFUSED_GENERIC_MAX_ARITY
-#include <boost/fusion/functional/adapter/detail/gen_result_of_spec.hpp>
+namespace boost {
+    template<typename Func>
+    struct result_of<boost::fusion::unfused_generic<Func>()>
+    {
+        typedef boost::fusion::unfused_generic<Func> function;
+        typedef typename function::template result<function()>::type type;
+    };
+}
 
 #define BOOST_FUSION_FUNCTIONAL_ADAPTER_UNFUSED_GENERIC_HPP_INCLUDED
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -116,17 +115,12 @@ namespace boost { namespace fusion
 #include <boost/fusion/functional/adapter/detail/pt_def.hpp>
 
 #if BOOST_PP_SLOT_1() == 0 
-        template <BOOST_PP_ENUM_PARAMS(N,typename T), class _>
+        template <typename Func, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result
-#if N < BOOST_FUSION_UNFUSED_GENERIC_MAX_ARITY
-            < BOOST_PP_ENUM_PARAMS(N,T),
-            BOOST_PP_ENUM_PARAMS(
-                BOOST_PP_SUB(BOOST_FUSION_UNFUSED_GENERIC_MAX_ARITY,N),
-                fusion::void_ BOOST_PP_INTERCEPT), _ >
-#endif
-            : function::template result< BOOST_PP_CAT(fusion::vector,N)<
+            <unfused_generic<Func>(BOOST_PP_ENUM_PARAMS(N,T))>
+            : function::template result<function(BOOST_PP_CAT(fusion::vector,N)<
                 BOOST_PP_ENUM_BINARY_PARAMS(N,typename detail::gref<T,>::type
-                    BOOST_PP_INTERCEPT) > >
+                    BOOST_PP_INTERCEPT) >)>
         { };
 #endif
 

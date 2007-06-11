@@ -10,7 +10,6 @@
 
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/mpl/placeholders.hpp>
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/sequence/intrinsic/mpl.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
@@ -38,21 +37,27 @@ namespace boost { namespace fusion {
             typedef Tag2 type;
         };
 
-        template<typename Next, typename StrictestSoFar>
         struct strictest_traversal_impl
         {
-            typedef StrictestSoFar tag1;
-            typedef typename traits::category_of<
-                typename remove_reference<Next>::type>::type tag2;
+            template<typename T>
+            struct result;
 
-            typedef typename stricter_traversal<tag1,tag2>::type type;
+            template<typename Next, typename StrictestSoFar>
+            struct result<strictest_traversal_impl(Next, StrictestSoFar)>
+            {
+                typedef StrictestSoFar tag1;
+                typedef typename traits::category_of<
+                    typename remove_reference<Next>::type>::type tag2;
+
+                typedef typename stricter_traversal<tag1,tag2>::type type;
+            };
         };
 
         template<typename Sequence>
         struct strictest_traversal
             : result_of::fold<
             Sequence, fusion::random_access_traversal_tag, 
-            strictest_traversal_impl<boost::mpl::_,boost::mpl::_> >
+            strictest_traversal_impl>
         {};
 
     }

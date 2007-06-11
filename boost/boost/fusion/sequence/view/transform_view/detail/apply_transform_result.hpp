@@ -1,11 +1,14 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2007 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_APPLY_TRANSFORM_RESULT_02092006_1936)
-#define FUSION_APPLY_TRANSFORM_RESULT_02092006_1936
+#if !defined(BOOST_FUSION_APPLY_TRANSFORM_RESULT_02092006_1936)
+#define BOOST_FUSION_APPLY_TRANSFORM_RESULT_02092006_1936
+
+#include <boost/utility/result_of.hpp>
 
 namespace boost { namespace fusion
 {
@@ -18,15 +21,13 @@ namespace boost { namespace fusion
         {
             template <typename T0, typename T1 = void_>
             struct apply
-            {
-                typedef typename F::template result<T0, T1>::type type;
-            };
+                : boost::result_of<F(T0, T1)>
+            {};
 
             template <typename T0>
             struct apply<T0, void_>
-            {
-                typedef typename F::template result<T0>::type type;
-            };
+                : boost::result_of<F(T0)>
+            {};
         };
     }
 }}

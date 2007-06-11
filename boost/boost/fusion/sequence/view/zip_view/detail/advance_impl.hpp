@@ -21,13 +21,16 @@ namespace boost { namespace fusion {
         template<typename N>
         struct poly_advance
         {
-            template<typename It>
-            struct result
+            template<typename T>
+            struct result;
+
+            template<typename N1, typename It>
+            struct result<poly_advance<N1>(It)>
                 : result_of::advance<It,N>
             {};
 
             template<typename It>
-            typename result<It>::type
+            typename result<poly_advance(It)>::type
             operator()(const It& it) const
             {
                 return fusion::advance<N>(it);

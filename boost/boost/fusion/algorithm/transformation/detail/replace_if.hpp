@@ -43,8 +43,11 @@ namespace boost { namespace fusion { namespace detail
         replacer_if(F f, T const& new_value)
             : f(f), new_value(new_value) {}
 
-        template <typename U>
-        struct result
+        template<typename Params>
+        struct result;
+
+        template <typename F1, typename T1, typename U>
+        struct result<replacer_if<F1, T1>(U)>
         {
             typedef typename
                 mpl::if_<is_convertible<T, U>, U, U const&>::type
@@ -52,7 +55,7 @@ namespace boost { namespace fusion { namespace detail
         };
     
         template <typename U>
-        typename result<U>::type
+        typename result<replacer_if(U)>::type
         operator()(U const& x) const
         {
             return replacer_if_helper<is_convertible<T, U>::value>::

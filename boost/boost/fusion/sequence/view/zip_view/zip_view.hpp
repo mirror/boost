@@ -32,6 +32,7 @@
 #include <boost/mpl/find_if.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/eval_if.hpp>
 
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>
@@ -47,27 +48,31 @@ namespace boost { namespace fusion {
 
         struct seq_ref_size
         {
-            template<typename Seq, 
-                typename SeqClass = typename remove_reference<Seq>::type, 
-                bool HasSize = traits::is_forward<SeqClass>::value
-                >
-            struct result
-                : result_of::size<SeqClass>
-            {};
+            template<typename Params>
+            struct result;
 
-            static int const int_max = static_cast<int>(
-                static_cast<unsigned>(~0) >> 1);
+            template<typename Seq>
+            struct result<seq_ref_size(Seq)>
+            {
+                static int const int_max = static_cast<int>(
+                    static_cast<unsigned>(~0) >> 1);
 
-            template<typename Seq, typename SeqClass>
-            struct result<Seq, SeqClass, false>
-                : mpl::int_<int_max>
-            {}; 
+                typedef typename remove_reference<Seq>::type SeqClass;
+
+                typedef typename mpl::eval_if<
+                    traits::is_forward<SeqClass>,
+                    result_of::size<SeqClass>,
+                    mpl::int_<int_max> >::type type;
+            };
         };
 
         struct poly_min
         {
+            template<typename T>
+            struct result;
+
             template<typename Lhs, typename Rhs>
-            struct result
+            struct result<poly_min(Lhs, Rhs)>
                 : mpl::min<Lhs, Rhs>
             {};
         };

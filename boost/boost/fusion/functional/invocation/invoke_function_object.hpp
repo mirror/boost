@@ -17,9 +17,14 @@
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
+#include <boost/utility/result_of.hpp>
+
 #include <boost/blank.hpp>
 
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_const.hpp>
+
+#include <boost/utility/result_of.hpp>
 
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
@@ -74,7 +79,7 @@ namespace boost { namespace fusion
         template <class Function, class Sequence> struct invoke_function_object
             : detail::invoke_function_object_impl< 
                 typename boost::remove_reference<Function>::type, Sequence
-              >::template result<>
+            >::template result<>
         { }; 
     }
 
@@ -114,11 +119,11 @@ namespace boost { namespace fusion
 
             template <typename _ = void>
             struct result
-                : Function::template result <
 #define M(z,j,data)                                                             \
     typename boost::remove_reference<                                          \
         typename result_of::value_at_c<Sequence,j>::type >::type 
-                    BOOST_PP_ENUM(N,M,~) >
+                : boost::result_of<
+                typename remove_const<Function>::type (BOOST_PP_ENUM(N,M,~))>
 #undef M
             { }; 
 
@@ -138,12 +143,14 @@ namespace boost { namespace fusion
         private:
             typedef invoke_function_object_param_types<Sequence,N> seq;
         public:
-
             template <typename _ = void>
             struct result
-                : Function::template result < 
-                    BOOST_PP_ENUM_PARAMS(N,typename seq::T) >
-            { }; 
+                
+            { 
+                typedef typename 
+                boost::result_of<
+                    typename remove_const<Function>::type (BOOST_PP_ENUM_PARAMS(N,typename seq::T))>::type type;
+            }; 
 
             template <class F>
             static inline typename result<F>::type

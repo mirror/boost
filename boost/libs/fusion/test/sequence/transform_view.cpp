@@ -26,8 +26,11 @@
 
 struct square
 {
+    template<typename T>
+    struct result;
+
     template <typename T>
-    struct result
+    struct result<square(T)>
     {
         typedef int type;
     };
@@ -41,8 +44,11 @@ struct square
 
 struct add
 {
+    template<typename T>
+    struct result;
+
     template <typename A, typename B>
-    struct result
+    struct result<add(A,B)>
     {
         typedef int type;
     };

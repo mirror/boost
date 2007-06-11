@@ -27,8 +27,11 @@ namespace boost { namespace fusion {
     {
         struct poly_begin
         {
+            template<typename T>
+            struct result;
+
             template<typename SeqRef>
-            struct result
+            struct result<poly_begin(SeqRef)>
                 : mpl::eval_if<is_same<SeqRef, unused_type const&>,
                                mpl::identity<unused_type>,
                                result_of::begin<typename remove_reference<SeqRef>::type> >
@@ -37,14 +40,14 @@ namespace boost { namespace fusion {
             };
 
             template<typename Seq>
-            typename result<Seq&>::type
+            typename result<poly_begin(Seq&)>::type
             operator()(Seq& seq) const
             {
                 return fusion::begin(seq);
             }
 
             template<typename Seq>
-            typename result<Seq const&>::type
+            typename result<poly_begin(Seq const&)>::type
             operator()(Seq const& seq) const
             {
                 return fusion::begin(seq);

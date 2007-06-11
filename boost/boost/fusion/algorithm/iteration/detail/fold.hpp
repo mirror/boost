@@ -11,6 +11,7 @@
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/distance.hpp>
+#include <boost/utility/result_of.hpp>
 
 namespace boost { namespace fusion {
 namespace result_of
@@ -25,14 +26,13 @@ namespace detail
     {
         template <typename Value, typename State>
         struct apply
-        {
-            typedef typename F::template result<Value, State>::type type;
-        };
+            : boost::result_of<F(Value,State)>
+        {};
     };
 
     template <typename Iterator, typename State, typename F>
     struct fold_apply
-        : mpl::apply<apply_fold_result<F>, typename result_of::value_of<Iterator>::type, State>
+        : boost::result_of<F(typename result_of::value_of<Iterator>::type, State)>
     {};
 
     template <typename First, typename Last, typename State, typename F>

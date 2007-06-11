@@ -20,6 +20,7 @@
 #include <boost/detail/workaround.hpp>
 
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
@@ -53,8 +54,8 @@ namespace boost { namespace fusion
             // type of the next base class
             typedef unfused_typed_impl
                 < Derived, Function, NextSeq, result_of::size<NextSeq>::value,
-                  has_type< typename Function::template result< 
-                      typename result_of::as_vector<NextSeq>::type > >::value
+                  has_type< typename Function::template result<Function( 
+                      typename result_of::as_vector<NextSeq>::type)> >::value
                 >
             type; 
         };
@@ -80,7 +81,7 @@ namespace boost { namespace fusion
     class unfused_typed
         : public detail::unfused_typed_next_base
           < unfused_typed<Function,Sequence>,
-            typename remove_reference<Function>::type, Sequence, Sequence
+            typename remove_const<typename remove_reference<Function>::type>::type, Sequence, Sequence
           >::type
     {
         Function fnc_transformed;
@@ -91,11 +92,11 @@ namespace boost { namespace fusion
         template <class D, class F, bool E>
         friend struct detail::nullary_call_base;
 
-        typedef typename boost::remove_reference<Function>::type function;
+        typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
         typedef typename detail::unfused_typed_next_base<unfused_typed<
-            Function,Sequence>,function,Sequence,Sequence>::type base;
+            function, Sequence>,function,Sequence,Sequence>::type base;
 
     public:
 
@@ -103,17 +104,11 @@ namespace boost { namespace fusion
             : fnc_transformed(f)
         { }
 
-        template <
-            BOOST_PP_ENUM_BINARY_PARAMS(BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY,
-                typename T, = fusion::void_ BOOST_PP_INTERCEPT),
-                class _ = fusion::void_
-            >
+        template <typename T>
         struct result;
 
-        template <typename _>
-        struct result<
-            BOOST_PP_ENUM_PARAMS(BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY,
-                fusion::void_ BOOST_PP_INTERCEPT),_>
+        template <typename Func, typename Seq>
+        struct result<unfused_typed<Func, Seq>()>
             : base::r0
         { };
     }; 
@@ -124,10 +119,14 @@ namespace boost { namespace fusion
 
 }}
 
-#define  BOOST_FUSION_CLASS_TPL_PARAMS class F, class S
-#define  BOOST_FUSION_CLASS_TPL_SPEC fusion::unfused_typed<F,S>
-#define  BOOST_FUSION_FUNC_OBJ_ARITY BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY
-#include <boost/fusion/functional/adapter/detail/gen_result_of_spec.hpp>
+namespace boost {
+    template<typename Func, typename Seq>
+    struct result_of<boost::fusion::unfused_typed<Func, Seq>()>
+    {
+        typedef boost::fusion::unfused_typed<Func, Seq> function;
+        typedef typename function::template result<function()>::type type;
+    };
+}
 
 #define BOOST_FUSION_FUNCTIONAL_ADAPTER_UNFUSED_TYPED_HPP_INCLUDED
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -149,6 +148,8 @@ namespace boost { namespace fusion
             typedef typename unfused_typed_next_base<
                 Derived,Function,Sequence>::type base;
 
+            typedef typename remove_const<typename remove_reference<Function>::type>::type function;
+
             // Notes: 
             // - conversion to fusion::vector might not be perfect (there is 
             //   currently no "inrinsic converting ctor" that would allow us
@@ -161,13 +162,13 @@ namespace boost { namespace fusion
 
             using base::operator();
 
-            typedef typename Function::
-                template result<arg_vector_t> BOOST_PP_CAT(r,N);
+            typedef typename function::
+                template result<function(arg_vector_t)> BOOST_PP_CAT(r,N);
 
 #define M(z,i,s)                                                                \
     typename call_param<typename result_of::value_at_c<s,i>::type>::type a##i
 
-            inline typename Function::template result<arg_vector_t>::type 
+            inline typename function::template result<function(arg_vector_t)>::type 
             operator()(BOOST_PP_ENUM(N,M,arg_vector_t)) const
             {
                 arg_vector_t arg(BOOST_PP_ENUM_PARAMS(N,a));
@@ -175,7 +176,7 @@ namespace boost { namespace fusion
             }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1400)
-            inline typename Function::template result<arg_vector_t>::type 
+            inline typename function::template result<function(arg_vector_t)>::type 
             operator()(BOOST_PP_ENUM(N,M,arg_vector_t)) 
             {
                 arg_vector_t arg(BOOST_PP_ENUM_PARAMS(N,a));
@@ -189,14 +190,9 @@ namespace boost { namespace fusion
     } // namespace detail
 
     template <class Function, class Sequence> 
-        template <BOOST_PP_ENUM_PARAMS(N,typename T), class _>
+        template <typename Func, BOOST_PP_ENUM_PARAMS(N,typename T)>
     struct unfused_typed<Function,Sequence>::result
-#if N < BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY
-            < BOOST_PP_ENUM_PARAMS(N,T),
-            BOOST_PP_ENUM_PARAMS(
-                BOOST_PP_SUB(BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY,N),
-                fusion::void_ BOOST_PP_INTERCEPT), _ >
-#endif
+    <Func(BOOST_PP_ENUM_PARAMS(N,T))>
         : BOOST_PP_CAT(base::r,N)
     { };
 

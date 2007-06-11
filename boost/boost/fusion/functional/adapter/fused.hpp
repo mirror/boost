@@ -62,17 +62,16 @@ namespace boost { namespace fusion
           return fusion::invoke<func_fwd_t>(this->fnc_transformed,s);
         }
 
-        template <class Seq>
-        struct result
+        template<typename T>
+        struct result;
+
+        template <typename Func, class Seq>
+        struct result<fused<Func>(Seq)>
             : result_of::invoke<Function,Seq>
         { };
     };
 
 }}
-
-#define BOOST_FUSION_CLASS_TPL_PARAMS typename F
-#define  BOOST_FUSION_CLASS_TPL_SPEC fusion::fused<F>
-#include <boost/fusion/functional/adapter/detail/gen_result_of_spec.hpp>
 
 #endif
 

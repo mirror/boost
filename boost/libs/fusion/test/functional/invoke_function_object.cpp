@@ -40,8 +40,24 @@ struct object_nc : boost::noncopyable {};
 
 struct fobj
 {
-    template <typename T0 = void, typename T1 = void, typename T2 = void>
-    struct result
+    // Handle nullary separately to exercise result_of support
+    template<typename T> 
+    struct result;
+
+    template<typename T0>
+    struct result<fobj(T0)>
+    {
+        typedef int type;
+    };
+
+    template<typename T0, typename T1>
+    struct result<fobj(T0, T1)>
+    {
+        typedef int type;
+    };
+
+    template<typename T0, typename T1, typename T2>
+    struct result<fobj(T0, T1, T2)>
     {
         typedef int type;
     };
@@ -61,21 +77,40 @@ struct fobj
     int operator()(int i, object &, object_nc &) const { return 11 + i; }
 };
 
+struct nullary_fobj
+{
+    typedef int result_type;
+
+    int operator()()       { return 0; }
+    int operator()() const { return 1; }
+};
+
 struct fobj_nc
       : boost::noncopyable
 {
-    template <typename T0 = void>
-    struct result
+    // Handle nullary separately to exercise result_of support
+    template <typename T>
+    struct result;
+
+    template<typename T0>
+    struct result<fobj_nc(T0)>
     {
         typedef int type;
     };
-
-    int operator()()       { return 12; }
-    int operator()() const { return 13; }
-
+    
     int operator()(int i)       { return 14 + i; }
     int operator()(int i) const { return 15 + i; }
 };
+
+struct nullary_fobj_nc
+      : boost::noncopyable
+{
+    typedef int result_type;
+
+    int operator()()       { return 12; }
+    int operator()() const { return 13; }
+};
+
 
 typedef int         element1_type;
 typedef object      element2_type;
@@ -90,23 +125,23 @@ void test_sequence_n(Sequence & seq, mpl::int_<0>)
 {
     // Function Objects
 
-    fobj f;
+    nullary_fobj f;
     BOOST_TEST(f () == fusion::invoke_function_object(f ,        seq ));
     BOOST_TEST(f () == fusion::invoke_function_object(f , const_(seq)));
 
     // Note: The function object is taken by value, so we request the copy
     // to be const with an explicit template argument. We can also request
     // the function object to be pased by reference...
-    BOOST_TEST(const_(f)() == fusion::invoke_function_object<fobj const  >(const_(f),        seq ));
-    BOOST_TEST(const_(f)() == fusion::invoke_function_object<fobj const &>(const_(f), const_(seq)));
+    BOOST_TEST(const_(f)() == fusion::invoke_function_object<nullary_fobj const  >(const_(f),        seq ));
+    BOOST_TEST(const_(f)() == fusion::invoke_function_object<nullary_fobj const &>(const_(f), const_(seq)));
 
-    fobj_nc nc_f;
+    nullary_fobj_nc nc_f;
     // ...and we further ensure there is no copying in this case, using a
     // noncopyable function object.
-    BOOST_TEST(nc_f () == fusion::invoke_function_object<fobj_nc &>(nc_f ,        seq ));
-    BOOST_TEST(nc_f () == fusion::invoke_function_object<fobj_nc &>(nc_f , const_(seq)));
-    BOOST_TEST(const_(nc_f)() == fusion::invoke_function_object<fobj_nc const &>(const_(nc_f),        seq ));
-    BOOST_TEST(const_(nc_f)() == fusion::invoke_function_object<fobj_nc const &>(const_(nc_f), const_(seq)));
+    BOOST_TEST(nc_f () == fusion::invoke_function_object<nullary_fobj_nc &>(nc_f ,        seq ));
+    BOOST_TEST(nc_f () == fusion::invoke_function_object<nullary_fobj_nc &>(nc_f , const_(seq)));
+    BOOST_TEST(const_(nc_f)() == fusion::invoke_function_object<nullary_fobj_nc const &>(const_(nc_f),        seq ));
+    BOOST_TEST(const_(nc_f)() == fusion::invoke_function_object<nullary_fobj_nc const &>(const_(nc_f), const_(seq)));
 }
 
 template <class Sequence>
@@ -154,7 +189,7 @@ void result_type_tests()
 {
     using boost::is_same;
 
-    BOOST_TEST(( is_same< fusion::result_of::invoke_function_object< fobj, fusion::vector<> >::type, int >::value ));
+    BOOST_TEST(( is_same< fusion::result_of::invoke_function_object< nullary_fobj, fusion::vector<> >::type, int >::value ));
     BOOST_TEST(( is_same< fusion::result_of::invoke_function_object< fobj, fusion::vector<element1_type> >::type, int >::value ));
     BOOST_TEST(( is_same< fusion::result_of::invoke_function_object< fobj, fusion::vector<element1_type,element2_type> >::type, int >::value ));
 }

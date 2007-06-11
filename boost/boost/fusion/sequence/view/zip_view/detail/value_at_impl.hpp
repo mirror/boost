@@ -26,8 +26,11 @@ namespace boost { namespace fusion {
         template<typename N>
         struct poly_value_at
         {
-            template<typename Seq>
-            struct result
+            template<typename T>
+            struct result;
+
+            template<typename N1, typename Seq>
+            struct result<poly_value_at<N1>(Seq)>
                 : mpl::eval_if<is_same<Seq, unused_type const&>,
                                mpl::identity<unused_type>,
                                result_of::value_at<typename remove_reference<Seq>::type, N> >

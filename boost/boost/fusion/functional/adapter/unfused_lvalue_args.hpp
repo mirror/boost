@@ -16,6 +16,7 @@
 #include <boost/preprocessor/facilities/intercept.hpp>
 
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
 #include <boost/fusion/sequence/container/vector/vector.hpp>
 
@@ -43,7 +44,7 @@ namespace boost { namespace fusion
         typedef detail::nullary_call_base<
             fusion::unfused_lvalue_args<Function>, Function > base;
 
-        typedef typename boost::remove_reference<Function>::type function;
+        typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
       public:
@@ -54,17 +55,11 @@ namespace boost { namespace fusion
 
         using base::operator();
 
-        template <
-            BOOST_PP_ENUM_BINARY_PARAMS(
-                BOOST_FUSION_UNFUSED_LVALUE_ARGS_MAX_ARITY,
-                typename T, = fusion::void_ BOOST_PP_INTERCEPT ), 
-            class _ = fusion::void_ >
+        template <typename T>
         struct result;
 
-        template <typename _>
-        struct result<BOOST_PP_ENUM_PARAMS(
-                BOOST_FUSION_UNFUSED_LVALUE_ARGS_MAX_ARITY,
-                fusion::void_ BOOST_PP_INTERCEPT ), _ >
+        template <typename Func>
+        struct result<unfused_lvalue_args<Func>()>
             : base::r0
         { };
 
@@ -76,10 +71,14 @@ namespace boost { namespace fusion
     };
 }}
 
-#define  BOOST_FUSION_CLASS_TPL_PARAMS class F
-#define  BOOST_FUSION_CLASS_TPL_SPEC fusion::unfused_lvalue_args<F>
-#define  BOOST_FUSION_FUNC_OBJ_ARITY BOOST_FUSION_UNFUSED_LVALUE_ARGS_MAX_ARITY
-#include <boost/fusion/functional/adapter/detail/gen_result_of_spec.hpp>
+namespace boost {
+    template<typename Func>
+    struct result_of<boost::fusion::unfused_lvalue_args<Func>()>
+    {
+        typedef boost::fusion::unfused_lvalue_args<Func> function;
+        typedef typename function::template result<function()>::type type;
+    };
+}
 
 #define BOOST_FUSION_FUNCTIONAL_ADAPTER_UNFUSED_LVALUE_ARGS_HPP_INCLUDED
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -90,22 +89,17 @@ namespace boost { namespace fusion
 ////////////////////////////////////////////////////////////////////////////////
 #define N BOOST_PP_ITERATION()
 
-        template <BOOST_PP_ENUM_PARAMS(N,typename T), class _>
+        template <typename Func, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result
-#if N < BOOST_FUSION_UNFUSED_LVALUE_ARGS_MAX_ARITY
-            < BOOST_PP_ENUM_PARAMS(N,T),
-            BOOST_PP_ENUM_PARAMS(
-                BOOST_PP_SUB(BOOST_FUSION_UNFUSED_LVALUE_ARGS_MAX_ARITY,N),
-                fusion::void_ BOOST_PP_INTERCEPT), _ >
-#endif
-            : function::template result< BOOST_PP_CAT(fusion::vector,N)<
+            <Func(BOOST_PP_ENUM_PARAMS(N,T))>
+            : function::template result< function(BOOST_PP_CAT(fusion::vector,N)<
                 BOOST_PP_ENUM_BINARY_PARAMS(N,typename detail::mref<T,>::type
-                    BOOST_PP_INTERCEPT) > >
+                    BOOST_PP_INTERCEPT) >)>
         { };
 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<BOOST_PP_CAT(fusion::vector,N)
-            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)> >::type
+        inline typename function::template result<function(BOOST_PP_CAT(fusion::vector,N)
+            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)>)>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& a)) const
         {
             BOOST_PP_CAT(fusion::vector,N)<
@@ -115,8 +109,8 @@ namespace boost { namespace fusion
         }
 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<BOOST_PP_CAT(fusion::vector,N)
-            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)> >::type
+        inline typename function::template result<function(BOOST_PP_CAT(fusion::vector,N)
+            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)>)>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& a)) 
         {
             BOOST_PP_CAT(fusion::vector,N)<

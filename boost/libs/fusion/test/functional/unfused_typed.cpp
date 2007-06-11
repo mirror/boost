@@ -42,7 +42,11 @@ template <class Base = boost::blank, class Validation = unconstrained>
 struct test_func
     : Base
 {
-    template <class Seq> struct result
+    template<typename T>
+    struct result;
+
+    template <typename B, typename V, class Seq> 
+    struct result<test_func<B,V>(Seq)>
         : mpl::if_< typename mpl::apply<Validation, Seq>::type,
             mpl::identity<long>, boost::blank >::type
     { };
@@ -65,6 +69,8 @@ struct test_func
 
     struct fold_op
     {
+        typedef long result_type;
+
         template <typename T>
         long operator()(T const & elem, long value) const
         {
@@ -77,10 +83,6 @@ struct test_func
           elem += sizeof(T);
           return value;
         }
-
-        template <typename T0, typename T1> struct result
-            : mpl::identity<long>
-        { };
     };
 };
 
@@ -92,9 +94,9 @@ void result_type_tests()
     typedef fusion::unfused_typed< test_func<noncopyable, non_variadic>, types > test_func_3;
     typedef fusion::unfused_typed< test_func<noncopyable>, types > test_func_0;
 
-    BOOST_TEST(( has_type< test_func_0::result<> >::value ));
-    BOOST_TEST(( has_type< test_func_3::result<long &, int, char> >::value ));
-    BOOST_TEST(( ! has_type< test_func_3::result<> >::value ));
+    BOOST_TEST(( has_type< test_func_0::result<test_func_0()> >::value ));
+    BOOST_TEST(( has_type< test_func_3::result<test_func_3(long &, int, char)> >::value ));
+    BOOST_TEST(( ! has_type< test_func_3::result<test_func_3()> >::value ));
     BOOST_TEST(( is_same< boost::result_of< test_func_0() >::type, long >::value ));
     BOOST_TEST(( is_same< boost::result_of< test_func_3(long &, int, char) >::type, long >::value ));
 }

@@ -1,5 +1,6 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2007 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -18,8 +19,11 @@
 
 struct square
 {
+    template<typename T>
+    struct result;
+
     template <typename T>
-    struct result
+    struct result<square(T)>
     {
         BOOST_STATIC_ASSERT(!boost::is_reference<T>::value);
         typedef int type;
@@ -34,8 +38,11 @@ struct square
 
 struct add
 {
+    template<typename T>
+    struct result;
+
     template <typename A, typename B>
-    struct result
+    struct result<add(A, B)>
     {
         typedef int type;
     };

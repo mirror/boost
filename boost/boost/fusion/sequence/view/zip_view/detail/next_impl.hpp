@@ -24,15 +24,18 @@ namespace boost { namespace fusion {
     {
         struct poly_next
         {
+            template<typename T>
+            struct result;
+
             template<typename It>
-            struct result
+            struct result<poly_next(It)>
                 : mpl::eval_if<is_same<It, unused_type>,
                                mpl::identity<unused_type>,
                                result_of::next<It> >
             {};
 
             template<typename It>
-            typename result<It>::type
+            typename result<poly_next(It)>::type
             operator()(const It& it) const
             {
                 return fusion::next(it);
