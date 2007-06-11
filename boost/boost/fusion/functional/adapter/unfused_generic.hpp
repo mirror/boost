@@ -126,8 +126,8 @@ namespace boost {
 
 #if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1400)) 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<
-            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)> >::type
+        inline typename function::template result<function(
+            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>)>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a)) const
         {
             BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>
@@ -135,8 +135,8 @@ namespace boost {
             return this->fnc_transformed(arg);
         }
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<
-            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)> >::type
+        inline typename function::template result<function(
+            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>)>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a))
         {
             BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>

@@ -23,10 +23,15 @@ namespace boost { namespace fusion { namespace detail
 {
     struct reserved { };
 
+    template<typename Function>
+    struct get_result_spec
+    {
+        typedef typename remove_const<typename remove_reference<Function>::type>::type function;
+        typedef typename function::template result<function(fusion::vector0)> type;
+    };
+
     template <class Derived, class Function, bool Enable = detail::has_type< 
-        typename remove_reference<Function>::type
-          ::template result<
-        typename remove_const<typename remove_reference<Function>::type>::type(fusion::vector0)> >::value>
+        typename get_result_spec<Function>::type>::value>
     struct nullary_call_base
     {
         template <typename T> inline void operator()(T reserved::*) const { }
