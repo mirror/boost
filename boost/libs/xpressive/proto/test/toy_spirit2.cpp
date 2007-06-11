@@ -412,11 +412,7 @@ namespace boost { namespace spirit2
             typedef bool type;
         };
 #else
-        template<typename, typename> // used by fusion::fold
-        struct result
-        {
-            typedef bool type;
-        };
+        typedef bool result_type;   // used by fusion::fold
 #endif
 
         template<typename T>

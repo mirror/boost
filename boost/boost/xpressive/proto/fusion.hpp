@@ -19,6 +19,8 @@
 #include <boost/mpl/distance.hpp>
 #include <boost/mpl/begin_end.hpp>
 #include <boost/mpl/next_prior.hpp>
+#include <boost/type_traits/remove_const.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/fusion/support/is_view.hpp>
 #include <boost/fusion/support/tag_of_fwd.hpp>
 #include <boost/fusion/support/category_of.hpp>
@@ -32,6 +34,9 @@
 #include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
 #include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
+
+#define UNREF(x) typename remove_reference<x>::type
+#define UNCVREF(x) typename remove_cv<typename remove_reference<x>::type>::type
 
 namespace boost { namespace proto
 {
@@ -76,18 +81,19 @@ namespace boost { namespace proto
           : ctx_(ctx)
         {}
 
-        template<typename Expr>
-        struct result
+        template<typename Sig>
+        struct result {};
+
+        template<typename This, typename Expr>
+        struct result<This(Expr)>
         {
             typedef
-                typename Context::template eval<
-                    typename remove_reference<Expr>::type
-                >::result_type
+                typename Context::template eval<UNREF(Expr)>::result_type
             type;
         };
 
         template<typename Expr>
-        typename result<Expr>::type
+        typename result<eval_fun(Expr)>::type
         operator()(Expr &expr) const
         {
             return proto::eval(expr, this->ctx_);
@@ -320,20 +326,23 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct as_element
         {
-            template<typename Expr>
-            struct result
+            template<typename Sig>
+            struct result {};
+
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
               : mpl::if_<
-                    is_same<Tag, typename Expr::tag_type>
-                  , Expr const &
-                  , fusion::single_view<Expr const &>
+                    is_same<Tag, UNREF(Expr)::tag_type>
+                  , UNCVREF(Expr) const &
+                  , fusion::single_view<UNCVREF(Expr) const &>
                 >
             {};
 
             template<typename Expr>
-            typename result<Expr>::type
+            typename result<as_element(Expr)>::type
             operator()(Expr &expr) const
             {
-                return typename result<Expr>::type(expr);
+                return typename result<as_element(Expr)>::type(expr);
             }
         };
 
@@ -541,5 +550,8 @@ namespace boost { namespace fusion
 //    };
 //
 //}} // namespace boost::mpl
+
+#undef UNREF
+#undef UNCVREF
 
 #endif
