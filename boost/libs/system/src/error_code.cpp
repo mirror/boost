@@ -191,8 +191,13 @@ namespace
   //      no way to tell if is available at runtime and in any case their
   //      versions of strerror are thread safe anyhow.
   //   -- Linux only sometimes provides strerror_r.
+  //   -- Tru64 provides strerror_r only when compiled -pthread.
+  //   -- VMS doesn't provide strerror_r, but on this platform, strerror is
+  //      thread safe.
 # if defined(BOOST_WINDOWS_API) || defined(__hpux) || defined(__sun)\
-     || (defined(__linux) && (!defined(__USE_XOPEN2K) || defined(BOOST_SYSTEM_USE_STRERROR)))
+     || (defined(__linux) && (!defined(__USE_XOPEN2K) || defined(BOOST_SYSTEM_USE_STRERROR)))\
+     || (defined(__osf__) && !defined(_REENTRANT))\
+     || (defined(__vms))
     const char * c_str = std::strerror( ec.value() );
     return std::string( c_str ? c_str : "EINVAL" );
 # else
