@@ -188,7 +188,7 @@ namespace boost { namespace proto { namespace transform
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &, Visitor &)
         {
-            return Placeholder::call(expr);
+            return typename mpl::apply1<Placeholder, Expr>::type();
         }
     };
 
