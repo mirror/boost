@@ -18,10 +18,42 @@
 #include <boost/xpressive/proto/transform/fold.hpp>
 using namespace boost;
 
+// Forward declaration of a meta-function for calculating
+// a calculator expression's arity; that is, the number of
+// arguments that it requires in order to be evaluated.
+template<typename Expr>
+struct calculator_arity;
+
 // Will be used to define the placeholders _1 and _2
 template<typename I> struct arg { typedef I arity; };
 
-// Some custom transforms for calculating the max arity of a calculator expression
+// A meta-function for getting a placeholder terminal's arity.
+template<typename Arg>
+struct arg_arity
+{
+    typedef typename Arg::arity type;
+};
+
+// A custom transform that fetches the arity of a placeholder terminal
+template<typename Grammar>
+struct placeholder_arity
+  : Grammar
+{
+    template<typename Expr, typename, typename>
+    struct apply
+      : arg_arity<typename proto::result_of::arg<Expr>::type>
+    {};
+
+    //// If this transform had a runtime counterpart, it would look like this:
+    //template<typename Expr, typename State, typename Visitor>
+    //static typename apply<Expr, State, Visitor>::type 
+    //call(Expr const &expr, State const &state, Visitor &visitor)
+    //{
+    //    ... do stuff ...
+    //}
+};
+
+// A custom transforms for calculating the max arity of a calculator expression
 template<typename Grammar>
 struct max_arity
   : Grammar
@@ -37,27 +69,7 @@ struct max_arity
         typedef typename mpl::max<arity, State>::type type;
     };
 
-    //// If this transform had a runtime counterpart, it would look like this:
-    //template<typename Expr, typename State, typename Visitor>
-    //static typename apply<Expr, State, Visitor>::type 
-    //call(Expr const &expr, State const &state, Visitor &visitor)
-    //{
-    //    ... do stuff ...
-    //}
-};
-
-// Fetch the arity of a placeholder terminal
-template<typename Grammar>
-struct placeholder_arity
-  : Grammar
-{
-    template<typename Expr, typename, typename>
-    struct apply
-    {
-        typedef typename proto::result_of::arg<Expr>::type::arity type;
-    };
-
-    // As with max_arity<> above, placeholder_arity<> has no need
+    // As with placeholder_arity<> above, placeholder_arity<> has no need
     // for a call() member function.
 };
 
@@ -67,12 +79,21 @@ using proto::_;
 //   - A placeholder terminal
 //   - Some other terminal
 //   - Some non-terminal whose children are calculator expressions
-// In addition, it has transforms that say how to calculate the the
+// In addition, it has transforms that say how to calculate the
 // expression arity for each of the three cases.
 struct CalculatorGrammar
   : proto::or_<
         // placeholders have a non-zero arity ...
         placeholder_arity< proto::terminal< arg<_> > >
+
+        // This accomplishes the same thing without the need to
+        // define a separate placeholder_arity<> transform, but
+        // is a little more cryptic.
+        //proto::trans::apply1<
+        //    proto::terminal< arg<_> >
+        //  , arg_arity< proto::result_of::arg<mpl::_> >
+        //>
+
         // Any other terminals have arity 0 ...
       , proto::trans::always< proto::terminal<_>, mpl::int_<0> >
         // For any non-terminals, find the arity of the children and
@@ -81,6 +102,19 @@ struct CalculatorGrammar
             // This matches any non-terminal for which the children
             // are themselves calculator expressions.
             proto::nary_expr<_, proto::vararg< max_arity< CalculatorGrammar > > >
+
+            // This accomplishes the same thing without the need to
+            // define a separate max_arity<> transform, but is a little
+            // more cryptic.
+            //proto::nary_expr<
+            //    _
+            //  , proto::vararg<
+            //        proto::trans::apply2<
+            //            CalculatorGrammar
+            //          , mpl::max< calculator_arity<mpl::_1>, mpl::_2 >
+            //        >
+            //    >
+            //>
         >
     >
 {};
