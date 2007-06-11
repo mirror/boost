@@ -738,6 +738,17 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+            ar & serialization::make_nvp("data", data_);
+        }
+
     private:
         size_type size_;
         array_type data_;
@@ -1316,6 +1327,23 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator rend () {
             return reverse_iterator (begin ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+            // ISSUE: filled may be much less than capacity
+            // ISSUE: index_data_ and value_data_ are undefined between filled and capacity (trouble with 'nan'-values)
+            ar & serialization::make_nvp("capacity", capacity_);
+            ar & serialization::make_nvp("filled", filled_);
+            ar & serialization::make_nvp("index_data", index_data_);
+            ar & serialization::make_nvp("value_data", value_data_);
+            storage_invariants();
         }
 
     private:
@@ -1979,6 +2007,25 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator rend () {
             return reverse_iterator (begin ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+            // ISSUE: filled may be much less than capacity
+            // ISSUE: index_data_ and value_data_ are undefined between filled and capacity (trouble with 'nan'-values)
+            ar & serialization::make_nvp("capacity", capacity_);
+            ar & serialization::make_nvp("filled", filled_);
+            ar & serialization::make_nvp("sorted_filled", sorted_filled_);
+            ar & serialization::make_nvp("sorted", sorted_);
+            ar & serialization::make_nvp("index_data", index_data_);
+            ar & serialization::make_nvp("value_data", value_data_);
+            storage_invariants();
         }
 
     private:

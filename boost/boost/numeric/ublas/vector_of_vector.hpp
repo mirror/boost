@@ -1217,6 +1217,30 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator2 (begin2 ());
         }
 
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+        
+            // we need to copy to a collection_size_type to get a portable
+            // and efficient serialization
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+          
+            // serialize the sizes
+            ar & serialization::make_nvp("size1",s1)
+               & serialization::make_nvp("size2",s2);
+
+            // copy the values back if loading
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+
+            ar & serialization::make_nvp("data", data_);
+
+            storage_invariants();
+        }
+
     private:
         void storage_invariants () const
         {

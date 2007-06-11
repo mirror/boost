@@ -1,6 +1,6 @@
 //
-//  Copyright (c) 2000-2002
-//  Joerg Walter, Mathias Koch
+//  Copyright (c) 2000-2007
+//  Joerg Walter, Mathias Koch, Gunter Winkler
 //
 //  Permission to use, copy, modify, distribute and sell this software
 //  and its documentation for any purpose is hereby granted without fee,
@@ -20,6 +20,8 @@
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix_expression.hpp>
 #include <boost/numeric/ublas/detail/matrix_assign.hpp>
+#include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/nvp.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -943,6 +945,27 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator2 rend2 () {
             return reverse_iterator2 (begin2 ());
+        }
+
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+        
+            // we need to copy to a collection_size_type to get a portable
+            // and efficient serialization
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+          
+            // serialize the sizes
+            ar & serialization::make_nvp("size1",s1)
+               & serialization::make_nvp("size2",s2);
+
+            // copy the values back if loading
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+            ar & serialization::make_nvp("data",data_);
         }
 
     private:
@@ -1964,6 +1987,27 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator2 (begin2 ());
         }
 
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+        
+            // we need to copy to a collection_size_type to get a portable
+            // and efficient serialization
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+          
+            // serialize the sizes
+            ar & serialization::make_nvp("size1",s1)
+               & serialization::make_nvp("size2",s2);
+
+            // copy the values back if loading
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+            ar & serialization::make_nvp("data",data_);
+        }
+
     private:
         size_type size1_;
         size_type size2_;
@@ -2319,6 +2363,26 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_reverse_iterator2 rend2 () const {
             return const_reverse_iterator2 (begin2 ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+        
+            // we need to copy to a collection_size_type to get a portable
+            // and efficient serialization
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+          
+            // serialize the sizes
+            ar & serialization::make_nvp("size1",s1)
+               & serialization::make_nvp("size2",s2);
+
+            // copy the values back if loading
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
         }
 
     private:
@@ -2699,6 +2763,27 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_reverse_iterator2 rend2 () const {
             return const_reverse_iterator2 (begin2 ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+        
+            // we need to copy to a collection_size_type to get a portable
+            // and efficient serialization
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+          
+            // serialize the sizes
+            ar & serialization::make_nvp("size1",s1)
+               & serialization::make_nvp("size2",s2);
+
+            // copy the values back if loading
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+                size_common_ = ((std::min)(size1_, size2_));
+            }
         }
 
     private:
@@ -3138,6 +3223,28 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_reverse_iterator2 rend2 () const {
             return const_reverse_iterator2 (begin2 ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+        
+            // we need to copy to a collection_size_type to get a portable
+            // and efficient serialization
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+          
+            // serialize the sizes
+            ar & serialization::make_nvp("size1",s1)
+               & serialization::make_nvp("size2",s2);
+
+            // copy the values back if loading
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+
+            ar & serialization::make_nvp("value", value_);
         }
 
     private:
@@ -4041,6 +4148,28 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator2 rend2 () {
             return reverse_iterator2 (begin2 ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+        
+            // we need to copy to a collection_size_type to get a portable
+            // and efficient serialization
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+          
+            // serialize the sizes
+            ar & serialization::make_nvp("size1",s1)
+               & serialization::make_nvp("size2",s2);
+
+            // copy the values back if loading
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+            // could probably use make_array( &(data[0][0]), N*M ) 
+            ar & serialization::make_array(data_, N);
         }
 
     private:

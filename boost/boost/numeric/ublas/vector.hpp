@@ -20,6 +20,8 @@
 #include <boost/numeric/ublas/storage.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/detail/vector_assign.hpp>
+#include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/nvp.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -509,6 +511,12 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            ar & serialization::make_nvp("data",data_);
+        }
+
     private:
         array_type data_;
     };
@@ -752,6 +760,16 @@ namespace boost { namespace numeric { namespace ublas {
             return const_reverse_iterator (begin ());
         }
 
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+        }
+
     private:
         size_type size_;
         typedef const value_type const_value_type;
@@ -960,6 +978,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_reverse_iterator rend () const {
             return const_reverse_iterator (begin ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+            ar & serialization::make_nvp("index", index_);
         }
 
     private:
@@ -1194,6 +1223,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_reverse_iterator rend () const {
             return const_reverse_iterator (begin ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+            ar & serialization::make_nvp("value", value_);
         }
 
     private:
@@ -1676,6 +1716,21 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator rend () {
             return reverse_iterator (begin ());
+        }
+
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            
+            // copy the value back if loading
+            if (Archive::is_loading::value) {
+              if (s > N) bad_size("too large size in bounded_vector::load()\n").raise();
+              size_ = s;
+            }
+            // ISSUE: this writes the full array
+            ar & serialization::make_nvp("data",data_);
         }
 
     private:

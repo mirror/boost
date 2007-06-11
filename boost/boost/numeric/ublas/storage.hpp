@@ -22,6 +22,10 @@
 #include <boost/shared_array.hpp>
 #endif
 
+#include <boost/serialization/array.hpp>
+#include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/nvp.hpp>
+
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/traits.hpp>
 #include <boost/numeric/ublas/detail/iterator.hpp>
@@ -87,6 +91,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &c):
+            storage_array<unbounded_array<T, ALLOC> >(),
             alloc_ (c.alloc_), size_ (c.size_) {
             if (size_) {
                 data_ = alloc_.allocate (size_);
@@ -268,6 +273,21 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
+        friend class boost::serialization::access;
+
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int version)
+        { 
+            serialization::collection_size_type s(size_);
+            ar & serialization::make_nvp("size",s);
+            if ( Archive::is_loading::value ) {
+                resize(s);
+            }
+            ar & serialization::make_array(data_, s);
+        }
+
+    private:
         // Handle explict destroy on a (possibly indexed) iterator
         BOOST_UBLAS_INLINE
         static void iterator_destroy (iterator &i) {
@@ -428,6 +448,22 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator rend () {
             return reverse_iterator (begin ());
+        }
+
+    private:
+        // Serialization
+        friend class boost::serialization::access;
+
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int version)
+        {
+            serialization::collection_size_type s(size_);
+            ar & serialization::make_nvp("size", s);
+            if ( Archive::is_loading::value ) {
+                if (s > N) bad_size("too large size in bounded_array::load()\n").raise();
+                resize(s);
+            }
+            ar & serialization::make_array(data_, s);
         }
 
     private:

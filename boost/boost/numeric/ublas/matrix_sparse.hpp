@@ -1,6 +1,6 @@
 //
-//  Copyright (c) 2000-2002
-//  Joerg Walter, Mathias Koch
+//  Copyright (c) 2000-2007
+//  Joerg Walter, Mathias Koch, Gunter Winkler
 //
 //  Permission to use, copy, modify, distribute and sell this software
 //  and its documentation for any purpose is hereby granted without fee,
@@ -1295,6 +1295,20 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator2 (begin2 ());
         }
 
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+            ar & serialization::make_nvp("size1",s1);
+            ar & serialization::make_nvp("size2",s2);
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+            ar & serialization::make_nvp("data", data_);
+        }
+
     private:
         size_type size1_;
         size_type size2_;
@@ -2480,6 +2494,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator2 rend2 () {
             return reverse_iterator2 (begin2 ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+            ar & serialization::make_nvp("size1",s1);
+            ar & serialization::make_nvp("size2",s2);
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+            ar & serialization::make_nvp("data", data_);
         }
 
     private:
@@ -3813,6 +3841,26 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator2 rend2 () {
             return reverse_iterator2 (begin2 ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+            ar & serialization::make_nvp("size1",s1);
+            ar & serialization::make_nvp("size2",s2);
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+            ar & serialization::make_nvp("capacity", capacity_);
+            ar & serialization::make_nvp("filled1", filled1_);
+            ar & serialization::make_nvp("filled2", filled2_);
+            ar & serialization::make_nvp("index1_data", index1_data_);
+            ar & serialization::make_nvp("index2_data", index2_data_);
+            ar & serialization::make_nvp("value_data", value_data_);
+            storage_invariants();
         }
 
     private:
@@ -5157,6 +5205,27 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator2 rend2 () {
             return reverse_iterator2 (begin2 ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s1 (size1_);
+            serialization::collection_size_type s2 (size2_);
+            ar & serialization::make_nvp("size1",s1);
+            ar & serialization::make_nvp("size2",s2);
+            if (Archive::is_loading::value) {
+                size1_ = s1;
+                size2_ = s2;
+            }
+            ar & serialization::make_nvp("capacity", capacity_);
+            ar & serialization::make_nvp("filled", filled_);
+            ar & serialization::make_nvp("sorted_filled", sorted_filled_);
+            ar & serialization::make_nvp("sorted", sorted_);
+            ar & serialization::make_nvp("index1_data", index1_data_);
+            ar & serialization::make_nvp("index2_data", index2_data_);
+            ar & serialization::make_nvp("value_data", value_data_);
+            storage_invariants();
         }
 
     private:
