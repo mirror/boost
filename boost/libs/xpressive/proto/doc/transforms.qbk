@@ -200,8 +200,8 @@ associated with them. Just as `unary_expr<>` has a pass-through transform,
 so too does `binary_expr<>`, `shift_right<>`, and all the others.
 `proto::or_<>` has a default transform which evaluates the transform of the
 branch that matched. `proto::and_<>`'s default transform evaluates the
-transform of the last branch. Even `proto::expr<>`, `proto::if_<>`
-`proto::not_<>` and `proto::_` have no-op default transforms that simply return
+transform of the last branch. Even `proto::expr<>`, `proto::if_<>`,
+`proto::not_<>`, and `proto::_` have no-op default transforms that simply return
 unmodified the expressions passed to them.
 ]
 
@@ -289,7 +289,7 @@ This displays the following:
 Some transforms are generally useful, so Proto provides them. They are
 described below. Each is of the form:
 
-    boost::proto::transform::``[~transform-name]``< Grammar ``[~\[, additional args ...\]]`` >
+    boost::proto::trans::``[~transform-name]``< Grammar ``[~\[, additional args ...\]]`` >
 
 They each inherit from their `Grammar` parameter; therefore, they themselves
 match the same expressions as `Grammar` does. As transforms, they all have
@@ -298,10 +298,7 @@ nested static `call()` member functions that accept `expr`, `state`, and
 the return type of `call()`. The tables below show what `call()` and `apply<>`
 do for each of the transforms that Proto provides.
 
-[h4 [^arg<>] and [^arc_c<>]]
-
-These transforms are useful for extracting the ['[^N]]th argument from an
-expression.
+[h4 [^arg<>], [^arc_c<>], [^left<>] and [^right<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -310,42 +307,7 @@ expression.
 
         template<typename Grammar, long N>
         struct arg_c;
-    }}}
 
-[table
-    [   [Expression]
-        [Returns]
-    ]
-    [   [`transform::arg<Grammar, N>::apply<Expr, State, Visitor>::type`]
-        [`proto::result_of::arg<typename Grammar::apply<Expr, State, Visitor>::type, N>::type`]
-    ]
-    [   [`transform::arg<Grammar, N>::call(expr, state, visitor)`]
-        [`proto::arg<N>(Grammar::call(expr, state, visitor))`]
-    ]
-    [   [`transform::arg_c<Grammar, N>::apply<Expr, State, Visitor>::type`]
-        [`proto::result_of::arg_c<typename Grammar::apply<Expr, State, Visitor>::type, N>::type`]
-    ]
-    [   [`transform::arg_c<Grammar, N>::call(expr, state, visitor)`]
-        [`proto::arg_c<N>(Grammar::call(expr, state, visitor))`]
-    ]
-]
-
-Example:
-
-    // Matches an integer terminal and extracts the int.
-    struct Int
-      : transform::arg< terminal<int> >
-    {};
-
-[h4 [^left<>] and [^right<>]]
-
-Other ways to extract children from an expression. The `left<Grammar>`
-transform is equivalent to the `arg_c<Grammar, 0>` transform, and the
-`right<Grammar>` transform is equivalent to the `arg_c<Grammar, 1>`
-transform.
-
-    namespace boost { namespace proto { namespace transform
-    {
         template<typename Grammar>
         struct left;
 
@@ -353,35 +315,49 @@ transform.
         struct right;
     }}}
 
+These transforms are useful for extracting the ['[^N]]th argument from an
+expression. The `left<Grammar>` transform is equivalent to the 
+`arg_c<Grammar, 0>` transform, and the `right<Grammar>` transform is equivalent
+to the `arg_c<Grammar, 1>` transform.
+
 [table
     [   [Expression]
         [Returns]
     ]
-    [   [`transform::left<Grammar>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::arg<Grammar, N>::apply<Expr, State, Visitor>::type`]
+        [`proto::result_of::arg<typename Grammar::apply<Expr, State, Visitor>::type, N>::type`]
+    ]
+    [   [`trans::arg<Grammar, N>::call(expr, state, visitor)`]
+        [`proto::arg<N>(Grammar::call(expr, state, visitor))`]
+    ]
+    [   [`trans::arg_c<Grammar, N>::apply<Expr, State, Visitor>::type`]
+        [`proto::result_of::arg_c<typename Grammar::apply<Expr, State, Visitor>::type, N>::type`]
+    ]
+    [   [`trans::arg_c<Grammar, N>::call(expr, state, visitor)`]
+        [`proto::arg_c<N>(Grammar::call(expr, state, visitor))`]
+    ]
+    [   [`trans::left<Grammar>::apply<Expr, State, Visitor>::type`]
         [`proto::result_of::left<typename Grammar::apply<Expr, State, Visitor>::type>::type`]
     ]
-    [   [`transform::left<Grammar>::call(expr, state, visitor)`]
+    [   [`trans::left<Grammar>::call(expr, state, visitor)`]
         [`proto::left(Grammar::call(expr, state, visitor))`]
     ]
-    [   [`transform::right<Grammar>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::right<Grammar>::apply<Expr, State, Visitor>::type`]
         [`proto::result_of::right<typename Grammar::apply<Expr, State, Visitor>::type>::type`]
     ]
-    [   [`transform::right<Grammar>::call(expr, state, visitor)`]
+    [   [`trans::right<Grammar>::call(expr, state, visitor)`]
         [`proto::right(Grammar::call(expr, state, visitor))`]
     ]
 ]
 
 Example:
 
-    // Matches an assignment, returns the right hand side.
-    struct Assign
-      : transform::right< assign<_, _> >
+    // Matches an integer terminal and extracts the int.
+    struct Int
+      : trans::arg< terminal<int> >
     {};
 
 [h4 [^identity<>], [^state<>] and [^visitor<>]]
-
-The `identity<>`, `state<>` and `visitor<>` transforms merely return the
-`expr`, `state` and `visitor` arguments, respectively.
 
     namespace boost { namespace proto { namespace transform
     {
@@ -395,57 +371,63 @@ The `identity<>`, `state<>` and `visitor<>` transforms merely return the
         struct visitor;
     }}}
 
+The `identity<>`, `state<>` and `visitor<>` transforms merely return the
+`expr`, `state` and `visitor` arguments, respectively.
+
 [table
     [   [Expression]
         [Returns]
     ]
-    [   [`transform::identity<Grammar>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::identity<Grammar>::apply<Expr, State, Visitor>::type`]
         [`Expr`]
     ]
-    [   [`transform::identity<Grammar>::call(expr, state, visitor)`]
+    [   [`trans::identity<Grammar>::call(expr, state, visitor)`]
         [`expr`]
     ]
-    [   [`transform::state<Grammar>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::state<Grammar>::apply<Expr, State, Visitor>::type`]
         [`State`]
     ]
-    [   [`transform::state<Grammar>::call(expr, state, visitor)`]
+    [   [`trans::state<Grammar>::call(expr, state, visitor)`]
         [`state`]
     ]
-    [   [`transform::visitor<Grammar>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::visitor<Grammar>::apply<Expr, State, Visitor>::type`]
         [`Visitor`]
     ]
-    [   [`transform::visitor<Grammar>::call(expr, state, visitor)`]
+    [   [`trans::visitor<Grammar>::call(expr, state, visitor)`]
         [`visitor`]
     ]
 ]
 
 Example:
 
-    // Matches an subscript where the left- and right-hand operands match
-    // MyGrammar, returns the expression unmodified; that is, without applying
-    // the MyGrammar transform to the left and right operands, as would happen
-    // by default.
+    // Matches a subscript expression where the left- and right-hand operands
+    // match MyGrammar, returns the expression unmodified; that is, without
+    // applying MyGrammar's transforms to the left and right operands, as would
+    // happen by default.
     struct Subscript
-      : transform::identity< subscript<MyGrammar, MyGrammar> >
+      : trans::identity< subscript<MyGrammar, MyGrammar> >
     {};
 
 [h4 [^always<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Grammar, typename Always, typename Factory = ``[~default-factory]``>
+        struct always;
+    }}}
 
 The `always<>` transform always returns a certain type. By default, its
 `call()` member returns a default constructed object of that type, but you can
 configure this with the optional `Factory` parameter.
 
-    template<typename Grammar, typename Always, typename Factory = ``[~default-factory]``>
-    struct always;
-
 [table
     [   [Expression]
         [Returns]
     ]
-    [   [`transform::always<Grammar, Type, Factory>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::always<Grammar, Type, Factory>::apply<Expr, State, Visitor>::type`]
         [`Type`]
     ]
-    [   [`transform::always<Grammar, Type, Factory>::call(expr, state, visitor)`]
+    [   [`trans::always<Grammar, Type, Factory>::call(expr, state, visitor)`]
         [`Factory()()`]
     ]
 ]
@@ -455,44 +437,47 @@ Example:
     // Match a placeholder terminal and return the arity of the
     // placeholder.
     struct PlaceholderArity
-      : transform::always< terminal<placeholder1>, mpl::int_<1> >
+      : trans::always< terminal<placeholder1>, mpl::int_<1> >
     {};
 
 [h4 [^apply1<>], [^apply2<>] and [^apply3<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
+        struct apply1;
+
+        template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
+        struct apply2;
+
+        template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
+        struct apply3;
+    }}}
 
 The `apply1<>` transform invokes an MPL lambda expression with the Proto
 expression as the argument, `apply2<>` uses the expression and the state
 as arguments and `apply3<>` uses the expression, state and visitor.
 
-    template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
-    struct apply1;
-
-    template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
-    struct apply2;
-
-    template<typename Grammar, typename Lambda, typename Factory = ``[~default-factory]``>
-    struct apply3;
-
 [table
     [   [Expression]
         [Returns]
     ]
-    [   [`transform::apply1<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::apply1<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
         [`mpl::apply1<Lambda, typename Grammar::apply<Expr, State, Visitor>::type>::type`]
     ]
-    [   [`transform::apply1<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
+    [   [`trans::apply1<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
         [`Factory()(Grammar::call(expr, state, visitor))`]
     ]
-    [   [`transform::apply2<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::apply2<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
         [`mpl::apply2<Lambda, typename Grammar::apply<Expr, State, Visitor>::type, State>::type`]
     ]
-    [   [`transform::apply2<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
+    [   [`trans::apply2<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
         [`Factory()(Grammar::call(expr, state, visitor), state)`]
     ]
-    [   [`transform::apply3<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
+    [   [`trans::apply3<Grammar, Lambda, Factory>::apply<Expr, State, Visitor>::type`]
         [`mpl::apply3<Lambda, typename Grammar::apply<Expr, State, Visitor>::type, State, Visitor>::type`]
     ]
-    [   [`transform::apply3<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
+    [   [`trans::apply3<Grammar, Lambda, Factory>::call(expr, state, visitor)`]
         [`Factory()(Grammar::call(expr, state, visitor), state, visitor)`]
     ]
 ]
@@ -513,9 +498,301 @@ Example:
     // evaluate the arity of the left and right sub-expressions and return the
     // maximum of the two.
     struct BinaryCalculatorArity
-      : transform::apply1<
+      : trans::apply1<
             binary_expr<_, CalculatorArity, CalculatorArity>
           , mpl::max<result_of::left<mpl::_>, result_of::right<mpl::_> >
+        >
+    {};
+
+[h4 [^branch<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Grammar, typename BranchState>
+        struct branch;
+    }}}
+
+The `branch<>` transform applies `Grammar`'s transform with a new `state`
+parameter. This is useful when you want to compile a branch of the expression
+tree independently of the rest; for example, when you want to fold everything
+under a certain child node into a list.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`trans::branch<Grammar, BranchState>::apply<Expr, State, Visitor>::type`]
+        [`typename Grammar::template apply<Expr, BranchState, Visitor>::type`]
+    ]
+    [   [`trans::branch<Grammar, BranchState>::call(expr, state, visitor)`]
+        [`Grammar::call(expr, BranchState(), visitor)`]
+    ]
+]
+
+Example:
+
+See the [link reverse_fold_example [^reverse_fold<>] example].
+
+[/
+    // This transform matches function invocations such as foo(1,'a',"b")
+    // and transforms them into fusion cons lists of their arguments. In this
+    // case, the result would be cons(1, cons('a', cons("b", nil()))).
+    struct ArgsAsList
+      : trans::branch<
+            trans::reverse_fold<
+                function<
+                    // This effectively skips the first argument, which is 
+                    // the function being invoked; in this case, "foo".
+                    trans::state<terminal<_> >
+                  , vararg<
+                        // Put the rest of the args in a fusion cons list:
+                        trans::list<
+                            // Extract the arguments from the terminals:
+                            trans::arg<terminal<_> >
+                        >
+                    >
+                >
+            >
+            // The whole thing uses fusion::nil as the initial state
+          , fusion::nil
+        >
+    {};
+]
+
+[h4 [^compose<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Grammar1, typename Grammar2>
+        struct compose;
+    }}}
+
+The `compose<>` transform applies two transformations in succession. It
+inherits from `Grammar1`, so it matches whatever `Grammar1` matches. The
+result of applying `Grammar1`'s transform is passed to `Grammar2`'s transform,
+along with the `state` and `visitor` parameters. It is assumed that the
+result of applying `Grammar1`'s transform is an expression that matches
+the grammar specified by `Grammar2`.
+
+The `compose<>` transform is useful in situations where you would like to
+preprocess a node in the expression tree before forwarding it on for further
+processing.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`trans::compose<Grammar1, Grammar2>::apply<Expr, State, Visitor>::type`]
+        [``typename Grammar2::template apply<
+    typename Grammar1::template apply<Expr, State, Visitor>::type
+  , State
+  , Visitor
+>::type``]
+    ]
+    [   [`trans::compose<Grammar1, Grammar2>::call(expr, state, visitor)`]
+        [``Grammar2::call(
+    Grammar1::call(expr, state, visitor), state, visitor)``]
+    ]
+]
+
+Example:
+
+    // A fragment of a Calculator grammar which uses compose<> to process
+    // a node in the expression tree after it has been preprocessed by
+    // an arg<> transform.
+    struct Calculator
+      : or_<
+            // ...
+            trans::compose<
+                // Match anything of the form +X, and
+                // extract X, discarding the +.
+                trans::arg<posit<_> >
+                // Now invoke the Calculator transform on X
+              , Calculator
+            >
+        >
+    {};
+
+[h4 [^conditional<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Predicate, typename Grammar0, typename Grammar1>
+        struct conditional
+          : or_<
+                and_<
+                    if_<Predicate>
+                  , Grammar0
+                >
+              , and_<
+                    not_<if_<Predicate> >
+                  , Grammar1
+                >
+            >
+        {};
+    }}}
+
+Above is the complete definition of the `conditional<>` transform. It is a
+higher level transform, built out of more primitive transforms. It has the
+effect of conditionally selecting one grammar / transform to apply based on
+the result of invoking an MPL predicate with a Proto expression.
+
+Example:
+
+    // This rule tests the size of a terminal object, and if it's below a
+    // certain threshold applies a "small_buffer" transformation. Otherwise,
+    // it applies a "dynamic_buffer" transformation (defined elsewhere).
+    struct StoreTerminal
+      : trans::conditional<
+            mpl::less_equal<mpl::sizeof_<proto::result_of::arg<mpl::_> >, mpl::size_t<4> >
+          , small_buffer< trans::arg< terminal<_> > >
+          , dynamic_buffer< trans::arg< terminal<_> > >
+        >
+    {};
+
+[h4 [^list<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Grammar>
+        struct list;
+    }}}
+
+`list<>` is a simple transform that builds a fusion cons list, using the
+transformed expression as the list's head, and the state as the list's tail.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`trans::list<Grammar>::apply<Expr, State, Visitor>::type`]
+        [``fusion::cons<
+    typename Grammar::template apply<Expr, State, Visitor>::type
+  , State
+>``]
+    ]
+    [   [`trans::list<Grammar>::call(expr, state, visitor)`]
+        [``fusion::cons<
+    typename Grammar::template apply<Expr, State, Visitor>::type
+  , State
+>(Grammar::call(expr, state, visitor), state)``]
+    ]
+]
+
+Example:
+
+See the [link reverse_fold_example [^reverse_fold<>] example].
+
+[h4 [^fold<>] and [^reverse_fold<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Grammar>
+        struct fold;
+
+        template<typename Grammar>
+        struct reverse_fold;
+    }}}
+
+The transforms `fold<>` and `reverse_fold<>` are akin to the
+`std::accumulate()` algorithm in the STL. They both iterate over the pairs of
+children in the grammar and the expression, applying the child grammar's
+transform to the corresponding child expression. The result of one transform
+is used as the state of the next transform, such that the transforms nest
+like Russian dolls. The `fold<>` transform iterates over the children in
+order, starting with the 0th child. The `reverse_fold<>` transform does it
+in reverse order, starting with the Nth child. (Note that for building things
+like cons lists, you'll often want to built it back-to-front with
+`reverse_fold<>`.)
+
+[def __arg_N__ arg[~N]_type]
+[def __arg_N_sub_1__ arg[~N-1]_type]
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`trans::fold<Grammar>::apply<Expr, State, Visitor>::type`]
+        [``typename Grammar::__arg_N__::apply<
+    typename Expr::__arg_N__::type
+  , typename Grammar::__arg_N_sub_1__::apply<
+        typename Expr::__arg_N_sub_1__::type
+      , // ...
+            typename Grammar::arg0_type::apply<
+                typename Expr::arg0_type::type, State, Visitor>::type
+        // ...
+      , Visitor
+    >::type
+  , Visitor
+>::type``]
+    ]
+    [   [`trans::fold<Grammar>::call(expr, state, visitor)`]
+        [``Grammar::__arg_N__::call(
+    proto::arg_c<N>(expr)
+  , Grammar::__arg_N_sub_1__::call(
+        proto::arg_c<N-1>(expr)
+      , // ...
+            Grammar::arg0_type::call(
+                proto::arg_c<0>(expr), state, visitor)
+        // ...
+      , visitor
+    )
+  , visitor
+)``]
+    ]
+    [   [`trans::reverse_fold<Grammar>::apply<Expr, State, Visitor>::type`]
+        [``typename Grammar::arg0_type::apply<
+    typename Expr::arg0_type::type
+  , typename Grammar::arg1_type::apply<
+        typename Expr::arg1_type::type
+      , // ...
+            typename Grammar::__arg_N__::apply<
+                typename Expr::__arg_N__::type, State, Visitor>::type
+        // ...
+      , Visitor
+    >::type
+  , Visitor
+>::type``]
+    ]
+    [   [`trans::reverse_fold<Grammar>::call(expr, state, visitor)`]
+        [``Grammar::arg0_type::call(
+    proto::arg_c<0>(expr)
+  , Grammar::arg1_type::call(
+        proto::arg_c<1>(expr)
+      , // ...
+            Grammar::__arg_N__::call(
+                proto::arg_c<N>(expr), state, visitor)
+        // ...
+      , visitor
+    )
+  , visitor
+)``]
+    ]
+]
+
+[#reverse_fold_example]Example:
+
+    // This transform matches function invocations such as foo(1,'a',"b")
+    // and transforms them into fusion cons lists of their arguments. In this
+    // case, the result would be cons(1, cons('a', cons("b", nil()))).
+    struct ArgsAsList
+      : trans::branch<
+            trans::reverse_fold<
+                function<
+                    // This effectively skips the first argument, which is 
+                    // the function being invoked; in this case, "foo".
+                    trans::state<terminal<_> >
+                  , vararg<
+                        // Put the rest of the args in a fusion cons list:
+                        trans::list<
+                            // Extract the arguments from the terminals:
+                            trans::arg<terminal<_> >
+                        >
+                    >
+                >
+            >
+            // The whole thing uses fusion::nil as the initial state
+          , fusion::nil
         >
     {};
 
