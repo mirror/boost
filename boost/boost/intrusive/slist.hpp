@@ -137,7 +137,7 @@ class slist
    slist()
    {
       size_traits::set_size(size_type(0));
-      node_algorithms::init(get_root_node()); 
+      node_algorithms::init(this->get_root_node()); 
    }
 
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue of type value_type.
@@ -152,7 +152,7 @@ class slist
    slist(Iterator b, Iterator e)
    {
       size_traits::set_size(size_type(0));
-      node_algorithms::init(get_root_node());
+      node_algorithms::init(this->get_root_node());
       insert_after(before_begin(), b, e);
    }
 
@@ -182,7 +182,7 @@ class slist
          this->erase_after(this->before_begin(), this->end()); 
       }
       else{
-         node_algorithms::init(get_root_node());
+         node_algorithms::init(this->get_root_node());
          size_traits::set_size(size_type(0));
       }
    }
@@ -213,10 +213,10 @@ class slist
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    void push_front(reference value) 
    {
-      node_ptr to_insert(ValueTraits::to_node_ptr(value));
+      node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
          BOOST_ASSERT(node_algorithms::unique(to_insert));
-      node_algorithms::link_after(get_root_node(), to_insert); 
+      node_algorithms::link_after(this->get_root_node(), to_insert); 
       size_traits::increment();
    }
 
@@ -230,8 +230,8 @@ class slist
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the erased element.
    void pop_front() 
    {
-      node_ptr to_erase = node_traits::get_next(get_root_node());
-      node_algorithms::unlink_after(get_root_node());
+      node_ptr to_erase = node_traits::get_next(this->get_root_node());
+      node_algorithms::unlink_after(this->get_root_node());
       size_traits::decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
@@ -250,7 +250,7 @@ class slist
    template<class Destroyer>
    void pop_front_and_destroy(Destroyer destroyer)
    {
-      node_ptr to_erase = node_traits::get_next(get_root_node());
+      node_ptr to_erase = node_traits::get_next(this->get_root_node());
       this->pop_front();
       destroyer(ValueTraits::to_value_ptr(to_erase));
    }
@@ -261,7 +261,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    reference front()
-   { return *ValueTraits::to_value_ptr(node_traits::get_next(get_root_node())); }
+   { return *ValueTraits::to_value_ptr(node_traits::get_next(this->get_root_node())); }
 
    //! <b>Effects</b>: Returns a const_reference to the first element of the list.
    //! 
@@ -269,7 +269,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    const_reference front() const
-   { return *ValueTraits::to_value_ptr(uncast(node_traits::get_next(get_root_node()))); }
+   { return *ValueTraits::to_value_ptr(uncast(node_traits::get_next(this->get_root_node()))); }
 
    //! <b>Effects</b>: Returns an iterator to the first element contained in the list.
    //! 
@@ -277,7 +277,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    iterator begin() 
-   { return iterator (node_traits::get_next(get_root_node())); }
+   { return iterator (node_traits::get_next(this->get_root_node())); }
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the list.
    //! 
@@ -285,7 +285,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator begin() const 
-   { return const_iterator (node_traits::get_next(get_root_node())); }
+   { return const_iterator (node_traits::get_next(this->get_root_node())); }
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the list.
    //! 
@@ -293,7 +293,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator cbegin() const 
-   { return const_iterator (node_traits::get_next(get_root_node())); }
+   { return const_iterator (node_traits::get_next(this->get_root_node())); }
 
    //! <b>Effects</b>: Returns an iterator to the end of the list.
    //! 
@@ -301,7 +301,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    iterator end() 
-   { return iterator (get_root_node()); }
+   { return iterator (this->get_root_node()); }
 
    //! <b>Effects</b>: Returns a const_iterator to the end of the list.
    //! 
@@ -309,7 +309,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator end() const 
-   { return const_iterator (uncast(get_root_node())); }
+   { return const_iterator (uncast(this->get_root_node())); }
 
    //! <b>Effects</b>: Returns a const_iterator to the end of the list.
    //! 
@@ -317,7 +317,7 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator cend() const 
-   { return const_iterator (uncast(get_root_node())); }
+   { return const_iterator (uncast(this->get_root_node())); }
 
    //! <b>Effects</b>: Returns an iterator that points to a position
    //!   before the first element. Equivalent to "end()"
@@ -381,7 +381,7 @@ class slist
       if(ConstantTimeSize)
          return size_traits::get_size();
       else
-         return node_algorithms::count(get_root_node()) - 1; 
+         return node_algorithms::count(this->get_root_node()) - 1; 
    }
 
    //! <b>Effects</b>: Returns true if the list contains no elements.
@@ -392,7 +392,7 @@ class slist
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    bool empty() const
-   { return node_algorithms::unique(get_root_node()); }
+   { return node_algorithms::unique(this->get_root_node()); }
 
    //! <b>Effects</b>: Swaps the elements of x and *this.
    //! 
@@ -403,7 +403,7 @@ class slist
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    void swap(slist& other)
    {
-      node_algorithms::swap_nodes(get_root_node(), other.get_root_node());
+      node_algorithms::swap_nodes(this->get_root_node(), other.get_root_node());
       if(ConstantTimeSize){
          size_type backup = size_traits::get_size();
          size_traits::set_size(other.get_size());
@@ -424,7 +424,7 @@ class slist
    {
       //Null shift, nothing to do
       if(!n) return;
-      node_ptr root = get_root_node();
+      node_ptr root = this->get_root_node();
       node_ptr first  = node_traits::get_next(root);
 
       //size() == 0 or 1, nothing to do
@@ -474,7 +474,7 @@ class slist
    {
       //Null shift, nothing to do
       if(!n) return;
-      node_ptr root = get_root_node();
+      node_ptr root = this->get_root_node();
       node_ptr first  = node_traits::get_next(root);
 
       //size() == 0 or 1, nothing to do
@@ -1029,7 +1029,7 @@ class slist
    template<class Predicate>
    void sort(Predicate p)
    {
-      if (node_traits::get_next(node_traits::get_next(get_root_node()))
+      if (node_traits::get_next(node_traits::get_next(this->get_root_node()))
                != this->get_root_node()) {
          slist carry;
          slist counter[64];
@@ -1159,7 +1159,7 @@ class slist
    //! 
    //! <b>Note</b>: Iterators and references are not invalidated
    void reverse() 
-   {  node_algorithms::reverse(get_root_node());  }
+   {  node_algorithms::reverse(this->get_root_node());  }
 
    //! <b>Effects</b>: Removes all the elements that compare equal to value.
    //!   No destructors are called.

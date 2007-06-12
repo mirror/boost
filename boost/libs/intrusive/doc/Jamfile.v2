@@ -8,9 +8,9 @@
 # See http://www.boost.org/libs/intrusive for documentation.
 
 
-project boost/intrusive/libs/doc ;
+project boost/intrusive/doc ;
 
-import doxygen ;
+import boostbook : boostbook ;
 import quickbook ;
 
 doxygen intrusive_doxygen
@@ -28,7 +28,7 @@ doxygen intrusive_doxygen
 
 xml intrusive_xml : intrusive.qbk ;
 
-boostbook standalone
+boostbook intrusive
    :
       intrusive_xml
       intrusive_doxygen

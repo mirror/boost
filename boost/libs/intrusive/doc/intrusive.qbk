@@ -2393,8 +2393,11 @@ all the objects to be inserted in intrusive containers in containers like `std::
 *  Visual 7.1/WinXP
 *  Visual 8.0/WinXP
 *  GCC 4.1.1/MinGW
+*  GCC 3.4.4/Cygwin
 *  Intel 9.1/WinXP
 *  GCC 4.1.2/Linux
+*  Codewarrior 9.4/WinXP
+*  GCC 3.4.3 Solaris 11
 
 [endsect]
 

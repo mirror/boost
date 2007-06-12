@@ -13,9 +13,6 @@
 #ifndef BOOST_INTRUSIVE_POINTER_PLUS_BIT_HPP
 #define BOOST_INTRUSIVE_POINTER_PLUS_BIT_HPP
 
-#include<boost/type_traits/alignment_of.hpp>
-#include<boost/static_assert.hpp>
-
 namespace boost {
 namespace intrusive {
 
@@ -23,7 +20,7 @@ namespace intrusive {
 //!can embed an extra bit of information if
 //!it's going to be used to point to objects
 //!with an alignment of "Alignment" bytes.
-template<class Pointer>
+template<class VoidPointer, std::size_t Alignment>
 struct has_pointer_plus_bit
 {
    enum  {  value = false  };
@@ -32,11 +29,10 @@ struct has_pointer_plus_bit
 //!This is an specialization for raw pointers.
 //!Raw pointers can embed an extra bit in the lower bit
 //!if the alignment is multiple of 2.
-
-template<class T>
-struct has_pointer_plus_bit<T*>
+template<std::size_t N>
+struct has_pointer_plus_bit<void*, N>
 {
-   enum  {  value = (boost::alignment_of<T>::value % 2u) == 0  };
+   enum  {  value = N % 2u == 0  };
 };
 
 //!This is class that is supposed to have static methods
@@ -56,9 +52,6 @@ template<class T>
 struct pointer_plus_bit<T*>
 {
    typedef T*        pointer;
-
-   //Check that the pointer can embed the bit
-   BOOST_STATIC_ASSERT((has_pointer_plus_bit<T*>::value));
 
    static pointer get_pointer(pointer n)
    {  return pointer(std::size_t(n) & std::size_t(~1u));  }

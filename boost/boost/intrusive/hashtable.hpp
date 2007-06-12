@@ -648,29 +648,42 @@ class hashtable
 
       try{
          size_type n = 0;
-         bool same_buffer = old_buckets == new_buckets;
-         //If we are shrinking the bucket array, just rehash the last nodes
-         if(same_buffer && (old_buckets_len > new_buckets_len)){
+         const bool same_buffer = old_buckets == new_buckets;
+         //If the new bucket length is a common factor
+         //of the old one we can avoid hash calculations.
+         const bool fast_shrink = (old_buckets_len > new_buckets_len) && 
+                                  (old_buckets_len % new_buckets_len) == 0;
+         //If we are shrinking the same bucket array and it's
+         //is a fast shrink, just rehash the last nodes
+         if(same_buffer && fast_shrink){
             n = new_buckets_len;
          }
 
          //Iterate through nodes
          for(; n < old_buckets_len; ++n){
             bucket_type &old_bucket = old_buckets[n];
-            local_iterator before_i(old_bucket.before_begin());
-            local_iterator end(old_bucket.end());
-            local_iterator i(old_bucket.begin());
-            for(;i != end; ++i){
-               size_type new_n = this->priv_hasher()(*i) % new_buckets_len;
-               //If this is a buffer expansion don't move if it's not necessary
-               if(same_buffer && new_n == n){
-                  ++before_i;
+
+            if(!fast_shrink){
+               local_iterator before_i(old_bucket.before_begin());
+               local_iterator end(old_bucket.end());
+               local_iterator i(old_bucket.begin());
+               for(;i != end; ++i){
+                  const size_type new_n = (this->priv_hasher()(*i) % new_buckets_len);
+                  //If this is a buffer expansion don't move if it's not necessary
+                  if(same_buffer && new_n == n){
+                     ++before_i;
+                  }
+                  else{
+                     bucket_type &new_b = new_buckets[new_n];
+                     new_b.splice_after(new_b.before_begin(), old_bucket, before_i);
+                     i = before_i;
+                  }
                }
-               else{
-                  bucket_type &new_b = new_buckets[new_n];
-                  new_b.splice_after(new_b.before_begin(), old_bucket, before_i);
-                  i = before_i;
-               }
+            }
+            else{
+               const size_type new_n = n % new_buckets_len;
+               bucket_type &new_b = new_buckets[new_n];
+               new_b.splice_after(new_b.before_begin(), old_bucket);
             }
          }
 

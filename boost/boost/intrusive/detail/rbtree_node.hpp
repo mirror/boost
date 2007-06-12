@@ -26,6 +26,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #endif
 #include <boost/intrusive/pointer_plus_bit.hpp>
+#include <boost/type_traits/alignment_of.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -170,10 +171,8 @@ struct rbtree_node_traits
    :  public rbtree_node_traits_dispatch
          <VoidPointer
          ,has_pointer_plus_bit
-            < typename pointer_to_other
-               <VoidPointer
-               , compact_rbtree_node<VoidPointer>
-               >::type
+            <VoidPointer, boost::alignment_of<compact_rbtree_node<VoidPointer> 
+                                             >::value 
             >::value
          >
 {};
