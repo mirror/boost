@@ -126,21 +126,28 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Expr, typename Char, typename Left>
-    struct width_of_assign;
+    struct width_of_assign
+    {};
 
     template<typename Expr, typename Char>
-    struct width_of_assign<Expr, Char, basic_mark_tag>
+    struct width_of_assign<Expr, Char, mark_placeholder>
       : width_of<typename Expr::arg1_type::type, Char>
     {};
 
     template<typename Expr, typename Char>
-    struct width_of_assign<Expr, Char, set_initializer_type>
+    struct width_of_assign<Expr, Char, set_initializer>
       : mpl::size_t<1>
     {};
 
+    template<typename Expr, typename Char, typename Nbr>
+    struct width_of_assign<Expr, Char, attribute_placeholder<Nbr> >
+      : unknown_width
+    {};
+
+    // either (s1 = ...) or (a1 = ...) or (set = ...)
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, proto::tag::assign>
-      : width_of_assign<Expr, Char, typename Expr::arg0_type::type>
+      : width_of_assign<Expr, Char, typename Expr::arg0_type::arg0_type>
     {};
 
     template<typename Expr, typename Char>

@@ -88,19 +88,24 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<>
-    struct use_simple_repeat_assign<basic_mark_tag>
+    struct use_simple_repeat_assign<mark_placeholder>
       : mpl::false_
     {};
 
     template<>
-    struct use_simple_repeat_assign<set_initializer_type>
+    struct use_simple_repeat_assign<set_initializer>
       : mpl::true_
     {};
 
-    // either (s1 = ...) or (set = ...)
+    template<typename Nbr>
+    struct use_simple_repeat_assign<attribute_placeholder<Nbr> >
+      : mpl::false_
+    {};
+
+    // either (s1 = ...) or (a1 = ...) or (set = ...)
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, proto::tag::assign>
-      : use_simple_repeat_assign<typename Expr::arg0_type::type>
+      : use_simple_repeat_assign<typename Expr::arg0_type::arg0_type>
     {};
 
     template<typename Expr, typename Char>
