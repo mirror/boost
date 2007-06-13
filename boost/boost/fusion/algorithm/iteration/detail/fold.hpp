@@ -81,7 +81,10 @@ namespace detail
             I2 i2 = fusion::next(i1);
             typedef typename result_of::next<I2>::type I3;
             I3 i3 = fusion::next(i2);
-            return f(*i0, f(*i1, f(*i2, unrolled_fold<N-3>::call(i3, state, f))));
+            typedef typename result_of::next<I3>::type I4;
+            I4 i4 = fusion::next(i3);
+
+            return unrolled_fold<N-4>::call(i4, f(*i3, f(*i2, f(*i1, f(*i0, state)))), f);
         }
     };
 
@@ -96,7 +99,7 @@ namespace detail
             I1 i1 = fusion::next(i0);
             typedef typename result_of::next<I1>::type I2;
             I2 i2 = fusion::next(i1);
-            return f(*i0, f(*i1, f(*i2, state)));
+            return f(*i2, f(*i1, f(*i0, state)));
         }
     };
 
@@ -109,7 +112,7 @@ namespace detail
         {
             typedef typename result_of::next<I0>::type I1;
             I1 i1 = fusion::next(i0);
-            return f(*i0, f(*i1, state));
+            return f(*i1, f(*i0, state));
         }
     };
 
@@ -168,11 +171,12 @@ namespace detail
         typedef typename result_of::next<I1>::type I2;
         typedef typename result_of::next<I2>::type I3;
         typedef typename result_of::next<I3>::type I4;
-        typedef typename result_of_unrolled_fold<I4, State, F, N-4>::type Rest;
-        typedef typename fold_apply<I3, Rest, F>::type Rest2;
+        typedef typename fold_apply<I0, State, F>::type Rest1;
+        typedef typename fold_apply<I1, Rest1, F>::type Rest2;
         typedef typename fold_apply<I2, Rest2, F>::type Rest3;
-        typedef typename fold_apply<I1, Rest3, F>::type Rest4;
-        typedef typename fold_apply<I0, Rest4, F>::type type;
+        typedef typename fold_apply<I3, Rest3, F>::type Rest4;
+
+        typedef typename result_of_unrolled_fold<I4, Rest4, F, N-4>::type type;
     };
 
     template<typename I0, typename State, typename F>
@@ -180,17 +184,17 @@ namespace detail
     {
         typedef typename result_of::next<I0>::type I1;
         typedef typename result_of::next<I1>::type I2;
-        typedef typename fold_apply<I2, State, F>::type Rest;
+        typedef typename fold_apply<I0, State, F>::type Rest;
         typedef typename fold_apply<I1, Rest, F>::type Rest2;
-        typedef typename fold_apply<I0, Rest2, F>::type type;
+        typedef typename fold_apply<I2, Rest2, F>::type type;
     };
 
     template<typename I0, typename State, typename F>
     struct result_of_unrolled_fold<I0, State, F, 2>
     {
         typedef typename result_of::next<I0>::type I1;
-        typedef typename fold_apply<I1, State, F>::type Rest;
-        typedef typename fold_apply<I0, Rest, F>::type type;
+        typedef typename fold_apply<I0, State, F>::type Rest;
+        typedef typename fold_apply<I1, Rest, F>::type type;
     };
 
     template<typename I0, typename State, typename F>
