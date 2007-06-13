@@ -5,6 +5,8 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
+[import ../test/examples.cpp]
+
 [/===========================]
 [section Tree Transformations]
 [/===========================]
@@ -81,17 +83,7 @@ Calculator expression can be made up of any combination of 5 constituents:
 
 We can immediately write the calculator grammar as follows:
 
-    using namespace proto;
-
-    struct CalculatorGrammar
-      : or_<
-            terminal< placeholder1 >
-          , terminal< placeholder2 >
-          , terminal< _ >
-          , unary_expr< _, CalculatorGrammar >
-          , binary_expr< _, CalculatorGrammar, CalculatorGrammar >
-        >
-    {};
+[CalculatorGrammar]
 
 We can read this as follows: a calculator expression is either placeholder 1,
 placeholder 2, some other terminal, or some unary or binary operator whose
@@ -210,26 +202,7 @@ right operands. Proto does not provide a transform that can help us directly,
 but we can easily write our own. This is what it looks like, and we'll describe
 it below:
 
-    template<typename Grammar>
-    struct binary_max
-      : Grammar
-    {
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-        {
-            typedef typename mpl::apply_wrap3<Grammar, Expr, State, Visitor>::type expr_type;
-            typedef typename result_of::left<expr_type>::type left_arity;
-            typedef typename result_of::right<expr_type>::type right_arity;
-            typedef typename mpl::max<left_arity, right_arity>::type type;
-        };
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &, State const &, Visitor &)
-        {
-            return typename apply<Expr, State, Visitor>::type();
-        }
-    };
+[binary_max]
 
 This transform will be used as follows:
 `binary_max< binary_expr< _, CalculatorGrammar, CalculatorGrammar > >`.
@@ -253,15 +226,7 @@ instantiation of `mpl::int_<>`.
 
 Piecing it all together, the complete `CalculatorGrammar` looks like this:
 
-    struct CalculatorGrammar
-      : or_<
-            trans::always< terminal< placeholder1 >, mpl::int_<1> >
-          , trans::always< terminal< placeholder2 >, mpl::int_<2> >
-          , trans::always< terminal< _ >, mpl::int_<0> >
-          , trans::arg< unary_expr< _, CalculatorGrammar > >
-          , binary_max< binary_expr< _, CalculatorGrammar, CalculatorGrammar > >
-        >
-    {};
+[CalculatorArityGrammar]
 
 We can use our CalculatorGrammar transform to calculate the arity of any
 calculator expression:
@@ -772,28 +737,6 @@ like cons lists, you'll often want to built it back-to-front with
 
 [#reverse_fold_example]Example:
 
-    // This transform matches function invocations such as foo(1,'a',"b")
-    // and transforms them into fusion cons lists of their arguments. In this
-    // case, the result would be cons(1, cons('a', cons("b", nil()))).
-    struct ArgsAsList
-      : trans::branch<
-            trans::reverse_fold<
-                function<
-                    // This effectively skips the first argument, which is 
-                    // the function being invoked; in this case, "foo".
-                    trans::state<terminal<_> >
-                  , vararg<
-                        // Put the rest of the args in a fusion cons list:
-                        trans::list<
-                            // Extract the arguments from the terminals:
-                            trans::arg<terminal<_> >
-                        >
-                    >
-                >
-            >
-            // The whole thing uses fusion::nil as the initial state
-          , fusion::nil
-        >
-    {};
+[AsArgList]
 
 [endsect]

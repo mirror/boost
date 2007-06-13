@@ -20,6 +20,7 @@
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/xpressive/proto/transform/branch.hpp>
+#include <boost/xpressive/proto/transform/fold_to_list.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/core/matcher/alternate_matcher.hpp>
@@ -87,35 +88,6 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // reverse_fold_to_alternates_list_recurse
-    template<typename Tag, typename Grammar>
-    struct reverse_fold_to_alternates_list_recurse
-      : proto::or_<
-            proto::transform::reverse_fold<
-                proto::binary_expr<
-                    Tag
-                  , reverse_fold_to_alternates_list_recurse<Tag, Grammar>
-                  , reverse_fold_to_alternates_list_recurse<Tag, Grammar>
-                >
-            >
-          , in_alternate<Grammar>
-        >
-    {};
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // reverse_fold_to_alternates_list
-    template<typename Tag, typename Grammar>
-    struct reverse_fold_to_alternates_list
-      : proto::transform::reverse_fold<
-            proto::binary_expr<
-                Tag
-              , reverse_fold_to_alternates_list_recurse<Tag, Grammar>
-              , reverse_fold_to_alternates_list_recurse<Tag, Grammar>
-            >
-        >
-    {};
-
-    ///////////////////////////////////////////////////////////////////////////////
     // as_alternate_matcher
     template<typename Grammar>
     struct as_alternate_matcher
@@ -147,11 +119,9 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Grammar>
     struct as_alternate
       : as_alternate_matcher<
-            proto::transform::branch<
-                reverse_fold_to_alternates_list<
-                    typename Grammar::tag_type
-                  , typename Grammar::arg0_type
-                >
+            proto::transform::reverse_fold_tree<
+                typename Grammar::tag_type
+              , in_alternate<typename Grammar::arg0_type>
               , fusion::nil
             >
         >
