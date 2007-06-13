@@ -93,7 +93,7 @@ check the [link proto.reference Reference] section.
 
 [endsect]
 
-[/ xinclude protodoc.xml]
+[xinclude protodoc.xml]
 
 [include acknowledgements.qbk]
 
