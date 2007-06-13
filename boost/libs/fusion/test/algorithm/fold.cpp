@@ -10,6 +10,7 @@
 #include <boost/fusion/sequence/adapted/mpl.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
+#include <boost/fusion/sequence/generation/make_vector.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 #include <boost/fusion/algorithm/iteration/accumulate.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -17,6 +18,8 @@
 #include <boost/mpl/next.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/vector.hpp>
+
+#include <string>
 
 using boost::mpl::if_;
 using boost::mpl::int_;
@@ -73,6 +76,16 @@ struct count_ints
     }
 };
 
+struct appender
+{
+    typedef std::string result_type;
+
+    std::string operator()(char c, std::string const& str) const
+    {
+        return str + c;
+    }
+};
+
 int
 main()
 {
@@ -113,6 +126,11 @@ main()
     }
 
     {
+        BOOST_TEST(fusion::fold(fusion::make_vector('a','b','c','d','e'), std::string(""), appender())
+                   == "abcde");
+    }
+
+    {
         typedef vector<int, char, int, double> vector_type;
         vector_type v(12345, 'x', 678910, 3.36);
         int result = accumulate(v, 0, add_ints_only());
@@ -145,6 +163,10 @@ main()
         BOOST_TEST(n == 3);
     }
 
+    {
+        BOOST_TEST(fusion::accumulate(fusion::make_vector('a','b','c','d','e'), std::string(""), appender())
+                   == "abcde");
+    }
 
     return boost::report_errors();
 }
