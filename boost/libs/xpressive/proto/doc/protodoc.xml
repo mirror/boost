@@ -732,10 +732,11 @@
         </template><parameter name="expr_"><paramtype>Expr_ const &amp;</paramtype></parameter><parameter name=""><paramtype>State_ const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor_ &amp;</paramtype></parameter></method><method name="make" cv=""><type>static Derived const</type><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace></namespace></header><header name="boost/xpressive/proto/fusion.hpp"><para>Make any Proto parse tree a valid Fusion sequence </para><namespace name="boost"><namespace name="fusion"><namespace name="extension"><struct name="as_element"><template>
       <template-type-parameter name="Tag"/>
     </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
+      <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
-    </template></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::type</type><template>
-          <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method></method-group></struct><struct-specialization name="is_view_impl"><template>
+    </template><specialization><template-arg>This(Expr)</template-arg></specialization></struct-specialization></struct><struct-specialization name="is_view_impl"><template>
     </template><specialization><template-arg>proto::proto_ref_tag</template-arg></specialization><struct name="apply"><template>
       <template-type-parameter name="Iterator"/>
     </template></struct></struct-specialization><struct-specialization name="is_view_impl"><template>
@@ -804,10 +805,11 @@
     </template><inherit access="public">boost::proto::ref_&lt; Expr &gt;</inherit><method-group name="public member functions"/><constructor><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></constructor></struct><struct name="eval_fun"><template>
       <template-type-parameter name="Context"/>
     </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
+      <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
-    </template><typedef name="type"><type>Context::template eval&lt; typename remove_reference&lt; Expr &gt;::type &gt;::result_type</type></typedef></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::type</type><template>
-          <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method></method-group><constructor><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></constructor></struct><function name="children_of"><type><classname>children</classname>&lt; Expr &gt;</type><template>
+    </template><specialization><template-arg>This(Expr)</template-arg></specialization><typedef name="type"><type>Context::template eval&lt; typename remove_reference&lt; Expr &gt;::type &gt;::result_type</type></typedef></struct-specialization><method-group name="public member functions"/><constructor><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></constructor></struct><function name="children_of"><type><classname>children</classname>&lt; Expr &gt;</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></function></namespace></namespace></header><header name="boost/xpressive/proto/generate.hpp"><para>Contains definition of generate&lt;&gt; class template, which end users can specialize for generating domain-specific expression wrappers. </para><namespace name="boost"><namespace name="proto"><struct name="default_generator"><struct name="apply"><template>
       <template-type-parameter name="Expr"/>
@@ -1915,7 +1917,7 @@
         </template><parameter name="expr_"><paramtype>Expr_ const &amp;</paramtype></parameter><parameter name=""><paramtype>State_ const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor_ &amp;</paramtype></parameter></method></method-group></struct><struct name="apply1"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Lambda"/>
-      <template-type-parameter name="Factory"><default>detail::default_factory</default></template-type-parameter>
+      <template-type-parameter name="Factory"/>
     </template><struct name="apply"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1927,7 +1929,7 @@
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="apply2"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Lambda"/>
-      <template-type-parameter name="Factory"><default>detail::default_factory</default></template-type-parameter>
+      <template-type-parameter name="Factory"/>
     </template><struct name="apply"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1939,7 +1941,7 @@
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="apply3"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Lambda"/>
-      <template-type-parameter name="Factory"><default>detail::default_factory</default></template-type-parameter>
+      <template-type-parameter name="Factory"/>
     </template><struct name="apply"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1994,11 +1996,25 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_to_list.hpp"><para>A higher-level transform that uses the fold, branch and list transforms to fold a binary tree into a fusion cons-list. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="fold_to_list"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_to_list.hpp"><para>A higher-level transform that uses the fold, branch and list transforms to fold a binary tree into a fusion cons-list. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="fold_tree"><template>
+      <template-type-parameter name="Tag"/>
       <template-type-parameter name="Grammar"/>
-    </template><data-member name="mpl_assertion_in_line_91" specifiers="static"><type>const std::size_t</type></data-member></struct><struct name="reverse_fold_to_list"><template>
+      <template-type-parameter name="State"><default>void</default></template-type-parameter>
+    </template><description><para>fold_tree </para></description></struct><struct-specialization name="fold_tree"><template>
+      <template-type-parameter name="Tag"/>
       <template-type-parameter name="Grammar"/>
-    </template><data-member name="mpl_assertion_in_line_106" specifiers="static"><type>const std::size_t</type></data-member></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/list.hpp"><para>A special-purpose proto transform for putting things into a fusion::cons&lt;&gt; list. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="list"><template>
+    </template><specialization><template-arg>Tag</template-arg><template-arg>Grammar</template-arg><template-arg>void</template-arg></specialization></struct-specialization><struct name="reverse_fold_tree"><template>
+      <template-type-parameter name="Tag"/>
+      <template-type-parameter name="Grammar"/>
+      <template-type-parameter name="State"><default>void</default></template-type-parameter>
+    </template><description><para>reverse_fold_tree </para></description></struct><struct-specialization name="reverse_fold_tree"><template>
+      <template-type-parameter name="Tag"/>
+      <template-type-parameter name="Grammar"/>
+    </template><specialization><template-arg>Tag</template-arg><template-arg>Grammar</template-arg><template-arg>void</template-arg></specialization></struct-specialization><struct name="fold_to_list"><template>
+      <template-type-parameter name="Grammar"/>
+    </template><inherit access="public">boost::proto::transform::fold_tree&lt; Grammar::tag_type, trans::list&lt; Grammar::arg0_type &gt;, fusion::nil &gt;</inherit><description><para>fold_to_list TODO Find a cleaner interface </para></description><data-member name="mpl_assertion_in_line_95" specifiers="static"><type>const std::size_t</type></data-member></struct><struct name="reverse_fold_to_list"><template>
+      <template-type-parameter name="Grammar"/>
+    </template><inherit access="public">boost::proto::transform::reverse_fold_tree&lt; Grammar::tag_type, trans::list&lt; Grammar::arg0_type &gt;, fusion::nil &gt;</inherit><description><para>reverse_fold_to_list TODO Find a cleaner interface </para></description><data-member name="mpl_assertion_in_line_113" specifiers="static"><type>const std::size_t</type></data-member></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/list.hpp"><para>A special-purpose proto transform for putting things into a fusion::cons&lt;&gt; list. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="list"><template>
       <template-type-parameter name="Grammar"/>
     </template><struct name="apply"><template>
       <template-type-parameter name="Expr"/>

@@ -49,7 +49,9 @@ namespace boost { namespace proto { namespace transform
     template<typename Tag, typename Grammar, typename State = void>
     struct fold_tree
       : trans::branch<
-            fold_tree<Tag, Grammar>
+            trans::fold<
+                nary_expr<Tag, vararg<detail::fold_tree_<Tag, Grammar> > >
+            >
           , State
         >
     {};
@@ -66,7 +68,9 @@ namespace boost { namespace proto { namespace transform
     template<typename Tag, typename Grammar, typename State = void>
     struct reverse_fold_tree
       : trans::branch<
-            reverse_fold_tree<Tag, Grammar>
+            trans::reverse_fold<
+                nary_expr<Tag, vararg<detail::reverse_fold_tree_<Tag, Grammar> > >
+            >
           , State
         >
     {};
