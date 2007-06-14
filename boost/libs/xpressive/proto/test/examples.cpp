@@ -12,6 +12,7 @@
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/transform/list.hpp>
+#include <boost/xpressive/proto/transform/construct.hpp>
 #include <boost/xpressive/proto/transform/fold_to_list.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/test/unit_test.hpp>
@@ -161,6 +162,21 @@ struct FoldTreeToList
 {};
 //]
 
+//[ Promote
+// This transform finds all float terminals in an expression and promotes
+// them to doubles.
+struct Promote
+  : or_<
+        /*<< Match a `terminal<float>`, then construct a `terminal<double>` with the `float`. >>*/
+        transform::construct<terminal<float>, terminal<double>(transform::arg<_>) >
+      , terminal<_>
+      /*<< `nary_expr<>` has a pass-through transform which will transform each child
+      sub-expression using the `Promote` transform. >>*/
+      , nary_expr<_, vararg<Promote> >
+    >
+{};
+//]
+
 void test_examples()
 {
 
@@ -188,6 +204,10 @@ void test_examples()
     BOOST_CHECK_EQUAL(lst.cdr.car, 'a');
     BOOST_CHECK_EQUAL(lst.cdr.cdr.car, std::string("b"));
 
+    plus<
+        terminal<double>::type
+      , terminal<double>::type
+    >::type p = Promote::call( lit(1.f) + 2.f, i, i );
 }
 
 
