@@ -40,8 +40,13 @@
   <xsl:param name="chunker.output.indent">yes</xsl:param>
   <xsl:param name="toc.max.depth">2</xsl:param>
   <xsl:param name="callout.graphics.number.limit">15</xsl:param>
+  <xsl:param name = "admon.graphics.path"
+            select = "concat($boost.root, '/doc/html/images/')"/>
+  <xsl:param name = "navig.graphics.path"
+            select = "concat($boost.root, '/doc/html/images/')"/>
 
-<xsl:param name="admon.style">
+
+   <xsl:param name="admon.style">
     <!-- Remove the style. Let the CSS do the styling -->
 </xsl:param>
 
