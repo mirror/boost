@@ -210,8 +210,8 @@ set       toc,title
                 select="normalize-space($revision-node/attribute::rev:last-revision)"/>
             </xsl:variable>
             <xsl:if test="string-length($revision-text) &gt; 0">
-              <small>
-                <p>
+              <p>
+                <small>
                   <xsl:text>Last revised: </xsl:text>
                   <xsl:choose>
                     <xsl:when test="contains($revision-text, '/')">
@@ -225,8 +225,8 @@ set       toc,title
                       </xsl:call-template>
                     </xsl:otherwise>
                   </xsl:choose>
-                </p>
-              </small>
+                </small>
+              </p>
             </xsl:if>
           </xsl:if>
         </td>

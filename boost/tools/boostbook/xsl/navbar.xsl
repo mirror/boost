@@ -54,7 +54,7 @@
       <xsl:variable name = "home" select = "/*[1]"/>
       <xsl:variable name = "up"   select = "parent::*"/>
 
-      <table cellpadding = "2" width = "100%">
+      <table cellpadding = "2" width = "100%"><tr>
          <xsl:if test = "$nav.border = 'Boost'">
             <xsl:attribute name = "class">boost-head</xsl:attribute>
          </xsl:if>
@@ -77,7 +77,7 @@
                <xsl:call-template name = "header.navdata-vert"/>
             </xsl:when>
          </xsl:choose>
-      </table>
+      </tr></table>
       <hr/>
       <xsl:choose>
          <xsl:when test = "$nav.flow = 'DocBook'">
