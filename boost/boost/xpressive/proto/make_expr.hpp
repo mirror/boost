@@ -390,6 +390,11 @@
                 }
             };
 
+            template<typename Sequence>
+            struct unpack_expr_<tag::terminal, deduce_domain, Sequence, 1u>
+              : unpack_expr_<tag::terminal, default_domain, Sequence, 1u>
+            {};
+
             template<
                 typename Tag
               , typename Domain

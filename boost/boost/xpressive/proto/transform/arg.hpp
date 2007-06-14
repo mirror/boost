@@ -64,7 +64,7 @@ namespace boost { namespace proto { namespace transform
     struct arg
       : Grammar
     {
-        arg();
+        arg() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
@@ -86,7 +86,7 @@ namespace boost { namespace proto { namespace transform
     struct arg_c
       : Grammar
     {
-        arg_c();
+        arg_c() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
@@ -106,7 +106,7 @@ namespace boost { namespace proto { namespace transform
     struct left
       : Grammar
     {
-        left();
+        left() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
@@ -126,7 +126,7 @@ namespace boost { namespace proto { namespace transform
     struct right
       : Grammar
     {
-        right();
+        right() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
@@ -146,7 +146,7 @@ namespace boost { namespace proto { namespace transform
     struct state
       : Grammar
     {
-        state();
+        state() {}
 
         template<typename, typename State, typename>
         struct apply
@@ -167,7 +167,7 @@ namespace boost { namespace proto { namespace transform
     struct visitor
       : Grammar
     {
-        visitor();
+        visitor() {}
 
         template<typename, typename, typename Visitor>
         struct apply
@@ -188,7 +188,7 @@ namespace boost { namespace proto { namespace transform
     struct always
       : Grammar
     {
-        always();
+        always() {}
 
         template<typename, typename, typename>
         struct apply
@@ -209,7 +209,7 @@ namespace boost { namespace proto { namespace transform
     struct identity
       : Grammar
     {
-        identity();
+        identity() {}
         BOOST_PROTO_IDENTITY_TRANSFORM();
     };
 
@@ -218,7 +218,7 @@ namespace boost { namespace proto { namespace transform
     struct apply1
       : Grammar
     {
-        apply1();
+        apply1() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
@@ -238,7 +238,7 @@ namespace boost { namespace proto { namespace transform
     struct apply2
       : Grammar
     {
-        apply2();
+        apply2() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
@@ -258,7 +258,7 @@ namespace boost { namespace proto { namespace transform
     struct apply3
       : Grammar
     {
-        apply3();
+        apply3() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply

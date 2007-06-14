@@ -73,12 +73,12 @@ struct quant_style
     /**/
 
 //    // Replace transmogrify stupidity with rebindable matchers/placeholders
-//#define BOOST_XPR_IDENTITY_REBIND(TYPE)                                         \
-//    template<typename BidiIter, typename ICase, typename Traits>                \
-//    struct rebind                                                               \
-//    {                                                                           \
-//        typedef TYPE type;                                                      \
-//    };                                                                          \
+//#define BOOST_XPR_IDENTITY_REBIND(TYPE)                                         \/
+//    template<typename BidiIter, typename ICase, typename Traits>                \/
+//    struct rebind                                                               \/
+//    {                                                                           \/
+//        typedef TYPE type;                                                      \/
+//    };                                                                          \/
 //    /**/
 
 ///////////////////////////////////////////////////////////////////////////////

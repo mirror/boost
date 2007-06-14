@@ -1,9 +1,7 @@
 #ifndef BOOST_PP_IS_ITERATING
     ///////////////////////////////////////////////////////////////////////////////
     /// \file construct.hpp
-    /// For constructing an arbitrary type from a bunch of transforms. This assumes
-    /// that all the grammars corresponding to the transforms are equivalent; that is,
-    /// that they match the same expressions.
+    /// For constructing an arbitrary type from a bunch of transforms.
     //
     //  Copyright 2004 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
@@ -14,18 +12,45 @@
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
     #include <boost/preprocessor/iterate.hpp>
-    #include <boost/preprocessor/arithmetic/sub.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/mpl/lambda.hpp>
+    #include <boost/mpl/apply_wrap.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto { namespace transform
     {
-        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/construct.hpp>))
+        namespace detail
+        {
+            template<typename T, bool HasType = mpl::aux::has_type<T>::value>
+            struct nested_type
+            {
+                typedef typename T::type type;
+            };
+
+            template<typename T>
+            struct nested_type<T, false>
+            {
+                typedef T type;
+            };
+
+            template<typename Result, typename Expr, typename Lambda = typename mpl::lambda<Result>::type>
+            struct apply_if_
+              : mpl::apply_wrap1<Lambda, Expr>
+            {};
+
+            template<typename Result, typename Expr>
+            struct apply_if_<Result, Expr, Result>
+              : nested_type<Result>
+            {};
+        }
+
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/construct.hpp>))
         #include BOOST_PP_ITERATE()
-        #undef BOOST_PP_ITERATION_PARAMS_1
+
     }}}
 
     #endif
@@ -34,26 +59,43 @@
 
     #define N BOOST_PP_ITERATION()
 
-        template<typename Type BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)>
-        struct construct<
-            Type
-            BOOST_PP_ENUM_TRAILING_PARAMS(N, Grammar)
-            BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT)
-          , void
-        >
-          : Grammar0
+        template<typename Grammar, typename Result BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Arg)>
+        struct construct<Grammar, Result(BOOST_PP_ENUM_PARAMS(N, Arg))>
+          : Grammar
         {
-            template<typename, typename, typename>
+            template<typename Expr, typename State, typename Visitor>
             struct apply
-            {
-                typedef Type type;
-            };
+              : detail::apply_if_<Result, typename Grammar::template apply<Expr, State, Visitor>::type>
+            {};
 
             template<typename Expr, typename State, typename Visitor>
-            static Type call(Expr const &expr, State const &state, Visitor &visitor)
+            static typename apply<Expr, State, Visitor>::type
+            call(Expr const &expr, State const &state, Visitor &visitor)
             {
-                return Type(
-                    BOOST_PP_ENUM_BINARY_PARAMS(N, Grammar, ::call(expr, state, visitor) BOOST_PP_INTERCEPT)
+                return construct::call_(expr, state, visitor, is_expr<typename apply<Expr, State, Visitor>::type>());
+            }
+
+        private:
+            template<typename Expr, typename State, typename Visitor>
+            static typename apply<Expr, State, Visitor>::type
+            call_(Expr const &expr, State const &state, Visitor &visitor, mpl::true_)
+            {
+                typename Grammar::template apply<Expr, State, Visitor>::type const &expr2
+                    = Grammar::call(expr, state, visitor);
+                typename apply<Expr, State, Visitor>::type that = {
+                    BOOST_PP_ENUM_BINARY_PARAMS(N, Arg, ::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
+                };
+                return that;
+            }
+
+            template<typename Expr, typename State, typename Visitor>
+            static typename apply<Expr, State, Visitor>::type
+            call_(Expr const &expr, State const &state, Visitor &visitor, mpl::false_)
+            {
+                typename Grammar::template apply<Expr, State, Visitor>::type const &expr2
+                    = Grammar::call(expr, state, visitor);
+                return typename apply<Expr, State, Visitor>::type(
+                    BOOST_PP_ENUM_BINARY_PARAMS(N, Arg, ::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
                 );
             }
         };

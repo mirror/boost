@@ -60,7 +60,7 @@
         struct pass_through
           : Grammar
         {
-            pass_through();
+            pass_through() {}
 
             template<typename Expr, typename State, typename Visitor>
             struct apply
@@ -80,7 +80,7 @@
     template<typename Grammar>
     struct has_pass_through_transform
     {
-        has_pass_through_transform();
+        has_pass_through_transform() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply

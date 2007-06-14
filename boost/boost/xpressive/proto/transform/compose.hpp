@@ -24,7 +24,7 @@ namespace boost { namespace proto { namespace transform
     struct compose
       : Grammar1
     {
-        compose();
+        compose() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply

@@ -62,6 +62,9 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Predicate>
     struct predicate_placeholder;
 
+    template<typename Nbr>
+    struct attribute_placeholder;
+
     ///////////////////////////////////////////////////////////////////////////////
     // matchers
     //

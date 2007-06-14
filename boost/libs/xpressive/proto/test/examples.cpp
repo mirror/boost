@@ -12,6 +12,8 @@
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/transform/list.hpp>
+#include <boost/xpressive/proto/transform/fold_to_list.hpp>
+#include <boost/utility/result_of.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace boost::proto;
@@ -88,10 +90,10 @@ terminal< placeholder2 >::type const _2 = {{}};
 //[ CalculatorArityGrammar
 struct CalculatorGrammar
   : or_<
-        trans::always< terminal< placeholder1 >, mpl::int_<1> >
-      , trans::always< terminal< placeholder2 >, mpl::int_<2> >
-      , trans::always< terminal< _ >, mpl::int_<0> >
-      , trans::arg< unary_expr< _, CalculatorGrammar > >
+        transform::always< terminal< placeholder1 >, mpl::int_<1> >
+      , transform::always< terminal< placeholder2 >, mpl::int_<2> >
+      , transform::always< terminal< _ >, mpl::int_<0> >
+      , transform::arg< unary_expr< _, CalculatorGrammar > >
       , binary_max< binary_expr< _, CalculatorGrammar, CalculatorGrammar > >
     >
 {};
@@ -99,16 +101,16 @@ struct CalculatorGrammar
 
 //[ AsArgList
 // This transform matches function invocations such as foo(1,'a',"b")
-// and transforms them into fusion cons lists of their arguments. In this
+// and transforms them into Fusion cons lists of their arguments. In this
 // case, the result would be cons(1, cons('a', cons("b", nil()))).
 struct ArgsAsList
  /*<< Use a `branch<>` transform to use `fusion::nil` as the initial
  state of this transformation. >>*/
- : trans::branch<
+ : transform::branch<
      /*<< Use a `reverse_fold<>` transform to iterate over the children
      of this node in reverse order, building a fusion list from back to
      front. >>*/
-     trans::reverse_fold<
+     transform::reverse_fold<
        /*<< The `Grammar` we're matching is a function invocation. >>*/
        function<
          /*<< The first child expression of a `function<>` node is the
@@ -117,17 +119,17 @@ struct ArgsAsList
          we're building a list in the state parameter, and that the 
          `state<>` transform just returns the state unmodified. So this
          says to match a `terminal<>` but to not add it to the list.) >>*/
-         trans::state<terminal<_> >
+         transform::state<terminal<_> >
        /*<< We use `vararg<>` here because the function expression we're
        matching can have an arbitrary number of arguments. >>*/
        , vararg<
            /*<< The `list<>` transform puts the rest of the function
            arguments in a fusion cons list. >>*/
-           trans::list<
+           transform::list<
              /*<< The arguments to the function are terminals.
              Extract the argument from each terminal before putting
              them into the list. >>*/
-             trans::arg<terminal<_> >
+             transform::arg<terminal<_> >
            >
          >
        >
@@ -135,6 +137,27 @@ struct ArgsAsList
    /*<< Here is the initial state used by this transform. >>*/
    , fusion::nil
    >
+{};
+//]
+
+//[ FoldTreeToList
+// This grammar describes what counts as the terminals in expressions
+// of the form (_1=1,'a',"b"), which will be flattened using
+// reverse_fold_tree<> below.
+struct Terminals
+  : or_<
+        transform::arg<transform::right<assign<_, terminal<_> > > >
+      , transform::arg<terminal<_> >
+    >
+{};
+
+// This transform matches expressions of the form (_1=1,'a',"b")
+// (note the use of the comma operator) and transforms it into a
+// Fusion cons list of their arguments. In this case, the result
+// would be cons(1, cons('a', cons("b", nil()))).
+struct FoldTreeToList
+  /*<< Fold all terminals that are separated by commas into a Fusion cons list. >>*/
+  : transform::reverse_fold_tree<tag::comma, transform::list<Terminals>, fusion::nil>
 {};
 //]
 
@@ -159,6 +182,12 @@ void test_examples()
     BOOST_CHECK_EQUAL(args.car, 1);
     BOOST_CHECK_EQUAL(args.cdr.car, 'a');
     BOOST_CHECK_EQUAL(args.cdr.cdr.car, std::string("b"));
+
+    cons<int, cons<char, cons<char const (&)[2]> > > lst(FoldTreeToList::call( (_1 = 1, 'a', "b"), i, i ));
+    BOOST_CHECK_EQUAL(lst.car, 1);
+    BOOST_CHECK_EQUAL(lst.cdr.car, 'a');
+    BOOST_CHECK_EQUAL(lst.cdr.cdr.car, std::string("b"));
+
 }
 
 

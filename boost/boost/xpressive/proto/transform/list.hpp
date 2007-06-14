@@ -28,7 +28,7 @@ namespace boost { namespace proto { namespace transform
     struct list
       : Grammar
     {
-        list();
+        list() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
@@ -53,7 +53,7 @@ namespace boost { namespace proto { namespace transform
     struct tail
       : Grammar
     {
-        tail();
+        tail() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply

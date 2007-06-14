@@ -311,9 +311,11 @@ namespace boost { namespace spirit2
             >
           , case_sensitive<
                 proto::trans::construct<                                    // char_('a','z')
-                    char_range
-                  , proto::trans::arg< proto::trans::arg_c< CharRangeParser, 1 > >
-                  , proto::trans::arg< proto::trans::arg_c< CharRangeParser, 2 > >
+                    CharRangeParser
+                  , char_range(
+                        proto::trans::arg< proto::trans::arg_c< proto::_, 1 > >
+                      , proto::trans::arg< proto::trans::arg_c< proto::_, 2 > >
+                    )
                 >
             >
         >

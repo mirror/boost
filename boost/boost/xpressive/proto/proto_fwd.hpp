@@ -412,11 +412,7 @@ namespace boost { namespace proto
         template<typename Grammar>
         struct pass_through;
 
-        template<
-            typename Type
-          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename Grammar, void)
-          , typename Dummy = void
-        >
+        template<typename Grammar, typename ConstructorFun>
         struct construct;
     }
 

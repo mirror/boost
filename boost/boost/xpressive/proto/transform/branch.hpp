@@ -23,7 +23,7 @@ namespace boost { namespace proto { namespace transform
     struct branch
       : Grammar
     {
-        branch();
+        branch() {}
 
         template<typename Expr, typename State, typename Visitor>
         struct apply

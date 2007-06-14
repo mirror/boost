@@ -33,23 +33,33 @@
 
     namespace boost { namespace proto
     {
+    /// INTERNAL ONLY
+    ///
     #define BOOST_PROTO_ARG(z, n, data)\
         typedef typename Args::BOOST_PP_CAT(arg, n) BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
         BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type) BOOST_PP_CAT(arg, n);\
         /**/
 
+    /// INTERNAL ONLY
+    ///
     #define BOOST_PROTO_VOID(z, n, data)\
         typedef void BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
         /**/
 
+    /// INTERNAL ONLY
+    ///
     #define BOOST_PROTO_AS_OP(z, n, data)\
         proto::as_arg(BOOST_PP_CAT(a,n))\
         /**/
 
+    /// INTERNAL ONLY
+    ///
     #define BOOST_PROTO_UNREF_ARG_TYPE(z, n, data)\
         typename result_of::unref<typename Args::BOOST_PP_CAT(arg, n)>::const_reference\
         /**/
 
+    /// INTERNAL ONLY
+    ///
     #define BOOST_PROTO_UNREF_ARG(z, n, data)\
         proto::unref(this->BOOST_PP_CAT(arg, n))\
         /**/
