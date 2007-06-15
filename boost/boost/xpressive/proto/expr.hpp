@@ -11,9 +11,10 @@
     #define BOOST_PROTO_EXPR_HPP_EAN_04_01_2005
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
-    #include <boost/preprocessor/inc.hpp>
-    #include <boost/preprocessor/dec.hpp>
     #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/arithmetic/inc.hpp>
+    #include <boost/preprocessor/arithmetic/dec.hpp>
+    #include <boost/preprocessor/selection/max.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/repeat.hpp>
@@ -123,23 +124,15 @@
         ///             type is \c boost::proto::tag::terminal, in which case
         ///             \c Args must be \c proto::args1\<T\>, where \c T can be any
         ///             type.
-    #if 0 == BOOST_PP_ITERATION()
-        #define IS_TERMINAL 1
-        #define ARG_COUNT 1
-        template<typename Args>
-        struct expr<proto::tag::terminal, Args, 1>
-        {
-            typedef proto::tag::terminal tag_type;
-            typedef mpl::long_<1> arity;
-    #else
-        #define IS_TERMINAL 0
-        #define ARG_COUNT BOOST_PP_ITERATION()
+
+    #define ARG_COUNT BOOST_PP_MAX(1, BOOST_PP_ITERATION())
+    #define IS_TERMINAL 0 == BOOST_PP_ITERATION()
+
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {
             typedef Tag tag_type;
             typedef mpl::long_<BOOST_PP_ITERATION() > arity;
-    #endif
             typedef expr type;
             typedef Args args_type;
             typedef default_domain domain;

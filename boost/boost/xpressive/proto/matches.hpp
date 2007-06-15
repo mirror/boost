@@ -281,13 +281,8 @@
             {};
 
             template<typename Args1, typename Args2>
-            struct matches_impl< expr<tag::terminal, Args1, 1>, expr<tag::terminal, Args2, 1> >
+            struct matches_impl< expr<tag::terminal, Args1, 0>, expr<tag::terminal, Args2, 0> >
               : terminal_matches<typename Args1::arg0, typename Args2::arg0>
-            {};
-
-            template<typename Args1, typename Args2>
-            struct matches_impl< expr<tag::terminal, Args1, 1>, expr<proto::_, Args2, 1> >
-              : mpl::false_
             {};
 
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\

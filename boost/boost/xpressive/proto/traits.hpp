@@ -93,7 +93,7 @@
                   , remove_cv<T>
                 >::type arg0_type;
 
-                typedef expr<proto::tag::terminal, args1<arg0_type> > expr_type;
+                typedef expr<proto::tag::terminal, args0<arg0_type> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
                 typedef type result_type;
 
@@ -121,7 +121,7 @@
             template<typename T, typename Domain, typename EnableIf>
             struct as_arg
             {
-                typedef expr<proto::tag::terminal, args1<T &> > expr_type;
+                typedef expr<proto::tag::terminal, args0<T &> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
 
                 BOOST_PROTO_WITH_ALIAS_(T, T2)
@@ -181,7 +181,7 @@
         struct terminal : has_identity_transform
         {
             terminal();
-            typedef expr<proto::tag::terminal, args1<T> > type;
+            typedef expr<proto::tag::terminal, args0<T> > type;
             typedef proto::tag::terminal tag_type;
             typedef T arg0_type;
         };
@@ -303,7 +303,6 @@
 
     #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/traits.hpp>))
     #include BOOST_PP_ITERATE()
-    #undef BOOST_PP_ITERATION_PARAMS_1
 
     #undef BOOST_PROTO_ARG
     #undef BOOST_PROTO_ARG_N_TYPE

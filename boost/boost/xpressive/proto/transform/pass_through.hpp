@@ -23,29 +23,27 @@
     {
         namespace detail
         {
-            template<typename Grammar, typename Expr, typename State, typename Visitor, typename Tag = typename Expr::tag_type, long Arity = Expr::arity::value>
+            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::arity::value>
             struct pass_through_impl {};
 
-            #define BOOST_PROTO_DEFINE_META_COMPILE(z, n, data)\
+            #define BOOST_PROTO_DEFINE_TRANSFORM_TYPE(z, n, data)\
                 typename Grammar::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
                     ::template apply<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)::type, State, Visitor>\
                 ::type
 
-            #define BOOST_PROTO_DEFINE_COMPILE(z, n, data)\
+            #define BOOST_PROTO_DEFINE_TRANSFORM(z, n, data)\
                 Grammar::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)::call(\
                     expr.BOOST_PP_CAT(arg, n).cast(), state, visitor\
                 )
 
             #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/pass_through.hpp>))
-
             #include BOOST_PP_ITERATE()
 
-            #undef BOOST_PP_ITERATION_PARAMS_1
-            #undef BOOST_PROTO_DEFINE_COMPILE
-            #undef BOOST_PROTO_DEFINE_META_COMPILE
+            #undef BOOST_PROTO_DEFINE_TRANSFORM
+            #undef BOOST_PROTO_DEFINE_TRANSFORM_TYPE
 
             template<typename Grammar, typename Expr, typename State, typename Visitor>
-            struct pass_through_impl<Grammar, Expr, State, Visitor, tag::terminal, 1>
+            struct pass_through_impl<Grammar, Expr, State, Visitor, 0>
             {
                 typedef Expr type;
 
@@ -64,7 +62,7 @@
 
             template<typename Expr, typename State, typename Visitor>
             struct apply
-              : detail::pass_through_impl<Grammar, Expr, State, Visitor, typename Expr::tag_type, Expr::arity::value>
+              : detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::arity::value>
             {};
 
             template<typename Expr, typename State, typename Visitor>
@@ -84,7 +82,7 @@
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : transform::detail::pass_through_impl<Grammar, Expr, State, Visitor, typename Expr::tag_type, Expr::arity::value>
+          : transform::detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::arity::value>
         {};
 
         template<typename Expr, typename State, typename Visitor>
@@ -103,13 +101,13 @@
 
     #define N BOOST_PP_ITERATION()
 
-            template<typename Grammar, typename Expr, typename State, typename Visitor, typename Tag>
-            struct pass_through_impl<Grammar, Expr, State, Visitor, Tag, N>
+            template<typename Grammar, typename Expr, typename State, typename Visitor>
+            struct pass_through_impl<Grammar, Expr, State, Visitor, N>
             {
                 typedef expr<
-                    Tag
+                    typename Expr::tag_type
                   , BOOST_PP_CAT(args, N)<
-                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_META_COMPILE, ~)
+                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM_TYPE, ~)
                     >
                 > type;
 
@@ -121,7 +119,7 @@
                 #endif
                 {
                     type that = {
-                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_COMPILE, ~)
+                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM, ~)
                     };
                     #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
                     // Without this, MSVC complains that "that" is uninitialized,

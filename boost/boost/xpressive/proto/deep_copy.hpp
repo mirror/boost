@@ -24,11 +24,11 @@
     {
         namespace detail
         {
-            template<typename Expr, typename Tag = typename Expr::tag_type, long Arity = Expr::arity::value>
+            template<typename Expr, long Arity = Expr::arity::value>
             struct deep_copy_impl;
 
             template<typename Expr>
-            struct deep_copy_impl<Expr, tag::terminal, 1>
+            struct deep_copy_impl<Expr, 0>
             {
                 typedef typename terminal<typename result_of::arg<Expr>::type>::type expr_type;
                 typedef typename Expr::domain::template apply<expr_type>::type type;
@@ -82,10 +82,8 @@
             proto::deep_copy(expr.cast().BOOST_PP_CAT(arg, n))
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/deep_copy.hpp>))
-
         #include BOOST_PP_ITERATE()
 
-        #undef BOOST_PP_ITERATION_PARAMS_1
         #undef BOOST_PROTO_DEFINE_DEEP_COPY_FUN
         #undef BOOST_PROTO_DEFINE_DEEP_COPY_TYPE
         }
@@ -98,10 +96,10 @@
 
     #define N BOOST_PP_ITERATION()
 
-            template<typename Expr, typename Tag>
-            struct deep_copy_impl<Expr, Tag, N>
+            template<typename Expr>
+            struct deep_copy_impl<Expr, N>
             {
-                typedef expr<Tag, BOOST_PP_CAT(args, N)<
+                typedef expr<typename Expr::tag_type, BOOST_PP_CAT(args, N)<
                     BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
                 > > expr_type;
                 typedef typename Expr::domain::template apply<expr_type>::type type;

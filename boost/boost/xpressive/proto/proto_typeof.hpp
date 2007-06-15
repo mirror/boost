@@ -67,6 +67,7 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref_, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::expr, (typename)(typename)(long))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::literal, (typename)(typename))
 
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args0, 1)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args1, 1)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args2, 2)
 // can't use PP metaprogramming here because all typeof registrations

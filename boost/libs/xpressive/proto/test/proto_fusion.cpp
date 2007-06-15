@@ -38,7 +38,7 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::tag::bitwise_or)
 }
 
 template<typename Args>
-std::ostream &operator <<(std::ostream &sout, boost::proto::expr<boost::proto::tag::terminal, Args, 1> const *op)
+std::ostream &operator <<(std::ostream &sout, boost::proto::expr<boost::proto::tag::terminal, Args, 0> const *op)
 {
     return sout << boost::proto::arg(*op);
 }

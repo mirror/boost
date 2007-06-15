@@ -37,12 +37,12 @@ namespace boost { namespace proto
                     Tag
                   , args2<
                         ref_<Left>
-                      , typename Left::domain::template apply<expr<tag::terminal, args1<Right &> > >::type
+                      , typename Left::domain::template apply<expr<tag::terminal, args0<Right &> > >::type
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args1<Right &> > term_type;
+            typedef expr<tag::terminal, args0<Right &> > term_type;
             typedef expr<Tag, args2<ref_<Left>, typename Left::domain::template apply<term_type>::type> > expr_type;
 
             static typename Left::domain::template apply<expr_type>::type
@@ -61,13 +61,13 @@ namespace boost { namespace proto
               , expr<
                     Tag
                   , args2<
-                        typename Right::domain::template apply<expr<tag::terminal, args1<Left &> > >::type
+                        typename Right::domain::template apply<expr<tag::terminal, args0<Left &> > >::type
                       , ref_<Right>
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args1<Left &> > term_type;
+            typedef expr<tag::terminal, args0<Left &> > term_type;
             typedef expr<Tag, args2<typename Right::domain::template apply<term_type>::type, ref_<Right> > > expr_type;
 
             static typename Right::domain::template apply<expr_type>::type

@@ -100,7 +100,7 @@ namespace boost { namespace proto
             {}
 
             template<typename Args>
-            void operator()(expr<tag::terminal, Args, 1> const &expr) const
+            void operator()(expr<tag::terminal, Args, 0> const &expr) const
             {
                 this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
                     << "terminal(" << proto::arg(expr) << ")\n";

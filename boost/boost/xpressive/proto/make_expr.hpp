@@ -378,7 +378,7 @@
             {
                 typedef expr<
                     tag::terminal
-                  , args1<typename fusion::result_of::value_at_c<Sequence, 0>::type>
+                  , args0<typename fusion::result_of::value_at_c<Sequence, 0>::type>
                 > expr_type;
 
                 typedef typename Domain::template apply<expr_type>::type type;
@@ -412,7 +412,7 @@
             struct make_expr_<tag::terminal, Domain, A>
             {
                 typedef typename add_reference<A>::type reference;
-                typedef expr<tag::terminal, args1<reference> > expr_type;
+                typedef expr<tag::terminal, args0<reference> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
 
                 static type const call(reference a)

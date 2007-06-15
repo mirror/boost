@@ -23,6 +23,7 @@
     #include <boost/preprocessor/repetition/enum_trailing.hpp>
     #include <boost/preprocessor/arithmetic/inc.hpp>
     #include <boost/preprocessor/tuple/elem.hpp>
+    #include <boost/preprocessor/selection/max.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/typeof/typeof.hpp>
     #include <boost/utility/result_of.hpp>
@@ -228,7 +229,7 @@
         BOOST_PROTO_BINARY_OP_RESULT(^=, proto::tag::bitwise_xor_assign)
 
         template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::terminal, 1>
+        struct default_eval<Expr, Context, proto::tag::terminal, 0>
         {
             typedef
                 typename mpl::if_<
@@ -317,7 +318,7 @@
     #define BOOST_PROTO_EVAL_N(Z, N, Data)\
         proto::eval(proto::arg_c<N>(BOOST_PP_TUPLE_ELEM(2, 0, Data)), BOOST_PP_TUPLE_ELEM(2, 1, Data))
 
-    #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/context.hpp>))
+    #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/context.hpp>))
     #include BOOST_PP_ITERATE()
 
     #undef BOOST_PROTO_ARG_N_TYPE
@@ -360,7 +361,9 @@
 #else
 
     #define N BOOST_PP_ITERATION()
+    #define ARG_COUNT BOOST_PP_MAX(1, N)
 
+        #if N != 0
         // Handle function specially
         template<typename Expr, typename Context>
         struct default_eval<Expr, Context, proto::tag::function, N>
@@ -386,6 +389,7 @@
                 );
             }
         };
+        #endif
 
         template<typename Expr, typename Context>
         struct callable_eval<Expr, Context, N>
@@ -401,7 +405,7 @@
             {
                 inner_context();
                 struct private_type_ { private_type_ const &operator,(int) const; };
-                typedef private_type_ const &(*pointer_to_function)(BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(N), detail::dont_care BOOST_PP_INTERCEPT));
+                typedef private_type_ const &(*pointer_to_function)(BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(ARG_COUNT), detail::dont_care BOOST_PP_INTERCEPT));
                 operator pointer_to_function() const;
             };
 
@@ -410,7 +414,7 @@
                 typename boost::result_of<
                     Context(
                         typename Expr::tag_type
-                        BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N_TYPE, Expr)
+                        BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N_TYPE, Expr)
                     )
                 >::type
             result_type;
@@ -424,7 +428,7 @@
                             callable_eval::check(
                                 (static_cast<inner_context &>(const_cast<context_type &>(context))(
                                     typename Expr::tag_type()
-                                    BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N, expr)
+                                    BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
                                 ), 0)
                             )
                     )));
@@ -442,7 +446,7 @@
             {
                 return context(
                     typename Expr::tag_type()
-                    BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N, expr)
+                    BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
                 );
             }
 
@@ -453,5 +457,6 @@
         };
 
     #undef N
+    #undef ARG_COUNT
 
 #endif
