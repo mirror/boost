@@ -18,6 +18,8 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/mpl/lambda.hpp>
     #include <boost/mpl/apply_wrap.hpp>
+    #include <boost/type_traits/is_function.hpp>
+    #include <boost/type_traits/remove_pointer.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
@@ -46,6 +48,18 @@
             struct apply_if_<Result, Expr, Result>
               : nested_type<Result>
             {};
+
+            template<typename Arg, bool IsFunction = is_function<typename remove_pointer<Arg>::type>::value>
+            struct as_transform
+            {
+                typedef Arg type;
+            };
+
+            template<typename Arg>
+            struct as_transform<Arg, true>
+            {
+                typedef construct<_, typename remove_pointer<Arg>::type> type;
+            };
         }
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/construct.hpp>))
@@ -76,6 +90,8 @@
             }
 
         private:
+            /// INTERNAL ONLY
+            ///
             template<typename Expr, typename State, typename Visitor>
             static typename apply<Expr, State, Visitor>::type
             call_(Expr const &expr, State const &state, Visitor &visitor, mpl::true_)
@@ -83,11 +99,13 @@
                 typename Grammar::template apply<Expr, State, Visitor>::type const &expr2
                     = Grammar::call(expr, state, visitor);
                 typename apply<Expr, State, Visitor>::type that = {
-                    BOOST_PP_ENUM_BINARY_PARAMS(N, Arg, ::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
+                    BOOST_PP_ENUM_BINARY_PARAMS(N, detail::as_transform<Arg, >::type::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
                 };
                 return that;
             }
 
+            /// INTERNAL ONLY
+            ///
             template<typename Expr, typename State, typename Visitor>
             static typename apply<Expr, State, Visitor>::type
             call_(Expr const &expr, State const &state, Visitor &visitor, mpl::false_)
@@ -95,7 +113,7 @@
                 typename Grammar::template apply<Expr, State, Visitor>::type const &expr2
                     = Grammar::call(expr, state, visitor);
                 return typename apply<Expr, State, Visitor>::type(
-                    BOOST_PP_ENUM_BINARY_PARAMS(N, Arg, ::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
+                    BOOST_PP_ENUM_BINARY_PARAMS(N, detail::as_transform<Arg, >::type::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
                 );
             }
         };
