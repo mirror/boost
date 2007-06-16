@@ -16,8 +16,6 @@
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
-    #include <boost/mpl/lambda.hpp>
-    #include <boost/mpl/apply_wrap.hpp>
     #include <boost/type_traits/is_function.hpp>
     #include <boost/type_traits/remove_pointer.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -27,6 +25,8 @@
     {
         namespace detail
         {
+            using proto::detail::is_placeholder_expression;
+
             template<typename T, bool HasType = mpl::aux::has_type<T>::value>
             struct nested_type
             {
@@ -39,16 +39,6 @@
                 typedef T type;
             };
 
-            template<typename Result, typename Expr, typename Lambda = typename mpl::lambda<Result>::type>
-            struct apply_if_
-              : mpl::apply_wrap1<Lambda, Expr>
-            {};
-
-            template<typename Result, typename Expr>
-            struct apply_if_<Result, Expr, Result>
-              : nested_type<Result>
-            {};
-
             template<typename Arg, bool IsFunction = is_function<typename remove_pointer<Arg>::type>::value>
             struct as_transform
             {
@@ -60,10 +50,42 @@
             {
                 typedef construct<_, typename remove_pointer<Arg>::type> type;
             };
+
+            template<typename R, typename Expr, typename State, typename Visitor
+                     BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<R>::value)>
+            struct apply_aux2_;
+
+            template<typename R, typename Expr, typename State, typename Visitor,
+                     bool IsPlaceholder = is_placeholder_expression<R>::value>
+            struct apply_aux_
+            {
+                typedef R type;
+            };
+
+            template<typename R, typename Expr, typename State, typename Visitor>
+            struct apply_aux_<R, Expr, State, Visitor, true>
+              : apply_aux2_<R, Expr, State, Visitor>
+            {};
+
+            template<typename R, typename Expr, typename State, typename Visitor, typename EnableIf = void>
+            struct apply_
+              : apply_aux_<R, Expr, State, Visitor>
+            {};
+
+            template<typename R, typename Expr, typename State, typename Visitor>
+            struct apply_<R, Expr, State, Visitor, typename R::proto_is_placeholder_>
+              : nested_type<typename R::template apply<Expr, State, Visitor>::type>
+            {};
         }
+
+        #define BOOST_PROTO_APPLY_(Z, N, DATA)                                                      \
+            typename apply_<BOOST_PP_CAT(DATA, N), Expr, State, Visitor>::type                      \
+            /**/
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/construct.hpp>))
         #include BOOST_PP_ITERATE()
+
+        #undef BOOST_PROTO_APPLY_
 
     }}}
 
@@ -73,13 +95,27 @@
 
     #define N BOOST_PP_ITERATION()
 
+        #if N > 0
+        namespace detail
+        {
+            template<
+                template<BOOST_PP_ENUM_PARAMS(N, typename BOOST_PP_INTERCEPT)> class T
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, typename G),
+                typename Expr, typename State, typename Visitor
+            >
+            struct apply_aux2_<T<BOOST_PP_ENUM_PARAMS(N, G)>, Expr, State, Visitor BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N)>
+              : nested_type<T<BOOST_PP_ENUM(N, BOOST_PROTO_APPLY_, G)> >
+            {};
+        }
+        #endif
+
         template<typename Grammar, typename Result BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Arg)>
         struct construct<Grammar, Result(BOOST_PP_ENUM_PARAMS(N, Arg))>
           : Grammar
         {
             template<typename Expr, typename State, typename Visitor>
             struct apply
-              : detail::apply_if_<Result, typename Grammar::template apply<Expr, State, Visitor>::type>
+              : detail::apply_<Result, typename Grammar::template apply<Expr, State, Visitor>::type, State, Visitor>
             {};
 
             template<typename Expr, typename State, typename Visitor>

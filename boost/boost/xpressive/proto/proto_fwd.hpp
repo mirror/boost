@@ -165,7 +165,12 @@ namespace boost { namespace proto
     struct proto_ref_tag;
     struct proto_ref_iterator_tag;
 
-    struct _;
+    namespace placeholder_detail_
+    {
+        struct _;
+    }
+
+    using placeholder_detail_::_;
 
     struct default_generator;
 

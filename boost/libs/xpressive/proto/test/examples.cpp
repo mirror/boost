@@ -167,8 +167,8 @@ struct FoldTreeToList
 // them to doubles.
 struct Promote
   : or_<
-        /*<< Match a `terminal<float>`, then construct a `terminal<double>` with the `float`. >>*/
-        transform::construct<terminal<float>, terminal<double>(transform::arg<_>) >
+        /*<< Match a `terminal<float>`, then construct a `terminal<double>::type` with the `float`. >>*/
+        transform::construct<terminal<float>, terminal<double>::type(transform::arg<_>) >
       , terminal<_>
       /*<< `nary_expr<>` has a pass-through transform which will transform each child
       sub-expression using the `Promote` transform. >>*/
@@ -177,9 +177,32 @@ struct Promote
 {};
 //]
 
+//[ LazyMakePair
+struct make_pair_tag {};
+terminal<make_pair_tag>::type const make_pair_ = {{}};
+
+// This transform matches lazy function invocations like
+// `make_pair_(1, 3.14)` and actually builds a `std::pair<>`
+// from the arguments.
+struct MakePair
+  : transform::construct<
+        /*<< Match expressions like `make_pair_(1, 3.14)` >>*/
+        function<terminal<make_pair_tag>, terminal<_>, terminal<_> >
+      /*<< Return `std::pair<F,S>(f,s)` where `f` and `s` are the
+      first and second arguments to the lazy `make_pair_()` function >>*/
+      , std::pair<
+            transform::arg<transform::arg_c<_, 1> >
+          , transform::arg<transform::arg_c<_, 2> >
+        >(
+            transform::arg<transform::arg_c<_, 1> >
+          , transform::arg<transform::arg_c<_, 2> >
+        )
+    >
+{};
+//]
+
 void test_examples()
 {
-
     //[ CalculatorArityTest
     int i = 0; // not used, dummy state and visitor parameter
 
@@ -208,6 +231,18 @@ void test_examples()
         terminal<double>::type
       , terminal<double>::type
     >::type p = Promote::call( lit(1.f) + 2.f, i, i );
+
+    //[ LazyMakePairTest
+    int j = 0; // not used, dummy state and visitor parameter
+
+    std::pair<int, double> p2 = MakePair::call( make_pair_(1, 3.14), j, j );
+    
+    std::cout << p2.first << std::endl;
+    std::cout << p2.second << std::endl;
+    //]
+
+    BOOST_CHECK_EQUAL(p2.first, 1);
+    BOOST_CHECK_EQUAL(p2.second, 3.14);
 }
 
 

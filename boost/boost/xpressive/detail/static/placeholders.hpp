@@ -29,6 +29,8 @@ struct mark_placeholder
     BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, true)
 
     int mark_number_;
+
+    //operator int() const { return this->mark_number_; }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

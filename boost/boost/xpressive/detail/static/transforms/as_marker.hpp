@@ -17,8 +17,37 @@
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 
+//#include <boost/xpressive/proto/transform/construct.hpp>
+
 namespace boost { namespace xpressive { namespace detail
 {
+
+    //template<typename Grammar>
+    //struct as_marker
+    //  : proto::transform::construct<
+    //        proto::transform::identity<Grammar>
+    //      , proto::shift_right<
+    //            proto::terminal<mark_begin_matcher>::type
+    //          , proto::shift_right<
+    //                proto::transform::right<proto::_>
+    //              , proto::terminal<mark_end_matcher>::type
+    //            >
+    //        >(
+    //            proto::terminal<mark_begin_matcher>::type(
+    //                mark_begin_matcher(proto::transform::arg<proto::transform::left<proto::_> > )
+    //            )
+    //          , proto::shift_right<
+    //                proto::transform::right<proto::_>
+    //              , proto::terminal<mark_end_matcher>::type
+    //            >(
+    //                proto::transform::right<proto::_>
+    //              , proto::terminal<mark_end_matcher>::type(
+    //                    mark_end_matcher(proto::transform::arg<proto::transform::left<proto::_> > )
+    //                )
+    //            )
+    //        )
+    //    >
+    //{};
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_marker

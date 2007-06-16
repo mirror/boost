@@ -1066,7 +1066,7 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="_"><inherit access="public">boost::proto::has_identity_transform</inherit><typedef name="proto_base_expr"><type><classname>_</classname></type></typedef></struct><struct name="if_"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="if_"><template>
       <template-type-parameter name="Pred"/>
     </template><inherit access="public">boost::proto::has_identity_transform</inherit><typedef name="proto_base_expr"><type><classname>if_</classname></type></typedef></struct><struct name="not_"><template>
       <template-type-parameter name="Pred"/>

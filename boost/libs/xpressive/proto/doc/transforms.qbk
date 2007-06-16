@@ -826,7 +826,7 @@ typical usage of the `construct<>` transform is like this:
 
     transform::construct<
         terminal<float>
-      , terminal<double>(transform::arg<_>)
+      , terminal<double>::type(transform::arg<_>)
     >
 
 The first template parameter is the grammar to match; in this case, terminals
@@ -853,33 +853,27 @@ where `s` and `v` are some state and visitor parameters, and `E2` is the return
 type of `G::call(e,s,v)`. Note that `G`'s transform is applied first, followed
 by `T`'s transform.
 
-If the result type is an MPL Placeholder expression, then the placeholder is
-invoked with the type `E2` and the result is taken to be the return type.
-Consider the following code that matches an invocation of a lazy `make_pair`
-function, and actually returns a `std::pair<>` of the correct type.
+The result type itself may be specified in terms of Proto transforms. In that
+case, the return type is the result of applying the transforms and substituting
+the transforms with the results. Consider the following code that matches an
+invocation of a lazy `make_pair_` function, and actually returns a 
+`std::pair<>` of the correct type.
 
-    struct lazy_make_pair {};
-    
-    struct MakePair
-      : transform::construct<
-            function<terminal<lazy_make_pair>, terminal<_>, terminal<_> >
-          , std::pair<
-                proto::result_of::arg<proto::result_of::left<mpl::_> >
-              , proto::result_of::arg<proto::result_of::right<mpl::_> >
-            >(transform::arg<transform::left<_> >, transform::arg<transform::right<_> >)
-        >
-    {};
+[LazyMakePair]
 
-Notice that the result type, `std::pair< ... >` is a MPL Placeholder expression
-because it uses the MPL placeholder `mpl::_`. Also notice it uses Proto's
-`left<>` and `right<>` meta-functions. These are distinct from Proto's `left<>`
-and `right<>` transforms, so be careful. The transforms are in the `transform`
-namespace, and they accept grammars as their template parameter. The
-meta-functions are in the `proto::result_of` namespace, and they accept
-expressions as their template parameter.
+Notice that the result type, `std::pair<...>`, is specified in terms of Proto
+transforms. Notice also that Proto transforms are used to specify how to
+construct the `std::pair<>` object. We can now use the `MakePair` transform to
+convert a lazy `make_pair_()` function invocation into an actual `std::pair<>`:
 
+[LazyMakePairTest]
 
+The above code would display the following:
 
+[pre
+1
+3.14
+]
 
 [h4 [^pass_through<>]]
 
