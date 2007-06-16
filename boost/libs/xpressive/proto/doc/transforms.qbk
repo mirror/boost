@@ -875,6 +875,31 @@ The above code would display the following:
 3.14
 ]
 
+When building the result type, if the result of applying a Proto transform is a
+type that has a nested `::type` member typedef, then that type is used instead.
+For instance, here is a transform that matches an integer and negates it lazily
+by wrapping it in a `negate<>` node.
+
+[NegateInt]
+
+The return type is `negate<_>`, but what is actually constructed is 
+`negate<terminal<int>::type>::type`. This behavior should seem familiar if you
+have ever used MPL Placeholder expressions.
+
+The `construct<>` transform gives you a simple and convenient syntax for
+creating temporary sub-objects. In the `Constructor` expression
+`ResultType(Transform1, Transform2)`, if the type of `Transform1` is a function
+type, then it is converted into the transform `construct<_, Transform1>`. The
+following example demonstrates how to match an integer, promote it to a long
+integer, and lazily square it.
+
+[SquareAndPromoteInt]
+
+The "arguments" to the constructor are `terminal<long>::type(transform::arg<_>)`,
+which is short-cut syntax for a nested `construct<>` transform. [footnote The
+short-cut syntax for nested constructors does not work on MSVC due to compiler
+bugs.]
+
 [h4 [^pass_through<>]]
 
     namespace boost { namespace proto { namespace transform

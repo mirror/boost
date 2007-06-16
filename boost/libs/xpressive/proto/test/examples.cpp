@@ -6,6 +6,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
+#include <boost/config.hpp>
 #include <boost/mpl/min_max.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
@@ -201,6 +202,29 @@ struct MakePair
 {};
 //]
 
+//[ NegateInt
+struct NegateInt
+  : transform::construct<
+        terminal<int>
+      , negate<_>(_)
+    >
+{};
+//]
+
+#ifndef BOOST_MSVC
+//[ SquareAndPromoteInt
+struct SquareAndPromoteInt
+  : transform::construct<
+        terminal<int>
+      , multiplies<terminal<long>::type, terminal<long>::type>::type(
+            terminal<long>::type(transform::arg<_>)
+          , terminal<long>::type(transform::arg<_>)
+        )
+    >
+{};
+//]
+#endif
+
 void test_examples()
 {
     //[ CalculatorArityTest
@@ -243,6 +267,11 @@ void test_examples()
 
     BOOST_CHECK_EQUAL(p2.first, 1);
     BOOST_CHECK_EQUAL(p2.second, 3.14);
+
+    NegateInt::call(lit(1), i, i);
+#ifndef BOOST_MSVC
+    SquareAndPromoteInt::call(lit(1), i, i);
+#endif
 }
 
 
