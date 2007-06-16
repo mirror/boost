@@ -52,7 +52,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             typedef typename proto::result_of::arg<typename proto::result_of::left<Expr>::type>::type modifier_type;
             typedef typename modifier_type::BOOST_NESTED_TEMPLATE apply<Visitor>::type visitor_type;
-            typedef typename proto::trans::right<Grammar>::template apply<Expr, State, visitor_type>::type type;
+            typedef typename proto::transform::right<Grammar>::template apply<Expr, State, visitor_type>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
@@ -64,7 +64,7 @@ namespace boost { namespace xpressive { namespace detail
             new_visitor.swap(visitor);
             scoped_swap<Visitor, new_visitor_type> const undo = {&visitor, &new_visitor};
             detail::ignore_unused(undo);
-            return proto::trans::right<Grammar>::call(expr, state, new_visitor);
+            return proto::transform::right<Grammar>::call(expr, state, new_visitor);
         }
     };
 

@@ -442,7 +442,7 @@
             {};
 
             template<typename Tag, typename Domain, typename Sequence>
-            struct unpack_expr<Tag, Domain, Sequence, typename Domain::boost_proto_is_domain_>
+            struct unpack_expr<Tag, Domain, Sequence, typename Domain::proto_is_domain_>
               : detail::unpack_expr_<
                     Tag
                   , Domain
@@ -474,7 +474,7 @@
                 Tag
               , Domain
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A)
-              , typename Domain::boost_proto_is_domain_
+              , typename Domain::proto_is_domain_
             >
               : detail::make_expr_<
                     Tag

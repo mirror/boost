@@ -182,7 +182,7 @@ namespace boost { namespace proto
 
     struct deduce_domain;
 
-    template<typename Expr, typename Derived, typename Domain = default_domain, typename Tag = typename Expr::tag_type>
+    template<typename Expr, typename Derived, typename Domain = default_domain, typename Tag = typename Expr::proto_tag>
     struct extends;
 
     struct default_context;
@@ -415,8 +415,6 @@ namespace boost { namespace proto
         template<typename Grammar, typename ConstructorFun>
         struct construct;
     }
-
-    namespace trans = transform;
 
 #define BOOST_PROTO_IDENTITY_TRANSFORM()\
     template<typename Expr_, typename State_, typename Visitor_>\

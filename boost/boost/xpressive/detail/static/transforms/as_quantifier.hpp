@@ -65,7 +65,7 @@ namespace boost { namespace xpressive { namespace detail
     struct as_simple_quantifier
       : Grammar
     {
-        typedef proto::trans::arg<Grammar> grammar_type;
+        typedef proto::transform::arg<Grammar> grammar_type;
         as_simple_quantifier();
 
         template<typename Expr, typename State, typename Visitor>
@@ -85,8 +85,8 @@ namespace boost { namespace xpressive { namespace detail
             return apply<Expr, State, Visitor>::type::make(
                 typename apply<Expr, State, Visitor>::matcher_type(
                     xpr
-                  , min_type<typename Expr::tag_type>::value
-                  , max_type<typename Expr::tag_type>::value
+                  , min_type<typename Expr::proto_tag>::value
+                  , max_type<typename Expr::proto_tag>::value
                   , xpr.get_width().value()
                 )
             );
@@ -164,8 +164,8 @@ namespace boost { namespace xpressive { namespace detail
             int mark_number = proto::arg(proto::left(marked_sub)).mark_number_;
             BOOST_ASSERT(0 != mark_number);
 
-            unsigned min_ = min_type<typename Expr::tag_type>::value;
-            unsigned max_ = max_type<typename Expr::tag_type>::value;
+            unsigned min_ = min_type<typename Expr::proto_tag>::value;
+            unsigned max_ = max_type<typename Expr::proto_tag>::value;
 
             repeat_begin_matcher begin(mark_number);
             repeat_end_matcher<Greedy> end(mark_number, min_, max_);
@@ -250,7 +250,7 @@ namespace boost { namespace xpressive { namespace detail
     // as_optional
     template<typename Grammar, bool Greedy>
     struct as_optional
-      : proto::trans::conditional<
+      : proto::transform::conditional<
             proto::matches<mpl::_, IsMarkerOrRepeater>
           , as_mark_optional<Grammar, Greedy>
           , as_default_optional<Grammar, Greedy>
@@ -282,7 +282,7 @@ namespace boost { namespace xpressive { namespace detail
     // as_default_quantifier_impl
     template<bool Greedy, uint_t Max>
     struct as_default_quantifier_impl<Greedy, 0, Max>
-      : proto::trans::compose<
+      : proto::transform::compose<
             as_default_quantifier_impl<Greedy, 1, Max>
           , make_optional_<Greedy>
         >
@@ -292,8 +292,8 @@ namespace boost { namespace xpressive { namespace detail
     // as_default_quantifier_impl
     template<bool Greedy>
     struct as_default_quantifier_impl<Greedy, 0, 1>
-      : proto::trans::compose<
-            proto::trans::arg<proto::_>
+      : proto::transform::compose<
+            proto::transform::arg<proto::_>
           , make_optional_<Greedy>
         >
     {};
@@ -310,8 +310,8 @@ namespace boost { namespace xpressive { namespace detail
         struct apply
           : as_default_quantifier_impl<
                 Greedy
-              , min_type<typename Expr::tag_type>::value
-              , max_type<typename Expr::tag_type>::value
+              , min_type<typename Expr::proto_tag>::value
+              , max_type<typename Expr::proto_tag>::value
             >::template apply<Expr, State, Visitor>
         {};
 
@@ -321,8 +321,8 @@ namespace boost { namespace xpressive { namespace detail
         {
             return as_default_quantifier_impl<
                 Greedy
-              , min_type<typename Expr::tag_type>::value
-              , max_type<typename Expr::tag_type>::value
+              , min_type<typename Expr::proto_tag>::value
+              , max_type<typename Expr::proto_tag>::value
             >::call(expr, state, visitor);
         }
     };

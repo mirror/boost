@@ -86,14 +86,14 @@ namespace boost { namespace xpressive { namespace detail
     //  populates an array of characters
     template<typename Char>
     struct ListSet
-      : proto::trans::left<
+      : proto::transform::left<
             proto::or_<
                 proto::comma<
                     next<ListSet<Char> >
                   , push_back<CharLiteral<Char> >
                 >
               , proto::assign<
-                    proto::trans::always<set_initializer_type, mpl::int_<1> >
+                    proto::transform::always<set_initializer_type, mpl::int_<1> >
                   , push_back<CharLiteral<Char> >
                 >
             >
@@ -176,7 +176,7 @@ namespace boost { namespace xpressive { namespace detail
         // Gah, this is to work around a MSVC bug.
         template<typename Expr>
         struct eval
-          : eval_<Expr, typename Expr::tag_type>
+          : eval_<Expr, typename Expr::proto_tag>
         {};
 
         typedef typename Visitor::traits_type traits_type;

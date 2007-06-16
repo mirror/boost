@@ -48,14 +48,13 @@ Statically initialized objects cannot be misused that way.]
 
 The actual type of `_1` looks like this:
 
-    proto::expr< proto::tag::terminal, proto::args1< placeholder1 >, 1 >
+    proto::expr< proto::tag::terminal, proto::args0< placeholder1 >, 0 >
 
 The _expr_ template makes up the nodes in expression trees. The first template
 parameter is the node type; in this case, `proto::tag::terminal`. That means
 that `_1` is a leaf-node in the expression tree. The second template parameter
 is a list of children types. Terminals will always have only one type in the
-type list. The last parameter is the number of types in the list. It is
-deduced from the type list, so you won't need to worry about it.
+type list. The last parameter is the arity of .
 
 The _expr_ struct is defined as follows:
 

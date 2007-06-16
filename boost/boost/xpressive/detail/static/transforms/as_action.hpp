@@ -31,18 +31,18 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Nbr>
     struct FindAttr
       : proto::or_<
-            proto::trans::state< proto::terminal<proto::_> >
+            proto::transform::state< proto::terminal<proto::_> >
             // Ignore nested actions, because attributes are scoped:
-          , proto::trans::state< proto::subscript<proto::_, proto::_> >
-          , proto::trans::arg<
-                proto::trans::right<
+          , proto::transform::state< proto::subscript<proto::_, proto::_> >
+          , proto::transform::arg<
+                proto::transform::right<
                     proto::assign<
                         proto::terminal<xpressive::detail::attribute_placeholder<Nbr> >
                       , proto::_
                     >
                 >
             >
-          , proto::trans::fold<proto::nary_expr<proto::_, proto::vararg<FindAttr<Nbr> > > >
+          , proto::transform::fold<proto::nary_expr<proto::_, proto::vararg<FindAttr<Nbr> > > >
         >
     {};
 
@@ -90,8 +90,8 @@ namespace boost { namespace xpressive { namespace detail
         struct apply
           : proto::result_of::as_expr<
                 read_attr<
-                    typename Expr::arg0_type::nbr_type
-                  , typename FindAttr<typename Expr::arg0_type::nbr_type>
+                    typename Expr::proto_arg0::nbr_type
+                  , typename FindAttr<typename Expr::proto_arg0::nbr_type>
                         ::template apply<State, mpl::void_, int>::type
                 >
             >
@@ -140,7 +140,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : Expr::arg0_type::nbr_type
+          : Expr::proto_arg0::nbr_type
         {};
     };
 
@@ -150,10 +150,10 @@ namespace boost { namespace xpressive { namespace detail
     struct MaxAttr
       : proto::or_<
             attr_nbr< proto::terminal< xpressive::detail::attribute_placeholder<proto::_> > >
-          , proto::trans::state< proto::terminal<proto::_> >
+          , proto::transform::state< proto::terminal<proto::_> >
             // Ignore nested actions, because attributes are scoped:
-          , proto::trans::state< proto::subscript<proto::_, proto::_> >
-          , proto::trans::fold<proto::nary_expr<proto::_, max_attr<proto::vararg<MaxAttr> > > >
+          , proto::transform::state< proto::subscript<proto::_, proto::_> >
+          , proto::transform::fold<proto::nary_expr<proto::_, max_attr<proto::vararg<MaxAttr> > > >
         >
     {};
 
@@ -171,7 +171,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             typedef
                 attr_matcher<
-                    typename proto::result_of::arg<typename Expr::arg1_type>::type
+                    typename proto::result_of::arg<typename Expr::proto_arg1>::type
                   , typename Visitor::traits_type
                   , Visitor::icase_type::value
                 >
@@ -183,7 +183,7 @@ namespace boost { namespace xpressive { namespace detail
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return typename apply<Expr, State, Visitor>::type(
-                Expr::arg0_type::arg0_type::nbr_type::value
+                Expr::proto_arg0::proto_arg0::nbr_type::value
               , proto::arg(proto::right(expr))
             );
         }

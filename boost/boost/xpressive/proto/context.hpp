@@ -64,11 +64,11 @@
     namespace boost { namespace proto
     {
 
-        template<typename Expr, typename Context, typename Tag = typename Expr::tag_type, long Arity = Expr::arity::value>
+        template<typename Expr, typename Context, typename Tag = typename Expr::proto_tag, long Arity = Expr::proto_arity::value>
         struct default_eval
         {};
 
-        template<typename Expr, typename Context, long Arity = Expr::arity::value>
+        template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
         struct callable_eval
         {};
 
@@ -294,9 +294,9 @@
         template<typename Expr, typename Context>
         struct default_eval<Expr, Context, proto::tag::comma, 2>
         {
-            typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 0>::type, Context>::type arg0_type;
-            typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 1>::type, Context>::type arg1_type;
-            typedef typename detail::comma_result<arg0_type, arg1_type>::type result_type;
+            typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 0>::type, Context>::type proto_arg0;
+            typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 1>::type, Context>::type proto_arg1;
+            typedef typename detail::comma_result<proto_arg0, proto_arg1>::type result_type;
             result_type operator()(Expr &expr, Context &ctx) const
             {
                 return proto::eval(proto::arg_c<0>(expr), ctx), proto::eval(proto::arg_c<1>(expr), ctx);
@@ -413,7 +413,7 @@
             typedef
                 typename boost::result_of<
                     Context(
-                        typename Expr::tag_type
+                        typename Expr::proto_tag
                         BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N_TYPE, Expr)
                     )
                 >::type
@@ -427,7 +427,7 @@
                         sizeof(
                             callable_eval::check(
                                 (static_cast<inner_context &>(const_cast<context_type &>(context))(
-                                    typename Expr::tag_type()
+                                    typename Expr::proto_tag()
                                     BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
                                 ), 0)
                             )
@@ -445,7 +445,7 @@
             result_type operator ()(Expr &expr, Context &context, mpl::true_) const
             {
                 return context(
-                    typename Expr::tag_type()
+                    typename Expr::proto_tag()
                     BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
                 );
             }

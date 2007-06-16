@@ -36,13 +36,13 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::expr<boost::proto::t
 template<typename Tag, typename Args>
 std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 1> const *op)
 {
-    return sout << Tag() << boost::addressof(boost::proto::arg(*op).cast());
+    return sout << Tag() << boost::addressof(boost::proto::arg(*op).proto_base());
 }
 
 template<typename Tag, typename Args>
 std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 2> const *op)
 {
-    return sout << boost::addressof(boost::proto::left(*op).cast()) << Tag() << boost::addressof(boost::proto::right(*op).cast());
+    return sout << boost::addressof(boost::proto::left(*op).proto_base()) << Tag() << boost::addressof(boost::proto::right(*op).proto_base());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ struct to_string
     template<typename Op>
     void operator()(Op const &op) const
     {
-        this->sout_ << '(' << boost::addressof(op.cast()) << ')';
+        this->sout_ << '(' << boost::addressof(op.proto_base()) << ')';
     }
 private:
     std::ostream &sout_;

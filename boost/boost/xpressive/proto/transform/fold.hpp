@@ -27,37 +27,38 @@
 
         namespace detail
         {
-            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::arity::value>
+            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::proto_arity::value>
             struct fold_impl
             {};
 
-            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::arity::value>
+            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::proto_arity::value>
             struct reverse_fold_impl
             {};
 
             #define BOOST_PROTO_ARG_N_TYPE(n)\
-                BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)
+                BOOST_PP_CAT(proto_arg, n)\
+                /**/
 
             #define BOOST_PROTO_FOLD_STATE_TYPE(z, n, data)\
                 typedef typename Grammar::BOOST_PROTO_ARG_N_TYPE(n)::template\
-                    apply<typename Expr::BOOST_PROTO_ARG_N_TYPE(n)::type, BOOST_PP_CAT(state, n), Visitor>::type\
+                    apply<typename Expr::BOOST_PROTO_ARG_N_TYPE(n)::proto_base_expr, BOOST_PP_CAT(state, n), Visitor>::type\
                 BOOST_PP_CAT(state, BOOST_PP_INC(n));\
                 /**/
 
             #define BOOST_PROTO_FOLD_STATE(z, n, data)\
                 BOOST_PP_CAT(state, BOOST_PP_INC(n)) const &BOOST_PP_CAT(s, BOOST_PP_INC(n)) =\
-                    Grammar::BOOST_PROTO_ARG_N_TYPE(n)::call(expr.BOOST_PP_CAT(arg, n).cast(), BOOST_PP_CAT(s, n), visitor);\
+                    Grammar::BOOST_PROTO_ARG_N_TYPE(n)::call(expr.BOOST_PP_CAT(arg, n).proto_base(), BOOST_PP_CAT(s, n), visitor);\
                 /**/
 
             #define BOOST_PROTO_REVERSE_FOLD_STATE_TYPE(z, n, data)\
                 typedef typename Grammar::BOOST_PROTO_ARG_N_TYPE(BOOST_PP_SUB(data, BOOST_PP_INC(n)))::template\
-                    apply<typename Expr::BOOST_PROTO_ARG_N_TYPE(BOOST_PP_SUB(data, BOOST_PP_INC(n)))::type, BOOST_PP_CAT(state, BOOST_PP_SUB(data, n)), Visitor>::type\
+                    apply<typename Expr::BOOST_PROTO_ARG_N_TYPE(BOOST_PP_SUB(data, BOOST_PP_INC(n)))::proto_base_expr, BOOST_PP_CAT(state, BOOST_PP_SUB(data, n)), Visitor>::type\
                 BOOST_PP_CAT(state, BOOST_PP_SUB(data, BOOST_PP_INC(n)));\
                 /**/
 
             #define BOOST_PROTO_REVERSE_FOLD_STATE(z, n, data)\
                 BOOST_PP_CAT(state, BOOST_PP_SUB(data, BOOST_PP_INC(n))) const &BOOST_PP_CAT(s, BOOST_PP_SUB(data, BOOST_PP_INC(n))) =\
-                    Grammar::BOOST_PROTO_ARG_N_TYPE(BOOST_PP_SUB(data, BOOST_PP_INC(n)))::call(expr.BOOST_PP_CAT(arg, BOOST_PP_SUB(data, BOOST_PP_INC(n))).cast(), BOOST_PP_CAT(s, BOOST_PP_SUB(data, n)), visitor);\
+                    Grammar::BOOST_PROTO_ARG_N_TYPE(BOOST_PP_SUB(data, BOOST_PP_INC(n)))::call(expr.BOOST_PP_CAT(arg, BOOST_PP_SUB(data, BOOST_PP_INC(n))).proto_base(), BOOST_PP_CAT(s, BOOST_PP_SUB(data, n)), visitor);\
                 /**/
 
             #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/fold.hpp>))

@@ -46,7 +46,7 @@ namespace boost { namespace xpressive { namespace detail
 
         operator basic_mark_tag const &() const
         {
-            return this->cast();
+            return this->proto_base();
         }
 
         using proto::extends<basic_mark_tag, mark_tag>::operator =;
@@ -54,7 +54,7 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Grammar>
     struct push_back_sub
-      : proto::trans::identity<Grammar>
+      : proto::transform::identity<Grammar>
     {
         template<typename Sub>
         static int to_sub(Sub const &sub, proto::tag::terminal)
@@ -71,7 +71,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename State, typename Visitor>
         static Expr const &call(Expr const &expr, State const &, Visitor &subs)
         {
-            subs.push_back(push_back_sub::to_sub(expr, typename Expr::tag_type()));
+            subs.push_back(push_back_sub::to_sub(expr, typename Expr::proto_tag()));
             return expr;
         }
     };
@@ -413,7 +413,7 @@ detail::set_initializer_type const set = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $& in Perl
-mark_tag::type const s0 = {{0}};
+mark_tag::proto_base_expr const s0 = {{0}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $1 in perl.
@@ -427,15 +427,15 @@ mark_tag::type const s0 = {{0}};
 /// After a successful regex_match() or regex_search(), the sub-match placeholders
 /// can be used to index into the match_results\<\> object to retrieve the Nth
 /// sub-match.
-mark_tag::type const s1 = {{1}};
-mark_tag::type const s2 = {{2}};
-mark_tag::type const s3 = {{3}};
-mark_tag::type const s4 = {{4}};
-mark_tag::type const s5 = {{5}};
-mark_tag::type const s6 = {{6}};
-mark_tag::type const s7 = {{7}};
-mark_tag::type const s8 = {{8}};
-mark_tag::type const s9 = {{9}};
+mark_tag::proto_base_expr const s1 = {{1}};
+mark_tag::proto_base_expr const s2 = {{2}};
+mark_tag::proto_base_expr const s3 = {{3}};
+mark_tag::proto_base_expr const s4 = {{4}};
+mark_tag::proto_base_expr const s5 = {{5}};
+mark_tag::proto_base_expr const s6 = {{6}};
+mark_tag::proto_base_expr const s7 = {{7}};
+mark_tag::proto_base_expr const s8 = {{8}};
+mark_tag::proto_base_expr const s9 = {{9}};
 
 // NOTE: For the purpose of xpressive's documentation, make icase() look like an
 // ordinary function. In reality, it is a function object defined in detail/icase.hpp

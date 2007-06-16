@@ -138,7 +138,7 @@ namespace boost { namespace xpressive { namespace detail
         };
 
         // eval
-        template<typename Expr, typename Tag = typename Expr::tag_type>
+        template<typename Expr, typename Tag = typename Expr::proto_tag>
         struct eval
           : proto::default_eval<Expr, action_context const>
         {};
@@ -296,7 +296,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename State, typename Visitor>
         struct apply
           : proto::result_of::as_expr<
-                opt<typename attr_of<typename Expr::arg0_type::matcher_type::result_type>::type>
+                opt<typename attr_of<typename Expr::proto_arg0::matcher_type::result_type>::type>
             >
         {};
 
@@ -304,8 +304,8 @@ namespace boost { namespace xpressive { namespace detail
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &)
         {
-            typedef typename attr_of<typename Expr::arg0_type::matcher_type::result_type>::type attr_type;
-            int slot = typename Expr::arg0_type::nbr_type();
+            typedef typename attr_of<typename Expr::proto_arg0::matcher_type::result_type>::type attr_type;
+            int slot = typename Expr::proto_arg0::nbr_type();
             attr_type const *attr = static_cast<attr_type const *>(state.attr_context_.attr_slots_[slot-1]);
             return proto::as_expr(opt<attr_type>(attr));
         }

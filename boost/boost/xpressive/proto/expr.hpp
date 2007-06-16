@@ -37,14 +37,14 @@
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_ARG(z, n, data)\
-        typedef typename Args::BOOST_PP_CAT(arg, n) BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
-        BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type) BOOST_PP_CAT(arg, n);\
+        typedef typename Args::BOOST_PP_CAT(arg, n) BOOST_PP_CAT(proto_arg, n);\
+        BOOST_PP_CAT(proto_arg, n) BOOST_PP_CAT(arg, n);\
         /**/
 
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_VOID(z, n, data)\
-        typedef void BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
+        typedef void BOOST_PP_CAT(proto_arg, n);\
         /**/
 
     /// INTERNAL ONLY
@@ -131,14 +131,14 @@
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {
-            typedef Tag tag_type;
-            typedef mpl::long_<BOOST_PP_ITERATION() > arity;
-            typedef expr type;
-            typedef Args args_type;
-            typedef default_domain domain;
+            typedef Tag proto_tag;
+            typedef mpl::long_<BOOST_PP_ITERATION() > proto_arity;
+            typedef expr proto_base_expr;
+            typedef Args proto_args;
+            typedef default_domain proto_domain;
             typedef proto_expr_tag fusion_tag;
-            typedef void is_boost_proto_expr_;
-            typedef expr boost_proto_expr_type_;
+            typedef void proto_is_expr_;
+            typedef expr proto_derived_expr;
 
             BOOST_PROTO_IDENTITY_TRANSFORM();
             BOOST_PP_REPEAT(ARG_COUNT, BOOST_PROTO_ARG, ~)
@@ -146,14 +146,14 @@
 
             /// \return *this
             ///
-            expr const &cast() const
+            expr const &proto_base() const
             {
                 return *this;
             }
 
             /// \overload
             ///
-            expr &cast()
+            expr &proto_base()
             {
                 return *this;
             }
@@ -180,10 +180,10 @@
         #endif
 
         #if 1 == BOOST_PP_ITERATION()
-            /// If \c Tag is \c boost::proto::tag::address_of and \c arg0_type is
+            /// If \c Tag is \c boost::proto::tag::address_of and \c proto_arg0 is
             /// \c proto::ref_\<T\>, then \c address_of_hack_type_ is <tt>T*</tt>.
             /// Otherwise, it is some undefined type.
-            typedef typename detail::address_of_hack<Tag, arg0_type>::type address_of_hack_type_;
+            typedef typename detail::address_of_hack<Tag, proto_arg0>::type address_of_hack_type_;
 
             /// \return The address of <tt>this->arg0</tt> if \c Tag is
             /// \c boost::proto::tag::address_of. Otherwise, this function will

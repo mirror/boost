@@ -76,8 +76,8 @@ using proto::_;
 struct LambdaGrammar
   : proto::or_<
         placeholder_arity< proto::terminal< placeholder<_> > >
-      , proto::trans::always< proto::terminal<_>, mpl::int_<0> >
-      , proto::trans::fold<
+      , proto::transform::always< proto::terminal<_>, mpl::int_<0> >
+      , proto::transform::fold<
             proto::nary_expr<_, proto::vararg< max_arity< LambdaGrammar > > >
         >
     >

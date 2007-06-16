@@ -131,7 +131,7 @@ namespace boost { namespace proto
             template<typename T>
             void operator()(T const &t) const
             {
-                (*this)(t.cast());
+                (*this)(t.proto_base());
             }
 
         private:

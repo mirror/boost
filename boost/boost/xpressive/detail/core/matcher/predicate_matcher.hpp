@@ -71,7 +71,7 @@ namespace boost { namespace xpressive { namespace detail
         };
 
         // eval
-        template<typename Expr, typename Tag = typename Expr::tag_type>
+        template<typename Expr, typename Tag = typename Expr::proto_tag>
         struct eval
           : proto::default_eval<Expr, predicate_context const>
         {};
@@ -111,7 +111,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Next>
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
-            typedef typename Predicate::arg0_type::predicate_type predicate_type;
+            typedef typename Predicate::proto_arg0::predicate_type predicate_type;
             return this->match_(state, next, proto::is_expr<predicate_type>());
         }
 

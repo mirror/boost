@@ -167,7 +167,7 @@ So, putting a few things together, consider the calculator expression `+_1`,
 which would have the following type:
 
     expr< tag::posit, arg1<
-        expr< tag::terminal, arg1< placeholder1 > >
+        expr< tag::terminal, arg0< placeholder1 > >
     > >
 
 If we executed the `unary_expr< _, CalculatorGrammar >` transform on this
@@ -679,12 +679,12 @@ like cons lists, you'll often want to built it back-to-front with
     ]
     [   [`transform::fold<Grammar>::apply<Expr, State, Visitor>::type`]
         [``typename Grammar::__arg_N__::apply<
-    typename Expr::__arg_N__::type
+    typename Expr::__arg_N__::proto_base_expr
   , typename Grammar::__arg_N_sub_1__::apply<
-        typename Expr::__arg_N_sub_1__::type
+        typename Expr::__arg_N_sub_1__::proto_base_expr
       , // ...
-            typename Grammar::arg0_type::apply<
-                typename Expr::arg0_type::type, State, Visitor>::type
+            typename Grammar::proto_arg0::apply<
+                typename Expr::proto_arg0::proto_base_expr, State, Visitor>::type
         // ...
       , Visitor
     >::type
@@ -697,7 +697,7 @@ like cons lists, you'll often want to built it back-to-front with
   , Grammar::__arg_N_sub_1__::call(
         proto::arg_c<N-1>(expr)
       , // ...
-            Grammar::arg0_type::call(
+            Grammar::proto_arg0::call(
                 proto::arg_c<0>(expr), state, visitor)
         // ...
       , visitor
@@ -706,13 +706,13 @@ like cons lists, you'll often want to built it back-to-front with
 )``]
     ]
     [   [`transform::reverse_fold<Grammar>::apply<Expr, State, Visitor>::type`]
-        [``typename Grammar::arg0_type::apply<
-    typename Expr::arg0_type::type
-  , typename Grammar::arg1_type::apply<
-        typename Expr::arg1_type::type
+        [``typename Grammar::proto_arg0::apply<
+    typename Expr::proto_arg0::proto_base_expr
+  , typename Grammar::proto_arg1::apply<
+        typename Expr::proto_arg1::proto_base_expr
       , // ...
             typename Grammar::__arg_N__::apply<
-                typename Expr::__arg_N__::type, State, Visitor>::type
+                typename Expr::__arg_N__::proto_base_expr, State, Visitor>::type
         // ...
       , Visitor
     >::type
@@ -720,9 +720,9 @@ like cons lists, you'll often want to built it back-to-front with
 >::type``]
     ]
     [   [`transform::reverse_fold<Grammar>::call(expr, state, visitor)`]
-        [``Grammar::arg0_type::call(
+        [``Grammar::proto_arg0::call(
     proto::arg_c<0>(expr)
-  , Grammar::arg1_type::call(
+  , Grammar::proto_arg1::call(
         proto::arg_c<1>(expr)
       , // ...
             Grammar::__arg_N__::call(
@@ -811,6 +811,76 @@ Example:
 
 [FoldTreeToList]
 
+[h4 [^construct<>]]
+
+    namespace boost { namespace proto { namespace transform
+    {
+        template<typename Grammar, typename Constructor>
+        struct construct;
+    }}}
+
+The `construct<>` transform is a flexible tool for transforming expressions
+into other types of objects. With it, you can specify both the type of the
+object to construct as well as what parameters to pass to its constructor. A
+typical usage of the `construct<>` transform is like this:
+
+    transform::construct<
+        terminal<float>
+      , terminal<double>(transform::arg<_>)
+    >
+
+The first template parameter is the grammar to match; in this case, terminals
+of type `float`. The second template parameter might look a little strange. It
+is actually a function type, but here we're using it to describe what object to
+construct and how to initialize it. In this case, we will be constructing a 
+`double` terminal, using the argument from the `float` terminal. This transform
+effectively promotes a `float` to a `double`.
+
+The `Constructor` template parameter is a function type of the following form:
+
+    ResultType(Transform1, Transform2, ...)
+
+where `Transform1`, `Transform2`, etc, are Proto transforms. They specify what
+arguments should be used to construct the `ResultType` object. The way it works
+is as follows. Consider the transform `transform::construct<G, R(T)>`, and an
+expression object `e` of type `E` that matches `G`. Then the result will be an
+object of type `R` constructed like this:
+
+    E2 e2 = G::call(e, s, v);
+    R(T::call(e2, s, v));
+
+where `s` and `v` are some state and visitor parameters, and E2 is the return
+type of `G::call(e,s,v)`. Note that `G`'s transform is applied first, followed
+by `T`'s transform.
+
+If the result type is an MPL Placeholder expression, then the placeholder is
+invoked with the type `E2` and the result is taken to be the return type.
+Consider the following code that matches an invocation of a lazy `make_pair`
+function, and actually returns a `std::pair<>` of the correct type.
+
+    struct lazy_make_pair {};
+    
+    struct MakePair
+      : transform::construct<
+            function<terminal<lazy_make_pair>, terminal<_>, terminal<_> >
+          , std::pair<
+                proto::result_of::arg<proto::result_of::left<mpl::_> >
+              , proto::result_of::arg<proto::result_of::right<mpl::_> >
+            >(transform::arg<transform::left<_> >, transform::arg<transform::right<_> >)
+        >
+    {};
+
+Notice that the result type, `std::pair< ... >` is a MPL Placeholder expression
+because it uses the MPL placeholder `mpl::_`. Also notice it uses Proto's
+`left<>` and `right<>` meta-functions. These are distinct from Proto's `left<>`
+and `right<>` transforms, so be careful. The transforms are in the `transform`
+namespace, and they accept grammars as their template parameter. The
+meta-functions are in the `proto::result_of` namespace, and they accept
+expressions as their template parameter.
+
+
+
+
 [h4 [^pass_through<>]]
 
     namespace boost { namespace proto { namespace transform
@@ -839,17 +909,17 @@ transform explicitly.
     ]
     [   [`transform::pass_through<Grammar>::apply<Expr, State, Visitor>::type`]
         [``typename nary_expr<
-    typename Expr::tag_type
-  , typename Grammar::arg0_type::apply<typename Expr::arg0_type::type, State, Visitor>::type
-  , typename Grammar::arg1_type::apply<typename Expr::arg1_type::type, State, Visitor>::type
+    typename Expr::proto_tag
+  , typename Grammar::proto_arg0::apply<typename Expr::proto_arg0::proto_base_expr, State, Visitor>::type
+  , typename Grammar::proto_arg1::apply<typename Expr::proto_arg1::proto_base_expr, State, Visitor>::type
     // ...
-  , typename Grammar::__arg_N__::apply<typename Expr::__arg_N__::type, State, Visitor>::type
+  , typename Grammar::__arg_N__::apply<typename Expr::__arg_N__::proto_base_expr, State, Visitor>::type
 >::type``]
     ]
     [   [`transform::pass_through<Grammar>::call(expr, state, visitor)`]
         [``transform::pass_through<Grammar>::apply<Expr, State, Visitor>::type::make(
-    Grammar::arg0_type::call(proto::arg_c<0>(expr), state, visitor)
-  , Grammar::arg1_type::call(proto::arg_c<1>(expr), state, visitor)
+    Grammar::proto_arg0::call(proto::arg_c<0>(expr), state, visitor)
+  , Grammar::proto_arg1::call(proto::arg_c<1>(expr), state, visitor)
     // ...
   , Grammar::__arg_N__::call(proto::arg_c<N>(expr), state, visitor)
 )``]

@@ -23,17 +23,17 @@
     {
         namespace detail
         {
-            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::arity::value>
+            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::proto_arity::value>
             struct pass_through_impl {};
 
             #define BOOST_PROTO_DEFINE_TRANSFORM_TYPE(z, n, data)\
-                typename Grammar::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
-                    ::template apply<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)::type, State, Visitor>\
+                typename Grammar::BOOST_PP_CAT(proto_arg, n)\
+                    ::template apply<typename Expr::BOOST_PP_CAT(proto_arg, n)::proto_base_expr, State, Visitor>\
                 ::type
 
             #define BOOST_PROTO_DEFINE_TRANSFORM(z, n, data)\
-                Grammar::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)::call(\
-                    expr.BOOST_PP_CAT(arg, n).cast(), state, visitor\
+                Grammar::BOOST_PP_CAT(proto_arg, n)::call(\
+                    expr.BOOST_PP_CAT(arg, n).proto_base(), state, visitor\
                 )
 
             #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/pass_through.hpp>))
@@ -62,7 +62,7 @@
 
             template<typename Expr, typename State, typename Visitor>
             struct apply
-              : detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::arity::value>
+              : detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::proto_arity::value>
             {};
 
             template<typename Expr, typename State, typename Visitor>
@@ -82,7 +82,7 @@
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : transform::detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::arity::value>
+          : transform::detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::proto_arity::value>
         {};
 
         template<typename Expr, typename State, typename Visitor>
@@ -105,7 +105,7 @@
             struct pass_through_impl<Grammar, Expr, State, Visitor, N>
             {
                 typedef expr<
-                    typename Expr::tag_type
+                    typename Expr::proto_tag
                   , BOOST_PP_CAT(args, N)<
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM_TYPE, ~)
                     >

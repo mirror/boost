@@ -303,18 +303,18 @@ namespace boost { namespace spirit2
     // Extract the arg from terminals
     struct ToySpiritTerminal
       : proto::or_<
-            proto::trans::arg< AnyChar >
-          , case_sensitive< proto::trans::arg< CharLiteral > >
-          , case_sensitive< proto::trans::arg< NTBSLiteral > >
+            proto::transform::arg< AnyChar >
+          , case_sensitive< proto::transform::arg< CharLiteral > >
+          , case_sensitive< proto::transform::arg< NTBSLiteral > >
           , case_sensitive<
-                proto::trans::arg< proto::trans::arg_c< CharParser, 1 > >   // char_('a')
+                proto::transform::arg< proto::transform::arg_c< CharParser, 1 > >   // char_('a')
             >
           , case_sensitive<
-                proto::trans::construct<                                    // char_('a','z')
+                proto::transform::construct<                                    // char_('a','z')
                     CharRangeParser
                   , char_range(
-                        proto::trans::arg< proto::trans::arg_c< proto::_, 1 > >
-                      , proto::trans::arg< proto::trans::arg_c< proto::_, 2 > >
+                        proto::transform::arg< proto::transform::arg_c< proto::_, 1 > >
+                      , proto::transform::arg< proto::transform::arg_c< proto::_, 2 > >
                     )
                 >
             >
@@ -326,7 +326,7 @@ namespace boost { namespace spirit2
     struct ToySpiritSequence
       : as_composite<
             proto::tag::shift_right
-          , proto::trans::reverse_fold_to_list<
+          , proto::transform::reverse_fold_to_list<
                 proto::shift_right<ToySpiritGrammar, ToySpiritGrammar>
             >
         >
@@ -337,7 +337,7 @@ namespace boost { namespace spirit2
     struct ToySpiritAlternate
       : as_composite<
             proto::tag::bitwise_or
-          , proto::trans::reverse_fold_to_list<
+          , proto::transform::reverse_fold_to_list<
                 proto::bitwise_or<ToySpiritGrammar, ToySpiritGrammar>
             >
         >
@@ -346,7 +346,7 @@ namespace boost { namespace spirit2
     // Directives such as no_case are handled here
     struct ToySpiritDirective
       : no_case_transform<
-            proto::trans::arg_c<
+            proto::transform::arg_c<
                 proto::subscript< NoCase, ToySpiritGrammar >
               , 1
             >

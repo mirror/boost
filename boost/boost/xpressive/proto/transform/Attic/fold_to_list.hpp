@@ -26,7 +26,7 @@ namespace boost { namespace proto { namespace transform
         template<typename Tag, typename Grammar>
         struct fold_tree_
           : or_<
-                trans::fold<
+                transform::fold<
                     nary_expr<Tag, vararg<fold_tree_<Tag, Grammar> > >
                 >
               , Grammar
@@ -36,7 +36,7 @@ namespace boost { namespace proto { namespace transform
         template<typename Tag, typename Grammar>
         struct reverse_fold_tree_
           : or_<
-                trans::reverse_fold<
+                transform::reverse_fold<
                     nary_expr<Tag, vararg<reverse_fold_tree_<Tag, Grammar> > >
                 >
               , Grammar
@@ -48,8 +48,8 @@ namespace boost { namespace proto { namespace transform
     ///
     template<typename Tag, typename Grammar, typename State = void>
     struct fold_tree
-      : trans::branch<
-            trans::fold<
+      : transform::branch<
+            transform::fold<
                 nary_expr<Tag, vararg<detail::fold_tree_<Tag, Grammar> > >
             >
           , State
@@ -58,7 +58,7 @@ namespace boost { namespace proto { namespace transform
 
     template<typename Tag, typename Grammar>
     struct fold_tree<Tag, Grammar, void>
-      : trans::fold<
+      : transform::fold<
             nary_expr<Tag, vararg<detail::fold_tree_<Tag, Grammar> > >
         >
     {};
@@ -67,8 +67,8 @@ namespace boost { namespace proto { namespace transform
     ///
     template<typename Tag, typename Grammar, typename State = void>
     struct reverse_fold_tree
-      : trans::branch<
-            trans::reverse_fold<
+      : transform::branch<
+            transform::reverse_fold<
                 nary_expr<Tag, vararg<detail::reverse_fold_tree_<Tag, Grammar> > >
             >
           , State
@@ -77,7 +77,7 @@ namespace boost { namespace proto { namespace transform
 
     template<typename Tag, typename Grammar>
     struct reverse_fold_tree<Tag, Grammar, void>
-      : trans::reverse_fold<
+      : transform::reverse_fold<
             nary_expr<Tag, vararg<detail::reverse_fold_tree_<Tag, Grammar> > >
         >
     {};
@@ -87,15 +87,15 @@ namespace boost { namespace proto { namespace transform
     template<typename Grammar>
     struct fold_to_list
       : fold_tree<
-            typename Grammar::tag_type
-          , trans::list<typename Grammar::arg0_type>
+            typename Grammar::proto_tag
+          , transform::list<typename Grammar::proto_arg0>
           , fusion::nil
         >
     {
         BOOST_MPL_ASSERT((
             is_same<
-                typename Grammar::arg0_type
-              , typename Grammar::arg1_type
+                typename Grammar::proto_arg0
+              , typename Grammar::proto_arg1
             >
         ));
     };
@@ -105,15 +105,15 @@ namespace boost { namespace proto { namespace transform
     template<typename Grammar>
     struct reverse_fold_to_list
       : reverse_fold_tree<
-            typename Grammar::tag_type
-          , trans::list<typename Grammar::arg0_type>
+            typename Grammar::proto_tag
+          , transform::list<typename Grammar::proto_arg0>
           , fusion::nil
         >
     {
         BOOST_MPL_ASSERT((
             is_same<
-                typename Grammar::arg0_type
-              , typename Grammar::arg1_type
+                typename Grammar::proto_arg0
+              , typename Grammar::proto_arg1
             >
         ));
     };

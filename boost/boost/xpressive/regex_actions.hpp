@@ -551,7 +551,7 @@ namespace boost { namespace xpressive
         {}
 
         explicit value(T const &t)
-          : base_type(base_type::type::make(t))
+          : base_type(base_type::proto_base_expr::make(t))
         {}
 
         using base_type::operator =;
@@ -574,7 +574,7 @@ namespace boost { namespace xpressive
         typedef proto::extends<typename proto::terminal<reference_wrapper<T> >::type, reference<T> > base_type;
 
         explicit reference(T &t)
-          : base_type(base_type::type::make(boost::ref(t)))
+          : base_type(base_type::proto_base_expr::make(boost::ref(t)))
         {}
 
         using base_type::operator =;

@@ -240,7 +240,7 @@ namespace boost { namespace fusion
         {
             template<typename Sequence>
             struct apply
-              : Sequence::arity
+              : Sequence::proto_arity
             {};
         };
 
@@ -271,7 +271,7 @@ namespace boost { namespace fusion
             template<typename Sequence>
             struct apply
             {
-                typedef proto::detail::ref_iterator<Sequence const, Sequence::arity::value> type;
+                typedef proto::detail::ref_iterator<Sequence const, Sequence::proto_arity::value> type;
 
                 static type call(Sequence& seq)
                 {
@@ -332,7 +332,7 @@ namespace boost { namespace fusion
             template<typename This, typename Expr>
             struct result<This(Expr)>
               : mpl::if_<
-                    is_same<Tag, UNREF(Expr)::tag_type>
+                    is_same<Tag, UNREF(Expr)::proto_tag>
                   , UNCVREF(Expr) const &
                   , fusion::single_view<UNCVREF(Expr) const &>
                 >
@@ -355,17 +355,17 @@ namespace boost { namespace fusion
             template<typename Sequence>
             struct apply
             {
-                typedef typename Sequence::tag_type tag_type;
+                typedef typename Sequence::proto_tag proto_tag;
 
                 typedef fusion::transform_view<
                     proto::ref_<Sequence>
-                  , as_element<tag_type>
+                  , as_element<proto_tag>
                 > type;
 
                 static type call(Sequence &sequence)
                 {
                     proto::ref_<Sequence> r = {sequence};
-                    return type(r, as_element<tag_type>());
+                    return type(r, as_element<proto_tag>());
                 }
             };
         };
@@ -416,8 +416,8 @@ namespace boost { namespace fusion
     //{
     //    template<typename Sequence>
     //    struct apply
-    //      : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
-    //            ::template apply<typename Sequence::args_type>
+    //      : begin_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+    //            ::template apply<typename Sequence::proto_args>
     //    {};
     //};
 
@@ -426,8 +426,8 @@ namespace boost { namespace fusion
     //{
     //    template<typename Sequence>
     //    struct apply
-    //      : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
-    //            ::template apply<typename Sequence::args_type>
+    //      : end_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+    //            ::template apply<typename Sequence::proto_args>
     //    {};
     //};
 
@@ -437,7 +437,7 @@ namespace boost { namespace fusion
     //    template<typename Sequence>
     //    struct apply
     //    {
-    //        typedef typename Sequence::arity type;
+    //        typedef typename Sequence::proto_arity type;
     //    };
     //};
 
@@ -446,8 +446,8 @@ namespace boost { namespace fusion
     //{
     //    template<typename Sequence, typename N>
     //    struct apply
-    //      : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
-    //            ::template apply<typename Sequence::args_type, N>
+    //      : at_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+    //            ::template apply<typename Sequence::proto_args, N>
     //    {};
     //};
 
@@ -457,8 +457,8 @@ namespace boost { namespace fusion
     //{
     //    template<typename Sequence>
     //    struct apply
-    //      : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
-    //            ::template apply<typename Sequence::args_type>
+    //      : begin_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+    //            ::template apply<typename Sequence::proto_args>
     //    {};
     //};
 
@@ -467,8 +467,8 @@ namespace boost { namespace fusion
     //{
     //    template<typename Sequence>
     //    struct apply
-    //      : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
-    //            ::template apply<typename Sequence::args_type>
+    //      : end_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+    //            ::template apply<typename Sequence::proto_args>
     //    {};
     //};
 
@@ -478,7 +478,7 @@ namespace boost { namespace fusion
     //    template<typename Sequence>
     //    struct apply
     //    {
-    //        typedef typename Sequence::arity type;
+    //        typedef typename Sequence::proto_arity type;
     //    };
     //};
 
@@ -487,8 +487,8 @@ namespace boost { namespace fusion
     //{
     //    template<typename Sequence, typename N>
     //    struct apply
-    //      : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
-    //            ::template apply<typename Sequence::args_type, N>
+    //      : at_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+    //            ::template apply<typename Sequence::proto_args, N>
     //    {};
     //};
 
@@ -514,8 +514,8 @@ namespace boost { namespace fusion
 //    {
 //        template<typename Sequence>
 //        struct apply
-//          : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
-//                ::template apply<typename Sequence::args_type>
+//          : begin_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+//                ::template apply<typename Sequence::proto_args>
 //        {};
 //    };
 //
@@ -524,8 +524,8 @@ namespace boost { namespace fusion
 //    {
 //        template<typename Sequence>
 //        struct apply
-//          : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
-//                ::template apply<typename Sequence::args_type>
+//          : end_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+//                ::template apply<typename Sequence::proto_args>
 //        {};
 //    };
 //
@@ -535,7 +535,7 @@ namespace boost { namespace fusion
 //        template<typename Sequence>
 //        struct apply
 //        {
-//            typedef typename Sequence::arity type;
+//            typedef typename Sequence::proto_arity type;
 //        };
 //    };
 //
@@ -544,8 +544,8 @@ namespace boost { namespace fusion
 //    {
 //        template<typename Sequence, typename N>
 //        struct apply
-//          : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
-//                ::template apply<typename Sequence::args_type, N>
+//          : at_impl<typename sequence_tag<typename Sequence::proto_args>::type>
+//                ::template apply<typename Sequence::proto_args, N>
 //        {};
 //    };
 //

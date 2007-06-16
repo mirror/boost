@@ -90,20 +90,20 @@ namespace boost { namespace proto
     ///
     #define BOOST_PROTO_EXTENDS_ARG(z, n, Expr)\
         typedef\
-            typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
-        BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
+            typename Expr::BOOST_PP_CAT(proto_arg, n)\
+        BOOST_PP_CAT(proto_arg, n);\
         /**/
 
     #define BOOST_PROTO_EXTENDS(Expr, Derived, Domain)\
         Expr expr;\
         \
-        typedef Expr type;\
-        typedef Domain domain;\
-        typedef Derived boost_proto_expr_type_;\
-        typedef typename Expr::tag_type tag_type;\
-        typedef typename Expr::args_type args_type;\
-        typedef typename Expr::arity arity;\
-        typedef void is_boost_proto_expr_;\
+        typedef Expr proto_base_expr;\
+        typedef Domain proto_domain;\
+        typedef Derived proto_derived_expr;\
+        typedef typename Expr::proto_tag proto_tag;\
+        typedef typename Expr::proto_args proto_args;\
+        typedef typename Expr::proto_arity proto_arity;\
+        typedef void proto_is_expr_;\
         typedef boost::proto::proto_expr_tag fusion_tag;\
         \
         BOOST_PROTO_IDENTITY_TRANSFORM();\
@@ -115,12 +115,12 @@ namespace boost { namespace proto
             return that;\
         }\
         \
-        Expr &cast()\
+        Expr &proto_base()\
         {\
             return this->expr;\
         }\
         \
-        Expr const &cast() const\
+        Expr const &proto_base() const\
         {\
             return this->expr;\
         }\

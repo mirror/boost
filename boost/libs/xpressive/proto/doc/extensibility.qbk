@@ -177,7 +177,7 @@ Here is the code. It is described below.
         {}
 
         // Use default_eval for all the operations ...
-        template<typename Expr, typename Tag = typename Expr::tag_type>
+        template<typename Expr, typename Tag = typename Expr::proto_tag>
         struct eval
           : proto::default_eval<Expr, lazy_subscript_context>
         {};

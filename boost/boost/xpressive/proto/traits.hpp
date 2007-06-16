@@ -66,7 +66,7 @@
         {};
 
         template<typename T>
-        struct is_ref<T, typename T::is_boost_proto_ref_>
+        struct is_ref<T, typename T::proto_is_ref_>
           : mpl::true_
         {};
 
@@ -77,7 +77,7 @@
         {};
 
         template<typename T>
-        struct is_expr<T, typename T::is_boost_proto_expr_>
+        struct is_expr<T, typename T::proto_is_expr_>
           : mpl::true_
         {};
 
@@ -91,9 +91,9 @@
                     mpl::or_<BOOST_PROTO_IS_ARRAY_(T), is_function<T> >
                   , add_reference<T>
                   , remove_cv<T>
-                >::type arg0_type;
+                >::type proto_arg0;
 
-                typedef expr<proto::tag::terminal, args0<arg0_type> > expr_type;
+                typedef expr<proto::tag::terminal, args0<proto_arg0> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
                 typedef type result_type;
 
@@ -105,9 +105,9 @@
             };
 
             template<typename T, typename Domain>
-            struct as_expr<T, Domain, typename T::is_boost_proto_expr_>
+            struct as_expr<T, Domain, typename T::proto_is_expr_>
             {
-                typedef typename T::boost_proto_expr_type_ type;
+                typedef typename T::proto_derived_expr type;
                 typedef T &result_type;
 
                 BOOST_PROTO_WITH_ALIAS_(T, T2)
@@ -132,7 +132,7 @@
             };
 
             template<typename T, typename Domain>
-            struct as_arg<T, Domain, typename T::is_boost_proto_expr_>
+            struct as_arg<T, Domain, typename T::proto_is_expr_>
             {
                 typedef ref_<T> type;
 
@@ -154,13 +154,13 @@
                 // ref_< expr< T, A > > and return A::arg0 ?
             template<typename Expr>
             struct left
-              : unref<typename Expr::arg0_type>
+              : unref<typename Expr::proto_arg0>
             {};
 
             // right
             template<typename Expr>
             struct right
-              : unref<typename Expr::arg1_type>
+              : unref<typename Expr::proto_arg1>
             {};
 
         }
@@ -171,7 +171,7 @@
             struct if_vararg {};
 
             template<typename T>
-            struct if_vararg<T, typename T::boost_proto_is_vararg_>
+            struct if_vararg<T, typename T::proto_is_vararg_>
               : T
             {};
         }
@@ -182,8 +182,9 @@
         {
             terminal();
             typedef expr<proto::tag::terminal, args0<T> > type;
-            typedef proto::tag::terminal tag_type;
-            typedef T arg0_type;
+            typedef type proto_base_expr;
+            typedef proto::tag::terminal proto_tag;
+            typedef T proto_arg0;
         };
 
         // unary_expr
@@ -192,8 +193,9 @@
         {
             unary_expr();
             typedef expr<Tag, args1<T> > type;
-            typedef Tag tag_type;
-            typedef T arg0_type;
+            typedef type proto_base_expr;
+            typedef Tag proto_tag;
+            typedef T proto_arg0;
         };
 
         // binary_expr
@@ -202,9 +204,10 @@
         {
             binary_expr();
             typedef expr<Tag, args2<T, U> > type;
-            typedef Tag tag_type;
-            typedef T arg0_type;
-            typedef U arg1_type;
+            typedef type proto_base_expr;
+            typedef Tag proto_tag;
+            typedef T proto_arg0;
+            typedef U proto_arg1;
         };
 
     #define BOOST_PROTO_UNARY_GENERATOR(Name)\
@@ -213,8 +216,9 @@
         {\
             Name();\
             typedef expr<proto::tag::Name, args1<T> > type;\
-            typedef proto::tag::Name tag_type;\
-            typedef T arg0_type;\
+            typedef type proto_base_expr;\
+            typedef proto::tag::Name proto_tag;\
+            typedef T proto_arg0;\
         };\
         /**/
 
@@ -224,9 +228,10 @@
         {\
             Name();\
             typedef expr<proto::tag::Name, args2<T, U> > type;\
-            typedef proto::tag::Name tag_type;\
-            typedef T arg0_type;\
-            typedef U arg1_type;\
+            typedef type proto_base_expr;\
+            typedef proto::tag::Name proto_tag;\
+            typedef T proto_arg0;\
+            typedef U proto_arg1;\
         };\
         /**/
 
@@ -282,7 +287,7 @@
         template<typename Expr>
         struct tag_of
         {
-            typedef typename Expr::tag_type type;
+            typedef typename Expr::proto_tag type;
         };
 
         // id
@@ -292,12 +297,12 @@
         {};
 
     #define BOOST_PROTO_ARG(z, n, data)\
-        typedef BOOST_PP_CAT(data, n) BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
+        typedef BOOST_PP_CAT(data, n) BOOST_PP_CAT(proto_arg, n);\
         /**/
 
     #define BOOST_PROTO_ARG_N_TYPE(z, n, data)\
         typename proto::result_of::unref<\
-            typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
+            typename Expr::BOOST_PP_CAT(proto_arg, n)\
         >::const_reference\
         /**/
 
@@ -438,13 +443,13 @@
                 template<typename Expr>
                 typename result_of::left<Expr>::reference operator ()(Expr &expr) const
                 {
-                    return proto::unref(expr.cast().arg0);
+                    return proto::unref(expr.proto_base().arg0);
                 }
 
                 template<typename Expr>
                 typename result_of::left<Expr>::const_reference operator ()(Expr const &expr) const
                 {
-                    return proto::unref(expr.cast().arg0);
+                    return proto::unref(expr.proto_base().arg0);
                 }
             };
 
@@ -461,13 +466,13 @@
                 template<typename Expr>
                 typename result_of::right<Expr>::reference operator ()(Expr &expr) const
                 {
-                    return proto::unref(expr.cast().arg1);
+                    return proto::unref(expr.proto_base().arg1);
                 }
 
                 template<typename Expr>
                 typename result_of::right<Expr>::const_reference operator ()(Expr const &expr) const
                 {
-                    return proto::unref(expr.cast().arg1);
+                    return proto::unref(expr.proto_base().arg1);
                 }
             };
 
@@ -551,19 +556,19 @@
         /// arg
         ///
         template<typename Expr>
-        typename result_of::unref<typename Expr::type::arg0_type>::reference
+        typename result_of::unref<typename Expr::proto_base_expr::proto_arg0>::reference
         arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
-            return proto::unref(expr.cast().arg0);
+            return proto::unref(expr.proto_base().arg0);
         };
 
         /// \overload
         ///
         template<typename Expr>
-        typename result_of::unref<typename Expr::type::arg0_type>::const_reference
+        typename result_of::unref<typename Expr::proto_base_expr::proto_arg0>::const_reference
         arg(Expr const &expr)
         {
-            return proto::unref(expr.cast().arg0);
+            return proto::unref(expr.proto_base().arg0);
         };
 
         /// \overload
@@ -626,7 +631,8 @@
             >
         {
             typedef expr<proto::tag::function, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
-            typedef proto::tag::function tag_type;
+            typedef type proto_base_expr;
+            typedef proto::tag::function proto_tag;
             BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, A)
             BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT)
         };
@@ -646,7 +652,8 @@
             >
         {
             typedef expr<Tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
-            typedef Tag tag_type;
+            typedef type proto_base_expr;
+            typedef Tag proto_tag;
             BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, A)
             BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT)
         };
@@ -656,16 +663,16 @@
         {
             template<typename Expr>
             struct arg_c<Expr, N>
-              : unref<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)>
+              : unref<typename Expr::BOOST_PP_CAT(proto_arg, N)>
             {
                 static typename arg_c::reference call(Expr &expr)
                 {
-                    return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));
+                    return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }
 
                 static typename arg_c::const_reference call(Expr const &expr)
                 {
-                    return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));
+                    return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }
             };
 

@@ -27,7 +27,7 @@ namespace boost { namespace proto
 
         /// INTERNAL ONLY
         ///
-        typedef void boost_proto_is_domain_;
+        typedef void proto_is_domain_;
     };
 
     struct deduce_domain
@@ -40,7 +40,7 @@ namespace boost { namespace proto
     {};
 
     template<typename T>
-    struct is_domain<T, typename T::boost_proto_is_domain_>
+    struct is_domain<T, typename T::proto_is_domain_>
       : mpl::true_
     {};
 
@@ -51,9 +51,9 @@ namespace boost { namespace proto
     };
 
     template<typename T>
-    struct domain_of<T, typename T::is_boost_proto_expr_>
+    struct domain_of<T, typename T::proto_is_expr_>
     {
-        typedef typename T::domain type;
+        typedef typename T::proto_domain type;
     };
 
 }}

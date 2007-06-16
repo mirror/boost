@@ -74,7 +74,7 @@ namespace boost { namespace xpressive
         // as_repeat
         template<typename Char, typename Tag, bool Greedy>
         struct as_repeat
-          : proto::trans::conditional<
+          : proto::transform::conditional<
                 use_simple_repeat<proto::result_of::arg<mpl::_>, Char>
               , as_simple_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>
               , as_default_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>
@@ -134,17 +134,17 @@ namespace boost { namespace xpressive
 
             template<typename Dummy>
             struct case_<proto::tag::subscript, Dummy>
-              : proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar<Char> > > >
+              : proto::transform::right<proto::subscript<set_initializer_type, as_set<Grammar<Char> > > >
             {};
 
             template<typename Dummy>
             struct case_<lookahead_tag, Dummy>
-              : proto::trans::arg<proto::unary_expr<lookahead_tag, as_lookahead<Grammar<Char> > > >
+              : proto::transform::arg<proto::unary_expr<lookahead_tag, as_lookahead<Grammar<Char> > > >
             {};
 
             template<typename Dummy>
             struct case_<lookbehind_tag, Dummy>
-              : proto::trans::arg<proto::unary_expr<lookbehind_tag, as_lookbehind<Grammar<Char> > > >
+              : proto::transform::arg<proto::unary_expr<lookbehind_tag, as_lookbehind<Grammar<Char> > > >
             {};
 
             template<typename Dummy>
@@ -171,7 +171,7 @@ namespace boost { namespace xpressive
 
             template<typename Dummy>
             struct case_<proto::tag::shift_right, Dummy>
-              : proto::trans::reverse_fold<proto::shift_right<Grammar<Char>, Grammar<Char> > >
+              : proto::transform::reverse_fold<proto::shift_right<Grammar<Char>, Grammar<Char> > >
             {};
 
             template<typename Dummy>
@@ -186,33 +186,33 @@ namespace boost { namespace xpressive
 
             template<typename Dummy, bool Greedy>
             struct case_<optional_tag<Greedy> , Dummy>
-              : in_sequence<proto::trans::arg<proto::unary_expr<optional_tag<Greedy>, as_optional<Grammar<Char>, Greedy> > > >
+              : in_sequence<proto::transform::arg<proto::unary_expr<optional_tag<Greedy>, as_optional<Grammar<Char>, Greedy> > > >
             {};
 
             template<typename Dummy>
             struct case_<proto::tag::dereference, Dummy>
-              : proto::trans::compose<as_repeat<Char, proto::tag::dereference, true>, Grammar<Char> >
+              : proto::transform::compose<as_repeat<Char, proto::tag::dereference, true>, Grammar<Char> >
             {};
 
             template<typename Dummy>
             struct case_<proto::tag::posit, Dummy>
-              : proto::trans::compose<as_repeat<Char, proto::tag::posit, true>, Grammar<Char> >
+              : proto::transform::compose<as_repeat<Char, proto::tag::posit, true>, Grammar<Char> >
             {};
 
             template<typename Dummy>
             struct case_<proto::tag::logical_not, Dummy>
-              : proto::trans::compose<as_repeat<Char, proto::tag::logical_not, true>, Grammar<Char> >
+              : proto::transform::compose<as_repeat<Char, proto::tag::logical_not, true>, Grammar<Char> >
             {};
 
             template<uint_t Min, uint_t Max, typename Dummy>
             struct case_<generic_quant_tag<Min, Max> , Dummy>
-              : proto::trans::compose<as_repeat<Char, generic_quant_tag<Min, Max>, true>, Grammar<Char> >
+              : proto::transform::compose<as_repeat<Char, generic_quant_tag<Min, Max>, true>, Grammar<Char> >
             {};
 
             template<typename Dummy>
             struct case_<proto::tag::negate, Dummy>
-              : proto::trans::compose<
-                    proto::trans::arg<proto::negate<proto::switch_<NonGreedyRepeatCases<Char> > > >
+              : proto::transform::compose<
+                    proto::transform::arg<proto::negate<proto::switch_<NonGreedyRepeatCases<Char> > > >
                   , Grammar<Char>
                 >
             {};
@@ -220,7 +220,7 @@ namespace boost { namespace xpressive
             template<typename Dummy>
             struct case_<proto::tag::complement, Dummy>
               : in_sequence<as_inverse<
-                    proto::trans::arg<proto::complement<proto::switch_<InvertibleCases<Char> > > >
+                    proto::transform::arg<proto::complement<proto::switch_<InvertibleCases<Char> > > >
                 > >
             {};
 
@@ -231,17 +231,17 @@ namespace boost { namespace xpressive
 
             template<typename Dummy>
             struct case_<lookahead_tag, Dummy>
-              : in_sequence<proto::trans::arg<proto::unary_expr<lookahead_tag, as_lookahead<Grammar<Char> > > > >
+              : in_sequence<proto::transform::arg<proto::unary_expr<lookahead_tag, as_lookahead<Grammar<Char> > > > >
             {};
 
             template<typename Dummy>
             struct case_<lookbehind_tag, Dummy>
-              : in_sequence<proto::trans::arg<proto::unary_expr<lookbehind_tag, as_lookbehind<Grammar<Char> > > > >
+              : in_sequence<proto::transform::arg<proto::unary_expr<lookbehind_tag, as_lookbehind<Grammar<Char> > > > >
             {};
 
             template<typename Dummy>
             struct case_<keeper_tag, Dummy>
-              : in_sequence<proto::trans::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar<Char> > > > >
+              : in_sequence<proto::transform::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar<Char> > > > >
             {};
 
             template<typename Dummy>
@@ -252,7 +252,7 @@ namespace boost { namespace xpressive
             template<typename Dummy>
             struct case_<proto::tag::assign, Dummy>
               : proto::or_<
-                    proto::trans::compose<as_marker<proto::assign<basic_mark_tag, Grammar<Char> > >, Grammar<Char> >
+                    proto::transform::compose<as_marker<proto::assign<basic_mark_tag, Grammar<Char> > >, Grammar<Char> >
                   , in_sequence<as_list_set<ListSet<Char> > >
                   , in_sequence<as_attr_matcher<proto::assign<proto::terminal<attribute_placeholder<proto::_> >, proto::_> > >
                 >
@@ -261,8 +261,8 @@ namespace boost { namespace xpressive
             template<typename Dummy>
             struct case_<proto::tag::subscript, Dummy>
               : proto::or_<
-                    in_sequence<proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar<Char> > > > >
-                  , proto::trans::compose<as_action<proto::subscript<Grammar<Char>, proto::_> >, Grammar<Char> >
+                    in_sequence<proto::transform::right<proto::subscript<set_initializer_type, as_set<Grammar<Char> > > > >
+                  , proto::transform::compose<as_action<proto::subscript<Grammar<Char>, proto::_> >, Grammar<Char> >
                 >
             {};
         };

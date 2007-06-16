@@ -120,16 +120,16 @@ namespace boost { namespace xpressive { namespace detail
     struct as_alternate
       : as_alternate_matcher<
             proto::transform::reverse_fold_tree<
-                typename Grammar::tag_type
-              , in_alternate<typename Grammar::arg0_type>
+                typename Grammar::proto_tag
+              , in_alternate<typename Grammar::proto_arg0>
               , fusion::nil
             >
         >
     {
         BOOST_MPL_ASSERT((
             is_same<
-                typename Grammar::arg0_type
-              , typename Grammar::arg1_type
+                typename Grammar::proto_arg0
+              , typename Grammar::proto_arg1
             >
         ));
     };

@@ -22,29 +22,29 @@ namespace boost { namespace proto
 
 #define BOOST_PROTO_ARG(z, n, data)\
     typedef\
-        typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
-    BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
+        typename Expr::BOOST_PP_CAT(proto_arg, n)\
+    BOOST_PP_CAT(proto_arg, n);\
     /**/
 
     template<typename Expr>
     struct ref_
     {
-        typedef typename Expr::type type;
-        typedef typename Expr::tag_type tag_type;
-        typedef typename Expr::args_type args_type;
-        typedef typename Expr::arity arity;
-        typedef typename Expr::domain domain;
+        typedef typename Expr::proto_base_expr proto_base_expr;
+        typedef typename Expr::proto_tag proto_tag;
+        typedef typename Expr::proto_args proto_args;
+        typedef typename Expr::proto_arity proto_arity;
+        typedef typename Expr::proto_domain proto_domain;
         typedef proto_ref_tag fusion_tag;
-        typedef void is_boost_proto_ref_;
-        typedef void is_boost_proto_expr_;
-        typedef Expr boost_proto_expr_type_;
+        typedef void proto_is_ref_;
+        typedef void proto_is_expr_;
+        typedef Expr proto_derived_expr;
 
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
 
-        typename mpl::if_<is_const<Expr>, type const &, type &>::type
-        cast() const
+        typename mpl::if_<is_const<Expr>, proto_base_expr const &, proto_base_expr &>::type
+        proto_base() const
         {
-            return this->expr.cast();
+            return this->expr.proto_base();
         }
 
         static ref_<Expr> make(Expr &expr)
@@ -76,7 +76,7 @@ namespace boost { namespace proto
         template<typename T>
         struct unref<ref_<T> >
         {
-            typedef typename T::boost_proto_expr_type_ type;
+            typedef typename T::proto_derived_expr type;
             typedef T &reference;
             typedef T &const_reference;
         };
