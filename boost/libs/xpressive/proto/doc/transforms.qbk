@@ -670,8 +670,8 @@ in reverse order, starting with the Nth child. (Note that for building things
 like cons lists, you'll often want to built it back-to-front with
 `reverse_fold<>`.)
 
-[def __arg_N__ arg[~N]_type]
-[def __arg_N_sub_1__ arg[~N-1]_type]
+[def __arg_N__ proto_arg[~N]]
+[def __arg_N_sub_1__ proto_arg[~N-1]]
 
 [table
     [   [Expression]
@@ -849,7 +849,7 @@ object of type `R` constructed like this:
     E2 e2 = G::call(e, s, v);
     R(T::call(e2, s, v));
 
-where `s` and `v` are some state and visitor parameters, and E2 is the return
+where `s` and `v` are some state and visitor parameters, and `E2` is the return
 type of `G::call(e,s,v)`. Note that `G`'s transform is applied first, followed
 by `T`'s transform.
 
