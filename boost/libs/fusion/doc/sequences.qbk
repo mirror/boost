@@ -117,6 +117,7 @@ For any Forward Sequence s the following invariants always hold:
 * __joint_view__
 * __transform_view__
 * __reverse_view__
+* __zip_view__
 
 [endsect]
 
@@ -179,9 +180,10 @@ are not defined in __forward_sequence__.
 * __std_pair__
 * __boost_array__
 * __vector__
+* __reverse_view__
 * __iterator_range__ (where adapted sequence is a Bidirectional Sequence)
 * __transform_view__ (where adapted sequence is a Bidirectional Sequence)
-* __reverse_view__
+* __zip_view__       (where adapted sequences are models Bidirectional Sequence)
 
 [endsect]
 
@@ -253,9 +255,10 @@ are not defined in __bidirectional_sequence__.
 * __std_pair__
 * __boost_array__
 * __vector__
+* __reverse_view__
 * __iterator_range__ (where adapted sequence is a Random Access Sequence)
 * __transform_view__ (where adapted sequence is a Random Access Sequence)
-* __reverse_view__
+* __zip_view__       (where adapted sequences are models Random Access Sequence)
 
 [endsect]
 
@@ -924,7 +927,9 @@ by a pair of iterators.
 
 [heading Model of]
 
-* __forward_sequence__
+* __forward_sequence__, __bidirectional_sequence__ or
+__random_access_sequence__ depending on the traversal characteristics (see
+__traversal_concept__) of its underlying sequence.
 
 [variablelist Notation
     [[`IR`]             [An `iterator_range` type]]
@@ -1047,7 +1052,9 @@ is constructed from a __sequence__ of references to the component __sequence__s.
 
 [heading Model of]
 
-* __forward_sequence__
+* __forward_sequence__, __bidirectional_sequence__ or
+__random_access_sequence__ depending on the traversal characteristics (see
+__traversal_concept__) of its underlying sequence.
 
 [variablelist Notation
     [[`ZV`]             [A `joint_view` type]]

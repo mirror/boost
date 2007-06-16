@@ -84,9 +84,6 @@ tosh:
   orthogonal so there can be infinite Bidi/RA/Assoc Sequences. 
   OTOH it complicates things in way that might not be worth it...
 
-* Document new Concept-preserving semantics of iterator_range
-* Document forgotten Concept preserving semantics of zip_view
-
 * Implement always_view/always with repetitive_view<single_view<T> > 
   semantics - using repetitive_view will for this purpose will be way
   too much overhead.
