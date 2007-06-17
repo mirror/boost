@@ -1,9 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // action_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//  Copyright 2007 Eric Niebler.
+//  Copyright 2007 David Jenkins.
+//
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_XPRESSIVE_DETAIL_CORE_MATCHER_ACTION_MATCHER_HPP_EAN_10_04_2005
 #define BOOST_XPRESSIVE_DETAIL_CORE_MATCHER_ACTION_MATCHER_HPP_EAN_10_04_2005
@@ -250,18 +253,6 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    // The attribute of optional<T> and smart pointers.
-    template<typename Attr>
-    struct attr_of
-      : remove_const<typename remove_reference<typename Attr::value_type>::type>
-    {};
-
-    // The attribute of bare pointers
-    template<typename Attr>
-    struct attr_of<Attr *>
-      : remove_const<Attr>
-    {};
-
     ///////////////////////////////////////////////////////////////////////////////
     // opt
     //
@@ -296,7 +287,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename State, typename Visitor>
         struct apply
           : proto::result_of::as_expr<
-                opt<typename attr_of<typename Expr::proto_arg0::matcher_type::result_type>::type>
+                opt<typename Expr::proto_arg0::matcher_type::value_type::second_type>
             >
         {};
 
@@ -304,7 +295,7 @@ namespace boost { namespace xpressive { namespace detail
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &)
         {
-            typedef typename attr_of<typename Expr::proto_arg0::matcher_type::result_type>::type attr_type;
+            typedef typename Expr::proto_arg0::matcher_type::value_type::second_type attr_type;
             int slot = typename Expr::proto_arg0::nbr_type();
             attr_type const *attr = static_cast<attr_type const *>(state.attr_context_.attr_slots_[slot-1]);
             return proto::as_expr(opt<attr_type>(attr));

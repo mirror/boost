@@ -1,9 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // as_action.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//  Copyright 2007 Eric Niebler.
+//  Copyright 2007 David Jenkins.
+//
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_XPRESSIVE_DETAIL_STATIC_TRANSFORMS_AS_ACTION_HPP_EAN_04_05_2007
 #define BOOST_XPRESSIVE_DETAIL_STATIC_TRANSFORMS_AS_ACTION_HPP_EAN_04_05_2007
@@ -185,6 +188,7 @@ namespace boost { namespace xpressive { namespace detail
             return typename apply<Expr, State, Visitor>::type(
                 Expr::proto_arg0::proto_arg0::nbr_type::value
               , proto::arg(proto::right(expr))
+              , visitor.traits()
             );
         }
     };
