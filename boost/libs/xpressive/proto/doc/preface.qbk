@@ -10,7 +10,7 @@
 [:Something witty.]
 [:[*['-- Someone Famous]]]
 
-[h2 Description]
+[header Description]
 
 Proto is a framework for building Domain Specific Embedded Languages
 in C++. It provides tools for constructing, type-checking, transforming and
@@ -23,8 +23,9 @@ More specifically, Proto provides:
 * Utilities for defining the meta-grammar to which an expression must conform.
 * An extensible mechanism for immediately executing an expression template.
 * An extensible set of tree transformations to apply to expression trees.
+* A mechanism for giving expressions additional behaviors and members.
 
-[h2 Motivation]
+[header Motivation]
 
 Expression Templates are an advanced technique that C++ library developers use
 to define embedded mini-languages that target specific problem domains. The
@@ -44,7 +45,7 @@ developed with Proto is declarative and readable.
 
 In short, Proto is a DSEL for defining DSELs.
 
-[h2 Influences and Related Work]
+[header Influences and Related Work]
 
 Proto was initially developed as part of _xpressive_ to simplify the job of
 transforming an expression template into an executable finite state machine

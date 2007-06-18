@@ -7,9 +7,9 @@
 
 [import ../test/examples.cpp]
 
-[/===========================]
-[section Tree Transformations]
-[/===========================]
+[/==========================================================]
+[section:expression_transformation Expression Transformation]
+[/==========================================================]
 
 Sometimes, rather than immediately executing an expression template, you'd
 like to transform it into some other object. Maybe the transformation is simple,
@@ -18,9 +18,9 @@ transforming an expression template into a finite-state automata for matching a
 regular expression. Proto provides a framework for applying tree
 transformations and several canned transformations that are generally useful.
 
-[/=========================]
-[h3 Transformation Overview]
-[/=========================]
+[/===============]
+[heading Overview]
+[/===============]
 
 Defining tree transformations involves defining the meta-grammar for your DSEL
 and decorating it with transformations. Each rule in your meta-grammar will
@@ -53,9 +53,9 @@ transformations can be accumulated bottom-up.
 
 That's it, in a nutshell. Now let's crack this nut and peek inside.
 
-[/====================]
-[h3 Defining a Grammar]
-[/====================]
+[/==========================================]
+[section Example: Calculator Arity Transform]
+[/==========================================]
 
 Let's have another look at our trusty calculator example. If you recall, the
 calculator allows the lazy evaluation of arithmetic expressions, with
@@ -71,6 +71,10 @@ could say the /arity/ of the first expression is one and of the second is two.
 The arity is determined by the highest placeholder in the expression. Our job
 will be to write a transform that calculates the arity of any calculator
 expression.
+
+[/=========================]
+[heading Defining a Grammar]
+[/=========================]
 
 First, we must write the grammar for the calculator. It's really very simple.
 Calculator expression can be made up of any combination of 5 constituents:
@@ -93,9 +97,9 @@ matches anything. So `terminal< _ >` will match any terminal, and
 for which the operand matches CalculatorGrammar (the `_` matches any operator
 tag).
 
-[/=======================]
-[h3 Writing the Transform]
-[/=======================]
+[/============================]
+[heading Writing the Transform]
+[/============================]
 
 It's straightforward to describe in words how the arity of an expression should
 be calculated. First, we describe the arity of each of the 5 constituents in
@@ -142,7 +146,7 @@ So `transform::arg<>` invokes the transform associated with
 That begs the question, what does `unary_expr<>`'s transform do? Well,
 `unary_expr< _, CalculatorGrammar >` has a default transform
 associated with it. It is a /pass-through/ transform. When an expression
-of the form `expr< T, arg1< X > >` is passed to the transform, it's `apply<>`
+of the form `expr< T, arg1< X > >` is passed to the transform, its `apply<>`
 member template will invoke the `CalculatorGrammar` transform (which we haven't
 completely defined yet -- patience) on `X` resulting in `Y`, and then
 reassemble the expression as `expr< T, arg1< Y > >`.
@@ -247,9 +251,11 @@ This displays the following:
 
 (Aside: this uses the fact that `mpl::int_<1>` has a conversion to `int(1)`.)
 
-[/===================]
-[h3 Canned Transforms]
-[/===================]
+[endsect]
+
+[/========================]
+[section Canned Transforms]
+[/========================]
 
 Some transforms are generally useful, so Proto provides them. They are
 described below. Each is of the form:
@@ -263,7 +269,7 @@ nested static `call()` member functions that accept `expr`, `state`, and
 the return type of `call()`. The tables below show what `call()` and `apply<>`
 do for each of the transforms that Proto provides.
 
-[h4 [^arg<>], [^arc_c<>], [^left<>] and [^right<>]]
+[section:arg_c_and_friends [^arg<>], [^arc_c<>], [^left<>] and [^right<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -322,7 +328,9 @@ Example:
       : transform::arg< terminal<int> >
     {};
 
-[h4 [^identity<>], [^state<>] and [^visitor<>]]
+[endsect]
+
+[section:identity_and_friends [^identity<>], [^state<>] and [^visitor<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -373,7 +381,9 @@ Example:
       : transform::identity< subscript<MyGrammar, MyGrammar> >
     {};
 
-[h4 [^always<>]]
+[endsect]
+
+[section:always [^always<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -405,7 +415,9 @@ Example:
       : transform::always< terminal<placeholder1>, mpl::int_<1> >
     {};
 
-[h4 [^apply1<>], [^apply2<>] and [^apply3<>]]
+[endsect]
+
+[section:applyn [^apply1<>], [^apply2<>] and [^apply3<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -469,7 +481,9 @@ Example:
         >
     {};
 
-[h4 [^branch<>]]
+[endsect]
+
+[section:branch [^branch<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -498,33 +512,9 @@ Example:
 
 See the [link reverse_fold_example [^reverse_fold<>] example].
 
-[/
-    // This transform matches function invocations such as foo(1,'a',"b")
-    // and transforms them into fusion cons lists of their arguments. In this
-    // case, the result would be cons(1, cons('a', cons("b", nil()))).
-    struct ArgsAsList
-      : transform::branch<
-            transform::reverse_fold<
-                function<
-                    // This effectively skips the first argument, which is 
-                    // the function being invoked; in this case, "foo".
-                    transform::state<terminal<_> >
-                  , vararg<
-                        // Put the rest of the args in a fusion cons list:
-                        transform::list<
-                            // Extract the arguments from the terminals:
-                            transform::arg<terminal<_> >
-                        >
-                    >
-                >
-            >
-            // The whole thing uses fusion::nil as the initial state
-          , fusion::nil
-        >
-    {};
-]
+[endsect]
 
-[h4 [^compose<>]]
+[section:compose [^compose<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -578,7 +568,9 @@ Example:
         >
     {};
 
-[h4 [^conditional<>]]
+[endsect]
+
+[section:conditional [^conditional<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -615,7 +607,9 @@ Example:
         >
     {};
 
-[h4 [^list<>]]
+[endsect]
+
+[section:list [^list<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -648,7 +642,9 @@ Example:
 
 See the [link reverse_fold_example [^reverse_fold<>] example].
 
-[h4 [^fold<>] and [^reverse_fold<>]]
+[endsect]
+
+[section:fold [^fold<>] and [^reverse_fold<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -739,7 +735,9 @@ like cons lists, you'll often want to built it back-to-front with
 
 [AsArgList]
 
-[h4 [^fold_tree<>] and [^reverse_fold_tree<>]]
+[endsect]
+
+[section:fold_tree [^fold_tree<>] and [^reverse_fold_tree<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -811,7 +809,9 @@ Example:
 
 [FoldTreeToList]
 
-[h4 [^construct<>]]
+[endsect]
+
+[section:construct [^construct<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -900,7 +900,9 @@ which is short-cut syntax for a nested `construct<>` transform. [footnote The
 short-cut syntax for nested constructors does not work on MSVC due to compiler
 bugs.]
 
-[h4 [^pass_through<>]]
+[endsect]
+
+[section:pass_through [^pass_through<>]]
 
     namespace boost { namespace proto { namespace transform
     {
@@ -948,5 +950,9 @@ transform explicitly.
 Example:
 
 [Promote]
+
+[endsect]
+
+[endsect]
 
 [endsect]

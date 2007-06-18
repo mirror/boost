@@ -18,7 +18,7 @@ lazily-evaluated arithmetic expression, such as `(_2 - _1) / _2 * 100`, where
 `_1` and `_2` are placeholders for values to be passed in when the expression
 is evaluated.
 
-[h3 Defining Terminals]
+[header Defining Terminals]
 
 The first order of business is to define the placeholders `_1` and `_2`. For
 that, we'll use the _terminal_ expression generator.
@@ -34,17 +34,10 @@ that, we'll use the _terminal_ expression generator.
 The initialization may look a little odd at first, but there is a good reason
 for doing things this way. The objects `_1` and `_2` above do not require
 run-time construction -- they are ['statically initialized], which means they
-are essentially initialized at compile time.
-
-[/ TODO Move this discussion into expr_trees.qbk]
-
-[blurb [*Static Initialization]\n
-\n
-Why is static initialization important? The terminals of many domain-specific
-embedded languages are likely to be global const objects, like `_1` and `_2`
-above. Were these object to require run-time initialization, it might be
-possible to use these objects before they are initialized. That would be bad.
-Statically initialized objects cannot be misused that way.]
+are essentially initialized at compile time. See the
+[link boost_proto.appendices.rationale.static_initialization Static
+Initialization] section in the [link boost_proto.appendices.rationale Rationale]
+appendix for more information.
 
 The actual type of `_1` looks like this:
 
@@ -54,7 +47,8 @@ The _expr_ template makes up the nodes in expression trees. The first template
 parameter is the node type; in this case, `proto::tag::terminal`. That means
 that `_1` is a leaf-node in the expression tree. The second template parameter
 is a list of children types. Terminals will always have only one type in the
-type list. The last parameter is the arity of .
+type list. The last parameter is the arity of the expression. Terminals have
+arity 0, unary expressions have arity 1, etc.
 
 The _expr_ struct is defined as follows:
 
@@ -76,7 +70,7 @@ for the _expr_ struct, and the inner braces are for the member `_1.arg0` which
 is of type `placeholder1`. Note that we use braces to initialize `_1.arg0`
 because `placeholder1` is also an aggregate.
 
-[h3 Constructing Expression Trees]
+[header Constructing Expression Trees]
 
 Now that we have terminals, we can use Proto's operator overloads to combine
 these terminals into larger expressions. So, for instance, we can immediately
@@ -88,7 +82,7 @@ So far, the object is just a tree representing the expression. It has no
 behavior. In particular, it is not yet a calculator. Below we'll see how
 to make it a calculator by defining an evaluation context.
 
-[h3 Defining an Evaluation Context]
+[header Defining an Evaluation Context]
 
 No doubt you want your expression templates to actually /do/ something. One
 approach is to define an ['evaluation context]. The context is like a function
@@ -172,7 +166,7 @@ evaluate our arithmetic expressions, as below:
     // This prints "10"
     std::cout << d << std::endl;
 
-[h3 Default Expression Evaluation]
+[header Default Expression Evaluation]
 
 You might notice that the `calculator_context` has a lot of boilerplate. It
 is fairly common for addition nodes to be handled by evaluating the left and

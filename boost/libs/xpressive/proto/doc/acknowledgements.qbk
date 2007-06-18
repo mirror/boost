@@ -5,7 +5,7 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[section Acknowledgements]
+[section:acknowledgements Appendix D: Acknowledgements]
 
 I'd like to thank Joel de Guzman and Hartmut Kaiser for being willing to take a
 chance on using Proto for their work on Spirit-2 and Karma when Proto was

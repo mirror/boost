@@ -7,25 +7,25 @@
 
 [section Installing Proto]
 
-[h2 Getting Proto]
+[header Getting Proto]
 
 Currently the only way to get Proto is through CVS via the boost project on
 SourceForge.net. Just go to [@http://sf.net/projects/boost] and follow the
 instructions there for anonymous CVS access.
 
-[h2 Building with Proto]
+[header Building with Proto]
 
 Proto is a header-only template library, which means you don't need to alter
 your build scripts or link to any separate lib file to use it. All you need
 to do is `#include <boost/xpressive/proto/proto.hpp>`. This will include the
 core of Proto. If you want to use any transforms, you must include the
-appropriate header from the [^boost/xpressive/proto/transform/] directory.
+appropriate header from the [^boost\/xpressive\/proto\/transform\/] directory.
 
-[h2 Requirements]
+[header Requirements]
 
 Proto depends on Boost. You must use the version in CVS HEAD.
 
-[h2 Supported Compilers]
+[header Supported Compilers]
 
 Currently, Boost.Proto is known to work on the following compilers:
 

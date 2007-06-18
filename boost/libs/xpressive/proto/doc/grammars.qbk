@@ -5,16 +5,23 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[section Pattern Matching and Meta-Grammars]
+[/============================================================================================]
+[section:expression_introspection Expression Introspection: Pattern Matching and Meta-Grammars]
+[/============================================================================================]
 
 Expression trees can have a very rich and complicated structure. Often, you
 need to know some things about an expression's structure before you can process
-it. Imagine your DSEL is a miniature I/O facility, with iostream operations
+it. This section describes the tools Proto provides for peering inside an
+expression tree and discovering its structure.
+
+[/==========================]
+[section Expression Patterns]
+[/==========================]
+
+Imagine your DSEL is a miniature I/O facility, with iostream operations
 that execute lazily. You might want expressions representing input operations
 to be processed by one function, and output operations to be processed by a
 different function. How would you do that?
-
-[h3 Expression Patterns]
 
 The answer is to write patterns that match the structure of input and output
 expressions. Proto provides utilities for defining the patterns, and the
@@ -146,9 +153,13 @@ the `Output` pattern. This time we succeed, because `cout_ << 1` will match
 the first alternate of the _or_. We're done -- the pattern matches
 successfully.
 
-[h3 Fuzzy and Exact Matches of Terminals]
+[endsect]
 
-They terminals in an expression tree could be const or non-const references, or
+[/===========================================]
+[section Fuzzy and Exact Matches of Terminals]
+[/===========================================]
+
+The terminals in an expression tree could be const or non-const references, or
 they might not be references at all. When writing patterns, you usually don't 
 have to worry about it because _matches_ gives you a little wiggle room when 
 matching terminals. A pattern such as `proto::terminal<int>` will match a 
@@ -242,7 +253,11 @@ When given a pattern like this, Proto will deconstruct the pattern and the
 terminal it is being matched against and see if it can match all the
 constituents.
 
-[h3 Other Valid Patterns]
+[endsect]
+
+[/============================================================]
+[section Condition and Conjunction with [^if_<>] and [^and_<>]]
+[/============================================================]
 
 We've already seen how to use expression generators like `terminal<>` and
 `shift_right<>` as patterns. We've also seen _or_, which we can use to
@@ -269,10 +284,14 @@ expression because it has the MPL placeholder `mpl::_` in it.
 
 [warning Do not confuse `mpl::_` with `proto::_`. The first is only useful in
 MPL lambda expressions. The second is Proto's pattern wildcard. The only place
-`mpl::_` should appear in your patterns is in an _if_. Elsewhere in your
-patterns you should be using `proto::_`.]
+`mpl::_` should appear in your patterns is in an _if_, or in tranform::applyN<>,
+as we'll see later. Elsewhere in your patterns you should be using `proto::_`.]
 
-[h3 Matching Vararg Functions]
+[endsect]
+
+[/================================]
+[section Matching Vararg Functions]
+[/================================]
 
 Not all of C++'s overloadable operators are unary or binary. There is the
 oddball `operator()` -- the function call operator -- which can have any number
@@ -319,7 +338,11 @@ node type, and any additional template parameters represent children nodes. The
 answer is that this is a degenerate pattern that matches every possible
 expression tree, from root to leaves.
 
-[h3 Meta-Grammars]
+[endsect]
+
+[/====================]
+[section Meta-Grammars]
+[/====================]
 
 We've already seen how to use small patterns to answer simple questions about
 expression trees. Here's a harder question: ["Does this expression conform to the
@@ -332,17 +355,25 @@ expressions.
 ["If Proto let me select which operators to overload, my users wouldn't be able
 to create invalid expressions in the first place, and I wouldn't need a grammar
 at all!] That may be true, but there are reasons for preferring to do things
-this way. First, it lets you develop your DSEL rapidly -- all the operators are
-there for you already! -- and worry about invalid syntax later. Second, it
+this way.
+
+First, it lets you develop your DSEL rapidly -- all the operators are
+there for you already! -- and worry about invalid syntax later.
+
+Second, it
 might be the case that some operators are only allowed in certain contexts
 within your DSEL. This is easy to express with a grammar, and hard to do with
-straight operator overloading. Third, using a DSEL grammar to flag invalid
+straight operator overloading. 
+
+Third, using a DSEL grammar to flag invalid
 expressions can often yield better errors than manually selecting the
-overloaded operators. Fourth, the grammar can be used for more than just
+overloaded operators. 
+
+Fourth, the grammar can be used for more than just
 validation. As we'll see later, you can use your grammar to define ['tree
 transformations] that convert expression templates into other more useful
-objects.\n
-\n
+objects.
+
 If none of the above convinces you, you actually /can/ use Proto to control
 which operators are overloaded within your domain. And to do it, you need to 
 define a grammar! We'll see how later.
@@ -437,5 +468,7 @@ to issue readable compile-time errors for invalid expressions, as below:
         BOOST_MPL_ASSERT(( matches< Expr, CalculatorGrammar > ));
         // ...
     }
+
+[endsect]
 
 [endsect]

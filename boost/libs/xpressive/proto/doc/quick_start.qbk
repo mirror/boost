@@ -5,12 +5,7 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[section Quick Start]
-
-In this section, we'll see a simple ['hello world] for Proto and take a quick
-tour of the types and functions Proto provides.
-
-[h2 Hello, world!]
+[section Hello World]
 
 Below is a very simple program that uses Proto to build an expression template
 and then execute it.
@@ -82,73 +77,5 @@ As we'll see later, there is a way to create Proto expression trees that are
 context. There is also a way to control which operators are overloaded for your
 particular domain. But that is not the default behavior. We'll see later why
 the default is often a good thing.]
-
-[h2 Proto's Tool-Box]
-
-Let's begin with the nickel tour of the utilities Proto provides.
-
-[table Proto's Tool-Box
-    [[Tool]                     [Description]]
-    [[_expr_]                   [The structure from which Proto's expression
-                                    trees are built.]]
-    [[_arg_, _arg_c_]           [For extracting the ['N]th child expression
-                                    from a Proto expression tree.]]
-    [[_left_, _right_]          [For extracting the left or right child
-                                    expression from a binary Proto expression
-                                    tree.]]
-    [[_eval_]                   [A Proto expression evaluator. Given an 
-                                    expression and a /context/, it evaluates
-                                    the expression in that context.]]
-    [[_default_context_]        [An evaluation context for use with _eval_ 
-                                    which assignes the standard meanings to the
-                                    operators and uses Boost.Typeof to deduce
-                                    return types.]]
-    [[_callable_context_]       [An alternate evaluation context that is easier
-                                    to use in some situations.]]
-    [[_deep_copy_]              [A function for transforming an expression
-                                    tree such that all nodes are held by value
-                                    instead of by reference.]]
-    [[_as_expr_, _as_arg_]      [_as_expr_ is a function that Proto-ifies an
-                                    object if it is not already a Proto
-                                    expression. _as_arg_ is similar except
-                                    the argument is stored by reference.]]
-    [[_terminal_, _unary_expr_,
-        _binary_expr_, /etc./]  [Expression type generators. For example,
-                                    `shift_right<A, B>::type` is the type
-                                    of a right-shift expression with `A` and
-                                    `B` as children. These are also used for
-                                    specifying productions in meta-grammars.]]
-    [[_matches_]                [A compile-time predicate for determining
-                                    whether an expression type matches a
-                                    given meta-grammar.]]
-    [[_or_]                     [For specifying alternate productions in a
-                                    Proto meta-grammar.]]
-    [[_and_]                    [For specifying a compound production in a
-                                    Proto meta-grammar.]]
-    [[_if_]                     [Allows an arbitrary compile-time predicate
-                                    to be used as a production in a Proto
-                                    meta-grammar.]]
-    [[_exact_]                  [Used to specify that a terminal type must
-                                    match exactly in a Proto meta-grammar.
-                                    (By default, matches are ['fuzzy].)]]
-    [[_extends_]                [A domain-specific wrapper for giving an
-                                    expression additional behaviors.]]
-    [[_literal_, _lit_]         [A wrapper for a Proto terminal, and a function
-                                    for generating them, respectively.]]
-    [[_is_expr_]                [Tests a type to see if it is a Proto
-                                    expression type.]]
-    [[_tag_of_]                 [Meta-function which returns the node type
-                                    of the specified expression.]]
-]
-
-[/
-    [[_make_expr_]              [A function for building a Proto expression
-                                    given a node type and children expressions.]]
-    [[_unpack_expr_]            [Like _make_expr_, except the children
-                                    expressions are in a Fusion sequence.]]
-]
-
-Now that you know a bit about the tools Proto provides, let's look at how to
-use them to implement some domain-specific embedded languages.
 
 [endsect]

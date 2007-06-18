@@ -5,13 +5,15 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[section Extending Proto]
+[section:expression_extension Expression Extension: Giving Expressions Extra Smarts]
 
 In this section, we'll see how to associate Proto expressions with a /domain/,
 how to add members to expressions within a domain, how to control which
 operators are overloaded in a domain, and how to define your own "operators".
 
-[h3 Domains]
+[/==============]
+[section Domains]
+[/==============]
 
 In the examples we've seen so far, Proto has been used to construct an
 expression tree that either is evaluated with the help of a /context/ or else
@@ -31,7 +33,11 @@ This will not compile. The problem is that the object created by the expression
 member function that takes a `double` and returns a `double`, like
 `std::transform()` expects. What can we do?
 
-[h3 The [^extends<>] Expression Wrapper]
+[endsect]
+
+[/==================================================]
+[section:extends The [^extends<>] Expression Wrapper]
+[/==================================================]
 
 The general idea is to add behaviors to the _expr_ type by wrapping it in a
 class template that you define. This wrapper is associated with a domain. Proto
@@ -104,7 +110,11 @@ wrap the placeholders to imbue them with calculator-ness:
     calculator< proto::terminal< placeholder1 >::type > const _1;
     calculator< proto::terminal< placeholder2 >::type > const _2;
 
-[h3 Expression Generators]
+[endsect]
+
+[/============================]
+[section Expression Generators]
+[/============================]
 
 The last thing that remains to be done is to tell Proto that it needs to wrap
 all of our calculator expressions in our `calculator<>` wrapper. We have
@@ -135,7 +145,11 @@ follows:
     // Use the calculator DSEL to square each element ... WORKS! :-)
     std::transform( data, data + 4, data, _1 * _1 );
 
-[h3 Controlling Operator Overloads]
+[endsect]
+
+[/==========================================================]
+[section:inhibiting_overloads Controlling Operator Overloads]
+[/==========================================================]
 
 By default, Proto defines every possible operator overload for Proto-ified
 expressions. This makes it simple to bang together a DSEL, and Proto's grammar
@@ -309,5 +323,7 @@ as:
 
 And that's it! Now, all operators that do not produce valid lazy vector
 expressions are automatically disabled.
+
+[endsect]
 
 [endsect]

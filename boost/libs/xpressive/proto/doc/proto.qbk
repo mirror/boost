@@ -71,11 +71,31 @@
 
 [include preface.qbk]
 
-[section User's Guide]
+[section:users_guide Users' Guide]
 
-This section describes how to use Boost.Proto to build an expression template library.
-If you are looking for detailed information regarding specific components in Boost.Proto,
-check the [link proto.reference Reference] section.
+This Users' Guide describes how to use Proto to build expression-template
+based Domain-Specific Embedded Langauges. It is broken up in to 5 sections, 
+corresponding to the 5 major parts to Proto:
+
+[variablelist
+[[Expression Construction]
+    [Describes how to use Proto to build expression trees.]]
+[[Expression Evaluation]
+    [Describes the tools Proto provides for making your expression trees do
+     something useful.]]
+[[[link boost_proto.users_guide.expression_introspection Expression Introspection]]
+    [Describes Proto's pattern matching and meta-grammar faciities, which make
+     it easy to discover the structure of an expression tree.]]
+[[[link boost_proto.users_guide.expression_transformation Expression Transformation]]
+    [Describes how to write expression transforms that turn an expression tree
+     into some other object.]]
+[[[link boost_proto.users_guide.expression_extension Expression Extension]]
+    [Describes how to extend Proto expressions with additional behaviors and
+     members.]]
+]
+
+But before we get started, let's have a look at some very simple Proto examples
+and say a few words about Proto's philosophy.
 
 [include installation.qbk]
 
@@ -95,5 +115,14 @@ check the [link proto.reference Reference] section.
 
 [xinclude protodoc.xml]
 
+[section Appendices]
+
+[include history.qbk]
+
+[include rationale.qbk]
+
+[include implementation.qbk]
+
 [include acknowledgements.qbk]
 
+[endsect]
