@@ -13,6 +13,9 @@
 #include <boost/fusion/iterator/distance.hpp>
 #include <boost/utility/result_of.hpp>
 
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/add_reference.hpp>
+
 namespace boost { namespace fusion {
 namespace result_of
 {
@@ -32,8 +35,11 @@ namespace detail
 
     template <typename Iterator, typename State, typename F>
     struct fold_apply
-        : boost::result_of<F(typename result_of::value_of<Iterator>::type, State)>
-    {};
+    {
+        typedef typename result_of::deref<Iterator>::type dereferenced;
+        typedef typename add_reference<typename add_const<State>::type>::type lvalue_state;
+        typedef typename boost::result_of<F(dereferenced, lvalue_state)>::type type;
+    };
 
     template <typename First, typename Last, typename State, typename F>
     struct static_fold;

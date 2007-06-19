@@ -39,15 +39,17 @@ namespace boost { namespace fusion {
 
         struct strictest_traversal_impl
         {
-            template<typename T>
+            template<typename Sig>
             struct result;
 
             template<typename Next, typename StrictestSoFar>
             struct result<strictest_traversal_impl(Next, StrictestSoFar)>
             {
-                typedef StrictestSoFar tag1;
-                typedef typename traits::category_of<
-                    typename remove_reference<Next>::type>::type tag2;
+                typedef typename remove_reference<Next>::type next_value;
+                typedef typename remove_reference<StrictestSoFar>::type strictest_so_far;
+
+                typedef strictest_so_far tag1;
+                typedef typename traits::category_of<next_value>::type tag2;
 
                 typedef typename stricter_traversal<tag1,tag2>::type type;
             };

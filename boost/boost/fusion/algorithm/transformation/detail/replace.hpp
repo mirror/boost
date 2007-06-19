@@ -9,6 +9,7 @@
 
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {
@@ -43,14 +44,15 @@ namespace boost { namespace fusion { namespace detail
         replacer(T const& old_value, T const& new_value)
             : old_value(old_value), new_value(new_value) {}
 
-        template<typename Params>
+        template<typename Sig>
         struct result;
 
         template <typename U1, typename U2>
         struct result<replacer<U1>(U2)>
         {
+            typedef typename remove_reference<U2>::type value;
             typedef typename
-                mpl::if_<is_convertible<T, U2>, U2, U2 const&>::type
+                mpl::if_<is_convertible<T, value>, value, value const&>::type
             type;
         };
     

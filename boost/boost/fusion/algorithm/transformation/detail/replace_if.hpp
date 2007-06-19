@@ -9,6 +9,7 @@
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 
 namespace boost { namespace fusion { namespace detail
 {
@@ -49,8 +50,9 @@ namespace boost { namespace fusion { namespace detail
         template <typename F1, typename T1, typename U>
         struct result<replacer_if<F1, T1>(U)>
         {
+            typedef typename remove_reference<U>::type value;
             typedef typename
-                mpl::if_<is_convertible<T, U>, U, U const&>::type
+                mpl::if_<is_convertible<T, value>, value, value const&>::type
             type;
         };
     

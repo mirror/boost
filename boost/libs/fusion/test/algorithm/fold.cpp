@@ -19,6 +19,10 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/vector.hpp>
 
+#include <boost/type_traits/remove_const.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/is_reference.hpp>
+
 #include <string>
 
 using boost::mpl::if_;
@@ -33,7 +37,8 @@ struct add_ints_only
     template <typename T, typename State>
     struct result<add_ints_only(T,State)>
     {
-        typedef State type;
+        typedef typename boost::remove_const<
+            typename boost::remove_reference<State>::type>::type type;
     };
 
     template <typename T, typename State>
@@ -58,11 +63,16 @@ struct count_ints
     template <typename T, typename CountT>
     struct result<count_ints(T,CountT)>
     {
+        typedef typename boost::remove_const<
+            typename boost::remove_reference<T>::type>::type elem;
+        typedef typename boost::remove_const<
+            typename boost::remove_reference<CountT>::type>::type state;
+
         typedef typename
             if_<
-                is_same<T, int>
-              , typename boost::mpl::next<CountT>::type
-              , CountT
+                is_same<elem, int>
+              , typename boost::mpl::next<state>::type
+              , state
             >::type
         type;
     };
@@ -83,6 +93,25 @@ struct appender
     std::string operator()(char c, std::string const& str) const
     {
         return str + c;
+    }
+};
+
+struct lvalue_adder
+{
+    template<typename Sig>
+    struct result;
+
+    template<typename T0, typename T1>
+    struct result<lvalue_adder(T0&, T1)>
+    {
+        // Second argument still needs to support rvalues - see definition of fusion::fold
+        typedef T0 type; 
+    };
+
+    template<typename T0, typename T1>
+    T0 operator()(T0& lhs, T1 const& rhs) const
+    {
+        return lhs + rhs;
     }
 };
 
@@ -128,6 +157,11 @@ main()
     {
         BOOST_TEST(fusion::fold(fusion::make_vector('a','b','c','d','e'), std::string(""), appender())
                    == "abcde");
+    }
+
+    {
+        vector<int, int> vec(1,2);
+        BOOST_TEST(fusion::fold(vec, 0, lvalue_adder()) == 3);
     }
 
     {

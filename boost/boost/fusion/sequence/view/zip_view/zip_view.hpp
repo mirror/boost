@@ -73,8 +73,11 @@ namespace boost { namespace fusion {
 
             template<typename Lhs, typename Rhs>
             struct result<poly_min(Lhs, Rhs)>
-                : mpl::min<Lhs, Rhs>
-            {};
+            {
+                typedef typename remove_reference<Lhs>::type lhs;
+                typedef typename remove_reference<Rhs>::type rhs;
+                typedef typename mpl::min<lhs, rhs>::type type;
+            };
         };
 
         template<typename Sequences>

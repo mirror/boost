@@ -15,6 +15,8 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
 namespace boost { namespace fusion {
 
@@ -24,15 +26,19 @@ namespace boost { namespace fusion {
     {
         struct poly_next
         {
-            template<typename T>
+            template<typename Sig>
             struct result;
 
             template<typename It>
             struct result<poly_next(It)>
-                : mpl::eval_if<is_same<It, unused_type>,
-                               mpl::identity<unused_type>,
-                               result_of::next<It> >
-            {};
+            {
+                typedef typename remove_const<
+                    typename remove_reference<It>::type>::type it;
+
+                typedef typename mpl::eval_if<is_same<it, unused_type>,
+                    mpl::identity<unused_type>,
+                    result_of::next<it> >::type type;
+            };
 
             template<typename It>
             typename result<poly_next(It)>::type

@@ -30,7 +30,7 @@ namespace boost { namespace fusion
             struct apply
             {
                 typedef typename
-                    result_of::value_of<typename Iterator::first_type>::type
+                    result_of::deref<typename Iterator::first_type>::type
                 value_type;
 
                 typedef detail::apply_transform_result<typename Iterator::transform_type> transform_type;
@@ -52,10 +52,10 @@ namespace boost { namespace fusion
             struct apply
             {
                 typedef typename
-                    result_of::value_of<typename Iterator::first1_type>::type
+                    result_of::deref<typename Iterator::first1_type>::type
                 value1_type;
                 typedef typename
-                    result_of::value_of<typename Iterator::first2_type>::type
+                    result_of::deref<typename Iterator::first2_type>::type
                 value2_type;
 
                 typedef detail::apply_transform_result<typename Iterator::transform_type> transform_type;

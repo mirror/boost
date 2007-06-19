@@ -11,6 +11,7 @@
 #include <boost/fusion/sequence/view/zip_view/zip_view_iterator_fwd.hpp>
 #include <boost/fusion/iterator/advance.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 
 namespace boost { namespace fusion {
 
@@ -21,13 +22,15 @@ namespace boost { namespace fusion {
         template<typename N>
         struct poly_advance
         {
-            template<typename T>
+            template<typename Sig>
             struct result;
 
             template<typename N1, typename It>
             struct result<poly_advance<N1>(It)>
-                : result_of::advance<It,N>
-            {};
+            {
+                typedef typename remove_reference<It>::type it;
+                typedef typename result_of::advance<it,N>::type type;
+            };
 
             template<typename It>
             typename result<poly_advance(It)>::type

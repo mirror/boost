@@ -145,4 +145,3 @@ import testing ;
     run sequence/ext_/iterator_range_s.cpp ;
     explicit iterator_range_s ;
 }
-

@@ -19,13 +19,12 @@
 
 struct square
 {
-    template<typename T>
+    template<typename Sig>
     struct result;
 
     template <typename T>
     struct result<square(T)>
     {
-        BOOST_STATIC_ASSERT(!boost::is_reference<T>::value);
         typedef int type;
     };
 
@@ -38,7 +37,7 @@ struct square
 
 struct add
 {
-    template<typename T>
+    template<typename Sig>
     struct result;
 
     template <typename A, typename B>
@@ -51,6 +50,42 @@ struct add
     int operator()(A a, B b) const
     {
         return a + b;
+    }
+};
+
+struct unary_lvalue_transform
+{
+    template<typename Sig>
+    struct result;
+
+    template<typename T>
+    struct result<unary_lvalue_transform(T&)>
+    {
+        typedef T* type;
+    };
+
+    template<typename T>
+    T* operator()(T& t) const
+    {
+        return &t;
+    }
+};
+
+struct binary_lvalue_transform
+{
+    template<typename Sig>
+    struct result;
+
+    template<typename T0, typename T1>
+    struct result<binary_lvalue_transform(T0&,T1&)>
+    {
+        typedef T0* type;
+    };
+
+    template<typename T0, typename T1>
+    T0* operator()(T0& t0, T1&) const
+    {
+        return &t0;
     }
 };
 
@@ -90,6 +125,20 @@ main()
         vector<int, int, int> tup2(4, 5, 6);
         std::cout << transform(tup1, tup2, add()) << std::endl;
         BOOST_TEST((transform(tup1, tup2, add()) == make_vector(5, 7, 9)));
+    }
+
+    {
+        // Unary transform that requires lvalues, just check compilation
+        vector<int, int, int> tup1(1, 2, 3);
+        BOOST_TEST(at_c<0>(transform(tup1, unary_lvalue_transform())) == &at_c<0>(tup1));
+        BOOST_TEST(*begin(transform(tup1, unary_lvalue_transform())) == &at_c<0>(tup1));
+    }
+
+    {
+        vector<int, int, int> tup1(1, 2, 3);
+        vector<int, int, int> tup2(4, 5, 6);
+        BOOST_TEST(at_c<0>(transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
+        BOOST_TEST(*begin(transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
     }
 
     return boost::report_errors();
