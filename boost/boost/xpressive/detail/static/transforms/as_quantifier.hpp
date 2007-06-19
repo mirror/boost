@@ -19,7 +19,6 @@
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/compose.hpp>
-#include <boost/xpressive/proto/transform/conditional.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -250,7 +249,7 @@ namespace boost { namespace xpressive { namespace detail
     // as_optional
     template<typename Grammar, bool Greedy>
     struct as_optional
-      : proto::transform::conditional<
+      : proto::if_<
             proto::matches<mpl::_, IsMarkerOrRepeater>
           , as_mark_optional<Grammar, Greedy>
           , as_default_optional<Grammar, Greedy>

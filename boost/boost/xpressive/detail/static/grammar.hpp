@@ -74,7 +74,7 @@ namespace boost { namespace xpressive
         // as_repeat
         template<typename Char, typename Tag, bool Greedy>
         struct as_repeat
-          : proto::transform::conditional<
+          : proto::if_<
                 use_simple_repeat<proto::result_of::arg<mpl::_>, Char>
               , as_simple_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>
               , as_default_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>

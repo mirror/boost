@@ -146,7 +146,7 @@ namespace boost { namespace proto
     >
     struct and_;
 
-    template<typename Pred>
+    template<typename Condition, typename Then = void, typename Else = void>
     struct if_;
 
     template<typename Cases>

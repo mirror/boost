@@ -331,9 +331,9 @@
         #undef BOOST_PROTO_DEFINE_LAMBDA_MATCHES
 
             // handle proto::if_
-            template<typename Expr, typename Pred>
-            struct matches_impl<Expr, if_<Pred> >
-              : mpl::apply1<Pred, Expr>::type
+            template<typename Expr, typename Condition>
+            struct matches_impl<Expr, if_<Condition> >
+              : mpl::apply1<Condition, Expr>::type
             {};
 
             // handle proto::not_
@@ -428,12 +428,6 @@
         }
 
         template<typename Pred>
-        struct if_ : has_identity_transform
-        {
-            typedef if_ proto_base_expr;
-        };
-
-        template<typename Pred>
         struct not_ : has_identity_transform
         {
             typedef not_ proto_base_expr;
@@ -459,6 +453,27 @@
         template<typename T>
         struct exact
         {};
+
+        template<typename Condition, typename Then, typename Else>
+        struct if_
+          : or_<
+                and_<if_<Condition>, Then>
+              , and_<not_<if_<Condition> >, Else>
+            >
+        {};
+
+        template<typename Condition, typename Then>
+        struct if_<Condition, Then, void>
+          : and_<if_<Condition>, Then>
+        {};
+
+        template<typename Condition>
+        struct if_<Condition, void, void>
+          : has_identity_transform
+        {
+            typedef if_ proto_base_expr;
+        };
+
     }}
 
     #endif
