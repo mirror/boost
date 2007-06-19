@@ -13,6 +13,7 @@
     #include <boost/xpressive/proto/detail/prefix.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>

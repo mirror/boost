@@ -20,7 +20,7 @@
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/xpressive/proto/transform/branch.hpp>
-#include <boost/xpressive/proto/transform/fold_to_list.hpp>
+#include <boost/xpressive/proto/transform/fold_tree.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/core/matcher/alternate_matcher.hpp>

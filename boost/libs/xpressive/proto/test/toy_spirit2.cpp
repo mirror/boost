@@ -16,7 +16,8 @@
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/construct.hpp>
-#include <boost/xpressive/proto/transform/fold_to_list.hpp>
+#include <boost/xpressive/proto/transform/fold_tree.hpp>
+#include <boost/xpressive/proto/transform/list.hpp>
 #if BOOST_VERSION < 103500
 # include <boost/spirit/fusion/algorithm/for_each.hpp>
 # include <boost/spirit/fusion/algorithm/fold.hpp>
@@ -326,8 +327,10 @@ namespace boost { namespace spirit2
     struct ToySpiritSequence
       : as_composite<
             proto::tag::shift_right
-          , proto::transform::reverse_fold_to_list<
-                proto::shift_right<ToySpiritGrammar, ToySpiritGrammar>
+          , proto::transform::reverse_fold_tree<
+                proto::tag::shift_right
+              , proto::transform::list<ToySpiritGrammar>
+              , fusion::nil
             >
         >
     {};
@@ -337,8 +340,10 @@ namespace boost { namespace spirit2
     struct ToySpiritAlternate
       : as_composite<
             proto::tag::bitwise_or
-          , proto::transform::reverse_fold_to_list<
-                proto::bitwise_or<ToySpiritGrammar, ToySpiritGrammar>
+          , proto::transform::reverse_fold_tree<
+                proto::tag::bitwise_or
+              , proto::transform::list<ToySpiritGrammar>
+              , fusion::nil
             >
         >
     {};
