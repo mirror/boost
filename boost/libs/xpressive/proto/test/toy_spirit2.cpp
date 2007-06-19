@@ -492,7 +492,7 @@ namespace boost { namespace spirit2
     };
 
     template<typename Rule, typename Iterator>
-    typename proto::if_matches< Rule, ToySpiritGrammar, bool >::type
+    typename enable_if<proto::matches< Rule, ToySpiritGrammar >, bool >::type
     parse_impl(Rule const &rule, Iterator begin, Iterator end)
     {
         mpl::false_ is_case_sensitive;
@@ -502,7 +502,7 @@ namespace boost { namespace spirit2
 
     // 2nd overload provides a short error message for invalid rules
     template<typename Rule, typename Iterator>
-    typename proto::if_not_matches< Rule, ToySpiritGrammar, bool >::type
+    typename disable_if<proto::matches< Rule, ToySpiritGrammar >, bool >::type
     parse_impl(Rule const &rule, Iterator begin, Iterator end)
     {
         BOOST_MPL_ASSERT((proto::matches<Rule, ToySpiritGrammar>));

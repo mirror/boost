@@ -64,7 +64,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile_impl1
     template<typename Xpr, typename BidiIter>
-    typename proto::if_not_matches<Xpr, XpressiveLocaleModifier>::type
+    typename disable_if<proto::matches<Xpr, XpressiveLocaleModifier> >::type
     static_compile_impl1(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl)
     {
         // use default traits
@@ -77,7 +77,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile_impl1
     template<typename Xpr, typename BidiIter>
-    typename proto::if_matches<Xpr, XpressiveLocaleModifier>::type
+    typename enable_if<proto::matches<Xpr, XpressiveLocaleModifier> >::type
     static_compile_impl1(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl)
     {
         // use specified traits

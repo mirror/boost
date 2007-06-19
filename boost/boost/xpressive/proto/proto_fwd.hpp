@@ -155,12 +155,6 @@ namespace boost { namespace proto
     template<typename Grammar>
     struct not_;
 
-    template<typename Expr, typename Grammar, typename Return = void>
-    struct if_matches;
-
-    template<typename Expr, typename Grammar, typename Return = void>
-    struct if_not_matches;
-
     struct proto_expr_tag;
     struct proto_ref_tag;
     struct proto_ref_iterator_tag;

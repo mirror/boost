@@ -440,16 +440,6 @@
             typedef void proto_is_vararg_;
         };
 
-        template<typename Expr, typename Grammar, typename Return>
-        struct if_matches
-          : enable_if<matches<Expr, Grammar>, Return>
-        {};
-
-        template<typename Expr, typename Grammar, typename Return>
-        struct if_not_matches
-          : disable_if<matches<Expr, Grammar>, Return>
-        {};
-
         template<typename T>
         struct exact
         {};
