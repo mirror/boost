@@ -45,7 +45,7 @@ struct lazy_subscript_context
     {}
 
     // Use default_eval for all the operations ...
-    template<typename Expr, typename Tag = typename Expr::tag_type>
+    template<typename Expr, typename Tag = typename Expr::proto_tag>
     struct eval
       : proto::default_eval<Expr, lazy_subscript_context>
     {};

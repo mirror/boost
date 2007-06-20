@@ -58,7 +58,7 @@ struct max_arity
         // Calculate the arity of the current expression.
         typedef typename Grammar::template apply<Expr, State, Visitor>::type arity;
         // The old maximum is passed along in the State parameter by
-        // proto::trans::fold<> (see below). The new maximum is the
+        // proto::transform::fold<> (see below). The new maximum is the
         // larger of the old maximum and the arity we just calculated.
         typedef typename mpl::max<arity, State>::type type;
     };
@@ -83,16 +83,16 @@ struct CalculatorGrammar
         //// This accomplishes the same thing without the need to
         //// define a separate placeholder_arity<> transform, but
         //// is a little more cryptic.
-        //proto::trans::apply1<
+        //proto::transform::apply1<
         //    proto::terminal< arg<_> >
         //  , arg_arity< proto::result_of::arg<mpl::_> >
         //>
 
         // Any other terminals have arity 0 ...
-      , proto::trans::always< proto::terminal<_>, mpl::int_<0> >
+      , proto::transform::always< proto::terminal<_>, mpl::int_<0> >
         // For any non-terminals, find the arity of the children and
         // take the maximum. This is recursive.
-      , proto::trans::fold<
+      , proto::transform::fold<
             // This matches any non-terminal for which the children
             // are themselves calculator expressions.
             proto::nary_expr<_, proto::vararg< max_arity< CalculatorGrammar > > >
@@ -108,7 +108,7 @@ struct CalculatorGrammar
             //        // child node), and mpl::_2 will be replaced with the State of
             //        // the transformation so far (i.e., the maximum arity found so
             //        // far).
-            //        proto::trans::apply2<CalculatorGrammar, mpl::max<mpl::_1, mpl::_2> >
+            //        proto::transform::apply2<CalculatorGrammar, mpl::max<mpl::_1, mpl::_2> >
             //    >
             //>
         >
