@@ -78,7 +78,7 @@ based Domain-Specific Embedded Langauges. It is broken up in to 5 sections,
 corresponding to the 5 major parts to Proto:
 
 [variablelist
-[[Expression Construction]
+[[[link boost_proto.users_guide.expression_construction Expression Construction]]
     [Describes how to use Proto to build expression trees.]]
 [[Expression Evaluation]
     [Describes the tools Proto provides for making your expression trees do
@@ -91,7 +91,7 @@ corresponding to the 5 major parts to Proto:
      into some other object.]]
 [[[link boost_proto.users_guide.expression_extension Expression Extension]]
     [Describes how to extend Proto expressions with additional behaviors and
-     members.]]
+     members and how to selectively disable Proto's operator overloads.]]
 ]
 
 But before we get started, let's have a look at some very simple Proto examples
@@ -102,6 +102,8 @@ and say a few words about Proto's philosophy.
 [include quick_start.qbk]
 
 [include calculator.qbk]
+
+[include construction.qbk]
 
 [include grammars.qbk]
 

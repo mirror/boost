@@ -1,0 +1,144 @@
+[/
+ / Copyright (c) 2007 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section:expression_construction Expression Construction: Building Proto Expression Trees]
+
+We've seen some simple examples of how to use Proto, but we haven't really said
+much about what is going on under the hood. How exactly does Proto build and
+process expression trees? Now is the time to find out.
+
+In the calculator example, we defined a placeholder terminal like this:
+
+    // Define a placeholder type
+    struct placeholder1 {};
+
+    // Define the Proto-ified placeholder terminal
+    terminal< placeholder1 >::type const _1 = {{}};
+
+The actual type of `_1` looks like this:
+
+    expr< tag::terminal, args0< placeholder1 >, 0 >
+
+The _expr_ template is the most important type in Proto. Although you will
+rarely need to deal with it directly, it's always there behind the scenes
+holding your expression trees together. In fact, _expr_ /is/ the expression
+tree -- braches, leaves and all. 
+
+The _expr_ template makes up the nodes in expression trees. The first template
+parameter is the node type; in this case, `proto::tag::terminal`. That means
+that `_1` is a leaf-node in the expression tree. The second template parameter
+is a list of children types. Terminals will always have only one type in the
+type list. The last parameter is the arity of the expression. Terminals have
+arity 0, unary expressions have arity 1, etc.
+
+The _expr_ struct is defined as follows:
+
+    template< typename Tag, typename Args, long Arity = Args::size >
+    struct expr;
+
+    template< typename Tag, typename Args >
+    struct expr< Tag, Args, 1 >
+    {
+        typename Args::arg0 arg0;
+        // ...
+    };
+
+The _expr_ struct does not define a constructor, or anything else that would
+prevent static initialization. All _expr_ objects are initialized using
+['aggregate initialization], with curly braces. In our example, `_1` is
+initialized with the initializer `{{}}`. The outer braces is the initializer
+for the _expr_ struct, and the inner braces are for the member `_1.arg0` which
+is of type `placeholder1`. Note that we use braces to initialize `_1.arg0`
+because `placeholder1` is also an aggregate.
+
+[section:operator_overloads Proto's Operator Overloads]
+
+Once we have some Proto terminals, expressions involving those terminals build
+expression trees for us, as if by magic. It's not magic; Proto defines
+overloads for each of C++'s overloadable operators to make it happen. As long
+as one operand is a Proto expression, the result of the operation is a tree
+node representing that operation.[footnote There are a couple of exceptions to
+this. In ["`int x; x = _1`], the assignment isn't a Proto expression, even
+though the right hand operand /is/ a Proto expression. That's just how C++ works.
+The same is also true for the subscript operator and the function call
+operator, as in ["`int *x; x[_1];`] and ["`std::sin(_1);`]. Them's the breaks,
+as they say.]
+
+[note The _expr_ struct lives in the `boost::proto` namespace, as do all of
+Proto's operator overloads. The overloads are found via ADL (Argument-Dependent
+Lookup). That is why expressions must be "tainted" with Proto-ness for Proto to
+be able to build trees out of expressions.]
+
+As a result of Proto's operator overloads, we can say:
+
+    -_1;        // OK, build a unary-negate tree node
+    _1 + 42;    // OK, build a binary-plus tree node
+
+[endsect]
+
+[section:expression_trees Building Expression Trees]
+
+The `_1` node is an _expr_ type, and new nodes created with this type are
+also _expr_ types. They look like this:
+
+    // typeof( -_1 )
+    expr<
+        tag::negate
+      , args1<
+            ref_< expr< tag::terminal, args0< placeholder1 >, 0 > >
+        >
+      , 1
+    >
+
+    // typeof( _1 + 42 )
+    expr<
+        tag::plus
+      , args2<
+            ref_< expr< tag::terminal, args0< placeholder1 >, 0 > >
+          , expr< tag::terminal, args0< int const & >, 0 >
+        >
+      , 2
+    >
+
+There are a few things to note about these types:
+
+# Terminals have arity 0, unary expressions have arity 1 and binary expressions
+  have arity 2.
+# When one Proto expression is made a child node of another Proto expression,
+  it is wrapped in _ref_, which is a simple reference wrapper. That is, Proto
+  expressions hold their children by reference ['even if they are temporary
+  objects]. This last point becomes important later.
+# Non-Proto expressions, such as the integer literal, are turned into Proto
+  expressions by making them Proto terminals. These terminal expressions
+  are /not/ wrapped in _ref_, but the object itself /is/ held by reference.
+  Notice that the type of the Proto-ified `42` literal is `int const &` -- held
+  by reference.
+
+The types make it clear: everything in a Proto expression tree is held by
+reference. That means that building an expression tree is exceptionally cheap.
+It involves no copying at all.
+
+[note To use Proto effectively, you won't have to bother yourself with the
+actual types that Proto generates. These are details, but you're likely to
+encounter these types in compiler error messages, so it's helpful to be familiar
+with them.]
+
+[endsect]
+
+[section:tags_and_meta_functions Operator Tags and Meta-Functions]
+
+// TODO make a table showing all of the operator tags and meta-functions
+
+[endsect]
+
+[section:construction_utils Expression Construction Utilities]
+
+// TODO describe make_expr, unpack_expr and BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE
+
+[endsect]
+
+[endsect]

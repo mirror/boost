@@ -31,7 +31,14 @@ wave-command = [ path.native ../../../../dist/bin/wave ] ;
 #        ../../../../boost/xpressive/proto/ref.hpp
 #        ../../../../boost/xpressive/proto/tags.hpp
 #        ../../../../boost/xpressive/proto/traits.hpp
-#        [ glob ../../../../boost/xpressive/proto/transform/*.hpp ]
+#        ../../../../boost/xpressive/proto/transform/arg.hpp
+#        ../../../../boost/xpressive/proto/transform/branch.hpp
+#        ../../../../boost/xpressive/proto/transform/compose.hpp
+#        ../../../../boost/xpressive/proto/transform/construct.hpp
+#        ../../../../boost/xpressive/proto/transform/fold.hpp
+#        ../../../../boost/xpressive/proto/transform/fold_tree.hpp
+#        ../../../../boost/xpressive/proto/transform/list.hpp
+#        ../../../../boost/xpressive/proto/transform/pass_through.hpp
 #    :
 #        <doxygen:param>EXTRACT_ALL=YES
 #        <doxygen:param>HIDE_UNDOC_MEMBERS=NO

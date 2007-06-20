@@ -1066,21 +1066,22 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="if_"><template>
-      <template-type-parameter name="Pred"/>
-    </template><inherit access="public">boost::proto::has_identity_transform</inherit><typedef name="proto_base_expr"><type><classname>if_</classname></type></typedef></struct><struct name="not_"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="not_"><template>
       <template-type-parameter name="Pred"/>
     </template><inherit access="public">boost::proto::has_identity_transform</inherit><typedef name="proto_base_expr"><type><classname>not_</classname></type></typedef></struct><struct name="vararg"><template>
       <template-type-parameter name="Grammar"/>
-    </template><typedef name="proto_is_vararg_"><type>void</type></typedef></struct><struct name="if_matches"><template>
-      <template-type-parameter name="Expr"/>
-      <template-type-parameter name="Grammar"/>
-      <template-type-parameter name="Return"/>
-    </template></struct><struct name="if_not_matches"><template>
-      <template-type-parameter name="Expr"/>
-      <template-type-parameter name="Grammar"/>
-      <template-type-parameter name="Return"/>
-    </template></struct><struct name="exact"><template>
+    </template><typedef name="proto_is_vararg_"><type>void</type></typedef></struct><struct name="exact"><template>
+      <template-type-parameter name="T"/>
+    </template></struct><struct name="if_"><template>
+      <template-type-parameter name="Condition"/>
+      <template-type-parameter name="Then"/>
+      <template-type-parameter name="Else"/>
+    </template><inherit access="public">boost::proto::or_&lt; and_&lt; if_&lt; Condition &gt;, Then &gt;, and_&lt; not_&lt; if_&lt; Condition &gt; &gt;, Else &gt; &gt;</inherit></struct><struct-specialization name="if_"><template>
+      <template-type-parameter name="Condition"/>
+      <template-type-parameter name="Then"/>
+    </template><specialization><template-arg>Condition</template-arg><template-arg>Then</template-arg><template-arg>void</template-arg></specialization><inherit access="public">boost::proto::and_&lt; if_&lt; Condition &gt;, Then &gt;</inherit></struct-specialization><struct-specialization name="if_"><template>
+      <template-type-parameter name="Condition"/>
+    </template><specialization><template-arg>Condition</template-arg><template-arg>void</template-arg><template-arg>void</template-arg></specialization><inherit access="public">boost::proto::has_identity_transform</inherit><typedef name="proto_base_expr"><type><classname>if_</classname></type></typedef></struct-specialization><struct name="convertible_to"><template>
       <template-type-parameter name="T"/>
     </template></struct></namespace></namespace></header><header name="boost/xpressive/proto/operators.hpp"><para>Contains all the overloaded operators that make it possible to build expression templates using proto components </para><namespace name="boost"><namespace name="proto"><function name="operator+"><type><emphasis>unspecified</emphasis></type><template>
           <template-type-parameter name="Arg"/>
@@ -1765,11 +1766,15 @@
       <template-type-parameter name="T"/>
       <template-type-parameter name="Domain"/>
       <template-type-parameter name="EnableIf"/>
-    </template><typedef name="proto_arg0"><type>mpl::eval_if&lt; mpl::or_&lt; boost::is_array&lt; T &gt;, is_function&lt; T &gt; &gt;, add_reference&lt; T &gt;, remove_cv&lt; T &gt;&gt;::type</type></typedef><typedef name="expr_type"><type>expr&lt; <classname>proto::tag::terminal</classname>, <classname>args0</classname>&lt; proto_arg0 &gt; &gt;</type></typedef><typedef name="type"><type>Domain::template apply&lt; expr_type &gt;::type</type></typedef><typedef name="result_type"><type>type</type></typedef><typedef name="T2"><type>T</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static result_type</type><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct><struct name="as_arg"><template>
+    </template><typedef name="proto_arg0"><type>mpl::eval_if&lt; mpl::or_&lt; boost::is_array&lt; T &gt;, is_function&lt; T &gt; &gt;, add_reference&lt; T &gt;, remove_cv&lt; T &gt;&gt;::type</type></typedef><typedef name="expr_type"><type>expr&lt; <classname>proto::tag::terminal</classname>, <classname>args0</classname>&lt; proto_arg0 &gt; &gt;</type></typedef><typedef name="type"><type>Domain::template apply&lt; expr_type &gt;::type</type></typedef><typedef name="result_type"><type>type</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static result_type</type><template>
+          <template-type-parameter name="T2"/>
+        </template><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct><struct name="as_arg"><template>
       <template-type-parameter name="T"/>
       <template-type-parameter name="Domain"/>
       <template-type-parameter name="EnableIf"/>
-    </template><typedef name="expr_type"><type>expr&lt; <classname>proto::tag::terminal</classname>, <classname>args0</classname>&lt; T &amp; &gt; &gt;</type></typedef><typedef name="type"><type>Domain::template apply&lt; expr_type &gt;::type</type></typedef><typedef name="T2"><type>T</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static type</type><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct><struct name="arg"><template>
+    </template><typedef name="expr_type"><type>expr&lt; <classname>proto::tag::terminal</classname>, <classname>args0</classname>&lt; T &amp; &gt; &gt;</type></typedef><typedef name="type"><type>Domain::template apply&lt; expr_type &gt;::type</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static type</type><template>
+          <template-type-parameter name="T2"/>
+        </template><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct><struct name="arg"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="N"/>
     </template><inherit access="public">arg_c&lt; Expr, N::value &gt;</inherit></struct><struct name="left"><template>
@@ -1803,10 +1808,14 @@
     </template><specialization><template-arg>Expr const</template-arg><template-arg>5</template-arg></specialization><inherit access="public">boost::proto::result_of::arg_c&lt; Expr, 5 &gt;</inherit></struct-specialization><struct-specialization name="as_expr"><template>
       <template-type-parameter name="T"/>
       <template-type-parameter name="Domain"/>
-    </template><specialization><template-arg>T</template-arg><template-arg>Domain</template-arg><template-arg>typename T::proto_is_expr_</template-arg></specialization><typedef name="type"><type>T::proto_derived_expr</type></typedef><typedef name="result_type"><type>T &amp;</type></typedef><typedef name="T2"><type>T</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static result_type</type><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="as_arg"><template>
+    </template><specialization><template-arg>T</template-arg><template-arg>Domain</template-arg><template-arg>typename T::proto_is_expr_</template-arg></specialization><typedef name="type"><type>T::proto_derived_expr</type></typedef><typedef name="result_type"><type>T &amp;</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static result_type</type><template>
+          <template-type-parameter name="T2"/>
+        </template><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="as_arg"><template>
       <template-type-parameter name="T"/>
       <template-type-parameter name="Domain"/>
-    </template><specialization><template-arg>T</template-arg><template-arg>Domain</template-arg><template-arg>typename T::proto_is_expr_</template-arg></specialization><typedef name="type"><type><classname>ref_</classname>&lt; T &gt;</type></typedef><typedef name="T2"><type>T</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static <classname>type</classname></type><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace><data-member name="left"><type><classname>functional::left</classname> const</type></data-member><data-member name="right"><type><classname>functional::right</classname> const</type></data-member><overloaded-function name="as_expr"><signature><type><classname>result_of::as_expr</classname>&lt; T &gt;::result_type</type><template>
+    </template><specialization><template-arg>T</template-arg><template-arg>Domain</template-arg><template-arg>typename T::proto_is_expr_</template-arg></specialization><typedef name="type"><type><classname>ref_</classname>&lt; T &gt;</type></typedef><method-group name="public static functions"><method name="call" cv=""><type>static <classname>type</classname></type><template>
+          <template-type-parameter name="T2"/>
+        </template><parameter name="t"><paramtype>T2 &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace><data-member name="left"><type><classname>functional::left</classname> const</type></data-member><data-member name="right"><type><classname>functional::right</classname> const</type></data-member><overloaded-function name="as_expr"><signature><type><classname>result_of::as_expr</classname>&lt; T &gt;::result_type</type><template>
           <template-type-parameter name="T"/>
         </template><parameter name="t"><paramtype>T &amp;</paramtype></parameter></signature><signature><type><classname>result_of::as_expr</classname>&lt; T const  &gt;::result_type</type><template>
           <template-type-parameter name="T"/>
@@ -1966,11 +1975,7 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/conditional.hpp"><para>A special-purpose proto transform for selecting between two transforms based on a compile-time predicate. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="conditional"><template>
-      <template-type-parameter name="Predicate"/>
-      <template-type-parameter name="Grammar0"/>
-      <template-type-parameter name="Grammar1"/>
-    </template><inherit access="public">boost::proto::or_&lt; proto::and_&lt; proto::if_&lt; Predicate &gt;, Grammar0 &gt;, proto::and_&lt; proto::not_&lt; proto::if_&lt; Predicate &gt; &gt;, Grammar1 &gt; &gt;</inherit></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/construct.hpp"><para>For constructing an arbitrary type from a bunch of transforms. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct-specialization name="construct"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/construct.hpp"><para>For constructing an arbitrary type from a bunch of transforms. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct-specialization name="construct"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Result"/>
     </template><specialization><template-arg>Grammar</template-arg><template-arg>Result()</template-arg></specialization><struct name="apply"><template>
@@ -2071,7 +2076,7 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_to_list.hpp"><para>A higher-level transform that uses the fold, branch and list transforms to fold a binary tree into a fusion cons-list. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="fold_tree"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_tree.hpp"><para>A higher-level transform that uses the fold, and branch transforms to recursively fold a tree. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="fold_tree"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="State"><default>void</default></template-type-parameter>
@@ -2085,11 +2090,7 @@
     </template><description><para>reverse_fold_tree </para></description></struct><struct-specialization name="reverse_fold_tree"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Grammar"/>
-    </template><specialization><template-arg>Tag</template-arg><template-arg>Grammar</template-arg><template-arg>void</template-arg></specialization></struct-specialization><struct name="fold_to_list"><template>
-      <template-type-parameter name="Grammar"/>
-    </template><inherit access="public">boost::proto::transform::fold_tree&lt; Grammar::proto_tag, transform::list&lt; Grammar::proto_arg0 &gt;, fusion::nil &gt;</inherit><description><para>fold_to_list TODO Find a cleaner interface </para></description><data-member name="mpl_assertion_in_line_95" specifiers="static"><type>const std::size_t</type></data-member></struct><struct name="reverse_fold_to_list"><template>
-      <template-type-parameter name="Grammar"/>
-    </template><inherit access="public">boost::proto::transform::reverse_fold_tree&lt; Grammar::proto_tag, transform::list&lt; Grammar::proto_arg0 &gt;, fusion::nil &gt;</inherit><description><para>reverse_fold_to_list TODO Find a cleaner interface </para></description><data-member name="mpl_assertion_in_line_113" specifiers="static"><type>const std::size_t</type></data-member></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/list.hpp"><para>A special-purpose proto transform for putting things into a fusion::cons&lt;&gt; list. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="list"><template>
+    </template><specialization><template-arg>Tag</template-arg><template-arg>Grammar</template-arg><template-arg>void</template-arg></specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/list.hpp"><para>A special-purpose proto transform for putting things into a fusion::cons&lt;&gt; list. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="list"><template>
       <template-type-parameter name="Grammar"/>
     </template><struct name="apply"><template>
       <template-type-parameter name="Expr"/>

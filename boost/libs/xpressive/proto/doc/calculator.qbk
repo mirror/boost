@@ -5,18 +5,16 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[section Calculator]
+[section Hello Calculator]
 
-Let's use Proto to build a Domain Specific Embedded Language for a
-lazily-evaluated calculator. We'll see how to define the terminals in your
-mini-language, how Proto combines the terminals into larger expressions, and
-how to define an evaluation context so that your expressions can do useful
-work.
-
-When we're done, we'll have a mini-language that will allow us to declare a
-lazily-evaluated arithmetic expression, such as `(_2 - _1) / _2 * 100`, where
-`_1` and `_2` are placeholders for values to be passed in when the expression
-is evaluated.
+"Hello, world" is nice, but it doesn't get you very far. Let's use Proto to
+build a Domain Specific Embedded Language for a lazily-evaluated calculator.
+We'll see how to define the terminals in your mini-language, how Proto combines
+the terminals into larger expressions, and how to define an evaluation context
+so that your expressions can do useful work. When we're done, we'll have a
+mini-language that will allow us to declare a lazily-evaluated arithmetic
+expression, such as `(_2 - _1) / _2 * 100`, where `_1` and `_2` are
+placeholders for values to be passed in when the expression is evaluated.
 
 [header Defining Terminals]
 
@@ -38,37 +36,6 @@ are essentially initialized at compile time. See the
 [link boost_proto.appendices.rationale.static_initialization Static
 Initialization] section in the [link boost_proto.appendices.rationale Rationale]
 appendix for more information.
-
-The actual type of `_1` looks like this:
-
-    proto::expr< proto::tag::terminal, proto::args0< placeholder1 >, 0 >
-
-The _expr_ template makes up the nodes in expression trees. The first template
-parameter is the node type; in this case, `proto::tag::terminal`. That means
-that `_1` is a leaf-node in the expression tree. The second template parameter
-is a list of children types. Terminals will always have only one type in the
-type list. The last parameter is the arity of the expression. Terminals have
-arity 0, unary expressions have arity 1, etc.
-
-The _expr_ struct is defined as follows:
-
-    template< typename Tag, typename Args, long Arity = Args::size >
-    struct expr;
-
-    template< typename Tag, typename Args >
-    struct expr< Tag, Args, 1 >
-    {
-        typename Args::arg0 arg0;
-        // ...
-    };
-
-The _expr_ struct does not define a constructor, or anything else that would
-prevent static initialization. All _expr_ objects are initialized using
-['aggregate initialization] -- with curly braces. In our example, `_1`
-is initialized with the initializer `{{}}`. The outer braces is the initializer
-for the _expr_ struct, and the inner braces are for the member `_1.arg0` which
-is of type `placeholder1`. Note that we use braces to initialize `_1.arg0`
-because `placeholder1` is also an aggregate.
 
 [header Constructing Expression Trees]
 
