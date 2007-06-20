@@ -203,7 +203,9 @@ Member Functions
       >& fn)
 
 A ``dynamic_properties`` object can be constructed with a function object
-that, when called, creates a new property map.  If an attempt is made
+that, when called, creates a new property map.  The library provides the 
+``ignore_other_properties`` function object, which lets the ``dynamic_properties`` object ignore any properties that it hasn't been prepared to record.
+If an attempt is made
 to ``put`` a key-value pair to a nonexistent ``dynamic_properties`` key,
 then this function is called with the ``dynamic_properties`` key and the
 intended property key and value .  If ``dynamic_properties`` is
@@ -261,6 +263,17 @@ property map that has name for its ``dynamic_properties`` key.
 
 Free functions
 ~~~~~~~~~~~~~~
+
+::
+
+  std::auto_ptr<boost::dynamic_property_map> 
+  ignore_other_properties(const std::string&,
+                        const boost::any&,
+                        const boost::any&)
+
+When passed to the ``dynamic_properties`` constructor, this function
+allows the ``dynamic_properties`` object to disregard attempts to put
+values to unknown keys without signaling an error.
 
 ::
 
