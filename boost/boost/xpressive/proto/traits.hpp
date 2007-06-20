@@ -45,10 +45,8 @@
 
     #if BOOST_WORKAROUND( BOOST_MSVC, == 1310 )
         #define BOOST_PROTO_IS_ARRAY_(T) boost::is_array<typename boost::remove_const<T>::type>
-        #define BOOST_PROTO_WITH_ALIAS_(X,Y) template<typename Y>
     #else
         #define BOOST_PROTO_IS_ARRAY_(T) boost::is_array<T>
-        #define BOOST_PROTO_WITH_ALIAS_(X,Y) typedef X Y;
     #endif
 
     #if BOOST_WORKAROUND( BOOST_MSVC, == 1400 )
@@ -97,7 +95,7 @@
                 typedef typename Domain::template apply<expr_type>::type type;
                 typedef type result_type;
 
-                BOOST_PROTO_WITH_ALIAS_(T, T2)
+                template<typename T2>
                 static result_type call(T2 &t)
                 {
                     return Domain::make(expr_type::make(t));
@@ -110,7 +108,7 @@
                 typedef typename T::proto_derived_expr type;
                 typedef T &result_type;
 
-                BOOST_PROTO_WITH_ALIAS_(T, T2)
+                template<typename T2>
                 static result_type call(T2 &t)
                 {
                     return t;
@@ -124,7 +122,7 @@
                 typedef expr<proto::tag::terminal, args0<T &> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
 
-                BOOST_PROTO_WITH_ALIAS_(T, T2)
+                template<typename T2>
                 static type call(T2 &t)
                 {
                     return Domain::make(expr_type::make(t));
@@ -136,7 +134,7 @@
             {
                 typedef ref_<T> type;
 
-                BOOST_PROTO_WITH_ALIAS_(T, T2)
+                template<typename T2>
                 static type call(T2 &t)
                 {
                     return type::make(t);
