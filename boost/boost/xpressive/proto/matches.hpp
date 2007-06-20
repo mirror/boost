@@ -464,6 +464,9 @@
             typedef if_ proto_base_expr;
         };
 
+        template<typename T>
+        struct convertible_to
+        {};
     }}
 
     #endif
