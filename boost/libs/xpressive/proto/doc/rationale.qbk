@@ -20,7 +20,7 @@ domain-specific embedded languages are likely to be global const objects, like
 `_1` and `_2` from the Boost.Lambda library. Were these object to require
 run-time initialization, it might be possible to use these objects before they
 are initialized. That would be bad. Statically initialized objects cannot be
-misused that way.]
+misused that way.
 
 [endsect]
 

@@ -16,7 +16,7 @@ mini-language that will allow us to declare a lazily-evaluated arithmetic
 expression, such as `(_2 - _1) / _2 * 100`, where `_1` and `_2` are
 placeholders for values to be passed in when the expression is evaluated.
 
-[header Defining Terminals]
+[heading Defining Terminals]
 
 The first order of business is to define the placeholders `_1` and `_2`. For
 that, we'll use the _terminal_ expression generator.
@@ -37,7 +37,7 @@ are essentially initialized at compile time. See the
 Initialization] section in the [link boost_proto.appendices.rationale Rationale]
 appendix for more information.
 
-[header Constructing Expression Trees]
+[heading Constructing Expression Trees]
 
 Now that we have terminals, we can use Proto's operator overloads to combine
 these terminals into larger expressions. So, for instance, we can immediately
@@ -49,7 +49,7 @@ So far, the object is just a tree representing the expression. It has no
 behavior. In particular, it is not yet a calculator. Below we'll see how
 to make it a calculator by defining an evaluation context.
 
-[header Defining an Evaluation Context]
+[heading Defining an Evaluation Context]
 
 No doubt you want your expression templates to actually /do/ something. One
 approach is to define an ['evaluation context]. The context is like a function
@@ -133,7 +133,7 @@ evaluate our arithmetic expressions, as below:
     // This prints "10"
     std::cout << d << std::endl;
 
-[header Default Expression Evaluation]
+[heading Default Expression Evaluation]
 
 You might notice that the `calculator_context` has a lot of boilerplate. It
 is fairly common for addition nodes to be handled by evaluating the left and

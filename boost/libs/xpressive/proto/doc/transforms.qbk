@@ -570,6 +570,7 @@ Example:
 
 [endsect]
 
+[/
 [section:conditional [^conditional<>]]
 
     namespace boost { namespace proto { namespace transform
@@ -608,6 +609,7 @@ Example:
     {};
 
 [endsect]
+]
 
 [section:list [^list<>]]
 

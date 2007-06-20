@@ -9,7 +9,12 @@
 
 [variablelist
 [
-    [April 4, 2006]
+    [April 15, 2007]
+    [Boost.Xpressive is ported from Proto compilers to Proto transforms.
+     Support for old Proto compilers is dropped.]
+]
+[
+    [April 4, 2007]
     [Preliminary submission of Proto to Boost.]
 ]
 [

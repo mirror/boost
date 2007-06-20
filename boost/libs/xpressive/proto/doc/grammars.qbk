@@ -255,9 +255,9 @@ constituents.
 
 [endsect]
 
-[/============================================================]
-[section Condition and Conjunction with [^if_<>] and [^and_<>]]
-[/============================================================]
+[/=======================================================================]
+[section:if_and_and Condition and Conjunction with [^if_<>] and [^and_<>]]
+[/=======================================================================]
 
 We've already seen how to use expression generators like `terminal<>` and
 `shift_right<>` as patterns. We've also seen _or_, which we can use to
@@ -286,6 +286,21 @@ expression because it has the MPL placeholder `mpl::_` in it.
 MPL lambda expressions. The second is Proto's pattern wildcard. The only place
 `mpl::_` should appear in your patterns is in an _if_, or in tranform::applyN<>,
 as we'll see later. Elsewhere in your patterns you should be using `proto::_`.]
+
+The _if_ template has a couple of variants. In additon to `if_<Condition>` you
+can also say `if_<Condition, ThenGrammar>` and
+`if_<Condition, ThenGrammar, ElseGrammar>`. These let you select one sub-grammar
+or another based on the `Condition`. They following table shows their
+equivalencies:
+
+[table If-Then-Else Equivalencies
+[[Short-Cut Grammar][Equivalent Grammar]]
+[[`if_<Condition, ThenGrammar>`][`and_<if_<Condition>, ThenGrammar>`]]
+[[`if_<Condition, ThenGrammar, ElseGrammar>`][``or_<
+    and_<if_<Condition>, ThenGrammar>
+  , and_<not_<if_<Condition> >, ElseGrammar>
+>``]]
+]
 
 [endsect]
 
