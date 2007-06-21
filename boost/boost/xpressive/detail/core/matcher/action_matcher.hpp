@@ -95,6 +95,9 @@ namespace boost { namespace xpressive { namespace detail
     struct attr_with_default_tag
     {};
 
+    template<typename T>
+    struct opt;
+
     ///////////////////////////////////////////////////////////////////////////////
     // action_context
     //
@@ -122,6 +125,16 @@ namespace boost { namespace xpressive { namespace detail
             result_type operator()(Expr &expr, action_context const &) const
             {
                 return proto::arg(expr).get();
+            }
+        };
+
+        template<typename Expr, typename Arg>
+        struct eval_terminal<Expr, opt<Arg> >
+        {
+            typedef Arg const &result_type;
+            result_type operator()(Expr &expr, action_context const &) const
+            {
+                return proto::arg(expr);
             }
         };
 

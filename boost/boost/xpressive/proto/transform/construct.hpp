@@ -26,7 +26,16 @@
     {
         namespace detail
         {
-            using proto::detail::is_placeholder_expression;
+            template<typename T>
+            struct is_placeholder_expression
+            {
+                BOOST_STATIC_CONSTANT(
+                    bool
+                  , value = (sizeof(is_placeholder_expression_fun(static_cast<T*>(0)))==                        \
+                             sizeof(yes_type))
+                );
+                typedef mpl::bool_<value> type;
+            };
 
             template<typename T, bool HasType = mpl::aux::has_type<T>::value>
             struct nested_type

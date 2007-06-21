@@ -56,21 +56,8 @@
         {
             struct _;
 
-            typedef char yes_type;
-            typedef char (&no_type)[2];
-
-            no_type is_placeholder_expression_fun(...);
-
             template<typename Expr, typename Grammar>
             struct matches_impl;
-
-            template<typename T>
-            struct is_placeholder_expression
-            {
-                static T const *const ptr;
-                BOOST_STATIC_CONSTANT(bool, value = sizeof(is_placeholder_expression_fun(ptr))==sizeof(yes_type));
-                typedef mpl::bool_<value> type;
-            };
 
             // and_ and or_ implementation
             template<bool B, typename Expr, typename G0>
@@ -417,18 +404,20 @@
 
         namespace placeholder_detail_
         {
-            struct _ : has_identity_transform
+            struct _
+              : has_identity_transform
             {
                 typedef _ proto_base_expr;
                 typedef void proto_is_placeholder_;
             };
 
             template<typename T>
-            detail::yes_type is_placeholder_expression_fun(T const *);
+            transform::detail::yes_type is_placeholder_expression_fun(T const *);
         }
 
-        template<typename Pred>
-        struct not_ : has_identity_transform
+        template<typename Grammar>
+        struct not_
+          : has_identity_transform
         {
             typedef not_ proto_base_expr;
         };

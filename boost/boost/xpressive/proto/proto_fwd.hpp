@@ -361,6 +361,14 @@ namespace boost { namespace proto
         namespace detail
         {
             struct default_factory;
+
+            typedef char yes_type;
+            typedef char (&no_type)[2];
+
+            no_type is_placeholder_expression_fun(...);
+
+            template<typename T>
+            struct is_placeholder_expression;
         }
 
         template<typename Grammar, typename N = mpl::long_<0> >
