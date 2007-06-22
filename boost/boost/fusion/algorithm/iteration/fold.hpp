@@ -31,14 +31,14 @@ namespace boost { namespace fusion {
 
     template <typename Sequence, typename State, typename F>
     inline typename result_of::fold<Sequence, State, F>::type
-    fold(Sequence& seq, State const& state, F const& f)
+    fold(Sequence& seq, State const& state, F f)
     {
         return detail::fold(seq, state, f, typename traits::category_of<Sequence>::type());
     }
 
     template <typename Sequence, typename State, typename F>
     inline typename result_of::fold<Sequence const, State, F>::type
-    fold(Sequence const& seq, State const& state, F const& f)
+    fold(Sequence const& seq, State const& state, F f)
     {
         return detail::fold(seq, state, f, typename traits::category_of<Sequence>::type());
     }

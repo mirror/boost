@@ -23,14 +23,14 @@ namespace boost { namespace fusion
 
     template <typename Sequence, typename State, typename F>
     inline typename result_of::accumulate<Sequence, State, F>::type
-    accumulate(Sequence& seq, State const& state, F const& f)
+    accumulate(Sequence& seq, State const& state, F f)
     {
         return fusion::fold(seq, state, f);
     }
 
     template <typename Sequence, typename State, typename F>
     inline typename result_of::accumulate<Sequence const, State, F>::type
-    accumulate(Sequence const& seq, State const& state, F const& f)
+    accumulate(Sequence const& seq, State const& state, F f)
     {
         return fusion::fold(seq, state, f);
     }

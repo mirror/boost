@@ -79,7 +79,7 @@ namespace detail
     {
         template<typename I0, typename State, typename F>
         static typename result_of_unrolled_fold<I0, State, F, N>::type
-        call(I0 const& i0, State const& state, F const& f)
+        call(I0 const& i0, State const& state, F f)
         {
             typedef typename result_of::next<I0>::type I1;
             I1 i1 = fusion::next(i0);
@@ -99,7 +99,7 @@ namespace detail
     {
         template<typename I0, typename State, typename F>
         static typename result_of_unrolled_fold<I0, State, F, 3>::type 
-        call(I0 const& i0, State const& state, F const& f)
+        call(I0 const& i0, State const& state, F f)
         {
             typedef typename result_of::next<I0>::type I1;
             I1 i1 = fusion::next(i0);
@@ -114,7 +114,7 @@ namespace detail
     {
         template<typename I0, typename State, typename F>
         static typename result_of_unrolled_fold<I0, State, F, 2>::type 
-        call(I0 const& i0, State const& state, F const& f)
+        call(I0 const& i0, State const& state, F f)
         {
             typedef typename result_of::next<I0>::type I1;
             I1 i1 = fusion::next(i0);
@@ -127,7 +127,7 @@ namespace detail
     {
         template<typename I0, typename State, typename F>
         static typename result_of_unrolled_fold<I0, State, F, 1>::type 
-        call(I0 const& i0, State const& state, F const& f)
+        call(I0 const& i0, State const& state, F f)
         {
             return f(*i0, state);
         }
@@ -137,7 +137,7 @@ namespace detail
     struct unrolled_fold<0>
     {
         template<typename I0, typename State, typename F>
-        static State call(I0 const&, State const& state, F const&)
+        static State call(I0 const&, State const& state, F)
         {
             return state;
         }
@@ -146,7 +146,7 @@ namespace detail
     // terminal case
     template <typename First, typename Last, typename State, typename F>
     inline State const&
-    linear_fold(First const&, Last const&, State const& state, F const&, mpl::true_)
+    linear_fold(First const&, Last const&, State const& state, F, mpl::true_)
     {
         return state;
     }
@@ -158,7 +158,7 @@ namespace detail
         First const& first
       , Last const& last
       , State const& state
-      , F const& f
+      , F f
       , mpl::false_)
     {
         return detail::linear_fold(
@@ -242,7 +242,7 @@ namespace detail
 
     template<typename Sequence, typename State, typename F, typename Tag>
     typename result_of::fold<Sequence, State, F>::type
-    fold(Sequence& seq, State const& state, F const& f, Tag)
+    fold(Sequence& seq, State const& state, F f, Tag)
     {
         return linear_fold(
             fusion::begin(seq)
@@ -257,7 +257,7 @@ namespace detail
 
     template<typename Sequence, typename State, typename F>
     typename result_of::fold<Sequence, State, F>::type
-    fold(Sequence& seq, State const& state, F const& f, random_access_traversal_tag)
+    fold(Sequence& seq, State const& state, F f, random_access_traversal_tag)
     {
         typedef typename result_of::begin<Sequence>::type begin;
         typedef typename result_of::end<Sequence>::type end;
