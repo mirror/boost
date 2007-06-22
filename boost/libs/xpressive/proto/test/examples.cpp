@@ -14,7 +14,7 @@
 #include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/transform/list.hpp>
 #include <boost/xpressive/proto/transform/construct.hpp>
-#include <boost/xpressive/proto/transform/fold_to_list.hpp>
+#include <boost/xpressive/proto/transform/fold_tree.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/test/unit_test.hpp>
 
