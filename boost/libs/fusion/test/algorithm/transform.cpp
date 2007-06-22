@@ -71,6 +71,11 @@ struct unary_lvalue_transform
     }
 };
 
+int twice(int v)
+{
+    return v*2;
+}
+
 struct binary_lvalue_transform
 {
     template<typename Sig>
@@ -140,6 +145,12 @@ main()
         BOOST_TEST(at_c<0>(transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
         BOOST_TEST(*begin(transform(tup1, tup2, binary_lvalue_transform())) == &at_c<0>(tup1));
     }
+
+    {
+        vector<int, int, int> tup1(1, 2, 3);
+        BOOST_TEST(transform(tup1, twice) == make_vector(2,4,6));
+    }
+
 
     return boost::report_errors();
 }

@@ -115,6 +115,11 @@ struct lvalue_adder
     }
 };
 
+int add(int lhs, int rhs)
+{
+    return lhs + rhs;
+}
+
 int
 main()
 {
@@ -165,6 +170,11 @@ main()
     }
 
     {
+        vector<int, int> vec(1,2);
+        BOOST_TEST(fusion::fold(vec, 0, add) == 3);
+    }
+
+    {
         typedef vector<int, char, int, double> vector_type;
         vector_type v(12345, 'x', 678910, 3.36);
         int result = accumulate(v, 0, add_ints_only());
@@ -200,6 +210,11 @@ main()
     {
         BOOST_TEST(fusion::accumulate(fusion::make_vector('a','b','c','d','e'), std::string(""), appender())
                    == "abcde");
+    }
+
+    {
+        vector<int, int> vec(1,2);
+        BOOST_TEST(fusion::accumulate(vec, 0, add) == 3);
     }
 
     return boost::report_errors();
