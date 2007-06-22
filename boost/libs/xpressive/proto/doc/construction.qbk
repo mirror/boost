@@ -137,7 +137,189 @@ with them.]
 
 [section:tags_and_meta_functions Operator Tags and Meta-Functions]
 
-// TODO make a table showing all of the operator tags and meta-functions
+The following table lists the overloadable C++ operators, the Proto tag types
+for each, and the name of the Proto meta-function for generating the 
+corresponding Proto expression nodes. The meta-functions are also usable as
+grammars for matching such nodes, as well as pass-through transforms, as
+explained in later sections.
+
+[table Operators, Tags and Meta-Functions
+    [[Operator]
+    [Proto Tag]
+    [Proto Meta-Function]]
+
+    [[unary `+`]
+    [`tag::posit`]
+    [`posit<>`]]        
+
+    [[unary `-`]
+    [`tag::negate`]
+    [`negate<>`]]
+
+    [[unary `*`]
+    [`tag::dereference`]
+    [`dereference<>`]]
+
+    [[unary `~`]
+    [`tag::complement`]
+    [`complement<>`]]
+
+    [[unary `&`]
+    [`tag::address_of`]
+    [`address_of<>`]]
+
+    [[unary `!`]
+    [`tag::logical_not`]
+    [`logical_not<>`]]
+
+    [[unary prefix `++`]
+    [`tag::pre_inc`]
+    [`pre_inc<>`]]
+
+    [[unary prefix `--`]
+    [`tag::pre_dec`]
+    [`pre_dec<>`]]
+
+    [[unary postfix `++`]
+    [`tag::post_inc`]
+    [`post_inc<>`]]
+
+    [[unary postfix `--`]
+    [`tag::post_dec`]
+    [`post_dec<>`]]
+
+    [[binary `<<`]
+    [`tag::shift_left`]
+    [`shift_left<>`]]
+
+    [[binary `>>`]
+    [`tag::shift_right`]
+    [`shift_right<>`]]
+
+    [[binary `*`]
+    [`tag::multiplies`]
+    [`multiplies<>`]]
+
+    [[binary `/`]
+    [`tag::divides`]
+    [`divides<>`]]
+
+    [[binary `%`]
+    [`tag::modulus`]
+    [`modulus<>`]]
+
+    [[binary `+`]
+    [`tag::plus`]
+    [`plus<>`]]
+
+    [[binary `-`]
+    [`tag::minus`]
+    [`minus<>`]]
+
+    [[binary `<`]
+    [`tag::less`]
+    [`less<>`]]
+
+    [[binary `>`]
+    [`tag::greater`]
+    [`greater<>`]]
+
+    [[binary `<=`]
+    [`tag::less_equal`]
+    [`less_equal<>`]]
+
+    [[binary `>=`]
+    [`tag::greater_equal`]
+    [`greater_equal<>`]]
+
+    [[binary `==`]
+    [`tag::equal_to`]
+    [`equal_to<>`]]
+
+    [[binary `!=`]
+    [`tag::not_equal_to`]
+    [`not_equal_to<>`]]
+
+    [[binary `||`]
+    [`tag::logical_or`]
+    [`logical_or<>`]]
+
+    [[binary `&&`]
+    [`tag::logical_and`]
+    [`logical_and<>`]]
+
+    [[binary `&`]
+    [`tag::bitwise_and`]
+    [`bitwise_and<>`]]
+
+    [[binary `|`]
+    [`tag::bitwise_or`]
+    [`bitwise_or<>`]]
+
+    [[binary `^`]
+    [`tag::bitwise_xor`]
+    [`bitwise_xor<>`]]
+
+    [[binary `,`]
+    [`tag::comma`]
+    [`comma<>`]]
+
+    [[binary `->*`]
+    [`tag::mem_ptr`]
+    [`mem_ptr<>`]]
+
+    [[binary `=`]
+    [`tag::assign`]
+    [`assign<>`]]
+
+    [[binary `<<=`]
+    [`tag::shift_left_assign`]
+    [`shift_left_assign<>`]]
+
+    [[binary `>>=`]
+    [`tag::shift_right_assign`]
+    [`shift_right_assign<>`]]
+
+    [[binary `*=`]
+    [`tag::multilpies_assign`]
+    [`multilpies_assign<>`]]
+
+    [[binary `/=`]
+    [`tag::divides_assign`]
+    [`divides_assign<>`]]
+
+    [[binary `%=`]
+    [`tag::modulus_assign`]
+    [`modulus_assign<>`]]
+
+    [[binary `+=`]
+    [`tag::plus_assign`]
+    [`plus_assign<>`]]
+
+    [[binary `-=`]
+    [`tag::minus_assign`]
+    [`minus_assign<>`]]
+
+    [[binary `&=`]
+    [`tag::bitwise_and_assign`]
+    [`bitwise_and_assign<>`]]
+
+    [[binary `|=`]
+    [`tag::bitwise_or_assign`]
+    [`bitwise_or_assign<>`]]
+
+    [[binary `^=`]
+    [`tag::bitwise_xor_assign`]
+    [`bitwise_xor_assign<>`]]
+
+    [[binary subscript]
+    [`tag::subscript`]
+    [`subscript<>`]]
+
+    [[nary function call]
+    [`tag::function`]
+    [`function<>`]]
+]
 
 [endsect]
 
