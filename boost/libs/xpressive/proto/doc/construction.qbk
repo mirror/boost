@@ -129,6 +129,12 @@ with them.]
 
 [endsect]
 
+[section:left_right_arg Accessing Children Nodes]
+
+// TODO describe tag_of, arg, arg_c, left and right. Maybe also children_of and Fusion.
+
+[endsect]
+
 [section:tags_and_meta_functions Operator Tags and Meta-Functions]
 
 // TODO make a table showing all of the operator tags and meta-functions

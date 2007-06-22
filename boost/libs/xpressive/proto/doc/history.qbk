@@ -25,7 +25,7 @@
 ]
 [
     [November 1, 2006]
-    [The idea for `proto::matches<>` and the whole meta-grammar facility is
+    [The idea for `proto::matches<>` and the whole grammar facility is
      hatched during a discussion with Hartmut Kaiser on the spirit-devel list.
      The first version of `proto::matches<>` is checked into CVS 3 days later.
      Message is [@http://osdir.com/ml/parsers.spirit.devel/2006-11/msg00003.html here].]

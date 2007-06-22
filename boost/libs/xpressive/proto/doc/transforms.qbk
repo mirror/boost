@@ -22,13 +22,13 @@ transformations and several canned transformations that are generally useful.
 [heading Overview]
 [/===============]
 
-Defining tree transformations involves defining the meta-grammar for your DSEL
-and decorating it with transformations. Each rule in your meta-grammar will
+Defining tree transformations involves defining the grammar for your DSEL
+and decorating it with transformations. Each rule in your grammar will
 have an associated transform describing how sub-expressions matching that rule
-are to be transformed. Just as the meta-grammar is defined recursively, so too
+are to be transformed. Just as the grammar is defined recursively, so too
 is the tree transformation.
 
-A meta-grammar decorated with transforms has a static member function named
+A grammar decorated with transforms has a static member function named
 `call()` which takes three parameters:
 
 * `expr`    -- the expression to transform
@@ -38,8 +38,8 @@ A meta-grammar decorated with transforms has a static member function named
 It also has a nested `apply<>` template which is used to calculate the return
 type of the `call()` member function.
 
-Let's say we have a meta-grammar called `Grammar`, an expression template
-object called `expr` that matches the meta-grammar, and `state` and `visitor`
+Let's say we have a grammar called `Grammar`, an expression template
+object called `expr` that matches the grammar, and `state` and `visitor`
 objects of your choosing. What happens when you call
 `Grammar::call(expr, state, visitor)`? Well, if `Grammar` were defined as
 `shift_right< Rule1, Rule2 >`, for instance, it might transform the left
@@ -157,9 +157,9 @@ different but related roles. In particular, `unary_expr<>` is ...
 ... [*a meta-function]: `unary_expr<T, X>::type` is a typedef for
 `expr<T, args1<X> >`.
 
-... [*a grammar]: `unary_expr<U, Y>` is a pattern that matches 
+... [*a grammar]: `unary_expr<U, Y>` is a simle grammar that matches 
 `expr<T, args1<X> >` if an only if `U` is `T` or `proto::_`, and `Y` is a
-pattern that matches `X`.
+grammar that matches `X`.
 
 ... [*a transform]: `unary_expr<U, Y>::apply<expr<T, args1<X> >, S, V>::type`
 applies `unary_expr<>`'s pass-through transform to `expr<T, args1<X> >` with

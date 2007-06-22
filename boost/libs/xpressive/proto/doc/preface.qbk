@@ -20,7 +20,7 @@ More specifically, Proto provides:
 
 * An expression tree data structure.
 * Operator overloads for building the tree from an expression.
-* Utilities for defining the meta-grammar to which an expression must conform.
+* Utilities for defining the grammar to which an expression must conform.
 * An extensible mechanism for immediately executing an expression template.
 * An extensible set of tree transformations to apply to expression trees.
 * A mechanism for giving expressions additional behaviors and members.
@@ -37,9 +37,9 @@ development of domain-specific embedded languages (DSELs). Use Proto to define
 the primitives of your mini-language and let Proto handle the operator
 overloading and the construction of the expression parse tree. Immediately
 evaluate the expression tree by passing it a function object. Or transform the
-expression tree by defining the meta-grammar of your mini-language, decorated
+expression tree by defining the grammar of your mini-language, decorated
 with an assortment of tree transforms provided by Proto or defined by you.
-Then use the meta-grammar to give your users short and readable syntax errors
+Then use the grammar to give your users short and readable syntax errors
 for invalid expressions! No more mumbo-jumbo -- an expression template library
 developed with Proto is declarative and readable.
 
@@ -52,15 +52,15 @@ transforming an expression template into an executable finite state machine
 capable of matching a regular expression. Since then, Proto has found
 application in the redesigned and improved Spirit-2 and the related Karma
 library, currently under development. As a result of these efforts, Proto
-evolved into a generic and abstract meta-grammar and tree transformation
+evolved into a generic and abstract grammar and tree transformation
 framework applicable in a wide variety of DSEL scenarios.
 
-The meta-grammar and tree transformation framework is modelled on Spirit's
+The grammar and tree transformation framework is modelled on Spirit's
 grammar and semantic action framework. The expression tree data structure
 is similar to Fusion data structures in many respects, and is interoperable
 with Fusion's iterators and algorithms.
 
-The syntax for the pattern-matching features of `proto::matches<>` is inspired
+The syntax for the grammar-matching features of `proto::matches<>` is inspired
 by MPL's lambda expressions.
 
 [endsect]

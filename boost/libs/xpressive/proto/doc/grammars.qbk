@@ -5,28 +5,28 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[/============================================================================================]
-[section:expression_introspection Expression Introspection: Pattern Matching and Meta-Grammars]
-[/============================================================================================]
+[/============================================================================]
+[section:expression_introspection Expression Introspection: Defining a Grammar]
+[/============================================================================]
 
 Expression trees can have a very rich and complicated structure. Often, you
 need to know some things about an expression's structure before you can process
 it. This section describes the tools Proto provides for peering inside an
 expression tree and discovering its structure.
 
-[/==========================]
-[section Expression Patterns]
-[/==========================]
+[/===============================================]
+[section:patterns Finding Patterns In Expressions]
+[/===============================================]
 
 Imagine your DSEL is a miniature I/O facility, with iostream operations
 that execute lazily. You might want expressions representing input operations
 to be processed by one function, and output operations to be processed by a
 different function. How would you do that?
 
-The answer is to write patterns that match the structure of input and output
-expressions. Proto provides utilities for defining the patterns, and the
-_matches_ template for checking whether a given expression type matches the
-pattern.
+The answer is to write patterns (a.k.a, /grammars/) that match the structure
+of input and output expressions. Proto provides utilities for defining the
+grammars, and the _matches_ template for checking whether a given expression
+type matches the grammar.
 
 First, let's define some terminals we can use in our lazy I/O expressions:
 
@@ -34,7 +34,7 @@ First, let's define some terminals we can use in our lazy I/O expressions:
     terminal< std::ostream & >::type cout_ = { std::cout };
 
 Now, we can use `cout_` instead of `std::cout`, and get I/O expression trees
-that we can execute later. To define patterns that match intput and output
+that we can execute later. To define grammars that match intput and output
 expressions of the form `cin_ >> i` and `cout_ << 1` we do this:
 
     struct Input
@@ -47,12 +47,12 @@ expressions of the form `cin_ >> i` and `cout_ << 1` we do this:
 
 We've seen the template `terminal<>` before, but here we're using it
 without accessing the nested `::type`. When used like this, it is a very simple
-pattern, as are `shift_right<>` and `shift_left<>`. The newcomer
+grammar, as are `shift_right<>` and `shift_left<>`. The newcomer
 here is `_` in the `proto` namespace. It is a wildcard that matches anything.
-The `Input` struct is a pattern that matches any right-shift expression that
+The `Input` struct is a grammar that matches any right-shift expression that
 has a `std::istream` terminal as its left operand.
 
-We can use these patterns together with the _matches_ template to query at
+We can use these grammars together with the _matches_ template to query at
 compile time whether a given I/O expression type is an input or output
 operation. Consider the following:
 
@@ -109,16 +109,16 @@ at all:
 
     input_output( cout_ << 1 << 2 ); // oops!
 
-What's wrong? The problem is that this expression does not match our pattern.
+What's wrong? The problem is that this expression does not match our grammar.
 The expression groups as if it were written like `(cout_ << 1) << 2`. It will
-not match the `Output` pattern, which expects the left operand to be a
-terminal, not another left-shift operation. We need to fix the pattern.
+not match the `Output` grammar, which expects the left operand to be a
+terminal, not another left-shift operation. We need to fix the grammar.
 
 We notice that in order to verify an expression as input or output, we'll need
 to recurse down to the bottom-left-most leaf and check that it is a
 `std::istream` or `std::ostream`. When we get to the terminal, we must stop
-recursing. We can express this in our pattern using _or_. Here are the correct
-`Input` and `Output` patterns:
+recursing. We can express this in our grammar using _or_. Here are the correct
+`Input` and `Output` grammars:
 
     struct Input
       : or_<
@@ -136,21 +136,21 @@ recursing. We can express this in our pattern using _or_. Here are the correct
 
 This may look a little odd at first. We seem to be defining the `Input` and
 `Output` types in terms of themselves. This is perfectly OK, actually. At
-the point in the pattern that the `Input` and `Output` types are being used,
-they are /incomplete/, but by the time we actually evaluate the pattern with
-_matches_, the types will be complete. These are recursive patterns, and
+the point in the grammar that the `Input` and `Output` types are being used,
+they are /incomplete/, but by the time we actually evaluate the grammar with
+_matches_, the types will be complete. These are recursive grammars, and
 rightly so because they must match a recursive data structure!
 
-When the `Output` pattern is evaluated against an expression like
+When the `Output` grammar is evaluated against an expression like
 `cout_ << 1 << 2`, the first alternate of the _or_ is tried first. It will
-fail, because the expression `cout_ << 1 << 2` does not match the pattern
+fail, because the expression `cout_ << 1 << 2` does not match the grammar
 `shift_left< terminal< std::ostream & >, _ >`. Then the second
 alternate is tried. We match the expression against
 `shift_left< Output, _ >`. The expression is a left-shift, so we try
 the operands. The right operand `2` matches `_` trivially. To see if
 the left operand `cout_ << 1` matches `Output`, we must recursively evaluate
-the `Output` pattern. This time we succeed, because `cout_ << 1` will match
-the first alternate of the _or_. We're done -- the pattern matches
+the `Output` grammar. This time we succeed, because `cout_ << 1` will match
+the first alternate of the _or_. We're done -- the grammar matches
 successfully.
 
 [endsect]
@@ -160,19 +160,19 @@ successfully.
 [/===========================================]
 
 The terminals in an expression tree could be const or non-const references, or
-they might not be references at all. When writing patterns, you usually don't 
+they might not be references at all. When writing grammars, you usually don't 
 have to worry about it because _matches_ gives you a little wiggle room when 
-matching terminals. A pattern such as `proto::terminal<int>` will match a 
+matching terminals. A grammar such as `proto::terminal<int>` will match a 
 terminal of type `int`, `int &`, or `int const &`. 
 
 You can explicitly specify that you want to match a reference type. If you do,
-the type must match exactly. For instance, a pattern such as 
+the type must match exactly. For instance, a grammar such as 
 `proto::terminal<int &>` will only match an `int &`. It will not match an `int`
 or a `int const &`.
 
 The table below shows how Proto matches terminals. The simiple rule is: if you
 want to match only reference types, you must specify the reference in your 
-pattern. Otherwise, leave it off and Proto will ignore const and references.
+grammar. Otherwise, leave it off and Proto will ignore const and references.
 
 [table proto::matches<> and Reference / CV-Qualification of Terminals 
     [[Terminal]     [Grammar]       [Matches?]]
@@ -197,7 +197,7 @@ themselves or the pointer types they decay to. This is especially useful with
 character arrays. The type returned by `proto::as_expr("hello")` is 
 `proto::terminal<char const (&)[6]>::type`. That's a terminal containing a 
 reference to a 6-element character array. Naturally, you can match this terminal
-with the pattern `proto::terminal<char const (&)[6]>`, but the pattern 
+with the grammar `proto::terminal<char const (&)[6]>`, but the grammar 
 `proto::terminal<char const *>` will match it as well, as the following
 code fragment illustrates.
 
@@ -230,7 +230,7 @@ character arrays, but not character pointers? As mentioned above, the
 expression `as_expr("hello")` has the type 
 `terminal< char const (&)[ 6 ] >::type`. If you wanted to match character
 arrays of arbitrary size, you could use `proto::N`, which is an array-size
-wildcard. The following pattern would match any string literal:
+wildcard. The following grammar would match any string literal:
 `terminal< char const (&)[ proto::N ] >`.
 
 Sometimes you need even more wiggle room when matching terminals. For 
@@ -243,32 +243,38 @@ There is one more way you can perform a fuzzy match on terminals. Consider the
 problem of trying to match a `std::complex<>` terminal. You can easily match
 a `std::complex<float>` or a `std::complex<double>`, but how would you match
 any instantiation of `std::complex<>`? You can use `proto::_` here to solve
-this problem. Here is the pattern to match any `std::complex<>` instantiation:
+this problem. Here is the grammar to match any `std::complex<>` instantiation:
 
     struct StdComplex
       : terminal< std::complex< _ > >
     {};
 
-When given a pattern like this, Proto will deconstruct the pattern and the
+When given a grammar like this, Proto will deconstruct the grammar and the
 terminal it is being matched against and see if it can match all the
 constituents.
 
 [endsect]
 
-[/=======================================================================]
-[section:if_and_and Condition and Conjunction with [^if_<>] and [^and_<>]]
-[/=======================================================================]
+[/====================================================]
+[section:if_and_not [^if_<>], [^and_<>], and [^not_<>]]
+[/====================================================]
 
 We've already seen how to use expression generators like `terminal<>` and
-`shift_right<>` as patterns. We've also seen _or_, which we can use to
-express a set of alternate patterns. There are a few others of interest; in
-particular, _if_ and _and_.
+`shift_right<>` as grammars. We've also seen _or_, which we can use to
+express a set of alternate grammars. There are a few others of interest; in
+particular, _if_, _and_ and _not_.
+
+The _not_ template is the simplest. It takes a grammar as a template parameter
+and logically negates it; `not_<Grammar>` will match any expression that
+`Grammar` does /not/ match.
 
 The _if_ template is used together with an MPL lambda expression, which is
-evaluated against expression types to find matches. The _and_ template is like
-_or_, except that each argument of the _and_ must match in order for the _and_
-to match. As an example, consider the definition of `CharString` above that
-uses _exact_. It could have been written without _exact_ as follows:
+evaluated against expression types to find matches.
+
+The _and_ template is like _or_, except that each argument of the _and_ must
+match in order for the _and_ to match. As an example, consider the definition
+of `CharString` above that uses _exact_. It could have been written without
+_exact_ as follows:
 
     struct CharString
       : and_<
@@ -277,20 +283,20 @@ uses _exact_. It could have been written without _exact_ as follows:
         >
     {};
 
-This says that a `CharString` must be a terminal, *and* its argument must be
+This says that a `CharString` must be a terminal, /and/ its argument must be
 the same as `char const *`. Notice the template argument of _if_:
 `is_same< result_of::arg< mpl::_ >, char const * >`. This is an MPL lambda
 expression because it has the MPL placeholder `mpl::_` in it.
 
 [warning Do not confuse `mpl::_` with `proto::_`. The first is only useful in
-MPL lambda expressions. The second is Proto's pattern wildcard. The only place
-`mpl::_` should appear in your patterns is in an _if_, or in tranform::applyN<>,
-as we'll see later. Elsewhere in your patterns you should be using `proto::_`.]
+MPL lambda expressions. The second is Proto's grammar wildcard. The only place
+`mpl::_` should appear in your grammars is in an _if_, or in tranform::applyN<>,
+as we'll see later. Elsewhere in your grammars you should be using `proto::_`.]
 
 The _if_ template has a couple of variants. In additon to `if_<Condition>` you
 can also say `if_<Condition, ThenGrammar>` and
 `if_<Condition, ThenGrammar, ElseGrammar>`. These let you select one sub-grammar
-or another based on the `Condition`. They following table shows their
+or another based on the `Condition`. The following table shows their
 equivalencies:
 
 [table If-Then-Else Equivalencies
@@ -304,19 +310,19 @@ equivalencies:
 
 [endsect]
 
-[/================================]
-[section Matching Vararg Functions]
-[/================================]
+[/==================================]
+[section Matching Vararg Expressions]
+[/==================================]
 
 Not all of C++'s overloadable operators are unary or binary. There is the
 oddball `operator()` -- the function call operator -- which can have any number
 of arguments. Likewise, with Proto you may define your own "operators" that
 could also take more that two arguments. As a result, there may be nodes in
 your Proto expression tree that have an arbitrary number of children (up to
-some predefined maximum). How do you write a pattern to match such a node?
+some predefined maximum). How do you write a grammar to match such a node?
 
 For such cases, Proto provides the _vararg_ class template. Its template
-argument is a pattern, and the _vararg_ will match the pattern zero or more
+argument is a grammar, and the _vararg_ will match the grammar zero or more
 times. Consider a Proto lazy function called `fun()` that can take zero or
 more characters as arguments, as follows:
 
@@ -330,16 +336,16 @@ more characters as arguments, as follows:
     fun('a', 'b');
     ...
 
-Below is the pattern that matches all the allowable invocations of `fun()`:
+Below is the grammar that matches all the allowable invocations of `fun()`:
 
     struct FunCall
       : function< FunTag, vararg< terminal< char > > >
     {};
 
-The `FunCall` pattern uses _vararg_ to match zero or more character literals
+The `FunCall` grammar uses _vararg_ to match zero or more character literals
 as arguments of the `fun()` function.
 
-As another example, can you guess what the following pattern matches?
+As another example, can you guess what the following grammar matches?
 
     struct Foo
       : or_<
@@ -350,16 +356,16 @@ As another example, can you guess what the following pattern matches?
 
 Here's a hint: the first template parameter to `nary_expr<>` represents the
 node type, and any additional template parameters represent children nodes. The
-answer is that this is a degenerate pattern that matches every possible
+answer is that this is a degenerate grammar that matches every possible
 expression tree, from root to leaves.
 
 [endsect]
 
-[/====================]
-[section Meta-Grammars]
-[/====================]
+[/=============================]
+[section Defining DSEL Grammars]
+[/=============================]
 
-We've already seen how to use small patterns to answer simple questions about
+We've already seen how to use small grammars to answer simple questions about
 expression trees. Here's a harder question: ["Does this expression conform to the
 grammar of my domain-specific embedded language?] In this section we'll see how
 to use Proto to define a grammar for your DSEL and use it to validate
@@ -420,7 +426,7 @@ Let's begin our grammar for forward-declaring it:
     struct CalculatorGrammar;
 
 It's an incomplete type at this point, but we'll still be able to use it to
-define the rules of our grammar. Let's define patterns for the terminals:
+define the rules of our grammar. Let's define grammar rules for the terminals:
 
     struct Double
       : terminal< convertible_to< double > >

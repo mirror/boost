@@ -7,7 +7,7 @@
     [id proto]
     [dirname proto]
     [purpose
-        Generic expression template, meta-grammar and
+        Generic expression template, grammar and
         tree-transformation framework.
     ]
     [license
@@ -84,7 +84,7 @@ corresponding to the 5 major parts to Proto:
     [Describes the tools Proto provides for making your expression trees do
      something useful.]]
 [[[link boost_proto.users_guide.expression_introspection Expression Introspection]]
-    [Describes Proto's pattern matching and meta-grammar faciities, which make
+    [Describes Proto's grammar matching faciities, which make
      it easy to discover the structure of an expression tree.]]
 [[[link boost_proto.users_guide.expression_transformation Expression Transformation]]
     [Describes how to write expression transforms that turn an expression tree
