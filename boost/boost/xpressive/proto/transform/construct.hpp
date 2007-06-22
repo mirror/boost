@@ -86,6 +86,10 @@
             struct apply_<R, Expr, State, Visitor, typename R::proto_is_placeholder_>
               : nested_type<typename R::template apply<Expr, State, Visitor>::type>
             {};
+
+            template<typename T>
+            void ignore_unused(T const &)
+            {}
         }
 
         #define BOOST_PROTO_APPLY_(Z, N, DATA)                                                      \
@@ -144,6 +148,7 @@
             {
                 typename Grammar::template apply<Expr, State, Visitor>::type const &expr2
                     = Grammar::call(expr, state, visitor);
+                detail::ignore_unused(expr2);
                 typename apply<Expr, State, Visitor>::type that = {
                     BOOST_PP_ENUM_BINARY_PARAMS(N, detail::as_transform<Arg, >::type::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
                 };
@@ -158,6 +163,7 @@
             {
                 typename Grammar::template apply<Expr, State, Visitor>::type const &expr2
                     = Grammar::call(expr, state, visitor);
+                detail::ignore_unused(expr2);
                 return typename apply<Expr, State, Visitor>::type(
                     BOOST_PP_ENUM_BINARY_PARAMS(N, detail::as_transform<Arg, >::type::call(expr2, state, visitor) BOOST_PP_INTERCEPT)
                 );
