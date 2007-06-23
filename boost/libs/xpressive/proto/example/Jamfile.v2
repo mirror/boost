@@ -27,3 +27,13 @@ exe lazy_vector
     :
         lazy_vector.cpp
     ;
+
+exe tarray
+    :
+        tarray.cpp
+    ;
+
+exe rgb
+    :
+        rgb.cpp
+    ;
