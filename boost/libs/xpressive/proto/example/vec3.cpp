@@ -9,10 +9,16 @@
 // from PETE (http://www.codesourcery.com/pooma/download.html).
 
 #include <iostream>
+#include <functional>
+#include <boost/mpl/int.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/proto_typeof.hpp>
+#include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform/fold.hpp>
+#include <boost/xpressive/proto/transform/function.hpp>
 using namespace boost::proto;
+namespace mpl = boost::mpl;
 
 // Here is an evaluation context that indexes into a Vec3
 // expression, and combines the result.
@@ -35,25 +41,24 @@ struct Vec3SubscriptCtx
     int i_;
 };
 
-// Here is an evaluation context that counts the number of
-// Vec3 terminals in an expression.
-struct CountLeavesCtx
-  : callable_context< CountLeavesCtx >
-{
-    typedef int result_type;
-
-    CountLeavesCtx()
-      : count(0)
-    {}
-
-    int operator()(tag::terminal, int const (&)[3])
-    {
-        ++this->count;
-        return 0; // not used
-    }
-
-    int count;
-};
+// This transform counts the number of int[3] terminals in an expression.
+// It accumulates a runtime value, rather than computing a compile-time
+// value, just to demonstrate the use of the std::plus<> function object
+// as a transform.
+struct CountLeaves
+  : or_<
+        // match a Vec3 terminal, return 1
+        transform::always<terminal<int[3]>, mpl::int_<1> >
+        // match a terminal, return int() (which is 0)
+      , transform::always<terminal<_>, int>
+        // fold everything else, using std::plus<> to add
+        // the leaf count of each child to the accumulated state.
+      , transform::fold<
+            nary_expr<_, vararg<transform::function2<CountLeaves, std::plus<int> > > >
+          , int // initial state of the fold is int() (which is 0)
+        >
+    >
+{};
 
 // Here is the Vec3 struct, which is a vector of 3 integers.
 struct Vec3
@@ -97,14 +102,13 @@ struct Vec3
     }
 };
 
-// The count_leaves() function uses the CountLeavesCtx and
-// proto::eval() to count the number of leaves in an expression.
+// The count_leaves() function uses the CountLeaves transform and
+// to count the number of leaves in an expression.
 template<typename Expr>
 int count_leaves(Expr const &expr)
 {
-    CountLeavesCtx ctx;
-    eval(expr, ctx);
-    return ctx.count;
+    int i = 0;
+    return CountLeaves::call(expr, i, i);
 }
 
 int main()
