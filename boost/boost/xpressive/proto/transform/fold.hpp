@@ -20,6 +20,7 @@
     #include <boost/preprocessor/repetition/repeat.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
+    #include <boost/xpressive/proto/transform/branch.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto { namespace transform
@@ -73,8 +74,13 @@
 
         // A fold transform that transforms the left sub-tree and
         // uses the result as state while transforming the right.
-        template<typename Grammar>
+        template<typename Grammar, typename State>
         struct fold
+          : branch<fold<Grammar>, State>
+        {};
+
+        template<typename Grammar>
+        struct fold<Grammar, void>
           : Grammar
         {
             fold() {}
@@ -94,8 +100,13 @@
 
         // A reverse_fold compiler that compiles the right sub-tree and
         // uses the result as state while compiling the left.
-        template<typename Grammar>
+        template<typename Grammar, typename State>
         struct reverse_fold
+          : branch<reverse_fold<Grammar>, State>
+        {};
+
+        template<typename Grammar>
+        struct reverse_fold<Grammar, void>
           : Grammar
         {
             reverse_fold() {}

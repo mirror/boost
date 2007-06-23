@@ -404,14 +404,29 @@ namespace boost { namespace proto
         template<typename Grammar, typename Lambda, typename Factory = detail::default_factory>
         struct apply3;
 
-        template<typename Grammar, typename BranchState>
+        template<typename Grammar, typename State>
         struct branch;
 
-        template<typename Grammar>
+        template<typename Grammar, typename State = void>
         struct fold;
 
-        template<typename Grammar>
+        template<typename Grammar, typename State = void>
         struct reverse_fold;
+
+        template<typename Tag, typename Grammar, typename State = void>
+        struct fold_tree;
+
+        template<typename Tag, typename Grammar, typename State = void>
+        struct reverse_fold_tree;
+
+        template<typename Grammar, typename Function1>
+        struct function1;
+
+        template<typename Grammar, typename Function2>
+        struct function2;
+
+        template<typename Grammar, typename Function3>
+        struct function3;
 
         template<typename Grammar>
         struct list;

@@ -43,7 +43,7 @@ namespace boost { namespace proto { namespace transform
 
     /// fold_tree
     ///
-    template<typename Tag, typename Grammar, typename State = void>
+    template<typename Tag, typename Grammar, typename State>
     struct fold_tree
       : transform::branch<
             transform::fold<
@@ -62,7 +62,7 @@ namespace boost { namespace proto { namespace transform
 
     /// reverse_fold_tree
     ///
-    template<typename Tag, typename Grammar, typename State = void>
+    template<typename Tag, typename Grammar, typename State>
     struct reverse_fold_tree
       : transform::branch<
             transform::reverse_fold<
