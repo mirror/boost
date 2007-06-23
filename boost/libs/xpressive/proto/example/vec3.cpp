@@ -16,6 +16,7 @@
 #include <boost/xpressive/proto/proto_typeof.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
+#include <boost/xpressive/proto/transform/apply.hpp>
 #include <boost/xpressive/proto/transform/function.hpp>
 using namespace boost::proto;
 namespace mpl = boost::mpl;
@@ -44,7 +45,7 @@ struct Vec3SubscriptCtx
 // This transform counts the number of int[3] terminals in an expression.
 // It accumulates a runtime value, rather than computing a compile-time
 // value, just to demonstrate the use of the std::plus<> function object
-// as a transform.
+// with the function2 transform.
 struct CountLeaves
   : or_<
         // match a Vec3 terminal, return 1

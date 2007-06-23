@@ -11,6 +11,7 @@
 #include <iostream>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform/apply.hpp>
 #include <boost/xpressive/proto/transform/compose.hpp>
 using namespace boost::proto;
 

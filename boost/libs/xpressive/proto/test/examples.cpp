@@ -13,6 +13,7 @@
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/transform/list.hpp>
+#include <boost/xpressive/proto/transform/apply.hpp>
 #include <boost/xpressive/proto/transform/construct.hpp>
 #include <boost/xpressive/proto/transform/fold_tree.hpp>
 #include <boost/utility/result_of.hpp>

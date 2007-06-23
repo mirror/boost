@@ -17,15 +17,15 @@ using namespace boost::xpressive;
 
 int main(int argc, char *argv[])
 {
-    int i = 1;
+    int i = 1, j = 1;
     bool nocase = false;
     char const *dot = " ~_n ";
     char const *bos = " bos ";
     char const *eos = " eos ";
 
-    for(; i < argc && '-' == *argv[i]; ++i)
+    for(; i < argc && '-' == *argv[i]; argv[i][++j]? 0: (j=1,++i))
     {
-        switch(argv[i][1])
+        switch(argv[i][j])
         {
         case 'i':           // perl /i modifier
             nocase = true;

@@ -16,6 +16,7 @@
 #include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
+#include <boost/xpressive/proto/transform/apply.hpp>
 using namespace boost;
 
 // Will be used to define the placeholders _1 and _2

@@ -130,7 +130,7 @@ You do that by creating named regexes, and referring to other regexes by name. E
 _regex_compiler_ instance keeps a mapping from names to regexes that have been created
 with it.
 
-You can create a named dynamic regex by prefacing your regex with `"(?$name=)"`, where 
+You can create a named dynamic regex by prefacing your regex with `"(?$name=)"`, where
 /name/ is the name of the regex. You can refer to a named regex from another regex with
 `"(?$name)"`. The named regex does not need to exist yet at the time it is referenced
 in another regex, but it must exist by the time you use the regex.
@@ -163,8 +163,8 @@ example from above.
     }
 
 As with static regex grammars, nested regex invocations create nested
-match results (see /Nested Results/ below). The result is a complete parse tree 
-for string that matched. Unlike static regexes, dynamic regexes are always 
+match results (see /Nested Results/ below). The result is a complete parse tree
+for string that matched. Unlike static regexes, dynamic regexes are always
 embedded by reference, not by value.
 
 [h2 Cyclic Patterns, Copying and Memory Management, Oh My!]
@@ -261,7 +261,7 @@ intended to be used with _iterator_. You can use it as follows:
 
     sregex name = +alpha;
     sregex integer = +_d;
-    sregex re = *( *_s >> ( name | integer ) ); 
+    sregex re = *( *_s >> ( name | integer ) );
 
     smatch what;
     std::string str( "marsha 123 jan 456 cindy 789" );

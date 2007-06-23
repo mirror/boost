@@ -16,6 +16,7 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform/apply.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/utility/chset/chset.hpp>

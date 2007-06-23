@@ -12,7 +12,7 @@
     [category string-text]
     [id xpressive]
     [dirname xpressive]
-    [purpose 
+    [purpose
         Regular expressions that can be written as strings or as expression templates,
         and that can refer to each other and themselves recursively with the power of
         context-free grammars

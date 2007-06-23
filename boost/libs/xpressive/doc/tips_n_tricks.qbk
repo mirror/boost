@@ -46,8 +46,8 @@ pair.
 
 [h2 Compile Patterns Once And Reuse Them]
 
-Compiling a regex (dynamic or static) is more expensive than executing a 
-match or search. If you have the option, prefer to compile a pattern into 
+Compiling a regex (dynamic or static) is more expensive than executing a
+match or search. If you have the option, prefer to compile a pattern into
 a _basic_regex_ object once and reuse it rather than recreating it over
 and over.
 

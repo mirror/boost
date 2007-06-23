@@ -28,6 +28,7 @@ namespace boost { namespace fusion { namespace result_of { using namespace meta;
 #include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
+#include <boost/xpressive/proto/transform/apply.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
