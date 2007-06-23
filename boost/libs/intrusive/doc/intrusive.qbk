@@ -1,6 +1,6 @@
-[library Intrusive
+[library Boost.Intrusive
     [quickbook 1.3]
-    [version 2007-05-03]
+    [version 2007-06-23]
     [authors [Krzikalla, Olaf], [Gazta&ntilde;aga, Ion]]
     [copyright 2005 Olaf Krzikalla, 2006-2007 Ion Gazta&ntilde;aga]
     [purpose Intrusive containers]
@@ -17,7 +17,7 @@
 
 [*Boost.Intrusive] is a library presenting some intrusive containers to
 the world of C++. Intrusive containers are special containers
-that offer [link intrusive.performance better performance]
+that offer [link boost_intrusive.performance better performance]
 and exception safety guarantees than non-intrusive containers (like STL containers). 
 
 The performance benefits of intrusive containers makes them ideal as a building
@@ -172,7 +172,7 @@ Intrusive containers have also downsides:
    appropriately. Although this task is easy with [*Boost.Intrusive], touching the 
    definition of a type is sometimes a crucial issue.
 
-*  In intrusive containers you don't store a copy of an object, [*but they rather the origina object
+*  In intrusive containers you don't store a copy of an object, [*but they rather the original object
    is linked with other objects in the container]. Objects don't need copy-constructors or assignment
    operators to be stored in intrusive containers. But you have to take care of possible side effects, 
    whenever you change the contents of an object (this is especially important for 
@@ -183,14 +183,14 @@ Intrusive containers have also downsides:
 
 *  Again you have to be [*careful]: in contrast to STL containers [*it's easy to render an
    iterator invalid] without touching the intrusive container directly, because the object
-   can be destroyed before is erased from the container.
+   can be disposed before is erased from the container.
 
 *  [*Boost.Intrusive] containers are [*non-copyable and non-assignable]. Since intrusive
    containers don't have allocation capabilities, these operations have no sense. However,
    swapping can be used to implement move-capabilities. To ease the implementation of
    copy constructors and assignment operators of classes storing [*Boost.Intrusive]
    containers, [*Boost.Intrusive] offers special cloning functions. See
-   [link intrusive.clone_from Cloning [*Boost.Intrusive] containers] section for more information.
+   [link boost_intrusive.clone_from Cloning [*Boost.Intrusive] containers] section for more information.
 
 *  Analyzing thread-safety of a program that uses containers is harder with intrusive containers, becuase
    the container might be modified indirectly without an explicitly call to a container member.
@@ -214,17 +214,11 @@ Intrusive containers have also downsides:
 ]
 
 For a performance comparison between Intrusive and Non-intrusive containers see
-[link intrusive.performance Performance] section.
+[link boost_intrusive.performance Performance] section.
 
 [endsect]
 
 [endsect]
-
-[/
-[section:quick_guide Quick guide for the impatient]
-
-[endsect]
-]
 
 [section:usage How to use Boost.Intrusive]
 
@@ -265,11 +259,11 @@ three template arguments:
 
 *  The second template argument controls the linking policy. [*Boost.Intrusive] currently supports
    3 policies: `normal_link`, `safe_link`, `auto_unlink`. More about these in the sections
-   [link intrusive.safe_hook Safe hooks] and [link intrusive.auto_unlink_hooks Auto-unlink hooks]
+   [link boost_intrusive.safe_hook Safe hooks] and [link boost_intrusive.auto_unlink_hooks Auto-unlink hooks]
 
 *  The third template argument is the pointer type to be used internally in the hook.
    The default value is `void *`, which means that raw pointers will be used in the hook.
-   More about this in the section titled [link intrusive.using_smart_pointers Using smart pointers with Boost.Intrusive containers]
+   More about this in the section titled [link boost_intrusive.using_smart_pointers Using smart pointers with Boost.Intrusive containers]
 
 Example:
 
@@ -413,10 +407,10 @@ Even if the interface of [classref boost::intrusive::list list] is similar to
 you directly store objects in intrusive containers, not copies. The lifetime of a 
 stored object is not bound to or managed by the container:
 
-*  When the container gets destroyed before the object, the object is not destroyed,
+*  When the container gets disposed before the object, the object is not disposed,
    so you have to be careful to avoid resource leaks.
    
-*  When the object is destroyed before the container, your program is likely to crash,
+*  When the object is disposed before the container, your program is likely to crash,
    because the container contains a pointer to an non-existing object.
 
 [endsect]
@@ -556,6 +550,8 @@ Apart from that, [*Boost.Intrusive] offers additional features:
 
 [section:safe_hook Safe hooks]
 
+[section:features Features of the safe mode]
+
 [*Boost.Intrusive] hooks can be configured to operate in safe-link mode.
 The safe mode is activated by default:
 
@@ -585,12 +581,28 @@ If the object is not actually inserted
 in a container, the hook is the default state and if it's inserted in a container, the
 hook is not in the default state.
 
-[*Note:] All assertions raised by [*Boost-Intrusive] hooks and containers, are
-implemented using `BOOST_ASSERT`, which can be configured by the user. See
-[@http://www.boost.org/libs/utility/assert.html] for more information about
-`BOOST_ASSERT`.
+[endsect]
 
-(to-do example!!)
+[section:configuring Configuring safe-mode assertions]
+
+By default, all safe-mode assertions raised by [*Boost-Intrusive] hooks
+and containers in are implemented using `BOOST_ASSERT`, which can be configured by
+the user. See [@http://www.boost.org/libs/utility/assert.html] for more
+information about `BOOST_ASSERT`.
+
+`BOOST_ASSERT` is globally configured for all the libraries, so the user might
+want to redefine safe-mode assertions without modifying `BOOST_ASSERT`. This can
+be achieved redefining the following macros:
+
+*  `BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT`: This assertion will be
+   used in insertion functions of the intrusive containers to check that
+   the hook of the value to be inserted is default constructed.
+*  `BOOST_INTRUSIVE_SAFE_MODE_HOOK_DESTRUCTOR_ASSERT`: This assertion will be
+   used in hooks' destructors to check that the hook is in a default state.
+
+If any of these macros is not redefined, it will be defaulted to `BOOST_ASSERT`.
+
+[endsect]
 
 [endsect]
 
@@ -608,7 +620,7 @@ implemented using `BOOST_ASSERT`, which can be configured by the user. See
 
 These hooks have exactly the same size overhead as their analogue non auto-unlinking
 hooks, but they have a restriction: they can only be used with
-[link intrusive.presenting_containers non-constant time containers].
+[link boost_intrusive.presenting_containers non-constant time containers].
 There is a reason for this: 
 
 * Auto-unlink hooks don't store any reference to the container where they are inserted.
@@ -989,7 +1001,7 @@ equality functor for those values:
 
 Each hashed container needs [*its own bucket array]. Two hashed containers
 [*can't] share the same `bucket_type` elements. The bucket array [*must] be
-destroyed [*after] the container using it is destroyed, otherwise, the result
+disposed [*after] the container using it is disposed, otherwise, the result
 is undefined.
 
 [section:unordered_set_unordered_multiset_performance unordered_set and unordered_multiset performance notes]
@@ -1217,7 +1229,7 @@ For more information about advanced lookup and insertion functions see
 
 [endsect]
 
-[section:erasing_and_destroying Erasing and destroying values from Boost.Intrusive containers]
+[section:erasing_and_disposing Erasing and disposing values from Boost.Intrusive containers]
 
 One of the most tedious tasks when using intrusive containers is the management of the erased elements.
 When using STL containers, the container itself unlinks and destroys the contained elements, but with
@@ -1237,19 +1249,26 @@ object that will be called after the element has been erased from the container.
 
 [c++]
 
-   template<class Pred, class Destroyer>
-   void remove_and_destroy_if(Pred pred, Destroyer destroyer)
+   template<class Pred, class Disposer>
+   void remove_and_dispose_if(Pred pred, Disposer disposer)
 
-This function can be used to efficiently remove and destroy elements. `remove_and_destroy_if` 
-will call "destroyer" function object for every removed element. [classref boost::intrusive::list list] offers
-more functions taking a destroyer function object as argument, like `erase_and_destroy`, `clear_and_destroy`,
-`remove_and_destroy`... Let's see an small example:
+With this function the user can efficiently remove and destroy elements if the disposer
+function destroys an object: `remove_and_dispose_if` 
+will call "disposer" function object for every removed element. [classref boost::intrusive::list list] offers
+more functions taking a disposer function object as argument, like `erase_and_dispose`, `clear_and_dispose`,
+`remove_and_dispose`... 
 
-[import ../example/doc_erasing_and_destroying.cpp]
-[doc_erasing_and_destroying]
+Note that the disposing function does not need to just destroy the object. It can
+implement any other operation like inserting the remove object in another container.
+Let's see an small example:
 
-All [*Boost.Intrusive] containers offer these "erase + destroy" additional members for all functions
+[import ../example/doc_erasing_and_disposing.cpp]
+[doc_erasing_and_disposing]
+
+All [*Boost.Intrusive] containers offer these "erase + dispose" additional members for all functions
 that erase an element from the container.
+
+
 
 [endsect]
 
@@ -1269,8 +1288,8 @@ Apart from the container to be cloned, `clone_from` takes two function objects a
 
 [c++]
 
-   template <class Cloner, class Destroyer>
-   void clone_from(const list &src, Cloner cloner, Destroyer destroyer);
+   template <class Cloner, class Disposer>
+   void clone_from(const list &src, Cloner cloner, Disposer disposer);
    
 This function will make `*this` a clone of `src`. Let's explain the arguments:
 
@@ -1278,14 +1297,14 @@ This function will make `*this` a clone of `src`. Let's explain the arguments:
 *   The second parameter is a function object that will clone `value_type` objects and
    return a pointer to the clone. It must implement the following function:
    `pointer operator()(const value_type &)`.
-*   The second parameter is a function object that will destroy `value_type` objects. It's used first
-   to empty the container before cloning and to erase the elements if an exception is thrown.
+*   The second parameter is a function object that will dispose `value_type` objects. It's used first
+   to empty the container before cloning and to dispose the elements if an exception is thrown.
    
 The cloning function works as follows:
 
-*   First clears and destroys all the elements from *this using the destroyer function object.
+*   First clears and disposes all the elements from *this using the disposer function object.
 *   After that starts cloning all the elements of the source container using the cloner function object.
-*   If any operation in the cloning function (for example, the cloner function object) throws, all the constructed elements are destroyed using the destroyer function object.
+*   If any operation in the cloning function (for example, the cloner function object) throws, all the constructed elements are disposed using the disposer function object.
 
 
 Here's an example of `clone_from`:
@@ -1575,7 +1594,7 @@ before explaining the customization options of [*Boost.Intrusive].
 
 [section:node_algorithms Node algorithms with custom NodeTraits]
 
-As explained in the [link intrusive.concepts Concepts] section, [*Boost.Intrusive]
+As explained in the [link boost_intrusive.concepts Concepts] section, [*Boost.Intrusive]
 containers are implemented using node algorithms that work on generic nodes.
 
 Sometimes, the use of intrusive containers is expensive for some environments
@@ -1756,7 +1775,7 @@ For a complete rbtree of functions see
 
 [section:value_traits Containers with custom ValueTraits]
 
-As explained in the [link intrusive.concepts Concepts] section, [*Boost.Intrusive]
+As explained in the [link boost_intrusive.concepts Concepts] section, [*Boost.Intrusive]
 containers are templatized using a `ValueTraits` parameter. This parameter contains
 all the information to glue the `value_type` of the containers and the node to be
 used in node algorithms, since these types can be different. Apart from this,
@@ -1800,7 +1819,7 @@ Let's explain each type and function:
 
 *  ['node_traits]: The node configuration that it's needed by node algorithms.
    These node traits and algorithms are
-   described in the previous chapter: [link intrusive.node_algorithms Nodes Algorithms].
+   described in the previous chapter: [link boost_intrusive.node_algorithms Nodes Algorithms].
 
    *  If my_value_traits is meant to be used with [classref boost::intrusive::slist slist],
       `node_traits` should follow
@@ -2012,7 +2031,7 @@ to have more than one hook per user type opens the possibility to implement mult
 containers on top of [*Boost.Intrusive].
 
 [*Boost.Intrusive] containers implement advanced functions taking function objects
-as arguments (`clone_from`, `erase_and_destroy`, `insert_check`...). These
+as arguments (`clone_from`, `erase_and_dispose`, `insert_check`...). These
 functions come handy when implementing non-intrusive containers
 (for example, STL-like containers) on top of intrusive containers.
 
@@ -2397,7 +2416,8 @@ all the objects to be inserted in intrusive containers in containers like `std::
 *  Intel 9.1/WinXP
 *  GCC 4.1.2/Linux
 *  Codewarrior 9.4/WinXP
-*  GCC 3.4.3 Solaris 11
+*  GCC 3.4.3/Solaris 11
+*  GCC 4.0/Mac Os 10.4.1
 
 [endsect]
 
@@ -2428,7 +2448,7 @@ helpful discussions.
 
 [endsect]
 
-[xinclude intrusive_doxygen.boostbook]
+[xinclude intrusive_doxygen.xml]
 
 [section:license_notices License notices]
 

@@ -10,7 +10,7 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-
+#include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/set.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include "itestvalue.hpp"
@@ -204,9 +204,9 @@ void test_set<ValueTraits>
       set_type testset1 (&values[0], &values[0] + values.size());
       set_type testset2;
 
-      testset2.clone_from(testset1, test::new_cloner(), test::delete_destroyer());
+      testset2.clone_from(testset1, test::new_cloner(), test::delete_disposer());
       BOOST_TEST (testset2 == testset1);
-      testset2.clear_and_destroy(test::delete_destroyer());
+      testset2.clear_and_dispose(test::delete_disposer());
       BOOST_TEST (testset2.empty());
 }
 
@@ -295,3 +295,4 @@ int main( int, char* [] )
    test_main_template<boost::intrusive::smart_ptr<void>, true>()();
    return boost::report_errors();
 }
+#include <boost/intrusive/detail/config_end.hpp>

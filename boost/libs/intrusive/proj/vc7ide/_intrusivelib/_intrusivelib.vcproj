@@ -160,6 +160,9 @@
 				Name="detail"
 				Filter="">
 				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\assert.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\config_begin.hpp">
 				</File>
 				<File
@@ -173,6 +176,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\list_node.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\mpl.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\parent_from_member.hpp">

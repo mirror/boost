@@ -10,7 +10,7 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-
+#include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/unordered_set.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include "itestvalue.hpp"
@@ -257,14 +257,14 @@ void test_unordered_set<ValueTraits>
       unordered_set_type testset1 (buckets1, BucketSize, values.begin(), values.end());
       unordered_set_type testset2 (buckets2, BucketSize);
 
-      testset2.clone_from(testset1, test::new_cloner(), test::delete_destroyer());
+      testset2.clone_from(testset1, test::new_cloner(), test::delete_disposer());
       //Ordering is not guarantee in the cloning so insert data in a set and test
       std::set<typename ValueTraits::value_type>
          src(testset1.begin(), testset1.end());
       std::set<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
       BOOST_TEST (src == dst );
-      testset2.clear_and_destroy(test::delete_destroyer());
+      testset2.clear_and_dispose(test::delete_disposer());
       BOOST_TEST (testset2.empty());
    }
    {
@@ -274,14 +274,14 @@ void test_unordered_set<ValueTraits>
       unordered_set_type testset1 (buckets1, BucketSize*2, values.begin(), values.end());
       unordered_set_type testset2 (buckets2, BucketSize);
 
-      testset2.clone_from(testset1, test::new_cloner(), test::delete_destroyer());
+      testset2.clone_from(testset1, test::new_cloner(), test::delete_disposer());
       //Ordering is not guarantee in the cloning so insert data in a set and test
       std::set<typename ValueTraits::value_type>
          src(testset1.begin(), testset1.end());
       std::set<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
       BOOST_TEST (src == dst );
-      testset2.clear_and_destroy(test::delete_destroyer());
+      testset2.clear_and_dispose(test::delete_disposer());
       BOOST_TEST (testset2.empty());
    }
    {
@@ -291,14 +291,14 @@ void test_unordered_set<ValueTraits>
       unordered_set_type testset1 (buckets1, BucketSize, values.begin(), values.end());
       unordered_set_type testset2 (buckets2, BucketSize*2);
 
-      testset2.clone_from(testset1, test::new_cloner(), test::delete_destroyer());
+      testset2.clone_from(testset1, test::new_cloner(), test::delete_disposer());
       //Ordering is not guarantee in the cloning so insert data in a set and test
       std::set<typename ValueTraits::value_type>
          src(testset1.begin(), testset1.end());
       std::set<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
       BOOST_TEST (src == dst );
-      testset2.clear_and_destroy(test::delete_destroyer());
+      testset2.clear_and_dispose(test::delete_disposer());
       BOOST_TEST (testset2.empty());
    }
 }
@@ -411,3 +411,4 @@ int main( int, char* [] )
    test_main_template<boost::intrusive::smart_ptr<void>, true>()();
    return boost::report_errors();
 }
+#include <boost/intrusive/detail/config_end.hpp>

@@ -38,7 +38,7 @@ Semantics of an expression is defined only where it differs from, or is not defi
 Move constructor  X(a)        X().size() == a.size(). X() contains a copy of each of a's elements.  
 Move constructor  X b(a);        b.size() == a.size(). b contains a copy of each of a's elements.  
 Move Assignment operator  b = a        b.size() == a.size(). b contains a copy of each of a's elements.  
-Destructor  a.~X()     Each of a's elements is destroyed, and memory allocated for them (if any) is deallocated.     
+Destructor  a.~X()     Each of a's elements is disposed, and memory allocated for them (if any) is deallocated.     
 Beginning of range  a.begin()     Returns an iterator pointing to the first element in the container. [7]  a.begin() is either dereferenceable or past-the-end. It is past-the-end if and only if a.size() == 0.  
 End of range  a.end()     Returns an iterator pointing one past the last element in the container.  a.end() is past-the-end.  
 Size  a.size()     Returns the size of the container, that is, its number of elements. [8]  a.size() >= 0 && a.size() <= max_size()  

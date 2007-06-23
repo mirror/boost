@@ -19,7 +19,7 @@ namespace boost      {
 namespace intrusive  {
 namespace test       {
 
-class delete_destroyer
+class delete_disposer
 {
 public:
    template <class Pointer>

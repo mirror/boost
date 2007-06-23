@@ -10,6 +10,7 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
+#include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/slist.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include "itestvalue.hpp"
@@ -302,9 +303,9 @@ void test_slist<ValueTraits>
       list_type testlist1 (&values[0], &values[0] + values.size());
       list_type testlist2;
 
-      testlist2.clone_from(testlist1, test::new_cloner(), test::delete_destroyer());
+      testlist2.clone_from(testlist1, test::new_cloner(), test::delete_disposer());
       BOOST_TEST (testlist2 == testlist1);
-      testlist2.clear_and_destroy(test::delete_destroyer());
+      testlist2.clear_and_dispose(test::delete_disposer());
       BOOST_TEST (testlist2.empty());
 }
 
@@ -379,3 +380,4 @@ int main(int, char* [])
    test_main_template<boost::intrusive::smart_ptr<void>, true>()();
    return boost::report_errors();
 }
+#include <boost/intrusive/detail/config_end.hpp>

@@ -93,7 +93,7 @@ void test_intrusive_list_push_back()
       for(int i = 0; i < NumElements; ++i)
          l.push_back(objects[i]);
       //Elements are unlinked in ilist's destructor
-      //Elements are destroyed in vector's destructor
+      //Elements are disposed in vector's destructor
       //]
    }
    ptime tend = microsec_clock::universal_time();
@@ -111,7 +111,7 @@ void test_std_list_push_back()
       stdlist l;
       for(int i = 0; i < NumElements; ++i)
          l.push_back(typename stdlist::value_type(i));
-      //Elements unlinked and destroyed in stdlist's destructor
+      //Elements unlinked and disposed in stdlist's destructor
       //]
    }
    ptime tend = microsec_clock::universal_time();
@@ -132,8 +132,8 @@ void test_compact_std_ptrlist_push_back()
       stdptrlist l;
       for(int i = 0; i < NumElements; ++i)
          l.push_back(&objects[i]);
-      //Pointers to elements unlinked and destroyed in stdptrlist's destructor
-      //Elements destroyed in vector's destructor
+      //Pointers to elements unlinked and disposed in stdptrlist's destructor
+      //Elements disposed in vector's destructor
       //]
    }
    ptime tend = microsec_clock::universal_time();
@@ -155,8 +155,8 @@ void test_disperse_std_ptrlist_push_back()
          objects.push_back(typename stdlist::value_type(i));
          l.push_back(&objects.back());
       }
-      //Pointers to elements unlinked and destroyed in stdptrlist's destructor
-      //Elements unlinked and destroyed in stdlist's destructor
+      //Pointers to elements unlinked and disposed in stdptrlist's destructor
+      //Elements unlinked and disposed in stdlist's destructor
       //]
    }
    ptime tend = microsec_clock::universal_time();

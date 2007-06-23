@@ -9,7 +9,7 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-//[doc_erasing_and_destroying
+//[doc_erasing_and_disposing
 #include <boost/intrusive/list.hpp>
 
 //A class that can be inserted in an intrusive list
@@ -36,8 +36,8 @@ class is_even
    {  return 0 == (c.int_ % 2);  }
 };
 
-//The destroyer object function
-class delete_destroyer
+//The disposer object function
+class delete_disposer
 {
    public:
    void operator()(my_class *delete_this)
@@ -57,17 +57,17 @@ int main()
          list.push_back(*new my_class(i));
       }
 
-      //Now use remove_and_destroy_if to erase and delete the objects
-      list.remove_and_destroy_if(is_even(), delete_destroyer());
+      //Now use remove_and_dispose_if to erase and delete the objects
+      list.remove_and_dispose_if(is_even(), delete_disposer());
    }
    catch(...){
       //If something throws, make sure that all the memory is freed
-      list.clear_and_destroy(delete_destroyer());
+      list.clear_and_dispose(delete_disposer());
       throw;
    }
 
-   //Destroy remaining elements
-   list.erase_and_destroy(list.begin(), list.end(), delete_destroyer());
+   //Dispose remaining elements
+   list.erase_and_dispose(list.begin(), list.end(), delete_disposer());
    return 0;
 }
 //]
