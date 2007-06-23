@@ -9,9 +9,18 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
+
+#ifndef BOOST_INTRUSIVE_SELECT_COMPILER_INCLUDED
+#ifndef BOOST_COMPILER_CONFIG
+//#include <boost/config/select_compiler_config.hpp>
+//#include BOOST_COMPILER_CONFIG
 #include <boost/config.hpp>
+#endif
+#define BOOST_INTRUSIVE_SELECT_COMPILER_INCLUDED
+#endif
 
 #ifdef BOOST_MSVC
+
    #pragma warning (push)
    //
    //'function' : resolved overload was found by argument-dependent lookup

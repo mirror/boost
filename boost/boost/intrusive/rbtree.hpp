@@ -15,15 +15,14 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <functional>
 #include <iterator>
-#include <boost/utility.hpp>
 #include <utility>
-#include <boost/assert.hpp>
+#include <boost/intrusive/detail/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/set_hook.hpp>
 #include <boost/intrusive/detail/rbtree_node.hpp>
-#include <boost/intrusive/detail/ebo_holder.hpp>
+#include <boost/intrusive/detail/ebo_functor_holder.hpp>
 #include <boost/intrusive/rbtree_algorithms.hpp>
 #include <boost/intrusive/linking_policy.hpp>
 #include <cstddef>
@@ -353,7 +352,7 @@ class rbtree
       detail::key_node_ptr_compare<value_compare, ValueTraits> key_node_comp(priv_comp());
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       return iterator(node_algorithms::insert_equal_upper_bound
          (node_ptr(&priv_header()), to_insert, key_node_comp));
@@ -375,7 +374,7 @@ class rbtree
       detail::key_node_ptr_compare<value_compare, ValueTraits> key_node_comp(priv_comp());
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       return iterator(node_algorithms::insert_equal_lower_bound
          (node_ptr(&priv_header()), to_insert, key_node_comp));
@@ -400,7 +399,7 @@ class rbtree
       detail::key_node_ptr_compare<value_compare, ValueTraits> key_node_comp(priv_comp());
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       return iterator(node_algorithms::insert_equal
          (node_ptr(&priv_header()), hint.pointed_node(), to_insert, key_node_comp));
@@ -540,7 +539,7 @@ class rbtree
    {
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       node_algorithms::insert_unique_commit
                (node_ptr(&priv_header()), to_insert, commit_data);
@@ -561,7 +560,7 @@ class rbtree
       ++ret;
       node_ptr to_erase(i.pointed_node());
       if(safemode_or_autounlink)
-         BOOST_ASSERT(!node_algorithms::unique(to_erase));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(!node_algorithms::unique(to_erase));
       node_algorithms::erase(&priv_header(), to_erase);
       size_traits::decrement();
       if(safemode_or_autounlink)
@@ -614,10 +613,10 @@ class rbtree
       return n;
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the element pointed to by pos. 
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //! 
    //! <b>Complexity</b>: Average complexity for erase element is constant time. 
    //! 
@@ -625,19 +624,19 @@ class rbtree
    //! 
    //! <b>Note</b>: Invalidates the iterators 
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(iterator i, Destroyer destroyer)
+   template<class Disposer>
+   iterator erase_and_dispose(iterator i, Disposer disposer)
    {
       node_ptr to_erase(i.pointed_node());
       iterator ret(this->erase(i));
-      destroyer(ValueTraits::to_value_ptr(to_erase));
+      disposer(ValueTraits::to_value_ptr(to_erase));
       return ret;
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the range pointed to by b end e.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Complexity</b>: Average complexity for erase range is at most 
    //!   O(log(size() + N)), where N is the number of elements in the range.
@@ -646,14 +645,14 @@ class rbtree
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(iterator b, iterator e, Destroyer destroyer)
-   {  size_type n;   return private_erase(b, e, n, destroyer);   }
+   template<class Disposer>
+   iterator erase_and_dispose(iterator b, iterator e, Disposer disposer)
+   {  size_type n;   return private_erase(b, e, n, disposer);   }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given value.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -663,20 +662,20 @@ class rbtree
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   size_type erase_and_destroy(const_reference value, Destroyer destroyer)
+   template<class Disposer>
+   size_type erase_and_dispose(const_reference value, Disposer disposer)
    {
       std::pair<iterator,iterator> p = this->equal_range(value);
       size_type n;
-      private_erase(p.first, p.second, n, destroyer);
+      private_erase(p.first, p.second, n, disposer);
       return n;
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given key.
    //!   according to the comparison functor "comp".
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -686,12 +685,12 @@ class rbtree
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class KeyType, class KeyValueCompare, class Destroyer>
-   size_type erase_and_destroy(const KeyType& key, KeyValueCompare comp, Destroyer destroyer)
+   template<class KeyType, class KeyValueCompare, class Disposer>
+   size_type erase_and_dispose(const KeyType& key, KeyValueCompare comp, Disposer disposer)
    {
       std::pair<iterator,iterator> p = this->equal_range(key, comp);
       size_type n;
-      private_erase(p.first, p.second, n, destroyer);
+      private_erase(p.first, p.second, n, disposer);
       return n;
    }
 
@@ -724,7 +723,7 @@ class rbtree
       }
    }
 
-   //! <b>Effects</b>: Erases all of the elements calling destroyer(p) for
+   //! <b>Effects</b>: Erases all of the elements calling disposer(p) for
    //!   each node to be erased.
    //! <b>Complexity</b>: Average complexity for is at most O(log(size() + N)),
    //!   where N is the number of elements in the container.
@@ -732,9 +731,9 @@ class rbtree
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
-   //!    to the erased elements. Calls N times to destroyer functor.
-   template<class Destroyer>
-   void clear_and_destroy(Destroyer destroyer)
+   //!    to the erased elements. Calls N times to disposer functor.
+   template<class Disposer>
+   void clear_and_dispose(Disposer disposer)
    {
       while(1){
          node_ptr leftmost
@@ -745,7 +744,7 @@ class rbtree
          size_traits::decrement();
          if(safemode_or_autounlink)
             node_algorithms::init(leftmost);
-         destroyer(ValueTraits::to_value_ptr(leftmost));
+         disposer(ValueTraits::to_value_ptr(leftmost));
       }
    }
 
@@ -965,30 +964,30 @@ class rbtree
       return std::pair<const_iterator, const_iterator>(const_iterator(ret.first), const_iterator(ret.second));
    }
 
-   template <class Cloner, class Destroyer>
-   void clone_from(const rbtree &src, Cloner cloner, Destroyer destroyer)
+   template <class Cloner, class Disposer>
+   void clone_from(const rbtree &src, Cloner cloner, Disposer disposer)
    {
-      this->clear_and_destroy(destroyer);
+      this->clear_and_dispose(disposer);
       if(!src.empty()){
          node_algorithms::clone_tree
             (const_node_ptr(&src.priv_header())
             ,node_ptr(&this->priv_header())
             ,detail::value_to_node_cloner<Cloner, ValueTraits>(cloner)
-            ,detail::value_to_node_destroyer<Destroyer, ValueTraits>(destroyer));
+            ,detail::value_to_node_disposer<Disposer, ValueTraits>(disposer));
          size_traits::set_size(src.get_size());
       }
    }
 
    pointer unlink_leftmost_without_rebalance()
    {
-      node_ptr to_destroy(node_algorithms::unlink_leftmost_without_rebalance
+      node_ptr to_be_disposed(node_algorithms::unlink_leftmost_without_rebalance
                            (node_ptr(&priv_header())));
-      if(!to_destroy)
+      if(!to_be_disposed)
          return 0;
       size_traits::decrement();
       if(safemode_or_autounlink)
-         node_algorithms::init(to_destroy);
-      return ValueTraits::to_value_ptr(to_destroy);
+         node_algorithms::init(to_be_disposed);
+      return ValueTraits::to_value_ptr(to_be_disposed);
    }
 
    //! <b>Requires</b>: value must be an lvalue and shall be in a set of
@@ -1059,11 +1058,11 @@ class rbtree
 */
    /// @cond
    private:
-   template<class Destroyer>
-   iterator private_erase(iterator b, iterator e, size_type &n, Destroyer destroyer)
+   template<class Disposer>
+   iterator private_erase(iterator b, iterator e, size_type &n, Disposer disposer)
    {
       for(n = 0; b != e; ++n)
-        this->erase_and_destroy(b++, destroyer);
+        this->erase_and_dispose(b++, disposer);
       return b;
    }
 

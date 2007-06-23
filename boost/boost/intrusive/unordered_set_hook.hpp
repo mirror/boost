@@ -20,7 +20,6 @@
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/slist_hook.hpp>
 #include <boost/intrusive/linking_policy.hpp>
-#include <stdexcept>
 
 namespace boost {
 namespace intrusive {

@@ -15,7 +15,7 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <iterator>
-#include <boost/assert.hpp>
+#include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 #ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
@@ -25,6 +25,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #endif
+#include <boost/intrusive/detail/mpl.hpp>
 #include <cstddef>
 
 namespace boost {
@@ -261,9 +262,7 @@ class hashtable_iterator
    #else
    template <class OtherValue>
    hashtable_iterator(hashtable_iterator<OtherValue, SlistImpl> const& other,
-                     typename enable_if<
-                           is_convertible<OtherValue*,T*>
-                     >::type* = 0)
+                     typename enable_if<is_convertible<OtherValue*, T*> >::type* = 0)
       :  local_it_(other.local_it_), bucket_info_(other.bucket_info_)
    {}
    #endif

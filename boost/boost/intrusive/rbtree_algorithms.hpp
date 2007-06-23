@@ -40,11 +40,11 @@
 #define BOOST_INTRUSIVE_RBTREE_ALGORITHMS_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <boost/assert.hpp>
+#include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <cstddef>
 #include <boost/detail/no_exceptions_support.hpp>
-#include <boost/interprocess/detail/utilities.hpp>
+#include <boost/intrusive/detail/utilities.hpp>
 
 
 namespace boost {
@@ -112,6 +112,16 @@ class rbtree_algorithms
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef typename NodeTraits::color           color;
+
+   /// @cond
+   private:
+   static node_ptr uncast(const_node_ptr ptr)
+   {
+      return node_ptr(const_cast<node*>(::boost::intrusive::detail::get_pointer(ptr)));
+   }
+   /// @endcond
+
+   public:
 
    //! This type is the information that will be filled by insert_unique_check
    struct insert_commit_data
@@ -479,30 +489,30 @@ class rbtree_algorithms
    }
 
    //! <b>Requires</b>: "cloner" must be a function
-   //!   object taking a node_ptr and returning a new cloned node of it. "destroyer" must
+   //!   object taking a node_ptr and returning a new cloned node of it. "disposer" must
    //!   take a node_ptr and shouldn't throw.
    //!
    //! <b>Effects</b>: First empties target tree calling 
-   //!   <tt>void destroyer::operator()(node_ptr)</tt> for every node of the tree
+   //!   <tt>void disposer::operator()(node_ptr)</tt> for every node of the tree
    //!    except the header.
    //!    
    //!   Then, duplicates the entire tree pointed by "source_header" cloning each
    //!   source node with <tt>node_ptr Cloner::operator()(node_ptr)</tt> to obtain 
    //!   the nodes of the target tree. If "cloner" throws, the cloned target nodes
-   //!   are destroyed using <tt>void destroyer(node_ptr)</tt>.
+   //!   are disposed using <tt>void disposer(node_ptr)</tt>.
    //! 
    //! <b>Complexity</b>: Linear to the number of element of the source tree plus the.
    //!   number of elements of tree target tree when calling this function.
    //! 
-   //! <b>Throws</b>: If cloner functor throws. If this happens target nodes are destroyed.
-   template <class Cloner, class Destroyer>
+   //! <b>Throws</b>: If cloner functor throws. If this happens target nodes are disposed.
+   template <class Cloner, class Disposer>
    static void clone_tree
-      (const_node_ptr source_header, node_ptr target_header, Cloner cloner, Destroyer destroyer)
+      (const_node_ptr source_header, node_ptr target_header, Cloner cloner, Disposer disposer)
    {
       if(!unique(target_header)){
          node_ptr p;
          while((p = unlink_leftmost_without_rebalance(target_header))){
-            destroyer(p);
+            disposer(p);
          }
       }
 
@@ -512,7 +522,7 @@ class rbtree_algorithms
 
       NodeTraits::set_parent
          ( target_header
-         , deep_clone_node(source_root, target_header, cloner, destroyer));
+         , deep_clone_node(source_root, target_header, cloner, disposer));
       NodeTraits::set_left(target_header, minimum(NodeTraits::get_parent(target_header)));
       NodeTraits::set_right(target_header, maximum(NodeTraits::get_parent(target_header)));
    }
@@ -904,16 +914,11 @@ class rbtree_algorithms
       (node_ptr header, node_ptr new_value, const insert_commit_data &commit_data)
    {
       //Check if commit_data has not been initialized by a insert_unique_check call.
-      BOOST_ASSERT(commit_data.node != 0);
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(commit_data.node != 0);
       link_and_balance(new_value, commit_data.node, commit_data.link_left, header);
    }
 
    /// @cond
-   private:
-   static node_ptr uncast(const_node_ptr ptr)
-   {
-      return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));
-   }
 
    //! <b>Requires</b>: z is the node to be inserted, par is its parent,
    //!   left, indicates if z should be a left node of par and header is the header
@@ -1100,9 +1105,9 @@ class rbtree_algorithms
       NodeTraits::set_color(NodeTraits::get_parent(header), NodeTraits::black());
    }
 
-   template <class Cloner, class Destroyer>
+   template <class Cloner, class Disposer>
    static node_ptr deep_clone_node
-      (node_ptr source_root, node_ptr new_parent, Cloner cloner, Destroyer destroyer)
+      (node_ptr source_root, node_ptr new_parent, Cloner cloner, Disposer disposer)
    {
       // structural copy.  source_root and new_parent must be non-null.
       node_ptr top = cloner(source_root);
@@ -1112,7 +1117,7 @@ class rbtree_algorithms
          if(NodeTraits::get_right(source_root)){
             NodeTraits::set_right
                (top, deep_clone_node(NodeTraits::get_right(source_root), top
-                                    ,cloner, destroyer));
+                                    ,cloner, disposer));
          }
          new_parent = top;
          source_root = NodeTraits::get_left(source_root);
@@ -1124,28 +1129,28 @@ class rbtree_algorithms
 
             if(NodeTraits::get_right(source_root)){
                NodeTraits::set_right(y, deep_clone_node(NodeTraits::get_right(source_root), y
-                                                    ,cloner, destroyer));
+                                                    ,cloner, disposer));
             }
             new_parent = y;
             source_root = NodeTraits::get_left(source_root);
          }
       }
       BOOST_CATCH(...){
-         deep_destroy_node(top, destroyer);
+         deep_dispose_node(top, disposer);
          BOOST_RETHROW;
       }
       BOOST_CATCH_END
       return top;
    }
 
-   template<class Destroyer>
-   static void deep_destroy_node(node_ptr x, Destroyer destroyer)
+   template<class Disposer>
+   static void deep_dispose_node(node_ptr x, Disposer disposer)
    {
       // erase without rebalancing
       while(x){
-         deep_destroy_node(NodeTraits::get_right(x), destroyer);
+         deep_dispose_node(NodeTraits::get_right(x), disposer);
          node_ptr y = NodeTraits::get_left(x);
-         destroyer(x);
+         disposer(x);
          x = y;
       }
    }

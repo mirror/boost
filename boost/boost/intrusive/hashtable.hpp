@@ -17,10 +17,9 @@
 #include <functional>
 #include <utility>
 #include <algorithm>
+#include <cstddef>
 //boost
-#include <boost/utility.hpp>
-#include <boost/compressed_pair.hpp>
-#include <boost/assert.hpp>
+#include <boost/intrusive/detail/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/functional/hash.hpp>
 //General intrusive utilities
@@ -28,10 +27,10 @@
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/detail/hashtable_node.hpp>
 #include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/detail/ebo_functor_holder.hpp>
 //Implementation utilities
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/intrusive/slist.hpp>
-#include <cstddef>
 
 namespace boost {
 namespace intrusive {
@@ -104,49 +103,66 @@ class hashtable
       <pointer, const bucket_info_t>::type         const_bucket_info_ptr;
 
    //User scattered boost::compressed pair to get EBO all compilers
-   boost::compressed_pair
-      <boost::compressed_pair<bucket_info_t, Hash>
-      ,Equal> members_;
+//   boost::compressed_pair
+//      <boost::compressed_pair<bucket_info_t, Hash>
+//      ,Equal> members_;
+   struct bucket_hash_t
+      :  public detail::ebo_functor_holder<Hash>
+   {
+      bucket_hash_t(const Hash & h)
+         :  detail::ebo_functor_holder<Hash>(h)
+      {}
+      bucket_info_t bucket_info;
+   };
+
+   struct bucket_hash_equal_t
+      :  public detail::ebo_functor_holder<Equal>
+   {
+      bucket_hash_equal_t(const Hash & h, const Equal &e)
+         :  detail::ebo_functor_holder<Equal>(e), bucket_hash(h)
+      {}
+      bucket_hash_t bucket_hash;
+   } bucket_hash_equal_;
 
    const Equal &priv_equal() const
-   {  return members_.second();  }
+   {  return static_cast<const Equal&>(bucket_hash_equal_.get());  }
 
    Equal &priv_equal()
-   {  return members_.second();  }
+   {  return static_cast<Equal&>(bucket_hash_equal_.get());  }
 
-   const_bucket_info_ptr priv_bucket_info() const
-   {  return &members_.first().first();  }
+   const bucket_info_t &priv_bucket_info() const
+   {  return bucket_hash_equal_.bucket_hash.bucket_info;  }
 
-   bucket_info_ptr priv_bucket_info()
-   {  return &members_.first().first();  }
+   bucket_info_t &priv_bucket_info()
+   {  return bucket_hash_equal_.bucket_hash.bucket_info;  }
 
    const Hash &priv_hasher() const
-   {  return members_.first().second();  }
+   {  return static_cast<const Hash&>(bucket_hash_equal_.bucket_hash.get());  }
 
    Hash &priv_hasher()
-   {  return members_.first().second();  }
+   {  return static_cast<Hash&>(bucket_hash_equal_.bucket_hash.get());  }
 
    const bucket_ptr &priv_buckets() const
-   {  return members_.first().first().buckets_;  }
+   {  return priv_bucket_info().buckets_;  }
 
    bucket_ptr &priv_buckets()
-   {  return members_.first().first().buckets_;  }
+   {  return priv_bucket_info().buckets_;  }
 
    const size_type &priv_buckets_len() const
-   {  return members_.first().first().buckets_len_;  }
+   {  return priv_bucket_info().buckets_len_;  }
 
    size_type &priv_buckets_len()
-   {  return members_.first().first().buckets_len_;  }
+   {  return priv_bucket_info().buckets_len_;  }
 
    static node_ptr uncast(const_node_ptr ptr)
    {
       return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));
    }
 
-   static bucket_info_ptr uncast(const_bucket_info_ptr ptr)
-   {
-      return bucket_info_ptr(const_cast<bucket_info_t*>(detail::get_pointer(ptr)));
-   }
+//   static bucket_info_ptr uncast(const_bucket_info_ptr ptr)
+//   {
+//      return bucket_info_ptr(const_cast<bucket_info_t*>(detail::get_pointer(ptr)));
+//   }
 
    static slist_impl &bucket_to_slist(bucket_type &b)
    {  return static_cast<slist_impl &>(b);  }
@@ -167,10 +183,10 @@ class hashtable
              , size_type buckets_len
              , const Hash & hasher = Hash()
              , const Equal &equal = Equal()) 
-      :  members_(boost::compressed_pair<bucket_info_t, Hash>(hasher), equal)
+      :  bucket_hash_equal_(hasher, equal)
    {
       
-      BOOST_ASSERT(buckets_len != 0);
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(buckets_len != 0);
       priv_buckets()       = buckets;
       priv_buckets_len()   = buckets_len;
       priv_clear_buckets();
@@ -184,7 +200,7 @@ class hashtable
    {
       size_type bucket_num;
       local_iterator local_it = priv_begin(bucket_num);
-      return iterator( local_it, this->priv_bucket_info());
+      return iterator(local_it, const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    const_iterator begin() const
@@ -194,23 +210,17 @@ class hashtable
    {
       size_type bucket_num;
       local_iterator local_it = priv_begin(bucket_num);
-      return const_iterator( local_it, this->priv_bucket_info());
+      return const_iterator( local_it, const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    iterator end()
-   {
-      bucket_info_t *info = detail::get_pointer(this->priv_bucket_info());
-      return iterator(invalid_local_it(*info), 0);
-   }
+   {  return iterator(invalid_local_it(this->priv_bucket_info()), 0);   }
 
    const_iterator end() const
    {  return cend(); }
 
    const_iterator cend() const
-   {  
-      const bucket_info_t *info = detail::get_pointer(this->priv_bucket_info());
-      return const_iterator(invalid_local_it(*info), 0);
-   }
+   {  return const_iterator(invalid_local_it(this->priv_bucket_info()), 0);  }
 
    hasher hash_function() const
    {  return this->priv_hasher();  }
@@ -266,10 +276,10 @@ class hashtable
       }
    }
 
-   template <class Cloner, class Destroyer>
-   void clone_from(const hashtable &src, Cloner cloner, Destroyer destroyer)
+   template <class Cloner, class Disposer>
+   void clone_from(const hashtable &src, Cloner cloner, Disposer disposer)
    {
-      this->clear_and_destroy(destroyer);
+      this->clear_and_dispose(disposer);
       if(!ConstantTimeSize || !src.empty()){
          const size_type src_bucket_count = src.bucket_count();
          const size_type dst_bucket_count = this->bucket_count();
@@ -284,7 +294,7 @@ class hashtable
                for( constructed = 0
                   ; constructed < dst_bucket_count
                   ; ++constructed){
-                  dst_buckets[constructed].clone_from(src_buckets[constructed], cloner, destroyer);
+                  dst_buckets[constructed].clone_from(src_buckets[constructed], cloner, disposer);
                }
                if(src_bucket_count != dst_bucket_count){
                   //Now insert the remaining ones using the modulo trick
@@ -303,7 +313,7 @@ class hashtable
             }
             catch(...){
                while(constructed--){
-                  dst_buckets[constructed].clear_and_destroy(destroyer);
+                  dst_buckets[constructed].clear_and_dispose(disposer);
                }
                throw;
             }
@@ -319,7 +329,7 @@ class hashtable
                }
             }
             catch(...){
-               this->clear_and_destroy(destroyer);
+               this->clear_and_dispose(disposer);
                throw;
             }
          }
@@ -331,11 +341,11 @@ class hashtable
       size_type bucket_num, hash;
       local_iterator it = priv_find(value, this->priv_hasher(), this->priv_equal(), bucket_num, hash);
       bucket_type &b = this->priv_buckets()[bucket_num];
-      if(it == invalid_local_it(*this->priv_bucket_info())){
+      if(it == invalid_local_it(this->priv_bucket_info())){
          it = b.before_begin();
       }
       size_traits::increment();
-      return iterator(b.insert_after(it, value), this->priv_bucket_info());
+      return iterator(b.insert_after(it, value), const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    template<class Iterator>
@@ -375,12 +385,12 @@ class hashtable
       size_type bucket_num;
       local_iterator prev_pos =
          priv_find(key, hasher, key_value_eq, bucket_num, commit_data.hash);
-      bool success = prev_pos == invalid_local_it(*this->priv_bucket_info());
+      bool success = prev_pos == invalid_local_it(this->priv_bucket_info());
       if(success){
          prev_pos = this->priv_buckets()[bucket_num].before_begin();
       }
       return std::pair<iterator, bool>
-         (iterator(prev_pos, this->priv_bucket_info())
+         (iterator(prev_pos, const_bucket_info_ptr(&this->priv_bucket_info()))
          ,success);
    }
 
@@ -390,34 +400,34 @@ class hashtable
       bucket_type &b = this->priv_buckets()[bucket_num];
       size_traits::increment();
       return iterator( b.insert_after(b.before_begin(), value)
-                     , this->priv_bucket_info());
+                     , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    void erase(const_iterator i)
-   {  erase_and_destroy(i, detail::null_destroyer());  }
+   {  erase_and_dispose(i, detail::null_disposer());  }
 
    void erase(const_iterator b, const_iterator e)
-   {  erase_and_destroy(b, e, detail::null_destroyer());  }
+   {  erase_and_dispose(b, e, detail::null_disposer());  }
 
    size_type erase(const_reference value)
    {  return this->erase(value, this->priv_hasher(), this->priv_equal());  }
 
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    size_type erase(const KeyType& key, KeyHasher hasher, KeyValueEqual equal)
-   {  return erase_and_destroy(key, hasher, equal, detail::null_destroyer()); }
+   {  return erase_and_dispose(key, hasher, equal, detail::null_disposer()); }
 
-   template<class Destroyer>
-   void erase_and_destroy(const_iterator i, Destroyer destroyer)
+   template<class Disposer>
+   void erase_and_dispose(const_iterator i, Disposer disposer)
    {
       local_iterator to_erase(i.local());
       bucket_ptr f(priv_buckets()), l(f + priv_buckets_len());
       bucket_type &b = this->priv_buckets()[bucket_type::get_bucket_num(to_erase, *f, *l)];
-      b.erase_after_and_destroy(b.previous(to_erase), destroyer);
+      b.erase_after_and_dispose(b.previous(to_erase), disposer);
       size_traits::decrement();
    }
 
-   template<class Destroyer>
-   void erase_and_destroy(const_iterator b, const_iterator e, Destroyer destroyer)
+   template<class Disposer>
+   void erase_and_dispose(const_iterator b, const_iterator e, Disposer disposer)
    {
       if(b == e)  return;
 
@@ -448,7 +458,7 @@ class hashtable
          local_iterator nxt(before_first_local_it); ++nxt;
          local_iterator end = first_b.end();
          while(nxt != end){
-            nxt = first_b.erase_after_and_destroy(before_first_local_it, destroyer);
+            nxt = first_b.erase_after_and_dispose(before_first_local_it, disposer);
             size_traits::decrement();
          }
       }
@@ -462,7 +472,7 @@ class hashtable
          local_iterator nxt(b_begin); ++nxt;
          local_iterator end = b.end();
          while(nxt != end){
-            nxt = b.erase_after_and_destroy(b_begin, destroyer);
+            nxt = b.erase_after_and_dispose(b_begin, disposer);
             size_traits::decrement();
          }
       }
@@ -473,19 +483,19 @@ class hashtable
          local_iterator b_begin(last_b.before_begin());
          local_iterator nxt(b_begin); ++nxt;
          while(nxt != last_local_it){
-            nxt = last_b.erase_after_and_destroy(b_begin, destroyer);
+            nxt = last_b.erase_after_and_dispose(b_begin, disposer);
             size_traits::decrement();
          }
       }
    }
 
-   template<class Destroyer>
-   size_type erase_and_destroy(const_reference value, Destroyer destroyer)
-   {  return erase_and_destroy(value, priv_hasher(), priv_equal(), destroyer);   }
+   template<class Disposer>
+   size_type erase_and_dispose(const_reference value, Disposer disposer)
+   {  return erase_and_dispose(value, priv_hasher(), priv_equal(), disposer);   }
 
-   template<class KeyType, class KeyHasher, class KeyValueEqual, class Destroyer>
-   size_type erase_and_destroy(const KeyType& key, KeyHasher hasher
-                  ,KeyValueEqual equal, Destroyer destroyer)
+   template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
+   size_type erase_and_dispose(const KeyType& key, KeyHasher hasher
+                  ,KeyValueEqual equal, Disposer disposer)
    {
       size_type count(0);
 
@@ -513,7 +523,7 @@ class hashtable
 
       //If found erase all equal values
       for(local_iterator end = b.end(); it != end && equal(key, *it); ++count){
-         it = b.erase_after_and_destroy(prev, destroyer);
+         it = b.erase_after_and_dispose(prev, disposer);
          size_traits::decrement();
       }
       return count;
@@ -527,14 +537,14 @@ class hashtable
       size_traits::set_size(size_type(0));
    }
 
-   template<class Destroyer>
-   void clear_and_destroy(Destroyer destroyer)
+   template<class Disposer>
+   void clear_and_dispose(Disposer disposer)
    {
       if(!ConstantTimeSize || !this->empty()){
          size_type num_buckets = this->bucket_count();
          bucket_ptr b = this->priv_buckets();
          for(; num_buckets--; ++b){
-            b->clear_and_destroy(destroyer);
+            b->clear_and_dispose(disposer);
          }
          size_traits::set_size(size_type(0));
       }
@@ -560,7 +570,7 @@ class hashtable
       size_type bucket_n, hash;
       local_iterator local_it = priv_find(key, hasher, equal, bucket_n, hash);
       return iterator( local_it
-                      , this->priv_bucket_info());
+                      , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    const_iterator find(const_reference value) const
@@ -573,7 +583,7 @@ class hashtable
       size_type bucket_n, hash;
       local_iterator local_it = priv_find(key, hasher, equal, bucket_n, hash);
       return const_iterator( local_it
-                           , uncast(this->priv_bucket_info()));
+                           , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    std::pair<iterator,iterator> equal_range(const_reference value)
@@ -586,9 +596,10 @@ class hashtable
       size_type bucket_n1, bucket_n2, count;
       std::pair<local_iterator, local_iterator> ret
          = priv_equal_range(key, hasher, equal, bucket_n1, bucket_n2, count);
+      const_bucket_info_ptr info_ptr (&this->priv_bucket_info());
       return std::pair<iterator, iterator>
-         (  iterator( ret.first, this->priv_bucket_info() )
-         ,  iterator( ret.second, this->priv_bucket_info()) );
+         (  iterator( ret.first, info_ptr)
+         ,  iterator( ret.second, info_ptr) );
    }
 
    std::pair<const_iterator, const_iterator>
@@ -602,9 +613,10 @@ class hashtable
       size_type bucket_n1, bucket_n2, count;
       std::pair<local_iterator, local_iterator> ret
          = priv_equal_range(key, hasher, equal, bucket_n1, bucket_n2, count);
+      const_bucket_info_ptr info_ptr (&this->priv_bucket_info());
       return std::pair<const_iterator, const_iterator>
-         (  const_iterator( ret.first, uncast(this->priv_bucket_info()) )
-         ,  const_iterator( ret.second, uncast(this->priv_bucket_info()) )  );
+         ( const_iterator( ret.first, info_ptr)
+         , const_iterator( ret.second, info_ptr) );
    }
 
    size_type bucket_count() const
@@ -703,13 +715,13 @@ class hashtable
    iterator iterator_to(reference value)
    {
       return iterator( bucket_type::iterator_to(value)
-                     , this->priv_bucket_info());
+                     , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    const_iterator iterator_to(const_reference value) const
    {
       return const_iterator( bucket_type::iterator_to(const_cast<reference>(value))
-                     , uncast(this->priv_bucket_info()));
+                           , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
    static local_iterator local_iterator_to(reference value)
@@ -755,7 +767,7 @@ class hashtable
          if(!b.empty())
             return b.begin();
       }
-      return invalid_local_it(*this->priv_bucket_info());
+      return invalid_local_it(this->priv_bucket_info());
    }
 
    void priv_clear_buckets()
@@ -778,7 +790,7 @@ class hashtable
       bucket_number = hash % b_len;
 
       if(ConstantTimeSize && this->empty()){
-         return invalid_local_it(*this->priv_bucket_info());
+         return invalid_local_it(this->priv_bucket_info());
       }
       
       bucket_type &b = this->priv_buckets()[bucket_number];
@@ -791,7 +803,7 @@ class hashtable
          ++it;
       }
 
-      return invalid_local_it(*this->priv_bucket_info());
+      return invalid_local_it(this->priv_bucket_info());
    }
 
    template<class KeyType, class KeyHasher, class KeyValueEqual>
@@ -808,7 +820,7 @@ class hashtable
       //Let's see if the element is present
       std::pair<local_iterator, local_iterator> to_return
          ( priv_find(key, hasher, equal, bucket_number_first, hash)
-         , invalid_local_it(*this->priv_bucket_info()));
+         , invalid_local_it(this->priv_bucket_info()));
       if(to_return.first == to_return.second){
          bucket_number_second = bucket_number_first;
          return to_return;
@@ -842,7 +854,7 @@ class hashtable
       }
 
       //Otherwise, return the end node
-      to_return.second = invalid_local_it(*this->priv_bucket_info());
+      to_return.second = invalid_local_it(this->priv_bucket_info());
       return to_return;
    }
    /// @endcond

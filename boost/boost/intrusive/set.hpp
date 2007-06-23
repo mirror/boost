@@ -296,22 +296,22 @@ class set
    void swap(set& other)
    { tree_.swap(other.tree_); }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
-   //!   calling Destroyer::operator()(pointer), clones all the 
+   //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
    //!   and inserts them on *this.
    //!
-   //!   If cloner throws, all cloned elements are unlinked and destroyed
-   //!   calling Destroyer::operator()(pointer).
+   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
    //! <b>Throws</b>: If cloner throws.
-   template <class Cloner, class Destroyer>
-   void clone_from(const set &src, Cloner cloner, Destroyer destroyer)
-   {  tree_.clone_from(src.tree_, cloner, destroyer);  }
+   template <class Cloner, class Disposer>
+   void clone_from(const set &src, Cloner cloner, Disposer disposer)
+   {  tree_.clone_from(src.tree_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
@@ -516,10 +516,10 @@ class set
    size_type erase(const KeyType& key, KeyValueCompare comp)
    {  return tree_.erase(key, comp);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the element pointed to by pos. 
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //! 
    //! <b>Complexity</b>: Average complexity for erase element is constant time. 
    //! 
@@ -529,14 +529,14 @@ class set
    //! 
    //! <b>Note</b>: Invalidates the iterators 
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(iterator i, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(i, destroyer);  }
+   template<class Disposer>
+   iterator erase_and_dispose(iterator i, Disposer disposer)
+   {  return tree_.erase_and_dispose(i, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the range pointed to by b end e.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Complexity</b>: Average complexity for erase range is at most 
    //!   O(log(size() + N)), where N is the number of elements in the range.
@@ -547,14 +547,14 @@ class set
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(iterator b, iterator e, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(b, e, destroyer);  }
+   template<class Disposer>
+   iterator erase_and_dispose(iterator b, iterator e, Disposer disposer)
+   {  return tree_.erase_and_dispose(b, e, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given value.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Throws</b>: If the internal Compare ordering function throws.
    //! 
@@ -564,15 +564,15 @@ class set
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   size_type erase_and_destroy(const_reference value, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(value, destroyer);  }
+   template<class Disposer>
+   size_type erase_and_dispose(const_reference value, Disposer disposer)
+   {  return tree_.erase_and_dispose(value, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given key.
    //!   according to the comparison functor "comp".
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -582,9 +582,9 @@ class set
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class KeyType, class KeyValueCompare, class Destroyer>
-   size_type erase_and_destroy(const KeyType& key, KeyValueCompare comp, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(key, comp, destroyer);  }
+   template<class KeyType, class KeyValueCompare, class Disposer>
+   size_type erase_and_dispose(const KeyType& key, KeyValueCompare comp, Disposer disposer)
+   {  return tree_.erase_and_dispose(key, comp, disposer);  }
 
    //! <b>Effects</b>: Erases all the elements of the container.
    //! 
@@ -598,20 +598,20 @@ class set
    void clear()
    {  return tree_.clear();  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //! 
    //! <b>Effects</b>: Erases all the elements of the container.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements on the container.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   void clear_and_destroy(Destroyer destroyer)
-   {  return tree_.clear_and_destroy(destroyer);  }
+   template<class Disposer>
+   void clear_and_dispose(Disposer disposer)
+   {  return tree_.clear_and_dispose(disposer);  }
 
    //! <b>Effects</b>: Returns the number of contained elements with the given key
    //! 
@@ -1188,22 +1188,22 @@ class multiset
    void swap(multiset& other)
    { tree_.swap(other.tree_); }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
-   //!   calling Destroyer::operator()(pointer), clones all the 
+   //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
    //!   and inserts them on *this.
    //!
-   //!   If cloner throws, all cloned elements are unlinked and destroyed
-   //!   calling Destroyer::operator()(pointer).
+   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
    //! <b>Throws</b>: If cloner throws. Basic guarantee.
-   template <class Cloner, class Destroyer>
-   void clone_from(const multiset &src, Cloner cloner, Destroyer destroyer)
-   {  tree_.clone_from(src.tree_, cloner, destroyer);  }
+   template <class Cloner, class Disposer>
+   void clone_from(const multiset &src, Cloner cloner, Disposer disposer)
+   {  tree_.clone_from(src.tree_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
@@ -1315,12 +1315,12 @@ class multiset
    size_type erase(const KeyType& key, KeyValueCompare comp)
    {  return tree_.erase(key, comp);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Returns</b>: An iterator to the element after the erased element.
    //!
    //! <b>Effects</b>: Erases the element pointed to by pos. 
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //! 
    //! <b>Complexity</b>: Average complexity for erase element is constant time. 
    //! 
@@ -1328,16 +1328,16 @@ class multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators 
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(iterator i, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(i, destroyer);  }
+   template<class Disposer>
+   iterator erase_and_dispose(iterator i, Disposer disposer)
+   {  return tree_.erase_and_dispose(i, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Returns</b>: An iterator to the element after the erased elements.
    //!
    //! <b>Effects</b>: Erases the range pointed to by b end e.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Complexity</b>: Average complexity for erase range is at most 
    //!   O(log(size() + N)), where N is the number of elements in the range.
@@ -1346,14 +1346,14 @@ class multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(iterator b, iterator e, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(b, e, destroyer);  }
+   template<class Disposer>
+   iterator erase_and_dispose(iterator b, iterator e, Disposer disposer)
+   {  return tree_.erase_and_dispose(b, e, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given value.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -1363,15 +1363,15 @@ class multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   size_type erase_and_destroy(const_reference value, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(value, destroyer);  }
+   template<class Disposer>
+   size_type erase_and_dispose(const_reference value, Disposer disposer)
+   {  return tree_.erase_and_dispose(value, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given key.
    //!   according to the comparison functor "comp".
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -1381,9 +1381,9 @@ class multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class KeyType, class KeyValueCompare, class Destroyer>
-   size_type erase_and_destroy(const KeyType& key, KeyValueCompare comp, Destroyer destroyer)
-   {  return tree_.erase_and_destroy(key, comp, destroyer);  }
+   template<class KeyType, class KeyValueCompare, class Disposer>
+   size_type erase_and_dispose(const KeyType& key, KeyValueCompare comp, Disposer disposer)
+   {  return tree_.erase_and_dispose(key, comp, disposer);  }
 
    //! <b>Effects</b>: Erases all the elements of the container.
    //! 
@@ -1397,20 +1397,20 @@ class multiset
    void clear()
    {  return tree_.clear();  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //! 
    //! <b>Effects</b>: Erases all the elements of the container.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements on the container.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   void clear_and_destroy(Destroyer destroyer)
-   {  return tree_.clear_and_destroy(destroyer);  }
+   template<class Disposer>
+   void clear_and_dispose(Disposer disposer)
+   {  return tree_.clear_and_dispose(disposer);  }
 
    //! <b>Effects</b>: Returns the number of contained elements with the same key
    //!   compared with the given comparison functor.

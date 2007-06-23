@@ -15,8 +15,7 @@
 #define BOOST_INTRUSIVE_LIST_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <boost/utility.hpp>
-#include <boost/assert.hpp>
+#include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/list_hook.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
@@ -165,7 +164,7 @@ class list
    {
       node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
       node_algorithms::link_before(this->get_root_node(), to_insert);
       size_traits::increment();
    }
@@ -184,7 +183,7 @@ class list
    {
       node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
       node_algorithms::link_before(node_traits::get_next(this->get_root_node()), to_insert); 
       size_traits::increment();
    }
@@ -206,26 +205,26 @@ class list
          node_algorithms::init(to_erase);
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the last element of the list.
    //!   No destructors are called.
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased element.
-   template<class Destroyer>
-   void pop_back_and_destroy(Destroyer destroyer)
+   template<class Disposer>
+   void pop_back_and_dispose(Disposer disposer)
    {
       node_ptr to_erase = node_traits::get_previous(this->get_root_node());
       node_algorithms::unlink(to_erase);
       size_traits::decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
-      destroyer(ValueTraits::to_value_ptr(to_erase));
+      disposer(ValueTraits::to_value_ptr(to_erase));
    }
 
    //! <b>Effects</b>: Erases the first element of the list.
@@ -245,26 +244,26 @@ class list
          node_algorithms::init(to_erase);
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the first element of the list.
    //!   No destructors are called.
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased element.
-   template<class Destroyer>
-   void pop_front_and_destroy(Destroyer destroyer)
+   template<class Disposer>
+   void pop_front_and_dispose(Disposer disposer)
    { 
       node_ptr to_erase = node_traits::get_next(this->get_root_node());
       node_algorithms::unlink(to_erase);
       size_traits::decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
-      destroyer(ValueTraits::to_value_ptr(to_erase));
+      disposer(ValueTraits::to_value_ptr(to_erase));
    }
 
    //! <b>Effects</b>: Returns a reference to the first element of the list.
@@ -570,11 +569,11 @@ class list
       }
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the element pointed by i of the list.
    //!   No destructors are called.
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //!
    //! <b>Returns</b>: the first element remaining beyond the removed element,
    //!   or end() if no such element exists.
@@ -584,8 +583,8 @@ class list
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased element.
-   template <class Destroyer>
-   iterator erase_and_destroy(iterator i, Destroyer destroyer)
+   template <class Disposer>
+   iterator erase_and_dispose(iterator i, Disposer disposer)
    {
       iterator erase = i;
       ++i;
@@ -594,15 +593,15 @@ class list
       size_traits::decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
-      destroyer(ValueTraits::to_value_ptr(to_erase));
+      disposer(ValueTraits::to_value_ptr(to_erase));
       return i;
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the element range pointed by b and e
    //!   No destructors are called.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //!
    //! <b>Returns</b>: the first element remaining beyond the removed elements,
    //!   or end() if no such element exists.
@@ -612,11 +611,11 @@ class list
    //! <b>Complexity</b>: Linear to the number of elements erased.
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased elements.
-   template <class Destroyer>
-   iterator erase_and_destroy(iterator b, iterator e, Destroyer destroyer)
+   template <class Disposer>
+   iterator erase_and_dispose(iterator b, iterator e, Disposer disposer)
    {
       while(b != e){
-         b = this->erase_and_destroy(b, destroyer);
+         b = this->erase_and_dispose(b, disposer);
       }
       return b;
    }
@@ -641,38 +640,38 @@ class list
       }
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements of the container.
    //!   No destructors are called.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements of the list.
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased elements.
-   template <class Destroyer>
-   void clear_and_destroy(Destroyer destroyer)
-   {  this->erase_and_destroy(this->begin(), this->end(), destroyer);   }
+   template <class Disposer>
+   void clear_and_dispose(Disposer disposer)
+   {  this->erase_and_dispose(this->begin(), this->end(), disposer);   }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
-   //!   calling Destroyer::operator()(pointer), clones all the 
+   //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
    //!   and inserts them on *this.
    //!
-   //!   If cloner throws, all cloned elements are unlinked and destroyed
-   //!   calling Destroyer::operator()(pointer).
+   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
    //! <b>Throws</b>: If cloner throws. Basic guarantee.
-   template <class Cloner, class Destroyer>
-   void clone_from(const list &src, Cloner cloner, Destroyer destroyer)
+   template <class Cloner, class Disposer>
+   void clone_from(const list &src, Cloner cloner, Disposer disposer)
    {
-      this->clear_and_destroy(destroyer);
+      this->clear_and_dispose(disposer);
       try{
          const_iterator b(src.begin()), e(src.end());
          for(; b != e; ++b){
@@ -680,7 +679,7 @@ class list
          }
       }
       catch(...){
-         clear_and_destroy(destroyer);
+         clear_and_dispose(disposer);
          throw;
       }
    }
@@ -700,7 +699,7 @@ class list
    {
       node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
       node_algorithms::link_before(p.pointed_node(), to_insert);
       size_traits::increment();
       return iterator(to_insert);
@@ -746,14 +745,14 @@ class list
       this->insert(this->end(), b, e);
    }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Requires</b>: Dereferencing iterator must yield 
    //!   an lvalue of type value_type.
    //! 
    //! <b>Effects</b>: Clears the list and inserts the range pointed by b and e.
    //!   No destructors or copy constructors are called.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -762,10 +761,10 @@ class list
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!   to the erased elements.
-   template<class Iterator, class Destroyer>
-   void destroy_and_assign(Destroyer destroyer, Iterator b, Iterator e)
+   template<class Iterator, class Disposer>
+   void dispose_and_assign(Disposer disposer, Iterator b, Iterator e)
    {
-      this->clear(destroyer);
+      this->clear(disposer);
       this->insert(this->end(), b, e);
    }
 
@@ -855,7 +854,7 @@ class list
    {
       if(n){
          if(ConstantTimeSize){
-            BOOST_ASSERT(n == std::distance(start, end));
+            BOOST_INTRUSIVE_INVARIANT_ASSERT(n == std::distance(start, end));
             node_algorithms::transfer(p.pointed_node(), start.pointed_node(), end.pointed_node());
             size_traits::set_size(size_traits::get_size() + n);
             x.set_size(x.get_size() - n);
@@ -989,10 +988,10 @@ class list
    void remove(const_reference value)
    {  remove_if(detail::equal_to_value<const_reference>(value));  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Removes all the elements that compare equal to value.
-   //!   Destroyer::operator()(pointer) is called for every removed element.
+   //!   Disposer::operator()(pointer) is called for every removed element.
    //!
    //! <b>Throws</b>: If std::equal_to<value_type> throws. Basic guarantee.
    //! 
@@ -1000,9 +999,9 @@ class list
    //! 
    //! <b>Note</b>: The relative order of elements that are not removed is unchanged,
    //!   and iterators to elements that are not removed remain valid.
-   template<class Destroyer>
-   void remove_and_destroy(const_reference value, Destroyer destroyer)
-   {  remove_and_destroy_if(detail::equal_to_value<const_reference>(value), destroyer);  }
+   template<class Disposer>
+   void remove_and_dispose(const_reference value, Disposer disposer)
+   {  remove_and_dispose_if(detail::equal_to_value<const_reference>(value), disposer);  }
 
    //! <b>Effects</b>: Removes all the elements for which a specified
    //!   predicate is satisfied. No destructors are called.
@@ -1015,13 +1014,13 @@ class list
    //!   and iterators to elements that are not removed remain valid.
    template<class Pred>
    void remove_if(Pred pred)
-   {  remove_and_destroy_if(pred, detail::null_destroyer());   }
+   {  remove_and_dispose_if(pred, detail::null_disposer());   }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Removes all the elements for which a specified
    //!   predicate is satisfied.
-   //!   Destroyer::operator()(pointer) is called for every removed element.
+   //!   Disposer::operator()(pointer) is called for every removed element.
    //!
    //! <b>Throws</b>: If pred throws. Basic guarantee.
    //! 
@@ -1029,8 +1028,8 @@ class list
    //!
    //! <b>Note</b>: The relative order of elements that are not removed is unchanged,
    //!   and iterators to elements that are not removed remain valid.
-   template<class Pred, class Destroyer>
-   void remove_and_destroy_if(Pred pred, Destroyer destroyer)
+   template<class Pred, class Disposer>
+   void remove_and_dispose_if(Pred pred, Disposer disposer)
    {
       iterator first = begin();
       iterator last = end();
@@ -1040,7 +1039,7 @@ class list
          if(pred(*first)){
             pointer p = first.operator->();
             this->erase(first);
-            destroyer(p);
+            disposer(p);
          }
          first = next;
       }
@@ -1056,7 +1055,7 @@ class list
    //! <b>Note</b>: The relative order of elements that are not removed is unchanged,
    //!   and iterators to elements that are not removed remain valid.
    void unique()
-   {  unique_and_destroy(std::equal_to<value_type>(), detail::null_destroyer());  }
+   {  unique_and_dispose(std::equal_to<value_type>(), detail::null_disposer());  }
 
    //! <b>Effects</b>: Removes adjacent duplicate elements or adjacent 
    //!   elements that satisfy some binary predicate from the list.
@@ -1070,13 +1069,13 @@ class list
    //!   and iterators to elements that are not removed remain valid.
    template<class BinaryPredicate>
    void unique(BinaryPredicate pred)
-   {  unique_and_destroy(pred, detail::null_destroyer());  }
+   {  unique_and_dispose(pred, detail::null_disposer());  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Removes adjacent duplicate elements or adjacent 
    //!   elements that are equal from the list.
-   //!   Destroyer::operator()(pointer) is called for every removed element.
+   //!   Disposer::operator()(pointer) is called for every removed element.
    //! 
    //! <b>Throws</b>: If std::equal_to<value_type throws. Basic guarantee.
    //! 
@@ -1084,15 +1083,15 @@ class list
    //! 
    //! <b>Note</b>: The relative order of elements that are not removed is unchanged,
    //!   and iterators to elements that are not removed remain valid.
-   template<class Destroyer>
-   void unique_and_destroy(Destroyer destroyer)
-   {  unique_and_destroy(std::equal_to<value_type>(), destroyer);  }
+   template<class Disposer>
+   void unique_and_dispose(Disposer disposer)
+   {  unique_and_dispose(std::equal_to<value_type>(), disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Removes adjacent duplicate elements or adjacent 
    //!   elements that satisfy some binary predicate from the list.
-   //!   Destroyer::operator()(pointer) is called for every removed element.
+   //!   Disposer::operator()(pointer) is called for every removed element.
    //! 
    //! <b>Throws</b>: If pred throws. Basic guarantee.
    //! 
@@ -1100,8 +1099,8 @@ class list
    //! 
    //! <b>Note</b>: The relative order of elements that are not removed is unchanged,
    //!   and iterators to elements that are not removed remain valid.
-   template<class BinaryPredicate, class Destroyer>
-   void unique_and_destroy(BinaryPredicate pred, Destroyer destroyer)
+   template<class BinaryPredicate, class Disposer>
+   void unique_and_dispose(BinaryPredicate pred, Disposer disposer)
    {
       if(!this->empty()){
          iterator first = begin();
@@ -1111,7 +1110,7 @@ class list
             if(pred(*first, *after)){
                pointer p = after.operator->();
                after = erase(after);
-               destroyer(p);
+               disposer(p);
             }
             else{
                first = after++;
@@ -1131,7 +1130,7 @@ class list
    //! <b>Note</b>: Iterators and references are not invalidated.
    static iterator iterator_to(reference value)
    { 
-      BOOST_ASSERT(!node_algorithms::unique(ValueTraits::to_node_ptr(value)));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(ValueTraits::to_node_ptr(value)));
       return iterator(ValueTraits::to_node_ptr(value)); 
    }
 
@@ -1146,7 +1145,7 @@ class list
    //! <b>Note</b>: Iterators and references are not invalidated.
    static const_iterator iterator_to(const_reference value) 
    { 
-      BOOST_ASSERT(!node_algorithms::unique(ValueTraits::to_node_ptr(const_cast<reference> (value))));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(ValueTraits::to_node_ptr(const_cast<reference> (value))));
       return const_iterator(ValueTraits::to_node_ptr(const_cast<reference> (value))); 
    }
 };

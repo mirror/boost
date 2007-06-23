@@ -121,8 +121,8 @@ class unordered_set
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor or invocation of Hash or Equal throws. 
    //!
-   //! <b>Notes</b>: buckets array must be destroyed only after
-   //!   *this is destroyed. 
+   //! <b>Notes</b>: buckets array must be disposed only after
+   //!   *this is disposed. 
    unordered_set( bucket_ptr buckets
            , size_type buckets_len
            , const Hash & hasher = Hash()
@@ -143,8 +143,8 @@ class unordered_set
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor or invocation of Hash or Equal throws. 
    //!
-   //! <b>Notes</b>: buckets array must be destroyed only after
-   //!   *this is destroyed. 
+   //! <b>Notes</b>: buckets array must be disposed only after
+   //!   *this is disposed. 
    template<class Iterator>
    unordered_set( bucket_ptr buckets
            , size_type buckets_len
@@ -266,22 +266,22 @@ class unordered_set
    void swap(unordered_set& other)
    { table_.swap(other.table_); }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
-   //!   calling Destroyer::operator()(pointer), clones all the 
+   //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
    //!   and inserts them on *this.
    //!
-   //!   If cloner throws, all cloned elements are unlinked and destroyed
-   //!   calling Destroyer::operator()(pointer).
+   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
    //! <b>Throws</b>: If cloner throws. Basic guarantee.
-   template <class Cloner, class Destroyer>
-   void clone_from(const unordered_set &src, Cloner cloner, Destroyer destroyer)
-   {  table_.clone_from(src.table_, cloner, destroyer);  }
+   template <class Cloner, class Disposer>
+   void clone_from(const unordered_set &src, Cloner cloner, Disposer disposer)
+   {  table_.clone_from(src.table_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
@@ -441,10 +441,10 @@ class unordered_set
    size_type erase(const KeyType& key, KeyHasher hasher, KeyValueEqual equal)
    {  return table_.erase(key, hasher, equal);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the element pointed to by i. 
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //! 
    //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
    //! 
@@ -452,14 +452,14 @@ class unordered_set
    //! 
    //! <b>Note</b>: Invalidates the iterators 
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(const_iterator i, Destroyer destroyer)
-   {  return table_.erase_and_destroy(i, destroyer);  }
+   template<class Disposer>
+   iterator erase_and_dispose(const_iterator i, Disposer disposer)
+   {  return table_.erase_and_dispose(i, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the range pointed to by b end e.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Complexity</b>: Average case O(std::distance(b, e)),
    //!   worst case O(this->size()).
@@ -468,14 +468,14 @@ class unordered_set
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class Destroyer>
-   iterator erase_and_destroy(const_iterator b, const_iterator e, Destroyer destroyer)
-   {  return table_.erase_and_destroy(b, e, destroyer);  }
+   template<class Disposer>
+   iterator erase_and_dispose(const_iterator b, const_iterator e, Disposer disposer)
+   {  return table_.erase_and_dispose(b, e, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given value.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -486,15 +486,15 @@ class unordered_set
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   size_type erase_and_destroy(const_reference value, Destroyer destroyer)
-   {  return table_.erase_and_destroy(value, destroyer);  }
+   template<class Disposer>
+   size_type erase_and_dispose(const_reference value, Disposer disposer)
+   {  return table_.erase_and_dispose(value, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given key.
    //!   according to the comparison functor "equal".
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -505,9 +505,9 @@ class unordered_set
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class KeyType, class KeyHasher, class KeyValueEqual, class Destroyer>
-   size_type erase_and_destroy(const KeyType& key, KeyHasher hasher, KeyValueEqual equal, Destroyer destroyer)
-   {  return table_.erase_and_destroy(key, hasher, equal, destroyer);  }
+   template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
+   size_type erase_and_dispose(const KeyType& key, KeyHasher hasher, KeyValueEqual equal, Disposer disposer)
+   {  return table_.erase_and_dispose(key, hasher, equal, disposer);  }
 
    //! <b>Effects</b>: Erases all of the elements. 
    //! 
@@ -521,20 +521,20 @@ class unordered_set
    void clear()
    {  return table_.clear();  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //! 
    //! <b>Effects</b>: Erases all of the elements. 
    //! 
    //! <b>Complexity</b>: Linear to the number of elements on the container.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   void clear_and_destroy(Destroyer destroyer)
-   {  return table_.clear_and_destroy(destroyer);  }
+   template<class Disposer>
+   void clear_and_dispose(Disposer disposer)
+   {  return table_.clear_and_dispose(disposer);  }
 
    //! <b>Effects</b>: Returns the number of contained elements with the given value
    //! 
@@ -557,7 +557,7 @@ class unordered_set
    //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
    //! 
    //! <b>Throws</b>: If hasher or equal throw.
-   template<class KeyType, class KeyHasher, class KeyValueEqual, class Destroyer>
+   template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
    size_type count(const KeyType& key, KeyHasher hasher, KeyValueEqual equal) const
    {  return table_.find(key, hasher, equal) != end();  }
 
@@ -1019,8 +1019,8 @@ class unordered_multiset
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor or invocation of Hash or Equal throws. 
    //!
-   //! <b>Notes</b>: buckets array must be destroyed only after
-   //!   *this is destroyed. 
+   //! <b>Notes</b>: buckets array must be disposed only after
+   //!   *this is disposed. 
    unordered_multiset  ( bucket_ptr buckets
                   , size_type buckets_len
                   , const Hash & hasher = Hash()
@@ -1041,8 +1041,8 @@ class unordered_multiset
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor or invocation of Hash or Equal throws. 
    //!
-   //! <b>Notes</b>: buckets array must be destroyed only after
-   //!   *this is destroyed.
+   //! <b>Notes</b>: buckets array must be disposed only after
+   //!   *this is disposed.
    template<class Iterator>
    unordered_multiset  ( bucket_ptr buckets
                   , size_type buckets_len
@@ -1165,22 +1165,22 @@ class unordered_multiset
    void swap(unordered_multiset& other)
    { table_.swap(other.table_); }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements from *this
-   //!   calling Destroyer::operator()(pointer), clones all the 
+   //!   calling Disposer::operator()(pointer), clones all the 
    //!   elements from src calling Cloner::operator()(const_reference )
    //!   and inserts them on *this.
    //!
-   //!   If cloner throws, all cloned elements are unlinked and destroyed
-   //!   calling Destroyer::operator()(pointer).
+   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   calling Disposer::operator()(pointer).
    //!   
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //! 
    //! <b>Throws</b>: If cloner throws.
-   template <class Cloner, class Destroyer>
-   void clone_from(const unordered_multiset &src, Cloner cloner, Destroyer destroyer)
-   {  table_.clone_from(src.table_, cloner, destroyer);  }
+   template <class Cloner, class Disposer>
+   void clone_from(const unordered_multiset &src, Cloner cloner, Disposer disposer)
+   {  table_.clone_from(src.table_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
@@ -1275,10 +1275,10 @@ class unordered_multiset
    size_type erase(const KeyType& key, KeyHasher hasher, KeyValueEqual equal)
    {  return table_.erase(key, hasher, equal);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the element pointed to by i. 
-   //!   Destroyer::operator()(pointer) is called for the removed element.
+   //!   Disposer::operator()(pointer) is called for the removed element.
    //! 
    //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
    //! 
@@ -1286,14 +1286,14 @@ class unordered_multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators 
    //!    to the erased elements.
-   template<class Destroyer>
-   void erase_and_destroy(const_iterator i, Destroyer destroyer)
-   {  table_.erase_and_destroy(i, destroyer);  }
+   template<class Disposer>
+   void erase_and_dispose(const_iterator i, Disposer disposer)
+   {  table_.erase_and_dispose(i, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases the range pointed to by b end e.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Complexity</b>: Average case O(std::distance(b, e)),
    //!   worst case O(this->size()).
@@ -1302,14 +1302,14 @@ class unordered_multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class Destroyer>
-   void erase_and_destroy(const_iterator b, const_iterator e, Destroyer destroyer)
-   {  table_.erase_and_destroy(b, e, destroyer);  }
+   template<class Disposer>
+   void erase_and_dispose(const_iterator b, const_iterator e, Disposer disposer)
+   {  table_.erase_and_dispose(b, e, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given value.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -1320,15 +1320,15 @@ class unordered_multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   size_type erase_and_destroy(const_reference value, Destroyer destroyer)
-   {  return table_.erase_and_destroy(value, destroyer);  }
+   template<class Disposer>
+   size_type erase_and_dispose(const_reference value, Disposer disposer)
+   {  return table_.erase_and_dispose(value, disposer);  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
    //! <b>Effects</b>: Erases all the elements with the given key.
    //!   according to the comparison functor "equal".
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
@@ -1339,9 +1339,9 @@ class unordered_multiset
    //! 
    //! <b>Note</b>: Invalidates the iterators
    //!    to the erased elements.
-   template<class KeyType, class KeyHasher, class KeyValueEqual, class Destroyer>
-   size_type erase_and_destroy(const KeyType& key, KeyHasher hasher, KeyValueEqual equal, Destroyer destroyer)
-   {  return table_.erase_and_destroy(key, hasher, equal, destroyer);  }
+   template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
+   size_type erase_and_dispose(const KeyType& key, KeyHasher hasher, KeyValueEqual equal, Disposer disposer)
+   {  return table_.erase_and_dispose(key, hasher, equal, disposer);  }
 
    //! <b>Effects</b>: Erases all the elements of the container.
    //! 
@@ -1355,20 +1355,20 @@ class unordered_multiset
    void clear()
    {  return table_.clear();  }
 
-   //! <b>Requires</b>: Destroyer::operator()(pointer) shouldn't throw.
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //! 
    //! <b>Effects</b>: Erases all the elements of the container.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements on the container.
-   //!   Destroyer::operator()(pointer) is called for the removed elements.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
-   template<class Destroyer>
-   void clear_and_destroy(Destroyer destroyer)
-   {  return table_.clear_and_destroy(destroyer);  }
+   template<class Disposer>
+   void clear_and_dispose(Disposer disposer)
+   {  return table_.clear_and_dispose(disposer);  }
 
    //! <b>Effects</b>: Returns the number of contained elements with the given key
    //! 
@@ -1391,7 +1391,7 @@ class unordered_multiset
    //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
    //! 
    //! <b>Throws</b>: If the internal hasher or the equality functor throws.
-   template<class KeyType, class KeyHasher, class KeyValueEqual, class Destroyer>
+   template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
    size_type count(const KeyType& key, KeyHasher hasher, KeyValueEqual equal) const
    {  return table_.count(key, hasher, equal);  }
 

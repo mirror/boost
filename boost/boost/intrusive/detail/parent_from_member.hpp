@@ -13,7 +13,7 @@
 #define BOOST_INTRUSIVE_PARENT_FROM_MEMBER_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-
+#include <cstddef>
 namespace boost {
 namespace intrusive {
 namespace detail {
@@ -22,8 +22,7 @@ template<class Parent, class Member>
 std::size_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)
 {
    //The implementation of a pointer to member is compiler dependent.
-   #if defined(BOOST_MSVC)  || defined(__GNUC__) || \
-       defined(BOOST_INTEL) || defined(__HP_aCC)
+   #if (defined(_MSC_VER)  || defined(__GNUC__) || defined(BOOST_INTEL) || defined(__HP_aCC))
    //This works with gcc, msvc, ac++
    return *(const std::size_t*)(const void*)&ptr_to_member;
    #else

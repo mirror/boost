@@ -26,11 +26,10 @@
 #include <boost/type_traits/is_convertible.hpp>
 #endif
 #include <boost/intrusive/pointer_plus_bit.hpp>
-#include <boost/type_traits/alignment_of.hpp>
+#include <boost/intrusive/detail/mpl.hpp>
 
 namespace boost {
 namespace intrusive {
-
 namespace detail {
 
 /////////////////////////////////////////////////////////////////////////////
@@ -171,7 +170,7 @@ struct rbtree_node_traits
    :  public rbtree_node_traits_dispatch
          <VoidPointer
          ,has_pointer_plus_bit
-            <VoidPointer, boost::alignment_of<compact_rbtree_node<VoidPointer> 
+            <VoidPointer, detail::alignment_of<compact_rbtree_node<VoidPointer> 
                                              >::value 
             >::value
          >

@@ -16,7 +16,7 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <iterator>
-#include <boost/assert.hpp>
+#include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 #ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE

@@ -16,9 +16,11 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/detail/parent_from_member.hpp>
-#include <boost/intrusive/detail/ebo_holder.hpp>
+#include <boost/intrusive/detail/ebo_functor_holder.hpp>
 #include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/detail/mpl.hpp>
 #include <cstddef>
+#include <iterator>
 
 namespace boost {
 namespace intrusive {
@@ -65,7 +67,7 @@ class equal_to_value
    {  return t_ == t;   }
 };
 
-class null_destroyer
+class null_disposer
 {
    public:
    template <class Pointer>
@@ -155,8 +157,8 @@ struct member_value_traits
    typedef typename node_traits::const_node_ptr                      const_node_ptr;
    typedef typename boost::pointer_to_other<node_ptr, T>::type       pointer;
    typedef typename boost::pointer_to_other<node_ptr, const T>::type const_pointer;
-   typedef typename std::iterator_traits<pointer>::reference         reference;
-   typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
+   typedef value_type &                                              reference;
+   typedef const value_type &                                        const_reference;
    enum { linking_policy = MemberHookType::linking_policy };
 
    public:
@@ -192,10 +194,10 @@ struct member_value_traits
 
 template<class KeyValueCompare, class ValueTraits>
 struct key_node_ptr_compare
-   :  private detail::ebo_holder<KeyValueCompare>
+   :  private detail::ebo_functor_holder<KeyValueCompare>
 {
    typedef typename ValueTraits::node_ptr node_ptr;
-   typedef detail::ebo_holder<KeyValueCompare> base_t;
+   typedef detail::ebo_functor_holder<KeyValueCompare> base_t;
    key_node_ptr_compare(KeyValueCompare kcomp)
       :  base_t(kcomp)
    {}
@@ -217,10 +219,10 @@ struct key_node_ptr_compare
 
 template<class F, class ValueTraits>
 struct value_to_node_cloner
-   :  private detail::ebo_holder<F>
+   :  private detail::ebo_functor_holder<F>
 {
    typedef typename ValueTraits::node_ptr node_ptr;
-   typedef detail::ebo_holder<F> base_t;
+   typedef detail::ebo_functor_holder<F> base_t;
 
    value_to_node_cloner(F f)
       :  base_t(f)
@@ -231,12 +233,12 @@ struct value_to_node_cloner
 };
 
 template<class F, class ValueTraits>
-struct value_to_node_destroyer
-   :  private detail::ebo_holder<F>
+struct value_to_node_disposer
+   :  private detail::ebo_functor_holder<F>
 {
    typedef typename ValueTraits::node_ptr node_ptr;
-   typedef detail::ebo_holder<F> base_t;
-   value_to_node_destroyer(F f)
+   typedef detail::ebo_functor_holder<F> base_t;
+   value_to_node_disposer(F f)
       :  base_t(f)
    {}
 
@@ -250,7 +252,7 @@ struct dispatcher
 
 template<class Container>
 void destructor_impl(Container &cont, dispatcher<safe_link>)
-{  (void)cont; BOOST_ASSERT(!cont.is_linked());  }
+{  (void)cont; BOOST_INTRUSIVE_SAFE_MODE_HOOK_DESTRUCTOR_ASSERT(!cont.is_linked());  }
 
 template<class Container>
 void destructor_impl(Container &cont, dispatcher<auto_unlink>)
@@ -262,26 +264,26 @@ void destructor_impl(Container &, dispatcher<normal_link>)
 
 template<class Node, class MaybeClass>
 struct node_plus_pred
-   :  public ebo_holder<MaybeClass>
+   :  public ebo_functor_holder<MaybeClass>
    ,  public Node
 {
    node_plus_pred()
       {}
 
    node_plus_pred(const Node &x, const MaybeClass &y)
-      : Node(x), ebo_holder<MaybeClass>(y) {}
+      : Node(x), ebo_functor_holder<MaybeClass>(y) {}
 
    node_plus_pred(const MaybeClass &y)
-      : ebo_holder<MaybeClass>(y) {}
+      : ebo_functor_holder<MaybeClass>(y) {}
 
    Node &first()          
       {  return *this;  }
    const Node &first() const 
       {  return *this;  }
    MaybeClass &second()        
-      {  return ebo_holder<MaybeClass>::get();  }
+      {  return ebo_functor_holder<MaybeClass>::get();  }
    const MaybeClass &second() const  
-      {  return ebo_holder<MaybeClass>::get();  }
+      {  return ebo_functor_holder<MaybeClass>::get();  }
 
    static node_plus_pred *this_from_node(Node *n)
    {  return static_cast<node_plus_pred*>(n);   }
@@ -289,33 +291,6 @@ struct node_plus_pred
    static node_plus_pred *this_from_node(const Node *n)
    {  return static_cast<const node_plus_pred*>(n);   }
 };
-
-#ifndef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
-
-template <bool B, class T = void>
-struct enable_if_c {
-  typedef T type;
-};
-
-template <class T>
-struct enable_if_c<false, T> {};
-
-template <class Cond, class T = void>
-struct enable_if : public enable_if_c<Cond::value, T> {};
-
-template <class T, class U>
-class is_convertible
-{
-   typedef char true_t;
-   class false_t { char dummy[2]; };
-   static true_t dispatch(U);
-   static false_t dispatch(...);
-   static T trigger();
-   public:
-   enum { value = sizeof(dispatch(trigger())) == sizeof(true_t) };
-};
-
-#endif   //#ifndef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
 
 } //namespace detail 
 } //namespace intrusive 

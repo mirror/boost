@@ -14,7 +14,6 @@
 #define BOOST_INTRUSIVE_FWD_HPP
 
 #include <cstddef>
-#include <boost/functional/hash_fwd.hpp>
 #include <boost/intrusive/tag.hpp>
 #include <boost/intrusive/linking_policy.hpp>
 
@@ -30,6 +29,11 @@ struct less;
 }  //namespace std{
 
 namespace boost {
+
+//Hash predeclaration
+template<class T>
+struct hash;
+
 namespace intrusive {
 
 ////////////////////////////

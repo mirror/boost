@@ -23,7 +23,6 @@
 #include <boost/intrusive/linking_policy.hpp>
 #include <boost/intrusive/tag.hpp>
 #include <boost/static_assert.hpp>
-#include <stdexcept>
 
 namespace boost {
 namespace intrusive {
