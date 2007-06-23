@@ -166,7 +166,8 @@
         namespace detail
         {
             template<typename T, typename EnableIf = void>
-            struct if_vararg {};
+            struct if_vararg
+            {};
 
             template<typename T>
             struct if_vararg<T, typename T::proto_is_vararg_>
@@ -183,6 +184,19 @@
             typedef type proto_base_expr;
             typedef proto::tag::terminal proto_tag;
             typedef T proto_arg0;
+        };
+
+        // if_else
+        template<typename T, typename U, typename V>
+        struct if_else_ : has_pass_through_transform<if_else_<T, U, V> >
+        {
+            if_else_();
+            typedef expr<proto::tag::if_else_, args3<T, U, V> > type;
+            typedef type proto_base_expr;
+            typedef proto::tag::if_else_ proto_tag;
+            typedef T proto_arg0;
+            typedef U proto_arg1;
+            typedef V proto_arg2;
         };
 
         // unary_expr

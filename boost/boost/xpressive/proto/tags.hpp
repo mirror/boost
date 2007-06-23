@@ -145,6 +145,9 @@ namespace boost { namespace proto { namespace tag
     /// Tag type for the binary subscript operator.
     struct subscript {};
 
+    /// Tag type for the ternary ?: conditional operator.
+    struct if_else_ {};
+
     /// Tag type for the nary function call operator.
     struct function {};
 

@@ -19,6 +19,7 @@
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/generate.hpp>
+#include <boost/xpressive/proto/make_expr.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
@@ -228,6 +229,16 @@ namespace boost { namespace proto
         that_type that = {{arg}};
         return Arg::proto_domain::make(that);
     }
+
+    /// if_else
+    ///
+    BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
+        3
+      , if_else
+      , deduce_domain
+      , (tag::if_else_)
+      , BOOST_PP_SEQ_NIL
+    )
 
 }}
 

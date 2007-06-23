@@ -83,6 +83,7 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_TAG_NAME(bitwise_or_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(bitwise_xor_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(subscript)
+        BOOST_PROTO_DEFINE_TAG_NAME(if_else_)
         BOOST_PROTO_DEFINE_TAG_NAME(function)
 
     #undef BOOST_PROTO_DEFINE_TAG_NAME

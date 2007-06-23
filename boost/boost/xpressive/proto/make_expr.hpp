@@ -224,6 +224,13 @@
         BOOST_PP_SEQ_POP_BACK(BOOST_PP_SEQ_PUSH_FRONT(BOOST_PP_SEQ_PUSH_BACK(SEQ, _dummy_), ELEM))  \
         /**/
 
+
+    /// INTERNAL ONLY
+    ///
+    #define BOOST_PROTO_VARARG_AS_PARAM_(Z, N, DATA)                                                \
+        (BOOST_PP_CAT(DATA, N))                                                                     \
+        /**/
+
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_VARARG_FUN_(Z, N, DATA)                                                     \
@@ -237,8 +244,12 @@
                       , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                             \
                     )                                                                               \
                 )                                                                                   \
+                BOOST_PP_REPEAT_ ## Z(                                                              \
+                    N                                                                               \
+                  , BOOST_PROTO_VARARG_AS_PARAM_                                                    \
+                  , typename A                                                                      \
+                )                                                                                   \
             )                                                                                       \
-            BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, typename A)                                       \
         >                                                                                           \
         typename boost::mpl::apply_wrap1<                                                           \
             BOOST_PP_TUPLE_ELEM(4, 3, DATA)                                                         \

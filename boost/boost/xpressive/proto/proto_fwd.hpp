@@ -96,7 +96,7 @@ namespace boost { namespace proto
         struct bitwise_or_assign;
         struct bitwise_xor_assign;
         struct subscript;
-
+        struct if_else_;
         struct function;
     }
 
@@ -319,6 +319,7 @@ namespace boost { namespace proto
     template<typename T, typename U> struct bitwise_or_assign;
     template<typename T, typename U> struct bitwise_xor_assign;
     template<typename T, typename U> struct subscript;
+    template<typename T, typename U, typename V> struct if_else_;
 
     template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
     struct function;
