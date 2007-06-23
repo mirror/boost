@@ -37,3 +37,8 @@ exe rgb
     :
         rgb.cpp
     ;
+
+exe vec3
+    :
+        vec3.cpp
+    ;
