@@ -78,6 +78,25 @@
             {
                 typedef Expr *type;
             };
+
+            template<typename X, std::size_t N, typename Y>
+            void checked_copy(X (&x)[N], Y (&y)[N])
+            {
+                for(std::size_t i = 0; i < N; ++i)
+                {
+                    y[i] = x[i];
+                }
+            }
+
+            template<typename T, std::size_t N>
+            struct if_is_array
+            {};
+
+            template<typename T, std::size_t N>
+            struct if_is_array<T[N], N>
+            {
+                typedef int type;
+            };
         }
 
         namespace result_of
@@ -175,6 +194,26 @@
             static expr make(A0 &a0)
             {
                 expr that = {a0};
+                return that;
+            }
+
+            /// \overload
+            ///
+            template<typename A0, std::size_t N>
+            static expr make(A0 (&a0)[N], typename detail::if_is_array<proto_arg0, N>::type = 0)
+            {
+                expr that;
+                detail::checked_copy(a0, that.arg0);
+                return that;
+            }
+
+            /// \overload
+            ///
+            template<typename A0, std::size_t N>
+            static expr make(A0 const (&a0)[N], typename detail::if_is_array<proto_arg0, N>::type = 0)
+            {
+                expr that;
+                detail::checked_copy(a0, that.arg0);
                 return that;
             }
         #endif

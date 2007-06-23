@@ -93,7 +93,7 @@
 
                 typedef expr<proto::tag::terminal, args0<proto_arg0> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
-                typedef type result_type;
+                typedef type const result_type;
 
                 template<typename T2>
                 static result_type call(T2 &t)

@@ -36,8 +36,7 @@
                 template<typename Expr2>
                 static type call(Expr2 const &expr)
                 {
-                    expr_type that = {proto::arg(expr)};
-                    return Expr::proto_domain::make(that);
+                    return Expr::proto_domain::make(expr_type::make(proto::arg(expr)));
                 }
             };
         }
