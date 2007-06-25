@@ -42,3 +42,9 @@ exe vec3
     :
         vec3.cpp
     ;
+
+exe vector
+    :
+        vector.cpp
+    ;
+
