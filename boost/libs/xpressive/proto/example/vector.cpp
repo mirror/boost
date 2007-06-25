@@ -53,25 +53,33 @@ struct VectorSubscriptCtx
 // Here is an evaluation context that verifies that all the
 // vectors in an expression have the same size.
 struct VectorSizeCtx
-  : proto::callable_context< VectorSizeCtx const >
 {
-    typedef int result_type;
-
     VectorSizeCtx(std::size_t size)
       : size_(size)
     {}
 
+    // Unless this is a vector terminal, use the
+    // null evaluation context
+    template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
+    struct eval
+      : proto::null_eval<Expr, VectorSizeCtx const>
+    {};
+
     // Index array terminals with our subscript. Everything
     // else will be handled by the default evaluation context.
-    template<typename T, typename A>
-    int operator()(proto::tag::terminal, std::vector<T, A> const &arr) const
+    template<typename Expr, typename T, typename A>
+    struct eval<Expr, std::vector<T, A> >
     {
-        if(this->size_ != arr.size())
+        typedef void result_type;
+
+        result_type operator()(Expr &expr, VectorSizeCtx const &ctx) const
         {
-            throw std::invalid_argument("LHS and RHS are not compatible");
+            if(ctx.size_ != proto::arg(expr).size())
+            {
+                throw std::invalid_argument("LHS and RHS are not compatible");
+            }
         }
-        return 0; // not used
-    }
+    };
 
     std::size_t size_;
 };
