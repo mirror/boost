@@ -62,14 +62,20 @@
 
             template<typename Expr, typename State, typename Visitor>
             struct apply
-              : detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::proto_arity::value>
+              : detail::pass_through_impl<
+                    Grammar
+                  , typename Expr::proto_base_expr
+                  , State
+                  , Visitor
+                  , Expr::proto_arity::value
+                >
             {};
 
             template<typename Expr, typename State, typename Visitor>
             static typename apply<Expr, State, Visitor>::type
             call(Expr const &expr, State const &state, Visitor &visitor)
             {
-                return apply<Expr, State, Visitor>::call(expr, state, visitor);
+                return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
             }
         };
 
@@ -82,14 +88,20 @@
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : transform::detail::pass_through_impl<Grammar, Expr, State, Visitor, Expr::proto_arity::value>
+          : transform::detail::pass_through_impl<
+                Grammar
+              , typename Expr::proto_base_expr
+              , State
+              , Visitor
+              , Expr::proto_arity::value
+            >
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return apply<Expr, State, Visitor>::call(expr, state, visitor);
+            return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
         }
     };
 
