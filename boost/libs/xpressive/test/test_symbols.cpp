@@ -247,10 +247,11 @@ void test7()
     }
 }
 
+#ifndef BOOST_XPRESSIVE_NO_WREGEX
 struct City
 {
-    std::string name;
-    char* nickname;
+    std::wstring name;
+    char const* nickname;
     int population;
 };
 
@@ -262,21 +263,23 @@ void test8()
     using namespace boost::xpressive;
 
     City cities[] = {
-        {"Chicago", "The Windy City", 945000},
-        {"New York", "The Big Apple", 16626000},
-        {"\u041c\u043E\u0441\u043A\u0432\u0430", "Moscow", 9299000}
+        {L"Chicago", "The Windy City", 945000},
+        {L"New York", "The Big Apple", 16626000},
+        {L"\u041c\u043E\u0441\u043A\u0432\u0430", "Moscow", 9299000}
     };
 
-    std::map<std::string, City> map1;
+    std::map<std::wstring, City> map1;
     BOOST_FOREACH(const City & c, cities)
+    {
         map1[c.name] = c;
+    }
 
-    std::string str("Chicago \u041c\u043E\u0441\u043A\u0432\u0430");
+    std::wstring str(L"Chicago \u041c\u043E\u0441\u043A\u0432\u0430");
     City result1, result2;
     //int result1p;
     // ERROR "error C2039: 'population' : is not a member of 'boost::proto::expr<Tag,Args>'	c:\boost\libs\xpressive\test\test_symbols.cpp	277"
     //sregex rx = (a1= map1)[ ref(result1p) = a1.population ];
-    sregex rx = (a1= map1)[ ref(result1) = a1 ] >> +_s
+    wsregex rx = (a1= map1)[ ref(result1) = a1 ] >> +_s
         >> (a1= map1)[ ref(result2) = a1 ];
     if(!regex_match(str, rx))
     {
@@ -288,6 +291,12 @@ void test8()
         BOOST_CHECK_EQUAL(result2.nickname, "Moscow");
     }
 }
+#else
+void test8()
+{
+    // This test is empty
+}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // test9
