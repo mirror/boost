@@ -312,6 +312,10 @@
         typedef BOOST_PP_CAT(data, n) BOOST_PP_CAT(proto_arg, n);\
         /**/
 
+    #define BOOST_PROTO_IMPLICIT_ARG(z, n, data)\
+        BOOST_PP_CAT(data, n) &BOOST_PP_CAT(a, n);\
+        /**/
+
     #define BOOST_PROTO_ARG_N_TYPE(z, n, data)\
         typename proto::result_of::unref<\
             typename Expr::BOOST_PP_CAT(proto_arg, n)\
@@ -323,6 +327,7 @@
 
     #undef BOOST_PROTO_ARG
     #undef BOOST_PROTO_ARG_N_TYPE
+    #undef BOOST_PROTO_IMPLICIT_ARG
 
         namespace functional
         {
@@ -669,6 +674,33 @@
             BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, A)
             BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT)
         };
+
+
+        namespace detail
+        {
+            template<BOOST_PP_ENUM_PARAMS(N, typename A)>
+            struct BOOST_PP_CAT(implicit_expr_, N)
+            {
+                BOOST_PP_REPEAT(N, BOOST_PROTO_IMPLICIT_ARG, A)
+
+                template<typename Tag, typename Args, long Arity>
+                operator expr<Tag, Args, Arity> () const
+                {
+                    expr<Tag, Args, Arity> that = {BOOST_PP_ENUM_PARAMS(N, a)};
+                    return that;
+                }
+            };
+        }
+
+        template<BOOST_PP_ENUM_PARAMS(N, typename A)>
+        detail::BOOST_PP_CAT(implicit_expr_, N)<BOOST_PP_ENUM_PARAMS(N, A)>
+        implicit_expr(BOOST_PP_ENUM_BINARY_PARAMS(N, A, &a))
+        {
+            detail::BOOST_PP_CAT(implicit_expr_, N)<BOOST_PP_ENUM_PARAMS(N, A)> that
+                = {BOOST_PP_ENUM_PARAMS(N, a)};
+            return that;
+        }
+
     #endif
 
         namespace result_of
@@ -693,6 +725,7 @@
               : arg_c<Expr, N>
             {};
         }
+
 
     #undef N
 

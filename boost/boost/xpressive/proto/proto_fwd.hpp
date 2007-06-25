@@ -464,6 +464,12 @@ namespace boost { namespace proto
 
     int const N = INT_MAX;
 
+    template<typename T>
+    struct is_extension;
+
+    namespace exops
+    {}
+
 }} // namespace boost::proto
 
 #endif

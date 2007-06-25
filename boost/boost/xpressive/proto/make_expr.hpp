@@ -20,6 +20,7 @@
     #include <boost/preprocessor/punctuation/comma_if.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/comparison/greater.hpp>
     #include <boost/preprocessor/tuple/elem.hpp>
     #include <boost/preprocessor/tuple/to_list.hpp>
     #include <boost/preprocessor/logical/and.hpp>
@@ -167,41 +168,22 @@
 
     /// INTERNAL ONLY
     ///
-    #define BOOST_PROTO_VARARG_TYPE_YES_(R, DATA, I, ELEM)                                          \
-      , typename boost::proto::result_of::as_expr<                                                  \
-            const BOOST_PP_SEQ_HEAD(ELEM)                                                           \
-            BOOST_PP_IF(                                                                            \
-                BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(ELEM))                                               \
-              , BOOST_PROTO_TEMPLATE_PARAMS_YES_                                                    \
-              , BOOST_PROTO_TEMPLATE_PARAMS_NO_                                                     \
-            )(R, DATA, I, ELEM)                                                                     \
-          , DATA                                                                                    \
-        >::type                                                                                     \
-        /**/
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_VARARG_TYPE_NO_(R, DATA, I, ELEM)                                           \
+    #define BOOST_PROTO_VARARG_TYPE_(R, DATA, I, ELEM)                                              \
+        BOOST_PP_COMMA_IF(I)                                                                        \
         BOOST_PP_SEQ_HEAD(ELEM)                                                                     \
         BOOST_PP_IF(                                                                                \
             BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(ELEM))                                                   \
           , BOOST_PROTO_TEMPLATE_PARAMS_YES_                                                        \
           , BOOST_PROTO_TEMPLATE_PARAMS_NO_                                                         \
-        )(R, DATA, I, ELEM)                                                                         \
-        /**/
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_VARARG_TYPE_(R, DATA, I, ELEM)                                              \
-        BOOST_PP_IF(I, BOOST_PROTO_VARARG_TYPE_YES_, BOOST_PROTO_VARARG_TYPE_NO_)(R, DATA, I, ELEM) \
+        )(R, DATA, I, ELEM) BOOST_PP_EXPR_IF(BOOST_PP_GREATER(I, 1), const)                         \
         /**/
 
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_VARARG_AS_EXPR_(R, DATA, I, ELEM)                                           \
         BOOST_PP_EXPR_IF(                                                                           \
-            I                                                                                       \
-          , (boost::proto::as_expr<DATA>(                                                           \
+            BOOST_PP_GREATER(I, 1)                                                                  \
+          , ((                                                                                      \
                 BOOST_PP_SEQ_HEAD(ELEM)                                                             \
                 BOOST_PP_IF(                                                                        \
                     BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(ELEM))                                           \
@@ -215,7 +197,7 @@
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_VARARG_AS_ARG_(Z, N, DATA)                                                  \
-        (BOOST_PROTO_AS_ARG(Z, N, DATA))                                                            \
+        (BOOST_PP_CAT(DATA, N))                                                                     \
         /**/
 
     /// INTERNAL ONLY
@@ -223,7 +205,6 @@
     #define BOOST_PROTO_SEQ_PUSH_FRONT(SEQ, ELEM)                                                   \
         BOOST_PP_SEQ_POP_BACK(BOOST_PP_SEQ_PUSH_FRONT(BOOST_PP_SEQ_PUSH_BACK(SEQ, _dummy_), ELEM))  \
         /**/
-
 
     /// INTERNAL ONLY
     ///
@@ -237,72 +218,60 @@
         template<                                                                                   \
             BOOST_PP_SEQ_ENUM(                                                                      \
                 BOOST_PP_SEQ_FOR_EACH_I(                                                            \
-                    BOOST_PROTO_VARARG_TEMPLATE_                                                    \
-                  , ~                                                                               \
-                  , BOOST_PROTO_SEQ_PUSH_FRONT(                                                     \
-                        BOOST_PP_TUPLE_ELEM(4, 2, DATA)                                             \
+                    BOOST_PROTO_VARARG_TEMPLATE_, ~                                                 \
+                  , BOOST_PP_SEQ_PUSH_FRONT(                                                        \
+                        BOOST_PROTO_SEQ_PUSH_FRONT(                                                 \
+                            BOOST_PP_TUPLE_ELEM(4, 2, DATA)\
+                          , (BOOST_PP_TUPLE_ELEM(4, 3, DATA))\
+                        )                                                                           \
                       , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                             \
                     )                                                                               \
                 )                                                                                   \
-                BOOST_PP_REPEAT_ ## Z(                                                              \
-                    N                                                                               \
-                  , BOOST_PROTO_VARARG_AS_PARAM_                                                    \
-                  , typename A                                                                      \
-                )                                                                                   \
+                BOOST_PP_REPEAT_ ## Z(N, BOOST_PROTO_VARARG_AS_PARAM_, typename A)                  \
             )                                                                                       \
         >                                                                                           \
-        typename boost::mpl::apply_wrap1<                                                           \
-            BOOST_PP_TUPLE_ELEM(4, 3, DATA)                                                         \
-          , typename boost::proto::nary_expr<                                                       \
-                BOOST_PP_SEQ_FOR_EACH_I(                                                            \
-                    BOOST_PROTO_VARARG_TYPE_                                                        \
-                  , BOOST_PP_TUPLE_ELEM(4, 3, DATA)                                                 \
-                  , BOOST_PROTO_SEQ_PUSH_FRONT(                                                     \
+        typename boost::proto::result_of::make_expr<                                                \
+            BOOST_PP_SEQ_FOR_EACH_I(                                                                \
+                BOOST_PROTO_VARARG_TYPE_, ~                                                         \
+              , BOOST_PP_SEQ_PUSH_FRONT(                                                            \
+                    BOOST_PROTO_SEQ_PUSH_FRONT(                                                     \
                         BOOST_PP_TUPLE_ELEM(4, 2, DATA)                                             \
-                      , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                             \
+                      , (BOOST_PP_TUPLE_ELEM(4, 3, DATA))                                           \
                     )                                                                               \
+                  , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                                 \
                 )                                                                                   \
-                BOOST_PP_ENUM_TRAILING(                                                             \
-                    N                                                                               \
-                  , BOOST_PROTO_AS_ARG_TYPE                                                         \
-                  , (const A, BOOST_PP_TUPLE_ELEM(4, 3, DATA))                                      \
-                )                                                                                   \
-            >::type                                                                                 \
-        >::type                                                                                     \
+            )                                                                                       \
+            BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)                                               \
+        >::type const                                                                               \
         BOOST_PP_TUPLE_ELEM(4, 0, DATA)(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, const A, &a))           \
         {                                                                                           \
-            typename boost::proto::nary_expr<                                                       \
+            return boost::proto::result_of::make_expr<                                              \
                 BOOST_PP_SEQ_FOR_EACH_I(                                                            \
-                    BOOST_PROTO_VARARG_TYPE_                                                        \
-                  , BOOST_PP_TUPLE_ELEM(4, 3, DATA)                                                 \
-                  , BOOST_PROTO_SEQ_PUSH_FRONT(                                                     \
-                        BOOST_PP_TUPLE_ELEM(4, 2, DATA)                                             \
+                    BOOST_PROTO_VARARG_TYPE_, ~                                                     \
+                  , BOOST_PP_SEQ_PUSH_FRONT(                                                        \
+                        BOOST_PROTO_SEQ_PUSH_FRONT(                                                 \
+                            BOOST_PP_TUPLE_ELEM(4, 2, DATA)                                         \
+                          , (BOOST_PP_TUPLE_ELEM(4, 3, DATA))                                       \
+                        )                                                                           \
                       , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                             \
                     )                                                                               \
                 )                                                                                   \
-                BOOST_PP_ENUM_TRAILING(                                                             \
-                    N                                                                               \
-                  , BOOST_PROTO_AS_ARG_TYPE                                                         \
-                  , (const A, BOOST_PP_TUPLE_ELEM(4, 3, DATA))                                      \
-                )                                                                                   \
-            >::type that = {                                                                        \
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)                                           \
+            >::call(                                                                                \
                 BOOST_PP_SEQ_ENUM(                                                                  \
                     BOOST_PP_SEQ_FOR_EACH_I(                                                        \
-                        BOOST_PROTO_VARARG_AS_EXPR_                                                 \
-                      , BOOST_PP_TUPLE_ELEM(4, 3, DATA)                                             \
-                      , BOOST_PROTO_SEQ_PUSH_FRONT(                                                 \
-                            BOOST_PP_TUPLE_ELEM(4, 2, DATA)                                         \
+                        BOOST_PROTO_VARARG_AS_EXPR_, ~                                              \
+                      , BOOST_PP_SEQ_PUSH_FRONT(                                                    \
+                            BOOST_PROTO_SEQ_PUSH_FRONT(                                             \
+                                BOOST_PP_TUPLE_ELEM(4, 2, DATA)                                     \
+                              , (BOOST_PP_TUPLE_ELEM(4, 3, DATA))                                   \
+                            )                                                                       \
                           , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                         \
                         )                                                                           \
                     )                                                                               \
-                    BOOST_PP_REPEAT_ ## Z(                                                          \
-                        N                                                                           \
-                      , BOOST_PROTO_VARARG_AS_ARG_                                                  \
-                      , (a, BOOST_PP_TUPLE_ELEM(4, 3, DATA))                                        \
-                    )                                                                               \
+                    BOOST_PP_REPEAT_ ## Z(N, BOOST_PROTO_VARARG_AS_ARG_, a)                         \
                 )                                                                                   \
-            };                                                                                      \
-            return BOOST_PP_TUPLE_ELEM(4, 3, DATA)::make(that);                                     \
+            );                                                                                      \
         }                                                                                           \
         /**/
 
