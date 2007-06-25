@@ -48,3 +48,8 @@ exe vector
         vector.cpp
     ;
 
+exe mixed
+    :
+        mixed.cpp
+    ;
+
