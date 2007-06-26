@@ -12,7 +12,8 @@
 
 //  HP aCC C++ compiler setup:
 
-#if (__HP_aCC >= 61200) && defined(__EDG__)
+#if (((__HP_aCC >= 61200) && defined(__EDG__)) ||\
+     ((__HP_aCC >= 38000) && defined(__hpxstd98)))
 #include "boost/config/compiler/common_edg.hpp"
 #endif
 
@@ -69,8 +70,9 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 61300:
-#if (__HP_aCC > 61300)
+// last known and checked version for HP-UX/ia64 is 61300
+// last known and checked version for PA-RISC is 38000
+#if ((__HP_aCC > 61300) || ((__HP_aCC > 38000) && defined(__hpxstd98)))
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
