@@ -40,14 +40,6 @@
         struct callable_eval
         {};
 
-        namespace detail
-        {
-            struct dont_care
-            {
-                dont_care(...);
-            };
-        }
-
     #define BOOST_PROTO_ARG_N_TYPE(Z, N, Expr)                                                      \
         typename proto::result_of::arg_c<Expr, N>::const_reference                                  \
         /**/

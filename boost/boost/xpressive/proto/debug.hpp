@@ -28,10 +28,35 @@ namespace boost { namespace proto
 {
     namespace tag
     {
-        template<typename Tag>
-        inline char const *proto_tag_name(Tag)
+        namespace hidden_detail_
         {
-            return typeid(Tag).name();
+            typedef char (&not_ostream)[sizeof(std::ostream)+1];
+            not_ostream operator<<(std::ostream &, detail::dont_care);
+
+            template<typename Tag, std::size_t S>
+            struct printable_tag_
+            {
+                typedef char const *type;
+                static type call() { return typeid(Tag).name(); }
+            };
+
+            template<typename Tag>
+            struct printable_tag_<Tag, sizeof(std::ostream)>
+            {
+                typedef Tag type;
+                static type call() { return Tag(); }
+            };
+
+            template<typename Tag>
+            struct printable_tag
+              : printable_tag_<Tag, sizeof(std::cout << Tag())>
+            {};
+        }
+
+        template<typename Tag>
+        inline typename hidden_detail_::printable_tag<Tag>::type proto_tag_name(Tag)
+        {
+            return hidden_detail_::printable_tag<Tag>::call();
         }
 
     #define BOOST_PROTO_DEFINE_TAG_NAME(Tag)\
@@ -108,21 +133,22 @@ namespace boost { namespace proto
                 this->first_ = false;
             }
 
-        #define BOOST_PROTO_ARG(z, n, data)\
-            display(proto::arg_c<n>(expr));\
+        #define BOOST_PROTO_ARG(z, n, data)                                                         \
+            display(proto::arg_c<n>(expr));                                                         \
             /**/
 
-        #define BOOST_PP_LOCAL_MACRO(N)\
-            template<typename Tag, typename Args>\
-            void operator()(expr<Tag, Args, N> const &expr) const\
-            {\
-                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")\
-                    << proto_tag_name(Tag()) << "(\n";\
-                display_expr display(this->depth_ + 4, this->sout_);\
-                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, _)\
-                this->sout_ << std::setw(this->depth_) << "" << ")\n";\
-                this->first_ = false;\
-            }\
+        #define BOOST_PP_LOCAL_MACRO(N)                                                             \
+            template<typename Tag, typename Args>                                                   \
+            void operator()(expr<Tag, Args, N> const &expr) const                                   \
+            {                                                                                       \
+                using namespace tag;                                                                \
+                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")                 \
+                    << proto_tag_name(Tag()) << "(\n";                                              \
+                display_expr display(this->depth_ + 4, this->sout_);                                \
+                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, _)                                              \
+                this->sout_ << std::setw(this->depth_) << "" << ")\n";                              \
+                this->first_ = false;                                                               \
+            }                                                                                       \
             /**/
 
         #define BOOST_PP_LOCAL_LIMITS (1, BOOST_PROTO_MAX_ARITY)

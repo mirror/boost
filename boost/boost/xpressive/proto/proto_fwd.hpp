@@ -47,6 +47,14 @@
 
 namespace boost { namespace proto
 {
+    namespace detail
+    {
+        struct dont_care
+        {
+            dont_care(...);
+        };
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
     namespace tag
