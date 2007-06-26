@@ -65,7 +65,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Trans>
         result_type operator ()(BidiIter &begin, BidiIter end, Trans trans) const
         {
-            return this->search(root, begin, end, trans);
+            return this->search(this->root, begin, end, trans);
         }
 
     private:

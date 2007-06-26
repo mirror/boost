@@ -353,11 +353,14 @@ namespace boost { namespace proto
       : mpl::false_
     {};
 
+#ifndef BOOST_PROTO_DOXYGEN_INVOKED
     namespace exops
     {
         BOOST_PROTO_DEFINE_OPERATORS(is_extension, deduce_domain)
         using proto::if_else;
     }
+#endif
+
 }}
 
 #endif

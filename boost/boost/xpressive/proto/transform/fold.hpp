@@ -74,11 +74,6 @@
 
         // A fold transform that transforms the left sub-tree and
         // uses the result as state while transforming the right.
-        template<typename Grammar, typename State>
-        struct fold
-          : branch<fold<Grammar>, State>
-        {};
-
         template<typename Grammar>
         struct fold<Grammar, void>
           : Grammar
@@ -100,11 +95,6 @@
 
         // A reverse_fold compiler that compiles the right sub-tree and
         // uses the result as state while compiling the left.
-        template<typename Grammar, typename State>
-        struct reverse_fold
-          : branch<reverse_fold<Grammar>, State>
-        {};
-
         template<typename Grammar>
         struct reverse_fold<Grammar, void>
           : Grammar
@@ -123,6 +113,19 @@
                 return apply<Expr, State, Visitor>::call(expr, state, visitor);
             }
         };
+
+        // Causes Doxygen to crash. Sigh.
+    #ifndef BOOST_PROTO_DOXYGEN_INVOKED
+        template<typename Grammar, typename State>
+        struct fold
+          : branch<fold<Grammar, void>, State>
+        {};
+
+        template<typename Grammar, typename State>
+        struct reverse_fold
+          : branch<reverse_fold<Grammar, void>, State>
+        {};
+    #endif
 
     }}}
 

@@ -12,7 +12,6 @@
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
-#include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto { namespace transform
@@ -45,18 +44,9 @@ namespace boost { namespace proto { namespace transform
     ///
     template<typename Tag, typename Grammar, typename State>
     struct fold_tree
-      : transform::branch<
-            transform::fold<
-                nary_expr<Tag, vararg<detail::fold_tree_<Tag, Grammar> > >
-            >
-          , State
-        >
-    {};
-
-    template<typename Tag, typename Grammar>
-    struct fold_tree<Tag, Grammar, void>
       : transform::fold<
             nary_expr<Tag, vararg<detail::fold_tree_<Tag, Grammar> > >
+          , State
         >
     {};
 
@@ -64,18 +54,9 @@ namespace boost { namespace proto { namespace transform
     ///
     template<typename Tag, typename Grammar, typename State>
     struct reverse_fold_tree
-      : transform::branch<
-            transform::reverse_fold<
-                nary_expr<Tag, vararg<detail::reverse_fold_tree_<Tag, Grammar> > >
-            >
-          , State
-        >
-    {};
-
-    template<typename Tag, typename Grammar>
-    struct reverse_fold_tree<Tag, Grammar, void>
       : transform::reverse_fold<
             nary_expr<Tag, vararg<detail::reverse_fold_tree_<Tag, Grammar> > >
+          , State
         >
     {};
 
