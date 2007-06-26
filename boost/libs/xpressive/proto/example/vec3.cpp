@@ -1,3 +1,4 @@
+//[ Vec3
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -144,4 +145,4 @@ int main()
 
     return 0;
 }
-
+//]

@@ -51,6 +51,7 @@
 [def _or_                   [classref boost::proto::or_ `or_<>`]]
 [def _and_                  [classref boost::proto::and_ `and_<>`]]
 [def _if_                   [classref boost::proto::if_ `if_<>`]]
+[def _not_                  [classref boost::proto::not_ `not_<>`]]
 [def _exact_                [classref boost::proto::exact `exact<>`]]
 [def _convertible_to_       [classref boost::proto::convertible_to `convertible_to<>`]]
 [def _is_expr_              [classref boost::proto::is_expr `is_expr<>`]]
@@ -80,7 +81,7 @@ corresponding to the 5 major parts to Proto:
 [variablelist
 [[[link boost_proto.users_guide.expression_construction Expression Construction]]
     [Describes how to use Proto to build expression trees.]]
-[[Expression Evaluation]
+[[[link boost_proto.users_guide.expression_evaluation Expression Evaluation]]
     [Describes the tools Proto provides for making your expression trees do
      something useful.]]
 [[[link boost_proto.users_guide.expression_introspection Expression Introspection]]
@@ -104,6 +105,8 @@ and say a few words about Proto's philosophy.
 [include calculator.qbk]
 
 [include construction.qbk]
+
+[include evaluation.qbk]
 
 [include grammars.qbk]
 

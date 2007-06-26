@@ -31,6 +31,10 @@ wave-command = [ path.native ../../../../dist/bin/wave ] ;
 #        ../../../../boost/xpressive/proto/ref.hpp
 #        ../../../../boost/xpressive/proto/tags.hpp
 #        ../../../../boost/xpressive/proto/traits.hpp
+#        ../../../../boost/xpressive/proto/transform.hpp
+#        ../../../../boost/xpressive/proto/context/callable.hpp
+#        ../../../../boost/xpressive/proto/context/default.hpp
+#        ../../../../boost/xpressive/proto/context/null.hpp
 #        ../../../../boost/xpressive/proto/transform/arg.hpp
 #        ../../../../boost/xpressive/proto/transform/apply.hpp
 #        ../../../../boost/xpressive/proto/transform/branch.hpp
