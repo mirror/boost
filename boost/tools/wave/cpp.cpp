@@ -937,6 +937,7 @@ int error_count = 0;
                 // some preprocessing error
                     if (is_interactive || boost::wave::is_recoverable(e)) {
                         error_count += report_error_message(ctx, e);
+                        ++first;    // advance to the next token
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors
@@ -948,6 +949,7 @@ int error_count = 0;
                         boost::wave::cpplexer::is_recoverable(e)) 
                     {
                         error_count += report_error_message(e);
+                        ++first;    // advance to the next token
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors

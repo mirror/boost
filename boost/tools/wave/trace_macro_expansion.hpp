@@ -162,7 +162,7 @@ public:
     
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'expanding_function_like_macro' is called, whenever a 
+    //  The function 'expanding_function_like_macro' is called whenever a 
     //  function-like macro is to be expanded.
     //
     //  The parameter 'ctx' is a reference to the context object used for 
@@ -282,7 +282,7 @@ public:
 
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'expanding_object_like_macro' is called, whenever a 
+    //  The function 'expanding_object_like_macro' is called whenever a 
     //  object-like macro is to be expanded .
     //
     //  The parameter 'ctx' is a reference to the context object used for 
@@ -337,7 +337,7 @@ public:
     
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'expanded_macro' is called, whenever the expansion of a 
+    //  The function 'expanded_macro' is called whenever the expansion of a 
     //  macro is finished but before the rescanning process starts.
     //
     //  The parameter 'ctx' is a reference to the context object used for 
@@ -368,7 +368,7 @@ public:
 
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'rescanned_macro' is called, whenever the rescanning of a 
+    //  The function 'rescanned_macro' is called whenever the rescanning of a 
     //  macro is finished.
     //
     //  The parameter 'ctx' is a reference to the context object used for 
@@ -403,7 +403,7 @@ public:
 
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'interpret_pragma' is called, whenever a #pragma command 
+    //  The function 'interpret_pragma' is called whenever a #pragma command 
     //  directive is found which isn't known to the core Wave library, where
     //  command is the value defined as the BOOST_WAVE_PRAGMA_KEYWORD constant
     //  which defaults to "wave".
@@ -487,7 +487,7 @@ public:
         
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'opened_include_file' is called, whenever a file referred 
+    //  The function 'opened_include_file' is called whenever a file referred 
     //  by an #include directive was successfully located and opened.
     //
     //  The parameter 'ctx' is a reference to the context object used for 
@@ -535,8 +535,8 @@ public:
 
     ///////////////////////////////////////////////////////////////////////////
     //
-    //  The function 'may_skip_whitespace' is called, will be called by the 
-    //  library, whenever a token is about to be returned to the calling 
+    //  The function 'may_skip_whitespace' will be called by the 
+    //  library whenever a token is about to be returned to the calling 
     //  application. 
     //
     //  The parameter 'ctx' is a reference to the context object used for 
@@ -566,7 +566,50 @@ public:
             !preserve_whitespace : false;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'throw_exception' will be called by the library whenever a
+    //  preprocessing exception occurs.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'e' is the exception object containing detailed error 
+    //  information.
+    //
+    //  The default behavior is to call the function boost::throw_exception.
+    //  
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT>
+    void
+    throw_exception(ContextT const& ctx, boost::wave::preprocess_exception const& e)
+    {
+#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+        if (!is_import_directive_error(e))
+            boost::throw_exception(e);
+#else
+        boost::throw_exception(e);
+#endif
+    }
+    using base_type::throw_exception; 
+    
 protected:
+#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+    ///////////////////////////////////////////////////////////////////////////
+    //  Avoid throwing an error from a #import directive
+    bool is_import_directive_error(boost::wave::preprocess_exception const& e)
+    {
+        using namespace boost::wave;
+        if (e.get_errorcode() != preprocess_exception::ill_formed_directive)
+            return false;
+            
+        // the error string is formatted as 'severity: error: directive'
+        std::string error(e.description());
+        std::string::size_type p = error.find_last_of(":");
+        return p != std::string::npos && error.substr(p+2) == "import";
+    }
+#endif
+
     ///////////////////////////////////////////////////////////////////////////
     //  Interpret the different Wave specific pragma directives/operators
     template <typename ContextT, typename ContainerT>

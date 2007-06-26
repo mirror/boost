@@ -1203,6 +1203,18 @@ token_id id = token_id(found_directive);
 
     default:                // #something else
         on_illformed((*nodeval.begin()).get_value());
+        
+        // if we end up here, we have been instructed to ignore the error, so 
+        // we simply copy the whole construct to the output
+        {
+            token_sequence_type expanded;
+            get_token_value<result_type, parse_node_type> get_value;
+
+            std::copy(make_ref_transform_iterator(begin_child_it, get_value), 
+                make_ref_transform_iterator(end_child_it, get_value),
+                std::inserter(expanded, expanded.end()));
+            pending_queue.splice(pending_queue.begin(), expanded);
+        }
         break;
     }
     return true;    // return newline only
