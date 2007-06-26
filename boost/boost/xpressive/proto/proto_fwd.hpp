@@ -108,8 +108,49 @@ namespace boost { namespace proto
         struct function;
     }
 
-    template<typename Tag, typename Args, long Arity = Args::size>
-    struct expr;
+    namespace placeholder_detail_
+    {
+        struct _;
+    }
+
+    using placeholder_detail_::_;
+
+    struct default_generator;
+
+    template<template<typename> class Extends>
+    struct generator;
+
+    template<template<typename> class Extends>
+    struct pod_generator;
+
+    template<typename Generator = default_generator, typename Grammar = proto::_>
+    struct domain;
+
+    struct default_domain;
+
+    struct deduce_domain;
+
+    namespace ops
+    {
+        template<typename Tag, typename Args, long Arity = Args::size>
+        struct expr;
+
+        template<
+            typename Expr
+          , typename Derived
+          , typename Domain = default_domain
+          , typename Tag = typename Expr::proto_tag
+        >
+        struct extends;
+
+        struct is_proto_expr;
+    }
+
+    using ops::expr;
+
+    using ops::extends;
+
+    using ops::is_proto_expr;
 
     template<typename Expr>
     struct ref_;
@@ -166,31 +207,6 @@ namespace boost { namespace proto
     struct proto_expr_tag;
     struct proto_ref_tag;
     struct proto_ref_iterator_tag;
-
-    namespace placeholder_detail_
-    {
-        struct _;
-    }
-
-    using placeholder_detail_::_;
-
-    struct default_generator;
-
-    template<template<typename> class Extends>
-    struct generator;
-
-    template<template<typename> class Extends>
-    struct pod_generator;
-
-    template<typename Generator = default_generator, typename Grammar = proto::_>
-    struct domain;
-
-    typedef domain<> default_domain;
-
-    struct deduce_domain;
-
-    template<typename Expr, typename Derived, typename Domain = default_domain, typename Tag = typename Expr::proto_tag>
-    struct extends;
 
     struct default_context;
 

@@ -30,6 +30,10 @@ namespace boost { namespace proto
         typedef void proto_is_domain_;
     };
 
+    struct default_domain
+      : domain<>
+    {};
+
     struct deduce_domain
       : domain<>
     {};

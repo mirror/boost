@@ -108,8 +108,11 @@
         #include BOOST_PP_ITERATE()
         }
 
+        namespace ops
+        {
     #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
+        }
 
     #undef BOOST_PROTO_ARG
     #undef BOOST_PROTO_VOID

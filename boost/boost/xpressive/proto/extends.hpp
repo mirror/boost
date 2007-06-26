@@ -219,109 +219,113 @@ namespace boost { namespace proto
         BOOST_PP_REPEAT_FROM_TO(0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), BOOST_PROTO_DEFINE_FUN_OP, (Expr, Derived, Domain))\
         /**/
 
-    /// \brief Empty type to be used as a dummy template parameter of
-    ///     POD expression wrappers. It allows argument-dependent lookup
-    ///     to find Proto's operator overloads.
-    ///
-    /// \c proto::is_proto_expr allows argument-dependent lookup
-    ///     to find Proto's operator overloads. For example:
-    ///
-    /// \code
-    /// template<typename T, typename Dummy = proto::is_proto_expr>
-    /// struct my_terminal
-    /// {
-    ///     BOOST_PROTO_EXTENDS(
-    ///         typename proto::terminal<T>::type
-    ///       , my_terminal<T>
-    ///       , default_domain
-    ///     )
-    /// };
-    ///
-    /// // ...
-    /// my_terminal<int> _1, _2;
-    /// _1 + _2; // OK, uses proto::operator+
-    /// \endcode
-    ///
-    /// Without the second \c Dummy template parameter, Proto's operator
-    /// overloads would not be considered by name lookup.
-    struct is_proto_expr
-    {};
-
-    /// \brief extends\<\> class template for adding behaviors to a proto expression template
-    ///
-    template<typename Expr, typename Derived, typename Domain, typename Tag>
-    struct extends
+    namespace ops
     {
-        extends()
-          : expr()
-        {}
-
-        extends(extends const &that)
-          : expr(that.expr)
-        {}
-
-        extends(Expr const &expr_)
-          : expr(expr_)
-        {}
-
-        BOOST_PROTO_EXTENDS(Expr, Derived, Domain)
-        BOOST_PROTO_EXTENDS_ASSIGN_CONST(Expr, Derived, Domain)
-        BOOST_PROTO_EXTENDS_SUBSCRIPT_CONST(Expr, Derived, Domain)
-
-        // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
-        // nested preprocessor loops, use file iteration here to generate
-        // the operator() overloads, which is more efficient.
-        BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)
-
-        /// INTERNAL ONLY
+        /// \brief Empty type to be used as a dummy template parameter of
+        ///     POD expression wrappers. It allows argument-dependent lookup
+        ///     to find Proto's operator overloads.
         ///
-    #define BOOST_PP_LOCAL_MACRO(N) \
-        BOOST_PROTO_DEFINE_FUN_OP_CONST(1, N, (Expr, Derived, Domain))\
-        /**/
-
-        /// INTERNAL ONLY
+        /// \c proto::is_proto_expr allows argument-dependent lookup
+        ///     to find Proto's operator overloads. For example:
         ///
-    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
-    #include BOOST_PP_LOCAL_ITERATE()
-    };
-
-    /// \brief extends\<\> class template for adding behaviors to a proto expression template
-    ///
-    template<typename Expr, typename Derived, typename Domain>
-    struct extends<Expr, Derived, Domain, tag::terminal>
-    {
-        extends()
-          : expr()
-        {}
-
-        extends(extends const &that)
-          : expr(that.expr)
-        {}
-
-        extends(Expr const &expr_)
-          : expr(expr_)
-        {}
-
-        BOOST_PROTO_EXTENDS(Expr, Derived, Domain)
-        BOOST_PROTO_EXTENDS_ASSIGN(Expr, Derived, Domain)
-        BOOST_PROTO_EXTENDS_SUBSCRIPT(Expr, Derived, Domain)
-
-        // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
-        // nested preprocessor loops, use file iteration here to generate
-        // the operator() overloads, which is more efficient.
-        BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)
-
-        /// INTERNAL ONLY
+        /// \code
+        /// template<typename T, typename Dummy = proto::is_proto_expr>
+        /// struct my_terminal
+        /// {
+        ///     BOOST_PROTO_EXTENDS(
+        ///         typename proto::terminal<T>::type
+        ///       , my_terminal<T>
+        ///       , default_domain
+        ///     )
+        /// };
         ///
-    #define BOOST_PP_LOCAL_MACRO(N) \
-        BOOST_PROTO_DEFINE_FUN_OP(1, N, (Expr, Derived, Domain))\
-        /**/
-
-        /// INTERNAL ONLY
+        /// // ...
+        /// my_terminal<int> _1, _2;
+        /// _1 + _2; // OK, uses proto::operator+
+        /// \endcode
         ///
-    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
-    #include BOOST_PP_LOCAL_ITERATE()
-    };
+        /// Without the second \c Dummy template parameter, Proto's operator
+        /// overloads would not be considered by name lookup.
+        struct is_proto_expr
+        {};
+
+        /// \brief extends\<\> class template for adding behaviors to a proto expression template
+        ///
+        template<typename Expr, typename Derived, typename Domain, typename Tag>
+        struct extends
+        {
+            extends()
+              : expr()
+            {}
+
+            extends(extends const &that)
+              : expr(that.expr)
+            {}
+
+            extends(Expr const &expr_)
+              : expr(expr_)
+            {}
+
+            BOOST_PROTO_EXTENDS(Expr, Derived, Domain)
+            BOOST_PROTO_EXTENDS_ASSIGN_CONST(Expr, Derived, Domain)
+            BOOST_PROTO_EXTENDS_SUBSCRIPT_CONST(Expr, Derived, Domain)
+
+            // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
+            // nested preprocessor loops, use file iteration here to generate
+            // the operator() overloads, which is more efficient.
+            BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)
+
+            /// INTERNAL ONLY
+            ///
+        #define BOOST_PP_LOCAL_MACRO(N) \
+            BOOST_PROTO_DEFINE_FUN_OP_CONST(1, N, (Expr, Derived, Domain))\
+            /**/
+
+            /// INTERNAL ONLY
+            ///
+        #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
+        #include BOOST_PP_LOCAL_ITERATE()
+        };
+
+        /// \brief extends\<\> class template for adding behaviors to a proto expression template
+        ///
+        template<typename Expr, typename Derived, typename Domain>
+        struct extends<Expr, Derived, Domain, tag::terminal>
+        {
+            extends()
+              : expr()
+            {}
+
+            extends(extends const &that)
+              : expr(that.expr)
+            {}
+
+            extends(Expr const &expr_)
+              : expr(expr_)
+            {}
+
+            BOOST_PROTO_EXTENDS(Expr, Derived, Domain)
+            BOOST_PROTO_EXTENDS_ASSIGN(Expr, Derived, Domain)
+            BOOST_PROTO_EXTENDS_SUBSCRIPT(Expr, Derived, Domain)
+
+            // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
+            // nested preprocessor loops, use file iteration here to generate
+            // the operator() overloads, which is more efficient.
+            BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)
+
+            /// INTERNAL ONLY
+            ///
+        #define BOOST_PP_LOCAL_MACRO(N) \
+            BOOST_PROTO_DEFINE_FUN_OP(1, N, (Expr, Derived, Domain))\
+            /**/
+
+            /// INTERNAL ONLY
+            ///
+        #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
+        #include BOOST_PP_LOCAL_ITERATE()
+        };
+
+    } // namespace ops
 
 }}
 
