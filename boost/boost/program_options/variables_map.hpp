@@ -24,6 +24,29 @@ namespace boost { namespace program_options {
     class value_semantic;
     class variables_map;
 
+    // forward declaration
+
+    /** Stores in 'm' all options that are defined in 'options'. 
+        If 'm' already has a non-defaulted value of an option, that value
+        is not changed, even if 'options' specify some value.        
+    */
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void store(const basic_parsed_options<char>& options, variables_map& m,
+                    bool utf8 = false);
+
+    /** Stores in 'm' all options that are defined in 'options'. 
+        If 'm' already has a non-defaulted value of an option, that value
+        is not changed, even if 'options' specify some value.        
+        This is wide character variant.
+    */
+    BOOST_PROGRAM_OPTIONS_DECL 
+    void store(const basic_parsed_options<wchar_t>& options, 
+                    variables_map& m);
+
+
+    /** Runs all 'notify' function for options in 'm'. */
+    BOOST_PROGRAM_OPTIONS_DECL void notify(variables_map& m);
+
     /** Class holding value of option. Contains details about how the 
         value is set and allows to conveniently obtain the value.
     */
@@ -66,8 +89,8 @@ namespace boost { namespace program_options {
         // be easily accessible, so we need to store semantic here.
         shared_ptr<const value_semantic> m_value_semantic;
 
-        friend BOOST_PROGRAM_OPTIONS_DECL void 
-        store(const basic_parsed_options<char>& options, 
+        friend BOOST_PROGRAM_OPTIONS_DECL
+        void store(const basic_parsed_options<char>& options, 
               variables_map& m, bool);
         friend BOOST_PROGRAM_OPTIONS_DECL void notify(variables_map& m);
     };
@@ -134,29 +157,11 @@ namespace boost { namespace program_options {
             be changed by subsequence assignments. */
         std::set<std::string> m_final;
 
-        friend void store(const basic_parsed_options<char>& options, 
+        friend BOOST_PROGRAM_OPTIONS_DECL
+        void store(const basic_parsed_options<char>& options, 
                           variables_map& xm,
                           bool utf8);
     };
-
-    /** Stores in 'm' all options that are defined in 'options'. 
-        If 'm' already has a non-defaulted value of an option, that value
-        is not changed, even if 'options' specify some value.        
-    */
-    BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<char>& options, variables_map& m,
-                    bool utf8 = false);
-
-    /** Stores in 'm' all options that are defined in 'options'. 
-        If 'm' already has a non-defaulted value of an option, that value
-        is not changed, even if 'options' specify some value.        
-        This is wide character variant.
-    */
-    BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<wchar_t>& options, 
-                    variables_map& m);
-
-
-    /** Runs all 'notify' function for options in 'm'. */
-    BOOST_PROGRAM_OPTIONS_DECL void notify(variables_map& m);
 
 
     /*
