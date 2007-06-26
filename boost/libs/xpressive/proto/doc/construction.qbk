@@ -316,6 +316,10 @@ explained in later sections.
     [`tag::subscript`]
     [`subscript<>`]]
 
+    [[ternary `?:`]
+    [`tag::if_else_`]
+    [`if_else_<>`]]
+
     [[nary function call]
     [`tag::function`]
     [`function<>`]]
