@@ -19,6 +19,8 @@
 #include <boost/serialization/map.hpp>
 #endif
 
+#include <boost/iterator/transform_iterator.hpp>
+
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
 #include BOOST_ABI_PREFIX
@@ -55,6 +57,37 @@ private:
             boost::serialization::base_object<base_type>(*this));
     }
 #endif
+
+private:
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  This is a special iterator allowing to iterate the names of all defined 
+    //  macros.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename StringT>
+    struct get_first
+    {
+        typedef typename StringT const& result_type;
+
+        template <typename First, typename Second>
+        StringT const& operator() (std::pair<First, Second> const& p) const
+        {
+            return p.first;
+        }
+    };
+    typedef get_first<StringT> unary_functor;
+
+public:
+    typedef transform_iterator<unary_functor, iterator> name_iterator;
+    typedef transform_iterator<unary_functor, const_iterator> const_name_iterator;
+
+    template <typename Iterator>
+    static 
+    transform_iterator<unary_functor, Iterator> make_iterator(Iterator it)
+    {
+        return boost::make_transform_iterator<unary_functor>(it);
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

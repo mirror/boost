@@ -529,6 +529,79 @@ namespace {
 #endif
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // list all defined macros
+    bool list_macro_names(context_type const& ctx, std::string filename)
+    {
+    // open file for macro names listing
+        std::ofstream macronames_out;
+        fs::path macronames_file (filename, fs::native);
+
+        if (macronames_file != "-") {
+            macronames_file = fs::complete(macronames_file);
+            fs::create_directories(macronames_file.branch_path());
+            macronames_out.open(macronames_file.string().c_str());
+            if (!macronames_out.is_open()) {
+                cerr << "wave: could not open file for macro name listing: " 
+                     << macronames_file.string() << endl;
+                return false;
+            }
+        }
+        else {
+            macronames_out.copyfmt(cout);
+            macronames_out.clear(cout.rdstate());
+            static_cast<std::basic_ios<char> &>(macronames_out).rdbuf(cout.rdbuf());
+        }
+
+    // simply list all defined macros and its definitions
+        typedef context_type::const_name_iterator name_iterator;
+        name_iterator end = ctx.macro_names_end();
+        for (name_iterator it = ctx.macro_names_begin(); it != end; ++it) 
+        {
+            typedef std::vector<context_type::token_type> parameters_type;
+            
+        bool has_pars = false;
+        bool predef = false;
+        context_type::position_type pos;
+        parameters_type pars;
+        context_type::token_sequence_type def;
+            
+            if (ctx.get_macro_definition(*it, has_pars, predef, pos, pars, def))
+            {
+                macronames_out << *it;
+                if (has_pars) {
+                // list the parameter names for function style macros
+                    macronames_out << "(";
+                    parameters_type::const_iterator pend = pars.end();
+                    for (parameters_type::const_iterator pit = pars.begin();
+                         pit != pend; /**/)
+                    {
+                        macronames_out << (*pit).get_value();
+                        if (++pit != pend)
+                            macronames_out << ", ";
+                    }
+                    macronames_out << ")";
+                }
+                macronames_out << "=";
+
+            // print the macro definition
+                context_type::token_sequence_type::const_iterator dend = def.end();
+                for (context_type::token_sequence_type::const_iterator dit = def.begin();
+                     dit != dend; ++dit)
+                {
+                    macronames_out << (*dit).get_value();
+                }
+
+            // predefined macros get a 'P' appended
+                if (predef) 
+                    macronames_out << " (P)";
+                    
+                macronames_out << std::endl;
+            }
+        }
+        return true;
+    }
+
 ///////////////////////////////////////////////////////////////////////////////
 }   // anonymous namespace
 
@@ -960,6 +1033,12 @@ int error_count = 0;
 
         if (is_interactive) 
             save_state(vm, ctx);    // write the internal tables to disc
+
+    // list all defined macros at the end of the preprocessing
+        if (vm.count("macronames")) {
+            if (!list_macro_names(ctx, vm["macronames"].as<string>()))
+                return -1;
+        }
     }
     catch (boost::wave::cpp_exception const &e) {
     // some preprocessing error
@@ -1054,6 +1133,8 @@ main (int argc, char *argv[])
 #endif 
             ("listincludes,l", po::value<string>(), 
                 "list names of included files to a file [arg] or to stdout [-]")
+            ("macronames,m", po::value<string>(), 
+                "list names of all defined macros to a file [arg] or to stdout [-]")
             ("preserve,p", po::value<int>()->default_value(0), 
                 "preserve whitespace\n"
                             "0: no whitespace is preserved (default),\n"

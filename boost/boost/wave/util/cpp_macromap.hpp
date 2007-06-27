@@ -140,6 +140,19 @@ public:
 
     position_type &get_main_pos() { return main_pos; }
     
+//  interface for macro name introspection
+    typedef typename defined_macros_type::name_iterator name_iterator;
+    typedef typename defined_macros_type::const_name_iterator const_name_iterator;
+    
+    name_iterator begin() 
+        { return defined_macros_type::make_iterator(current_macros->begin()); }
+    name_iterator end() 
+        { return defined_macros_type::make_iterator(current_macros->end()); }
+    const_name_iterator begin() const
+        { return defined_macros_type::make_iterator(current_macros->begin()); }
+    const_name_iterator end() const
+        { return defined_macros_type::make_iterator(current_macros->end()); }
+     
 protected:
 //  Helper functions for expanding all macros in token sequences
     template <typename IteratorT, typename ContainerT>

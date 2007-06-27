@@ -15,8 +15,6 @@ TODO (known issues):
   function.
 - Fix the trigraph backslash problem in the re2c (C/C++ and IDL) scanners, if 
   there is the end of the (internal) buffer just in between a '??/' and a '\n'.
-- Add a macro introspection facility allowing to iterate on all defined macro 
-  names.
 - Change the cpp_exception::what() function to return more meaningful error 
   texts.
   
@@ -117,6 +115,11 @@ CHANGELOG
   directive is passed through to the output) whenever the pp constant 
   BOOST_WAVE_SUPPORT_MS_EXTENSIONS is defined to something not equal to zero.
 - Fixed the wave driver applet to correctly continue after a error or warning.
+- Added a macro introspection facility allowing to iterate on all defined macro 
+  names.
+- Added a new commandline option --macronames/-m to the Wave driver application
+  which lists all defined macros and their definitions to an optionally 
+  specified file (default is cout).
 
 Boost V1.34.0
 - Wave Version 1.2.4
