@@ -201,6 +201,8 @@ namespace boost { namespace program_options {
         return *this;
     }
 
+    const unsigned options_description::m_default_line_length = 80;
+
     options_description::options_description(unsigned line_length)
     : m_line_length(line_length)
     {}
