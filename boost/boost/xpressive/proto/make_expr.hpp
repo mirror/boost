@@ -12,6 +12,7 @@
     #define BOOST_PROTO_MAKE_EXPR_HPP_EAN_04_01_2005
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/version.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/control/if.hpp>
     #include <boost/preprocessor/control/expr_if.hpp>
@@ -49,9 +50,27 @@
     #include <boost/xpressive/proto/traits.hpp>
     #include <boost/xpressive/proto/domain.hpp>
     #include <boost/xpressive/proto/generate.hpp>
-    #include <boost/fusion/sequence/intrinsic/at.hpp>
-    #include <boost/fusion/sequence/intrinsic/value_at.hpp>
-    #include <boost/fusion/sequence/intrinsic/size.hpp>
+    #if BOOST_VERSION >= 103500
+    # include <boost/fusion/sequence/intrinsic/at.hpp>
+    # include <boost/fusion/sequence/intrinsic/value_at.hpp>
+    # include <boost/fusion/sequence/intrinsic/size.hpp>
+    namespace boost { namespace proto { namespace detail
+    {
+        namespace fusion_ = fusion;
+    }}}
+    #else
+    # include <boost/spirit/fusion/sequence/at.hpp>
+    # include <boost/spirit/fusion/sequence/value_at.hpp>
+    # include <boost/spirit/fusion/sequence/size.hpp>
+    namespace boost { namespace proto { namespace detail { namespace fusion_
+    {
+        namespace result_of = fusion::meta;
+        template<int N, typename Seq>
+        typename result_of::at_c<Seq, N>::type at_c(Seq &seq) { return fusion::at<N>(seq); }
+        template<int N, typename Seq>
+        typename result_of::at_c<Seq const, N>::type at_c(Seq const &seq) { return fusion::at<N>(seq); }
+    }}}}
+    #endif
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     /// INTERNAL ONLY
@@ -73,16 +92,16 @@
 
     /// INTERNAL ONLY
     ///
-    #define BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                         \
+    # define BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                        \
         typename remove_reference<                                                                  \
-            typename fusion::result_of::value_at_c<BOOST_PP_TUPLE_ELEM(2, 0, DATA), N >::type       \
+            typename detail::fusion_::result_of::value_at_c<BOOST_PP_TUPLE_ELEM(2, 0, DATA), N >::type       \
         >::type                                                                                     \
         /**/
 
     /// INTERNAL ONLY
     ///
-    #define BOOST_PROTO_AT(Z, N, DATA)                                                              \
-        fusion::at_c<N >(BOOST_PP_TUPLE_ELEM(2, 0, DATA))                                           \
+    # define BOOST_PROTO_AT(Z, N, DATA)                                                             \
+        detail::fusion_::at_c<N >(BOOST_PP_TUPLE_ELEM(2, 0, DATA))                                           \
         /**/
 
     /// INTERNAL ONLY
@@ -358,14 +377,14 @@
             {
                 typedef expr<
                     tag::terminal
-                  , args0<typename fusion::result_of::value_at_c<Sequence, 0>::type>
+                  , args0<typename fusion_::result_of::value_at_c<Sequence, 0>::type>
                 > expr_type;
 
                 typedef typename Domain::template apply<expr_type>::type type;
 
                 static type const call(Sequence const &sequence)
                 {
-                    expr_type that = {fusion::at_c<0>(sequence)};
+                    expr_type that = {fusion_::at_c<0>(sequence)};
                     return Domain::make(that);
                 }
             };
@@ -417,7 +436,7 @@
                     Tag
                   , deduce_domain
                   , Sequence
-                  , fusion::result_of::size<Sequence>::type::value
+                  , detail::fusion_::result_of::size<Sequence>::type::value
                 >
             {};
 
@@ -427,7 +446,7 @@
                     Tag
                   , Domain
                   , Sequence
-                  , fusion::result_of::size<Sequence>::type::value
+                  , detail::fusion_::result_of::size<Sequence>::type::value
                 >
             {};
 

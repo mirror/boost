@@ -53,6 +53,11 @@ namespace boost { namespace proto
         {
             dont_care(...);
         };
+
+        template<typename T>
+        struct remove_cv_ref
+          : remove_cv<typename remove_reference<T>::type>
+        {};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -155,23 +160,6 @@ namespace boost { namespace proto
     template<typename Expr>
     struct ref_;
 
-    struct identity_transform;
-
-    struct arg_transform;
-
-    struct left_transform;
-
-    struct right_transform;
-
-    template<typename Always>
-    struct always_transform;
-
-    template<typename First, typename Second>
-    struct compose_transforms;
-
-    template<typename Predicate, typename IfTransform, typename ElseTransform = identity_transform>
-    struct conditional_transform;
-
     template<typename Expr, typename Grammar>
     struct matches;
 
@@ -268,14 +256,6 @@ namespace boost { namespace proto
 
         template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename _ = void>
         struct unpack_expr;
-    }
-
-    namespace detail
-    {
-        template<typename T>
-        struct remove_cv_ref
-          : remove_cv<typename remove_reference<T>::type>
-        {};
     }
 
     template<typename Expr>
@@ -455,6 +435,9 @@ namespace boost { namespace proto
 
         template<typename Grammar>
         struct list;
+
+        template<typename Grammar>
+        struct tail;
 
         template<typename Grammar>
         struct pass_through;

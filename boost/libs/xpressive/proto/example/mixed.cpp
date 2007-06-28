@@ -18,6 +18,9 @@
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/debug.hpp>
 #include <boost/xpressive/proto/context.hpp>
+#include <boost/typeof/std/list.hpp>
+#include <boost/typeof/std/vector.hpp>
+#include <boost/typeof/std/complex.hpp>
 
 using namespace boost;
 using proto::_;
