@@ -412,7 +412,7 @@ $ export LC_CTYPE=ru_RU.KOI8-R
       method of that class:
       <programlisting>
 parsed_options parsed = 
-    command_line_parser(argv, argc).options(desc).allow_unregistered().run();      
+    command_line_parser(argc, argv).options(desc).allow_unregistered().run();      
       </programlisting>
       
       For each token that looks like an option, but does not have a known name, 
