@@ -427,7 +427,7 @@ parsed_options parsed =
       The function will collect original tokens for all unrecognized values, and optionally, all found positional options.
       Say, if your code handles a few options, but does not handles positional options at all, you can use the function like this:
       <programlisting>
-vector&lt;string&gt; to_pass_further = collect_arguments(parsed.option, include_positional);
+vector&lt;string&gt; to_pass_further = collect_unrecognized(parsed.options, include_positional);
       </programlisting>
       
       </para>     
