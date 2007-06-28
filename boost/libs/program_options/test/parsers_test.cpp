@@ -20,7 +20,11 @@ using namespace boost;
 #include <sstream>
 using namespace std;
 
+#if defined(__sun)
+#include <stdlib.h> // for putenv on solaris
+#else
 #include <cstdlib> // for putenv
+#endif
 
 #define TEST_CHECK_THROW(expression, exception, description) \
     try \
