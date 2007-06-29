@@ -224,7 +224,8 @@ namespace detail
         static bool is_blank(Char ch)
         {
             BOOST_MPL_ASSERT_RELATION('\t', ==, L'\t');
-            return L'\t' == ch;
+            BOOST_MPL_ASSERT_RELATION(' ', ==, L' ');
+            return L' ' == ch || L'\t' == ch;
         }
 
         static bool is_underscore(Char ch)
