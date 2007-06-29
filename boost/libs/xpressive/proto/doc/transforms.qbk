@@ -46,9 +46,9 @@ objects of your choosing. What happens when you call
 child of `expr` according to `Rule1`'s transform, do the same thing to the
 right child using `Rule2`, and combine the results somehow. Of course, `Rule1`
 and `Rule2` might be defined in terms of other rules with other transforms, so
-the process executes recursively. Some transforms, the binary `fold<>` in
-particular, use the result of transforming one child as the `state` parameter
-when transforming the other child. In this way, the results of the recursive
+the process executes recursively. Some transforms, the `fold<>` in particular,
+use the result of transforming one child as the `state` parameter when
+transforming the other child. In this way, the results of the recursive
 transformations can be accumulated bottom-up.
 
 That's it, in a nutshell. Now let's crack this nut and peek inside.
@@ -570,47 +570,6 @@ Example:
 
 [endsect]
 
-[/
-[section:conditional [^conditional<>]]
-
-    namespace boost { namespace proto { namespace transform
-    {
-        template<typename Predicate, typename Grammar0, typename Grammar1>
-        struct conditional
-          : or_<
-                and_<
-                    if_<Predicate>
-                  , Grammar0
-                >
-              , and_<
-                    not_<if_<Predicate> >
-                  , Grammar1
-                >
-            >
-        {};
-    }}}
-
-Above is the complete definition of the `conditional<>` transform. It is a
-higher level transform, built out of more primitive transforms. It has the
-effect of conditionally selecting one grammar / transform to apply based on
-the result of invoking an MPL predicate with a Proto expression.
-
-Example:
-
-    // This rule tests the size of a terminal object, and if it's below a
-    // certain threshold applies a "small_buffer" transformation. Otherwise,
-    // it applies a "dynamic_buffer" transformation (defined elsewhere).
-    struct StoreTerminal
-      : transform::conditional<
-            mpl::less_equal<mpl::sizeof_<proto::result_of::arg<mpl::_> >, mpl::size_t<4> >
-          , small_buffer< transform::arg< terminal<_> > >
-          , dynamic_buffer< transform::arg< terminal<_> > >
-        >
-    {};
-
-[endsect]
-]
-
 [section:list [^list<>]]
 
     namespace boost { namespace proto { namespace transform
@@ -650,23 +609,25 @@ See the [link reverse_fold_example [^reverse_fold<>] example].
 
     namespace boost { namespace proto { namespace transform
     {
-        template<typename Grammar>
+        template<typename Grammar, typename State = void>
         struct fold;
 
-        template<typename Grammar>
+        template<typename Grammar, typename State = void>
         struct reverse_fold;
     }}}
 
 The transforms `fold<>` and `reverse_fold<>` are akin to the
-`std::accumulate()` algorithm in the STL. They both iterate over the pairs of
-children in the grammar and the expression, applying the child grammar's
-transform to the corresponding child expression. The result of one transform
-is used as the state of the next transform, such that the transforms nest
-like Russian dolls. The `fold<>` transform iterates over the children in
-order, starting with the 0th child. The `reverse_fold<>` transform does it
-in reverse order, starting with the Nth child. (Note that for building things
-like cons lists, you'll often want to built it back-to-front with
-`reverse_fold<>`.)
+`std::accumulate()` algorithm in the STL. They iterate over some sequence and
+accumulate some state at each element. For Proto's `fold<>` and 
+`reverse_fold<>`, the "elements" of the sequence are actually pairs consisting
+of the corresponding child grammars and expressions. The state is accumulated
+by applying the child grammar's transform to the corresponding child
+expression. The result of one transform is used as the state of the next
+transform, such that the transforms nest like Russian dolls. The `fold<>`
+transform iterates over the children in order, starting with the 0th child.
+The `reverse_fold<>` transform does it in reverse order, starting with the Nth
+child. (Note that for building things like cons lists, you'll often want to
+built it back-to-front with `reverse_fold<>`.)
 
 [def __arg_N__ proto_arg[~N]]
 [def __arg_N_sub_1__ proto_arg[~N-1]]
@@ -733,6 +694,22 @@ like cons lists, you'll often want to built it back-to-front with
     ]
 ]
 
+Both the `fold<>` and `reverse_fold<>` transforms take an optional `State`
+template parameter. For non-`void` `State` parameters, the following
+equivalances hold:
+
+[table fold<> and reverse_fold<> Equivalencies
+    [[Short-Cut Grammar]                        [Equivalent Grammar]]
+    [[`transform::fold<Grammar, State>`]        [``transform::branch<
+    transform::fold<Grammar>
+  , State
+>``]]
+    [[`transform::reverse_fold<Grammar, State>`][``transform::branch<
+    transform::reverse_fold<Grammar>
+  , State
+>``]]
+]
+
 [#reverse_fold_example]Example:
 
 [AsArgList]
@@ -764,9 +741,9 @@ like a separator. The `Grammar` parameter represents that grammar that the
 separated sub-expressions must match, and the transform that will be applied
 to each. The optional `State` parameter is the initial state of the transform.
 
-These are higher-level transforms, implemented in terms of the `branch<>` and
-`fold<>` transforms. They are probably best understood in terms of their
-definition, which is fairly small.
+These are higher-level transforms, implemented in terms of the `fold<>`
+transform. They are probably best understood in terms of their definition,
+which is fairly small.
 
     namespace detail
     {
@@ -784,23 +761,11 @@ definition, which is fairly small.
         {};
     }
     
-    // If a State parameter is specified, use a branch<> compiler.
     template<typename Tag, typename Grammar, typename State = void>
     struct fold_tree
-      : transform::branch<
-            transform::fold<
-                nary_expr<Tag, vararg<detail::fold_tree_<Tag, Grammar> > >
-            >
-          , State
-        >
-    {};
-
-    // Otherwise, if no State parameter is specified, just use whatever
-    // state is passed in as the initial state.
-    template<typename Tag, typename Grammar>
-    struct fold_tree<Tag, Grammar, void>
       : transform::fold<
             nary_expr<Tag, vararg<detail::fold_tree_<Tag, Grammar> > >
+          , State
         >
     {};
 
