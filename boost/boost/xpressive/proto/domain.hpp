@@ -19,6 +19,15 @@
 namespace boost { namespace proto
 {
 
+    namespace detail
+    {
+        struct not_a_generator
+        {};
+
+        struct not_a_grammar
+        {};
+    }
+
     template<typename Generator, typename Grammar>
     struct domain
       : Generator
@@ -35,7 +44,7 @@ namespace boost { namespace proto
     {};
 
     struct deduce_domain
-      : domain<>
+      : domain<detail::not_a_generator, detail::not_a_grammar>
     {};
 
     template<typename T, typename EnableIf>

@@ -123,6 +123,22 @@ namespace boost { namespace proto
             >
         {};
 
+        template<typename Trait, typename Arg, typename Expr>
+        struct enable_unary<deduce_domain, Trait, Arg, Expr>
+          : boost::enable_if<
+                boost::mpl::and_<
+                    Trait
+                  , boost::proto::matches<Expr, typename domain_of<Arg>::type::grammar>
+                >
+              , Expr
+            >
+        {};
+
+        template<typename Trait, typename Arg, typename Expr>
+        struct enable_unary<default_domain, Trait, Arg, Expr>
+          : boost::enable_if<Trait, Expr>
+        {};
+
         template<typename Domain, typename Trait1, typename Arg1, typename Trait2, typename Arg2, typename Expr>
         struct enable_binary
           : boost::enable_if<
@@ -130,6 +146,25 @@ namespace boost { namespace proto
                     mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
                   , boost::proto::matches<Expr, typename Domain::grammar>
                 >
+              , Expr
+            >
+        {};
+
+        template<typename Trait1, typename Arg1, typename Trait2, typename Arg2, typename Expr>
+        struct enable_binary<deduce_domain, Trait1, Arg1, Trait2, Arg2, Expr>
+          : boost::enable_if<
+                boost::mpl::and_<
+                    mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
+                  , boost::proto::matches<Expr, typename deduce_domain_<typename domain_of<Arg1>::type, Arg2>::type::grammar>
+                >
+              , Expr
+            >
+        {};
+
+        template<typename Trait1, typename Arg1, typename Trait2, typename Arg2, typename Expr>
+        struct enable_binary<default_domain, Trait1, Arg1, Trait2, Arg2, Expr>
+          : boost::enable_if_c<
+                (3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))
               , Expr
             >
         {};
@@ -359,7 +394,7 @@ namespace boost { namespace proto
 #ifndef BOOST_PROTO_DOXYGEN_INVOKED
     namespace exops
     {
-        BOOST_PROTO_DEFINE_OPERATORS(is_extension, deduce_domain)
+        BOOST_PROTO_DEFINE_OPERATORS(is_extension, default_domain)
         using proto::if_else;
     }
 #endif
