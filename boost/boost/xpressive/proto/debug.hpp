@@ -15,6 +15,7 @@
 #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
 #include <iomanip>
 #include <iostream>
+#include <typeinfo>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
