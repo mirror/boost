@@ -137,7 +137,7 @@ splitting).
 [*Throws]: `std::runtime_error` if the complexity of matching the expression against 
 an N character string begins to exceed O(N[super 2]), or if the program runs 
 out of stack space while matching the expression (if Boost.Regex is configured 
-in recursive mode), or if the matcher exhausts it's permitted memory 
+in recursive mode), or if the matcher exhausts its permitted memory 
 allocation (if Boost.Regex is configured in non-recursive mode).
 
 [#boost_regex.regex_token_iterator.construct3]
@@ -164,7 +164,7 @@ be found: from the end of the last match found, to the end of the underlying seq
 [*Throws]: `std::runtime_error` if the complexity of matching the expression 
 against an N character string begins to exceed O(N[super 2]), or if the 
 program runs out of stack space while matching the expression (if Boost.Regex is 
-configured in recursive mode), or if the matcher exhausts it's permitted memory 
+configured in recursive mode), or if the matcher exhausts its permitted memory 
 allocation (if Boost.Regex is configured in non-recursive mode).
 
 [#boost_regex.regex_token_iterator.construct4]
@@ -191,7 +191,7 @@ the end of the underlying sequence.
 [*Throws]: `std::runtime_error` if the complexity of matching the expression 
 against an N character string begins to exceed O(N[super 2]), or if the 
 program runs out of stack space while matching the expression (if Boost.Regex 
-is configured in recursive mode), or if the matcher exhausts it's 
+is configured in recursive mode), or if the matcher exhausts its 
 permitted memory allocation (if Boost.Regex is configured in non-recursive mode).
 
 [#boost_regex.regex_token_iterator.construct5]
@@ -243,7 +243,7 @@ permitted memory allocation (if Boost.Regex is configured in non-recursive mode)
 [*Throws]: `std::runtime_error` if the complexity of matching the expression 
 against an N character string begins to exceed O(N[super 2]), or if the program 
 runs out of stack space while matching the expression (if Boost.Regex is 
-configured in recursive mode), or if the matcher exhausts it's permitted 
+configured in recursive mode), or if the matcher exhausts its permitted 
 memory allocation (if Boost.Regex is configured in non-recursive mode).
 
 [*Returns]: `*this`.

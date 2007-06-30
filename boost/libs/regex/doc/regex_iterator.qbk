@@ -75,7 +75,7 @@ The object /re/ must exist for the lifetime of the [regex_iterator].
 [*Throws]: `std::runtime_error` if the complexity of matching the expression 
 against an N character string begins to exceed O(N[super 2]), or if the program 
 runs out of stack space while matching the expression (if Boost.Regex is 
-configured in recursive mode), or if the matcher exhausts it's permitted 
+configured in recursive mode), or if the matcher exhausts its permitted 
 memory allocation (if Boost.Regex is configured in non-recursive mode).
 
 [#boost_regex.regex_iterator.construct3]
@@ -169,7 +169,7 @@ next (possibly zero length) match from one position to the right of the last mat
 [*Throws]: `std::runtime_error` if the complexity of matching the expression 
 against an N character string begins to exceed O(N[super 2]), or if the 
 program runs out of stack space while matching the expression (if Boost.Regex is 
-configured in recursive mode), or if the matcher exhausts it's permitted 
+configured in recursive mode), or if the matcher exhausts its permitted 
 memory allocation (if Boost.Regex is configured in non-recursive mode).
 
 [*Returns]: *this.

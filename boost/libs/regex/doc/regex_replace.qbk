@@ -95,7 +95,7 @@ is replaced.
 [*Throws]: `std::runtime_error` if the complexity of matching the expression 
 against an N character string begins to exceed O(N[super 2]), or if the 
 program runs out of stack space while matching the expression (if Boost.Regex is 
-configured in recursive mode), or if the matcher exhausts it's permitted 
+configured in recursive mode), or if the matcher exhausts its permitted 
 memory allocation (if Boost.Regex is configured in non-recursive mode).
 
 [*Returns]: out.
