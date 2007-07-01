@@ -65,14 +65,14 @@ public:
    operator size_type() const { return m_capacity; }
 };</pre></p>
         \pre <code>capacity >= min_capacity</code>
-        <p>The <code>m_capacity</code> represents the capacity of the <code>circular_buffer_space_optimized</code> and
-        the <code>m_min_capacity</code> determines the minimal allocated size of its internal buffer.</p>
+        <p>The <code>capacity()</code> represents the capacity of the <code>circular_buffer_space_optimized</code> and
+        the <code>min_capacity()</code> determines the minimal allocated size of its internal buffer.</p>
         <p>The converting constructor of the <code>capacity_control</code> allows implicit conversion from
         <code>size_type</code>-like types which ensures compatibility of creating an instance of the
         <code>circular_buffer_space_optimized</code> with other STL containers. On the other hand the operator
-        <code>%size_type()</code> (returning <code>m_capacity</code>) provides implicit conversion to the
-        <code>size_type</code> which allows to treat the capacity of the <code>circular_buffer_space_optimized</code>
-        the same way as in the <code><a href="circular_buffer.html">circular_buffer</a></code>.</p>
+        <code>%size_type()</code> provides implicit conversion to the <code>size_type</code> which allows to treat the
+        capacity of the <code>circular_buffer_space_optimized</code> the same way as in the
+        <code><a href="circular_buffer.html">circular_buffer</a></code>.</p>
     */
     typedef cb_details::capacity_control<size_type> capacity_type;
 
