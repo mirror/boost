@@ -49,6 +49,9 @@ namespace boost { namespace proto
 {
     namespace detail
     {
+        typedef char yes_type;
+        typedef char (&no_type)[2];
+
         struct dont_care
         {
             dont_care(...);
@@ -198,7 +201,7 @@ namespace boost { namespace proto
 
     struct default_context;
 
-    template<typename Derived>
+    template<typename Derived, typename DefaultCtx = default_context>
     struct callable_context;
 
     template<typename T, typename Domain = default_domain>
@@ -365,10 +368,10 @@ namespace boost { namespace proto
     {
         namespace detail
         {
+        	using proto::detail::yes_type;
+        	using proto::detail::no_type;
+        	
             struct default_factory;
-
-            typedef char yes_type;
-            typedef char (&no_type)[2];
 
             no_type is_placeholder_expression_fun(...);
 

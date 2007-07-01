@@ -53,9 +53,9 @@
         {
             /// null_context::eval
             ///
-            template<typename Expr>
+            template<typename Expr, typename ThisContext = null_context const>
             struct eval
-              : null_eval<Expr, null_context const>
+              : null_eval<Expr, ThisContext>
             {};
         };
 

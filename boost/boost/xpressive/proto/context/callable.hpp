@@ -24,21 +24,36 @@
     #include <boost/preprocessor/repetition/enum_trailing.hpp>
     #include <boost/preprocessor/arithmetic/inc.hpp>
     #include <boost/preprocessor/selection/max.hpp>
+    #include <boost/mpl/if.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/utility/result_of.hpp>
     #include <boost/type_traits/remove_cv.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
-    #include <boost/xpressive/proto/tags.hpp>
-    #include <boost/xpressive/proto/eval.hpp>
-    #include <boost/xpressive/proto/context/default.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
     namespace boost { namespace proto
     {
+        namespace detail
+        {
+            struct private_type_
+            {
+                private_type_ const &operator,(int) const;
+            };
+
+            template<typename T>
+            yes_type check_is_expr_handled(T const &);
+
+            no_type check_is_expr_handled(private_type_ const &);
+
+            template<typename Context, long Arity>
+            struct callable_context_wrapper;
+
+            template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
+            struct is_expr_handled;
+        }
 
         template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
-        struct callable_eval
-        {};
+        struct callable_eval;
 
     #define BOOST_PROTO_ARG_N_TYPE(Z, N, Expr)                                                      \
         typename proto::result_of::arg_c<Expr, N>::const_reference                                  \
@@ -59,14 +74,18 @@
 
         /// callable_context
         ///
-        template<typename Context>
+        template<typename Context, typename DefaultCtx>
         struct callable_context
         {
             /// callable_context::eval
             ///
-            template<typename Expr>
+            template<typename Expr, typename ThisContext = Context>
             struct eval
-              : callable_eval<Expr, Context>
+              : mpl::if_<
+                    detail::is_expr_handled<Expr, Context>
+                  , callable_eval<Expr, ThisContext>
+                  , typename DefaultCtx::template eval<Expr, Context>
+                >::type
             {};
         };
 
@@ -79,25 +98,44 @@
     #define N BOOST_PP_ITERATION()
     #define ARG_COUNT BOOST_PP_MAX(1, N)
 
-        template<typename Expr, typename Context>
-        struct callable_eval<Expr, Context, N>
+        namespace detail
         {
-        private:
-            /// INTERNAL ONLY
-            ///
-            typedef typename remove_cv<Context>::type context_type;
-            /// INTERNAL ONLY
-            ///
-            struct inner_context
-              : context_type
+            #if N > 0
+            template<typename Context>
+            struct callable_context_wrapper<Context, N>
+              : remove_cv<Context>::type
             {
-                inner_context();
-                struct private_type_ { private_type_ const &operator,(int) const; };
+                callable_context_wrapper();
                 typedef private_type_ const &(*pointer_to_function)(BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(ARG_COUNT), detail::dont_care BOOST_PP_INTERCEPT));
                 operator pointer_to_function() const;
             };
+            #endif
 
-        public:
+            template<typename Expr, typename Context>
+            struct is_expr_handled<Expr, Context, N>
+            {
+                static callable_context_wrapper<Context, ARG_COUNT> &sctx_;
+                static Expr &sexpr_;
+
+                BOOST_STATIC_CONSTANT(bool, value =
+                (
+                    sizeof(yes_type) ==
+                    sizeof(
+                        detail::check_is_expr_handled(
+                            (sctx_(
+                                typename Expr::proto_tag()
+                                BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, sexpr_)
+                            ), 0)
+                        )
+                )));
+
+                typedef mpl::bool_<value> type;
+            };
+        }
+
+        template<typename Expr, typename Context>
+        struct callable_eval<Expr, Context, N>
+        {
             typedef
                 typename boost::result_of<
                     Context(
@@ -109,38 +147,10 @@
 
             result_type operator ()(Expr &expr, Context &context) const
             {
-                BOOST_STATIC_CONSTANT(bool, value =
-                    (
-                        sizeof(yes_type) ==
-                        sizeof(
-                            callable_eval::check(
-                                (static_cast<inner_context &>(const_cast<context_type &>(context))(
-                                    typename Expr::proto_tag()
-                                    BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
-                                ), 0)
-                            )
-                    )));
-                return (*this)(expr, context, mpl::bool_<value>());
-            }
-
-        private:
-
-            typedef char yes_type;
-            typedef char (&no_type)[2];
-            template<typename T> static yes_type check(T const &);
-            static no_type check(typename inner_context::private_type_ const &);
-
-            result_type operator ()(Expr &expr, Context &context, mpl::true_) const
-            {
                 return context(
                     typename Expr::proto_tag()
                     BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
                 );
-            }
-
-            result_type operator ()(Expr &expr, Context &context, mpl::false_) const
-            {
-                return default_eval<Expr, Context>()(expr, context);
             }
         };
 

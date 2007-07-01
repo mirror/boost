@@ -62,7 +62,6 @@
 
     namespace boost { namespace proto
     {
-
         template<typename Expr, typename Context, typename Tag = typename Expr::proto_tag, long Arity = Expr::proto_arity::value>
         struct default_eval
         {};
@@ -336,9 +335,9 @@
         {
             /// default_context::eval
             ///
-            template<typename Expr>
+            template<typename Expr, typename ThisContext = default_context const>
             struct eval
-              : default_eval<Expr, default_context const>
+              : default_eval<Expr, ThisContext>
             {};
         };
 
