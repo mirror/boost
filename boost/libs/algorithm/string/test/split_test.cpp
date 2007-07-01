@@ -122,6 +122,25 @@ void iterator_test()
     BOOST_CHECK( tokens[2]==string("") );
     BOOST_CHECK( tokens[3]==string("xx") );
     BOOST_CHECK( tokens[4]==string("abb") );
+
+    find_iterator<string::iterator> fiter=make_find_iterator(str1, first_finder("xx"));
+    BOOST_CHECK(equals(*fiter, "xx"));
+    ++fiter;
+    BOOST_CHECK(equals(*fiter, "xx"));
+    ++fiter;
+    BOOST_CHECK(fiter==find_iterator<string::iterator>());
+
+    split_iterator<string::iterator> siter=make_split_iterator(str1, token_finder(is_any_of("-"), token_compress_on));
+    BOOST_CHECK(equals(*siter, "xx"));
+    ++siter;
+    BOOST_CHECK(equals(*siter, "abc"));
+    ++siter;
+    BOOST_CHECK(equals(*siter, "xx"));
+    ++siter;
+    BOOST_CHECK(equals(*siter, "abb"));
+    ++siter;
+    BOOST_CHECK(siter==split_iterator<string::iterator>());
+
 }
 
 // test main 
