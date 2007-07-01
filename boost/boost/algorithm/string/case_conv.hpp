@@ -16,6 +16,7 @@
 #include <locale>
 #include <boost/iterator/transform_iterator.hpp>
 
+#include <boost/range/as_literal.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/value_type.hpp>
@@ -56,11 +57,10 @@ namespace boost {
             const RangeT& Input,
             const std::locale& Loc=std::locale())
         {
-            return std::transform( 
-                begin(Input), 
-                end(Input), 
-                Output,
-                ::boost::algorithm::detail::to_lowerF<
+            return ::boost::algorithm::detail::transform_range_copy( 
+               Output,
+			   as_literal(Input),
+               ::boost::algorithm::detail::to_lowerF<
                     typename range_value<RangeT>::type >(Loc));
         }
 
@@ -73,15 +73,10 @@ namespace boost {
             const SequenceT& Input, 
             const std::locale& Loc=std::locale())
         {
-            return SequenceT(
-                make_transform_iterator(
-                    begin(Input),
-                    ::boost::algorithm::detail::to_lowerF<
-                        typename range_value<SequenceT>::type >(Loc)),
-                make_transform_iterator(
-                    end(Input), 
-                    ::boost::algorithm::detail::to_lowerF<
-                        typename range_value<SequenceT>::type >(Loc)));
+			return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
+				as_literal(Input),
+                ::boost::algorithm::detail::to_lowerF<
+					typename range_value<SequenceT>::type >(Loc));
         }
 
         //! Convert to lower case
@@ -97,10 +92,8 @@ namespace boost {
             WritableRangeT& Input, 
             const std::locale& Loc=std::locale())
         {
-            std::transform( 
-                begin(Input), 
-                end(Input), 
-                begin(Input), 
+			::boost::algorithm::detail::transform_range(
+				as_literal(Input),
                 ::boost::algorithm::detail::to_lowerF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }
@@ -129,11 +122,10 @@ namespace boost {
             const RangeT& Input,
             const std::locale& Loc=std::locale())
         {
-            return std::transform( 
-                begin(Input), 
-                end(Input), 
-                Output,
-                ::boost::algorithm::detail::to_upperF<
+            return ::boost::algorithm::detail::transform_range_copy( 
+               Output,
+			   as_literal(Input),
+               ::boost::algorithm::detail::to_upperF<
                     typename range_value<RangeT>::type >(Loc));
         }
 
@@ -146,16 +138,10 @@ namespace boost {
             const SequenceT& Input, 
             const std::locale& Loc=std::locale())
         {
-            return SequenceT(
-                make_transform_iterator(
-                    begin(Input),
-                    ::boost::algorithm::detail::to_upperF<
-                        typename range_value<SequenceT>::type >(Loc)),
-                make_transform_iterator(
-                    end(Input), 
-                    ::boost::algorithm::detail::to_upperF<
-                        typename range_value<SequenceT>::type >(Loc)));
-
+			return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
+				as_literal(Input),
+                ::boost::algorithm::detail::to_upperF<
+					typename range_value<SequenceT>::type >(Loc));
         }
 
         //! Convert to upper case
@@ -171,10 +157,8 @@ namespace boost {
             WritableRangeT& Input, 
             const std::locale& Loc=std::locale())
         {
-            std::transform( 
-                begin(Input), 
-                end(Input), 
-                begin(Input), 
+			::boost::algorithm::detail::transform_range(
+				as_literal(Input),
                 ::boost::algorithm::detail::to_upperF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }

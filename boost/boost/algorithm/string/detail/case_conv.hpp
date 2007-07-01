@@ -61,6 +61,49 @@ namespace boost {
                 const std::locale& m_Loc;
             };
 
+// algorithm implementation -------------------------------------------------------------------------
+
+			// Transform a range
+			template<typename OutputIteratorT, typename RangeT, typename FunctorT>
+			OutputIteratorT transform_range_copy(
+				OutputIteratorT Output,
+				const RangeT& Input,
+				FunctorT Functor)
+			{
+				return std::transform( 
+					begin(Input), 
+					end(Input), 
+					Output,
+					Functor);
+			}
+
+			// Transform a range (in-place)
+			template<typename RangeT, typename FunctorT>
+			void transform_range(
+				const RangeT& Input,
+				FunctorT Functor)
+			{
+				std::transform( 
+					begin(Input), 
+					end(Input), 
+					begin(Input),
+					Functor);
+			}
+
+			template<typename SequenceT, typename RangeT, typename FunctorT>
+			inline SequenceT transform_range_copy( 
+				const RangeT& Input, 
+				FunctorT Functor)
+			{
+				return SequenceT(
+					make_transform_iterator(
+						begin(Input),
+						Functor),
+					make_transform_iterator(
+						end(Input), 
+						Functor));
+			}
+
         } // namespace detail
     } // namespace algorithm
 } // namespace boost
