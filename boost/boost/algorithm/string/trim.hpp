@@ -16,6 +16,8 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/const_iterator.hpp>
+#include <boost/range/as_literal.hpp>
+#include <boost/range/iterator_range.hpp>
 
 #include <boost/algorithm/string/detail/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
@@ -61,12 +63,14 @@ namespace boost {
             const RangeT& Input,
             PredicateT IsSpace)
         {
+			iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
+
             std::copy( 
                 ::boost::algorithm::detail::trim_begin( 
-                    begin(Input), 
-                    end(Input), 
+                    begin(lit_range), 
+                    end(lit_range), 
                     IsSpace ),
-                end(Input),
+                end(lit_range),
                 Output);
 
             return Output;
@@ -167,11 +171,13 @@ namespace boost {
             const RangeT& Input,
             PredicateT IsSpace )
         {
-            std::copy( 
-                begin(Input),
+			iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
+		 
+			std::copy( 
+                begin(lit_range),
                 ::boost::algorithm::detail::trim_end( 
-                    begin(Input), 
-                    end(Input), 
+                    begin(lit_range), 
+                    end(lit_range), 
                     IsSpace ),
                 Output );
 
@@ -277,16 +283,18 @@ namespace boost {
             const RangeT& Input,
             PredicateT IsSpace)
         {
-            BOOST_STRING_TYPENAME 
+			iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
+
+			BOOST_STRING_TYPENAME 
                 range_const_iterator<RangeT>::type TrimEnd=
                 ::boost::algorithm::detail::trim_end( 
-                    begin(Input), 
-                    end(Input), 
+                    begin(lit_range), 
+                    end(lit_range), 
                     IsSpace);
 
             std::copy( 
                 detail::trim_begin( 
-                    begin(Input), TrimEnd, IsSpace),
+                    begin(lit_range), TrimEnd, IsSpace),
                 TrimEnd,
                 Output
                 );

@@ -74,7 +74,7 @@ namespace boost {
             const std::locale& Loc=std::locale())
         {
 			return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
-				as_literal(Input),
+				Input,
                 ::boost::algorithm::detail::to_lowerF<
 					typename range_value<SequenceT>::type >(Loc));
         }
@@ -139,7 +139,7 @@ namespace boost {
             const std::locale& Loc=std::locale())
         {
 			return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
-				as_literal(Input),
+				Input,
                 ::boost::algorithm::detail::to_upperF<
 					typename range_value<SequenceT>::type >(Loc));
         }
