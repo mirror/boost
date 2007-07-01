@@ -16,6 +16,8 @@
 #include <boost/xpressive/regex_actions.hpp>
 #include <boost/test/unit_test.hpp>
 
+namespace xp = boost::xpressive;
+
 ///////////////////////////////////////////////////////////////////////////////
 // test1
 //  simple action which builds a string
@@ -25,7 +27,7 @@ void test1()
 
     std::string result;
     std::string str("foo bar baz foo bar baz");
-    sregex rx = (+_w)[ ref(result) += _ ] >> *(' ' >> (+_w)[ ref(result) += ',' + _ ]);
+    sregex rx = (+_w)[ xp::ref(result) += _ ] >> *(' ' >> (+_w)[ xp::ref(result) += ',' + _ ]);
 
     if(!regex_match(str, rx))
     {
@@ -46,7 +48,7 @@ void test2()
 
     std::string result;
     std::string str("foo bar baz foo bar baz");
-    sregex rx = (+_w)[ ref(result) += _ ] >> *(' ' >> (+_w)[ ref(result) += ',' + _ ]) >> repeat<4>(_);
+    sregex rx = (+_w)[ xp::ref(result) += _ ] >> *(' ' >> (+_w)[ xp::ref(result) += ',' + _ ]) >> repeat<4>(_);
 
     if(!regex_match(str, rx))
     {
@@ -68,11 +70,11 @@ void test3()
     std::list<int> result;
     std::string str("1 23 456 7890");
 #if BOOST_VERSION >= 103500
-    sregex rx = (+_d)[ ref(result)->*push_back( as<int>(_) ) ] 
-        >> *(' ' >> (+_d)[ ref(result)->*push_back( as<int>(_) ) ]);
+    sregex rx = (+_d)[ xp::ref(result)->*push_back( as<int>(_) ) ] 
+        >> *(' ' >> (+_d)[ xp::ref(result)->*push_back( as<int>(_) ) ]);
 #else
-    sregex rx = (+_d)[ push_back(ref(result), as<int>(_) ) ] 
-        >> *(' ' >> (+_d)[ push_back(ref(result), as<int>(_) ) ]);
+    sregex rx = (+_d)[ push_back(xp::ref(result), as<int>(_) ) ] 
+        >> *(' ' >> (+_d)[ push_back(xp::ref(result), as<int>(_) ) ]);
 #endif
 
     if(!regex_match(str, rx))
@@ -98,7 +100,7 @@ void test4()
 
     std::map<std::string, int> result;
     std::string str("aaa=>1 bbb=>23 ccc=>456");
-    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ ref(result)[s1] = as<int>(s2) ];
+    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ xp::ref(result)[s1] = as<int>(s2) ];
     sregex rx = pair >> *(+_s >> pair);
 
     if(!regex_match(str, rx))

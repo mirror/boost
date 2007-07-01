@@ -12,8 +12,11 @@
 #include <boost/version.hpp>
 #include <boost/xpressive/xpressive_static.hpp>
 #include <boost/xpressive/regex_actions.hpp>
-#include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
+
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
+
+namespace xp = boost::xpressive;
 
 ///////////////////////////////////////////////////////////////////////////////
 // test1
@@ -29,7 +32,7 @@ void test1()
     map1["bar"] = "2";
     map1["baz"] = "3";
 
-    sregex rx = (a1=map1)[ ref(result) = a1 ] >> *(' ' >> (a1=map1)[ ref(result) += ',' + a1 ]);
+    sregex rx = (a1=map1)[ xp::ref(result) = a1 ] >> *(' ' >> (a1=map1)[ xp::ref(result) += ',' + a1 ]);
 
     if(!regex_match(str, rx))
     {
@@ -57,8 +60,8 @@ void test2()
     map1["foobaz"] = "4";
     map1["foobazbaz"] = "5";
 
-    sregex rx = (a1=map1)[ ref(result) = a1 ] 
-		>> *((a1=map1)[ ref(result) += ',', ref(result) += a1 ]);
+    sregex rx = (a1=map1)[ xp::ref(result) = a1 ] 
+		>> *((a1=map1)[ xp::ref(result) += ',', xp::ref(result) += a1 ]);
 
     if(!regex_match(str, rx))
     {
@@ -86,11 +89,11 @@ void test3()
     map1["bop"] = 7890;
 
 #if BOOST_VERSION >= 103500
-    sregex rx = (a1=map1)[ ref(result)->*push_back( a1 ) ] 
-        >> *(' ' >> (a1=map1)[ ref(result)->*push_back( a1 ) ]);
+    sregex rx = (a1=map1)[ xp::ref(result)->*push_back( a1 ) ] 
+        >> *(' ' >> (a1=map1)[ xp::ref(result)->*push_back( a1 ) ]);
 #else
-    sregex rx = (a1=map1)[ push_back(ref(result), a1 ) ] 
-        >> *(' ' >> (a1=map1)[ push_back(ref(result), a1 ) ]);
+    sregex rx = (a1=map1)[ push_back(xp::ref(result), a1 ) ] 
+        >> *(' ' >> (a1=map1)[ push_back(xp::ref(result), a1 ) ]);
 #endif
 
     if(!regex_match(str, rx))
@@ -174,15 +177,15 @@ void test5()
     map9["i"] = 9;
 
     sregex rx = 
-           (a1=map1)[ ref(result) += a1 ]
-        >> (a2=map2)[ ref(result) += a2 ]
-        >> (a3=map3)[ ref(result) += a3 ] 
-        >> (a4=map4)[ ref(result) += a4 ] 
-        >> (a5=map5)[ ref(result) += a5 ] 
-        >> (a6=map6)[ ref(result) += a6 ] 
-        >> (a7=map7)[ ref(result) += a7 ] 
-        >> (a8=map8)[ ref(result) += a8 ] 
-        >> (a9=map9)[ ref(result) += a9 ];
+           (a1=map1)[ xp::ref(result) += a1 ]
+        >> (a2=map2)[ xp::ref(result) += a2 ]
+        >> (a3=map3)[ xp::ref(result) += a3 ] 
+        >> (a4=map4)[ xp::ref(result) += a4 ] 
+        >> (a5=map5)[ xp::ref(result) += a5 ] 
+        >> (a6=map6)[ xp::ref(result) += a6 ] 
+        >> (a7=map7)[ xp::ref(result) += a7 ] 
+        >> (a8=map8)[ xp::ref(result) += a8 ] 
+        >> (a9=map9)[ xp::ref(result) += a9 ];
 
     if(!regex_match(str, rx))
     {
@@ -208,9 +211,9 @@ void test6()
     map1["b"] = "3";
     map1["B"] = "4";
     std::string str("a A b B a A b B");
-    sregex rx = icase(a1= map1) [ ref(result) = a1 ] 
-        >> repeat<3>( (' ' >> icase(a1= map1) [ ref(result) += ',', ref(result) += a1 ]) )
-        >> repeat<4>( (' ' >>      (a1= map1) [ ref(result) += ',', ref(result) += a1 ]) );
+    sregex rx = icase(a1= map1) [ xp::ref(result) = a1 ] 
+        >> repeat<3>( (' ' >> icase(a1= map1) [ xp::ref(result) += ',', xp::ref(result) += a1 ]) )
+        >> repeat<4>( (' ' >>      (a1= map1) [ xp::ref(result) += ',', xp::ref(result) += a1 ]) );
     if(!regex_match(str, rx))
     {
         BOOST_ERROR("oops");
@@ -236,7 +239,7 @@ void test7()
     map2["c"] = "3";
     map2["d"] = "4";
     std::string str("abcde");
-    sregex rx = *((a1= map1) | (a1= map2) | 'e') [ ref(result) += (a1 | "9") ];
+    sregex rx = *((a1= map1) | (a1= map2) | 'e') [ xp::ref(result) += (a1 | "9") ];
     if(!regex_match(str, rx))
     {
         BOOST_ERROR("oops");
@@ -255,6 +258,8 @@ struct City
     int population;
 };
 
+BOOST_TYPEOF_REGISTER_TYPE(City)
+
 ///////////////////////////////////////////////////////////////////////////////
 // test8
 //  test wide strings with structure result
@@ -267,20 +272,21 @@ void test8()
         {L"New York", "The Big Apple", 16626000},
         {L"\u041c\u043E\u0441\u043A\u0432\u0430", "Moscow", 9299000}
     };
+    int const nbr_cities = sizeof(cities)/sizeof(*cities);
 
     std::map<std::wstring, City> map1;
-    BOOST_FOREACH(const City & c, cities)
+    for(int i=0; i<nbr_cities; ++i)
     {
-        map1[c.name] = c;
+        map1[cities[i].name] = cities[i];
     }
 
     std::wstring str(L"Chicago \u041c\u043E\u0441\u043A\u0432\u0430");
     City result1, result2;
     //int result1p;
     // ERROR "error C2039: 'population' : is not a member of 'boost::proto::expr<Tag,Args>'	c:\boost\libs\xpressive\test\test_symbols.cpp	277"
-    //sregex rx = (a1= map1)[ ref(result1p) = a1.population ];
-    wsregex rx = (a1= map1)[ ref(result1) = a1 ] >> +_s
-        >> (a1= map1)[ ref(result2) = a1 ];
+    //sregex rx = (a1= map1)[ xp::ref(result1p) = a1.population ];
+    wsregex rx = (a1= map1)[ xp::ref(result1) = a1 ] >> +_s
+        >> (a1= map1)[ xp::ref(result2) = a1 ];
     if(!regex_match(str, rx))
     {
         BOOST_ERROR("oops");
@@ -310,7 +316,7 @@ void test9()
     std::map<std::string,int> map1;
     map1["foo"] = 1;
     int xx = 0;
-    sregex rx = ~before((a1=map1)[ref(xx)=a1]) >> (s1=*_w)[ ref(result) = s1 ];
+    sregex rx = ~before((a1=map1)[xp::ref(xx)=a1]) >> (s1=*_w)[ xp::ref(result) = s1 ];
     if(!regex_match(str, rx))
     {
         BOOST_CHECK_EQUAL(result, "");

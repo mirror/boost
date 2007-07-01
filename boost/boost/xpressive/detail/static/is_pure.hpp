@@ -105,7 +105,7 @@ namespace boost { namespace xpressive { namespace detail
     // either (s1 = ...) or (a1 = ...) or (set = ...)
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, proto::tag::assign>
-      : use_simple_repeat_assign<typename Expr::proto_arg0::proto_arg0>
+      : use_simple_repeat_assign<typename proto::result_of::arg<typename Expr::proto_arg0>::type>
     {};
 
     template<typename Expr, typename Char>
