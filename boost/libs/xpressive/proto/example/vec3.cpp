@@ -9,6 +9,7 @@
 // evaluating expressions. It is a port of the Vec3 example
 // from PETE (http://www.codesourcery.com/pooma/download.html).
 
+#include <cassert>
 #include <iostream>
 #include <functional>
 #include <boost/mpl/int.hpp>
@@ -43,10 +44,30 @@ struct Vec3SubscriptCtx
     int i_;
 };
 
-// This transform counts the number of int[3] terminals in an expression.
-// It accumulates a runtime value, rather than computing a compile-time
-// value, just to demonstrate the use of the std::plus<> function object
-// with the function2 transform.
+// Here is an evaluation context that counts the number
+// of Vec3 terminals in an expression. 
+struct CountLeavesCtx
+  : callable_context< CountLeavesCtx, null_context >
+{
+    CountLeavesCtx()
+      : count(0)
+      {}
+      
+      typedef void result_type;
+      
+      void operator()(tag::terminal, int const(&)[3])
+      {
+          ++this->count;
+      }
+      
+      int count;
+};
+
+// Here is a transform that does the same thing as the above context.
+// It demonstrates the use of the std::plus<> function object
+// with the function2 transform. With minor modifications, this
+// transform could be used to calculate the leaf count at compile
+// time, rather at runtime.
 struct CountLeaves
   : or_<
         // match a Vec3 terminal, return 1
@@ -109,8 +130,16 @@ struct Vec3
 template<typename Expr>
 int count_leaves(Expr const &expr)
 {
+    // Count the number of Vec3 terminals using the
+    // CountLeavesCtx evaluation context.
+    CountLeavesCtx ctx;
+    eval(expr, ctx);
+    
+    // This is another way to count the leaves using a transform.
     int i = 0;
-    return CountLeaves::call(expr, i, i);
+    assert( CountLeaves::call(expr, i, i) == ctx.count );
+
+    return ctx.count;
 }
 
 int main()
