@@ -16,6 +16,8 @@
 #include <boost/range/end.hpp>
 #include <boost/range/iterator.hpp>
 #include <boost/range/const_iterator.hpp>
+#include <boost/range/as_literal.hpp>
+#include <boost/range/iterator_range.hpp>
 
 #include <boost/algorithm/string/compare.hpp>
 #include <boost/algorithm/string/find.hpp>
@@ -57,16 +59,19 @@ namespace boost {
             const Range2T& Test,
             PredicateT Comp)
         {
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(as_literal(Input));
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(as_literal(Test));
+
             typedef BOOST_STRING_TYPENAME 
                 range_const_iterator<Range1T>::type Iterator1T;
             typedef BOOST_STRING_TYPENAME 
                 range_const_iterator<Range2T>::type Iterator2T;
 
-            Iterator1T InputEnd=end(Input);
-            Iterator2T TestEnd=end(Test);
+            Iterator1T InputEnd=end(lit_input);
+            Iterator2T TestEnd=end(lit_test);
 
-            Iterator1T it=begin(Input);
-            Iterator2T pit=begin(Test);
+            Iterator1T it=begin(lit_input);
+            Iterator2T pit=begin(lit_test);
             for(;
                 it!=InputEnd && pit!=TestEnd;
                 ++it,++pit)
@@ -136,6 +141,9 @@ namespace boost {
             const Range2T& Test,
             PredicateT Comp)
         {
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(as_literal(Input));
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(as_literal(Test));
+
             typedef BOOST_STRING_TYPENAME 
                 range_const_iterator<Range1T>::type Iterator1T;
             typedef BOOST_STRING_TYPENAME boost::detail::
@@ -143,10 +151,10 @@ namespace boost {
 
             return detail::
                 ends_with_iter_select( 
-                    begin(Input), 
-                    end(Input), 
-                    begin(Test), 
-                    end(Test), 
+                    begin(lit_input), 
+                    end(lit_input), 
+                    begin(lit_test), 
+                    end(lit_test), 
                     Comp,
                     category());
         }
@@ -207,14 +215,17 @@ namespace boost {
             const Range2T& Test,
             PredicateT Comp)
         {
-            if (empty(Test))
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(as_literal(Input));
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(as_literal(Test));
+
+            if (empty(lit_test))
             {
                 // Empty range is contained always
                 return true;
             }
             
             // Use the temporary variable to make VACPP happy
-            bool bResult=(first_finder(Test,Comp)(begin(Input), end(Input)));
+            bool bResult=(first_finder(lit_test,Comp)(begin(lit_input), end(lit_input)));
             return bResult;
         }
 
@@ -275,16 +286,19 @@ namespace boost {
             const Range2T& Test,
             PredicateT Comp)
         {
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_input(as_literal(Input));
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_test(as_literal(Test));
+
             typedef BOOST_STRING_TYPENAME 
                 range_const_iterator<Range1T>::type Iterator1T;
             typedef BOOST_STRING_TYPENAME 
                 range_const_iterator<Range2T>::type Iterator2T;
                 
-            Iterator1T InputEnd=end(Input);
-            Iterator2T TestEnd=end(Test);
+            Iterator1T InputEnd=end(lit_input);
+            Iterator2T TestEnd=end(lit_test);
 
-            Iterator1T it=begin(Input);
-            Iterator2T pit=begin(Test);
+            Iterator1T it=begin(lit_input);
+            Iterator2T pit=begin(lit_test);
             for(;
                 it!=InputEnd && pit!=TestEnd;
                 ++it,++pit)
@@ -358,11 +372,14 @@ namespace boost {
             const Range2T& Arg2,
             PredicateT Pred)
         {
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range1T>::type> lit_arg1(as_literal(Arg1));
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<Range2T>::type> lit_arg2(as_literal(Arg2));
+
             return std::lexicographical_compare(
-                begin(Arg1),
-                end(Arg1),
-                begin(Arg2),
-                end(Arg2),
+                begin(lit_arg1),
+                end(lit_arg1),
+                begin(lit_arg2),
+                end(lit_arg2),
                 Pred);
         }
 
@@ -375,12 +392,7 @@ namespace boost {
             const Range1T& Arg1,
             const Range2T& Arg2)
         {
-            return std::lexicographical_compare(
-                begin(Arg1),
-                end(Arg1),
-                begin(Arg2),
-                end(Arg2),
-                is_less());
+            return lexicographical_compare(Arg1, Arg2, is_less());
         }
 
         //! Lexicographical compare predicate (case-insensitive)
@@ -394,6 +406,7 @@ namespace boost {
 
              \param Arg1 First argument 
              \param Arg2 Second argument
+             \param Loc A locale used for case insensitive comparison
              \return The result of the test
 
              \note This function provides the strong exception-safety guarantee
@@ -401,14 +414,10 @@ namespace boost {
         template<typename Range1T, typename Range2T>
         inline bool ilexicographical_compare(
             const Range1T& Arg1,
-            const Range2T& Arg2)
+            const Range2T& Arg2,
+            const std::locale& Loc=std::locale())
         {
-            return std::lexicographical_compare(
-                begin(Arg1),
-                end(Arg1),
-                begin(Arg2),
-                end(Arg2),
-                is_iless());
+            return lexicographical_compare(Arg1, Arg2, is_iless(Loc));
         }
         
 
@@ -430,11 +439,13 @@ namespace boost {
             const RangeT& Input, 
             PredicateT Pred)
         {
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_input(as_literal(Input));
+
             typedef BOOST_STRING_TYPENAME 
                 range_const_iterator<RangeT>::type Iterator1T;
 
-            Iterator1T InputEnd=end(Input);
-            for( Iterator1T It=begin(Input); It!=InputEnd; ++It)
+            Iterator1T InputEnd=end(lit_input);
+            for( Iterator1T It=begin(lit_input); It!=InputEnd; ++It)
             {
                 if (!Pred(*It))
                     return false;

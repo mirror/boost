@@ -19,6 +19,7 @@
 #include <boost/range/iterator.hpp>
 #include <boost/range/const_iterator.hpp>
 #include <boost/range/result_iterator.hpp>
+#include <boost/range/as_literal.hpp>
 
 #include <boost/algorithm/string/finder.hpp>
 #include <boost/algorithm/string/compare.hpp>
@@ -52,16 +53,18 @@ namespace boost {
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
         find( 
             RangeT& Input, 
-            FinderT Finder)
+            const FinderT& Finder)
         {
-            return Finder(begin(Input),end(Input));
+            iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(as_literal(Input));
+
+            return Finder(begin(lit_input),end(lit_input));
         }
 
 //  find_first  -----------------------------------------------//
 
         //! Find first algorithm
         /*!
-            Search for the first occurence of the substring in the input. 
+            Search for the first occurrence of the substring in the input. 
             
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
@@ -80,8 +83,7 @@ namespace boost {
             Range1T& Input, 
             const Range2T& Search)
         {
-            return first_finder(Search)(
-                begin(Input),end(Input));
+            return find(Input, first_finder(Search));
         }
 
         //! Find first algorithm ( case insensitive )
@@ -108,15 +110,14 @@ namespace boost {
             const Range2T& Search,
             const std::locale& Loc=std::locale())
         {
-            return first_finder(Search,is_iequal(Loc))(
-                begin(Input),end(Input));
+            return find(Input, first_finder(Search,is_iequal(Loc)));
         }
 
 //  find_last  -----------------------------------------------//
 
         //! Find last algorithm
         /*!
-            Search for the last occurence of the substring in the input. 
+            Search for the last occurrence of the substring in the input. 
             
             \param Input A string which will be searched.
             \param Search A substring to be searched for.
@@ -135,8 +136,7 @@ namespace boost {
             Range1T& Input, 
             const Range2T& Search)
         {
-            return last_finder(Search)(
-                begin(Input),end(Input));
+            return find(Input, last_finder(Search));
         }
 
         //! Find last algorithm ( case insensitive )
@@ -163,15 +163,14 @@ namespace boost {
             const Range2T& Search,
             const std::locale& Loc=std::locale())
         {
-            return last_finder(Search, is_iequal(Loc))(
-                begin(Input),end(Input));
+            return find(Input, last_finder(Search, is_iequal(Loc)));
         }
 
 //  find_nth ----------------------------------------------------------------------//
 
         //! Find n-th algorithm 
         /*!
-            Search for the n-th (zero-indexed) occurence of the substring in the 
+            Search for the n-th (zero-indexed) occurrence of the substring in the 
             input.         
             
             \param Input A string which will be searched.
@@ -192,8 +191,7 @@ namespace boost {
             const Range2T& Search,
             int Nth)
         {
-            return nth_finder(Search,Nth)(
-                begin(Input),end(Input));
+            return find(Input, nth_finder(Search,Nth));
         }
 
         //! Find n-th algorithm ( case insensitive ).
@@ -224,8 +222,7 @@ namespace boost {
             int Nth,
             const std::locale& Loc=std::locale())
         {
-            return nth_finder(Search,Nth,is_iequal(Loc))(
-                begin(Input),end(Input));
+            return find(Input, nth_finder(Search,Nth,is_iequal(Loc)));
         }
 
 //  find_head ----------------------------------------------------------------------//
@@ -255,8 +252,7 @@ namespace boost {
             RangeT& Input, 
             int N)
         {
-            return head_finder(N)(
-                begin(Input),end(Input));      
+            return find(Input, head_finder(N));
         }
 
 //  find_tail ----------------------------------------------------------------------//
@@ -287,8 +283,7 @@ namespace boost {
             RangeT& Input, 
             int N)
         {
-            return tail_finder(N)(
-                begin(Input),end(Input));      
+            return find(Input, tail_finder(N));
         }
 
 //  find_token --------------------------------------------------------------------//
@@ -318,8 +313,7 @@ namespace boost {
             PredicateT Pred,
             token_compress_mode_type eCompress=token_compress_off)
         {
-            return token_finder(Pred, eCompress)(
-                begin(Input),end(Input));       
+            return find(Input, token_finder(Pred, eCompress));
         }
 
     } // namespace algorithm

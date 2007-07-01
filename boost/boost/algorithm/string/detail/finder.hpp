@@ -19,6 +19,7 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/empty.hpp>
+#include <boost/range/as_literal.hpp>
 
 namespace boost {
     namespace algorithm {

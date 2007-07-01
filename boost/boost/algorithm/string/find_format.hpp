@@ -69,12 +69,13 @@ namespace boost {
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
 
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_input(as_literal(Input));
+
             return detail::find_format_copy_impl(
                 Output,
-                Input,
-                Finder,
+                lit_input,
                 Formatter,
-                Finder( begin(Input), end(Input) ) );
+                Finder( begin(lit_input), end(lit_input) ) );
         }
 
         //! Generic replace algorithm
@@ -101,7 +102,6 @@ namespace boost {
 
             return detail::find_format_copy_impl(
                 Input,
-                Finder,
                 Formatter,
                 Finder(begin(Input), end(Input)));
         }
@@ -135,7 +135,6 @@ namespace boost {
 
             detail::find_format_impl(
                 Input,
-                Finder,
                 Formatter,
                 Finder(begin(Input), end(Input)));
         }
@@ -180,12 +179,14 @@ namespace boost {
                     FormatterT,
                     FinderT,BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> >();
 
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_input(as_literal(Input));
+
             return detail::find_format_all_copy_impl(
                 Output,
-                Input,
+                lit_input,
                 Finder,
                 Formatter,
-                Finder(begin(Input), end(Input)));
+                Finder(begin(lit_input), end(lit_input)));
         }
 
         //! Generic replace all algorithm

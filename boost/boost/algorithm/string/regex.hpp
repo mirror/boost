@@ -18,6 +18,7 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/result_iterator.hpp>
+#include <boost/range/as_literal.hpp>
 
 #include <boost/algorithm/string/find_format.hpp>
 #include <boost/algorithm/string/regex_find_format.hpp>
@@ -59,8 +60,10 @@ namespace boost {
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
+            iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(as_literal(Input));
+
             return regex_finder(Rx,Flags)(
-                begin(Input), end(Input) );
+                begin(lit_input), end(lit_input) );
         }
 
 //  replace_regex --------------------------------------------------------------------//
@@ -503,7 +506,7 @@ namespace boost {
         inline typename range_value<SequenceSequenceT>::type 
         join_if(
             const SequenceSequenceT& Input,
-            Range1T& Separator,
+            const Range1T& Separator,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
@@ -536,7 +539,7 @@ namespace boost {
                 if(regex_match(begin(*itBegin), end(*itBegin), Rx, Flags))
                 {
                     // Add separator
-                    detail::insert(Result, end(Result), Separator);
+                    detail::insert(Result, end(Result), as_literal(Separator));
                     // Add element
                     detail::insert(Result, end(Result), *itBegin);
                 }
@@ -571,7 +574,7 @@ namespace boost {
         inline typename range_value<SequenceSequenceT>::type 
         join_if_regex(
             const SequenceSequenceT& Input,
-            Range1T& Separator,
+            const Range1T& Separator,
             const basic_regex<CharT, RegexTraitsT>& Rx,
             match_flag_type Flags=match_default )
         {
@@ -604,7 +607,7 @@ namespace boost {
                 if(regex_match(begin(*itBegin), end(*itBegin), Rx, Flags))
                 {
                     // Add separator
-                    detail::insert(Result, end(Result), Separator);
+                    detail::insert(Result, end(Result), as_literal(Separator));
                     // Add element
                     detail::insert(Result, end(Result), *itBegin);
                 }

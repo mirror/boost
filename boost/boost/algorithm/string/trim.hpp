@@ -63,7 +63,7 @@ namespace boost {
             const RangeT& Input,
             PredicateT IsSpace)
         {
-			iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
 
             std::copy( 
                 ::boost::algorithm::detail::trim_begin( 
@@ -171,9 +171,9 @@ namespace boost {
             const RangeT& Input,
             PredicateT IsSpace )
         {
-			iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
-		 
-			std::copy( 
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
+         
+            std::copy( 
                 begin(lit_range),
                 ::boost::algorithm::detail::trim_end( 
                     begin(lit_range), 
@@ -283,9 +283,9 @@ namespace boost {
             const RangeT& Input,
             PredicateT IsSpace)
         {
-			iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
+            iterator_range<BOOST_STRING_TYPENAME range_const_iterator<RangeT>::type> lit_range(as_literal(Input));
 
-			BOOST_STRING_TYPENAME 
+            BOOST_STRING_TYPENAME 
                 range_const_iterator<RangeT>::type TrimEnd=
                 ::boost::algorithm::detail::trim_end( 
                     begin(lit_range), 

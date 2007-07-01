@@ -14,8 +14,10 @@
 #include <algorithm>
 #include <locale>
 #include <boost/range/value_type.hpp>
+#include <boost/range/as_literal.hpp>
 #include <boost/algorithm/string/detail/classification.hpp>
 #include <boost/algorithm/string/predicate_facade.hpp>
+
 
 /*! \file
     Classification predicates are included in the library to give 
@@ -201,7 +203,7 @@ namespace boost {
         is_any_of( const RangeT& Set )
         {
             return detail::is_any_ofF<
-                BOOST_STRING_TYPENAME range_value<RangeT>::type>(Set); 
+                BOOST_STRING_TYPENAME range_value<RangeT>::type>(as_literal(Set)); 
         }
 
         //! is_from_range predicate

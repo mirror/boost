@@ -27,20 +27,17 @@ namespace boost {
             template< 
                 typename OutputIteratorT,
                 typename InputT,
-                typename FinderT,
                 typename FormatterT,
                 typename FindResultT >
             inline OutputIteratorT find_format_copy_impl(
                 OutputIteratorT Output,
                 const InputT& Input,
-                FinderT Finder,
                 FormatterT Formatter,
                 const FindResultT& FindResult )
             {       
                 return find_format_copy_impl2( 
                     Output,
                     Input,
-                    Finder,
                     Formatter,
                     FindResult,
                     Formatter(FindResult) );
@@ -49,14 +46,12 @@ namespace boost {
             template< 
                 typename OutputIteratorT,
                 typename InputT,
-                typename FinderT,
                 typename FormatterT,
                 typename FindResultT,
                 typename FormatResultT >
             inline OutputIteratorT find_format_copy_impl2(
                 OutputIteratorT Output,
                 const InputT& Input,
-                FinderT Finder,
                 FormatterT Formatter,
                 const FindResultT& FindResult,
                 const FormatResultT& FormatResult )
@@ -92,18 +87,15 @@ namespace boost {
 
             template< 
                 typename InputT, 
-                typename FinderT,
                 typename FormatterT,
                 typename FindResultT >
             inline InputT find_format_copy_impl(
                 const InputT& Input,
-                FinderT Finder,
                 FormatterT Formatter,
                 const FindResultT& FindResult)
             {
                 return find_format_copy_impl2(
                     Input,
-                    Finder,
                     Formatter,
                     FindResult,
                     Formatter(FindResult) );
@@ -111,13 +103,11 @@ namespace boost {
 
             template< 
                 typename InputT, 
-                typename FinderT,
                 typename FormatterT,
                 typename FindResultT,
                 typename FormatResultT >
             inline InputT find_format_copy_impl2(
                 const InputT& Input,
-                FinderT Finder,
                 FormatterT Formatter,
                 const FindResultT& FindResult,
                 const FormatResultT& FormatResult)
@@ -152,18 +142,15 @@ namespace boost {
         
             template<
                 typename InputT,
-                typename FinderT,
                 typename FormatterT,
                 typename FindResultT >
             inline void find_format_impl( 
                 InputT& Input,
-                FinderT Finder,
                 FormatterT Formatter,
                 const FindResultT& FindResult)
             {
                 find_format_impl2(
                     Input,
-                    Finder,
                     Formatter,
                     FindResult,
                     Formatter(FindResult) );
@@ -171,13 +158,11 @@ namespace boost {
 
             template<
                 typename InputT,
-                typename FinderT,
                 typename FormatterT,
                 typename FindResultT,
                 typename FormatResultT >
             inline void find_format_impl2( 
                 InputT& Input,
-                FinderT,
                 FormatterT Formatter,
                 const FindResultT& FindResult,
                 const FormatResultT& FormatResult)

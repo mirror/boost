@@ -45,7 +45,7 @@ namespace boost {
         inline typename range_value<SequenceSequenceT>::type 
         join(
             const SequenceSequenceT& Input,
-            Range1T& Separator)
+            const Range1T& Separator)
         {
             // Define working types
             typedef typename range_value<SequenceSequenceT>::type ResultT;
@@ -68,7 +68,7 @@ namespace boost {
             for(;itBegin!=itEnd; ++itBegin)
             {
                 // Add separator
-                detail::insert(Result, end(Result), Separator);
+                detail::insert(Result, end(Result), as_literal(Separator));
                 // Add element
                 detail::insert(Result, end(Result), *itBegin);
             }
@@ -95,7 +95,7 @@ namespace boost {
         inline typename range_value<SequenceSequenceT>::type 
         join_if(
             const SequenceSequenceT& Input,
-            Range1T& Separator,
+            const Range1T& Separator,
             PredicateT Pred)
         {
             // Define working types
@@ -123,7 +123,7 @@ namespace boost {
                 if(Pred(*itBegin))
                 {
                     // Add separator
-                    detail::insert(Result, end(Result), Separator);
+                    detail::insert(Result, end(Result), as_literal(Separator));
                     // Add element
                     detail::insert(Result, end(Result), *itBegin);
                 }

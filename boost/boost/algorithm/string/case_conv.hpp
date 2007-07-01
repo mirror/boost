@@ -59,7 +59,7 @@ namespace boost {
         {
             return ::boost::algorithm::detail::transform_range_copy( 
                Output,
-			   as_literal(Input),
+               as_literal(Input),
                ::boost::algorithm::detail::to_lowerF<
                     typename range_value<RangeT>::type >(Loc));
         }
@@ -73,10 +73,10 @@ namespace boost {
             const SequenceT& Input, 
             const std::locale& Loc=std::locale())
         {
-			return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
-				Input,
+            return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
+                Input,
                 ::boost::algorithm::detail::to_lowerF<
-					typename range_value<SequenceT>::type >(Loc));
+                    typename range_value<SequenceT>::type >(Loc));
         }
 
         //! Convert to lower case
@@ -92,8 +92,8 @@ namespace boost {
             WritableRangeT& Input, 
             const std::locale& Loc=std::locale())
         {
-			::boost::algorithm::detail::transform_range(
-				as_literal(Input),
+            ::boost::algorithm::detail::transform_range(
+                as_literal(Input),
                 ::boost::algorithm::detail::to_lowerF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }
@@ -124,7 +124,7 @@ namespace boost {
         {
             return ::boost::algorithm::detail::transform_range_copy( 
                Output,
-			   as_literal(Input),
+               as_literal(Input),
                ::boost::algorithm::detail::to_upperF<
                     typename range_value<RangeT>::type >(Loc));
         }
@@ -138,10 +138,10 @@ namespace boost {
             const SequenceT& Input, 
             const std::locale& Loc=std::locale())
         {
-			return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
-				Input,
+            return ::boost::algorithm::detail::transform_range_copy<SequenceT>(
+                Input,
                 ::boost::algorithm::detail::to_upperF<
-					typename range_value<SequenceT>::type >(Loc));
+                    typename range_value<SequenceT>::type >(Loc));
         }
 
         //! Convert to upper case
@@ -157,8 +157,8 @@ namespace boost {
             WritableRangeT& Input, 
             const std::locale& Loc=std::locale())
         {
-			::boost::algorithm::detail::transform_range(
-				as_literal(Input),
+            ::boost::algorithm::detail::transform_range(
+                as_literal(Input),
                 ::boost::algorithm::detail::to_upperF<
                     typename range_value<WritableRangeT>::type >(Loc));
         }
