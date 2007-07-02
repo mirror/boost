@@ -709,12 +709,12 @@
             struct arg_c<Expr, N>
               : unref<typename Expr::BOOST_PP_CAT(proto_arg, N)>
             {
-                static typename arg_c::reference call(Expr &expr)
+                static typename arg_c<Expr, N>::reference call(Expr &expr)
                 {
                     return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }
 
-                static typename arg_c::const_reference call(Expr const &expr)
+                static typename arg_c<Expr, N>::const_reference call(Expr const &expr)
                 {
                     return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }

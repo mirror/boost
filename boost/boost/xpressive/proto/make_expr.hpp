@@ -18,6 +18,7 @@
     #include <boost/preprocessor/control/expr_if.hpp>
     #include <boost/preprocessor/arithmetic/inc.hpp>
     #include <boost/preprocessor/arithmetic/dec.hpp>
+    #include <boost/preprocessor/arithmetic/sub.hpp>
     #include <boost/preprocessor/punctuation/comma_if.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
@@ -408,7 +409,8 @@
             {};
 
             template<typename Domain, typename A>
-            struct make_expr_<tag::terminal, Domain, A>
+            struct make_expr_<tag::terminal, Domain, A
+                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, void BOOST_PP_INTERCEPT)>
             {
                 typedef typename add_reference<A>::type reference;
                 typedef expr<tag::terminal, args0<reference> > expr_type;
@@ -658,9 +660,11 @@
 #elif BOOST_PP_ITERATION_FLAGS() == 1
 
     #define N BOOST_PP_ITERATION()
+    #define M BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N)
 
         template<typename Tag, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct make_expr_<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, A) >
+        struct make_expr_<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
+            BOOST_PP_ENUM_TRAILING_PARAMS(M, void BOOST_PP_INTERCEPT), void>
         {
             typedef expr<
                 Tag
@@ -716,6 +720,7 @@
         {};
 
     #undef N
+    #undef M
 
 #elif BOOST_PP_ITERATION_FLAGS() == 2
 
