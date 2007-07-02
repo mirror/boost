@@ -194,8 +194,10 @@ public:
     */
     void set_capacity(const capacity_type& capacity_ctrl) {
         m_capacity_ctrl = capacity_ctrl;
-        if (capacity_ctrl < size())
-            circular_buffer<T, Alloc>::erase(end() - (size() - capacity_ctrl), end());
+        if (capacity_ctrl < size()) {
+            iterator e = end();
+            circular_buffer<T, Alloc>::erase(e - (size() - capacity_ctrl), e);
+        }
         adjust_min_capacity();
     }
 
@@ -231,7 +233,8 @@ public:
                 m_capacity_ctrl = capacity_type(new_size, m_capacity_ctrl.min_capacity());
             insert(end(), new_size - size(), item);
         } else {
-            erase(end() - (size() - new_size), end());
+            iterator e = end();
+            erase(e - (size() - new_size), e);
         }
     }
 
@@ -260,8 +263,10 @@ public:
     */
     void rset_capacity(const capacity_type& capacity_ctrl) {
         m_capacity_ctrl = capacity_ctrl;
-        if (capacity_ctrl < size())
-            circular_buffer<T, Alloc>::rerase(begin(), begin() + (size() - capacity_ctrl));
+        if (capacity_ctrl < size()) {
+            iterator b = begin();
+            circular_buffer<T, Alloc>::rerase(b, b + (size() - capacity_ctrl));
+        }
         adjust_min_capacity();
     }
 

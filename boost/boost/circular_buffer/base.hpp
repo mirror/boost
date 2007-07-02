@@ -780,10 +780,11 @@ public:
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
+        iterator b = begin();
         BOOST_TRY {
             reset(buff,
-                cb_details::uninitialized_copy_with_alloc(begin(),
-                    begin() + (std::min)(new_capacity, size()), buff, m_alloc), new_capacity);
+                cb_details::uninitialized_copy_with_alloc(b, b + (std::min)(new_capacity, size()), buff, m_alloc),
+                new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -823,7 +824,8 @@ public:
                 set_capacity(new_size);
             insert(end(), new_size - size(), item);
         } else {
-            erase(end() - (size() - new_size), end());
+            iterator e = end();
+            erase(e - (size() - new_size), e);
         }
     }
 
@@ -850,9 +852,10 @@ public:
         if (new_capacity == capacity())
             return;
         pointer buff = allocate(new_capacity);
+        iterator e = end();
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy_with_alloc(end()
-                - (std::min)(new_capacity, size()), end(), buff, m_alloc), new_capacity);
+            reset(buff, cb_details::uninitialized_copy_with_alloc(e - (std::min)(new_capacity, size()),
+                e, buff, m_alloc), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -1418,8 +1421,9 @@ public:
     */
     iterator insert(iterator pos, param_value_type item = value_type()) {
         BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
-        if (full() && pos == begin())
-            return begin();
+        iterator b = begin();
+        if (full() && pos == b)
+            return b;
         return insert_item(pos, item);
     }
 
@@ -2406,7 +2410,8 @@ private:
     void rinsert_n(const iterator& pos, size_type n, const Wrapper& wrapper) {
         if (n == 0)
             return;
-        size_type copy = capacity() - (pos - begin());
+        iterator b = begin();
+        size_type copy = capacity() - (pos - b);
         if (copy == 0)
             return;
         if (n > copy)
@@ -2414,7 +2419,7 @@ private:
         size_type construct = reserve();
         if (construct > n)
             construct = n;
-        if (pos == begin()) {
+        if (pos == b) {
             pointer p = sub(m_first, n);
             size_type ii = n;
             BOOST_TRY {
