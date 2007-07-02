@@ -654,6 +654,15 @@ namespace detail
         ignore_unused(s7);
         ignore_unused(s8);
         ignore_unused(s9);
+        ignore_unused(a1);
+        ignore_unused(a2);
+        ignore_unused(a3);
+        ignore_unused(a4);
+        ignore_unused(a5);
+        ignore_unused(a6);
+        ignore_unused(a7);
+        ignore_unused(a8);
+        ignore_unused(a9);
         ignore_unused(as_xpr);
         ignore_unused(optional);
         ignore_unused(before);

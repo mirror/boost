@@ -115,7 +115,7 @@ namespace detail
     umaskex_t const std_ctype_xdigit = mask_cast<std::ctype_base::xdigit>::value;
 
     // Reserve some bits for the implementation
-    #if defined(__GLIBCXX__) && __GLIBCXX__ >= 20050209
+    #if defined(__GLIBCXX__)
     umaskex_t const std_ctype_reserved = 0x8000;
     #else
     umaskex_t const std_ctype_reserved = 0;
