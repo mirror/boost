@@ -102,7 +102,7 @@ namespace boost { namespace xpressive { namespace detail
                 c1 = trans(*begin);
             }
 
-            if(0 == p)
+            if(!p)
             {
                 p = new node;
                 p->ch = c1;
@@ -136,7 +136,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             result_type r = 0;
 
-            if(0 != p)
+            if(p)
             {
                 BidiIter isave = begin;
 
@@ -158,7 +158,7 @@ namespace boost { namespace xpressive { namespace detail
                     }
                 }
 
-                if(0 == r && 0 == p->ch)
+                if(!r && 0 == p->ch)
                 {
                     begin = isave;
                     r = p->result;
