@@ -18,7 +18,16 @@ std::string bar()
 //]
 
 //[ foo
-/*` This is the [*['foo]] function. */
+    /*`
+    This is the [*['foo]] function.
+
+    This description can have paragraphs...
+
+    * lists
+    * etc.
+
+    And any quickbook block markup.
+    */
 std::string foo()
 {
     // return 'em, foo man!

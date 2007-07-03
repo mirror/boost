@@ -78,10 +78,10 @@ namespace quickbook
                     ;
 
                 escaped_comment =
-                        *space_p >> "//`" >> *space_p
+                        *space_p >> "//`"
                         >> ((*(anychar_p - eol_p))
                             >> eol_p)               [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
-                    |   *space_p >> "/*`" >> *space_p
+                    |   *space_p >> "/*`"
                         >> (*(anychar_p - "*/"))    [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
                         >> "*/"
                     ;
