@@ -1134,7 +1134,7 @@ main (int argc, char *argv[])
             ("listincludes,l", po::value<string>(), 
                 "list names of included files to a file [arg] or to stdout [-]")
             ("macronames,m", po::value<string>(), 
-                "list names of all defined macros to a file [arg] or to stdout [-]")
+                "list all defined macros to a file [arg] or to stdout [-]")
             ("preserve,p", po::value<int>()->default_value(0), 
                 "preserve whitespace\n"
                             "0: no whitespace is preserved (default),\n"

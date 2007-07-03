@@ -202,13 +202,11 @@
 
 //  This include is needed for the boost::fast_allocator class used in the 
 //  BOOST_WAVE_STRINGTYPE above.
-//  Configure Boost.Pool thread support (for now: no thread support at all)
-//#define BOOST_NO_MT
-//#include <boost/pool/pool_alloc.hpp>
+// #include <boost/pool/pool_alloc.hpp>
 
 // Use the following, if you want to incorporate Maxim Yegorushkin's
 // const_string library (http://sourceforge.net/projects/conststring/), which
-// may be even faster, than using the flex_string class from above
+// may be even faster than using the flex_string class from above
 //#define BOOST_WAVE_STRINGTYPE boost::const_string<char>
 //
 //#include <boost/const_string/const_string.hpp>
@@ -225,7 +223,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  The following definition forces the Spirit tree code to use boost pool 
-//  allocators in stead of the std::allocator for the vector/list's.
+//  allocators instead of the std::allocator for the vector/list's.
 // #define BOOST_SPIRIT_USE_BOOST_ALLOCATOR_FOR_TREES
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -353,14 +351,12 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  configure Boost.Pool thread support (for now: no thread support at all)
-#if !defined(BOOST_NO_MT)
-#define BOOST_NO_MT
-#endif // !defined(BOOST_NO_MT)
-
-//#if !defined(BOOST_DISABLE_THREADS)
-//#define BOOST_DISABLE_THREADS
-//#endif // !defined(BOOST_DISABLE_THREADS)
+//  configure Boost.Spirit thread support, Boost.Pool is configured
+//  automatically 
+#if defined(BOOST_HAS_THREADS)
+#define BOOST_SPIRIT_THREADSAFE 1
+#define PHOENIX_THREADSAFE 1
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Wave needs at least 4 parameters for phoenix actors

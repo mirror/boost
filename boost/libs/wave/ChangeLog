@@ -120,6 +120,7 @@ CHANGELOG
 - Added a new commandline option --macronames/-m to the Wave driver application
   which lists all defined macros and their definitions to an optionally 
   specified file (default is cout).
+- Fixed configuration to take into account thread related build settings.
 
 Boost V1.34.0
 - Wave Version 1.2.4

@@ -386,7 +386,8 @@ struct uchar_wrapper
         return base_cursor;
     }
     
-    friend int operator- (uchar_wrapper const& lhs, uchar_wrapper const& rhs)
+    friend std::ptrdiff_t 
+    operator- (uchar_wrapper const& lhs, uchar_wrapper const& rhs)
     {
         return lhs.base_cursor - rhs.base_cursor;
     }
