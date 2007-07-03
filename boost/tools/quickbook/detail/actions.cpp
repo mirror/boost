@@ -867,7 +867,7 @@ namespace quickbook
         }
         std::string temp(first, last);
         detail::unindent(temp); // remove all indents
-        snippet += temp;
+        snippet += "\n" + temp; // add a linebreak to allow block marskups
     }
 
     void cpp_code_snippet_grammar::compile(iterator first, iterator last) const
