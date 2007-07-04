@@ -126,6 +126,24 @@ CHANGELOG
   even if these do not have a 'll' suffix. This pp constant is effective only, 
   if the target platform supports long long integers (BOOST_HAS_LONG_LONG is 
   defined).
+- The following preprocessing hooks now return a boolean value, which when 
+  returning 'true' cause the Wave library to skip the execution of the related 
+  preprocessing action:
+    . found_directive: allows to skip the whole directive it is called for
+    . expanding_object_like_macro: allows to skip expansion of the given object
+        like macro, the macro symbol is copied to the output
+    . expanding_function_like_macro: allows to skip the expansion of the given
+        function like macro, the whole macro invocation (including all 
+        macro invocation parameters) are copied to the output with any further 
+        processing.
+- Changed the interpretation of the return value found_include_directive() 
+  preprocessing hook: a return value of 'false' now normally processes the file 
+  to include and a return value of 'true' now skips the processing of the 
+  include file. 
+  This change was necessary to make the return values of the preprocessing 
+  hooks consistent. Now return 'false' generally means: normal execution and 
+  return 'true' generally means: skip execution of the corresponding 
+  preprocessor action.
 
 Boost V1.34.0
 - Wave Version 1.2.4

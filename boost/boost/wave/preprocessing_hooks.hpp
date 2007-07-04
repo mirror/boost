@@ -56,6 +56,11 @@ struct default_preprocessing_hooks
     //  invocation (starting with the opening parenthesis and ending after the
     //  closing one).
     //
+    //  The return value defines, whether the corresponding macro will be 
+    //  expanded (return false) or will be copied to the output (return true).
+    //  Note: the whole argument list is copied unchanged to the output as well
+    //        without any further processing.
+    //
     ///////////////////////////////////////////////////////////////////////////
 
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
@@ -69,12 +74,13 @@ struct default_preprocessing_hooks
 #else
     // new signature
     template <typename ContextT, typename TokenT, typename ContainerT, typename IteratorT>
-    void expanding_function_like_macro(ContextT const& ctx,
+    bool 
+    expanding_function_like_macro(ContextT const& ctx,
         TokenT const& macrodef, std::vector<TokenT> const& formal_args, 
         ContainerT const& definition,
         TokenT const& macrocall, std::vector<ContainerT> const& arguments,
         IteratorT const& seqstart, IteratorT const& seqend) 
-    {}
+    { return false; }   // default is to normally expand the macro
 #endif
 
     ///////////////////////////////////////////////////////////////////////////
@@ -93,6 +99,9 @@ struct default_preprocessing_hooks
     //
     //  The parameter 'macrocall' marks the position, where this macro invoked.
     //
+    //  The return value defines, whether the corresponding macro will be 
+    //  expanded (return false) or will be copied to the output (return true).
+    //
     ///////////////////////////////////////////////////////////////////////////
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
@@ -103,9 +112,10 @@ struct default_preprocessing_hooks
 #else
     // new signature
     template <typename ContextT, typename TokenT, typename ContainerT>
-    void expanding_object_like_macro(ContextT const& ctx, TokenT const& macro, 
+    bool 
+    expanding_object_like_macro(ContextT const& ctx, TokenT const& macro, 
         ContainerT const& definition, TokenT const& macrocall)
-    {}
+    { return false; }   // default is to normally expand the macro
 #endif
 
     ///////////////////////////////////////////////////////////////////////////
@@ -176,7 +186,7 @@ struct default_preprocessing_hooks
     //  preprocessing constant was defined to something != 0.
     //
     //  The return value defines, whether the found file will be included 
-    //  (return true) or will be skipped (return false),
+    //  (return false) or will be skipped (return true).
     //
     ///////////////////////////////////////////////////////////////////////////
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
@@ -191,7 +201,7 @@ struct default_preprocessing_hooks
     found_include_directive(ContextT const& ctx, std::string const& filename, 
         bool include_next) 
     {
-        return true;    // ok to include this file
+        return false;    // ok to include this file
     }
 #endif
     
@@ -371,6 +381,11 @@ struct default_preprocessing_hooks
     //  The parameter 'directive' is a reference to the token holding the 
     //  preprocessing directive.
     //
+    //  The return value defines, whether the given expression has to be 
+    //  to be executed in a normal way (return 'false'), or if it has to be  
+    //  skipped altogether (return 'true'), which means it gets replaced in the 
+    //  output by a single newline.
+    //
     ///////////////////////////////////////////////////////////////////////////
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
@@ -381,9 +396,9 @@ struct default_preprocessing_hooks
 #else
     // new signature
     template <typename ContextT, typename TokenT>
-    void
+    bool
     found_directive(ContextT const& ctx, TokenT const& directive)
-    {}
+    { return false; }   // by default we never skip any directives
 #endif
 
     ///////////////////////////////////////////////////////////////////////////

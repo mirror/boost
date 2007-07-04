@@ -393,6 +393,9 @@ namespace boost { namespace wave
 #if defined(BOOST_HAS_THREADS)
 #define BOOST_SPIRIT_THREADSAFE 1
 #define PHOENIX_THREADSAFE 1
+#else
+// disable thread support in Boost.Pool
+#define BOOST_NO_MT 1
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////

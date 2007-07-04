@@ -195,18 +195,22 @@ public:
         TokenT const &macrodef, std::vector<TokenT> const &formal_args, 
         ContainerT const &definition,
         TokenT const &macrocall, std::vector<ContainerT> const &arguments) 
+    {
+        if (!enabled_macro_tracing()) 
+            return;
 #else
     // new signature
     template <typename ContextT, typename ContainerT, typename IteratorT>
-    void expanding_function_like_macro(ContextT const& ctx,
+    bool 
+    expanding_function_like_macro(ContextT const& ctx,
         TokenT const &macrodef, std::vector<TokenT> const &formal_args, 
         ContainerT const &definition,
         TokenT const &macrocall, std::vector<ContainerT> const &arguments,
         IteratorT const& seqstart, IteratorT const& seqend) 
-#endif
     {
-        if (!enabled_macro_tracing()) return;
-        
+        if (!enabled_macro_tracing()) 
+            return false;
+#endif
         if (0 == get_level()) {
         // output header line
         BOOST_WAVE_OSSTREAM stream;
@@ -278,6 +282,10 @@ public:
             close_trace_body();
         }
         open_trace_body();
+        
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
+        return false;
+#endif
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -302,16 +310,20 @@ public:
     template <typename ContainerT>
     void expanding_object_like_macro(TokenT const &macrodef, 
         ContainerT const &definition, TokenT const &macrocall)
+    {
+        if (!enabled_macro_tracing()) 
+            return;
 #else
     // new signature
     template <typename ContextT, typename ContainerT>
-    void expanding_object_like_macro(ContextT const& ctx,
+    bool 
+    expanding_object_like_macro(ContextT const& ctx,
         TokenT const &macrodef, ContainerT const &definition, 
         TokenT const &macrocall)
-#endif
     {
-        if (!enabled_macro_tracing()) return;
-        
+        if (!enabled_macro_tracing()) 
+            return false;
+#endif
         if (0 == get_level()) {
         // output header line
         BOOST_WAVE_OSSTREAM stream;
@@ -333,6 +345,10 @@ public:
             output(BOOST_WAVE_GETSTRING(stream));
         }
         open_trace_body();
+
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
+        return false;
+#endif
     }
     
     ///////////////////////////////////////////////////////////////////////////

@@ -1119,7 +1119,8 @@ token_id id = token_id(found_directive);
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().found_directive(found_directive);     
 #else
-    ctx.get_hooks().found_directive(ctx, found_directive);     
+    if (ctx.get_hooks().found_directive(ctx, found_directive))
+        return true;    // skip this directive and return newline only
 #endif
     
     switch (static_cast<unsigned int>(id)) {
@@ -1278,7 +1279,7 @@ char const *current_name = 0;   // never try to match current file name
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().found_include_directive(f, include_next);
 #else
-    if (!ctx.get_hooks().found_include_directive(ctx, f, include_next))
+    if (ctx.get_hooks().found_include_directive(ctx, f, include_next))
         return true;    // client returned false: skip file to include 
 #endif
 

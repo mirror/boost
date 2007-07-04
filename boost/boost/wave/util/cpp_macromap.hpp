@@ -1236,10 +1236,16 @@ ContainerT replacement_list;
                 macro_def.macroname, macro_def.macroparameters, 
                 macro_def.macrodefinition, curr_token, arguments);
 #else
-            ctx.get_hooks().expanding_function_like_macro(
+            if (ctx.get_hooks().expanding_function_like_macro(
                 ctx, macro_def.macroname, macro_def.macroparameters, 
                 macro_def.macrodefinition, curr_token, arguments,
-                seqstart, first);
+                    seqstart, first))
+            {
+                // do not expand this macro, just copy the whole sequence 
+                std::copy(seqstart, first, 
+                    std::inserter(replacement_list, replacement_list.end()));
+                return false;           // no further preprocessing required
+            }
 #endif
 
         // expand the replacement list of this macro
@@ -1252,8 +1258,15 @@ ContainerT replacement_list;
             ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
 #else
-            ctx.get_hooks().expanding_object_like_macro(
-                ctx, macro_def.macroname, macro_def.macrodefinition, curr_token);
+            if (ctx.get_hooks().expanding_object_like_macro(
+                    ctx, macro_def.macroname, macro_def.macrodefinition, 
+                    curr_token))
+            {
+                // do not expand this macro, just copy the whole sequence 
+                replacement_list.push_back(curr_token);
+                ++first;                // skip macro name
+                return false;           // no further preprocessing required
+            }
 #endif
 
         bool found = false;
@@ -1289,8 +1302,15 @@ ContainerT replacement_list;
             ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
 #else
-            ctx.get_hooks().expanding_object_like_macro(
-                ctx, macro_def.macroname, macro_def.macrodefinition, curr_token);
+            if (ctx.get_hooks().expanding_object_like_macro(
+                    ctx, macro_def.macroname, macro_def.macrodefinition, 
+                    curr_token))
+            {
+                // do not expand this macro, just copy the whole sequence 
+                replacement_list.push_back(curr_token);
+                ++first;                // skip macro name
+                return false;           // no further preprocessing required
+            }
 #endif
 
         bool found = false;
