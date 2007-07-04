@@ -104,7 +104,7 @@ namespace impl {
                 is_unsigned);
 
             return is_unsigned ? 
-                return_type(ul) : return_type(static_cast<uint_literal_type>(ul));
+                return_type(ul) : return_type(static_cast<int_literal_type>(ul));
         }
     };
     phoenix::function<convert_intlit> const as_intlit;
