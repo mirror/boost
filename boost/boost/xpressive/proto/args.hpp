@@ -23,34 +23,38 @@
 
     namespace boost { namespace proto
     {
-    #define BOOST_PROTO_DEFINE_ARG_N(z, n, data)\
-        typedef BOOST_PP_CAT(Arg, n) BOOST_PP_CAT(arg, n);
-
-    #define BOOST_PROTO_DEFINE_VOID_N(z, n, data)\
-        typedef mpl::void_ BOOST_PP_CAT(arg, n);
-
-        /// \brief A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
-        ///
-        /// A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
-        /// The types in the sequence correspond to the children of a node in an expression tree.
-        template< typename Arg0 >
-        struct args0
+        namespace argsns_
         {
-            BOOST_STATIC_CONSTANT(long, size = 0);
-            typedef Arg0 arg0;
-            BOOST_PP_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
+        #define BOOST_PROTO_DEFINE_ARG_N(z, n, data)\
+            typedef BOOST_PP_CAT(Arg, n) BOOST_PP_CAT(arg, n);
 
-            /// INTERNAL ONLY
+        #define BOOST_PROTO_DEFINE_VOID_N(z, n, data)\
+            typedef mpl::void_ BOOST_PP_CAT(arg, n);
+
+            /// \brief A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
             ///
-            typedef Arg0 back_;
-        };
+            /// A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
+            /// The types in the sequence correspond to the children of a node in an expression tree.
+            template< typename Arg0 >
+            struct args0
+            {
+                BOOST_STATIC_CONSTANT(long, size = 0);
+                typedef Arg0 arg0;
+                BOOST_PP_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
 
-    #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/args.hpp>))
-    #include BOOST_PP_ITERATE()
+                /// INTERNAL ONLY
+                ///
+                typedef Arg0 back_;
+            };
 
-    #undef BOOST_PROTO_DEFINE_ARG_N
-    #undef BOOST_PROTO_DEFINE_VOID_N
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/args.hpp>))
+        #include BOOST_PP_ITERATE()
 
+        #undef BOOST_PROTO_DEFINE_ARG_N
+        #undef BOOST_PROTO_DEFINE_VOID_N
+        }
+
+        using namespace argsns_;
     }}
     #endif
 

@@ -332,95 +332,17 @@
             // handle proto::switch_
             template<typename Expr, typename Cases>
             struct matches_impl<Expr, switch_<Cases> >
-              : matches_impl<Expr, typename Cases::template case_<typename Expr::proto_tag>::proto_base_expr>
+              : matches_impl<
+                    Expr
+                  , typename Cases::template case_<typename Expr::proto_tag>::proto_base_expr
+                >
             {};
-
         }
 
         template<typename Expr, typename Grammar>
         struct matches
           : detail::matches_impl<typename Expr::proto_base_expr, typename Grammar::proto_base_expr>
         {};
-
-        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
-        struct or_
-        {
-            typedef or_ proto_base_expr;
-
-            template<typename Expr, typename State, typename Visitor>
-            struct apply
-            {
-                typedef typename detail::matches_impl<Expr, or_>::which which;
-                typedef typename which::template apply<Expr, State, Visitor>::type type;
-            };
-
-            template<typename Expr, typename State, typename Visitor>
-            static typename apply<Expr, State, Visitor>::type
-            call(Expr const &expr, State const &state, Visitor &visitor)
-            {
-                typedef typename detail::matches_impl<Expr, or_>::which which;
-                return which::call(expr, state, visitor);
-            }
-        };
-
-        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
-        struct and_
-        {
-            typedef and_ proto_base_expr;
-
-            template<typename Expr, typename State, typename Visitor>
-            struct apply
-            {
-                typedef typename detail::last<and_>::type which;
-                typedef typename which::template apply<Expr, State, Visitor>::type type;
-            };
-
-            template<typename Expr, typename State, typename Visitor>
-            static typename apply<Expr, State, Visitor>::type
-            call(Expr const &expr, State const &state, Visitor &visitor)
-            {
-                typedef typename detail::last<and_>::type which;
-                return which::call(expr, state, visitor);
-            }
-        };
-
-        template<typename Cases>
-        struct switch_
-        {
-            typedef switch_ proto_base_expr;
-
-            template<typename Expr, typename State, typename Visitor>
-            struct apply
-              : Cases::template case_<typename Expr::proto_tag>::template apply<Expr, State, Visitor>
-            {};
-
-            template<typename Expr, typename State, typename Visitor>
-            static typename apply<Expr, State, Visitor>::type
-            call(Expr const &expr, State const &state, Visitor &visitor)
-            {
-                return Cases::template case_<typename Expr::proto_tag>::call(expr, state, visitor);
-            }
-        };
-
-        namespace placeholder_detail_
-        {
-            struct _
-              : has_identity_transform
-            {
-                typedef _ proto_base_expr;
-                typedef void proto_is_placeholder_;
-            };
-
-            template<typename T>
-            transform::detail::yes_type is_placeholder_expression_fun(T const *);
-        }
-
-        template<typename Grammar>
-        struct not_
-          : has_identity_transform
-        {
-            typedef not_ proto_base_expr;
-        };
 
         template<typename Grammar>
         struct vararg
@@ -433,29 +355,117 @@
         struct exact
         {};
 
-        template<typename Condition, typename Then, typename Else>
-        struct if_
-          : or_<
-                and_<if_<Condition>, Then>
-              , and_<not_<if_<Condition> >, Else>
-            >
-        {};
-
-        template<typename Condition, typename Then>
-        struct if_<Condition, Then, void>
-          : and_<if_<Condition>, Then>
-        {};
-
-        template<typename Condition>
-        struct if_<Condition, void, void>
-          : has_identity_transform
-        {
-            typedef if_ proto_base_expr;
-        };
-
         template<typename T>
         struct convertible_to
         {};
+
+        namespace wildcardns_
+        {
+            struct _
+              : has_identity_transform
+            {
+                typedef _ proto_base_expr;
+                typedef void proto_is_wildcard_;
+            };
+
+            template<typename T>
+            transform::detail::yes_type is_wildcard_expression_fun(T const *);
+        }
+
+        namespace control
+        {
+            // not_
+            template<typename Grammar>
+            struct not_
+              : has_identity_transform
+            {
+                typedef not_ proto_base_expr;
+            };
+
+            // if_
+            template<typename Condition, typename Then, typename Else>
+            struct if_
+              : or_<
+                    and_<if_<Condition>, Then>
+                  , and_<not_<if_<Condition> >, Else>
+                >
+            {};
+
+            template<typename Condition, typename Then>
+            struct if_<Condition, Then, void>
+              : and_<if_<Condition>, Then>
+            {};
+
+            template<typename Condition>
+            struct if_<Condition, void, void>
+              : has_identity_transform
+            {
+                typedef if_ proto_base_expr;
+            };
+
+            // or_
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
+            struct or_
+            {
+                typedef or_ proto_base_expr;
+
+                template<typename Expr, typename State, typename Visitor>
+                struct apply
+                {
+                    typedef typename detail::matches_impl<Expr, or_>::which which;
+                    typedef typename which::template apply<Expr, State, Visitor>::type type;
+                };
+
+                template<typename Expr, typename State, typename Visitor>
+                static typename apply<Expr, State, Visitor>::type
+                call(Expr const &expr, State const &state, Visitor &visitor)
+                {
+                    typedef typename detail::matches_impl<Expr, or_>::which which;
+                    return which::call(expr, state, visitor);
+                }
+            };
+
+            // and_
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
+            struct and_
+            {
+                typedef and_ proto_base_expr;
+
+                template<typename Expr, typename State, typename Visitor>
+                struct apply
+                {
+                    typedef typename detail::last<and_>::type which;
+                    typedef typename which::template apply<Expr, State, Visitor>::type type;
+                };
+
+                template<typename Expr, typename State, typename Visitor>
+                static typename apply<Expr, State, Visitor>::type
+                call(Expr const &expr, State const &state, Visitor &visitor)
+                {
+                    typedef typename detail::last<and_>::type which;
+                    return which::call(expr, state, visitor);
+                }
+            };
+
+            // switch_
+            template<typename Cases>
+            struct switch_
+            {
+                typedef switch_ proto_base_expr;
+
+                template<typename Expr, typename State, typename Visitor>
+                struct apply
+                  : Cases::template case_<typename Expr::proto_tag>::template apply<Expr, State, Visitor>
+                {};
+
+                template<typename Expr, typename State, typename Visitor>
+                static typename apply<Expr, State, Visitor>::type
+                call(Expr const &expr, State const &state, Visitor &visitor)
+                {
+                    return Cases::template case_<typename Expr::proto_tag>::call(expr, state, visitor);
+                }
+            };
+        }
     }}
 
     #endif

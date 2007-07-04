@@ -27,11 +27,11 @@
         namespace detail
         {
             template<typename T>
-            struct is_placeholder_expression
+            struct is_wildcard_expression
             {
                 BOOST_STATIC_CONSTANT(
                     bool
-                  , value = (sizeof(is_placeholder_expression_fun(static_cast<T*>(0)))==                        \
+                  , value = (sizeof(is_wildcard_expression_fun(static_cast<T*>(0)))==                        \
                              sizeof(yes_type))
                 );
                 typedef mpl::bool_<value> type;
@@ -66,7 +66,7 @@
             struct apply_aux2_;
 
             template<typename R, typename Expr, typename State, typename Visitor,
-                     bool IsPlaceholder = is_placeholder_expression<R>::value>
+                     bool IsWildcard = is_wildcard_expression<R>::value>
             struct apply_aux_
             {
                 typedef R type;
@@ -83,7 +83,7 @@
             {};
 
             template<typename R, typename Expr, typename State, typename Visitor>
-            struct apply_<R, Expr, State, Visitor, typename R::proto_is_placeholder_>
+            struct apply_<R, Expr, State, Visitor, typename R::proto_is_wildcard_>
               : nested_type<typename R::template apply<Expr, State, Visitor>::type>
             {};
 

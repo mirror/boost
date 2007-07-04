@@ -26,40 +26,43 @@ namespace boost { namespace proto
     BOOST_PP_CAT(proto_arg, n);\
     /**/
 
-    template<typename Expr>
-    struct ref_
+    namespace refns_
     {
-        typedef typename Expr::proto_base_expr proto_base_expr;
-        typedef typename Expr::proto_tag proto_tag;
-        typedef typename Expr::proto_args proto_args;
-        typedef typename Expr::proto_arity proto_arity;
-        typedef typename Expr::proto_domain proto_domain;
-        typedef proto_ref_tag fusion_tag;
-        typedef void proto_is_ref_;
-        typedef void proto_is_expr_;
-        typedef Expr proto_derived_expr;
-
-        BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
-
-        typename mpl::if_<is_const<Expr>, proto_base_expr const &, proto_base_expr &>::type
-        proto_base() const
+        template<typename Expr>
+        struct ref_
         {
-            return this->expr.proto_base();
-        }
+            typedef typename Expr::proto_base_expr proto_base_expr;
+            typedef typename Expr::proto_tag proto_tag;
+            typedef typename Expr::proto_args proto_args;
+            typedef typename Expr::proto_arity proto_arity;
+            typedef typename Expr::proto_domain proto_domain;
+            typedef proto_ref_tag fusion_tag;
+            typedef void proto_is_ref_;
+            typedef void proto_is_expr_;
+            typedef Expr proto_derived_expr;
 
-        static ref_<Expr> make(Expr &expr)
-        {
-            ref_<Expr> that = {expr};
-            return that;
-        }
+            BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
 
-        Expr &expr;
-    };
+            typename mpl::if_<is_const<Expr>, proto_base_expr const &, proto_base_expr &>::type
+            proto_base() const
+            {
+                return this->expr.proto_base();
+            }
 
-    // ref_-to-ref_ is not allowed. this will cause a compile error.
-    template<typename Expr>
-    struct ref_<ref_<Expr> >
-    {};
+            static ref_<Expr> make(Expr &expr)
+            {
+                ref_<Expr> that = {expr};
+                return that;
+            }
+
+            Expr &expr;
+        };
+
+        // ref_-to-ref_ is not allowed. this will cause a compile error.
+        template<typename Expr>
+        struct ref_<ref_<Expr> >
+        {};
+    }
 
 #undef BOOST_PROTO_ARG
 

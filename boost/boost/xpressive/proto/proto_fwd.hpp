@@ -116,12 +116,12 @@ namespace boost { namespace proto
         struct function;
     }
 
-    namespace placeholder_detail_
+    namespace wildcardns_
     {
         struct _;
     }
 
-    using placeholder_detail_::_;
+    using wildcardns_::_;
 
     struct default_generator;
 
@@ -160,8 +160,13 @@ namespace boost { namespace proto
 
     using ops::is_proto_expr;
 
-    template<typename Expr>
-    struct ref_;
+    namespace refns_
+    {
+        template<typename Expr>
+        struct ref_;
+    }
+
+    using refns_::ref_;
 
     template<typename Expr, typename Grammar>
     struct matches;
@@ -172,28 +177,37 @@ namespace boost { namespace proto
     template<typename T>
     struct convertible_to;
 
-    template<
-        typename Grammar0
-      , typename Grammar1
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
-    >
-    struct or_;
+    namespace control
+    {
+        template<
+            typename Grammar0
+          , typename Grammar1
+          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
+        >
+        struct or_;
 
-    template<
-        typename Grammar0
-      , typename Grammar1
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
-    >
-    struct and_;
+        template<
+            typename Grammar0
+          , typename Grammar1
+          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
+        >
+        struct and_;
 
-    template<typename Condition, typename Then = void, typename Else = void>
-    struct if_;
+        template<typename Condition, typename Then = void, typename Else = void>
+        struct if_;
 
-    template<typename Cases>
-    struct switch_;
+        template<typename Cases>
+        struct switch_;
 
-    template<typename Grammar>
-    struct not_;
+        template<typename Grammar>
+        struct not_;
+    }
+
+    using control::if_;
+    using control::or_;
+    using control::and_;
+    using control::not_;
+    using control::switch_;
 
     struct proto_expr_tag;
     struct proto_ref_tag;
@@ -373,10 +387,10 @@ namespace boost { namespace proto
         	
             struct default_factory;
 
-            no_type is_placeholder_expression_fun(...);
+            no_type is_wildcard_expression_fun(...);
 
             template<typename T>
-            struct is_placeholder_expression;
+            struct is_wildcard_expression;
         }
 
         template<typename Grammar, typename N = mpl::long_<0> >
