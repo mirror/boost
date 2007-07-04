@@ -100,11 +100,11 @@ namespace impl {
         { 
             typedef boost::wave::grammars::closures::closure_value return_type;
             bool is_unsigned = false;
-            unsigned long ul = intlit_grammar_gen<TokenT>::evaluate(token, 
+            uint_literal_type ul = intlit_grammar_gen<TokenT>::evaluate(token, 
                 is_unsigned);
 
             return is_unsigned ? 
-                return_type(ul) : return_type(static_cast<long>(ul));
+                return_type(ul) : return_type(static_cast<uint_literal_type>(ul));
         }
     };
     phoenix::function<convert_intlit> const as_intlit;

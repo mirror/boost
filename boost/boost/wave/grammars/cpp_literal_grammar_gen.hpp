@@ -42,7 +42,7 @@ namespace grammars {
 template <typename TokenT>
 struct BOOST_WAVE_DECL intlit_grammar_gen {
 
-    static unsigned long evaluate(TokenT const &tok, bool &is_unsigned);
+    static uint_literal_type evaluate(TokenT const &tok, bool &is_unsigned);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -351,6 +351,43 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Decide, whether to support long long integers in the preprocessor.
+//
+//  The C++ standard requires the preprocessor to use one of the following 
+//  types for integer literals: long or unsigned long depending on a optional 
+//  suffix ('u', 'l', 'ul', or 'lu')
+//
+//  Sometimes it's required to preprocess integer literals bigger than that
+//  (i.e. long long or unsigned long long). In this case you need to define the 
+//  BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS to something not equal to zero.
+//
+//  This pp constant is effective only, if your target platform supports 
+//  long long integers (BOOST_HAS_LONG_LONG is defined).
+//
+//  Please note, that this setting doesn't relate to the Wave support option
+//  support_option_long_long, which enables the recognition of 'll' suffixes 
+//  only.
+//
+//  Defining this pp constant enables the recognition of long long integers
+//  even if these do not have the 'll' suffix.
+//
+#if !defined(BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS)
+#define BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS 0
+#endif
+
+namespace boost { namespace wave 
+{
+#if defined(BOOST_HAS_LONG_LONG) && \
+    BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS != 0
+    typedef boost::long_long_type int_literal_type;
+    typedef boost::ulong_long_type uint_literal_type;
+#else
+    typedef long int_literal_type;
+    typedef unsigned long uint_literal_type;
+#endif
+}}
+
+///////////////////////////////////////////////////////////////////////////////
 //  configure Boost.Spirit thread support, Boost.Pool is configured
 //  automatically 
 #if defined(BOOST_HAS_THREADS)

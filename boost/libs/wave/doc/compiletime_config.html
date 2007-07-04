@@ -117,6 +117,20 @@
     <td class="table_cells"><code>BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS</code></td>
     <td class="table_cells"><p>If defined to something not equal to zero (<span class="literal">'0'</span>) Wave will be compiled to use the depreciated preprocessing hooks. The interface of the preprocessing hooks has been changed after the Boost V1.34.x releases. This constant allows to compile applications using the older interface. </p></td>
   </tr>
+  <tr>
+    <td class="table_cells"><code>BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS</code></td>
+    <td class="table_cells"><p>The C++ standard requires the preprocessor to use one of the following 
+      types for integer literals: <code>long</code> or <code>unsigned long</code> depending on a optional 
+      suffix (<span class="literal">'u'</span>, <span class="literal">'l'</span>, <span class="literal">'ul'</span>, or <span class="literal">'lu'</span>). Sometimes it is required to preprocess integer literals larger than that
+        (i.e. <code>long long</code> or <code>unsigned long long</code>). Defining this pp constant enables the recognition of long long integers
+even if these do not have the <span class="literal">'ll'</span> suffix.</p>
+      <p>This preprocessor constant is effective only, if your target platform supports 
+        long long integers (<code>BOOST_HAS_LONG_LONG</code> is defined). Please note, that this setting doesn't relate to the Wave support option
+        <code>support_option_long_long</code>, which enables the recognition of <span class="literal">'ll'</span> suffixes 
+        only.
+    </p>
+      </td>
+  </tr>
 </table>
 <P dir="ltr"><b><a name="using_custom_lexer"></a>Using a different token type or lexer type in conjunction with Wave </b></P>
 <P dir="ltr">It is possible to use the <tt>Wave</tt> library while using your own token and/or lexer types. This may be achieved by providing your lexer type as the second template parameter while instantiating the <tt>boost::wave::context&lt;&gt;</tt> object. The token type used by the library is derived from the <tt>token_type</tt> typedef to be provided by the lexer type. If you want to provide your own token type only, you may use the <tt>boost::wave::lex_iterator&lt;&gt;</tt> type contained with the library. This type needs to be parametrized with the token type to use. </P>
@@ -215,7 +229,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, June 26, 2007  20:15<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, July 4, 2007  13:21<!-- #EndDate -->
 </span></p>
 </body>
 </html>

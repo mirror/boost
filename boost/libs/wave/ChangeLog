@@ -121,6 +121,11 @@ CHANGELOG
   which lists all defined macros and their definitions to an optionally 
   specified file (default is cout).
 - Fixed configuration to take into account thread related build settings.
+- Added the BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS pp constant allowing
+  to recognize large integer literals (larger in size than long/unsigned long) 
+  even if these do not have a 'll' suffix. This pp constant is effective only, 
+  if the target platform supports long long integers (BOOST_HAS_LONG_LONG is 
+  defined).
 
 Boost V1.34.0
 - Wave Version 1.2.4

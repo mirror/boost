@@ -217,6 +217,15 @@ public:
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
+    typedef boost::wave::util::macromap<self_type> macromap_type;
+    typedef typename macromap_type::name_iterator name_iterator;
+    typedef typename macromap_type::const_name_iterator const_name_iterator;
+    
+    name_iterator macro_names_begin() { return macros.begin(); }
+    name_iterator macro_names_end() { return macros.end(); }
+    const_name_iterator macro_names_begin() const { return macros.begin(); }
+    const_name_iterator macro_names_end() const { return macros.end(); }
+
 // get the Wave version information 
     static std::string get_version()  
         { return boost::wave::util::predefined_macros::get_fullversion(false); }
@@ -442,7 +451,7 @@ private:
     boost::wave::util::if_block_stack ifblocks;   // conditional compilation contexts
     boost::wave::util::include_paths includes;    // lists of include directories to search
     iteration_context_stack_type iter_ctxs;       // iteration contexts
-    boost::wave::util::macromap<self_type> macros;  // map of defined macros
+    macromap_type macros;                         // map of defined macros
     boost::wave::language_support language;       // supported language/extensions
     hook_policy_type hooks;                       // hook policy instance
 };
