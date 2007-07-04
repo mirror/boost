@@ -157,11 +157,11 @@ public:
    reference <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_1d219f0d3203fb43b964a8cf63f1865cd">operator[]</a>(size_type index);
    const_reference <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_10a7001ebed1ee8c0c31b7b03887cd96b">operator[]</a>(size_type index) const;
+"circular_buffer.html#classboost_1_1circular__buffer_1eb0a7fe7f8a56a4dc4c933b93adfcef4">operator[]</a>(size_type index) const;
    reference <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_1cd84838cb4fffb6c113fd0297e502edc">at</a>(size_type index);
    const_reference <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_1d18a1d3a8c5efba3635cd37b8d0a1e35">at</a>(size_type index) const;
+"circular_buffer.html#classboost_1_1circular__buffer_1b233a298f5845a0fcf2ecc56f4170810">at</a>(size_type index) const;
    reference <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_10d5fdeabeb352f47d1f7bb1ea8d9819f">front</a>();
    reference <a href=
@@ -186,22 +186,6 @@ public:
 "circular_buffer.html#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size</a>() const;
    bool <a href=
 "circular_buffer.html#classboost_1_1circular__buffer_105acab2b9a0b41044b5241cfc9d87663">empty</a>() const;
-   explicit <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_1e53e744d2f94a2bcbfcdb219a9d93300">circular_buffer</a>(const allocator_type&amp; alloc = allocator_type());
-   explicit <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_1862a64cbc6a49376ecbb8321c3b44974">circular_buffer</a>(capacity_type capacity, const allocator_type&amp; alloc = allocator_type());
-   <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_1fdace8f110d5b7a17c02020757f06fe8">circular_buffer</a>(size_type n, const_reference item, const allocator_type&amp; alloc = allocator_type());
-   <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_10c7e9286d8270357d7e369b183124239">circular_buffer</a>(capacity_type capacity, size_type n, const_reference item, const allocator_type&amp; alloc = allocator_type());
-   <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_1e515d8a951eeb18b8cc930300e7e13bd">circular_buffer</a>(const circular_buffer&lt;T, Alloc&gt;&amp; cb);
-   template &lt;class InputIterator&gt;
-      <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_1744ec06b06a5a723386b645a29cb8ed2">circular_buffer</a>(InputIterator first, InputIterator last, const allocator_type&amp; alloc = allocator_type());
-   template &lt;class InputIterator&gt;
-      <a href=
-"circular_buffer.html#classboost_1_1circular__buffer_1a64dcad327971194a706d52487151eb7">circular_buffer</a>(capacity_type capacity, InputIterator first, InputIterator last, const allocator_type&amp; alloc = allocator_type());
    bool <a href="#classboost_1_1circular__buffer__space__optimized_15f5e6fb070d2484eaa037cdf4ffd69a8">full</a>() const;
    size_type <a href=
 "#classboost_1_1circular__buffer__space__optimized_100d0c06a38f789ae760709cc86420ae4">reserve</a>() const;
@@ -260,6 +244,27 @@ public:
    void <a href="#classboost_1_1circular__buffer__space__optimized_12aa1dd29bd9509b5482ca2666c61deab">clear</a>();
 };
 
+template &lt;class T, class Alloc&gt;
+   bool <a href=
+"circular_buffer.html#namespaceboost_1d35871e838359b5215e1cbb353663207">operator==</a>(const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; lhs, const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; rhs);
+template &lt;class T, class Alloc&gt;
+   bool <a href=
+"circular_buffer.html#namespaceboost_195b08213f201c2067d8acb024756329d">operator&lt;</a>(const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; lhs, const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; rhs);
+template &lt;class T, class Alloc&gt;
+   bool <a href=
+"circular_buffer.html#namespaceboost_1f5717e2f6532581a6492ff1839b18f6d">operator!=</a>(const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; lhs, const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; rhs);
+template &lt;class T, class Alloc&gt;
+   bool <a href=
+"circular_buffer.html#namespaceboost_1f575d7a9741c2044424de50c966c12f3">operator&gt;</a>(const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; lhs, const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; rhs);
+template &lt;class T, class Alloc&gt;
+   bool <a href=
+"circular_buffer.html#namespaceboost_179abcbacd24b67f08185db54aec8600d">operator&lt;=</a>(const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; lhs, const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; rhs);
+template &lt;class T, class Alloc&gt;
+   bool <a href=
+"circular_buffer.html#namespaceboost_11c31150380272af67deebef578c80b05">operator&gt;=</a>(const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; lhs, const circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; rhs);
+template &lt;class T, class Alloc&gt;
+   void <a href=
+"circular_buffer.html#namespaceboost_14aa8f6a2c9640f3f22e266f0fca85777">swap</a>(circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; lhs, circular_buffer_space_optimized&lt;T, Alloc&gt;&amp; rhs);
 
 } // namespace boost
 </pre>
@@ -1288,9 +1293,13 @@ public:
               <dd>
                 To explicitly clear the extra allocated memory use the <b>shrink-to-fit</b> technique:<br>
                 <br>
-                <code>boost::circular_buffer_space_optimized&lt;int&gt; cb(1000);<br>
+                <code><a href=
+                "circular_buffer.html#namespaceboost">boost</a>::circular_buffer_space_optimized&lt;int&gt;
+                cb(1000);<br>
                 ...<br>
-                boost::circular_buffer_space_optimized&lt;int&gt;(cb).swap(cb);</code><br>
+                <a href=
+                "circular_buffer.html#namespaceboost">boost</a>::circular_buffer_space_optimized&lt;int&gt;(cb).swap(cb);</code><br>
+
                 <br>
                 For more information about the shrink-to-fit technique in STL see <a href=
                 "http://www.gotw.ca/gotw/054.htm">http://www.gotw.ca/gotw/054.htm</a>.
