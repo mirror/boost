@@ -147,7 +147,7 @@ public:
 
     virtual void * get_deleter( std::type_info const & ti )
     {
-        return ti == typeid(D)? &del: 0;
+        return ti == typeid(D)? &reinterpret_cast<char&>( del ): 0;
     }
 
 #if defined(BOOST_SP_USE_STD_ALLOCATOR)
@@ -217,7 +217,7 @@ public:
 
     virtual void * get_deleter( std::type_info const & ti )
     {
-        return ti == typeid( D )? &d_: 0;
+        return ti == typeid( D )? &reinterpret_cast<char&>( d_ ): 0;
     }
 };
 
