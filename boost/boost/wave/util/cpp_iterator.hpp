@@ -1098,7 +1098,6 @@ pp_iterator_functor<ContextT>::dispatch_directive(
     token_sequence_type const& found_eoltokens)
 {
     using namespace cpplexer;
-    using namespace boost::spirit;
     
     typedef typename parse_tree_type::const_iterator const_child_iterator_t;
     

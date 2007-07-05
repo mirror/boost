@@ -56,7 +56,7 @@
 
         <span class="comment">// general hook functions</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_directive">found_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_directive">found_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
             TokenT <span class="keyword">const </span>&amp;directive);<br>
         <span class="comment">// test, whether a given token may be skipped</span><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;
         <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#may_skip_whitespace">may_skip_whitespace</a> (ContextT <span class="keyword">const</span>&amp; ctx,
@@ -72,7 +72,7 @@
             typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT,
             <span class="keyword">typename</span> IteratorT
         &gt;
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(
             ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span> &amp;macrodef, 
             <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, 
             ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, 
@@ -80,7 +80,7 @@
             IteratorT <span class="keyword">const</span> &amp;seqstart, Iterator <span class="keyword">const</span> &amp;seqend);
  
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanding_object_like_macro">expanding_object_like_macro</a>(
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#expanding_object_like_macro">expanding_object_like_macro</a>(
             ContextT <span class="keyword">const</span> &amp;ctx, TokenT <span class="keyword">const</span> &amp;macro, 
             ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);
  
@@ -94,7 +94,7 @@
 
         <span class="comment">// include file tracing functions</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#opened_include_file">found_include_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#opened_include_file">found_include_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
             std::string <span class="keyword">const</span> &amp;filename, <span class="keyword">bool</span> include_next);
 
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;
@@ -137,7 +137,7 @@
 
         <span class="comment">// #line directive hook</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
-        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_line_directive">found_line_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
+        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_line_directive">found_line_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
             ContainerT <span class="keyword">const</span> &amp;arguments, <span class="keyword">unsigned int</span> line,
             std::string <span class="keyword">const</span>&amp; filename);
     };
@@ -147,12 +147,13 @@
 <h3>General hook functions </h3>
 <p><a name="found_directive"></a><strong>found_directive</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;
-    <span class="keyword">void</span> found_directive(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const </span>&amp;directive);
+    <span class="keyword">bool</span> found_directive(ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const </span>&amp;directive);
 </pre>
 <blockquote>
   <p>The function <tt>found_directive</tt> is called, whenever the preprocessor has detected one of the preprocessing directives (<span class="preprocessor">#define</span>, <span class="preprocessor">#undef</span>, <span class="preprocessor">#if</span>, <span class="preprocessor">#idef</span>, <span class="preprocessor">#ifndef</span>, <span class="preprocessor">#elif</span>, <span class="preprocessor">#endif</span>, <span class="preprocessor">#error</span>, <span class="preprocessor">#include</span>, <span class="preprocessor">#pragma</span> or <span class="preprocessor">#warning</span>) .</p>
   <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. Note, this parameter was added for the Boost V1.35.0 release. </p>
   <p>The parameter <tt>directive</tt> refers to the token containing the detected preprocessing directive. </p>
+  <p>If the return value is <tt>true</tt>, the directive will be skipped altogether, i.e. no preprocessing is done. The overall directive is replaced by a single newline character. If the return value is <tt>false</tt>, the directive is processed in the normal manner. </p>
 </blockquote>
 <p><a name="may_skip_whitespace" id="may_skip"></a><strong>may_skipwhitespace</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;
@@ -194,7 +195,7 @@
 <h3>Macro expansion tracking functions</h3>
 <p><a name="expanding_function_like_macro"></a><b>expanding_function_like_macro</b></p>
 <pre><span class="keyword">    template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
-    <span class="keyword">void</span> expanding_function_like_macro(
+    <span class="keyword">bool</span> expanding_function_like_macro(
         ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span> &amp;macrodef, 
         <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, 
         ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, 
@@ -223,12 +224,13 @@
   <p>The parameters <tt>seqstart</tt> and <tt>seqend</tt> point into the input token 
     stream allowing to access the whole token sequence comprising the macro
     invocation (starting with the opening parenthesis and ending after the 
-    closing one).<br>
+  closing one).</p>
+  <p>If the return value is <tt>true</tt>, the macro is not expanded, i.e. the overall macro invocation sequence, including the parameters are copied to the output without further processing . If the return value is <tt>false</tt>, the macro is expanded as expected. <br>
   </p>
 </blockquote>
 <p><a name="expanding_object_like_macro"></a><b>expanding_object_like_macro</b></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
-    <span class="keyword">void</span> expanding_object_like_macro(
+    <span class="keyword">bool</span> expanding_object_like_macro(
         ContextT <span class="keyword">const</span>&amp; ctx, TokenT <span class="keyword">const</span> &amp;macro, 
         ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);
 </pre>
@@ -245,6 +247,8 @@
   <p>The <tt>macrocall</tt> parameter marks the position where this macro is invoked. 
     It contains the token which identifies the macro call inside the preprocessed 
     input stream. </p>
+  <p>If the return value is <tt>true</tt>, the macro is not expanded, i.e. the macro symbol is copied to the output without further processing. If the return value is <tt>false</tt>, the macro is expanded as expected. <br>
+</p>
 </blockquote>
 <p><a name="expanded_macro"></a><b>expanded_macro</b></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
@@ -274,7 +278,7 @@
 <h3>Include file tracing functions</h3>
 <p><a name="opened_include_file" id="found_include_directive"></a><strong>found_include_directive</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;
-    <span class="keyword">void</span> found_include_directive(ContextT <span class="keyword">const</span>&amp; ctx, 
+    <span class="keyword">bool</span> found_include_directive(ContextT <span class="keyword">const</span>&amp; ctx, 
         std::string <span class="keyword">const</span> &amp;filename, <span class="keyword">bool</span> include_next);
 </pre>
 <blockquote>
@@ -286,7 +290,8 @@
     in the preprocessed token stream, the format <tt>file</tt> is used for files
     specified through the --force_include command line argument.</p>
   <p>The parameter <tt>include_next</tt> is set to true if the found directive was
-    a <span class="preprocessor">#include_next</span> directive and the <tt>BOOST_WAVE_SUPPORT_INCLUDE_NEXT</tt>    preprocessing constant was defined to something != 0.<br>
+  a <span class="preprocessor">#include_next</span> directive and the <tt>BOOST_WAVE_SUPPORT_INCLUDE_NEXT</tt>    preprocessing constant was defined to something != 0.</p>
+  <p>If the return value is <tt>true</tt>, the include directive is not executed, i.e. the file to include is not loaded nor processed. The overall directive is replaced by a single newline character. If the return value is <tt>false</tt>, the directive is executed in a normal manner. <br>
   </p>
 </blockquote>
 <p><a name="opened_include_file" id="opened_include_file"></a><strong>opened_include_file</strong></p>
@@ -381,34 +386,36 @@
 </blockquote>
 <p><strong><a name="found_warning_directive" id="found_warning_directive"></a>found_warning_drective</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
-    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_warning_directive">found_warning_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
+    <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_warning_directive">found_warning_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
         ContainerT <span class="keyword">const</span> &amp;message);
 </pre>
 <blockquote>
-  <p>The function <tt>found_warning_directive </tt> is called whenever a <span class="preprocessor">#warning </span>directive has been encountered. Note, this functions was added for the Boost V1.35.0 release. This function will be called only if the <tt>BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE</tt> compile time constant was defined to something not equal to zero (see the <a href="compiletime_config.html">Compile Time Configuration</a> for more information). </p>
+  <p>The function <tt>found_warning_directive </tt> is called whenever a <span class="preprocessor">#warning </span>directive has been encountered. Note, this function was added for the Boost V1.35.0 release. This function will be called only if the <tt>BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE</tt> compile time constant was defined to something not equal to zero (see the <a href="compiletime_config.html">Compile Time Configuration</a> for more information). </p>
   <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. </p>
-  <p>The parameter <tt>message</tt> references the argument token sequence of the encountered <span class="preprocessor">#warning</span> directive.<br>
-  </p>
+  <p>The parameter <tt>message</tt> references the argument token sequence of the encountered <span class="preprocessor">#warning</span> directive.</p>
+  <p>If the return value is <tt>false</tt>, the library throws a preprocessor 
+  exception of the type <code>warning_directive</code> (normal execution continues), if the return value is <tt>true</tt> the execution continues as if no <span class="preprocessor">#warning</span> directive has been found and the overall directive is replaced by a single newline. </p>
 </blockquote>
 <p><strong><a name="found_error_directive" id="found_error_directive"></a>found_error_drective</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
-    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_error_directive">found_error_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
+    <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_error_directive">found_error_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
         ContainerT <span class="keyword">const</span> &amp;message);
 </pre>
 <blockquote>
-  <p>The function <tt>found_error_directive </tt> is called whenever a <span class="preprocessor">#error </span>directive has been encountered. Note, this functions was added for the Boost V1.35.0 release. </p>
+  <p>The function <tt>found_error_directive </tt> is called whenever a <span class="preprocessor">#error </span>directive has been encountered. Note, this function was added for the Boost V1.35.0 release. </p>
   <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. </p>
-  <p>The parameter <tt>message</tt> references the argument token sequence of the encountered <span class="preprocessor">#error</span> directive.<br>
-  </p>
+  <p>The parameter <tt>message</tt> references the argument token sequence of the encountered <span class="preprocessor">#error</span> directive.</p>
+  <p>If the return value is <tt>false</tt>, the library throws a preprocessor 
+    exception of the type <code>error_directive</code> (normal execution continues), if the return value is <tt>true</tt>    the execution continues as if no <span class="preprocessor">#error</span> directive has been found and the overall directive is replaced by a single newline. </p>
 </blockquote>
 <p><strong><a name="found_line_directive" id="found_line_directive"></a>found_line_drective</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
-    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_error_directive">found_error_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
+    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_error_directive"><strong>found_line_drective</strong></a>(ContextT <span class="keyword">const</span>&amp; ctx, 
         ContainerT <span class="keyword">const</span> &amp;arguments, <span class="keyword">unsigned int</span> line,
         std::string <span class="keyword">const</span>&amp; filename);
 </pre>
 <blockquote>
-  <p>The function <tt>found_line_directive </tt> is called whenever a <span class="preprocessor">#line </span>directive has been encountered. Note, this functions was added for the Boost V1.35.0 release. </p>
+  <p>The function <tt>found_line_directive </tt> is called whenever a <span class="preprocessor">#line </span>directive has been encountered. Note, this function was added for the Boost V1.35.0 release. </p>
   <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. </p>
   <p>The parameter <tt>arguments</tt> references the argument token sequence of the encountered <span class="preprocessor">#line</span> directive.</p>
   <p>The parameter <tt>line</tt> contains the recognized line number from the <span class="preprocessor">#line</span>  directive.</p>
@@ -428,7 +435,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, June 25, 2006  12:10<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, July 4, 2007  16:10<!-- #EndDate -->
 </span></p>
 </body>
 </html>

@@ -42,6 +42,8 @@ struct symbol_table
 :   public std::map<StringT, boost::shared_ptr<MacroDefT> > 
 {
     typedef std::map<StringT, boost::shared_ptr<MacroDefT> > base_type;
+    typedef typename base_type::iterator iterator_type;
+    typedef typename base_type::const_iterator const_iterator_type;
     
     symbol_table(long uid_ = 0) 
     {}
@@ -65,13 +67,13 @@ private:
     //  macros.
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename StringT>
+    template <typename StringT1>
     struct get_first
     {
-        typedef typename StringT const& result_type;
+        typedef StringT1 const& result_type;
 
         template <typename First, typename Second>
-        StringT const& operator() (std::pair<First, Second> const& p) const
+        StringT1 const& operator() (std::pair<First, Second> const& p) const
         {
             return p.first;
         }
@@ -79,8 +81,10 @@ private:
     typedef get_first<StringT> unary_functor;
 
 public:
-    typedef transform_iterator<unary_functor, iterator> name_iterator;
-    typedef transform_iterator<unary_functor, const_iterator> const_name_iterator;
+    typedef transform_iterator<unary_functor, iterator_type> 
+        name_iterator;
+    typedef transform_iterator<unary_functor, const_iterator_type> 
+        const_name_iterator;
 
     template <typename Iterator>
     static 
