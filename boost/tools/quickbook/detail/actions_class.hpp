@@ -87,6 +87,7 @@ namespace quickbook
         int                     list_indent;
         string_list             template_info;
         int                     template_depth;
+        bool                    template_escape;
         template_stack          templates;
 
     // push/pop the states and the streams

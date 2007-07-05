@@ -123,20 +123,28 @@ namespace quickbook
                         )
                     ;
 
+                static const bool true_ = true;
+                static const bool false_ = false;
+
                 template_ =
                     (
+                        ch_p('`')                       [assign_a(actions.template_escape,true_)]
+                        |
+                        eps_p                           [assign_a(actions.template_escape,false_)]
+                    )
+                    >>
+                    ( (
                         (eps_p(punct_p)
                             >> actions.templates.scope
                         )                               [push_back_a(actions.template_info)]
                         >> !template_args
-                    )
-                |   (
+                    ) | (
                         (actions.templates.scope
                             >> eps_p
                         )                               [push_back_a(actions.template_info)]
                         >> !(hard_space
                             >> template_args)
-                    )
+                    ) )
                     ;
 
                 brackets =

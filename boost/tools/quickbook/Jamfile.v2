@@ -20,6 +20,7 @@ exe quickbook
     /boost//program_options
     /boost//filesystem
     : #<define>QUICKBOOK_NO_DATES
+      <toolset>msvc:<cxxflags>/wd4355
       <toolset>msvc:<cxxflags>/wd4511
       <toolset>msvc:<cxxflags>/wd4512
       <toolset>msvc:<cxxflags>/wd4701
@@ -27,6 +28,8 @@ exe quickbook
       <toolset>msvc:<cxxflags>/wd4244
       <toolset>msvc:<cxxflags>/wd4267
       <toolset>msvc:<cxxflags>/wd4800
+      <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
     ;
 
 install dist-bin

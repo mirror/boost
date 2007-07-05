@@ -61,6 +61,7 @@ namespace quickbook
         , list_indent(-1)
         , template_info()
         , template_depth(0)
+        , template_escape(false)
         , templates()
 
     // actions

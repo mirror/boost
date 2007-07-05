@@ -495,7 +495,14 @@ namespace quickbook
             bool is_block = (iter != body.end()) && ((*iter == '\r') || (*iter == '\n'));
             bool r = false;
 
-            if (!is_block)
+            if (actions.template_escape)
+            {
+                //  escape the body of the template
+                //  we just copy out the literal body
+                result = body;
+                r = true;
+            }
+            else if (!is_block)
             {
                 //  do a phrase level parse
                 iterator first(body.begin(), body.end(), actions.filename.native_file_string().c_str());
