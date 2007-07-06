@@ -47,6 +47,12 @@ namespace boost { namespace fusion
         typedef mpl::false_ is_view;
         typedef random_access_traversal_tag category;
         typedef mpl::int_<0> size;
+
+        vector0() {}
+
+        template<typename Sequence>
+        vector0(Sequence const& seq)
+        {}
     };
 
 // expand vector1 to vector10

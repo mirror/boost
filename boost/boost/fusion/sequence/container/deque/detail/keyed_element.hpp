@@ -11,6 +11,9 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
 
+#include <boost/fusion/iterator/deref.hpp>
+#include <boost/fusion/iterator/next.hpp>
+
 namespace boost { namespace fusion {
 
     struct fusion_sequence_tag;
@@ -21,6 +24,13 @@ namespace detail {
     {
         typedef fusion_sequence_tag tag;
         void get();
+
+        template<typename It>
+        static nil_keyed_element 
+        from_iterator(It const&)
+        {
+            return nil_keyed_element();
+        }
     };
 
     template<typename Key, typename Value, typename Rest>
@@ -30,6 +40,14 @@ namespace detail {
         typedef Rest base;
         typedef fusion_sequence_tag tag;
         using Rest::get;
+
+        template<typename It>
+        static keyed_element
+        from_iterator(It const& it)
+        {
+            return keyed_element(
+                *it, base::from_iterator(fusion::next(it)));
+        }
 
         template<typename U, typename Rst>
         keyed_element(keyed_element<Key, U, Rst> const& rhs)

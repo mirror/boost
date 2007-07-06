@@ -20,20 +20,23 @@
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 #include <boost/fusion/sequence/container/deque/deque_fwd.hpp>
 #include <boost/fusion/sequence/container/deque/detail/value_at_impl.hpp>
 #include <boost/fusion/sequence/container/deque/detail/at_impl.hpp>
 #include <boost/fusion/sequence/container/deque/detail/begin_impl.hpp>
 #include <boost/fusion/sequence/container/deque/detail/end_impl.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/mpl/bool.hpp>
 
 #include <boost/fusion/support/sequence_base.hpp>
+#include <boost/fusion/support/void.hpp>
+#include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace fusion {
 
     struct deque_tag;
-    struct void_;
 
     template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename T)>
     struct deque
@@ -61,6 +64,11 @@ namespace boost { namespace fusion {
         template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename U)>
             deque(deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)> const& seq)
             : base(seq)
+            {}
+
+        template<typename Sequence>
+            deque(Sequence const& seq, typename disable_if<is_convertible<Sequence, T0> >::type* dummy = 0)
+            : base(base::from_iterator(fusion::begin(seq)))
             {}
 
         template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename U)>
