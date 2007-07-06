@@ -114,6 +114,11 @@ namespace boost { namespace proto
         struct subscript;
         struct if_else_;
         struct function;
+
+        // Fusion tags
+        struct proto_expr;
+        struct proto_ref;
+        struct proto_ref_iterator;
     }
 
     namespace wildcardns_
@@ -152,7 +157,7 @@ namespace boost { namespace proto
     using domainns_::default_domain;
     using domainns_::deduce_domain;
 
-    namespace ops
+    namespace exprns_
     {
         template<typename Tag, typename Args, long Arity = Args::size>
         struct expr;
@@ -168,11 +173,9 @@ namespace boost { namespace proto
         struct is_proto_expr;
     }
 
-    using ops::expr;
-
-    using ops::extends;
-
-    using ops::is_proto_expr;
+    using exprns_::expr;
+    using exprns_::extends;
+    using exprns_::is_proto_expr;
 
     namespace refns_
     {
@@ -181,15 +184,6 @@ namespace boost { namespace proto
     }
 
     using refns_::ref_;
-
-    template<typename Expr, typename Grammar>
-    struct matches;
-
-    template<typename T>
-    struct exact;
-
-    template<typename T>
-    struct convertible_to;
 
     namespace control
     {
@@ -215,6 +209,17 @@ namespace boost { namespace proto
 
         template<typename Grammar>
         struct not_;
+
+        template<typename T>
+        struct exact;
+
+        template<typename T>
+        struct convertible_to;
+
+        template<typename Grammar>
+        struct vararg;
+
+        int const N = INT_MAX;
     }
 
     using control::if_;
@@ -222,27 +227,44 @@ namespace boost { namespace proto
     using control::and_;
     using control::not_;
     using control::switch_;
+    using control::exact;
+    using control::convertible_to;
+    using control::vararg;
+    using control::N;
 
-    struct proto_expr_tag;
-    struct proto_ref_tag;
-    struct proto_ref_iterator_tag;
+    namespace context
+    {
+        struct null_context;
 
-    struct default_context;
+        template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
+        struct null_eval;
 
-    template<typename Derived, typename DefaultCtx = default_context>
-    struct callable_context;
+        struct default_context;
 
-    template<typename T, typename Domain = default_domain>
-    struct literal;
+        template<typename Expr, typename Context, typename Tag = typename Expr::proto_tag, long Arity = Expr::proto_arity::value>
+        struct default_eval;
 
-    template<typename T, typename EnableIf = void>
-    struct is_ref;
+        template<typename Derived, typename DefaultCtx = default_context>
+        struct callable_context;
 
-    template<typename T, typename EnableIf = void>
-    struct is_expr;
+        template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
+        struct callable_eval;
+    }
 
-    template<typename T, typename EnableIf = void>
-    struct is_domain;
+    using context::null_context;
+    using context::null_eval;
+    using context::default_context;
+    using context::default_eval;
+    using context::callable_context;
+    using context::callable_eval;
+
+    namespace utility
+    {
+        template<typename T, typename Domain = default_domain>
+        struct literal;
+    }
+
+    using utility::literal;
 
     namespace result_of
     {
@@ -287,77 +309,102 @@ namespace boost { namespace proto
 
         template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename _ = void>
         struct unpack_expr;
+
+        template<typename T, typename EnableIf = void>
+        struct is_ref;
+
+        template<typename T, typename EnableIf = void>
+        struct is_expr;
+
+        template<typename T, typename EnableIf = void>
+        struct is_domain;
+
+        template<typename Expr>
+        struct tag_of;
+
+        template<typename T, typename EnableIf = void>
+        struct domain_of;
+
+        template<typename Expr>
+        struct id;
+
+        template<typename Expr, typename Grammar>
+        struct matches;
     }
 
-    template<typename Expr>
-    struct tag_of;
+    using proto::result_of::is_ref;
+    using proto::result_of::is_expr;
+    using proto::result_of::is_domain;
+    using proto::result_of::tag_of;
+    using proto::result_of::domain_of;
+    using proto::result_of::id;
+    using proto::result_of::matches;
 
-    template<typename T, typename EnableIf = void>
-    struct domain_of;
+    namespace op
+    {
+        // Generic expression generators
+        template<typename Tag, typename Arg>
+        struct unary_expr;
 
-    template<typename Expr>
-    struct id;
+        template<typename Tag, typename Left, typename Right>
+        struct binary_expr;
 
-    // Generic expression generators
-    template<typename Tag, typename Arg>
-    struct unary_expr;
+        template<typename Tag, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
+        struct nary_expr;
 
-    template<typename Tag, typename Left, typename Right>
-    struct binary_expr;
+        // Specific expression generators, for convenience
+        template<typename T> struct terminal;
+        template<typename T> struct posit;
+        template<typename T> struct negate;
+        template<typename T> struct dereference;
+        template<typename T> struct complement;
+        template<typename T> struct address_of;
+        template<typename T> struct logical_not;
+        template<typename T> struct pre_inc;
+        template<typename T> struct pre_dec;
+        template<typename T> struct post_inc;
+        template<typename T> struct post_dec;
 
-    template<typename Tag, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
-    struct nary_expr;
+        template<typename T, typename U> struct shift_left;
+        template<typename T, typename U> struct shift_right;
+        template<typename T, typename U> struct multiplies;
+        template<typename T, typename U> struct divides;
+        template<typename T, typename U> struct modulus;
+        template<typename T, typename U> struct plus;
+        template<typename T, typename U> struct minus;
+        template<typename T, typename U> struct less;
+        template<typename T, typename U> struct greater;
+        template<typename T, typename U> struct less_equal;
+        template<typename T, typename U> struct greater_equal;
+        template<typename T, typename U> struct equal_to;
+        template<typename T, typename U> struct not_equal_to;
+        template<typename T, typename U> struct logical_or;
+        template<typename T, typename U> struct logical_and;
+        template<typename T, typename U> struct bitwise_and;
+        template<typename T, typename U> struct bitwise_or;
+        template<typename T, typename U> struct bitwise_xor;
+        template<typename T, typename U> struct comma;
+        template<typename T, typename U> struct mem_ptr;
 
-    // Specific expression generators, for convenience
-    template<typename T> struct terminal;
-    template<typename T> struct posit;
-    template<typename T> struct negate;
-    template<typename T> struct dereference;
-    template<typename T> struct complement;
-    template<typename T> struct address_of;
-    template<typename T> struct logical_not;
-    template<typename T> struct pre_inc;
-    template<typename T> struct pre_dec;
-    template<typename T> struct post_inc;
-    template<typename T> struct post_dec;
+        template<typename T, typename U> struct assign;
+        template<typename T, typename U> struct shift_left_assign;
+        template<typename T, typename U> struct shift_right_assign;
+        template<typename T, typename U> struct multilpies_assign;
+        template<typename T, typename U> struct divides_assign;
+        template<typename T, typename U> struct modulus_assign;
+        template<typename T, typename U> struct plus_assign;
+        template<typename T, typename U> struct minus_assign;
+        template<typename T, typename U> struct bitwise_and_assign;
+        template<typename T, typename U> struct bitwise_or_assign;
+        template<typename T, typename U> struct bitwise_xor_assign;
+        template<typename T, typename U> struct subscript;
+        template<typename T, typename U, typename V> struct if_else_;
 
-    template<typename T, typename U> struct shift_left;
-    template<typename T, typename U> struct shift_right;
-    template<typename T, typename U> struct multiplies;
-    template<typename T, typename U> struct divides;
-    template<typename T, typename U> struct modulus;
-    template<typename T, typename U> struct plus;
-    template<typename T, typename U> struct minus;
-    template<typename T, typename U> struct less;
-    template<typename T, typename U> struct greater;
-    template<typename T, typename U> struct less_equal;
-    template<typename T, typename U> struct greater_equal;
-    template<typename T, typename U> struct equal_to;
-    template<typename T, typename U> struct not_equal_to;
-    template<typename T, typename U> struct logical_or;
-    template<typename T, typename U> struct logical_and;
-    template<typename T, typename U> struct bitwise_and;
-    template<typename T, typename U> struct bitwise_or;
-    template<typename T, typename U> struct bitwise_xor;
-    template<typename T, typename U> struct comma;
-    template<typename T, typename U> struct mem_ptr;
+        template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
+        struct function;
+    }
 
-    template<typename T, typename U> struct assign;
-    template<typename T, typename U> struct shift_left_assign;
-    template<typename T, typename U> struct shift_right_assign;
-    template<typename T, typename U> struct multilpies_assign;
-    template<typename T, typename U> struct divides_assign;
-    template<typename T, typename U> struct modulus_assign;
-    template<typename T, typename U> struct plus_assign;
-    template<typename T, typename U> struct minus_assign;
-    template<typename T, typename U> struct bitwise_and_assign;
-    template<typename T, typename U> struct bitwise_or_assign;
-    template<typename T, typename U> struct bitwise_xor_assign;
-    template<typename T, typename U> struct subscript;
-    template<typename T, typename U, typename V> struct if_else_;
-
-    template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
-    struct function;
+    using namespace op;
 
     namespace functional
     {
@@ -390,6 +437,18 @@ namespace boost { namespace proto
 
         template<typename Tag, typename Domain = deduce_domain>
         struct unfused_expr;
+    }
+
+#define BOOST_PROTO_IDENTITY_TRANSFORM()\
+    template<typename Expr_, typename State_, typename Visitor_>\
+    static Expr_ const &call(Expr_ const &expr_, State_ const &, Visitor_ &)\
+    {\
+        return expr_;\
+    }\
+    template<typename Expr_, typename, typename>\
+    struct apply\
+    {\
+        typedef Expr_ type;\
     }
 
     namespace transform
@@ -477,35 +536,19 @@ namespace boost { namespace proto
         struct construct;
     }
 
-#define BOOST_PROTO_IDENTITY_TRANSFORM()\
-    template<typename Expr_, typename State_, typename Visitor_>\
-    static Expr_ const &call(Expr_ const &expr_, State_ const &, Visitor_ &)\
-    {\
-        return expr_;\
-    }\
-    template<typename Expr_, typename, typename>\
-    struct apply\
-    {\
-        typedef Expr_ type;\
-    }
-
-    namespace identitytfxns_
+    namespace has_transformns_
     {
+        template<typename Grammar>
+        struct has_pass_through_transform;
+
         struct has_identity_transform
         {
             BOOST_PROTO_IDENTITY_TRANSFORM();
         };
     }
 
-    using identitytfxns_::has_identity_transform;
-
-    template<typename Grammar>
-    struct has_pass_through_transform;
-
-    template<typename Grammar>
-    struct vararg;
-
-    int const N = INT_MAX;
+    using has_transformns_::has_identity_transform;
+    using has_transformns_::has_pass_through_transform;
 
     template<typename T>
     struct is_extension;

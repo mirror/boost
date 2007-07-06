@@ -52,8 +52,31 @@
             struct is_expr_handled;
         }
 
-        template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
-        struct callable_eval;
+        namespace context
+        {
+            /// callable_eval
+            ///
+            template<typename Expr, typename Context, long Arity>
+            struct callable_eval
+            {};
+
+            /// callable_context
+            ///
+            template<typename Context, typename DefaultCtx>
+            struct callable_context
+            {
+                /// callable_context::eval
+                ///
+                template<typename Expr, typename ThisContext = Context>
+                struct eval
+                  : mpl::if_<
+                        detail::is_expr_handled<Expr, Context>
+                      , callable_eval<Expr, ThisContext>
+                      , typename DefaultCtx::template eval<Expr, Context>
+                    >::type
+                {};
+            };
+        }
 
     #define BOOST_PROTO_ARG_N_TYPE(Z, N, Expr)                                                      \
         typename proto::result_of::arg_c<Expr, N>::const_reference                                  \
@@ -71,23 +94,6 @@
 
     #undef BOOST_PROTO_ARG_N_TYPE
     #undef BOOST_PROTO_ARG_N
-
-        /// callable_context
-        ///
-        template<typename Context, typename DefaultCtx>
-        struct callable_context
-        {
-            /// callable_context::eval
-            ///
-            template<typename Expr, typename ThisContext = Context>
-            struct eval
-              : mpl::if_<
-                    detail::is_expr_handled<Expr, Context>
-                  , callable_eval<Expr, ThisContext>
-                  , typename DefaultCtx::template eval<Expr, Context>
-                >::type
-            {};
-        };
 
     }}
 
@@ -133,26 +139,29 @@
             };
         }
 
-        template<typename Expr, typename Context>
-        struct callable_eval<Expr, Context, N>
+        namespace context
         {
-            typedef
-                typename boost::result_of<
-                    Context(
-                        typename Expr::proto_tag
-                        BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N_TYPE, Expr)
-                    )
-                >::type
-            result_type;
-
-            result_type operator ()(Expr &expr, Context &context) const
+            template<typename Expr, typename Context>
+            struct callable_eval<Expr, Context, N>
             {
-                return context(
-                    typename Expr::proto_tag()
-                    BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
-                );
-            }
-        };
+                typedef
+                    typename boost::result_of<
+                        Context(
+                            typename Expr::proto_tag
+                            BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N_TYPE, Expr)
+                        )
+                    >::type
+                result_type;
+
+                result_type operator ()(Expr &expr, Context &context) const
+                {
+                    return context(
+                        typename Expr::proto_tag()
+                        BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, expr)
+                    );
+                }
+            };
+        }
 
     #undef N
     #undef ARG_COUNT

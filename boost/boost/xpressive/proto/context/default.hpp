@@ -62,10 +62,6 @@
 
     namespace boost { namespace proto
     {
-        template<typename Expr, typename Context, typename Tag = typename Expr::proto_tag, long Arity = Expr::proto_arity::value>
-        struct default_eval
-        {};
-
         namespace detail
         {
             template<typename T> T make();
@@ -140,208 +136,216 @@
         #endif
         }
 
-        /// INTERNAL ONLY
-        ///
-    #define BOOST_PROTO_UNARY_OP_RESULT(Op, Tag)\
-        template<typename Expr, typename Context>\
-        struct default_eval<Expr, Context, Tag, 1>\
-        {\
-        private:\
-            static Expr &sexpr;\
-            static Context &sctx;\
-        public:\
-            BOOST_PROTO_DECLTYPE_(Op proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx), result_type)\
-            result_type operator()(Expr &expr, Context &ctx) const\
-            {\
-                return Op proto::eval(proto::arg_c<0>(expr), ctx);\
-            }\
-        };\
-        /**/
-
-        /// INTERNAL ONLY
-        ///
-    #define BOOST_PROTO_BINARY_OP_RESULT(Op, Tag)\
-        template<typename Expr, typename Context>\
-        struct default_eval<Expr, Context, Tag, 2>\
-        {\
-        private:\
-            static Expr &sexpr;\
-            static Context &sctx;\
-        public:\
-            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) Op proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx), result_type)\
-            result_type operator()(Expr &expr, Context &ctx) const\
-            {\
-                return proto::eval(proto::arg_c<0>(expr), ctx) Op proto::eval(proto::arg_c<1>(expr), ctx);\
-            }\
-        };\
-        /**/
-
-        BOOST_PROTO_UNARY_OP_RESULT(+, proto::tag::posit)
-        BOOST_PROTO_UNARY_OP_RESULT(-, proto::tag::negate)
-        BOOST_PROTO_UNARY_OP_RESULT(*, proto::tag::dereference)
-        BOOST_PROTO_UNARY_OP_RESULT(~, proto::tag::complement)
-        BOOST_PROTO_UNARY_OP_RESULT(&, proto::tag::address_of)
-        BOOST_PROTO_UNARY_OP_RESULT(!, proto::tag::logical_not)
-        BOOST_PROTO_UNARY_OP_RESULT(++, proto::tag::pre_inc)
-        BOOST_PROTO_UNARY_OP_RESULT(--, proto::tag::pre_dec)
-
-        BOOST_PROTO_BINARY_OP_RESULT(<<, proto::tag::shift_left)
-        BOOST_PROTO_BINARY_OP_RESULT(>>, proto::tag::shift_right)
-        BOOST_PROTO_BINARY_OP_RESULT(*, proto::tag::multiplies)
-        BOOST_PROTO_BINARY_OP_RESULT(/, proto::tag::divides)
-        BOOST_PROTO_BINARY_OP_RESULT(%, proto::tag::modulus)
-        BOOST_PROTO_BINARY_OP_RESULT(+, proto::tag::plus)
-        BOOST_PROTO_BINARY_OP_RESULT(-, proto::tag::minus)
-        BOOST_PROTO_BINARY_OP_RESULT(<, proto::tag::less)
-        BOOST_PROTO_BINARY_OP_RESULT(>, proto::tag::greater)
-        BOOST_PROTO_BINARY_OP_RESULT(<=, proto::tag::less_equal)
-        BOOST_PROTO_BINARY_OP_RESULT(>=, proto::tag::greater_equal)
-        BOOST_PROTO_BINARY_OP_RESULT(==, proto::tag::equal_to)
-        BOOST_PROTO_BINARY_OP_RESULT(!=, proto::tag::not_equal_to)
-        BOOST_PROTO_BINARY_OP_RESULT(||, proto::tag::logical_or)
-        BOOST_PROTO_BINARY_OP_RESULT(&&, proto::tag::logical_and)
-        BOOST_PROTO_BINARY_OP_RESULT(&, proto::tag::bitwise_and)
-        BOOST_PROTO_BINARY_OP_RESULT(|, proto::tag::bitwise_or)
-        BOOST_PROTO_BINARY_OP_RESULT(^, proto::tag::bitwise_xor)
-        BOOST_PROTO_BINARY_OP_RESULT(->*, proto::tag::mem_ptr)
-
-        BOOST_PROTO_BINARY_OP_RESULT(=, proto::tag::assign)
-        BOOST_PROTO_BINARY_OP_RESULT(<<=, proto::tag::shift_left_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(>>=, proto::tag::shift_right_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(*=, proto::tag::multilpies_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(/=, proto::tag::divides_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(%=, proto::tag::modulus_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(+=, proto::tag::plus_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(-=, proto::tag::minus_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(&=, proto::tag::bitwise_and_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(|=, proto::tag::bitwise_or_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(^=, proto::tag::bitwise_xor_assign)
-
-        template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::terminal, 0>
+        namespace context
         {
-            typedef
-                typename mpl::if_<
-                    is_const<Expr>
-                  , typename proto::result_of::arg<Expr>::const_reference
-                  , typename proto::result_of::arg<Expr>::reference
-                >::type
-            result_type;
-
-            result_type operator()(Expr &expr, Context &) const
-            {
-                return proto::arg(expr);
-            }
-        };
-
-        // Handle post-increment specially.
-        template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::post_inc, 1>
-        {
-        private:
-            static Expr &sexpr;
-            static Context &sctx;
-        public:
-            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) ++, result_type)
-            result_type operator()(Expr &expr, Context &ctx) const
-            {
-                return proto::eval(proto::arg_c<0>(expr), ctx) ++;
-            }
-        };
-
-        // Handle post-decrement specially.
-        template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::post_dec, 1>
-        {
-        private:
-            static Expr &sexpr;
-            static Context &sctx;
-        public:
-            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) --, result_type)
-            result_type operator()(Expr &expr, Context &ctx) const
-            {
-                return proto::eval(proto::arg_c<0>(expr), ctx) --;
-            }
-        };
-
-        // Handle subscript specially.
-        template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::subscript, 2>
-        {
-        private:
-            static Expr &sexpr;
-            static Context &sctx;
-        public:
-            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)[proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)], result_type)
-            result_type operator()(Expr &expr, Context &ctx) const
-            {
-                return proto::eval(proto::arg_c<0>(expr), ctx)[proto::eval(proto::arg_c<1>(expr), ctx)];
-            }
-        };
-
-        // Handle if_else_ specially.
-        template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::if_else_, 3>
-        {
-        private:
-            static Expr &sexpr;
-            static Context &sctx;
-        public:
-            BOOST_PROTO_DECLTYPE_(
-                proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)
-              ? proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)
-              : proto::eval(BOOST_PROTO_REF(proto::arg_c<2>(sexpr)), sctx)
-              , result_type
-            )
-            result_type operator()(Expr &expr, Context &ctx) const
-            {
-                return proto::eval(proto::arg_c<0>(expr), ctx)
-                     ? proto::eval(proto::arg_c<1>(expr), ctx)
-                     : proto::eval(proto::arg_c<2>(expr), ctx);
-            }
-        };
-
-        // Handle comma specially.
-        template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::comma, 2>
-        {
-            typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 0>::type, Context>::type proto_arg0;
-            typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 1>::type, Context>::type proto_arg1;
-            typedef typename detail::comma_result<proto_arg0, proto_arg1>::type result_type;
-            result_type operator()(Expr &expr, Context &ctx) const
-            {
-                return proto::eval(proto::arg_c<0>(expr), ctx), proto::eval(proto::arg_c<1>(expr), ctx);
-            }
-        };
-
-    #define BOOST_PROTO_EVAL_N_TYPE(Z, N, Data)\
-        typename proto::result_of::eval<\
-            typename proto::result_of::arg_c<BOOST_PP_TUPLE_ELEM(2, 0, Data), N>::type\
-          , BOOST_PP_TUPLE_ELEM(2, 1, Data)\
-        >::type
-
-    #define BOOST_PROTO_EVAL_N(Z, N, Data)\
-        proto::eval(proto::arg_c<N>(BOOST_PP_TUPLE_ELEM(2, 0, Data)), BOOST_PP_TUPLE_ELEM(2, 1, Data))
-
-    #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/context/default.hpp>))
-    #include BOOST_PP_ITERATE()
-
-    #undef BOOST_PROTO_EVAL_N_TYPE
-    #undef BOOST_PROTO_EVAL_N
-
-        /// default_context
-        ///
-        struct default_context
-        {
-            /// default_context::eval
-            ///
-            template<typename Expr, typename ThisContext = default_context const>
-            struct eval
-              : default_eval<Expr, ThisContext>
+            template<typename Expr, typename Context, typename Tag, long Arity>
+            struct default_eval
             {};
-        };
 
-    }}
+            /// INTERNAL ONLY
+            ///
+        #define BOOST_PROTO_UNARY_OP_RESULT(Op, Tag)                                                \
+            template<typename Expr, typename Context>                                               \
+            struct default_eval<Expr, Context, Tag, 1>                                              \
+            {                                                                                       \
+            private:                                                                                \
+                static Expr &sexpr;                                                                 \
+                static Context &sctx;                                                               \
+            public:                                                                                 \
+                BOOST_PROTO_DECLTYPE_(Op proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx), result_type)\
+                result_type operator()(Expr &expr, Context &ctx) const                              \
+                {                                                                                   \
+                    return Op proto::eval(proto::arg_c<0>(expr), ctx);                              \
+                }                                                                                   \
+            };                                                                                      \
+            /**/
+
+            /// INTERNAL ONLY
+            ///
+        #define BOOST_PROTO_BINARY_OP_RESULT(Op, Tag)                                               \
+            template<typename Expr, typename Context>                                               \
+            struct default_eval<Expr, Context, Tag, 2>                                              \
+            {                                                                                       \
+            private:                                                                                \
+                static Expr &sexpr;                                                                 \
+                static Context &sctx;                                                               \
+            public:                                                                                 \
+                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) Op proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx), result_type)\
+                result_type operator()(Expr &expr, Context &ctx) const                              \
+                {                                                                                   \
+                    return proto::eval(proto::arg_c<0>(expr), ctx) Op proto::eval(proto::arg_c<1>(expr), ctx);\
+                }                                                                                   \
+            };                                                                                      \
+            /**/
+
+            BOOST_PROTO_UNARY_OP_RESULT(+, proto::tag::posit)
+            BOOST_PROTO_UNARY_OP_RESULT(-, proto::tag::negate)
+            BOOST_PROTO_UNARY_OP_RESULT(*, proto::tag::dereference)
+            BOOST_PROTO_UNARY_OP_RESULT(~, proto::tag::complement)
+            BOOST_PROTO_UNARY_OP_RESULT(&, proto::tag::address_of)
+            BOOST_PROTO_UNARY_OP_RESULT(!, proto::tag::logical_not)
+            BOOST_PROTO_UNARY_OP_RESULT(++, proto::tag::pre_inc)
+            BOOST_PROTO_UNARY_OP_RESULT(--, proto::tag::pre_dec)
+
+            BOOST_PROTO_BINARY_OP_RESULT(<<, proto::tag::shift_left)
+            BOOST_PROTO_BINARY_OP_RESULT(>>, proto::tag::shift_right)
+            BOOST_PROTO_BINARY_OP_RESULT(*, proto::tag::multiplies)
+            BOOST_PROTO_BINARY_OP_RESULT(/, proto::tag::divides)
+            BOOST_PROTO_BINARY_OP_RESULT(%, proto::tag::modulus)
+            BOOST_PROTO_BINARY_OP_RESULT(+, proto::tag::plus)
+            BOOST_PROTO_BINARY_OP_RESULT(-, proto::tag::minus)
+            BOOST_PROTO_BINARY_OP_RESULT(<, proto::tag::less)
+            BOOST_PROTO_BINARY_OP_RESULT(>, proto::tag::greater)
+            BOOST_PROTO_BINARY_OP_RESULT(<=, proto::tag::less_equal)
+            BOOST_PROTO_BINARY_OP_RESULT(>=, proto::tag::greater_equal)
+            BOOST_PROTO_BINARY_OP_RESULT(==, proto::tag::equal_to)
+            BOOST_PROTO_BINARY_OP_RESULT(!=, proto::tag::not_equal_to)
+            BOOST_PROTO_BINARY_OP_RESULT(||, proto::tag::logical_or)
+            BOOST_PROTO_BINARY_OP_RESULT(&&, proto::tag::logical_and)
+            BOOST_PROTO_BINARY_OP_RESULT(&, proto::tag::bitwise_and)
+            BOOST_PROTO_BINARY_OP_RESULT(|, proto::tag::bitwise_or)
+            BOOST_PROTO_BINARY_OP_RESULT(^, proto::tag::bitwise_xor)
+            BOOST_PROTO_BINARY_OP_RESULT(->*, proto::tag::mem_ptr)
+
+            BOOST_PROTO_BINARY_OP_RESULT(=, proto::tag::assign)
+            BOOST_PROTO_BINARY_OP_RESULT(<<=, proto::tag::shift_left_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(>>=, proto::tag::shift_right_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(*=, proto::tag::multilpies_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(/=, proto::tag::divides_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(%=, proto::tag::modulus_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(+=, proto::tag::plus_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(-=, proto::tag::minus_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(&=, proto::tag::bitwise_and_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(|=, proto::tag::bitwise_or_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(^=, proto::tag::bitwise_xor_assign)
+
+            template<typename Expr, typename Context>
+            struct default_eval<Expr, Context, proto::tag::terminal, 0>
+            {
+                typedef
+                    typename mpl::if_<
+                        is_const<Expr>
+                      , typename proto::result_of::arg<Expr>::const_reference
+                      , typename proto::result_of::arg<Expr>::reference
+                    >::type
+                result_type;
+
+                result_type operator()(Expr &expr, Context &) const
+                {
+                    return proto::arg(expr);
+                }
+            };
+
+            // Handle post-increment specially.
+            template<typename Expr, typename Context>
+            struct default_eval<Expr, Context, proto::tag::post_inc, 1>
+            {
+            private:
+                static Expr &sexpr;
+                static Context &sctx;
+            public:
+                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) ++, result_type)
+                result_type operator()(Expr &expr, Context &ctx) const
+                {
+                    return proto::eval(proto::arg_c<0>(expr), ctx) ++;
+                }
+            };
+
+            // Handle post-decrement specially.
+            template<typename Expr, typename Context>
+            struct default_eval<Expr, Context, proto::tag::post_dec, 1>
+            {
+            private:
+                static Expr &sexpr;
+                static Context &sctx;
+            public:
+                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) --, result_type)
+                result_type operator()(Expr &expr, Context &ctx) const
+                {
+                    return proto::eval(proto::arg_c<0>(expr), ctx) --;
+                }
+            };
+
+            // Handle subscript specially.
+            template<typename Expr, typename Context>
+            struct default_eval<Expr, Context, proto::tag::subscript, 2>
+            {
+            private:
+                static Expr &sexpr;
+                static Context &sctx;
+            public:
+                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)[proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)], result_type)
+                result_type operator()(Expr &expr, Context &ctx) const
+                {
+                    return proto::eval(proto::arg_c<0>(expr), ctx)[proto::eval(proto::arg_c<1>(expr), ctx)];
+                }
+            };
+
+            // Handle if_else_ specially.
+            template<typename Expr, typename Context>
+            struct default_eval<Expr, Context, proto::tag::if_else_, 3>
+            {
+            private:
+                static Expr &sexpr;
+                static Context &sctx;
+            public:
+                BOOST_PROTO_DECLTYPE_(
+                    proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)
+                  ? proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)
+                  : proto::eval(BOOST_PROTO_REF(proto::arg_c<2>(sexpr)), sctx)
+                  , result_type
+                )
+                result_type operator()(Expr &expr, Context &ctx) const
+                {
+                    return proto::eval(proto::arg_c<0>(expr), ctx)
+                         ? proto::eval(proto::arg_c<1>(expr), ctx)
+                         : proto::eval(proto::arg_c<2>(expr), ctx);
+                }
+            };
+
+            // Handle comma specially.
+            template<typename Expr, typename Context>
+            struct default_eval<Expr, Context, proto::tag::comma, 2>
+            {
+                typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 0>::type, Context>::type proto_arg0;
+                typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 1>::type, Context>::type proto_arg1;
+                typedef typename detail::comma_result<proto_arg0, proto_arg1>::type result_type;
+                result_type operator()(Expr &expr, Context &ctx) const
+                {
+                    return proto::eval(proto::arg_c<0>(expr), ctx), proto::eval(proto::arg_c<1>(expr), ctx);
+                }
+            };
+
+        #define BOOST_PROTO_EVAL_N_TYPE(Z, N, Data)\
+            typename proto::result_of::eval<\
+                typename proto::result_of::arg_c<BOOST_PP_TUPLE_ELEM(2, 0, Data), N>::type\
+              , BOOST_PP_TUPLE_ELEM(2, 1, Data)\
+            >::type
+
+        #define BOOST_PROTO_EVAL_N(Z, N, Data)\
+            proto::eval(proto::arg_c<N>(BOOST_PP_TUPLE_ELEM(2, 0, Data)), BOOST_PP_TUPLE_ELEM(2, 1, Data))
+
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/context/default.hpp>))
+        #include BOOST_PP_ITERATE()
+
+        #undef BOOST_PROTO_EVAL_N_TYPE
+        #undef BOOST_PROTO_EVAL_N
+
+            /// default_context
+            ///
+            struct default_context
+            {
+                /// default_context::eval
+                ///
+                template<typename Expr, typename ThisContext = default_context const>
+                struct eval
+                  : default_eval<Expr, ThisContext>
+                {};
+            };
+
+        } // namespace context
+
+    }} // namespace boost::proto
 
     #undef BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_
     #undef BOOST_PROTO_DECLTYPE_

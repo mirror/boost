@@ -49,7 +49,7 @@ namespace boost { namespace proto
             typedef Expr expr_type;
             typedef mpl::long_<Pos> index;
             typedef fusion::forward_traversal_tag category;
-            typedef proto_ref_iterator_tag fusion_tag;
+            typedef tag::proto_ref_iterator fusion_tag;
 
             ref_iterator(Expr const &expr)
               : expr_(expr)
@@ -112,7 +112,7 @@ namespace boost { namespace fusion
         struct is_view_impl;
 
         template<>
-        struct is_view_impl<proto::proto_ref_tag>
+        struct is_view_impl<proto::tag::proto_ref>
         {
             template<typename Iterator>
             struct apply
@@ -121,7 +121,7 @@ namespace boost { namespace fusion
         };
 
         template<>
-        struct is_view_impl<proto::proto_expr_tag>
+        struct is_view_impl<proto::tag::proto_expr>
         {
             template<typename Iterator>
             struct apply
@@ -133,7 +133,7 @@ namespace boost { namespace fusion
         struct value_of_impl;
 
         template<>
-        struct value_of_impl<proto::proto_ref_iterator_tag>
+        struct value_of_impl<proto::tag::proto_ref_iterator>
         {
             template<typename Iterator>
             struct apply
@@ -145,7 +145,7 @@ namespace boost { namespace fusion
         struct deref_impl;
 
         template<>
-        struct deref_impl<proto::proto_ref_iterator_tag>
+        struct deref_impl<proto::tag::proto_ref_iterator>
         {
             template<typename Iterator>
             struct apply
@@ -166,7 +166,7 @@ namespace boost { namespace fusion
         struct advance_impl;
 
         template<>
-        struct advance_impl<proto::proto_ref_iterator_tag>
+        struct advance_impl<proto::tag::proto_ref_iterator>
         {
             template<typename Iterator, typename N>
             struct apply
@@ -187,7 +187,7 @@ namespace boost { namespace fusion
         struct distance_impl;
 
         template<>
-        struct distance_impl<proto::proto_ref_iterator_tag>
+        struct distance_impl<proto::tag::proto_ref_iterator>
         {
             template<typename IteratorFrom, typename IteratorTo>
             struct apply
@@ -199,11 +199,11 @@ namespace boost { namespace fusion
         struct next_impl;
 
         template<>
-        struct next_impl<proto::proto_ref_iterator_tag>
+        struct next_impl<proto::tag::proto_ref_iterator>
         {
             template<typename Iterator>
             struct apply
-              : advance_impl<proto::proto_ref_iterator_tag>::template apply<Iterator, mpl::long_<1> >
+              : advance_impl<proto::tag::proto_ref_iterator>::template apply<Iterator, mpl::long_<1> >
             {};
         };
 
@@ -211,11 +211,11 @@ namespace boost { namespace fusion
         struct prior_impl;
 
         template<>
-        struct prior_impl<proto::proto_ref_iterator_tag>
+        struct prior_impl<proto::tag::proto_ref_iterator>
         {
             template<typename Iterator>
             struct apply
-              : advance_impl<proto::proto_ref_iterator_tag>::template apply<Iterator, mpl::long_<-1> >
+              : advance_impl<proto::tag::proto_ref_iterator>::template apply<Iterator, mpl::long_<-1> >
             {};
         };
 
@@ -223,7 +223,7 @@ namespace boost { namespace fusion
         struct category_of_impl;
 
         template<>
-        struct category_of_impl<proto::proto_ref_tag>
+        struct category_of_impl<proto::tag::proto_ref>
         {
             template<typename Sequence>
             struct apply
@@ -236,7 +236,7 @@ namespace boost { namespace fusion
         struct size_impl;
 
         template<>
-        struct size_impl<proto::proto_ref_tag>
+        struct size_impl<proto::tag::proto_ref>
         {
             template<typename Sequence>
             struct apply
@@ -248,7 +248,7 @@ namespace boost { namespace fusion
         struct begin_impl;
 
         template<>
-        struct begin_impl<proto::proto_ref_tag>
+        struct begin_impl<proto::tag::proto_ref>
         {
             template<typename Sequence>
             struct apply
@@ -266,7 +266,7 @@ namespace boost { namespace fusion
         struct end_impl;
 
         template<>
-        struct end_impl<proto::proto_ref_tag>
+        struct end_impl<proto::tag::proto_ref>
         {
             template<typename Sequence>
             struct apply
@@ -284,7 +284,7 @@ namespace boost { namespace fusion
         struct value_at_impl;
 
         template<>
-        struct value_at_impl<proto::proto_ref_tag>
+        struct value_at_impl<proto::tag::proto_ref>
         {
             template<typename Sequence, typename N>
             struct apply
@@ -297,7 +297,7 @@ namespace boost { namespace fusion
         struct at_impl;
 
         template<>
-        struct at_impl<proto::proto_ref_tag>
+        struct at_impl<proto::tag::proto_ref>
         {
             template<typename Sequence, typename N>
             struct apply
@@ -315,7 +315,7 @@ namespace boost { namespace fusion
         struct is_segmented_impl;
 
         template<>
-        struct is_segmented_impl<proto::proto_expr_tag>
+        struct is_segmented_impl<proto::tag::proto_expr>
         {
             template<typename Iterator>
             struct apply
@@ -350,7 +350,7 @@ namespace boost { namespace fusion
         struct segments_impl;
 
         template<>
-        struct segments_impl<proto::proto_expr_tag>
+        struct segments_impl<proto::tag::proto_expr>
         {
             template<typename Sequence>
             struct apply
@@ -371,7 +371,7 @@ namespace boost { namespace fusion
         };
 
         template<>
-        struct category_of_impl<proto::proto_expr_tag>
+        struct category_of_impl<proto::tag::proto_expr>
         {
             template<typename Sequence>
             struct apply
@@ -381,7 +381,7 @@ namespace boost { namespace fusion
         };
 
         template<>
-        struct begin_impl<proto::proto_expr_tag>
+        struct begin_impl<proto::tag::proto_expr>
         {
             template<typename Sequence>
             struct apply
@@ -390,7 +390,7 @@ namespace boost { namespace fusion
         };
 
         template<>
-        struct end_impl<proto::proto_expr_tag>
+        struct end_impl<proto::tag::proto_expr>
         {
             template<typename Sequence>
             struct apply
@@ -399,7 +399,7 @@ namespace boost { namespace fusion
         };
 
         template<>
-        struct size_impl<proto::proto_expr_tag>
+        struct size_impl<proto::tag::proto_expr>
         {
             template<typename Sequence>
             struct apply
@@ -412,7 +412,7 @@ namespace boost { namespace fusion
 //namespace boost { namespace mpl
 //{
     //template<>
-    //struct begin_impl<proto::proto_expr_tag>
+    //struct begin_impl<proto::tag::proto_expr>
     //{
     //    template<typename Sequence>
     //    struct apply
@@ -422,7 +422,7 @@ namespace boost { namespace fusion
     //};
 
     //template<>
-    //struct end_impl<proto::proto_expr_tag>
+    //struct end_impl<proto::tag::proto_expr>
     //{
     //    template<typename Sequence>
     //    struct apply
@@ -432,7 +432,7 @@ namespace boost { namespace fusion
     //};
 
     //template<>
-    //struct size_impl<proto::proto_expr_tag>
+    //struct size_impl<proto::tag::proto_expr>
     //{
     //    template<typename Sequence>
     //    struct apply
@@ -442,7 +442,7 @@ namespace boost { namespace fusion
     //};
 
     //template<>
-    //struct at_impl<proto::proto_expr_tag>
+    //struct at_impl<proto::tag::proto_expr>
     //{
     //    template<typename Sequence, typename N>
     //    struct apply
@@ -453,7 +453,7 @@ namespace boost { namespace fusion
 
 
     //template<>
-    //struct begin_impl<proto::proto_ref_tag>
+    //struct begin_impl<proto::tag::proto_ref>
     //{
     //    template<typename Sequence>
     //    struct apply
@@ -463,7 +463,7 @@ namespace boost { namespace fusion
     //};
 
     //template<>
-    //struct end_impl<proto::proto_ref_tag>
+    //struct end_impl<proto::tag::proto_ref>
     //{
     //    template<typename Sequence>
     //    struct apply
@@ -473,7 +473,7 @@ namespace boost { namespace fusion
     //};
 
     //template<>
-    //struct size_impl<proto::proto_ref_tag>
+    //struct size_impl<proto::tag::proto_ref>
     //{
     //    template<typename Sequence>
     //    struct apply
@@ -483,7 +483,7 @@ namespace boost { namespace fusion
     //};
 
     //template<>
-    //struct at_impl<proto::proto_ref_tag>
+    //struct at_impl<proto::tag::proto_ref>
     //{
     //    template<typename Sequence, typename N>
     //    struct apply
@@ -500,17 +500,17 @@ namespace boost { namespace fusion
 //    template<typename Tag, typename Args, long Arity>
 //    struct sequence_tag<proto::expr<Tag, Args, Arity> >
 //    {
-//        typedef proto::proto_expr_tag type;
+//        typedef proto::tag::proto_expr type;
 //    };
 //
 //    template<typename Expr>
 //    struct sequence_tag<proto::ref_<Expr> >
 //    {
-//        typedef proto::proto_expr_tag type;
+//        typedef proto::tag::proto_expr type;
 //    };
 //
 //    template<>
-//    struct begin_impl<proto::proto_expr_tag>
+//    struct begin_impl<proto::tag::proto_expr>
 //    {
 //        template<typename Sequence>
 //        struct apply
@@ -520,7 +520,7 @@ namespace boost { namespace fusion
 //    };
 //
 //    template<>
-//    struct end_impl<proto::proto_expr_tag>
+//    struct end_impl<proto::tag::proto_expr>
 //    {
 //        template<typename Sequence>
 //        struct apply
@@ -530,7 +530,7 @@ namespace boost { namespace fusion
 //    };
 //
 //    template<>
-//    struct size_impl<proto::proto_expr_tag>
+//    struct size_impl<proto::tag::proto_expr>
 //    {
 //        template<typename Sequence>
 //        struct apply
@@ -540,7 +540,7 @@ namespace boost { namespace fusion
 //    };
 //
 //    template<>
-//    struct at_impl<proto::proto_expr_tag>
+//    struct at_impl<proto::tag::proto_expr>
 //    {
 //        template<typename Sequence, typename N>
 //        struct apply

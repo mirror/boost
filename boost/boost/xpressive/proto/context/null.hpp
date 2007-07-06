@@ -20,10 +20,10 @@
     #include <boost/xpressive/proto/traits.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
-    namespace boost { namespace proto
+    namespace boost { namespace proto { namespace context
     {
 
-        template<typename Expr, typename Context, long Arity = Expr::proto_arity::value>
+        template<typename Expr, typename Context, long Arity>
         struct null_eval
         {};
 
@@ -59,7 +59,7 @@
             {};
         };
 
-    }}
+    }}}
 
     #endif
 

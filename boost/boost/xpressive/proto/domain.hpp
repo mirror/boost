@@ -50,28 +50,30 @@ namespace boost { namespace proto
         {};
     }
 
-    template<typename T, typename EnableIf>
-    struct is_domain
-      : mpl::false_
-    {};
-
-    template<typename T>
-    struct is_domain<T, typename T::proto_is_domain_>
-      : mpl::true_
-    {};
-
-    template<typename T, typename EnableIf>
-    struct domain_of
+    namespace result_of
     {
-        typedef default_domain type;
-    };
+        template<typename T, typename EnableIf>
+        struct is_domain
+          : mpl::false_
+        {};
 
-    template<typename T>
-    struct domain_of<T, typename T::proto_is_expr_>
-    {
-        typedef typename T::proto_domain type;
-    };
+        template<typename T>
+        struct is_domain<T, typename T::proto_is_domain_>
+          : mpl::true_
+        {};
 
+        template<typename T, typename EnableIf>
+        struct domain_of
+        {
+            typedef default_domain type;
+        };
+
+        template<typename T>
+        struct domain_of<T, typename T::proto_is_expr_>
+        {
+            typedef typename T::proto_domain type;
+        };
+    }
 }}
 
 #endif

@@ -52,7 +52,7 @@
                     return expr;
                 }
             };
-        }
+        } // namespace detail
 
         template<typename Grammar>
         struct pass_through
@@ -78,34 +78,37 @@
                 return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
             }
         };
+    } // namespace transform
 
-    }
-
-    template<typename Grammar>
-    struct has_pass_through_transform
+    namespace has_transformns_
     {
-        has_pass_through_transform() {}
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : transform::detail::pass_through_impl<
-                Grammar
-              , typename Expr::proto_base_expr
-              , State
-              , Visitor
-              , Expr::proto_arity::value
-            >
-        {};
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        template<typename Grammar>
+        struct has_pass_through_transform
         {
-            return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
-        }
-    };
+            has_pass_through_transform() {}
 
-    }}
+            template<typename Expr, typename State, typename Visitor>
+            struct apply
+              : transform::detail::pass_through_impl<
+                    Grammar
+                  , typename Expr::proto_base_expr
+                  , State
+                  , Visitor
+                  , Expr::proto_arity::value
+                >
+            {};
+
+            template<typename Expr, typename State, typename Visitor>
+            static typename apply<Expr, State, Visitor>::type
+            call(Expr const &expr, State const &state, Visitor &visitor)
+            {
+                return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
+            }
+        };
+
+    } // namespace has_transformns_
+    
+    }} // namespace boost::proto
 
     #endif
 

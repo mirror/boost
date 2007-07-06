@@ -108,7 +108,7 @@
         #include BOOST_PP_ITERATE()
         }
 
-        namespace ops
+        namespace exprns_
         {
     #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
@@ -158,7 +158,7 @@
             typedef expr proto_base_expr;
             typedef Args proto_args;
             typedef default_domain proto_domain;
-            typedef proto_expr_tag fusion_tag;
+            typedef tag::proto_expr fusion_tag;
             typedef void proto_is_expr_;
             typedef expr proto_derived_expr;
 

@@ -104,7 +104,7 @@ namespace boost { namespace proto
         typedef typename Expr::proto_args proto_args;\
         typedef typename Expr::proto_arity proto_arity;\
         typedef void proto_is_expr_;\
-        typedef boost::proto::proto_expr_tag fusion_tag;\
+        typedef boost::proto::tag::proto_expr fusion_tag;\
         \
         BOOST_PROTO_IDENTITY_TRANSFORM();\
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_ARG, Expr)\
@@ -219,7 +219,7 @@ namespace boost { namespace proto
         BOOST_PP_REPEAT_FROM_TO(0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), BOOST_PROTO_DEFINE_FUN_OP, (Expr, Derived, Domain))\
         /**/
 
-    namespace ops
+    namespace exprns_
     {
         /// \brief Empty type to be used as a dummy template parameter of
         ///     POD expression wrappers. It allows argument-dependent lookup
@@ -325,7 +325,7 @@ namespace boost { namespace proto
         #include BOOST_PP_LOCAL_ITERATE()
         };
 
-    } // namespace ops
+    } // namespace exprns_
 
 }}
 

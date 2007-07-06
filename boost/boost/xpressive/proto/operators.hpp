@@ -226,7 +226,7 @@ namespace boost { namespace proto
     }                                                                                               \
     /**/
 
-    namespace ops
+    namespace exprns_
     {
         BOOST_PROTO_DEFINE_UNARY_OPERATOR(+, tag::posit, 0)
         BOOST_PROTO_DEFINE_UNARY_OPERATOR(-, tag::negate, 0)
@@ -270,17 +270,19 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(&=, tag::bitwise_and_assign)
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(|=, tag::bitwise_or_assign)
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(^=, tag::bitwise_xor_assign)
-    }
 
-    /// if_else
-    ///
-    BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
-        3
-      , if_else
-      , deduce_domain
-      , (tag::if_else_)
-      , BOOST_PP_SEQ_NIL
-    )
+        /// if_else
+        ///
+        BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
+            3
+          , if_else
+          , deduce_domain
+          , (tag::if_else_)
+          , BOOST_PP_SEQ_NIL
+        )
+    } // exprns_
+
+    using exprns_::if_else;
 
 #undef BOOST_PROTO_DEFINE_UNARY_OPERATOR
 #undef BOOST_PROTO_DEFINE_BINARY_OPERATOR
@@ -391,13 +393,13 @@ namespace boost { namespace proto
       : mpl::false_
     {};
 
-#ifndef BOOST_PROTO_DOXYGEN_INVOKED
+    #ifndef BOOST_PROTO_DOXYGEN_INVOKED
     namespace exops
     {
         BOOST_PROTO_DEFINE_OPERATORS(is_extension, default_domain)
         using proto::if_else;
     }
-#endif
+    #endif
 
 }}
 

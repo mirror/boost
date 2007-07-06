@@ -19,30 +19,33 @@
 
 namespace boost { namespace proto
 {
-    template<typename T, typename Domain>
-    struct literal
-      : extends<typename terminal<T>::type, literal<T, Domain>, Domain>
+    namespace utility
     {
-        typedef typename terminal<T>::type terminal_type;
-        typedef extends<terminal_type, literal<T, Domain>, Domain> base_type;
+        template<typename T, typename Domain>
+        struct literal
+          : extends<typename terminal<T>::type, literal<T, Domain>, Domain>
+        {
+            typedef typename terminal<T>::type terminal_type;
+            typedef extends<terminal_type, literal<T, Domain>, Domain> base_type;
 
-        template<typename U>
-        literal(U &u)
-          : base_type(terminal_type::make(u))
-        {}
+            template<typename U>
+            literal(U &u)
+              : base_type(terminal_type::make(u))
+            {}
 
-        template<typename U>
-        literal(U const &u)
-          : base_type(terminal_type::make(u))
-        {}
+            template<typename U>
+            literal(U const &u)
+              : base_type(terminal_type::make(u))
+            {}
 
-        template<typename U>
-        literal(literal<U, Domain> const &u)
-          : base_type(terminal_type::make(proto::arg(u)))
-        {}
+            template<typename U>
+            literal(literal<U, Domain> const &u)
+              : base_type(terminal_type::make(proto::arg(u)))
+            {}
 
-        using base_type::operator =;
-    };
+            using base_type::operator =;
+        };
+    }
 
     /// lit
     ///
@@ -57,14 +60,16 @@ namespace boost { namespace proto
     template<typename T>
     inline literal<T const &> lit(T const &t)
     {
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4180) // warning C4180: qualifier applied to function type has no meaning; ignored
-#endif
+        #ifdef _MSC_VER
+        #pragma warning(push)
+        #pragma warning(disable: 4180) // warning C4180: qualifier applied to function type has no meaning; ignored
+        #endif
+
         return literal<T const &>(t);
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+
+        #ifdef _MSC_VER
+        #pragma warning(pop)
+        #endif
     }
 
 }}

@@ -339,25 +339,13 @@
             {};
         }
 
-        template<typename Expr, typename Grammar>
-        struct matches
-          : detail::matches_impl<typename Expr::proto_base_expr, typename Grammar::proto_base_expr>
-        {};
-
-        template<typename Grammar>
-        struct vararg
-          : Grammar
+        namespace result_of
         {
-            typedef void proto_is_vararg_;
-        };
-
-        template<typename T>
-        struct exact
-        {};
-
-        template<typename T>
-        struct convertible_to
-        {};
+            template<typename Expr, typename Grammar>
+            struct matches
+              : detail::matches_impl<typename Expr::proto_base_expr, typename Grammar::proto_base_expr>
+            {};
+        }
 
         namespace wildcardns_
         {
@@ -464,6 +452,21 @@
                 {
                     return Cases::template case_<typename Expr::proto_tag>::call(expr, state, visitor);
                 }
+            };
+
+            template<typename T>
+            struct exact
+            {};
+
+            template<typename T>
+            struct convertible_to
+            {};
+
+            template<typename Grammar>
+            struct vararg
+              : Grammar
+            {
+                typedef void proto_is_vararg_;
             };
         }
     }}
