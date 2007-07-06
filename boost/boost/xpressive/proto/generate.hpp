@@ -19,53 +19,56 @@
 namespace boost { namespace proto
 {
 
-    struct default_generator
+    namespace generatorns_
     {
-        template<typename Expr>
-        struct apply
+        struct default_generator
         {
-            typedef Expr type;
+            template<typename Expr>
+            struct apply
+            {
+                typedef Expr type;
+            };
+
+            template<typename Expr>
+            static Expr const &make(Expr const &expr)
+            {
+                return expr;
+            };
         };
 
-        template<typename Expr>
-        static Expr const &make(Expr const &expr)
+        template<template<typename> class Extends>
+        struct generator
         {
-            return expr;
-        };
-    };
+            template<typename Expr>
+            struct apply
+            {
+                typedef Extends<Expr> type;
+            };
 
-    template<template<typename> class Extends>
-    struct generator
-    {
-        template<typename Expr>
-        struct apply
-        {
-            typedef Extends<Expr> type;
-        };
-
-        template<typename Expr>
-        static Extends<Expr> make(Expr const &expr)
-        {
-            return Extends<Expr>(expr);
-        }
-    };
-
-    template<template<typename> class Extends>
-    struct pod_generator
-    {
-        template<typename Expr>
-        struct apply
-        {
-            typedef Extends<Expr> type;
+            template<typename Expr>
+            static Extends<Expr> make(Expr const &expr)
+            {
+                return Extends<Expr>(expr);
+            }
         };
 
-        template<typename Expr>
-        static Extends<Expr> make(Expr const &expr)
+        template<template<typename> class Extends>
+        struct pod_generator
         {
-            Extends<Expr> that = {expr};
-            return that;
-        }
-    };
+            template<typename Expr>
+            struct apply
+            {
+                typedef Extends<Expr> type;
+            };
+
+            template<typename Expr>
+            static Extends<Expr> make(Expr const &expr)
+            {
+                Extends<Expr> that = {expr};
+                return that;
+            }
+        };
+    }
 
     namespace detail
     {

@@ -123,20 +123,34 @@ namespace boost { namespace proto
 
     using wildcardns_::_;
 
-    struct default_generator;
+    namespace generatorns_
+    {
+        struct default_generator;
 
-    template<template<typename> class Extends>
-    struct generator;
+        template<template<typename> class Extends>
+        struct generator;
 
-    template<template<typename> class Extends>
-    struct pod_generator;
+        template<template<typename> class Extends>
+        struct pod_generator;
+    }
 
-    template<typename Generator = default_generator, typename Grammar = proto::_>
-    struct domain;
+    using generatorns_::default_generator;
+    using generatorns_::generator;
+    using generatorns_::pod_generator;
 
-    struct default_domain;
+    namespace domainns_
+    {
+        template<typename Generator = default_generator, typename Grammar = proto::_>
+        struct domain;
 
-    struct deduce_domain;
+        struct default_domain;
+
+        struct deduce_domain;
+    }
+
+    using domainns_::domain;
+    using domainns_::default_domain;
+    using domainns_::deduce_domain;
 
     namespace ops
     {
@@ -475,10 +489,15 @@ namespace boost { namespace proto
         typedef Expr_ type;\
     }
 
-    struct has_identity_transform
+    namespace identitytfxns_
     {
-        BOOST_PROTO_IDENTITY_TRANSFORM();
-    };
+        struct has_identity_transform
+        {
+            BOOST_PROTO_IDENTITY_TRANSFORM();
+        };
+    }
+
+    using identitytfxns_::has_identity_transform;
 
     template<typename Grammar>
     struct has_pass_through_transform;

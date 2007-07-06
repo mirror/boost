@@ -28,24 +28,27 @@ namespace boost { namespace proto
         {};
     }
 
-    template<typename Generator, typename Grammar>
-    struct domain
-      : Generator
+    namespace domainns_
     {
-        typedef Grammar grammar;
+        template<typename Generator, typename Grammar>
+        struct domain
+          : Generator
+        {
+            typedef Grammar grammar;
 
-        /// INTERNAL ONLY
-        ///
-        typedef void proto_is_domain_;
-    };
+            /// INTERNAL ONLY
+            ///
+            typedef void proto_is_domain_;
+        };
 
-    struct default_domain
-      : domain<>
-    {};
+        struct default_domain
+          : domain<>
+        {};
 
-    struct deduce_domain
-      : domain<detail::not_a_generator, detail::not_a_grammar>
-    {};
+        struct deduce_domain
+          : domain<detail::not_a_generator, detail::not_a_grammar>
+        {};
+    }
 
     template<typename T, typename EnableIf>
     struct is_domain
