@@ -64,68 +64,68 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::subscript)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::if_else_)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::function)
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref_, (typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::expr, (typename)(typename)(long))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::literal, (typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::refns_::ref_, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::exprns_::expr, (typename)(typename)(long))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::utility::literal, (typename)(typename))
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args0, 1)
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args1, 1)
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args2, 2)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args0, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args1, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args2, 2)
 // can't use PP metaprogramming here because all typeof registrations
 // must be on separate lines.
 #if BOOST_PROTO_MAX_ARITY >= 3
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args3, 3)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args3, 3)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 4
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args4, 4)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args4, 4)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 5
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args5, 5)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args5, 5)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 6
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args6, 6)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args6, 6)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 7
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args7, 7)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args7, 7)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 8
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args8, 8)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args8, 8)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 9
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args9, 9)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args9, 9)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 10
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args10, 10)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args10, 10)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 11
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args11, 11)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args11, 11)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 12
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args12, 12)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args12, 12)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 13
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args13, 13)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args13, 13)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 14
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args14, 14)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args14, 14)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 15
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args15, 15)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args15, 15)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 16
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args16, 16)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args16, 16)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 17
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args17, 17)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args17, 17)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 18
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args18, 18)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args18, 18)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 19
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args19, 19)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args19, 19)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 20
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args20, 20)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::argsns_::args20, 20)
 #endif
 
 #define BOOST_PROTO_AUTO(Var, Expr) BOOST_AUTO(Var, boost::proto::deep_copy(Expr))
