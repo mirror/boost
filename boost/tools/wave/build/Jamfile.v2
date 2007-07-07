@@ -24,6 +24,7 @@ exe wave
     /boost/filesystem//boost_filesystem
     /boost/serialization//boost_serialization
     /boost/system//boost_system
+    /boost/thread//boost_thread
     :
 #   <debug-symbols>on
     :
