@@ -291,7 +291,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
       <refnamediv>
         <refname><xsl:value-of select="$refname"/></refname>
         <refpurpose>
-		  <xsl:apply-templates mode="annotation" select="$purpose"/>
+		  <xsl:apply-templates mode="purpose" select="$purpose"/>
 		</refpurpose>
       </refnamediv>
       <refsynopsisdiv>
