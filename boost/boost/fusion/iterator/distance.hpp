@@ -61,9 +61,13 @@ namespace boost { namespace fusion
     {
         template <typename First, typename Last>
         struct distance
-            : extension::distance_impl<typename detail::tag_of<First>::type>:: 
-                template apply<First, Last>
-        {};
+        : extension::distance_impl<typename detail::tag_of<First>::type>:: 
+        template apply<First, Last>
+        {
+            typedef typename extension::distance_impl<typename detail::tag_of<First>::type>:: 
+            template apply<First, Last>::type distance_application;
+            BOOST_STATIC_CONSTANT(int, value = distance_application::value);
+        };
     }
         
     template <typename First, typename Last>

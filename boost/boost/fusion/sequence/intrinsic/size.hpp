@@ -53,8 +53,13 @@ namespace boost { namespace fusion
         template <typename Sequence>
         struct size
             : extension::size_impl<typename detail::tag_of<Sequence>::type>::
-                template apply<Sequence>
-        {};
+        template apply<Sequence>
+
+        {
+            typedef typename extension::size_impl<typename detail::tag_of<Sequence>::type>::
+            template apply<Sequence>::type size_application;
+            BOOST_STATIC_CONSTANT(int, value = size_application::value);
+        };
     }
 
     template <typename Sequence>

@@ -25,8 +25,9 @@ namespace boost { namespace fusion {
         {
             template<typename Sequence>
             struct apply
-                : Sequence::size
-            {};
+            {
+                typedef typename Sequence::size type;
+            };
         };
     }
 }}
