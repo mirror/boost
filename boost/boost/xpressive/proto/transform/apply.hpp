@@ -140,4 +140,27 @@ namespace boost { namespace proto { namespace transform
 
 }}}
 
+namespace boost { namespace proto
+{
+    template<typename Grammar, typename Always, typename Factory>
+    struct is_transform<transform::always<Grammar, Always, Factory> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar, typename Lambda, typename Factory>
+    struct is_transform<transform::apply1<Grammar, Lambda, Factory> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar, typename Lambda, typename Factory>
+    struct is_transform<transform::apply2<Grammar, Lambda, Factory> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar, typename Lambda, typename Factory>
+    struct is_transform<transform::apply3<Grammar, Lambda, Factory> >
+      : mpl::true_
+    {};
+}}
+
 #endif

@@ -534,6 +534,9 @@ namespace boost { namespace proto
 
         template<typename Grammar, typename ConstructorFun>
         struct construct;
+
+        template<typename Grammar, typename ConstructorFun>
+        struct pod_construct;
     }
 
     namespace has_transformns_
@@ -549,6 +552,9 @@ namespace boost { namespace proto
 
     using has_transformns_::has_identity_transform;
     using has_transformns_::has_pass_through_transform;
+
+    template<typename T>
+    struct is_transform;
 
     template<typename T>
     struct is_extension;

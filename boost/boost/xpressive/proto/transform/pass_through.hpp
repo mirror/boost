@@ -80,6 +80,11 @@
         };
     } // namespace transform
 
+    template<typename Grammar>
+    struct is_transform<transform::pass_through<Grammar> >
+      : mpl::true_
+    {};
+
     namespace has_transformns_
     {
         template<typename Grammar>
@@ -107,7 +112,7 @@
         };
 
     } // namespace has_transformns_
-    
+
     }} // namespace boost::proto
 
     #endif

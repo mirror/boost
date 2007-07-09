@@ -40,4 +40,12 @@ namespace boost { namespace proto { namespace transform
 
 }}}
 
+namespace boost { namespace proto
+{
+    template<typename Grammar, typename BranchState>
+    struct is_transform<transform::branch<Grammar, BranchState> >
+      : mpl::true_
+    {};
+}}
+
 #endif

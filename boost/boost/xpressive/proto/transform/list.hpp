@@ -71,4 +71,17 @@ namespace boost { namespace proto { namespace transform
 
 }}}
 
+namespace boost { namespace proto
+{
+    template<typename Grammar>
+    struct is_transform<transform::list<Grammar> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar>
+    struct is_transform<transform::tail<Grammar> >
+      : mpl::true_
+    {};
+}}
+
 #endif

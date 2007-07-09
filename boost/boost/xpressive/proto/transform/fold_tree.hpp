@@ -62,4 +62,17 @@ namespace boost { namespace proto { namespace transform
 
 }}}
 
+namespace boost { namespace proto
+{
+    template<typename Tag, typename Grammar, typename State>
+    struct is_transform<transform::fold_tree<Tag, Grammar, State> >
+      : mpl::true_
+    {};
+
+    template<typename Tag, typename Grammar, typename State>
+    struct is_transform<transform::reverse_fold_tree<Tag, Grammar, State> >
+      : mpl::true_
+    {};
+}}
+
 #endif

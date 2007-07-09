@@ -151,4 +151,42 @@ namespace boost { namespace proto { namespace transform
 
 }}}
 
+namespace boost { namespace proto
+{
+    template<typename Grammar, typename N>
+    struct is_transform<transform::arg<Grammar, N> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar, long N>
+    struct is_transform<transform::arg_c<Grammar, N> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar>
+    struct is_transform<transform::left<Grammar> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar>
+    struct is_transform<transform::right<Grammar> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar>
+    struct is_transform<transform::identity<Grammar> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar>
+    struct is_transform<transform::state<Grammar> >
+      : mpl::true_
+    {};
+
+    template<typename Grammar>
+    struct is_transform<transform::visitor<Grammar> >
+      : mpl::true_
+    {};
+}}
+
 #endif

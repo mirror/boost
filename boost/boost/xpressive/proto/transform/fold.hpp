@@ -129,6 +129,19 @@
 
     }}}
 
+    namespace boost { namespace proto
+    {
+        template<typename Grammar, typename State>
+        struct is_transform<transform::fold<Grammar, State> >
+          : mpl::true_
+        {};
+
+        template<typename Grammar, typename State>
+        struct is_transform<transform::reverse_fold<Grammar, State> >
+          : mpl::true_
+        {};
+    }}
+
     #endif
 
 #else

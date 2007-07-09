@@ -56,6 +56,15 @@
 
     namespace boost { namespace proto
     {
+        template<typename T>
+        struct is_transform
+          : mpl::false_
+        {};
+
+        template<>
+        struct is_transform<proto::_>
+          : mpl::true_
+        {};
 
         namespace result_of
         {
@@ -173,7 +182,6 @@
             struct right
               : unref<typename Expr::proto_arg1>
             {};
-
         }
 
         namespace detail
@@ -237,29 +245,29 @@
                 typedef U proto_arg1;
             };
 
-        #define BOOST_PROTO_UNARY_GENERATOR(Name)\
-            template<typename T>\
-            struct Name : has_pass_through_transform<Name<T> >\
-            {\
-                Name();\
-                typedef expr<proto::tag::Name, args1<T> > type;\
-                typedef type proto_base_expr;\
-                typedef proto::tag::Name proto_tag;\
-                typedef T proto_arg0;\
-            };\
+        #define BOOST_PROTO_UNARY_GENERATOR(Name)                                                   \
+            template<typename T>                                                                    \
+            struct Name : has_pass_through_transform<Name<T> >                                      \
+            {                                                                                       \
+                Name();                                                                             \
+                typedef expr<proto::tag::Name, args1<T> > type;                                     \
+                typedef type proto_base_expr;                                                       \
+                typedef proto::tag::Name proto_tag;                                                 \
+                typedef T proto_arg0;                                                               \
+            };                                                                                      \
             /**/
 
-        #define BOOST_PROTO_BINARY_GENERATOR(Name)\
-            template<typename T, typename U>\
-            struct Name : has_pass_through_transform<Name<T, U> >\
-            {\
-                Name();\
-                typedef expr<proto::tag::Name, args2<T, U> > type;\
-                typedef type proto_base_expr;\
-                typedef proto::tag::Name proto_tag;\
-                typedef T proto_arg0;\
-                typedef U proto_arg1;\
-            };\
+        #define BOOST_PROTO_BINARY_GENERATOR(Name)                                                  \
+            template<typename T, typename U>                                                        \
+            struct Name : has_pass_through_transform<Name<T, U> >                                   \
+            {                                                                                       \
+                Name();                                                                             \
+                typedef expr<proto::tag::Name, args2<T, U> > type;                                  \
+                typedef type proto_base_expr;                                                       \
+                typedef proto::tag::Name proto_tag;                                                 \
+                typedef T proto_arg0;                                                               \
+                typedef U proto_arg1;                                                               \
+            };                                                                                      \
             /**/
 
             BOOST_PROTO_UNARY_GENERATOR(posit)
@@ -306,11 +314,11 @@
             BOOST_PROTO_BINARY_GENERATOR(bitwise_or_assign)
             BOOST_PROTO_BINARY_GENERATOR(bitwise_xor_assign)
             BOOST_PROTO_BINARY_GENERATOR(subscript)
+        
+        } // namespace op
 
         #undef BOOST_PROTO_UNARY_GENERATOR
         #undef BOOST_PROTO_BINARY_GENERATOR
-
-        } // namespace op
 
     #define BOOST_PROTO_ARG(z, n, data)\
         typedef BOOST_PP_CAT(data, n) BOOST_PP_CAT(proto_arg, n);\
