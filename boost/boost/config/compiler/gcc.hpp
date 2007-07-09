@@ -88,14 +88,11 @@
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 2)
 // C++0x features are only enabled when -std=c++0x or -std=gnu++0x are
 // passed on the command line, which in turn defines
-// __GXX_EXPERIMENTAL_CXX0X__. Note: __GXX_EXPERIMENTAL_CPP0X__ is
-// defined by some very early development versions of GCC 4.3; we will
-// remove this part of the check in the near future.
-#  if defined(__GXX_EXPERIMENTAL_CPP0X__) || defined(__GXX_EXPERIMENTAL_CXX0X__)
+// __GXX_EXPERIMENTAL_CXX0X__. 
+#  if defined(__GXX_EXPERIMENTAL_CXX0X__)
 #    define BOOST_HAS_STATIC_ASSERT
-#    ifndef __STRICT_ANSI__
-#      define BOOST_HAS_VARIADIC_TMPL
-#    endif
+#    define BOOST_HAS_VARIADIC_TMPL
+#    define BOOST_HAS_RVALUE_REFS
 #  endif
 #endif
 
@@ -109,16 +106,10 @@
 #  define BOOST_HAS_VARIADIC_TMPL
 #endif
 
-// Rvalue reference support
-#ifdef __RVALUE_REFS
-#  define BOOST_HAS_RVALUE_REFS
-#endif
-
 // ConceptGCC compiler:
 //   http://www.generic-programming.org/software/ConceptGCC/
 #ifdef __GXX_CONCEPTS__
 #  define BOOST_HAS_CONCEPTS
-#  define BOOST_HAS_RVALUE_REFS
 #  define BOOST_COMPILER "ConceptGCC version " __VERSION__
 #endif
 
