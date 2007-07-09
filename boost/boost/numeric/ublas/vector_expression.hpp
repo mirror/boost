@@ -1589,6 +1589,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Dense random access specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (dense_random_access_iterator_tag) const {
+            BOOST_UBLAS_CHECK (e1_.size () == e2_.size (), external_logic());
 #ifdef BOOST_UBLAS_USE_INDEXING
             return functor_type::apply (e1_, e2_);
 #elif BOOST_UBLAS_USE_ITERATING
@@ -1606,12 +1607,14 @@ namespace boost { namespace numeric { namespace ublas {
         // Packed bidirectional specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (packed_random_access_iterator_tag) const {
+            BOOST_UBLAS_CHECK (e1_.size () == e2_.size (), external_logic());
             return functor_type::apply (e1_.begin (), e1_.end (), e2_.begin (), e2_.end ());
         }
 
         // Sparse bidirectional specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (sparse_bidirectional_iterator_tag) const {
+            BOOST_UBLAS_CHECK (e1_.size () == e2_.size (), external_logic());
             return functor_type::apply (e1_.begin (), e1_.end (), e2_.begin (), e2_.end (), sparse_bidirectional_iterator_tag ());
         }
 
