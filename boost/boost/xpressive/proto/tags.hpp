@@ -119,7 +119,7 @@ namespace boost { namespace proto { namespace tag
     struct shift_right_assign {};
 
     /// Tag type for the binary *= operator.
-    struct multilpies_assign {};
+    struct multiplies_assign {};
 
     /// Tag type for the binary /= operator.
     struct divides_assign {};

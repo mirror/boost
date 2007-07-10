@@ -210,7 +210,7 @@
             BOOST_PROTO_BINARY_OP_RESULT(=, proto::tag::assign)
             BOOST_PROTO_BINARY_OP_RESULT(<<=, proto::tag::shift_left_assign)
             BOOST_PROTO_BINARY_OP_RESULT(>>=, proto::tag::shift_right_assign)
-            BOOST_PROTO_BINARY_OP_RESULT(*=, proto::tag::multilpies_assign)
+            BOOST_PROTO_BINARY_OP_RESULT(*=, proto::tag::multiplies_assign)
             BOOST_PROTO_BINARY_OP_RESULT(/=, proto::tag::divides_assign)
             BOOST_PROTO_BINARY_OP_RESULT(%=, proto::tag::modulus_assign)
             BOOST_PROTO_BINARY_OP_RESULT(+=, proto::tag::plus_assign)

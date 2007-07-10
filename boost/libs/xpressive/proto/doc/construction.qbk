@@ -281,8 +281,8 @@ explained in later sections.
     [`shift_right_assign<>`]]
 
     [[binary `*=`]
-    [`tag::multilpies_assign`]
-    [`multilpies_assign<>`]]
+    [`tag::multiplies_assign`]
+    [`multiplies_assign<>`]]
 
     [[binary `/=`]
     [`tag::divides_assign`]

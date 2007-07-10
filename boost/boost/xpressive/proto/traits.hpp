@@ -305,7 +305,7 @@
             BOOST_PROTO_BINARY_GENERATOR(assign)
             BOOST_PROTO_BINARY_GENERATOR(shift_left_assign)
             BOOST_PROTO_BINARY_GENERATOR(shift_right_assign)
-            BOOST_PROTO_BINARY_GENERATOR(multilpies_assign)
+            BOOST_PROTO_BINARY_GENERATOR(multiplies_assign)
             BOOST_PROTO_BINARY_GENERATOR(divides_assign)
             BOOST_PROTO_BINARY_GENERATOR(modulus_assign)
             BOOST_PROTO_BINARY_GENERATOR(plus_assign)

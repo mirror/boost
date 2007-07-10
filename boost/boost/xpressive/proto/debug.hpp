@@ -100,7 +100,7 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_TAG_NAME(assign)
         BOOST_PROTO_DEFINE_TAG_NAME(shift_left_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(shift_right_assign)
-        BOOST_PROTO_DEFINE_TAG_NAME(multilpies_assign)
+        BOOST_PROTO_DEFINE_TAG_NAME(multiplies_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(divides_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(modulus_assign)
         BOOST_PROTO_DEFINE_TAG_NAME(plus_assign)

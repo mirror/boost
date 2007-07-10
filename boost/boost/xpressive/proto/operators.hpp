@@ -262,7 +262,7 @@ namespace boost { namespace proto
 
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(<<=, tag::shift_left_assign)
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(>>=, tag::shift_right_assign)
-        BOOST_PROTO_DEFINE_BINARY_OPERATOR(*=, tag::multilpies_assign)
+        BOOST_PROTO_DEFINE_BINARY_OPERATOR(*=, tag::multiplies_assign)
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(/=, tag::divides_assign)
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(%=, tag::modulus_assign)
         BOOST_PROTO_DEFINE_BINARY_OPERATOR(+=, tag::plus_assign)
@@ -378,7 +378,7 @@ namespace boost { namespace proto
     BOOST_PROTO_DEFINE_BINARY_OPERATOR(->*, boost::proto::tag::mem_ptr, TRAIT, DOMAIN)              \
     BOOST_PROTO_DEFINE_BINARY_OPERATOR(<<=, boost::proto::tag::shift_left_assign, TRAIT, DOMAIN)    \
     BOOST_PROTO_DEFINE_BINARY_OPERATOR(>>=, boost::proto::tag::shift_right_assign, TRAIT, DOMAIN)   \
-    BOOST_PROTO_DEFINE_BINARY_OPERATOR(*=, boost::proto::tag::multilpies_assign, TRAIT, DOMAIN)     \
+    BOOST_PROTO_DEFINE_BINARY_OPERATOR(*=, boost::proto::tag::multiplies_assign, TRAIT, DOMAIN)     \
     BOOST_PROTO_DEFINE_BINARY_OPERATOR(/=, boost::proto::tag::divides_assign, TRAIT, DOMAIN)        \
     BOOST_PROTO_DEFINE_BINARY_OPERATOR(%=, boost::proto::tag::modulus_assign, TRAIT, DOMAIN)        \
     BOOST_PROTO_DEFINE_BINARY_OPERATOR(+=, boost::proto::tag::plus_assign, TRAIT, DOMAIN)           \

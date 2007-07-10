@@ -137,7 +137,7 @@ struct AssignOpsCases
 
     template<int D> struct case_< proto::tag::plus_assign, D >         : _ {};
     template<int D> struct case_< proto::tag::minus_assign, D >        : _ {};
-    template<int D> struct case_< proto::tag::multilpies_assign, D >   : _ {};
+    template<int D> struct case_< proto::tag::multiplies_assign, D >   : _ {};
     template<int D> struct case_< proto::tag::divides_assign, D >      : _ {};
     template<int D> struct case_< proto::tag::modulus_assign, D >      : _ {};
     template<int D> struct case_< proto::tag::shift_left_assign, D >   : _ {};

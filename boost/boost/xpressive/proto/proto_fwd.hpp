@@ -103,7 +103,7 @@ namespace boost { namespace proto
         struct assign;
         struct shift_left_assign;
         struct shift_right_assign;
-        struct multilpies_assign;
+        struct multiplies_assign;
         struct divides_assign;
         struct modulus_assign;
         struct plus_assign;
@@ -389,7 +389,7 @@ namespace boost { namespace proto
         template<typename T, typename U> struct assign;
         template<typename T, typename U> struct shift_left_assign;
         template<typename T, typename U> struct shift_right_assign;
-        template<typename T, typename U> struct multilpies_assign;
+        template<typename T, typename U> struct multiplies_assign;
         template<typename T, typename U> struct divides_assign;
         template<typename T, typename U> struct modulus_assign;
         template<typename T, typename U> struct plus_assign;
