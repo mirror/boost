@@ -153,7 +153,8 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL
 #endif
     basic_parsed_options<charT>
-    parse_config_file(std::basic_istream<charT>&, const options_description&);
+    parse_config_file(std::basic_istream<charT>&, const options_description&,
+                      bool allow_unregistered = false);
 
     /** Controls if the 'collect_unregistered' function should
         include positional options, or not. */
