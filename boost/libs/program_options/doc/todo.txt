@@ -1,4 +1,6 @@
 
+Say that variables_map is actually derived from std::map.
+
 Make parse_config_file("foo.cfg", desc) work.
 
 Document handling of positional options which depends on precedding options. 
