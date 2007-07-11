@@ -134,7 +134,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Allow to define macros with the command line syntax (-DMACRO(x)=definition)
 //
-//  To disable the the possibility to define macros based on the command line 
+//  To disable the possibility to define macros based on the command line 
 //  syntax, define the following constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_ENABLE_COMMANDLINE_MACROS)

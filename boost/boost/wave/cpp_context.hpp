@@ -207,7 +207,7 @@ public:
             bool even_predefined = false)
         { 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-            // ensure this gets remove from the list of include guards as well
+            // ensure this gets removed from the list of include guards as well
             includes.remove_pragma_once_header(std::string(name.c_str()));
 #endif
             return macros.remove_macro(
