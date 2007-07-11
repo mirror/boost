@@ -258,7 +258,8 @@ namespace boost { namespace program_options {
     options_description::find_nothrow(const std::string& name, 
                                       bool approx) const
     {
-        int found = -1;
+        shared_ptr<option_description> found;
+        vector<string> approximate_matches;
         // We use linear search because matching specified option
         // name with the declared option name need to take care about
         // case sensitivity and trailing '*' and so we can't use simple map.
@@ -284,25 +285,16 @@ namespace boost { namespace program_options {
                 return m_options[i].get();                
             }
 
-            if (found != -1)
-            {
-                vector<string> alts;
-                // FIXME: the use of 'key' here might not
-                // be the best approach.
-                alts.push_back(m_options[found]->key(name));
-                alts.push_back(m_options[i]->key(name));
-                boost::throw_exception(ambiguous_option(name, alts));
-            }
-            else
-            {
-                found = i;
-            }
+            found = m_options[i];
+            // FIXME: the use of 'key' here might not
+            // be the best approach.
+            approximate_matches.push_back(m_options[i]->key(name));
         }
-        if (found != -1) {
-            return m_options[found].get();
-        } else {
-            return 0;
-        }
+        if (approximate_matches.size() > 1)
+            boost::throw_exception(
+                ambiguous_option(name, approximate_matches));
+        else
+            return found.get();
     }
 
     BOOST_PROGRAM_OPTIONS_DECL

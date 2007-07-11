@@ -44,9 +44,9 @@ void test_approximation()
         ("foo", new untyped_value())
         ("fee", new untyped_value())
         ("baz", new untyped_value())
-        ("all", new untyped_value())
         ("all-chroots", new untyped_value())
         ("all-sessions", new untyped_value())
+        ("all", new untyped_value())
         ;
 
     BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "foo");
