@@ -11,9 +11,6 @@
 project
     :
     requirements
-    <link>static
-    <runtime-link>static    
-    <threading>single
     ;
 
 exe wave
@@ -24,11 +21,11 @@ exe wave
     /boost/filesystem//boost_filesystem
     /boost/serialization//boost_serialization
     /boost/system//boost_system
+    /boost/thread//boost_thread
     :
 #   <debug-symbols>on
-    <define>BOOST_DISABLE_THREADS=1
     :
-    <variant>release
+    release
     ;
 
 install dist-bin
@@ -38,7 +35,7 @@ install dist-bin
     <install-type>EXE
     <location>../../../dist/bin
     :
-    <variant>release
+    release
     ;
 
 install dist-lib
@@ -48,5 +45,5 @@ install dist-lib
     <install-type>LIB
     <location>../../../dist/lib
     :
-    <variant>release
+    release
     ;

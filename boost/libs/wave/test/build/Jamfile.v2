@@ -62,6 +62,7 @@ test-suite wave
                 /boost/program_options//boost_program_options
                 /boost/filesystem//boost_filesystem    
                 /boost/system//boost_system    
+                /boost/thread//boost_thread
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
