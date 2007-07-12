@@ -89,7 +89,7 @@ namespace boost { namespace fusion
         template <class D, class F, class S, long A, bool EO>
         friend struct detail::unfused_typed_impl;
 
-        template <class D, class F, bool E>
+        template <class D, class F, bool EC, bool E>
         friend struct detail::nullary_call_base;
 
         typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;

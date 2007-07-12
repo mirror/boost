@@ -38,7 +38,7 @@ namespace boost { namespace fusion
     {
         Function fnc_transformed;
 
-        template <class D, class F, bool E>
+        template <class D, class F, bool EC, bool E>
         friend struct detail::nullary_call_base;
 
         typedef detail::nullary_call_base<
