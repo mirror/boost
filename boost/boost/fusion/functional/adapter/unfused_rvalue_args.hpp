@@ -55,12 +55,18 @@ namespace boost { namespace fusion
 
         using base::operator();
 
-        template <typename T>
-        struct result;
+        template <typename Sig>
+        struct result
+        { };
 
-        template <typename Func>
-        struct result<unfused_rvalue_args<Func>()>
-            : base::r0
+        template <class Self>
+        struct result< Self const () >
+            : base::call_const_0_result_class
+        { };
+
+        template <class Self>
+        struct result< Self() >
+            : base::call_0_result_class
         { };
 
         #define  BOOST_PP_FILENAME_1 \
@@ -71,12 +77,17 @@ namespace boost { namespace fusion
     };
 }}
 
-namespace boost {
-    template<typename Func>
-    struct result_of<boost::fusion::unfused_rvalue_args<Func>()>
+namespace boost 
+{
+    template<class F>
+    struct result_of<boost::fusion::unfused_rvalue_args<F> const ()>
     {
-        typedef boost::fusion::unfused_rvalue_args<Func> function;
-        typedef typename function::template result<function()>::type type;
+        typedef typename boost::fusion::unfused_rvalue_args<F>::call_const_0_result type;
+    };
+    template<class F>
+    struct result_of<boost::fusion::unfused_rvalue_args<F>()>
+    {
+        typedef typename boost::fusion::unfused_rvalue_args<F>::call_0_result type;
     };
 }
 
@@ -89,11 +100,18 @@ namespace boost {
 ////////////////////////////////////////////////////////////////////////////////
 #define N BOOST_PP_ITERATION()
 
-        template <typename Func, BOOST_PP_ENUM_PARAMS(N,typename T)>
-        struct result<Func(BOOST_PP_ENUM_PARAMS(N,T))>
-            : function::template result<function( BOOST_PP_CAT(fusion::vector,N)<
-                BOOST_PP_ENUM_BINARY_PARAMS(N,typename detail::cref<T,>::type
-                    BOOST_PP_INTERCEPT) >)>
+        template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
+        struct result< Self const (BOOST_PP_ENUM_PARAMS(N,T)) >
+            : function::template result< function const (
+                BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
+                    typename detail::cref<T,>::type BOOST_PP_INTERCEPT) >)>
+        { };
+
+        template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
+        struct result< Self (BOOST_PP_ENUM_PARAMS(N,T)) >
+            : function::template result< function (
+                BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
+                    typename detail::cref<T,>::type BOOST_PP_INTERCEPT) >)>
         { };
 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>

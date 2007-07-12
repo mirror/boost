@@ -32,11 +32,11 @@ template <class Base = boost::blank, class RemoveNullary = mpl::false_>
 struct test_func
     : Base
 {
-    template<typename T>
+    template <typename Sig>
     struct result;
 
-    template <typename B, typename RM, class Seq> 
-    struct result<test_func<B, RM>(Seq)>
+    template <class Self, class Seq> 
+    struct result< Self(Seq) >
         : mpl::if_< mpl::and_< fusion::result_of::empty<Seq>, RemoveNullary >, 
                     boost::blank, mpl::identity<long> >::type
     { };
@@ -48,7 +48,7 @@ struct test_func
         return fusion::fold(seq, state, fold_op());
     }
 
-    template < typename Seq >
+    template <typename Seq>
     long operator()(Seq const & seq) 
     {
         long state = 100;

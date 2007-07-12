@@ -45,8 +45,8 @@ struct test_func
     template<typename T>
     struct result;
 
-    template <typename B, typename V, class Seq> 
-    struct result<test_func<B,V>(Seq)>
+    template <class Self, class Seq> 
+    struct result<Self(Seq)>
         : mpl::if_< typename mpl::apply<Validation, Seq>::type,
             mpl::identity<long>, boost::blank >::type
     { };

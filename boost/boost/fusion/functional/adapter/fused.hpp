@@ -35,40 +35,47 @@ namespace boost { namespace fusion
         { }
 
         template <class Seq> 
-        inline typename result_of::invoke<Function,Seq const>::type 
+        inline typename result_of::invoke<func_const_fwd_t,Seq const>::type 
         operator()(Seq const & s) const
         {
-          return fusion::invoke<func_const_fwd_t>(this->fnc_transformed,s);
+            return fusion::invoke<func_const_fwd_t>(this->fnc_transformed,s);
         }
 
         template <class Seq> 
-        inline typename result_of::invoke<Function,Seq const>::type 
+        inline typename result_of::invoke<func_fwd_t,Seq const>::type 
         operator()(Seq const & s) 
         {
-          return fusion::invoke<func_fwd_t>(this->fnc_transformed,s);
+            return fusion::invoke<func_fwd_t>(this->fnc_transformed,s);
         }
 
         template <class Seq> 
-        inline typename result_of::invoke<Function,Seq>::type 
+        inline typename result_of::invoke<func_const_fwd_t,Seq>::type 
         operator()(Seq & s) const
         {
-          return fusion::invoke<func_const_fwd_t>(this->fnc_transformed,s);
+            return fusion::invoke<func_const_fwd_t>(this->fnc_transformed,s);
         }
 
         template <class Seq> 
-        inline typename result_of::invoke<Function,Seq>::type 
+        inline typename result_of::invoke<func_fwd_t,Seq>::type 
         operator()(Seq & s) 
         {
-          return fusion::invoke<func_fwd_t>(this->fnc_transformed,s);
+            return fusion::invoke<func_fwd_t>(this->fnc_transformed,s);
         }
 
-        template<typename T>
-        struct result;
-
-        template <typename Func, class Seq>
-        struct result<fused<Func>(Seq)>
-            : result_of::invoke<Function,Seq>
+        template <typename Sig>
+        struct result
         { };
+
+        template <class Self, class Seq>
+        struct result< Self const (Seq) >
+            : result_of::invoke<func_const_fwd_t,Seq>
+        { };
+
+        template <class Self, class Seq>
+        struct result< Self(Seq) >
+            : result_of::invoke<func_fwd_t,Seq>
+        { };
+
     };
 
 }}

@@ -35,43 +35,42 @@ namespace boost { namespace fusion
         { }
 
         template <class Seq> 
-        inline typename result_of::invoke_procedure<Function,Seq const>::type 
-        operator()(Seq const & s) const
+        inline void operator()(Seq const & s) const
         {
-          return fusion::invoke_procedure<
-              func_const_fwd_t >(this->fnc_transformed,s);
+            fusion::invoke_procedure<
+                func_const_fwd_t >(this->fnc_transformed,s);
         }
 
         template <class Seq> 
-        inline typename result_of::invoke_procedure<Function,Seq const>::type
-        operator()(Seq const & s) 
+        inline void operator()(Seq const & s) 
         {
-          return fusion::invoke_procedure<
-              func_fwd_t >(this->fnc_transformed,s);
+            fusion::invoke_procedure<
+                func_fwd_t >(this->fnc_transformed,s);
         }
 
         template <class Seq> 
-        inline typename result_of::invoke_procedure<Function,Seq>::type 
-        operator()(Seq & s) const
+        inline void operator()(Seq & s) const
         {
-          return fusion::invoke_procedure<
-              func_const_fwd_t >(this->fnc_transformed,s);
+            fusion::invoke_procedure<
+                func_const_fwd_t >(this->fnc_transformed,s);
         }
 
         template <class Seq> 
-        inline typename result_of::invoke_procedure<Function,Seq>::type 
-        operator()(Seq & s) 
+        inline void operator()(Seq & s) 
         {
-          return fusion::invoke_procedure<
-              func_fwd_t >(this->fnc_transformed,s);
+            return fusion::invoke_procedure<
+                func_fwd_t >(this->fnc_transformed,s);
         }
 
-        template <class Seq>
+        template <typename Sig>
         struct result
-            : result_of::invoke_procedure<Function,Seq>
         { };
 
-        typedef void result_type;
+        template <class Self, class Seq>
+        struct result< Self(Seq) >
+        {
+            typedef void type;
+        };
     };
 }}
 

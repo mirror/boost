@@ -35,16 +35,16 @@ namespace boost { namespace fusion
         { }
 
         template <class Seq> 
-        inline typename result_of::invoke_function_object<Function,Seq const
-            >::type operator()(Seq const & s) const
+        inline typename result_of::invoke_function_object<func_const_fwd_t,
+            Seq const>::type operator()(Seq const & s) const
         {
           return fusion::invoke_function_object<
               func_const_fwd_t >(this->fnc_transformed,s);
         }
 
         template <class Seq> 
-        inline typename result_of::invoke_function_object<Function,Seq const
-            >::type 
+        inline typename result_of::invoke_function_object<func_fwd_t,
+            Seq const>::type 
         operator()(Seq const & s) 
         {
           return fusion::invoke_function_object<
@@ -52,7 +52,8 @@ namespace boost { namespace fusion
         }
 
         template <class Seq> 
-        inline typename result_of::invoke_function_object<Function,Seq>::type
+        inline typename result_of::invoke_function_object<func_const_fwd_t,
+            Seq>::type
         operator()(Seq & s) const
         {
           return fusion::invoke_function_object<
@@ -60,7 +61,7 @@ namespace boost { namespace fusion
         }
 
         template <class Seq> 
-        inline typename result_of::invoke_function_object<Function,Seq>::type
+        inline typename result_of::invoke_function_object<func_fwd_t,Seq>::type
         operator()(Seq & s) 
         {
           return fusion::invoke_function_object<
@@ -68,11 +69,17 @@ namespace boost { namespace fusion
         }
 
         template<typename T>
-        struct result;
+        struct result
+        { };
 
-        template <typename Seq>
-        struct result<fused_function_object(Seq)>
-            : result_of::invoke_function_object<Function, Seq>
+        template <class Self, class Seq>
+        struct result< Self const (Seq) >
+            : result_of::invoke_function_object<func_const_fwd_t, Seq>
+        { };
+
+        template <class Self, class Seq>
+        struct result< Self(Seq) >
+            : result_of::invoke_function_object<func_fwd_t, Seq>
         { };
     };
 

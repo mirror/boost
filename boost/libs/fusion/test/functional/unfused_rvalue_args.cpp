@@ -32,11 +32,11 @@ template <class Base = boost::blank, class RemoveNullary = mpl::false_>
 struct test_func
     : Base
 {
-    template<typename T>
+    template <typename Sig>
     struct result;
 
-    template <typename B, typename RN, class Seq> 
-    struct result<test_func<B, RN>(Seq)>
+    template <class Self, class Seq> 
+    struct result< Self(Seq) >
         : mpl::if_< mpl::and_< fusion::result_of::empty<Seq>, RemoveNullary >, 
                     boost::blank, mpl::identity<long> >::type
     { };

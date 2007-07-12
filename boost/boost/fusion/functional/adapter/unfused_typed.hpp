@@ -104,12 +104,18 @@ namespace boost { namespace fusion
             : fnc_transformed(f)
         { }
 
-        template <typename T>
-        struct result;
+        template <typename Sig>
+        struct result
+        { };
 
-        template <typename Func, typename Seq>
-        struct result<unfused_typed<Func, Seq>()>
-            : base::r0
+        template <class Self>
+        struct result< Self const () >
+            : base::call_const_0_result_class
+        { };
+
+        template <class Self>
+        struct result< Self() >
+            : base::call_0_result_class
         { };
     }; 
 
@@ -119,14 +125,20 @@ namespace boost { namespace fusion
 
 }}
 
-namespace boost {
-    template<typename Func, typename Seq>
-    struct result_of<boost::fusion::unfused_typed<Func, Seq>()>
+namespace boost 
+{
+    template<class F, class Seq>
+    struct result_of< boost::fusion::unfused_typed<F,Seq> const () >
     {
-        typedef boost::fusion::unfused_typed<Func, Seq> function;
-        typedef typename function::template result<function()>::type type;
+        typedef typename boost::fusion::unfused_typed<F,Seq>::call_const_0_result type;
+    };
+    template<class F, class Seq>
+    struct result_of< boost::fusion::unfused_typed<F,Seq>() >
+    {
+        typedef typename boost::fusion::unfused_typed<F,Seq>::call_0_result type;
     };
 }
+
 
 #define BOOST_FUSION_FUNCTIONAL_ADAPTER_UNFUSED_TYPED_HPP_INCLUDED
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -149,26 +161,21 @@ namespace boost {
                 Derived,Function,Sequence>::type base;
 
             typedef typename remove_const<typename remove_reference<Function>::type>::type function;
-
-            // Notes: 
-            // - conversion to fusion::vector might not be perfect (there is 
-            //   currently no "inrinsic converting ctor" that would allow us
-            //   to let the user choose the sequence implementation)
-            // - value_at_c (instead of iteration) is OK because of conversion 
-            //   to fusion::vector - we would need iteration for arbitrary 
-            //   sequences
             typedef typename result_of::as_vector<Sequence>::type arg_vector_t;
+
+        protected:
+            typedef typename function::
+                template result<function const (arg_vector_t)> BOOST_PP_CAT(rc,N);
+            typedef typename function::
+                template result<function(arg_vector_t)> BOOST_PP_CAT(r,N);
         public:
 
             using base::operator();
 
-            typedef typename function::
-                template result<function(arg_vector_t)> BOOST_PP_CAT(r,N);
-
 #define M(z,i,s)                                                                \
     typename call_param<typename result_of::value_at_c<s,i>::type>::type a##i
 
-            inline typename function::template result<function(arg_vector_t)>::type 
+            inline typename function::template result<function const (arg_vector_t)>::type 
             operator()(BOOST_PP_ENUM(N,M,arg_vector_t)) const
             {
                 arg_vector_t arg(BOOST_PP_ENUM_PARAMS(N,a));
@@ -190,11 +197,20 @@ namespace boost {
     } // namespace detail
 
     template <class Function, class Sequence> 
-        template <typename Func, BOOST_PP_ENUM_PARAMS(N,typename T)>
-    struct unfused_typed<Function,Sequence>::result
-    <Func(BOOST_PP_ENUM_PARAMS(N,T))>
+        template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
+    struct unfused_typed<Function,Sequence>::result<
+            Self const (BOOST_PP_ENUM_PARAMS(N,T)) >
+        : BOOST_PP_CAT(base::rc,N)
+    { };
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1400)
+    template <class Function, class Sequence> 
+        template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
+    struct unfused_typed<Function,Sequence>::result<
+            Self (BOOST_PP_ENUM_PARAMS(N,T)) >
         : BOOST_PP_CAT(base::r,N)
     { };
+#endif
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

@@ -26,41 +26,99 @@ namespace boost { namespace fusion { namespace detail
     template<typename Function>
     struct get_result_spec
     {
-        typedef typename remove_const<typename remove_reference<Function>::type>::type function;
-        typedef typename function::template result<function(fusion::vector0)> type;
+    private:
+        typedef typename boost::remove_const<
+            typename boost::remove_reference<Function>::type>::type function;
+
+        typedef fusion::vector0 arg;
+    public:
+        typedef typename function::template result<function(arg)> call_0_result;
+        typedef typename function::template result<function const (arg)> 
+            call_const_0_result;
     };
 
-    template <class Derived, class Function, bool Enable = detail::has_type< 
-        typename get_result_spec<Function>::type>::value>
+    template <class Derived, class Function, 
+        bool EnableConst = detail::has_type< 
+            typename get_result_spec<Function>::call_const_0_result>::value,
+        bool Enable = detail::has_type<
+            typename get_result_spec<Function>::call_0_result>::value>
     struct nullary_call_base
     {
-        template <typename T> inline void operator()(T reserved::*) const { }
     protected:
-        typedef boost::blank r0;
-    };
+        typedef typename get_result_spec<Function>::call_const_0_result
+            call_const_0_result_class;
 
-    template <class Derived, class Function>
-    struct nullary_call_base<Derived,Function,true>
-    {
-    private:
-        typedef typename remove_const<typename remove_reference<Function>::type>::type function;
-    protected:
-        typedef typename function::template result<function(vector0)> r0;
+        typedef typename get_result_spec<Function>::call_0_result
+            call_0_result_class;
     public:
+        typedef typename call_const_0_result_class::type
+            call_const_0_result;
 
-        inline typename r0::type
-        operator()() const
+        inline call_const_0_result operator()() const
         {
             fusion::vector0 arg;
             return static_cast<Derived const *>(this)->fnc_transformed(arg);
         }
 
-        inline typename r0::type
-        operator()() 
+        typedef typename get_result_spec<Function>::call_0_result::type 
+            call_0_result;
+
+        inline call_0_result operator()() 
         {
             fusion::vector0 arg;
             return static_cast<Derived *>(this)->fnc_transformed(arg);
         }
+    };
+
+    template <class Derived, class Function> 
+    struct nullary_call_base<Derived, Function, true, false>
+    {
+    protected:
+        typedef typename get_result_spec<Function>::call_const_0_result
+            call_const_0_result_class;
+
+        typedef typename boost::blank call_0_result_class;
+    public:
+        typedef typename call_const_0_result_class::type
+            call_const_0_result, call_0_result;
+
+        inline call_const_0_result operator()() const
+        {
+            fusion::vector0 arg;
+            return static_cast<Derived const *>(this)->fnc_transformed(arg);
+        }
+    };
+
+    template <class Derived, class Function> 
+    struct nullary_call_base<Derived, Function, false, true>
+    {
+    protected:
+        typedef typename boost::blank call_const_0_result_class;
+
+        typedef typename get_result_spec<Function>::call_0_result
+            call_0_result_class;
+    public:
+        typedef void call_const_0_result;
+        typedef typename call_0_result_class::type call_0_result;
+
+        inline call_const_0_result operator()()
+        {
+            fusion::vector0 arg;
+            return static_cast<Derived *>(this)->fnc_transformed(arg);
+        }
+    };
+
+    template <class Derived, class Function> 
+    struct nullary_call_base<Derived, Function, false, false>
+    {
+    protected:
+        typedef boost::blank call_0_result_class;
+        typedef boost::blank call_const_0_result_class;
+    public:
+        typedef void call_0_result;
+        typedef void call_const_0_result;
+
+        template <typename T> inline void operator()(T reserved::*) const { }
     };
 
 }}}

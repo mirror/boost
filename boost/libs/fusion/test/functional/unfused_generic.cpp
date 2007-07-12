@@ -35,14 +35,14 @@ template <class Base = boost::blank, class RemoveNullary = mpl::false_>
 struct test_func
     : Base
 {
-    template<typename T>
+    template <typename Sig>
     struct result;
 
-    template <typename B, typename RN, class Seq> 
-    struct result<test_func<B,RN>(Seq)>
+    template <class Self, class Seq>
+    struct result< Self(Seq) >
         : mpl::if_< mpl::and_< fusion::result_of::empty<Seq>, RemoveNullary >, 
                     boost::blank, mpl::identity<long> >::type
-    {};
+    { };
 
     template <typename Seq>
     long operator()(Seq const & seq) const
@@ -51,7 +51,7 @@ struct test_func
         return fusion::fold(seq, state, fold_op());
     }
 
-    template < typename Seq >
+    template <typename Seq>
     long operator()(Seq const & seq) 
     {
         long state = 100;
@@ -89,7 +89,7 @@ void result_type_tests()
 
     BOOST_TEST(( has_type< test_func_0::result<test_func_0()> >::value ));
     BOOST_TEST(( has_type< test_func_1::result<test_func_1(int)> >::value ));
-    BOOST_TEST(( ! has_type< test_func_1::result<test_func_1()> >::value ));
+    BOOST_TEST(( ! has_type< test_func_1::result<test_func_1() > >::value ));
     BOOST_TEST(( is_same< boost::result_of< test_func_0() >::type, long >::value ));
     BOOST_TEST(( is_same< boost::result_of< test_func_1(int) >::type, long >::value ));
 }
@@ -112,8 +112,12 @@ int main()
     BOOST_TEST(unfused_func_c_ref() == 0);
 
     long lvalue = 12;
+    // also test const lvalues to pick up compiler deficiencies in that area
+    int const clvalue_1 = 1;
+    long const clvalue_2 = 2; 
+
     static const long expected = 1*sizeof(int) + 2*sizeof(long) + 7*sizeof(char);
-    BOOST_TEST(unfused_func(lvalue,lvalue,1,2l,'\007') == 100 + expected); 
+    BOOST_TEST(unfused_func(lvalue,lvalue,clvalue_1,clvalue_2,'\007') == 100 + expected); 
     BOOST_TEST(lvalue == 12 + 2*sizeof(long));
     BOOST_TEST(unfused_func_ref(lvalue,lvalue,1,2l,'\007') == 100 + expected); 
     BOOST_TEST(lvalue == 12 + 4*sizeof(long));

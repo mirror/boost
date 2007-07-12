@@ -56,17 +56,23 @@ namespace boost { namespace fusion
 
         using base::operator();
 
-        template <typename T>
-        struct result;
+        template <typename Sig>
+        struct result
+        { };
 
-        template <typename Func>
-        struct result<unfused_generic<Func>()>
-            : base::r0
+        template <class Self>
+        struct result< Self const () >
+            : base::call_const_0_result_class
+        { };
+
+        template <class Self>
+        struct result< Self() >
+            : base::call_0_result_class
         { };
 
         #define BOOST_FUSION_CODE(tpl_params,arg_types,params,args)             \
         template <tpl_params>                                                  \
-        inline typename function::template result<function(                    \
+        inline typename function::template result<function const (             \
             BOOST_PP_CAT(fusion::vector,N)<arg_types>)>::type                  \
         operator()(params) const                                               \
         {                                                                      \
@@ -91,16 +97,22 @@ namespace boost { namespace fusion
         #define  N BOOST_PP_ITERATION_1
         #include BOOST_PP_ITERATE()
         #undef   N
+
         #undef BOOST_FUSION_CODE
     };
 }}
 
-namespace boost {
-    template<typename Func>
-    struct result_of<boost::fusion::unfused_generic<Func>()>
+namespace boost 
+{
+    template<class F>
+    struct result_of<boost::fusion::unfused_generic<F> const ()>
     {
-        typedef boost::fusion::unfused_generic<Func> function;
-        typedef typename function::template result<function()>::type type;
+        typedef typename boost::fusion::unfused_generic<F>::call_const_0_result type;
+    };
+    template<class F>
+    struct result_of<boost::fusion::unfused_generic<F>()>
+    {
+        typedef typename boost::fusion::unfused_generic<F>::call_0_result type;
     };
 }
 
@@ -115,9 +127,17 @@ namespace boost {
 #include <boost/fusion/functional/adapter/detail/pt_def.hpp>
 
 #if BOOST_PP_SLOT_1() == 0 
-        template <typename Func, BOOST_PP_ENUM_PARAMS(N,typename T)>
+        template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result
-            <unfused_generic<Func>(BOOST_PP_ENUM_PARAMS(N,T))>
+            < Self const (BOOST_PP_ENUM_PARAMS(N,T)) >
+            : function::template result<function const (
+                BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
+                   typename detail::gref<T,>::type BOOST_PP_INTERCEPT) >)>
+        { };
+
+        template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
+        struct result
+            < Self(BOOST_PP_ENUM_PARAMS(N,T)) >
             : function::template result<function(BOOST_PP_CAT(fusion::vector,N)<
                 BOOST_PP_ENUM_BINARY_PARAMS(N,typename detail::gref<T,>::type
                     BOOST_PP_INTERCEPT) >)>
@@ -126,7 +146,7 @@ namespace boost {
 
 #if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1400)) 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<function(
+        inline typename function::template result<function const(
             BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>)>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a)) const
         {
