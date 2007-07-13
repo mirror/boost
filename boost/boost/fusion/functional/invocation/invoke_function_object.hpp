@@ -27,10 +27,9 @@
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/iterator/next.hpp>
-#include <boost/fusion/iterator/value_of.hpp>
+#include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/functional/invocation/limits.hpp>
 
 namespace boost { namespace fusion
@@ -116,7 +115,7 @@ namespace boost { namespace fusion
             typedef typename boost::result_of<
 #define M(z,j,data)                                                             \
     typename boost::remove_reference<                                          \
-        typename result_of::value_at_c<Sequence,j>::type >::type 
+        typename result_of::at_c<Sequence,j>::type >::type 
                 Function (BOOST_PP_ENUM(N,M,~)) >::type result_type;
 #undef M
 
@@ -161,14 +160,12 @@ namespace boost { namespace fusion
         {
 #if N > 0
             typedef typename result_of::begin<Sequence>::type I0;
-            typedef typename boost::remove_reference< 
-                typename result_of::value_of<I0>::type >::type T0;
+            typedef typename result_of::deref<I0>::type T0;
 
 #define M(z,i,data)                                                             \
             typedef typename result_of::next<                                  \
                 BOOST_PP_CAT(I,BOOST_PP_DEC(i))>::type I##i;                   \
-            typedef typename boost::remove_reference<                          \
-                typename result_of::value_of<I##i>::type >::type T##i;
+            typedef typename result_of::deref<I##i>::type T##i;
 
             BOOST_PP_REPEAT_FROM_TO(1,N,M,~)
 #undef M
