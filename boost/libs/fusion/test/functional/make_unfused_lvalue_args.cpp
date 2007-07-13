@@ -41,7 +41,7 @@ struct test_func
     struct result;
 
     template <class Self, class Seq> 
-    struct result< Self(Seq) >
+    struct result< Self(Seq &) >
         : mpl::if_< mpl::and_< fusion::result_of::empty<Seq>, RemoveNullary >, 
                     boost::blank, mpl::identity<long> >::type
     { };

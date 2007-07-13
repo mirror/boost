@@ -10,10 +10,10 @@
 #include <boost/fusion/functional/invocation/invoke.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-#include <boost/fusion/functional/adapter/detail/has_type.hpp>
-
 #include <memory>
 #include <boost/noncopyable.hpp>
+
+#include <boost/type_traits/is_same.hpp>
 
 #include <boost/mpl/int.hpp>
 
@@ -337,25 +337,19 @@ void test_sequence(Sequence & seq)
 
 void result_type_tests()
 {
-    using boost::fusion::detail::has_type;
+    using boost::is_same;
 
-    BOOST_TEST(( has_type<
-      fusion::result_of::invoke<int (*)(), fusion::vector0 > 
+    BOOST_TEST(( is_same<
+      fusion::result_of::invoke<int (*)(), fusion::vector0 >::type, int 
     >::value ));
-    BOOST_TEST(( has_type<
-      fusion::result_of::invoke<int (*)(...), fusion::vector1<int> > 
+    BOOST_TEST(( is_same<
+      fusion::result_of::invoke<int (*)(...), fusion::vector1<int> >::type, int 
     >::value ));
-    BOOST_TEST(( ! has_type<
-      fusion::result_of::invoke<int (*)(), fusion::vector1<int> > 
+    BOOST_TEST(( is_same< 
+      fusion::result_of::invoke<int (members::*)(), fusion::vector1<members*> >::type, int 
     >::value ));
-    BOOST_TEST(( has_type< 
-      fusion::result_of::invoke<int (members::*)(), fusion::vector1<members*> > 
-    >::value ));
-    BOOST_TEST(( has_type< 
-      fusion::result_of::invoke<int (members::*)(...), fusion::vector2<members*,int> > 
-    >::value ));
-    BOOST_TEST(( ! has_type< 
-      fusion::result_of::invoke<int (members::*)(), fusion::vector2<members*,int> > 
+    BOOST_TEST(( is_same< 
+      fusion::result_of::invoke<int (members::*)(...), fusion::vector2<members*,int> >::type, int
     >::value ));
 }
 

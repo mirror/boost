@@ -14,15 +14,10 @@
 
 #include <boost/utility/result_of.hpp>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/apply.hpp>
-#include <boost/mpl/vector.hpp>
 #include <boost/mpl/identity.hpp>
-#include <boost/mpl/equal_to.hpp>
 
 #include <boost/utility/result_of.hpp>
 
-#include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 
 namespace fusion = boost::fusion;
@@ -33,12 +28,7 @@ using boost::noncopyable;
 
 typedef fusion::vector<long &,int,char> types;
 
-typedef mpl::always< mpl::true_ > unconstrained;
-
-typedef  mpl::equal_to< fusion::result_of::size<_>,
-    fusion::result_of::size<types> > non_variadic; 
-
-template <class Base = boost::blank, class Validation = unconstrained>
+template <class Base = boost::blank>
 struct test_func
     : Base
 {
@@ -46,9 +36,8 @@ struct test_func
     struct result;
 
     template <class Self, class Seq> 
-    struct result<Self(Seq)>
-        : mpl::if_< typename mpl::apply<Validation, Seq>::type,
-            mpl::identity<long>, boost::blank >::type
+    struct result< Self(Seq) >
+        : mpl::identity<long>
     { };
 
     template <typename Seq>
@@ -89,16 +78,10 @@ struct test_func
 void result_type_tests()
 {
     using boost::is_same;
-    using boost::fusion::detail::has_type;
 
-    typedef fusion::unfused_typed< test_func<noncopyable, non_variadic>, types > test_func_3;
-    typedef fusion::unfused_typed< test_func<noncopyable>, types > test_func_0;
-
-    BOOST_TEST(( has_type< test_func_0::result<test_func_0()> >::value ));
-    BOOST_TEST(( has_type< test_func_3::result<test_func_3(long &, int, char)> >::value ));
-    BOOST_TEST(( ! has_type< test_func_3::result<test_func_3()> >::value ));
-    BOOST_TEST(( is_same< boost::result_of< test_func_0() >::type, long >::value ));
-    BOOST_TEST(( is_same< boost::result_of< test_func_3(long &, int, char) >::type, long >::value ));
+    typedef fusion::unfused_typed< test_func<>, types > t;
+    BOOST_TEST(( is_same< boost::result_of< t () >::type, long >::value ));
+    BOOST_TEST(( is_same< boost::result_of< t (int) >::type, long >::value ));
 }
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1400

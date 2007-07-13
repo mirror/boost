@@ -12,9 +12,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/blank.hpp>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
 
 #include <boost/utility/result_of.hpp>
@@ -26,9 +23,8 @@ namespace fusion = boost::fusion;
 namespace mpl = boost::mpl;
 
 using boost::noncopyable;
-typedef mpl::true_ no_nullary_call;
 
-template <class Base = boost::blank, class RemoveNullary = mpl::false_>
+template <class Base = boost::blank>
 struct test_func
     : Base
 {
@@ -37,8 +33,7 @@ struct test_func
 
     template <class Self, class Seq> 
     struct result< Self(Seq) >
-        : mpl::if_< mpl::and_< fusion::result_of::empty<Seq>, RemoveNullary >, 
-                    boost::blank, mpl::identity<long> >::type
+        : mpl::identity<long> 
     { };
 
     template <typename Seq>
@@ -73,16 +68,10 @@ struct test_func
 void result_type_tests()
 {
     using boost::is_same;
-    using boost::fusion::detail::has_type;
 
-    typedef fusion::unfused_lvalue_args< test_func<noncopyable, no_nullary_call> > test_func_1;
-    typedef fusion::unfused_lvalue_args< test_func<noncopyable> > test_func_0;
-
-    BOOST_TEST(( has_type< test_func_0::result<test_func_0()> >::value ));
-    BOOST_TEST(( has_type< test_func_1::result<test_func_1(int)> >::value ));
-    BOOST_TEST(( ! has_type< test_func_1::result<test_func_1()> >::value ));
-    BOOST_TEST(( is_same< boost::result_of< test_func_0() >::type, long >::value ));
-    BOOST_TEST(( is_same< boost::result_of< test_func_1(int) >::type, long >::value ));
+    typedef fusion::unfused_lvalue_args< test_func<> > t;
+    BOOST_TEST(( is_same< boost::result_of< t () >::type, long >::value ));
+    BOOST_TEST(( is_same< boost::result_of< t (int) >::type, long >::value ));
 }
 
 int main()
