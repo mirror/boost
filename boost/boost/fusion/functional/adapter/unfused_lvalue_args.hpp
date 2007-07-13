@@ -22,7 +22,6 @@
 
 #include <boost/fusion/functional/adapter/limits.hpp>
 #include <boost/fusion/functional/adapter/detail/access.hpp>
-#include <boost/fusion/functional/adapter/detail/nullary_call_base.hpp>
 
 namespace boost { namespace fusion
 {
@@ -33,16 +32,8 @@ namespace boost { namespace fusion
     struct void_;
 
     template <class Function> class unfused_lvalue_args
-        : public detail::nullary_call_base
-              <unfused_lvalue_args<Function>, Function>
     {
         Function fnc_transformed;
-
-        template <class D, class F, bool EC, bool E>
-        friend struct detail::nullary_call_base;
-
-        typedef detail::nullary_call_base<
-            fusion::unfused_lvalue_args<Function>, Function > base;
 
         typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
@@ -53,21 +44,26 @@ namespace boost { namespace fusion
             : fnc_transformed(f)
         { }
 
-        using base::operator();
-
         template <typename Sig>
-        struct result
-        { };
+        struct result;
 
-        template <class Self>
-        struct result< Self const () >
-            : base::call_const_0_result_class
-        { };
+        typedef typename boost::result_of<
+            function const (fusion::vector0 &) >::type call_const_0_result;
 
-        template <class Self>
-        struct result< Self() >
-            : base::call_0_result_class
-        { };
+        inline call_const_0_result operator()() const
+        {
+            fusion::vector0 arg;
+            return this->fnc_transformed(arg);
+        }
+
+        typedef typename boost::result_of< 
+            function (fusion::vector0 &) >::type call_0_result;
+
+        inline call_0_result operator()() 
+        {
+            fusion::vector0 arg;
+            return this->fnc_transformed(arg);
+        }
 
         #define  BOOST_PP_FILENAME_1 \
             <boost/fusion/functional/adapter/unfused_lvalue_args.hpp>
@@ -102,21 +98,21 @@ namespace boost
 
         template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result< Self const (BOOST_PP_ENUM_PARAMS(N,T)) >
-            : function::template result< function const (
+            : boost::result_of< function const (
                 BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
-                    typename detail::mref<T,>::type BOOST_PP_INTERCEPT) >)>
+                    typename detail::mref<T,>::type BOOST_PP_INTERCEPT) > & )>
         { };
 
         template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result< Self(BOOST_PP_ENUM_PARAMS(N,T)) >
-            : function::template result< function (
+            : boost::result_of< function (
                 BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
-                    typename detail::mref<T,>::type BOOST_PP_INTERCEPT) >)>
+                    typename detail::mref<T,>::type BOOST_PP_INTERCEPT) > & )>
         { };
 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<function(BOOST_PP_CAT(fusion::vector,N)
-            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)>)>::type
+        inline typename boost::result_of<function(BOOST_PP_CAT(fusion::vector,N)
+            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)> & )>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& a)) const
         {
             BOOST_PP_CAT(fusion::vector,N)<
@@ -126,8 +122,8 @@ namespace boost
         }
 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<function(BOOST_PP_CAT(fusion::vector,N)
-            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)>)>::type
+        inline typename boost::result_of<function(BOOST_PP_CAT(fusion::vector,N)
+            <BOOST_PP_ENUM_BINARY_PARAMS(N,T,& BOOST_PP_INTERCEPT)> & )>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,T,& a)) 
         {
             BOOST_PP_CAT(fusion::vector,N)<

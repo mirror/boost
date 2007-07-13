@@ -23,7 +23,9 @@
 
 #include <boost/fusion/functional/adapter/limits.hpp>
 #include <boost/fusion/functional/adapter/detail/access.hpp>
-#include <boost/fusion/functional/adapter/detail/nullary_call_base.hpp>
+
+#include <boost/utility/result_of.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 
 namespace boost { namespace fusion
 {
@@ -35,15 +37,8 @@ namespace boost { namespace fusion
 
     template <class Function> 
     class unfused_generic
-        : public detail::nullary_call_base<unfused_generic<Function>, Function>
     {
         Function fnc_transformed;
-
-        template <class D, class F, bool EC, bool E>
-        friend struct detail::nullary_call_base;
-
-        typedef detail::nullary_call_base<
-            fusion::unfused_generic<Function>, Function > base;
 
         typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
@@ -54,34 +49,39 @@ namespace boost { namespace fusion
             : fnc_transformed(f)
         { }
 
-        using base::operator();
-
         template <typename Sig>
-        struct result
-        { };
+        struct result;
 
-        template <class Self>
-        struct result< Self const () >
-            : base::call_const_0_result_class
-        { };
+        typedef typename boost::result_of<
+            function const (fusion::vector0 &) >::type call_const_0_result;
 
-        template <class Self>
-        struct result< Self() >
-            : base::call_0_result_class
-        { };
+        inline call_const_0_result operator()() const
+        {
+            fusion::vector0 arg;
+            return this->fnc_transformed(arg);
+        }
+
+        typedef typename boost::result_of< 
+            function (fusion::vector0 &) >::type call_0_result;
+
+        inline call_0_result operator()() 
+        {
+            fusion::vector0 arg;
+            return this->fnc_transformed(arg);
+        }
 
         #define BOOST_FUSION_CODE(tpl_params,arg_types,params,args)             \
         template <tpl_params>                                                  \
-        inline typename function::template result<function const (             \
-            BOOST_PP_CAT(fusion::vector,N)<arg_types>)>::type                  \
+        inline typename boost::result_of<function const (                      \
+            BOOST_PP_CAT(fusion::vector,N)<arg_types> & )>::type               \
         operator()(params) const                                               \
         {                                                                      \
             BOOST_PP_CAT(fusion::vector,N)<arg_types> arg(args);               \
             return this->fnc_transformed(arg);                                 \
         }                                                                      \
         template <tpl_params>                                                  \
-        inline typename function::template result<function(                    \
-            BOOST_PP_CAT(fusion::vector,N)<arg_types>)>::type                  \
+        inline typename boost::result_of<function(                             \
+            BOOST_PP_CAT(fusion::vector,N)<arg_types> & )>::type               \
         operator()(params)                                                     \
         {                                                                      \
             BOOST_PP_CAT(fusion::vector,N)<arg_types> arg(args);               \
@@ -130,24 +130,24 @@ namespace boost
         template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result
             < Self const (BOOST_PP_ENUM_PARAMS(N,T)) >
-            : function::template result<function const (
+            : boost::result_of<function const (
                 BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
-                   typename detail::gref<T,>::type BOOST_PP_INTERCEPT) >)>
+                   typename detail::gref<T,>::type BOOST_PP_INTERCEPT) > & )>
         { };
 
         template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result
             < Self(BOOST_PP_ENUM_PARAMS(N,T)) >
-            : function::template result<function(BOOST_PP_CAT(fusion::vector,N)<
-                BOOST_PP_ENUM_BINARY_PARAMS(N,typename detail::gref<T,>::type
-                    BOOST_PP_INTERCEPT) >)>
+            : boost::result_of<function (
+                BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
+                   typename detail::gref<T,>::type BOOST_PP_INTERCEPT) > & )>
         { };
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1400)) 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<function const(
-            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>)>::type
+        inline typename boost::result_of<function const(
+            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)> & )>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a)) const
         {
             BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>
@@ -155,8 +155,8 @@ namespace boost
             return this->fnc_transformed(arg);
         }
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename function::template result<function(
-            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>)>::type
+        inline typename boost::result_of<function(
+            BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)> & )>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a))
         {
             BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)>
