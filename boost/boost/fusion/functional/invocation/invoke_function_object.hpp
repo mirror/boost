@@ -19,8 +19,6 @@
 
 #include <boost/utility/result_of.hpp>
 
-#include <boost/blank.hpp>
-
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
@@ -59,10 +57,7 @@ namespace boost { namespace fusion
             int N = result_of::size<Sequence>::value,
             bool RandomAccess = traits::is_random_access<Sequence>::value 
             >
-        struct invoke_function_object_impl
-        {
-            typedef boost::blank result;
-        };
+        struct invoke_function_object_impl;
 
         template <class Sequence, int N> 
         struct invoke_function_object_param_types;
@@ -77,10 +72,11 @@ namespace boost { namespace fusion
     namespace result_of
     {
         template <class Function, class Sequence> struct invoke_function_object
-            : detail::invoke_function_object_impl< 
+        {
+            typedef typename detail::invoke_function_object_impl< 
                 typename boost::remove_reference<Function>::type, Sequence
-            >::result
-        { }; 
+                >::result_type type;
+        }; 
     }
 
     template <class Function, class Sequence>
@@ -117,16 +113,15 @@ namespace boost { namespace fusion
         {
         public:
 
-            struct result
+            typedef typename boost::result_of<
 #define M(z,j,data)                                                             \
     typename boost::remove_reference<                                          \
         typename result_of::value_at_c<Sequence,j>::type >::type 
-                : boost::result_of< Function (BOOST_PP_ENUM(N,M,~)) >
+                Function (BOOST_PP_ENUM(N,M,~)) >::type result_type;
 #undef M
-            { }; 
 
             template <class F>
-            static inline typename result::type
+            static inline result_type
             call(F & f, Sequence & s)
             {
 #define M(z,j,data) fusion::at_c<j>(s)
@@ -141,13 +136,12 @@ namespace boost { namespace fusion
         private:
             typedef invoke_function_object_param_types<Sequence,N> seq;
         public:
-            struct result
-                : boost::result_of<
-                    Function (BOOST_PP_ENUM_PARAMS(N,typename seq::T)) >
-            { }; 
+            typedef typename boost::result_of<
+                Function (BOOST_PP_ENUM_PARAMS(N,typename seq::T))
+                >::type result_type;
 
             template <class F>
-            static inline typename result::type
+            static inline result_type
             call(F & f, Sequence & s)
             {
 #if N > 0
