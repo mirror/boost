@@ -62,15 +62,7 @@ namespace boost { namespace fusion
                 func_fwd_t >(this->fnc_transformed,s);
         }
 
-        template <typename Sig>
-        struct result
-        { };
-
-        template <class Self, class Seq>
-        struct result< Self(Seq) >
-        {
-            typedef void type;
-        };
+        typedef void result_type;
     };
 }}
 

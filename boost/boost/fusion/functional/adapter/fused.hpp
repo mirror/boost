@@ -63,17 +63,18 @@ namespace boost { namespace fusion
         }
 
         template <typename Sig>
-        struct result
-        { };
+        struct result;
 
         template <class Self, class Seq>
         struct result< Self const (Seq) >
-            : result_of::invoke<func_const_fwd_t,Seq>
+            : result_of::invoke<func_const_fwd_t,
+                typename boost::remove_reference<Seq>::type >
         { };
 
         template <class Self, class Seq>
         struct result< Self(Seq) >
-            : result_of::invoke<func_fwd_t,Seq>
+            : result_of::invoke<func_fwd_t,
+                typename boost::remove_reference<Seq>::type >
         { };
 
     };
