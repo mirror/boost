@@ -91,8 +91,11 @@ namespace impl
             return bound;
         }
 
-        template <typename T>
-        struct result
+        template <typename Signature>
+        struct result;
+
+        template <class Self, typename T>
+        struct result< Self (T) >
             : mpl::eval_if< is_placeholder<T>, 
                 result_of::at<FinalArgs,typename boost::remove_reference<T>::type>,
                 mpl::identity<T>
@@ -113,15 +116,11 @@ namespace impl
           : fsq_bind_args(bind_args)
         { }
 
-        template <class FinalArgs, bool Enable =
-        // Disable for empty sequences if we expect arguments 
-            ! (result_of::empty<FinalArgs>::value &&
-                !! mpl::count_if<bound_args,is_placeholder<_> >::value) > 
-        struct result
-        { };
+        template <typename Signature>
+        struct result;
 
         template <class FinalArgs>
-        struct result<FinalArgs,true>
+        struct result_impl
             : result_of::invoke< typename result_of::front<bound_args>::type,
                 typename result_of::transform<
                     typename result_of::pop_front<bound_args>::type,
@@ -130,8 +129,13 @@ namespace impl
             >
         { }; 
 
+        template <class Self, class FinalArgs>
+        struct result< Self (FinalArgs) >
+            : result_impl< typename boost::remove_reference<FinalArgs>::type > 
+        { };
+
         template <class FinalArgs>
-        inline typename result<FinalArgs>::type 
+        inline typename result_impl<FinalArgs>::type 
         operator()(FinalArgs const & final_args) const
         {
             return fusion::invoke( fusion::front(this->fsq_bind_args),
@@ -145,8 +149,11 @@ namespace impl
     // Fused implementation of the 'bind' function
     struct fused_binder
     {
+        template <class Signature>
+        struct result;
+
         template <class BindArgs>
-        struct result
+        struct result_impl
         {
             // We have to transform the arguments so they are held by-value
             // in the returned function. 
@@ -154,11 +161,16 @@ namespace impl
                 fused_bound_function<BindArgs> > type;
         };
 
+        template <class Self, class BindArgs>
+        struct result< Self (BindArgs) >
+            : result_impl< typename boost::remove_reference<BindArgs>::type >
+        { };
+
         template <class BindArgs>
-        inline typename result<BindArgs>::type 
+        inline typename result_impl< BindArgs >::type 
         operator()(BindArgs & bind_args) const
         {
-            return typename result<BindArgs>::type(bind_args);
+            return typename result< void(BindArgs) >::type(bind_args);
         }
     };
 
