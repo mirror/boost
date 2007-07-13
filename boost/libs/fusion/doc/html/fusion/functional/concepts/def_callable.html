@@ -7,9 +7,10 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="prev" href="poly.html" title=" Polymorphic Function
+<link rel="prev" href="reg_callable.html" title=" Regular Callable
         Object">
-<link rel="next" href="../invocation.html" title="Invocation">
+<link rel="next" href="poly.html" title=" Polymorphic Function
+        Object">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
@@ -22,7 +23,7 @@
 </table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="poly.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../invocation.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="reg_callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="poly.html"><img src="../../../images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -30,37 +31,58 @@
         Callable Object"> Deferred
         Callable Object</a></h4></div></div></div>
 <a name="fusion.functional.concepts.def_callable.description"></a><h5>
-<a name="id1187426"></a>
+<a name="id1241924"></a>
           <a href="def_callable.html#fusion.functional.concepts.def_callable.description">Description</a>
         </h5>
 <p>
           <a href="callable.html" title=" Callable Object">Callable Object</a>
-          that works with <a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top">Boost.ResultOf</a>
-          to determine the result of a call (such as the function objects provided
-          by the standard library).
+          types that work with <a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top">Boost.ResultOf</a>
+          to determine the result of a call.
         </p>
 <a name="fusion.functional.concepts.def_callable.refinement_of"></a><h5>
-<a name="id1187469"></a>
+<a name="id1241966"></a>
           <a href="def_callable.html#fusion.functional.concepts.def_callable.refinement_of">Refinement
           of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="callable.html" title=" Callable Object">Callable Object</a></li></ul></div>
+<div class="sidebar"><p>
+          note Once C++ supports the <code class="literal">decltype</code> keyword, all models
+          of <a href="callable.html" title=" Callable Object">Callable Object</a>
+          will also be models of <a href="def_callable.html" title=" Deferred
+        Callable Object">Deferred
+          Callable Object</a>, because function objects won't need client-side
+          support for <code class="computeroutput"><span class="identifier">result_of</span></code>.
+        </p></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd>
-            A Deferred Callable Object type
+            A possibly const qualified Deferred Callable Object type
           </dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">A1</span>
+          <span class="special">...</span><span class="identifier">AN</span></code></span></dt>
+<dd>
+            Argument types
+          </dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">a1</span>
+          <span class="special">...</span><span class="identifier">aN</span></code></span></dt>
+<dd>
+            Objects or references to objects with types <code class="computeroutput"><span class="identifier">A1</span>
+            <span class="special">...</span><span class="identifier">AN</span></code>
+</dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
           <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
 <dd>
-            Arbitrary types
+<code class="computeroutput"><span class="identifier">T</span></code>i is <code class="computeroutput"><span class="identifier">A</span></code>i
+            <code class="computeroutput"><span class="special">&amp;</span></code> if <code class="computeroutput"><span class="identifier">a</span></code>i
+            is an LValue, same as <code class="computeroutput"><span class="identifier">A</span></code>i,
+            otherwise
           </dd>
 </dl>
 </div>
 <a name="fusion.functional.concepts.def_callable.expression_requirements"></a><h5>
-<a name="id1187555"></a>
+<a name="id1242224"></a>
           <a href="def_callable.html#fusion.functional.concepts.def_callable.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -70,23 +92,47 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Type</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Type
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
 <td>
-<a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></code></a><code class="computeroutput"><span class="special">&lt;</span> <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span> <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>
-</td>
-<td>Unspecified</td>
+                <p>
+                  <a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></code></a><code class="computeroutput"><span class="special">&lt;</span> <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span>
+                  <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Result of a call with <code class="computeroutput"><span class="identifier">A1</span>
+                  <span class="special">...</span><span class="identifier">AN</span></code>-typed
+                  arguments
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.def_callable.models"></a><h5>
-<a name="id1187678"></a>
+<a name="id1242387"></a>
           <a href="def_callable.html#fusion.functional.concepts.def_callable.models">Models</a>
         </h5>
-<div class="itemizedlist"><ul type="disc"><li>
-            all Fusion <a href="../adapters.html" title=" Adapters">functional adapters</a>
-</li></ul></div>
+<div class="itemizedlist"><ul type="disc">
+<li>
+<a href="poly.html" title=" Polymorphic Function
+        Object">Polymorphic Function
+            Object</a> types
+          </li>
+<li>
+            member (function or data) pointer types
+          </li>
+</ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
@@ -95,7 +141,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="poly.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../invocation.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="reg_callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="poly.html"><img src="../../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

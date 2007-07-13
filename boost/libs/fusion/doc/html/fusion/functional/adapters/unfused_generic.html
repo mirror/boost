@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.unfused_generic"></a><a href="unfused_generic.html" title="unfused_generic">unfused_generic</a></h4></div></div></div>
 <a name="fusion.functional.adapters.unfused_generic.description"></a><h5>
-<a name="id1213482"></a>
+<a name="id1251715"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.description">Description</a>
         </h5>
 <p>
@@ -41,38 +41,12 @@
           Non-const LValue arguments are transported as references to non-const,
           otherwise references to const are used.
         </p>
-<div class="tip"><table border="0" summary="Tip">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../images/tip.png"></td>
-<th align="left">Tip</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-            Detecting mutable LValues on a per-argument basis is currently a compile
-            time expensive operation (see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_top">The
-            Forwarding Problem</a> for details). Therefore, there are two, lightweight
-            and more restricted variants of this class template, <a href="unfused_lvalue_args.html" title="unfused_lvalue_args"><code class="computeroutput"><span class="identifier">unfused_lvalue_args</span></code></a> and <a href="unfused_rvalue_args.html" title="unfused_rvalue_args"><code class="computeroutput"><span class="identifier">unfused_rvalue_args</span></code></a>.
-          </p></td></tr>
-</table></div>
-<p>
-          The overload set of the adapter's function call operator can be restricted
-          by removing the <code class="computeroutput"><span class="identifier">type</span></code> member
-          from the nested result metafunction of the <a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic
-          Function Object</a> (in this case the substitution-failure-is-not-an-error
-          principle applies for non-nullary case and nullary calls are explicitly
-          disabled by the library).
-        </p>
-<div class="caution"><table border="0" summary="Caution">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../images/caution.png"></td>
-<th align="left">Caution</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-            As the nullary call operator cannot be a template it will be instantiated
-            along with the class template, so it must be disabled (as described above)
-            in cases where it isn't instantiable.
-          </p></td></tr>
-</table></div>
+<div class="sidebar"><p>
+          <span class="inlinemediaobject"><img src="../../../images/tip.png" alt="tip"></span> Detecting mutable LValues on a per-argument basis
+          is currently a compile time expensive operation (see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm" target="_top">The
+          Forwarding Problem</a> for details). Therefore, there are two, lightweight
+          and more restricted variants of this class template, <a href="unfused_lvalue_args.html" title="unfused_lvalue_args"><code class="computeroutput"><span class="identifier">unfused_lvalue_args</span></code></a> and <a href="unfused_rvalue_args.html" title="unfused_rvalue_args"><code class="computeroutput"><span class="identifier">unfused_rvalue_args</span></code></a>.
+        </p></div>
 <p>
           The type of the target function is allowed to be const qualified or a reference.
           Const qualification is preserved and propagated appropriately (in other
@@ -81,14 +55,14 @@
           object is held by value, the adapter is const).
         </p>
 <a name="fusion.functional.adapters.unfused_generic.header"></a><h5>
-<a name="id1213642"></a>
+<a name="id1251857"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">unfused_generic</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_generic.synopsis"></a><h5>
-<a name="id1213736"></a>
+<a name="id1251952"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -96,7 +70,7 @@
 <span class="keyword">class</span> <span class="identifier">unfused_generic</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_generic.template_parameters"></a><h5>
-<a name="id1213806"></a>
+<a name="id1252023"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.template_parameters">Template
           parameters</a>
         </h5>
@@ -107,22 +81,43 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">Function</span></code></td>
-<td>An
-                unary <a href="../concepts/poly.html" title=" Polymorphic Function
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Function</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  An unary <a href="../concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-                Function Object</a>
-</td>
-<td> </td>
+                  Function Object</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_generic.model_of"></a><h5>
-<a name="id1213881"></a>
+<a name="id1252124"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.model_of">Model
           of</a>
         </h5>
@@ -163,7 +158,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.unfused_generic.expression_semantics"></a><h5>
-<a name="id1214088"></a>
+<a name="id1252346"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -173,56 +168,88 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">UG</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code></td>
-<td>Creates
-                a fused function as described above, initializes the target function
-                with <code class="computeroutput"><span class="identifier">f</span></code>.</td>
-</tr>
-<tr>
-<td><code class="computeroutput"><span class="identifier">UG</span><span class="special">()</span></code></td>
-<td>Creates
-                a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">F</span></code>'s default constructor.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">UG</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, initializes the target
+                  function with <code class="computeroutput"><span class="identifier">f</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
 <td>
-<code class="computeroutput"><span class="identifier">ug</span><span class="special">(</span><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></code>
-</td>
-<td>Calls <code class="computeroutput"><span class="identifier">f</span></code> with a <a href="../../sequences.html" title="Sequences">Sequence</a>
-                that contains references to the arguments <code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code>.</td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">UG</span><span class="special">()</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">F</span></code>'s default constructor.
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">ug</span><span class="special">(</span><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Calls <code class="computeroutput"><span class="identifier">f</span></code> with a
+                  <a href="../../sequences.html" title="Sequences">Sequence</a> that contains
+                  references to the arguments <code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code>.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_generic.example"></a><h5>
-<a name="id1214276"></a>
+<a name="id1252581"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.example">Example</a>
         </h5>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fused_bound_1st</span>
 <span class="special">{</span>
-    <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><a href="../../support/deduce.html" title="deduce"><code class="computeroutput"><span class="identifier">deduce</span></code></a><span class="special">&lt;</span><span class="identifier">Function</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">fnc_deferred</span><span class="special">;</span>
-    <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><a href="../../support/deduce.html" title="deduce"><code class="computeroutput"><span class="identifier">deduce</span></code></a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>        <span class="identifier">xxx_bound</span><span class="special">;</span>
+    <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">deduce</span><span class="special">&lt;</span><span class="identifier">Function</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">fnc_deferred</span><span class="special">;</span>
+    <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">deduce</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>        <span class="identifier">xxx_bound</span><span class="special">;</span>
 <span class="keyword">public</span><span class="special">:</span>
 
     <span class="identifier">fused_bound_1st</span><span class="special">(</span><span class="identifier">Function</span> <span class="identifier">deferred</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">bound</span><span class="special">)</span>
         <span class="special">:</span> <span class="identifier">fnc_deferred</span><span class="special">(</span><span class="identifier">deferred</span><span class="special">),</span> <span class="identifier">xxx_bound</span><span class="special">(</span><span class="identifier">bound</span><span class="special">)</span>
     <span class="special">{</span> <span class="special">}</span>
 
-    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">result</span>
-        <span class="special">:</span> <a href="../invocation/metafunctions/invoke.html" title="invoke"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke</span></code></a><span class="special">&lt;</span> <span class="identifier">Function</span><span class="special">,</span>
-            <span class="keyword">typename</span> <a href="../../algorithms/transformation/metafunctions/push_front.html" title="push_front"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">push_front</span></code></a><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="special">&gt;</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sig</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">;</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Self</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">Seq</span><span class="special">)</span> <span class="special">&gt;</span>
+        <span class="special">:</span> <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke</span><span class="special">&lt;</span> <span class="identifier">Function</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">push_front</span><span class="special">&lt;</span>
+            <span class="keyword">typename</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="special">&gt;</span>
     <span class="special">{</span> <span class="special">};</span>
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
-    <span class="keyword">typename</span> <span class="identifier">result</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Seq</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span> <span class="keyword">const</span>
+    <span class="keyword">typename</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="keyword">void</span><span class="special">(</span><span class="identifier">Seq</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Seq</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span> <span class="keyword">const</span>
     <span class="special">{</span>
-        <span class="keyword">return</span> <a href="../invocation/functions/invoke.html" title="invoke"><code class="computeroutput"><span class="identifier">invoke</span></code></a><span class="special">(</span><span class="identifier">fnc_deferred</span><span class="special">,</span> <span class="identifier">push_front</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span><span class="identifier">xxx_bound</span><span class="special">));</span>
+        <span class="keyword">return</span> <span class="identifier">invoke</span><span class="special">(</span><span class="identifier">fnc_deferred</span><span class="special">,</span> <span class="identifier">push_front</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span><span class="identifier">xxx_bound</span><span class="special">));</span>
     <span class="special">}</span>
 <span class="special">};</span>
 
@@ -242,11 +269,11 @@
 <span class="keyword">void</span> <span class="identifier">try_it</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="identifier">assert</span><span class="special">(</span><span class="identifier">bind_1st</span><span class="special">(&amp;</span> <span class="identifier">test_func</span><span class="special">,</span><span class="number">3</span><span class="special">)(-</span><span class="number">2</span><span class="special">,-</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
-    <span class="identifier">assert</span><span class="special">(</span><span class="identifier">bind_1st</span><span class="special">(</span><a href="http://www.sgi.com/tech/stl/plus.html" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">plus</span></code></a><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;(),</span> <span class="number">1</span><span class="special">)(</span><span class="number">0.5f</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.5f</span><span class="special">);</span>
+    <span class="identifier">assert</span><span class="special">(</span><span class="identifier">bind_1st</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">plus</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;(),</span> <span class="number">1</span><span class="special">)(</span><span class="number">0.5f</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.5f</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_generic.see_also"></a><h5>
-<a name="id1215428"></a>
+<a name="id1253810"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.see_also">See
           also</a>
         </h5>

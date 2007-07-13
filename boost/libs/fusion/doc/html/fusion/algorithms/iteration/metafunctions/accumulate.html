@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.iteration.metafunctions.accumulate"></a><a href="accumulate.html" title="accumulate">accumulate</a></h5></div></div></div>
 <a name="fusion.algorithms.iteration.metafunctions.accumulate.description"></a><h6>
-<a name="id1102482"></a>
+<a name="id1136364"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.metafunctions.accumulate.description">Description</a>
           </h6>
 <p>
             Returns the result type of <a href="../functions/accumulate.html" title="accumulate"><code class="computeroutput"><span class="identifier">accumulate</span></code></a>.
           </p>
 <a name="fusion.algorithms.iteration.metafunctions.accumulate.synopsis"></a><h6>
-<a name="id1102524"></a>
+<a name="id1136407"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.metafunctions.accumulate.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -47,7 +47,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id1102642"></a><p class="title"><b>Table 1.36. Parameters</b></p>
+<a name="id1136527"></a><p class="title"><b>Table 1.37. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -55,43 +55,83 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Requirement
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">Sequence</span></code></td>
-<td>A
-                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td>The sequence to iterate</td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  The sequence to iterate
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">State</span></code></td>
-<td>Any
-                type</td>
-<td>The initial state for the first application of
-                <code class="computeroutput"><span class="identifier">F</span></code>
-</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">State</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Any type
+                </p>
+                </td>
+<td>
+                <p>
+                  The initial state for the first application of <code class="computeroutput"><span class="identifier">F</span></code>
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">F</span></code></td>
-<td>A
-                model of binary <a href="../../../functional/concepts/poly.html" title=" Polymorphic Function
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">F</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of binary <a href="../../../functional/concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-                Function Object</a>
-</td>
-<td>The operation to be applied
-                on forward traversal</td>
+                  Function Object</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  The operation to be applied on forward traversal
+                </p>
+                </td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithms.iteration.metafunctions.accumulate.expression_semantics"></a><h6>
-<a name="id1102762"></a>
+<a name="id1136703"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.metafunctions.accumulate.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -111,14 +151,14 @@
             Function Object</a> of type <code class="computeroutput"><span class="identifier">F</span></code>.
           </p>
 <a name="fusion.algorithms.iteration.metafunctions.accumulate.complexity"></a><h6>
-<a name="id1102917"></a>
+<a name="id1136864"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.metafunctions.accumulate.complexity">Complexity</a>
           </h6>
 <p>
             Linear, exactly <code class="computeroutput"><a href="../../../sequences/intrinsics/metafunctions/size.html" title="size"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></code> applications of <code class="computeroutput"><span class="identifier">F</span></code>.
           </p>
 <a name="fusion.algorithms.iteration.metafunctions.accumulate.header"></a><h6>
-<a name="id1102998"></a>
+<a name="id1136948"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.metafunctions.accumulate.header">Header</a>
           </h6>
 <pre class="programlisting">

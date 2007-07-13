@@ -7,9 +7,9 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="prev" href="callable.html" title=" Callable Object">
-<link rel="next" href="def_callable.html" title=" Deferred
+<link rel="prev" href="def_callable.html" title=" Deferred
         Callable Object">
+<link rel="next" href="../invocation.html" title="Invocation">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
@@ -22,7 +22,7 @@
 </table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="def_callable.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="def_callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../invocation.html"><img src="../../../images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -30,45 +30,61 @@
         Object"> Polymorphic Function
         Object</a></h4></div></div></div>
 <a name="fusion.functional.concepts.poly.description"></a><h5>
-<a name="id1187036"></a>
+<a name="id1242444"></a>
           <a href="poly.html#fusion.functional.concepts.poly.description">Description</a>
         </h5>
 <p>
-          A type of function object with a nested metafunction <code class="computeroutput"><span class="identifier">result</span></code>.
-          <code class="computeroutput"><span class="identifier">result</span></code> returns the result
-          type of calling the function object, given the argument types.
+          A non-member-pointer <a href="def_callable.html" title=" Deferred
+        Callable Object">Deferred
+          Callable Object</a> type.
         </p>
 <a name="fusion.functional.concepts.poly.refinement_of"></a><h5>
-<a name="id1187082"></a>
+<a name="id1242478"></a>
           <a href="poly.html#fusion.functional.concepts.poly.refinement_of">Refinement
           of</a>
         </h5>
-<div class="itemizedlist"><ul type="disc"><li><a href="callable.html" title=" Callable Object">Callable Object</a></li></ul></div>
+<div class="itemizedlist"><ul type="disc">
+<li><a href="reg_callable.html" title=" Regular Callable
+        Object">Regular Callable
+            Object</a></li>
+<li><a href="def_callable.html" title=" Deferred
+        Callable Object">Deferred Callable
+            Object</a></li>
+</ul></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
 <dd>
-            A Polymorphic Function Object type
+            A possibly const-qualified Polymorphic Function Object type
           </dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
 <dd>
-            A Polymorphic Function Object
+            An object or reference to an object of type F
           </dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">A1</span>
+          <span class="special">...</span><span class="identifier">AN</span></code></span></dt>
+<dd>
+            Argument types
+          </dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">a1</span>
+          <span class="special">...</span><span class="identifier">aN</span></code></span></dt>
+<dd>
+            Objects or references to objects with types <code class="computeroutput"><span class="identifier">A1</span>
+            <span class="special">...</span><span class="identifier">AN</span></code>
+</dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
           <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
 <dd>
-            Arbitrary types
+<code class="computeroutput"><span class="identifier">T</span></code>i is <code class="computeroutput"><span class="identifier">A</span></code>i
+            <code class="computeroutput"><span class="special">&amp;</span></code> if <code class="computeroutput"><span class="identifier">a</span></code>i
+            is an LValue, same as <code class="computeroutput"><span class="identifier">A</span></code>i,
+            otherwise
           </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">t1</span>
-          <span class="special">...</span><span class="identifier">tN</span></code></span></dt>
-<dd>
-            Objects with types <code class="computeroutput"><span class="identifier">T1</span> <span class="special">...</span><span class="identifier">TN</span></code>
-</dd>
 </dl>
 </div>
 <a name="fusion.functional.concepts.poly.expression_requirements"></a><h5>
-<a name="id1187226"></a>
+<a name="id1242720"></a>
           <a href="poly.html#fusion.functional.concepts.poly.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -79,24 +95,58 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Return Type</th>
-<th>Runtime
-                Complexity</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Return Type
+                </p>
+                </th>
+<th>
+                <p>
+                  Runtime Complexity
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">t1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">tN</span><span class="special">)</span></code></td>
-<td><code class="computeroutput"><span class="identifier">F</span><span class="special">::</span><span class="identifier">result</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
-<td>Unspecified</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">a1</span><span class="special">,</span>
+                  <span class="special">...</span><span class="identifier">aN</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">result_of</span><span class="special">&lt;</span>
+                  <span class="identifier">F</span><span class="special">(</span><span class="identifier">T1</span><span class="special">,</span>
+                  <span class="special">...</span><span class="identifier">TN</span><span class="special">)</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Unspecified
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.concepts.poly.models"></a><h5>
-<a name="id1187369"></a>
+<a name="id1242898"></a>
           <a href="poly.html#fusion.functional.concepts.poly.models">Models</a>
         </h5>
-<div class="itemizedlist"><ul type="disc"><li>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            function pointers
+          </li>
+<li>
+            function objects of the Standard Library
+          </li>
+<li>
             all Fusion <a href="../adapters.html" title=" Adapters">functional adapters</a>
-</li></ul></div>
+</li>
+</ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
@@ -105,7 +155,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="def_callable.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="def_callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../invocation.html"><img src="../../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

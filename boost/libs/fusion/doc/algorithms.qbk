@@ -174,7 +174,7 @@ Applies a unary function object to each element of a sequence.
 [table Parameters
     [[Parameter][Requirement][Description]]
     [[`seq`][A model of __forward_sequence__, `f(e)` must be a valid expression for each element `e` in `seq`][Operation's argument]]
-    [[`f`][A unary function object][Operation's argument]]
+    [[`f`][A unary __reg_callable_obj__][Operation's argument]]
 ]
 
 [heading Expression Semantics]

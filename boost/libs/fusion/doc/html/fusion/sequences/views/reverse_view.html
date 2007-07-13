@@ -31,14 +31,14 @@
           and the last element will be its first.
         </p>
 <a name="fusion.sequences.views.reverse_view.header"></a><h5>
-<a name="id999442"></a>
+<a name="id1009366"></a>
           <a href="reverse_view.html#fusion.sequences.views.reverse_view.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">reverse_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.views.reverse_view.synopsis"></a><h5>
-<a name="id999532"></a>
+<a name="id1009458"></a>
           <a href="reverse_view.html#fusion.sequences.views.reverse_view.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -46,7 +46,7 @@
 <span class="keyword">struct</span> <span class="identifier">reverse_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.views.reverse_view.template_parameters"></a><h5>
-<a name="id999601"></a>
+<a name="id1009528"></a>
           <a href="reverse_view.html#fusion.sequences.views.reverse_view.template_parameters">Template
           parameters</a>
         </h5>
@@ -57,22 +57,43 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">Sequence</span></code></td>
-<td>A
-                <a href="../concepts/bidirectional_sequence.html" title="Bidirectional
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A <a href="../concepts/bidirectional_sequence.html" title="Bidirectional
         Sequence">Bidirectional
-                Sequence</a>
-</td>
-<td> </td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.views.reverse_view.model_of"></a><h5>
-<a name="id999678"></a>
+<a name="id1009631"></a>
           <a href="reverse_view.html#fusion.sequences.views.reverse_view.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="../concepts/bidirectional_sequence.html" title="Bidirectional
@@ -97,7 +118,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.views.reverse_view.expression_semantics"></a><h5>
-<a name="id999804"></a>
+<a name="id1009767"></a>
           <a href="reverse_view.html#fusion.sequences.views.reverse_view.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -113,35 +134,65 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">RV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td>Creates
-                a unary <code class="computeroutput"><span class="identifier">reverse_view</span></code>
-                given sequence, <code class="computeroutput"><span class="identifier">s</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">RV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a unary <code class="computeroutput"><span class="identifier">reverse_view</span></code>
+                  given sequence, <code class="computeroutput"><span class="identifier">s</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">RV</span><span class="special">(</span><span class="identifier">rv</span><span class="special">)</span></code></td>
-<td>Copy
-                constructs a <code class="computeroutput"><span class="identifier">reverse_view</span></code>
-                from another <code class="computeroutput"><span class="identifier">reverse_view</span></code>,
-                <code class="computeroutput"><span class="identifier">rv</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">RV</span><span class="special">(</span><span class="identifier">rv</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Copy constructs a <code class="computeroutput"><span class="identifier">reverse_view</span></code>
+                  from another <code class="computeroutput"><span class="identifier">reverse_view</span></code>,
+                  <code class="computeroutput"><span class="identifier">rv</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">rv</span> <span class="special">=</span>
-                <span class="identifier">rv2</span></code></td>
-<td>Assigns
-                to a <code class="computeroutput"><span class="identifier">reverse_view</span></code>,
-                <code class="computeroutput"><span class="identifier">rv</span></code>, from another
-                <code class="computeroutput"><span class="identifier">reverse_view</span></code>, <code class="computeroutput"><span class="identifier">rv2</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">rv</span> <span class="special">=</span>
+                  <span class="identifier">rv2</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Assigns to a <code class="computeroutput"><span class="identifier">reverse_view</span></code>,
+                  <code class="computeroutput"><span class="identifier">rv</span></code>, from another
+                  <code class="computeroutput"><span class="identifier">reverse_view</span></code>,
+                  <code class="computeroutput"><span class="identifier">rv2</span></code>.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.views.reverse_view.example"></a><h5>
-<a name="id1000032"></a>
+<a name="id1010047"></a>
           <a href="reverse_view.html#fusion.sequences.views.reverse_view.example">Example</a>
         </h5>
 <pre class="programlisting">

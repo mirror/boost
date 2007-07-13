@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.views.joint_view"></a><a href="joint_view.html" title="joint_view">joint_view</a></h4></div></div></div>
 <a name="fusion.sequences.views.joint_view.description"></a><h5>
-<a name="id978306"></a>
+<a name="id1005304"></a>
           <a href="joint_view.html#fusion.sequences.views.joint_view.description">Description</a>
         </h5>
 <p>
@@ -34,14 +34,14 @@
           which is a concatenation of two sequences.
         </p>
 <a name="fusion.sequences.views.joint_view.header"></a><h5>
-<a name="id978342"></a>
+<a name="id1005341"></a>
           <a href="joint_view.html#fusion.sequences.views.joint_view.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">joint_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.views.joint_view.synopsis"></a><h5>
-<a name="id978434"></a>
+<a name="id1005434"></a>
           <a href="joint_view.html#fusion.sequences.views.joint_view.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -49,7 +49,7 @@
 <span class="keyword">struct</span> <span class="identifier">joint_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.views.joint_view.template_parameters"></a><h5>
-<a name="id978518"></a>
+<a name="id1005520"></a>
           <a href="joint_view.html#fusion.sequences.views.joint_view.template_parameters">Template
           parameters</a>
         </h5>
@@ -60,33 +60,63 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">Sequence1</span></code></td>
-<td>A
-                <a href="../concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Sequence1</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td> </td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">Sequence2</span></code></td>
-<td>A
-                <a href="../concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Sequence2</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td> </td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.views.joint_view.model_of"></a><h5>
-<a name="id978618"></a>
+<a name="id1005661"></a>
           <a href="joint_view.html#fusion.sequences.views.joint_view.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="../concepts/forward_sequence.html" title="Forward
@@ -114,7 +144,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.views.joint_view.expression_semantics"></a><h5>
-<a name="id996244"></a>
+<a name="id1005823"></a>
           <a href="joint_view.html#fusion.sequences.views.joint_view.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -130,36 +160,66 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">JV</span><span class="special">(</span><span class="identifier">s1</span><span class="special">,</span> <span class="identifier">s2</span><span class="special">)</span></code></td>
-<td>Creates
-                a <code class="computeroutput"><span class="identifier">joint_view</span></code> given
-                sequences, <code class="computeroutput"><span class="identifier">s1</span></code> and
-                <code class="computeroutput"><span class="identifier">s2</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">JV</span><span class="special">(</span><span class="identifier">s1</span><span class="special">,</span>
+                  <span class="identifier">s2</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a <code class="computeroutput"><span class="identifier">joint_view</span></code>
+                  given sequences, <code class="computeroutput"><span class="identifier">s1</span></code>
+                  and <code class="computeroutput"><span class="identifier">s2</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">JV</span><span class="special">(</span><span class="identifier">jv</span><span class="special">)</span></code></td>
-<td>Copy
-                constructs a <code class="computeroutput"><span class="identifier">joint_view</span></code>
-                from another <code class="computeroutput"><span class="identifier">joint_view</span></code>,
-                <code class="computeroutput"><span class="identifier">jv</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">JV</span><span class="special">(</span><span class="identifier">jv</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Copy constructs a <code class="computeroutput"><span class="identifier">joint_view</span></code>
+                  from another <code class="computeroutput"><span class="identifier">joint_view</span></code>,
+                  <code class="computeroutput"><span class="identifier">jv</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">jv</span> <span class="special">=</span>
-                <span class="identifier">jv2</span></code></td>
-<td>Assigns
-                to a <code class="computeroutput"><span class="identifier">joint_view</span></code>,
-                <code class="computeroutput"><span class="identifier">jv</span></code>, from another
-                <code class="computeroutput"><span class="identifier">joint_view</span></code>, <code class="computeroutput"><span class="identifier">jv2</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">jv</span> <span class="special">=</span>
+                  <span class="identifier">jv2</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Assigns to a <code class="computeroutput"><span class="identifier">joint_view</span></code>,
+                  <code class="computeroutput"><span class="identifier">jv</span></code>, from another
+                  <code class="computeroutput"><span class="identifier">joint_view</span></code>, <code class="computeroutput"><span class="identifier">jv2</span></code>.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.views.joint_view.example"></a><h5>
-<a name="id996489"></a>
+<a name="id1006121"></a>
           <a href="joint_view.html#fusion.sequences.views.joint_view.example">Example</a>
         </h5>
 <pre class="programlisting">

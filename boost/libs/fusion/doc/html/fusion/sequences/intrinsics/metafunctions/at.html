@@ -26,16 +26,16 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.intrinsics.metafunctions.at"></a><a href="at.html" title="at">at</a></h5></div></div></div>
 <a name="fusion.sequences.intrinsics.metafunctions.at.description"></a><h6>
-<a name="id1032922"></a>
+<a name="id1044494"></a>
             <a href="at.html#fusion.sequences.intrinsics.metafunctions.at.description">Description</a>
           </h6>
 <p>
             Returns the result type of <a href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>
-            <sup>[<a name="id1032954" href="#ftn.id1032954">6</a>]</sup>
+            <sup>[<a name="id1044528" href="#ftn.id1044528">6</a>]</sup>
             .
           </p>
 <a name="fusion.sequences.intrinsics.metafunctions.at.synopsis"></a><h6>
-<a name="id1033054"></a>
+<a name="id1044633"></a>
             <a href="at.html#fusion.sequences.intrinsics.metafunctions.at.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -48,7 +48,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id1033157"></a><p class="title"><b>Table 1.25. Parameters</b></p>
+<a name="id1044737"></a><p class="title"><b>Table 1.25. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -56,33 +56,65 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Requirement
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">Seq</span></code></td>
-<td>A
-                model of <a href="../../concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td>Argument sequence</td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Argument sequence
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">N</span></code></td>
-<td>An
-                <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
-                Integral Constant</a>
-</td>
-<td>Index of element</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">N</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
+                  Integral Constant</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Index of element
+                </p>
+                </td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.sequences.intrinsics.metafunctions.at.expression_semantics"></a><h6>
-<a name="id1033248"></a>
+<a name="id1044869"></a>
             <a href="at.html#fusion.sequences.intrinsics.metafunctions.at.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -97,14 +129,14 @@
             using <a href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> to access the <code class="computeroutput"><span class="identifier">N</span></code>th element of <code class="computeroutput"><span class="identifier">Seq</span></code>.
           </p>
 <a name="fusion.sequences.intrinsics.metafunctions.at.header"></a><h6>
-<a name="id1033370"></a>
+<a name="id1044996"></a>
             <a href="at.html#fusion.sequences.intrinsics.metafunctions.at.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">at</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.intrinsics.metafunctions.at.example"></a><h6>
-<a name="id1033463"></a>
+<a name="id1045090"></a>
             <a href="at.html#fusion.sequences.intrinsics.metafunctions.at.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -113,7 +145,7 @@
 </pre>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1032954" href="#id1032954">6</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1044528" href="#id1044528">6</a>] </sup>
                 <a href="at.html" title="at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></code></a> reflects the actual return
                 type of the function <a href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>. <span class="underline">_sequence</span>_s
                 typically return references to its elements via the <a href="../functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> function. If you want

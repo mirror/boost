@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.fused_function_object"></a><a href="fused_function_object.html" title="fused_function_object">fused_function_object</a></h4></div></div></div>
 <a name="fusion.functional.adapters.fused_function_object.description"></a><h5>
-<a name="id1211857"></a>
+<a name="id1249910"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.description">Description</a>
         </h5>
 <p>
@@ -39,10 +39,6 @@
           Sequence</a> that contains the arguments for the target function.
         </p>
 <p>
-          The nested <code class="computeroutput"><span class="identifier">result</span></code> metafunction
-          is inhertied from the target function.
-        </p>
-<p>
           The type of the target function is allowed to be const qualified or a reference.
           Const qualification is preserved and propagated appropriately (in other
           words, only const versions of <code class="literal">operator()</code> can be used
@@ -50,14 +46,14 @@
           object is held by value, the adapter is const).
         </p>
 <a name="fusion.functional.adapters.fused_function_object.header"></a><h5>
-<a name="id1211940"></a>
+<a name="id1249979"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">fused_function_object</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.synopsis"></a><h5>
-<a name="id1212033"></a>
+<a name="id1250074"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -65,7 +61,7 @@
 <span class="keyword">class</span> <span class="identifier">fused_function_object</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.template_parameters"></a><h5>
-<a name="id1212105"></a>
+<a name="id1250147"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.template_parameters">Template
           parameters</a>
         </h5>
@@ -76,21 +72,43 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">Function</span></code></td>
 <td>
-<a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic Function Object</a>
-                type</td>
-<td> </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Function</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  <a href="../concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic Function
+                  Object</a> type
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_function_object.model_of"></a><h5>
-<a name="id1212179"></a>
+<a name="id1250248"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.model_of">Model
           of</a>
         </h5>
@@ -127,7 +145,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_function_object.expression_semantics"></a><h5>
-<a name="id1212354"></a>
+<a name="id1250433"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -137,31 +155,61 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">fused_function_object</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code></td>
-<td>Creates a fused function
-                as described above, initializes the target function with <code class="computeroutput"><span class="identifier">r</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">fused_function_object</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, initializes the target
+                  function with <code class="computeroutput"><span class="identifier">r</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">fused_function_object</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code></td>
-<td>Creates a fused
-                function as described above, attempts to use <code class="computeroutput"><span class="identifier">R</span></code>'s
-                default constructor.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">fused_function_object</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">R</span></code>'s default constructor.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td>Calls
-                <code class="computeroutput"><span class="identifier">r</span></code> with the elements
-                in <code class="computeroutput"><span class="identifier">s</span></code> as its arguments.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Calls <code class="computeroutput"><span class="identifier">r</span></code> with the
+                  elements in <code class="computeroutput"><span class="identifier">s</span></code> as
+                  its arguments.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_function_object.example"></a><h5>
-<a name="id1212537"></a>
+<a name="id1250660"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -176,11 +224,12 @@
 
 <span class="keyword">struct</span> <span class="identifier">sub</span>
 <span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">_</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">result</span>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="identifier">T</span> <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sig</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">;</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Self</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">T</span><span class="special">)</span> <span class="special">&gt;</span> 
+    <span class="special">{</span> <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">type</span><span class="special">;</span> <span class="special">};</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
     <span class="identifier">T</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">rhs</span><span class="special">)</span> <span class="keyword">const</span>
@@ -198,7 +247,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.see_also"></a><h5>
-<a name="id1213367"></a>
+<a name="id1251594"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.see_also">See
           also</a>
         </h5>

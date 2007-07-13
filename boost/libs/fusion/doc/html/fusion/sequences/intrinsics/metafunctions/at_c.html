@@ -26,16 +26,16 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.intrinsics.metafunctions.at_c"></a><a href="at_c.html" title="at_c">at_c</a></h5></div></div></div>
 <a name="fusion.sequences.intrinsics.metafunctions.at_c.description"></a><h6>
-<a name="id1033693"></a>
+<a name="id1045322"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.metafunctions.at_c.description">Description</a>
           </h6>
 <p>
             Returns the result type of <a href="../functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a>
-            <sup>[<a name="id1033726" href="#ftn.id1033726">7</a>]</sup>
+            <sup>[<a name="id1045356" href="#ftn.id1045356">7</a>]</sup>
             .
           </p>
 <a name="fusion.sequences.intrinsics.metafunctions.at_c.synopsis"></a><h6>
-<a name="id1033829"></a>
+<a name="id1045464"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.metafunctions.at_c.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -48,7 +48,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id1033931"></a><p class="title"><b>Table 1.26. Parameters</b></p>
+<a name="id1045568"></a><p class="title"><b>Table 1.26. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -56,31 +56,64 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Requirement
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">Seq</span></code></td>
-<td>A
-                model of <a href="../../concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td>Argument sequence</td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Argument sequence
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">M</span></code></td>
-<td>Positive
-                integer index</td>
-<td>Index of element</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">M</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Positive integer index
+                </p>
+                </td>
+<td>
+                <p>
+                  Index of element
+                </p>
+                </td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.sequences.intrinsics.metafunctions.at_c.expression_semantics"></a><h6>
-<a name="id1034017"></a>
+<a name="id1045693"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.metafunctions.at_c.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -95,14 +128,14 @@
             using <a href="../functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a> to access the <code class="computeroutput"><span class="identifier">M</span></code>th element of <code class="computeroutput"><span class="identifier">Seq</span></code>.
           </p>
 <a name="fusion.sequences.intrinsics.metafunctions.at_c.header"></a><h6>
-<a name="id1034139"></a>
+<a name="id1045821"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.metafunctions.at_c.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">at</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.intrinsics.metafunctions.at_c.example"></a><h6>
-<a name="id1034232"></a>
+<a name="id1045915"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.metafunctions.at_c.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -111,7 +144,7 @@
 </pre>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1033726" href="#id1033726">7</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1045356" href="#id1045356">7</a>] </sup>
                 <a href="at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_c</span></code></a> reflects the actual
                 return type of the function <a href="../functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a>. <span class="underline">_sequence</span>_s
                 typically return references to its elements via the <a href="../functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a> function. If you want

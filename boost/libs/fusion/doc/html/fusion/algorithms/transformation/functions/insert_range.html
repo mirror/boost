@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.insert_range"></a><a href="insert_range.html" title="insert_range">insert_range</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.insert_range.description"></a><h6>
-<a name="id1142460"></a>
+<a name="id1177977"></a>
             <a href="insert_range.html#fusion.algorithms.transformation.functions.insert_range.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             iterator.
           </p>
 <a name="fusion.algorithms.transformation.functions.insert_range.synposis"></a><h6>
-<a name="id1142491"></a>
+<a name="id1178008"></a>
             <a href="insert_range.html#fusion.algorithms.transformation.functions.insert_range.synposis">Synposis</a>
           </h6>
 <pre class="programlisting">
@@ -47,7 +47,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">Pos</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">pos</span><span class="special">,</span> <span class="identifier">Range</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">range</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id1142729"></a><p class="title"><b>Table 1.65. Parameters</b></p>
+<a name="id1178248"></a><p class="title"><b>Table 1.66. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -55,43 +55,85 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Requirement
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
-<td>A
-                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td>Operation's argument</td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Operation's argument
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">pos</span></code></td>
-<td>A
-                model of <a href="../../../iterators/concepts/forward_iterator.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">pos</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../iterators/concepts/forward_iterator.html" title="Forward
         Iterator">Forward
-                Iterator</a>
-</td>
-<td>The position to insert at</td>
+                  Iterator</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  The position to insert at
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">range</span></code></td>
-<td>A
-                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">range</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td>Range to insert</td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Range to insert
+                </p>
+                </td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.insert_range.expression_semantics"></a><h6>
-<a name="id1142847"></a>
+<a name="id1178421"></a>
             <a href="insert_range.html#fusion.algorithms.transformation.functions.insert_range.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -111,21 +153,21 @@
             All elements retaining their ordering from the orignal sequences.
           </p>
 <a name="fusion.algorithms.transformation.functions.insert_range.complexity"></a><h6>
-<a name="id1142982"></a>
+<a name="id1178562"></a>
             <a href="insert_range.html#fusion.algorithms.transformation.functions.insert_range.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.insert_range.header"></a><h6>
-<a name="id1143010"></a>
+<a name="id1178590"></a>
             <a href="insert_range.html#fusion.algorithms.transformation.functions.insert_range.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">insert_range</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.insert_range.example"></a><h6>
-<a name="id1143103"></a>
+<a name="id1178684"></a>
             <a href="insert_range.html#fusion.algorithms.transformation.functions.insert_range.example">Example</a>
           </h6>
 <pre class="programlisting">

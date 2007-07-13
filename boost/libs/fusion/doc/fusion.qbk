@@ -1,7 +1,7 @@
 [library Fusion
     [quickbook 1.3]
     [version 2.0]
-    [authors [de Guzman, Joel], [Marsden, Dan]]
+    [authors [de Guzman, Joel], [Marsden, Dan], [Schwinger, Tobias]]
     [copyright 2001 2002 2003 2004 2005 2006 2007 Joel de Guzman, Dan Marsden, Tobias Schwinger]
     [purpose Statically Typed Heterogeneous Data Structures and Algorithms]
     [license
@@ -250,8 +250,9 @@
 [def __tuple_get__              [link fusion.tuples.class_template_tuple.element_access `get`]]
 
 [def __callable_obj__           [link fusion.functional.concepts.callable Callable Object]]
-[def __poly_func_obj__          [link fusion.functional.concepts.poly Polymorphic Function Object]]
 [def __def_callable_obj__       [link fusion.functional.concepts.def_callable Deferred Callable Object]]
+[def __reg_callable_obj__       [link fusion.functional.concepts.reg_callable Regular Callable Object]]
+[def __poly_func_obj__          [link fusion.functional.concepts.poly Polymorphic Function Object]]
 [def __functional_adapters__    [link fusion.functional.adapters functional adapters]]
 [def __fused__                  [link fusion.functional.adapters.fused `fused`]]
 [def __fused_procedure__        [link fusion.functional.adapters.fused_procedure `fused_procedure`]]

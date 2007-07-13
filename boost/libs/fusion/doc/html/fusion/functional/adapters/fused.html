@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.fused"></a><a href="fused.html" title="fused">fused</a></h4></div></div></div>
 <a name="fusion.functional.adapters.fused.description"></a><h5>
-<a name="id1209464"></a>
+<a name="id1247382"></a>
           <a href="fused.html#fusion.functional.adapters.fused.description">Description</a>
         </h5>
 <p>
@@ -39,19 +39,13 @@
           Sequence</a> that contains the arguments for the target function.
         </p>
 <p>
-          The nested <code class="computeroutput"><span class="identifier">result</span></code> metafunction
-          does not define a <code class="computeroutput"><span class="identifier">type</span></code>
-          member for target functions of non-class type whose arity is not satisfied
-          by the size of the sequence.
-        </p>
-<p>
           The type of the target function is allowed to be const qualified or a reference.
           Const qualification is preserved and propagated appropriately (in other
           words, only const versions of <code class="literal">operator()</code> can be used
-          for an target function object that is const or, if the target function
-          object is held by value, the adapter is const - these semantics have nothing
-          to do with the const qualification of a member function, which is referring
-          to the type of object pointed to by <code class="literal">this</code>, which is specified
+          for a target function object that is const or, if the target function object
+          is held by value, the adapter is const - these semantics have nothing to
+          do with the const qualification of a member function, which is referring
+          to the type of object pointed to by <code class="literal">this</code> which is specified
           with the first element in the sequence passed to the adapter).
         </p>
 <p>
@@ -59,17 +53,17 @@
           object can be specified as a reference, pointer, or smart pointer. In case
           of the latter, a freestanding <code class="literal">get_pointer</code> function must
           be defined (Boost provides this function for <code class="literal">std::auto_ptr</code>
-          and <a href="http://www.boost.org/libs/smart_ptr/smart_ptr.hpp" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span></code></a>).
+          and <a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span></code></a>).
         </p>
 <a name="fusion.functional.adapters.fused.header"></a><h5>
-<a name="id1209607"></a>
+<a name="id1247502"></a>
           <a href="fused.html#fusion.functional.adapters.fused.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">fused</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.fused.synopsis"></a><h5>
-<a name="id1209698"></a>
+<a name="id1247594"></a>
           <a href="fused.html#fusion.functional.adapters.fused.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -77,7 +71,7 @@
 <span class="keyword">class</span> <span class="identifier">fused</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused.template_parameters"></a><h5>
-<a name="id1209767"></a>
+<a name="id1247665"></a>
           <a href="fused.html#fusion.functional.adapters.fused.template_parameters">Template
           parameters</a>
         </h5>
@@ -88,22 +82,43 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">Function</span></code></td>
-<td>A
-                <a href="../concepts/def_callable.html" title=" Deferred
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Function</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A <a href="../concepts/def_callable.html" title=" Deferred
         Callable Object">Deferred
-                Callable Object</a>
-</td>
-<td> </td>
+                  Callable Object</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused.model_of"></a><h5>
-<a name="id1209843"></a>
+<a name="id1247767"></a>
           <a href="fused.html#fusion.functional.adapters.fused.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -139,7 +154,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused.expression_semantics"></a><h5>
-<a name="id1210015"></a>
+<a name="id1247948"></a>
           <a href="fused.html#fusion.functional.adapters.fused.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -149,31 +164,61 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">fused</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code></td>
-<td>Creates
-                a fused function as described above, initializes the target function
-                with <code class="computeroutput"><span class="identifier">r</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">fused</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, initializes the target
+                  function with <code class="computeroutput"><span class="identifier">r</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">fused</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code></td>
-<td>Creates
-                a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">R</span></code>'s default constructor.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">fused</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">R</span></code>'s default constructor.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td>Calls
-                <code class="computeroutput"><span class="identifier">r</span></code> with the elements
-                in <code class="computeroutput"><span class="identifier">s</span></code> as its arguments.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Calls <code class="computeroutput"><span class="identifier">r</span></code> with the
+                  elements in <code class="computeroutput"><span class="identifier">s</span></code> as
+                  its arguments.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused.example"></a><h5>
-<a name="id1210197"></a>
+<a name="id1248174"></a>
           <a href="fused.html#fusion.functional.adapters.fused.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -181,7 +226,7 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><a href="../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2l</span><span class="special">))</span> <span class="special">==</span> <span class="number">3l</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.adapters.fused.see_also"></a><h5>
-<a name="id1210353"></a>
+<a name="id1248331"></a>
           <a href="fused.html#fusion.functional.adapters.fused.see_also">See also</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

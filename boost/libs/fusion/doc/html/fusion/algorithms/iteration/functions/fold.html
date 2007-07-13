@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.iteration.functions.fold"></a><a href="fold.html" title="fold">fold</a></h5></div></div></div>
 <a name="fusion.algorithms.iteration.functions.fold.description"></a><h6>
-<a name="id1080754"></a>
+<a name="id1114351"></a>
             <a href="fold.html#fusion.algorithms.iteration.functions.fold.description">Description</a>
           </h6>
 <p>
@@ -36,7 +36,7 @@
             to each element of a sequence and the previous state.
           </p>
 <a name="fusion.algorithms.iteration.functions.fold.synopsis"></a><h6>
-<a name="id1080800"></a>
+<a name="id1114398"></a>
             <a href="fold.html#fusion.algorithms.iteration.functions.fold.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -49,7 +49,7 @@
     <span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">State</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">initial_state</span><span class="special">,</span> <span class="identifier">F</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id1081026"></a><p class="title"><b>Table 1.32. Parameters</b></p>
+<a name="id1114626"></a><p class="title"><b>Table 1.33. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -57,41 +57,85 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Requirement
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
-<td>A
-                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>,<code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></code> must be a valid expression for each
-                element <code class="computeroutput"><span class="identifier">e</span></code> in <code class="computeroutput"><span class="identifier">seq</span></code>
-</td>
-<td>Operation's argument</td>
+                  Sequence</a>,<code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></code> must be a valid expression for
+                  each element <code class="computeroutput"><span class="identifier">e</span></code>
+                  in <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Operation's argument
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">initial_state</span></code></td>
-<td>Any
-                type</td>
-<td>Initial state</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">initial_state</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Any type
+                </p>
+                </td>
+<td>
+                <p>
+                  Initial state
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">f</span></code></td>
-<td>A
-                model of binary <a href="../../../functional/concepts/poly.html" title=" Polymorphic Function
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">f</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of binary <a href="../../../functional/concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-                Function Object</a>
-</td>
-<td>Operation's argument</td>
+                  Function Object</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Operation's argument
+                </p>
+                </td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithms.iteration.functions.fold.expression_semantics"></a><h6>
-<a name="id1081174"></a>
+<a name="id1114833"></a>
             <a href="fold.html#fusion.algorithms.iteration.functions.fold.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -106,21 +150,21 @@
             where <code class="computeroutput"><span class="identifier">e1</span> <span class="special">...</span><span class="identifier">eN</span></code> are the elements of <code class="computeroutput"><span class="identifier">seq</span></code>.
           </p>
 <a name="fusion.algorithms.iteration.functions.fold.complexity"></a><h6>
-<a name="id1081354"></a>
+<a name="id1115018"></a>
             <a href="fold.html#fusion.algorithms.iteration.functions.fold.complexity">Complexity</a>
           </h6>
 <p>
             Linear, exactly <code class="computeroutput"><a href="../../../sequences/intrinsics/metafunctions/size.html" title="size"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></code> applications of <code class="computeroutput"><span class="identifier">f</span></code>.
           </p>
 <a name="fusion.algorithms.iteration.functions.fold.header"></a><h6>
-<a name="id1081436"></a>
+<a name="id1115102"></a>
             <a href="fold.html#fusion.algorithms.iteration.functions.fold.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">iteration</span><span class="special">/</span><span class="identifier">fold</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.iteration.functions.fold.example"></a><h6>
-<a name="id1081529"></a>
+<a name="id1115197"></a>
             <a href="fold.html#fusion.algorithms.iteration.functions.fold.example">Example</a>
           </h6>
 <pre class="programlisting">

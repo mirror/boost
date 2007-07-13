@@ -31,7 +31,7 @@
         Access Sequence">Random
         Access Sequence</a></h4></div></div></div>
 <a name="fusion.sequences.concepts.random_access_sequence.description"></a><h5>
-<a name="id964909"></a>
+<a name="id973055"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.description">Description</a>
         </h5>
 <p>
@@ -43,7 +43,7 @@
           sequence elements.
         </p>
 <a name="fusion.sequences.concepts.random_access_sequence.refinement_of"></a><h5>
-<a name="id964956"></a>
+<a name="id973102"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.refinement_of">Refinement
           of</a>
         </h5>
@@ -65,8 +65,9 @@
           </dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">N</span></code></span></dt>
 <dd>
-            An integral constant
-          </dd>
+            An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
+            Integral Constant</a>
+</dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">o</span></code></span></dt>
 <dd>
             An arbitrary object
@@ -78,7 +79,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.concepts.random_access_sequence.valid_expressions"></a><h5>
-<a name="id965080"></a>
+<a name="id973240"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.valid_expressions">Valid
           Expressions</a>
         </h5>
@@ -95,51 +96,125 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Return type</th>
-<th>Type Requirements</th>
-<th>Runtime
-                Complexity</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Return type
+                </p>
+                </th>
+<th>
+                <p>
+                  Type Requirements
+                </p>
+                </th>
+<th>
+                <p>
+                  Runtime Complexity
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><a href="../intrinsics/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td><a href="../../iterators/concepts/random_access_iterator.html" title="Random
-        Access Iterator">Random
-                Access Iterator</a></td>
-<td> </td>
-<td>Constant</td>
-</tr>
-<tr>
-<td><code class="computeroutput"><a href="../intrinsics/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td><a href="../../iterators/concepts/random_access_iterator.html" title="Random
-        Access Iterator">Random
-                Access Iterator</a></td>
-<td> </td>
-<td>Constant</td>
-</tr>
-<tr>
-<td><code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td>Any
-                type</td>
-<td> </td>
-<td>Constant</td>
-</tr>
-<tr>
-<td><code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">o</span></code></td>
-<td>Any
-                type</td>
 <td>
-<code class="computeroutput"><span class="identifier">s</span></code>
-                is mutable and <code class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></code>,
-                where <code class="computeroutput"><span class="identifier">e</span></code> is the first
-                element in the sequence, is a valid expression.</td>
-<td>Constant</td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  <a href="../../iterators/concepts/random_access_iterator.html" title="Random
+        Access Iterator">Random
+                  Access Iterator</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
+<td>
+                <p>
+                  Constant
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  <a href="../../iterators/concepts/random_access_iterator.html" title="Random
+        Access Iterator">Random
+                  Access Iterator</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
+<td>
+                <p>
+                  Constant
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Any type
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
+<td>
+                <p>
+                  Constant
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span>
+                  <span class="special">=</span> <span class="identifier">o</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Any type
+                </p>
+                </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">s</span></code> is mutable and
+                  <code class="computeroutput"><span class="identifier">e</span> <span class="special">=</span>
+                  <span class="identifier">o</span></code>, where <code class="computeroutput"><span class="identifier">e</span></code> is the first element in the
+                  sequence, is a valid expression.
+                </p>
+                </td>
+<td>
+                <p>
+                  Constant
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.concepts.random_access_sequence.result_type_expressions"></a><h5>
-<a name="id965394"></a>
+<a name="id973649"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h5>
@@ -149,42 +224,80 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Compile Time Complexity</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Compile Time Complexity
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><a href="../intrinsics/metafunctions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
-<td>Amortized constant
-                time</td>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/metafunctions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Amortized constant time
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><a href="../intrinsics/metafunctions/end.html" title="end"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
-<td>Amortized constant
-                time</td>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/metafunctions/end.html" title="end"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">end</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Amortized constant time
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
-<td>Amortized constant
-                time</td>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span>
+                  <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Amortized constant time
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><a href="../intrinsics/metafunctions/value_at.html" title="value_at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
-<td>Amortized constant
-                time</td>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/metafunctions/value_at.html" title="value_at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span>
+                  <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Amortized constant time
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
-<p class="blurb">
+<div class="sidebar"><p>
           <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <code class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></code> returns the actual type returned by
           <code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code>. In
           most cases, this is a reference. Hence, there is no way to know the exact
           element type using <code class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></code>.The element at <code class="computeroutput"><span class="identifier">N</span></code>
           may actually be a reference to begin with. For this purpose, you can use
           <code class="computeroutput"><a href="../intrinsics/metafunctions/value_at.html" title="value_at"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></code>.
-        </p>
+        </p></div>
 <a name="fusion.sequences.concepts.random_access_sequence.expression_semantics"></a><h5>
-<a name="id965893"></a>
+<a name="id974206"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -200,23 +313,39 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td>The
-                Nth element from the beginning of the sequence; see <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  The Nth element from the beginning of the sequence; see <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>.
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.concepts.random_access_sequence.models"></a><h5>
-<a name="id966016"></a>
+<a name="id974348"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
 <li><a href="../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a></li>
 <li><a href="../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a></li>
 <li><a href="../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a></li>
+<li><a href="../views/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a></li>
 <li>
 <a href="../views/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
             (where adapted sequence is a Random Access Sequence)
@@ -225,7 +354,10 @@
 <a href="../views/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a>
             (where adapted sequence is a Random Access Sequence)
           </li>
-<li><a href="../views/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a></li>
+<li>
+<a href="../views/zip_view.html" title="zip_view"><code class="computeroutput"><span class="identifier">zip_view</span></code></a>
+            (where adapted sequences are models Random Access Sequence)
+          </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

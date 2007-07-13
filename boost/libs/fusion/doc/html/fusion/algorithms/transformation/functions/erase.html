@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.erase"></a><a href="erase.html" title="erase">erase</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.erase.description"></a><h6>
-<a name="id1139610"></a>
+<a name="id1174940"></a>
             <a href="erase.html#fusion.algorithms.transformation.functions.erase.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             those at a specified iterator, or between two iterators.
           </p>
 <a name="fusion.algorithms.transformation.functions.erase.synposis"></a><h6>
-<a name="id1139640"></a>
+<a name="id1174970"></a>
             <a href="erase.html#fusion.algorithms.transformation.functions.erase.synposis">Synposis</a>
           </h6>
 <pre class="programlisting">
@@ -54,7 +54,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">First</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it1</span><span class="special">,</span> <span class="identifier">Last</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it2</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id1140045"></a><p class="title"><b>Table 1.62. Parameters</b></p>
+<a name="id1175377"></a><p class="title"><b>Table 1.63. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -62,46 +62,86 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameters</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                <p>
+                  Parameters
+                </p>
+                </th>
+<th>
+                <p>
+                  Requirement
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
-<td>A
-                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>
-</td>
-<td>Operation's argument</td>
+                  Sequence</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Operation's argument
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">it1</span></code></td>
-<td>A
-                model of <a href="../../../iterators/concepts/forward_iterator.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">it1</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../iterators/concepts/forward_iterator.html" title="Forward
         Iterator">Forward
-                Iterator</a>
-</td>
-<td>Iterator into <code class="computeroutput"><span class="identifier">seq</span></code>
-</td>
+                  Iterator</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Iterator into <code class="computeroutput"><span class="identifier">seq</span></code>
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">it2</span></code></td>
-<td>A
-                model of <a href="../../../iterators/concepts/forward_iterator.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">it2</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A model of <a href="../../../iterators/concepts/forward_iterator.html" title="Forward
         Iterator">Forward
-                Iterator</a>
-</td>
-<td>Iterator into <code class="computeroutput"><span class="identifier">seq</span></code>
-                after <code class="computeroutput"><span class="identifier">it1</span></code>
-</td>
+                  Iterator</a>
+                </p>
+                </td>
+<td>
+                <p>
+                  Iterator into <code class="computeroutput"><span class="identifier">seq</span></code>
+                  after <code class="computeroutput"><span class="identifier">it1</span></code>
+                </p>
+                </td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.erase.expression_semantics"></a><h6>
-<a name="id1140187"></a>
+<a name="id1175579"></a>
             <a href="erase.html#fusion.algorithms.transformation.functions.erase.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -132,21 +172,21 @@
             in their original order, except those in the range [<code class="computeroutput"><span class="identifier">first</span></code>,<code class="computeroutput"><span class="identifier">last</span></code>).
           </p>
 <a name="fusion.algorithms.transformation.functions.erase.complexity"></a><h6>
-<a name="id1140406"></a>
+<a name="id1175808"></a>
             <a href="erase.html#fusion.algorithms.transformation.functions.erase.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.erase.header"></a><h6>
-<a name="id1140435"></a>
+<a name="id1175837"></a>
             <a href="erase.html#fusion.algorithms.transformation.functions.erase.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">erase</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.erase.example"></a><h6>
-<a name="id1140528"></a>
+<a name="id1175932"></a>
             <a href="erase.html#fusion.algorithms.transformation.functions.erase.example">Example</a>
           </h6>
 <pre class="programlisting">

@@ -7,7 +7,7 @@
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="has_key.html" title="has_key">
-<link rel="next" href="../metafunctions.html" title="Metafunctions">
+<link rel="next" href="swap.html" title="swap">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
@@ -20,20 +20,20 @@
 </table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="has_key.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="../metafunctions.html"><img src="../../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="has_key.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="swap.html"><img src="../../../../images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.intrinsics.functions.at_key"></a><a href="at_key.html" title="at_key">at_key</a></h5></div></div></div>
 <a name="fusion.sequences.intrinsics.functions.at_key.description"></a><h6>
-<a name="id1010739"></a>
+<a name="id1038651"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.description">Description</a>
           </h6>
 <p>
             Returns the element associated with a Key from the sequence.
           </p>
 <a name="fusion.sequences.intrinsics.functions.at_key.synopsis"></a><h6>
-<a name="id1010768"></a>
+<a name="id1038680"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -46,7 +46,7 @@
 <span class="identifier">at_key</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequences.intrinsics.functions.at_key.parameters"></a><h6>
-<a name="id1011061"></a>
+<a name="id1038974"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -56,30 +56,63 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                  <p>
+                    Parameter
+                  </p>
+                  </th>
+<th>
+                  <p>
+                    Requirement
+                  </p>
+                  </th>
+<th>
+                  <p>
+                    Description
+                  </p>
+                  </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
-<td>Model
-                  of <a href="../../concepts/associative_sequence.html" title="Associative
+<td>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">seq</span></code>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    Model of <a href="../../concepts/associative_sequence.html" title="Associative
         Sequence">Associative
-                  Sequence</a>
-</td>
-<td>The sequence we wish to investigate.</td>
+                    Sequence</a>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    The sequence we wish to investigate.
+                  </p>
+                  </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">Key</span></code></td>
-<td>Any
-                  type</td>
-<td>The queried key.</td>
+<td>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">Key</span></code>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    Any type
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    The queried key.
+                  </p>
+                  </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.intrinsics.functions.at_key.expression_semantics"></a><h6>
-<a name="id1011159"></a>
+<a name="id1039113"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -103,14 +136,14 @@
             with Key.
           </p>
 <a name="fusion.sequences.intrinsics.functions.at_key.header"></a><h6>
-<a name="id1011336"></a>
+<a name="id1039298"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">at_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.intrinsics.functions.at_key.example"></a><h6>
-<a name="id1011429"></a>
+<a name="id1039393"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -125,7 +158,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="has_key.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="../metafunctions.html"><img src="../../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="has_key.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="swap.html"><img src="../../../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

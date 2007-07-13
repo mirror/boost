@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.containers.set"></a><a href="set.html" title="set">set</a></h4></div></div></div>
 <a name="fusion.sequences.containers.set.description"></a><h5>
-<a name="id972322"></a>
+<a name="id998759"></a>
           <a href="set.html#fusion.sequences.containers.set.description">Description</a>
         </h5>
 <p>
@@ -39,14 +39,14 @@
           Functions</a>).
         </p>
 <a name="fusion.sequences.containers.set.header"></a><h5>
-<a name="id972371"></a>
+<a name="id998808"></a>
           <a href="set.html#fusion.sequences.containers.set.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">set</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.containers.set.synopsis"></a><h5>
-<a name="id972462"></a>
+<a name="id998900"></a>
           <a href="set.html#fusion.sequences.containers.set.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -77,7 +77,7 @@
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_SET_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.sequences.containers.set.template_parameters"></a><h5>
-<a name="id972745"></a>
+<a name="id999194"></a>
           <a href="set.html#fusion.sequences.containers.set.template_parameters">Template
           parameters</a>
         </h5>
@@ -88,20 +88,42 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
 <td>
-<code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
-</td>
-<td>Element types</td>
-<td><span class="emphasis"><em>unspecified-type</em></span></td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Element types
+                </p>
+                </td>
+<td>
+                <p>
+                  <span class="emphasis"><em>unspecified-type</em></span>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.containers.set.model_of"></a><h5>
-<a name="id972825"></a>
+<a name="id999302"></a>
           <a href="set.html#fusion.sequences.containers.set.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -135,7 +157,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.containers.set.expression_semantics"></a><h5>
-<a name="id972976"></a>
+<a name="id999462"></a>
           <a href="set.html#fusion.sequences.containers.set.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -153,41 +175,78 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">S</span><span class="special">()</span></code></td>
-<td>Creates
-                a set with default constructed elements.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">S</span><span class="special">()</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a set with default constructed elements.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
-                <span class="identifier">en</span><span class="special">)</span></code></td>
-<td>Creates
-                a set with elements <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span>
+                  <span class="identifier">e1</span><span class="special">,...</span>
+                  <span class="identifier">en</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a set with elements <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">fs</span><span class="special">)</span></code></td>
-<td>Copy
-                constructs a set from a <a href="../concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">fs</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Copy constructs a set from a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">fs</span></code>.</td>
+                  Sequence</a> <code class="computeroutput"><span class="identifier">fs</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
-                <span class="identifier">fs</span></code></td>
-<td>Assigns
-                to a set, <code class="computeroutput"><span class="identifier">s</span></code>, from
-                a <a href="../concepts/forward_sequence.html" title="Forward
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
+                  <span class="identifier">fs</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Assigns to a set, <code class="computeroutput"><span class="identifier">s</span></code>,
+                  from a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">fs</span></code>.</td>
+                  Sequence</a> <code class="computeroutput"><span class="identifier">fs</span></code>.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.containers.set.example"></a><h5>
-<a name="id973231"></a>
+<a name="id999773"></a>
           <a href="set.html#fusion.sequences.containers.set.example">Example</a>
         </h5>
 <pre class="programlisting">

@@ -27,17 +27,13 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.functional.invocation.functions.invoke"></a><a href="invoke.html" title="invoke">invoke</a></h5></div></div></div>
 <a name="fusion.functional.invocation.functions.invoke.description"></a><h6>
-<a name="id1187766"></a>
+<a name="id1242995"></a>
             <a href="invoke.html#fusion.functional.invocation.functions.invoke.description">Description</a>
           </h6>
 <p>
             Calls a <a href="../../concepts/def_callable.html" title=" Deferred
         Callable Object">Deferred
             Callable Object</a> with the arguments from a <a href="../../../sequences.html" title="Sequences">Sequence</a>.
-          </p>
-<p>
-            The corresponding metafunction, <a href="../metafunctions/invoke.html" title="invoke"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke</span></code></a> does not define a <code class="computeroutput"><span class="identifier">type</span></code> member for target functions of
-            non-class type whose arity is not satisfied by the size of the sequence.
           </p>
 <p>
             The first template parameter can be specialized explicitly to avoid copying
@@ -48,10 +44,10 @@
             object can be specified as a reference, pointer, or smart pointer. In
             case of the latter, a freestanding <code class="literal">get_pointer</code> function
             must be defined (Boost provides this function for <code class="literal">std::auto_ptr</code>
-            and <a href="http://www.boost.org/libs/smart_ptr/smart_ptr.hpp" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span></code></a>).
+            and <a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span></code></a>).
           </p>
 <a name="fusion.functional.invocation.functions.invoke.synopsis"></a><h6>
-<a name="id1187898"></a>
+<a name="id1243087"></a>
             <a href="invoke.html#fusion.functional.invocation.functions.invoke.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -70,7 +66,7 @@
 <span class="identifier">invoke</span><span class="special">(</span><span class="identifier">Function</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Sequence</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.invocation.functions.invoke.parameters"></a><h6>
-<a name="id1188226"></a>
+<a name="id1243419"></a>
             <a href="invoke.html#fusion.functional.invocation.functions.invoke.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -80,33 +76,65 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Requirement</th>
-<th>Description</th>
+<th>
+                  <p>
+                    Parameter
+                  </p>
+                  </th>
+<th>
+                  <p>
+                    Requirement
+                  </p>
+                  </th>
+<th>
+                  <p>
+                    Description
+                  </p>
+                  </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">f</span></code></td>
-<td>A
-                  <a href="../../concepts/def_callable.html" title=" Deferred
+<td>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">f</span></code>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    A <a href="../../concepts/def_callable.html" title=" Deferred
         Callable Object">Deferred
-                  Callable Object</a>
-</td>
-<td>The function to call.</td>
+                    Callable Object</a>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    The function to call.
+                  </p>
+                  </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">s</span></code></td>
-<td>A
-                  <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+<td>
+                  <p>
+                    <code class="computeroutput"><span class="identifier">s</span></code>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    A <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>
-</td>
-<td>The arguments.</td>
+                    Sequence</a>
+                  </p>
+                  </td>
+<td>
+                  <p>
+                    The arguments.
+                  </p>
+                  </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.invocation.functions.invoke.expression_semantics"></a><h6>
-<a name="id1188331"></a>
+<a name="id1243565"></a>
             <a href="invoke.html#fusion.functional.invocation.functions.invoke.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -123,14 +151,14 @@
             as arguments and returns the result of the call expression.
           </p>
 <a name="fusion.functional.invocation.functions.invoke.header"></a><h6>
-<a name="id1188338"></a>
+<a name="id1243684"></a>
             <a href="invoke.html#fusion.functional.invocation.functions.invoke.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">invocation</span><span class="special">/</span><span class="identifier">invoke</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.invocation.functions.invoke.example"></a><h6>
-<a name="id1206013"></a>
+<a name="id1243779"></a>
             <a href="invoke.html#fusion.functional.invocation.functions.invoke.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -138,7 +166,7 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">invoke</span><span class="special">(</span><span class="identifier">add</span><span class="special">,</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">))</span> <span class="special">==</span> <span class="number">2</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.invocation.functions.invoke.see_also"></a><h6>
-<a name="id1206163"></a>
+<a name="id1243931"></a>
             <a href="invoke.html#fusion.functional.invocation.functions.invoke.see_also">See
             also</a>
           </h6>

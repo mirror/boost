@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.unfused_rvalue_args"></a><a href="unfused_rvalue_args.html" title="unfused_rvalue_args">unfused_rvalue_args</a></h4></div></div></div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.description"></a><h5>
-<a name="id1216842"></a>
+<a name="id1255290"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.description">Description</a>
         </h5>
 <p>
@@ -41,26 +41,6 @@
           object. All referenced objects in the sequence are const qualified.
         </p>
 <p>
-          The overload set of the adapter's function call operator can be restricted
-          by removing the <code class="computeroutput"><span class="identifier">type</span></code> member
-          from the nested result metafunction of the <a href="../concepts/poly.html" title=" Polymorphic Function
-        Object">Polymorphic
-          Function Object</a> (in this case the substitution-failure-is-not-an-error
-          principle applies for non-nullary calls and nullary calls are explicitly
-          disabled by the library).
-        </p>
-<div class="caution"><table border="0" summary="Caution">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../images/caution.png"></td>
-<th align="left">Caution</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-            As the nullary call operator cannot be a template it will be instantiated
-            along with the class template, so it must be disabled (as described above)
-            in cases where it isn't instantiable.
-          </p></td></tr>
-</table></div>
-<p>
           The type of the target function is allowed to be const qualified or a reference.
           Const qualification is preserved and propagated appropriately (in other
           words, only const versions of <code class="literal">operator()</code> can be used
@@ -68,14 +48,14 @@
           object is held by value, the adapter is const).
         </p>
 <a name="fusion.functional.adapters.unfused_rvalue_args.header"></a><h5>
-<a name="id1216950"></a>
+<a name="id1255362"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">unfused_rvalue_args</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_rvalue_args.synopsis"></a><h5>
-<a name="id1217043"></a>
+<a name="id1255457"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -83,7 +63,7 @@
 <span class="keyword">class</span> <span class="identifier">unfused_rvalue_args</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_rvalue_args.template_parameters"></a><h5>
-<a name="id1217116"></a>
+<a name="id1255531"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.template_parameters">Template
           parameters</a>
         </h5>
@@ -94,22 +74,43 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">Function</span></code></td>
-<td>A
-                unary <a href="../concepts/poly.html" title=" Polymorphic Function
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Function</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  A unary <a href="../concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-                Function Object</a>
-</td>
-<td> </td>
+                  Function Object</a>
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.model_of"></a><h5>
-<a name="id1217191"></a>
+<a name="id1255632"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.model_of">Model
           of</a>
         </h5>
@@ -150,7 +151,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.expression_semantics"></a><h5>
-<a name="id1217401"></a>
+<a name="id1255857"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -160,32 +161,61 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">UR</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code></td>
-<td>Creates
-                a fused function as described above, initializes the target function
-                with <code class="computeroutput"><span class="identifier">f</span></code>.</td>
-</tr>
-<tr>
-<td><code class="computeroutput"><span class="identifier">UR</span><span class="special">()</span></code></td>
-<td>Creates
-                a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">F</span></code>'s default constructor.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">UR</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, initializes the target
+                  function with <code class="computeroutput"><span class="identifier">f</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
 <td>
-<code class="computeroutput"><span class="identifier">ur</span><span class="special">(</span><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></code>
-</td>
-<td>Calls <code class="computeroutput"><span class="identifier">f</span></code> with a <a href="../../sequences.html" title="Sequences">Sequence</a>
-                that contains references to the arguments <code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code>.</td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">UR</span><span class="special">()</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">F</span></code>'s default constructor.
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">ur</span><span class="special">(</span><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Calls <code class="computeroutput"><span class="identifier">f</span></code> with a
+                  <a href="../../sequences.html" title="Sequences">Sequence</a> that contains
+                  references to the arguments <code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code>.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.example"></a><h5>
-<a name="id1217589"></a>
+<a name="id1256092"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -211,7 +241,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_rvalue_args.see_also"></a><h5>
-<a name="id1217941"></a>
+<a name="id1256446"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.see_also">See
           also</a>
         </h5>

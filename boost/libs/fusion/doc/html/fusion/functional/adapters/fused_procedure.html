@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.fused_procedure"></a><a href="fused_procedure.html" title="fused_procedure">fused_procedure</a></h4></div></div></div>
 <a name="fusion.functional.adapters.fused_procedure.description"></a><h5>
-<a name="id1210465"></a>
+<a name="id1248449"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.description">Description</a>
         </h5>
 <p>
@@ -39,19 +39,15 @@
         </p>
 <p>
           The result is discared and the adapter's return type is <code class="computeroutput"><span class="keyword">void</span></code>.
-          The nested <code class="computeroutput"><span class="identifier">result</span></code> metafunction
-          does not define a <code class="computeroutput"><span class="identifier">type</span></code>
-          member for target functions of non-class type whose arity is not satisfied
-          by the size of the sequence.
         </p>
 <p>
           The type of the target function is allowed to be const qualified or a reference.
           Const qualification is preserved and propagated appropriately (in other
           words, only const versions of <code class="literal">operator()</code> can be used
-          for an target function object that is const or, if the target function
-          object is held by value, the adapter is const - these semantics have nothing
-          to do with the const qualification of a member function, which is referring
-          to the type of object pointed to by <code class="literal">this</code>, which is specified
+          for a target function object that is const or, if the target function object
+          is held by value, the adapter is const - these semantics have nothing to
+          do with the const qualification of a member function, which is referring
+          to the type of object pointed to by <code class="literal">this</code> which is specified
           with the first element in the sequence passed to the adapter).
         </p>
 <p>
@@ -59,22 +55,22 @@
           object can be specified as a reference, pointer, or smart pointer. In case
           of the latter, a freestanding <code class="literal">get_pointer</code> function must
           be defined (Boost provides this function for <code class="literal">std::auto_ptr</code>
-          and <a href="http://www.boost.org/libs/smart_ptr/smart_ptr.hpp" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span></code></a>).
+          and <a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span></code></a>).
         </p>
 <p>
           The target function must not be a pointer to a member object (dereferencing
-          such a pointer without returning anything does not make sense, so it isn't
-          implemented).
+          such a pointer without returning anything does not make sense, so this
+          case is not implemented).
         </p>
 <a name="fusion.functional.adapters.fused_procedure.header"></a><h5>
-<a name="id1210626"></a>
+<a name="id1248591"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.synopsis"></a><h5>
-<a name="id1210718"></a>
+<a name="id1248685"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -82,7 +78,7 @@
 <span class="keyword">class</span> <span class="identifier">fused_procedure</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.template_parameters"></a><h5>
-<a name="id1210788"></a>
+<a name="id1248756"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.template_parameters">Template
           parameters</a>
         </h5>
@@ -93,20 +89,42 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
+<th>
+                <p>
+                  Parameter
+                </p>
+                </th>
+<th>
+                <p>
+                  Description
+                </p>
+                </th>
+<th>
+                <p>
+                  Default
+                </p>
+                </th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">Function</span></code></td>
 <td>
-<a href="../concepts/callable.html" title=" Callable Object">Callable Object</a>
-                type</td>
-<td> </td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">Function</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  <a href="../concepts/callable.html" title=" Callable Object">Callable Object</a>
+                  type
+                </p>
+                </td>
+<td>
+                <p>
+                </p>
+                </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.model_of"></a><h5>
-<a name="id1210862"></a>
+<a name="id1248857"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.model_of">Model
           of</a>
         </h5>
@@ -142,7 +160,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_procedure.expression_semantics"></a><h5>
-<a name="id1211036"></a>
+<a name="id1249041"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -152,31 +170,61 @@
 <col>
 </colgroup>
 <thead><tr>
-<th>Expression</th>
-<th>Semantics</th>
+<th>
+                <p>
+                  Expression
+                </p>
+                </th>
+<th>
+                <p>
+                  Semantics
+                </p>
+                </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code></td>
-<td>Creates a fused function
-                as described above, initializes the target function with <code class="computeroutput"><span class="identifier">r</span></code>.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;(</span><span class="identifier">r</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, initializes the target
+                  function with <code class="computeroutput"><span class="identifier">r</span></code>.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code></td>
-<td>Creates a fused
-                function as described above, attempts to use <code class="computeroutput"><span class="identifier">R</span></code>'s
-                default constructor.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">R</span><span class="special">&gt;()</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">R</span></code>'s default constructor.
+                </p>
+                </td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
-<td>Calls
-                <code class="computeroutput"><span class="identifier">r</span></code> with the elements
-                in <code class="computeroutput"><span class="identifier">s</span></code> as its arguments.</td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                </p>
+                </td>
+<td>
+                <p>
+                  Calls <code class="computeroutput"><span class="identifier">r</span></code> with the
+                  elements in <code class="computeroutput"><span class="identifier">s</span></code> as
+                  its arguments.
+                </p>
+                </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.example"></a><h5>
-<a name="id1211220"></a>
+<a name="id1249268"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -197,7 +245,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.see_also"></a><h5>
-<a name="id1211758"></a>
+<a name="id1249808"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.see_also">See
           also</a>
         </h5>
