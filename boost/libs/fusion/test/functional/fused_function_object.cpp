@@ -25,8 +25,8 @@ struct test_func
     template<typename T>
     struct result;
 
-    template<typename B, typename T0, typename T1>
-    struct result<test_func<B>(T0, T1)>
+    template<class Self, typename T0, typename T1>
+    struct result< Self(T0, T1) >
     {
         typedef int type;
     };

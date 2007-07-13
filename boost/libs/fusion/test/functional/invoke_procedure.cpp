@@ -10,8 +10,6 @@
 #include <boost/fusion/functional/invocation/invoke_procedure.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-#include <boost/fusion/functional/adapter/detail/has_type.hpp>
-
 #include <memory>
 #include <boost/noncopyable.hpp>
 
@@ -249,35 +247,8 @@ void test_sequence(Sequence & seq)
     test_sequence_n(seq, mpl::int_<fusion::result_of::size<Sequence>::value>());
 }
 
-
-void result_type_tests()
-{
-    using boost::fusion::detail::has_type;
-
-    BOOST_TEST(( has_type<
-      fusion::result_of::invoke_procedure<int (*)(), fusion::vector0 > 
-    >::value ));
-    BOOST_TEST(( has_type<
-      fusion::result_of::invoke_procedure<int (*)(...), fusion::vector1<int> > 
-    >::value ));
-    BOOST_TEST(( ! has_type<
-      fusion::result_of::invoke_procedure<int (*)(), fusion::vector1<int> > 
-    >::value ));
-    BOOST_TEST(( has_type< 
-      fusion::result_of::invoke_procedure<int (members::*)(), fusion::vector1<members*> > 
-    >::value ));
-    BOOST_TEST(( has_type< 
-      fusion::result_of::invoke_procedure<int (members::*)(...), fusion::vector2<members*,int> > 
-    >::value ));
-    BOOST_TEST(( ! has_type< 
-      fusion::result_of::invoke_procedure<int (members::*)(), fusion::vector2<members*,int> > 
-    >::value ));
-}
-
 int main()
 {
-    result_type_tests();
-
     typedef fusion::vector<> vector0;
     typedef fusion::vector<element1_type &> vector1;
     typedef fusion::vector<element1_type &, element2_type> vector2;
