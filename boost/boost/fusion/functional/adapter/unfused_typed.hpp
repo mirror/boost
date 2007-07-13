@@ -44,8 +44,7 @@ namespace boost { namespace fusion
 
     namespace detail
     {
-        template <class Derived, class Function, class Sequence,
-            long Arity = result_of::size<Sequence>::value >
+        template <class Derived, class Function, class Sequence, long Arity>
         struct unfused_typed_impl;
     }
 
@@ -53,15 +52,16 @@ namespace boost { namespace fusion
     class unfused_typed
         : public detail::unfused_typed_impl
           < unfused_typed<Function,Sequence>, typename detail::uncr<Function>::type, 
-            Sequence > 
+            Sequence, result_of::size<Sequence>::value > 
     {
         Function fnc_transformed;
 
         typedef typename detail::uncr<Function>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
-        typedef typename detail::unfused_typed_impl<
-            unfused_typed<Function,Sequence>,function,Sequence > base;
+        typedef typename detail::unfused_typed_impl< 
+            unfused_typed<Function,Sequence>,function,Sequence, 
+            result_of::size<Sequence>::value > base;
 
         template <class D, class F, class S, long A>
         friend struct detail::unfused_typed_impl;
