@@ -22,14 +22,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/or.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/less.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/size_t.hpp>
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/identity.hpp>
-
-#include <boost/blank.hpp>
 
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_cv.hpp>
@@ -39,10 +33,10 @@
 
 #include <boost/function_types/is_function.hpp>
 #include <boost/function_types/is_callable_builtin.hpp>
+#include <boost/function_types/is_member_pointer.hpp>
 #include <boost/function_types/is_member_function_pointer.hpp>
 #include <boost/function_types/result_type.hpp>
 #include <boost/function_types/parameter_types.hpp>
-#include <boost/function_types/function_arity.hpp>
 
 #include <boost/utility/result_of.hpp>
 
@@ -81,45 +75,53 @@ namespace boost { namespace fusion
             typename Function, class Sequence, 
             int N = result_of::size<Sequence>::value,
             bool CBI = ft::is_callable_builtin<Function>::value,
-            bool MFP = ft::is_member_function_pointer<Function>::value, 
             bool RandomAccess = traits::is_random_access<Sequence>::value
             >
-        struct invoke_impl
-        {
-            typedef boost::blank result;
-        };
+        struct invoke_impl;
 
-        template <class Sequence, int N> struct invoke_param_types;
+        template <class Sequence, int N> 
+        struct invoke_param_types;
 
-        template <typename Func, class N, bool CBI = true, typename Sig = void>
-        // contains type member with the result, empty on error
-        struct invoke_result
-            : mpl::if_< 
-                  mpl::or_< 
-                      mpl::equal_to< ft::function_arity<Func>, N >,
-                      mpl::and_< ft::is_callable_builtin<Func, ft::variadic>,
-                          mpl::less< ft::function_arity<Func>, N > >
-                  >, ft::result_type<Func>, boost::blank
-              >::type
-        { }; 
-        template <typename Func, class N, typename Sig>
-        struct invoke_result<Func,N,false,Sig>
-            : boost::result_of<Sig>
-        { };
+        template <typename T, class Sequence>
+        struct invoke_data_member;
 
-        // Transform for F so that boost::result_of< F(...) > works
-        template <typename F> struct invoke_result_of_prep
-            : mpl::if_< ft::is_function<F>, boost::add_reference<F>, 
-                boost::remove_cv<F> 
-              >::type
-        { };
+        template <typename Function, class Sequence, int N, bool RandomAccess> 
+        struct invoke_mem_fn;
 
         #define  BOOST_PP_FILENAME_1 <boost/fusion/functional/invocation/invoke.hpp>
         #define  BOOST_PP_ITERATION_LIMITS (0, BOOST_FUSION_INVOKE_MAX_ARITY)
         #include BOOST_PP_ITERATE()
 
+        template <typename F, class Sequence, int N, bool RandomAccess>
+        struct invoke_nonmember_builtin
+        // use same implementation as for function objects but...
+            : invoke_impl< // ...work around boost::result_of bugs
+                typename mpl::eval_if< ft::is_function<F>,
+                    boost::add_reference<F>, boost::remove_cv<F> >::type,
+                Sequence, N, false, RandomAccess >
+        { };
+
+        template <typename Function, class Sequence, int N, bool RandomAccess>
+        struct invoke_impl<Function,Sequence,N,true,RandomAccess>
+            : mpl::if_< ft::is_member_function_pointer<Function>,
+                invoke_mem_fn<Function,Sequence,N,RandomAccess>,
+                invoke_nonmember_builtin<Function,Sequence,N,RandomAccess>
+            >::type
+        { };
+
+        template <typename Function, class Sequence, bool RandomAccess>
+        struct invoke_impl<Function,Sequence,1,true,RandomAccess>
+            : mpl::eval_if< ft::is_member_pointer<Function>,
+                mpl::if_< ft::is_member_function_pointer<Function>,
+                    invoke_mem_fn<Function,Sequence,1,RandomAccess>,
+                    invoke_data_member<Function, Sequence> >,
+                mpl::identity< invoke_nonmember_builtin<
+                    Function,Sequence,1,RandomAccess> > 
+            >::type
+        { };
+
         template <typename T, class C, class Sequence>
-        struct invoke_data_member
+        struct invoke_data_member< T C::*, Sequence >
         {
         private:
 
@@ -137,37 +139,25 @@ namespace boost { namespace fusion
 
         public:
 
-            template <typename _ = void>
-            struct result
-                : boost::add_reference<qualified_type>
-            { }; 
+            typedef typename boost::add_reference<qualified_type>::type 
+                result_type;
 
-            static inline typename result<>::type call(T C::* f, Sequence & s)
+            static inline result_type call(T C::* f, Sequence & s)
             {
                 typename result_of::front<Sequence>::type c = fusion::front(s);
                 return that_ptr<qualified_class>::get(c)->*f;
             }
         };
-
-        template <typename T, class C, class Sequence>
-        struct invoke_impl<T C::*, Sequence, 1, true, false, false>
-            : detail::invoke_data_member<T, C, Sequence>
-        { };
-
-        template <typename T, class C, class Sequence>
-        struct invoke_impl<T C::*, Sequence, 1, true, false, true>
-            : detail::invoke_data_member<T, C, Sequence>
-        { };
-
     }
 
     namespace result_of
     {
         template <typename Function, class Sequence> struct invoke
-            : detail::invoke_impl< 
+        {
+            typedef typename detail::invoke_impl< 
                 typename boost::remove_reference<Function>::type, Sequence
-              >::template result<>
-        { }; 
+              >::result_type type;
+        }; 
     }
 
     template <typename Function, class Sequence>
@@ -199,23 +189,18 @@ namespace boost { namespace fusion
 ///////////////////////////////////////////////////////////////////////////////
 #define N BOOST_PP_ITERATION()
 
-        template <typename Function, class Sequence, bool CBI>
-        struct invoke_impl<Function,Sequence,N,CBI,false,true>
+        template <typename Function, class Sequence>
+        struct invoke_impl<Function,Sequence,N,false,true>
         {
-        private:
-            typedef typename invoke_result_of_prep<Function>::type func;
         public:
 
-            template <typename _ = void>
-            struct result
-                : invoke_result< Function, mpl::size_t<N>, CBI,
+            typedef typename boost::result_of<
 #define M(z,j,data) typename result_of::at_c<Sequence,j>::type
-                    func(BOOST_PP_ENUM(N,M,~)) >
+                    Function(BOOST_PP_ENUM(N,M,~)) >::type result_type;
 #undef M
-            { }; 
 
             template <typename F>
-            static inline typename result<F>::type
+            static inline result_type
             call(F & f, Sequence & s)
             {
 #define M(z,j,data) fusion::at_c<j>(s)
@@ -223,19 +208,17 @@ namespace boost { namespace fusion
             }
         };
 
+
 #if N > 0
         template <typename Function, class Sequence>
-        struct invoke_impl<Function,Sequence,N,true,true,true>
+        struct invoke_mem_fn<Function,Sequence,N,true>
         {
         public:
 
-            template <typename _ = void>
-            struct result
-                : invoke_result< Function, mpl::size_t<N> >
-            { }; 
+            typedef typename ft::result_type<Function>::type result_type;
 
             template <typename F>
-            static inline typename result<F>::type
+            static inline result_type
             call(F & f, Sequence & s)
             {
                 return (that_ptr<typename mpl::front<
@@ -251,22 +234,19 @@ namespace boost { namespace fusion
             typename seq::I##j i##j =                                          \
                 fusion::next(BOOST_PP_CAT(i,BOOST_PP_DEC(j)));
 
-        template <typename Function, class Sequence, bool CBI>
-        struct invoke_impl<Function,Sequence,N,CBI,false,false>
+        template <typename Function, class Sequence>
+        struct invoke_impl<Function,Sequence,N,false,false>
         {
         private:
-            typedef typename invoke_result_of_prep<Function>::type func;
             typedef invoke_param_types<Sequence,N> seq;
         public:
 
-            template <typename _ = void>
-            struct result
-                : invoke_result< Function, mpl::size_t<N>, CBI, 
-                    func(BOOST_PP_ENUM_PARAMS(N,typename seq::T)) >
-            { }; 
+            typedef typename boost::result_of<
+                Function(BOOST_PP_ENUM_PARAMS(N,typename seq::T)) 
+                >::type result_type;
 
             template <typename F>
-            static inline typename result<F>::type
+            static inline result_type
             call(F & f, Sequence & s)
             {
 #if N > 0
@@ -279,19 +259,16 @@ namespace boost { namespace fusion
 
 #if N > 0
         template <typename Function, class Sequence>
-        struct invoke_impl<Function,Sequence,N,true,true,false>
+        struct invoke_mem_fn<Function,Sequence,N,false>
         {
         private:
             typedef invoke_param_types<Sequence,N> seq;
         public:
 
-            template <typename _ = void>
-            struct result
-                : invoke_result< Function, mpl::size_t<N> >
-            { }; 
+            typedef typename ft::result_type<Function>::type result_type;
 
             template <typename F>
-            static inline typename result<F>::type
+            static inline result_type
             call(F & f, Sequence & s)
             {
                 typename seq::I0 i0 = fusion::begin(s);
