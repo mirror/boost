@@ -42,10 +42,7 @@ namespace
             return boost::fusion::fold(seq, state, sum_op());
         }
 
-        template <class Seq> struct result
-        {
-            typedef int type;
-        };
+        typedef int result_type;
 
       private:
 
@@ -64,10 +61,7 @@ namespace
               return value;
             }
 
-            template <typename T0, typename T1> struct result
-            {
-                typedef int type; 
-            };
+            typedef int result_type; 
         };
     };
 
@@ -98,12 +92,7 @@ namespace
             return a0 + a1 + a2 + a3;
         } 
 
-        template<typename T0 = void, typename T1 = void, typename T2 = void, 
-            typename T3 = void>
-        struct result
-        {
-            typedef int type;
-        };
+        typedef int result_type;
     };
 
     template<typename F>
@@ -324,5 +313,6 @@ int main()
         std::cout << "unfused_generic<fused_function_object<U> >     " << call_unfused(f,res) << std::endl;
         total += res;
     }
+ 
     return total;
 }
