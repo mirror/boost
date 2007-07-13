@@ -18,6 +18,8 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
+#include <boost/utility/result_of.hpp>
+
 #include <boost/fusion/sequence/container/vector/vector.hpp>
 
 #include <boost/fusion/functional/adapter/limits.hpp>
