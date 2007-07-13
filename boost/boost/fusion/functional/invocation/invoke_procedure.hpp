@@ -19,24 +19,13 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/less.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/size_t.hpp>
-#include <boost/mpl/front.hpp>
-#include <boost/mpl/identity.hpp>
-
-#include <boost/blank.hpp>
-
 #include <boost/type_traits/remove_reference.hpp>
+
+#include <boost/mpl/front.hpp>
 
 #include <boost/function_types/is_callable_builtin.hpp>
 #include <boost/function_types/is_member_function_pointer.hpp>
 #include <boost/function_types/parameter_types.hpp>
-#include <boost/function_types/function_arity.hpp>
 
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
@@ -51,7 +40,10 @@ namespace boost { namespace fusion
 {
     namespace result_of
     {
-        template <typename Function, class Sequence> struct invoke_procedure;
+        template <typename Function, class Sequence> struct invoke_procedure
+        {
+            typedef void type;
+        };
     }
 
     template <typename Function, class Sequence>
@@ -69,27 +61,10 @@ namespace boost { namespace fusion
         template< 
             typename Function, class Sequence, 
             int N = result_of::size<Sequence>::value,
-            bool CBI = ft::is_callable_builtin<Function>::value,
             bool MFP = ft::is_member_function_pointer<Function>::value,
             bool RandomAccess = traits::is_random_access<Sequence>::value
             >
-        struct invoke_procedure_impl
-        {
-            typedef boost::blank result;
-        };
-
-        template <typename Func, class N, bool CBI = true>
-        // Contains void type member, empty on arity mismatch
-        struct invoke_procedure_result
-            : mpl::if_< 
-                  mpl::or_<
-                      mpl::bool_<! CBI>, 
-                      mpl::equal_to< ft::function_arity<Func>, N >,
-                      mpl::and_< ft::is_callable_builtin<Func, ft::variadic>,
-                          mpl::less< ft::function_arity<Func>, N > >
-                  >, mpl::identity<void>, boost::blank
-              >::type
-        { }; 
+        struct invoke_procedure_impl;
 
         #define  BOOST_PP_FILENAME_1 \
             <boost/fusion/functional/invocation/invoke_procedure.hpp>
@@ -97,15 +72,6 @@ namespace boost { namespace fusion
             (0, BOOST_FUSION_INVOKE_PROCEDURE_MAX_ARITY)
         #include BOOST_PP_ITERATE()
 
-    }
-
-    namespace result_of
-    {
-        template <typename Function, class Sequence> struct invoke_procedure
-            : detail::invoke_procedure_impl< 
-                typename boost::remove_reference<Function>::type, Sequence
-              >::result
-        { }; 
     }
 
     template <typename Function, class Sequence>
@@ -137,13 +103,9 @@ namespace boost { namespace fusion
 
 #define M(z,j,data) fusion::at_c<j>(s)
 
-        template <typename Function, class Sequence, bool CBI>
-        struct invoke_procedure_impl<Function,Sequence,N,CBI,false,true>
+        template <typename Function, class Sequence>
+        struct invoke_procedure_impl<Function,Sequence,N,false,true>
         {
-            struct result
-                : invoke_procedure_result< Function, mpl::size_t<N>, CBI >
-            { }; 
-
             static inline void call(Function & f, Sequence & s)
             {
                 f(BOOST_PP_ENUM(N,M,~));
@@ -152,12 +114,8 @@ namespace boost { namespace fusion
 
 #if N > 0
         template <typename Function, class Sequence>
-        struct invoke_procedure_impl<Function,Sequence,N,true,true,true>
+        struct invoke_procedure_impl<Function,Sequence,N,true,true>
         {
-            struct result
-                : invoke_procedure_result< Function, mpl::size_t<N> >
-            { }; 
-
             static inline void call(Function & f, Sequence & s)
             {
                 (that_ptr<typename mpl::front<
@@ -174,13 +132,9 @@ namespace boost { namespace fusion
                 >::type I ## j ;                                               \
             I##j i##j = fusion::next(BOOST_PP_CAT(i,BOOST_PP_DEC(j)));
 
-        template <typename Function, class Sequence, bool CBI>
-        struct invoke_procedure_impl<Function,Sequence,N,CBI,false,false>
+        template <typename Function, class Sequence>
+        struct invoke_procedure_impl<Function,Sequence,N,false,false>
         {
-            struct result
-                : invoke_procedure_result< Function, mpl::size_t<N>, CBI >
-            { }; 
-
             static inline void call(Function & f, Sequence & s)
             {
 #if N > 0
@@ -194,12 +148,8 @@ namespace boost { namespace fusion
 
 #if N > 0
         template <typename Function, class Sequence>
-        struct invoke_procedure_impl<Function,Sequence,N,true,true,false>
+        struct invoke_procedure_impl<Function,Sequence,N,true,false>
         {
-            struct result
-                : invoke_procedure_result< Function, mpl::size_t<N> >
-            { }; 
-
             static inline void call(Function & f, Sequence & s)
             {
                 typedef typename result_of::begin<Sequence>::type I0;

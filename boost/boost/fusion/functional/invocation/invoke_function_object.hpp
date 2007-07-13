@@ -79,7 +79,7 @@ namespace boost { namespace fusion
         template <class Function, class Sequence> struct invoke_function_object
             : detail::invoke_function_object_impl< 
                 typename boost::remove_reference<Function>::type, Sequence
-            >::template result<>
+            >::result
         { }; 
     }
 
@@ -117,18 +117,16 @@ namespace boost { namespace fusion
         {
         public:
 
-            template <typename _ = void>
             struct result
 #define M(z,j,data)                                                             \
     typename boost::remove_reference<                                          \
         typename result_of::value_at_c<Sequence,j>::type >::type 
-                : boost::result_of<
-                typename remove_const<Function>::type (BOOST_PP_ENUM(N,M,~))>
+                : boost::result_of< Function (BOOST_PP_ENUM(N,M,~)) >
 #undef M
             { }; 
 
             template <class F>
-            static inline typename result<F>::type
+            static inline typename result::type
             call(F & f, Sequence & s)
             {
 #define M(z,j,data) fusion::at_c<j>(s)
@@ -143,17 +141,13 @@ namespace boost { namespace fusion
         private:
             typedef invoke_function_object_param_types<Sequence,N> seq;
         public:
-            template <typename _ = void>
             struct result
-                
-            { 
-                typedef typename 
-                boost::result_of<
-                    typename remove_const<Function>::type (BOOST_PP_ENUM_PARAMS(N,typename seq::T))>::type type;
-            }; 
+                : boost::result_of<
+                    Function (BOOST_PP_ENUM_PARAMS(N,typename seq::T)) >
+            { }; 
 
             template <class F>
-            static inline typename result<F>::type
+            static inline typename result::type
             call(F & f, Sequence & s)
             {
 #if N > 0
