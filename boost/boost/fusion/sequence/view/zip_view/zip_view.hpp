@@ -54,15 +54,15 @@ namespace boost { namespace fusion {
             template<typename Seq>
             struct result<seq_ref_size(Seq)>
             {
-                static int const int_max = static_cast<int>(
-                    static_cast<unsigned>(~0) >> 1);
+                static int const high_int = static_cast<int>(
+                    (static_cast<unsigned>(~0) >> 1) - 1);
 
                 typedef typename remove_reference<Seq>::type SeqClass;
 
                 typedef typename mpl::eval_if<
                     traits::is_forward<SeqClass>,
                     result_of::size<SeqClass>,
-                    mpl::int_<int_max> >::type type;
+                    mpl::int_<high_int> >::type type;
             };
         };
 
