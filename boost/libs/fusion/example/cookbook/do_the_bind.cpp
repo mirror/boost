@@ -38,9 +38,7 @@
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
-#include <boost/mpl/bool.hpp>
 #include <boost/mpl/int.hpp>
-#include <boost/mpl/count_if.hpp>
 
 #include <boost/ref.hpp>
 #include <iostream>
