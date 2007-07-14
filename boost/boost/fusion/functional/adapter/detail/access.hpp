@@ -26,11 +26,6 @@ namespace boost { namespace fusion { namespace detail
     template <typename T> struct gref<T&>           { typedef T      & type; };
     template <typename T> struct gref<T const>      { typedef T const& type; };
 
-    // boost::result_of to Fusion PFO parameter
-    template <typename T> struct r2fp               { typedef T const type; };
-    template <typename T> struct r2fp<T const>      { typedef T const type; };
-    template <typename T> struct r2fp<T &>          { typedef T       type; };
-
     // remove_const< remove_reference<_> >
     template <typename T> struct uncr               { typedef T       type; };
     template <typename T> struct uncr<T const>      { typedef T       type; };
