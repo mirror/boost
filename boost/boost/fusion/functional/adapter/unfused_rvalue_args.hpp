@@ -15,9 +15,6 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
 
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/remove_const.hpp>
-
 #include <boost/utility/result_of.hpp>
 
 #include <boost/fusion/sequence/container/vector/vector.hpp>
@@ -31,13 +28,11 @@ namespace boost { namespace fusion
 
     //----- ---- --- -- - -  -   -
 
-    struct void_;
-
     template <class Function> class unfused_rvalue_args
     {
         Function fnc_transformed;
 
-        typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;
+        typedef typename detail::uncr<Function>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
       public:

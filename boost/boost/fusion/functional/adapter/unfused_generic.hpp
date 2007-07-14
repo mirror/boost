@@ -25,7 +25,6 @@
 #include <boost/fusion/functional/adapter/detail/access.hpp>
 
 #include <boost/utility/result_of.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 
 namespace boost { namespace fusion
 {
@@ -33,14 +32,12 @@ namespace boost { namespace fusion
 
     //----- ---- --- -- - -  -   -
 
-    struct void_;
-
     template <class Function> 
     class unfused_generic
     {
         Function fnc_transformed;
 
-        typedef typename remove_const<typename boost::remove_reference<Function>::type>::type function;
+        typedef typename detail::uncr<Function>::type function;
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
       public:
