@@ -455,9 +455,9 @@ namespace boost { namespace proto
     {
         namespace detail
         {
-        	using proto::detail::yes_type;
-        	using proto::detail::no_type;
-        	
+            using proto::detail::yes_type;
+            using proto::detail::no_type;
+            
             struct default_factory;
 
             no_type is_wildcard_expression_fun(...);

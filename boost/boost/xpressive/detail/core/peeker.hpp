@@ -63,6 +63,28 @@ struct peeker_string
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// char_sink
+//
+template<typename Traits, bool ICase>
+struct char_sink
+{
+    typedef typename Traits::char_type char_type;
+
+    char_sink(hash_peek_bitset<char_type> &bset, Traits const &traits)
+      : bset_(bset)
+      , traits_(traits)
+    {}
+
+    void operator()(char_type ch) const
+    {
+        this->bset_.set_char(ch, ICase, this->traits_);
+    }
+
+    hash_peek_bitset<char_type> &bset_;
+    Traits const &traits_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // xpression_peeker
 //
 template<typename Char>
@@ -142,6 +164,13 @@ struct xpression_peeker
     {
         BOOST_ASSERT(0 != xpr.bset_.count());
         this->bset_.set_bitset(xpr.bset_);
+        return mpl::false_();
+    }
+
+    template<typename Matcher, typename Traits, bool ICase>
+    mpl::false_ accept(attr_matcher<Matcher, Traits, ICase> const &xpr)
+    {
+        xpr.sym_.peek(char_sink<Traits, ICase>(this->bset_, this->get_traits_<Traits>()));
         return mpl::false_();
     }
 

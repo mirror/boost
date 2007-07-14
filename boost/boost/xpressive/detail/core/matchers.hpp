@@ -22,6 +22,7 @@
 #include <boost/xpressive/detail/core/matcher/assert_eol_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/assert_eos_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/assert_word_matcher.hpp>
+#include <boost/xpressive/detail/core/matcher/attr_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/charset_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/end_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/epsilon_matcher.hpp>

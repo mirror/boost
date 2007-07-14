@@ -4,7 +4,7 @@
 /// Based on the following papers:
 /// J. Bentley and R. Sedgewick. (1998) Ternary search trees. Dr. Dobbs Journal
 /// G. Badr and B.J. Oommen. (2005) Self-Adjusting of Ternary Search Tries Using
-/// 	Conditional Rotations and Randomized Heuristics
+///     Conditional Rotations and Randomized Heuristics
 //
 //  Copyright 2007 David Jenkins. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -30,13 +30,13 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // symbols (using a ternary search trie)
     //
-    template<typename T>
+    template<typename Map>
     struct symbols
     {
-        typedef typename range_value<T>::type::first_type key_type;
-        typedef typename range_value<T>::type::second_type value_type;
+        typedef typename range_value<Map>::type::first_type key_type;
+        typedef typename range_value<Map>::type::second_type value_type;
         typedef typename range_value<key_type>::type char_type;
-        typedef typename range_iterator<T const>::type iterator;
+        typedef typename range_iterator<Map const>::type iterator;
         typedef typename range_iterator<key_type const>::type key_iterator;
         typedef value_type const *result_type;
 
@@ -47,12 +47,12 @@ namespace boost { namespace xpressive { namespace detail
         // copies of this symbols table share the TST
 
         template<typename Trans>
-        void load(T const &m, Trans trans)
+        void load(Map const &map, Trans trans)
         {
             if(0 == this->root)
             {
-                iterator begin = boost::begin(m);
-                iterator end = boost::end(m);
+                iterator begin = boost::begin(map);
+                iterator end = boost::end(map);
                 for(; begin != end; ++begin)
                 {
                     key_iterator kbegin = boost::begin(begin->first);
@@ -65,7 +65,13 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Trans>
         result_type operator ()(BidiIter &begin, BidiIter end, Trans trans) const
         {
-            return this->search(this->root, begin, end, trans);
+            return this->search(begin, end, trans);
+        }
+
+        template<typename Sink>
+        void peek(Sink const &sink) const
+        {
+            this->peek_(this->root, sink);
         }
 
     private:
@@ -132,40 +138,52 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Trans>
-        result_type search(node_ptr const &p, BidiIter &begin, BidiIter end, Trans trans) const
+        result_type search(BidiIter &begin, BidiIter end, Trans trans) const
         {
-            result_type r = 0;
+            const node* p = this->root.get();
+            result_type r = (0 == p->ch ? p->result : 0);
+            if (begin == end)
+                return r;
 
-            if(p)
+            BidiIter isave = begin;
+            char_type c1 = trans(*begin);
+            while(p)
             {
-                BidiIter isave = begin;
-
-                if(begin != end)
+                if(c1 == p->ch)
                 {
-                    char_type c1 = trans(*begin);
-
-                    if(c1 == p->ch)
+                    ++begin;
+                    p = p->eq.get();
+                    if (0 == p->ch)
                     {
-                        r = this->search(p->eq, ++begin, end, trans);
+                        isave = begin;
+                        r = p->result;
                     }
-                    else if(c1 < p->ch)
-                    {
-                        r = this->search(p->lo, begin, end, trans);
-                    }
-                    else // (c1 > p->ch)
-                    {
-                        r = this->search(p->hi, begin, end, trans);
-                    }
+                    if(begin == end)
+                        break;
+                    c1 = trans(*begin);
                 }
-
-                if(!r && 0 == p->ch)
+                else if(c1 < p->ch)
                 {
-                    begin = isave;
-                    r = p->result;
+                    p = p->lo.get();
+                }
+                else // (c1 > p->ch)
+                {
+                    p = p->hi.get();
                 }
             }
-
+            begin = isave;
             return r;
+        }
+
+        template<typename Sink>
+        void peek_(node_ptr const &p, Sink const &sink) const
+        {
+            if(p)
+            {
+                sink(p->ch);
+                this->peek_(p->lo, sink);
+                this->peek_(p->hi, sink);
+            }
         }
 
         node_ptr root;
