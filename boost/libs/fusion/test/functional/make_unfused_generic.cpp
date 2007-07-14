@@ -10,7 +10,6 @@
 #include <boost/detail/lightweight_test.hpp>
 
 #include <boost/type_traits/is_same.hpp>
-#include <boost/fusion/functional/adapter/detail/has_type.hpp>
 
 #include <boost/noncopyable.hpp>
 #include <boost/blank.hpp>
