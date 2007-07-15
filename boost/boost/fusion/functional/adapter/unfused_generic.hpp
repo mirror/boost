@@ -37,7 +37,9 @@ namespace boost { namespace fusion
     {
         Function fnc_transformed;
 
-        typedef typename detail::uncr<Function>::type function;
+        typedef typename detail::qf_c<Function>::type function_c;
+        typedef typename detail::qf<Function>::type function;
+
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
       public:
@@ -50,7 +52,7 @@ namespace boost { namespace fusion
         struct result;
 
         typedef typename boost::result_of<
-            function const (fusion::vector0 &) >::type call_const_0_result;
+            function_c(fusion::vector0 &) >::type call_const_0_result;
 
         inline call_const_0_result operator()() const
         {
@@ -69,7 +71,7 @@ namespace boost { namespace fusion
 
         #define BOOST_FUSION_CODE(tpl_params,arg_types,params,args)             \
         template <tpl_params>                                                  \
-        inline typename boost::result_of<function const (                      \
+        inline typename boost::result_of<function_c(                           \
             BOOST_PP_CAT(fusion::vector,N)<arg_types> & )>::type               \
         operator()(params) const                                               \
         {                                                                      \
@@ -127,7 +129,7 @@ namespace boost
         template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result
             < Self const (BOOST_PP_ENUM_PARAMS(N,T)) >
-            : boost::result_of<function const (
+            : boost::result_of<function_c(
                 BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
                    typename detail::gref<T,>::type BOOST_PP_INTERCEPT) > & )>
         { };
@@ -135,7 +137,7 @@ namespace boost
         template <class Self, BOOST_PP_ENUM_PARAMS(N,typename T)>
         struct result
             < Self(BOOST_PP_ENUM_PARAMS(N,T)) >
-            : boost::result_of<function (
+            : boost::result_of<function(
                 BOOST_PP_CAT(fusion::vector,N)< BOOST_PP_ENUM_BINARY_PARAMS(N,
                    typename detail::gref<T,>::type BOOST_PP_INTERCEPT) > & )>
         { };
@@ -143,7 +145,7 @@ namespace boost
 
 #if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1400)) 
         template <BOOST_PP_ENUM_PARAMS(N,typename T)>
-        inline typename boost::result_of<function const(
+        inline typename boost::result_of<function_c(
             BOOST_PP_CAT(fusion::vector,N)<BOOST_PP_ENUM_PARAMS(N,PT)> & )>::type
         operator()(BOOST_PP_ENUM_BINARY_PARAMS(N,PT,a)) const
         {

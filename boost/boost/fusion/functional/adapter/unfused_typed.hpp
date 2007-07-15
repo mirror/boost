@@ -41,26 +41,29 @@ namespace boost { namespace fusion
 
     namespace detail
     {
-        template <class Derived, class Function, class Sequence, long Arity>
+        template <class Derived, class FunctionC, class Function, 
+            class Sequence, long Arity>
         struct unfused_typed_impl;
     }
 
     template <class Function, class Sequence>
     class unfused_typed
         : public detail::unfused_typed_impl
-          < unfused_typed<Function,Sequence>, typename detail::uncr<Function>::type, 
-            Sequence, result_of::size<Sequence>::value > 
+          < unfused_typed<Function,Sequence>, typename detail::qf_c<Function>::type,
+            typename detail::qf<Function>::type, Sequence, result_of::size<Sequence>::value > 
     {
         Function fnc_transformed;
 
-        typedef typename detail::uncr<Function>::type function;
+        typedef typename detail::qf_c<Function>::type function_c;
+        typedef typename detail::qf<Function>::type function;
+
         typedef typename detail::call_param<Function>::type func_const_fwd_t;
 
         typedef typename detail::unfused_typed_impl< 
-            unfused_typed<Function,Sequence>,function,Sequence, 
+            unfused_typed<Function,Sequence>,function_c,function,Sequence, 
             result_of::size<Sequence>::value > base;
 
-        template <class D, class F, class S, long A>
+        template <class D, class FC, class F, class S, long A>
         friend struct detail::unfused_typed_impl;
 
     public:
@@ -75,21 +78,22 @@ namespace boost { namespace fusion
 
     namespace detail
     {
-        template <class Derived, class Function, class Sequence>
-        struct unfused_typed_impl<Derived,Function,Sequence,0>
+        template <class Derived, class FunctionC, class Function, 
+            class Sequence>
+        struct unfused_typed_impl<Derived,FunctionC,Function,Sequence,0>
         {
             typedef fusion::vector0 arg_vector_t;
 
         public:
 
             typedef typename boost::result_of<
-                Function const (arg_vector_t &) > call_const_0_result;
+                FunctionC (arg_vector_t &) > call_const_0_result;
 
             typedef typename boost::result_of<
                 Function(arg_vector_t &) > call_0_result;
 
             inline typename boost::result_of< 
-                Function const (arg_vector_t &) >::type
+                FunctionC (arg_vector_t &) >::type
             operator()() const
             {
                 arg_vector_t arg;
@@ -139,9 +143,10 @@ namespace boost
     namespace detail
     {
 
-        template <class Derived, class Function, class Sequence>
-        struct unfused_typed_impl<Derived,Function,Sequence,N>
-            : unfused_typed_impl<Derived,Function,
+        template <class Derived, class FunctionC, class Function, 
+            class Sequence>
+        struct unfused_typed_impl<Derived,FunctionC,Function,Sequence,N>
+            : unfused_typed_impl<Derived,FunctionC,Function,
                 typename result_of::pop_back<Sequence>::type, BOOST_PP_DEC(N) >
         {
             typedef typename result_of::as_vector<Sequence>::type arg_vector_t;
@@ -149,14 +154,14 @@ namespace boost
         protected:
 
             typedef typename boost::result_of<
-                Function const (arg_vector_t &) > BOOST_PP_CAT(rc,N);
+                FunctionC(arg_vector_t &) > BOOST_PP_CAT(rc,N);
 
             typedef typename boost::result_of<
                 Function(arg_vector_t &) > BOOST_PP_CAT(r,N);
 
         public:
 
-            using unfused_typed_impl< Derived,Function, 
+            using unfused_typed_impl< Derived,FunctionC,Function, 
                 typename result_of::pop_back<Sequence>::type, BOOST_PP_DEC(N)
                 >::operator();
 
@@ -164,7 +169,7 @@ namespace boost
     typename call_param<typename result_of::value_at_c<s,i>::type>::type a##i
 
             inline typename boost::result_of< 
-                Function const (arg_vector_t &) >::type
+                FunctionC(arg_vector_t &) >::type
             operator()(BOOST_PP_ENUM(N,M,arg_vector_t)) const
             {
                 arg_vector_t arg(BOOST_PP_ENUM_PARAMS(N,a));
@@ -173,7 +178,7 @@ namespace boost
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1400)
             inline typename boost::result_of<
-                Function (arg_vector_t &) >::type 
+                Function(arg_vector_t &) >::type 
             operator()(BOOST_PP_ENUM(N,M,arg_vector_t)) 
             {
                 arg_vector_t arg(BOOST_PP_ENUM_PARAMS(N,a));

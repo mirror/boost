@@ -11,7 +11,7 @@
 
 #include <boost/type_traits/add_reference.hpp>
 
-#include <boost/fusion/support/detail/access.hpp>
+#include <boost/fusion/functional/adapter/detail/access.hpp>
 #include <boost/fusion/functional/invocation/invoke_function_object.hpp>
 
 namespace boost { namespace fusion
@@ -25,8 +25,8 @@ namespace boost { namespace fusion
     {
         Function fnc_transformed;
 
-        typedef typename boost::add_reference<Function>::type func_fwd_t;
-        typedef typename detail::call_param<Function>::type func_const_fwd_t;
+        typedef typename detail::qf_c<Function>::type & func_const_fwd_t;
+        typedef typename detail::qf<Function>::type & func_fwd_t;
 
     public:
 
