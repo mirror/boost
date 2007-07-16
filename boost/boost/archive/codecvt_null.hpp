@@ -25,14 +25,16 @@ namespace std{
     #if defined(__LIBCOMO__)
         using ::mbstate_t;
     #elif defined(__QNXNTO__)
-        using std::mbstate_t;
+        //using std::mbstate_t;
     #elif defined(BOOST_DINKUMWARE_STDLIB) && BOOST_DINKUMWARE_STDLIB == 1
         using ::mbstate_t;
     #elif defined(__SGI_STL_PORT)
     #elif defined(BOOST_NO_STDC_NAMESPACE)
         using ::codecvt;
         using ::mbstate_t;
-    #endif
+    #elif defined(BOOST_RWSTD_VER)
+        using ::mbstate_t;
+   #endif
 } // namespace std
 
 namespace boost {
