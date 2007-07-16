@@ -640,6 +640,9 @@
 				RelativePath="..\..\..\boost\serialization\void_cast.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\void_cast_fwd.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\wcslen.hpp">
 			</File>
 		</Filter>
