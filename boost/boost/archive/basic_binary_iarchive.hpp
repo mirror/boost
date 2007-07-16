@@ -58,8 +58,7 @@ public:
     // note extra nonsense to sneak it pass the borland compiers
     typedef array::iarchive<Archive> array_iarchive;
     template<class T>
-    void load_override(T & t, BOOST_PFTO int)
-    {
+    void load_override(T & t, BOOST_PFTO int){
         this->array_iarchive::load_override(t, 0);
     }
     // binary files don't include the optional information 
