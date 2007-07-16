@@ -1674,6 +1674,9 @@
 		<File
 			RelativePath="..\test\test_polymorphic_A.cpp">
 		</File>
+		<File
+			RelativePath="..\test\test_polymorphic_A.hpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
