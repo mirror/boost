@@ -55,7 +55,8 @@ class portable_binary_iarchive :
         portable_binary_iarchive, 
         std::istream::char_type, 
         std::istream::traits_type
-    >
+    >,
+    public boost::archive::detail::shared_ptr_helper
 {
     typedef boost::archive::binary_iarchive_impl<
         portable_binary_iarchive, 
@@ -92,11 +93,26 @@ public:
                 *first = x;
             }
         #endif
+
+        // extend sign if necessary
+        if((l >> (size - 1) * 8) & 0x80){
+            l |= (-1 << (size * 8));
+        }
     }
     // default fall through for any types not specified here
     template<class T>
     void load(T & t){
         this->primitive_base_t::load(t);
+    }
+    void load(unsigned short & t){
+        long l;
+        load_impl(l, sizeof(unsigned short));
+        t = l;
+    }
+    void load(short & t){
+        long l;
+        load_impl(l, sizeof(short));
+        t = l;
     }
     void load(unsigned int & t){
         long l;
