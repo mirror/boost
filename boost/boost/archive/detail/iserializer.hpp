@@ -76,7 +76,6 @@ namespace std{
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/serialization/binary_object.hpp>
 #include <boost/serialization/void_cast.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
@@ -296,6 +295,7 @@ BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
         );
     }
     BOOST_CATCH(...){
+        ap.release();
         BOOST_RETHROW;
     }
     BOOST_CATCH_END
