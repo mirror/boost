@@ -79,9 +79,6 @@ class basic_iarchive_impl {
 
     //////////////////////////////////////////////////////////////////////
     // used to implement the reset_object_address operation.
-    // list of objects which might be moved. We use a vector for implemenation
-    // in the hope the the truncation operation will be faster than either
-    // with a list or stack adaptor
     object_id_type moveable_objects_start;
     object_id_type moveable_objects_end;
     object_id_type moveable_objects_recent;
