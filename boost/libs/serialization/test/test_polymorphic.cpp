@@ -79,5 +79,22 @@ int test_main(int /* argc */, char * /* argv */ [])
     BOOST_CHECK(d == d1);
     std::remove(testfile);
 
+    // test using using polymorphic implementation.
+    {
+        test_ostream os(testfile, TEST_STREAM_FLAGS);
+        boost::archive::polymorphic_oarchive * oa_implementation 
+            = new test_oarchive(os);
+        *oa_implementation << BOOST_SERIALIZATION_NVP(d);
+        delete oa_implementation;
+    }
+    {
+        test_istream is(testfile, TEST_STREAM_FLAGS);
+        boost::archive::polymorphic_iarchive * ia_implementation
+            = new test_iarchive(is);
+        *ia_implementation >> BOOST_SERIALIZATION_NVP(d1);
+        delete ia_implementation;
+    }
+    BOOST_CHECK(d == d1);
+    std::remove(testfile);
     return EXIT_SUCCESS;
 }
