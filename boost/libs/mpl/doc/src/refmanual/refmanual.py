@@ -1,3 +1,9 @@
+# Copyright (c) Aleksey Gurtovoy 2001-2007
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
 import time
 import fnmatch
 import os.path
@@ -6,6 +12,8 @@ import re
 import string
 
 underlines = ['+', '/']
+special_cases = [ 'inserter', '_1,_2,..._n' ]
+
 
 def __section_header(section):
     parts = section.split('/')
@@ -22,21 +30,14 @@ def __section_intro(section):
     return '%s.rst' % '-'.join( [x.split(' ')[0] for x in parts] )
 
 
-def __include_page( output, page ):
+def __include_page( output, page, name = None ):
     output.write( '.. include:: %s\n' % page )      
     # output.write( '.. raw:: LaTeX\n\n' )
     # output.write( '   \\newpage\n\n')
     
-    ref = '/'.join( page.split('.')[0].split('-') )
-    if ref.upper() == ref: # macros
-        ref = 'BOOST_MPL_%s' % ref
-        output.write( 
-              ( '.. |%(ref)s| replace:: |``%(ref)s``|__\n'
-                + '.. |``%(ref)s``| replace:: :refentry:`%(ref)s`\n'
-                + '__ `%(ref)s`_\n' ) 
-                    % { 'ref': ref }
-            )
-    elif ref.lower() == ref:
+    if name and name not in special_cases: ref = name
+    else:    ref = '/'.join( page.split('.')[0].split('-') )
+    if ref.upper() == ref or ref.lower() == ref:
         output.write( 
               ( '.. |%(ref)s| replace:: |``%(ref)s``|__\n'
                 + '.. |``%(ref)s``| replace:: :refentry:`%(ref)s`\n'
@@ -82,7 +83,7 @@ def main( filename, dir ):
         placement_spec = open(src, 'r').readline()
         
         topic = 'Unclassified'
-        name = None        
+        name = None
         order = -1
         
         match = re_topic.match(placement_spec)
@@ -95,7 +96,7 @@ def main( filename, dir ):
         if not topics.has_key(topic):
             topics[topic] = []
         
-        topics[topic].append((src, order))
+        topics[topic].append((src, order, name))
         
         if name:
             if topic.find( '/Concepts' ) == -1:
@@ -115,7 +116,7 @@ def main( filename, dir ):
             __include_page( output, intro )
         
         for src in content:
-            __include_page( output, src[0] )
+            __include_page( output, src[0], src[2] )
 
     output.close()
 

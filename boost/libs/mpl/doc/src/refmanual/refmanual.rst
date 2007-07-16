@@ -2,7 +2,7 @@
 The MPL Reference Manual
 ************************
 
-:Copyright: Copyright ©  Aleksey Gurtovoy and David Abrahams, 2001-2005.
+:Copyright: Copyright ©  Aleksey Gurtovoy and David Abrahams, 2001-2007.
 
 :License:   Distributed under the Boost Software License, Version 1.0. (See 
             accompanying file ``LICENSE_1_0.txt`` or copy at 
@@ -130,10 +130,6 @@ __ `Placeholders`_
 
 .. |+BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS+| replace:: :refentry:`BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`
 __ `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
-__ `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
-
-.. |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS| replace:: |``BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS``|__
-.. |``BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS``| replace:: :refentry:`BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`
 __ `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
 
 
