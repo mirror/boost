@@ -437,6 +437,9 @@ function guarantees that this is always the case and will minimize the
 occurence of hard to find errors related to synchronization of 
 <code style="white-space: normal">save</code> and <code style="white-space: normal">load</code> 
 functions.
+<p>
+Also note that <code style="white-space: normal">BOOST_SERIALIZATION_SPLIT_FREE</code>
+must be used outside of any namespace.
 
 <h2><a name="pointeroperators">Pointers</a></h2>
 A pointer to any class instance can be serialized with any of the archive 
@@ -787,7 +790,10 @@ class derived : public base {
         // method 1 : invoke base class serialization
         boost::serialization::base_object&lt;base&gt;(*this);
         // method 2 : explicitly register base/derived relationship
-        boost::serialization::void_cast_register&lt;derived, base&gt;();
+        boost::serialization::void_cast_register&lt;derived, base&gt;(
+            static_cast&lt;base *&gt;(NULL),
+            static_cast&lt;derived *&gt;(NULL)
+        )
     }
 };
 
