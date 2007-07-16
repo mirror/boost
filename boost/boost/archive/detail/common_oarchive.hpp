@@ -31,6 +31,7 @@ class common_oarchive :
     public basic_oarchive,
     public interface_oarchive<Archive>
 {
+    friend class interface_oarchive<Archive>;
 private:
     virtual void vsave(const version_type t){
         * this->This() << t;
@@ -62,10 +63,9 @@ protected:
     void save_override(T & t, BOOST_PFTO int){
         archive::save(* this->This(), t);
     }
-
     void save_start(const char *name){}
     void save_end(const char *name){}
-    common_oarchive(unsigned int flags) : 
+    common_oarchive(unsigned int flags = 0) : 
         basic_oarchive(flags),
         interface_oarchive<Archive>()
     {}

@@ -32,6 +32,7 @@ class common_iarchive :
     public basic_iarchive,
     public interface_iarchive<Archive>
 {
+    friend class interface_iarchive<Archive>;
 private:
     virtual void vload(version_type & t){
         * this->This() >> t; 
@@ -62,7 +63,7 @@ protected:
     void load_start(const char *name){}
     void load_end(const char *name){}
     // default archive initialization
-    common_iarchive(unsigned int flags) : 
+    common_iarchive(unsigned int flags = 0) : 
         basic_iarchive(flags),
         interface_iarchive<Archive>()
     {}
