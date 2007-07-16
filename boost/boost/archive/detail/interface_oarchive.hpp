@@ -51,8 +51,9 @@ public:
     }
 
     template<class T>
-    const basic_pointer_oserializer * register_type(const T * = NULL){
-        const basic_pointer_oserializer & bpos =
+    const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer * 
+    register_type(const T * = NULL){
+        const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer & bpos =
             pointer_oserializer<Archive, T>::get_instance();
         this->This()->register_basic_serializer(bpos.get_basic_serializer());
         return & bpos;

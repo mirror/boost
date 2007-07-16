@@ -28,6 +28,7 @@ class shared_ptr;
 namespace serialization {
     class extended_type_info;
 } // namespace serialization
+
 namespace archive {
 namespace detail {
 
@@ -50,8 +51,9 @@ public:
     }
 
     template<class T>
-    const basic_pointer_iserializer * register_type(T * = NULL){
-        const basic_pointer_iserializer & bpis =
+    const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer * 
+    register_type(T * = NULL){
+        const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer & bpis =
             pointer_iserializer<Archive, T>::get_instance();
         this->This()->register_basic_serializer(bpis.get_basic_serializer());
         return & bpis;
