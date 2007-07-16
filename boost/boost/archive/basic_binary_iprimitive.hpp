@@ -160,7 +160,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
         static_cast<Elem *>(address), 
         s
     );
-    if(count != static_cast<std::size_t>(s))
+    if(scount != static_cast<std::size_t>(s))
         boost::throw_exception(
             archive_exception(archive_exception::stream_error)
         );
@@ -171,7 +171,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
 //            boost::throw_exception(archive_exception(archive_exception::stream_error));
         Elem t;
         scount = m_sb.sgetn(& t, 1);
-        if(count != 1)
+        if(scount != 1)
             boost::throw_exception(
                 archive_exception(archive_exception::stream_error)
             );
