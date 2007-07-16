@@ -26,19 +26,14 @@ if ! $(BOOST_ARCHIVE_LIST) {
 rule run-template ( test-name : sources * : requirements * ) {
     return [
         run
-            ../../test/build//boost_test_exec_monitor/<link>static
             $(sources)
         : # command
         : # input files
         : # requirements
-
-
             # FIXME: Not ported yet.
             #std::locale-support
-            #toolset::require-boost-spirit-support
             #toolset::suppress-warnings
             #toolset::optimizations
-
             $(requirements)
         : # test name
             $(test-name)
@@ -61,9 +56,6 @@ rule dependency-save-test ( test )
 # each of the following tests is run with each type of archive
 rule run-invoke ( test-name : sources * : defns * )
 {
-#    FIXME
-#    if [ in-invocation-subdir ] { Echo $(test-name) ; }
-
     local save-test = [ dependency-save-test $(test-name) ] ;
 
     local tests ;
@@ -73,22 +65,18 @@ rule run-invoke ( test-name : sources * : defns * )
             $(sources)
             ../build//boost_serialization/<link>static
         : # requirements
-
             # msvc stlport 4.5.3 only works with static lib
             <toolset>msvc,<stdlib>stlport:<runtime-link>static
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
             <dependency>$(save-test)
     ] ;
-#   FIXME
-#    if [ in-invocation-subdir ] { Echo $(test-name)_dll ; }
     tests += [ 
         run-template $(test-name)_dll
         : # sources
             $(sources)
             ../build//boost_serialization
-        : # requiremens
-
+        : # requirements
         # FIXME:
         #            toolset::require-shared-libraries-support
             <define>$(defns)
@@ -103,9 +91,6 @@ rule run-invoke ( test-name : sources * : defns * )
 # each of the following tests is run with each type of archive
 rule run-winvoke ( test-name : sources * : defns * )
 {
-# FIXME
-#    if [ in-invocation-subdir ] { Echo $(test-name) ; }
-
     local save-test = [ dependency-save-test $(test-name) ] ;
 
     local tests ;
@@ -127,8 +112,6 @@ rule run-winvoke ( test-name : sources * : defns * )
             <toolset>msvc,<stdlib>stlport:<linkflags>"-force:multiple"
             <dependency>$(save-test)
     ] ;
-# FIXME
-#    if [ in-invocation-subdir ] { Echo $(test-name)_dll ; }
     tests += [ 
         run-template $(test-name)_dll
         : # sources
@@ -151,8 +134,6 @@ rule run-winvoke ( test-name : sources * : defns * )
 # for tests which don't use library code - usually just headers
 rule test-bsl-run-no-lib  ( test-name : sources * )
 {
-# FIXME
-#    if [ in-invocation-subdir ] { Echo $(test-name) ; }
     local tests ;
     tests += [ 
         run-template $(test-name)
@@ -299,7 +280,7 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ compile-fail test_const_save_fail1.cpp ] # FIXME std:locale-support ]
         [ compile-fail test_const_save_fail2.cpp ] # FIXME std:locale-support ]
         [ compile-fail test_const_save_fail3.cpp ] # FIXME std:locale-support ]
-        # note - library unable to detect there errors for now
+        # note - library unable to detect these errors for now
         #[ compile-fail test_const_save_fail1_nvp.cpp ]
         #[ compile-fail test_const_save_fail2_nvp.cpp ]
         #[ compile-fail test_const_save_fail3_nvp.cpp ]
@@ -316,24 +297,3 @@ if $(BOOST_SERIALIZATION_TEST) {
     ;
     
 }
-
-#saving-tests = [ test-bsl-run_files test_class_info_save ]
-#               [ test-bsl-run test_demo_xml_save ] ;
-#loading-tests = [ test-bsl-run_files test_class_info_load ]
-#                [ test-bsl-run test_demo_xml_load ] ;
-
-# FIXME
-## This makes each individual load test depend on the run of the
-## corresponding save test. It is important to do this one at a
-## time because $(saving-tests) and $(loading-tests) can contain
-## the targets for multiple toolsets.
-
-
-
-#for local save-test-i in $(saving-tests)
-#{
-#    DEPENDS $(loading-tests[1]:S=.run) : $(save-test-i:S=.run) ;
-#    loading-tests = $(loading-tests[2-]) ;
-#}
-
-
