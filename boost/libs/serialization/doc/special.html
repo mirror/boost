@@ -161,10 +161,10 @@ class hasn't been otherwise referred to by the program.  This functionality
 is necessary to implement serialization of pointers through a virtual base
 class pointer.  That is, a polymorphic pointer.
 <p>
-This macro specifies a "Globally Unique IDentifier" which corresponds to the
-external representation of the class name.  Generally this text representation
-of the class name is sufficient for this purpose, but in certain
-cases it maybe necessary to specify a different string by using 
+This macro specifies a "<b>G</b>lobally <b>U</b>nique <b>ID</b>entifier".  
+This is an string which identifies the class to be created when data is loaded.
+Generally a text representation of the class name is sufficient for this purpose, 
+but in certain cases it maybe necessary to specify a different string by using 
 <code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> 
 rather than a simple 
 <code style="white-space: normal">BOOST_CLASS_EXPORT</code>.
@@ -192,6 +192,15 @@ is instantiated regardless of whether or not it is actually invoked.)
 If no archive headers are included - no code should be instantiated. 
 This will permit <code style="white-space: normal">BOOST_CLASS_EXPORT</code> 
 to be a permanent part of the <code style="white-space: normal">my_class.hpp</code> .
+
+<p>
+Note that the implementation of this functionality depends upon vendor
+specific extensions to the C++ language.  So, there is no guarenteed portability
+of programs which use this facility.  However, all C++ compilers which
+are tested with boost provide the required extensions.  The library
+includes the extra declarations required by each of these compilers.
+It's reasonable to expect that future C++ compilers will support
+these extensions or something equivalent.
 
 <h3><a name="classinfo">Class Information</a></h3>
 By default, for each class serialized, class information is written to the archive.
