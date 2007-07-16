@@ -554,12 +554,13 @@ struct check_tracking {
 
 template<class Archive, class T>
 inline void save(Archive & ar, T &t){
-    // if your program traps here, it indicates taht your doing one of the following:
+    // if your program traps here, it indicates that your doing one of the following:
     // a) serializing an object of a type marked "track_never" through a pointer.
     // b) saving an non-const object of a type not markd "track_never)
     // Either of these conditions may be an indicator of an error usage of the
     // serialization library and should be double checked.  See documentation on
-    // object tracking.
+    // object tracking.  Also, see the "rationale" section of the documenation
+    // for motivation for this checking.
     BOOST_STATIC_ASSERT(check_tracking<T>::value);
         save(ar, const_cast<const T &>(t));
 }
