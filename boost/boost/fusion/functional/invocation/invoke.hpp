@@ -127,8 +127,8 @@ namespace boost { namespace fusion
 
             typedef typename result_of::front<Sequence>::type that;
 
-            typedef mpl::or_< is_convertible<that,C*>,
-                              is_convertible<that,C&>,
+            typedef mpl::or_< boost::is_convertible<that,C*>,
+                              boost::is_convertible<that,C&>,
                               non_const_pointee<that> > non_const_cond;
 
             typedef typename mpl::eval_if< non_const_cond,
