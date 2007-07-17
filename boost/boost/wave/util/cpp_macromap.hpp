@@ -254,6 +254,7 @@ private:
     string_type base_name;      // the name to be expanded by __BASE_FILE__
     ContextT &ctx;              // context object associated with the macromap
     long macro_uid;
+    predefined_macros predef;   // predefined macro support
 };
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1772,8 +1773,6 @@ inline void
 macromap<ContextT>::init_predefined_macros(char const *fname, 
     defined_macros_type *scope, bool at_global_scope)
 {
-    using namespace predefined_macros;
-
 // if no scope is given, use the current one
 defined_macros_type *current_scope = scope ? scope : current_macros;
 
@@ -1783,20 +1782,20 @@ position_type pos("<built-in>");
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     if (boost::wave::need_c99(ctx.get_language())) {
     // define C99 specifics
-        for (int i = 0; 0 != static_data_c99(i).name; ++i) {
-            predefine_macro(current_scope, static_data_c99(i).name,
-                token_type(static_data_c99(i).token_id, 
-                    static_data_c99(i).value, pos));
+        for (int i = 0; 0 != predef.static_data_c99(i).name; ++i) {
+            predefined_macros::static_macros const& m = predef.static_data_c99(i);
+            predefine_macro(current_scope, m.name,
+                token_type(m.token_id, m.value, pos));
         }
     }
     else 
 #endif 
     {
     // define C++ specifics
-        for (int i = 0; 0 != static_data_cpp(i).name; ++i) {
-            predefine_macro(current_scope, static_data_cpp(i).name, 
-                token_type(static_data_cpp(i).token_id, 
-                    static_data_cpp(i).value, pos));
+        for (int i = 0; 0 != predef.static_data_cpp(i).name; ++i) {
+            predefined_macros::static_macros const& m = predef.static_data_cpp(i);
+            predefine_macro(current_scope, m.name, 
+                token_type(m.token_id, m.value, pos));
         }
         
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -1829,10 +1828,10 @@ position_type pos("<built-in>");
     }
     
 // now add the dynamic macros
-    for (int j = 0; 0 != dynamic_data(j).name; ++j) {
-        predefine_macro(current_scope, dynamic_data(j).name,
-            token_type(dynamic_data(j).token_id, 
-                dynamic_data(j).generator(false), pos));
+    for (int j = 0; 0 != predef.dynamic_data(j).name; ++j) {
+        predefined_macros::dynamic_macros const& m = predef.dynamic_data(j);
+        predefine_macro(current_scope, m.name,
+            token_type(m.token_id, (predef.* m.generator)(), pos));
     }
 }
 
@@ -1846,8 +1845,7 @@ inline void
 macromap<ContextT>::reset_macromap()
 {
     current_macros->clear();
-    predefined_macros::get_time(true);
-    predefined_macros::get_date(true);
+    predef.reset();
     act_token = token_type();
 }
 

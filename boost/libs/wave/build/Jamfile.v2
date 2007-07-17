@@ -31,8 +31,8 @@ SOURCES =
 lib boost_wave
     :
     $(SOURCES)
-    /boost/filesystem//boost_filesystem
-    /boost/thread//boost_thread
+    ../../filesystem/build//boost_filesystem
+    ../../thread/build//boost_thread
     ;
 
 for local source in $(SOURCES)

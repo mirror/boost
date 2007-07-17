@@ -16,12 +16,12 @@ project
 exe wave
     :
     ../cpp.cpp 
-    /boost/wave//boost_wave
-    /boost/program_options//boost_program_options
-    /boost/filesystem//boost_filesystem
-    /boost/serialization//boost_serialization
-    /boost/system//boost_system
-    /boost/thread//boost_thread
+    /boost//wave
+    /boost//program_options
+    /boost//filesystem
+    /boost//serialization
+    /boost//system
+    /boost//thread
     :
 #   <debug-symbols>on
     :

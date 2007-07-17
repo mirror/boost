@@ -40,62 +40,41 @@ namespace boost {
 namespace wave {
 namespace util {
 
-namespace predefined_macros {
+    ///////////////////////////////////////////////////////////////////////////
+    class predefined_macros 
+    {
+        typedef BOOST_WAVE_STRINGTYPE string_type;
 
-// list of static predefined macros
+    public:
+    // list of static predefined macros
     struct static_macros {
         char const *name;
         boost::wave::token_id token_id;
         char const *value;
     };
 
-// C++ mode 
-    inline static_macros const & 
-    static_data_cpp(std::size_t i)
-    {
-    static static_macros data[] = {
-            { "__STDC__", T_INTLIT, "1" },
-            { "__cplusplus", T_INTLIT, "199711L" },
-            { 0, T_EOF, 0 }
+    // list of dynamic predefined macros
+        struct dynamic_macros {
+            char const *name;
+            boost::wave::token_id token_id;
+            string_type (predefined_macros:: *generator)() const;
         }; 
-        BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
-        return data[i];
-    }
-
-#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-// C99 mode
-    inline static_macros const &
-    static_data_c99(std::size_t i)
-    {
-    static static_macros data[] = {
-            { "__STDC__", T_INTLIT, "1" },
-            { "__STDC_VERSION__", T_INTLIT, "199901L" },
-            { "__STDC_HOSTED__", T_INTLIT, "0" },
-            { "__WAVE_HAS_VARIADICS__", T_INTLIT, "1" },
-            { 0, T_EOF, 0 }
-        }; 
-        BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
-        return data[i];
-    }
-#endif 
     
-// list of dynamic predefined macros
-    typedef char const * (* get_dynamic_value)(bool);
+    private:
+        boost::wave::util::time_conversion_helper compilation_time_;
+        string_type datestr_;     // __DATE__
+        string_type timestr_;     // __TIME__
+        string_type version_;     // __SPIRIT_PP_VERSION__/__WAVE_VERSION__
+        string_type versionstr_;  // __SPIRIT_PP_VERSION_STR__/__WAVE_VERSION_STR__
 
-// __DATE__ 
-    inline 
-    char const *get_date(bool reset)
+    protected:
+        void reset_datestr()
     {
-    static std::string datestr;
     static const char *const monthnames[] = {
             "Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
         };
     
-        if (reset) {
-            datestr.erase();
-        }
-        else {
         // for some systems sprintf, time_t etc. is in namespace std
             using namespace std;    
 
@@ -108,25 +87,15 @@ namespace predefined_macros {
                 tb = localtime (&tt);
                 sprintf (buffer, "\"%s %2d %4d\"",
                     monthnames[tb->tm_mon], tb->tm_mday, tb->tm_year + 1900);
-                datestr = buffer;
+                datestr_ = buffer;
             }
             else {
-                datestr = "\"??? ?? ????\"";
-            }
+                datestr_ = "\"??? ?? ????\"";
         }
-        return datestr.c_str();
     }
 
-// __TIME__
-    inline 
-    char const *get_time(bool reset)
+        void reset_timestr()
     {
-    static std::string timestr;
-    
-        if (reset) {
-            timestr.erase();
-        }
-        else {
         // for some systems sprintf, time_t etc. is in namespace std
             using namespace std;    
 
@@ -139,37 +108,15 @@ namespace predefined_macros {
                 tb = localtime (&tt);
                 sprintf (buffer, "\"%02d:%02d:%02d\"", tb->tm_hour, 
                     tb->tm_min, tb->tm_sec);
-                timestr = buffer;
+                timestr_ = buffer;
             }
             else {
-                timestr = "\"??:??:??\"";
-            }
+                timestr_ = "\"??:??:??\"";
         }
-        return timestr.c_str();
-    }
-
-// __SPIRIT_PP__/__WAVE__
-    inline 
-    char const *get_version(bool /*reset*/)
-    {
-    static std::string versionstr;
-    char buffer[sizeof("0x0000")+1];
-
-        using namespace std;    // for some systems sprintf is in namespace std
-        sprintf(buffer, "0x%02d%1d%1d", BOOST_WAVE_VERSION_MAJOR, 
-            BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR);
-        versionstr = buffer;
-        return versionstr.c_str();
     }
     
-// __SPIRIT_PP_VERSION__/__WAVE_VERSION__
-    boost::wave::util::time_conversion_helper const 
-        compilation_time(__DATE__ " " __TIME__);
-        
-    inline 
-    char const *get_fullversion(bool /*reset*/)
+        void reset_version()
     {
-    static std::string versionstr;
     char buffer[sizeof("0x00000000")+1];
 
     // for some systems sprintf, time_t etc. is in namespace std
@@ -185,23 +132,16 @@ namespace predefined_macros {
         first_day.tm_mday = 13;          // 13
         first_day.tm_year = 101;         // 2001
 
-    long seconds = long(difftime(compilation_time.get_time(), 
-        mktime(&first_day)));
+        long seconds = long(difftime(compilation_time_.get_time(), mktime(&first_day)));
 
         sprintf(buffer, "0x%02d%1d%1d%04ld", BOOST_WAVE_VERSION_MAJOR,
              BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
              seconds/(3600*24));
-        versionstr = buffer;
-        return versionstr.c_str();
+            version_ = buffer;
     }
     
-// __SPIRIT_PP_VERSION_STR__/__WAVE_VERSION_STR__
-    inline 
-    char const *get_versionstr(bool /*reset*/)
+        void reset_versionstr()
     {
-        using namespace std;    // for some systems memset is in namespace std
-
-    static std::string versionstr;
     char buffer[sizeof("\"00.00.00.0000 \"")+sizeof(BOOST_PLATFORM)+sizeof(BOOST_COMPILER)+4];
 
     // for some systems sprintf, time_t etc. is in namespace std
@@ -216,59 +156,116 @@ namespace predefined_macros {
         first_day.tm_mday = 13;          // 13
         first_day.tm_year = 101;         // 2001
 
-    long seconds = long(difftime(compilation_time.get_time(), 
-        mktime(&first_day)));
+        long seconds = long(difftime(compilation_time_.get_time(), mktime(&first_day)));
 
         sprintf(buffer, "\"%d.%d.%d.%ld [%s/%s]\"", BOOST_WAVE_VERSION_MAJOR,
              BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
              seconds/(3600*24), BOOST_PLATFORM, BOOST_COMPILER);
-        versionstr = buffer;
-        return versionstr.c_str();
+            versionstr_ = buffer;
     }
     
-// __WAVE_CONFIG__
-    inline 
-    char const *get_config(bool /*reset*/)
+    // dynamic predefined macros
+        string_type get_date() const { return datestr_; }     // __DATE__ 
+        string_type get_time() const { return timestr_; }     // __TIME__
+        
+    // __SPIRIT_PP__/__WAVE__
+        string_type get_version() const
     {
-        using namespace std;    // for some systems memset is in namespace std
+            char buffer[sizeof("0x0000")+1];
 
-    static std::string configstr;
+            using namespace std;    // for some systems sprintf is in namespace std
+            sprintf(buffer, "0x%02d%1d%1d", BOOST_WAVE_VERSION_MAJOR, 
+                BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR);
+            return buffer;
+        }
+
+    // __WAVE_CONFIG__
+        string_type get_config() const
+        {
     char buffer[sizeof("0x00000000")+1];
 
-    // for some systems sprintf is in namespace std
-        using namespace std;    
+            using namespace std;     // for some systems sprintf is in namespace std
+            sprintf(buffer, "0x%08x", BOOST_WAVE_CONFIG);
+            return buffer;
+        }
+    
+    public:
+        predefined_macros() 
+          : compilation_time_(__DATE__ " " __TIME__)
+        { 
+            reset(); 
+            reset_version();
+            reset_versionstr();
+        }
+        
+        void reset()
+        {
+            reset_datestr();
+            reset_timestr();
+        }
+        
+    // __SPIRIT_PP_VERSION__/__WAVE_VERSION__
+        string_type get_fullversion() const { return version_; }
+        
+    // __SPIRIT_PP_VERSION_STR__/__WAVE_VERSION_STR__
+        string_type get_versionstr() const { return versionstr_; }
 
-        sprintf(buffer, "0x%08x", BOOST_WAVE_CONFIG);
-        configstr = buffer;
-        return configstr.c_str();
+    // C++ mode 
+        static_macros const& static_data_cpp(std::size_t i) const
+        {
+        static static_macros data[] = {
+                { "__STDC__", T_INTLIT, "1" },
+                { "__cplusplus", T_INTLIT, "199711L" },
+                { 0, T_EOF, 0 }
+            }; 
+            BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
+            return data[i];
+        }
+        std::size_t static_data_cpp_size() const
+        {
     }
     
-    struct dynamic_macros {
-        char const *name;
-        boost::wave::token_id token_id;
-        get_dynamic_value generator;
+#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+    // C99 mode
+        static_macros const& static_data_c99(std::size_t i) const
+        {
+        static static_macros data[] = {
+                { "__STDC__", T_INTLIT, "1" },
+                { "__STDC_VERSION__", T_INTLIT, "199901L" },
+                { "__STDC_HOSTED__", T_INTLIT, "0" },
+                { "__WAVE_HAS_VARIADICS__", T_INTLIT, "1" },
+                { 0, T_EOF, 0 }
     };
+            BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
+            return data[i];
+        }
+        std::size_t static_data_c99_size() const
+        {
+        }
+#endif 
     
-    inline dynamic_macros const &
-    dynamic_data(std::size_t i)
+        dynamic_macros const& dynamic_data(std::size_t i) const
     {
     static dynamic_macros data[] = {
-            { "__DATE__", T_STRINGLIT, get_date },
-            { "__TIME__", T_STRINGLIT, get_time },
-            { "__SPIRIT_PP__", T_INTLIT, get_version },
-            { "__SPIRIT_PP_VERSION__", T_INTLIT, get_fullversion },
-            { "__SPIRIT_PP_VERSION_STR__", T_STRINGLIT, get_versionstr },
-            { "__WAVE__", T_INTLIT, get_version },
-            { "__WAVE_VERSION__", T_INTLIT, get_fullversion },
-            { "__WAVE_VERSION_STR__", T_STRINGLIT, get_versionstr },
-            { "__WAVE_CONFIG__", T_INTLIT, get_config },
+                { "__DATE__", T_STRINGLIT, &predefined_macros::get_date },
+                { "__TIME__", T_STRINGLIT, &predefined_macros::get_time },
+                { "__SPIRIT_PP__", T_INTLIT, &predefined_macros::get_version },
+                { "__SPIRIT_PP_VERSION__", T_INTLIT, &predefined_macros::get_fullversion },
+                { "__SPIRIT_PP_VERSION_STR__", T_STRINGLIT, &predefined_macros::get_versionstr },
+                { "__WAVE__", T_INTLIT, &predefined_macros::get_version },
+                { "__WAVE_VERSION__", T_INTLIT, &predefined_macros::get_fullversion },
+                { "__WAVE_VERSION_STR__", T_STRINGLIT, &predefined_macros::get_versionstr },
+                { "__WAVE_CONFIG__", T_INTLIT, &predefined_macros::get_config },
             { 0, T_EOF, 0 }
         };
         BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
         return data[i];
     }
+        std::size_t dynamic_data_size() const
+        {
+        }
     
-}   // namespace predefined_macros
+    };   // predefined_macros
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace util

@@ -8,7 +8,7 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#define BOOST_WAVE_SERIALIZATION        1             // enable serialization
+#define BOOST_WAVE_SERIALIZATION        0             // enable serialization
 #define BOOST_WAVE_BINARY_SERIALIZATION 0             // use binary archives
 #define BOOST_WAVE_XML_SERIALIZATION    1             // use XML archives
 

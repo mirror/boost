@@ -228,9 +228,15 @@ public:
 
 // get the Wave version information 
     static std::string get_version()  
-        { return boost::wave::util::predefined_macros::get_fullversion(false); }
+    { 
+        boost::wave::util::predefined_macros p; 
+        return p.get_fullversion().c_str(); 
+    }
     static std::string get_version_string()  
-        { return boost::wave::util::predefined_macros::get_versionstr(false); }
+    {   
+        boost::wave::util::predefined_macros p;
+        return p.get_versionstr().c_str(); 
+    }
 
 // access current language options
     void set_language(boost::wave::language_support language_,
