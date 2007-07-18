@@ -76,4 +76,4 @@ protected:
 
 } } } // end namespace boost::mpi::detail
 
-#endif // BOOST_MPI_DETAIL_FORWARD_STRUCTURE_OARCHIVE_HPP
+#endif // BOOST_MPI_DETAIL_FORWARD_SKELETON_OARCHIVE_HPP

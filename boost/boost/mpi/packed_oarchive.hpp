@@ -82,4 +82,8 @@ private:
 
 } } // end namespace boost::mpi
 
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_oarchive)
+
+
 #endif // BOOST_MPI_PACKED_OARCHIVE_HPP

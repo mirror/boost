@@ -21,6 +21,7 @@
 #include <boost/mpi/datatype.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/basic_binary_iarchive.hpp>
+#include <boost/archive/shared_ptr_helper.hpp>
 #include <boost/mpi/detail/packed_iprimitive.hpp>
 #include <boost/assert.hpp>
 
@@ -35,8 +36,9 @@ namespace boost { namespace mpi {
  *  implementation to perform serialization.
  */
 class packed_iarchive
-  : public packed_iprimitive,
-    public archive::basic_binary_iarchive<packed_iarchive>
+  : public packed_iprimitive
+  , public archive::basic_binary_iarchive<packed_iarchive>
+  , public archive::detail::shared_ptr_helper
 {
 public:
   /**
@@ -86,6 +88,7 @@ private:
 
 } } // end namespace boost::mpi
 
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(parallel::mpi::packed_iarchive)
+BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::mpi::packed_iarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_iarchive)
 
 #endif // BOOST_MPI_PACKED_IARCHIVE_HPP

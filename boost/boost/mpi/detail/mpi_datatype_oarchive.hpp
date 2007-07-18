@@ -40,4 +40,8 @@ public:
 
 } } } // end namespace boost::mpi::detail
 
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::mpi_datatype_oarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::mpi_datatype_oarchive>)
+
 #endif // BOOST_MPI_DETAIL_MPI_DATATYPE_OARCHIVE_HPP

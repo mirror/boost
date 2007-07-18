@@ -33,7 +33,18 @@ private:
     boost::archive::text_oarchive skeleton_archive_;
 };
 
+namespace detail {
+
+typedef boost::mpi::detail::forward_skeleton_oarchive<boost::mpi::text_skeleton_oarchive,boost::archive::text_oarchive> type3;
+
+}
+
+
 } } // end namespace boost::mpi
+
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::text_skeleton_oarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::type3)
 
 
 #endif // BOOST_MPI_TEXT_SKELETON_OARCHIVE_HPP

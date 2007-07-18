@@ -58,4 +58,8 @@ const content get_content(const T& x)
 
 } } // end namespace boost::mpi
 
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::content_oarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::content_oarchive>)
+
 #endif // BOOST_MPI_DETAIL_CONTENT_OARCHIVE_HPP

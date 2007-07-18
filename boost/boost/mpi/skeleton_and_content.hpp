@@ -356,6 +356,12 @@ private:
   packed_oarchive skeleton_archive_;
 };
 
+namespace detail {
+  typedef boost::mpi::detail::forward_skeleton_oarchive<boost::mpi::packed_skeleton_oarchive,boost::mpi::packed_oarchive> type1;
+  typedef boost::mpi::detail::forward_skeleton_iarchive<boost::mpi::packed_skeleton_iarchive,boost::mpi::packed_iarchive> type2;
+}
+
+
 } } // end namespace boost::mpi
 
 #include <boost/mpi/detail/content_oarchive.hpp>
@@ -372,5 +378,11 @@ private:
 #ifdef BOOST_MPI_COMMUNICATOR_HPP
 #  include <boost/mpi/detail/communicator_sc.hpp>
 #endif
+
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_skeleton_oarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_skeleton_iarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::type1)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::type2)
 
 #endif // BOOST_MPI_SKELETON_AND_CONTENT_HPP
