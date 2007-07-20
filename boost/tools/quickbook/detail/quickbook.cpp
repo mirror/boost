@@ -26,7 +26,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.3"
+#define QUICKBOOK_VERSION "Quickbook Version 1.4"
 
 namespace quickbook
 {
@@ -139,7 +139,7 @@ namespace quickbook
 int
 main(int argc, char* argv[])
 {
-    try 
+    try
     {
         using boost::program_options::options_description;
         using boost::program_options::variables_map;
@@ -165,18 +165,18 @@ main(int argc, char* argv[])
             ("debug", "debug mode (for developers)")
             ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
         ;
-        
+
         positional_options_description p;
         p.add("input-file", -1);
-    
+
         variables_map vm;
         int indent = -1;
         int linewidth = -1;
         bool pretty_print = true;
         store(command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
-        notify(vm);    
-    
-        if (vm.count("help")) 
+        notify(vm);
+
+        if (vm.count("help"))
         {
             std::cout << desc << "\n";
             return 0;
@@ -187,7 +187,7 @@ main(int argc, char* argv[])
             std::cout << QUICKBOOK_VERSION << std::endl;
             return 0;
         }
-    
+
         if (vm.count("ms-errors"))
             quickbook::ms_errors = true;
 
@@ -199,7 +199,7 @@ main(int argc, char* argv[])
 
         if (vm.count("linewidth"))
             linewidth = vm["linewidth"].as<int>();
-        
+
         if (vm.count("debug"))
         {
             static tm timeinfo;
@@ -243,7 +243,7 @@ main(int argc, char* argv[])
             std::cout << "Generating Output File: "
                 << fileout
                 << std::endl;
-    
+
             return quickbook::parse(filein.c_str(), fileout.c_str(), indent, linewidth, pretty_print);
         }
         else
@@ -251,14 +251,14 @@ main(int argc, char* argv[])
             quickbook::detail::outerr("",0) << "Error: No filename given" << std::endl;
         }
     }
-    
-    catch(std::exception& e) 
+
+    catch(std::exception& e)
     {
         quickbook::detail::outerr("",0) << "Error: " << e.what() << "\n";
         return 1;
     }
 
-    catch(...) 
+    catch(...)
     {
         quickbook::detail::outerr("",0) << "Error: Exception of unknown type caught\n";
     }
