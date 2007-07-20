@@ -3,12 +3,14 @@
 <article id="quickbook" name="Quickbook" dirname="quickbook" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <articleinfo>
+    <authorgroup>
     <author>
       <firstname>Joel</firstname> <surname>de Guzman</surname>
     </author>
     <author>
       <firstname>Eric</firstname> <surname>Niebler</surname>
     </author>
+    </authorgroup>
     <copyright>
       <year>2002</year> <year>2004</year> <year>2006</year> <holder>Joel de Guzman,
       Eric Niebler</holder>
@@ -2480,8 +2482,26 @@ for the journey to old age.]]]
           And the result is:
         </para>
         <para>
-          This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
-          
+          <para>
+            This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis>
+            function.
+          </para>
+          <para>
+            This description can have paragraphs...
+          </para>
+          <itemizedlist>
+            <listitem>
+              lists
+            </listitem>
+            <listitem>
+              etc.
+            </listitem>
+          </itemizedlist>
+          <para>
+            And any quickbook block markup.
+          </para>
+          <para>
+            
 <programlisting>
 <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
@@ -2489,9 +2509,16 @@ for the journey to old age.]]]
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-          <calloutlist></calloutlist>
-This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis> function
-          
+          </para>
+          <para>
+            <calloutlist></calloutlist>
+          </para>
+          <para>
+            This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis>
+            function
+          </para>
+          <para>
+            
 <programlisting>
 <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">bar</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
@@ -2499,7 +2526,10 @@ This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis> function
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;bar&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-          <calloutlist></calloutlist>
+          </para>
+          <para>
+            <calloutlist></calloutlist>
+          </para>
         </para>
         <anchor id="quickbook.syntax.block.import.code_snippet_markup"/>
         <bridgehead renderas="sect5">
@@ -2570,14 +2600,14 @@ This is the <emphasis role="bold"><emphasis>bar</emphasis></emphasis> function
           <para>
             
 <programlisting>
-<phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <!--quickbook-escape-prefix--><co id="quickbook0co" linkends="quickbook0" /><!--quickbook-escape-postfix-->
+<phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo_bar</phrase><phrase role="special">()</phrase> <!--quickbook-escape-prefix--><phrase role="callout_bug"><co id="quickbook0co" linkends="quickbook0" /></phrase><!--quickbook-escape-postfix-->
 <phrase role="special">{</phrase>
-    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <!--quickbook-escape-prefix--><co id="quickbook1co" linkends="quickbook1" /><!--quickbook-escape-postfix-->
+    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo-bar&quot;</phrase><phrase role="special">;</phrase> <!--quickbook-escape-prefix--><phrase role="callout_bug"><co id="quickbook1co" linkends="quickbook1" /></phrase><!--quickbook-escape-postfix-->
 <phrase role="special">}</phrase>
 </programlisting>
           </para>
           <para>
-            <calloutlist><callout arearefs="quickbook0co" id="quickbook0"><para> The <emphasis role="bold">Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
+            <calloutlist><callout arearefs="quickbook0co" id="quickbook0"><para> The <emphasis>Mythical</emphasis> FooBar. See <ulink url="http://en.wikipedia.org/wiki/Foobar">Foobar
             for details</ulink> </para></callout><callout arearefs="quickbook1co" id="quickbook1"><para> return 'em, foo-bar man! </para></callout></calloutlist>
           </para>
         </para>
