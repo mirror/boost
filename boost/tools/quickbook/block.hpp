@@ -74,11 +74,11 @@ namespace quickbook
                 eol = blank >> eol_p
                     ;
 
-                close_bracket =
+                phrase_end =
                     ']' |
                     if_p(var(no_eols))
                     [
-                        eol_p >> eol_p                  // Make sure that we don't go
+                        eol >> eol                      // Make sure that we don't go
                     ]                                   // past a single block, except
                     ;                                   // when preformatted.
 
@@ -321,14 +321,14 @@ namespace quickbook
                        "xinclude"
                     >> hard_space
                     >> (*(anychar_p -
-                            close_bracket))             [actions.xinclude]
+                            phrase_end))                [actions.xinclude]
                     ;
 
                 import =
                        "import"
                     >> hard_space
                     >> (*(anychar_p -
-                            close_bracket))             [actions.import]
+                            phrase_end))                [actions.import]
                     ;
 
                 include =
@@ -341,7 +341,7 @@ namespace quickbook
                         >> space
                     )
                     >> (*(anychar_p -
-                            close_bracket))             [actions.include]
+                            phrase_end))                [actions.include]
                     ;
 
                 code =
@@ -400,7 +400,7 @@ namespace quickbook
                    *(   common
                     |   comment
                     |   (anychar_p -
-                            close_bracket)              [actions.plain_char]
+                            phrase_end)                 [actions.plain_char]
                     )
                     ;
             }
@@ -410,7 +410,7 @@ namespace quickbook
             rule<Scanner>   start_, blocks, block_markup, code, code_line,
                             paragraph, space, blank, comment, headings, h, h1, h2,
                             h3, h4, h5, h6, hr, blurb, blockquote, admonition,
-                            phrase, list, close_bracket, ordered_list, def_macro,
+                            phrase, list, phrase_end, ordered_list, def_macro,
                             macro_identifier, table, table_row, variablelist,
                             varlistentry, varlistterm, varlistitem, table_cell,
                             preformatted, list_item, begin_section, end_section,

@@ -6,8 +6,25 @@
   </articleinfo>
   <title>Import</title>
   <para>
-    This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
-    
+    <para>
+      This is the <emphasis role="bold"><emphasis>foo</emphasis></emphasis> function.
+    </para>
+    <para>
+      This description can have paragraphs...
+    </para>
+    <itemizedlist>
+      <listitem>
+        lists
+      </listitem>
+      <listitem>
+        etc.
+      </listitem>
+    </itemizedlist>
+    <para>
+      And any quickbook block markup.
+    </para>
+    <para>
+      
 <programlisting>
 <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
@@ -15,6 +32,9 @@
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
-    <calloutlist></calloutlist>
+    </para>
+    <para>
+      <calloutlist></calloutlist>
+    </para>
   </para>
 </article>

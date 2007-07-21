@@ -712,6 +712,8 @@ Paragraphs start left-flushed and are terminated by two or more newlines. No
 markup is needed for paragraphs. QuickBook automatically detects paragraphs from
 the context. Block markups \[section, endsect, h1, h2, h3, h4, h5, h6, blurb,
 (block-quote) ':', pre, def, table and include \] may also terminate a paragraph.
+ [/ <-- There's a space here. Don't remove. this is intentianal, for testing]
+This is a new paragraph...
 
 [endsect]
 
@@ -1481,7 +1483,7 @@ and thus:
             Row 0, Col 1: a big fat cell with paragraphs
 
             Boost provides free peer-reviewed portable C++ source libraries.
-
+ [/ <-- There's a space here. Don't remove. This is intentional, for testing]
             We emphasize libraries that work well with the C++ Standard Library.
             Boost libraries are intended to be widely useful, and usable across
             a broad spectrum of applications. The Boost license encourages both
@@ -1797,7 +1799,7 @@ Additionally, if you need to build documentation that uses
 
 # Go to the [@http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
   downloads section] and get the disk image (`dmg` file) for Mac OS X.
-  
+
 # Open the disk image and drag the Doxygen application to your
   `Applications` folder to install it.
 

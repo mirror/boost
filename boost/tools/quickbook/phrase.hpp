@@ -80,11 +80,11 @@ namespace quickbook
                 eol = blank >> eol_p
                     ;
 
-                close_bracket =
+                phrase_end =
                     ']' |
                     if_p(var(self.no_eols))
                     [
-                        eol_p >> eol_p                  // Make sure that we don't go
+                        eol >> eol                      // Make sure that we don't go
                     ]                                   // past a single block, except
                     ;                                   // when preformatted.
 
@@ -194,19 +194,18 @@ namespace quickbook
                     ;
 
                 simple_markup(simple_bold,
-                    '*', actions.simple_bold, close_bracket);
+                    '*', actions.simple_bold, phrase_end);
                 simple_markup(simple_italic,
-                    '/', actions.simple_italic, close_bracket);
+                    '/', actions.simple_italic, phrase_end);
                 simple_markup(simple_underline,
-                    '_', actions.simple_underline, close_bracket);
+                    '_', actions.simple_underline, phrase_end);
                 simple_markup(simple_teletype,
-                    '=', actions.simple_teletype, close_bracket);
+                    '=', actions.simple_teletype, phrase_end);
 
                 phrase =
                    *(   common
                     |   comment
-                    |   (anychar_p -
-                            close_bracket)              [actions.plain_char]
+                    |   (anychar_p - phrase_end)        [actions.plain_char]
                     )
                     ;
 
@@ -252,7 +251,7 @@ namespace quickbook
                 image =
                         '$' >> blank
                     >> (*(anychar_p -
-                            close_bracket))             [actions.image]
+                            phrase_end))                [actions.image]
                     ;
 
                 url =
@@ -277,7 +276,7 @@ namespace quickbook
                         '#'
                     >>  blank
                     >>  (   *(anychar_p -
-                                close_bracket)
+                                phrase_end)
                         )                               [actions.anchor]
                     ;
 
@@ -393,7 +392,7 @@ namespace quickbook
             }
 
             rule<Scanner>   space, blank, comment, phrase, phrase_markup, image,
-                            close_bracket, bold, italic, underline, teletype,
+                            phrase_end, bold, italic, underline, teletype,
                             strikethrough, escape, url, common, funcref,
                             classref, memberref, enumref, macroref, headerref, conceptref,
                             anchor, link, hard_space, eol, inline_code, simple_format,
