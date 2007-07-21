@@ -33,10 +33,12 @@
         // version 7.1 is missing a keyword to specify the thiscall cc ...
 #       ifndef BOOST_FT_CC_IMPLICIT_THISCALL
 #       define BOOST_FT_CC_IMPLICIT_THISCALL non_variadic|member|callable_builtin
-#       ifndef BOOST_FT_CONFIGURATION_OK
-#         pragma message("ATTENTION: /Gd /Gr /Gz compiler options will not")
-#         pragma message("ATTENTION: work with this configuration.")
-          // TODO: add documentation reference
+#       ifndef BOOST_FT_CONFIG_OK
+#         pragma message("INFO| /Gd /Gr /Gz will compiler options will cause")
+#         pragma message("INFO| a compile error.")
+#         pragma message("INFO| Reconfigure Boost.FunctionTypes in this case.")
+#         pragma message("INFO| This message can be suppressed by defining")
+#         pragma message("INFO| BOOST_FT_CONFIG_OK.")
 #       endif
 #       endif
 #     else 
