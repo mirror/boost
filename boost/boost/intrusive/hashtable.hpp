@@ -22,6 +22,9 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/functional/hash.hpp>
+#ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+#include <boost/detail/no_exceptions_support.hpp>
+#endif
 //General intrusive utilities
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
@@ -179,6 +182,19 @@ class hashtable
    public:
    typedef insert_commit_data_impl insert_commit_data;
 
+   //! <b>Requires</b>: buckets must not be being used by any other resource.
+   //!
+   //! <b>Effects</b>: Constructs an empty unordered_set, storing a reference
+   //!   to the bucket array and copies of the hasher and equal functors.
+   //!   
+   //! <b>Complexity</b>: Constant. 
+   //! 
+   //! <b>Throws</b>: If value_traits::node_traits::node
+   //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
+   //!   or the copy constructor or invocation of Hash or Equal throws. 
+   //!
+   //! <b>Notes</b>: buckets array must be disposed only after
+   //!   *this is disposed. 
    hashtable( bucket_ptr buckets
              , size_type buckets_len
              , const Hash & hasher = Hash()
@@ -193,9 +209,22 @@ class hashtable
       size_traits::set_size(size_type(0));
    }
 
+   //! <b>Effects</b>: Detaches all elements from this. The objects in the unordered_set 
+   //!   are not deleted (i.e. no destructors are called).
+   //! 
+   //! <b>Complexity</b>: Linear to the number of elements in the unordered_set, if 
+   //!   it's a safe-mode or auto-unlink value. Otherwise constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    ~hashtable() 
    {  this->clear(); }
 
+   //! <b>Effects</b>: Returns an iterator pointing to the beginning of the unordered_set.
+   //! 
+   //! <b>Complexity</b>: Amortized constant time.
+   //!   Worst case (empty unordered_set): O(this->bucket_count())
+   //! 
+   //! <b>Throws</b>: Nothing.
    iterator begin()
    {
       size_type bucket_num;
@@ -203,9 +232,23 @@ class hashtable
       return iterator(local_it, const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
+   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning
+   //!   of the unordered_set.
+   //!
+   //! <b>Complexity</b>: Amortized constant time.
+   //!   Worst case (empty unordered_set): O(this->bucket_count())
+   //! 
+   //! <b>Throws</b>: Nothing.
    const_iterator begin() const
    {  return cbegin();  }
 
+   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning
+   //!   of the unordered_set.
+   //!
+   //! <b>Complexity</b>: Amortized constant time.
+   //!   Worst case (empty unordered_set): O(this->bucket_count())
+   //! 
+   //! <b>Throws</b>: Nothing.
    const_iterator cbegin() const
    {
       size_type bucket_num;
@@ -213,21 +256,53 @@ class hashtable
       return const_iterator( local_it, const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
+   //! <b>Effects</b>: Returns an iterator pointing to the end of the unordered_set.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    iterator end()
    {  return iterator(invalid_local_it(this->priv_bucket_info()), 0);   }
 
+   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the unordered_set.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    const_iterator end() const
    {  return cend(); }
 
+   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the unordered_set.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    const_iterator cend() const
    {  return const_iterator(invalid_local_it(this->priv_bucket_info()), 0);  }
 
+   //! <b>Effects</b>: Returns the hasher object used by the unordered_set.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: If hasher copy-constructor throws.
    hasher hash_function() const
    {  return this->priv_hasher();  }
 
+   //! <b>Effects</b>: Returns the key_equal object used by the unordered_set.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: If key_equal copy-constructor throws.
    key_equal key_eq() const
    {  return this->priv_equal();   }
 
+   //! <b>Effects</b>: Returns true is the container is empty.
+   //! 
+   //! <b>Complexity</b>: if ConstantTimeSize is false, average constant time
+   //!   (worst case, with empty() == true): O(this->bucket_count()).
+   //!   Otherwise constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    bool empty() const
    {
       if(ConstantTimeSize){
@@ -245,6 +320,12 @@ class hashtable
       }
    }
 
+   //! <b>Effects</b>: Returns the number of elements stored in the unordered_set.
+   //! 
+   //! <b>Complexity</b>: Linear to elements contained in *this if
+   //!   ConstantTimeSize is false. Constant-time otherwise.
+   //! 
+   //! <b>Throws</b>: Nothing.
    size_type size() const
    {
       if(ConstantTimeSize)
@@ -260,6 +341,16 @@ class hashtable
       }
    }
 
+   //! <b>Requires</b>: the hasher and the equality function unqualified swap
+   //!   call should not throw.
+   //! 
+   //! <b>Effects</b>: Swaps the contents of two unordered_sets.
+   //!   Swaps also the contained bucket array and equality and hasher functors.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //!
+   //! <b>Throws</b>: If the swap() call for the comparison or hash functors
+   //!   found using ADL throw. Basic guarantee.
    void swap(hashtable& other)
    {
       using std::swap;
@@ -276,6 +367,19 @@ class hashtable
       }
    }
 
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!
+   //! <b>Effects</b>: Erases all the elements from *this
+   //!   calling Disposer::operator()(pointer), clones all the 
+   //!   elements from src calling Cloner::operator()(const_reference )
+   //!   and inserts them on *this.
+   //!
+   //!   If cloner throws, all cloned elements are unlinked and disposed
+   //!   calling Disposer::operator()(pointer).
+   //!   
+   //! <b>Complexity</b>: Linear to erased plus inserted elements.
+   //! 
+   //! <b>Throws</b>: If cloner throws. Basic guarantee.
    template <class Cloner, class Disposer>
    void clone_from(const hashtable &src, Cloner cloner, Disposer disposer)
    {
@@ -290,7 +394,9 @@ class hashtable
             const bucket_ptr src_buckets = src.priv_buckets();
             const bucket_ptr dst_buckets = this->priv_buckets();
             size_type constructed;
-            try{
+            #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+            BOOST_TRY{
+            #endif
                for( constructed = 0
                   ; constructed < dst_bucket_count
                   ; ++constructed){
@@ -310,28 +416,36 @@ class hashtable
                      }
                   }
                }
+            #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
             }
-            catch(...){
+            BOOST_CATCH(...){
                while(constructed--){
                   dst_buckets[constructed].clear_and_dispose(disposer);
                }
-               throw;
+               BOOST_RETHROW;
             }
+            BOOST_CATCH_END
+            #endif
             size_traits::set_size(src.get_size());
          }
          else{
             //Unlike previous cloning algorithm, this can throw
             //if cloner, the hasher or comparison functor throw
             const_iterator b(src.begin()), e(src.end());
-            try{
+            #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+            BOOST_TRY{
+            #endif
                for(; b != e; ++b){
                   this->insert_equal(*cloner(*b));
                }
+            #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
             }
-            catch(...){
+            BOOST_CATCH(...){
                this->clear_and_dispose(disposer);
-               throw;
+               BOOST_RETHROW;
             }
+            BOOST_CATCH_END
+            #endif
          }
       }
    }
@@ -355,15 +469,43 @@ class hashtable
          this->insert_equal(*b);
    }
 
+   //! <b>Requires</b>: value must be an lvalue
+   //! 
+   //! <b>Effects</b>: Tries to inserts value into the unordered_set.
+   //!
+   //! <b>Returns</b>: If the value
+   //!   is not already present inserts it and returns a pair containing the
+   //!   iterator to the new value and true. If there is an equivalent value
+   //!   returns a pair containing an iterator to the already present value
+   //!   and false.
+   //! 
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws. Strong guarantee.
+   //! 
+   //! <b>Note</b>: Does not affect the validity of iterators and references.
+   //!   No copy-constructors are called.
    std::pair<iterator, bool> insert_unique(reference value)
    {
       insert_commit_data commit_data;
-      std::pair<iterator, bool> ret = insert_unique_check(value, commit_data);
+      std::pair<iterator, bool> ret = insert_unique_check(value, this->priv_hasher(), this->priv_equal(), commit_data);
       if(!ret.second)
          return ret;
       return std::pair<iterator, bool> (insert_unique_commit(value, commit_data), true);
    }
 
+   //! <b>Requires</b>: Dereferencing iterator must yield an lvalue 
+   //!   of type value_type.
+   //! 
+   //! <b>Effects</b>: Equivalent to this->insert(t) for each element in [b, e).
+   //! 
+   //! <b>Complexity</b>: Average case O(N), where N is std::distance(b, e).
+   //!   Worst case O(N*this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws. Basic guarantee.
+   //! 
+   //! <b>Note</b>: Does not affect the validity of iterators and references.
+   //!   No copy-constructors are called.
    template<class Iterator>
    void insert_unique(Iterator b, Iterator e)
    {
@@ -371,10 +513,41 @@ class hashtable
          this->insert_unique(*b);
    }
 
-   std::pair<iterator, bool> insert_unique_check
-      (const_reference value, insert_commit_data &commit_data)
-   {  return insert_unique_check(value, this->priv_hasher(), this->priv_equal(), commit_data); }
-
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //!   "key_value_equal" must be a equality function that induces 
+   //!   the same equality as key_equal. The difference is that
+   //!   "key_value_equal" compares an arbitrary key with the contained values.
+   //! 
+   //! <b>Effects</b>: Checks if a value can be inserted in the unordered_set, using
+   //!   a user provided key instead of the value itself.
+   //!
+   //! <b>Returns</b>: If there is an equivalent value
+   //!   returns a pair containing an iterator to the already present value
+   //!   and false. If the value can be inserted returns true in the returned
+   //!   pair boolean and fills "commit_data" that is meant to be used with
+   //!   the "insert_commit" function.
+   //! 
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //!
+   //! <b>Throws</b>: If hasher or key_value_equal throw. Strong guarantee.
+   //! 
+   //! <b>Notes</b>: This function is used to improve performance when constructing
+   //!   a value_type is expensive: if there is an equivalent value
+   //!   the constructed object must be discarded. Many times, the part of the
+   //!   node that is used to impose the hash or the equality is much cheaper to
+   //!   construct than the value_type and this function offers the possibility to
+   //!   use that the part to check if the insertion will be successful.
+   //!
+   //!   If the check is successful, the user can construct the value_type and use
+   //!   "insert_commit" to insert the object in constant-time.
+   //!
+   //!   "commit_data" remains valid for a subsequent "insert_commit" only if no more
+   //!   objects are inserted or erased from the unordered_set.
+   //!
+   //!   After a successful rehashing insert_commit_data remains valid.
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    std::pair<iterator, bool> insert_unique_check
       ( const KeyType &key
@@ -394,6 +567,25 @@ class hashtable
          ,success);
    }
 
+   //! <b>Requires</b>: value must be an lvalue of type value_type. commit_data
+   //!   must have been obtained from a previous call to "insert_check".
+   //!   No objects should have been inserted or erased from the unordered_set between
+   //!   the "insert_check" that filled "commit_data" and the call to "insert_commit".
+   //! 
+   //! <b>Effects</b>: Inserts the value in the unordered_set using the information obtained
+   //!   from the "commit_data" that a previous "insert_check" filled.
+   //!
+   //! <b>Returns</b>: An iterator to the newly inserted object.
+   //! 
+   //! <b>Complexity</b>: Constant time.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Notes</b>: This function has only sense if a "insert_check" has been
+   //!   previously executed to fill "commit_data". No value should be inserted or
+   //!   erased between the "insert_check" and "insert_commit" calls.
+   //!
+   //!   After a successful rehashing insert_commit_data remains valid.
    iterator insert_unique_commit(reference value, const insert_commit_data &commit_data)
    {
       size_type bucket_num = commit_data.hash % this->priv_buckets_len();
@@ -403,19 +595,78 @@ class hashtable
                      , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
+   //! <b>Effects</b>: Erases the element pointed to by i. 
+   //! 
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references)
+   //!    to the erased element. No destructors are called.
    void erase(const_iterator i)
    {  erase_and_dispose(i, detail::null_disposer());  }
 
+   //! <b>Effects</b>: Erases the range pointed to by b end e. 
+   //! 
+   //! <b>Complexity</b>: Average case O(std::distance(b, e)),
+   //!   worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references)
+   //!    to the erased elements. No destructors are called.
    void erase(const_iterator b, const_iterator e)
    {  erase_and_dispose(b, e, detail::null_disposer());  }
 
+   //! <b>Effects</b>: Erases all the elements with the given value.
+   //! 
+   //! <b>Returns</b>: The number of erased elements.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(value)).
+   //!   Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws.  Basic guarantee.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references)
+   //!    to the erased elements. No destructors are called.
    size_type erase(const_reference value)
    {  return this->erase(value, this->priv_hasher(), this->priv_equal());  }
 
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //!   "key_value_equal" must be a equality function that induces 
+   //!   the same equality as key_equal. The difference is that
+   //!   "key_value_equal" compares an arbitrary key with the contained values.
+   //!
+   //! <b>Effects</b>: Erases all the elements that have the same hash and
+   //!   compare equal with the given key.
+   //! 
+   //! <b>Returns</b>: The number of erased elements.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(value)).
+   //!   Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If hasher or equal throw. Basic guarantee.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references)
+   //!    to the erased elements. No destructors are called.
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    size_type erase(const KeyType& key, KeyHasher hasher, KeyValueEqual equal)
    {  return erase_and_dispose(key, hasher, equal, detail::null_disposer()); }
 
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!
+   //! <b>Effects</b>: Erases the element pointed to by i. 
+   //!   Disposer::operator()(pointer) is called for the removed element.
+   //! 
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators 
+   //!    to the erased elements.
    template<class Disposer>
    void erase_and_dispose(const_iterator i, Disposer disposer)
    {
@@ -426,6 +677,18 @@ class hashtable
       size_traits::decrement();
    }
 
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!
+   //! <b>Effects</b>: Erases the range pointed to by b end e.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
+   //! 
+   //! <b>Complexity</b>: Average case O(std::distance(b, e)),
+   //!   worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators
+   //!    to the erased elements.
    template<class Disposer>
    void erase_and_dispose(const_iterator b, const_iterator e, Disposer disposer)
    {
@@ -489,10 +752,39 @@ class hashtable
       }
    }
 
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!
+   //! <b>Effects</b>: Erases all the elements with the given value.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
+   //! 
+   //! <b>Returns</b>: The number of erased elements.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(value)).
+   //!   Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws. Basic guarantee.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references)
+   //!    to the erased elements. No destructors are called.
    template<class Disposer>
    size_type erase_and_dispose(const_reference value, Disposer disposer)
    {  return erase_and_dispose(value, priv_hasher(), priv_equal(), disposer);   }
 
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //!
+   //! <b>Effects</b>: Erases all the elements with the given key.
+   //!   according to the comparison functor "equal".
+   //!   Disposer::operator()(pointer) is called for the removed elements.
+   //!
+   //! <b>Returns</b>: The number of erased elements.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(value)).
+   //!   Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If hasher or key_value_equal throw. Basic guarantee.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators
+   //!    to the erased elements.
    template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
    size_type erase_and_dispose(const KeyType& key, KeyHasher hasher
                   ,KeyValueEqual equal, Disposer disposer)
@@ -529,6 +821,15 @@ class hashtable
       return count;
    }
 
+   //! <b>Effects</b>: Erases all of the elements. 
+   //! 
+   //! <b>Complexity</b>: Linear to the number of elements on the container.
+   //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references)
+   //!    to the erased elements. No destructors are called.
    void clear()
    {
       if(safemode_or_autounlink){
@@ -537,6 +838,17 @@ class hashtable
       size_traits::set_size(size_type(0));
    }
 
+   //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
+   //! 
+   //! <b>Effects</b>: Erases all of the elements. 
+   //! 
+   //! <b>Complexity</b>: Linear to the number of elements on the container.
+   //!   Disposer::operator()(pointer) is called for the removed elements.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references)
+   //!    to the erased elements. No destructors are called.
    template<class Disposer>
    void clear_and_dispose(Disposer disposer)
    {
@@ -550,9 +862,27 @@ class hashtable
       }
    }
 
+   //! <b>Effects</b>: Returns the number of contained elements with the given value
+   //! 
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws.
    size_type count(const_reference value) const
    {  return this->count(value, this->priv_hasher(), this->priv_equal());  }
 
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //!   "key_value_equal" must be a equality function that induces 
+   //!   the same equality as key_equal. The difference is that
+   //!   "key_value_equal" compares an arbitrary key with the contained values.
+   //!
+   //! <b>Effects</b>: Returns the number of contained elements with the given key
+   //!
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If hasher or equal throw.
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    size_type count(const KeyType &key, const KeyHasher &hasher, const KeyValueEqual &equal) const
    {
@@ -561,9 +891,34 @@ class hashtable
       return count;
    }
 
+   //! <b>Effects</b>: Finds an iterator to the first element is equal to
+   //!   "value" or end() if that element does not exist.
+   //!
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws.
    iterator find(const_reference value)
    {  return find(value, this->priv_hasher(), this->priv_equal());   }
 
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //!   "key_value_equal" must be a equality function that induces 
+   //!   the same equality as key_equal. The difference is that
+   //!   "key_value_equal" compares an arbitrary key with the contained values.
+   //!
+   //! <b>Effects</b>: Finds an iterator to the first element whose key is 
+   //!   "key" according to the given hasher and equality functor or end() if
+   //!   that element does not exist.
+   //!
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If hasher or equal throw.
+   //!
+   //! <b>Note</b>: This function is used when constructing a value_type
+   //!   is expensive and the value_type can be compared with a cheaper
+   //!   key type. Usually this key is part of the value_type.
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    iterator find(const KeyType &key, KeyHasher hasher, KeyValueEqual equal)
    {
@@ -573,9 +928,34 @@ class hashtable
                       , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
+   //! <b>Effects</b>: Finds a const_iterator to the first element whose key is 
+   //!   "key" or end() if that element does not exist.
+   //! 
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws.
    const_iterator find(const_reference value) const
    {  return find(value, this->priv_hasher(), this->priv_equal());   }
 
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //!   "key_value_equal" must be a equality function that induces 
+   //!   the same equality as key_equal. The difference is that
+   //!   "key_value_equal" compares an arbitrary key with the contained values.
+   //!
+   //! <b>Effects</b>: Finds an iterator to the first element whose key is 
+   //!   "key" according to the given hasher and equality functor or end() if
+   //!   that element does not exist.
+   //! 
+   //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If hasher or equal throw.
+   //!
+   //! <b>Note</b>: This function is used when constructing a value_type
+   //!   is expensive and the value_type can be compared with a cheaper
+   //!   key type. Usually this key is part of the value_type.
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    const_iterator find
       (const KeyType &key, KeyHasher hasher, KeyValueEqual equal) const
@@ -586,9 +966,35 @@ class hashtable
                            , const_bucket_info_ptr(&this->priv_bucket_info()));
    }
 
+   //! <b>Effects</b>: Returns a range containing all elements with values equivalent
+   //!   to value. Returns std::make_pair(this->end(), this->end()) if no such 
+   //!   elements exist.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(value)). Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws.
    std::pair<iterator,iterator> equal_range(const_reference value)
    {  return this->equal_range(value, this->priv_hasher(), this->priv_equal());  }
 
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //!   "key_value_equal" must be a equality function that induces 
+   //!   the same equality as key_equal. The difference is that
+   //!   "key_value_equal" compares an arbitrary key with the contained values.
+   //!
+   //! <b>Effects</b>: Returns a range containing all elements with equivalent
+   //!   keys. Returns std::make_pair(this->end(), this->end()) if no such 
+   //!   elements exist.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(key, hasher, equal)). Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If hasher or the equal throw.
+   //!
+   //! <b>Note</b>: This function is used when constructing a value_type
+   //!   is expensive and the value_type can be compared with a cheaper
+   //!   key type. Usually this key is part of the value_type.
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    std::pair<iterator,iterator> equal_range
       (const KeyType &key, KeyHasher hasher, KeyValueEqual equal)
@@ -602,10 +1008,36 @@ class hashtable
          ,  iterator( ret.second, info_ptr) );
    }
 
+   //! <b>Effects</b>: Returns a range containing all elements with values equivalent
+   //!   to value. Returns std::make_pair(this->end(), this->end()) if no such 
+   //!   elements exist.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(value)). Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws.
    std::pair<const_iterator, const_iterator>
       equal_range(const_reference value) const
    {  return this->equal_range(value, this->priv_hasher(), this->priv_equal());  }
 
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //!   "key_value_equal" must be a equality function that induces 
+   //!   the same equality as key_equal. The difference is that
+   //!   "key_value_equal" compares an arbitrary key with the contained values.
+   //!
+   //! <b>Effects</b>: Returns a range containing all elements with equivalent
+   //!   keys. Returns std::make_pair(this->end(), this->end()) if no such 
+   //!   elements exist.
+   //! 
+   //! <b>Complexity</b>: Average case O(this->count(key, hasher, equal)). Worst case O(this->size()).
+   //! 
+   //! <b>Throws</b>: If the hasher or equal throw.
+   //!
+   //! <b>Note</b>: This function is used when constructing a value_type
+   //!   is expensive and the value_type can be compared with a cheaper
+   //!   key type. Usually this key is part of the value_type.
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    std::pair<const_iterator,const_iterator> equal_range
       (const KeyType &key, KeyHasher hasher, KeyValueEqual equal) const
@@ -619,46 +1051,217 @@ class hashtable
          , const_iterator( ret.second, info_ptr) );
    }
 
+   //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid iterator belonging to the unordered_set
+   //!   that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: If the internal hash function throws.
+   iterator iterator_to(reference value)
+   {
+      return iterator( bucket_type::iterator_to(value)
+                     , const_bucket_info_ptr(&this->priv_bucket_info()));
+   }
+
+   //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid const_iterator belonging to the
+   //!   unordered_set that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: If the internal hash function throws.
+   const_iterator iterator_to(const_reference value) const
+   {
+      return const_iterator( bucket_type::iterator_to(const_cast<reference>(value))
+                           , const_bucket_info_ptr(&this->priv_bucket_info()));
+   }
+
+   //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid local_iterator belonging to the unordered_set
+   //!   that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static local_iterator local_iterator_to(reference value)
+   {  return bucket_type::iterator_to(value);  }
+
+   //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid const_local_iterator belonging to
+   //!   the unordered_set that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static const_local_iterator local_iterator_to(const_reference value)
+   {  return bucket_type::iterator_to(value);  }
+
+   //! <b>Effects</b>: Returns the number of buckets passed in the constructor
+   //!   or the last rehash function.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    size_type bucket_count() const
    {  return this->priv_buckets_len();   }
 
+   //! <b>Requires</b>: n is in the range [0, this->bucket_count()).
+   //!
+   //! <b>Effects</b>: Returns the number of elements in the nth bucket.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    size_type bucket_size(size_type n) const
    {  return this->priv_buckets()[n].size();   }
 
+   //! <b>Effects</b>: Returns the index of the bucket in which elements
+   //!   with keys equivalent to k would be found, if any such element existed.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: If the hash functor throws.
+   //!
+   //! <b>Note</b>: the return value is in the range [0, this->bucket_count()).
    size_type bucket(const key_type& k)  const
    {  return this->bucket(k, this->priv_hasher());   }
 
+   //! <b>Requires</b>: "hasher" must be a hash function that induces 
+   //!   the same hash values as the stored hasher. The difference is that
+   //!   "hasher" hashes the given key instead of the value_type.
+   //!
+   //! <b>Effects</b>: Returns the index of the bucket in which elements
+   //!   with keys equivalent to k would be found, if any such element existed.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: If hasher throws.
+   //!
+   //! <b>Note</b>: the return value is in the range [0, this->bucket_count()).
    template<class KeyType, class KeyHasher>
    size_type bucket(const KeyType& k, const KeyHasher &hasher)  const
    {  return hasher(k) % this->priv_buckets_len();   }
 
+   //! <b>Effects</b>: Returns the bucket array pointer passed in the constructor
+   //!   or the last rehash function.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
    bucket_ptr bucket_pointer() const
    {  return this->priv_buckets();   }
 
+   //! <b>Requires</b>: n is in the range [0, this->bucket_count()).
+   //!
+   //! <b>Effects</b>: Returns a local_iterator pointing to the beginning
+   //!   of the sequence stored in the bucket n.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>:  [this->begin(n), this->end(n)) is a valid range
+   //!   containing all of the elements in the nth bucket. 
    local_iterator begin(size_type n)
    {  return this->priv_buckets()[n].begin();  }
 
+   //! <b>Requires</b>: n is in the range [0, this->bucket_count()).
+   //!
+   //! <b>Effects</b>: Returns a const_local_iterator pointing to the beginning
+   //!   of the sequence stored in the bucket n.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>:  [this->begin(n), this->end(n)) is a valid range
+   //!   containing all of the elements in the nth bucket. 
    const_local_iterator begin(size_type n) const
    {  return this->cbegin(n);  }
 
+   //! <b>Requires</b>: n is in the range [0, this->bucket_count()).
+   //!
+   //! <b>Effects</b>: Returns a const_local_iterator pointing to the beginning
+   //!   of the sequence stored in the bucket n.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>:  [this->begin(n), this->end(n)) is a valid range
+   //!   containing all of the elements in the nth bucket. 
    const_local_iterator cbegin(size_type n) const
    {  return const_cast<const bucket_type&>(this->priv_buckets()[n]).begin();  }
 
+   //! <b>Requires</b>: n is in the range [0, this->bucket_count()).
+   //!
+   //! <b>Effects</b>: Returns a local_iterator pointing to the end
+   //!   of the sequence stored in the bucket n.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>:  [this->begin(n), this->end(n)) is a valid range
+   //!   containing all of the elements in the nth bucket. 
    local_iterator end(size_type n)
    {  return this->priv_buckets()[n].end();  }
 
+   //! <b>Requires</b>: n is in the range [0, this->bucket_count()).
+   //!
+   //! <b>Effects</b>: Returns a const_local_iterator pointing to the end
+   //!   of the sequence stored in the bucket n.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>:  [this->begin(n), this->end(n)) is a valid range
+   //!   containing all of the elements in the nth bucket.
    const_local_iterator end(size_type n) const
    {  return this->cend(n);  }
 
+   //! <b>Requires</b>: n is in the range [0, this->bucket_count()).
+   //!
+   //! <b>Effects</b>: Returns a const_local_iterator pointing to the end
+   //!   of the sequence stored in the bucket n.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>:  [this->begin(n), this->end(n)) is a valid range
+   //!   containing all of the elements in the nth bucket. 
    const_local_iterator cend(size_type n) const
    {  return const_cast<const bucket_type&>(this->priv_buckets()[n]).end();  }
 
+   //! <b>Requires</b>: new_buckets must be a pointer to a new bucket array
+   //!   or the same as the old bucket array. new_size is the length of the
+   //!   the array pointed by new_buckets. If new_buckets == this->bucket_pointer()
+   //!   n can be bigger or smaller than this->bucket_count().
+   //!
+   //! <b>Effects</b>: Updates the internal reference with the new bucket erases
+   //!   the values from the old bucket and inserts then in the new one. 
+   //! 
+   //! <b>Complexity</b>: Average case linear in this->size(), worst case quadratic.
+   //! 
+   //! <b>Throws</b>: If the hasher functor throws. Basic guarantee.
    void rehash(bucket_ptr new_buckets, size_type new_buckets_len)
    {
       bucket_ptr old_buckets     = this->priv_buckets();
       size_type  old_buckets_len = this->priv_buckets_len();
-
-      try{
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+      BOOST_TRY{
+      #endif
          size_type n = 0;
          const bool same_buffer = old_buckets == new_buckets;
          //If the new bucket length is a common factor
@@ -701,36 +1304,29 @@ class hashtable
 
          this->priv_buckets()      = new_buckets;
          this->priv_buckets_len()  = new_buckets_len;
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
       }
-      catch(...){
+      BOOST_CATCH(...){
          for(size_type n = 0; n < new_buckets_len; ++n){
             new_buckets[n].clear();
             old_buckets[n].clear();
          }
          size_traits::set_size(size_type(0));
-         throw;
+         BOOST_RETHROW;
       }
+      BOOST_CATCH_END
+      #endif
    }
 
-   iterator iterator_to(reference value)
-   {
-      return iterator( bucket_type::iterator_to(value)
-                     , const_bucket_info_ptr(&this->priv_bucket_info()));
-   }
-
-   const_iterator iterator_to(const_reference value) const
-   {
-      return const_iterator( bucket_type::iterator_to(const_cast<reference>(value))
-                           , const_bucket_info_ptr(&this->priv_bucket_info()));
-   }
-
-   static local_iterator local_iterator_to(reference value)
-   {  return bucket_type::iterator_to(value);  }
-
-   static const_local_iterator local_iterator_to(const_reference value)
-   {  return bucket_type::iterator_to(value);  }
-
-   // no throw
+   //! <b>Effects</b>: Returns the nearest new bucket count optimized for
+   //!   the container that is bigger than n. This suggestion can be used
+   //!   to create bucket arrays with a size that will usually improve
+   //!   container's performance. If such value does not exist, the 
+   //!   higher possible value is returned.
+   //! 
+   //! <b>Complexity</b>: Amortized constant time.
+   //! 
+   //! <b>Throws</b>: Nothing.
    static size_type suggested_upper_bucket_count(size_type n)
    {
       const std::size_t *primes     = &detail::prime_list_holder<0>::prime_list[0];
@@ -742,7 +1338,15 @@ class hashtable
       return size_type(*bound);
    }
 
-   // no throw
+   //! <b>Effects</b>: Returns the nearest new bucket count optimized for
+   //!   the container that is smaller than n. This suggestion can be used
+   //!   to create bucket arrays with a size that will usually improve
+   //!   container's performance. If such value does not exist, the 
+   //!   lower possible value is returned.
+   //! 
+   //! <b>Complexity</b>: Amortized constant time.
+   //! 
+   //! <b>Throws</b>: Nothing.
    static size_type suggested_lower_bucket_count(size_type n)
    {
       const std::size_t *primes     = &detail::prime_list_holder<0>::prime_list[0];
@@ -783,11 +1387,11 @@ class hashtable
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    local_iterator priv_find
       ( const KeyType &key,  KeyHasher hasher
-      , KeyValueEqual equal, size_type &bucket_number, size_type &hash) const
+      , KeyValueEqual equal, size_type &bucket_number, size_type &h) const
    {
       size_type b_len(this->priv_buckets_len());
-      hash = hasher(key);
-      bucket_number = hash % b_len;
+      h = hasher(key);
+      bucket_number = h % b_len;
 
       if(ConstantTimeSize && this->empty()){
          return invalid_local_it(this->priv_bucket_info());
@@ -815,11 +1419,11 @@ class hashtable
       , size_type &bucket_number_second
       , size_type &count) const
    {
-      size_type hash;
+      size_type h;
       count = 0;
       //Let's see if the element is present
       std::pair<local_iterator, local_iterator> to_return
-         ( priv_find(key, hasher, equal, bucket_number_first, hash)
+         ( priv_find(key, hasher, equal, bucket_number_first, h)
          , invalid_local_it(this->priv_bucket_info()));
       if(to_return.first == to_return.second){
          bucket_number_second = bucket_number_first;

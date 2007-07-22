@@ -53,7 +53,7 @@ class list_base_hook
 
    /// @cond
    private:
-   typedef circular_list_algorithms<node_traits>               node_algorithms;
+   typedef circular_list_algorithms<node_traits>      node_algorithms;
 
    public:
    typedef typename node_traits::node                 node;
@@ -174,7 +174,7 @@ class list_base_hook
    //! copy-constructible or assignable.
    template<class T>
    struct value_traits
-      : detail::derivation_value_traits<T, this_type, Tag>
+      : detail::derivation_hook_value_traits<T, this_type, Tag>
    {};
 
    //! <b>Effects</b>: Converts a pointer to a node into
@@ -351,7 +351,7 @@ class list_member_hook
    //! T doesn't need to be copy-constructible or assignable.
    template<class T, this_type T::* M>
    struct value_traits
-      : detail::member_value_traits<T, this_type, M>
+      : detail::member_hook_value_traits<T, this_type, M>
    {};
 
    //! <b>Effects</b>: Converts a pointer to a node into

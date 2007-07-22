@@ -116,7 +116,7 @@ struct size_holder<false, SizeType>
 };
 
 template<class T, class DerivationHookType, typename Tag>
-struct derivation_value_traits
+struct derivation_hook_value_traits
 {
    public:
    typedef typename DerivationHookType::node_traits                  node_traits;
@@ -148,7 +148,7 @@ struct derivation_value_traits
 
 
 template<class T, class MemberHookType, MemberHookType T::* P>
-struct member_value_traits
+struct member_hook_value_traits
 {
    public:
    typedef typename MemberHookType::node_traits                      node_traits;
@@ -174,21 +174,22 @@ struct member_value_traits
       return result->to_node_ptr();
    }
 
-   //Now let's be nasty. A pointer to member is usually implemented
-   //as an offset from the start of the class.
-   //get the offset in bytes and go
-   //backwards from n to the value subtracting
-   //the needed bytes.
    static pointer to_value_ptr(node_ptr n)
    {
-      return pointer(parent_from_member<value_type, MemberHookType>
-         ((MemberHookType*)detail::get_pointer(n), P));
+      return pointer
+      (
+         parent_from_member<value_type, MemberHookType>
+            (detail::get_pointer(MemberHookType::to_hook_ptr(n)), P)
+      ); 
    }
 
    static const_pointer to_value_ptr(const_node_ptr n)
    {
-      const_pointer(parent_from_member<value_type, MemberHookType>
-         ((const MemberHookType*)detail::get_pointer(n), P));
+      return const_pointer
+      (
+         parent_from_member<value_type, MemberHookType>
+            (detail::get_pointer(MemberHookType::to_hook_ptr(n)), P)
+      ); 
    }
 };
 
@@ -252,7 +253,7 @@ struct dispatcher
 
 template<class Container>
 void destructor_impl(Container &cont, dispatcher<safe_link>)
-{  (void)cont; BOOST_INTRUSIVE_SAFE_MODE_HOOK_DESTRUCTOR_ASSERT(!cont.is_linked());  }
+{  (void)cont; BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT(!cont.is_linked());  }
 
 template<class Container>
 void destructor_impl(Container &cont, dispatcher<auto_unlink>)

@@ -16,6 +16,9 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/static_assert.hpp>
+#ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+#include <boost/detail/no_exceptions_support.hpp>
+#endif
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/slist_hook.hpp>
@@ -56,11 +59,12 @@ template < class ValueTraits
          >
 class slist
    :  private detail::size_holder<ConstantTimeSize, SizeType>
-   ,  private ValueTraits::node_traits::node
 {
    /// @cond
    private:
-   typedef slist<ValueTraits, ConstantTimeSize, SizeType>  this_type; 
+   typename ValueTraits::node_traits::node root_;
+
+   typedef slist<ValueTraits, ConstantTimeSize, SizeType>   this_type; 
    typedef typename ValueTraits::node_traits                node_traits;
    typedef detail::size_holder<ConstantTimeSize, SizeType>  size_traits;
 
@@ -102,10 +106,10 @@ class slist
    BOOST_STATIC_ASSERT(!(ConstantTimeSize && ((int)ValueTraits::linking_policy == (int)auto_unlink)));
 
    node_ptr get_root_node()
-   {  return node_ptr(&static_cast<node&>(*this));  }
+   {  return node_ptr(&root_);  }
 
    const_node_ptr get_root_node() const
-   {  return const_node_ptr(&static_cast<const node&>(*this));  }
+   {  return const_node_ptr(&root_);  }
 
    static node_ptr uncast(const_node_ptr ptr)
    {
@@ -213,7 +217,7 @@ class slist
    {
       node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       node_algorithms::link_after(this->get_root_node(), to_insert); 
       size_traits::increment();
    }
@@ -353,7 +357,10 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    static slist &container_from_end_iterator(iterator end_iterator)
-   {  return static_cast<slist&>(*end_iterator.pointed_node());  }
+   {
+      return *detail::parent_from_member<slist, node>
+         ( detail::get_pointer(end_iterator.pointed_node()), &slist::root_);
+   }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
    //!   of slist.
@@ -364,7 +371,10 @@ class slist
    //! 
    //! <b>Complexity</b>: Constant.
    static const slist &container_from_end_iterator(const_iterator end_iterator)
-   {  return static_cast<const slist&>(*end_iterator.pointed_node());  }
+   {
+      return *detail::parent_from_member<slist, node>
+         ( detail::get_pointer(end_iterator.pointed_node()), &slist::root_);
+   }
 
    //! <b>Effects</b>: Returns the number of the elements contained in the list.
    //! 
@@ -526,17 +536,22 @@ class slist
    void clone_from(const slist &src, Cloner cloner, Disposer disposer)
    {  
       this->clear_and_dispose(disposer);
-      try{
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+      BOOST_TRY{
+      #endif
          iterator prev = this->before_begin();
          const_iterator b(src.begin()), e(src.end());
          for(; b != e; ++b, ++prev){
             this->insert_after(prev, *cloner(*b));
          }
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
       }
-      catch(...){
-         clear_and_dispose(disposer);
-         throw;
+      BOOST_CATCH(...){
+         this->clear_and_dispose(disposer);
+         BOOST_RETHROW;
       }
+      BOOST_CATCH_END
+      #endif
    }
 
    //! <b>Requires</b>: value must be an lvalue and prev_p must point to an element
@@ -556,7 +571,7 @@ class slist
    {
       node_ptr n = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(n));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(n));
       node_algorithms::link_after(prev_p.pointed_node(), n);
       size_traits::increment();
       return iterator (n);

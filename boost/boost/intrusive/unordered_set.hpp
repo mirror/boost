@@ -302,6 +302,22 @@ class unordered_set
    std::pair<iterator, bool> insert(reference value)
    {  return table_.insert_unique(value);  }
 
+   //! <b>Requires</b>: Dereferencing iterator must yield an lvalue 
+   //!   of type value_type.
+   //! 
+   //! <b>Effects</b>: Equivalent to this->insert(t) for each element in [b, e).
+   //! 
+   //! <b>Complexity</b>: Average case O(N), where N is std::distance(b, e).
+   //!   Worst case O(N*this->size()).
+   //! 
+   //! <b>Throws</b>: If the internal hasher or the equality functor throws. Basic guarantee.
+   //! 
+   //! <b>Note</b>: Does not affect the validity of iterators and references.
+   //!   No copy-constructors are called.
+   template<class Iterator>
+   void insert(Iterator b, Iterator e)
+   {  table_.insert_unique(b, e);  }
+
    //! <b>Requires</b>: "hasher" must be a hash function that induces 
    //!   the same hash values as the stored hasher. The difference is that
    //!   "hasher" hashes the given key instead of the value_type.
@@ -363,22 +379,6 @@ class unordered_set
    //!   After a successful rehashing insert_commit_data remains valid.
    iterator insert_commit(reference value, const insert_commit_data &commit_data)
    {  return table_.insert_unique_commit(value, commit_data); }
-
-   //! <b>Requires</b>: Dereferencing iterator must yield an lvalue 
-   //!   of type value_type.
-   //! 
-   //! <b>Effects</b>: Equivalent to this->insert(t) for each element in [b, e).
-   //! 
-   //! <b>Complexity</b>: Average case O(N), where N is std::distance(b, e).
-   //!   Worst case O(N*this->size()).
-   //! 
-   //! <b>Throws</b>: If the internal hasher or the equality functor throws. Basic guarantee.
-   //! 
-   //! <b>Note</b>: Does not affect the validity of iterators and references.
-   //!   No copy-constructors are called.
-   template<class Iterator>
-   void insert(Iterator b, Iterator e)
-   {  table_.insert_unique(b, e);  }
 
    //! <b>Effects</b>: Erases the element pointed to by i. 
    //! 
@@ -696,7 +696,7 @@ class unordered_set
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid iterator i belonging to the unordered_set
+   //! <b>Effects</b>: Returns: a valid iterator belonging to the unordered_set
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -708,7 +708,7 @@ class unordered_set
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
+   //! <b>Effects</b>: Returns: a valid const_iterator belonging to the
    //!   unordered_set that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -720,7 +720,7 @@ class unordered_set
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid local_iterator i belonging to the unordered_set
+   //! <b>Effects</b>: Returns: a valid local_iterator belonging to the unordered_set
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -732,7 +732,7 @@ class unordered_set
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid const_local_iterator i belonging to
+   //! <b>Effects</b>: Returns: a valid const_local_iterator belonging to
    //!   the unordered_set that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -768,7 +768,7 @@ class unordered_set
    //! <b>Throws</b>: If the hash functor throws.
    //!
    //! <b>Note</b>: the return value is in the range [0, this->bucket_count()).
-   size_type bucket(const key_type& k) const
+   size_type bucket(const value_type& k) const
    {  return table_.bucket(k);   }
 
    //! <b>Requires</b>: "hasher" must be a hash function that induces 
@@ -1530,7 +1530,7 @@ class unordered_multiset
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid iterator i belonging to the unordered_multiset
+   //! <b>Effects</b>: Returns: a valid iterator belonging to the unordered_multiset
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1542,7 +1542,7 @@ class unordered_multiset
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
+   //! <b>Effects</b>: Returns: a valid const_iterator belonging to the
    //!   unordered_multiset that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1554,7 +1554,7 @@ class unordered_multiset
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid local_iterator i belonging to the unordered_multiset
+   //! <b>Effects</b>: Returns: a valid local_iterator belonging to the unordered_multiset
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1566,7 +1566,7 @@ class unordered_multiset
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid const_local_iterator i belonging to
+   //! <b>Effects</b>: Returns: a valid const_local_iterator belonging to
    //!   the unordered_multiset that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1602,7 +1602,7 @@ class unordered_multiset
    //! <b>Throws</b>: If the hash functor throws.
    //!
    //! <b>Note</b>: the return value is in the range [0, this->bucket_count()).
-   size_type bucket(const key_type& k) const
+   size_type bucket(const value_type& k) const
    {  return table_.bucket(k);   }
 
    //! <b>Requires</b>: "hasher" must be a hash function that induces 

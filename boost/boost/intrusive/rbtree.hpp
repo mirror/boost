@@ -42,14 +42,14 @@ template < class ValueTraits
          >
 class rbtree
    :  private detail::size_holder<ConstantTimeSize, SizeType>
-   ,  private ValueTraits::node_traits::node
 {
    /// @cond
    private:
+   typename ValueTraits::node_traits::node root_;
    typedef rbtree<ValueTraits, Compare
                   ,ConstantTimeSize, SizeType>              this_type; 
    typedef typename ValueTraits::node_traits                node_traits;
-   typedef detail::size_holder<ConstantTimeSize, SizeType>    size_traits;
+   typedef detail::size_holder<ConstantTimeSize, SizeType>  size_traits;
 
    //noncopyable
    rbtree (const rbtree&);
@@ -352,7 +352,7 @@ class rbtree
       detail::key_node_ptr_compare<value_compare, ValueTraits> key_node_comp(priv_comp());
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       return iterator(node_algorithms::insert_equal_upper_bound
          (node_ptr(&priv_header()), to_insert, key_node_comp));
@@ -374,7 +374,7 @@ class rbtree
       detail::key_node_ptr_compare<value_compare, ValueTraits> key_node_comp(priv_comp());
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       return iterator(node_algorithms::insert_equal_lower_bound
          (node_ptr(&priv_header()), to_insert, key_node_comp));
@@ -399,7 +399,7 @@ class rbtree
       detail::key_node_ptr_compare<value_compare, ValueTraits> key_node_comp(priv_comp());
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       return iterator(node_algorithms::insert_equal
          (node_ptr(&priv_header()), hint.pointed_node(), to_insert, key_node_comp));
@@ -539,7 +539,7 @@ class rbtree
    {
       node_ptr to_insert(ValueTraits::to_node_ptr(value));
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       size_traits::increment();
       node_algorithms::insert_unique_commit
                (node_ptr(&priv_header()), to_insert, commit_data);
@@ -560,7 +560,7 @@ class rbtree
       ++ret;
       node_ptr to_erase(i.pointed_node());
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(!node_algorithms::unique(to_erase));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(!node_algorithms::unique(to_erase));
       node_algorithms::erase(&priv_header(), to_erase);
       size_traits::decrement();
       if(safemode_or_autounlink)

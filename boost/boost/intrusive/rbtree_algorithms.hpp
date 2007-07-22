@@ -43,7 +43,9 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <cstddef>
+#ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
 #include <boost/detail/no_exceptions_support.hpp>
+#endif
 #include <boost/intrusive/detail/utilities.hpp>
 
 
@@ -1112,8 +1114,9 @@ class rbtree_algorithms
       // structural copy.  source_root and new_parent must be non-null.
       node_ptr top = cloner(source_root);
       NodeTraits::set_parent(top, new_parent);
-       
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
       BOOST_TRY {
+      #endif
          if(NodeTraits::get_right(source_root)){
             NodeTraits::set_right
                (top, deep_clone_node(NodeTraits::get_right(source_root), top
@@ -1134,12 +1137,14 @@ class rbtree_algorithms
             new_parent = y;
             source_root = NodeTraits::get_left(source_root);
          }
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
       }
       BOOST_CATCH(...){
          deep_dispose_node(top, disposer);
          BOOST_RETHROW;
       }
       BOOST_CATCH_END
+      #endif
       return top;
    }
 

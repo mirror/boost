@@ -1412,6 +1412,15 @@ class multiset
    void clear_and_dispose(Disposer disposer)
    {  return tree_.clear_and_dispose(disposer);  }
 
+   //! <b>Effects</b>: Returns the number of contained elements with the given key
+   //! 
+   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //!   to number of objects with the given key.
+   //! 
+   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   size_type count(const_reference value) const
+   {  return tree_.count(value);  }
+
    //! <b>Effects</b>: Returns the number of contained elements with the same key
    //!   compared with the given comparison functor.
    //! 
@@ -1421,7 +1430,7 @@ class multiset
    //! <b>Throws</b>: If comp ordering function throws.
    template<class KeyType, class KeyValueCompare>
    size_type count(const KeyType& key, KeyValueCompare comp) const
-   {  return tree_.find(key, comp) != end();  }
+   {  return tree_.count(key, comp);  }
 
    //! <b>Effects</b>: Returns an iterator to the first element whose
    //!   key is not less than k or end() if that element does not exist.

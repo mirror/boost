@@ -162,7 +162,7 @@ class set_base_hook
    //! copy-constructible or assignable.
    template<class T>
    struct value_traits
-      :  detail::derivation_value_traits<T, this_type, Tag>
+      :  detail::derivation_hook_value_traits<T, this_type, Tag>
    {};
 
    //! <b>Effects</b>: Converts a pointer to a node into
@@ -318,7 +318,7 @@ class set_member_hook
    //! T don't need to be copy-constructible or assignable.
    template<class T, this_type T::* P>
    struct value_traits
-      :  detail::member_value_traits<T, this_type, P>
+      :  detail::member_hook_value_traits<T, this_type, P>
    {};
 
    //! <b>Effects</b>: Converts a pointer to a node into

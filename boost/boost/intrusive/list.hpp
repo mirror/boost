@@ -22,6 +22,9 @@
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/linking_policy.hpp>
 #include <boost/static_assert.hpp>
+#ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+#include <boost/detail/no_exceptions_support.hpp>
+#endif
 #include <iterator>
 #include <algorithm>
 #include <functional>
@@ -46,10 +49,10 @@ template< class ValueTraits
         >
 class list
    :  private detail::size_holder<ConstantTimeSize, SizeType>
-   ,  private ValueTraits::node_traits::node
 {
    /// @cond
    private:
+   typename ValueTraits::node_traits::node root_;
    typedef list<ValueTraits, ConstantTimeSize, SizeType>   this_type; 
    typedef typename ValueTraits::node_traits                node_traits;
    typedef detail::size_holder<ConstantTimeSize, SizeType>  size_traits;
@@ -99,10 +102,10 @@ class list
    }
 
    node_ptr get_root_node()
-   {  return node_ptr(&static_cast<node&>(*this));  }
+   {  return node_ptr(&root_);  }
 
    const_node_ptr get_root_node() const
-   {  return const_node_ptr(&static_cast<const node&>(*this));  }
+   {  return const_node_ptr(&root_);  }
    /// @endcond
 
    public:
@@ -164,7 +167,7 @@ class list
    {
       node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       node_algorithms::link_before(this->get_root_node(), to_insert);
       size_traits::increment();
    }
@@ -183,7 +186,7 @@ class list
    {
       node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       node_algorithms::link_before(node_traits::get_next(this->get_root_node()), to_insert); 
       size_traits::increment();
    }
@@ -409,7 +412,10 @@ class list
    //! 
    //! <b>Complexity</b>: Constant.
    static list &container_from_end_iterator(iterator end_iterator)
-   {  return static_cast<list&>(*end_iterator.pointed_node());  }
+   {
+      return *detail::parent_from_member<list, node>
+         ( detail::get_pointer(end_iterator.pointed_node()), &list::root_);
+   }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
    //!   of list.
@@ -420,7 +426,10 @@ class list
    //! 
    //! <b>Complexity</b>: Constant.
    static const list &container_from_end_iterator(const_iterator end_iterator)
-   {  return static_cast<const list&>(*end_iterator.pointed_node());  }
+   {
+      return *detail::parent_from_member<list, node>
+         ( detail::get_pointer(end_iterator.pointed_node()), &list::root_);
+   }
 
    //! <b>Effects</b>: Returns the number of the elements contained in the list.
    //! 
@@ -672,16 +681,21 @@ class list
    void clone_from(const list &src, Cloner cloner, Disposer disposer)
    {
       this->clear_and_dispose(disposer);
-      try{
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
+      BOOST_TRY{
+      #endif
          const_iterator b(src.begin()), e(src.end());
          for(; b != e; ++b){
             this->push_back(*cloner(*b));
          }
+      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
       }
-      catch(...){
+      BOOST_CATCH(...){
          clear_and_dispose(disposer);
-         throw;
+         BOOST_RETHROW;
       }
+      BOOST_CATCH_END
+      #endif
    }
 
    //! <b>Requires</b>: value must be an lvalue and p must be a valid iterator of *this.
@@ -699,7 +713,7 @@ class list
    {
       node_ptr to_insert = ValueTraits::to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       node_algorithms::link_before(p.pointed_node(), to_insert);
       size_traits::increment();
       return iterator(to_insert);
