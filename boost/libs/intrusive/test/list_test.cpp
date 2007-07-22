@@ -20,6 +20,7 @@
 #include <vector>
 #include <boost/detail/lightweight_test.hpp>
 #include "test_macros.hpp"
+#include "test_container.hpp"
 
 using namespace boost::intrusive;
 
@@ -39,6 +40,20 @@ struct test_list
 template<class ValueTraits>
 void test_list<ValueTraits>::test_all(std::vector<typename ValueTraits::value_type>& values)
 {
+   typedef boost::intrusive::list
+      < ValueTraits
+      , ValueTraits::value_type::constant_time_size
+      , std::size_t 
+      > list_type;
+
+   {
+      list_type list(values.begin(), values.end());
+      test::test_container(list);
+      list.clear();
+      list.insert(list.end(), values.begin(), values.end());
+      test::test_sequence_container(list, values);
+   }
+
    test_front_back(values);
    test_sort(values);
    test_insert(values);
@@ -46,11 +61,6 @@ void test_list<ValueTraits>::test_all(std::vector<typename ValueTraits::value_ty
    test_swap(values);
    test_clone(values);
 
-   typedef boost::intrusive::list
-      < ValueTraits
-      , ValueTraits::value_type::constant_time_size
-      , std::size_t 
-      > list_type;
    list_type testlist(values.begin(), values.end());
    list_type testlist2;
 }

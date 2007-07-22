@@ -1,118 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2006 Matias Capeletto
-// Copyright (c) 2007 Ion Gaztanaga
+// (C) Copyright Ion Gaztanaga  2007
 //
 // Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
 //
-//////////////////////////////////////////////////////////////////////////////
+// See http://www.boost.org/libs/intrusive for documentation.
+//
+/////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_INTRUSIVE_TEST_TEST_CONTAINER_HPP
-#define BOOST_INTRUSIVE_TEST_TEST_CONTAINER_HPP
+#ifndef BOOST_INTRUSIVE_TEST_CONTAINER_HPP
+#define BOOST_INTRUSIVE_TEST_CONTAINER_HPP
 
-// std
-#include <cassert>
-#include <algorithm>
-#include <vector>
-// Boost.Test
-//#include "boost/test/included/test_exec_monitor.hpp"
+#include <boost/detail/lightweight_test.hpp>
 
-namespace boost{
-namespace intrusive{
+namespace boost {
+namespace intrusive {
 namespace test {
-
-const int NumElem = 5;
-
-/*
-Beginning of range  a.begin()     iterator if a is mutable, const_iterator otherwise [4] [7]  
-End of range  a.end()     iterator if a is mutable, const_iterator otherwise [4]  
-Size  a.size()     size_type  
-Maximum size  a.max_size()     size_type  
-Empty container  a.empty()     Convertible to bool  
-Swap  a.swap(b)     void  
-
-Expression semantics
-Semantics of an expression is defined only where it differs from, or is not defined in, Assignable, Equality Comparable, or LessThan Comparable Name  Expression  Precondition  Semantics  Postcondition  
-Move constructor  X(a)        X().size() == a.size(). X() contains a copy of each of a's elements.  
-Move constructor  X b(a);        b.size() == a.size(). b contains a copy of each of a's elements.  
-Move Assignment operator  b = a        b.size() == a.size(). b contains a copy of each of a's elements.  
-Destructor  a.~X()     Each of a's elements is disposed, and memory allocated for them (if any) is deallocated.     
-Beginning of range  a.begin()     Returns an iterator pointing to the first element in the container. [7]  a.begin() is either dereferenceable or past-the-end. It is past-the-end if and only if a.size() == 0.  
-End of range  a.end()     Returns an iterator pointing one past the last element in the container.  a.end() is past-the-end.  
-Size  a.size()     Returns the size of the container, that is, its number of elements. [8]  a.size() >= 0 && a.size() <= max_size()  
-Maximum size  a.max_size()     Returns the largest size that this container can ever have. [8]  a.max_size() >= 0 && a.max_size() >= a.size()  
-Empty container  a.empty()     Equivalent to a.size() == 0. (But possibly faster.)     
-Swap  a.swap(b)     Equivalent to swap(a,b) [9]     
-*/
-
-/*
-expression     return type       operational       assertion/note       complexity
-                                 semantics      pre/post-condition
-
-
-X::value_type  T                 T is
-                           CopyConstructible
-compile time
-X::reference lvalue of T compile time
-X::const_-
-reference
-const lvalue of T compile time
-X::iterator iterator type
-whose value
-type is T
-any iterator category
-except output iterator.
-convertible to
-X::const_iterator.
-compile time
-X::const_-
-iterator
-constant iterator
-type whose
-value type is T
-any iterator category
-except output iterator
-compile time
-X::difference_
-type
-signed integral
-type
-is identical to the
-difference type of
-X::iterator and
-X::const_iterator
-compile time
-X::size_type unsigned
-integral type
-size_type can
-represent any
-non-negative value of
-compile time
-
-
-
-
-
-
-X u;     post: u.size() == 0        constant
-X();     X().size() == 0            constant
-X(a);    a == X(a). linear
-X u(a); post: u == a linear
-X u = a; Equivalent to: X u; u
-= a;
-(&a)->X(); void note: the destructor is
-applied to every
-element of a; all the
-memory is deallocated.
-linear
-a.begin(); iterator;
-const_-
-iterator for
-constant a
-constant
-*/
 
 template< class Container >
 void test_container( Container & c )
@@ -126,102 +31,231 @@ void test_container( Container & c )
    typedef typename Container::const_pointer    const_pointer;
    typedef typename Container::difference_type  difference_type;
    typedef typename Container::size_type        size_type;
+   typedef typename Container::difference_type  difference_type;
+   typedef typename Container::size_type        size_type;
+   typedef typename Container::value_traits     value_traits;
 
    const size_type num_elem = c.size();
-   BOOST_CHECK( c.empty() == (num_elem == 0) );
+   BOOST_TEST( c.empty() == (num_elem == 0) );
    {
       iterator it(c.begin()), itend(c.end());
       size_type i;
       for(i = 0; i < num_elem; ++i){
          ++it;
       }
-      BOOST_CHECK( it == c.end() );
-      BOOST_CHECK( c.size() == i );
+      BOOST_TEST( it == c.end() );
+      BOOST_TEST( c.size() == i );
    }
+
    //Check iterator conversion
-   BOOST_CHECK( const_iterator(c.begin()) == c.cbegin() );
+   BOOST_TEST( const_iterator(c.begin()) == c.cbegin() );
    {
       const_iterator it(c.cbegin()), itend(c.cend());
       size_type i;
       for(i = 0; i < num_elem; ++i){
          ++it;
       }
-      BOOST_CHECK( it == c.cend() );
-      BOOST_CHECK( c.size() == i );
+      BOOST_TEST( it == c.cend() );
+      BOOST_TEST( c.size() == i );
    }
 }
-/*
-template< class Container >
-void test_container
-   ( Container & c, typename Container::size_type num_elem
-   , Container & c2, typename Container::size_type num_elem2)
+
+
+template< class Container, class Data >
+void test_sequence_container(Container & c, Data & d)
 {
-   typedef typename Container::value_type       value_type;
-   typedef typename Container::iterator         iterator;
-   typedef typename Container::const_iterator   const_iterator;
-   typedef typename Container::reference        reference;
-   typedef typename Container::const_reference  const_reference;
-   typedef typename Container::pointer          pointer;
-   typedef typename Container::const_pointer    const_pointer;
-   typedef typename Container::difference_type  difference_type;
-   typedef typename Container::size_type        size_type;
+   assert( d.size() > 2 );
 
-   //For the future:
-   //
-   //move-copy constructor
-   //move-assignment
+   c.clear();
 
-   test_container_helper(c, num_elem);
-   test_container_helper(c2, num_elem2);
+   BOOST_TEST( c.size() == 0 );
+   BOOST_TEST( c.empty() );
 
-   //Test swap and test again
-   c.swap(c2);
-   test_container_helper(c, num_elem2);
-   test_container_helper(c2, num_elem);
-}*/
+   c.insert( c.begin(), *d.begin() );
+   c.insert( c.end(), *(++d.begin()) );
 
-template< class Sequence >
-void test_sequence( Sequence & seq )
-{
-   //First the container requirements  
-   test_container(seq);
-   typedef Sequence::value_type  value_type;
-   typedef Sequence::iterator    iterator;
+   BOOST_TEST( c.size() == 2 );
+   BOOST_TEST( !c.empty() );
 
-   Sequence::size_type old_size(seq.size());
+   c.erase( c.begin() );
 
-   //Now test sequence requirements
-   //insert(p, t)
-   Sequence::value_type one(1);
-   iterator one_pos = seq.insert(seq.begin(), one);
-   BOOST_CHECK( &*seq.begin() == &one );
-   BOOST_CHECK( seq.size() == (old_size + 1) );
+   BOOST_TEST( c.size() == 1 );
 
-   //insert(p, i, j)
-   value_type range[2] = { value_type(2), value_type(3) };
-   iterator range_it = one_pos;  ++range_it;
-   seq.insert(range_it, &range[0], &range[2]);
-   BOOST_CHECK( seq.size() == (old_size + 3) );
-   range_it = ++seq.begin();
-   BOOST_CHECK( &*range_it  == &range[0] );
-   ++range_it;
-   BOOST_CHECK( &*range_it  == &range[1] );
+   c.insert( c.begin(), *(++++d.begin()) );
 
-   //erase(q)
-   iterator it_from_erase = seq.erase(seq.begin());
-   BOOST_CHECK( seq.size() == (old_size + 2) );
-   BOOST_CHECK( &*it_from_erase == &range[0] );
+   c.erase( c.begin(), c.end() );
 
-   //erase(q1, q2)
-   iterator q1(it_from_erase), q2(it_from_erase);
-   ++++q2;
-   it_from_erase = seq.erase(q1, q2);
-   BOOST_CHECK( seq.size() == old_size );
-   //clear(), assign()???
+   BOOST_TEST( c.empty() );
+
+   c.insert( c.begin(), *d.begin() );
+
+   BOOST_TEST( c.size() == 1 );
+
+   BOOST_TEST( c.begin() != c.end() );
+
+   c.erase( c.begin() );
+
+   c.assign(d.begin(), d.end());
+
+   BOOST_TEST( c.size() == d.size() );
+
+   c.clear();
+
+   BOOST_TEST( c.size() == 0 );
+   BOOST_TEST( c.empty() );
 }
 
-}  // namespace test{
-}  // namespace intrusive{
-}  // namespace boost{
+template< class Container, class Data >
+void test_common_unordered_and_associative_container(Container & c, Data & d)
+{
+   typedef typename Container::size_type  size_type;
 
-#endif // BOOST_INTRUSIVE_TEST_TEST_CONTAINER_HPP
+   assert( d.size() > 2 );
+
+   c.clear();
+   c.insert(d.begin(), d.end());
+
+   for( typename Data::const_iterator di = d.begin(), de = d.end();
+      di != de; ++di )
+   {
+      BOOST_TEST( c.find(*di) != c.end() );
+   }
+
+   typename Data::const_iterator da =   d.begin();
+   typename Data::const_iterator db = ++d.begin();
+
+   size_type old_size = c.size();
+
+   c.erase(*da);
+
+   BOOST_TEST( c.size() == old_size-1 );
+
+   BOOST_TEST( c.count(*da) == 0 );
+   BOOST_TEST( c.count(*db) != 0 );
+
+   BOOST_TEST( c.find(*da) == c.end() );
+   BOOST_TEST( c.find(*db) != c.end() );
+
+   BOOST_TEST( c.equal_range(*db).first != c.end() );
+
+   c.clear();
+
+   BOOST_TEST( c.equal_range(*da).first == c.end() );
+}
+
+template< class Container, class Data >
+void test_associative_container_invariants(Container & c, Data & d)
+{
+   typedef typename Container::const_iterator const_iterator;
+   for( typename Data::const_iterator di = d.begin(), de = d.end();
+      di != de; ++di)
+   {
+      const_iterator ci = c.find(*di);
+      BOOST_TEST( ci != c.end() );
+      BOOST_TEST( ! c.value_comp()(*ci, *di) );
+      const_iterator cil = c.lower_bound(*di);
+      const_iterator ciu = c.upper_bound(*di);
+      std::pair<const_iterator, const_iterator> er = c.equal_range(*di);
+      BOOST_TEST( cil == er.first );
+      BOOST_TEST( ciu == er.second );
+      if(ciu != c.end()){
+         BOOST_TEST( c.value_comp()(*cil, *ciu) );
+      }
+      if(c.count(*di) > 1){
+         const_iterator ci_next = cil; ++ci_next;
+         for( ; ci_next != ciu; ++cil, ++ci_next){
+            BOOST_TEST( !c.value_comp()(*ci_next, *cil) );
+         }
+      }
+   }
+}
+
+template< class Container, class Data >
+void test_associative_container(Container & c, Data & d)
+{
+   typedef typename Container::const_iterator const_iterator;
+   assert( d.size() > 2 );
+
+   c.clear();
+   c.insert(d.begin(),d.end());
+
+   test_associative_container_invariants(c, d);
+
+   const Container & cr = c;
+
+   test_associative_container_invariants(cr, d);
+}
+
+template< class Container, class Data >
+void test_unordered_associative_container_invariants(Container & c, Data & d)
+{
+   typedef typename Container::size_type size_type;
+   typedef typename Container::const_iterator const_iterator;
+
+   for( typename Data::const_iterator di = d.begin(), de = d.end() ;
+      di != de ; ++di ){
+      const_iterator i = c.find(*di);
+      size_type nb = c.bucket(*i);
+      size_type bucket_elem = std::distance(c.begin(nb), c.end(nb));
+      BOOST_TEST( bucket_elem ==  c.bucket_size(nb) );
+      BOOST_TEST( &*c.local_iterator_to(*c.find(*di)) == &*i );
+      std::pair<const_iterator, const_iterator> er = c.equal_range(*di);
+      size_type cnt = std::distance(er.first, er.second);
+      BOOST_TEST( cnt == c.count(*di));
+      if(cnt > 1)
+      for(const_iterator n = er.first, i = n++, e = er.second; n != e; ++i, ++n){
+         BOOST_TEST( c.key_eq()(*i, *n) );
+         BOOST_TEST( c.hash_function()(*i) == c.hash_function()(*n) );
+      }
+   }
+
+   size_type blen = c.bucket_count();
+   size_type total_objects = 0;
+   for(size_type i = 0; i < blen; ++i){
+      total_objects += c.bucket_size(i);
+   }
+   BOOST_TEST( total_objects ==  c.size() );
+}
+
+template< class Container, class Data >
+void test_unordered_associative_container(Container & c, Data & d)
+{
+   c.clear();
+   c.insert( d.begin(), d.end() );
+
+   test_unordered_associative_container_invariants(c, d);
+
+   const Container & cr = c;
+
+   test_unordered_associative_container_invariants(cr, d);
+}
+
+template< class Container, class Data >
+void test_unique_container(Container & c, Data & d)
+{
+   typedef typename Container::value_type value_type;
+   c.clear();
+   c.insert(d.begin(),d.end());
+   typename Container::size_type old_size = c.size();
+   value_type v(*d.begin());
+   c.insert(v);
+   BOOST_TEST( c.size() == old_size );
+   c.clear();
+}
+
+template< class Container, class Data >
+void test_non_unique_container(Container & c, Data & d)
+{
+   typedef typename Container::value_type value_type;
+   c.clear();
+   c.insert(d.begin(),d.end());
+   typename Container::size_type old_size = c.size();
+   value_type v(*d.begin());
+   c.insert(v);
+   BOOST_TEST( c.size() == (old_size+1) );
+   c.clear();
+}
+
+}}}
+
+#endif   //#ifndef BOOST_INTRUSIVE_TEST_CONTAINER_HPP

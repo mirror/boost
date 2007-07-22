@@ -8,12 +8,10 @@
 # See http://www.boost.org/libs/intrusive for documentation.
 
 
-project boost/intrusive/doc ;
-
-import boostbook : boostbook ;
+import doxygen ;
 import quickbook ;
 
-doxygen intrusive_doxygen
+doxygen autodoc
    :
       [ glob ../../../boost/intrusive/*.hpp ]
    :
@@ -26,15 +24,15 @@ doxygen intrusive_doxygen
    <doxygen:param>SEARCH_INCLUDES=YES
    ;
 
-xml intrusive_xml : intrusive.qbk ;
+xml intrusive : intrusive.qbk ;
 
-boostbook intrusive
+boostbook standalone
    :
-      intrusive_xml
-      intrusive_doxygen
+      intrusive
    :
         <xsl:param>boost.root=../../../..
         <xsl:param>boost.libraries=../../../../libs/libraries.htm
         <xsl:param>generate.section.toc.level=3
         <xsl:param>chunk.first.sections=1
+        <dependency>autodoc
    ;

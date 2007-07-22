@@ -45,7 +45,7 @@ int main()
    //nodes and the container itself must be created in shared memory
    const int MaxElem    = 100;
    const int ShmSize    = 50000;
-   const char *ShmName  = "MySharedMemory";
+   const char *ShmName  = "SharedMemoryName";
 
    using namespace boost::interprocess;
 

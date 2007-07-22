@@ -21,6 +21,7 @@
 #include <set>
 #include <boost/detail/lightweight_test.hpp>
 #include "test_macros.hpp"
+#include "test_container.hpp"
 
 using namespace boost::intrusive;
 
@@ -43,6 +44,27 @@ struct test_unordered_multiset
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_all (std::vector<typename ValueTraits::value_type>& values)
 {
+   typedef boost::intrusive::unordered_multiset
+      <ValueTraits
+      ,boost::hash<typename ValueTraits::value_type>
+      ,std::equal_to<typename ValueTraits::value_type>
+      ,ValueTraits::value_type::constant_time_size, std::size_t 
+      > unordered_multiset_type;
+   {
+      typename unordered_multiset_type::bucket_type buckets [BucketSize];
+      unordered_multiset_type testset(buckets, BucketSize);
+      testset.insert(values.begin(), values.end());
+      test::test_container(testset);
+      testset.clear();
+      testset.insert(values.begin(), values.end());
+      test::test_common_unordered_and_associative_container(testset, values);
+      testset.clear();
+      testset.insert(values.begin(), values.end());
+      test::test_unordered_associative_container(testset, values);
+      testset.clear();
+      testset.insert(values.begin(), values.end());
+      test::test_non_unique_container(testset, values);
+   }
    test_sort(values);
    test_insert(values);
    test_swap(values);

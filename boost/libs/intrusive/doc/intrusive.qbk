@@ -1,8 +1,16 @@
+[/
+ / Copyright (c) 2007 Ion Gaztanaga
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [library Boost.Intrusive
     [quickbook 1.3]
-    [version 2007-06-23]
     [authors [Krzikalla, Olaf], [Gazta&ntilde;aga, Ion]]
     [copyright 2005 Olaf Krzikalla, 2006-2007 Ion Gazta&ntilde;aga]
+    [id intrusive]
+    [dirname intrusive]
     [purpose Intrusive containers]
     [license
         Distributed under the Boost Software License, Version 1.0.
@@ -17,7 +25,7 @@
 
 [*Boost.Intrusive] is a library presenting some intrusive containers to
 the world of C++. Intrusive containers are special containers
-that offer [link boost_intrusive.performance better performance]
+that offer [link intrusive.performance better performance]
 and exception safety guarantees than non-intrusive containers (like STL containers). 
 
 The performance benefits of intrusive containers makes them ideal as a building
@@ -190,7 +198,7 @@ Intrusive containers have also downsides:
    swapping can be used to implement move-capabilities. To ease the implementation of
    copy constructors and assignment operators of classes storing [*Boost.Intrusive]
    containers, [*Boost.Intrusive] offers special cloning functions. See
-   [link boost_intrusive.clone_from Cloning [*Boost.Intrusive] containers] section for more information.
+   [link intrusive.clone_from Cloning [*Boost.Intrusive] containers] section for more information.
 
 *  Analyzing thread-safety of a program that uses containers is harder with intrusive containers, becuase
    the container might be modified indirectly without an explicitly call to a container member.
@@ -214,7 +222,7 @@ Intrusive containers have also downsides:
 ]
 
 For a performance comparison between Intrusive and Non-intrusive containers see
-[link boost_intrusive.performance Performance] section.
+[link intrusive.performance Performance] section.
 
 [endsect]
 
@@ -259,11 +267,11 @@ three template arguments:
 
 *  The second template argument controls the linking policy. [*Boost.Intrusive] currently supports
    3 policies: `normal_link`, `safe_link`, `auto_unlink`. More about these in the sections
-   [link boost_intrusive.safe_hook Safe hooks] and [link boost_intrusive.auto_unlink_hooks Auto-unlink hooks]
+   [link intrusive.safe_hook Safe hooks] and [link intrusive.auto_unlink_hooks Auto-unlink hooks]
 
 *  The third template argument is the pointer type to be used internally in the hook.
    The default value is `void *`, which means that raw pointers will be used in the hook.
-   More about this in the section titled [link boost_intrusive.using_smart_pointers Using smart pointers with Boost.Intrusive containers]
+   More about this in the section titled [link intrusive.using_smart_pointers Using smart pointers with Boost.Intrusive containers]
 
 Example:
 
@@ -591,13 +599,13 @@ the user. See [@http://www.boost.org/libs/utility/assert.html] for more
 information about `BOOST_ASSERT`.
 
 `BOOST_ASSERT` is globally configured for all the libraries, so the user might
-want to redefine safe-mode assertions without modifying `BOOST_ASSERT`. This can
-be achieved redefining the following macros:
+want to redefine intrusive safe-mode assertions without modifying the global
+`BOOST_ASSERT`. This can be achieved redefining the following macros:
 
-*  `BOOST_INTRUSIVE_SAFE_MODE_CONTAINER_INSERTION_ASSERT`: This assertion will be
+*  `BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT`: This assertion will be
    used in insertion functions of the intrusive containers to check that
    the hook of the value to be inserted is default constructed.
-*  `BOOST_INTRUSIVE_SAFE_MODE_HOOK_DESTRUCTOR_ASSERT`: This assertion will be
+*  `BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT`: This assertion will be
    used in hooks' destructors to check that the hook is in a default state.
 
 If any of these macros is not redefined, it will be defaulted to `BOOST_ASSERT`.
@@ -620,7 +628,7 @@ If any of these macros is not redefined, it will be defaulted to `BOOST_ASSERT`.
 
 These hooks have exactly the same size overhead as their analogue non auto-unlinking
 hooks, but they have a restriction: they can only be used with
-[link boost_intrusive.presenting_containers non-constant time containers].
+[link intrusive.presenting_containers non-constant time containers].
 There is a reason for this: 
 
 * Auto-unlink hooks don't store any reference to the container where they are inserted.
@@ -1594,7 +1602,7 @@ before explaining the customization options of [*Boost.Intrusive].
 
 [section:node_algorithms Node algorithms with custom NodeTraits]
 
-As explained in the [link boost_intrusive.concepts Concepts] section, [*Boost.Intrusive]
+As explained in the [link intrusive.concepts Concepts] section, [*Boost.Intrusive]
 containers are implemented using node algorithms that work on generic nodes.
 
 Sometimes, the use of intrusive containers is expensive for some environments
@@ -1775,7 +1783,7 @@ For a complete rbtree of functions see
 
 [section:value_traits Containers with custom ValueTraits]
 
-As explained in the [link boost_intrusive.concepts Concepts] section, [*Boost.Intrusive]
+As explained in the [link intrusive.concepts Concepts] section, [*Boost.Intrusive]
 containers are templatized using a `ValueTraits` parameter. This parameter contains
 all the information to glue the `value_type` of the containers and the node to be
 used in node algorithms, since these types can be different. Apart from this,
@@ -1819,7 +1827,7 @@ Let's explain each type and function:
 
 *  ['node_traits]: The node configuration that it's needed by node algorithms.
    These node traits and algorithms are
-   described in the previous chapter: [link boost_intrusive.node_algorithms Nodes Algorithms].
+   described in the previous chapter: [link intrusive.node_algorithms Nodes Algorithms].
 
    *  If my_value_traits is meant to be used with [classref boost::intrusive::slist slist],
       `node_traits` should follow
@@ -1912,6 +1920,21 @@ we'll define a ValueTraits class that will configure [*Boost.Intrusive] containe
 
 [doc_value_traits_value_traits]
 
+Defining a value traits class that just defines `value_type` as 
+`legacy_node_traits::node` is a common approach when defining customized
+intrusive containers, so [*Boost.Intrusive] offers a templatized
+[classref boost::intrusive::trivial_value_traits trivial_value_traits] class
+that does exactly what we want:
+
+[c++]
+   
+   #include <boost/intrusive/trivial_value_traits.hpp>
+
+   //Now we can define legacy_value_traits just with a single line
+   using namespace boost::intrusive;
+   typedef trivial_value_traits<legacy_node_traits, normal_link> legacy_value_traits;
+   
+
 Now we can just define the containers that will store the legacy abi objects and write
 a little test:
 
@@ -1952,6 +1975,40 @@ All [*Boost.Intrusive] containers using predefined hooks use this technique to m
 all the possible [classref boost::intrusive::list list] containers
 created with predefined hooks that define the same `VoidPointer` type
 share the same list algorithms.
+
+[endsect]
+
+[section:simplifying_value_traits Simplifying value traits definition]
+
+The previous example can be further simplified using
+[classref boost::intrusive::derivation_value_traits derivation_value_traits]
+class to define a value traits class with a value that stores the
+`simple_node` as a base class:
+
+[c++]
+
+   #include <boost/intrusive/derivation_value_traits.hpp>
+
+   //value_1, value_2, simple_node and simple_node_traits are defined
+   //as in the previous example...
+   //...
+
+   using namespace boost::intrusive;
+
+   //Now define the needed value traits using 
+   typedef derivation_value_traits<value_1, simple_node_traits, normal_link> ValueTraits1;
+   typedef derivation_value_traits<value_2, simple_node_traits, normal_link> ValueTraits2;
+
+   //Now define the containers
+   typedef list <ValueTraits1> Value1List;
+   typedef list <ValueTraits2> Value2List;
+
+We can even choose to store `simple_node` as a member of `value_1` and `value_2`
+classes and use [classref boost::intrusive::member_value_traits member_value_traits]
+to define the needed value traits classes:
+
+[import ../example/doc_advanced_value_traits2.cpp]
+[doc_advanced_value_traits2_value_traits]
 
 [endsect]
 
@@ -2108,7 +2165,7 @@ and also derives from `test_class`.
 You can find the full test code code in the 
 [@../../perf/perf_list.cpp perf_list.cpp] source file.
 
-[section:performance_results_push_back Back insertions and destruction]
+[section:performance_results_push_back Back insertion and destruction]
 
 The first test will measure the benefits we can obtain with intrusive containers
 avoiding memory allocations and deallocations . All the objects to be
@@ -2171,7 +2228,7 @@ These are the times in microseconds for each case, and the normalized time:
 
 The results are logical: intrusive lists just need one allocation. The destruction
 time of the `normal_link` intrusive container is trivial (complexity: `O(1)`),
-whereas `safe_link` and `auto_unlink` intrusive containers need to the hook of
+whereas `safe_link` and `auto_unlink` intrusive containers need to put the hook of
 erased values' in the default state (complexity: `O(NumElements)`). That's why
 `normal_link` intrusive list shines in this test.
 
@@ -2187,7 +2244,7 @@ a good operating system memory allocator is the reason for this good results.
 
 [section:performance_results_reversing Reversing]
 
-The next test measures the time needed to complete calss to the member function `reverse()`.
+The next test measures the time needed to complete calls to the member function `reverse()`.
 Values (`test_class` and `itest_class`) and lists are created like explained in the
 previous section.
 
@@ -2405,6 +2462,21 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [endsect]
 
+[section:disabling_exceptions Disabling exceptions support]
+
+[*Boost.Intrusive] might be useful in environments where exceptions are not available
+or recommendable (like embedded or real-time systems). [*Boost.Intrusive] uses the
+global Boost mechanism to disable exception handling, so that if the compiler
+configuration disables exceptions, `BOOST_NO_EXCEPTIONS` is defined and exception
+handling is disabled.
+
+This mechanism is a global mechanism to disable exceptions. If for any reason,
+the user wants to disable exception handling [*only] in [*Boost.Intrusive],
+`BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING` can be defined to disable
+exception handling in the library.
+
+[endsect]
+
 [section:tested_compilers Tested compilers]
 
 [*Boost.Intrusive] has been tested in the following compilers/platforms:
@@ -2418,6 +2490,7 @@ all the objects to be inserted in intrusive containers in containers like `std::
 *  Codewarrior 9.4/WinXP
 *  GCC 3.4.3/Solaris 11
 *  GCC 4.0/Mac Os 10.4.1
+*  SunCC 5.8/Solaris 11
 
 [endsect]
 
@@ -2448,7 +2521,7 @@ helpful discussions.
 
 [endsect]
 
-[xinclude intrusive_doxygen.xml]
+[xinclude autodoc.xml]
 
 [section:license_notices License notices]
 

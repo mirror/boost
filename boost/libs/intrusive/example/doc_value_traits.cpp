@@ -60,6 +60,7 @@ struct legacy_value_traits
    static pointer to_value_ptr(node_ptr n)                     {  return pointer(n); }
    static const_pointer to_value_ptr(const_node_ptr n)         {  return const_pointer(n); }
 };
+
 //]
 
 //[doc_value_traits_test

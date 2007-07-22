@@ -112,6 +112,9 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\circular_slist_algorithms.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\derivation_value_traits.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\hashtable.hpp">
 			</File>
 			<File
@@ -125,6 +128,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\list_hook.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\member_value_traits.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_bit.hpp">
@@ -151,6 +157,9 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\tag.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\trivial_value_traits.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\unordered_set.hpp">
 			</File>
 			<File
@@ -169,7 +178,7 @@
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\config_end.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\boost\intrusive\detail\ebo_holder.hpp">
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\ebo_functor_holder.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\hashtable_node.hpp">
@@ -185,9 +194,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\pointer_to_other.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\boost\intrusive\detail\pointer_type.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\rbtree_node.hpp">
@@ -224,6 +230,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\test\test_container.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\test\testvalue.hpp">
 			</File>
 		</Filter>
 		<Filter
