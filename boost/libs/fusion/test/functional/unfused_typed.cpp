@@ -26,7 +26,9 @@ using mpl::placeholders::_;
 
 using boost::noncopyable;
 
-typedef fusion::vector<long &,int,char> types;
+typedef fusion::vector<> types0;
+typedef fusion::vector<long &> types1;
+typedef fusion::vector<long &,int,char> types3;
 
 template <class Base = boost::blank>
 struct test_func
@@ -79,9 +81,10 @@ void result_type_tests()
 {
     using boost::is_same;
 
-    typedef fusion::unfused_typed< test_func<>, types > t;
-    BOOST_TEST(( is_same< boost::result_of< t () >::type, long >::value ));
-    BOOST_TEST(( is_same< boost::result_of< t (int) >::type, long >::value ));
+    typedef fusion::unfused_typed< test_func<>, types0 > t0;
+    BOOST_TEST(( is_same< boost::result_of< t0 () >::type, long >::value ));
+    typedef fusion::unfused_typed< test_func<>, types1 > t1;
+    BOOST_TEST(( is_same< boost::result_of< t1 (int) >::type, long >::value ));
 }
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1400
@@ -90,22 +93,30 @@ void result_type_tests()
 #   define BOOST_TEST_NO_VC71(cond) BOOST_TEST(cond)
 #endif
 
-int main()
+void nullary_tests()
 {
-    result_type_tests();
-
     test_func<noncopyable> f;
-    fusion::unfused_typed< test_func<>, types > unfused_func;
-    fusion::unfused_typed< test_func<noncopyable> &, types > unfused_func_ref(f);
-    fusion::unfused_typed< test_func<> const, types > unfused_func_c;
-    fusion::unfused_typed< test_func<>, types > const unfused_func_c2;
-    fusion::unfused_typed< test_func<noncopyable> const &, types > unfused_func_c_ref(f);
+    fusion::unfused_typed< test_func<>, types0 > unfused_func;
+    fusion::unfused_typed< test_func<noncopyable> &, types0 > unfused_func_ref(f);
+    fusion::unfused_typed< test_func<> const, types0 > unfused_func_c;
+    fusion::unfused_typed< test_func<>, types0 > const unfused_func_c2;
+    fusion::unfused_typed< test_func<noncopyable> const &, types0 > unfused_func_c_ref(f);
 
     BOOST_TEST(unfused_func() == 100);
     BOOST_TEST(unfused_func_ref() == 100);
     BOOST_TEST(unfused_func_c() == 0);
     BOOST_TEST(unfused_func_c2() == 0);
     BOOST_TEST(unfused_func_c_ref() == 0);
+}
+
+void unary_tests()
+{
+    test_func<noncopyable> f;
+    fusion::unfused_typed< test_func<>, types1 > unfused_func;
+    fusion::unfused_typed< test_func<noncopyable> &, types1 > unfused_func_ref(f);
+    fusion::unfused_typed< test_func<> const, types1 > unfused_func_c;
+    fusion::unfused_typed< test_func<>, types1 > const unfused_func_c2;
+    fusion::unfused_typed< test_func<noncopyable> const &, types1 > unfused_func_c_ref(f);
 
     long lvalue = 1;
     BOOST_TEST_NO_VC71(unfused_func(lvalue) == 100);
@@ -118,18 +129,37 @@ int main()
     BOOST_TEST(lvalue == 1 + 4*sizeof(lvalue));
     BOOST_TEST(unfused_func_c_ref(lvalue) == 0);
     BOOST_TEST(lvalue == 1 + 5*sizeof(lvalue));
+}
 
+void ternary_tests()
+{
+    test_func<noncopyable> f;
+    fusion::unfused_typed< test_func<>, types3 > unfused_func;
+    fusion::unfused_typed< test_func<noncopyable> &, types3 > unfused_func_ref(f);
+    fusion::unfused_typed< test_func<> const, types3 > unfused_func_c;
+    fusion::unfused_typed< test_func<>, types3 > const unfused_func_c2;
+    fusion::unfused_typed< test_func<noncopyable> const &, types3 > unfused_func_c_ref(f);
+
+    long lvalue = 1;
     static const long expected = 2*sizeof(int) + 7*sizeof(char);
     BOOST_TEST_NO_VC71(unfused_func(lvalue,2,'\007') == 100 + expected);
-    BOOST_TEST(lvalue == 1 + 6*sizeof(lvalue));
+    BOOST_TEST(lvalue == 1 + 1*sizeof(lvalue));
     BOOST_TEST(unfused_func_ref(lvalue,2,'\007') == 100 + expected);
-    BOOST_TEST(lvalue == 1 + 7*sizeof(lvalue));
+    BOOST_TEST(lvalue == 1 + 2*sizeof(lvalue));
     BOOST_TEST(unfused_func_c(lvalue,2,'\007') == 0 + expected);
-    BOOST_TEST(lvalue == 1 + 8*sizeof(lvalue));
+    BOOST_TEST(lvalue == 1 + 3*sizeof(lvalue));
     BOOST_TEST(unfused_func_c2(lvalue,2,'\007') == 0 + expected);
-    BOOST_TEST(lvalue == 1 + 9*sizeof(lvalue));
+    BOOST_TEST(lvalue == 1 + 4*sizeof(lvalue));
     BOOST_TEST(unfused_func_c_ref(lvalue,2,'\007') == 0 + expected);
-    BOOST_TEST(lvalue == 1 + 10*sizeof(lvalue));
+    BOOST_TEST(lvalue == 1 + 5*sizeof(lvalue));
+}
+
+int main()
+{
+    result_type_tests();
+    nullary_tests();
+    unary_tests();
+    ternary_tests();
 
     return boost::report_errors();
 }
