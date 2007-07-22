@@ -58,7 +58,7 @@ templates or function call operators.
 
 The library provides several adapter variants that implement this 
 transformation, ranging from strictly typed to fully generic. The latter 
-provides a reusable solution to __the_forwarding_problem__.
+provides a reusable, approximate solution to __the_forwarding_problem__.
 Every generic variant has a corresponding generator function template that 
 returns an adapter instance for the given argument.
 
@@ -1019,10 +1019,8 @@ An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
 target function. When called, its arguments are bundled to a 
 __random_access_sequence__ that is passed to the target function object.
 
-The call operators of the resulting function object are strictly typed
+The call operators of  esulting function objects are strictly typed
 (in other words, non-templatized) with the types from a __sequence__.
-By default, call operators with zero to N parameters are generated to, 
-where N is the size of the __sequence__ that specifies the types. 
 
 The type of the target function is allowed to be const qualified or a 
 reference. Const qualification is preserved and propagated appropriately 
