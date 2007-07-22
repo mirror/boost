@@ -25,11 +25,14 @@ namespace boost { namespace fusion
     {
         struct size_plus
         {
-            template<typename Seq, typename State>
-            struct result
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Seq, typename State>
+            struct result<This(Seq, State)>
               : mpl::plus<
                     segmented_size<typename remove_reference<Seq>::type>
-                  , State
+                  , typename remove_reference<State>::type
                 >
             {};
         };
