@@ -137,11 +137,15 @@ namespace boost { namespace proto
 
         template<template<typename> class Extends>
         struct pod_generator;
+
+        template<typename Generator = default_generator>
+        struct by_value_generator;
     }
 
     using generatorns_::default_generator;
     using generatorns_::generator;
     using generatorns_::pod_generator;
+    using generatorns_::by_value_generator;
 
     namespace domainns_
     {

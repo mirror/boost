@@ -79,9 +79,17 @@ namespace boost { namespace proto
         template<typename T>
         struct unref<ref_<T> >
         {
-            typedef typename T::proto_derived_expr type;
+            typedef T type;
             typedef T &reference;
             typedef T &const_reference;
+        };
+
+        template<typename T>
+        struct unref<ref_<T const> >
+        {
+            typedef T type;
+            typedef T const &reference;
+            typedef T const &const_reference;
         };
 
         template<typename T>
