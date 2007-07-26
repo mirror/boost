@@ -35,7 +35,7 @@ namespace boost { namespace mpi {
  *  type and will use the @c MPI_Pack function of the underlying MPI
  *  implementation to perform serialization.
  */
-class packed_iarchive
+class BOOST_MPI_DECL packed_iarchive
   : public packed_iprimitive
   , public archive::basic_binary_iarchive<packed_iarchive>
   , public archive::detail::shared_ptr_helper

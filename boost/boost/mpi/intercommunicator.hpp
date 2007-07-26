@@ -47,7 +47,7 @@ class group;
  * must use a different (intra-)communicator.
  * 
  */   
-class intercommunicator : public communicator
+class BOOST_MPI_DECL intercommunicator : public communicator
 {
 private:
   friend class communicator;

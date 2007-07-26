@@ -12,7 +12,7 @@
 #ifndef BOOST_MPI_TIMER_HPP
 #define BOOST_MPI_TIMER_HPP
 
-#include <mpi.h>
+#include <boost/mpi/config.hpp>
 #include <boost/limits.hpp>
 
 namespace boost { namespace mpi {
@@ -23,7 +23,7 @@ namespace boost { namespace mpi {
  *  The @c timer class is a simple wrapper around the MPI timing
  *  facilities that mimics the interface of the Boost Timer library.
  */
-class timer {
+class BOOST_MPI_DECL timer {
 public:
   /** Initializes the timer
    *

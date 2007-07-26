@@ -7,12 +7,14 @@
 /** @file config.hpp
  *
  *  This header provides MPI configuration details that expose the
- *  capabilities of the underlying MPI implementation.
+ *  capabilities of the underlying MPI implementation, and provides
+ *  auto-linking support on Windows.
  */
 #ifndef BOOST_MPI_CONFIG_HPP
 #define BOOST_MPI_CONFIG_HPP
 
 #include <mpi.h>
+#include <boost/config.hpp>
 
 // If this is an MPI-2 implementation, define configuration macros for
 // the features we are interested in.
@@ -61,6 +63,36 @@
 #  define BOOST_MPI_HAS_NOARG_INITIALIZATION
 #elif defined(MPICH_NAME)
 // Configuration for MPICH
+#endif
+
+/*****************************************************************************
+ *                                                                           *
+ *  DLL import/export options                                                *  
+ *                                                                           *
+ *****************************************************************************/
+
+#if defined(BOOST_HAS_DECLSPEC) && (defined(BOOST_MPI_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)) && !defined(BOOST_MPI_STATIC_LINK)
+#  if defined(BOOST_MPI_SOURCE)
+#     define BOOST_MPI_DECL __declspec(dllexport)
+#     define BOOST_MPI_BUILD_DLL
+#  else
+#     define BOOST_MPI_DECL __declspec(dllimport)
+#  endif
+#endif
+
+#ifndef BOOST_MPI_DECL
+#  define BOOST_MPI_DECL
+#endif
+
+#if !defined(BOOST_MPI_NO_LIB) && !defined(BOOST_MPI_SOURCE) && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
+#  define BOOST_LIB_NAME boost_mpi
+#  if defined(BOOST_MPI_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)
+#     define BOOST_DYN_LINK
+#  endif
+#  ifdef BOOST_MPI_DIAG
+#     define BOOST_LIB_DIAGNOSTIC
+#  endif
+#  include <boost/config/auto_link.hpp>
 #endif
 
 #endif // BOOST_MPI_CONFIG_HPP

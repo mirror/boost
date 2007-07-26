@@ -33,7 +33,7 @@ namespace boost { namespace mpi {
  * group, one can create a new communicator containing only the
  * processes in that group.
  */
-class group
+class BOOST_MPI_DECL group
 {
 public:
   /**
@@ -211,7 +211,7 @@ protected:
  * @returns True when the two process groups contain the same
  * processes in the same order.
  */
-bool operator==(const group& g1, const group& g2);
+BOOST_MPI_DECL bool operator==(const group& g1, const group& g2);
 
 /**
  * @brief Determines whether two process groups are not identical.
@@ -236,7 +236,7 @@ inline bool operator!=(const group& g1, const group& g2)
  * followed by the processes from @c g2 (but not also in @c
  * g1). Equivalent to @c MPI_Group_union.
  */
-group operator|(const group& g1, const group& g2);
+BOOST_MPI_DECL group operator|(const group& g1, const group& g2);
 
 /**
  * @brief Computes the intersection of two process groups.
@@ -245,7 +245,7 @@ group operator|(const group& g1, const group& g2);
  * that are in group @c g1 and in group @c g2, ordered in the same way
  * as @c g1. Equivalent to @c MPI_Group_intersection.
  */
-group operator&(const group& g1, const group& g2);
+BOOST_MPI_DECL group operator&(const group& g1, const group& g2);
 
 /**
  * @brief Computes the difference between two process groups.
@@ -254,7 +254,7 @@ group operator&(const group& g1, const group& g2);
  * that are in group @c g1 but not in group @c g2, ordered in the same way
  * as @c g1. Equivalent to @c MPI_Group_difference.
  */
-group operator-(const group& g1, const group& g2);
+BOOST_MPI_DECL group operator-(const group& g1, const group& g2);
 
 /************************************************************************
  * Implementation details                                               *
@@ -288,7 +288,7 @@ group::translate_ranks(InputIterator first, InputIterator last,
  * we can avoid any memory allocation or copying.
  */
 template<> 
-int*
+BOOST_MPI_DECL int*
 group::translate_ranks(int* first, int* last, const group& to_group, int* out);
 
 template<typename InputIterator>
@@ -311,7 +311,7 @@ group group::include(InputIterator first, InputIterator last)
  * can avoid any memory allocation or copying before creating the
  * group.
  */
-template<> group group::include(int* first, int* last);
+template<> BOOST_MPI_DECL group group::include(int* first, int* last);
 
 template<typename InputIterator>
 group group::exclude(InputIterator first, InputIterator last)
@@ -333,7 +333,7 @@ group group::exclude(InputIterator first, InputIterator last)
  * can avoid any memory allocation or copying before creating the
  * group.
  */
-template<> group group::exclude(int* first, int* last);
+template<> BOOST_MPI_DECL group group::exclude(int* first, int* last);
 
 } } // end namespace boost::mpi
 

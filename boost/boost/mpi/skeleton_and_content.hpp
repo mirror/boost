@@ -23,7 +23,7 @@
 #ifndef BOOST_MPI_SKELETON_AND_CONTENT_HPP
 #define BOOST_MPI_SKELETON_AND_CONTENT_HPP
 
-#include <mpi.h>
+#include <boost/mpi/config.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/mpi/packed_iarchive.hpp>
 #include <boost/mpi/packed_oarchive.hpp>
@@ -51,7 +51,7 @@ namespace boost { namespace mpi {
  *  without changing the structure of the object.
  */
 template <class T>
-struct skeleton_proxy
+struct BOOST_MPI_DECL skeleton_proxy
 {
   /**
    *  Constructs a @c skeleton_proxy that references object @p x.
@@ -88,7 +88,7 @@ namespace detail {
   /// @brief a class holding an MPI datatype
   /// INTERNAL ONLY
   /// the type is freed upon destruction
-  class mpi_datatype_holder : public boost::noncopyable
+  class BOOST_MPI_DECL mpi_datatype_holder : public boost::noncopyable
   {
   public:
     mpi_datatype_holder()
@@ -138,7 +138,7 @@ namespace detail {
  *  will invoke @c send, @c recv, or @c broadcast operations using @c
  *  get_content().
  */
-class content
+class BOOST_MPI_DECL content
 {
 public:
   /**
@@ -239,7 +239,7 @@ template <class T> const content get_content(const T& x);
  *  Users will not generally need to use @c packed_skeleton_iarchive
  *  directly. Instead, use @c skeleton or @c get_skeleton.
  */
-class packed_skeleton_iarchive
+class BOOST_MPI_DECL packed_skeleton_iarchive
   : public detail::ignore_iprimitive,
     public detail::forward_skeleton_iarchive<packed_skeleton_iarchive,packed_iarchive>
 {
@@ -309,7 +309,7 @@ private:
  *  Users will not generally need to use @c packed_skeleton_oarchive
  *  directly. Instead, use @c skeleton or @c get_skeleton.
  */
-class packed_skeleton_oarchive
+class BOOST_MPI_DECL packed_skeleton_oarchive
   : public detail::ignore_oprimitive,
     public detail::forward_skeleton_oarchive<packed_skeleton_oarchive,packed_oarchive>
 {

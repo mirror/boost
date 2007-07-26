@@ -48,7 +48,7 @@ namespace boost { namespace mpi {
  * requirements of the BGL Graph, Incidence Graph, Adjacency Graph,
  * Vertex List Graph, and Edge List Graph concepts.
  */
-class graph_communicator : public communicator
+class BOOST_MPI_DECL graph_communicator : public communicator
 {
   friend class communicator;
 

@@ -22,7 +22,7 @@ namespace detail {
   // special types defined by the serialization library
   // to define the data skeletons (classes, pointers, container sizes, ...)
 
-  class content_oarchive
+  class BOOST_MPI_DECL content_oarchive
     : public mpi_datatype_primitive,
       public ignore_skeleton_oarchive<content_oarchive>
   {

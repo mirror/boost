@@ -12,7 +12,7 @@
 #ifndef BOOST_MPI_STATUS_HPP
 #define BOOST_MPI_STATUS_HPP
 
-#include <mpi.h>
+#include <boost/mpi/config.hpp>
 #include <boost/optional.hpp>
 
 namespace boost { namespace mpi {
@@ -30,7 +30,7 @@ class communicator;
  *  message, message tag, error code (rarely used), or the number of
  *  elements that have been transmitted.
  */
-class status
+class BOOST_MPI_DECL status
 {
  public:
   status() : m_count(-1) { }

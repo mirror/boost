@@ -17,6 +17,7 @@
 #ifndef BOOST_MPI_DATATYPE_HPP
 #define BOOST_MPI_DATATYPE_HPP
 
+#include <boost/mpi/config.hpp>
 #include <boost/mpi/datatype_fwd.hpp>
 #include <mpi.h>
 #include <boost/config.hpp>

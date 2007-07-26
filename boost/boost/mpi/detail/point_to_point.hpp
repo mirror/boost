@@ -9,13 +9,14 @@
 #define BOOST_MPI_DETAIL_POINT_TO_POINT_HPP
 
 // For (de-)serializing sends and receives
+#include <boost/mpi/config.hpp>
 #include <boost/mpi/packed_oarchive.hpp>
 #include <boost/mpi/packed_iarchive.hpp>
 
 namespace boost { namespace mpi { namespace detail {
 
 /** Sends a packed archive using MPI_Send. */
-void
+BOOST_MPI_DECL void
 packed_archive_send(MPI_Comm comm, int dest, int tag,
                     const packed_oarchive& ar);
 
@@ -28,7 +29,7 @@ packed_archive_send(MPI_Comm comm, int dest, int tag,
  *
  * @pre num_out_requests >= 2
  */
-int
+BOOST_MPI_DECL int
 packed_archive_isend(MPI_Comm comm, int dest, int tag,
                      const packed_oarchive& ar,
                      MPI_Request* out_requests, int num_out_requests);
@@ -36,13 +37,13 @@ packed_archive_isend(MPI_Comm comm, int dest, int tag,
 /**
  * \overload
  */
-int
+BOOST_MPI_DECL int
 packed_archive_isend(MPI_Comm comm, int dest, int tag,
                      const packed_iarchive& ar,
                      MPI_Request* out_requests, int num_out_requests);
 
 /** Receives a packed archive using MPI_Recv. */
-void
+BOOST_MPI_DECL void
 packed_archive_recv(MPI_Comm comm, int source, int tag, packed_iarchive& ar,
                     MPI_Status& status);
 

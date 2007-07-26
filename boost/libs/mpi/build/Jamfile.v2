@@ -42,6 +42,8 @@ lib boost_mpi
   : # Requirements
     <library>../../serialization/build//boost_serialization
     <library>/mpi//mpi [ mpi.extra-requirements ]
+    <define>BOOST_MPI_SOURCE=1
+    <link>shared:<define>BOOST_MPI_DYN_LINK=1
   : # Default build
     <link>shared
   : # Usage requirements
@@ -58,6 +60,10 @@ lib boost_mpi
         <library>boost_mpi
         <library>/mpi//mpi [ mpi.extra-requirements ]
       	<library>/boost/python//boost_python
+        <link>shared:<define>BOOST_MPI_DYN_LINK=1
+        <link>shared:<define>BOOST_MPI_PYTHON_DYN_LINK=1
+        <link>shared:<define>BOOST_PYTHON_DYN_LINK=1        
+        <define>BOOST_MPI_PYTHON_SOURCE=1
       : # Default build
         <link>shared
       : # Usage requirements
@@ -78,9 +84,15 @@ lib boost_mpi
         python/status.cpp
         python/py_timer.cpp
       : # Requirements
+      	<library>/boost/python//boost_python      
         <library>boost_mpi_python
         <library>boost_mpi
         <library>/mpi//mpi [ mpi.extra-requirements ]
+        <link>shared:<define>BOOST_MPI_DYN_LINK=1    
+        <link>shared:<define>BOOST_MPI_PYTHON_DYN_LINK=1        
+        <link>shared:<define>BOOST_PYTHON_DYN_LINK=1    
+        <link>shared 
+        <variant>release   
       ;
   }
 }

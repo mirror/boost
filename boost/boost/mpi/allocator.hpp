@@ -29,7 +29,7 @@ template<typename T> class allocator;
  *  rebinding to another, different value type.
  */
 template<> 
-class allocator<void> 
+class BOOST_MPI_DECL allocator<void> 
 { 
 public: 
   typedef void* pointer; 
@@ -64,7 +64,7 @@ public:
  *  defined when the MPI-2 memory allocation facilities are available.
  */
 template<typename T> 
-class allocator 
+class BOOST_MPI_DECL allocator 
 {
 public:
   /// Holds the size of objects

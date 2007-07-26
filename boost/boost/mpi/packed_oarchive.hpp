@@ -33,7 +33,7 @@ namespace boost { namespace mpi {
  *  type and will use the @c MPI_Unpack function of the underlying MPI
  *  implementation to perform deserialization.
  */
-class packed_oarchive
+class BOOST_MPI_DECL packed_oarchive
   : public packed_oprimitive,
     public archive::basic_binary_oarchive<packed_oarchive>
 {

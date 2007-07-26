@@ -83,7 +83,7 @@ namespace detail {
   using boost::python::object;
   using boost::python::extract;
    
-  extern boost::python::object skeleton_proxy_base_type;
+  extern BOOST_MPI_DECL boost::python::object skeleton_proxy_base_type;
 
   template<typename T>
   struct skeleton_saver
@@ -150,14 +150,14 @@ namespace detail {
    * Determine if a skeleton and content handler for @p type has
    * already been registered.
    */
-  bool
+  BOOST_MPI_PYTHON_DECL bool
   skeleton_and_content_handler_registered(PyTypeObject* type);
  
   /**
    * Register a skeleton/content handler with a particular Python type
    * (which actually wraps a C++ type).
    */
-  void 
+  BOOST_MPI_PYTHON_DECL void 
   register_skeleton_and_content_handler(PyTypeObject*, 
                                         const skeleton_content_handler&);
 } // end namespace detail

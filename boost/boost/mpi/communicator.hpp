@@ -13,6 +13,7 @@
 #ifndef BOOST_MPI_COMMUNICATOR_HPP
 #define BOOST_MPI_COMMUNICATOR_HPP
 
+#include <boost/mpi/config.hpp>
 #include <boost/mpi/exception.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
@@ -120,7 +121,7 @@ class graph_communicator;
  * within the communicator, and communicate with any other processes
  * in the communicator.
  */
-class communicator
+class BOOST_MPI_DECL communicator
 {
  public:
   /**
@@ -1052,7 +1053,7 @@ class communicator
  * @returns True when the two communicators refer to the same
  * underlying MPI communicator.
  */
-bool operator==(const communicator& comm1, const communicator& comm2);
+BOOST_MPI_DECL bool operator==(const communicator& comm1, const communicator& comm2);
 
 /**
  * @brief Determines whether two communicators are different.
@@ -1604,7 +1605,7 @@ request communicator::irecv(int source, int tag, T* values, int n) const
  * INTERNAL ONLY
  */
 template<>
-void
+BOOST_MPI_DECL void
 communicator::send<packed_oarchive>(int dest, int tag,
                                     const packed_oarchive& ar) const;
 
@@ -1612,7 +1613,7 @@ communicator::send<packed_oarchive>(int dest, int tag,
  * INTERNAL ONLY
  */
 template<>
-void
+BOOST_MPI_DECL void
 communicator::send<packed_skeleton_oarchive>
   (int dest, int tag, const packed_skeleton_oarchive& ar) const;
 
@@ -1620,14 +1621,14 @@ communicator::send<packed_skeleton_oarchive>
  * INTERNAL ONLY
  */
 template<>
-void
+BOOST_MPI_DECL void
 communicator::send<content>(int dest, int tag, const content& c) const;
 
 /**
  * INTERNAL ONLY
  */
 template<>
-status
+BOOST_MPI_DECL status
 communicator::recv<packed_iarchive>(int source, int tag,
                                     packed_iarchive& ar) const;
 
@@ -1635,7 +1636,7 @@ communicator::recv<packed_iarchive>(int source, int tag,
  * INTERNAL ONLY
  */
 template<>
-status
+BOOST_MPI_DECL status
 communicator::recv<packed_skeleton_iarchive>
   (int source, int tag, packed_skeleton_iarchive& ar) const;
 
@@ -1643,7 +1644,7 @@ communicator::recv<packed_skeleton_iarchive>
  * INTERNAL ONLY
  */
 template<>
-status
+BOOST_MPI_DECL status
 communicator::recv<const content>(int source, int tag,
                                   const content& c) const;
 
@@ -1662,15 +1663,15 @@ communicator::recv<content>(int source, int tag,
  * INTERNAL ONLY
  */
 template<>
-request
+BOOST_MPI_DECL request
 communicator::isend<packed_oarchive>(int dest, int tag,
-                                    const packed_oarchive& ar) const;
+                                     const packed_oarchive& ar) const;
 
 /**
  * INTERNAL ONLY
  */
 template<>
-request
+BOOST_MPI_DECL request
 communicator::isend<packed_skeleton_oarchive>
   (int dest, int tag, const packed_skeleton_oarchive& ar) const;
 
@@ -1678,14 +1679,14 @@ communicator::isend<packed_skeleton_oarchive>
  * INTERNAL ONLY
  */
 template<>
-request
+BOOST_MPI_DECL request
 communicator::isend<content>(int dest, int tag, const content& c) const;
 
 /**
  * INTERNAL ONLY
  */
 template<>
-request
+BOOST_MPI_DECL request
 communicator::irecv<packed_skeleton_iarchive>
   (int source, int tag, packed_skeleton_iarchive& ar) const;
 
@@ -1693,7 +1694,7 @@ communicator::irecv<packed_skeleton_iarchive>
  * INTERNAL ONLY
  */
 template<>
-request
+BOOST_MPI_DECL request
 communicator::irecv<const content>(int source, int tag,
                                    const content& c) const;
 

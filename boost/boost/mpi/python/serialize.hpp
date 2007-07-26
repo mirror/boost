@@ -20,6 +20,8 @@
 #ifndef BOOST_MPI_PYTHON_SERIALIZE_HPP
 #define BOOST_MPI_PYTHON_SERIALIZE_HPP
 
+#include <boost/mpi/python/config.hpp>
+
 #include <boost/python/object.hpp>
 #include <boost/python/str.hpp>
 #include <boost/python/extract.hpp>
@@ -86,7 +88,7 @@ DPG PICK UP HERE
 BOOST_PYTHON_SERIALIZATION_ARCHIVE(IArchiver, OArchiver)                \
 namespace boost { namespace python { namespace detail {                 \
 template<>                                                              \
-direct_serialization_table< IArchiver , OArchiver >&                    \
+BOOST_MPI_PYTHON_DECL direct_serialization_table< IArchiver , OArchiver >& \
  get_direct_serialization_table< IArchiver , OArchiver >();             \
 }                                                                       \
                                                                         \
@@ -113,7 +115,11 @@ struct input_archiver< OArchiver > { typedef IArchiver type; };         \
  */
 #define BOOST_PYTHON_DIRECT_SERIALIZATION_ARCHIVE_IMPL(IArchiver, OArchiver) \
 namespace boost { namespace python { namespace detail {                 \
+template                                                                \
+  class BOOST_MPI_PYTHON_DECL direct_serialization_table< IArchiver , OArchiver >; \
+                                                                        \
 template<>                                                              \
+ BOOST_MPI_PYTHON_DECL                                                  \
  direct_serialization_table< IArchiver , OArchiver >&                   \
  get_direct_serialization_table< IArchiver , OArchiver >( )             \
 {                                                                       \
@@ -129,7 +135,7 @@ namespace boost { namespace python {
  *
  * Provides access to the Python "pickle" module from within C++.
  */
-class pickle {
+class BOOST_MPI_PYTHON_DECL pickle {
   struct data_t;
 
 public:
@@ -187,7 +193,7 @@ namespace detail {
    * instead, use get_direct_serialization_table.
    */
   template<typename IArchiver, typename OArchiver>
-  class direct_serialization_table
+  class BOOST_MPI_PYTHON_DECL direct_serialization_table
   {
   public:
     typedef boost::function3<void, OArchiver&, const object&, const unsigned int>

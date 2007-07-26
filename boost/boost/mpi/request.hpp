@@ -12,7 +12,7 @@
 #ifndef BOOST_MPI_REQUEST_HPP
 #define BOOST_MPI_REQUEST_HPP
 
-#include <mpi.h>
+#include <boost/mpi/config.hpp>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/mpi/packed_iarchive.hpp>
@@ -29,7 +29,7 @@ class communicator;
  *  receive and will be returned from @c isend or @c irecv,
  *  respectively.
  */
-class request 
+class BOOST_MPI_DECL request 
 {
  public:
   /**

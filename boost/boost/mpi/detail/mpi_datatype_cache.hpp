@@ -46,7 +46,7 @@ struct type_info_compare
 /// @brief a map of MPI data types, indexed by their type_info
 ///
 ///
-class mpi_datatype_map
+class BOOST_MPI_DECL mpi_datatype_map
  : private std::map<std::type_info const*,MPI_Datatype,type_info_compare>,
    public boost::noncopyable
 {

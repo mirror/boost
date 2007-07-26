@@ -25,7 +25,15 @@ namespace boost { namespace mpi { namespace python {
 namespace detail {
   typedef std::map<PyTypeObject*, skeleton_content_handler>
     skeleton_content_handlers_type;
-  extern skeleton_content_handlers_type skeleton_content_handlers;
+
+// We're actually importing skeleton_content_handlers from skeleton_and_content.cpp.
+#if defined(BOOST_HAS_DECLSPEC) && (defined(BOOST_MPI_PYTHON_DYN_LINK) || defined(BOOST_ALL_DYN_LINK))
+#  define BOOST_SC_DECL __declspec(dllimport)
+#else
+#  define BOOST_SC_DECL
+#endif
+
+  extern BOOST_SC_DECL skeleton_content_handlers_type skeleton_content_handlers;
 }
 
 /**

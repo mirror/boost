@@ -59,7 +59,8 @@ namespace boost { namespace mpi { namespace python { namespace detail {
   // A map from Python type objects to skeleton/content handlers
   typedef std::map<PyTypeObject*, skeleton_content_handler>
     skeleton_content_handlers_type;
-  skeleton_content_handlers_type skeleton_content_handlers;
+
+  BOOST_MPI_PYTHON_DECL skeleton_content_handlers_type skeleton_content_handlers;
 
   bool
   skeleton_and_content_handler_registered(PyTypeObject* type)

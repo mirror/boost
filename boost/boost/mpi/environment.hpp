@@ -13,10 +13,10 @@
 #ifndef BOOST_MPI_ENVIRONMENT_HPP
 #define BOOST_MPI_ENVIRONMENT_HPP
 
+#include <boost/mpi/config.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <string>
-#include <boost/mpi/config.hpp>
 
 namespace boost { namespace mpi {
 
@@ -45,7 +45,7 @@ namespace boost { namespace mpi {
  *  @c environment object is needed. If one is created, however, it
  *  will do nothing on either construction or destruction.
  */
-class environment : noncopyable {
+class BOOST_MPI_DECL environment : noncopyable {
 public:
 #ifdef BOOST_MPI_HAS_NOARG_INITIALIZATION
   /** Initialize the MPI environment. 

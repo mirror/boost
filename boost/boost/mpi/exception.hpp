@@ -13,7 +13,7 @@
 #ifndef BOOST_MPI_EXCEPTION_HPP
 #define BOOST_MPI_EXCEPTION_HPP
 
-#include <mpi.h>
+#include <boost/mpi/config.hpp>
 #include <exception>
 #include <string>
 #include <boost/config.hpp>
@@ -29,7 +29,7 @@ namespace boost { namespace mpi {
  * implementation. Consult the documentation for your MPI
  * implementation to determine the effect of MPI errors.
  */
-class exception : public std::exception
+class BOOST_MPI_DECL exception : public std::exception
 {
  public:
   /**

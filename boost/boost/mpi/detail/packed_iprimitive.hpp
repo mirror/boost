@@ -25,7 +25,7 @@ namespace boost { namespace mpi {
 
 /// deserialization using MPI_Unpack
 
-class packed_iprimitive
+class BOOST_MPI_DECL packed_iprimitive
 {
 public:
     /// the type of the buffer from which the data is unpacked upon deserialization

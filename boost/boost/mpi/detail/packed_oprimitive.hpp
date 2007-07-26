@@ -26,7 +26,7 @@ namespace boost { namespace mpi {
 
 /// serialization using MPI::Pack
 
-class packed_oprimitive
+class BOOST_MPI_DECL packed_oprimitive
 {
 public:
     /// the type of the buffer into which the data is packed upon serialization

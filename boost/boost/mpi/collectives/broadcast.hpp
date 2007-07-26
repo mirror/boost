@@ -23,7 +23,7 @@ namespace boost { namespace mpi {
  * INTERNAL ONLY
  */
 template<>
-void
+BOOST_MPI_DECL void
 broadcast<const packed_oarchive>(const communicator& comm,
                                  const packed_oarchive& oa,
                                  int root);
@@ -32,7 +32,7 @@ broadcast<const packed_oarchive>(const communicator& comm,
  * INTERNAL ONLY
  */
 template<>
-void
+BOOST_MPI_DECL void
 broadcast<packed_oarchive>(const communicator& comm, packed_oarchive& oa,
                            int root);
 
@@ -40,7 +40,7 @@ broadcast<packed_oarchive>(const communicator& comm, packed_oarchive& oa,
  * INTERNAL ONLY
  */
 template<>
-void
+BOOST_MPI_DECL void
 broadcast<packed_iarchive>(const communicator& comm, packed_iarchive& ia,
                            int root);
 
@@ -48,7 +48,7 @@ broadcast<packed_iarchive>(const communicator& comm, packed_iarchive& ia,
  * INTERNAL ONLY
  */
 template<>
-void
+BOOST_MPI_DECL void
 broadcast<const packed_skeleton_oarchive>(const communicator& comm,
                                           const packed_skeleton_oarchive& oa,
                                           int root);
