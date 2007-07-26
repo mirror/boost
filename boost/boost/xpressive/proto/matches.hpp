@@ -270,6 +270,11 @@
               : vararg_matches< Args1, Args2, typename Args2::back_, (N1+2 > N2), (N2 > N1) >
             {};
 
+            template<typename Args1, typename Args2, long N2>
+            struct matches_impl< expr<tag::terminal, Args1, 0>, expr<proto::_, Args2, N2> >
+              : mpl::false_
+            {};
+
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< expr<Tag, Args1, 1>, expr<Tag, Args2, 1> >
               : matches_impl<typename Args1::arg0::proto_base_expr, typename Args2::arg0::proto_base_expr>
