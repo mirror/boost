@@ -122,6 +122,23 @@
             {}
         }
 
+        template<typename Grammar, typename ConstructorFun>
+        struct construct
+          : Grammar
+        {
+            template<typename Expr, typename State, typename Visitor>
+            struct apply
+              : ConstructorFun::template apply<typename Grammar::template apply<Expr, State, Visitor>::type, State, Visitor>
+            {};
+
+            template<typename Expr, typename State, typename Visitor>
+            static typename apply<Expr, State, Visitor>::type
+            call(Expr const &expr, State const &state, Visitor &visitor)
+            {
+                return ConstructorFun::call(Grammar::call(expr, state, visitor), state, visitor);
+            }
+        };
+
         #define BOOST_PROTO_APPLY_(Z, N, DATA)                                                      \
             typename apply_<BOOST_PP_CAT(DATA, N), Expr, State, Visitor>::type                      \
             /**/
