@@ -477,6 +477,9 @@ upcoming ISO C++ standard, C++0x.
 The compiler supports  concepts. Note: concepts have been proposed for C++0x,
 but have not yet been approved for inclusion in the language.
 ]]
+[[`BOOST_HAS_DECLTYPE`][
+The compiler supports decltype.
+]]
 [[`BOOST_HAS_LONG_LONG`][
 The compiler supports the long long data type.
 ]]
@@ -487,9 +490,7 @@ The compiler supports  rvalue references.
 The compiler supports  static assertions.
 ]]
 [[`BOOST_HAS_VARIADIC_TMPL`][
-The compiler supports  variadic templates. Note: variadic templates have been
-proposed for C++0x, but have not yet been approved for inclusion in the
-language.
+The compiler supports  variadic templates. 
 ]]
 ]
 

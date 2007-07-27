@@ -93,6 +93,7 @@
 #    define BOOST_HAS_STATIC_ASSERT
 #    define BOOST_HAS_VARIADIC_TMPL
 #    define BOOST_HAS_RVALUE_REFS
+#    define BOOST_HAS_DECLTYPE
 #  endif
 #endif
 
