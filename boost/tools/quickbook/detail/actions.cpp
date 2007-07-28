@@ -116,6 +116,31 @@ namespace quickbook
         out << post;
     }
 
+    void cond_phrase_action_pre::operator()(iterator first, iterator last) const
+    {
+        std::string str(first, last);
+        conditions.push_back(find(macro, str.c_str()));
+        out.push(); // save the stream
+    }
+
+    void cond_phrase_action_post::operator()(iterator first, iterator last) const
+    {
+        bool symbol_found = conditions.back();
+        conditions.pop_back();
+
+        if (first == last || !symbol_found)
+        {
+            out.pop(); // restore the stream
+        }
+        else
+        {
+            std::string save;
+            out.swap(save);
+            out.pop(); // restore the stream
+            out << save; // print the body
+        }
+    }
+
     void list_action::operator()(iterator first, iterator last) const
     {
         BOOST_ASSERT(!list_marks.empty()); // there must be at least one item in the stack

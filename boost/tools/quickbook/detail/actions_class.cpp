@@ -93,6 +93,8 @@ namespace quickbook
         , plain_char(phrase)
         , raw_char(phrase)
         , image(phrase)
+        , cond_phrase_pre(phrase, conditions, macro)
+        , cond_phrase_post(phrase, conditions, macro)
 
         , list(out, list_buffer, list_indent, list_marks)
         , list_format(list_buffer, list_indent, list_marks)

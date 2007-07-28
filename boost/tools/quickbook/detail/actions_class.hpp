@@ -85,6 +85,7 @@ namespace quickbook
         std::string             macro_id;
         std::stack<mark_type>   list_marks;
         int                     list_indent;
+        std::vector<bool>       conditions;
         string_list             template_info;
         int                     template_depth;
         bool                    template_escape;
@@ -114,6 +115,8 @@ namespace quickbook
         plain_char_action       plain_char;
         raw_char_action         raw_char;
         image_action            image;
+        cond_phrase_action_pre  cond_phrase_pre;
+        cond_phrase_action_post cond_phrase_post;
 
         list_action             list;
         list_format_action      list_format;

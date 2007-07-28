@@ -45,6 +45,7 @@
 [def __escape__             [link quickbook.syntax.phrase.escape Escape]]
 [def __single_char_escape__ [link quickbook.syntax.phrase.single_char_escape Single char escape]]
 [def __images__             [link quickbook.syntax.phrase.images Images]]
+[def __cond__               [link quickbook.syntax.phrase.cond Conditional Generation]]
 
 [def __document__           [link quickbook.syntax.block.document Document]]
 [def __section__            [link quickbook.syntax.block.section Section]]
@@ -160,6 +161,7 @@ Features include:
 * __blurbs__, __admonitions__ and table cells (see __tables__) may now
   contain paragraphs.
 * `\n` and `[br]` are now deprecated.
+* __cond__. Ala C++ #ifdef.
 
 [endsect]
 
@@ -624,6 +626,37 @@ See __templates__ for details.
 [endsect]
 
 [endsect]
+
+[section:cond Conditional Generation]
+
+Like C++ `#ifdef`, you can generate phrases depending on the presence of
+a macro. Example:
+
+[pre'''
+[? __to_be__ To be or not to be]
+''']
+
+[? __to_be__ To be or not to be]
+
+Here, the phrase "To be or not to be" will only be generated if the
+macro symbol '''__to_be__''' has been previously defined. The phrase
+above will not do anything since we haven't defined '''__to_be__'''.
+Now, let's define the symbol:
+
+[pre'''
+[def __to_be__]
+''']
+
+[def __to_be__]
+
+And try again:
+
+[? __to_be__ To be or not to be]
+
+Yes![footnote Conditional Generation makes quickbook turing complete.]
+
+[endsect]
+
 [endsect]
 [section:block Block Level Elements]
 
@@ -2106,6 +2139,8 @@ boostbook standalone
     [[table]                [[table_sample]]                                [__tables__]]
     [[variablelist]         [[var_list_sample]]                             [__variable_lists__]]
     [[include]              [[^'''[include someother.qbk]''']]              [__include__]]
+    [[conditional generation]
+                            [[^'''[? symbol phrase]''']]                    [__cond__]]
 ]
 
 [endsect]

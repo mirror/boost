@@ -211,7 +211,8 @@ namespace quickbook
 
                 phrase_markup =
                         '['
-                    >>  (   image
+                    >>  (   cond_phrase
+                        |   image
                         |   url
                         |   link
                         |   anchor
@@ -246,6 +247,16 @@ namespace quickbook
                         >>  *(anychar_p - "'''")        [actions.raw_char]
                         >>  str_p("'''")                [actions.escape_post]
                         )
+                    ;
+
+                macro_identifier =
+                    +(anychar_p - (space_p | ']'))
+                    ;
+
+                cond_phrase =
+                        '?' >> blank
+                    >>  macro_identifier                [actions.cond_phrase_pre]
+                    >>  (!phrase)                       [actions.cond_phrase_post]
                     ;
 
                 image =
@@ -399,7 +410,9 @@ namespace quickbook
                             simple_bold, simple_italic, simple_underline,
                             simple_teletype, source_mode, template_, template_arg,
                             quote, code_block, footnote, replaceable, macro,
-                            brackets, template_args, dummy_block;
+                            brackets, template_args, dummy_block, cond_phrase,
+                            macro_identifier
+                            ;
 
             rule<Scanner> const&
             start() const { return common; }

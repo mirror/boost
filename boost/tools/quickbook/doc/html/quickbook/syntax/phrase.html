@@ -44,6 +44,7 @@
         char escape</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.images">Images</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.footnotes">Footnotes</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.cond"> Conditional Generation</a></span></dt>
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -135,7 +136,7 @@ the true business precept.]
 <p>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
           are much stricter
-          <sup>[<a name="id385487" href="#ftn.id385487">1</a>]</sup>
+          <sup>[<a name="id385500" href="#ftn.id385500">1</a>]</sup>
           .
         </p>
 <div class="itemizedlist"><ul type="disc">
@@ -171,7 +172,7 @@ the true business precept.]
           </li>
 </ul></div>
 <div class="table">
-<a name="id455953"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
+<a name="id455966"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
 <table class="table" summary="More Formatting Samples">
 <colgroup>
 <col>
@@ -500,7 +501,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
           whereas a Python comment <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.
         </p>
 <div class="table">
-<a name="id456938"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
+<a name="id456951"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
 <table class="table" summary="Supported Source Modes">
 <colgroup>
 <col>
@@ -790,7 +791,7 @@ escape (no processing/formatting)
 </pre>
 <p>
           will generate this
-          <sup>[<a name="id457794" href="#ftn.id457794">2</a>]</sup>
+          <sup>[<a name="id457807" href="#ftn.id457807">2</a>]</sup>
           .
         </p>
 <div class="section" lang="en">
@@ -817,17 +818,49 @@ escape (no processing/formatting)
           </p>
 </div>
 </div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.cond"></a><a href="phrase.html#quickbook.syntax.phrase.cond" title=" Conditional Generation"> Conditional Generation</a></h4></div></div></div>
+<p>
+          Like C++ <tt class="computeroutput"><span class="comment">#ifdef</span></tt>, you can generate
+          phrases depending on the presence of a macro. Example:
+        </p>
+<pre class="programlisting">[? __to_be__ To be or not to be]
+</pre>
+<p>
+        </p>
+<p>
+          Here, the phrase "To be or not to be" will only be generated
+          if the macro symbol __to_be__ has been previously defined. The phrase above will
+          not do anything since we haven't defined __to_be__. Now, let's define the symbol:
+        </p>
+<pre class="programlisting">[def __to_be__]
+</pre>
+<p>
+          And try again:
+        </p>
+<p>
+          To be or not to be
+        </p>
+<p>
+          Yes!
+          <sup>[<a name="id457980" href="#ftn.id457980">3</a>]</sup>
+        </p>
+</div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id385487" href="#id385487">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id385500" href="#id385500">1</a>] </sup>
               Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
               for sharing these samples and teaching me these obscure formatting
               rules. I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
               being more or less a formal EBNF parser, can handle the context sensitivity
               and ambiguity.
             </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id457794" href="#id457794">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id457807" href="#id457807">2</a>] </sup>
               A sample footnote
+            </p></div>
+<div class="footnote"><p><sup>[<a name="ftn.id457980" href="#id457980">3</a>] </sup>
+              Conditional Generation makes quickbook turing complete.
             </p></div>
 </div>
 </div>
