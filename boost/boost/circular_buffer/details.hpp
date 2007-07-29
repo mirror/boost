@@ -219,9 +219,9 @@ public:
     //! Difference type.
     typedef typename base_iterator::difference_type difference_type;
 
-#if !defined(BOOST_CB_TEST)
+#if !defined(BOOST_CB_TEST) && !BOOST_CB_ENABLE_DEBUG
 private:
-#endif // #if !defined(BOOST_CB_TEST)
+#endif
 // Member variables
 
     //! The circular buffer where the iterator points to.
