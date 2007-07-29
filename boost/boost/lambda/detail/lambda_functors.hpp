@@ -148,11 +148,43 @@ public:
     >(a, cnull_type(), cnull_type(), cnull_type());
   }
 
+  template<class A>
+  typename inherited::template sig<tuple<A const&> >::type
+  operator()(A const& a) const { 
+    return inherited::template call<
+      typename inherited::template sig<tuple<A const&> >::type
+    >(a, cnull_type(), cnull_type(), cnull_type());
+  }
+
   template<class A, class B>
   typename inherited::template sig<tuple<A&, B&> >::type
   operator()(A& a, B& b) const { 
     return inherited::template call<
       typename inherited::template sig<tuple<A&, B&> >::type
+    >(a, b, cnull_type(), cnull_type()); 
+  }
+
+  template<class A, class B>
+  typename inherited::template sig<tuple<A const&, B&> >::type
+  operator()(A const& a, B& b) const { 
+    return inherited::template call<
+      typename inherited::template sig<tuple<A const&, B&> >::type
+    >(a, b, cnull_type(), cnull_type()); 
+  }
+
+  template<class A, class B>
+  typename inherited::template sig<tuple<A&, B const&> >::type
+  operator()(A& a, B const& b) const { 
+    return inherited::template call<
+      typename inherited::template sig<tuple<A&, B const&> >::type
+    >(a, b, cnull_type(), cnull_type()); 
+  }
+
+  template<class A, class B>
+  typename inherited::template sig<tuple<A const&, B const&> >::type
+  operator()(A const& a, B const& b) const { 
+    return inherited::template call<
+      typename inherited::template sig<tuple<A const&, B const&> >::type
     >(a, b, cnull_type(), cnull_type()); 
   }
 
@@ -162,6 +194,15 @@ public:
   { 
     return inherited::template call<
       typename inherited::template sig<tuple<A&, B&, C&> >::type
+    >(a, b, c, cnull_type()); 
+  }
+
+  template<class A, class B, class C>
+  typename inherited::template sig<tuple<A const&, B const&, C const&> >::type
+  operator()(A const& a, B const& b, C const& c) const
+  { 
+    return inherited::template call<
+      typename inherited::template sig<tuple<A const&, B const&, C const&> >::type
     >(a, b, c, cnull_type()); 
   }
 

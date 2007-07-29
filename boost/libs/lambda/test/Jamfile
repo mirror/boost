@@ -53,7 +53,10 @@ DEPENDS all : test ;
   [ run libs/lambda/test/phoenix_control_structures.cpp :  :  :  :  ]
 
   [ run libs/lambda/test/switch_construct.cpp :  :  :  :  ]
+
+  [ run libs/lambda/test/rvalue_test.cpp :  :  :  :  ]
+
+  [ run libs/lambda/test/istreambuf_test.cpp :  :  :  :  ]
  ;
 
 }
-      
