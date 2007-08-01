@@ -202,6 +202,7 @@ namespace quickbook
         out.push();
         phrase.push();
         temp.push();
+        temp_para.push();
         list_buffer.push();
         templates.push();
     }
@@ -222,6 +223,7 @@ namespace quickbook
         out.pop();
         phrase.pop();
         temp.pop();
+        temp_para.pop();
         list_buffer.pop();
         templates.pop();
     }

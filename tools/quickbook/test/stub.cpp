@@ -15,6 +15,9 @@ std::string bar()
     // return 'em, bar man!
     return "bar";
 }
+/*`
+Some trailing text here
+*/
 //]
 
 //[ foo

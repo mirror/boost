@@ -64,6 +64,9 @@ namespace quickbook { namespace detail
         std::string::size_type const start = program.find_first_not_of("\r\n");
         program.erase(0, start);
 
+        if (program.size() == 0)
+            return; // nothing left to do
+
         // Get the first line indent
         std::string::size_type indent = program.find_first_not_of(" \t");
         std::string::size_type pos = 0;

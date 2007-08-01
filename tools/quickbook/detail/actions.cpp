@@ -437,7 +437,7 @@ namespace quickbook
                     // Try to break the last argument at the first space found
                     // and push it into the back of template_info. Do this
                     // recursively until we have all the expected number of
-                    // arguments, or if there is no more spaces left.
+                    // arguments, or if there are no more spaces left.
 
                     std::string& str = template_info.back();
                     std::string::size_type l_pos = str.find_first_of(" \t\r\n");
@@ -908,12 +908,18 @@ namespace quickbook
         if (!code.empty())
         {
             detail::unindent(code); // remove all indents
-            snippet += "\n\n``\n" + code + "``\n\n";
-            code.clear();
+            if (code.size() != 0)
+            {
+                snippet += "\n\n``\n" + code + "``\n\n";
+                code.clear();
+            }
         }
         std::string temp(first, last);
-        detail::unindent(temp); // remove all indents
-        snippet += "\n" + temp; // add a linebreak to allow block marskups
+        if (temp.size() != 0)
+        {
+            detail::unindent(temp); // remove all indents
+            snippet += "\n" + temp; // add a linebreak to allow block marskups
+        }
     }
 
     void cpp_code_snippet_grammar::compile(iterator first, iterator last) const
@@ -922,7 +928,10 @@ namespace quickbook
         if (!code.empty())
         {
             detail::unindent(code); // remove all indents
-            snippet += "\n\n```\n" + code + "```\n\n";
+            if (code.size() != 0)
+            {
+                snippet += "\n\n```\n" + code + "```\n\n";
+            }
 
             snippet += "'''<calloutlist>'''";
             for (size_t i = 0; i < callouts.size(); ++i)
