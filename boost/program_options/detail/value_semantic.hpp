@@ -134,7 +134,14 @@ namespace boost { namespace program_options {
         for (unsigned i = 0; i < s.size(); ++i)
         {
             try {
-                tv->push_back(boost::lexical_cast<T>(s[i]));
+                /* We call validate so that if user provided
+                   a validator for class T, we use it even
+                   when parsing vector<T>.  */
+                boost::any a;
+                std::vector<std::basic_string<charT> > v;
+                v.push_back(s[i]);
+                validate(a, v, (T*)0, 0);                
+                tv->push_back(boost::any_cast<T>(a));
             }
             catch(const bad_lexical_cast& /*e*/) {
                 boost::throw_exception(invalid_option_value(s[i]));
