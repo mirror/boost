@@ -48,7 +48,7 @@ template <typename Token>
 struct correct_token_position
 :   public boost::wave::context_policies::eat_whitespace<Token>
 {
-    correct_token_position(std::string filename)
+    correct_token_position(typename Token::string_type filename)
     :   pos(filename) {}
     
     ///////////////////////////////////////////////////////////////////////////

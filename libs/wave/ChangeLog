@@ -136,10 +136,10 @@ CHANGELOG
         function like macro, the whole macro invocation (including all 
         macro invocation parameters) are copied to the output without any 
         further processing.
-- Changed the interpretation of the return value found_include_directive() 
+- Changed the interpretation of the return value of the found_include_directive 
   preprocessing hook: a return value of 'false' now processes the file 
-  to include normally and a return value of 'true' now skips the processing of 
-  the include file. 
+  to be included normally and a return value of 'true' now skips the processing 
+  of the include file directive (the file doesn't get included). 
   This change was necessary to make the return values of the preprocessing 
   hooks consistent. Now return 'false' generally means: normal execution and 
   return 'true' generally means: skip execution of the corresponding 
