@@ -478,7 +478,45 @@ notify(vm);
     <title>Specific parsers</title>
 
     <section>
-      <title>Environment variables</title>
+      <title>Configuration file parser</title>
+
+      <para>The &parse_config_file; function implements parsing
+      of simple INI-like configuration files. Configuration file
+      syntax is line based:
+      </para>
+      <itemizedlist>
+        <listitem><para>A line in the form:</para>
+        <screen>
+<replaceable>name</replaceable>=<replaceable>value</replaceable>
+        </screen>
+        <para>gives a value to an option.</para>
+        </listitem>
+        <listitem><para>A line in the form:</para>
+        <screen>
+[<replaceable>section name</replaceable>]
+        </screen>
+        <para>introduces a new section in the configuration file.</para>
+        </listitem>
+        <listitem><para>The <literal>#</literal> character introduces a
+        comment that spans until the end of the line.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The option names are relative to the section names, so
+      the following configuration file part:</para>
+      <screen>
+[gui.accessibility]
+visual_bell=yes
+      </screen>
+      <para>is equivalent to</para>
+      <screen>
+gui.accessibility.visual_bell=yes
+      </screen>
+                  
+    </section>
+
+    <section>
+      <title>Environment variables parser</title>
 
       <para><firstterm>Environment variables</firstterm> are string variables
       which are available to all programs via the <code>getenv</code> function
