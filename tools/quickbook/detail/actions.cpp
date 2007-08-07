@@ -303,6 +303,8 @@ namespace quickbook
         // preprocess the code section to remove the initial indentation
         std::string program(first, last);
         detail::unindent(program);
+        if (program.size() == 0)
+            return; // Nothing left to do here. The program is empty.
 
         iterator first_(program.begin(), program.end());
         iterator last_(program.end(), program.end());
@@ -915,9 +917,9 @@ namespace quickbook
             }
         }
         std::string temp(first, last);
+        detail::unindent(temp); // remove all indents
         if (temp.size() != 0)
         {
-            detail::unindent(temp); // remove all indents
             snippet += "\n" + temp; // add a linebreak to allow block marskups
         }
     }

@@ -2530,11 +2530,10 @@ for the journey to old age.]]]
 <phrase role="special">{</phrase>
     <phrase role="comment">// return 'em, bar man!
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;bar&quot;</phrase><phrase role="special">;</phrase>
-<phrase role="special">}</phrase>
-</programlisting>
+<phrase role="special">}</phrase></programlisting>
           </para>
           <para>
-            <calloutlist></calloutlist>
+            Some trailing text here <calloutlist></calloutlist>
           </para>
         </para>
         <anchor id="quickbook.syntax.block.import.code_snippet_markup"/>

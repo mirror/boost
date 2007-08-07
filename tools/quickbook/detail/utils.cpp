@@ -60,8 +60,14 @@ namespace quickbook { namespace detail
     // un-indent a code segment
     void unindent(std::string& program)
     {
-        // Erase leading newlines
-        std::string::size_type const start = program.find_first_not_of("\r\n");
+        // Erase leading blank lines and newlines:
+        std::string::size_type start = program.find_first_not_of(" \t");
+        if (start != std::string::npos &&
+            (program[start] == '\r' || program[start] == '\n'))
+        {
+            program.erase(0, start);
+        }
+        start = program.find_first_not_of("\r\n");
         program.erase(0, start);
 
         if (program.size() == 0)
@@ -70,7 +76,14 @@ namespace quickbook { namespace detail
         // Get the first line indent
         std::string::size_type indent = program.find_first_not_of(" \t");
         std::string::size_type pos = 0;
-        BOOST_ASSERT(std::string::npos != indent);
+        if (std::string::npos == indent)
+        {
+            // Nothing left to do here. The code is empty (just spaces).
+            // We clear the program to signal the caller that it is empty
+            // and return early.
+            program.clear();
+            return;
+        }
 
         // Calculate the minimum indent from the rest of the lines
         do
