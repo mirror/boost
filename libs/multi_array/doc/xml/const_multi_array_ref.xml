@@ -64,9 +64,9 @@ public:
   // structors
 
   template <typename ExtentList>
-  explicit const_multi_array_ref(const element* data, const ExtentList& sizes,
+  explicit const_multi_array_ref(TPtr data, const ExtentList& sizes,
                        const storage_order_type& store = c_storage_order());
-  explicit const_multi_array_ref(const element* data, const extents_tuple& ranges,
+  explicit const_multi_array_ref(TPtr data, const extents_tuple& ranges,
                        const storage_order_type& store = c_storage_order());
   const_multi_array_ref(const const_multi_array_ref& x);
   ~const_multi_array_ref();
@@ -122,7 +122,7 @@ public:
 <variablelist>
 <varlistentry>
 <term><programlisting>template &lt;typename ExtentList&gt;
-explicit const_multi_array_ref(const element* data, 
+explicit const_multi_array_ref(TPtr data, 
                      const ExtentList&amp; sizes,
                      const storage_order&amp; store = c_storage_order());
 </programlisting></term>
@@ -151,7 +151,7 @@ dimensions.
 
 <varlistentry>
 <term>
-<programlisting><![CDATA[explicit const_multi_array_ref(const element* data,
+<programlisting><![CDATA[explicit const_multi_array_ref(TPtr data,
                      extent_gen::gen_type<NumDims>::type ranges,
                      const storage_order& store = c_storage_order());]]>
 </programlisting></term> 

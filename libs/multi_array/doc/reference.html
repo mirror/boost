@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Boost.MultiArray Reference Manual</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id720674"></a>Boost.MultiArray Reference Manual</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Ronald</span> <span class="surname">Garcia</span></h3><div class="affiliation"><span class="orgname">Indiana University<br></span><span class="orgdiv">Open Systems Lab<br></span></div></div></div><div><p class="copyright">Copyright © 2002 The Trustees of Indiana University</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#synopsis">Library Synopsis</a></span></dt><dt><span class="sect1"><a href="#MultiArray">MultiArray Concept</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id825416">Notation</a></span></dt><dt><span class="sect2"><a href="#id825584">Associated Types</a></span></dt><dt><span class="sect2"><a href="#id826094">Valid expressions</a></span></dt><dt><span class="sect2"><a href="#id826884">Complexity guarantees</a></span></dt><dt><span class="sect2"><a href="#id826909">Invariants</a></span></dt><dt><span class="sect2"><a href="#view_types">Associated Types for Views</a></span></dt><dt><span class="sect2"><a href="#id828278">Models</a></span></dt></dl></dd><dt><span class="sect1"><a href="#array_types">Array Components</a></span></dt><dd><dl><dt><span class="sect2"><a href="#multi_array"><code class="literal">multi_array</code></a></span></dt><dt><span class="sect2"><a href="#multi_array_ref"><code class="literal">multi_array_ref</code></a></span></dt><dt><span class="sect2"><a href="#const_multi_array_ref"><code class="literal">const_multi_array_ref</code></a></span></dt></dl></dd><dt><span class="sect1"><a href="#auxiliary">Auxiliary Components</a></span></dt><dd><dl><dt><span class="sect2"><a href="#multi_array_types"><code class="literal">multi_array_types</code></a></span></dt><dt><span class="sect2"><a href="#extent_range"><code class="classname">extent_range</code></a></span></dt><dt><span class="sect2"><a href="#extent_gen"><code class="classname">extent_gen</code></a></span></dt><dt><span class="sect2"><a href="#id835382">Global Objects</a></span></dt><dt><span class="sect2"><a href="#generators">View and SubArray Generators</a></span></dt><dt><span class="sect2"><a href="#memory_layout">Memory Layout Specifiers</a></span></dt><dt><span class="sect2"><a href="#range_checking">Range Checking</a></span></dt></dl></dd></dl></div><p>Boost.MultiArray is composed of several components.
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Boost.MultiArray Reference Manual</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id720674"></a>Boost.MultiArray Reference Manual</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Ronald</span> <span class="surname">Garcia</span></h3><div class="affiliation"><span class="orgname">Indiana University<br></span><span class="orgdiv">Open Systems Lab<br></span></div></div></div><div><p class="copyright">Copyright © 2002 The Trustees of Indiana University</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#synopsis">Library Synopsis</a></span></dt><dt><span class="sect1"><a href="#MultiArray">MultiArray Concept</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id825416">Notation</a></span></dt><dt><span class="sect2"><a href="#id825584">Associated Types</a></span></dt><dt><span class="sect2"><a href="#id826094">Valid expressions</a></span></dt><dt><span class="sect2"><a href="#id826884">Complexity guarantees</a></span></dt><dt><span class="sect2"><a href="#id826909">Invariants</a></span></dt><dt><span class="sect2"><a href="#view_types">Associated Types for Views</a></span></dt><dt><span class="sect2"><a href="#id828278">Models</a></span></dt></dl></dd><dt><span class="sect1"><a href="#array_types">Array Components</a></span></dt><dd><dl><dt><span class="sect2"><a href="#multi_array"><code class="literal">multi_array</code></a></span></dt><dt><span class="sect2"><a href="#multi_array_ref"><code class="literal">multi_array_ref</code></a></span></dt><dt><span class="sect2"><a href="#const_multi_array_ref"><code class="literal">const_multi_array_ref</code></a></span></dt></dl></dd><dt><span class="sect1"><a href="#auxiliary">Auxiliary Components</a></span></dt><dd><dl><dt><span class="sect2"><a href="#multi_array_types"><code class="literal">multi_array_types</code></a></span></dt><dt><span class="sect2"><a href="#extent_range"><code class="classname">extent_range</code></a></span></dt><dt><span class="sect2"><a href="#extent_gen"><code class="classname">extent_gen</code></a></span></dt><dt><span class="sect2"><a href="#id835381">Global Objects</a></span></dt><dt><span class="sect2"><a href="#generators">View and SubArray Generators</a></span></dt><dt><span class="sect2"><a href="#memory_layout">Memory Layout Specifiers</a></span></dt><dt><span class="sect2"><a href="#range_checking">Range Checking</a></span></dt></dl></dd></dl></div><p>Boost.MultiArray is composed of several components.
 The MultiArray concept defines a generic interface to multidimensional
 containers.
 <code class="literal">multi_array</code> is a general purpose container class
@@ -1003,9 +1003,9 @@ public:
   // structors
 
   template &lt;typename ExtentList&gt;
-  explicit const_multi_array_ref(const element* data, const ExtentList&amp; sizes,
+  explicit const_multi_array_ref(TPtr data, const ExtentList&amp; sizes,
                        const storage_order_type&amp; store = c_storage_order());
-  explicit const_multi_array_ref(const element* data, const extents_tuple&amp; ranges,
+  explicit const_multi_array_ref(TPtr data, const extents_tuple&amp; ranges,
                        const storage_order_type&amp; store = c_storage_order());
   const_multi_array_ref(const const_multi_array_ref&amp; x);
   ~const_multi_array_ref();
@@ -1053,7 +1053,7 @@ public:
 };
 
 </pre><p><b>Constructors. </b></p><div class="variablelist"><dl><dt><span class="term"><pre class="programlisting">template &lt;typename ExtentList&gt;
-explicit const_multi_array_ref(const element* data, 
+explicit const_multi_array_ref(TPtr data, 
                      const ExtentList&amp; sizes,
                      const storage_order&amp; store = c_storage_order());
 </pre></span></dt><dd><p>
@@ -1065,7 +1065,7 @@ dimensions.
 </p><p><b><code class="literal">ExtentList</code> Requirements. </b>
 <code class="literal">ExtentList</code> must model <a href="../../utility/Collection.html" target="_top">Collection</a>.
 </p><p><b>Preconditions. </b><code class="literal">sizes.size() == NumDims;</code></p></dd><dt><span class="term">
-<pre class="programlisting">explicit const_multi_array_ref(const element* data,
+<pre class="programlisting">explicit const_multi_array_ref(TPtr data,
                      extent_gen::gen_type&lt;NumDims&gt;::type ranges,
                      const storage_order&amp; store = c_storage_order());
 </pre></span></dt><dd><p><b>Effects. </b>
@@ -1170,7 +1170,7 @@ operator[](index idx) const;</code></span></dt><dd><p>This function returns a ne
 <code class="classname">extent_range</code> objects in addition to
 <code class="literal">extent_range(0,idx).</code> This function gives the array
 constructors a similar syntax to traditional C multidimensional array
-declaration.</p></dd></dl></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id835382"></a>Global Objects</h3></div></div></div><p>For syntactic convenience, Boost.MultiArray defines two 
+declaration.</p></dd></dl></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id835381"></a>Global Objects</h3></div></div></div><p>For syntactic convenience, Boost.MultiArray defines two 
 global objects as part of its
 interface.  These objects play the role of object generators;
 expressions involving them create other objects of interest.
