@@ -33,7 +33,7 @@ namespace boost {
 
 template <typename ValueType, 
           std::size_t NumDims, 
-          typename Allocator = std::allocator<ValueType> >
+          typename TPtr = const T*>
 class const_multi_array_ref {
 public:
 // types:

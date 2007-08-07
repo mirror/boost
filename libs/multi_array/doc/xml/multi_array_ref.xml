@@ -31,8 +31,7 @@ not described in the <literal>multi_array</literal> reference.
 namespace boost {
 
 template <typename ValueType, 
-          std::size_t NumDims, 
-          typename Allocator = std::allocator<ValueType> >
+          std::size_t NumDims>
 class multi_array_ref {
 public:
 // types:
