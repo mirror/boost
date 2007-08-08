@@ -7,69 +7,12 @@
 #
 #  See http://www.boost.org for updates, documentation, and revision history.
 
-subproject libs/algorithm/string/example ;
 
-exe conv_example
-    :
-    conv_example.cpp
-    :
-    <include>$(BOOST_ROOT)     
-    :
-    ;
-
-exe predicate_example
-    :
-    predicate_example.cpp
-    :
-    <include>$(BOOST_ROOT)     
-    :
-    ;
-
-exe find_example
-    :
-    find_example.cpp 
-    :
-    <include>$(BOOST_ROOT)     
-    :
-    ;
-
-exe replace_example
-    :
-    replace_example.cpp
-    :
-    <include>$(BOOST_ROOT)     
-    :
-    ;
-
-exe rle_example
-    :
-    rle_example.cpp
-    :
-    <include>$(BOOST_ROOT)     
-    :
-    ;
-
-exe trim_example
-    :
-    trim_example.cpp
-    :
-    <include>$(BOOST_ROOT)
-    :
-    ;
-
-exe regex_example
-    :
-    regex_example.cpp
-    <lib>../../../regex/build/boost_regex
-    :
-    <include>$(BOOST_ROOT)     
-    :
-    ;
-
-exe split_example
-    :
-    split_example.cpp
-    :
-    <include>$(BOOST_ROOT)
-    :
-    ;
+exe conv_example : conv_example.cpp ;
+exe predicate_example : predicate_example.cpp ;
+exe find_example : find_example.cpp ;
+exe replace_example : replace_example.cpp ;
+exe rle_example : rle_example.cpp ;
+exe trim_example : trim_example.cpp ;
+exe regex_example : regex_example.cpp /boost/regex//boost_regex ;
+exe split_example : split_example.cpp ;
