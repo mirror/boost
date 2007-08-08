@@ -7,48 +7,22 @@
 
 # For more information, see http://www.boost.org
 
-subproject libs/signals/example ;
+project : requirements <library>../build//boost_signals ;
 
-exe button_click : <lib>../build/boost_signals
-                    button_click.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
+exe button_click : button_click.cpp ;
 
-exe difference_connection : <lib>../build/boost_signals
-                    difference_connection.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
+exe difference_connection : difference_connection.cpp ;
 
-exe disconnect_all : <lib>../build/boost_signals
-                    disconnect_all.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
+exe disconnect_all : disconnect_all.cpp ;
 
-exe first_positive : <lib>../build/boost_signals
-                    first_positive.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
+exe first_positive : first_positive.cpp ;
 
-exe maximum : <lib>../build/boost_signals
-                    maximum.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
-exe print_sum_product : <lib>../build/boost_signals
-                    print_sum_product.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
+exe maximum : maximum.cpp ;
 
-exe quotient_controlling : <lib>../build/boost_signals
-                    quotient_controlling.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
+exe print_sum_product : print_sum_product.cpp ;
 
-exe quotient_named : <lib>../build/boost_signals
-                    quotient_named.cpp
-                  : <include>$(BOOST_ROOT)
-                  ;
+exe quotient_controlling : quotient_controlling.cpp ;
 
-exe no_function : <lib>../build/boost_signals
-                  no_function.cpp
-                : <include>$(BOOST_ROOT)
-                ;
+exe quotient_named : quotient_named.cpp ;
+
+exe no_function : no_function.cpp ;
