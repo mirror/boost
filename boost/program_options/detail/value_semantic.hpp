@@ -16,7 +16,13 @@ namespace boost { namespace program_options {
     std::string
     typed_value<T, charT>::name() const
     {
-        if (!m_default_value.empty() && !m_default_value_as_text.empty()) {
+        if (!m_implicit_value.empty() && !m_implicit_value_as_text.empty()) {
+            std::string msg = "[=arg(=" + m_implicit_value_as_text + ")]";
+            if (!m_default_value.empty() && !m_default_value_as_text.empty())
+                msg += " (=" + m_default_value_as_text + ")";
+            return msg;
+        }
+        else if (!m_default_value.empty() && !m_default_value_as_text.empty()) {
             return arg + " (=" + m_default_value_as_text + ")";
         } else {
             return arg;
@@ -155,7 +161,13 @@ namespace boost { namespace program_options {
     xparse(boost::any& value_store, 
            const std::vector<std::basic_string<charT> >& new_tokens) const
     {
-        validate(value_store, new_tokens, (T*)0, 0);
+        // If no tokens were given, and the option accepts an implicit
+        // value, then assign the implicit value as the stored value;
+        // otherwise, validate the user-provided token(s).
+        if (new_tokens.empty() && !m_implicit_value.empty())
+            value_store = m_implicit_value;
+        else
+            validate(value_store, new_tokens, (T*)0, 0);
     }
 
     template<class T>

@@ -204,6 +204,38 @@ namespace boost { namespace program_options {
             return this;
         }
 
+        /** Specifies an implicit value, which will be used
+            if the option is given, but without an adjacent value.
+            Using this implies that an explicit value is optional, but if
+            given, must be strictly adjacent to the option, i.e.: '-ovalue'
+            or '--option=value'.  Giving '-o' or '--option' will cause the
+            implicit value to be applied.
+        */
+        typed_value* implicit_value(const T &v)
+        {
+            m_implicit_value = boost::any(v);
+            m_implicit_value_as_text =
+                boost::lexical_cast<std::string>(v);
+            return this;
+        }
+
+        /** Specifies an implicit value, which will be used
+            if the option is given, but without an adjacent value.
+            Using this implies that an explicit value is optional, but if
+            given, must be strictly adjacent to the option, i.e.: '-ovalue'
+            or '--option=value'.  Giving '-o' or '--option' will cause the
+            implicit value to be applied.
+            Unlike the above overload, the type 'T' need not provide
+            operator<< for ostream, but textual representation of default
+            value must be provided by the user.
+        */
+        typed_value* implicit_value(const T &v, const std::string& textual)
+        {
+            m_implicit_value = boost::any(v);
+            m_implicit_value_as_text = textual;
+            return this;
+        }
+
         /** Specifies a function to be called when the final value
             is determined. */
         typed_value* notifier(function1<void, const T&> f)
@@ -243,7 +275,7 @@ namespace boost { namespace program_options {
 
         unsigned min_tokens() const
         {
-            if (m_zero_tokens) {
+            if (m_zero_tokens || !m_implicit_value.empty()) {
                 return 0;
             } else {
                 return 1;
@@ -301,6 +333,8 @@ namespace boost { namespace program_options {
         // as boost::optional to avoid unnecessary instantiations.
         boost::any m_default_value;
         std::string m_default_value_as_text;
+        boost::any m_implicit_value;
+        std::string m_implicit_value_as_text;
         bool m_composing, m_implicit, m_multitoken, m_zero_tokens;
         boost::function1<void, const T&> m_notifier;
     };

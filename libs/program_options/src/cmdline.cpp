@@ -329,6 +329,14 @@ namespace boost { namespace program_options { namespace detail {
             
             max_tokens -= opt.value.size();
 
+            // A value is optional if min_tokens == 0, but max_tokens > 0.
+            // If a value is optional, it must appear in opt.value (because
+            // it was 'adjacent'.  Otherwise, remove the expectation of a
+            // non-adjacent value.  (For now, we just check max_tokens == 1,
+            // as there is no current support for max_tokens>1)
+            if (min_tokens == 0 && max_tokens == 1 && opt.value.empty())
+                --max_tokens;
+
             // Everything's OK, move the values to the result.            
             for(;!other_tokens.empty() && max_tokens--; ) {
                 opt.value.push_back(other_tokens[0]);

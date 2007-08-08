@@ -26,11 +26,17 @@ int main(int ac, char* av[])
 {
     try {
         int opt;
+        int portnum;
         po::options_description desc("Allowed options");
         desc.add_options()
             ("help", "produce help message")
             ("optimization", po::value<int>(&opt)->default_value(10), 
                   "optimization level")
+            ("verbose,v", po::value<int>()->implicit_value(1),
+                  "enable verbosity (optionally specify level)")
+            ("listen,l", po::value<int>(&portnum)->implicit_value(1001)
+                  ->default_value(0,"no"),
+                  "listen on a port.")
             ("include-path,I", po::value< vector<string> >(), 
                   "include path")
             ("input-file", po::value< vector<string> >(), "input file")
@@ -62,7 +68,14 @@ int main(int ac, char* av[])
                  << vm["input-file"].as< vector<string> >() << "\n";
         }
 
+        if (vm.count("verbose")) {
+            cout << "Verbosity enabled.  Level is " << vm["verbose"].as<int>()
+                 << "\n";
+        }
+
         cout << "Optimization level is " << opt << "\n";                
+
+        cout << "Listen port is " << portnum << "\n";                
     }
     catch(exception& e)
     {
