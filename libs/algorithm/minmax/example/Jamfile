@@ -7,8 +7,6 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 #
 
-subproject libs/algorithm/minmax/example ;
-
 exe minmax_ex : minmax_ex.cpp ;
 exe minmax_timer : minmax_timer.cpp ;
 
