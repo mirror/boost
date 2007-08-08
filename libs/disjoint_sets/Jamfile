@@ -1,7 +1,2 @@
-subproject libs/dynamic_bitset ;
 
-unit-test disjoint_set_test
-    : disjoint_set_test.cpp
-    : <include>$(BOOST_ROOT)
-    ;
-
+unit-test disjoint_set_test : disjoint_set_test.cpp ;
