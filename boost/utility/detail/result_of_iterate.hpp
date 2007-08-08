@@ -21,7 +21,7 @@
 template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct result_of<F(BOOST_RESULT_OF_ARGS)>
-    : detail::result_of_impl<F, F(BOOST_RESULT_OF_ARGS), (detail::has_result_type<F>::value)> {};
+    : boost::detail::result_of_impl<F, F(BOOST_RESULT_OF_ARGS), (boost::detail::has_result_type<F>::value)> {};
 #endif
 
 #undef BOOST_RESULT_OF_ARGS
