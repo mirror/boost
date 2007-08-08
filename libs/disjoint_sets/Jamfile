@@ -1,2 +1,4 @@
 
-unit-test disjoint_set_test : disjoint_set_test.cpp ;
+test-suite disjoint_sets : 
+    [ run  disjoint_set_test.cpp ]
+    ;
