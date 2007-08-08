@@ -1,7 +1,3 @@
-subproject libs/mpl/test/aux_ ;
-
-# bring in rules for testing
-import testing ;
 
 compile preprocessor/is_seq.cpp ;
 compile preprocessor/token_equal.cpp ;
