@@ -1,6 +1,4 @@
-subproject libs/mpl/example ;
 
-# bring in rules for testing
 import testing ;
 
 run fsm/player.cpp ;
