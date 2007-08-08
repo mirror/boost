@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <boost/iterator/permutation_iterator.hpp>
 #include <boost/cstdlib.hpp>
+#include <assert.h>
 
 
 int main() {
