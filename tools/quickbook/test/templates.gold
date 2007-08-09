@@ -46,7 +46,7 @@
       wxyz wxyz trail
     </para>
     <para>
-      
+
 <programlisting>
 <phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>

@@ -10,7 +10,7 @@
     <para>
       A code block with proper indentation ;-)
     </para>
-    
+
 <programlisting>
 <phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 

@@ -24,7 +24,7 @@
       And any quickbook block markup.
     </para>
     <para>
-      
+
 <programlisting>
 <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">string</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
