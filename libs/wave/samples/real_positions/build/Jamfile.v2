@@ -10,13 +10,15 @@
 
 exe real_positions
     :   ../real_positions.cpp 
-        ../instantiate_cpp_exprgrammar 
-        ../instantiate_cpp_grammar 
-        ../instantiate_cpp_literalgrs
-        ../instantiate_defined_grammar
-        ../instantiate_re2c_lexer 
+        ../instantiate_cpp_exprgrammar.cpp 
+        ../instantiate_cpp_grammar.cpp
+        ../instantiate_cpp_literalgrs.cpp
+        ../instantiate_defined_grammar.cpp
+        ../instantiate_re2c_lexer.cpp
+        ../instantiate_re2c_lexer_str.cpp 
         /boost/wave//boost_wave
         /boost/filesystem//boost_filesystem
         /boost/system//boost_system
+        /boost/thread//boost_thread
     ;  
 

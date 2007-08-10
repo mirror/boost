@@ -147,7 +147,9 @@ CHANGELOG
 - Fixed compilation problems on gcc, fixed ambiguity in with boost code 
   (detail namespace was ambigious).
 - Fixed predefined macro support to be thread safe.
-
+- Added missing file to real_positions example. Thanks to Ludovic Aubert for 
+  spotting the problem.
+  
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
