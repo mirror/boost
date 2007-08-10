@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PP_IS_ITERATING
@@ -15,6 +15,7 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC == 1310)
+#pragma warning (push)
 #pragma warning(disable: 4348)  // redefinition of default parameter
 #endif
 
@@ -119,5 +120,10 @@
     }
 
 #undef N
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1310)
+#pragma warning (pop)
+#endif
+
 #endif // defined(BOOST_PP_IS_ITERATING)
 
