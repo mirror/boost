@@ -517,6 +517,36 @@ for(; first != last; ++first)
 
         <signature>
           <type>std::size_t</type>
+          <parameter name="val"><paramtype>bool</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>char</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>signed char</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned char</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>short</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned short</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
           <parameter name="val"><paramtype>int</paramtype></parameter>
         </signature>
 

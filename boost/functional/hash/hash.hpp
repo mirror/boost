@@ -34,17 +34,21 @@
 
 namespace boost
 {
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-    // Borland complains about an ambiguous function overload
-    // when compiling boost::hash<bool>.
     std::size_t hash_value(bool);
-#endif
-    
+    std::size_t hash_value(char);
+    std::size_t hash_value(unsigned char);
+    std::size_t hash_value(signed char);
+    std::size_t hash_value(short);
+    std::size_t hash_value(unsigned short);
     std::size_t hash_value(int);
     std::size_t hash_value(unsigned int);
     std::size_t hash_value(long);
     std::size_t hash_value(unsigned long);
 
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+    std::size_t hash_value(wchar_t);
+#endif
+    
 #if defined(BOOST_HAS_LONG_LONG)
     std::size_t hash_value(long long);
     std::size_t hash_value(unsigned long long);
@@ -137,12 +141,35 @@ namespace boost
         }
     }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
     inline std::size_t hash_value(bool v)
     {
         return static_cast<std::size_t>(v);
     }
-#endif
+
+    inline std::size_t hash_value(char v)
+    {
+        return static_cast<std::size_t>(v);
+    }
+
+    std::size_t hash_value(unsigned char v)
+    {
+        return static_cast<std::size_t>(v);
+    }
+
+    std::size_t hash_value(signed char v)
+    {
+        return static_cast<std::size_t>(v);
+    }
+
+    inline std::size_t hash_value(short v)
+    {
+        return static_cast<std::size_t>(v);
+    }
+
+    inline std::size_t hash_value(unsigned short v)
+    {
+        return static_cast<std::size_t>(v);
+    }
 
     inline std::size_t hash_value(int v)
     {
@@ -163,6 +190,13 @@ namespace boost
     {
         return static_cast<std::size_t>(v);
     }
+
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+    std::size_t hash_value(wchar_t v)
+    {
+        return static_cast<std::size_t>(v);
+    }
+#endif
 
 #if defined(BOOST_HAS_LONG_LONG)
     inline std::size_t hash_value(long long v)
