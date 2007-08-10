@@ -8,6 +8,7 @@ import testing ;
 project hash-tests
     : requirements
         <toolset>gcc:<define>_GLIBCXX_DEBUG
+        <toolset>gcc:<cxxflags>-Wsign-promo
     ;
 
 test-suite functional/hash
