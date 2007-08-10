@@ -66,11 +66,6 @@ using std::distance;
 #ifdef BOOST_REGEX_NO_BOOL
 #  define BOOST_REGEX_MAKE_BOOL(x) static_cast<bool>((x) ? true : false)
 #else
-#  ifdef BOOST_MSVC
-      // warning suppression with VC6:
-#     pragma warning(disable: 4800)
-#     pragma warning(disable: 4786)
-#  endif
 #  define BOOST_REGEX_MAKE_BOOL(x) static_cast<bool>(x)
 #endif
 
@@ -197,7 +192,8 @@ namespace boost{ namespace re_detail{
    }
 
 }} // namespaces
-#endif
+
+#endif // __cplusplus
 
 #endif // include guard
 

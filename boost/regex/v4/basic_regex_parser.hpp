@@ -28,7 +28,7 @@ namespace re_detail{
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
-#pragma warning(disable:4244)
+#pragma warning(disable:4244 4800)
 #endif
 
 template <class charT, class traits>

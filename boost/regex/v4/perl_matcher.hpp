@@ -18,6 +18,11 @@
 #  include BOOST_ABI_PREFIX
 #endif
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4800)
+#endif
+
 namespace boost{
 namespace re_detail{
 
@@ -511,6 +516,10 @@ private:
 #endif
 
 } // namespace boost
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 //
 // include the implementation of perl_matcher:

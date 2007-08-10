@@ -86,6 +86,12 @@
 #if defined(BOOST_INTEL) && defined(__cplusplus) && (BOOST_INTEL <= 800)
 #  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
 #endif
+/*
+ * Visual C++ doesn't support external templates with C++ extensions turned off:
+ */
+#if defined(_MSC_VER) && !defined(_MSC_EXTENSIONS)
+#  define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
+#endif
 
 /*
  * If there isn't good enough wide character support then there will
