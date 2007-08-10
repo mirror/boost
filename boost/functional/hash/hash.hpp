@@ -151,12 +151,12 @@ namespace boost
         return static_cast<std::size_t>(v);
     }
 
-    std::size_t hash_value(unsigned char v)
+    inline std::size_t hash_value(unsigned char v)
     {
         return static_cast<std::size_t>(v);
     }
 
-    std::size_t hash_value(signed char v)
+    inline std::size_t hash_value(signed char v)
     {
         return static_cast<std::size_t>(v);
     }
@@ -192,7 +192,7 @@ namespace boost
     }
 
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-    std::size_t hash_value(wchar_t v)
+    inline std::size_t hash_value(wchar_t v)
     {
         return static_cast<std::size_t>(v);
     }
