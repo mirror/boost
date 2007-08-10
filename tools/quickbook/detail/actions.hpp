@@ -27,6 +27,7 @@
 
 #ifdef BOOST_MSVC
 // disable copy/assignment could not be generated, unreferenced formal params
+#pragma warning (push)
 #pragma warning(disable : 4511 4512 4100)
 #endif
 
@@ -755,6 +756,10 @@ namespace quickbook
         collector& phrase;
     };
 }
+
+#ifdef BOOST_MSVC
+#pragma warning (pop)
+#endif
 
 #endif // BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP
 
