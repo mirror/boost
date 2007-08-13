@@ -10,14 +10,14 @@
 <link rel="next" href="../../background_information.html" title="Background Information">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="regex_split.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../deprecated_interfaces.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="../../background_information.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
@@ -493,10 +493,12 @@
                   using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
                   For each match calls the call-back function cb. If the call-back
                   returns false then the algorithm returns without considering further
-                  matches in the current file, or any further files. The parameter
-                  <span class="emphasis"><em>files</em></span> can include wild card characters '*'
-                  and '?', if the parameter recurse is true then searches sub-directories
-                  for matching file names.
+                  matches in the current file, or any further files.
+                </p>
+                <p>
+                  The parameter <span class="emphasis"><em>files</em></span> can include wild card
+                  characters '*' and '?', if the parameter recurse is true then searches
+                  sub-directories for matching file names.
                 </p>
                 <p>
                   Returns the total number of matches found.

@@ -25,6 +25,10 @@ flags is described in more detail in the
    static const match_flag_type match_prev_avail;
    static const match_flag_type match_not_dot_newline;
    static const match_flag_type match_not_dot_null;
+   static const match_flag_type match_posix;
+   static const match_flag_type match_perl;
+   static const match_flag_type match_nosubs;
+   static const match_flag_type match_extra;
 
    static const match_flag_type format_default = 0;
    static const match_flag_type format_sed;
@@ -64,6 +68,20 @@ This flag is used when matching incomplete or very long texts, see the partial m
 [[match_prev_avail][Specifies that --first is a valid iterator position, when this flag is set then the flags match_not_bol and match_not_bow are ignored by the regular expression algorithms (RE.7) and iterators (RE.8).]]
 [[match_not_dot_newline][Specifies that the expression "." does not match a newline character.  This is the inverse of Perl's s/ modifier.]]
 [[match_not_dot_null][Specified that the expression "." does not match a character null '\\0'.]]
+[[match_posix][Specifies that the expression should be matched according to the POSIX
+   [link boost_regex.syntax.leftmost_longest_rule leftmost-longest rule], 
+   regardless of what kind of expression was compiled.
+   Be warned that these rules do not work well with many Perl-specific features
+   such as non-greedy repeats.]]
+[[match_perl][Specifies that the expression should be matched according to
+   the [link boost_regex.syntax.perl_syntax.what_gets_matched Perl matching rules], 
+   irrespective of what kind of expression was
+   compiled.]]
+[[match_nosubs][Makes the expression behave as if it had no marked
+   subexpressions, no matter how many capturing groups are actually
+   present.  The [match_results] class will only contain information
+   about the overall match, and not any sub-expressions.]]
+
 [[format_default][Specifies that when a regular expression match is to be 
       replaced by a new string, that the new string is constructed using the rules 
       used by the ECMAScript replace function in ECMA-262, ECMAScript Language 

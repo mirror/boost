@@ -10,14 +10,14 @@
 <link rel="next" href="error_type.html" title="error_type">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="syntax_option_type/syntax_option_type_literal.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../ref.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="error_type.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
@@ -51,6 +51,10 @@
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">match_prev_avail</span><span class="special">;</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">match_not_dot_newline</span><span class="special">;</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">match_not_dot_null</span><span class="special">;</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">match_posix</span><span class="special">;</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">match_perl</span><span class="special">;</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">match_nosubs</span><span class="special">;</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">match_extra</span><span class="special">;</span>
 
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">format_default</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">match_flag_type</span> <span class="identifier">format_sed</span><span class="special">;</span>
@@ -65,7 +69,7 @@
 </span><span class="special">}</span> <span class="comment">// namespace boost
 </span></pre>
 <a name="boost_regex.ref.match_flag_type.description"></a><h5>
-<a name="id611579"></a>
+<a name="id611631"></a>
         <a href="match_flag_type.html#boost_regex.ref.match_flag_type.description">Description</a>
       </h5>
 <p>
@@ -317,6 +321,52 @@
 <tr>
 <td>
               <p>
+                match_posix
+              </p>
+              </td>
+<td>
+              <p>
+                Specifies that the expression should be matched according to the
+                POSIX <a href="../syntax/leftmost_longest_rule.html" title="The Leftmost Longest Rule">leftmost-longest
+                rule</a>, regardless of what kind of expression was compiled.
+                Be warned that these rules do not work well with many Perl-specific
+                features such as non-greedy repeats.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                match_perl
+              </p>
+              </td>
+<td>
+              <p>
+                Specifies that the expression should be matched according to the
+                <a href="../syntax/perl_syntax.html#boost_regex.syntax.perl_syntax.what_gets_matched">Perl
+                matching rules</a>, irrespective of what kind of expression was
+                compiled.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                match_nosubs
+              </p>
+              </td>
+<td>
+              <p>
+                Makes the expression behave as if it had no marked subexpressions,
+                no matter how many capturing groups are actually present. The <a href="match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
+                class will only contain information about the overall match, and
+                not any sub-expressions.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 format_default
               </p>
               </td>
@@ -326,11 +376,16 @@
                 by a new string, that the new string is constructed using the rules
                 used by the ECMAScript replace function in ECMA-262, ECMAScript Language
                 Specification, Chapter 15 part 5.4.11 String.prototype.replace. (FWD.1).
+              </p>
+              <p>
                 This is functionally identical to the <a href="../format/perl_format.html" title="Perl Format String Syntax">Perl
-                format string rules</a>. In addition during search and replace
-                operations then all non-overlapping occurrences of the regular expression
-                are located and replaced, and sections of the input that did not
-                match the expression, are copied unchanged to the output string.
+                format string rules</a>.
+              </p>
+              <p>
+                In addition during search and replace operations then all non-overlapping
+                occurrences of the regular expression are located and replaced, and
+                sections of the input that did not match the expression, are copied
+                unchanged to the output string.
               </p>
               </td>
 </tr>
