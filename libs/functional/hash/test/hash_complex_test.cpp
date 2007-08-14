@@ -19,11 +19,22 @@
 
 #include <complex>
 #include <sstream>
+#include <boost/limits.hpp>
+
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4244) // conversion from 'unsigned long' to 'unsigned short', possible loss of data
+#pragma warning(disable:4512) // assignment operator could not be generated
+#endif
+
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/variate_generator.hpp>
-#include <boost/limits.hpp>
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
 template <class T>
 void generic_complex_tests(std::complex<T> v)

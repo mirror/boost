@@ -21,6 +21,13 @@
 
 #include "./compile_time.hpp"
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4309) // truncation of constant value
+#pragma warning(disable:4310) // cast truncates constant value
+#endif
+
 template <class T>
 void numeric_test(T*)
 {
@@ -31,7 +38,7 @@ void numeric_test(T*)
     HASH_NAMESPACE::hash<T> x1;
     HASH_NAMESPACE::hash<T> x2;
 
-    T v1 = -5;
+    T v1 = (T) -5;
     BOOST_TEST(x1(v1) == x2(v1));
     BOOST_TEST(x1(T(-5)) == x2(T(-5)));
     BOOST_TEST(x1(T(0)) == x2(T(0)));
@@ -106,6 +113,16 @@ void poor_quality_tests(T*)
         BOOST_TEST(x1((limits::max)()) != x2((limits::max)() - 1));
 }
 
+void bool_test()
+{
+    HASH_NAMESPACE::hash<bool> x1;
+    HASH_NAMESPACE::hash<bool> x2;
+    
+    BOOST_TEST(x1(true) == x2(true));
+    BOOST_TEST(x1(false) == x2(false));
+    BOOST_TEST(x1(true) != x2(false));
+    BOOST_TEST(x1(false) != x2(true));
+}
 
 #define NUMERIC_TEST(type, name) \
     std::cerr<<"Testing: " BOOST_STRINGIZE(name) "\n"; \
@@ -119,7 +136,6 @@ void poor_quality_tests(T*)
 
 int main()
 {
-    NUMERIC_TEST(bool, bool)
     NUMERIC_TEST(char, char)
     NUMERIC_TEST(signed char, schar)
     NUMERIC_TEST(unsigned char, uchar)
@@ -142,7 +158,11 @@ int main()
     NUMERIC_TEST(double, double)
     NUMERIC_TEST(long double, ldouble)
 
+    bool_test();
+
     return boost::report_errors();
 }
 
-
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif

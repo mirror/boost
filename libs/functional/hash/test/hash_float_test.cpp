@@ -18,6 +18,11 @@
 
 #include <iostream>
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
+
 template <class T>
 void float_tests(char const* name, T* = 0)
 {
@@ -226,3 +231,6 @@ int main()
     return boost::report_errors();
 }
 
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
