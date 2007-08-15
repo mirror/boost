@@ -8,7 +8,7 @@ import testing ;
 project hash-tests
     : requirements
         <toolset>gcc:<define>_GLIBCXX_DEBUG
-        <toolset>gcc:<cxxflags>-Wsign-promo
+        "<toolset>gcc:<cxxflags>-Wsign-promo -Wextra"
         <toolset>msvc:<cxxflags>/W4
     ;
 

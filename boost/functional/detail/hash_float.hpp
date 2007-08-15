@@ -106,7 +106,7 @@ namespace boost
                         boost::static_log2<limits<T>::radix>::value - 1)
                 / limits<std::size_t>::digits;
 
-            for(std::size_t i = 0; i < length; ++i)
+            for(std::size_t i = 0; i != length; ++i)
             {
                 v = boost::hash_detail::call_ldexp(v, limits<std::size_t>::digits);
                 std::size_t part = static_cast<std::size_t>(v);
