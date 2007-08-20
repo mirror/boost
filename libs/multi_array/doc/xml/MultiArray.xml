@@ -386,6 +386,13 @@ This is the const view type with <literal>Dims</literal> dimensions.
 	</thead>
 	<tbody>
 	  <row>
+	    <entry><literal>A::dimensionality</literal></entry>
+	    <entry><literal>size_type</literal></entry>
+	    <entry>This compile-time constant represents the number of
+dimensions of the array (note that 
+<literal>A::dimensionality == NumDims</literal>).</entry>
+	  </row>
+	  <row>
 	    <entry><literal>a.shape()</literal></entry>
 	    <entry><literal>const size_type*</literal></entry>
 	    <entry>
