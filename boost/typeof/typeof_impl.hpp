@@ -18,8 +18,8 @@
 #define BOOST_TYPEOF_sizer_item(z, n, _)\
     char item ## n[V::item ## n ::value];
 
-namespace boost { namespace type_of {   
-    template<class V> 
+namespace boost { namespace type_of {
+    template<class V>
     struct sizer
     {
         // char item0[V::item0::value];
@@ -33,17 +33,17 @@ namespace boost { namespace type_of {
 #undef BOOST_TYPEOF_sizer_item
 
 //
-namespace boost { namespace type_of {   
+namespace boost { namespace type_of {
 # ifdef BOOST_NO_SFINAE
-    template<class V, class T> 
+    template<class V, class T>
     sizer<typename encode_type<V, T>::type> encode(const T&);
 # else
-    template<class V, class T> 
+    template<class V, class T>
     typename enable_if<
         typename is_function<T>::type,
         sizer<typename encode_type<V, T>::type> >::type encode(T&);
 
-    template<class V, class T> 
+    template<class V, class T>
     typename disable_if<
         typename is_function<T>::type,
         sizer<typename encode_type<V, T>::type> >::type encode(const T&);
@@ -72,7 +72,7 @@ namespace boost { namespace type_of {
 
 #define BOOST_TYPEOF_TPL typename BOOST_TYPEOF
 
-//offset_vector is used to delay the insertion of data into the vector in order to allow 
+//offset_vector is used to delay the insertion of data into the vector in order to allow
 //encoding to be done in many steps
 namespace boost { namespace type_of {
     template<typename V,typename Offset>
@@ -118,7 +118,7 @@ namespace boost { namespace type_of {
             BOOST_STATIC_CONSTANT(int,pos=(Pos::value));\
             BOOST_STATIC_CONSTANT(int,iteration=(pos/BOOST_TYPEOF_LIMIT_SIZE));\
             BOOST_STATIC_CONSTANT(int,where=pos%BOOST_TYPEOF_LIMIT_SIZE);\
-            BOOST_TYPEOF_FRACTIONTYPE();\
+            BOOST_TYPEOF_FRACTIONTYPE()\
             typedef typename boost::type_of::v_iter<fraction_type,boost::mpl::int_<where> >::type type;\
             typedef _typeof_fraction_iter<typename Pos::next> next;\
         };
@@ -133,7 +133,7 @@ struct BOOST_PP_CAT(_typeof_template_,name) {\
 };\
 typedef BOOST_PP_CAT(_typeof_template_,name)<int> name;
 
-# define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) BOOST_TYPEOF_NESTED_TYPEDEF(name,expr);
+# define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) BOOST_TYPEOF_NESTED_TYPEDEF(name,expr)
 
 #else
 # define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
