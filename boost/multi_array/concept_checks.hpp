@@ -77,6 +77,7 @@ namespace multi_array {
 
       st = a.size();
       st = a.num_dimensions();
+      st = Array::dimensionality;
       st = a.num_elements();
       stp = a.shape();
       idp = a.strides();
