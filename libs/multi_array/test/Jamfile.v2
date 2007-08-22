@@ -44,5 +44,6 @@ test-suite multi_array
       [ run idxgen1.cpp ../../test/build//boost_test_exec_monitor ]
       [ run stl_interaction.cpp ../../test/build//boost_test_exec_monitor ]
       [ run resize.cpp ../../test/build//boost_test_exec_monitor ]
+      [ run assert.cpp ../../test/build//boost_test_exec_monitor ]
       [ compile concept_checks.cpp ]
     ;
