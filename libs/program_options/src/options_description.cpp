@@ -254,7 +254,7 @@ namespace boost { namespace program_options {
         return m_options;
     }
 
-    const option_description* 
+    const option_description*
     options_description::find_nothrow(const std::string& name, 
                                       bool approx) const
     {
@@ -279,10 +279,10 @@ namespace boost { namespace program_options {
             //
             // For now, we don't check the situation when there are 
             // two full matches. 
-                            
+
             if (r == option_description::full_match)
             {
-                return m_options[i].get();                
+                return m_options[i].get();
             }
 
             found = m_options[i];
@@ -293,8 +293,8 @@ namespace boost { namespace program_options {
         if (approximate_matches.size() > 1)
             boost::throw_exception(
                 ambiguous_option(name, approximate_matches));
-        else
-            return found.get();
+
+        return found.get();
     }
 
     BOOST_PROGRAM_OPTIONS_DECL
