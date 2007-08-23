@@ -36,8 +36,15 @@
 
 namespace boost{
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
 #if BOOST_WORKAROUND(BOOST_MSVC, > 1300)
 #  pragma warning(push)
@@ -315,8 +322,15 @@ inline regex_token_iterator<typename std::basic_string<charT, ST, SA>::const_ite
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
 #  pragma warning(pop)
 #endif
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
 
 } // namespace boost

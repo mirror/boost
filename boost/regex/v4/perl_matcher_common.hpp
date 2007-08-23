@@ -20,8 +20,15 @@
 #ifndef BOOST_REGEX_V4_PERL_MATCHER_COMMON_HPP
 #define BOOST_REGEX_V4_PERL_MATCHER_COMMON_HPP
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
 
 #ifdef __BORLANDC__
@@ -949,8 +956,15 @@ bool perl_matcher<BidiIterator, Allocator, traits>::find_restart_lit()
 #ifdef __BORLANDC__
 #  pragma option pop
 #endif
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
 
 #endif
