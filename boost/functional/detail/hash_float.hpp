@@ -1,7 +1,7 @@
 
-// Copyright 2005-2007 Daniel James.
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//  Copyright Daniel James 2005-2006. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  Based on Peter Dimov's proposal
 //  http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
@@ -15,9 +15,9 @@
 #endif
 
 #include <boost/functional/detail/float_functions.hpp>
-#include <boost/integer/static_log2.hpp>
 #include <boost/limits.hpp>
 #include <boost/assert.hpp>
+#include <errno.h>
 
 // Don't use fpclassify or _fpclass for stlport.
 #if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
@@ -35,43 +35,10 @@
 #  endif
 #endif
 
-// On OpenBSD, numeric_limits is not reliable for long doubles, but
-// the macros defined in <float.h> are.
-
-#if defined(__OpenBSD__)
-#include <float.h>
-#endif
-
 namespace boost
 {
     namespace hash_detail
     {
-        template <class T>
-        struct limits : std::numeric_limits<T> {};
-
-#if defined(__OpenBSD__)
-        template <>
-        struct limits<long double>
-             : std::numeric_limits<long double>
-        {
-            static long double epsilon() {
-                return LDBL_EPSILON;
-            }
-
-            static long double (max)() {
-                return LDBL_MAX;
-            }
-
-            static long double (min)() {
-                return LDBL_MIN;
-            }
-
-            BOOST_STATIC_CONSTANT(int, digits = LDBL_MANT_DIG);
-            BOOST_STATIC_CONSTANT(int, max_exponent = LDBL_MAX_EXP);
-            BOOST_STATIC_CONSTANT(int, min_exponent = LDBL_MIN_EXP);
-        };
-#endif // __OpenBSD__
-
         inline void hash_float_combine(std::size_t& seed, std::size_t value)
         {
             seed ^= value + (seed<<6) + (seed>>2);
@@ -81,35 +48,21 @@ namespace boost
         inline std::size_t float_hash_impl(T v)
         {
             int exp = 0;
+            errno = 0;
+            v = boost::hash_detail::call_frexp(v, &exp);
+            if(errno) return 0;
 
-            // The result of frexp is always between 0.5 and 1, so its
-            // top bit will always be 1. Subtract by 0.5 to remove that.
-            if(v >= 0) {
-                v = boost::hash_detail::call_frexp(v, &exp) - T(0.5);
-            }
-            else {
-                v = -boost::hash_detail::call_frexp(v, &exp) - T(0.5);
-                exp = ~exp;
-            }
+            std::size_t seed = 0;
 
-            // TODO: Of course, this doesn't pass when hashing infinity or NaN.
-            //BOOST_ASSERT(0 <= v && v < 0.5);
-
-            v = boost::hash_detail::call_ldexp(v,
-                    limits<std::size_t>::digits + 1);
-            std::size_t seed = static_cast<std::size_t>(v);
-            v -= seed;
-
-            // ceiling(digits(T) * log2(radix(T))/ digits(size_t)) - 1;
             std::size_t const length
-                = (limits<T>::digits *
-                        boost::static_log2<limits<T>::radix>::value - 1)
-                / limits<std::size_t>::digits;
+                = (std::numeric_limits<T>::digits +
+                        std::numeric_limits<int>::digits - 1)
+                / std::numeric_limits<int>::digits;
 
-            for(std::size_t i = 0; i != length; ++i)
+            for(std::size_t i = 0; i < length; ++i)
             {
-                v = boost::hash_detail::call_ldexp(v, limits<std::size_t>::digits);
-                std::size_t part = static_cast<std::size_t>(v);
+                v = boost::hash_detail::call_ldexp(v, std::numeric_limits<int>::digits);
+                int const part = static_cast<int>(v);
                 v -= part;
                 hash_float_combine(seed, part);
             }
@@ -161,7 +114,7 @@ namespace boost
                 return 0;
             }
 #else
-            return v == 0 ? 0 : float_hash_impl(v);
+            return float_hash_impl(v);
 #endif
         }
     }

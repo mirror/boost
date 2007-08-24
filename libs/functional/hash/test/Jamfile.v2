@@ -1,15 +1,13 @@
 
-# Copyright 2005-2007 Daniel James.
-# Distributed under the Boost Software License, Version 1.0. (See accompanying
-# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+#  Copyright Daniel James 2005-2006. Use, modification, and distribution are
+#  subject to the Boost Software License, Version 1.0. (See accompanying
+#  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 import testing ;
 
 project hash-tests
     : requirements
         <toolset>gcc:<define>_GLIBCXX_DEBUG
-        "<toolset>gcc:<cxxflags>-Wsign-promo -Wextra"
-        <toolset>msvc:<cxxflags>/W4
     ;
 
 test-suite functional/hash
@@ -32,7 +30,6 @@ test-suite functional/hash
         [ run hash_deque_test.cpp ]
         [ run hash_set_test.cpp ]
         [ run hash_map_test.cpp ]
-        [ run hash_complex_test.cpp ]
         [ run link_test.cpp link_test_2.cpp ]
         [ run link_ext_test.cpp link_no_ext_test.cpp ]
         [ run container_fwd_test.cpp ]
