@@ -56,7 +56,7 @@ namespace boost
                         std::numeric_limits<int>::digits - 1)
                 / std::numeric_limits<int>::digits;
 
-            for(std::size_t i = 0; i < length; ++i)
+            for(std::size_t i = 0; i != length; ++i)
             {
                 v = boost::hash_detail::call_ldexp(v, std::numeric_limits<int>::digits);
                 int const part = static_cast<int>(v);
