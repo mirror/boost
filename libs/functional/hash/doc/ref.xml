@@ -501,6 +501,11 @@ for(; first != last; ++first)
 
         <signature>
           <type>std::size_t</type>
+          <parameter name="val"><paramtype>wchar_t</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
           <parameter name="val"><paramtype>short</paramtype></parameter>
         </signature>
 
@@ -687,7 +692,11 @@ for(; first != last; ++first)
               </thead>
               <tbody>
                 <row>
-                  <entry><code>int</code>, <code>unsigned int</code>, <code>long</code>, <code>unsigned long</code></entry>
+                  <entry><code>bool</code>,
+                    <code>char</code>, <code>signed char</code>, <code>unsigned char</code>, <code>wchar_t</code>,
+                    <code>short</code>, <code>unsigned short</code>,
+                    <code>int</code>, <code>unsigned int</code>, <code>long</code>, <code>unsigned long</code>
+                  </entry>
                   <entry><code>val</code></entry>
                 </row>
                 <row>
