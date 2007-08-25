@@ -120,6 +120,12 @@ for another integral type. Use this symbol to decide whether it is appropriate
 to explicitly specialize a template on `wchar_t` if there is already a
 specialization for other integer types.
 ]]
+[[`BOOST_NO_IOSFWD`][std lib][
+The standard library lacks `<iosfwd>`.
+]]
+[[`BOOST_NO_IOSTREAM`][std lib][
+The standard library lacks `<iostream>`, `<istream>` or `<ostream>`.
+]]
 [[`BOOST_NO_IS_ABSTRACT`][Compiler][
 The C++ compiler does not support SFINAE with abstract types, this is covered
 by __CORE_LANGUAGE_DR337__, but is not part of the current standard.  Fortunately
@@ -210,6 +216,9 @@ functions that should be in `<algorithm>`.
 [[`BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN`][Standard library][
 Defined if the standard library's output iterators are not assignable.
 ]]
+[[`BOOST_NO_STD_TYPEINFO`][Standard library][
+The <typeinfo> header declares `type_info` in the global namespace instead of namespace std.
+]]
 [[`BOOST_NO_STD_USE_FACET`][Standard library][
 The standard library lacks a conforming `std::use_facet`.
 ]]
@@ -243,6 +252,9 @@ for its containers.
 ]]
 [[`BOOST_NO_TEMPLATE_TEMPLATES`][Compiler][
 The compiler does not support template template parameters.
+]]
+[[`BOOST_NO_TYPEID`][Compiler][
+The compiler does not support the typeid operator at all.
 ]]
 [[`BOOST_NO_UNREACHABLE_RETURN_DETECTION`][Compiler][
 If a return is unreachable, then no return statement should be required,

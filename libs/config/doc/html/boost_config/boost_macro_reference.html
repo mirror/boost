@@ -10,14 +10,14 @@
 <link rel="next" href="guidelines_for_boost_authors.html" title="Guidelines for Boost Authors">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
 <a accesskey="p" href="../index.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
@@ -415,6 +415,41 @@
                 to decide whether it is appropriate to explicitly specialize a template
                 on <code class="computeroutput"><span class="keyword">wchar_t</span></code> if there
                 is already a specialization for other integer types.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_IOSFWD</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                std lib
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">iosfwd</span><span class="special">&gt;</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_IOSTREAM</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                std lib
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span></code>,
+                <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">istream</span><span class="special">&gt;</span></code> or <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">ostream</span><span class="special">&gt;</span></code>.
               </p>
               </td>
 </tr>
@@ -832,6 +867,24 @@
 <tr>
 <td>
               <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_TYPEINFO</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The &lt;typeinfo&gt; header declares <code class="computeroutput"><span class="identifier">type_info</span></code>
+                in the global namespace instead of namespace std.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <code class="computeroutput"><span class="identifier">BOOST_NO_STD_USE_FACET</span></code>
               </p>
               </td>
@@ -988,6 +1041,23 @@
 <td>
               <p>
                 The compiler does not support template template parameters.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TYPEID</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support the typeid operator at all.
               </p>
               </td>
 </tr>
@@ -2028,6 +2098,18 @@
 <tr>
 <td>
               <p>
+                <code class="computeroutput"><span class="identifier">BOOST_HAS_DECLTYPE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler supports decltype.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
                 <code class="computeroutput"><span class="identifier">BOOST_HAS_LONG_LONG</span></code>
               </p>
               </td>
@@ -2069,9 +2151,7 @@
               </td>
 <td>
               <p>
-                The compiler supports variadic templates. Note: variadic templates
-                have been proposed for C++0x, but have not yet been approved for
-                inclusion in the language.
+                The compiler supports variadic templates.
               </p>
               </td>
 </tr>
@@ -2717,19 +2797,19 @@
 <p class="title"><b></b></p>
 <dl>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">BOOST_LIB_NAME</span></code></span></dt>
-<dd>
-            Required: An identifier containing the basename of the library, for example
-            'boost_regex'.
-          </dd>
+<dd><p>
+              Required: An identifier containing the basename of the library, for
+              example 'boost_regex'.
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">BOOST_DYN_LINK</span></code></span></dt>
-<dd>
-            Optional: when set link to dll rather than static library.
-          </dd>
+<dd><p>
+              Optional: when set link to dll rather than static library.
+            </p></dd>
 <dt><span class="term"><code class="computeroutput"><span class="identifier">BOOST_LIB_DIAGNOSTIC</span></code></span></dt>
-<dd>
-            Optional: when set the header will print out the name of the library
-            selected (useful for debugging).
-          </dd>
+<dd><p>
+              Optional: when set the header will print out the name of the library
+              selected (useful for debugging).
+            </p></dd>
 </dl>
 </div>
 <p>
