@@ -43,7 +43,7 @@ std::string get_filename(const std::string& path)
    boost::smatch what;
    if(boost::u32regex_match(path, what, r))
    {
-      // extract $1 as a CString:
+      // extract $1 as a std::string:
       return what.str(1);
    }
    else
@@ -61,7 +61,7 @@ UnicodeString extract_greek(const UnicodeString& text)
    boost::u16match what;
    if(boost::u32regex_search(text, what, r))
    {
-      // extract $0 as a CString:
+      // extract $0 as a UnicodeString:
       return UnicodeString(what[0].first, what.length(0));
    }
    else

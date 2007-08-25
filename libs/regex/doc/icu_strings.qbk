@@ -138,7 +138,7 @@ Example: match a UTF-8 encoded filename:
       boost::smatch what;
       if(boost::u32regex_match(path, what, r))
       {
-         // extract $1 as a CString:
+         // extract $1 as a std::string:
          return what.str(1);
       }
       else
@@ -172,7 +172,7 @@ Example: search for a character sequence in a specific language block:
       boost::u16match what;
       if(boost::u32regex_search(text, what, r))
       {
-         // extract $0 as a CString:
+         // extract $0 as a UnicodeString:
          return UnicodeString(what[0].first, what.length(0));
       }
       else

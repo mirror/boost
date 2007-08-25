@@ -80,7 +80,7 @@
    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">smatch</span> <span class="identifier">what</span><span class="special">;</span>
    <span class="keyword">if</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">u32regex_match</span><span class="special">(</span><span class="identifier">path</span><span class="special">,</span> <span class="identifier">what</span><span class="special">,</span> <span class="identifier">r</span><span class="special">))</span>
    <span class="special">{</span>
-      <span class="comment">// extract $1 as a CString:
+      <span class="comment">// extract $1 as a std::string:
 </span>      <span class="keyword">return</span> <span class="identifier">what</span><span class="special">.</span><span class="identifier">str</span><span class="special">(</span><span class="number">1</span><span class="special">);</span>
    <span class="special">}</span>
    <span class="keyword">else</span>
@@ -120,7 +120,7 @@
    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">u16match</span> <span class="identifier">what</span><span class="special">;</span>
    <span class="keyword">if</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">u32regex_search</span><span class="special">(</span><span class="identifier">text</span><span class="special">,</span> <span class="identifier">what</span><span class="special">,</span> <span class="identifier">r</span><span class="special">))</span>
    <span class="special">{</span>
-      <span class="comment">// extract $0 as a CString:
+      <span class="comment">// extract $0 as a UnicodeString:
 </span>      <span class="keyword">return</span> <span class="identifier">UnicodeString</span><span class="special">(</span><span class="identifier">what</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">what</span><span class="special">.</span><span class="identifier">length</span><span class="special">(</span><span class="number">0</span><span class="special">));</span>
    <span class="special">}</span>
    <span class="keyword">else</span>
@@ -130,7 +130,7 @@
 <span class="special">}</span>
 </pre>
 <a name="boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_replace"></a><h5>
-<a name="id616763"></a>
+<a name="id616762"></a>
             <a href="unicode_algo.html#boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_replace">u32regex_replace</a>
           </h5>
 <p>
