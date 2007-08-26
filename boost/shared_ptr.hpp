@@ -453,9 +453,9 @@ public:
         return pn < rhs.pn;
     }
 
-    void * _internal_get_deleter(std::type_info const & ti) const
+    void * _internal_get_deleter( detail::sp_typeinfo const & ti ) const
     {
-        return pn.get_deleter(ti);
+        return pn.get_deleter( ti );
     }
 
 // Tasteless as this may seem, making all members public allows member templates
@@ -594,7 +594,7 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 
 template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 {
-    void const * q = p._internal_get_deleter(typeid(D));
+    void const * q = p._internal_get_deleter(BOOST_SP_TYPEID(D));
     return const_cast<D *>(static_cast<D const *>(q));
 }
 
@@ -602,7 +602,7 @@ template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 
 template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 {
-    return static_cast<D *>(p._internal_get_deleter(typeid(D)));
+    return static_cast<D *>(p._internal_get_deleter(BOOST_SP_TYPEID(D)));
 }
 
 #endif
