@@ -28,11 +28,6 @@
 #include <boost/type_traits/is_const.hpp>
 #endif
 
-#if defined(BOOST_MSVC)
-#   pragma warning(push)
-#   pragma warning(disable:4267)
-#endif
-
 namespace boost
 {
     std::size_t hash_value(bool);
@@ -50,11 +45,7 @@ namespace boost
     std::size_t hash_value(wchar_t);
 #endif
     
-#if defined(BOOST_HAS_LONG_LONG) && defined(_M_X64) && defined(_WIN64)
-    // On 64-bit windows std::size_t is a typedef for unsigned long long, which
-    // isn't due to be supported until Boost 1.35. So add support here.
-    // (Technically, Boost.Hash isn't actually documented as supporting
-    // std::size_t. But it would be pretty silly not to).
+#if defined(BOOST_HAS_LONG_LONG)
     std::size_t hash_value(long long);
     std::size_t hash_value(unsigned long long);
 #endif
@@ -98,6 +89,50 @@ namespace boost
     std::size_t hash_value(std::multimap<K, T, C, A> const& v);
 
     // Implementation
+
+    namespace hash_detail
+    {
+        template <class T>
+        inline std::size_t hash_value_signed(T val)
+        {
+             const int size_t_bits = std::numeric_limits<std::size_t>::digits;
+             // ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
+             const int length = (std::numeric_limits<T>::digits - 1)
+                 / size_t_bits;
+
+             std::size_t seed = 0;
+             T positive = val < 0 ? -1 - val : val;
+
+             // Hopefully, this loop can be unrolled.
+             for(unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits)
+             {
+                 seed ^= (std::size_t) (positive >> i) + (seed<<6) + (seed>>2);
+             }
+             seed ^= (std::size_t) val + (seed<<6) + (seed>>2);
+
+             return seed;
+        }
+
+        template <class T>
+        inline std::size_t hash_value_unsigned(T val)
+        {
+             const int size_t_bits = std::numeric_limits<std::size_t>::digits;
+             // ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
+             const int length = (std::numeric_limits<T>::digits - 1)
+                 / size_t_bits;
+
+             std::size_t seed = 0;
+
+             // Hopefully, this loop can be unrolled.
+             for(unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits)
+             {
+                 seed ^= (std::size_t) (val >> i) + (seed<<6) + (seed>>2);
+             }
+             seed ^= (std::size_t) val + (seed<<6) + (seed>>2);
+
+             return seed;
+        }
+    }
 
     inline std::size_t hash_value(bool v)
     {
@@ -155,15 +190,15 @@ namespace boost
     }
 #endif
 
-#if defined(BOOST_HAS_LONG_LONG) && defined(_M_X64) && defined(_WIN64)
+#if defined(BOOST_HAS_LONG_LONG)
     inline std::size_t hash_value(long long v)
     {
-        return v;
+        return hash_detail::hash_value_signed(v);
     }
 
     inline std::size_t hash_value(unsigned long long v)
     {
-        return v;
+        return hash_detail::hash_value_unsigned(v);
     }
 #endif
 
@@ -634,10 +669,6 @@ namespace boost
     }
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 }
-
-#if defined(BOOST_MSVC)
-#   pragma warning(pop)
-#endif
 
 #endif
 
