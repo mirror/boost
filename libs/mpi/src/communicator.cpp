@@ -15,7 +15,7 @@ namespace boost { namespace mpi {
 /***************************************************************************
  * status                                                                  *
  ***************************************************************************/
-bool status::cancelled()
+bool status::cancelled() const
 {
   int flag = 0;
   BOOST_MPI_CHECK_RESULT(MPI_Test_cancelled, (&m_status, &flag));

@@ -54,7 +54,7 @@ class BOOST_MPI_DECL status
    * Determine whether the communication associated with this object
    * has been successfully cancelled.
   */
-  bool cancelled();
+  bool cancelled() const;
 
   /**
    * Determines the number of elements of type @c T contained in the
@@ -66,7 +66,7 @@ class BOOST_MPI_DECL status
    * @returns the number of @c T elements in the message, if it can be
    * determined.
    */
-  template<typename T> optional<int> count();
+  template<typename T> optional<int> count() const;
 
   /**
    * References the underlying @c MPI_Status
@@ -82,18 +82,18 @@ class BOOST_MPI_DECL status
   /**
    * INTERNAL ONLY
    */
-  template<typename T> optional<int> count_impl(mpl::true_);
+  template<typename T> optional<int> count_impl(mpl::true_) const;
 
   /**
    * INTERNAL ONLY
    */
-  template<typename T> optional<int> count_impl(mpl::false_);
+  template<typename T> optional<int> count_impl(mpl::false_) const;
 
  public: // friend templates are not portable
 
   /// INTERNAL ONLY
-  MPI_Status m_status;
-  int m_count;
+  mutable MPI_Status m_status;
+  mutable int m_count;
 
   friend class communicator;
   friend class request;

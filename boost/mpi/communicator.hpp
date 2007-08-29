@@ -1071,13 +1071,13 @@ inline bool operator!=(const communicator& comm1, const communicator& comm2)
  ************************************************************************/
 // Count elements in a message
 template<typename T> 
-inline optional<int> status::count()
+inline optional<int> status::count() const
 {
   return count_impl<T>(is_mpi_datatype<T>());
 }
 
 template<typename T> 
-optional<int> status::count_impl(mpl::true_)
+optional<int> status::count_impl(mpl::true_) const
 {
   if (m_count != -1)
     return m_count;
@@ -1093,7 +1093,7 @@ optional<int> status::count_impl(mpl::true_)
 }
 
 template<typename T> 
-inline optional<int> status::count_impl(mpl::false_)
+inline optional<int> status::count_impl(mpl::false_) const
 {
   if (m_count == -1)
     return optional<int>();
