@@ -562,12 +562,16 @@ namespace boost {
     operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       this->clear();
+#ifndef BOOST_NO_EXCEPTIONS
       try {
         this->assign_to(f);
       } catch (...) {
         vtable = 0;
         throw;
       }
+#else
+      this->assign_to(f);
+#endif
       return *this;
     }
 
@@ -593,12 +597,16 @@ namespace boost {
         return *this;
 
       this->clear();
+#ifndef BOOST_NO_EXCEPTIONS
       try {
         this->assign_to_own(f);
       } catch (...) {
         vtable = 0;
         throw;
       }
+#else
+      this->assign_to_own(f);
+#endif
       return *this;
     }
 
