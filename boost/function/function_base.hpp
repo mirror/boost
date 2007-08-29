@@ -30,6 +30,11 @@
 #endif
 #include <boost/function_equal.hpp>
 
+#if defined(BOOST_MSVC)
+#   pragma warning( push )
+#   pragma warning( disable : 4793 ) // complaint about native code generation
+#endif       
+
 // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
 #ifdef BOOST_NO_EXCEPTION_STD_NAMESPACE
 // Embedded VC++ does not have type_info in namespace std
@@ -740,5 +745,9 @@ namespace detail {
 
 #undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL
 #undef BOOST_FUNCTION_COMPARE_TYPE_ID
+
+#if defined(BOOST_MSVC)
+#   pragma warning( pop )
+#endif       
 
 #endif // BOOST_FUNCTION_BASE_HEADER
