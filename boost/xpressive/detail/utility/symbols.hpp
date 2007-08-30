@@ -21,8 +21,7 @@
 #include <boost/range/iterator.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
-#include <boost/intrusive_ptr.hpp>
-#include <boost/xpressive/detail/utility/counted_base.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -40,67 +39,85 @@ namespace boost { namespace xpressive { namespace detail
         typedef typename range_iterator<key_type const>::type key_iterator;
         typedef value_type const *result_type;
 
-        symbols()
-          : root(0)
-        {}
-
-        // copies of this symbols table share the TST
+        // copies of this symbol table share the TST
 
         template<typename Trans>
         void load(Map const &map, Trans trans)
         {
-            if(0 == this->root)
+            iterator begin = boost::begin(map);
+            iterator end = boost::end(map);
+            node* root_p = this->root.get();
+            for(; begin != end; ++begin)
             {
-                iterator begin = boost::begin(map);
-                iterator end = boost::end(map);
-                for(; begin != end; ++begin)
-                {
-                    key_iterator kbegin = boost::begin(begin->first);
-                    key_iterator kend = boost::end(begin->first);
-                    this->root = this->insert(this->root, kbegin, kend, &begin->second, trans);
-                }
+                key_iterator kbegin = boost::begin(begin->first);
+                key_iterator kend = boost::end(begin->first);
+                root_p = this->insert(root_p, kbegin, kend, &begin->second, trans);
             }
+            this->root.reset(root_p);
         }
 
         template<typename BidiIter, typename Trans>
         result_type operator ()(BidiIter &begin, BidiIter end, Trans trans) const
         {
-            return this->search(begin, end, trans);
+            return this->search(begin, end, trans, this->root.get());
         }
 
         template<typename Sink>
         void peek(Sink const &sink) const
         {
-            this->peek_(this->root, sink);
+            this->peek_(this->root.get(), sink);
         }
 
     private:
-        struct node;
-        typedef intrusive_ptr<node> node_ptr;
-
+        ///////////////////////////////////////////////////////////////////////////////
+        // struct node : a node in the TST. 
+        //     The "eq" field stores the result pointer when ch is zero.
+        // 
         struct node
-          : counted_base<node>
+            : boost::noncopyable
         {
-            node()
-              : counted_base<node>()
-              , ch(0)
+            node(char_type c)
+              : ch(c)
               , lo(0)
               , eq(0)
               , hi(0)
-              , result(0)
+              , tau(0)
             {}
 
+            ~node()
+            {
+                delete lo;
+                if (ch)
+                    delete eq;
+                delete hi;
+            }
+
+            void swap(node& that)
+            {
+                std::swap(ch, that.ch);
+                std::swap(lo, that.lo);
+                std::swap(eq, that.eq);
+                std::swap(hi, that.hi);
+                std::swap(tau, that.tau);
+            }
+
             char_type ch;
-            node_ptr lo;
-            node_ptr eq;
-            node_ptr hi;
-            result_type result;
+            node* lo;
+            union
+            {
+                node* eq;
+                result_type result;
+            };
+            node* hi;
+            long tau;
         };
 
+        ///////////////////////////////////////////////////////////////////////////////
+        // insert : insert a string into the TST
+        // 
         template<typename Trans>
-        node_ptr insert(node_ptr const &pp, key_iterator &begin, key_iterator end, result_type r, Trans trans) const
+        node* insert(node* p, key_iterator &begin, key_iterator end, result_type r, Trans trans) const
         {
-            node_ptr p = pp;
             char_type c1 = 0;
 
             if(begin != end)
@@ -110,8 +127,7 @@ namespace boost { namespace xpressive { namespace detail
 
             if(!p)
             {
-                p = new node;
-                p->ch = c1;
+                p = new node(c1);
             }
 
             if(c1 < p->ch)
@@ -137,46 +153,97 @@ namespace boost { namespace xpressive { namespace detail
             return p;
         }
 
-        template<typename BidiIter, typename Trans>
-        result_type search(BidiIter &begin, BidiIter end, Trans trans) const
+        ///////////////////////////////////////////////////////////////////////////////
+        // conditional rotation : the goal is to minimize the overall
+        //     weighted path length of each binary search tree
+        // 
+        bool const cond_rotation(bool left, node* const i, node* const j) const
         {
-            const node* p = this->root.get();
-            result_type r = (0 == p->ch ? p->result : 0);
-            if (begin == end)
-                return r;
+            // don't rotate top node in binary search tree
+            if (i == j)
+                return false;
+            // calculate psi (the rotation condition)
+            node* const k = (left ? i->hi : i->lo);
+            long psi = 2*i->tau - j->tau - (k ? k->tau : 0);
+            if (psi <= 0)
+                return false;
 
-            BidiIter isave = begin;
-            char_type c1 = trans(*begin);
+            // recalculate the tau values
+            j->tau += -i->tau + (k ? k->tau : 0);
+            i->tau +=  j->tau - (k ? k->tau : 0);
+            // fixup links and swap nodes
+            if (left)
+            {
+                j->lo = k;
+                i->hi = i;
+            }
+            else
+            {
+                j->hi = k;
+                i->lo = i;
+            }
+            (*i).swap(*j);
+            return true;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        // search : find a string in the TST
+        // 
+        template<typename BidiIter, typename Trans>
+        result_type search(BidiIter &begin, BidiIter end, Trans trans, node* p) const
+        {
+            result_type r = 0;
+            node* p2 = p;
+            bool left = false;
+            char_type c1 = (begin != end ? trans(*begin) : 0);
             while(p)
             {
+                ++p->tau;
                 if(c1 == p->ch)
                 {
-                    ++begin;
-                    p = p->eq.get();
+                    // conditional rotation test
+                    if (this->cond_rotation(left, p, p2))
+                        p = p2;
                     if (0 == p->ch)
                     {
-                        isave = begin;
+                        // it's a match!
                         r = p->result;
                     }
                     if(begin == end)
                         break;
-                    c1 = trans(*begin);
+                    ++begin;
+                    p = p->eq;
+                    // search for the longest match first
+                    r = search(begin,end,trans,p);
+                    if (0 == r)
+                    {
+                        // search for a match ending here
+                        r = search(end,end,trans,p);
+                        if (0 == r)
+                        {
+                            --begin;
+                        }
+                    }
+                    break;
                 }
                 else if(c1 < p->ch)
                 {
-                    p = p->lo.get();
+                    left = true;
+                    p2 = p;
+                    p = p->lo;
                 }
                 else // (c1 > p->ch)
                 {
-                    p = p->hi.get();
+                    left = false;
+                    p2 = p;
+                    p = p->hi;
                 }
             }
-            begin = isave;
             return r;
         }
 
         template<typename Sink>
-        void peek_(node_ptr const &p, Sink const &sink) const
+        void peek_(node const *const &p, Sink const &sink) const
         {
             if(p)
             {
@@ -186,7 +253,7 @@ namespace boost { namespace xpressive { namespace detail
             }
         }
 
-        node_ptr root;
+        boost::shared_ptr<node> root;
     };
 
 }}} // namespace boost::xpressive::detail
