@@ -175,14 +175,14 @@ struct xpression_peeker
     }
 
     template<typename Xpr, bool Greedy>
-    mpl::false_ accept(optional_matcher<Xpr, Greedy> const &xpr)
+    mpl::false_ accept(optional_matcher<Xpr, Greedy> const &)
     {
         this->fail();  // a union of xpr and next
         return mpl::false_();
     }
 
     template<typename Xpr, bool Greedy>
-    mpl::false_ accept(optional_mark_matcher<Xpr, Greedy> const &xpr)
+    mpl::false_ accept(optional_mark_matcher<Xpr, Greedy> const &)
     {
         this->fail();  // a union of xpr and next
         return mpl::false_();

@@ -25,7 +25,7 @@ namespace boost { namespace xpressive { namespace detail
     struct actionable
     {
         virtual ~actionable() {}
-        virtual void execute(action_args_type *action_args) const {}
+        virtual void execute(action_args_type *) const {}
 
         actionable()
           : next(0)

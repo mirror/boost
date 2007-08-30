@@ -71,7 +71,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &)
         {
             int mark_nbr = get_mark_number(proto::left(expr));
             mark_begin_matcher begin(mark_nbr);

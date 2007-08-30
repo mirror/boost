@@ -139,14 +139,14 @@ unsigned int const repeat_max = UINT_MAX-1;
 unsigned int const inf = UINT_MAX-1;
 
 /// INTERNAL ONLY (for backwards compatibility)
-proto::terminal<detail::epsilon_matcher>::type const epsilon = {};
+proto::terminal<detail::epsilon_matcher>::type const epsilon = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Successfully matches nothing.
 ///
 /// Successfully matches a zero-width sequence. nil always succeeds and
 /// never consumes any characters.
-proto::terminal<detail::epsilon_matcher>::type const nil = {};
+proto::terminal<detail::epsilon_matcher>::type const nil = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Matches an alpha-numeric character.
@@ -273,7 +273,7 @@ proto::terminal<detail::posix_charset_placeholder>::type const xdigit = {{"xdigi
 ///
 /// For the character sequence [begin, end), 'bos' matches the
 /// zero-width sub-sequence [begin, begin).
-proto::terminal<detail::assert_bos_matcher>::type const bos = {};
+proto::terminal<detail::assert_bos_matcher>::type const bos = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief End of sequence assertion.
@@ -284,7 +284,7 @@ proto::terminal<detail::assert_bos_matcher>::type const bos = {};
 /// \attention Unlike the perl end of sequence assertion \$, 'eos' will
 /// not match at the position [end-1, end-1) if *(end-1) is '\\n'. To
 /// get that behavior, use (!_n >> eos).
-proto::terminal<detail::assert_eos_matcher>::type const eos = {};
+proto::terminal<detail::assert_eos_matcher>::type const eos = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Beginning of line assertion.
@@ -292,7 +292,7 @@ proto::terminal<detail::assert_eos_matcher>::type const eos = {};
 /// 'bol' matches the zero-width sub-sequence
 /// immediately following a logical newline sequence. The regex traits
 /// is used to determine what constitutes a logical newline sequence.
-proto::terminal<detail::assert_bol_placeholder>::type const bol = {};
+proto::terminal<detail::assert_bol_placeholder>::type const bol = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief End of line assertion.
@@ -300,7 +300,7 @@ proto::terminal<detail::assert_bol_placeholder>::type const bol = {};
 /// 'eol' matches the zero-width sub-sequence
 /// immediately preceeding a logical newline sequence. The regex traits
 /// is used to determine what constitutes a logical newline sequence.
-proto::terminal<detail::assert_eol_placeholder>::type const eol = {};
+proto::terminal<detail::assert_eol_placeholder>::type const eol = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Beginning of word assertion.
@@ -308,7 +308,7 @@ proto::terminal<detail::assert_eol_placeholder>::type const eol = {};
 /// 'bow' matches the zero-width sub-sequence
 /// immediately following a non-word character and preceeding a word character.
 /// The regex traits are used to determine what constitutes a word character.
-proto::terminal<detail::assert_word_begin>::type const bow = {};
+proto::terminal<detail::assert_word_begin>::type const bow = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief End of word assertion.
@@ -316,7 +316,7 @@ proto::terminal<detail::assert_word_begin>::type const bow = {};
 /// 'eow' matches the zero-width sub-sequence
 /// immediately following a word character and preceeding a non-word character.
 /// The regex traits are used to determine what constitutes a word character.
-proto::terminal<detail::assert_word_end>::type const eow = {};
+proto::terminal<detail::assert_word_end>::type const eow = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Word boundary assertion.
@@ -326,7 +326,7 @@ proto::terminal<detail::assert_word_end>::type const eow = {};
 /// constitutes a word character. To match a non-word boundary, use ~_b.
 ///
 /// \attention _b is like \\b in perl. ~_b is like \\B in perl.
-proto::terminal<detail::assert_word_boundary>::type const _b = {};
+proto::terminal<detail::assert_word_boundary>::type const _b = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Matches a word character.
@@ -374,7 +374,7 @@ proto::terminal<char>::type const _n = {'\n'};
 /// line separator class, as determined by the regex traits, or the '\\r\\n' sequence.
 /// For the purpose of back-tracking, '\\r\\n' is treated as a unit.
 /// To match any one character that is not a logical newline, use ~_ln.
-detail::logical_newline_xpression const _ln = {};
+detail::logical_newline_xpression const _ln = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Matches any one character.
@@ -383,7 +383,7 @@ detail::logical_newline_xpression const _ln = {};
 /// '_' matches any one character, including the newline.
 ///
 /// \attention To match any character except the newline, use ~_n
-proto::terminal<detail::any_matcher>::type const _ = {};
+proto::terminal<detail::any_matcher>::type const _ = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Reference to the current regex object
@@ -392,7 +392,7 @@ proto::terminal<detail::any_matcher>::type const _ = {};
 /// identifier is a short-hand for the current regex object. For instance,
 /// sregex rx = '(' >> (self | nil) >> ')'; will create a regex object that
 /// matches balanced parens such as "((()))".
-proto::terminal<detail::self_placeholder>::type const self = {};
+proto::terminal<detail::self_placeholder>::type const self = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Used to create character sets.
@@ -409,7 +409,7 @@ proto::terminal<detail::self_placeholder>::type const self = {};
 ///
 /// Sets can be composed of other, possibly complemented, sets. For instance,
 /// set[ ~digit | ~(set= 'a','b','c') ].
-detail::set_initializer_type const set = {};
+detail::set_initializer_type const set = {{}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $& in Perl
