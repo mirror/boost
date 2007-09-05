@@ -644,12 +644,14 @@ that allows a nested class of base to be defined in a class derived from base:
     //Use the base class to access the type.
     typedef typeof_access::id2type::type type; 
  
-This method has also been adapted to VC7.0, where the nested class 
+Peder Holt adapted this method to VC7.0, where the nested class 
 is a template class that is specialized in the derived class. 
-The loopholes have been fixed in VC8.0 though, so on this compiler 
-this method doesn't work.
+
+In VC8.0, it seemed that all the bug-featire had been fixed, but
+Steven Watanabe managed to implement a more rigorous version of the VC7.0 fix that
+enables 'typeof' to be supported 'natively' here as well.
  
-For this and many other compilers neither native `typeof` support 
+For many other compilers neither native `typeof` support 
 nor the trick described above is an option.  For such compilers  
 the emulation method is the only way of implementing `typeof`.
 
