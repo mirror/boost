@@ -199,7 +199,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &visitor)
         {
             return typename apply<Expr, State, Visitor>::type(
                 Grammar::call(expr, alternate_end_xpression(), visitor)
@@ -226,7 +226,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &visitor)
         {
             int mark_number = proto::arg(proto::left(expr)).mark_number_;
             return typename apply<Expr, State, Visitor>::type(
@@ -270,7 +270,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &)
         {
             typename apply<Expr, State, Visitor>::type that = {expr};
             return that;
