@@ -10,7 +10,7 @@
 #endif
 
 #if defined(BOOST_TYPEOF_EMULATION) && defined(BOOST_TYPEOF_NATIVE)
-#   error both typeof emulation and native mode requested 
+#   error both typeof emulation and native mode requested
 #endif
 
 #if defined(__COMO__)
@@ -76,6 +76,14 @@
 #       endif
 #   endif
 
+#elif defined __DMC__
+#   ifndef BOOST_TYPEOF_EMULATION
+#       ifndef BOOST_TYPEOF_NATIVE
+#           define BOOST_TYPEOF_NATIVE
+#       endif
+#       include <boost/typeof/dmc/typeof_impl.hpp>
+#       define MSVC_TYPEOF_HACK
+#   endif
 #elif defined(_MSC_VER)
 #   if (_MSC_VER <= 1300)  // 6.5, 7.0
 #       ifndef BOOST_TYPEOF_EMULATION
