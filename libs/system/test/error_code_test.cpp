@@ -197,7 +197,7 @@ int test_main( int, char ** )
   BOOST_CHECK( ec == Linux::dot_dot_error );
   BOOST_CHECK( ec == error_code( EDOTDOT, system_category ) );
   BOOST_CHECK( ec == error_code( Linux::dot_dot_error, system_category ) );
-  BOOST_CHECK( ec.default_error_condition().category() == posix_category );
+  BOOST_CHECK( ec.default_error_condition().category() == system_category );
 
 # endif
 
