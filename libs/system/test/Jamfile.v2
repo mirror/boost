@@ -38,4 +38,7 @@ project
             :  :  : <define>BOOST_SYSTEM_DYN_LINK 
                   : system_error_test_dll
          ]
+         [ run header_only_test.cpp
+           :  :  : <runtime-link>static <link>static
+         ]
          ;

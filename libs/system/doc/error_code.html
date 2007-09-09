@@ -30,6 +30,11 @@ code, usually one returned by an API. Class <code>
 an identifier for&nbsp;a 
 particular kind of error code. Users or 
 third-parties may add additional error categories.</p>
+<h2>Builds</h2>
+<p>The system library is required by default. If the preprocessor macro name 
+BOOST_ERROR_CODE_HEADER_ONLY is defined, no object library or shared/DLL library 
+is required. Only one translation unit may defined BOOST_ERROR_CODE_HEADER_ONLY, 
+otherwise symbols will be multiply defined.</p>
 <h2><a name="Synopsis">Synopsis</a></h2>
 <pre>namespace boost
 {
@@ -254,7 +259,7 @@ choice for this type is pointer-to-member. <i>—end note </i>]</p>
   Oleg Abrosimov.</p>
 <hr>
 <p>Last revised:
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->06 September, 2006<!--webbot bot="Timestamp" endspan i-checksum="39349" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->30 August, 2007<!--webbot bot="Timestamp" endspan i-checksum="34727" --></p>
 <p>© Copyright Beman Dawes, 2006</p>
 <p>Distributed under the Boost Software License, Version 1.0. (See accompanying 
 file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at

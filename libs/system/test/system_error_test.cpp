@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------// 
 
 //  VC++ 8.0 warns on usage of certain Standard Library and API functions that
-//  can be cause buffer overruns or other possible security issues if misused.
+//  can cause buffer overruns or other possible security issues if misused.
 //  See http://msdn.microsoft.com/msdnmag/issues/05/05/SafeCandC/default.aspx
 //  But the wording of the warning is misleading and unsettling, there are no
 //  portable alternative functions, and VC++ 8.0's own libraries use the
@@ -23,24 +23,23 @@
 #include <iostream>
 
 #ifdef BOOST_WINDOWS_API
-# include <winerror.h>
+#include <winerror.h>
 #endif
 
 using boost::system::system_error;
 using boost::system::error_code;
-using boost::system::errno_ecat;
-using boost::system::no_message;
+using boost::system::system_category;
 
 #define TEST(x,v,w) test(#x,x,v,w)
 
 namespace
 {
   void test( const char * desc, const system_error & ex,
-    error_code::value_type v, const char * str )
+    int v, const char * str )
   {
     std::cout << "test " << desc << "\n what() returns \"" << ex.what() << "\"\n";
     BOOST_CHECK( ex.code().value() == v );
-    BOOST_CHECK( ex.code().category() == errno_ecat );
+    BOOST_CHECK( ex.code().category() == system_category );
 # ifdef BOOST_WINDOWS_API
     BOOST_CHECK( std::string( ex.what() ) == str );
     if ( std::string( ex.what() ) != str )
@@ -56,29 +55,22 @@ int test_main( int, char *[] )
 {
   // all combinations of constructors:
 
-  system_error se_0( error_code(0, errno_ecat) ); 
-  system_error se_1( 1, errno_ecat ); 
-  system_error se_0_m( error_code(0, errno_ecat), "se_0_m" ); 
-  system_error se_1_m( 1, errno_ecat, "se_1_m" ); 
-  system_error se_0_nm( error_code(0, errno_ecat), "" ); 
-  system_error se_1_nm( 1, errno_ecat, "" ); 
-  system_error se_0_m_im( error_code(0, errno_ecat), "se_0_m_im", no_message ); 
-  system_error se_1_m_im( 1, errno_ecat, "se_1_m_im", no_message ); 
-  system_error se_0_nm_im( error_code(0, errno_ecat), "", no_message ); 
-  system_error se_1_nm_im( 1, errno_ecat, "", no_message );
-  system_error se_1u_m( uvalue, errno_ecat, "se_1u_m" ); 
+  system_error se_0_m( error_code(0, system_category), "se_0_m" ); 
+  system_error se_1_m( 1, system_category, "se_1_m" ); 
+  system_error se_0_nm( error_code(0, system_category), "" ); 
+  system_error se_1_nm( 1, system_category, "" ); 
+  system_error se_0_nmx( error_code(0, system_category), "" ); 
+  system_error se_1_nmx( 1, system_category, "" ); 
+  system_error se_1u_m( uvalue, system_category, "se_1u_m" );
 
-  TEST( se_0, 0, "" );
-  TEST( se_1, 1, "Operation not permitted" );
   TEST( se_0_m, 0, "se_0_m" );
-  TEST( se_1_m, 1, "se_1_m: Operation not permitted" );
+  TEST( se_1_m, 1, "se_1_m: Incorrect function" );
   TEST( se_0_nm, 0, "" );
-  TEST( se_1_nm, 1, "Operation not permitted" );
-  TEST( se_0_m_im, 0, "se_0_m_im" );
-  TEST( se_1_m_im, 1, "se_1_m_im" );
-  TEST( se_0_nm_im, 0, "" );
-  TEST( se_1_nm_im, 1, "" );
-  TEST( se_1u_m, 1, "se_1u_m: Operation not permitted" );
+  TEST( se_1_nm, 1, "Incorrect function" );
+  TEST( se_0_nmx, 0, "" );
+  TEST( se_1_nmx, 1, "Incorrect function" );
+  TEST( se_1u_m, 1, "se_1u_m: Incorrect function" );
+
 
   return 0;
 }
