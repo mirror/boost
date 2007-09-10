@@ -69,6 +69,12 @@
 #      define BOOST_NO_IS_ABSTRACT
 #    endif
 
+//
+// Issues that effect all known versions:
+//
+#define BOOST_NO_TWO_PHASE_NAME_LOOKUP
+
+
 #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
 
 //

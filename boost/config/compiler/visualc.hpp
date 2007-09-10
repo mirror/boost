@@ -56,6 +56,7 @@
 #  define BOOST_NO_SFINAE
 #  define BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS
 #  define BOOST_NO_IS_ABSTRACT
+#  define BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
 // TODO: what version is meant here? Have there really been any fixes in cl 12.01 (as e.g. shipped with eVC4)?
 #  if (_MSC_VER > 1200)
 #     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
@@ -71,6 +72,7 @@
 
 #if _MSC_VER <= 1400  // 1400 == VC++ 8.0
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #endif
 
 #ifndef _NATIVE_WCHAR_T_DEFINED
