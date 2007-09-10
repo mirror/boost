@@ -15,7 +15,7 @@
     [authors [authors, various]]
     [category template]
     [category generic]
-    [last-revision $LastChangedDate$]
+    [last-revision $Date$]
 ]
 
 
@@ -234,6 +234,7 @@ See __has_trivial_constructor.
 [endsect]
 
 [include credits.qbk]
+
 
 
 
