@@ -45,15 +45,16 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_replace_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_search_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_split_example_1.cpp : -auto ]
-[ regex-test-run snippets/regex_split_example_2.cpp : $(BOOST_ROOT)/libs/regex/doc/index.html ]
+[ regex-test-run snippets/regex_split_example_2.cpp : $(BOOST_ROOT)/libs/regex/doc/html/index.html ]
 [ regex-test-run snippets/regex_token_iterator_eg_1.cpp : -auto ]
-[ regex-test-run snippets/regex_token_iterator_eg_2.cpp : $(BOOST_ROOT)/libs/regex/doc/index.html ]
+[ regex-test-run snippets/regex_token_iterator_eg_2.cpp : $(BOOST_ROOT)/libs/regex/doc/html/index.html ]
 [ regex-test-run snippets/regex_iterator_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ run snippets/captures_example.cpp
   ../test/captures//boost_regex_extra
   : : :  <threading>multi <define>BOOST_REGEX_MATCH_EXTRA=1 ]
 
 ;
+
 
 
 
