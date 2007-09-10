@@ -1,0 +1,14 @@
+[section:aligned_storage aligned_storage]
+
+   template <std::size_t Size, std::size_t Align>
+   struct aligned_storage
+   {
+      typedef __below type;
+   };
+  
+__type a built-in or POD type with size `Size` and an alignment 
+that is a multiple of `Align`.  
+
+__header ` #include <boost/type_traits/aligned_storage.hpp>` or ` #include <boost/type_traits.hpp>`
+
+[endsect]

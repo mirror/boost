@@ -1,0 +1,35 @@
+[section:remove_const remove_const]
+
+   template <class T>
+   struct remove_const
+   {
+      typedef __below type;
+   };
+  
+__type The same type as `T`, but with any /top level/ const-qualifier removed.
+
+__std_ref 3.9.3.
+
+__compat If the compiler does not support partial specialization of class-templates
+then this template will compile, but the member `type` will always be the same as 
+type `T` except where __transform_workaround have been applied.
+
+__header ` #include <boost/type_traits/remove_const.hpp>` or ` #include <boost/type_traits.hpp>`
+
+[table Examples
+
+[ [Expression] [Result Type]]
+
+[[`remove_const<int>::type`][`int`]]
+
+[[`remove_const<int const>::type`] [`int`]]
+
+[[`remove_const<int const volatile>::type`] [`int volatile`]]
+
+[[`remove_const<int const&>::type`] [`int const&`]]
+
+[[`remove_const<int const*>::type`] [`int const*`]]
+
+]
+
+[endsect]

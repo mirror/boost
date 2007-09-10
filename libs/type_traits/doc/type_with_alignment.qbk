@@ -1,0 +1,14 @@
+[section:type_with_alignment type_with_alignment]
+
+   template <std::size_t Align>
+   struct type_with_alignment
+   {
+      typedef __below type;
+   };
+  
+__type a built-in or POD type with an alignment 
+that is a multiple of `Align`.  
+
+__header ` #include <boost/type_traits/type_with_alignment.hpp>` or ` #include <boost/type_traits.hpp>`
+
+[endsect]

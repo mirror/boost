@@ -75,6 +75,10 @@
 #include "boost/type_traits/integral_promotion.hpp"
 #include "boost/type_traits/promote.hpp"
 #endif
+#include <boost/type_traits/make_unsigned.hpp>
+#include <boost/type_traits/make_signed.hpp>
+#include <boost/type_traits/decay.hpp>
+#include <boost/type_traits/is_complex.hpp>
 
 #include "boost/type_traits/ice.hpp"
 
