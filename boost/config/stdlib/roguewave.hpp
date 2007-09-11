@@ -1,6 +1,7 @@
 //  (C) Copyright John Maddock 2001 - 2003. 
 //  (C) Copyright Jens Maurer 2001. 
 //  (C) Copyright David Abrahams 2003. 
+//  (C) Copyright Boris Gubenko 2007. 
 //  Use, modification and distribution are subject to the 
 //  Boost Software License, Version 1.0. (See accompanying file 
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -130,5 +131,13 @@
 //
 #if !defined(_RWSTD_LONG_LONG) && defined(BOOST_HAS_LONG_LONG)
 #  undef BOOST_HAS_LONG_LONG
+#endif
+
+//
+// Define macros specific to RW V2.2 on HP-UX
+//
+#if defined(__HP_aCC) && (BOOST_RWSTD_VER == 0x02020100)
+#define __HP_TC1_MAKE_PAIR
+#define _HP_INSTANTIATE_STD2_VL
 #endif
 
