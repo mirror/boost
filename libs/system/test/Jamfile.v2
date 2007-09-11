@@ -11,6 +11,7 @@ project
     : requirements
       <library>/boost/system//boost_system
       <define>BOOST_ALL_NO_LIB
+      <toolset>msvc:<asynch-exceptions>on
     ;
 
    test-suite "system"
@@ -31,7 +32,7 @@ project
                  : error_code_user_test_dll
          ]
          [ run system_error_test.cpp
-           :  :  : <define>BOOST_ESYSTEM_STATIC_LINK 
+           :  :  : <define>BOOST_SYSTEM_STATIC_LINK 
                    <runtime-link>static <link>static
          ]
          [ run system_error_test.cpp
