@@ -137,7 +137,11 @@
 // Define macros specific to RW V2.2 on HP-UX
 //
 #if defined(__HP_aCC) && (BOOST_RWSTD_VER == 0x02020100)
-#define __HP_TC1_MAKE_PAIR
-#define _HP_INSTANTIATE_STD2_VL
+#  ifndef __HP_TC1_MAKE_PAIR
+#    define __HP_TC1_MAKE_PAIR
+#  endif
+#  ifndef _HP_INSTANTIATE_STD2_VL
+#    define _HP_INSTANTIATE_STD2_VL
+#  endif
 #endif
 
