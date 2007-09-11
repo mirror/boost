@@ -12,8 +12,7 @@
 
 //  HP aCC C++ compiler setup:
 
-#if (((__HP_aCC >= 61200) && defined(__EDG__)) ||\
-     ((__HP_aCC >= 38000) && defined(__hpxstd98)))
+#if defined(__EDG__)
 #include "boost/config/compiler/common_edg.hpp"
 #endif
 
