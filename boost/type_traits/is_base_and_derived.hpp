@@ -15,6 +15,7 @@
 #include <boost/type_traits/detail/ice_and.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/config.hpp>
+#include <boost/static_assert.hpp>
 
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
@@ -128,6 +129,13 @@ struct bd_helper
 template<typename B, typename D>
 struct is_base_and_derived_impl2
 {
+    //
+    // May silently do the wrong thing with incomplete types
+    // unless we trap them here:
+    //
+    BOOST_STATIC_ASSERT(sizeof(B));
+    BOOST_STATIC_ASSERT(sizeof(D));
+
     struct Host
     {
 #if !BOOST_WORKAROUND(BOOST_MSVC, == 1310)
