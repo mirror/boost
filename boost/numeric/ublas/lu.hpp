@@ -101,7 +101,8 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_column<M> mci (column (m, i));
             matrix_row<M> mri (row (m, i));
             if (m (i, i) != value_type/*zero*/()) {
-                project (mci, range (i + 1, size1)) *= value_type (1) / m (i, i);
+                value_type m_inv = value_type (1) / m (i, i);
+                project (mci, range (i + 1, size1)) *= m_inv;
             } else if (singular == 0) {
                 singular = i + 1;
             }
@@ -144,7 +145,8 @@ namespace boost { namespace numeric { namespace ublas {
                 } else {
                     BOOST_UBLAS_CHECK (pm (i) == i_norm_inf, external_logic ());
                 }
-                project (mci, range (i + 1, size1)) *= value_type (1) / m (i, i);
+                value_type m_inv = value_type (1) / m (i, i);
+                project (mci, range (i + 1, size1)) *= m_inv;
             } else if (singular == 0) {
                 singular = i + 1;
             }
