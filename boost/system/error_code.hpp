@@ -132,7 +132,7 @@ namespace boost
         too_many_links = EMLINK,
         too_many_synbolic_link_levels = ELOOP,
         value_too_large = EOVERFLOW,
-        wrong_protocol_type = EPROTOTYPE,
+        wrong_protocol_type = EPROTOTYPE
       };
 
     } // namespace posix
@@ -478,7 +478,7 @@ namespace boost
       {
         no_net = ENONET,
         no_package = ENOPKG,
-        no_share = ENOSHARE,
+        no_share = ENOSHARE
       };
     }  // namespace cygwin
 
@@ -545,7 +545,7 @@ namespace boost
         too_many_references = ETOOMANYREFS,
         too_many_users = EUSERS,
         unattached = EUNATCH,
-        unclean = EUCLEAN,
+        unclean = EUCLEAN
       };
     }  // namespace Linux
 
