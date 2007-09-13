@@ -24,6 +24,7 @@
 #include <sstream>
 #include <string>
 #include <cstring>
+#include <functional>
 #include <boost/cerrno.hpp>
 
 //  Although using directives are not the best programming practice, testing
@@ -66,8 +67,18 @@ int test_main( int, char ** )
   BOOST_CHECK( system_category == system_category );
   BOOST_CHECK( posix_category != system_category );
   BOOST_CHECK( system_category != posix_category );
-  BOOST_CHECK( posix_category < system_category );
-  BOOST_CHECK( !(system_category < posix_category) );
+
+  if ( std::less<const error_category*>()( &posix_category, &system_category ) )
+  {
+    BOOST_CHECK( posix_category < system_category );
+    BOOST_CHECK( !(system_category < posix_category) );
+  }
+  else
+  {
+    BOOST_CHECK( system_category < posix_category );
+    BOOST_CHECK( !(posix_category < system_category) );
+  }
+
 
   error_code ec;
   error_condition dec;
