@@ -211,8 +211,8 @@ namespace boost {
       struct reference_manager
       {
         static inline void
-        get(const function_buffer& in_buffer, function_buffer& out_buffer, 
-            functor_manager_operation_type op)
+        manage(const function_buffer& in_buffer, function_buffer& out_buffer, 
+               functor_manager_operation_type op)
         {
           switch (op) {
           case clone_functor_tag: 
@@ -379,6 +379,15 @@ namespace boost {
         {
           manager(in_buffer, out_buffer, op,
                   mpl::bool_<(function_allows_small_object_optimization<functor_type>::value)>());
+        }
+
+        // For member pointers, we treat them as function objects with
+        // the small-object optimization always enabled.
+        static inline void
+        manager(const function_buffer& in_buffer, function_buffer& out_buffer, 
+                functor_manager_operation_type op, member_ptr_tag)
+        {
+          manager(in_buffer, out_buffer, op, mpl::true_());
         }
 
       public:
@@ -571,7 +580,7 @@ public:
 #endif
 
 public: // should be protected, but GCC 2.95.3 will fail to allow access
-  detail::function::vtable_base* vtable;
+  const detail::function::vtable_base* vtable;
   mutable detail::function::function_buffer functor;
 };
 
