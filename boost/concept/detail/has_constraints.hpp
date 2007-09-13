@@ -5,7 +5,7 @@
 # define BOOST_CONCEPT_DETAIL_HAS_CONSTRAINTS_DWA2006429_HPP
 
 # include <boost/mpl/bool.hpp>
-
+# include <boost/detail/workaround.hpp>
 namespace boost { namespace concept {
 
 namespace detail
@@ -19,9 +19,17 @@ namespace detail
   template <class Model, void (Model::*)()>
   struct wrap_constraints {};
     
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+  // Work around the following bogus error in Sun Studio 11, by
+  // turning off the has_constraints function entirely:
+  //    Error: complex expression not allowed in dependent template
+  //    argument expression
+  inline no has_constraints_(...);
+#else
   template <class Model>
   inline yes has_constraints_(Model*, wrap_constraints<Model,&Model::constraints>* = 0);
   inline no has_constraints_(...);
+#endif
 }
 
 // This would be called "detail::has_constraints," but it has a strong
