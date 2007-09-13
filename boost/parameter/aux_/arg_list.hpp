@@ -11,6 +11,7 @@
 #include <boost/parameter/aux_/default.hpp>
 #include <boost/parameter/aux_/parameter_requirements.hpp>
 #include <boost/parameter/aux_/yesno.hpp>
+#include <boost/parameter/aux_/maybe.hpp>
 #include <boost/parameter/config.hpp>
 
 #include <boost/mpl/apply.hpp>
@@ -157,10 +158,6 @@ no_tag operator*(empty_arg_list, KW*);
 // Forward declaration for arg_list::operator,
 template <class KW, class T>
 struct tagged_argument;
-
-// Forward declaration for arg_list::operator[], with
-// IS_XXX helper
-struct maybe_base;
 
 template <class T>
 struct is_maybe
