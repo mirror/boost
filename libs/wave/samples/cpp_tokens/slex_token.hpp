@@ -55,7 +55,7 @@ public:
     operator token_id() const { return id; }
     string_type const &get_value() const { return value; }
     position_type const &get_position() const { return pos; }
-    bool is_eoi() const { id == T_EOI; }
+    bool is_eoi() const { return id == T_EOI; }
 
     void set_token_id (token_id id_) { id = id_; }
     void set_value (string_type const &newval) { value = newval; }
