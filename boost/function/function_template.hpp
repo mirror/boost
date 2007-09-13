@@ -426,7 +426,7 @@ namespace boost {
                                             BOOST_FUNCTION_TEMPLATE_ARGS);
 
         template<typename F>
-        bool assign_to(F f, function_buffer& functor) const
+        bool assign_to(const F& f, function_buffer& functor) const
         {
           typedef typename get_function_tag<F>::type tag;
           return assign_to(f, functor, tag());
@@ -477,7 +477,7 @@ namespace boost {
         // Assign to a function object using the small object optimization
         template<typename FunctionObj>
         void 
-        assign_functor(FunctionObj f, function_buffer& functor, 
+        assign_functor(const FunctionObj& f, function_buffer& functor, 
                        mpl::true_) const
         {
           new ((void*)&functor.data) FunctionObj(f);
@@ -486,7 +486,7 @@ namespace boost {
         // Assign to a function object allocated on the heap.
         template<typename FunctionObj>
         void 
-        assign_functor(FunctionObj f, function_buffer& functor, 
+        assign_functor(const FunctionObj& f, function_buffer& functor, 
                        mpl::false_) const
         {
 #ifndef BOOST_NO_STD_ALLOCATOR
@@ -507,7 +507,7 @@ namespace boost {
 
         template<typename FunctionObj>
         bool 
-        assign_to(FunctionObj f, function_buffer& functor, 
+        assign_to(const FunctionObj& f, function_buffer& functor, 
                   function_obj_tag) const
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
@@ -765,7 +765,7 @@ namespace boost {
     }
 
     template<typename Functor>
-    void assign_to(Functor f)
+    void assign_to(const Functor& f)
     {
       using detail::function::vtable_base;
 
