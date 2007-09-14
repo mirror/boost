@@ -140,7 +140,7 @@ namespace std {
 #if defined(BOOST_HAS_THREADS) 
 #  if defined(_MSC_VER) || defined(__MWERKS__) || defined(__MINGW32__) ||  defined(__BORLANDC__)
      //no reentrant posix functions (eg: localtime_r)
-#  else
+#  elif (!defined(__hpux) || (defined(__hpux) && defined(_REENTRANT)))
 #   define BOOST_DATE_TIME_HAS_REENTRANT_STD_FUNCTIONS
 #  endif
 #endif
