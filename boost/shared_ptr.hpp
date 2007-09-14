@@ -383,7 +383,7 @@ public:
 
     // implicit conversion to "bool"
 
-#if defined(__SUNPRO_CC) && BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
+#if ( defined(__SUNPRO_CC) && BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530) ) || defined(__CINT__)
 
     operator bool () const
     {
