@@ -478,7 +478,6 @@ namespace boost {
        */
       struct vtable_base
       {
-        vtable_base() : manager(0) { }
         void (*manager)(const function_buffer& in_buffer, 
                         function_buffer& out_buffer, 
                         functor_manager_operation_type op);

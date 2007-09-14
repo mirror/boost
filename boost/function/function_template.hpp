@@ -434,8 +434,8 @@ namespace boost {
 
         void clear(function_buffer& functor) const
         {
-          if (manager)
-            manager(functor, functor, destroy_functor_tag);
+          if (base.manager)
+            base.manager(functor, functor, destroy_functor_tag);
         }
 
       private:
@@ -538,9 +538,7 @@ namespace boost {
         }
 
       public:
-        void (*manager)(const function_buffer& in_buffer, 
-                        function_buffer& out_buffer, 
-                        functor_manager_operation_type op);
+        vtable_base base;
         invoker_type invoker;
       };
     } // end namespace function
@@ -780,10 +778,9 @@ namespace boost {
       typedef typename handler_type::manager_type manager_type;
       
       static const vtable_type stored_vtable = 
-        { &manager_type::manage, &invoker_type::invoke };
+        { { &manager_type::manage }, &invoker_type::invoke };
 
-      if (stored_vtable.assign_to(f, functor)) 
-        vtable = reinterpret_cast<const vtable_base*>(&stored_vtable);
+      if (stored_vtable.assign_to(f, functor)) vtable = &stored_vtable.base;
       else vtable = 0;
     }
   };
