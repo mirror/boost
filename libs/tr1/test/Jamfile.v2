@@ -11,6 +11,8 @@ local TR1_PROPERTIES =
     <include>$(BOOST_ROOT)/boost/tr1/tr1 
     # Borland's broken include mechanism needs these extra headers:
     <toolset>borland:<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+    # Sunpro's broken include mechanism needs these extra headers:
+    <include>$(BOOST_ROOT)/boost/tr1/tr1/sun 
     ;
 
 
@@ -76,6 +78,7 @@ rule test_all
 }
 
 test-suite tr1 : [ test_all r ] ; 
+
 
 
 
