@@ -16,8 +16,11 @@ project
 
    test-suite "system"
        : [ run error_code_test.cpp
-           :  :  : <define>BOOST_SYSTEM_STATIC_LINK 
-                   <runtime-link>static <link>static
+           : # command line
+           : # input files
+           : # requirements
+                   <define>BOOST_SYSTEM_STATIC_LINK 
+                   <link>static
          ]
          [ run error_code_test.cpp
            :  :  : <define>BOOST_SYSTEM_DYN_LINK 
@@ -25,7 +28,7 @@ project
          ]
          [ run error_code_user_test.cpp
            :  :  : <define>BOOST_SYSTEM_STATIC_LINK 
-                   <runtime-link>static <link>static
+                   <link>static
          ]
          [ run error_code_user_test.cpp
            :  :  : <define>BOOST_SYSTEM_DYN_LINK 
@@ -33,13 +36,13 @@ project
          ]
          [ run system_error_test.cpp
            :  :  : <define>BOOST_SYSTEM_STATIC_LINK 
-                   <runtime-link>static <link>static
+                   <link>static
          ]
          [ run system_error_test.cpp
             :  :  : <define>BOOST_SYSTEM_DYN_LINK 
                   : system_error_test_dll
          ]
          [ run header_only_test.cpp
-           :  :  : <runtime-link>static <link>static
+           :  :  : <link>static
          ]
          ;
