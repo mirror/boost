@@ -66,7 +66,7 @@ namespace boost
         }
         
         template< class T >
-        inline long is_char_ptr( T r )
+        inline long is_char_ptr( T /* r */ )
         {
             return 0L;
         }

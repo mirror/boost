@@ -197,7 +197,7 @@ namespace date_time {
 #endif
 
     //! sets default formats for ptime, local_date_time, and time_duration
-    explicit time_facet(::size_t a_ref = 0) 
+    explicit time_facet(::size_t /* a_ref */ = 0) 
       //: base_type(standard_format),
       : base_type(default_time_format), 
         m_time_duration_format(string_type(duration_sign_negative_only) + default_time_duration_format)
