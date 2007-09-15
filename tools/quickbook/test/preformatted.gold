@@ -10,7 +10,7 @@
     <para>
       Here's the ubiquitous <emphasis>Hello World</emphasis> program in C++.
     </para>
-
+    
 <programlisting>#include &lt;iostream&gt;
 
 int main()
