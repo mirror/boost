@@ -52,7 +52,7 @@ boost::system::error_code my_mkdir( const std::string & path )
 boost::system::error_code my_remove( const std::string & path )
 {
   return boost::system::error_code(
-    ::remove( path.c_str() ) == 0 ? 0 : errno,
+    std::remove( path.c_str() ) == 0 ? 0 : errno,
     boost::system::posix_category ); // OK for both Windows and POSIX
                                      // Alternatively, could use posix_category
                                      // on Windows and system_category on
