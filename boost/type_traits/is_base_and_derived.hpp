@@ -133,8 +133,8 @@ struct is_base_and_derived_impl2
     // May silently do the wrong thing with incomplete types
     // unless we trap them here:
     //
-    BOOST_STATIC_ASSERT(sizeof(B));
-    BOOST_STATIC_ASSERT(sizeof(D));
+    BOOST_STATIC_ASSERT(sizeof(B) != 0);
+    BOOST_STATIC_ASSERT(sizeof(D) != 0);
 
     struct Host
     {
