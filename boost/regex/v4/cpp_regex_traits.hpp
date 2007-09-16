@@ -41,6 +41,7 @@
 
 #include <istream>
 #include <ios>
+#include <climits>
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
