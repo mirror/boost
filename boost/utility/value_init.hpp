@@ -46,7 +46,11 @@ class const_T_base
       new (&x) T();
     }
 
-    ~const_T_base() { get().T::~T(); }
+    ~const_T_base()
+    {
+      void const * ptr = &x;
+      static_cast<T*>(ptr)->T::~T();
+    }
 
     T & get() const
     {
