@@ -95,6 +95,9 @@ int test_main(int, char **)
   test( POD(0,0,0.0), POD('a',1234,56.78) ) ;
   test( NonPOD( std::string() ), NonPOD( std::string("something") ) ) ;
 
+  NonPOD NonPOD_object( std::string("NonPOD_object") );
+  test<NonPOD *>( 0, &NonPOD_object ) ;
+
   return 0;
 }
 
