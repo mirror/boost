@@ -83,6 +83,11 @@ namespace boost
   template <> struct Integer<unsigned long> {};
   // etc.
 
+#ifdef _WIN64
+  template <> struct Integer<__int64> {};
+  template <> struct Integer<unsigned __int64> {};
+#endif
+
   BOOST_concept(SignedInteger,(T)) {
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     SignedInteger();   // at least 2.96 and 3.4.3 both need this :(
@@ -101,6 +106,9 @@ namespace boost
   template <> struct SignedInteger< ::boost::long_long_type> {};
   // etc.
 #endif      
+#ifdef _WIN64
+  template <> struct SignedInteger<__int64> {};
+#endif
 
   BOOST_concept(UnsignedInteger,(T)) {
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
@@ -121,6 +129,9 @@ namespace boost
   template <> struct UnsignedInteger< ::boost::ulong_long_type> {};
   // etc.
 #endif      
+#ifdef _WIN64
+  template <> struct UnsignedInteger<unsigned __int64> {};
+#endif
 
   // etc.
 
