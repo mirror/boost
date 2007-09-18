@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_BOOST_TUPLE_ITERATOR_09262006_1851)
@@ -18,6 +18,24 @@
 namespace boost { namespace fusion
 {
     struct forward_traversal_tag;
+
+    namespace detail
+    {
+        template <typename T>
+        struct boost_tuple_is_empty : mpl::false_ {};
+
+        template <>
+        struct boost_tuple_is_empty<tuples::null_type> : mpl::true_ {};
+
+        template <>
+        struct boost_tuple_is_empty<tuples::null_type const> : mpl::true_ {};
+
+        template <>
+        struct boost_tuple_is_empty<tuples::tuple<> > : mpl::true_ {};
+
+        template <>
+        struct boost_tuple_is_empty<tuples::tuple<> const> : mpl::true_ {};
+    }
 
     template <typename Cons = tuples::null_type>
     struct boost_tuple_iterator
@@ -36,13 +54,13 @@ namespace boost { namespace fusion
         struct deref
         {
             typedef typename value_of<Iterator>::type element;
-    
-            typedef typename 
+
+            typedef typename
                 mpl::if_<
                     is_const<typename Iterator::cons_type>
                   , typename tuples::access_traits<element>::const_type
                   , typename tuples::access_traits<element>::non_const_type
-                >::type 
+                >::type
             type;
 
             static type
@@ -72,11 +90,40 @@ namespace boost { namespace fusion
                 return type(iter.cons.get_tail());
             }
         };
+
+        template <typename I1, typename I2>
+        struct equal_to
+            : mpl::or_<
+                is_same<I1, I2>
+              , mpl::and_<
+                    detail::boost_tuple_is_empty<typename I1::cons_type>
+                  , detail::boost_tuple_is_empty<typename I2::cons_type>
+                >
+            >
+        {};
+    };
+
+    template <typename Null>
+    struct boost_tuple_null_iterator
+        : iterator_facade<boost_tuple_iterator<Null>, forward_traversal_tag>
+    {
+        typedef Null cons_type;
+
+        template <typename I1, typename I2>
+        struct equal_to
+            : mpl::or_<
+                is_same<I1, I2>
+              , mpl::and_<
+                    detail::boost_tuple_is_empty<typename I1::cons_type>
+                  , detail::boost_tuple_is_empty<typename I2::cons_type>
+                >
+            >
+        {};
     };
 
     template <>
     struct boost_tuple_iterator<tuples::null_type>
-        : iterator_facade<boost_tuple_iterator<tuples::null_type>, forward_traversal_tag>
+        : boost_tuple_null_iterator<tuples::null_type>
     {
         template <typename Cons>
         explicit boost_tuple_iterator(Cons const&) {}
@@ -84,7 +131,7 @@ namespace boost { namespace fusion
 
     template <>
     struct boost_tuple_iterator<tuples::null_type const>
-        : iterator_facade<boost_tuple_iterator<tuples::null_type const>, forward_traversal_tag>
+        : boost_tuple_null_iterator<tuples::null_type const>
     {
         template <typename Cons>
         explicit boost_tuple_iterator(Cons const&) {}
@@ -92,7 +139,7 @@ namespace boost { namespace fusion
 
     template <>
     struct boost_tuple_iterator<tuples::tuple<> >
-        : iterator_facade<boost_tuple_iterator<tuples::tuple<> >, forward_traversal_tag>
+        : boost_tuple_null_iterator<tuples::tuple<> >
     {
         template <typename Cons>
         explicit boost_tuple_iterator(Cons const&) {}
@@ -100,7 +147,7 @@ namespace boost { namespace fusion
 
     template <>
     struct boost_tuple_iterator<tuples::tuple<> const>
-        : iterator_facade<boost_tuple_iterator<tuples::tuple<> const>, forward_traversal_tag>
+        : boost_tuple_null_iterator<tuples::tuple<> const>
     {
         template <typename Cons>
         explicit boost_tuple_iterator(Cons const&) {}
