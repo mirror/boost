@@ -81,12 +81,13 @@ namespace boost
   template <> struct Integer<unsigned int> {};
   template <> struct Integer<long> {};
   template <> struct Integer<unsigned long> {};
-  // etc.
-
-#ifdef _WIN64
+# if defined(BOOST_HAS_LONG_LONG)
+  template <> struct Integer< ::boost::long_long_type> {};
+  template <> struct Integer< ::boost::ulong_long_type> {};
+# elif defined(BOOST_HAS_MS_INT64)
   template <> struct Integer<__int64> {};
   template <> struct Integer<unsigned __int64> {};
-#endif
+# endif
 
   BOOST_concept(SignedInteger,(T)) {
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
@@ -104,11 +105,9 @@ namespace boost
   template <> struct SignedInteger<long> {};
 # if defined(BOOST_HAS_LONG_LONG)
   template <> struct SignedInteger< ::boost::long_long_type> {};
-  // etc.
-#endif      
-#ifdef _WIN64
+# elif defined(BOOST_HAS_MS_INT64)
   template <> struct SignedInteger<__int64> {};
-#endif
+# endif      
 
   BOOST_concept(UnsignedInteger,(T)) {
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
@@ -127,13 +126,9 @@ namespace boost
   template <> struct UnsignedInteger<unsigned long> {};
 # if defined(BOOST_HAS_LONG_LONG)
   template <> struct UnsignedInteger< ::boost::ulong_long_type> {};
-  // etc.
-#endif      
-#ifdef _WIN64
+# elif defined(BOOST_HAS_MS_INT64)
   template <> struct UnsignedInteger<unsigned __int64> {};
-#endif
-
-  // etc.
+# endif
 
   //===========================================================================
   // Basic Concepts
