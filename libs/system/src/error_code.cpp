@@ -257,7 +257,14 @@ namespace
       {
         // strerror_r returns 0 on success, otherwise ERANGE if buffer too small,
         // invalid_argument if ev not a valid error number
-        if ( (result = strerror_r( ev, bp, sz )) == 0 )
+  #  if defined (__sgi)
+        const char * c_str = strerror( ev );
+        result = 0;
+        return std::string( c_str ? c_str : "invalid_argument" );
+  #  else
+        result = strerror_r( ev, bp, sz );
+  #  endif
+        if (result == 0 )
           break;
         else
         {
