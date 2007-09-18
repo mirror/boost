@@ -431,7 +431,7 @@ namespace boost
       return "error: should never be called";
     }
 
-    inline std::string error_category::message( int ev ) const
+    inline std::string error_category::message( int ) const
     { 
       static std::string s("error: should never be called");
       return s;
