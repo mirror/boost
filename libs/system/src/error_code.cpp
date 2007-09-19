@@ -214,8 +214,8 @@ namespace
     error_condition     default_error_condition( int ev ) const;
   };
 
-  const posix_error_category posix_category_const;
-  const system_error_category system_category_const;
+  const posix_error_category   posix_category_const;
+  const system_error_category  system_category_const;
 
   //  posix_error_category implementation  ---------------------------------//
 
@@ -376,18 +376,15 @@ namespace boost
   namespace system
   {
 
-    BOOST_SYSTEM_DECL const error_category & posix_category
-      = posix_category_const;
+    BOOST_SYSTEM_DECL const error_category & get_system_category()
+    {
+      return system_category_const;
+    }
 
-    BOOST_SYSTEM_DECL const error_category & system_category
-      = system_category_const;
-
-    // deprecated synonyms
-    BOOST_SYSTEM_DECL const error_category & errno_ecat
-      = posix_category_const;
-
-    BOOST_SYSTEM_DECL const error_category & native_ecat
-      = system_category_const;
+    BOOST_SYSTEM_DECL const error_category & get_posix_category()
+    {
+      return posix_category_const;
+    }
 
   } // namespace system
 } // namespace boost

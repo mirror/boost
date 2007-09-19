@@ -162,12 +162,15 @@ namespace boost
 
     //  predefined error categories  -----------------------------------------//
 
-    BOOST_SYSTEM_DECL extern const error_category & posix_category;
-    BOOST_SYSTEM_DECL extern const error_category & system_category;
+    BOOST_SYSTEM_DECL const error_category &  get_system_category();
+    BOOST_SYSTEM_DECL const error_category &  get_posix_category();
 
+    static const error_category &  system_category = get_system_category();
+    static const error_category &  posix_category = get_posix_category();
+    
     //  deprecated synonyms
-    BOOST_SYSTEM_DECL extern const error_category & errno_ecat;  // posix_category
-    BOOST_SYSTEM_DECL extern const error_category & native_ecat; // system_category
+    static const error_category &  errno_ecat  = get_posix_category();
+    static const error_category &  native_ecat = get_system_category();
 
     //  class error_condition  -----------------------------------------------//
 
