@@ -43,6 +43,8 @@
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-synopsis">Class <code>error_category</code> synopsis</a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-virtual-members">Class <code>error_category</code> virtual members</a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-non-virtual-members">Class <code>error_category</code> non-virtual members</a><br>
+&nbsp;&nbsp; <a href="#Class-error_category-non-member-functions">Class <code>error_category</code> 
+      non-member functions</a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-predefined-objects">Class <code>error_category</code> predefined objects</a><br>
       <a href="#Class-error_code">Class <code>error_code</code></a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_code-synopsis">Class <code>error_code</code> synopsis</a><br>
@@ -243,8 +245,11 @@ types should create a single object of each such type. <i>—end note</i> ]</p>
       bool operator&lt; ( const error_category &amp; rhs ) const;
     };
 
-    extern const error_category &amp; posix_category;
-    extern const error_category &amp; system_category;
+    const error_category &amp;  get_system_category();
+    const error_category &amp;  get_posix_category();
+
+    static const error_category &amp;  system_category = get_system_category();
+    static const error_category &amp;  posix_category = get_posix_category();
   }
 }</pre>
 </blockquote>
@@ -304,11 +309,24 @@ const;</code></p>
   </blockquote>
   <p><i>Throws:</i> Nothing.</p>
 </blockquote>
+<h3><a name="Class-error_category-non-member-functions">Class <code>error_category</code> 
+non-member functions</a></h3>
+<pre>const error_category &amp; get_system_category();</pre>
+<blockquote>
+  <p><i>Returns:</i> A reference to a <code>error_category</code> object 
+  identifying errors originating from the operating system.</p>
+  <p><i>Throws:</i> Nothing.</p>
+</blockquote>
+<pre>const error_category &amp; get_posix_category();</pre>
+<blockquote>
+  <p><i>Returns:</i> A reference to a <code>error_category</code> object 
+  identifying portable error conditions.</p>
+  <p><i>Throws:</i> Nothing.</p>
+</blockquote>
 <h3><a name="Class-error_category-predefined-objects">Class <code>error_category</code> 
 predefined objects</a></h3>
-<p>Predefined objects <code>posix_category</code> 
-and <code>system_category</code> identify portable error conditions and system error 
-codes, respectively.</p>
+<p>Predefined objects <code>system_category</code> 
+and <code>posix_category</code> identify operating system error codes and portable error conditions, respectively.</p>
 <h2><a name="Class-error_code">Class <code>
 error_code</code></a></h2>
 <p>The class <code>error_code</code> describes an object used to hold error code 
@@ -681,7 +699,7 @@ Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->September 14, 2007<!--webbot bot="Timestamp" endspan i-checksum="37985" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->September 19, 2007<!--webbot bot="Timestamp" endspan i-checksum="38025" --> </font>
 </p>
 
 </body>
