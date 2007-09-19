@@ -35,7 +35,7 @@ namespace quickbook { namespace /*unnamed*/
     const char* blockquote_post     = "</para></blockquote>";
     const char* preformatted_pre    = "<programlisting>";
     const char* preformatted_post   = "</programlisting>";
-    const char* warning_pre         = "<warning><para>";
+    const char* warning_pre         = "<warning>";
     const char* warning_post        = "</warning>";
     const char* caution_pre         = "<caution>";
     const char* caution_post        = "</caution>";
