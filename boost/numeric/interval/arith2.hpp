@@ -22,6 +22,7 @@
 #include <boost/numeric/interval/arith.hpp>
 #include <boost/numeric/interval/policies.hpp>
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 
 namespace boost {
