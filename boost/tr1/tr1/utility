@@ -4,19 +4,29 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 
-#if !defined(BOOST_TR1_UTILITY_INCLUDED)
+#if !defined(BOOST_TR1_UTILITY_INCLUDED) || defined(BOOST_TR1_NO_RECURSION)
+#ifndef BOOST_TR1_UTILITY_INCLUDED
 #  define BOOST_TR1_UTILITY_INCLUDED
-#  ifndef BOOST_TR1_NO_RECURSION
+#endif
+#  ifdef BOOST_TR1_NO_UTILITY_RECURSION2
+#     define BOOST_TR1_NO_UTILITY_RECURSION3
+#  elif defined(BOOST_TR1_NO_UTILITY_RECURSION)
+#     define BOOST_TR1_NO_UTILITY_RECURSION2
+#  elif !defined(BOOST_TR1_NO_RECURSION)
 #     define BOOST_TR1_NO_RECURSION
 #     define BOOST_TR1_NO_UTILITY_RECURSION
 #  endif
-#  include <boost/tr1/detail/config.hpp>
+#  include <boost/tr1/detail/config_all.hpp>
 #  ifdef BOOST_HAS_INCLUDE_NEXT
 #     include_next <utility>
 #  else
 #     include BOOST_TR1_STD_HEADER(utility)
 #  endif
-#  ifdef BOOST_TR1_NO_UTILITY_RECURSION
+#ifdef BOOST_TR1_NO_UTILITY_RECURSION3
+#  undef BOOST_TR1_NO_UTILITY_RECURSION3
+#elif defined(BOOST_TR1_NO_UTILITY_RECURSION2)
+#  undef BOOST_TR1_NO_UTILITY_RECURSION2
+#elif defined(BOOST_TR1_NO_UTILITY_RECURSION)
 #     undef BOOST_TR1_NO_RECURSION
 #     undef BOOST_TR1_NO_UTILITY_RECURSION
 #  endif

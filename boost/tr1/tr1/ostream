@@ -13,7 +13,7 @@
 #     define BOOST_TR1_NO_RECURSION
 #     define BOOST_TR1_NO_ostream_RECURSION
 #  endif
-#  include <boost/tr1/detail/config.hpp>
+#  include <boost/tr1/detail/config_all.hpp>
 #  ifdef BOOST_HAS_INCLUDE_NEXT
 #     include_next <ostream>
 #  else

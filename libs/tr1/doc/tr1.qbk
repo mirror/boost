@@ -1,4 +1,5 @@
 [library Boost.TR1
+    [quickbook 1.4]
     [copyright 2005 John Maddock]
     [purpose An implementation of the C++ Technical Report on Standard Library Extensions]
     [license
@@ -66,27 +67,51 @@ correct order is:\n\n
 3) Any other standard library replacements (STLport for example).\n
 4) Your regular standard library.]
 
-[blurb [*Important Note #2: Borland C++ Users]\n\n
+[blurb [*Important Note #2: GNU C++ Users]
+
+Normally this library should "just work" with the GNU C++ compiler.
+
+However, if Boost is installed in `/usr/include` then you may get an error
+message of the form:
+
+``In file included from /usr/include/boost/tr1/tuple.hpp:5,
+                 from boost-failure.cxx:1:
+/usr/include/boost/tr1/detail/config.hpp:60:26: error: no include path in which to search for utility``
+
+In this case try defining the macro `BOOST_TR1_DISABLE_INCLUDE_NEXT` when building,
+and if that doesn't work, define the macro `BOOST_TR1_GCC_INCLUDE_PATH` to the 
+name of the directory containing gcc's include files: this is likely to be 
+something like "g++-v4" but unfortunately varies from distribution 
+to distribution.
+]
+
+[blurb [*Important Note #3: Borland C++ Users]
+
 Borland's compiler has a particularly broken form of `#include`, that
 will actually look for a file named `array.h` if you `#include <array>`.
 In order to make this library work with Borland's compiler you will need to
-set up the include paths as follows:\n\n
+set up the include paths as follows:
+
 1) boost-root/boost/tr1/tr1/bcc32\n
 2) boost-root/boost/tr1/tr1\n
 3) boost-root\n
 4) Any other standard library replacements (STLport for example).\n
-5) Your regular standard library.]
+5) Your regular standard library.\n
+]
 
-[blurb [*Important Note #3: Sun C++ Users]\n\n
+[blurb [*Important Note #4: Sun C++ Users]
+
 Sun's compiler has a particularly interesting form of `#include`, that
 will actually look for a file named `array.SUNWCCh` if you `#include <array>`.
 In order to make this library work with Sun's compiler you will need to
-set up the include paths as follows:\n\n
+set up the include paths as follows:
+
 1) boost-root/boost/tr1/tr1/sun\n
 2) boost-root/boost/tr1/tr1\n
 3) boost-root\n
 4) Any other standard library replacements (STLport for example).\n
-5) Your regular standard library.]
+5) Your regular standard library.\n
+]
 
 [endsect]
 
