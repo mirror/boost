@@ -32,7 +32,7 @@
 #    define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 #endif
 
-#if (__HP_aCC < 60000) 
+#if (__HP_aCC > 50000) && (__HP_aCC < 60000)
 #    define BOOST_NO_UNREACHABLE_RETURN_DETECTION
 #    define BOOST_NO_TEMPLATE_TEMPLATES
 #    define BOOST_NO_SWPRINTF
@@ -56,7 +56,7 @@
 // what standard mode we are compiling with. Some future version
 // of aCC6 compiler will provide predefined macros reflecting the
 // compilation options, including the standard mode.
-#if (__HP_aCC >= 60000)
+#if (__HP_aCC >= 60000) || ((__HP_aCC > 38000) && defined(__hpxstd98))
 #    define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #endif
 
@@ -68,6 +68,19 @@
 #if __HP_aCC < 33000
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
+
+//
+// Extended checks for supporting aCC on PA-RISC
+#if __HP_aCC > 30000 && __HP_aCC < 50000
+#  if __HP_aCC < 38000
+      // versions prior to version A.03.80 not supported
+#     error "Compiler version not supported - version A.03.80 or higher is required"
+#  elif !defined(__hpxstd98)
+      // must compile using the option +hpxstd98 with version A.03.80 and above
+#     error "Compiler option '+hpxstd98' is required for proper support"
+#  endif //PA-RISC
+#endif
+
 //
 // last known and checked version for HP-UX/ia64 is 61300
 // last known and checked version for PA-RISC is 38000
@@ -76,7 +89,3 @@
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
-
-
-
-
