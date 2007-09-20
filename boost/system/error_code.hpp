@@ -172,6 +172,10 @@ namespace boost
     static const error_category &  errno_ecat  = get_posix_category();
     static const error_category &  native_ecat = get_system_category();
 
+    //  EDG with --dep_name requires make_error_condition be defined before use
+
+    template <class T> error_condition make_error_condition(T);
+
     //  class error_condition  -----------------------------------------------//
 
     //  error_conditions are portable, error_codes are system or lib specific
@@ -254,6 +258,10 @@ namespace boost
       const error_category *  m_cat;
 
     };
+
+    //  EDG with --dep_name requires make_error_code be defined before use
+
+    template <class T> error_code make_error_code(T);
 
     //  class error_code  ----------------------------------------------------//
 
@@ -401,11 +409,11 @@ namespace boost
     //  make_* functions for posix::posix_errno  -----------------------------//
 
     //  explicit conversion:
-    inline error_code make_error_code( posix::posix_errno e )
+    template<> inline error_code make_error_code( posix::posix_errno e )
       { return error_code( e, posix_category ); }
 
     //  implicit conversion:
-    inline error_condition make_error_condition( posix::posix_errno e )
+    template<> inline error_condition make_error_condition( posix::posix_errno e )
       { return error_condition( e, posix_category ); }
 
     //  error_category default implementation  -------------------------------//
