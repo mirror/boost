@@ -43,7 +43,7 @@
 
 # include <boost/detail/sp_counted_base_cw_ppc.hpp>
 
-#elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) )
+#elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) || defined( __ppc ) )
 
 # include <boost/detail/sp_counted_base_gcc_ppc.hpp>
 
