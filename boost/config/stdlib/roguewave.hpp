@@ -134,6 +134,13 @@
 #endif
 
 //
+// check that on HP-UX, the proper RW library is used
+//
+#if defined(__HP_aCC) && !defined(_HP_NAMESPACE_STD)
+#  error "Boost requires Standard RW library. Please compile and link with -AA"
+#endif
+
+//
 // Define macros specific to RW V2.2 on HP-UX
 //
 #if defined(__HP_aCC) && (BOOST_RWSTD_VER == 0x02020100)
@@ -144,4 +151,3 @@
 #    define _HP_INSTANTIATE_STD2_VL
 #  endif
 #endif
-
