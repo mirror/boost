@@ -1086,10 +1086,12 @@ defined in __forward_sequence__.
 
 [section transform_view]
 
-`transform_view` presents a transformed view of its underlying sequence
-given a unary __poly_func_obj__. The `transform_view` inherits the
-traversal characteristics (see __traversal_concept__) of its underlying
-sequence.
+The unary version of `transform_view` presents a view of its underlying
+sequence given a unary function object or function pointer. The binary
+version of `transform_view` presents a view of 2 underlying sequences,
+given a binary function object or function pointer. The `transform_view` 
+inherits the traversal characteristics (see __traversal_concept__)  of 
+its underlying sequence or sequences.
 
 [heading Header]
 
@@ -1099,12 +1101,12 @@ sequence.
 
 [*Unary Version]
 
-    template <typename Sequence, typename F>
+    template <typename Sequence, typename F1>
     struct transform_view;
 
 [*Binary Version]
 
-    template <typename Sequence1, typename Sequence2, typename F>
+    template <typename Sequence1, typename Sequence2, typename F2>
     struct transform_view;
 
 [heading Template parameters]
@@ -1114,7 +1116,8 @@ sequence.
     [[`Sequence`]           [A __forward_sequence__]                []]
     [[`Sequence1`]          [A __forward_sequence__]                []]
     [[`Sequence2`]          [A __forward_sequence__]                []]
-    [[`F`]                  [A __poly_func_obj__]                   []]
+    [[`F1`]                  [A unary function object or function pointer. `__boost_result_of_call__<F1(E)>::type` is the return type of an instance of `F1` when called with a value of each element type `E` in the input sequence.]                   []]
+    [[`F2`]                  [A binary function object or function pointer. `__boost_result_of_call__<F2(E1, E2)>::type` is the return type of an instance of `F2` when called with a value of each corresponding pair of element type `E1` and `E2` in the input sequences.]                   []]
 ]
 
 [heading Model of]
@@ -1127,7 +1130,8 @@ __traversal_concept__) of its underlying sequence.
     [[`TV`]             [A `transform_view` type]]
     [[`BTV`]            [A binary `transform_view` type]]
     [[`UTV`]            [A unary `transform_view` type]]
-    [[`f`]              [An instance of `F`]]
+    [[`f1`]              [An instance of `F1`]]
+    [[`f2`]              [An instance of `F2`]]
     [[`s`]              [An instance of `Sequence`]]
     [[`s1`]             [An instance of `Sequence1`]]
     [[`s2`]             [An instance of `Sequence2`]]
@@ -1139,14 +1143,14 @@ __traversal_concept__) of its underlying sequence.
 Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__, __bidirectional_sequence__ or
 __random_access_sequence__ depending on the traversal characteristics (see
-__traversal_concept__) of its underlying sequence.
+__traversal_concept__) of its underlying sequence or sequences.
 
 [table
     [[Expression]           [Semantics]]
-    [[`UTV(s, f)`]          [Creates a unary `transform_view` given sequence,
-                             `s` and unary __poly_func_obj__, `f`.]]
-    [[`BTV(s1, s2, f)`]     [Creates a binary `transform_view` given sequences, `s1` and `s2`
-                             and unary __poly_func_obj__, `f`.]]
+    [[`UTV(s, f1)`]          [Creates a unary `transform_view` given sequence,
+                             `s` and unary function object or function pointer, `f1`.]]
+    [[`BTV(s1, s2, f2)`]     [Creates a binary `transform_view` given sequences, `s1` and `s2`
+                             and binary function object or function pointer, `f2`.]]
     [[`TV(tv)`]             [Copy constructs a `transform_view` from another `transform_view`, `tv`.]]
     [[`tv = tv2`]           [Assigns to a `transform_view`, `tv`, from another `transform_view`, `tv2`.]]
 ]
@@ -1155,11 +1159,13 @@ __traversal_concept__) of its underlying sequence.
 
     struct square
     {
-        template <typename T>
-        struct result
-        {
-            typedef T type;
-        };
+        template<typename Sig>
+        struct result;
+
+        template<typename U>
+        struct result<square(U)>
+        : remove_reference<U>
+        {};
 
         template <typename T>
         T operator()(T x) const

@@ -50,7 +50,7 @@ a sequence repeatedly applying an operation to its elements.
 [section fold]
 
 [heading Description]
-Repeatedly applies binary __poly_func_obj__ `f` to each element of a sequence and the previous state.
+For a sequence `Seq`, initial state, and binary function object or function pointer `f`, fold repeatedly applies binary `f` to each element of `Seq` and the previous state.
 
 [heading Synopsis]
     template<
@@ -63,9 +63,9 @@ Repeatedly applies binary __poly_func_obj__ `f` to each element of a sequence an
 
 [table Parameters
     [[Parameter][Requirement][Description]]
-    [[`seq`][A model of __forward_sequence__,`f(e)` must be a valid expression for each element `e` in `seq`][Operation's argument]]
+    [[`seq`][A model of __forward_sequence__,`f(e,s)` must be a valid expression for each element `e` in `seq`, and current state `s`][Operation's argument]]
     [[`initial_state`][Any type][Initial state]]
-    [[`f`][A model of binary __poly_func_obj__][Operation's argument]]
+    [[`f`][`__boost_result_of_call__<F(E,S)>::type` is the return type of `f(e,s)` for each element `e` of type `E` in `seq`, and current state `s` of type `S`][Operation's argument]]
 ]
 
 [heading Expression Semantics]
@@ -84,11 +84,7 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 [heading Example]
     struct make_string
     {
-        template<typename T, typename State>
-        struct result
-        {
-            typedef std::string type;
-        };
+        typedef std::string result_type;
 
         template<typename T>
         std::string operator()(const T& t, const std::string& str) const
@@ -105,8 +101,7 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 [section accumulate]
 
 [heading Description]
-Repeatedly applies binary __poly_func_obj__ `f` to each element of a sequence and the previous state.
-__accumulate__ is equivalent to __fold__.
+For a sequence `Seq`, initial state, and binary function object or function pointer `f`, accumulate repeatedly applies binary `f` to each element of `Seq` and the previous state.
 
 [heading Synopsis]
     template<
@@ -121,7 +116,7 @@ __accumulate__ is equivalent to __fold__.
     [[Parameter][Requirement][Description]]
     [[`seq`][A model of __forward_sequence__, `f(eN ....f(e2,f(e1,initial_state)))` must be a valid expression for each element `e1` to `eN` in `seq`][Operation's argument]]
     [[`initial_state`][Any type][Initial state]]
-    [[`f`][A model of binary __poly_func_obj__][Operation's argument]]
+    [[`f`][`__boost_result_of_call__<F(E,S)>::type` is the return type of `f(e,s)` for each element `e` of type `E` in `seq`, and current state `s` of type `S`][Operation's argument]]
 ]
 
 [heading Expression Semantics]
@@ -140,11 +135,7 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 [heading Example]
     struct make_string
     {
-        template<typename T, typename State>
-        struct result
-        {
-            typedef std::string type;
-        };
+        typedef std::string result_type;
 
         template<typename T>
         std::string operator()(const T& t, const std::string& str) const
@@ -229,7 +220,7 @@ Returns the result type of __fold__.
     [[Parameter] [Requirement] [Description]]
     [[`Sequence`] [A model of __forward_sequence__] [The sequence to iterate]]
     [[`State`]    [Any type]                        [The initial state for the first application of `F`]]
-    [[`F`]    [A model of binary __poly_func_obj__] [The operation to be applied on forward traversal]]
+    [[`F`]    [`__boost_result_of_call__<F(E,S)>::type` is the return type of `f(e,s)` for each element `e` of type `E` in `seq`, and current state `s` of type `S`] [The operation to be applied on forward traversal]]
 ]
 
 [heading Expression Semantics]
@@ -238,7 +229,7 @@ Returns the result type of __fold__.
 [*Return type]: Any type
 
 [*Semantics]: Returns the result of applying `fold` to a sequence of type `Sequence`, with an initial state of
-type `State` and binary __poly_func_obj__ of type `F`.
+type `State` and binary function object or function pointer of type `F`.
 
 [heading Complexity]
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `F`.
@@ -267,7 +258,7 @@ Returns the result type of __accumulate__.
     [[Parameter] [Requirement] [Description]]
     [[`Sequence`] [A model of __forward_sequence__] [The sequence to iterate]]
     [[`State`]    [Any type]                                 [The initial state for the first application of `F`]]
-    [[`F`]    [A model of binary __poly_func_obj__] [The operation to be applied on forward traversal]]
+    [[`F`]    [`__boost_result_of_call__<F(E,S)>::type` is the return type of `f(e,s)` for each element `e` of type `E` in `seq`, and current state `s` of type `S`] [The operation to be applied on forward traversal]]
 ]
 
 [heading Expression Semantics]
@@ -276,7 +267,7 @@ Returns the result type of __accumulate__.
 [*Return type]: Any type
 
 [*Semantics]: Returns the result of applying `accumulate` to a sequence of type `Sequence`, with an initial state of
-type `State` and binary __poly_func_obj__ of type `F`.
+type `State` and binary function object or function pointer of type `F`.
 
 [heading Complexity]
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `F`.
@@ -997,8 +988,8 @@ Constant. Returns a view which is lazily evaluated.
 [section transform]
 
 [heading Description]
-For a sequence `seq` and __poly_func_obj__ `F`, `transform` returns a new sequence
-with elements created by applying `F` to each element of `seq`.
+For a sequence `seq` and function object or function pointer `f`, `transform` returns a new sequence
+with elements created by applying `f(e)` to each element of `e` of `seq`.
 
 [heading Unary version synopsis]
     template<
@@ -1011,7 +1002,7 @@ with elements created by applying `F` to each element of `seq`.
 [table Parameters
     [[Parameter][Requirement][Description]]
     [[`seq`][A model of __forward_sequence__][Operation's argument]]
-    [[`f`][A model of unary __poly_func_obj__ where `f(e)` is a valid expression for each element `e` of `seq`][Transformation function]]
+    [[`f`][`f(e)` is a valid expression for each element `e` of `seq`. `__boost_result_of_call__<F(E)>::type` is the return type of `f` when called with a value of each element type `E`.][Transformation function]]
 ]
 
 [heading Expression Semantics]
@@ -1034,7 +1025,7 @@ with elements created by applying `F` to each element of `seq`.
     [[Parameter][Requirement][Description]]
     [[`seq1`][A model of __forward_sequence__][Operation's argument]]
     [[`seq2`][A model of __forward_sequence__][Operation's argument]]
-    [[`f`][A model of binary __poly_func_obj__ where `f(e1, e2)` is a valid expression for each pair of elements `e1` and `e2` of `seq1` and `seq2` respectively][Transformation function]]
+    [[`f`][`f(e1,e2)` is a valid expression for each pair of elements `e1` of `seq1` and `e2` of `seq2`. `__boost_result_of_call__<F(E1,E2)>::type` is the return type of `f` when called with elements of type `E1` and `E2`][Transformation function]]
 ]
 
 [*Return type]: A model of __forward_sequence__.
@@ -1050,14 +1041,9 @@ Constant. Returns a view which is lazily evaluated.
 [heading Example]
     struct triple
     {
-        template<typename T>
-        struct result
-        {
-            typedef T type;
-        };
+        typedef int result_type;
 
-        template<typename T>
-        T operator()(T t) const
+        int operator()(int t) const
         {
             return t * 3;
         };
@@ -1774,36 +1760,68 @@ Constant.
 [section transform]
 
 [heading Description]
-Returns the result of type __transform__, given the sequence and __poly_func_obj__ types.
+For a sequence `seq` and function object or function pointer `f`, `transform` returns a new sequence
+with elements created by applying `f(e)` to each element of `e` of `seq`.
 
-[heading Synopsis]
+[heading Unary version synopsis]
     template<
         typename Sequence,
         typename F
         >
-    struct transform
-    {
-        typedef __unspecified__ type;
-    };
+    typename __result_of_transform__<Sequence const, F>::type transform(
+        Sequence const& seq, F f);
 
 [table Parameters
-    [[Parameter] [Requirement] [Description]]
-    [[`Sequence`] [A model of __forward_sequence__ ][Operation's argument]]
-    [[`F`]        [A model of unary __poly_func_obj__][Transformation function object]]
+    [[Parameter][Requirement][Description]]
+    [[`seq`][A model of __forward_sequence__][Operation's argument]]
+    [[`f`][`f(e)` is a valid expression for each element `e` of `seq`. `__boost_result_of_call__<F(E)>::type` is the return type of `f` when called with a value of each element type `E`.][Transformation function]]
 ]
 
 [heading Expression Semantics]
-    __result_of_transform__<Sequence, F>::type
+    __transform__(seq, f);
+
+[*Return type]: A model of __forward_sequence__
+
+[*Semantics]: Returns a new sequence, containing the return values of `f(e)` for each element `e` within `seq`.
+
+[heading Binary version synopsis]
+    template<
+        typename Sequence1,
+        typename Sequence2,
+        typename F
+        >
+    typename __result_of_transform__<Sequence1 const, Sequence2 const, F>::type transform(
+        Sequence1 const& seq1, Sequence2 const& seq2, F f);
+
+[table Parameters
+    [[Parameter][Requirement][Description]]
+    [[`seq1`][A model of __forward_sequence__][Operation's argument]]
+    [[`seq2`][A model of __forward_sequence__][Operation's argument]]
+    [[`f`][`f(e1,e2)` is a valid expression for each pair of elements `e1` of `seq1` and `e2` of `seq2`. `__boost_result_of_call__<F(E1,E2)>::type` is the return type of `f` when called with elements of type `E1` and `E2`][Transformation function]]
+]
 
 [*Return type]: A model of __forward_sequence__.
 
-[*Semantics]: Returns a sequence with values `F::result<E>::type` for each element type `E` in `Sequence`.
+[*Semantics]: Returns a new sequence, containing the return values of `f(e1, e2)` for each pair of elements `e1` and `e2` within `seq1` and `seq2` respectively.
 
 [heading Complexity]
-Constant.
+Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
     #include <boost/fusion/algorithm/transformation/transform.hpp>
+
+[heading Example]
+    struct triple
+    {
+        typedef int result_type;
+
+        int operator()(int t) const
+        {
+            return t * 3;
+        };
+    };
+    ...
+    assert(__transform__(__make_vector__(1,2,3), triple()) == __make_vector__(3,6,9));
 
 [endsect]
 
