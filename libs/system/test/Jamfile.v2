@@ -42,6 +42,9 @@ project
             :  :  : <define>BOOST_SYSTEM_DYN_LINK 
                   : system_error_test_dll
          ]
+         [ run initialization_test.cpp
+            :  :  : <define>BOOST_SYSTEM_DYN_LINK 
+         ]
          [ run header_only_test.cpp
            :  :  : <link>static
          ]

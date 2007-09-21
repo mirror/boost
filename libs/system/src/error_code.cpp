@@ -214,9 +214,6 @@ namespace
     error_condition     default_error_condition( int ev ) const;
   };
 
-  const posix_error_category   posix_category_const;
-  const system_error_category  system_category_const;
-
   //  posix_error_category implementation  ---------------------------------//
 
   const char * posix_error_category::name() const
@@ -378,11 +375,13 @@ namespace boost
 
     BOOST_SYSTEM_DECL const error_category & get_system_category()
     {
+      static const system_error_category  system_category_const;
       return system_category_const;
     }
 
     BOOST_SYSTEM_DECL const error_category & get_posix_category()
     {
+      static const posix_error_category posix_category_const;
       return posix_category_const;
     }
 
