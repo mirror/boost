@@ -88,7 +88,7 @@ namespace boost
     template<> struct is_error_code_enum<boost::lib3::error>
       { static const bool value = true; };
 
-    inline error_code make_error_code(boost::lib3::error e)
+    template<> inline error_code make_error_code(boost::lib3::error e)
       { return error_code(e,boost::lib3::lib3_error_category); }
   }
 
@@ -244,7 +244,7 @@ namespace lib4
 //  const boost::system::error_category & user_error_category
 //    = user_error_category_const;
 //
-//  inline boost::system::error_code make_error_code(user_err e)
+//  template<> inline boost::system::error_code make_error_code(user_err e)
 //  {
 //    return boost::system::error_code(e, user_error_category);
 //  }

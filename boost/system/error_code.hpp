@@ -496,7 +496,7 @@ namespace boost
     template<> struct is_error_code_enum<cygwin::cygwin_errno>
       { static const bool value = true; };
 
-    inline error_code make_error_code(cygwin::cygwin_errno e)
+    template<> inline error_code make_error_code(cygwin::cygwin_errno e)
       { return error_code( e, system_category ); }
 
 # elif defined(linux) || defined(__linux) || defined(__linux__)
@@ -563,7 +563,7 @@ namespace boost
     template<> struct is_error_code_enum<Linux::linux_error>
       { static const bool value = true; };
 
-    inline error_code make_error_code(Linux::linux_error e)
+    template<> inline error_code make_error_code(Linux::linux_error e)
       { return error_code( e, system_category ); }
 
 # endif
@@ -647,7 +647,7 @@ namespace boost
     template<> struct is_error_code_enum<windows::windows_error>
       { static const bool value = true; };
 
-    inline error_code make_error_code(windows::windows_error e)
+    template<> inline error_code make_error_code(windows::windows_error e)
       { return error_code( e, system_category ); }
 
 #else
