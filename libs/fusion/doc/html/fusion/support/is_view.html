@@ -3,44 +3,44 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>is_view</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../support.html" title="Support">
 <link rel="prev" href="is_sequence.html" title="is_sequence">
 <link rel="next" href="tag_of.html" title="tag_of">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="is_sequence.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="tag_of.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="is_sequence.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="tag_of.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.support.is_view"></a><a href="is_view.html" title="is_view">is_view</a></h3></div></div></div>
 <a name="fusion.support.is_view.description"></a><h4>
-<a name="id927534"></a>
+<a name="id460384"></a>
         <a href="is_view.html#fusion.support.is_view.description">Description</a>
       </h4>
 <p>
-        Metafunction that evaluates to <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code>
-        if a certain type <code class="computeroutput"><span class="identifier">T</span></code> is a
-        conforming Fusion <a href="../sequences/views.html" title="Views">View</a>, <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></code>
+        Metafunction that evaluates to <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>
+        if a certain type <tt class="computeroutput"><span class="identifier">T</span></tt> is a
+        conforming Fusion <a href="../sequences/views.html" title="Views">View</a>, <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></tt>
         otherwise. A view is a specialized sequence that does not actually contain
         data. Views hold sequences which may be other views. In general, views are
         held by other views by value, while non-views are held by other views by
-        reference. <code class="computeroutput"><span class="identifier">is_view</span></code> may be
+        reference. <tt class="computeroutput"><span class="identifier">is_view</span></tt> may be
         specialized to accomodate clients providing Fusion conforming views.
       </p>
 <a name="fusion.support.is_view.synopsis"></a><h4>
-<a name="id927632"></a>
+<a name="id460495"></a>
         <a href="is_view.html#fusion.support.is_view.synopsis">Synopsis</a>
       </h4>
 <pre class="programlisting">
@@ -54,7 +54,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.support.is_view.parameters"></a><h4>
-<a name="id927748"></a>
+<a name="id460626"></a>
         <a href="is_view.html#fusion.support.is_view.parameters">Parameters</a>
       </h4>
 <div class="informaltable"><table class="table">
@@ -83,7 +83,7 @@
 <tbody><tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">T</span></code>
+                <tt class="computeroutput"><span class="identifier">T</span></tt>
               </p>
               </td>
 <td>
@@ -99,31 +99,31 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.support.is_view.expression_semantics"></a><h4>
-<a name="id927841"></a>
+<a name="id460732"></a>
         <a href="is_view.html#fusion.support.is_view.expression_semantics">Expression Semantics</a>
       </h4>
 <pre class="programlisting">
 <span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_view</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">c</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Return type</strong></span>: An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
+        <span class="bold"><b>Return type</b></span>: An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
         Boolean Constant</a>.
       </p>
 <p>
-        <span class="bold"><strong>Semantics</strong></span>: Metafunction that evaluates to
-        <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code> if a certain type <code class="computeroutput"><span class="identifier">T</span></code>
-        is a conforming Fusion view, <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></code>
+        <span class="bold"><b>Semantics</b></span>: Metafunction that evaluates to
+        <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt> if a certain type <tt class="computeroutput"><span class="identifier">T</span></tt>
+        is a conforming Fusion view, <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></tt>
         otherwise.
       </p>
 <a name="fusion.support.is_view.header"></a><h4>
-<a name="id927991"></a>
+<a name="id460902"></a>
         <a href="is_view.html#fusion.support.is_view.header">Header</a>
       </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">is_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.is_view.example"></a><h4>
-<a name="id928072"></a>
+<a name="id460995"></a>
         <a href="is_view.html#fusion.support.is_view.example">Example</a>
       </h4>
 <pre class="programlisting">
@@ -132,8 +132,8 @@
 
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">_</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_pointer</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">long</span><span class="special">*,</span> <span class="keyword">bool</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../sequences/views/filter_view.html" title="filter_view"><code class="computeroutput"><span class="identifier">filter_view</span></code></a><span class="special">&lt;</span><span class="identifier">vector_type</span><span class="special">,</span> <span class="identifier">is_pointer</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">filter_view_type</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">long</span><span class="special">*,</span> <span class="keyword">bool</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vector_type</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../sequences/views/filter_view.html" title="filter_view"><tt class="computeroutput"><span class="identifier">filter_view</span></tt></a><span class="special">&lt;</span><span class="identifier">vector_type</span><span class="special">,</span> <span class="identifier">is_pointer</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">filter_view_type</span><span class="special">;</span>
 <span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_view</span><span class="special">&lt;</span><span class="identifier">filter_view_type</span><span class="special">&gt;</span> <span class="special">));</span>
 </pre>
 </div>
@@ -144,7 +144,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="is_sequence.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="tag_of.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="is_sequence.html"><img src="../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="tag_of.html"><img src="../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

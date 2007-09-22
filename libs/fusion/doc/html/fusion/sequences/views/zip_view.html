@@ -3,48 +3,48 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>zip_view</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../views.html" title="Views">
 <link rel="prev" href="joint_view.html" title="joint_view">
 <link rel="next" href="transform_view.html" title="transform_view">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="joint_view.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../views.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="transform_view.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="joint_view.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../views.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="transform_view.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.views.zip_view"></a><a href="zip_view.html" title="zip_view">zip_view</a></h4></div></div></div>
 <a name="fusion.sequences.views.zip_view.description"></a><h5>
-<a name="id1006486"></a>
+<a name="id510436"></a>
           <a href="zip_view.html#fusion.sequences.views.zip_view.description">Description</a>
         </h5>
 <p>
-          <code class="computeroutput"><span class="identifier">zip_view</span></code> presents a view
+          <tt class="computeroutput"><span class="identifier">zip_view</span></tt> presents a view
           which iterates over a collection of <span class="underline">_sequence</span>_s
-          in parallel. A <code class="computeroutput"><span class="identifier">zip_view</span></code>
+          in parallel. A <tt class="computeroutput"><span class="identifier">zip_view</span></tt>
           is constructed from a <a href="../../sequences.html" title="Sequences">Sequence</a>
           of references to the component <span class="underline">_sequence</span>_s.
         </p>
 <a name="fusion.sequences.views.zip_view.header"></a><h5>
-<a name="id1006554"></a>
+<a name="id510512"></a>
           <a href="zip_view.html#fusion.sequences.views.zip_view.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.views.zip_view.synopsis"></a><h5>
-<a name="id1006647"></a>
+<a name="id510619"></a>
           <a href="zip_view.html#fusion.sequences.views.zip_view.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -52,7 +52,7 @@
 <span class="keyword">struct</span> <span class="identifier">zip_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.views.zip_view.template_parameters"></a><h5>
-<a name="id1006718"></a>
+<a name="id510698"></a>
           <a href="zip_view.html#fusion.sequences.views.zip_view.template_parameters">Template
           parameters</a>
         </h5>
@@ -82,7 +82,7 @@
 <tbody><tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Sequences</span></code>
+                  <tt class="computeroutput"><span class="identifier">Sequences</span></tt>
                 </p>
                 </td>
 <td>
@@ -99,7 +99,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.views.zip_view.model_of"></a><h5>
-<a name="id1006827"></a>
+<a name="id510821"></a>
           <a href="zip_view.html#fusion.sequences.views.zip_view.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li>
@@ -116,23 +116,23 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">ZV</span></code></span></dt>
-<dd>
-            A <code class="computeroutput"><span class="identifier">joint_view</span></code> type
-          </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
-<dd>
-            An instance of <code class="computeroutput"><span class="identifier">Sequences</span></code>
-</dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">zv1</span></code>,
-          <code class="computeroutput"><span class="identifier">zv2</span></code></span></dt>
-<dd>
-            Instances of <code class="computeroutput"><span class="identifier">ZV</span></code>
-</dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">ZV</span></tt></span></dt>
+<dd><p>
+              A <tt class="computeroutput"><span class="identifier">joint_view</span></tt> type
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
+<dd><p>
+              An instance of <tt class="computeroutput"><span class="identifier">Sequences</span></tt>
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">zv1</span></tt>,
+          <tt class="computeroutput"><span class="identifier">zv2</span></tt></span></dt>
+<dd><p>
+              Instances of <tt class="computeroutput"><span class="identifier">ZV</span></tt>
+            </p></dd>
 </dl>
 </div>
 <a name="fusion.sequences.views.zip_view.expression_semantics"></a><h5>
-<a name="id1006990"></a>
+<a name="id511017"></a>
           <a href="zip_view.html#fusion.sequences.views.zip_view.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -163,12 +163,12 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Creates a <code class="computeroutput"><span class="identifier">zip_view</span></code>
+                  Creates a <tt class="computeroutput"><span class="identifier">zip_view</span></tt>
                   given a sequence of references to the component <span class="underline">_sequence</span>_s.
                 </p>
                 </td>
@@ -176,44 +176,44 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">zv1</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">zv1</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Copy constructs a <code class="computeroutput"><span class="identifier">zip_view</span></code>
-                  from another <code class="computeroutput"><span class="identifier">zip_view</span></code>,
-                  <code class="computeroutput"><span class="identifier">zv</span></code>.
+                  Copy constructs a <tt class="computeroutput"><span class="identifier">zip_view</span></tt>
+                  from another <tt class="computeroutput"><span class="identifier">zip_view</span></tt>,
+                  <tt class="computeroutput"><span class="identifier">zv</span></tt>.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">zv1</span> <span class="special">=</span>
-                  <span class="identifier">zv2</span></code>
+                  <tt class="computeroutput"><span class="identifier">zv1</span> <span class="special">=</span>
+                  <span class="identifier">zv2</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Assigns to a <code class="computeroutput"><span class="identifier">zip_view</span></code>,
-                  <code class="computeroutput"><span class="identifier">zv</span></code>, from another
-                  <code class="computeroutput"><span class="identifier">zip_view</span></code>, <code class="computeroutput"><span class="identifier">zv2</span></code>.
+                  Assigns to a <tt class="computeroutput"><span class="identifier">zip_view</span></tt>,
+                  <tt class="computeroutput"><span class="identifier">zv</span></tt>, from another
+                  <tt class="computeroutput"><span class="identifier">zip_view</span></tt>, <tt class="computeroutput"><span class="identifier">zv2</span></tt>.
                 </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.views.zip_view.example"></a><h5>
-<a name="id1007264"></a>
+<a name="id511326"></a>
           <a href="zip_view.html#fusion.sequences.views.zip_view.example">Example</a>
         </h5>
 <pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec1</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec2</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec1</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec2</span><span class="special">;</span>
 <span class="identifier">vec1</span> <span class="identifier">v1</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">vec2</span> <span class="identifier">v2</span><span class="special">(</span><span class="char">'a'</span><span class="special">,</span><span class="char">'b'</span><span class="special">);</span>
-<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="identifier">vec1</span><span class="special">&amp;,</span> <span class="identifier">vec2</span><span class="special">&amp;&gt;</span> <span class="identifier">sequences</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="identifier">vec1</span><span class="special">&amp;,</span> <span class="identifier">vec2</span><span class="special">&amp;&gt;</span> <span class="identifier">sequences</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">zip_view</span><span class="special">&lt;</span><span class="identifier">sequences</span><span class="special">&gt;(</span><span class="identifier">sequences</span><span class="special">(</span><span class="identifier">v1</span><span class="special">,</span> <span class="identifier">v2</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// ((1 a) (2 b))
 </span></pre>
 </div>
@@ -224,7 +224,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="joint_view.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../views.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="transform_view.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="joint_view.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../views.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="transform_view.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

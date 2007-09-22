@@ -3,38 +3,38 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>filter</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="../metafunctions.html" title="Metafunctions">
 <link rel="next" href="filter_if.html" title="filter_if">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../metafunctions.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="filter_if.html"><img src="../../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../metafunctions.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="filter_if.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.metafunctions.filter"></a><a href="filter.html" title="filter">filter</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.metafunctions.filter.description"></a><h6>
-<a name="id1183824"></a>
+<a name="id613083"></a>
             <a href="filter.html#fusion.algorithms.transformation.metafunctions.filter.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/filter.html" title="filter"><code class="computeroutput"><span class="identifier">filter</span></code></a> given the sequence type
+            Returns the result type of <a href="../functions/filter.html" title="filter"><tt class="computeroutput"><span class="identifier">filter</span></tt></a> given the sequence type
             and type to retain.
           </p>
 <a name="fusion.algorithms.transformation.metafunctions.filter.synopsis"></a><h6>
-<a name="id1183869"></a>
+<a name="id613133"></a>
             <a href="filter.html#fusion.algorithms.transformation.metafunctions.filter.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -48,7 +48,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id1183974"></a><p class="title"><b>Table 1.73. Parameter</b></p>
+<a name="id613252"></a><p class="title"><b>Table 1.73. Parameter</b></p>
 <table class="table" summary="Parameter">
 <colgroup>
 <col>
@@ -76,7 +76,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
                 </p>
                 </td>
 <td>
@@ -95,7 +95,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">T</span></code>
+                  <tt class="computeroutput"><span class="identifier">T</span></tt>
                 </p>
                 </td>
 <td>
@@ -113,34 +113,34 @@
 </table>
 </div>
 <a name="fusion.algorithms.transformation.metafunctions.filter.expression_semantics"></a><h6>
-<a name="id1184100"></a>
+<a name="id613393"></a>
             <a href="filter.html#fusion.algorithms.transformation.metafunctions.filter.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a href="filter.html" title="filter"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">filter</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="filter.html" title="filter"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">filter</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence containing
-            the elements of <code class="computeroutput"><span class="identifier">Sequence</span></code>
-            that are of type <code class="computeroutput"><span class="identifier">T</span></code>. Equivalent
-            to <code class="computeroutput"><a href="filter_if.html" title="filter_if"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">filter_if</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span>
-            <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">_</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>.
+            <span class="bold"><b>Semantics</b></span>: Returns a sequence containing
+            the elements of <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+            that are of type <tt class="computeroutput"><span class="identifier">T</span></tt>. Equivalent
+            to <tt class="computeroutput"><a href="filter_if.html" title="filter_if"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">filter_if</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span>
+            <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">_</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span></tt>.
           </p>
 <a name="fusion.algorithms.transformation.metafunctions.filter.complexity"></a><h6>
-<a name="id1184330"></a>
+<a name="id613656"></a>
             <a href="filter.html#fusion.algorithms.transformation.metafunctions.filter.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithms.transformation.metafunctions.filter.header"></a><h6>
-<a name="id1184337"></a>
+<a name="id613688"></a>
             <a href="filter.html#fusion.algorithms.transformation.metafunctions.filter.header">Header</a>
           </h6>
 <pre class="programlisting">
@@ -154,7 +154,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../metafunctions.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="filter_if.html"><img src="../../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../metafunctions.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../metafunctions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="filter_if.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

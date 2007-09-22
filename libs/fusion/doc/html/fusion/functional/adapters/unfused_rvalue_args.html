@@ -3,30 +3,30 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>unfused_rvalue_args</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../adapters.html" title=" Adapters">
 <link rel="prev" href="unfused_lvalue_args.html" title="unfused_lvalue_args">
 <link rel="next" href="unfused_typed.html" title="unfused_typed">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="unfused_lvalue_args.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="unfused_typed.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="unfused_lvalue_args.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unfused_typed.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.unfused_rvalue_args"></a><a href="unfused_rvalue_args.html" title="unfused_rvalue_args">unfused_rvalue_args</a></h4></div></div></div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.description"></a><h5>
-<a name="id1255291"></a>
+<a name="id657410"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.description">Description</a>
         </h5>
 <p>
@@ -43,19 +43,19 @@
 <p>
           The type of the target function is allowed to be const qualified or a reference.
           Const qualification is preserved and propagated appropriately (in other
-          words, only const versions of <code class="literal">operator()</code> can be used
+          words, only const versions of <tt class="literal">operator()</tt> can be used
           if the target function object is const - or, in case the target function
           object is held by value, the adapter is const).
         </p>
 <a name="fusion.functional.adapters.unfused_rvalue_args.header"></a><h5>
-<a name="id1255362"></a>
+<a name="id657489"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">unfused_rvalue_args</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_rvalue_args.synopsis"></a><h5>
-<a name="id1255457"></a>
+<a name="id657596"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -63,7 +63,7 @@
 <span class="keyword">class</span> <span class="identifier">unfused_rvalue_args</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_rvalue_args.template_parameters"></a><h5>
-<a name="id1255531"></a>
+<a name="id657678"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.template_parameters">Template
           parameters</a>
         </h5>
@@ -93,7 +93,7 @@
 <tbody><tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Function</span></code>
+                  <tt class="computeroutput"><span class="identifier">Function</span></tt>
                 </p>
                 </td>
 <td>
@@ -110,7 +110,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.model_of"></a><h5>
-<a name="id1255632"></a>
+<a name="id657793"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.model_of">Model
           of</a>
         </h5>
@@ -125,33 +125,33 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
-<dd>
-            A possibly const qualified, unary <a href="../concepts/poly.html" title=" Polymorphic Function
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">F</span></tt></span></dt>
+<dd><p>
+              A possibly const qualified, unary <a href="../concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-            Function Object</a> type or reference type thereof
-          </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
-<dd>
-            An object convertible to <code class="computeroutput"><span class="identifier">F</span></code>
-</dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">UR</span></code></span></dt>
-<dd>
-            The type <code class="computeroutput"><span class="identifier">unfused_rvalue_args</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;</span></code>
-</dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">ur</span></code></span></dt>
-<dd>
-            An instance of <code class="computeroutput"><span class="identifier">UR</span></code>, initialized
-            with <code class="computeroutput"><span class="identifier">f</span></code>
-</dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code></span></dt>
-<dd>
-            Arguments to <code class="computeroutput"><span class="identifier">ur</span></code>
-</dd>
+              Function Object</a> type or reference type thereof
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">f</span></tt></span></dt>
+<dd><p>
+              An object convertible to <tt class="computeroutput"><span class="identifier">F</span></tt>
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">UR</span></tt></span></dt>
+<dd><p>
+              The type <tt class="computeroutput"><span class="identifier">unfused_rvalue_args</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;</span></tt>
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">ur</span></tt></span></dt>
+<dd><p>
+              An instance of <tt class="computeroutput"><span class="identifier">UR</span></tt>,
+              initialized with <tt class="computeroutput"><span class="identifier">f</span></tt>
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">a0</span></tt>...<tt class="computeroutput"><span class="identifier">aN</span></tt></span></dt>
+<dd><p>
+              Arguments to <tt class="computeroutput"><span class="identifier">ur</span></tt>
+            </p></dd>
 </dl>
 </div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.expression_semantics"></a><h5>
-<a name="id1255857"></a>
+<a name="id658063"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -176,46 +176,46 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">UR</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><span class="identifier">UR</span><span class="special">(</span><span class="identifier">f</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Creates a fused function as described above, initializes the target
-                  function with <code class="computeroutput"><span class="identifier">f</span></code>.
+                  function with <tt class="computeroutput"><span class="identifier">f</span></tt>.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">UR</span><span class="special">()</span></code>
+                  <tt class="computeroutput"><span class="identifier">UR</span><span class="special">()</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Creates a fused function as described above, attempts to use <code class="computeroutput"><span class="identifier">F</span></code>'s default constructor.
+                  Creates a fused function as described above, attempts to use <tt class="computeroutput"><span class="identifier">F</span></tt>'s default constructor.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">ur</span><span class="special">(</span><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><span class="identifier">ur</span><span class="special">(</span><span class="identifier">a0</span></tt>...<tt class="computeroutput"><span class="identifier">aN</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Calls <code class="computeroutput"><span class="identifier">f</span></code> with a
+                  Calls <tt class="computeroutput"><span class="identifier">f</span></tt> with a
                   <a href="../../sequences.html" title="Sequences">Sequence</a> that contains
-                  references to the arguments <code class="computeroutput"><span class="identifier">a0</span></code>...<code class="computeroutput"><span class="identifier">aN</span></code>.
+                  references to the arguments <tt class="computeroutput"><span class="identifier">a0</span></tt>...<tt class="computeroutput"><span class="identifier">aN</span></tt>.
                 </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_rvalue_args.example"></a><h5>
-<a name="id1256093"></a>
+<a name="id658330"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -241,16 +241,16 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_rvalue_args.see_also"></a><h5>
-<a name="id1256446"></a>
+<a name="id658728"></a>
           <a href="unfused_rvalue_args.html#fusion.functional.adapters.unfused_rvalue_args.see_also">See
           also</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="unfused_lvalue_args.html" title="unfused_lvalue_args"><code class="computeroutput"><span class="identifier">unfused_lvalue_args</span></code></a></li>
-<li><a href="unfused_generic.html" title="unfused_generic"><code class="computeroutput"><span class="identifier">unfused_generic</span></code></a></li>
-<li><a href="unfused_typed.html" title="unfused_typed"><code class="computeroutput"><span class="identifier">unfused_typed</span></code></a></li>
-<li><a href="../../support/deduce.html" title="deduce"><code class="computeroutput"><span class="identifier">deduce</span></code></a></li>
-<li><a href="../../support/deduce_sequence.html" title="deduce_sequence"><code class="computeroutput"><span class="identifier">deduce_sequence</span></code></a></li>
+<li><a href="unfused_lvalue_args.html" title="unfused_lvalue_args"><tt class="computeroutput"><span class="identifier">unfused_lvalue_args</span></tt></a></li>
+<li><a href="unfused_generic.html" title="unfused_generic"><tt class="computeroutput"><span class="identifier">unfused_generic</span></tt></a></li>
+<li><a href="unfused_typed.html" title="unfused_typed"><tt class="computeroutput"><span class="identifier">unfused_typed</span></tt></a></li>
+<li><a href="../../support/deduce.html" title="deduce"><tt class="computeroutput"><span class="identifier">deduce</span></tt></a></li>
+<li><a href="../../support/deduce_sequence.html" title="deduce_sequence"><tt class="computeroutput"><span class="identifier">deduce_sequence</span></tt></a></li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
@@ -260,7 +260,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="unfused_lvalue_args.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="unfused_typed.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="unfused_lvalue_args.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapters.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="unfused_typed.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

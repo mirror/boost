@@ -3,43 +3,43 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>vector</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../containers.html" title="Containers">
 <link rel="prev" href="../containers.html" title="Containers">
 <link rel="next" href="cons.html" title="cons">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../containers.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../containers.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="cons.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../containers.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../containers.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="cons.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.containers.vector"></a><a href="vector.html" title="vector">vector</a></h4></div></div></div>
 <a name="fusion.sequences.containers.vector.description"></a><h5>
-<a name="id976040"></a>
+<a name="id495615"></a>
           <a href="vector.html#fusion.sequences.containers.vector.description">Description</a>
         </h5>
 <p>
-          <code class="computeroutput"><span class="identifier">vector</span></code> is a <a href="../concepts/random_access_sequence.html" title="Random
+          <tt class="computeroutput"><span class="identifier">vector</span></tt> is a <a href="../concepts/random_access_sequence.html" title="Random
         Access Sequence">Random
           Access Sequence</a> of heterogenous typed data structured as a simple
-          <code class="computeroutput"><span class="keyword">struct</span></code> where each element
-          is held as a member variable. <code class="computeroutput"><span class="identifier">vector</span></code>
+          <tt class="computeroutput"><span class="keyword">struct</span></tt> where each element
+          is held as a member variable. <tt class="computeroutput"><span class="identifier">vector</span></tt>
           is the simplest of the Fusion sequence container, and in many cases the
           most efficient.
         </p>
 <a name="fusion.sequences.containers.vector.header"></a><h5>
-<a name="id976108"></a>
+<a name="id495693"></a>
           <a href="vector.html#fusion.sequences.containers.vector.header">Header</a>
         </h5>
 <pre class="programlisting">
@@ -54,11 +54,11 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">vector</span><span class="special">/</span><span class="identifier">vector50</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.containers.vector.synopsis"></a><h5>
-<a name="id976642"></a>
+<a name="id496302"></a>
           <a href="vector.html#fusion.sequences.containers.vector.synopsis">Synopsis</a>
         </h5>
 <p>
-          <span class="bold"><strong>Numbered forms</strong></span>
+          <span class="bold"><b>Numbered forms</b></span>
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;&gt;</span>
@@ -79,7 +79,7 @@
 <span class="keyword">struct</span> <span class="identifier">vectorN</span><span class="special">;</span>
 </pre>
 <p>
-          <span class="bold"><strong>Variadic form</strong></span>
+          <span class="bold"><b>Variadic form</b></span>
         </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span>
@@ -98,24 +98,24 @@
 <span class="identifier">vector3</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span>
 </pre>
 <p>
-          The variadic form accepts <code class="computeroutput"><span class="number">0</span></code>
-          to <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
-          elements, where <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
-          is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>.
+          The variadic form accepts <tt class="computeroutput"><span class="number">0</span></tt>
+          to <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
+          elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
+          is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>.
           Example:
         </p>
 <pre class="programlisting">
 <span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span>
 </pre>
 <p>
-          You may define the preprocessor constant <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
+          You may define the preprocessor constant <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
           before including any Fusion header to change the default. Example:
         </p>
 <pre class="programlisting">
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.sequences.containers.vector.template_parameters"></a><h5>
-<a name="id977298"></a>
+<a name="id497044"></a>
           <a href="vector.html#fusion.sequences.containers.vector.template_parameters">Template
           parameters</a>
         </h5>
@@ -145,7 +145,7 @@
 <tbody><tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
+                  <tt class="computeroutput"><span class="identifier">T0</span></tt>...<tt class="computeroutput"><span class="identifier">TN</span></tt>
                 </p>
                 </td>
 <td>
@@ -161,7 +161,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.containers.vector.model_of"></a><h5>
-<a name="id977405"></a>
+<a name="id497165"></a>
           <a href="vector.html#fusion.sequences.containers.vector.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="../concepts/random_access_sequence.html" title="Random
@@ -170,28 +170,28 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">v</span></code></span></dt>
-<dd>
-            Instance of <code class="computeroutput"><span class="identifier">vector</span></code>
-</dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">V</span></code></span></dt>
-<dd>
-            A <code class="computeroutput"><span class="identifier">vector</span></code> type
-          </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code></span></dt>
-<dd>
-            Heterogeneous values
-          </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
-<dd>
-            A <a href="../concepts/forward_sequence.html" title="Forward
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">v</span></tt></span></dt>
+<dd><p>
+              Instance of <tt class="computeroutput"><span class="identifier">vector</span></tt>
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">V</span></tt></span></dt>
+<dd><p>
+              A <tt class="computeroutput"><span class="identifier">vector</span></tt> type
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt></span></dt>
+<dd><p>
+              Heterogeneous values
+            </p></dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
+<dd><p>
+              A <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-            Sequence</a>
-</dd>
+              Sequence</a>
+            </p></dd>
 </dl>
 </div>
 <a name="fusion.sequences.containers.vector.expression_semantics"></a><h5>
-<a name="id977554"></a>
+<a name="id497349"></a>
           <a href="vector.html#fusion.sequences.containers.vector.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -222,7 +222,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">V</span><span class="special">()</span></code>
+                  <tt class="computeroutput"><span class="identifier">V</span><span class="special">()</span></tt>
                 </p>
                 </td>
 <td>
@@ -234,57 +234,57 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">V</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span>
+                  <tt class="computeroutput"><span class="identifier">V</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span>
                   <span class="identifier">e1</span><span class="special">,...</span>
-                  <span class="identifier">en</span><span class="special">)</span></code>
+                  <span class="identifier">en</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Creates a vector with elements <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.
+                  Creates a vector with elements <tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt>.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">V</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><span class="identifier">V</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Copy constructs a vector from a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>, <code class="computeroutput"><span class="identifier">s</span></code>.
+                  Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">v</span> <span class="special">=</span>
-                  <span class="identifier">s</span></code>
+                  <tt class="computeroutput"><span class="identifier">v</span> <span class="special">=</span>
+                  <span class="identifier">s</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Assigns to a vector, <code class="computeroutput"><span class="identifier">v</span></code>,
+                  Assigns to a vector, <tt class="computeroutput"><span class="identifier">v</span></tt>,
                   from a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>, <code class="computeroutput"><span class="identifier">s</span></code>.
+                  Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.
                 </p>
                 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.containers.vector.example"></a><h5>
-<a name="id977858"></a>
+<a name="id497690"></a>
           <a href="vector.html#fusion.sequences.containers.vector.example">Example</a>
         </h5>
 <pre class="programlisting">
 <span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="number">5.5f</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
@@ -294,7 +294,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../containers.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../containers.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="cons.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../containers.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../containers.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="cons.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

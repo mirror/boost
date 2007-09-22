@@ -3,24 +3,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Tiers</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="make_map.html" title="make_map">
 <link rel="next" href="list_tie.html" title="list_tie">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="make_map.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="list_tie.html"><img src="../../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="make_map.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="list_tie.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
@@ -32,9 +32,9 @@
             flavors.
           </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="list_tie.html" title="list_tie"><code class="computeroutput"><span class="identifier">list_tie</span></code></a></li>
-<li><a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a></li>
-<li><a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">map_tie</span></code></a></li>
+<li><a href="list_tie.html" title="list_tie"><tt class="computeroutput"><span class="identifier">list_tie</span></tt></a></li>
+<li><a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a></li>
+<li><a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">map_tie</span></tt></a></li>
 </ul></div>
 <p>
             Example:
@@ -42,14 +42,14 @@
 <pre class="programlisting">
 <span class="keyword">int</span> <span class="identifier">i</span><span class="special">;</span> <span class="keyword">char</span> <span class="identifier">c</span><span class="special">;</span> <span class="keyword">double</span> <span class="identifier">d</span><span class="special">;</span>
   <span class="special">...</span>
-<a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">a</span><span class="special">);</span>
+<a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">a</span><span class="special">);</span>
 </pre>
 <p>
-            The <a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a> function creates
-            a <a href="../../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
-            of type <code class="computeroutput"><a href="../../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;,</span> <span class="keyword">char</span><span class="special">&amp;,</span> <span class="keyword">double</span><span class="special">&amp;&gt;</span></code>.
-            The same result could be achieved with the call <a href="make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a>(<a href="http://www.boost.org/doc/html/ref.html" target="_top"><code class="computeroutput"><span class="identifier">ref</span></code></a>(i), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><code class="computeroutput"><span class="identifier">ref</span></code></a>(c), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><code class="computeroutput"><span class="identifier">ref</span></code></a>(a))
-            <sup>[<a name="id1073558" href="#ftn.id1073558">11</a>]</sup>
+            The <a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a> function creates
+            a <a href="../../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a>
+            of type <tt class="computeroutput"><a href="../../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;,</span> <span class="keyword">char</span><span class="special">&amp;,</span> <span class="keyword">double</span><span class="special">&amp;&gt;</span></tt>.
+            The same result could be achieved with the call <a href="make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a>(<a href="http://www.boost.org/doc/html/ref.html" target="_top"><tt class="computeroutput"><span class="identifier">ref</span></tt></a>(i), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><tt class="computeroutput"><span class="identifier">ref</span></tt></a>(c), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><tt class="computeroutput"><span class="identifier">ref</span></tt></a>(a))
+            <sup>[<a name="id547092" href="#ftn.id547092">11</a>]</sup>
             .
           </p>
 <p>
@@ -58,7 +58,7 @@
           </p>
 <pre class="programlisting">
 <span class="keyword">int</span> <span class="identifier">i</span><span class="special">;</span> <span class="keyword">char</span> <span class="identifier">c</span><span class="special">;</span> <span class="keyword">double</span> <span class="identifier">d</span><span class="special">;</span>
-<a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">d</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="char">'a'</span><span class="special">,</span> <span class="number">5.5</span><span class="special">);</span>
+<a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">d</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="char">'a'</span><span class="special">,</span> <span class="number">5.5</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">i</span> <span class="special">&lt;&lt;</span> <span class="string">" "</span> <span class="special">&lt;&lt;</span>  <span class="identifier">c</span> <span class="special">&lt;&lt;</span> <span class="string">" "</span> <span class="special">&lt;&lt;</span> <span class="identifier">d</span><span class="special">;</span>
 </pre>
 <p>
@@ -67,7 +67,7 @@
             when calling functions which return sequences.
           </p>
 <a name="fusion.sequences.generation.functions.tiers.ignore"></a><h6>
-<a name="id1073830"></a>
+<a name="id547398"></a>
             <a href="tiers.html#fusion.sequences.generation.functions.tiers.ignore">Ignore</a>
           </h6>
 <p>
@@ -78,13 +78,13 @@
           </p>
 <pre class="programlisting">
 <span class="keyword">char</span> <span class="identifier">c</span><span class="special">;</span>
-<a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">ignore</span><span class="special">,</span> <span class="identifier">c</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'a'</span><span class="special">);</span>
+<a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a><span class="special">(</span><span class="identifier">ignore</span><span class="special">,</span> <span class="identifier">c</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'a'</span><span class="special">);</span>
 </pre>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1073558" href="#id1073558">11</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id547092" href="#id547092">11</a>] </sup>
                 see <a href="http://www.boost.org/doc/html/ref.html" target="_top">Boost.Ref</a>
-                for details about <code class="computeroutput"><span class="identifier">ref</span></code>
+                for details about <tt class="computeroutput"><span class="identifier">ref</span></tt>
               </p></div>
 </div>
 </div>
@@ -95,7 +95,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="make_map.html"><img src="../../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../images/home.png" alt="Home"></a><a accesskey="n" href="list_tie.html"><img src="../../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="make_map.html"><img src="../../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../functions.html"><img src="../../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="list_tie.html"><img src="../../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -3,67 +3,67 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>std::pair</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../adapted.html" title="Adapted">
 <link rel="prev" href="../adapted.html" title="Adapted">
 <link rel="next" href="mpl_sequence.html" title="mpl sequence">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%">
+<table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
 <td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
-</table>
+</tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../adapted.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="mpl_sequence.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../adapted.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="mpl_sequence.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.adapted.std__pair"></a><a href="std__pair.html" title="std::pair">std::pair</a></h4></div></div></div>
 <p>
-          This module provides adapters for <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code>.
-          Including the module header makes <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code>
+          This module provides adapters for <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt>.
+          Including the module header makes <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt>
           a fully conforming <a href="../concepts/random_access_sequence.html" title="Random
         Access Sequence">Random
           Access Sequence</a>.
         </p>
 <a name="fusion.sequences.adapted.std__pair.header"></a><h5>
-<a name="id1010529"></a>
+<a name="id515376"></a>
           <a href="std__pair.html#fusion.sequences.adapted.std__pair.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">std_pair</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.adapted.std__pair.model_of"></a><h5>
-<a name="id1010622"></a>
+<a name="id515482"></a>
           <a href="std__pair.html#fusion.sequences.adapted.std__pair.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="../concepts/random_access_sequence.html" title="Random
         Access Sequence">Random
             Access Sequence</a></li></ul></div>
 <a name="fusion.sequences.adapted.std__pair.example"></a><h5>
-<a name="id1010659"></a>
+<a name="id515524"></a>
           <a href="std__pair.html#fusion.sequences.adapted.std__pair.example">Example</a>
         </h5>
 <pre class="programlisting">
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">p</span><span class="special">(</span><span class="number">123</span><span class="special">,</span> <span class="string">"Hola!!!"</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.adapted.std__pair.see_also"></a><h5>
-<a name="id1010971"></a>
+<a name="id515878"></a>
           <a href="std__pair.html#fusion.sequences.adapted.std__pair.see_also">See also</a>
         </h5>
 <p>
-          <a href="http://www.sgi.com/tech/stl/pair.html" target="_top"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a>,
-          <a href="../../tuples/pairs.html" title="Pairs"><code class="computeroutput"><span class="identifier">TR1</span>
-          <span class="keyword">and</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a>
+          <a href="http://www.sgi.com/tech/stl/pair.html" target="_top"><tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt></a>,
+          <a href="../../tuples/pairs.html" title="Pairs"><tt class="computeroutput"><span class="identifier">TR1</span>
+          <span class="keyword">and</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt></a>
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
@@ -73,7 +73,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../adapted.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="mpl_sequence.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../adapted.html"><img src="../../../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../adapted.html"><img src="../../../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="mpl_sequence.html"><img src="../../../../../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
