@@ -90,17 +90,6 @@ namespace boost { namespace fusion
                 return type(iter.cons.get_tail());
             }
         };
-
-        template <typename I1, typename I2>
-        struct equal_to
-            : mpl::or_<
-                is_same<I1, I2>
-              , mpl::and_<
-                    detail::boost_tuple_is_empty<typename I1::cons_type>
-                  , detail::boost_tuple_is_empty<typename I2::cons_type>
-                >
-            >
-        {};
     };
 
     template <typename Null>
