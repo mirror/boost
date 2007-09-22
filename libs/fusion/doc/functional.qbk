@@ -80,6 +80,19 @@ function call operator.
 * member (function or data) pointer types
 * all kinds of function objects
 
+[heading Examples]
+
+  & a_free_function
+  & a_class::a_static_member_function
+  & a_class::a_nonstatic_data_member
+  & a_class::a_nonstatic_member_function
+  std::less<int>()
+  // using namespace boost;
+  bind(std::less<int>(), _1, 5)
+  lambda::_1 += lambda::_2;
+  fusion::__make_fused_function_object__(std::less<int>())
+  
+
 [endsect]
 
 
@@ -111,6 +124,16 @@ type whose objects can appear immediately to the left of a function call operato
 * function pointer types
 * all kinds of function objects
 
+[heading Examples]
+
+  & a_free_function
+  & a_class::a_static_member_function
+  std::less<int>()
+  // using namespace boost;
+  bind(std::less<int>(), _1, 5)
+  lambda::_1 += lambda::_2;
+  fusion::__make_fused_function_object__(std::less<int>())
+  
 [endsect]
 
 
@@ -147,6 +170,18 @@ function objects won't need client-side support for `result_of`.
 * __poly_func_obj__ types
 * member (function or data) pointer types
 
+[heading Examples]
+
+  & a_free_function
+  & a_class::a_static_member_function
+  & a_class::a_nonstatic_data_member
+  & a_class::a_nonstatic_member_function
+  std::less<int>()
+  // using namespace boost;
+  bind(std::less<int>(), _1, 5)
+  // Note: Boost.Lambda expressions don't work with __boost_result_of__
+  fusion::__make_fused_function_object__(std::less<int>())
+
 [endsect]
 
 
@@ -179,6 +214,16 @@ A non-member-pointer __def_callable_obj__ type.
 * function pointers
 * function objects of the Standard Library
 * all Fusion __functional_adapters__
+
+[heading Examples]
+
+  & a_free_function
+  & a_class::a_static_member_function
+  std::less<int>()
+  // using namespace boost;
+  bind(std::less<int>(), _1, 5)
+  // Note: Boost.Lambda expressions don't work with __boost_result_of__
+  fusion::__make_fused_function_object__(std::less<int>())
 
 [endsect]
 
