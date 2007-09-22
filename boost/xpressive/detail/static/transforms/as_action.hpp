@@ -20,6 +20,7 @@
 #include <boost/mpl/min_max.hpp>
 #include <boost/mpl/apply_wrap.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
+#include <boost/xpressive/detail/core/matcher/attr_end_matcher.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/static/transforms/as_quantifier.hpp>
 #include <boost/xpressive/proto/proto.hpp>
