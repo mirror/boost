@@ -54,7 +54,7 @@ struct pointer_plus_bit<T*>
    typedef T*        pointer;
 
    static pointer get_pointer(pointer n)
-   {  return pointer(std::size_t(n) & std::size_t(~1u));  }
+   {  return pointer(std::size_t(n) & ~std::size_t(1u));  }
 
    static void set_pointer(pointer &n, pointer p)
    {
