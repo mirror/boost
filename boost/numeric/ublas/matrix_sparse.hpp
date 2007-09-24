@@ -1642,8 +1642,18 @@ namespace boost { namespace numeric { namespace ublas {
 
                 const_subiterator_type it ((*itv).second.lower_bound (layout_type::index_m (i, j)));
                 const_subiterator_type it_end ((*itv).second.end ());
-                if (rank == 0)
-                    return const_iterator1 (*this, rank, i, j, itv, it);
+                if (rank == 0) {
+                    // advance to the first available major index
+                    size_type M = itv->first;
+                    size_type m;
+                    if (it != it_end) { 
+                        m = it->first; 
+                    } else {
+                        m = layout_type::size_m(size1_, size2_);
+                    }
+                    size_type first_i = layout_type::index_M(M,m);
+                    return const_iterator1 (*this, rank, first_i, j, itv, it);
+                }
                 if (it != it_end && (*it).first == layout_type::index_m (i, j))
                     return const_iterator1 (*this, rank, i, j, itv, it);
                 if (direction > 0) {
@@ -1681,8 +1691,18 @@ namespace boost { namespace numeric { namespace ublas {
 
                 subiterator_type it ((*itv).second.lower_bound (layout_type::index_m (i, j)));
                 subiterator_type it_end ((*itv).second.end ());
-                if (rank == 0)
-                    return iterator1 (*this, rank, i, j, itv, it);
+                if (rank == 0) {
+                    // advance to the first available major index
+                    size_type M = itv->first;
+                    size_type m;
+                    if (it != it_end) { 
+                        m = it->first; 
+                    } else {
+                        m = layout_type::size_m(size1_, size2_);
+                    }
+                    size_type first_i = layout_type::index_M(M,m);
+                    return iterator1 (*this, rank, first_i, j, itv, it);
+                }
                 if (it != it_end && (*it).first == layout_type::index_m (i, j))
                     return iterator1 (*this, rank, i, j, itv, it);
                 if (direction > 0) {
@@ -1720,8 +1740,18 @@ namespace boost { namespace numeric { namespace ublas {
 
                 const_subiterator_type it ((*itv).second.lower_bound (layout_type::index_m (i, j)));
                 const_subiterator_type it_end ((*itv).second.end ());
-                if (rank == 0)
-                    return const_iterator2 (*this, rank, i, j, itv, it);
+                if (rank == 0) {
+                    // advance to the first available major index
+                    size_type M = itv->first;
+                    size_type m;
+                    if (it != it_end) { 
+                        m = it->first; 
+                    } else {
+                        m = layout_type::size_m(size1_, size2_);
+                    }
+                    size_type first_j = layout_type::index_m(M,m);
+                    return const_iterator2 (*this, rank, i, first_j, itv, it);
+                }
                 if (it != it_end && (*it).first == layout_type::index_m (i, j))
                     return const_iterator2 (*this, rank, i, j, itv, it);
                 if (direction > 0) {
@@ -1759,8 +1789,18 @@ namespace boost { namespace numeric { namespace ublas {
 
                 subiterator_type it ((*itv).second.lower_bound (layout_type::index_m (i, j)));
                 subiterator_type it_end ((*itv).second.end ());
-                if (rank == 0)
-                    return iterator2 (*this, rank, i, j, itv, it);
+                if (rank == 0) {
+                    // advance to the first available major index
+                    size_type M = itv->first;
+                    size_type m;
+                    if (it != it_end) { 
+                        m = it->first; 
+                    } else {
+                        m = layout_type::size_m(size1_, size2_);
+                    }
+                    size_type first_j = layout_type::index_m(M,m);
+                    return iterator2 (*this, rank, i, first_j, itv, it);
+                }
                 if (it != it_end && (*it).first == layout_type::index_m (i, j))
                     return iterator2 (*this, rank, i, j, itv, it);
                 if (direction > 0) {
@@ -1819,7 +1859,12 @@ namespace boost { namespace numeric { namespace ublas {
                     ++ it_;
                 else {
                     const self_type &m = (*this) ();
-                    i_ = index1 () + 1;
+                    if (rank_ == 0) {
+                        ++ itv_;
+                        i_ = itv_->first;
+                    } else {
+                        i_ = index1 () + 1;
+                    }
                     if (rank_ == 1 && ++ itv_ == m.end1 ().itv_)
                         *this = m.find1 (rank_, i_, j_, 1);
                     else if (rank_ == 1) {
@@ -1836,7 +1881,13 @@ namespace boost { namespace numeric { namespace ublas {
                     -- it_;
                 else {
                     const self_type &m = (*this) ();
-                    i_ = index1 () - 1;
+                    if (rank_ == 0) {
+                        -- itv_;
+                        i_ = itv_->first;
+                    } else {
+                        i_ = index1 () - 1;
+                    }
+                    // FIXME: this expression should never become true!
                     if (rank_ == 1 && -- itv_ == m.end1 ().itv_)
                         *this = m.find1 (rank_, i_, j_, -1);
                     else if (rank_ == 1) {
@@ -1983,7 +2034,12 @@ namespace boost { namespace numeric { namespace ublas {
                     ++ it_;
                 else {
                     self_type &m = (*this) ();
-                    i_ = index1 () + 1;
+                    if (rank_ == 0) {
+                        ++ itv_;
+                        i_ = itv_->first;
+                    } else {
+                        i_ = index1 () + 1;
+                    }
                     if (rank_ == 1 && ++ itv_ == m.end1 ().itv_)
                         *this = m.find1 (rank_, i_, j_, 1);
                     else if (rank_ == 1) {
@@ -2000,7 +2056,13 @@ namespace boost { namespace numeric { namespace ublas {
                     -- it_;
                 else {
                     self_type &m = (*this) ();
-                    i_ = index1 () - 1;
+                    if (rank_ == 0) {
+                        -- itv_;
+                        i_ = itv_->first;
+                    } else {
+                        i_ = index1 () - 1;
+                    }
+                    // FIXME: this expression should never become true!
                     if (rank_ == 1 && -- itv_ == m.end1 ().itv_)
                         *this = m.find1 (rank_, i_, j_, -1);
                     else if (rank_ == 1) {
@@ -2152,7 +2214,12 @@ namespace boost { namespace numeric { namespace ublas {
                     ++ it_;
                 else {
                     const self_type &m = (*this) ();
-                    j_ = index2 () + 1;
+                    if (rank_ == 0) {
+                        ++ itv_;
+                        j_ = itv_->first;
+                    } else {
+                        j_ = index2 () + 1;
+                    }
                     if (rank_ == 1 && ++ itv_ == m.end2 ().itv_)
                         *this = m.find2 (rank_, i_, j_, 1);
                     else if (rank_ == 1) {
@@ -2169,7 +2236,13 @@ namespace boost { namespace numeric { namespace ublas {
                     -- it_;
                 else {
                     const self_type &m = (*this) ();
-                    j_ = index2 () - 1;
+                    if (rank_ == 0) {
+                        -- itv_;
+                        j_ = itv_->first;
+                    } else {
+                        j_ = index2 () - 1;
+                    }
+                    // FIXME: this expression should never become true!
                     if (rank_ == 1 && -- itv_ == m.end2 ().itv_)
                         *this = m.find2 (rank_, i_, j_, -1);
                     else if (rank_ == 1) {
@@ -2316,7 +2389,12 @@ namespace boost { namespace numeric { namespace ublas {
                     ++ it_;
                 else {
                     self_type &m = (*this) ();
-                    j_ = index2 () + 1;
+                    if (rank_ == 0) {
+                        ++ itv_;
+                        j_ = itv_->first;
+                    } else {
+                        j_ = index2 () + 1;
+                    }
                     if (rank_ == 1 && ++ itv_ == m.end2 ().itv_)
                         *this = m.find2 (rank_, i_, j_, 1);
                     else if (rank_ == 1) {
@@ -2333,7 +2411,13 @@ namespace boost { namespace numeric { namespace ublas {
                     -- it_;
                 else {
                     self_type &m = (*this) ();
-                    j_ = index2 () - 1;
+                    if (rank_ == 0) {
+                        -- itv_;
+                        j_ = itv_->first;
+                    } else {
+                        j_ = index2 () - 1;
+                    }
+                    // FIXME: this expression should never become true!
                     if (rank_ == 1 && -- itv_ == m.end2 ().itv_)
                         *this = m.find2 (rank_, i_, j_, -1);
                     else if (rank_ == 1) {
