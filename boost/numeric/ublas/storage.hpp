@@ -334,7 +334,7 @@ namespace boost { namespace numeric { namespace ublas {
         bounded_array (const bounded_array &c):
             size_ (c.size_)  {
             // ISSUE elements should be copy constructed here, but we must copy instead as already default constructed
-            std::copy (c.data_, c.data_ + c.size_, data_);
+            std::copy (c.begin(), c.end(), begin());
         }
         
         // Resizing
