@@ -386,7 +386,7 @@ namespace quickbook
                     ;
 
                 paragraph_end =
-                    '[' >> space >> paragraph_end_markups | eol >> eol
+                    '[' >> space >> paragraph_end_markups >> hard_space | eol >> eol
                     ;
 
                 paragraph =

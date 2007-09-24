@@ -72,7 +72,10 @@ namespace quickbook
                         *blank_p >> "//<-"
                         >> (*(anychar_p - "//->"))
                         >> "//->" >> *blank_p >> eol_p
-                    |    "/*<-"
+                    |   "/*<-*/"
+                        >> (*(anychar_p - "/*->*/"))
+                        >> "/*->*/"
+                    |   "/*<-"
                         >> (*(anychar_p - "->*/"))
                         >> "->*/"
                     ;

@@ -1705,14 +1705,18 @@ final star-slash shall be ignored.
 
 Special comments of the form:
 
-    /*<-- this will be ignored -->*/
+    /*<- this C++ comment will be ignored ->*/
 
 or
 
-    //<--
+    /*<-*/ "this c++ code  will be ignored" /*->*/
+
+or
+
+    //<-
     private:
         int some_member;
-    //-->
+    //->
 
 can be used to inhibit code from passing through to quickbook. All text between
 the delimeters will simply be ignored.
