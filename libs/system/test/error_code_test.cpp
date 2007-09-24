@@ -148,31 +148,38 @@ int test_main( int, char ** )
   std::cout << "Windows tests...\n";
   // these tests probe the Windows posix decoder
   //   test the first entry in the decoder table:
-  ec = error_code( ERROR_FILE_NOT_FOUND, system_category );
-  BOOST_CHECK( ec.value() == ERROR_FILE_NOT_FOUND );
-  BOOST_CHECK( ec == posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.default_error_condition().value() == posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.default_error_condition().category() == posix_category );
-
-  //   test the second entry in the decoder table:
-  ec = error_code( ERROR_PATH_NOT_FOUND, system_category );
-  BOOST_CHECK( ec.value() == ERROR_PATH_NOT_FOUND );
-  BOOST_CHECK( ec == posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.default_error_condition().value() == posix::no_such_file_or_directory );
-  BOOST_CHECK( ec.default_error_condition().category() == posix_category );
-
-  //   test the third entry in the decoder table:
   ec = error_code( ERROR_ACCESS_DENIED, system_category );
   BOOST_CHECK( ec.value() == ERROR_ACCESS_DENIED );
   BOOST_CHECK( ec == posix::permission_denied );
   BOOST_CHECK( ec.default_error_condition().value() == posix::permission_denied );
   BOOST_CHECK( ec.default_error_condition().category() == posix_category );
 
-  //   test the last regular entry in the decoder table:
+  //   test the second entry in the decoder table:
+  ec = error_code( ERROR_ALREADY_EXISTS, system_category );
+  BOOST_CHECK( ec.value() == ERROR_ALREADY_EXISTS );
+  BOOST_CHECK( ec == posix::file_exists );
+  BOOST_CHECK( ec.default_error_condition().value() == posix::file_exists );
+  BOOST_CHECK( ec.default_error_condition().category() == posix_category );
+
+  //   test the third entry in the decoder table:
+  ec = error_code( ERROR_BAD_UNIT, system_category );
+  BOOST_CHECK( ec.value() == ERROR_BAD_UNIT );
+  BOOST_CHECK( ec == posix::no_such_device );
+  BOOST_CHECK( ec.default_error_condition().value() == posix::no_such_device );
+  BOOST_CHECK( ec.default_error_condition().category() == posix_category );
+
+  //   test the last non-Winsock entry in the decoder table:
   ec = error_code( ERROR_WRITE_PROTECT, system_category );
   BOOST_CHECK( ec.value() == ERROR_WRITE_PROTECT );
   BOOST_CHECK( ec == posix::permission_denied );
   BOOST_CHECK( ec.default_error_condition().value() == posix::permission_denied );
+  BOOST_CHECK( ec.default_error_condition().category() == posix_category );
+
+  //   test the last Winsock entry in the decoder table:
+  ec = error_code( WSAEWOULDBLOCK, system_category );
+  BOOST_CHECK( ec.value() == WSAEWOULDBLOCK );
+  BOOST_CHECK( ec == posix::operation_would_block );
+  BOOST_CHECK( ec.default_error_condition().value() == posix::operation_would_block );
   BOOST_CHECK( ec.default_error_condition().category() == posix_category );
 
   //   test not-in-table condition:
