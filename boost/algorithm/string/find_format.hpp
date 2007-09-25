@@ -17,6 +17,7 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/const_iterator.hpp>
+#include <boost/range/as_literal.hpp>
 
 #include <boost/algorithm/string/concept.hpp>
 #include <boost/algorithm/string/detail/find_format.hpp>
