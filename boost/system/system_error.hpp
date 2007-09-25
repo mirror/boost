@@ -51,14 +51,14 @@ namespace boost
       {
         try
         {
-          m_what = this->runtime_error::what();
+          m_what = this->std::runtime_error::what();
           if ( m_error_code )
           {
             if ( !m_what.empty() ) m_what += ": ";
             m_what += m_error_code.message();
           }
         }
-        catch (...) { return runtime_error::what(); }
+        catch (...) { return std::runtime_error::what(); }
       }
       return m_what.c_str();
     }
