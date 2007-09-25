@@ -30,6 +30,7 @@
 #   define BOOST_CXX_MPW      0
 #   define BOOST_CXX_IBMCPP   0
 #   define BOOST_CXX_MSVC     0
+#   define BOOST_CXX_PGI      0
 
 
 // locate which compiler we are using and define
@@ -94,6 +95,10 @@
 #elif defined(__IBMCPP__)
 //  IBM Visual Age
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/vacpp.hpp"
+
+#elif defined(__PGI)
+//  Portland Group Inc.
+#   define BOOST_COMPILER_CONFIG "boost/config/compiler/pgi.hpp"
 
 #elif defined _MSC_VER
 //  Microsoft Visual C++
