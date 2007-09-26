@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //[doc_value_traits_code_legacy
-#include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/slist.hpp>
 #include <vector>
@@ -30,6 +30,9 @@ struct legacy_value
 //Define our own NodeTraits that will configure singly and doubly linked
 //list algorithms. Note that this node traits is compatible with
 //circular_slist_algorithms and circular_list_algorithms.
+
+namespace bi = boost::intrusive;
+
 struct legacy_node_traits
 {
    typedef legacy_value                            node;
@@ -54,7 +57,7 @@ struct legacy_value_traits
    typedef legacy_value                                        value_type;
    typedef legacy_value *                                      pointer;
    typedef const legacy_value *                                const_pointer;
-   enum {   linking_policy =                                   boost::intrusive::normal_link   };
+   static const bi::link_mode_type link_mode = bi::normal_link;
    static node_ptr to_node_ptr (value_type &value)             {  return node_ptr(&value); }
    static const_node_ptr to_node_ptr (const value_type &value) {  return const_node_ptr(&value); }
    static pointer to_value_ptr(node_ptr n)                     {  return pointer(n); }
@@ -65,8 +68,9 @@ struct legacy_value_traits
 
 //[doc_value_traits_test
 //Now define an intrusive list and slist that will store legacy_value objects
-typedef boost::intrusive::list <legacy_value_traits> LegacyAbiList;
-typedef boost::intrusive::slist<legacy_value_traits> LegacyAbiSlist;
+typedef bi::value_traits<legacy_value_traits>      ValueTraitsOption;
+typedef bi::list<legacy_value, ValueTraitsOption>  LegacyAbiList;
+typedef bi::slist<legacy_value, ValueTraitsOption> LegacyAbiSlist;
 
 template<class List>
 bool test_list()
@@ -87,9 +91,8 @@ bool test_list()
    typename Vect::const_iterator it(legacy_vector.begin()), itend(legacy_vector.end());
 
    //Test the objects inserted in our list
-   for(; it != itend; ++it, ++bit){
+   for(; it != itend; ++it, ++bit)
       if(&*bit != &*it) return false;
-   }
    return true;
 }
 

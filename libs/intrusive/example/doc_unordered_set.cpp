@@ -17,56 +17,43 @@
 
 using namespace boost::intrusive;
 
-                  //This is a derivation hook
-class MyClass  :  public unordered_set_base_hook<>
-{
+class MyClass : public unordered_set_base_hook<>
+{               //This is a derivation hook
    int int_;
 
    public:
-   //This is a member hook
-   unordered_set_member_hook<> member_hook_;
+   unordered_set_member_hook<> member_hook_; //This is a member hook
 
    MyClass(int i)
       :  int_(i)
    {}
 
-   int get() const
-   {  return int_;  }
-
    friend bool operator== (const MyClass &a, const MyClass &b)
-   {  return a.get() == b.get();  }
+   {  return a.int_ == b.int_;  }
 
-   friend bool operator> (const MyClass &a, const MyClass &b)
-   {  return a.get() > b.get();  }
+   friend std::size_t hash_value(const MyClass &value)
+   {  return std::size_t(value.int_); }
 };
 
-std::size_t hash_value(const MyClass &value)
-{  return std::size_t(value.get()); }
+//Define an unordered_set that will store MyClass objects using the base hook
+typedef unordered_set<MyClass>    BaseSet;
 
-//Define an unordered_set that will store MyClass
-//in reverse order using the public base hook
-typedef unordered_set< unordered_set_base_hook<>::
-                  value_traits<MyClass> >    BaseSet;
-
-//Define an unordered_multiset that will store MyClass
-//using the public member hook
-typedef unordered_multiset< unordered_set_member_hook<>::
-                       value_traits<MyClass, &MyClass::member_hook_> >  MemberMultiSet;
+//Define an unordered_multiset that will store MyClass using the member hook
+typedef member_hook<MyClass, unordered_set_member_hook<>, &MyClass::member_hook_>
+   MemberOption;
+typedef unordered_multiset< MyClass, MemberOption>  MemberMultiSet;
 
 int main()
 {
-   typedef std::vector<MyClass> Vect;
-   typedef Vect::iterator VectIt;
-   typedef Vect::reverse_iterator VectRit;
+   typedef std::vector<MyClass>::iterator VectIt;
+   typedef std::vector<MyClass>::reverse_iterator VectRit;
 
-   //Create a vector with 100 different MyClass objects,
-   //each one with a different internal number
-   Vect myclassvector;
-   for(int i = 0; i < 100; ++i)
-      myclassvector.push_back(MyClass(i));
+   //Create a vector with 100 different MyClass objects
+   std::vector<MyClass> values;
+   for(int i = 0; i < 100; ++i)  values.push_back(MyClass(i));
 
    //Create a copy of the vector
-   Vect myclassvector2(myclassvector);
+   std::vector<MyClass> values2(values);
 
    //Create a bucket array for base_set
    BaseSet::bucket_type base_buckets[100];
@@ -74,20 +61,18 @@ int main()
    //Create a bucket array for member_multi_set
    MemberMultiSet::bucket_type member_buckets[200];
 
-   //Create a the unordered_set and unordered_multiset,
-   //taking buckets as arguments
-   BaseSet base_set(base_buckets, 100);
-   MemberMultiSet member_multi_set(member_buckets, 200);
+   //Create unordered containers taking buckets as arguments
+   BaseSet base_set(BaseSet::bucket_traits(base_buckets, 100));
+   MemberMultiSet member_multi_set
+      (MemberMultiSet::bucket_traits(member_buckets, 200));
 
-   //Now insert myclassvector's elements in the unordered_set
-   for(VectIt it(myclassvector.begin()), itend(myclassvector.end())
-      ; it != itend; ++it){
+   //Now insert values's elements in the unordered_set
+   for(VectIt it(values.begin()), itend(values.end()); it != itend; ++it)
       base_set.insert(*it);
-   }
 
-   //Now insert myclassvector's and myclassvector2's elements in the unordered_multiset
-   for(VectIt it(myclassvector.begin()), itend(myclassvector.end()),
-             it2(myclassvector2.begin()),itend2(myclassvector2.end())
+   //Now insert values's and values2's elements in the unordered_multiset
+   for(VectIt it(values.begin()), itend(values.end()),
+             it2(values2.begin()),itend2(values2.end())
       ; it != itend; ++it, ++it2){
       member_multi_set.insert(*it);
       member_multi_set.insert(*it2);
@@ -95,7 +80,7 @@ int main()
 
    //Now find every element
    {
-      VectIt it(myclassvector.begin()), itend(myclassvector.end());
+      VectIt it(values.begin()), itend(values.end());
 
       for(; it != itend; ++it){
          //base_set should contain one element for each key

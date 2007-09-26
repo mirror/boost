@@ -35,17 +35,19 @@ struct test_list
    static void test_shift(std::vector<value_type>& values);
    static void test_swap(std::vector<value_type>& values);
    static void test_clone(std::vector<value_type>& values);
+   static void test_container_from_end(std::vector<value_type>& values);
 };
 
 template<class ValueTraits>
 void test_list<ValueTraits>::test_all(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef boost::intrusive::list
-      < ValueTraits
-      , ValueTraits::value_type::constant_time_size
-      , std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
       > list_type;
-
    {
       list_type list(values.begin(), values.end());
       test::test_container(list);
@@ -60,9 +62,15 @@ void test_list<ValueTraits>::test_all(std::vector<typename ValueTraits::value_ty
    test_shift(values);
    test_swap(values);
    test_clone(values);
-
-   list_type testlist(values.begin(), values.end());
-   list_type testlist2;
+   test_container_from_end(values);
+/*
+   const char *list_name = typeid(list_type).name();
+   std::cout << list_name << std::endl << strlen(list_name) << std::endl;
+   const char *value_t = typeid(typename list_type::value_traits).name();
+   std::cout << value_t << std::endl << strlen(value_t) << std::endl;
+   const char *list_it_name = typeid(typename list_type::iterator).name();
+   std::cout << list_it_name  << std::endl << strlen(list_it_name ) << std::endl;
+*/
 }
 
 //test: push_front, pop_front, push_back, pop_back, front, back, size, empty:
@@ -70,10 +78,12 @@ template<class ValueTraits>
 void test_list<ValueTraits>
    ::test_front_back(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef boost::intrusive::list
-      < ValueTraits
-      , ValueTraits::value_type::constant_time_size
-      , std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
       > list_type;
    list_type testlist;
    BOOST_TEST (testlist.empty());
@@ -104,12 +114,12 @@ template<class ValueTraits>
 void test_list<ValueTraits>
    ::test_sort(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   std::vector<int> expected;
-   typedef boost::intrusive::list
-      < ValueTraits
-      , ValueTraits::value_type::constant_time_size
-      , std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
       > list_type;
    list_type testlist(values.begin(), values.end());
 
@@ -125,17 +135,17 @@ void test_list<ValueTraits>
       TEST_INTRUSIVE_SEQUENCE( init_values, testlist.begin() );  }
 }
   
-//test: assign, insert, const_iterator, const_reverse_iterator, erase, iterator_to:
+//test: assign, insert, const_iterator, const_reverse_iterator, erase, s_iterator_to:
 template<class ValueTraits>
 void test_list<ValueTraits>
    ::test_insert(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   std::vector<int> expected;
-   typedef boost::intrusive::list
-      < ValueTraits
-      , ValueTraits::value_type::constant_time_size
-      , std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
       > list_type;
    list_type testlist;
    testlist.assign (&values[0] + 2, &values[0] + 5);
@@ -159,6 +169,9 @@ void test_list<ValueTraits>
    i = testlist.iterator_to (values[4]);
    BOOST_TEST (&*i == &values[4]);
 
+   i = list_type::s_iterator_to (values[4]);
+   BOOST_TEST (&*i == &values[4]);
+
    i = testlist.erase (i);
    BOOST_TEST (i == testlist.end());
 
@@ -170,15 +183,14 @@ template<class ValueTraits>
 void test_list<ValueTraits>
    ::test_shift(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   typedef boost::intrusive::list
-      < ValueTraits
-      , ValueTraits::value_type::constant_time_size
-      , std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
       > list_type;
    list_type testlist;
-   std::vector<int> expected;
-
    const int num_values = (int)values.size();
    std::vector<int> expected_values(num_values);
 
@@ -210,12 +222,13 @@ template<class ValueTraits>
 void test_list<ValueTraits>
    ::test_swap(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   typedef boost::intrusive::list
-      <ValueTraits
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
       > list_type;
-   std::vector<int> expected;
    {
       list_type testlist1 (&values[0], &values[0] + 2);
       list_type testlist2;
@@ -269,21 +282,38 @@ void test_list<ValueTraits>
 
 template<class ValueTraits>
 void test_list<ValueTraits>
+   ::test_container_from_end(std::vector<typename ValueTraits::value_type>& values)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
+      > list_type;
+   list_type testlist1 (&values[0], &values[0] + values.size());
+   BOOST_TEST (testlist1 == list_type::container_from_end_iterator(testlist1.end()));
+   BOOST_TEST (testlist1 == list_type::container_from_end_iterator(testlist1.cend()));
+}
+
+
+template<class ValueTraits>
+void test_list<ValueTraits>
    ::test_clone(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   std::vector<int> expected;
-   typedef boost::intrusive::list
-      <ValueTraits
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
       > list_type;
-
       list_type testlist1 (&values[0], &values[0] + values.size());
       list_type testlist2;
 
-      testlist2.clone_from(testlist1, test::new_cloner(), test::delete_disposer());
+      testlist2.clone_from(testlist1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       BOOST_TEST (testlist2 == testlist1);
-      testlist2.clear_and_dispose(test::delete_disposer());
+      testlist2.clear_and_dispose(test::delete_disposer<value_type>());
       BOOST_TEST (testlist2.empty());
 }
 
@@ -293,17 +323,24 @@ class test_main_template
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, constant_time_size> testvalue_t;
-      std::vector<testvalue_t> data (5);
+      typedef testvalue<VoidPointer, constant_time_size> value_type;
+      std::vector<value_type> data (5);
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
-      test_list <typename testvalue_t::list_base_hook_t::template
-         value_traits<testvalue_t> >::test_all(data);
-
-      test_list <typename testvalue_t::list_member_hook_t::template
-            value_traits<testvalue_t, &testvalue_t::list_node_> >::test_all(data);
-
+      test_list < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::list_base_hook_t
+                  >::type
+                >::test_all(data);
+      test_list < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::list_member_hook_t
+                               , &value_type::list_node_
+                               >
+                  >::type
+                >::test_all(data);
       return 0;
    }
 };
@@ -314,48 +351,64 @@ class test_main_template<VoidPointer, false>
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, false> testvalue_t;
-      std::vector<testvalue_t> data (5);
+      typedef testvalue<VoidPointer, false> value_type;
+      std::vector<value_type> data (5);
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
-      test_list <typename testvalue_t::list_base_hook_t::template
-         value_traits<testvalue_t> >::test_all(data);
+      test_list < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::list_base_hook_t
+                  >::type
+                >::test_all(data);
 
-      test_list <typename testvalue_t::list_member_hook_t::template
-            value_traits<testvalue_t, &testvalue_t::list_node_> >::test_all(data);
+      test_list < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::list_member_hook_t
+                               , &value_type::list_node_
+                               >
+                  >::type
+                >::test_all(data);
+/*
+      test_list<stateful_value_traits
+                  < value_type
+                  , list_node_traits<VoidPointer>
+                  , safe_link>
+               >::test_all(data);
+*/
+      test_list < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::list_auto_base_hook_t
+                  >::type
+                >::test_all(data);
 
-      test_list <typename testvalue_t::list_auto_base_hook_t::template
-         value_traits<testvalue_t> >::test_all(data);
-
-      test_list <typename testvalue_t::list_auto_member_hook_t::template
-            value_traits<testvalue_t, &testvalue_t::list_auto_node_> >::test_all(data);
+      test_list < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::list_auto_member_hook_t
+                               , &value_type::list_auto_node_
+                               >
+                  >::type
+                >::test_all(data);
+/*
+      test_list<stateful_value_traits
+                  < value_type
+                  , list_node_traits<VoidPointer>
+                  , auto_unlink>
+               >::test_all(data);
+*/
       return 0;
    }
 };
 
-//Explicit instantiations of non-counted classes
-//template class boost::intrusive::list<list_base_raw, false>;
-//template class boost::intrusive::list<list_member_raw, false>;
-//template class boost::intrusive::list<list_auto_base_raw, false>;
-//template class boost::intrusive::list<list_auto_member_raw, false>;
-//template class boost::intrusive::list<list_base_smart, false>;
-//template class boost::intrusive::list<list_member_smart, false>;
-//template class boost::intrusive::list<list_auto_base_smart, false>;
-//template class boost::intrusive::list<list_auto_member_smart, false>;
-
-//Explicit instantiation of counted classes
-//template class boost::intrusive::list<list_base_raw_t, true>;
-//template class boost::intrusive::list<list_member_raw_t, true>;
-//template class boost::intrusive::list<list_base_smart_t, true>;
-//template class boost::intrusive::list<list_member_smart_t, true>;
-
 int main( int, char* [] ) 
 {
    test_main_template<void*, false>()();
-   test_main_template<boost::intrusive::smart_ptr<void>, false>()();
+   test_main_template<smart_ptr<void>, false>()();
    test_main_template<void*, true>()();
-   test_main_template<boost::intrusive::smart_ptr<void>, true>()();
+   test_main_template<smart_ptr<void>, true>()();
+
    return boost::report_errors();
 }
 #include <boost/intrusive/detail/config_end.hpp>

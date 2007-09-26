@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //[doc_advanced_value_traits_code
-#include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/list.hpp>
 #include <vector>
 
@@ -46,7 +46,7 @@ struct simple_node_traits
 
 //A templatized value traits for value_1 and value_2
 template<class ValueType>
-struct value_traits
+struct simple_value_traits
 {
    typedef simple_node_traits                                  node_traits;
    typedef node_traits::node_ptr                               node_ptr;
@@ -54,7 +54,7 @@ struct value_traits
    typedef ValueType                                           value_type;
    typedef ValueType *                                         pointer;
    typedef const ValueType *                                   const_pointer;
-   enum {   linking_policy =                                   boost::intrusive::normal_link   };
+   static const boost::intrusive::link_mode_type link_mode = boost::intrusive::normal_link;
    static node_ptr to_node_ptr (value_type &value)             {  return node_ptr(&value); }
    static const_node_ptr to_node_ptr (const value_type &value) {  return const_node_ptr(&value); }
    static pointer to_value_ptr(node_ptr n)                     {  return static_cast<value_type*>(n); }
@@ -65,8 +65,10 @@ struct value_traits
 //[doc_advanced_value_traits_containers
 //Now define two intrusive lists. Both lists will use the same algorithms:
 // circular_list_algorithms<simple_node_traits>
-typedef boost::intrusive::list <value_traits<value_1> > Value1List;
-typedef boost::intrusive::list <value_traits<value_2> > Value2List;
+
+using namespace boost::intrusive;
+typedef list <value_1, value_traits<simple_value_traits<value_1> > > Value1List;
+typedef list <value_2, value_traits<simple_value_traits<value_2> > > Value2List;
 //]
 
 //[doc_advanced_value_traits_test

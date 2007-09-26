@@ -12,9 +12,10 @@
 //[doc_entity_code
 #include <boost/intrusive/list.hpp>
 
+using namespace boost::intrusive;
+
 //A class that can be inserted in an intrusive list
-class entity 
-   :  public boost::intrusive::list_base_hook<>
+class entity : public list_base_hook<>
 {
    public:
    virtual ~entity();
@@ -26,25 +27,25 @@ class some_entity  :  public entity
 {/**/};
 
 //Definition of the intrusive list
-typedef boost::intrusive::list< entity::value_traits<entity> > entity_list;
+typedef list<entity> entity_list;
 
 //A global list
-entity_list list;
+entity_list global_list;
 
-//The destructor removes itself from the list
+//The destructor removes itself from the global list
 entity::~entity()
-{  list.erase(entity_list::iterator_to(*this));  }
+{  global_list.erase(entity_list::s_iterator_to(*this));  }
 
-//Function to insert a new "some_entity" in the list
+//Function to insert a new "some_entity" in the global list
 void insert_some_entity()
-{  list.push_back (*new some_entity(/*...*/));  } 
+{  global_list.push_back (*new some_entity(/*...*/));  } 
 
-//Function to clear an entity from the intrusive list
+//Function to clear an entity from the intrusive global list
 void clear_list ()
 {
-   // entity's destructor removes itself from the list implicitly
-   while (!list.empty())
-      delete &list.front();   
+   // entity's destructor removes itself from the global list implicitly
+   while (!global_list.empty())
+      delete &global_list.front();   
 }
 
 int main()
@@ -52,7 +53,7 @@ int main()
    //Insert some new entities
    insert_some_entity();
    insert_some_entity();
-   //list's destructor will free objects
+   //global_list's destructor will free objects
    return 0;
 }
 

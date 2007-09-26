@@ -15,39 +15,38 @@
 
 using namespace boost::intrusive;
 
-class MyClass  :  public list_base_hook<tag, auto_unlink>
+typedef list_base_hook<link_mode<auto_unlink> > auto_unlink_hook;
+
+class MyClass : public auto_unlink_hook
                //This hook removes the node in the destructor
 {
    int int_;
 
    public:
    MyClass(int i = 0)   :  int_(i)  {}
-   void unlink()     {  list_base_hook<tag, auto_unlink>::unlink();  }
-   bool is_linked()     {  return list_base_hook<tag, auto_unlink>::is_linked();  }
-   int get() const   {  return int_;  }
+   void unlink()     {  auto_unlink_hook::unlink();  }
+   bool is_linked()  {  return auto_unlink_hook::is_linked();  }
 };
 
-//Define a list that will store MyClass
-//using the public base hook
+//Define a list that will store values using the base hook
 //The list can't have constant-time size!
-typedef list< list_base_hook<tag, auto_unlink>::
-   value_traits<MyClass>, false >   List;
+typedef list< MyClass, constant_time_size<false> > List;
 
 int main()
 {
    //Create the list
-   List list;
+   List l;
    {
       //Create myclass and check it's linked
       MyClass myclass;
       assert(myclass.is_linked() == false);
 
       //Insert the object
-      list.push_back(myclass);
+      l.push_back(myclass);
 
       //Check that we have inserted the object
-      assert(list.empty() == false);
-      assert(&list.front() == &myclass);
+      assert(l.empty() == false);
+      assert(&l.front() == &myclass);
       assert(myclass.is_linked() == true);
 
       //Now myclass' destructor will unlink it
@@ -55,7 +54,7 @@ int main()
    }
 
    //Check auto-unlink has been executed
-   assert(list.empty() == true);
+   assert(l.empty() == true);
 
    {
       //Now test the unlink() function
@@ -65,18 +64,18 @@ int main()
       assert(myclass.is_linked() == false);
 
       //Insert the object
-      list.push_back(myclass);
+      l.push_back(myclass);
 
       //Check that we have inserted the object
-      assert(list.empty() == false);
-      assert(&list.front() == &myclass);
+      assert(l.empty() == false);
+      assert(&l.front() == &myclass);
       assert(myclass.is_linked() == true);
 
       //Now unlink the node
       myclass.unlink();
 
       //Check auto-unlink has been executed
-      assert(list.empty() == true);
+      assert(l.empty() == true);
    }
    return 0;
 }

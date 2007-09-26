@@ -9,35 +9,49 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
+
+//This is needed to allow concurrent test execution in
+//several platforms. The shared memory must be unique
+//for each process...
+#include <boost/interprocess/detail/os_thread_functions.hpp>
+#include <sstream>
+
+const char *get_shared_memory_name()
+{
+   std::stringstream s;
+   s << "process_" << boost::interprocess::detail::get_current_process_id();
+   static std::string str = s.str();
+   return str.c_str();
+}
+
 //[doc_offset_ptr_0
 #include <boost/intrusive/list.hpp>
 #include <boost/interprocess/offset_ptr.hpp>
 
+using namespace boost::intrusive;
+namespace ip = boost::interprocess;
+
 class shared_memory_data
+   //Declare the hook with an offset_ptr from Boost.Interprocess
+   //to make this class compatible with shared memory
+   :  public list_base_hook< void_pointer< ip::offset_ptr<void> > >
 {
    int data_id_;
    public:
 
    int get() const   {  return data_id_;  }
    void set(int id)  {  data_id_ = id;    }
-
-   //Declare the hook with an offset_ptr from Boost.Interprocess
-   //to make this class compatible with shared memory
-   typedef boost::intrusive::list_member_hook
-         < boost::intrusive::safe_link
-         , boost::interprocess::offset_ptr<void> >  member_hook_t;
-   member_hook_t list_hook_;
 };
 //]
 
 //[doc_offset_ptr_1
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/containers/vector.hpp>
+#include <boost/interprocess/containers/list.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
 
 //Definition of the shared memory friendly intrusive list
-typedef boost::intrusive::list< shared_memory_data::member_hook_t::
-   value_traits<shared_memory_data, &shared_memory_data::list_hook_> > shm_list_t;
+typedef ip::list<shared_memory_data> shm_list_t;
 
 int main()
 {
@@ -45,45 +59,42 @@ int main()
    //nodes and the container itself must be created in shared memory
    const int MaxElem    = 100;
    const int ShmSize    = 50000;
-   const char *ShmName  = "SharedMemoryName";
+   const char *ShmName  = get_shared_memory_name();
+   {
+      //Erase all old shared memory 
+      ip::shared_memory_object::remove(ShmName);
+      ip::managed_shared_memory shm(ip::create_only, ShmName, ShmSize);
 
-   using namespace boost::interprocess;
+      //Create all nodes in shared memory using a shared memory vector
+      //See Boost.Interprocess documentation for more information on this
+      typedef ip::allocator
+         < shared_memory_data, ip::managed_shared_memory::segment_manager>
+            shm_allocator_t;
+      typedef ip::vector<shared_memory_data, shm_allocator_t> shm_vector_t;
+      shm_allocator_t shm_alloc(shm.get_segment_manager());
+      shm_vector_t *pshm_vect = 
+         shm.construct<shm_vector_t>(ip::anonymous_instance)(shm_alloc);
+      pshm_vect->resize(MaxElem);
 
-   //Erase all old shared memory 
-   shared_memory_object::remove(ShmName);
-   managed_shared_memory shm(create_only, ShmName, ShmSize);
+      //Initialize all the nodes
+      for(int i = 0; i < MaxElem; ++i)    (*pshm_vect)[i].set(i);
 
-   //Create all nodes in shared memory using a shared memory vector
-   //See Boost.Interprocess documentation for more information on this
-   typedef allocator< shared_memory_data
-                    , managed_shared_memory::segment_manager> shm_allocator_t;
-   typedef vector<shared_memory_data, shm_allocator_t> shm_vector_t;
-   shm_allocator_t shm_alloc(shm.get_segment_manager());
-   shm_vector_t *pshm_vect = shm.construct<shm_vector_t>(anonymous_instance)(shm_alloc);
-   pshm_vect->resize(MaxElem);
+      //Now create the shared memory intrusive list
+      shm_list_t *plist = shm.construct<shm_list_t>(ip::anonymous_instance)();
+      plist->insert(plist->end(), pshm_vect->begin(), pshm_vect->end());
 
-   //Initialize all the nodes
-   for(int i = 0; i < MaxElem; ++i){
-      (*pshm_vect)[i].set(i);
-   }
-
-   //Now create the shared memory intrusive list
-   shm_list_t *plist = shm.construct<shm_list_t>(anonymous_instance)();
-   plist->insert(plist->end(), pshm_vect->begin(), pshm_vect->end());
-
-   //Check all the inserted nodes
-   int checker = 0;
-   for( shm_list_t::const_iterator it = plist->begin(), itend(plist->end())
-      ; it != itend
-      ; ++it, ++checker){
-      if(it->get() != checker){
-         return false;
+      //Check all the inserted nodes
+      int checker = 0;
+      for( shm_list_t::const_iterator it = plist->begin(), itend(plist->end())
+         ; it != itend; ++it, ++checker){
+         if(it->get() != checker)   return false;
       }
-   }
 
-   //Now delete the list and after that, the nodes
-   shm.destroy_ptr(plist);
-   shm.destroy_ptr(pshm_vect);
+      //Now delete the list and after that, the nodes
+      shm.destroy_ptr(plist);
+      shm.destroy_ptr(pshm_vect);
+   }
+   ip::shared_memory_object::remove(ShmName);
    return 0;
 }
 //]

@@ -15,11 +15,11 @@
 using namespace boost::intrusive;
 
 //An abstract class that can be inserted in an intrusive list
-class Window   :  public list_base_hook<>
+class Window : public list_base_hook<>
 {
    public:
    //This is a container those value is an abstract class: you can't do this with std::list.
-   typedef list< list_base_hook<>::value_traits<Window> > win_list;
+   typedef list<Window> win_list;
 
    //An static intrusive list declaration
    static win_list all_windows;
@@ -27,7 +27,7 @@ class Window   :  public list_base_hook<>
    //Constructor. Includes this window in the list
    Window()             {  all_windows.push_back(*this);  }
    //Destructor. Removes this node from the list
-   virtual ~Window()    {  all_windows.erase(win_list::iterator_to(*this));  } 
+   virtual ~Window()    {  all_windows.erase(win_list::s_iterator_to(*this));  } 
    //Pure virtual function to be implemented by derived classes
    virtual void Paint() = 0;
 };
@@ -71,15 +71,13 @@ class MainWindow  :  public Window
 //Main function
 int main()
 {
-   //When each Window class is created, is
-   //automatically registered in the global list
+   //When a Window class is created, is automatically registered in the global list
    MainWindow window;
 
    //Paint all the windows, sub-windows and so on
    paint_all_windows(); 
 
-   //All the windows are automatically unregistered
-   //in their destructors.
+   //All the windows are automatically unregistered in their destructors.
    return 0;
 }
 //]

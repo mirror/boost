@@ -44,15 +44,16 @@ struct test_unordered_multiset
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_all (std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
       > unordered_multiset_type;
    {
+      typedef typename unordered_multiset_type::bucket_traits bucket_traits;
       typename unordered_multiset_type::bucket_type buckets [BucketSize];
-      unordered_multiset_type testset(buckets, BucketSize);
+      unordered_multiset_type testset(bucket_traits(buckets, BucketSize));
       testset.insert(values.begin(), values.end());
       test::test_container(testset);
       testset.clear();
@@ -78,18 +79,20 @@ void test_unordered_multiset<ValueTraits>::test_all (std::vector<typename ValueT
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_impl()
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   std::vector<testvalue_t> values (5);
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
+      > unordered_multiset_type;
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
+
+   std::vector<value_type> values (5);
    for (int i = 0; i < 5; ++i)
       values[i].value_ = i; 
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
-      > unordered_multiset_type;
+
    typename unordered_multiset_type::bucket_type buckets [BucketSize];
-   unordered_multiset_type testset(buckets, BucketSize);
+   unordered_multiset_type testset(bucket_traits(buckets, BucketSize));
 
    for (int i = 0; i < 5; ++i)
       testset.insert (values[i]);
@@ -106,15 +109,16 @@ void test_unordered_multiset<ValueTraits>::test_impl()
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_sort(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
       > unordered_multiset_type;
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
+
    typename unordered_multiset_type::bucket_type buckets [BucketSize];
-   unordered_multiset_type testset1(buckets, BucketSize, values.begin(), values.end());
+   unordered_multiset_type testset1(values.begin(), values.end(), bucket_traits(buckets, BucketSize));
 
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
@@ -126,16 +130,16 @@ void test_unordered_multiset<ValueTraits>::test_sort(std::vector<typename ValueT
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_insert(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
       > unordered_multiset_type;
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
+
    typename unordered_multiset_type::bucket_type buckets [BucketSize];
-   unordered_multiset_type testset(buckets, BucketSize);
-   typedef typename unordered_multiset_type::value_type value_type;
+   unordered_multiset_type testset(bucket_traits(buckets, BucketSize));
 
    testset.insert(&values[0] + 2, &values[0] + 5);
 
@@ -170,7 +174,7 @@ void test_unordered_multiset<ValueTraits>::test_insert(std::vector<typename Valu
 
    //Now with a single bucket
    typename unordered_multiset_type::bucket_type single_bucket[1];
-   unordered_multiset_type testset2(single_bucket, 1);
+   unordered_multiset_type testset2(bucket_traits(single_bucket, 1));
    testset2.insert(&values[0], &values[0] + values.size());
    BOOST_TEST (testset2.erase(5) == 1);
    BOOST_TEST (testset2.erase(2) == 2);
@@ -184,18 +188,18 @@ void test_unordered_multiset<ValueTraits>::test_insert(std::vector<typename Valu
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_swap(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
       > unordered_multiset_type;
-   typename unordered_multiset_type::bucket_type buckets [BucketSize];
-   unordered_multiset_type testset1(buckets, BucketSize, &values[0], &values[0] + 2);
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
 
+   typename unordered_multiset_type::bucket_type buckets [BucketSize];
    typename unordered_multiset_type::bucket_type buckets2 [BucketSize];
-   unordered_multiset_type testset2(buckets2, BucketSize);
+   unordered_multiset_type testset1(&values[0], &values[0] + 2, bucket_traits(buckets, BucketSize));
+   unordered_multiset_type testset2(bucket_traits(buckets2, BucketSize));
 
    testset2.insert (&values[0] + 2, &values[0] + 6);
    testset1.swap (testset2);
@@ -216,40 +220,41 @@ void test_unordered_multiset<ValueTraits>::test_swap(std::vector<typename ValueT
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_rehash(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
       > unordered_multiset_type;
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
 
    typename unordered_multiset_type::bucket_type buckets1 [BucketSize];
-   unordered_multiset_type testset1(buckets1, BucketSize, &values[0], &values[0] + 6);
+   typename unordered_multiset_type::bucket_type buckets2 [2];
+   typename unordered_multiset_type::bucket_type buckets3 [BucketSize*2];
+
+   unordered_multiset_type testset1(&values[0], &values[0] + 6, bucket_traits(buckets1, BucketSize));
    BOOST_TEST (testset1.size() == 6);
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
-   typename unordered_multiset_type::bucket_type buckets2 [2];
-   testset1.rehash(buckets2, 2);
+   testset1.rehash(bucket_traits(buckets2, 2));
    BOOST_TEST (testset1.size() == 6);
    {  int init_values [] = { 4, 2, 2, 5, 3, 1 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
-   typename unordered_multiset_type::bucket_type buckets3 [BucketSize*2];
-   testset1.rehash(buckets3, BucketSize*2);
+   testset1.rehash(bucket_traits(buckets3, BucketSize*2));
    BOOST_TEST (testset1.size() == 6);
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //Now rehash reducing the buckets
-   testset1.rehash(buckets3, 2);
+   testset1.rehash(bucket_traits(buckets3, 2));
    BOOST_TEST (testset1.size() == 6);
    {  int init_values [] = { 4, 2, 2, 5, 3, 1 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //Now rehash increasing the buckets
-   testset1.rehash(buckets3, BucketSize*2);
+   testset1.rehash(bucket_traits(buckets3, BucketSize*2));
    BOOST_TEST (testset1.size() == 6);
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
@@ -259,19 +264,20 @@ void test_unordered_multiset<ValueTraits>::test_rehash(std::vector<typename Valu
 template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>::test_find(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type testvalue_t;
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
       > unordered_multiset_type;
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
+
    typename unordered_multiset_type::bucket_type buckets[BucketSize];
-   unordered_multiset_type testset(buckets, BucketSize, values.begin(), values.end());
+   unordered_multiset_type testset(values.begin(), values.end(), bucket_traits(buckets, BucketSize));
 
    typedef typename unordered_multiset_type::iterator iterator;
 
-   testvalue_t cmp_val;
+   value_type cmp_val;
    cmp_val.value_ = 2;
    iterator i = testset.find (cmp_val);
    BOOST_TEST (i->value_ == 2);
@@ -291,61 +297,62 @@ template<class ValueTraits>
 void test_unordered_multiset<ValueTraits>
    ::test_clone(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef boost::intrusive::unordered_multiset
-      <ValueTraits
-      ,boost::hash<typename ValueTraits::value_type>
-      ,std::equal_to<typename ValueTraits::value_type>
-      ,ValueTraits::value_type::constant_time_size, std::size_t 
+   typedef typename ValueTraits::value_type value_type;
+   typedef unordered_multiset
+      <value_type
+      , value_traits<ValueTraits>
+      , constant_time_size<value_type::constant_time_size>
       > unordered_multiset_type;
+   typedef typename unordered_multiset_type::bucket_traits bucket_traits;
    {
       //Test with equal bucket arrays
       typename unordered_multiset_type::bucket_type buckets1 [BucketSize];
       typename unordered_multiset_type::bucket_type buckets2 [BucketSize];
-      unordered_multiset_type testset1 (buckets1, BucketSize, values.begin(), values.end());
-      unordered_multiset_type testset2 (buckets2, BucketSize);
+      unordered_multiset_type testset1 (values.begin(), values.end(), bucket_traits(buckets1, BucketSize));
+      unordered_multiset_type testset2 (bucket_traits(buckets2, BucketSize));
 
-      testset2.clone_from(testset1, test::new_cloner(), test::delete_disposer());
+      testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       //Ordering is not guarantee in the cloning so insert data in a set and test
       std::multiset<typename ValueTraits::value_type>
          src(testset1.begin(), testset1.end());
       std::multiset<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
       BOOST_TEST (src == dst);
-      testset2.clear_and_dispose(test::delete_disposer());
+      testset2.clear_and_dispose(test::delete_disposer<value_type>());
       BOOST_TEST (testset2.empty());
    }
    {
       //Test with bigger source bucket arrays
       typename unordered_multiset_type::bucket_type buckets1 [BucketSize*2];
       typename unordered_multiset_type::bucket_type buckets2 [BucketSize];
-      unordered_multiset_type testset1 (buckets1, BucketSize*2, values.begin(), values.end());
-      unordered_multiset_type testset2 (buckets2, BucketSize);
+      unordered_multiset_type testset1 (values.begin(), values.end(), bucket_traits(buckets1, BucketSize*2));
+      unordered_multiset_type testset2 (bucket_traits(buckets2, BucketSize));
 
-      testset2.clone_from(testset1, test::new_cloner(), test::delete_disposer());
+      testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       //Ordering is not guarantee in the cloning so insert data in a set and test
       std::multiset<typename ValueTraits::value_type>
          src(testset1.begin(), testset1.end());
       std::multiset<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
       BOOST_TEST (src == dst);
-      testset2.clear_and_dispose(test::delete_disposer());
+      testset2.clear_and_dispose(test::delete_disposer<value_type>());
       BOOST_TEST (testset2.empty());
    }
    {
       //Test with smaller source bucket arrays
       typename unordered_multiset_type::bucket_type buckets1 [BucketSize];
       typename unordered_multiset_type::bucket_type buckets2 [BucketSize*2];
-      unordered_multiset_type testset1 (buckets1, BucketSize, values.begin(), values.end());
-      unordered_multiset_type testset2 (buckets2, BucketSize*2);
+      unordered_multiset_type testset1 (values.begin(), values.end(), bucket_traits(buckets1, BucketSize));
+      unordered_multiset_type testset2 (bucket_traits(buckets2, BucketSize*2));
 
-      testset2.clone_from(testset1, test::new_cloner(), test::delete_disposer());
+      testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       //Ordering is not guarantee in the cloning so insert data in a set and test
       std::multiset<typename ValueTraits::value_type>
          src(testset1.begin(), testset1.end());
       std::multiset<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
       BOOST_TEST (src == dst);
-      testset2.clear_and_dispose(test::delete_disposer());
+      testset2.clear_and_dispose(test::delete_disposer<value_type>());
       BOOST_TEST (testset2.empty());
    }
 }
@@ -356,17 +363,26 @@ class test_main_template
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, constant_time_size> testvalue_t;
+      typedef testvalue<VoidPointer, constant_time_size> value_type;
       static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
       std::vector<testvalue<VoidPointer, constant_time_size> > data (6);
       for (int i = 0; i < 6; ++i)
          data[i].value_ = random_init[i]; 
 
-      test_unordered_multiset <typename testvalue_t::unordered_set_base_hook_t::template
-         value_traits<testvalue_t> >::test_all(data);
+      test_unordered_multiset < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::unordered_set_base_hook_t
+                  >::type
+                >::test_all(data);
 
-      test_unordered_multiset <typename testvalue_t::unordered_set_member_hook_t::template
-            value_traits<testvalue_t, &testvalue_t::unordered_set_node_> >::test_all(data);
+      test_unordered_multiset < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::unordered_set_member_hook_t
+                               , &value_type::unordered_set_node_
+                               >
+                  >::type
+                >::test_all(data);
 
       return 0;
    }
@@ -378,87 +394,51 @@ class test_main_template<VoidPointer, false>
    public:
    int operator()()
    {
-      typedef testvalue<VoidPointer, false> testvalue_t;
+      typedef testvalue<VoidPointer, false> value_type;
       static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
       std::vector<testvalue<VoidPointer, false> > data (6);
       for (int i = 0; i < 6; ++i)
          data[i].value_ = random_init[i]; 
 
-      test_unordered_multiset <typename testvalue_t::unordered_set_base_hook_t::template
-         value_traits<testvalue_t> >::test_all(data);
+      test_unordered_multiset < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::unordered_set_base_hook_t
+                  >::type
+                >::test_all(data);
 
-      test_unordered_multiset <typename testvalue_t::unordered_set_member_hook_t::template
-            value_traits<testvalue_t, &testvalue_t::unordered_set_node_> >::test_all(data);
+      test_unordered_multiset < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::unordered_set_member_hook_t
+                               , &value_type::unordered_set_node_
+                               >
+                  >::type
+                >::test_all(data);
 
-      test_unordered_multiset <typename testvalue_t::unordered_set_auto_base_hook_t::template
-         value_traits<testvalue_t> >::test_all(data);
+      test_unordered_multiset < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::unordered_set_auto_base_hook_t
+                  >::type
+                >::test_all(data);
 
-      test_unordered_multiset <typename testvalue_t::unordered_set_auto_member_hook_t::template
-            value_traits<testvalue_t, &testvalue_t::unordered_set_auto_node_> >::test_all(data);
+      test_unordered_multiset < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::unordered_set_auto_member_hook_t
+                               , &value_type::unordered_set_auto_node_
+                               >
+                  >::type
+                >::test_all(data);
       return 0;
    }
 };
 
-/*
-//Explicit instantiations of non-counted classes
-template class boost::intrusive::unordered_multiset
-   < unordered_set_base_raw_t
-   , boost::hash<unordered_set_base_raw_t::value_type>
-   , std::equal_to<unordered_set_base_raw_t::value_type>, false>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_member_raw_t
-   , boost::hash<unordered_set_member_raw_t::value_type>
-   , std::equal_to<unordered_set_member_raw_t::value_type>, false>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_auto_base_raw
-   , boost::hash<unordered_set_auto_base_raw::value_type>
-   , std::equal_to<unordered_set_auto_base_raw::value_type>, false>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_auto_member_raw
-   , boost::hash<unordered_set_auto_member_raw::value_type>
-   , std::equal_to<unordered_set_auto_member_raw::value_type>, false>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_base_smart
-   , boost::hash<unordered_set_base_smart::value_type>
-   , std::equal_to<unordered_set_base_smart::value_type>, false>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_member_smart
-   , boost::hash<unordered_set_member_smart::value_type>
-   , std::equal_to<unordered_set_member_smart::value_type>, false>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_auto_base_smart
-   , boost::hash<unordered_set_auto_base_smart::value_type>
-   , std::equal_to<unordered_set_auto_base_smart::value_type>, false>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_auto_member_smart
-   , boost::hash<unordered_set_auto_member_smart::value_type>
-   , std::equal_to<unordered_set_auto_member_smart::value_type>, false>;
-
-//Explicit instantiation of counted classes
-template class boost::intrusive::unordered_multiset
-   < unordered_set_base_raw_t
-   , boost::hash<unordered_set_base_raw_t::value_type>
-   , std::equal_to<unordered_set_base_raw_t::value_type>, true>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_member_raw_t
-   , boost::hash<unordered_set_base_raw_t::value_type>
-   , std::equal_to<unordered_set_member_raw_t::value_type>, true>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_base_smart_t
-   , boost::hash<unordered_set_base_smart_t::value_type>
-   , std::equal_to<unordered_set_base_smart_t::value_type>, true>;
-template class boost::intrusive::unordered_multiset
-   < unordered_set_member_smart_t
-   , boost::hash<unordered_set_member_smart_t::value_type>
-   , std::equal_to<unordered_set_member_smart_t::value_type>, true>;
-*/
-
 int main( int, char* [] ) 
 {
    test_main_template<void*, false>()();
-   test_main_template<boost::intrusive::smart_ptr<void>, false>()();
+   test_main_template<smart_ptr<void>, false>()();
    test_main_template<void*, true>()();
-   test_main_template<boost::intrusive::smart_ptr<void>, true>()();
+   test_main_template<smart_ptr<void>, true>()();
    return boost::report_errors();
 }
 

@@ -15,43 +15,44 @@
 #include <boost/functional/hash.hpp>
 #include <vector>
 
+using namespace boost::intrusive;
+
 class intrusive_data
 {
    int data_id_;
    public:
 
-   int get() const   {  return data_id_;  }
    void set(int id)  {  data_id_ = id;    }
 
    //This class can be inserted in an intrusive list
-   typedef boost::intrusive::
-      list_member_hook<>           list_member_hook_t;
-   list_member_hook_t     list_hook_;
+   list_member_hook<>   list_hook_;
 
    //This class can be inserted in an intrusive unordered_set
-   typedef boost::intrusive::
-      unordered_set_member_hook<>  unordered_set_member_hook_t;
-   unordered_set_member_hook_t   unordered_set_hook_;
+   unordered_set_member_hook<>   unordered_set_hook_;
 
    //Comparison operators
    friend bool operator==(const intrusive_data &a, const intrusive_data &b)
-   {  return a.get() == b.get(); }
+   {  return a.data_id_ == b.data_id_; }
 
    friend bool operator!=(const intrusive_data &a, const intrusive_data &b)
-   {  return a.get() != b.get(); }
+   {  return a.data_id_ != b.data_id_; }
+
+   //The hash function
+   friend std::size_t hash_value(const intrusive_data &i)
+   {  return boost::hash<int>()(i.data_id_);  }
 };
 
-//The hash function
-std::size_t hash_value(const intrusive_data &i)
-{  return boost::hash<int>()(i.get());  }
-
 //Definition of the intrusive list that will hold intrusive_data
-typedef boost::intrusive::list< intrusive_data::list_member_hook_t::
-   value_traits<intrusive_data, &intrusive_data::list_hook_> > list_t;
+typedef member_hook<intrusive_data, list_member_hook<>
+        , &intrusive_data::list_hook_> MemberListOption;
+typedef list<intrusive_data, MemberListOption> list_t;
 
 //Definition of the intrusive unordered_set that will hold intrusive_data
-typedef boost::intrusive::unordered_set< intrusive_data::unordered_set_member_hook_t::
-   value_traits<intrusive_data, &intrusive_data::unordered_set_hook_> > unordered_set_t;
+typedef member_hook
+      < intrusive_data, unordered_set_member_hook<>
+      , &intrusive_data::unordered_set_hook_> MemberUsetOption;
+typedef boost::intrusive::unordered_set
+   < intrusive_data, MemberUsetOption> unordered_set_t;
 
 int main()
 {
@@ -62,30 +63,32 @@ int main()
    //Declare the intrusive containers
    list_t     list;
    unordered_set_t::bucket_type buckets[MaxElem];
-   unordered_set_t  unordered_set(buckets, MaxElem);
+   unordered_set_t  unordered_set
+      (unordered_set_t::bucket_traits(buckets, MaxElem));
 
    //Initialize all the nodes
-   for(int i = 0; i < MaxElem; ++i)
-      nodes[i].set(i);
+   for(int i = 0; i < MaxElem; ++i) nodes[i].set(i);
 
    //Now insert them in both intrusive containers
    list.insert(list.end(), nodes.begin(), nodes.end());
    unordered_set.insert(nodes.begin(), nodes.end());
 
-   //Now check list::iterator_to
-   //which is an static member function
+   //Now check the iterator_to function
    list_t::iterator list_it(list.begin());
    for(int i = 0; i < MaxElem; ++i, ++list_it)
-      if(list_t::iterator_to(nodes[i]) != list_it)
+      if(list.iterator_to(nodes[i])       != list_it ||
+         list_t::s_iterator_to(nodes[i])  != list_it)
          return 1;
 
-   //Now check unordered_set::iterator_to (which is a member function)
-   //and unordered_set::local_current (which is an static member function)
+   //Now check unordered_set::s_iterator_to (which is a member function)
+   //and unordered_set::s_local_iterator_to (which is an static member function)
    unordered_set_t::iterator unordered_set_it(unordered_set.begin());
-   for(int i = 0; i < MaxElem; ++i, ++unordered_set_it){
-      if(unordered_set.iterator_to(nodes[i]) != unordered_set.find(nodes[i]))
+   for(int i = 0; i < MaxElem; ++i){
+      unordered_set_it = unordered_set.find(nodes[i]);
+      if(unordered_set.iterator_to(nodes[i]) != unordered_set_it)
          return 1;
-      if(*unordered_set_t::local_iterator_to(nodes[i]) != *unordered_set.find(nodes[i]))
+      if(*unordered_set.local_iterator_to(nodes[i])      != *unordered_set_it ||
+         *unordered_set_t::s_local_iterator_to(nodes[i]) != *unordered_set_it )
          return 1;
    }
 

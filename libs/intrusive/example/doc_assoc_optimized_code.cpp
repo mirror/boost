@@ -51,24 +51,21 @@ class Expensive : public set_base_hook<>, public unordered_set_base_hook<>
 };
 
 // A set and unordered_set that store Expensive objects
-typedef set<set_base_hook<>::value_traits<Expensive> >   Set;
-typedef unordered_set<unordered_set_base_hook<>::
-      value_traits<Expensive> >                          UnorderedSet;
+typedef set<Expensive>           Set;
+typedef unordered_set<Expensive> UnorderedSet;
 
 // Search functions
-Expensive *get_from_set(const char* key, Set &set)
+Expensive *get_from_set(const char* key, Set &set_object)
 {
-   Set::iterator it = set.find(Expensive(key));
-   if( it == set.end() )     return 0;
+   Set::iterator it = set_object.find(Expensive(key));
+   if( it == set_object.end() )     return 0;
    return &*it;
 }
 
-Expensive *get_from_unordered_set
-   (const char* key, UnorderedSet &unordered_set)
+Expensive *get_from_uset(const char* key, UnorderedSet &uset_object)
 {
-   UnorderedSet::iterator it = 
-      unordered_set.find(Expensive (key));
-   if( it == unordered_set.end() )  return 0;
+   UnorderedSet::iterator it = uset_object.find(Expensive (key));
+   if( it == uset_object.end() )  return 0;
    return &*it;
 }
 //]
@@ -94,38 +91,35 @@ struct StrExpEqual
 };
 
 // Optimized search functions
-Expensive *get_from_set_optimized(const char* key, Set &set)
+Expensive *get_from_set_optimized(const char* key, Set &set_object)
 {
-   Set::iterator it = set.find(key, StrExpComp());
-   if( it == set.end() )   return 0;
+   Set::iterator it = set_object.find(key, StrExpComp());
+   if( it == set_object.end() )   return 0;
    return &*it;
 }
 
-Expensive *get_from_unordered_set_optimized
-   (const char* key, UnorderedSet &unordered_set)
+Expensive *get_from_uset_optimized(const char* key, UnorderedSet &uset_object)
 {
-   UnorderedSet::iterator it = 
-      unordered_set.find(key, StrHasher(), StrExpEqual());
-   if( it == unordered_set.end() )  return 0;
+   UnorderedSet::iterator it = uset_object.find(key, StrHasher(), StrExpEqual());
+   if( it == uset_object.end() )  return 0;
    return &*it;
 }
 //]
 
 //[doc_assoc_optimized_code_normal_insert
 // Insertion functions
-bool insert_to_set(const char* key, Set &set)
+bool insert_to_set(const char* key, Set &set_object)
 {
    Expensive *pobject = new Expensive(key);
-   bool success = set.insert(*pobject).second;
+   bool success = set_object.insert(*pobject).second;
    if(!success)   delete pobject;
    return success;
 }
 
-bool insert_to_unordered_set
-   (const char* key, UnorderedSet &unordered_set)
+bool insert_to_uset(const char* key, UnorderedSet &uset_object)
 {
    Expensive *pobject = new Expensive(key);
-   bool success = unordered_set.insert(*pobject).second;
+   bool success = uset_object.insert(*pobject).second;
    if(!success)   delete pobject;
    return success;
 }
@@ -133,24 +127,20 @@ bool insert_to_unordered_set
 
 //[doc_assoc_optimized_code_optimized_insert
 // Optimized insertion functions
-bool insert_to_set_optimized(const char* key, Set &set)
+bool insert_to_set_optimized(const char* key, Set &set_object)
 {
    Set::insert_commit_data insert_data;
-   bool success = set.insert_check
-      (key, StrExpComp(), insert_data).second;
-   if(success)
-      set.insert_commit(*new Expensive(key), insert_data);
+   bool success = set_object.insert_check(key, StrExpComp(), insert_data).second;
+   if(success) set_object.insert_commit(*new Expensive(key), insert_data);
    return success;
 }
 
-bool insert_to_unordered_set_optimized
-   (const char* key, UnorderedSet &unordered_set)
+bool insert_to_uset_optimized(const char* key, UnorderedSet &uset_object)
 {
    UnorderedSet::insert_commit_data insert_data;
-   bool success = unordered_set.insert_check
+   bool success = uset_object.insert_check
       (key, StrHasher(), StrExpEqual(), insert_data).second;
-   if(success)
-      unordered_set.insert_commit(*new Expensive(key), insert_data);
+   if(success) uset_object.insert_commit(*new Expensive(key), insert_data);
    return success;
 }
 //]
@@ -159,7 +149,7 @@ int main()
 {
    Set set;
    UnorderedSet::bucket_type buckets[10];
-   UnorderedSet unordered_set(buckets, 10);
+   UnorderedSet unordered_set(UnorderedSet::bucket_traits(buckets, 10));
 
    const char * const expensive_key
       = "A long string that avoids small string optimization";
@@ -170,7 +160,7 @@ int main()
       return 1;
    }
 
-   if(get_from_unordered_set(expensive_key, unordered_set)){
+   if(get_from_uset(expensive_key, unordered_set)){
       return 1;
    }
 
@@ -178,7 +168,7 @@ int main()
       return 1;
    }
 
-   if(get_from_unordered_set_optimized(expensive_key, unordered_set)){
+   if(get_from_uset_optimized(expensive_key, unordered_set)){
       return 1;
    }
 
@@ -189,7 +179,7 @@ int main()
       return 1;
    }
 
-   if(!get_from_unordered_set(expensive_key, unordered_set)){
+   if(!get_from_uset(expensive_key, unordered_set)){
       return 1;
    }
 
@@ -197,7 +187,7 @@ int main()
       return 1;
    }
 
-   if(!get_from_unordered_set_optimized(expensive_key, unordered_set)){
+   if(!get_from_uset_optimized(expensive_key, unordered_set)){
       return 1;
    }
 
@@ -208,7 +198,7 @@ int main()
       return 1;
    }
 
-   if(!insert_to_unordered_set(expensive_key, unordered_set)){
+   if(!insert_to_uset(expensive_key, unordered_set)){
       return 1;
    }
 
@@ -228,7 +218,7 @@ int main()
       return 1;
    }
 
-   if(!insert_to_unordered_set_optimized(expensive_key, unordered_set)){
+   if(!insert_to_uset_optimized(expensive_key, unordered_set)){
       return 1;
    }
 
@@ -251,7 +241,7 @@ int main()
       return 1;
    }
 
-   if(insert_to_unordered_set(expensive_key, unordered_set)){
+   if(insert_to_uset(expensive_key, unordered_set)){
       return 1;
    }
 
@@ -259,7 +249,7 @@ int main()
       return 1;
    }
 
-   if(insert_to_unordered_set_optimized(expensive_key, unordered_set)){
+   if(insert_to_uset_optimized(expensive_key, unordered_set)){
       return 1;
    }
 

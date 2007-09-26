@@ -9,7 +9,7 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-#include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/member_value_traits.hpp>
 #include <vector>
@@ -57,8 +57,8 @@ typedef member_value_traits
 
 //Now define two intrusive lists. Both lists will use the same algorithms:
 // circular_list_algorithms<simple_node_traits>
-typedef boost::intrusive::list <ValueTraits1> Value1List;
-typedef boost::intrusive::list <ValueTraits2> Value2List;
+typedef list <value_1, value_traits<ValueTraits1> > Value1List;
+typedef list <value_2, value_traits<ValueTraits2> > Value2List;
 //]
 
 //[doc_advanced_value_traits2_test

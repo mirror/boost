@@ -12,9 +12,10 @@
 //[doc_erasing_and_disposing
 #include <boost/intrusive/list.hpp>
 
+using namespace boost::intrusive;
+
 //A class that can be inserted in an intrusive list
-class my_class 
-   :  public boost::intrusive::list_base_hook<>
+class my_class : public list_base_hook<>
 {
    public:
    my_class(int i)
@@ -26,20 +27,18 @@ class my_class
 };
 
 //Definition of the intrusive list
-typedef boost::intrusive::list< my_class::value_traits<my_class> > my_class_list;
+typedef list<my_class> my_class_list;
 
 //The predicate function
-class is_even
+struct is_even
 {
-   public:
    bool operator()(const my_class &c) const
    {  return 0 == (c.int_ % 2);  }
 };
 
 //The disposer object function
-class delete_disposer
+struct delete_disposer
 {
-   public:
    void operator()(my_class *delete_this)
    {  delete delete_this;  }
 };
@@ -53,9 +52,7 @@ int main()
 
    try{
       //Insert new objects in the container
-      for(int i = 0; i < MaxElem; ++i){
-         list.push_back(*new my_class(i));
-      }
+      for(int i = 0; i < MaxElem; ++i) list.push_back(*new my_class(i));
 
       //Now use remove_and_dispose_if to erase and delete the objects
       list.remove_and_dispose_if(is_even(), delete_disposer());
