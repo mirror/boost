@@ -73,23 +73,26 @@ namespace boost
   namespace lib3
   {
     // lib3 has its own error_category:
-    extern const boost::system::error_category & lib3_error_category;
+    const boost::system::error_category & get_lib3_error_category();
+    const boost::system::error_category & lib3_error_category = get_lib3_error_category();
     
     enum error
     {
       boo_boo=123,
       big_boo_boo
     };
-
   }
 
   namespace system
   {
     template<> struct is_error_code_enum<boost::lib3::error>
       { static const bool value = true; };
+  }
 
-    template<> inline error_code make_error_code(boost::lib3::error e)
-      { return error_code(e,boost::lib3::lib3_error_category); }
+  namespace lib3
+  {
+    inline boost::system::error_code make_error_code(error e)
+      { return boost::system::error_code(e,lib3_error_category); }
   }
 
 }
@@ -125,12 +128,14 @@ namespace boost
         if ( ev == big_boo_boo ) return std::string("big boo boo");
         return std::string("unknown error");
       }
+
     };
 
-    const lib3_error_category_imp lib3_error_category_const;
-
-    const boost::system::error_category & lib3_error_category
-      = lib3_error_category_const;
+    const boost::system::error_category & get_lib3_error_category()
+    {
+      static const lib3_error_category_imp l3ecat;
+      return l3ecat;
+    }
   }
 }
 
@@ -147,7 +152,8 @@ namespace boost
 namespace lib4
 {
   // lib4 has its own error_category:
-  extern const boost::system::error_category & lib4_error_category;
+  const boost::system::error_category & get_lib4_error_category();
+  const boost::system::error_category & lib4_error_category = get_lib4_error_category();
   
   extern const boost::system::error_code boo_boo;
   extern const boost::system::error_code big_boo_boo;
@@ -183,10 +189,11 @@ namespace lib4
     }
   };
 
-  const lib4_error_category_imp lib4_error_category_const;
-
-  const boost::system::error_category & lib4_error_category
-    = lib4_error_category_const;
+  const boost::system::error_category & get_lib4_error_category()
+  {
+    static const lib4_error_category_imp l4ecat;
+    return l4ecat;
+  }
 
   const boost::system::error_code boo_boo( 456, lib4_error_category );
   const boost::system::error_code big_boo_boo( 789, lib4_error_category );
