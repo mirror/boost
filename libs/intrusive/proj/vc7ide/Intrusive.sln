@@ -27,6 +27,34 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unordered_multiset", "unord
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "perf_test", "perf_test\perf_test.vcproj", "{910E70E6-2C91-AA67-BF4C-A9C74A309927}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "default_hook", "default_hook\default_hook.vcproj", "{761A79B4-9968-CB81-F02B-2A4497345475}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stateful_value_traits", "stateful_value_traits\stateful_value_traits.vcproj", "{9571A7B4-9968-B9C1-17FB-134547B46975}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "virtual_base", "virtual_base\virtual_base.vcproj", "{3579B1A4-9894-02AB-CB81-297B46154345}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "make_functions", "make_functions\make_functions.vcproj", "{7679B41B-F2B4-9176-CB81-35449467B435}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "custom_bucket_traits", "custom_bucket_traits\custom_bucket_traits.vcproj", "{31C77B84-0B2C-9481-CB81-27A149F33825}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "external_value_traits", "external_value_traits\external_value_traits.vcproj", "{97B69A72-B9D3-7389-17FB-74612F4A9543}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -63,6 +91,34 @@ Global
 		{9101EE76-BB6C-2C91-F4B7-A9F3B9490279}.Debug.Build.0 = Debug|Win32
 		{9101EE76-BB6C-2C91-F4B7-A9F3B9490279}.Release.ActiveCfg = Release|Win32
 		{9101EE76-BB6C-2C91-F4B7-A9F3B9490279}.Release.Build.0 = Release|Win32
+		{910E70E6-2C91-AA67-BF4C-A9C74A309927}.Debug.ActiveCfg = Debug|Win32
+		{910E70E6-2C91-AA67-BF4C-A9C74A309927}.Debug.Build.0 = Debug|Win32
+		{910E70E6-2C91-AA67-BF4C-A9C74A309927}.Release.ActiveCfg = Release|Win32
+		{910E70E6-2C91-AA67-BF4C-A9C74A309927}.Release.Build.0 = Release|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Debug.ActiveCfg = Debug|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Debug.Build.0 = Debug|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Release.ActiveCfg = Release|Win32
+		{761A79B4-9968-CB81-F02B-2A4497345475}.Release.Build.0 = Release|Win32
+		{9571A7B4-9968-B9C1-17FB-134547B46975}.Debug.ActiveCfg = Debug|Win32
+		{9571A7B4-9968-B9C1-17FB-134547B46975}.Debug.Build.0 = Debug|Win32
+		{9571A7B4-9968-B9C1-17FB-134547B46975}.Release.ActiveCfg = Release|Win32
+		{9571A7B4-9968-B9C1-17FB-134547B46975}.Release.Build.0 = Release|Win32
+		{3579B1A4-9894-02AB-CB81-297B46154345}.Debug.ActiveCfg = Debug|Win32
+		{3579B1A4-9894-02AB-CB81-297B46154345}.Debug.Build.0 = Debug|Win32
+		{3579B1A4-9894-02AB-CB81-297B46154345}.Release.ActiveCfg = Release|Win32
+		{3579B1A4-9894-02AB-CB81-297B46154345}.Release.Build.0 = Release|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Debug.ActiveCfg = Debug|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Debug.Build.0 = Debug|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Release.ActiveCfg = Release|Win32
+		{7679B41B-F2B4-9176-CB81-35449467B435}.Release.Build.0 = Release|Win32
+		{31C77B84-0B2C-9481-CB81-27A149F33825}.Debug.ActiveCfg = Debug|Win32
+		{31C77B84-0B2C-9481-CB81-27A149F33825}.Debug.Build.0 = Debug|Win32
+		{31C77B84-0B2C-9481-CB81-27A149F33825}.Release.ActiveCfg = Release|Win32
+		{31C77B84-0B2C-9481-CB81-27A149F33825}.Release.Build.0 = Release|Win32
+		{97B69A72-B9D3-7389-17FB-74612F4A9543}.Debug.ActiveCfg = Debug|Win32
+		{97B69A72-B9D3-7389-17FB-74612F4A9543}.Debug.Build.0 = Debug|Win32
+		{97B69A72-B9D3-7389-17FB-74612F4A9543}.Release.ActiveCfg = Release|Win32
+		{97B69A72-B9D3-7389-17FB-74612F4A9543}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

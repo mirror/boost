@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="list"
-	ProjectGUID="{977B61B4-9968-497C-9F0B-24A8145473B8}"
-	RootNamespace="list"
+	Name="make_functions"
+	ProjectGUID="{7679B41B-F2B4-9176-CB81-35449467B435}"
+	RootNamespace="make_functions"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -37,11 +37,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/list.exe"
+				OutputFile="$(OutDir)/make_functions.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/list.pdb"
-				GenerateMapFile="FALSE"
+				ProgramDatabaseFile="$(OutDir)/make_functions.pdb"
+				GenerateMapFile="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -86,7 +86,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/list.exe"
+				OutputFile="$(OutDir)/make_functions.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -121,20 +121,10 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4F537F31-AB85-7644-A616-25727F35FA5F}">
 			<File
-				RelativePath="..\..\..\test\list_test.cpp">
+				RelativePath="..\..\..\test\make_functions_test.cpp">
 			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 		</Filter>
 	</Files>
 	<Globals>

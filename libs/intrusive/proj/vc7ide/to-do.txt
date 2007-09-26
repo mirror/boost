@@ -1,0 +1,14 @@
+add includes needed for the snippets
+add section explaining splice(...,n)
+(Node algorithms with custom NodeTraits)La sección deja al lector con la pregunta:
+   ¿para qué sirve esto? debido a que los node traits no se ponen en conexión con
+   los contenedores intrusivos, esto se explica más adelante en la siguiente sección,
+   pero a lo mejor estaría bien comentarlo someramente aquí para que al lector le
+   encajen los conceptos.
+Faltaría, en mi opinión, una guía de qué headers incluyen a cuáles. P.ej.,
+los *_hook.hpp típicamente están incluidos por el header del contenedor asociado, etc.
+Explain the default hook states for custom value_traits.
+Create a new assertion for each type of error
+Add resize() to list
+Optimize rehash for when shrinking: there is no need to hash the values.
+Add BOOST_STATIC_ASSERT to s_iterator_to functions and fix documentation on this issue.

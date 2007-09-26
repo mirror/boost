@@ -2,9 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="list"
-	ProjectGUID="{977B61B4-9968-497C-9F0B-24A8145473B8}"
-	RootNamespace="list"
+	Name="perf_test"
+	ProjectGUID="{910E70E6-2C91-AA67-BF4C-A9C74A309927}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -22,8 +21,6 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="../../../../../"
 				PreprocessorDefinitions="BOOST_DATE_TIME_NO_LIB"
-				GeneratePreprocessedFile="0"
-				KeepComments="FALSE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
@@ -37,11 +34,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/list.exe"
+				OutputFile="$(OutDir)/perf_test.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/list.pdb"
-				GenerateMapFile="FALSE"
+				ProgramDatabaseFile="$(OutDir)/perf_test.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -77,7 +73,6 @@
 				PreprocessorDefinitions="BOOST_DATE_TIME_NO_LIB"
 				RuntimeLibrary="4"
 				DisableLanguageExtensions="FALSE"
-				ForceConformanceInForLoopScope="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -86,7 +81,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/list.exe"
+				OutputFile="$(OutDir)/perf_test.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -121,9 +116,9 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{43C77EF1-B78A-73C5-7346-2D7522AE2C3F}">
 			<File
-				RelativePath="..\..\..\test\list_test.cpp">
+				RelativePath="..\..\..\perf\perf_list.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -134,7 +129,7 @@
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			UniqueIdentifier="{68B017A6-F80D6A2-084c-06A6-8A323C1ABD01}">
 		</Filter>
 	</Files>
 	<Globals>
