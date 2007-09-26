@@ -52,6 +52,7 @@ class circular_list_algorithms
    public:
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
+   typedef NodeTraits                           node_traits;
 
    //! <b>Effects</b>: Constructs an empty list, making this_node the only
    //!   node of the circular list:
