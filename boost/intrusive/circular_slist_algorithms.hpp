@@ -48,6 +48,7 @@ class circular_slist_algorithms
    public:
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
+   typedef NodeTraits                           node_traits;
 
    //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
    //! 

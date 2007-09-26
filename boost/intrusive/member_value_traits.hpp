@@ -13,7 +13,7 @@
 #ifndef BOOST_INTRUSIVE_MEMBER_VALUE_TRAITS_HPP
 #define BOOST_INTRUSIVE_MEMBER_VALUE_TRAITS_HPP
 
-#include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/link_mode.hpp>
 #include <iterator>
 #include <boost/intrusive/detail/parent_from_member.hpp>
 
@@ -25,7 +25,7 @@ namespace intrusive {
 //!store a node_traits::node
 template< class T, class NodeTraits
         , typename NodeTraits::node T::* PtrToMember
-        , linking_policy Policy>
+        , link_mode_type LinkMode = safe_link>
 struct member_value_traits
 {
    public:
@@ -38,8 +38,7 @@ struct member_value_traits
    typedef typename boost::pointer_to_other<node_ptr, const T>::type const_pointer;
    typedef typename std::iterator_traits<pointer>::reference         reference;
    typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
-
-   enum { linking_policy = Policy };
+   static const link_mode_type link_mode = LinkMode;
 
    static node_ptr to_node_ptr(reference value)
    {  return node_ptr(&(value.*PtrToMember));   }

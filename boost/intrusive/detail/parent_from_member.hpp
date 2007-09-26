@@ -13,6 +13,7 @@
 #define BOOST_INTRUSIVE_PARENT_FROM_MEMBER_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
+#include <boost/static_assert.hpp>
 #include <cstddef>
 
 namespace boost {
@@ -22,14 +23,18 @@ namespace detail {
 template<class Parent, class Member>
 inline std::size_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)
 {
+   //BOOST_STATIC_ASSERT(( sizeof(std::ptrdiff_t) == sizeof(ptr_to_member) ));
    //The implementation of a pointer to member is compiler dependent.
-   #if (defined(_MSC_VER)  || defined(__GNUC__) || \
-        defined(BOOST_INTEL) || defined(__HP_aCC))
-   //This works with gcc, msvc, ac++
+   #if defined(BOOST_MSVC) || (defined (BOOST_WINDOWS) && defined(BOOST_INTEL))
+   //This works with gcc, msvc, ac++, ibmcpp
    return *(const std::ptrdiff_t*)(void*)&ptr_to_member;
+   #elif defined(__GNUC__) || defined(__HP_aCC) || defined(BOOST_INTEL) || defined (__IBMCPP__)
+   const Parent * const parent = 0;
+   const char *const member = reinterpret_cast<const char*>(&(parent->*ptr_to_member));
+   return std::size_t(member - reinterpret_cast<const char*>(parent));
    #else
    //This is the traditional C-front approach: __MWERKS__, __DMC__, __SUNPRO_CC
-   return *(const std::ptrdiff_t*)(void*)&ptr_to_member - 1;
+   return (*(const std::ptrdiff_t*)(void*)&ptr_to_member) - 1;
    #endif
 }
 

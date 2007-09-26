@@ -11,18 +11,49 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_INTRUSIVE_HASHSET_HOOK_HPP
-#define BOOST_INTRUSIVE_HASHSET_HOOK_HPP
+#ifndef BOOST_INTRUSIVE_UNORDERED_SET_HOOK_HPP
+#define BOOST_INTRUSIVE_UNORDERED_SET_HOOK_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
-#include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/slist_hook.hpp>
-#include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/options.hpp>
+#include <boost/intrusive/detail/generic_hook.hpp>
 
 namespace boost {
 namespace intrusive {
+
+/// @cond
+template<class VoidPointer>
+struct get_uset_node_algo
+{
+   typedef circular_slist_algorithms<slist_node_traits<VoidPointer> > type;
+};
+/// @endcond
+
+//! Helper metafunction to define a \c unordered_set_base_hook that yields to the same
+//! type when the same options (either explicitly or implicitly) are used.
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class ...Options>
+#else
+template<class O1 = none, class O2 = none, class O3 = none>
+#endif
+struct make_unordered_set_base_hook
+{
+   /// @cond
+   typedef typename pack_options
+      < hook_defaults, O1, O2, O3>::type packed_options;
+
+   typedef detail::generic_hook
+   < get_slist_node_algo<typename packed_options::void_pointer>
+   , typename packed_options::tag
+   , packed_options::link_mode
+   , detail::UsetBaseHook
+   > implementation_defined;
+   /// @endcond
+   typedef implementation_defined type;
+};
 
 //! Derive a class from unordered_set_base_hook in order to store objects in 
 //! in an unordered_set/unordered_multi_set. unordered_set_base_hook holds the data necessary to maintain 
@@ -37,122 +68,103 @@ namespace intrusive {
 //!
 //! The third argument is the pointer type that will be used internally in the hook
 //! and the unordered_set/unordered_multi_set configured from this hook.
-template< class Tag              //= tag
-        , linking_policy Policy  //= safe_link
-        , class VoidPointer      //= void *
-        >
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class ...Options>
+#else
+template<class O1, class O2, class O3>
+#endif
 class unordered_set_base_hook
+   :  public make_unordered_set_base_hook<O1, O2, O3>::type
 {
-   /// @cond
-   typedef slist_base_hook<Tag, Policy, VoidPointer> IsListHook;
-   IsListHook m_slisthook;
-   typedef IsListHook                                 implementation_defined;
-   /// @endcond
-
-   public:
-   enum { linking_policy = Policy };
-   typedef typename implementation_defined::node_traits  node_traits;
-   typedef typename node_traits::node                    node;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, node>::type                          node_ptr;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, const node>::type                    const_node_ptr;
-   typedef unordered_set_base_hook
-      <Tag, Policy, VoidPointer>                         this_type;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, this_type>::type                     this_type_ptr;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, const this_type>::type               const_this_type_ptr;
-
-   //! <b>Effects</b>: If Policy is auto_unlink or safe_mode_linnk
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
-   //! <b>Throws</b>: Nothing.
-   unordered_set_base_hook()
-      :  m_slisthook()
-   {}
+   //! <b>Throws</b>: Nothing. 
+   unordered_set_base_hook();
 
-   //! <b>Effects</b>: If Policy is auto_unlink or safe_mode_linnk
+   //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state. The argument is ignored.
    //! 
-   //! <b>Throws</b>: Nothing.
+   //! <b>Throws</b>: Nothing. 
    //! 
    //! <b>Rationale</b>: Providing a copy-constructor
-   //!   makes classes using unordered_set_base_hook STL-compliant without forcing the 
-   //!   user to do some additional work. "swap" can be used to emulate
+   //!   makes classes using the hook STL-compliant without forcing the 
+   //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   unordered_set_base_hook(const unordered_set_base_hook &other)
-      :  m_slisthook(other.m_slisthook)
-   {}
+   unordered_set_base_hook(const unordered_set_base_hook& );
 
    //! <b>Effects</b>: Empty function. The argument is ignored.
    //! 
-   //! <b>Throws</b>: Nothing.
+   //! <b>Throws</b>: Nothing. 
    //! 
    //! <b>Rationale</b>: Providing an assignment operator 
-   //!   makes classes using unordered_set_base_hook STL-compliant without forcing the 
-   //!   user to do some additional work. "swap" can be used to emulate
+   //!   makes classes using the hook STL-compliant without forcing the 
+   //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   unordered_set_base_hook& operator=(const unordered_set_base_hook &other)
-   {  return *this;  }
+   unordered_set_base_hook& operator=(const unordered_set_base_hook& );
 
-   //! <b>Effects</b>: If Policy is normal_link, the destructor does
-   //!   nothing (ie. no code is generated). If Policy is safe_link and the
-   //!   object is stored in an list an assertion is raised. If Policy is
-   //!   auto_unlink and "is_linked()" is true, the node is unlinked.
+   //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
+   //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
+   //!   object is stored in an unordered_set an assertion is raised. If link_mode is
+   //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
-   //! <b>Throws</b>: Nothing.
-   ~unordered_set_base_hook() 
-   {} //m_slisthook's destructor does the job
+   //! <b>Throws</b>: Nothing. 
+   ~unordered_set_base_hook();
 
-   //! <b>Precondition</b>: Policy must be safe_link or auto_unlink.
+   //! <b>Effects</b>: Swapping two nodes swaps the position of the elements 
+   //!   related to those nodes in one or two containers. That is, if the node 
+   //!   this is part of the element e1, the node x is part of the element e2 
+   //!   and both elements are included in the containers s1 and s2, then after 
+   //!   the swap-operation e1 is in s2 at the position of e2 and e2 is in s1 
+   //!   at the position of e1. If one element is not in a container, then 
+   //!   after the swap-operation the other element is not in a container. 
+   //!   Iterators to e1 and e2 related to those nodes are invalidated. 
+   //!
+   //! <b>Complexity</b>: Constant 
+   //!
+   //! <b>Throws</b>: Nothing. 
+   void swap_nodes(unordered_set_base_hook &other);
+
+   //! <b>Precondition</b>: link_mode must be \c safe_link or \c auto_unlink.
    //!
    //! <b>Returns</b>: true, if the node belongs to a container, false
-   //!   otherwise. This function can be used to test whether unordered_set/unordered_multiset::iterator_to 
+   //!   otherwise. This function can be used to test whether \c unordered_set::iterator_to 
    //!   will return a valid iterator. 
    //!
-   //! <b>Complexity</b>: Constant
-   bool is_linked() const 
-   {  return m_slisthook.is_linked(); }
+   //! <b>Complexity</b>: Constant 
+   bool is_linked() const;
 
-   //! The value_traits class is used as the first template argument for unordered_set/unordered_multiset. 
-   //! The template argument T defines the class type stored in unordered_set/unordered_multiset. Objects 
-   //! of type T and of types derived from T can be stored. T doesn't need to be 
-   //! copy-constructible or assignable.
-   template<class T>
-   struct value_traits
-      : detail::derivation_hook_value_traits<T, this_type, Tag>
-   {};
-
-   //! <b>Effects</b>: Converts a pointer to a node into
-   //!   a pointer to the hook that holds that node.
+   //! <b>Effects</b>: Removes the node if it's inserted in a container.
+   //!   This function is only allowed if link_mode is \c auto_unlink.
    //! 
-   //! <b>Throws</b>: Nothing.
-   static this_type_ptr to_hook_ptr(node_ptr p)
-   {
-      return this_type_ptr((this_type*)detail::get_pointer(IsListHook::to_hook_ptr(p)));
-   }
+   //! <b>Throws</b>: Nothing. 
+   void unlink();
+   #endif
+};
 
-   //! <b>Effects</b>: Converts a const pointer to a node stored in a container into
-   //!   a const pointer to the hook that holds that node.
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static const_this_type_ptr to_hook_ptr(const_node_ptr p)
-   {
-      return const_this_type_ptr((const this_type*)detail::get_pointer(IsListHook::to_hook_ptr(p)));
-   }
 
-   //! <b>Effects</b>: Returns a pointer to the node that this hook holds.
-   //! 
-   //! <b>Throws</b>: Nothing.
-   node_ptr to_node_ptr()
-   {  return m_slisthook.to_node_ptr();  }
+//! Helper metafunction to define a \c unordered_set_member_hook that yields to the same
+//! type when the same options (either explicitly or implicitly) are used.
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class ...Options>
+#else
+template<class O1 = none, class O2 = none, class O3 = none>
+#endif
+struct make_unordered_set_member_hook
+{
+   /// @cond
+   typedef typename pack_options
+      < hook_defaults, O1, O2, O3>::type packed_options;
 
-   //! <b>Effects</b>: Returns a const pointer to the node that this hook holds.
-   //! 
-   //! <b>Throws</b>: Nothing.
-   const_node_ptr to_node_ptr() const
-   {  return m_slisthook.to_node_ptr();  }
+   typedef detail::generic_hook
+   < get_uset_node_algo<typename packed_options::void_pointer>
+   , member_tag
+   , packed_options::link_mode
+   , detail::NoBaseHook
+   > implementation_defined;
+   /// @endcond
+   typedef implementation_defined type;
 };
 
 //! Put a public data member unordered_set_member_hook in order to store objects of this class in
@@ -163,123 +175,79 @@ class unordered_set_base_hook
 //!
 //! The second argument is the pointer type that will be used internally in the hook
 //! and the unordered_set/unordered_multi_set configured from this hook.
-template< linking_policy Policy  //= safe_link
-        , class VoidPointer      //= void *
-        >
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class ...Options>
+#else
+template<class O1, class O2, class O3>
+#endif
 class unordered_set_member_hook
+   :  public make_unordered_set_member_hook<O1, O2, O3>::type
 {
-   /// @cond
-   typedef slist_member_hook<Policy, VoidPointer>  IsListHook;
-   IsListHook m_slisthook;
-   typedef IsListHook                                 implementation_defined;
-   /// @endcond
-
-   public:
-   enum { linking_policy = Policy };
-   typedef typename implementation_defined::node_traits  node_traits;
-   typedef typename node_traits::node                    node;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, node>::type                          node_ptr;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, const node>::type                    const_node_ptr;
-   typedef unordered_set_member_hook
-      <Policy, VoidPointer>                              this_type;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, this_type>::type                     this_type_ptr;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, const this_type>::type               const_this_type_ptr;
-
-   public:
-   //! <b>Effects</b>: If Policy is auto_unlink or safe_mode_linnk
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+   //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
    //! <b>Throws</b>: Nothing. 
-   unordered_set_member_hook()
-      :  m_slisthook()
-   {}
+   unordered_set_member_hook();
 
-   //! <b>Effects</b>: If Policy is auto_unlink or safe_mode_linnk
+   //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state. The argument is ignored.
    //! 
    //! <b>Throws</b>: Nothing. 
    //! 
    //! <b>Rationale</b>: Providing a copy-constructor
-   //!   makes classes using unordered_set_member_hook STL-compliant without forcing the 
-   //!   user to do some additional work.
-   unordered_set_member_hook(const unordered_set_member_hook &other)
-      :  m_slisthook(other.m_slisthook)
-   {}
+   //!   makes classes using the hook STL-compliant without forcing the 
+   //!   user to do some additional work. \c swap can be used to emulate
+   //!   move-semantics.
+   unordered_set_member_hook(const unordered_set_member_hook& );
 
    //! <b>Effects</b>: Empty function. The argument is ignored.
    //! 
    //! <b>Throws</b>: Nothing. 
    //! 
    //! <b>Rationale</b>: Providing an assignment operator 
-   //!   makes classes using unordered_set_member_hook STL-compliant without forcing the 
-   //!   user to do some additional work.
-   unordered_set_member_hook& operator=(const unordered_set_member_hook &other) 
-   {  return *this;  }
+   //!   makes classes using the hook STL-compliant without forcing the 
+   //!   user to do some additional work. \c swap can be used to emulate
+   //!   move-semantics.
+   unordered_set_member_hook& operator=(const unordered_set_member_hook& );
 
-   //! <b>Effects</b>: If Policy is normal_link, the destructor does
-   //!   nothing (ie. no code is generated). If Policy is safe_link and the
-   //!   object is stored in an list an assertion is raised. If Policy is
-   //!   auto_unlink and "is_linked()" is true, the node is unlinked.
+   //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
+   //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
+   //!   object is stored in an unordered_set an assertion is raised. If link_mode is
+   //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
    //! <b>Throws</b>: Nothing. 
-   ~unordered_set_member_hook() 
-   {} //m_slisthook's destructor does the job
+   ~unordered_set_member_hook();
 
-   //! <b>Precondition</b>: Policy must be safe_link or auto_unlink.
+   //! <b>Effects</b>: Swapping two nodes swaps the position of the elements 
+   //!   related to those nodes in one or two containers. That is, if the node 
+   //!   this is part of the element e1, the node x is part of the element e2 
+   //!   and both elements are included in the containers s1 and s2, then after 
+   //!   the swap-operation e1 is in s2 at the position of e2 and e2 is in s1 
+   //!   at the position of e1. If one element is not in a container, then 
+   //!   after the swap-operation the other element is not in a container. 
+   //!   Iterators to e1 and e2 related to those nodes are invalidated. 
    //!
    //! <b>Complexity</b>: Constant 
-   bool is_linked() const 
-   {  return m_slisthook.is_linked();  }
+   //!
+   //! <b>Throws</b>: Nothing. 
+   void swap_nodes(unordered_set_member_hook &other);
 
-   //! The value_traits class is used as the first template argument for unordered_set/unordered_multiset. 
-   //! The template argument is a pointer to member pointing to the node in 
-   //! the class. Objects of type T and of types derived from T can be stored. 
-   //! T doesn't need to be copy-constructible or assignable.
-   template<class T, this_type T::* M>
-   struct value_traits
-      : detail::member_hook_value_traits<T, this_type, M>
-   {};
+   //! <b>Precondition</b>: link_mode must be \c safe_link or \c auto_unlink.
+   //!
+   //! <b>Returns</b>: true, if the node belongs to a container, false
+   //!   otherwise. This function can be used to test whether \c unordered_set::iterator_to 
+   //!   will return a valid iterator. 
+   //!
+   //! <b>Complexity</b>: Constant 
+   bool is_linked() const;
 
    //! <b>Effects</b>: Removes the node if it's inserted in a container.
-   //!   This function is only allowed if Policy is auto_unlink.
+   //!   This function is only allowed if link_mode is \c auto_unlink.
    //! 
    //! <b>Throws</b>: Nothing. 
-   void unlink()
-   {  m_slisthook.unlink();   }
-
-   //! <b>Effects</b>: Converts a pointer to a node into
-   //!   a pointer to the hook that holds that node.
-   //! 
-   //! <b>Throws</b>: Nothing. 
-   static this_type_ptr to_hook_ptr(node_ptr p)
-   {
-      return this_type_ptr((this_type*)detail::get_pointer(IsListHook::to_hook_ptr(p)));
-   }
-
-   //! <b>Effects</b>: Converts a const pointer to a node stored in a container into
-   //!   a const pointer to the hook that holds that node.
-   //! 
-   //! <b>Throws</b>: Nothing. 
-   static const_this_type_ptr to_hook_ptr(const_node_ptr p)
-   {
-      return const_this_type_ptr((const this_type*)detail::get_pointer(IsListHook::to_hook_ptr(p)));
-   }
-
-   //! <b>Effects</b>: Returns a pointer to the node that this hook holds.
-   //! 
-   //! <b>Throws</b>: Nothing. 
-   node_ptr to_node_ptr()
-   {  return m_slisthook.to_node_ptr();  }
-
-   //! <b>Effects</b>: Returns a const pointer to the node that this hook holds.
-   //! 
-   //! <b>Throws</b>: Nothing. 
-   const_node_ptr to_node_ptr() const
-   {  return m_slisthook.to_node_ptr();  }
+   void unlink();
+   #endif
 };
 
 } //namespace intrusive 
@@ -287,4 +255,4 @@ class unordered_set_member_hook
 
 #include <boost/intrusive/detail/config_end.hpp>
 
-#endif //BOOST_INTRUSIVE_HASHSET_HOOK_HPP
+#endif //BOOST_INTRUSIVE_UNORDERED_SET_HOOK_HPP

@@ -24,63 +24,59 @@ namespace intrusive {
 //! The class template set is an intrusive container, that mimics most of 
 //! the interface of std::set as described in the C++ standard.
 //! 
-//! The template parameter ValueTraits is called "value traits". It stores
-//! information and operations about the type to be stored in the container.
+//! The template parameter \c T is the type to be managed by the container.
+//! The user can specify additional options and if no options are provided
+//! default options are used.
 //!
-//! The template parameter Compare, provides a function object that can compare two 
-//!   element values as sort keys to determine their relative order in the set. 
-//!
-//! If the user specifies ConstantTimeSize as "true", a member of type SizeType
-//! will be embedded in the class, that will keep track of the number of stored objects.
-//! This will allow constant-time O(1) size() member, instead of default O(N) size.
-template < class ValueTraits
-         , class Compare         //= std::less<typename ValueTraits::value_type>
-         , bool ConstantTimeSize //= true
-         , class SizeType        //= std::size_t
-         >
-class set
+//! The container supports the following options:
+//! \c base_hook<>/member_hook<>/value_traits<>,
+//! \c constant_time_size<>, \c size_type<> and
+//! \c compare<>.
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+class set_impl
 {
    /// @cond
-   typedef rbtree<ValueTraits, Compare, ConstantTimeSize, SizeType> tree_type;
-
+   typedef rbtree_impl<Config> tree_type;
    //! This class is
    //! non-copyable
-   set (const set&);
+   set_impl (const set_impl&);
 
    //! This class is
    //! non-assignable
-   set &operator =(const set&);
+   set_impl &operator =(const set_impl&);
 
    typedef tree_type implementation_defined;
    /// @endcond
 
    public:
-   typedef ValueTraits                                               value_traits;
-   typedef typename ValueTraits::value_type                          value_type;
-   typedef typename ValueTraits::pointer                             pointer;
-   typedef typename ValueTraits::const_pointer                       const_pointer;
-   typedef typename std::iterator_traits<pointer>::reference         reference;
-   typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
-   typedef typename std::iterator_traits<pointer>::difference_type   difference_type;
-   typedef SizeType                                                  size_type;
-   typedef value_type                                                key_type;
-   typedef Compare                                                   value_compare;
-   typedef value_compare                                             key_compare;
+   typedef typename implementation_defined::value_type               value_type;
+   typedef typename implementation_defined::value_traits             value_traits;
+   typedef typename implementation_defined::pointer                  pointer;
+   typedef typename implementation_defined::const_pointer            const_pointer;
+   typedef typename implementation_defined::reference                reference;
+   typedef typename implementation_defined::const_reference          const_reference;
+   typedef typename implementation_defined::difference_type          difference_type;
+   typedef typename implementation_defined::size_type                size_type;
+   typedef typename implementation_defined::value_compare            value_compare;
+   typedef typename implementation_defined::key_compare              key_compare;
    typedef typename implementation_defined::iterator                 iterator;
    typedef typename implementation_defined::const_iterator           const_iterator;
    typedef typename implementation_defined::reverse_iterator         reverse_iterator;
    typedef typename implementation_defined::const_reverse_iterator   const_reverse_iterator;
    typedef typename implementation_defined::insert_commit_data       insert_commit_data;
+   typedef typename implementation_defined::node_traits              node_traits;
+   typedef typename implementation_defined::node                     node;
+   typedef typename implementation_defined::node_ptr                 node_ptr;
+   typedef typename implementation_defined::const_node_ptr           const_node_ptr;
+   typedef typename implementation_defined::node_algorithms          node_algorithms;
 
    /// @cond
    private:
    tree_type tree_;
-
-   template <class V1, class P1, bool C1, class S1>
-   friend bool operator==(const set<V1, P1, C1, S1>& x, const set<V1, P1, C1, S1>& y);
-
-   template <class V1, class P1, bool C1, class S1>
-   friend bool operator<(const set<V1, P1, C1, S1>& x, const set<V1, P1, C1, S1>& y);
    /// @endcond
 
    public:
@@ -90,9 +86,10 @@ class set
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
-   //!   or the copy constructor of the Compare object throws. 
-   set(const Compare &cmp = Compare()) 
-      :  tree_(cmp)
+   //!   or the copy constructor of the value_compare object throws. 
+   set_impl( const value_compare &cmp = value_compare()
+           , const value_traits &v_traits = value_traits()) 
+      :  tree_(cmp, v_traits)
    {}
 
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue of type value_type. 
@@ -106,10 +103,12 @@ class set
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
-   //!   or the copy constructor/operator() of the Compare object throws. 
+   //!   or the copy constructor/operator() of the value_compare object throws. 
    template<class Iterator>
-   set(Iterator b, Iterator e, const Compare &cmp = Compare())
-      : tree_(true, b, e, cmp)
+   set_impl( Iterator b, Iterator e
+           , const value_compare &cmp = value_compare()
+           , const value_traits &v_traits = value_traits())
+      : tree_(true, b, e, cmp, v_traits)
    {  insert(b, e);  }
 
    //! <b>Effects</b>: Detaches all elements from this. The objects in the set 
@@ -119,7 +118,7 @@ class set
    //!   value. Otherwise constant.
    //! 
    //! <b>Throws</b>: Nothing.
-   ~set() 
+   ~set_impl() 
    {}
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the set.
@@ -232,11 +231,11 @@ class set
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static set &container_from_end_iterator(iterator end_iterator)
+   static set_impl &container_from_end_iterator(iterator end_iterator)
    {
-      return *detail::parent_from_member<set, tree_type>
+      return *detail::parent_from_member<set_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &set::tree_);
+         , &set_impl::tree_);
    }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
@@ -247,11 +246,11 @@ class set
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static const set &container_from_end_iterator(const_iterator end_iterator)
+   static const set_impl &container_from_end_iterator(const_iterator end_iterator)
    {
-      return *detail::parent_from_member<set, tree_type>
+      return *detail::parent_from_member<set_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &set::tree_);
+         , &set_impl::tree_);
    }
 
    //! <b>Effects</b>: Returns the key_compare object used by the set.
@@ -281,7 +280,7 @@ class set
    //! <b>Effects</b>: Returns the number of elements stored in the set.
    //! 
    //! <b>Complexity</b>: Linear to elements contained in *this if,
-   //!   ConstantTimeSize is false. Constant-time otherwise.
+   //!   constant-time size option is enabled. Constant-time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
    size_type size() const
@@ -293,7 +292,7 @@ class set
    //! 
    //! <b>Throws</b>: If the swap() call for the comparison functor
    //!   found using ADL throws. Strong guarantee.
-   void swap(set& other)
+   void swap(set_impl& other)
    { tree_.swap(other.tree_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -310,7 +309,7 @@ class set
    //! 
    //! <b>Throws</b>: If cloner throws.
    template <class Cloner, class Disposer>
-   void clone_from(const set &src, Cloner cloner, Disposer disposer)
+   void clone_from(const set_impl &src, Cloner cloner, Disposer disposer)
    {  tree_.clone_from(src.tree_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
@@ -326,7 +325,7 @@ class set
    //! <b>Complexity</b>: Average complexity for insert element is at
    //!   most logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Strong guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    //!   No copy-constructors are called.
@@ -344,7 +343,7 @@ class set
    //! <b>Complexity</b>: Logarithmic in general, but it's amortized
    //!   constant time if t is inserted immediately before hint.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Strong guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    //!   No copy-constructors are called.
@@ -449,11 +448,11 @@ class set
    //! 
    //! <b>Effects</b>: Inserts a range into the set.
    //! 
-   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the 
-   //!   size of the range. However, it is linear in N if the range is already sorted 
+   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the
+   //!   size of the range. However, it is linear in N if the range is already sorted
    //!   by value_comp().
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Basic guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    //!   No copy-constructors are called.
@@ -494,7 +493,7 @@ class set
    //! 
    //! <b>Complexity</b>: O(log(size()) + this->count(value)).
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Basic guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
@@ -556,7 +555,7 @@ class set
    //! <b>Effects</b>: Erases all the elements with the given value.
    //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    //! 
    //! <b>Complexity</b>: O(log(size() + this->count(value)). Basic guarantee.
    //! 
@@ -618,7 +617,7 @@ class set
    //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    size_type count(const_reference value) const
    {  return tree_.find(value) != end();  }
 
@@ -638,7 +637,7 @@ class set
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator lower_bound(const_reference value)
    {  return tree_.lower_bound(value);  }
 
@@ -666,7 +665,7 @@ class set
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    const_iterator lower_bound(const_reference value) const
    {  return tree_.lower_bound(value);  }
 
@@ -694,7 +693,7 @@ class set
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator upper_bound(const_reference value)
    {  return tree_.upper_bound(value);  }
 
@@ -722,7 +721,7 @@ class set
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    const_iterator upper_bound(const_reference value) const
    {  return tree_.upper_bound(value);  }
 
@@ -750,7 +749,7 @@ class set
    //!
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator find(const_reference value)
    {  return tree_.find(value);  }
 
@@ -778,7 +777,7 @@ class set
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    const_iterator find(const_reference value) const
    {  return tree_.find(value);  }
 
@@ -807,7 +806,7 @@ class set
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    std::pair<iterator,iterator> equal_range(const_reference value)
    {  return tree_.equal_range(value);  }
 
@@ -837,7 +836,7 @@ class set
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    std::pair<const_iterator, const_iterator>
       equal_range(const_reference value) const
    {  return tree_.equal_range(value);  }
@@ -872,8 +871,11 @@ class set
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: Nothing.
-   static iterator iterator_to(reference value)
-   {  return tree_type::iterator_to(value);  }
+   //! 
+   //! <b>Note</b>: This static function is available only if the <i>value traits</i>
+   //!   is stateless.
+   static iterator s_iterator_to(reference value)
+   {  return tree_type::s_iterator_to(value);  }
 
    //! <b>Requires</b>: value must be an lvalue and shall be in a set of
    //!   appropriate type. Otherwise the behavior is undefined.
@@ -884,91 +886,245 @@ class set
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: Nothing.
-   static const_iterator iterator_to(const_reference value)
-   {  return tree_type::iterator_to(value);  }
+   //! 
+   //! <b>Note</b>: This static function is available only if the <i>value traits</i>
+   //!   is stateless.
+   static const_iterator s_iterator_to(const_reference value)
+   {  return tree_type::s_iterator_to(value);  }
+
+   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid iterator i belonging to the set
+   //!   that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   iterator iterator_to(reference value)
+   {  return tree_.iterator_to(value);  }
+
+   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
+   //!   set that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   const_iterator iterator_to(const_reference value) const
+   {  return tree_.iterator_to(value);  }
+
+   //! <b>Requires</b>: value shall not be in a set/multiset.
+   //! 
+   //! <b>Effects</b>: init_node puts the hook of a value in a well-known default
+   //!   state.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant time.
+   //! 
+   //! <b>Note</b>: This function puts the hook in the well-known default state
+   //!   used by auto_unlink and safe hooks.
+   static void init_node(reference value)
+   { tree_type::init_node(value);   }
+
+   //! <b>Requires</b>: replace_this must be a valid iterator of *this
+   //!   and with_this must not be inserted in any tree.
+   //! 
+   //! <b>Effects</b>: Replaces replace_this in its position in the
+   //!   tree with with_this. The tree does not need to be rebalanced.
+   //! 
+   //! <b>Complexity</b>: Constant. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: This function will break container ordering invariants if
+   //!   with_this is not equivalent to *replace_this according to the
+   //!   ordering rules. This function is faster than erasing and inserting
+   //!   the node, since no rebalancing or comparison is needed.
+   void replace_node(iterator replace_this, reference with_this)
+   {  tree_.replace_node(replace_this, with_this);   }
 
    /// @cond
-   friend bool operator==(const set &x, const set &y)
+   friend bool operator==(const set_impl &x, const set_impl &y)
    {  return x.tree_ == y.tree_;  }
 
-   friend bool operator<(const set &x, const set &y)
+   friend bool operator<(const set_impl &x, const set_impl &y)
    {  return x.tree_ < y.tree_;  }
    /// @endcond
 };
 
-template <class V, class P, bool C, class S>
-inline bool operator!=(const set<V, P, C, S>& x, const set<V, P, C, S>& y) 
-{  return !(x==y); }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator!=
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+#else
+(const set_impl<Config> &x, const set_impl<Config> &y)
+#endif
+{  return !(x == y); }
 
-template <class V, class P, bool C, class S>
-inline bool operator>(const set<V, P, C, S>& x, const set<V, P, C, S>& y) 
-{  return y < x; }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator>
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+#else
+(const set_impl<Config> &x, const set_impl<Config> &y)
+#endif
+{  return y < x;  }
 
-template <class V, class P, bool C, class S>
-inline bool operator<=(const set<V, P, C, S>& x, const set<V, P, C, S>& y) 
-{  return !(y > x); }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator<=
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+#else
+(const set_impl<Config> &x, const set_impl<Config> &y)
+#endif
+{  return !(y < x);  }
 
-template <class V, class P, bool C, class S>
-inline bool operator>=(const set<V, P, C, S>& x, const set<V, P, C, S>& y) 
-{  return !(x < y); }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator>=
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+#else
+(const set_impl<Config> &x, const set_impl<Config> &y)
+#endif
+{  return !(x < y);  }
 
-template <class V, class P, bool C, class S>
-inline void swap(set<V, P, C, S>& x, set<V, P, C, S>& y)
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline void swap
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(set_impl<T, Options...> &x, set_impl<T, Options...> &y)
+#else
+(set_impl<Config> &x, set_impl<Config> &y)
+#endif
 {  x.swap(y);  }
+
+//! Helper metafunction to define a \c set that yields to the same type when the
+//! same options (either explicitly or implicitly) are used.
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class T, class O1 = none, class O2 = none
+                , class O3 = none, class O4 = none>
+#endif
+struct make_set
+{
+   /// @cond
+   typedef set_impl
+      < typename make_rbtree_opt<T, O1, O2, O3, O4>::type
+      > implementation_defined;
+   /// @endcond
+   typedef implementation_defined type;
+};
+
+#ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class O1, class O2, class O3, class O4>
+class set
+   :  public make_set<T, O1, O2, O3, O4>::type
+{
+   typedef typename make_set
+      <T, O1, O2, O3, O4>::type   Base;
+
+   public:
+   typedef typename Base::value_compare      value_compare;
+   typedef typename Base::value_traits       value_traits;
+   typedef typename Base::iterator           iterator;
+   typedef typename Base::const_iterator     const_iterator;
+
+   //Assert if passed value traits are compatible with the type
+   BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
+
+   set( const value_compare &cmp = value_compare()
+         , const value_traits &v_traits = value_traits())
+      :  Base(cmp, v_traits)
+   {}
+
+   template<class Iterator>
+   set( Iterator b, Iterator e
+      , const value_compare &cmp = value_compare()
+      , const value_traits &v_traits = value_traits())
+      :  Base(b, e, cmp, v_traits)
+   {}
+
+   static set &container_from_end_iterator(iterator end_iterator)
+   {  return static_cast<set &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static const set &container_from_end_iterator(const_iterator end_iterator)
+   {  return static_cast<const set &>(Base::container_from_end_iterator(end_iterator));   }
+};
+
+#endif
 
 //! The class template multiset is an intrusive container, that mimics most of 
 //! the interface of std::multiset as described in the C++ standard.
 //! 
-//! The template parameter ValueTraits is called "value traits". It stores
-//! information and operations about the type to be stored
-//! in list and what type of hook has been chosen to include it in the list.
-//! The value_traits class is supplied by the appropriate hook as a template subtype 
-//! called "value_traits".
+//! The template parameter \c T is the type to be managed by the container.
+//! The user can specify additional options and if no options are provided
+//! default options are used.
 //!
-//! The template parameter Compare, provides a function object that can compare two 
-//!   element values as sort keys to determine their relative order in the set. 
-//!
-//! If the user specifies ConstantTimeSize as "true", a member of type SizeType
-//! will be embedded in the class, that will keep track of the number of stored objects.
-//! This will allow constant-time O(1) size() member, instead of default O(N) size.
-template < class ValueTraits
-         , class Compare         //= std::less<typename ValueTraits::value_type>
-         , bool ConstantTimeSize //= true
-         , class SizeType        //= std::size_t
-         >
-class multiset
+//! The container supports the following options:
+//! \c base_hook<>/member_hook<>/value_traits<>,
+//! \c constant_time_size<>, \c size_type<> and
+//! \c compare<>.
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+class multiset_impl
 {
    /// @cond
-   typedef rbtree<ValueTraits, Compare, ConstantTimeSize, SizeType> tree_type;
+   typedef rbtree_impl<Config> tree_type;
 
-   //! This class is
-   //! non-copyable
-   multiset (const multiset&);
-
-   //! This class is
-   //! non-asignable
-   multiset &operator =(const multiset&);
-
+   //Non-copyable and non-assignable
+   multiset_impl (const multiset_impl&);
+   multiset_impl &operator =(const multiset_impl&);
    typedef tree_type implementation_defined;
    /// @endcond
 
    public:
-   typedef ValueTraits                                               value_traits;
-   typedef typename ValueTraits::value_type                          value_type;
-   typedef typename ValueTraits::pointer                             pointer;
-   typedef typename ValueTraits::const_pointer                       const_pointer;
-   typedef typename std::iterator_traits<pointer>::reference         reference;
-   typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
-   typedef typename std::iterator_traits<pointer>::difference_type   difference_type;
-   typedef SizeType                                                  size_type;
-   typedef value_type                                                key_type;
-   typedef Compare                                                   value_compare;
-   typedef value_compare                                             key_compare;
+   typedef typename implementation_defined::value_type               value_type;
+   typedef typename implementation_defined::value_traits             value_traits;
+   typedef typename implementation_defined::pointer                  pointer;
+   typedef typename implementation_defined::const_pointer            const_pointer;
+   typedef typename implementation_defined::reference                reference;
+   typedef typename implementation_defined::const_reference          const_reference;
+   typedef typename implementation_defined::difference_type          difference_type;
+   typedef typename implementation_defined::size_type                size_type;
+   typedef typename implementation_defined::value_compare            value_compare;
+   typedef typename implementation_defined::key_compare              key_compare;
    typedef typename implementation_defined::iterator                 iterator;
    typedef typename implementation_defined::const_iterator           const_iterator;
    typedef typename implementation_defined::reverse_iterator         reverse_iterator;
    typedef typename implementation_defined::const_reverse_iterator   const_reverse_iterator;
    typedef typename implementation_defined::insert_commit_data       insert_commit_data;
+   typedef typename implementation_defined::node_traits              node_traits;
+   typedef typename implementation_defined::node                     node;
+   typedef typename implementation_defined::node_ptr                 node_ptr;
+   typedef typename implementation_defined::const_node_ptr           const_node_ptr;
+   typedef typename implementation_defined::node_algorithms          node_algorithms;
 
    /// @cond
    private:
@@ -982,9 +1138,10 @@ class multiset
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
-   //!   or the copy constructor/operator() of the Compare object throws. 
-   multiset(const Compare &cmp = Compare()) 
-      :  tree_(cmp)
+   //!   or the copy constructor/operator() of the value_compare object throws. 
+   multiset_impl( const value_compare &cmp = value_compare()
+                , const value_traits &v_traits = value_traits()) 
+      :  tree_(cmp, v_traits)
    {}
 
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue of type value_type. 
@@ -993,15 +1150,17 @@ class multiset
    //! <b>Effects</b>: Constructs an empty multiset and inserts elements from 
    //!   [b, e).
    //! 
-   //! <b>Complexity</b>: Linear in N if [b, e) is already sorted using 
+   //! <b>Complexity</b>: Linear in N if [b, e) is already sorted using
    //!   comp and otherwise N * log N, where N is last ­ first.
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
-   //!   or the copy constructor/operator() of the Compare object throws. 
+   //!   or the copy constructor/operator() of the value_compare object throws. 
    template<class Iterator>
-   multiset(Iterator b, Iterator e, const Compare &cmp = Compare())
-      : tree_(false, b, e, cmp)
+   multiset_impl( Iterator b, Iterator e
+                , const value_compare &cmp = value_compare()
+                , const value_traits &v_traits = value_traits())
+      : tree_(false, b, e, cmp, v_traits)
    {}
 
    //! <b>Effects</b>: Detaches all elements from this. The objects in the set 
@@ -1011,7 +1170,7 @@ class multiset
    //!   auto-unlink value. Otherwise constant.
    //! 
    //! <b>Throws</b>: Nothing.
-   ~multiset() 
+   ~multiset_impl() 
    {}
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the multiset.
@@ -1124,11 +1283,11 @@ class multiset
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static multiset &container_from_end_iterator(iterator end_iterator)
+   static multiset_impl &container_from_end_iterator(iterator end_iterator)
    {
-      return *detail::parent_from_member<multiset, tree_type>
+      return *detail::parent_from_member<multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &multiset::tree_);
+         , &multiset_impl::tree_);
    }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
@@ -1139,11 +1298,11 @@ class multiset
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static const multiset &container_from_end_iterator(const_iterator end_iterator)
+   static const multiset_impl &container_from_end_iterator(const_iterator end_iterator)
    {
-      return *detail::parent_from_member<multiset, tree_type>
+      return *detail::parent_from_member<multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &multiset::tree_);
+         , &multiset_impl::tree_);
    }
 
    //! <b>Effects</b>: Returns the key_compare object used by the multiset.
@@ -1173,7 +1332,7 @@ class multiset
    //! <b>Effects</b>: Returns the number of elements stored in the multiset.
    //! 
    //! <b>Complexity</b>: Linear to elements contained in *this if,
-   //!   ConstantTimeSize is false. Constant-time otherwise.
+   //!   constant-time size option is enabled. Constant-time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
    size_type size() const
@@ -1185,7 +1344,7 @@ class multiset
    //! 
    //! <b>Throws</b>: If the swap() call for the comparison functor
    //!   found using ADL throws. Strong guarantee.
-   void swap(multiset& other)
+   void swap(multiset_impl& other)
    { tree_.swap(other.tree_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -1202,7 +1361,7 @@ class multiset
    //! 
    //! <b>Throws</b>: If cloner throws. Basic guarantee.
    template <class Cloner, class Disposer>
-   void clone_from(const multiset &src, Cloner cloner, Disposer disposer)
+   void clone_from(const multiset_impl &src, Cloner cloner, Disposer disposer)
    {  tree_.clone_from(src.tree_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
@@ -1215,7 +1374,7 @@ class multiset
    //! <b>Complexity</b>: Average complexity for insert element is at
    //!   most logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Strong guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    //!   No copy-constructors are called.
@@ -1233,7 +1392,7 @@ class multiset
    //! <b>Complexity</b>: Logarithmic in general, but it is amortized
    //!   constant time if t is inserted immediately before hint.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Strong guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    //!   No copy-constructors are called.
@@ -1248,11 +1407,11 @@ class multiset
    //! <b>Returns</b>: An iterator that points to the position where the new
    //!   element was inserted.
    //! 
-   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the 
-   //!   size of the range. However, it is linear in N if the range is already sorted 
+   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the
+   //!   size of the range. However, it is linear in N if the range is already sorted
    //!   by value_comp().
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Basic guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    //!   No copy-constructors are called.
@@ -1293,7 +1452,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: O(log(size() + this->count(value)).
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Basic guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
@@ -1359,7 +1518,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: O(log(size() + this->count(value)).
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws. Basic guarantee.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
@@ -1417,7 +1576,7 @@ class multiset
    //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    size_type count(const_reference value) const
    {  return tree_.count(value);  }
 
@@ -1437,7 +1596,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator lower_bound(const_reference value)
    {  return tree_.lower_bound(value);  }
 
@@ -1465,7 +1624,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    const_iterator lower_bound(const_reference value) const
    {  return tree_.lower_bound(value);  }
 
@@ -1493,7 +1652,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator upper_bound(const_reference value)
    {  return tree_.upper_bound(value);  }
 
@@ -1521,7 +1680,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    const_iterator upper_bound(const_reference value) const
    {  return tree_.upper_bound(value);  }
 
@@ -1549,7 +1708,7 @@ class multiset
    //!
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator find(const_reference value)
    {  return tree_.find(value);  }
 
@@ -1577,7 +1736,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    const_iterator find(const_reference value) const
    {  return tree_.find(value);  }
 
@@ -1606,7 +1765,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    std::pair<iterator,iterator> equal_range(const_reference value)
    {  return tree_.equal_range(value);  }
 
@@ -1636,7 +1795,7 @@ class multiset
    //! 
    //! <b>Complexity</b>: Logarithmic.
    //! 
-   //! <b>Throws</b>: If the internal Compare ordering function throws.
+   //! <b>Throws</b>: If the internal value_compare ordering function throws.
    std::pair<const_iterator, const_iterator>
       equal_range(const_reference value) const
    {  return tree_.equal_range(value);  }
@@ -1671,8 +1830,11 @@ class multiset
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: Nothing.
-   static iterator iterator_to(reference value)
-   {  return tree_type::iterator_to(value);  }
+   //! 
+   //! <b>Note</b>: This static function is available only if the <i>value traits</i>
+   //!   is stateless.
+   static iterator s_iterator_to(reference value)
+   {  return tree_type::s_iterator_to(value);  }
 
    //! <b>Requires</b>: value must be an lvalue and shall be in a set of
    //!   appropriate type. Otherwise the behavior is undefined.
@@ -1683,37 +1845,196 @@ class multiset
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: Nothing.
-   static const_iterator iterator_to(const_reference value)
-   {  return tree_type::iterator_to(value);  }
+   //! 
+   //! <b>Note</b>: This static function is available only if the <i>value traits</i>
+   //!   is stateless.
+   static const_iterator s_iterator_to(const_reference value)
+   {  return tree_type::s_iterator_to(value);  }
+
+   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid iterator i belonging to the set
+   //!   that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   iterator iterator_to(reference value)
+   {  return tree_.iterator_to(value);  }
+
+   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //!   appropriate type. Otherwise the behavior is undefined.
+   //! 
+   //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
+   //!   set that points to the value
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   const_iterator iterator_to(const_reference value) const
+   {  return tree_.iterator_to(value);  }
+
+   //! <b>Requires</b>: value shall not be in a set/multiset.
+   //! 
+   //! <b>Effects</b>: init_node puts the hook of a value in a well-known default
+   //!   state.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant time.
+   //! 
+   //! <b>Note</b>: This function puts the hook in the well-known default state
+   //!   used by auto_unlink and safe hooks.
+   static void init_node(reference value)
+   { tree_type::init_node(value);   }
+
+   //! <b>Requires</b>: replace_this must be a valid iterator of *this
+   //!   and with_this must not be inserted in any tree.
+   //! 
+   //! <b>Effects</b>: Replaces replace_this in its position in the
+   //!   tree with with_this. The tree does not need to be rebalanced.
+   //! 
+   //! <b>Complexity</b>: Constant. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: This function will break container ordering invariants if
+   //!   with_this is not equivalent to *replace_this according to the
+   //!   ordering rules. This function is faster than erasing and inserting
+   //!   the node, since no rebalancing or comparison is needed.
+   void replace_node(iterator replace_this, reference with_this)
+   {  tree_.replace_node(replace_this, with_this);   }
 
    /// @cond
-   friend bool operator==(const multiset &x, const multiset &y)
+   friend bool operator==(const multiset_impl &x, const multiset_impl &y)
    {  return x.tree_ == y.tree_;  }
 
-   friend bool operator<(const multiset &x, const multiset &y)
+   friend bool operator<(const multiset_impl &x, const multiset_impl &y)
    {  return x.tree_ < y.tree_;  }
    /// @endcond
 };
 
-template <class V, class P, bool C, class S>
-inline bool operator!=(const multiset<V, P, C, S>& x, const multiset<V, P, C, S>& y) 
-{  return !(x==y); }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator!=
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+#else
+(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+#endif
+{  return !(x == y); }
 
-template <class V, class P, bool C, class S>
-inline bool operator>(const multiset<V, P, C, S>& x, const multiset<V, P, C, S>& y) 
-{  return y < x; }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator>
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+#else
+(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+#endif
+{  return y < x;  }
 
-template <class V, class P, bool C, class S>
-inline bool operator<=(const multiset<V, P, C, S>& x, const multiset<V, P, C, S>& y) 
-{  return !(y > x); }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator<=
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+#else
+(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+#endif
+{  return !(y < x);  }
 
-template <class V, class P, bool C, class S>
-inline bool operator>=(const multiset<V, P, C, S>& x, const multiset<V, P, C, S>& y) 
-{  return !(x < y); }
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline bool operator>=
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+#else
+(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+#endif
+{  return !(x < y);  }
 
-template <class V, class P, bool C, class S>
-inline void swap(multiset<V, P, C, S>& x, multiset<V, P, C, S>& y)
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class Config>
+#endif
+inline void swap
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+(multiset_impl<T, Options...> &x, multiset_impl<T, Options...> &y)
+#else
+(multiset_impl<Config> &x, multiset_impl<Config> &y)
+#endif
 {  x.swap(y);  }
+
+//! Helper metafunction to define a \c multiset that yields to the same type when the
+//! same options (either explicitly or implicitly) are used.
+#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class ...Options>
+#else
+template<class T, class O1 = none, class O2 = none
+                , class O3 = none, class O4 = none>
+#endif
+struct make_multiset
+{
+   /// @cond
+   typedef multiset_impl
+      < typename make_rbtree_opt<T, O1, O2, O3, O4>::type
+      > implementation_defined;
+   /// @endcond
+   typedef implementation_defined type;
+};
+
+#ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+template<class T, class O1, class O2, class O3, class O4>
+class multiset
+   :  public make_multiset<T, O1, O2, O3, O4>::type
+{
+   typedef typename make_multiset
+      <T, O1, O2, O3, O4>::type   Base;
+
+   public:
+   typedef typename Base::value_compare      value_compare;
+   typedef typename Base::value_traits       value_traits;
+   typedef typename Base::iterator           iterator;
+   typedef typename Base::const_iterator     const_iterator;
+
+   //Assert if passed value traits are compatible with the type
+   BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
+
+   multiset( const value_compare &cmp = value_compare()
+           , const value_traits &v_traits = value_traits())
+      :  Base(cmp, v_traits)
+   {}
+
+   template<class Iterator>
+   multiset( Iterator b, Iterator e
+           , const value_compare &cmp = value_compare()
+           , const value_traits &v_traits = value_traits())
+      :  Base(b, e, cmp, v_traits)
+   {}
+
+   static multiset &container_from_end_iterator(iterator end_iterator)
+   {  return static_cast<multiset &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static const multiset &container_from_end_iterator(const_iterator end_iterator)
+   {  return static_cast<const multiset &>(Base::container_from_end_iterator(end_iterator));   }
+};
+
+#endif
 
 } //namespace intrusive 
 } //namespace boost 

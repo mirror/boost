@@ -14,8 +14,9 @@
 #define BOOST_INTRUSIVE_FWD_HPP
 
 #include <cstddef>
-#include <boost/intrusive/tag.hpp>
-#include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/link_mode.hpp>
+
+/// @cond
 
 //std predeclarations
 namespace std{
@@ -34,6 +35,14 @@ namespace boost {
 template<class T>
 struct hash;
 
+namespace intrusive {
+
+struct none;
+
+}  //namespace intrusive{
+}  //namespace boost{
+
+namespace boost {
 namespace intrusive {
 
 ////////////////////////////
@@ -55,104 +64,148 @@ class rbtree_algorithms;
 ////////////////////////////
 
 //slist
-template < class ValueTraits
-         , bool ConstantTimeSize = true
-         , class SizeType        = std::size_t>
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class slist;
 
-template< class Tag              = tag
-        , linking_policy Policy  = safe_link
-        , class VoidPointer      = void *
-        >
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class slist_base_hook;
 
-template< linking_policy Policy  = safe_link
-        , class VoidPointer      = void *>
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class slist_member_hook;
 
 //list
-template< class ValueTraits
-        , bool  ConstantTimeSize = true
-        , class SizeType         = std::size_t>
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class list;
 
-template< class Tag              = tag
-        , linking_policy Policy  = safe_link
-        , class VoidPointer      = void *
-        >
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class list_base_hook;
 
-template< linking_policy Policy  = safe_link
-        , class VoidPointer      = void *>
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class list_member_hook;
 
-//hash/unordered
-template< class ValueTraits
-        , class Hash             = boost::hash<typename ValueTraits::value_type>
-        , class Equal            = std::equal_to<typename ValueTraits::value_type>
-        , bool  ConstantTimeSize = true
-        , class SizeType         = std::size_t
-        >
-class hashtable;
-
-template< class ValueTraits
-        , class Hash             = boost::hash<typename ValueTraits::value_type>
-        , class Equal            = std::equal_to<typename ValueTraits::value_type>
-        , bool  ConstantTimeSize = true
-        , class SizeType         = std::size_t
-        >
-class unordered_set;
-
-template< class ValueTraits
-        , class Hash             = boost::hash<typename ValueTraits::value_type>
-        , class Equal            = std::equal_to<typename ValueTraits::value_type>
-        , bool  ConstantTimeSize = true
-        , class SizeType         = std::size_t
-        >
-class unordered_multiset;
-
-template< class Tag              = tag
-        , linking_policy Policy  = safe_link
-        , class VoidPointer      = void *
-        >
-class unordered_set_base_hook;
-
-template< linking_policy Policy  = safe_link
-        , class VoidPointer      = void *>
-class unordered_set_member_hook;
-
-
-//rbtree/set
-template < class ValueTraits
-         , class Compare         = std::less<typename ValueTraits::value_type>
-         , bool ConstantTimeSize = true
-         , class SizeType        = std::size_t
-         >
+//rbtree/set/multiset
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
 class rbtree;
 
-template < class ValueTraits
-         , class Compare         = std::less<typename ValueTraits::value_type>
-         , bool ConstantTimeSize = true
-         , class SizeType        = std::size_t>
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
 class set;
 
-template < class ValueTraits
-         , class Compare         = std::less<typename ValueTraits::value_type>
-         , bool ConstantTimeSize = true
-         , class SizeType        = std::size_t>
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
 class multiset;
 
-template< class Tag              = tag
-        , linking_policy Policy  = safe_link
-        , class VoidPointer      = void *
-        >
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class set_base_hook;
 
-template< linking_policy Policy  = safe_link
-        , class VoidPointer      = void *>
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
 class set_member_hook;
+
+//hash/unordered
+//rbtree/set/multiset
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   , class O5  = none
+   , class O6  = none
+   , class O7  = none
+   >
+class hashtable;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   , class O5  = none
+   , class O6  = none
+   , class O7  = none
+   >
+class unordered_set;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   , class O5  = none
+   , class O6  = none
+   , class O7  = none
+   >
+class unordered_multiset;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class unordered_set_base_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class unordered_set_member_hook;
 
 }  //namespace intrusive {
 }  //namespace boost {
+
+/// @endcond
 
 #endif   //#ifndef BOOST_INTRUSIVE_FWD_HPP

@@ -13,7 +13,7 @@
 #ifndef BOOST_INTRUSIVE_DERIVATION_VALUE_TRAITS_HPP
 #define BOOST_INTRUSIVE_DERIVATION_VALUE_TRAITS_HPP
 
-#include <boost/intrusive/linking_policy.hpp>
+#include <boost/intrusive/link_mode.hpp>
 #include <iterator>
 
 namespace boost {
@@ -22,7 +22,7 @@ namespace intrusive {
 //!This value traits template is used to create value traits
 //!from user defined node traits where value_traits::value_type will
 //!derive from node_traits::node
-template<class T, class NodeTraits, linking_policy Policy>
+template<class T, class NodeTraits, link_mode_type LinkMode = safe_link>
 struct derivation_value_traits
 {
    public:
@@ -35,8 +35,7 @@ struct derivation_value_traits
    typedef typename boost::pointer_to_other<node_ptr, const T>::type const_pointer;
    typedef typename std::iterator_traits<pointer>::reference         reference;
    typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
-
-   enum { linking_policy = Policy };
+   static const link_mode_type link_mode = LinkMode;
 
    static node_ptr to_node_ptr(reference value)
    { return node_ptr(&value); }

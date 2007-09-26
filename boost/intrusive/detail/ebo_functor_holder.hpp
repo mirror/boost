@@ -35,7 +35,7 @@ class ebo_functor_holder_impl
 
 template<typename T>
 class ebo_functor_holder_impl<T, false>
-   :  private T
+   :  public T
 {
    public:
    ebo_functor_holder_impl(){}

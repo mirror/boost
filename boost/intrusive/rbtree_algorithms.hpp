@@ -35,6 +35,15 @@
 // in supporting documentation.  Hewlett-Packard Company makes no
 // representations about the suitability of this software for any
 // purpose.  It is provided "as is" without express or implied warranty.
+//
+// The tree destruction algorithm is based on Julienne Walker and The EC Team code: 
+// 
+// This code is in the public domain. Anyone may use it or change it in any way that
+// they see fit. The author assumes no responsibility for damages incurred through
+// use of the original code or any variations thereof. 
+// 
+// It is requested, but not required, that due credit is given to the original author
+// and anyone who has modified the code through a header comment, such as this one. 
 
 #ifndef BOOST_INTRUSIVE_RBTREE_ALGORITHMS_HPP
 #define BOOST_INTRUSIVE_RBTREE_ALGORITHMS_HPP
@@ -43,9 +52,7 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <cstddef>
-#ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
-#include <boost/detail/no_exceptions_support.hpp>
-#endif
+#include <boost/intrusive/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
 
 
@@ -67,7 +74,7 @@ namespace intrusive {
 //! relinked into its place, rather than copied, so that the only
 //! pointers invalidated are those referring to the deleted node.
 //!
-//! rbtree_algorithms is configured with a NodeTraits class, which capsulates the
+//! rbtree_algorithms is configured with a NodeTraits class, which encapsulates the
 //! information about the node to be manipulated. NodeTraits must support the
 //! following interface:
 //!
@@ -111,6 +118,7 @@ class rbtree_algorithms
    /// @endcond
 
    public:
+   typedef NodeTraits                           node_traits;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef typename NodeTraits::color           color;
@@ -120,6 +128,27 @@ class rbtree_algorithms
    static node_ptr uncast(const_node_ptr ptr)
    {
       return node_ptr(const_cast<node*>(::boost::intrusive::detail::get_pointer(ptr)));
+   }
+
+   static void swap_left(node_ptr this_node, node_ptr other_node) 
+   { 
+      node_ptr temp(NodeTraits::get_left(this_node)); 
+      NodeTraits::set_left(this_node, NodeTraits::get_left(other_node)); 
+      NodeTraits::set_left(other_node, temp); 
+   }
+
+   static void swap_right(node_ptr this_node, node_ptr other_node) 
+   { 
+      node_ptr temp(NodeTraits::get_right(this_node)); 
+      NodeTraits::set_right(this_node, NodeTraits::get_right(other_node)); 
+      NodeTraits::set_right(other_node, temp); 
+   }
+
+   static void swap_parent(node_ptr this_node, node_ptr other_node) 
+   { 
+      node_ptr temp(NodeTraits::get_parent(this_node)); 
+      NodeTraits::set_parent(this_node, NodeTraits::get_parent(other_node)); 
+      NodeTraits::set_parent(other_node, temp); 
    }
    /// @endcond
 
@@ -146,7 +175,14 @@ class rbtree_algorithms
    //! 
    //! <b>Throws</b>: Nothing.
    static void swap_tree(node_ptr header1, node_ptr header2)
-   {
+   {/*
+      if(NodeTraits::get_parent(header1)){
+         NodeTraits::node n1;
+         node_ptr n2(NodeTraits::get_parent(header1));
+         init(&n1);
+         swap_nodes(&n1, n2);
+         swap_nodes(&n1, n2);
+      }*/
       if(header1 == header2)
          return;
    
@@ -185,6 +221,276 @@ class rbtree_algorithms
       }
    }
 
+   static node_ptr get_header(const_node_ptr node)
+   {
+      node_ptr h = uncast(node);
+      if(NodeTraits::get_parent(node)){
+         h = NodeTraits::get_parent(node);
+         while(!is_header(h))
+            h = NodeTraits::get_parent(h);
+      }
+      return h;
+   }
+
+   //! <b>Requires</b>: node1 and node2 can't be header nodes
+   //!  of two trees.
+   //! 
+   //! <b>Effects</b>: Swaps two nodes. After the function node1 will be inserted
+   //!   in the position node2 before the function. node2 will be inserted in the
+   //!   position node1 had before the function.
+   //! 
+   //! <b>Complexity</b>: Logarithmic. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: This function will break container ordering invariants if
+   //!   node1 and node2 are not equivalent according to the ordering rules.
+   //!
+   //!Experimental function
+   static void swap_nodes(node_ptr node1, node_ptr node2)
+   {
+      if(node1 == node2)
+         return;
+   
+      node_ptr header1(get_header(node1)), header2(get_header(node2));
+      swap_nodes(node1, header1, node2, header2);
+   }
+
+   //! <b>Requires</b>: node1 and node2 can't be header nodes
+   //!  of two trees with header header1 and header2.
+   //! 
+   //! <b>Effects</b>: Swaps two nodes. After the function node1 will be inserted
+   //!   in the position node2 before the function. node2 will be inserted in the
+   //!   position node1 had before the function.
+   //! 
+   //! <b>Complexity</b>: Constant. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: This function will break container ordering invariants if
+   //!   node1 and node2 are not equivalent according to the ordering rules.
+   //!
+   //!Experimental function
+   static void swap_nodes(node_ptr node1, node_ptr header1, node_ptr node2, node_ptr header2)
+   {
+      if(node1 == node2)
+         return;
+   
+      //node1 and node2 must not be header nodes 
+      //BOOST_INTRUSIVE_INVARIANT_ASSERT((header1 != node1 && header2 != node2));
+      if(header1 != header2){
+         //Update header1 if necessary
+         if(node1 == NodeTraits::get_left(header1)){
+            NodeTraits::set_left(header1, node2);
+         }
+
+         if(node1 == NodeTraits::get_right(header1)){
+            NodeTraits::set_right(header1, node2);
+         }
+
+         if(node1 == NodeTraits::get_parent(header1)){
+            NodeTraits::set_parent(header1, node2);
+         }
+
+         //Update header2 if necessary
+         if(node2 == NodeTraits::get_left(header2)){
+            NodeTraits::set_left(header2, node1);
+         }
+
+         if(node2 == NodeTraits::get_right(header2)){
+            NodeTraits::set_right(header2, node1);
+         }
+
+         if(node2 == NodeTraits::get_parent(header2)){
+            NodeTraits::set_parent(header2, node1);
+         }
+      }
+      else{
+         //If both nodes are from the same tree
+         //Update header if necessary
+         if(node1 == NodeTraits::get_left(header1)){
+            NodeTraits::set_left(header1, node2);
+         }
+         else if(node2 == NodeTraits::get_left(header2)){
+            NodeTraits::set_left(header2, node1);
+         }
+
+         if(node1 == NodeTraits::get_right(header1)){
+            NodeTraits::set_right(header1, node2);
+         }
+         else if(node2 == NodeTraits::get_right(header2)){
+            NodeTraits::set_right(header2, node1);
+         }
+
+         if(node1 == NodeTraits::get_parent(header1)){
+            NodeTraits::set_parent(header1, node2);
+         }
+         else if(node2 == NodeTraits::get_parent(header2)){
+            NodeTraits::set_parent(header2, node1);
+         }
+
+         //Adjust data in nodes to be swapped
+         //so that final link swap works as expected
+         if(node1 == NodeTraits::get_parent(node2)){
+            NodeTraits::set_parent(node2, node2);
+
+            if(node2 == NodeTraits::get_right(node1)){
+               NodeTraits::set_right(node1, node1);
+            }
+            else{
+               NodeTraits::set_left(node1, node1);
+            }
+         }
+         else if(node2 == NodeTraits::get_parent(node1)){
+            NodeTraits::set_parent(node1, node1);
+
+            if(node1 == NodeTraits::get_right(node2)){
+               NodeTraits::set_right(node2, node2);
+            }
+            else{
+               NodeTraits::set_left(node2, node2);
+            }
+         }
+      }
+
+      //Now swap all the links
+      node_ptr temp;
+      //swap left link
+      temp = NodeTraits::get_left(node1);
+      NodeTraits::set_left(node1, NodeTraits::get_left(node2));
+      NodeTraits::set_left(node2, temp);
+      //swap right link
+      temp = NodeTraits::get_right(node1);
+      NodeTraits::set_right(node1, NodeTraits::get_right(node2));
+      NodeTraits::set_right(node2, temp);
+      //swap parent link
+      temp = NodeTraits::get_parent(node1);
+      NodeTraits::set_parent(node1, NodeTraits::get_parent(node2));
+      NodeTraits::set_parent(node2, temp);
+      //Swap color
+      color c = NodeTraits::get_color(node1);
+      NodeTraits::set_color(node1, NodeTraits::get_color(node2)); 
+      NodeTraits::set_color(node2, c); 
+
+      //Now adjust adjacent nodes for newly inserted node 1
+      if((temp = NodeTraits::get_left(node1))){
+         NodeTraits::set_parent(temp, node1);
+      }
+      if((temp = NodeTraits::get_right(node1))){
+         NodeTraits::set_parent(temp, node1);
+      }
+      if((temp = NodeTraits::get_parent(node1)) &&
+         //The header has been already updated so avoid it
+         temp != header2){
+         if(NodeTraits::get_left(temp) == node2){
+            NodeTraits::set_left(temp, node1);
+         }
+         if(NodeTraits::get_right(temp) == node2){
+            NodeTraits::set_right(temp, node1);
+         }
+      }
+      //Now adjust adjacent nodes for newly inserted node 2
+      if((temp = NodeTraits::get_left(node2))){
+         NodeTraits::set_parent(temp, node2);
+      }
+      if((temp = NodeTraits::get_right(node2))){
+         NodeTraits::set_parent(temp, node2);
+      }
+      if((temp = NodeTraits::get_parent(node2)) &&
+         //The header has been already updated so avoid it
+         temp != header1){
+         if(NodeTraits::get_left(temp) == node1){
+            NodeTraits::set_left(temp, node2);
+         }
+         if(NodeTraits::get_right(temp) == node1){
+            NodeTraits::set_right(temp, node2);
+         }
+      }
+   }
+
+   //! <b>Requires</b>: node_to_be_replaced must be inserted in a tree
+   //!   and new_node must not be inserted in a tree.
+   //! 
+   //! <b>Effects</b>: Replaces node_to_be_replaced in its position in the
+   //!   tree with new_node. The tree does not need to be rebalanced
+   //! 
+   //! <b>Complexity</b>: Logarithmic. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: This function will break container ordering invariants if
+   //!   new_node is not equivalent to node_to_be_replaced according to the
+   //!   ordering rules. This function is faster than erasing and inserting
+   //!   the node, since no rebalancing and comparison is needed.
+   //!
+   //!Experimental function
+   static void replace_node(node_ptr node_to_be_replaced, node_ptr new_node)
+   {
+      if(node_to_be_replaced == new_node)
+         return;
+      replace_node(node_to_be_replaced, get_header(node_to_be_replaced), new_node);
+   }
+
+   //! <b>Requires</b>: node_to_be_replaced must be inserted in a tree
+   //!   with header "header" and new_node must not be inserted in a tree.
+   //! 
+   //! <b>Effects</b>: Replaces node_to_be_replaced in its position in the
+   //!   tree with new_node. The tree does not need to be rebalanced
+   //! 
+   //! <b>Complexity</b>: Constant. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Note</b>: This function will break container ordering invariants if
+   //!   new_node is not equivalent to node_to_be_replaced according to the
+   //!   ordering rules. This function is faster than erasing and inserting
+   //!   the node, since no rebalancing or comparison is needed.
+   //!
+   //!Experimental function
+   static void replace_node(node_ptr node_to_be_replaced, node_ptr header, node_ptr new_node)
+   {
+      if(node_to_be_replaced == new_node)
+         return;
+   
+      //Update header if necessary
+      if(node_to_be_replaced == NodeTraits::get_left(header)){
+         NodeTraits::set_left(header, new_node);
+      }
+
+      if(node_to_be_replaced == NodeTraits::get_right(header)){
+         NodeTraits::set_right(header, new_node);
+      }
+
+      if(node_to_be_replaced == NodeTraits::get_parent(header)){
+         NodeTraits::set_parent(header, new_node);
+      }
+
+      //Now set data from the original node
+      node_ptr temp;
+      NodeTraits::set_left(new_node, NodeTraits::get_left(node_to_be_replaced));
+      NodeTraits::set_right(new_node, NodeTraits::get_right(node_to_be_replaced));
+      NodeTraits::set_parent(new_node, NodeTraits::get_parent(node_to_be_replaced));
+      NodeTraits::set_color(new_node, NodeTraits::get_color(node_to_be_replaced)); 
+
+      //Now adjust adjacent nodes for newly inserted node
+      if((temp = NodeTraits::get_left(new_node))){
+         NodeTraits::set_parent(temp, new_node);
+      }
+      if((temp = NodeTraits::get_right(new_node))){
+         NodeTraits::set_parent(temp, new_node);
+      }
+      if((temp = NodeTraits::get_parent(new_node)) &&
+         //The header has been already updated so avoid it
+         temp != header){
+         if(NodeTraits::get_left(temp) == node_to_be_replaced){
+            NodeTraits::set_left(temp, new_node);
+         }
+         if(NodeTraits::get_right(temp) == node_to_be_replaced){
+            NodeTraits::set_right(temp, new_node);
+         }
+      }
+   }
+
    //! <b>Requires</b>: node is a tree node but not the header.
    //! 
    //! <b>Effects</b>: Unlinks the node and rebalances the tree.
@@ -201,6 +507,10 @@ class rbtree_algorithms
          erase(x, node);
       }
    }
+
+   static void unlink(node_ptr node)
+   {  unlink_and_rebalance(node);   }
+
 
    //! <b>Requires</b>: header is the header of a tree.
    //! 
@@ -508,25 +818,42 @@ class rbtree_algorithms
    //! 
    //! <b>Throws</b>: If cloner functor throws. If this happens target nodes are disposed.
    template <class Cloner, class Disposer>
-   static void clone_tree
+   static void clone
       (const_node_ptr source_header, node_ptr target_header, Cloner cloner, Disposer disposer)
    {
       if(!unique(target_header)){
-         node_ptr p;
-         while((p = unlink_leftmost_without_rebalance(target_header))){
-            disposer(p);
-         }
+         clear_and_dispose(target_header, disposer);
       }
 
-      node_ptr source_root = NodeTraits::get_parent(source_header);
+      node_ptr leftmost, rightmost;
+      node_ptr new_root = clone_subtree
+         (source_header, target_header, cloner, disposer, leftmost, rightmost);
+
+      //Now update header node
+      NodeTraits::set_parent(target_header, new_root);
+      NodeTraits::set_left  (target_header, leftmost);
+      NodeTraits::set_right (target_header, rightmost);
+   }
+
+   //! <b>Requires</b>: "disposer" must be an object function
+   //!   taking a node_ptr parameter and shouldn't throw.
+   //!
+   //! <b>Effects</b>: Empties the target tree calling 
+   //!   <tt>void disposer::operator()(node_ptr)</tt> for every node of the tree
+   //!    except the header.
+   //! 
+   //! <b>Complexity</b>: Linear to the number of element of the source tree plus the.
+   //!   number of elements of tree target tree when calling this function.
+   //! 
+   //! <b>Throws</b>: If cloner functor throws. If this happens target nodes are disposed.
+   template<class Disposer>
+   static void clear_and_dispose(node_ptr header, Disposer disposer)
+   {
+      node_ptr source_root = NodeTraits::get_parent(header);
       if(!source_root)
          return;
-
-      NodeTraits::set_parent
-         ( target_header
-         , deep_clone_node(source_root, target_header, cloner, disposer));
-      NodeTraits::set_left(target_header, minimum(NodeTraits::get_parent(target_header)));
-      NodeTraits::set_right(target_header, maximum(NodeTraits::get_parent(target_header)));
+      dispose_subtree(source_root, disposer);
+      init_header(header);
    }
 
    //! <b>Requires</b>: "header" must be the header node of a tree.
@@ -694,6 +1021,17 @@ class rbtree_algorithms
       bool link_left = (y == h) || 
                         comp(new_node, y);
       link_and_balance(new_node, y, link_left, h);
+/*
+      //erase me
+      NodeTraits::node n;
+      init(&n);
+      if(y!=h)
+         x = x;
+      node_ptr n1(y!=h ? y : &n);
+      node_ptr n2(new_node);
+      swap_nodes(n2, n1);
+      swap_nodes(n2, n1);
+*/
       return new_node;
    }
 
@@ -725,6 +1063,17 @@ class rbtree_algorithms
       bool link_left = (y == h) || 
                         !comp(y, new_node);
       link_and_balance(new_node, y, link_left, h);
+/*
+      //erase me
+      NodeTraits::node n;
+      init(&n);
+      if(y!=h)
+         x = x;
+      node_ptr n1(y!=h ? y : &n);
+      node_ptr n2(new_node);
+      swap_nodes(n2, n1);
+      swap_nodes(n2, n1);
+*/
       return new_node;
    }
 
@@ -752,6 +1101,14 @@ class rbtree_algorithms
             !comp(new_node, (prev = prev_node(hint)))){
             bool link_left = unique(header) || !NodeTraits::get_left(hint);
             link_and_balance(new_node, link_left ? hint : prev, link_left, header);
+/*
+            //erase me
+            NodeTraits::node n1;
+            node_ptr n2(new_node);
+            init(&n1);
+            swap_nodes(n2, &n1);
+            swap_nodes(&n1, n2);
+*/
             return new_node;
          }
          else{
@@ -921,6 +1278,109 @@ class rbtree_algorithms
    }
 
    /// @cond
+
+   template <class Cloner, class Disposer>
+   static node_ptr clone_subtree
+      ( const_node_ptr source_parent,  node_ptr target_parent
+      , Cloner cloner,                 Disposer disposer
+      , node_ptr &leftmost_out,        node_ptr &rightmost_out
+      )
+   {
+      node_ptr target_sub_root = target_parent;
+      node_ptr source_root = NodeTraits::get_parent(source_parent);
+      if(!source_root){
+         leftmost_out = rightmost_out = source_root;
+      }
+      else{
+         //We'll calculate leftmost and rightmost nodes while iterating
+         node_ptr current = source_root;
+         node_ptr insertion_point = target_sub_root = cloner(current);
+
+         //We'll calculate leftmost and rightmost nodes while iterating
+         node_ptr leftmost  = target_sub_root;
+         node_ptr rightmost = target_sub_root;
+
+         //First set the subroot
+         NodeTraits::set_left(target_sub_root, 0);
+         NodeTraits::set_right(target_sub_root, 0);
+         NodeTraits::set_parent(target_sub_root, target_parent);
+         NodeTraits::set_color(target_sub_root, NodeTraits::get_color(current));
+
+         try {
+            while(true) {
+               //First clone left nodes
+               if( NodeTraits::get_left(current) &&
+                  !NodeTraits::get_left(insertion_point)) {
+                  current = NodeTraits::get_left(current);
+                  node_ptr temp = insertion_point;
+                  //Clone and mark as leaf
+                  insertion_point = cloner(current);
+                  NodeTraits::set_left  (insertion_point, 0);
+                  NodeTraits::set_right (insertion_point, 0);
+                  NodeTraits::set_color (insertion_point, NodeTraits::get_color(current));
+                  //Insert left
+                  NodeTraits::set_parent(insertion_point, temp);
+                  NodeTraits::set_left  (temp, insertion_point);
+                  //Update leftmost
+                  if(rightmost == target_sub_root)
+                     leftmost = insertion_point;
+               }
+               //Then clone right nodes
+               else if( NodeTraits::get_right(current) && 
+                       !NodeTraits::get_right(insertion_point)){
+                  current = NodeTraits::get_right(current);
+                  node_ptr temp = insertion_point;
+                  //Clone and mark as leaf
+                  insertion_point = cloner(current);
+                  NodeTraits::set_left  (insertion_point, 0);
+                  NodeTraits::set_right (insertion_point, 0);
+                  NodeTraits::set_color (insertion_point, NodeTraits::get_color(current));
+                  //Insert right
+                  NodeTraits::set_parent(insertion_point, temp);
+                  NodeTraits::set_right (temp, insertion_point);
+                  //Update rightmost
+                  rightmost = insertion_point;
+               }
+               //If not, go up
+               else if(current == source_root){
+                  break;
+               }
+               else{
+                  //Branch completed, go up searching more nodes to clone
+                  current = NodeTraits::get_parent(current);
+                  insertion_point = NodeTraits::get_parent(insertion_point);
+               }
+            }
+         }
+         catch(...) {
+            dispose_subtree(target_sub_root, disposer);
+            throw;
+         }
+         leftmost_out   = leftmost;
+         rightmost_out  = rightmost;
+      }
+      return target_sub_root;
+   }
+
+   template<class Disposer>
+   static void dispose_subtree(node_ptr x, Disposer disposer)
+   {
+      node_ptr save;
+      while (x){
+         save = NodeTraits::get_left(x);
+         if (save) {
+            // Right rotation
+            NodeTraits::set_left(x, NodeTraits::get_right(save));
+            NodeTraits::set_right(save, x);
+         }
+         else {
+            save = NodeTraits::get_right(x);
+            init(x);
+            disposer(x);
+         }
+         x = save;
+      }
+   }
 
    //! <b>Requires</b>: z is the node to be inserted, par is its parent,
    //!   left, indicates if z should be a left node of par and header is the header
@@ -1105,59 +1565,6 @@ class rbtree_algorithms
          }
       }
       NodeTraits::set_color(NodeTraits::get_parent(header), NodeTraits::black());
-   }
-
-   template <class Cloner, class Disposer>
-   static node_ptr deep_clone_node
-      (node_ptr source_root, node_ptr new_parent, Cloner cloner, Disposer disposer)
-   {
-      // structural copy.  source_root and new_parent must be non-null.
-      node_ptr top = cloner(source_root);
-      NodeTraits::set_parent(top, new_parent);
-      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
-      BOOST_TRY {
-      #endif
-         if(NodeTraits::get_right(source_root)){
-            NodeTraits::set_right
-               (top, deep_clone_node(NodeTraits::get_right(source_root), top
-                                    ,cloner, disposer));
-         }
-         new_parent = top;
-         source_root = NodeTraits::get_left(source_root);
-
-         while(source_root){
-            node_ptr y = cloner(source_root);
-            NodeTraits::set_left(new_parent, y);
-            NodeTraits::set_parent(y, new_parent);
-
-            if(NodeTraits::get_right(source_root)){
-               NodeTraits::set_right(y, deep_clone_node(NodeTraits::get_right(source_root), y
-                                                    ,cloner, disposer));
-            }
-            new_parent = y;
-            source_root = NodeTraits::get_left(source_root);
-         }
-      #ifndef BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING
-      }
-      BOOST_CATCH(...){
-         deep_dispose_node(top, disposer);
-         BOOST_RETHROW;
-      }
-      BOOST_CATCH_END
-      #endif
-      return top;
-   }
-
-   template<class Disposer>
-   static void deep_dispose_node(node_ptr x, Disposer disposer)
-   {
-      // erase without rebalancing
-      while(x){
-         deep_dispose_node(NodeTraits::get_right(x), disposer);
-         node_ptr y = NodeTraits::get_left(x);
-         disposer(x);
-         x = y;
-      }
    }
    /// @endcond
 };

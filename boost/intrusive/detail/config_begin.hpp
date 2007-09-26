@@ -10,11 +10,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_INTRUSIVE_SELECT_COMPILER_INCLUDED
-#ifndef BOOST_COMPILER_CONFIG
+#ifndef BOOST_INTRUSIVE_CONFIG_INCLUDED
+#define BOOST_INTRUSIVE_CONFIG_INCLUDED
 #include <boost/config.hpp>
-#endif
-#define BOOST_INTRUSIVE_SELECT_COMPILER_INCLUDED
 #endif
 
 #ifdef BOOST_MSVC

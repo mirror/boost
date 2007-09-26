@@ -10,24 +10,24 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_INTRUSIVE_VALUE_LINKING_POLICY_HPP
-#define BOOST_INTRUSIVE_VALUE_LINKING_POLICY_HPP
+#ifndef BOOST_INTRUSIVE_VALUE_LINK_TYPE_HPP
+#define BOOST_INTRUSIVE_VALUE_LINK_TYPE_HPP
 
 namespace boost {
 namespace intrusive {
 
 //!This enumeration defines the type of value_traits that can be defined
 //!for Boost.Intrusive containers
-enum linking_policy{
+enum link_mode_type{
    //!If this linking policy is specified in a value_traits class
-   //!as the linking_policy, containers
+   //!as the link_mode, containers
    //!configured with such value_traits won't set the hooks
    //!of the erased values to a default state. Containers also won't
    //!check that the hooks of the new values are default initialized.
    normal_link,
 
    //!If this linking policy is specified in a value_traits class
-   //!as the linking_policy, containers
+   //!as the link_mode, containers
    //!configured with such value_traits will set the hooks
    //!of the erased values to a default state. Containers also will
    //!check that the hooks of the new values are default initialized.
@@ -43,4 +43,4 @@ enum linking_policy{
 } //namespace intrusive 
 } //namespace boost 
 
-#endif //BOOST_INTRUSIVE_VALUE_LINKING_POLICY_HPP
+#endif //BOOST_INTRUSIVE_VALUE_LINK_TYPE_HPP
