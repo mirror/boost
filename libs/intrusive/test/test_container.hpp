@@ -71,8 +71,11 @@ void test_sequence_container(Container & c, Data & d)
    BOOST_TEST( c.size() == 0 );
    BOOST_TEST( c.empty() );
 
-   c.insert( c.begin(), *d.begin() );
-   c.insert( c.end(), *(++d.begin()) );
+   {
+   typename Data::iterator i = d.begin();
+   c.insert( c.begin(), *i );
+   c.insert( c.end(), *(++i) );
+   }
 
    BOOST_TEST( c.size() == 2 );
    BOOST_TEST( !c.empty() );
@@ -81,7 +84,11 @@ void test_sequence_container(Container & c, Data & d)
 
    BOOST_TEST( c.size() == 1 );
 
-   c.insert( c.begin(), *(++++d.begin()) );
+   {
+   typename Data::iterator i = d.begin();
+   ++++i;
+   c.insert( c.begin(), *(i) );
+   }
 
    c.erase( c.begin(), c.end() );
 
@@ -121,8 +128,8 @@ void test_common_unordered_and_associative_container(Container & c, Data & d)
       BOOST_TEST( c.find(*di) != c.end() );
    }
 
-   typename Data::const_iterator da =   d.begin();
-   typename Data::const_iterator db = ++d.begin();
+   typename Data::const_iterator db = d.begin();
+   typename Data::const_iterator da = db++;
 
    size_type old_size = c.size();
 

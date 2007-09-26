@@ -16,12 +16,24 @@ doxygen autodoc
       [ glob ../../../boost/intrusive/*.hpp ]
    :
    <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+   <doxygen:param>HIDE_UNDOC_MEMBERS=YES
    <doxygen:param>HIDE_UNDOC_CLASSES=YES
    <doxygen:param>EXTRACT_PRIVATE=NO
    <doxygen:param>ENABLE_PREPROCESSING=YES
    <doxygen:param>MACRO_EXPANSION=YES
-   <doxygen:param>EXPAND_ONLY_PREDEF=YES
-   <doxygen:param>SEARCH_INCLUDES=YES
+#   <doxygen:param>EXPAND_ONLY_PREDEF=YES
+#   <doxygen:param>SEARCH_INCLUDES=YES
+#   <doxygen:param>INCLUDE_PATH=$(BOOST_ROOT)
+   <doxygen:param>"PREDEFINED=\"BOOST_INTRUSIVE_DOXYGEN_INVOKED\" \\
+                              \"list_impl=list\" \\
+                              \"slist_impl=slist\" \\
+                              \"set_impl=set\" \\
+                              \"multiset_impl=multiset\" \\
+                              \"rbtree_impl=rbtree\" \\
+                              \"unordered_set_impl=unordered_set\" \\
+                              \"unordered_multiset_impl=unordered_multiset\" \\
+                              \"hashtable_impl=hashtable\" \\
+                              "
    ;
 
 xml intrusive : intrusive.qbk ;

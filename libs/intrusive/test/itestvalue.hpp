@@ -10,67 +10,136 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-#ifndef BOOST_INTRUSIVE_ITESTVALUE
-#define BOOST_INTRUSIVE_ITESTVALUE
+#ifndef BOOST_INTRUSIVE_DETAIL_ITESTVALUE_HPP
+#define BOOST_INTRUSIVE_DETAIL_ITESTVALUE_HPP
 
 #include <iostream>
 #include <boost/intrusive/set_hook.hpp>
 #include <boost/intrusive/list_hook.hpp>
 #include <boost/intrusive/slist_hook.hpp>
 #include <boost/intrusive/unordered_set_hook.hpp>
+#include <boost/intrusive/options.hpp>
 #include "smart_ptr.hpp"
 
 namespace boost{
 namespace intrusive{
 
+struct my_tag;
+
+template<class VoidPointer>
+struct set_base_hook_type
+{  typedef set_base_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct set_auto_base_hook_type
+{  typedef set_base_hook<link_mode<auto_unlink>, void_pointer<VoidPointer>, tag<my_tag> > type;  };
+
+template<class VoidPointer>
+struct set_member_hook_type
+{  typedef set_member_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct set_auto_member_hook_type
+{  typedef set_member_hook<link_mode<auto_unlink>, void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct list_base_hook_type
+{  typedef list_base_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct list_auto_base_hook_type
+{  typedef list_base_hook<link_mode<auto_unlink>, void_pointer<VoidPointer>, tag<my_tag> > type;  };
+
+template<class VoidPointer>
+struct list_member_hook_type
+{  typedef list_member_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct list_auto_member_hook_type
+{  typedef list_member_hook<link_mode<auto_unlink>, void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct slist_base_hook_type
+{  typedef slist_base_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct slist_auto_base_hook_type
+{  typedef slist_base_hook<link_mode<auto_unlink>, void_pointer<VoidPointer>, tag<my_tag> > type;  };
+
+template<class VoidPointer>
+struct slist_member_hook_type
+{  typedef slist_member_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct slist_auto_member_hook_type
+{  typedef slist_member_hook<link_mode<auto_unlink>, void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct uset_base_hook_type
+{  typedef unordered_set_base_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct uset_auto_base_hook_type
+{  typedef unordered_set_base_hook<link_mode<auto_unlink>, void_pointer<VoidPointer>, tag<my_tag> > type;  };
+
+template<class VoidPointer>
+struct uset_member_hook_type
+{  typedef unordered_set_member_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct uset_auto_member_hook_type
+{  typedef unordered_set_member_hook<link_mode<auto_unlink>, void_pointer<VoidPointer> > type;  };
+
 template<class VoidPointer, bool ConstantTimeSize>
 struct testvalue
-   :  set_base_hook<tag, safe_link, VoidPointer>
-   ,  set_base_hook<tag, auto_unlink, VoidPointer>
-   ,  unordered_set_base_hook<tag, safe_link, VoidPointer>
-   ,  unordered_set_base_hook<tag, auto_unlink, VoidPointer>
-   ,  list_base_hook<tag, safe_link, VoidPointer>
-   ,  list_base_hook<tag, auto_unlink, VoidPointer>
-   ,  slist_base_hook<tag, safe_link, VoidPointer>
-   ,  slist_base_hook<tag, auto_unlink, VoidPointer>
+   :  set_base_hook_type<VoidPointer>::type
+   ,  set_auto_base_hook_type<VoidPointer>::type
+   ,  list_base_hook_type<VoidPointer>::type
+   ,  list_auto_base_hook_type<VoidPointer>::type
+   ,  slist_base_hook_type<VoidPointer>::type
+   ,  slist_auto_base_hook_type<VoidPointer>::type
+   ,  uset_base_hook_type<VoidPointer>::type
+   ,  uset_auto_base_hook_type<VoidPointer>::type
 {
-   typedef set_base_hook<tag, auto_unlink, VoidPointer>   set_auto_base_hook_t;
-   typedef set_base_hook<tag, safe_link, VoidPointer> set_base_hook_t;
-   typedef set_member_hook<auto_unlink, VoidPointer>              set_auto_member_hook_t;
-   typedef set_member_hook<safe_link, VoidPointer>           set_member_hook_t;
+   typedef typename set_auto_base_hook_type<VoidPointer>::type       set_auto_base_hook_t;
+   typedef typename set_base_hook_type<VoidPointer>::type            set_base_hook_t;
+   typedef typename set_auto_member_hook_type<VoidPointer>::type     set_auto_member_hook_t;
+   typedef typename set_member_hook_type<VoidPointer>::type          set_member_hook_t;
 
-   typedef unordered_set_base_hook<tag, auto_unlink, VoidPointer>     unordered_set_auto_base_hook_t;
-   typedef unordered_set_base_hook<tag, safe_link, VoidPointer>  unordered_set_base_hook_t;
-   typedef unordered_set_member_hook<auto_unlink, VoidPointer>                unordered_set_auto_member_hook_t;
-   typedef unordered_set_member_hook<safe_link, VoidPointer>             unordered_set_member_hook_t;
+   typedef typename uset_auto_base_hook_type<VoidPointer>::type      unordered_set_auto_base_hook_t;
+   typedef typename uset_base_hook_type<VoidPointer>::type           unordered_set_base_hook_t;
+   typedef typename uset_auto_member_hook_type<VoidPointer>::type    unordered_set_auto_member_hook_t;
+   typedef typename uset_member_hook_type<VoidPointer>::type         unordered_set_member_hook_t;
 
-   typedef list_base_hook<tag, auto_unlink, VoidPointer>     list_auto_base_hook_t;
-   typedef list_base_hook<tag, safe_link, VoidPointer>  list_base_hook_t;
-   typedef list_member_hook<auto_unlink, VoidPointer>                list_auto_member_hook_t;
-   typedef list_member_hook<safe_link, VoidPointer>             list_member_hook_t;
+   typedef typename list_auto_base_hook_type<VoidPointer>::type      list_auto_base_hook_t;
+   typedef typename list_base_hook_type<VoidPointer>::type           list_base_hook_t;
+   typedef typename list_auto_member_hook_type<VoidPointer>::type    list_auto_member_hook_t;
+   typedef typename list_member_hook_type<VoidPointer>::type         list_member_hook_t;
 
-   typedef slist_base_hook<tag, auto_unlink, VoidPointer>    slist_auto_base_hook_t;
-   typedef slist_base_hook<tag, safe_link, VoidPointer> slist_base_hook_t;
-   typedef slist_member_hook<auto_unlink, VoidPointer>               slist_auto_member_hook_t;
-   typedef slist_member_hook<safe_link, VoidPointer>            slist_member_hook_t;
+   typedef typename slist_auto_base_hook_type<VoidPointer>::type     slist_auto_base_hook_t;
+   typedef typename slist_base_hook_type<VoidPointer>::type          slist_base_hook_t;
+   typedef typename slist_auto_member_hook_type<VoidPointer>::type   slist_auto_member_hook_t;
+   typedef typename slist_member_hook_type<VoidPointer>::type        slist_member_hook_t;
 
    //Set members
-   set_member_hook_t set_node_;
-   set_auto_member_hook_t set_auto_node_;
-   unordered_set_member_hook_t unordered_set_node_;
+   set_member_hook_t       set_node_;
+   set_auto_member_hook_t  set_auto_node_;
+
+   //Unordered set members
+   unordered_set_member_hook_t      unordered_set_node_;
    unordered_set_auto_member_hook_t unordered_set_auto_node_;
 
    //List members
-   list_member_hook_t list_node_;
-   list_auto_member_hook_t list_auto_node_;
+   list_member_hook_t         list_node_;
+   list_auto_member_hook_t    list_auto_node_;
 
    //Slist members
-   slist_member_hook_t slist_node_;
-   slist_auto_member_hook_t slist_auto_node_;
+   slist_member_hook_t        slist_node_;
+   slist_auto_member_hook_t   slist_auto_node_;
 
    int value_;
 
-   enum{  constant_time_size = ConstantTimeSize  };
+   static const bool constant_time_size = ConstantTimeSize;
 
    testvalue()
    {}
@@ -89,44 +158,53 @@ struct testvalue
    testvalue & operator= (const testvalue& src)
    {
       set_base_hook_t::operator=(src);
-      this->set_node_ = src.set_node_;
       set_auto_base_hook_t::operator=(src);
+      this->set_node_ = src.set_node_;
       this->set_auto_node_ = src.set_auto_node_;
 
       unordered_set_base_hook_t::operator=(src);
-      this->unordered_set_node_ = src.unordered_set_node_;
       unordered_set_auto_base_hook_t::operator=(src);
+      this->unordered_set_node_ = src.unordered_set_node_;
       this->unordered_set_auto_node_ = src.unordered_set_auto_node_;
 
       list_base_hook_t::operator=(src);
-      this->list_node_ = src.list_node_;
       list_auto_base_hook_t::operator=(src);
+      this->list_node_ = src.list_node_;
       this->list_auto_node_ = src.list_auto_node_;
 
       slist_base_hook_t::operator=(src);
-      this->slist_node_ = src.slist_node_;
       slist_auto_base_hook_t::operator=(src);
+      this->slist_node_ = src.slist_node_;
       this->slist_auto_node_ = src.slist_auto_node_;
+
       value_ = src.value_;
       return *this;
    }
 
    void swap_nodes(testvalue &other)
    {
-      //Set has no swapping
+      //Set 
+      set_base_hook_t::swap_nodes(other);
+      set_auto_base_hook_t::swap_nodes(other);
+      set_node_.swap_nodes(other.set_node_);
+      set_auto_node_.swap_nodes(other.set_auto_node_);
 
-      //...
+      //Unordered set 
+      unordered_set_base_hook_t::swap_nodes(other);
+      unordered_set_auto_base_hook_t::swap_nodes(other);
+      unordered_set_node_.swap_nodes(other.unordered_set_node_);
+      unordered_set_auto_node_.swap_nodes(other.unordered_set_auto_node_);
 
       //List
       list_base_hook_t::swap_nodes(other);
-      list_node_.swap_nodes(other.list_node_);
       list_auto_base_hook_t::swap_nodes(other);
+      list_node_.swap_nodes(other.list_node_);
       list_auto_node_.swap_nodes(other.list_auto_node_);
 
       //Slist
       slist_base_hook_t::swap_nodes(other);
-      slist_node_.swap_nodes(other.slist_node_);
       slist_auto_base_hook_t::swap_nodes(other);
+      slist_node_.swap_nodes(other.slist_node_);
       slist_auto_node_.swap_nodes(other.slist_auto_node_);
    }
 
@@ -177,159 +255,6 @@ struct even_odd
          return v2.value_ & 1;
    }  
 };
-
-typedef testvalue<void *, false>          value_r_f;
-typedef testvalue<smart_ptr<void>, false> value_s_f;
-typedef testvalue<void *, true>           value_r_t;
-typedef testvalue<smart_ptr<void>, true>  value_s_t;
-
-//Typedefs
-typedef value_r_f::set_base_hook_t::
-   value_traits<value_r_f >                                 set_base_raw;
-
-typedef value_r_f::set_member_hook_t::
-      value_traits<value_r_f, &value_r_f::set_node_>        set_member_raw;
-
-typedef value_r_f::set_auto_base_hook_t::
-   value_traits<value_r_f>                                  set_auto_base_raw;
-
-typedef value_r_f::set_auto_member_hook_t::
-   value_traits<value_r_f, &value_r_f::set_auto_node_>      set_auto_member_raw;
-
-
-typedef value_s_f::set_base_hook_t::
-   value_traits<value_s_f >                                 set_base_smart;
-
-typedef value_s_f::set_member_hook_t::
-      value_traits<value_s_f, &value_s_f::set_node_>        set_member_smart;
-
-typedef value_s_f::set_auto_base_hook_t::
-   value_traits<value_s_f>                                  set_auto_base_smart;
-
-typedef value_s_f::set_auto_member_hook_t::
-      value_traits<value_s_f, &value_s_f::set_auto_node_>   set_auto_member_smart;
-
-typedef value_r_t::set_base_hook_t::
-   value_traits<value_r_t >                                 set_base_raw_t;
-
-typedef value_r_t::set_member_hook_t::
-      value_traits<value_r_t, &value_r_t::set_node_>        set_member_raw_t;
-
-typedef value_s_t::set_base_hook_t::
-   value_traits<value_s_t >                                 set_base_smart_t;
-
-typedef value_s_t::set_member_hook_t::
-      value_traits<value_s_t, &value_s_t::set_node_>        set_member_smart_t;
-
-//Typedefs
-typedef value_r_f::unordered_set_base_hook_t::
-   value_traits<value_r_f >                                 unordered_set_base_raw;
-
-typedef value_r_f::unordered_set_member_hook_t::
-      value_traits<value_r_f, &value_r_f::unordered_set_node_> unordered_set_member_raw;
-
-typedef value_r_f::unordered_set_auto_base_hook_t::
-   value_traits<value_r_f>               unordered_set_auto_base_raw;
-
-typedef value_r_f::unordered_set_auto_member_hook_t::
-   value_traits<value_r_f, &value_r_f::unordered_set_auto_node_>          unordered_set_auto_member_raw;
-
-typedef value_s_f::unordered_set_base_hook_t::
-   value_traits<value_s_f >                   unordered_set_base_smart;
-
-typedef value_s_f::unordered_set_member_hook_t::
-      value_traits<value_s_f, &value_s_f::unordered_set_node_>         unordered_set_member_smart;
-
-typedef value_s_f::unordered_set_auto_base_hook_t::
-   value_traits<value_s_f>               unordered_set_auto_base_smart;
-
-typedef value_s_f::unordered_set_auto_member_hook_t::
-      value_traits<value_s_f, &value_s_f::unordered_set_auto_node_>     unordered_set_auto_member_smart;
-
-typedef value_r_t::unordered_set_base_hook_t::
-   value_traits<value_r_t >                              unordered_set_base_raw_t;
-
-typedef value_r_t::unordered_set_member_hook_t::
-      value_traits<value_r_t, &value_r_t::unordered_set_node_>                    unordered_set_member_raw_t;
-
-typedef value_s_t::unordered_set_base_hook_t::
-   value_traits<value_s_t >                   unordered_set_base_smart_t;
-
-typedef value_s_t::unordered_set_member_hook_t::
-      value_traits<value_s_t, &value_s_t::unordered_set_node_>         unordered_set_member_smart_t;
-
-//Explicit instantiations
-typedef value_r_f::list_base_hook_t::
-   value_traits<value_r_f>               list_base_raw;
-
-typedef value_r_f::list_member_hook_t::
-   value_traits<value_r_f, &value_r_f::list_node_>          list_member_raw;
-
-typedef value_r_f::list_auto_base_hook_t::
-   value_traits<value_r_f>               list_auto_base_raw;
-
-typedef value_r_f::list_auto_member_hook_t::
-   value_traits<value_r_f, &value_r_f::list_auto_node_>          list_auto_member_raw;
-
-typedef value_s_f::list_base_hook_t::
-   value_traits<value_s_f>               list_base_smart;
-
-typedef value_s_f::list_member_hook_t::
-      value_traits<value_s_f, &value_s_f::list_node_>                    list_member_smart;
-
-typedef value_s_f::list_auto_base_hook_t::
-   value_traits<value_s_f>               list_auto_base_smart;
-
-typedef value_s_f::list_auto_member_hook_t::
-      value_traits<value_s_f, &value_s_f::list_auto_node_>                    list_auto_member_smart;
-
-typedef value_r_t::list_base_hook_t::
-   value_traits<value_r_t>               list_base_raw_t;
-
-typedef value_r_t::list_member_hook_t::
-   value_traits<value_r_t, &value_r_t::list_node_>  list_member_raw_t;
-
-typedef value_s_t::list_base_hook_t::
-      value_traits<value_s_t>               list_base_smart_t;
-
-typedef value_s_t::list_member_hook_t::
-      value_traits<value_s_t, &value_s_t::list_node_>                    list_member_smart_t;
-
-typedef value_r_f::slist_base_hook_t::
-   value_traits<value_r_f>               slist_base_raw;
-
-typedef value_r_f::slist_member_hook_t::
-   value_traits<value_r_f, &value_r_f::slist_node_>          slist_member_raw;
-
-typedef value_r_f::slist_auto_base_hook_t::
-   value_traits<value_r_f>               slist_auto_base_raw;
-
-typedef value_r_f::slist_auto_member_hook_t::
-   value_traits<value_r_f, &value_r_f::slist_auto_node_>          slist_auto_member_raw;
-
-typedef value_s_f::slist_base_hook_t::
-   value_traits<value_s_f>               slist_base_smart;
-
-typedef value_s_f::slist_member_hook_t::
-      value_traits<value_s_f, &value_s_f::slist_node_>                    slist_member_smart;
-
-typedef value_s_f::slist_auto_base_hook_t::
-   value_traits<value_s_f>               slist_auto_base_smart;
-
-typedef value_s_f::slist_auto_member_hook_t::
-      value_traits<value_s_f, &value_s_f::slist_auto_node_>                    slist_auto_member_smart;
-
-typedef value_r_t::slist_base_hook_t::
-   value_traits<value_r_t>               slist_base_raw_t;
-
-typedef value_r_t::slist_member_hook_t::
-   value_traits<value_r_t, &value_r_t::slist_node_>          slist_member_raw_t;
-
-typedef value_s_t::slist_base_hook_t::
-      value_traits<value_s_t>               slist_base_smart_t;
-
-typedef value_s_t::slist_member_hook_t::
-      value_traits<value_s_t, &value_s_t::slist_node_>                    slist_member_smart_t;
 
 }  //namespace boost{
 }  //namespace intrusive{
