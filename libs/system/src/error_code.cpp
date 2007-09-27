@@ -208,7 +208,9 @@ namespace
     case ENOSYS: return make_error_condition( function_not_supported );
     case ENOTCONN: return make_error_condition( not_connected );
     case ENOTDIR: return make_error_condition( not_a_directory );
+  # if ENOTEMPTY != EEXIST // AIX treats ENOTEMPTY and EEXIST as the same value
     case ENOTEMPTY: return make_error_condition( directory_not_empty );
+  # endif // ENOTEMPTY != EEXIST
     case ENOTRECOVERABLE: return make_error_condition( state_not_recoverable );
     case ENOTSOCK: return make_error_condition( not_a_socket );
     case ENOTSUP: return make_error_condition( not_supported );
