@@ -146,11 +146,11 @@ namespace boost
     {
     public:
       virtual ~error_category(){}
-      virtual const char *    name() const;  // see implementation note below
-      virtual std::string     message( int ev ) const;   // see implementation note below
-      virtual error_condition default_error_condition( int ev ) const;
-      virtual bool equivalent( int code, const error_condition & condition ) const;
-      virtual bool equivalent( const error_code & code, int condition ) const;
+      virtual inline const char *    name() const;  // see implementation note below
+      virtual inline std::string     message( int ev ) const;   // see implementation note below
+      virtual inline error_condition default_error_condition( int ev ) const;
+      virtual inline bool equivalent( int code, const error_condition & condition ) const;
+      virtual inline bool equivalent( const error_code & code, int condition ) const;
 
       bool operator==(const error_category & rhs) const { return this == &rhs; }
       bool operator!=(const error_category & rhs) const { return this != &rhs; }
