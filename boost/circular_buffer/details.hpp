@@ -24,6 +24,14 @@ namespace cb_details {
 
 template <class Traits> struct nonconst_traits;
 
+template<class ForwardIterator, class Diff, class T, class Alloc>
+void uninitialized_fill_n_with_alloc(
+    ForwardIterator first, Diff n, const T& item, Alloc& alloc);
+
+template<class InputIterator, class ForwardIterator, class Alloc>
+ForwardIterator uninitialized_copy_with_alloc(
+    InputIterator first, InputIterator last, ForwardIterator dest, Alloc& alloc);
+
 /*!
     \struct const_traits
     \brief Defines the data types for a const iterator.
