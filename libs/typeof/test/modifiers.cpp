@@ -14,3 +14,6 @@ BOOST_STATIC_ASSERT(boost::type_of::test<x[20]>::value);
 BOOST_STATIC_ASSERT(boost::type_of::test<const x>::value);
 BOOST_STATIC_ASSERT(boost::type_of::test<volatile x>::value);
 BOOST_STATIC_ASSERT(boost::type_of::test<volatile const x>::value);
+BOOST_STATIC_ASSERT(boost::type_of::test<const x&>::value);
+BOOST_STATIC_ASSERT(boost::type_of::test<const x*>::value);
+
