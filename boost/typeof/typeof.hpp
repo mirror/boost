@@ -131,6 +131,19 @@
 #       error native typeof is not supported
 #   endif
 
+#elif defined(__BORLANDC__)
+#   if (__BORLANDC__ < 0x600)
+#       define BOOST_TYPEOF_NO_FUNCTION_TYPES
+#       define BOOST_TYPEOF_NO_MEMBER_FUNCTION_TYPES
+#   endif
+#   ifndef BOOST_TYPEOF_NATIVE
+#       ifndef BOOST_TYPEOF_EMULATION
+#           define BOOST_TYPEOF_EMULATION
+#       endif
+#   else
+#       error native typeof is not supported
+#   endif
+
 #else //unknown compiler
 #   ifndef BOOST_TYPEOF_NATIVE
 #       ifndef BOOST_TYPEOF_EMULATION

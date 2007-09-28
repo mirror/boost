@@ -8,7 +8,7 @@
 
 // function pointers
 
-template<class V, class R BOOST_PP_ENUM_TRAILING_PARAMS(n, class P)> 
+template<class V, class R BOOST_PP_ENUM_TRAILING_PARAMS(n, class P)>
 struct encode_type_impl<V, R(*)(BOOST_PP_ENUM_PARAMS(n, P))>
 {
     typedef R BOOST_PP_CAT(P, n);
@@ -28,7 +28,7 @@ struct decode_type_impl<boost::mpl::size_t<FUN_PTR_ID + n>, Iter>
 
     // function references
 
-    template<class V, class R BOOST_PP_ENUM_TRAILING_PARAMS(n, class P)> 
+    template<class V, class R BOOST_PP_ENUM_TRAILING_PARAMS(n, class P)>
     struct encode_type_impl<V, R(&)(BOOST_PP_ENUM_PARAMS(n, P))>
     {
         typedef R BOOST_PP_CAT(P, n);
@@ -46,7 +46,7 @@ struct decode_type_impl<boost::mpl::size_t<FUN_PTR_ID + n>, Iter>
 
     // functions
 
-    template<class V, class R BOOST_PP_ENUM_TRAILING_PARAMS(n, class P)> 
+    template<class V, class R BOOST_PP_ENUM_TRAILING_PARAMS(n, class P)>
     struct encode_type_impl<V, R(BOOST_PP_ENUM_PARAMS(n, P))>
     {
         typedef R BOOST_PP_CAT(P, n);
@@ -64,9 +64,10 @@ struct decode_type_impl<boost::mpl::size_t<FUN_PTR_ID + n>, Iter>
 
 #endif//BOOST_TYPEOF_NO_FUNCTION_TYPES
 
+#ifndef BOOST_TYPEOF_NO_MEMBER_FUNCTION_TYPES
 // member functions
 
-#define BOOST_TYPEOF_qualifier 
+#define BOOST_TYPEOF_qualifier
 #define BOOST_TYPEOF_id MEM_FUN_ID
 #include <boost/typeof/register_mem_functions.hpp>
 
@@ -74,7 +75,7 @@ struct decode_type_impl<boost::mpl::size_t<FUN_PTR_ID + n>, Iter>
 #define BOOST_TYPEOF_id CONST_MEM_FUN_ID
 #include <boost/typeof/register_mem_functions.hpp>
 
-#define BOOST_TYPEOF_qualifier volatile 
+#define BOOST_TYPEOF_qualifier volatile
 #define BOOST_TYPEOF_id VOLATILE_MEM_FUN_ID
 #include <boost/typeof/register_mem_functions.hpp>
 
@@ -83,3 +84,4 @@ struct decode_type_impl<boost::mpl::size_t<FUN_PTR_ID + n>, Iter>
 #include <boost/typeof/register_mem_functions.hpp>
 
 #undef n
+#endif

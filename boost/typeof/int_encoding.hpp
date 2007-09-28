@@ -7,6 +7,7 @@
 
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/size_t.hpp>
+#include <boost/config.hpp>
 
 namespace boost { namespace type_of {
 
@@ -37,25 +38,25 @@ namespace boost { namespace type_of {
 
     //////////////////////////
 
-    template<std::size_t n, bool Overflow> 
+    template<std::size_t n, bool Overflow>
     struct pack
     {
-        enum {value = (n + 1) * 2 + (Overflow ? 1 : 0)};
+        BOOST_STATIC_CONSTANT(std::size_t , value=((n + 1) * 2 + (Overflow ? 1 : 0)));
     };
 
-    template<std::size_t m> 
+    template<std::size_t m>
     struct unpack
     {
-        enum {value = (m / 2) - 1};
-        enum {overflow = (m % 2 == 1)};
+        BOOST_STATIC_CONSTANT(std::size_t, value = (m / 2) - 1);
+        BOOST_STATIC_CONSTANT(std::size_t, overflow = (m % 2 == 1));
     };
 
     ////////////////////////////////
 
     template<class V, std::size_t n, bool overflow = (n >= 0x3fffffff)>
     struct encode_size_t : push_back<
-        V, 
-        boost::mpl::size_t<pack<n, false>::value> 
+        V,
+        boost::mpl::size_t<pack<n, false>::value>
     >
     {};
 
@@ -68,7 +69,7 @@ namespace boost { namespace type_of {
     {};
 
     template<class V, class T, T n>
-    struct encode_integral : encode_size_t< V, (typename get_unsigned<T>::type)n,(((typename get_unsigned<T>::type)n)>=0x3fffffff) > 
+    struct encode_integral : encode_size_t< V, (typename get_unsigned<T>::type)n,(((typename get_unsigned<T>::type)n)>=0x3fffffff) >
     {};
 
     template<class V, bool b>
@@ -76,41 +77,42 @@ namespace boost { namespace type_of {
     {};
     ///////////////////////////
 
-    template<std::size_t n, class Iter, bool overflow> 
+    template<std::size_t n, class Iter, bool overflow>
     struct decode_size_t;
 
-    template<std::size_t n, class Iter> 
+    template<std::size_t n, class Iter>
     struct decode_size_t<n, Iter, false>
     {
-        enum {value = n};
+        BOOST_STATIC_CONSTANT(std::size_t,value = n);
         typedef Iter iter;
     };
 
-    template<std::size_t n, class Iter> 
+    template<std::size_t n, class Iter>
     struct decode_size_t<n, Iter, true>
     {
-        enum {m = Iter::type::value};
+        BOOST_STATIC_CONSTANT(std::size_t,m = Iter::type::value);
 
-        enum {value = (std::size_t)m * 0x3ffffffe + n};
+        BOOST_STATIC_CONSTANT(std::size_t,value = (std::size_t)m * 0x3ffffffe + n);
         typedef typename Iter::next iter;
     };
 
     template<class T, class Iter>
     struct decode_integral
     {
-        enum {m = Iter::type::value};
+        typedef decode_integral<T,Iter> self_t;
+        BOOST_STATIC_CONSTANT(std::size_t,m = Iter::type::value);
 
-        enum {n = unpack<m>::value};
+        BOOST_STATIC_CONSTANT(std::size_t,n = unpack<m>::value);
 
-        enum {overflow = unpack<m>::overflow};
+        BOOST_STATIC_CONSTANT(std::size_t,overflow = unpack<m>::overflow);
 
         typedef typename Iter::next nextpos;
-        
+
         static const T value = (T)(std::size_t)decode_size_t<n, nextpos, overflow>::value;
 
-        typedef typename decode_size_t<n, nextpos, overflow>::iter iter;
+        typedef typename decode_size_t<self_t::n, nextpos, self_t::overflow>::iter iter;
     };
 
-}}//namespace 
+}}//namespace
 
 #endif//BOOST_TYPEOF_INT_ENCODING_HPP_INCLUDED

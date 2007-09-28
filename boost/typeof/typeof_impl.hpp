@@ -92,7 +92,7 @@ namespace boost { namespace type_of {
 
 #define BOOST_TYPEOF_NESTED_TYPEITEM(z, n, expr)\
     BOOST_STATIC_CONSTANT(int,BOOST_PP_CAT(value,n) = sizeof(boost::type_of::encode<_typeof_start_vector>(expr).item ## n));\
-    typedef boost::mpl::size_t<BOOST_PP_CAT(value,n)> BOOST_PP_CAT(item,n);
+    typedef boost::mpl::size_t<BOOST_PP_CAT(self_t::value,n)> BOOST_PP_CAT(item,n);
 
 #ifdef __DMC__
 #define BOOST_TYPEOF_NESTED_TYPEITEM_2(z,n,expr)\
@@ -103,23 +103,25 @@ namespace boost { namespace type_of {
     typedef _typeof_fraction_iter<Pos> fraction_type;
 #else
 #define BOOST_TYPEOF_FRACTIONTYPE()\
-    typedef _typeof_encode_fraction<iteration> fraction_type;
+    typedef _typeof_encode_fraction<self_t::iteration> fraction_type;
 #endif
 
 #define BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr) \
         template<int _Typeof_Iteration>\
         struct _typeof_encode_fraction {\
+            typedef _typeof_encode_fraction<_Typeof_Iteration> self_t;\
             BOOST_STATIC_CONSTANT(int,_typeof_encode_offset = (_Typeof_Iteration*BOOST_TYPEOF_LIMIT_SIZE));\
-            typedef boost::type_of::offset_vector<BOOST_TYPEOF_VECTOR(0)<>,boost::mpl::size_t<_typeof_encode_offset> > _typeof_start_vector;\
+            typedef boost::type_of::offset_vector<BOOST_TYPEOF_VECTOR(0)<>,boost::mpl::size_t<self_t::_typeof_encode_offset> > _typeof_start_vector;\
             BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE,BOOST_TYPEOF_NESTED_TYPEITEM,expr)\
         };\
         template<typename Pos>\
         struct _typeof_fraction_iter {\
+            typedef _typeof_fraction_iter<Pos> self_t;\
             BOOST_STATIC_CONSTANT(int,pos=(Pos::value));\
             BOOST_STATIC_CONSTANT(int,iteration=(pos/BOOST_TYPEOF_LIMIT_SIZE));\
             BOOST_STATIC_CONSTANT(int,where=pos%BOOST_TYPEOF_LIMIT_SIZE);\
             BOOST_TYPEOF_FRACTIONTYPE()\
-            typedef typename boost::type_of::v_iter<fraction_type,boost::mpl::int_<where> >::type type;\
+            typedef typename boost::type_of::v_iter<fraction_type,boost::mpl::int_<self_t::where> >::type type;\
             typedef _typeof_fraction_iter<typename Pos::next> next;\
         };
 
