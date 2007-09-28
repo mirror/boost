@@ -14,7 +14,7 @@
 #include <boost/algorithm/string/config.hpp>
 #include <boost/algorithm/string/detail/sequence.hpp>
 #include <boost/range/value_type.hpp>
-
+#include <boost/range/as_literal.hpp>
 
 /*! \file
     Defines join algorithm. 
