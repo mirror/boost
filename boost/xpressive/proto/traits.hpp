@@ -589,7 +589,7 @@
         arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
             return proto::unref(expr.proto_base().arg0);
-        };
+        }
 
         /// \overload
         ///
@@ -598,7 +598,7 @@
         arg(Expr const &expr)
         {
             return proto::unref(expr.proto_base().arg0);
-        };
+        }
 
         /// \overload
         ///
@@ -607,7 +607,7 @@
         arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
             return result_of::arg<Expr, N>::call(expr);
-        };
+        }
 
         /// \overload
         ///
@@ -616,7 +616,7 @@
         arg(Expr const &expr)
         {
             return result_of::arg<Expr, N>::call(expr);
-        };
+        }
 
         /// arg_c
         ///
@@ -625,7 +625,7 @@
         arg_c(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
             return result_of::arg_c<Expr, N>::call(expr);
-        };
+        }
 
         /// \overload
         ///
@@ -633,7 +633,7 @@
         typename result_of::arg_c<Expr, N>::const_reference arg_c(Expr const &expr)
         {
             return result_of::arg_c<Expr, N>::call(expr);
-        };
+        }
 
     }}
 
