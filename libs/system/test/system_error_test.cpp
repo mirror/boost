@@ -23,7 +23,7 @@
 #include <iostream>
 
 #ifdef BOOST_WINDOWS_API
-#include <winerror.h>
+#include <windows.h>
 #endif
 
 using boost::system::system_error;
@@ -41,10 +41,15 @@ namespace
     BOOST_CHECK( ex.code().value() == v );
     BOOST_CHECK( ex.code().category() == system_category );
 # ifdef BOOST_WINDOWS_API
-    BOOST_CHECK( std::string( ex.what() ) == str );
-    if ( std::string( ex.what() ) != str )
-      std::cout << "expected \"" << str << "\", but what() returned \""
-        << ex.what() << "\"\n";
+    LANGID language_id = ::GetUserDefaultUILanguage();
+    // std::cout << "GetUserDefaultUILanguage() returns " << language_id << '\n';
+    if ( language_id == 0x0409 )  // English (United States)
+    {
+      BOOST_CHECK( std::string( ex.what() ) == str );
+      if ( std::string( ex.what() ) != str )
+        std::cout << "expected \"" << str << "\", but what() returned \""
+          << ex.what() << "\"\n";
+    }
 # endif
   }
 
