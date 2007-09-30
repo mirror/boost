@@ -28,7 +28,7 @@ using namespace boost::xpressive;
 #define L(x) BOOST_XPR_CSTR_(char_type, x)
 
 #define BOOST_XPR_CHECK(pred)                                                   \
-    if( pred ) {} else { BOOST_ERROR( this->format_msg(#pred).c_str() ); }
+    if( pred ) {} else { BOOST_ERROR( this->section_ << " : " << #pred ); }
 
 using namespace boost::xpressive;
 
@@ -59,12 +59,6 @@ inline std::vector<std::basic_string<Char> > backrefs(Char const *br0, ...)
 //
 struct no_match_t {};
 no_match_t const no_match = {};
-
-template<typename BidiIter>
-struct xpr_test_case;
-
-template<typename BidiIter>
-std::string format_msg(xpr_test_case<BidiIter> const &test, char const *msg);
 
 ///////////////////////////////////////////////////////////////////////////////
 // xpr_test_case
@@ -116,11 +110,6 @@ struct xpr_test_case
     }
 
 private:
-
-    std::string format_msg(char const *msg) const
-    {
-        return this->section_ + " : " + msg;
-    }
 
     std::string section_;
     string_type str_;

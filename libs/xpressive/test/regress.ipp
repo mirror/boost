@@ -13,6 +13,7 @@
 
 #include <locale>
 #include <vector>
+#include <string>
 #include <fstream>
 #include <iostream>
 #include <boost/lexical_cast.hpp>
@@ -24,8 +25,20 @@
 # include <crtdbg.h>
 #endif
 
+#ifndef BOOST_XPRESSIVE_NO_WREGEX
+namespace std
+{
+    inline std::ostream &operator <<(std::ostream &sout, std::wstring const &wstr)
+    {
+        for(std::size_t n = 0; n < wstr.size(); ++n)
+            sout.put(sout.narrow(wstr[n], '?'));
+        return sout;
+    }
+}
+#endif
+
 #define BOOST_XPR_CHECK(pred)                                                   \
-    if(pred) {} else { BOOST_ERROR(format_msg(#pred).c_str()); }
+    if(pred) {} else { BOOST_ERROR(case_ << #pred); }
 
 using namespace boost::unit_test;
 using namespace boost::xpressive;
@@ -79,19 +92,23 @@ sregex const rx_sub = "sub=" >> (s1= *_);
 sregex const rx_res = "res=" >> (s1= *_);
 sregex const rx_br = "br" >> (s1= +digit) >> '=' >> (s2= *_);
 
-///////////////////////////////////////////////////////////////////////////////
-// format_msg
-std::string format_msg(char const *msg)
+struct test_case_formatter
 {
-    return test.section + " /" + test.pat + "/ : " + msg;
-}
+    friend std::ostream &operator <<(std::ostream &sout, test_case_formatter)
+    {
+        sout << test.section << " /" << test.pat << "/ : ";
+        return sout;
+    }
+};
+
+test_case_formatter const case_ = {};
 
 #ifndef BOOST_XPRESSIVE_NO_WREGEX
 ///////////////////////////////////////////////////////////////////////////////
 // widen
 //  make a std::wstring from a std::string by widening according to the
 //  current ctype<char> facet
-std::wstring widen(std::string const &str)
+inline std::wstring widen(std::string const &str)
 {
     std::ctype<char> const &ct = BOOST_USE_FACET(std::ctype<char>, std::locale());
     std::wstring res;
@@ -259,7 +276,7 @@ void run_test_impl(xpr_test_case<Char> const &test)
         {
             // test regex_replace
             std::basic_string<Char> res = regex_replace(test.str, rx, test.sub, test.match_flags);
-            BOOST_XPR_CHECK(res == test.res);
+            BOOST_CHECK_MESSAGE(res == test.res, case_ << res << " != " << test.res );
         }
 
         if(0 == (test.match_flags & regex_constants::format_first_only))
@@ -330,7 +347,7 @@ void run_test_impl(xpr_test_case<Char> const &test)
     }
     catch(regex_error const &e)
     {
-        BOOST_ERROR(format_msg(e.what()).c_str());
+        BOOST_ERROR(case_ << e.what());
     }
 }
 
