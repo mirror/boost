@@ -22,10 +22,10 @@ inline void test_no_cv()
 template<class T, class Promoted>
 inline void test_cv()
 {
-    typedef BOOST_DEDUCED_TYPENAME ::boost::promote<T               >::type promoted;
-    typedef BOOST_DEDUCED_TYPENAME ::boost::promote<T const         >::type promoted_c;
-    typedef BOOST_DEDUCED_TYPENAME ::boost::promote<T       volatile>::type promoted_v;
-    typedef BOOST_DEDUCED_TYPENAME ::boost::promote<T const volatile>::type promoted_cv;
+    typedef BOOST_DEDUCED_TYPENAME boost::promote<T               >::type promoted;
+    typedef BOOST_DEDUCED_TYPENAME boost::promote<T const         >::type promoted_c;
+    typedef BOOST_DEDUCED_TYPENAME boost::promote<T       volatile>::type promoted_v;
+    typedef BOOST_DEDUCED_TYPENAME boost::promote<T const volatile>::type promoted_cv;
 
     BOOST_STATIC_ASSERT(( ::boost::is_same< promoted   , Promoted                >::value ));
     BOOST_STATIC_ASSERT(( ::boost::is_same< promoted_c , Promoted const          >::value ));
