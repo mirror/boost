@@ -57,11 +57,33 @@ int main()
 
 // Version prior to VC8 didn't allow WCHAR_MAX in #if expressions
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1400
-#define BOOST_TT_AUX_WCHAR_MAX 0 // force test_cv< wchar_t, int >
-#else
-#define BOOST_TT_AUX_WCHAR_MAX WCHAR_MAX
+#  define BOOST_TT_AUX_WCHAR_MAX USHORT_MAX // force test_cv< wchar_t, int >
+#elif defined(WCHAR_MAX) && !defined(__APPLE__)
+#  define BOOST_TT_AUX_WCHAR_MAX WCHAR_MAX
+#elif defined(__BORLANDC__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__BEOS__) && defined(__GNUC__))
+    // No WCHAR_MIN and WCHAR_MAX, whar_t is short and unsigned:
+#  define BOOST_TT_AUX_WCHAR_MAX USHORT_MAX // force test_cv< wchar_t, int >
+#elif (defined(__sgi) && (!defined(__SGI_STL_PORT) || __SGI_STL_PORT < 0x400))\
+    || (defined __APPLE__)\
+    || (defined(__OpenBSD__) && defined(__GNUC__))\
+    || (defined(__NetBSD__) && defined(__GNUC__))\
+    || (defined(__FreeBSD__) && defined(__GNUC__))\
+    || (defined(__DragonFly__) && defined(__GNUC__))\
+    || (defined(__hpux) && defined(__GNUC__) && (__GNUC__ == 3) && !defined(__SGI_STL_PORT))
+    // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as int.
+    //  - SGI MIPSpro with native library
+    //  - gcc 3.x on HP-UX
+    //  - Mac OS X with native library
+    //  - gcc on FreeBSD, OpenBSD and NetBSD
+#  define BOOST_TT_AUX_WCHAR_MAX INT_MAX // force test_cv< wchar_t, int >
+#elif defined(__hpux) && defined(__GNUC__) && (__GNUC__ == 2) && !defined(__SGI_STL_PORT)
+    // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as unsigned int.
+    //  - gcc 2.95.x on HP-UX
+    // (also, std::numeric_limits<wchar_t> appears to return the wrong values).
+#  define BOOST_TT_AUX_WCHAR_MAX UINT_MAX // force test_cv< wchar_t, int >
 #endif
 
+#ifdef BOOST_TT_AUX_WCHAR_MAX
 #if BOOST_TT_AUX_WCHAR_MAX <= INT_MAX
     test_cv< wchar_t, int >();
 #elif WCHAR_MIN == 0 && BOOST_TT_AUX_WCHAR_MAX <= UINT_MAX
@@ -70,6 +92,7 @@ int main()
     test_cv< wchar_t, long >();
 #else
     test_cv< wchar_t, unsigned long >();
+#endif
 #endif
 
 #undef BOOST_TT_AUX_WCHAR_MAX
