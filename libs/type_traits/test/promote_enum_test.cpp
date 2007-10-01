@@ -91,7 +91,7 @@ void test_promote_to_int_or_uint()
 }
 
 #if (defined(BOOST_MSVC) && BOOST_MSVC <= 1400 ) || \
-    (defined(BOOST_INTEL_WIN) && BOOST_INTEL_WIN <= 900)
+    (defined(BOOST_INTEL_WIN) && BOOST_INTEL_WIN <= 1000)
 // Don't test UIntEnum on VC++ 8.0 and Intel for Windows 9.0,
 // they are broken. More info is on top of this file.
 #else
