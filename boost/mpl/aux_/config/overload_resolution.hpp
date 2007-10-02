@@ -18,7 +18,7 @@
 
 #if    !defined(BOOST_MPL_CFG_BROKEN_OVERLOAD_RESOLUTION) \
     && !defined(BOOST_MPL_PREPROCESSING_MODE) \
-    && (   BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
+    && (   BOOST_WORKAROUND(__BORLANDC__, < 0x590) \
         || BOOST_WORKAROUND(__MWERKS__, < 0x3001) \
         )
 
