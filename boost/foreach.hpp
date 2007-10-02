@@ -619,6 +619,18 @@ begin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
     return iterator(boost::begin(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
 }
 
+// work around msvc bugs wrt array types that have been deduced
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+template<typename T, std::size_t N, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME boost::mpl::if_<C, T const *, T*>::type>
+begin(auto_any_t col, type2type<T[N], C> *, boost::mpl::false_ *) // lvalue
+{
+    typedef BOOST_DEDUCED_TYPENAME type2type<T[N], C>::type type;
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<C, T const *, T*>::type iterator;
+    return &((*(auto_any_cast<type *, boost::mpl::false_>(col)))[0]);
+}
+#endif
+
 #ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T>
 auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, const_>::type>
@@ -655,6 +667,18 @@ end(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
     typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
     return iterator(boost::end(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
 }
+
+// work around msvc bugs wrt array types that have been deduced
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+template<typename T, std::size_t N, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME boost::mpl::if_<C, T const *, T*>::type>
+end(auto_any_t col, type2type<T[N], C> *, boost::mpl::false_ *) // lvalue
+{
+    typedef BOOST_DEDUCED_TYPENAME type2type<T[N], C>::type type;
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<C, T const *, T*>::type iterator;
+    return &((*(auto_any_cast<type *, boost::mpl::false_>(col)))[0]) + N;
+}
+#endif
 
 #ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T>
