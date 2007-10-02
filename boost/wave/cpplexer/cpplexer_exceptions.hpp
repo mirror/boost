@@ -60,6 +60,41 @@
 #endif // BOOST_NO_STRINGSTREAM
 #endif // BOOST_WAVE_LEXER_THROW
 
+#if !defined(BOOST_WAVE_LEXER_THROW_VAR)
+#ifdef BOOST_NO_STRINGSTREAM
+#include <strstream>
+#define BOOST_WAVE_LEXER_THROW_VAR(cls, codearg, msg, line, column, name)     \
+    {                                                                         \
+    using namespace boost::wave;                                              \
+    cls::error_code code = static_cast<cls::error_code>(codearg);             \
+    std::strstream stream;                                                    \
+        stream << cls::severity_text(code) << ": "                            \
+        << cls::error_text(code);                                             \
+    if ((msg)[0] != 0) stream << ": " << (msg);                               \
+    stream << std::ends;                                                      \
+    std::string throwmsg = stream.str(); stream.freeze(false);                \
+    boost::throw_exception(cls(throwmsg.c_str(), code, line, column,          \
+        name));                                                               \
+    }                                                                         \
+    /**/
+#else
+#include <sstream>
+#define BOOST_WAVE_LEXER_THROW_VAR(cls, codearg, msg, line, column, name)     \
+    {                                                                         \
+    using namespace boost::wave;                                              \
+    cls::error_code code = static_cast<cls::error_code>(codearg);             \
+    std::stringstream stream;                                                 \
+        stream << cls::severity_text(code) << ": "                            \
+        << cls::error_text(code);                                             \
+    if ((msg)[0] != 0) stream << ": " << (msg);                               \
+    stream << std::ends;                                                      \
+    boost::throw_exception(cls(stream.str().c_str(), code, line, column,      \
+        name));                                                               \
+    }                                                                         \
+    /**/
+#endif // BOOST_NO_STRINGSTREAM
+#endif // BOOST_WAVE_LEXER_THROW
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -135,7 +170,8 @@ public:
         universal_char_base_charset = 2,
         universal_char_not_allowed = 3,
         invalid_long_long_literal = 4,
-        generic_lexing_error = 5
+        generic_lexing_error = 5,
+        generic_lexing_warning = 6
     };
 
     lexing_exception(char const *what_, error_code code, int line_, 
@@ -173,6 +209,8 @@ public:
         case lexing_exception::universal_char_base_charset:
         case lexing_exception::universal_char_not_allowed:
         case lexing_exception::invalid_long_long_literal:
+        case lexing_exception::generic_lexing_warning:
+        case lexing_exception::generic_lexing_error:
             return true;    // for now allow all exceptions to be recoverable
             
         case lexing_exception::unexpected_error:
@@ -194,7 +232,8 @@ public:
             "this universal character is not allowed in an identifier", // universal_char_not_allowed 
             "long long suffixes are not allowed in pure C++ mode, "
             "enable long_long mode to allow these",     // invalid_long_long_literal
-            "generic lexing error"                      // generic_lexing_error
+            "generic lexing error",                     // generic_lexing_error
+            "generic lexing warning"                    // generic_lexing_warning
         };
         return preprocess_exception_errors[code];
     }
@@ -207,7 +246,8 @@ public:
             util::severity_error,               // universal_char_base_charset
             util::severity_error,               // universal_char_not_allowed
             util::severity_warning,             // invalid_long_long_literal
-            util::severity_error                // generic_lexing_error                
+            util::severity_error,               // generic_lexing_error                
+            util::severity_warning              // invalid_long_long_literal
         };
         return preprocess_exception_severity[code];
     }

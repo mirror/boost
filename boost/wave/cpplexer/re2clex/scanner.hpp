@@ -28,7 +28,8 @@ namespace re2clex {
 
 struct Scanner;
 typedef unsigned char uchar;
-typedef int (* ReportErrorProc)(struct Scanner const *, char const *, ...);
+typedef int (* ReportErrorProc)(struct Scanner const *, int errorcode, 
+    char const *, ...);
 
 typedef struct Scanner {
     uchar* first;   /* start of input buffer */

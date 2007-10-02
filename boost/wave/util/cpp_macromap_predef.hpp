@@ -44,22 +44,22 @@ namespace util {
     class predefined_macros 
     {
         typedef BOOST_WAVE_STRINGTYPE string_type;
-
+        
     public:
     // list of static predefined macros
-    struct static_macros {
-        char const *name;
-        boost::wave::token_id token_id;
-        char const *value;
-    };
+        struct static_macros {
+            char const *name;
+            boost::wave::token_id token_id;
+            char const *value;
+        };
 
     // list of dynamic predefined macros
         struct dynamic_macros {
             char const *name;
             boost::wave::token_id token_id;
             string_type (predefined_macros:: *generator)() const;
-        }; 
-    
+        };
+
     private:
         boost::wave::util::time_conversion_helper compilation_time_;
         string_type datestr_;     // __DATE__
@@ -69,12 +69,12 @@ namespace util {
 
     protected:
         void reset_datestr()
-    {
-    static const char *const monthnames[] = {
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        };
-    
+        {
+        static const char *const monthnames[] = {
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            };
+        
         // for some systems sprintf, time_t etc. is in namespace std
             using namespace std;    
 
@@ -91,11 +91,11 @@ namespace util {
             }
             else {
                 datestr_ = "\"??? ?? ????\"";
+            }
         }
-    }
 
         void reset_timestr()
-    {
+        {
         // for some systems sprintf, time_t etc. is in namespace std
             using namespace std;    
 
@@ -112,57 +112,57 @@ namespace util {
             }
             else {
                 timestr_ = "\"??:??:??\"";
+            }
         }
-    }
-    
+
         void reset_version()
-    {
-    char buffer[sizeof("0x00000000")+1];
+        {
+        char buffer[sizeof("0x00000000")+1];
+                
+        // for some systems sprintf, time_t etc. is in namespace std
+            using namespace std;    
 
-    // for some systems sprintf, time_t etc. is in namespace std
-        using namespace std;    
+        // calculate the number of days since Dec 13 2001 
+        // (the day the Wave project was started)
+        tm first_day;
 
-    // calculate the number of days since Dec 13 2001 
-    // (the day the Wave project was started)
-    tm first_day;
-
-        using namespace std;    // for some systems memset is in namespace std
-        memset (&first_day, 0, sizeof(tm));
-        first_day.tm_mon = 11;           // Dec
-        first_day.tm_mday = 13;          // 13
-        first_day.tm_year = 101;         // 2001
+            using namespace std;    // for some systems memset is in namespace std
+            memset (&first_day, 0, sizeof(tm));
+            first_day.tm_mon = 11;           // Dec
+            first_day.tm_mday = 13;          // 13
+            first_day.tm_year = 101;         // 2001
 
         long seconds = long(difftime(compilation_time_.get_time(), mktime(&first_day)));
 
-        sprintf(buffer, "0x%02d%1d%1d%04ld", BOOST_WAVE_VERSION_MAJOR,
-             BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
-             seconds/(3600*24));
+            sprintf(buffer, "0x%02d%1d%1d%04ld", BOOST_WAVE_VERSION_MAJOR,
+                 BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
+                 seconds/(3600*24));
             version_ = buffer;
-    }
+        }
     
         void reset_versionstr()
-    {
-    char buffer[sizeof("\"00.00.00.0000 \"")+sizeof(BOOST_PLATFORM)+sizeof(BOOST_COMPILER)+4];
+        {
+        char buffer[sizeof("\"00.00.00.0000 \"")+sizeof(BOOST_PLATFORM)+sizeof(BOOST_COMPILER)+4];
 
-    // for some systems sprintf, time_t etc. is in namespace std
-        using namespace std;    
+        // for some systems sprintf, time_t etc. is in namespace std
+            using namespace std;    
 
-    // calculate the number of days since Dec 13 2001 
-    // (the day the Wave project was started)
-    tm first_day;
+        // calculate the number of days since Dec 13 2001 
+        // (the day the Wave project was started)
+        tm first_day;
 
-        memset (&first_day, 0, sizeof(tm));
-        first_day.tm_mon = 11;           // Dec
-        first_day.tm_mday = 13;          // 13
-        first_day.tm_year = 101;         // 2001
+            memset (&first_day, 0, sizeof(tm));
+            first_day.tm_mon = 11;           // Dec
+            first_day.tm_mday = 13;          // 13
+            first_day.tm_year = 101;         // 2001
 
         long seconds = long(difftime(compilation_time_.get_time(), mktime(&first_day)));
 
-        sprintf(buffer, "\"%d.%d.%d.%ld [%s/%s]\"", BOOST_WAVE_VERSION_MAJOR,
-             BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
-             seconds/(3600*24), BOOST_PLATFORM, BOOST_COMPILER);
+            sprintf(buffer, "\"%d.%d.%d.%ld [%s/%s]\"", BOOST_WAVE_VERSION_MAJOR,
+                 BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
+                 seconds/(3600*24), BOOST_PLATFORM, BOOST_COMPILER);
             versionstr_ = buffer;
-    }
+        }
     
     // dynamic predefined macros
         string_type get_date() const { return datestr_; }     // __DATE__ 
@@ -170,7 +170,7 @@ namespace util {
         
     // __SPIRIT_PP__/__WAVE__
         string_type get_version() const
-    {
+        {
             char buffer[sizeof("0x0000")+1];
 
             using namespace std;    // for some systems sprintf is in namespace std
@@ -178,11 +178,11 @@ namespace util {
                 BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR);
             return buffer;
         }
-
+    
     // __WAVE_CONFIG__
         string_type get_config() const
         {
-    char buffer[sizeof("0x00000000")+1];
+            char buffer[sizeof("0x00000000")+1];
 
             using namespace std;     // for some systems sprintf is in namespace std
             sprintf(buffer, "0x%08x", BOOST_WAVE_CONFIG);
@@ -209,7 +209,7 @@ namespace util {
         
     // __SPIRIT_PP_VERSION_STR__/__WAVE_VERSION_STR__
         string_type get_versionstr() const { return versionstr_; }
-
+        
     // C++ mode 
         static_macros const& static_data_cpp(std::size_t i) const
         {
@@ -223,8 +223,8 @@ namespace util {
         }
         std::size_t static_data_cpp_size() const
         {
-    }
-    
+        }
+        
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // C99 mode
         static_macros const& static_data_c99(std::size_t i) const
@@ -235,7 +235,7 @@ namespace util {
                 { "__STDC_HOSTED__", T_INTLIT, "0" },
                 { "__WAVE_HAS_VARIADICS__", T_INTLIT, "1" },
                 { 0, T_EOF, 0 }
-    };
+            }; 
             BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
             return data[i];
         }
@@ -243,10 +243,10 @@ namespace util {
         {
         }
 #endif 
-    
+
         dynamic_macros const& dynamic_data(std::size_t i) const
-    {
-    static dynamic_macros data[] = {
+        {
+        static dynamic_macros data[] = {
                 { "__DATE__", T_STRINGLIT, &predefined_macros::get_date },
                 { "__TIME__", T_STRINGLIT, &predefined_macros::get_time },
                 { "__SPIRIT_PP__", T_INTLIT, &predefined_macros::get_version },
@@ -256,11 +256,11 @@ namespace util {
                 { "__WAVE_VERSION__", T_INTLIT, &predefined_macros::get_fullversion },
                 { "__WAVE_VERSION_STR__", T_STRINGLIT, &predefined_macros::get_versionstr },
                 { "__WAVE_CONFIG__", T_INTLIT, &predefined_macros::get_config },
-            { 0, T_EOF, 0 }
-        };
-        BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
-        return data[i];
-    }
+                { 0, T_EOF, 0 }
+            };
+            BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
+            return data[i];
+        }
         std::size_t dynamic_data_size() const
         {
         }

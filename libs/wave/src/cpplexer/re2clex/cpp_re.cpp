@@ -36,6 +36,7 @@
 #include <boost/wave/cpplexer/re2clex/aq.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
 #include <boost/wave/cpplexer/re2clex/cpp_re.hpp>
+#include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -212,8 +213,10 @@ uchar *fill(Scanner *s, uchar *cursor)
             if (buf == 0)
             {
                 using namespace std;      // some systems have printf in std
-                if (0 != s->error_proc)
-                    (*s->error_proc)(s, "Out of memory!");
+                if (0 != s->error_proc) {
+                    (*s->error_proc)(s, lexing_exception::unexpected_error, 
+                        "Out of memory!");
+                }
                 else 
                     printf("Out of memory!\n");
                     

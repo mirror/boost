@@ -33,6 +33,7 @@
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/cpplexer/re2clex/aq.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
+#include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
 
 #include "idl_re.hpp"
 
@@ -199,8 +200,10 @@ fill(boost::wave::cpplexer::re2clex::Scanner *s,
             if (buf == 0)
             {
                 using namespace std;      // some systems have printf in std
-                if (0 != s->error_proc)
-                    (*s->error_proc)(s, "Out of memory!");
+                if (0 != s->error_proc) {
+                    (*s->error_proc)(s, lexing_exception::unexpected_error,
+                        "Out of memory!");
+                }
                 else 
                     printf("Out of memory!\n");
                     
@@ -473,8 +476,10 @@ Pound              = "#" | "??=" | "%:";
         if(cursor != s->eof) 
         {
             using namespace std;      // some systems have printf in std
-            if (0 != s->error_proc)
-                (*s->error_proc)(s, "'\\000' in input stream");
+            if (0 != s->error_proc) {
+                (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                    "'\\000' in input stream");
+            }
             else
                 printf("Error: 0 in file\n");
         }
@@ -506,14 +511,16 @@ ccomment:
         if(cursor == s->eof) 
         {
             if (s->error_proc)
-                (*s->error_proc)(s, "Unterminated comment");
+                (*s->error_proc)(s, lexing_exception::generic_lexing_warning,
+                    "Unterminated comment");
             else
                 printf("Error: Unterminated comment\n");
         }
         else
         {
             if (s->error_proc)
-                (*s->error_proc)(s, "'\\000' in input stream");
+                (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                    "'\\000' in input stream");
             else
                 printf("Error: 0 in file");
         }
@@ -526,7 +533,8 @@ ccomment:
     anyctrl
     {
         if (s->error_proc)
-            (*s->error_proc)(s, "invalid character in input stream");
+            (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                "invalid character in input stream");
         else
             printf("Error: 0 in file");
     }
@@ -551,7 +559,8 @@ cppcomment:
         if(cursor != s->eof) 
         {
             if (s->error_proc)
-                (*s->error_proc)(s, "'\\000' in input stream");
+                (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                    "'\\000' in input stream");
             else
                 printf("Error: 0 in file");
         }

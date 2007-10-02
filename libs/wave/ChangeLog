@@ -144,11 +144,13 @@ CHANGELOG
   hooks consistent. Now return 'false' generally means: normal execution and 
   return 'true' generally means: skip execution of the corresponding 
   preprocessor action.
-- Fixed compilation problems on gcc, fixed ambiguity in with boost code 
-  (detail namespace was ambigious).
+- Fixed compilation problems on gcc, fixed ambiguity with boost code (detail 
+  namespace was ambigious).
 - Fixed predefined macro support to be thread safe.
 - Added missing file to real_positions example. Thanks to Ludovic Aubert for 
   spotting the problem.
+- Unterminated C++/C comment diagnostics are now a warning and not an error 
+  anymore.
   
 Boost V1.34.0
 - Wave Version 1.2.4

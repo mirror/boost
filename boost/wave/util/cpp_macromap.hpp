@@ -139,7 +139,7 @@ public:
     void reset_macromap();
 
     position_type &get_main_pos() { return main_pos; }
-    
+
 //  interface for macro name introspection
     typedef typename defined_macros_type::name_iterator name_iterator;
     typedef typename defined_macros_type::const_name_iterator const_name_iterator;
@@ -1238,8 +1238,8 @@ ContainerT replacement_list;
                 macro_def.macrodefinition, curr_token, arguments);
 #else
             if (ctx.get_hooks().expanding_function_like_macro(
-                ctx, macro_def.macroname, macro_def.macroparameters, 
-                macro_def.macrodefinition, curr_token, arguments,
+                    ctx, macro_def.macroname, macro_def.macroparameters, 
+                    macro_def.macrodefinition, curr_token, arguments,
                     seqstart, first))
             {
                 // do not expand this macro, just copy the whole sequence 
