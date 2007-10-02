@@ -134,7 +134,10 @@ struct case_converting_iterator
 
     friend bool set_transform(case_converting_iterator &iter, transform_op trans, transform_scope scope)
     {
-        (scope == Next ? iter.next_ : iter.rest_) = trans;
+        if(scope == Next)
+            iter.next_ = trans;
+        else
+            iter.rest_ = trans;
         return true;
     }
 
