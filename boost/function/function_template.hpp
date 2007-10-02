@@ -437,8 +437,9 @@ namespace boost {
           if (base.manager)
             base.manager(functor, functor, destroy_functor_tag);
         }
-
+#ifndef BOOST_NO_PRIVATE_IN_AGGREGATE
       private:
+#endif
         // Function pointers
         template<typename FunctionPtr>
         bool 
