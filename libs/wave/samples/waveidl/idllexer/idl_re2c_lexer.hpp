@@ -78,7 +78,7 @@ public:
     }
 
 // error reporting from the re2c generated lexer
-    static int report_error(scanner_t const *s, char const *, ...);
+    static int report_error(scanner_t const *s, int code, char const *, ...);
 
 private:
     static char const *tok_names[];
@@ -164,7 +164,8 @@ lexer<IteratorT, PositionT>::get()
 
 template <typename IteratorT, typename PositionT>
 inline int 
-lexer<IteratorT, PositionT>::report_error(scanner_t const *s, char const* msg, ...)
+lexer<IteratorT, PositionT>::report_error(scanner_t const *s, int errcode,
+    char const* msg, ...)
 {
     BOOST_ASSERT(0 != s);
     BOOST_ASSERT(0 != msg);
@@ -177,8 +178,8 @@ lexer<IteratorT, PositionT>::report_error(scanner_t const *s, char const* msg, .
     vsprintf(buffer, msg, params);
     va_end(params);
     
-    BOOST_WAVE_LEXER_THROW(boost::wave::cpplexer::lexing_exception, 
-        generic_lexing_error, buffer, s->line, -1, s->file_name);
+    BOOST_WAVE_LEXER_THROW_VAR(boost::wave::cpplexer::lexing_exception, 
+        errcode, buffer, s->line, -1, s->file_name);
     return 0;
 }
 

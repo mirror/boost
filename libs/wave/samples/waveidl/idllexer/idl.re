@@ -201,7 +201,8 @@ fill(boost::wave::cpplexer::re2clex::Scanner *s,
             {
                 using namespace std;      // some systems have printf in std
                 if (0 != s->error_proc) {
-                    (*s->error_proc)(s, lexing_exception::unexpected_error,
+                    (*s->error_proc)(s, 
+                        cpplexer::lexing_exception::unexpected_error,
                         "Out of memory!");
                 }
                 else 
@@ -477,7 +478,8 @@ Pound              = "#" | "??=" | "%:";
         {
             using namespace std;      // some systems have printf in std
             if (0 != s->error_proc) {
-                (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                (*s->error_proc)(s, 
+                    cpplexer::lexing_exception::generic_lexing_error,
                     "'\\000' in input stream");
             }
             else
@@ -511,7 +513,8 @@ ccomment:
         if(cursor == s->eof) 
         {
             if (s->error_proc)
-                (*s->error_proc)(s, lexing_exception::generic_lexing_warning,
+                (*s->error_proc)(s, 
+                    cpplexer::lexing_exception::generic_lexing_warning,
                     "Unterminated comment");
             else
                 printf("Error: Unterminated comment\n");
@@ -519,7 +522,8 @@ ccomment:
         else
         {
             if (s->error_proc)
-                (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                (*s->error_proc)(s, 
+                    cpplexer::lexing_exception::generic_lexing_error,
                     "'\\000' in input stream");
             else
                 printf("Error: 0 in file");
@@ -533,7 +537,8 @@ ccomment:
     anyctrl
     {
         if (s->error_proc)
-            (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+            (*s->error_proc)(s, 
+                cpplexer::lexing_exception::generic_lexing_error,
                 "invalid character in input stream");
         else
             printf("Error: 0 in file");
@@ -559,7 +564,8 @@ cppcomment:
         if(cursor != s->eof) 
         {
             if (s->error_proc)
-                (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                (*s->error_proc)(s, 
+                    cpplexer::lexing_exception::generic_lexing_error,
                     "'\\000' in input stream");
             else
                 printf("Error: 0 in file");
