@@ -221,9 +221,6 @@ namespace util {
             BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
             return data[i];
         }
-        std::size_t static_data_cpp_size() const
-        {
-        }
         
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // C99 mode
@@ -238,9 +235,6 @@ namespace util {
             }; 
             BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
             return data[i];
-        }
-        std::size_t static_data_c99_size() const
-        {
         }
 #endif 
 
@@ -260,9 +254,6 @@ namespace util {
             };
             BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));
             return data[i];
-        }
-        std::size_t dynamic_data_size() const
-        {
         }
     
     };   // predefined_macros
