@@ -151,14 +151,14 @@ private:
 #define FLOAT_SUFFIX        "(" "[fF][lL]?" OR "[lL][fF]?" ")"
 #define CHAR_SPEC           "L?"
 
-#define BACKSLASH           "(" "\\" OR TRI(Q("/")) ")"
+#define BACKSLASH           "(" Q("\\") OR TRI(Q("/")) ")"
 #define ESCAPESEQ           "(" BACKSLASH "(" \
                                 "[abfnrtv?'\"]" OR \
                                 BACKSLASH OR \
                                 "x" HEXDIGIT "+" OR \
                                 OCTALDIGIT OCTALDIGIT "?" OCTALDIGIT "?" \
                             "))"
-#define HEXQUAD             HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT 
+#define HEXQUAD             "(" HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT ")"
 #define UNIVERSALCHAR       "(" BACKSLASH "(" \
                                 "u" HEXQUAD OR \
                                 "U" HEXQUAD HEXQUAD \
