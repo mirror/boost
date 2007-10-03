@@ -16,7 +16,7 @@
 // Tests error reporting: undefined behavior: End of a source file with an 
 // unterminated comment.
 
-//E t_6_067.hpp(48): error: generic lexing error: Unterminated 'C' style comment
+//E t_6_067.hpp(48): warning: generic lexing warning: Unterminated 'C' style comment
 #include "t_6_067.hpp"
 
 //R #line 19 "t_6_067.hpp"
