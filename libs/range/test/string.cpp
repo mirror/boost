@@ -33,28 +33,28 @@ template< class T >
 inline BOOST_DEDUCED_TYPENAME boost::range_iterator<T>::type
 str_begin( T& r )
 {
-    return boost::begin( as_literal(r) ); 
+    return boost::begin( boost::as_literal(r) ); 
 }
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME boost::range_iterator<T>::type
 str_end( T& r )
 {
-    return boost::end( as_literal(r) ); 
+    return boost::end( boost::as_literal(r) ); 
 }
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME boost::range_size<T>::type
 str_size( const T& r )
 {
-    return boost::size( as_literal(r) ); 
+    return boost::size( boost::as_literal(r) ); 
 }
 
 template< class T >
 inline bool
 str_empty( T& r )
 {
-    return boost::empty( as_literal(r) ); 
+    return boost::empty( boost::as_literal(r) ); 
 }
 
 template< typename Container, typename T >
