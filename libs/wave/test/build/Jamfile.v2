@@ -107,8 +107,8 @@ test-suite wave
                 /boost/wave//boost_wave
                 /boost/program_options//boost_program_options
                 /boost/filesystem//boost_filesystem
-                /boost/system//boost_system
                 /boost/thread//boost_thread
+                /boost/system//boost_system
             :
             # arguments
             :
@@ -127,8 +127,8 @@ test-suite wave
                 /boost/wave//boost_wave
                 /boost/program_options//boost_program_options
                 /boost/filesystem//boost_filesystem
-                /boost/system//boost_system
                 /boost/thread//boost_thread
+                /boost/system//boost_system
             :
             # arguments
             :
