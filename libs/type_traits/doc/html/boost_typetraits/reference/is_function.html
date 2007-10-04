@@ -131,69 +131,44 @@
 </tr>
 <tr><td align="left" valign="top">
 <p>
-          </p>
+          Don't confuse function-types with pointers to functions:
+        </p>
 <p>
-            Don't confuse function-types with pointers to functions:
-          </p>
+          <code class="computeroutput"><span class="keyword">typedef</span> <span class="keyword">int</span>
+          <span class="identifier">f</span><span class="special">(</span><span class="keyword">double</span><span class="special">);</span></code>
+        </p>
 <p>
-          </p>
+          defines a function type,
+        </p>
 <p>
-            <code class="computeroutput"><span class="keyword">typedef</span> <span class="keyword">int</span>
-            <span class="identifier">f</span><span class="special">(</span><span class="keyword">double</span><span class="special">);</span></code>
-          </p>
+          <code class="computeroutput"><span class="identifier">f</span> <span class="identifier">foo</span><span class="special">;</span></code>
+        </p>
 <p>
-          </p>
+          declares a prototype for a function of type <code class="computeroutput"><span class="identifier">f</span></code>,
+        </p>
 <p>
-            defines a function type,
-          </p>
+          <code class="computeroutput"><span class="identifier">f</span><span class="special">*</span>
+          <span class="identifier">pf</span> <span class="special">=</span>
+          <span class="identifier">foo</span><span class="special">;</span></code>
+        </p>
 <p>
-          </p>
+          <code class="computeroutput"><span class="identifier">f</span><span class="special">&amp;</span>
+          <span class="identifier">fr</span> <span class="special">=</span>
+          <span class="identifier">foo</span><span class="special">;</span></code>
+        </p>
 <p>
-            <code class="computeroutput"><span class="identifier">f</span> <span class="identifier">foo</span><span class="special">;</span></code>
-          </p>
+          declares a pointer and a reference to the function <code class="computeroutput"><span class="identifier">foo</span></code>.
+        </p>
 <p>
-          </p>
+          If you want to detect whether some type is a pointer-to-function then use:
+        </p>
 <p>
-            declares a prototype for a function of type <code class="computeroutput"><span class="identifier">f</span></code>,
-          </p>
+          <code class="computeroutput"><a href="is_function.html" title="is_function">is_function</a><span class="special">&lt;</span><a href="remove_pointer.html" title="remove_pointer">remove_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span>
+          <span class="special">&amp;&amp;</span> <a href="is_pointer.html" title="is_pointer">is_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
+        </p>
 <p>
-          </p>
-<p>
-            <code class="computeroutput"><span class="identifier">f</span><span class="special">*</span>
-            <span class="identifier">pf</span> <span class="special">=</span>
-            <span class="identifier">foo</span><span class="special">;</span></code>
-          </p>
-<p>
-          </p>
-<p>
-            <code class="computeroutput"><span class="identifier">f</span><span class="special">&amp;</span>
-            <span class="identifier">fr</span> <span class="special">=</span>
-            <span class="identifier">foo</span><span class="special">;</span></code>
-          </p>
-<p>
-          </p>
-<p>
-            declares a pointer and a reference to the function <code class="computeroutput"><span class="identifier">foo</span></code>.
-          </p>
-<p>
-          </p>
-<p>
-            If you want to detect whether some type is a pointer-to-function then
-            use:
-          </p>
-<p>
-          </p>
-<p>
-            <code class="computeroutput"><a href="is_function.html" title="is_function">is_function</a><span class="special">&lt;</span><a href="remove_pointer.html" title="remove_pointer">remove_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span>
-            <span class="special">&amp;&amp;</span> <a href="is_pointer.html" title="is_pointer">is_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
-          </p>
-<p>
-          </p>
-<p>
-            or for pointers to member functions you can just use <a href="is_member_function_pointer.html" title="is_member_function_pointer">is_member_function_pointer</a>
-            directly.
-          </p>
-<p>
+          or for pointers to member functions you can just use <a href="is_member_function_pointer.html" title="is_member_function_pointer">is_member_function_pointer</a>
+          directly.
         </p>
 </td></tr>
 </table></div>

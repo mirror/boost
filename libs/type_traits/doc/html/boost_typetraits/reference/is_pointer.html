@@ -110,23 +110,16 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../../doc/html/images/important.png"></td>
 <th align="left">Important</th>
 </tr>
-<tr><td align="left" valign="top">
-<p>
-          </p>
-<p>
-            <code class="computeroutput"><span class="identifier">is_pointer</span></code> detects "real"
-            pointer types only, and <span class="emphasis"><em>not</em></span> smart pointers. Users
-            should not specialise <code class="computeroutput"><span class="identifier">is_pointer</span></code>
-            for smart pointer types, as doing so may cause Boost (and other third
-            party) code to fail to function correctly. Users wanting a trait to detect
-            smart pointers should create their own. However, note that there is no
-            way in general to auto-magically detect smart pointer types, so such
-            a trait would have to be partially specialised for each supported smart
-            pointer type.
-          </p>
-<p>
-        </p>
-</td></tr>
+<tr><td align="left" valign="top"><p>
+          <code class="computeroutput"><span class="identifier">is_pointer</span></code> detects "real"
+          pointer types only, and <span class="emphasis"><em>not</em></span> smart pointers. Users
+          should not specialise <code class="computeroutput"><span class="identifier">is_pointer</span></code>
+          for smart pointer types, as doing so may cause Boost (and other third party)
+          code to fail to function correctly. Users wanting a trait to detect smart
+          pointers should create their own. However, note that there is no way in
+          general to auto-magically detect smart pointer types, so such a trait would
+          have to be partially specialised for each supported smart pointer type.
+        </p></td></tr>
 </table></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
