@@ -232,8 +232,8 @@ public:
             "this universal character is not allowed in an identifier", // universal_char_not_allowed 
             "long long suffixes are not allowed in pure C++ mode, "
             "enable long_long mode to allow these",     // invalid_long_long_literal
-            "generic lexing error",                     // generic_lexing_error
-            "generic lexing warning"                    // generic_lexing_warning
+            "generic lexer error",                      // generic_lexing_error
+            "generic lexer warning"                     // generic_lexing_warning
         };
         return preprocess_exception_errors[code];
     }
