@@ -290,8 +290,8 @@ namespace boost { namespace program_options { namespace detail {
 
         // First check that the option is valid, and get its description.
         // TODO: case-sensitivity.
-        const option_description* xd = 
-            m_desc->find_nothrow(opt.string_key, (m_style & allow_guessing));
+        const option_description* xd = m_desc->find_nothrow(opt.string_key, 
+                (m_style & allow_guessing) ? true : false);
 
         if (!xd)
         {
@@ -470,7 +470,8 @@ namespace boost { namespace program_options { namespace detail {
              ((m_style & allow_slash_for_short) && tok[0] == '/')))            
         {
             if (m_desc->find_nothrow(tok.substr(1, tok.find('=')-1), 
-                                     m_style & allow_guessing)) {
+                                     (m_style & allow_guessing) ? true : false)) 
+            {
                 args[0].insert(0, "-");
                 if (args[0][1] == '/')
                     args[0][1] = '-';
