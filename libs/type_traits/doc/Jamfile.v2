@@ -5,6 +5,8 @@
 
 using quickbook ;
 
+path-constant boost-images : ../../../doc/src/images ;
+
 xml type_traits : type_traits.qbk ;
 boostbook standalone
     :
@@ -54,10 +56,12 @@ boostbook standalone
         # Set this one for PDF generation *only*:
         # default pnd graphics are awful in PDF form,
         # better use SVG's instead:
-        # <xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
     ;
 
 #install html : ../../../doc/html/boostbook.css ;
 #install ../ : ../../../boost.png ;
+
 
 
