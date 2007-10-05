@@ -901,6 +901,8 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         </xsl:if>
         <xsl:apply-templates select="description"/>
         
+        <xsl:apply-templates select="typedef" mode="reference"/>
+
         <xsl:call-template name="construct-copy-destruct-reference"/>
         
         <xsl:apply-templates 
