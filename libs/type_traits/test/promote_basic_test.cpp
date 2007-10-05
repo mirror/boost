@@ -83,7 +83,8 @@ int main()
 #  define BOOST_TT_AUX_WCHAR_MAX UINT_MAX // force test_cv< wchar_t, int >
 #endif
 
-#ifdef BOOST_TT_AUX_WCHAR_MAX
+// For this PP-logic to work we need a valid WCHAR_MAX etc:
+#if defined(BOOST_TT_AUX_WCHAR_MAX) && !defined(__DECCXX)
 #if BOOST_TT_AUX_WCHAR_MAX <= INT_MAX
     test_cv< wchar_t, int >();
 #elif WCHAR_MIN == 0 && BOOST_TT_AUX_WCHAR_MAX <= UINT_MAX
