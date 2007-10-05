@@ -1,0 +1,50 @@
+# Copyright (c) 2002 Trustees of Indiana University
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+project boost/graph
+    : requirements <include>../src
+    : source-location ../src
+    ;
+
+if [ modules.peek : GRAPHVIZ_PARSER ]
+{
+    lib boost_graph
+        :
+        graphviz_graph_lex
+        graphviz_digraph_lex
+        graphviz_graph_parser
+        graphviz_digraph_parser
+        : <define>YY_NO_UNISTD_H
+        ;
+
+    obj graphviz_graph_lex : graphviz_lex.ll
+        : <flex.prefix>bgl_undir_ <define>GRAPHVIZ_DIRECTED=0
+          <implicit-dependency>graphviz_graph_parser ;
+    obj graphviz_graph_parser : graphviz_parser.yy
+        : <bison.prefix>bgl_undir_ 	<define>GRAPHVIZ_DIRECTED=0 ;
+
+
+    obj graphviz_digraph_lex : graphviz_lex.ll
+        : <flex.prefix>bgl_dir_ <define>GRAPHVIZ_DIRECTED=1
+          <implicit-dependency>graphviz_digraph_parser ;
+    obj graphviz_digraph_parser : graphviz_parser.yy
+        : <bison.prefix>bgl_dir_ 	<define>GRAPHVIZ_DIRECTED=1 ;
+}
+else
+{
+    lib boost_graph
+        :
+        read_graphviz_spirit.cpp
+        :
+        <define>BOOST_GRAPH_NO_LIB=1
+        <link>shared:<define>BOOST_GRAPH_DYN_LINK=1
+        # # Intel compiler ICEs if we turn optimization on
+        <toolset>intel-vc71-win-9.1:<optimization>off
+        # Without these flags, MSVC 7.1 and 8.0 crash
+        <toolset>msvc-7.1:<cxxflags>-GR-
+        <toolset>msvc-8.0:<cxxflags>-GR-
+        ;
+}

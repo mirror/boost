@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="code_block_2" name="Code Block 2" dirname="code_block_2" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
+ xmlns:xi="http://www.w3.org/2001/XInclude">
+  <articleinfo>
+  </articleinfo>
+  <title>Code Block 2</title>
+  <section id="code_block_2.a_code_block">
+    <title>A code block</title>
+    <para>
+      A code block with proper indentation ;-)
+    </para>
+    <para>
+      
+<programlisting>
+<phrase role="preprocessor">#include</phrase>&nbsp;<phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
+
+<phrase role="keyword">int</phrase>&nbsp;<phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="special">{</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="string">&quot;Hello, World!&quot;</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
+    <phrase role="keyword">return</phrase>&nbsp;<phrase role="number">0</phrase><phrase role="special">;</phrase>
+<phrase role="special">}</phrase>
+</programlisting>
+    </para>
+  </section>
+</article>

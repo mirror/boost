@@ -1,0 +1,50 @@
+# Wave: A Standard compliant C++ preprocessor
+#
+# Boost Wave Library Build Jamfile
+#
+# http://www.boost.org/
+#
+# Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost
+# Software License, Version 1.0. (See accompanying file
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+project
+    :
+    requirements
+#    <link>static
+#    <runtime-link>static
+#    <threading>single
+    ;
+
+exe wave
+    :
+    ../cpp.cpp 
+    /boost/wave//boost_wave
+    /boost/program_options//boost_program_options
+    /boost/filesystem//boost_filesystem
+    /boost/serialization//boost_serialization
+    :
+#   <debug-symbols>on
+    :
+    release
+    ;
+
+install dist-bin
+    :
+    wave
+    :
+    <install-type>EXE
+    <location>../../../dist/bin
+    :
+    release
+    ;
+
+install dist-lib
+    :
+    wave
+    :
+    <install-type>LIB
+    <location>../../../dist/lib
+    :
+    release
+    ;

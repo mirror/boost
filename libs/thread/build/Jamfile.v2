@@ -1,0 +1,39 @@
+# (C) Copyright Vladimir Prus, David Abrahams, Michael Stevens, Hartmut Kaiser, 
+# William E Kempf 2002-2006
+# Use, modification and distribution are subject to the
+# Boost Software License, Version 1.0. (See accompanying file
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+import os ;
+
+
+project boost/thread
+    : source-location ../src 
+    : requirements <link>shared:<define>BOOST_THREAD_BUILD_DLL=1  <threading>multi 
+    : default-build <threading>multi
+    ;
+
+CPP_SOURCES =  
+        barrier
+        condition
+        exceptions
+        mutex
+        once
+        recursive_mutex
+#        read_write_mutex
+        thread
+        tss_hooks
+        tss_dll
+        tss_pe
+        tss
+        xtime
+    ;
+
+lib boost_thread
+   : $(CPP_SOURCES).cpp
+   : <link>shared:<define>BOOST_THREAD_BUILD_DLL=1
+     <link>static:<define>BOOST_THREAD_BUILD_LIB=1
+   : # default build
+   : <link>shared:<define>BOOST_THREAD_BUILD_DLL=1
+     <link>static:<define>BOOST_THREAD_BUILD_LIB=1
+   ;

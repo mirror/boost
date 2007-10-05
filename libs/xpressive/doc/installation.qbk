@@ -1,0 +1,45 @@
+[section Installing xpressive]
+
+[h2 Getting xpressive]
+
+There are two ways to get xpressive. The first is by downloading xpressive.zip at the
+[@http://www.boost-consulting.com/vault/index.php?directory=Strings%20-%20Text%20Processing
+Boost File Vault] in the "Strings - Text Processing" directory. In addition to
+the source code and the Boost license, this archive contains a copy of this documentation in
+PDF format.
+
+The second way is through anonymous CVS via the boost project on SourceForge.net. Just
+go to [@http://sf.net/projects/boost] and follow the instructions there for
+anonymous CVS access.
+
+[h2 Building with xpressive]
+
+xpressive is a header-only template library, which means you don't need to alter your build scripts
+or link to any separate lib file to use it. All you need to do is `#include <boost/xpressive/xpressive.hpp>`.
+If you are only using static regexes, you can improve compile times by only including `xpressive_static.hpp`.
+Likewise, you can include `xpressive_dynamic.hpp` if you only plan on using dynamic regexes.
+
+[h2 Requirements]
+
+xpressive depends on Boost. You can download the latest version of the Boost
+libraries from [@http://boost.org]. xpressive requires Boost version 1.32 or higher.
+
+[h2 Supported Compilers]
+
+Currently, Boost.Xpressive is known to work on the following compilers:
+
+* Visual C++ 7.1 and higher
+* GNU C++ 3.2 and higher
+* Intel for Linux 8.1 and higher
+* Intel for Windows 8.1 and higher
+* tru64cxx 65 and higher
+* QNX qcc 3.3 and higher
+* MinGW 3.4 and higher
+* Metrowerks CodeWarrior 9.4 and higher
+
+Check the latest tests results at Boost's
+[@http://engineering.meta-comm.com/boost-regression/CVS-HEAD/developer/xpressive.html Regression Results Page].
+
+[note Please send any questions, comments and bug reports to eric <at> boost-consulting <dot> com.]
+
+[endsect]

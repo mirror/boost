@@ -1,0 +1,3 @@
+POST 1.33.0
+array_adaptor and shallow_array_adaptor removed
+carray_adaptor included and documented

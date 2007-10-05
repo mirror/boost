@@ -1,0 +1,13 @@
+[section Acknowledgments]
+
+I am indebted to [@http://boost.org/people/joel_de_guzman.htm Joel de Guzman] and
+[@http://boost.org/people/hartmut_kaiser.htm Hartmut Kaiser] for their expert advice
+during the early states of xpressive's development. I am thankful for
+[@http://boost.org/people/john_maddock.htm John Maddock]'s excellent work on his proposal
+to add regular expressions to the standard library. I'd also like to thank
+[@http://moderncppdesign.com/ Andrei Alexandrescu] for his input regarding the behavior
+of nested regex objects, and [@http://boost.org/people/dave_abrahams.htm Dave Abrahams]
+for his suggestions regarding the regex domain-specific embedded language. Noel Belcourt
+helped porting xpressive to the Metrowerks CodeWarrior compiler.
+
+[endsect]

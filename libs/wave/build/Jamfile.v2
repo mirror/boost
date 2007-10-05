@@ -1,0 +1,60 @@
+# Boost.Wave: A Standard compliant C++ preprocessor library
+#
+# Boost Wave Library Build Jamfile
+#
+# http://www.boost.org/
+#
+# Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost 
+# Software License, Version 1.0. (See accompanying file 
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+project boost/wave
+    : requirements
+      <link>shared:<define>BOOST_ALL_DYN_LINK=1
+    : source-location ../src
+    ;
+
+SOURCES =
+    instantiate_cpp_exprgrammar
+    instantiate_cpp_grammar
+    instantiate_cpp_literalgrs
+    instantiate_defined_grammar
+    instantiate_predef_macros
+    instantiate_re2c_lexer
+    instantiate_re2c_lexer_str
+    token_ids
+    wave_config_constant
+    cpplexer/re2clex/aq
+    cpplexer/re2clex/cpp_re
+    ;
+
+lib boost_wave
+    :
+    $(SOURCES)
+    /boost/filesystem//boost_filesystem
+    ;
+
+for local source in $(SOURCES)
+{
+    local requirements ;
+
+    # workaround for compiler bug
+    requirements += <toolset-msvc:version>7.1:<rtti>off ;
+    requirements += <toolset-msvc:version>7.1_stlport4:<rtti>off ;
+
+    if $(source) in cpplexer/re2clex/cpp_re
+    {
+        requirements += <warnings>off ;
+    }
+    obj $(source) : $(source).cpp : $(requirements) ;
+}
+
+install dist-lib
+    :
+    boost_wave
+    :
+    <install-type>LIB
+    <location>../../../dist/lib
+    ;
+
+explicit dist-lib ;

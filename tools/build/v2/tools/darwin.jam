@@ -1,0 +1,96 @@
+# Copyright 2003 Christopher Currie
+# Copyright 2006 Dave Abrahams 
+# Copyright 2003, 2004, 2005, 2006 Vladimir Prus 
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt) 
+
+#  Please see http://article.gmane.org/gmane.comp.lib.boost.build/3389/
+#  for explanation why it's a separate toolset.
+
+import feature : feature ;
+import toolset : flags ;
+import type ;
+import common ;
+import generators ;
+
+toolset.register darwin ;
+import gcc ;
+toolset.inherit-generators darwin : gcc ;
+
+generators.override darwin.prebuilt : builtin.prebuilt ;
+generators.override darwin.searched-lib-generator : searched-lib-generator ;
+
+toolset.inherit-rules darwin : gcc ;
+toolset.inherit-flags darwin : gcc     
+  :  # On Darwin, static runtime is just not supported. So don't inherit
+     # any flags settings for <runtime-link>static
+     <runtime-link>static
+  ;
+
+# No additional initialization should be necessary
+rule init ( version ? : command * : options * )
+{
+    local condition = [ common.check-init-parameters darwin : version $(version) ] ;    
+    local command = [ common.get-invocation-command darwin : g++ : $(command) ] ;
+    
+    common.handle-options darwin : $(condition) : $(command) : $(options) ;
+    
+    # GCC 4.0 and higher in Darwin does not have -fcoalesce-templates.
+    local gccversion = [ SHELL "$(command) -dumpversion" ] ;
+    if $(gccversion) < "4.0.0"
+    {
+        flags darwin.compile.c++ OPTIONS : -fcoalesce-templates ;
+    }
+
+    gcc.init-link-flags darwin darwin $(condition) ;
+    
+    flags darwin.link NEED_STRIP $(condition)/<debug-symbols>off : "" ;        
+}
+
+feature framework : : free ;
+
+flags darwin.compile OPTIONS <link>shared : -dynamic ;
+flags darwin.compile OPTIONS : -Wno-long-double -no-cpp-precomp  ;
+
+flags darwin.link FRAMEWORK <framework> ;
+
+# This is flag is useful for debugging the link step
+# uncomment to see what libtool is doing under the hood
+# flags darwin.link.dll OPTIONS : -Wl,-v ;
+
+_ = " " ;
+
+# set up the -F option to include the paths to any frameworks used.
+local rule prepare-framework-path ( target + )
+{
+    local framework-path = [ on $(target) return $(FRAMEWORK:D) ] ;
+    
+    FRAMEWORK_PATH on $(target) += -F$(framework-path) ;
+}
+
+rule link
+{
+    prepare-framework-path $(<) ;
+}
+
+actions link bind LIBRARIES
+{
+    $(CONFIG_COMMAND) -L"$(LINKPATH)" -o "$(<)" "$(>)" "$(LIBRARIES)" -l$(FINDLIBS-SA) -l$(FINDLIBS-ST) $(FRAMEWORK_PATH) -framework$(_)$(FRAMEWORK:D=:S=) $(OPTIONS) $(USER_OPTIONS)
+    $(NEED_STRIP)strip $(NEED_STRIP)"$(<)"
+}
+
+rule link.dll
+{
+    prepare-framework-path $(<) ;
+}
+
+actions link.dll bind LIBRARIES
+{
+    $(CONFIG_COMMAND) -dynamiclib -L"$(LINKPATH)" -o "$(<)" "$(>)" "$(LIBRARIES)" -l$(FINDLIBS-SA) -l$(FINDLIBS-ST) $(FRAMEWORK_PATH) -framework$(_)$(FRAMEWORK:D=:S=) $(OPTIONS) $(USER_OPTIONS)
+}
+
+actions piecemeal archive
+{
+    ar -c -r -s $(ARFLAGS) "$(<:T)" "$(>:T)"
+}
+

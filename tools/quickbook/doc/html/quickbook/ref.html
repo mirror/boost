@@ -1,0 +1,402 @@
+<html>
+<head>
+
+    <--
+    Copyright (c) 2002 2004 Joel de Guzman
+    Copyright (c) 2004 Eric Niebler
+    http://spirit.sourceforge.net/
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+    -->
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title> Quick Reference</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="../index.html" title="Quickbook 1.3">
+<link rel="up" href="../index.html" title="Quickbook 1.3">
+<link rel="prev" href="syntax/block.html" title=" Block Level Elements">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="syntax/block.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="quickbook.ref"></a> Quick Reference</h2></div></div></div>
+<div class="informaltable">
+<h4>
+<a name="id2562261"></a>
+        <span class="table-title">Syntax Compendium</span>
+      </h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>To do this...</th>
+<th>Use this...</th>
+<th>See this...</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>comment</td>
+<td><code class="literal">
+[/ some comment]
+            </code></td>
+<td><a href="syntax/comments.html" title="Comments">Comments</a></td>
+</tr>
+<tr>
+<td><span class="emphasis"><em>italics</em></span></td>
+<td><code class="literal">
+['italics] or /italics/
+            </code></td>
+<td>
+<a href="syntax/phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font
+            Styles</a> and <a href="syntax/phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">formatting
+            Simple formatting</a>
+</td>
+</tr>
+<tr>
+<td><span class="bold"><strong>bold</strong></span></td>
+<td><code class="literal">
+[*bold] or *bold*
+            </code></td>
+<td>
+<a href="syntax/phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font
+            Styles</a> and <a href="syntax/phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">formatting
+            Simple formatting</a>
+</td>
+</tr>
+<tr>
+<td><span class="underline">underline</span></td>
+<td><code class="literal">
+[_underline] or _underline_
+            </code></td>
+<td>
+<a href="syntax/phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font
+            Styles</a> and <a href="syntax/phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">formatting
+            Simple formatting</a>
+</td>
+</tr>
+<tr>
+<td><code class="literal">teletype</code></td>
+<td><code class="literal">
+[^teletype] or =teletype=
+            </code></td>
+<td>
+<a href="syntax/phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font
+            Styles</a> and <a href="syntax/phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">formatting
+            Simple formatting</a>
+</td>
+</tr>
+<tr>
+<td><span class="strikethrough">strikethrough</span></td>
+<td><code class="literal">
+[-strikethrough]
+            </code></td>
+<td>
+<a href="syntax/phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font
+            Styles</a> and <a href="syntax/phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">formatting
+            Simple formatting</a>
+</td>
+</tr>
+<tr>
+<td>
+            <em class="replaceable"><code>
+              replaceable
+            </code></em>
+            </td>
+<td><code class="literal">
+[~replaceable]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.replaceable" title="Replaceable">Replaceble</a></td>
+</tr>
+<tr>
+<td>source mode</td>
+<td>
+<code class="literal">[c++]</code> or <code class="literal">[python]</code>
+</td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.source_mode" title="Source Mode">Source Mode</a></td>
+</tr>
+<tr>
+<td>inline code</td>
+<td><code class="literal">
+`int main();`
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.inline_code" title="Inline code">Inline
+            code</a></td>
+</tr>
+<tr>
+<td>code block</td>
+<td><code class="literal">
+``int main();``
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.code" title="Code">Code</a></td>
+</tr>
+<tr>
+<td>code escape</td>
+<td><code class="literal">
+``from c++ to QuickBook``
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.escape_back" title=" Escaping Back To QuickBook">Escaping
+            Back To QuickBook</a></td>
+</tr>
+<tr>
+<td>line break</td>
+<td><code class="literal">
+[br] or \n
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.line_break" title="line-break">line-break</a></td>
+</tr>
+<tr>
+<td>anchor</td>
+<td><code class="literal">
+[#anchor]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.anchors" title="Anchors">Anchors</a></td>
+</tr>
+<tr>
+<td>link</td>
+<td><code class="literal">
+[@http://www.boost.org Boost]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.links" title="Links">Links</a></td>
+</tr>
+<tr>
+<td>anchor link</td>
+<td><code class="literal">
+[link section.anchor Link text]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.anchor_links" title="Anchor links">Anchor
+            links</a></td>
+</tr>
+<tr>
+<td>refentry link</td>
+<td><code class="literal">
+[link xml.refentry Link text]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.refentry_links" title="refentry links">refentry
+            links</a></td>
+</tr>
+<tr>
+<td>function link</td>
+<td><code class="literal">
+[funcref fully::qualified::function_name Link text]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links">function,
+            class, member, enum or header links</a></td>
+</tr>
+<tr>
+<td>class link</td>
+<td><code class="literal">
+[classref fully::qualified::class_name Link text]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links">function,
+            class, member, enum or header links</a></td>
+</tr>
+<tr>
+<td>member link</td>
+<td><code class="literal">
+[memberref fully::qualified::member_name Link text]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links">function,
+            class, member, enum or header links</a></td>
+</tr>
+<tr>
+<td>enum link</td>
+<td><code class="literal">
+[enumref fully::qualified::enum_name Link text]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links">function,
+            class, member, enum or header links</a></td>
+</tr>
+<tr>
+<td>header link</td>
+<td><code class="literal">
+[headerref path/to/header.hpp Link text]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links">function,
+            class, member, enum or header links</a></td>
+</tr>
+<tr>
+<td>escape</td>
+<td><code class="literal">'''escaped text (no processing/formatting)'''</code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.escape" title="Escape">Escape</a></td>
+</tr>
+<tr>
+<td>single char escape</td>
+<td><code class="literal">\c</code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.single_char_escape" title="Single char escape">Single char escape</a></td>
+</tr>
+<tr>
+<td>images</td>
+<td><code class="literal">
+[$image.jpg]
+            </code></td>
+<td><a href="syntax/phrase.html#quickbook.syntax.phrase.images" title="Images">Images</a></td>
+</tr>
+<tr>
+<td>begin section</td>
+<td><code class="literal">
+[section The Section Title]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.section" title="Section">Section</a></td>
+</tr>
+<tr>
+<td>end section</td>
+<td><code class="literal">
+[endsect]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.section" title="Section">Section</a></td>
+</tr>
+<tr>
+<td>paragraph</td>
+<td>No markup. Paragraphs start left-flushed
+            and are terminated by two or more newlines.</td>
+<td><a href="syntax/block.html#quickbook.syntax.block.paragraphs" title="Paragraphs">Paragraphs</a></td>
+</tr>
+<tr>
+<td>ordered list</td>
+<td><code class="literal"># one<br> # two<br> #
+            three<br> </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.lists.ordered_lists" title="Ordered lists">Ordered
+            lists</a></td>
+</tr>
+<tr>
+<td>unordered list</td>
+<td><code class="literal">* one<br> * two<br>
+            * three<br> </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.lists.unordered_lists" title="Unordered lists">Unordered
+            lists</a></td>
+</tr>
+<tr>
+<td>code</td>
+<td>No markup. Preformatted code starts with a
+            space or a tab.</td>
+<td><a href="syntax/block.html#quickbook.syntax.block.code" title="Code">Code</a></td>
+</tr>
+<tr>
+<td>preformatted</td>
+<td><code class="literal">
+[pre preformatted]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.preformatted" title="Preformatted">Preformatted</a></td>
+</tr>
+<tr>
+<td>block quote</td>
+<td><code class="literal">
+[:sometext...]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.blockquote" title="Blockquote">Blockquote</a></td>
+</tr>
+<tr>
+<td>heading 1</td>
+<td><code class="literal">
+[h1 Heading 1]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.headings" title="Headings">Heading</a></td>
+</tr>
+<tr>
+<td>heading 2</td>
+<td><code class="literal">
+[h2 Heading 2]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.headings" title="Headings">Heading</a></td>
+</tr>
+<tr>
+<td>heading 3</td>
+<td><code class="literal">
+[h3 Heading 3]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.headings" title="Headings">Heading</a></td>
+</tr>
+<tr>
+<td>heading 4</td>
+<td><code class="literal">
+[h4 Heading 4]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.headings" title="Headings">Heading</a></td>
+</tr>
+<tr>
+<td>heading 5</td>
+<td><code class="literal">
+[h5 Heading 5]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.headings" title="Headings">Heading</a></td>
+</tr>
+<tr>
+<td>heading 6</td>
+<td><code class="literal">
+[h6 Heading 6]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.headings" title="Headings">Heading</a></td>
+</tr>
+<tr>
+<td>macro</td>
+<td><code class="literal">
+[def macro_identifier some text]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.macros" title="Macros">Macros</a></td>
+</tr>
+<tr>
+<td>blurb</td>
+<td><code class="literal">
+[blurb advertisement or note...]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.blurbs" title="Blurbs">Blurbs</a></td>
+</tr>
+<tr>
+<td>admonition</td>
+<td><code class="literal">
+[warning Warning text...]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.admonitions" title="Admonitions">Admonitions</a></td>
+</tr>
+<tr>
+<td>table</td>
+<td><code class="literal">[table Title<br> [[a][b][c]]<br>
+            [[a][b][c]]<br> ]</code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.tables" title="Tables">Tables</a></td>
+</tr>
+<tr>
+<td>variablelist</td>
+<td><code class="literal">[variablelist Title<br>
+            [[a][b]]<br> [[a][b]]<br> ]</code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.variable_lists" title="Variable Lists">Variable
+            Lists</a></td>
+</tr>
+<tr>
+<td>include</td>
+<td><code class="literal">
+[include someother.qbk]
+            </code></td>
+<td><a href="syntax/block.html#quickbook.syntax.block.include" title="Include">Include</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<table width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2002, 2004 Joel de Guzman, Eric Niebler</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="syntax/block.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a>
+</div>
+</body>
+</html>

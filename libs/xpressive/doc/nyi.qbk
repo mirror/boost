@@ -1,0 +1,20 @@
+[section Appendix 1: Not Yet Implemented]
+
+The following features of xpressive have not yet been implemented, but are planned
+for the near future:\n
+\n
+
+* match_flag_type::format_sed
+* match_flag_type::format_perl
+\n
+
+The following features are planned for xpressive 2.0:\n
+\n
+
+* syntax_option_type::collate
+* POSIX collation sequences such as [^'''[.a.]'''] and [^'''[=a=]''']
+* Semantic actions
+* Fine-grained control over the dynamic regex syntax
+* Improved localization support, possibly as a custom facet for `std::locale`
+
+[endsect]

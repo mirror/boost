@@ -1,0 +1,72 @@
+[section String Substitutions]
+
+Regular expressions are not only good for searching text; they're good at ['manipulating] it. And one of the most
+common text manipulation tasks is search-and-replace. xpressive provides the _regex_replace_ algorithm for
+searching and replacing.
+
+[h2 regex_replace()]
+
+Performing search-and-replace using _regex_replace_ is simple. All you need is an input sequence, a regex object,
+and a format string. There are two versions of the _regex_replace_ algorithm. The first accepts the input
+sequence as `std::basic_string<>` and returns the result in a new `std::basic_string<>`. The second accepts
+the input sequence as a pair of iterators, and writes the result into an output iterator. Below are examples of
+each.
+
+    std::string input("This is his face");
+    sregex re = as_xpr("his");                // find all occurrences of "his" ...
+    std::string format("her");                // ... and replace them with "her"
+
+    // use the version of regex_replace() that operates on strings
+    std::string output = regex_replace( input, re, format );
+    std::cout << output << '\n';
+
+    // use the version of regex_replace() that operates on iterators
+    std::ostream_iterator< char > out_iter( std::cout );
+    regex_replace( out_iter, input.begin(), input.end(), re, format );
+
+The above program prints out the following:
+
+[pre
+Ther is her face
+Ther is her face
+]
+
+Notice that ['all] the occurrences of `"his"` have been replaced with `"her"`.
+
+Click [link boost_xpressive.user_s_guide.examples.replace_all_sub_strings_that_match_a_regex here] to see a complete
+example program that shows how to use _regex_replace_. And check the _regex_replace_ reference
+to see a complete list of the available overloads.
+
+[h2 The Format String]
+
+As with Perl, you can refer to sub-matches in the format string. The table below shows the escape sequences
+xpressive recognizes in the format string.
+
+[table Format Escape Sequences
+    [[Escape Sequence]      [Meaning]]
+    [[[^$1]]                [the first sub-match]]
+    [[[^$2]]                [the second sub-match (etc.)]]
+    [[[^$&]]                [the full match]]
+    [[[^$\`]]               [the match prefix]]
+    [[[^$']]                [the match suffix]]
+    [[[^$$]]                [a literal `'$'` character]]
+]
+
+Any other sequence beginning with `'$'` simply represents itself. For example, if the format string were
+`"$a"` then `"$a"` would be inserted into the output sequence.
+
+[h2 Replace Options]
+
+The _regex_replace_ algorithm takes an optional bitmask parameter to control the formatting. The
+possible values of the bitmask are:
+
+[table Format Flags
+    [[Flag]                     [Meaning]]
+    [[`format_first_only`]      [Only replace the first match, not all of them.]]
+    [[`format_no_copy`]         [Don't copy the parts of the input sequence that didn't match the regex to the output sequence.]]
+    [[`format_literal`]         [Treat the format string as a literal; that is, don't recognize any escape sequences.]]
+]
+
+These flags live in the `regex_constants` namespace.
+
+[endsect]

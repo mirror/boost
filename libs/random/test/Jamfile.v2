@@ -1,0 +1,24 @@
+# Copyright 2003 Jens Maurer
+# Distributed under the Boost Software License, Version 1.0. (See accompany-
+# ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# Boost Random Library test Jamfile
+
+# bring in rules for testing
+import testing ;
+
+project
+    : source-location $(BOOST_ROOT)
+    ;
+{
+   test-suite "random"
+        :
+        [ run libs/random/random_test.cpp ]
+        [ run libs/random/random_demo.cpp ]
+#       [ run libs/random/nondet_random_speed.cpp ]
+#       [ run libs/random/random_device.cpp ]
+#       [ run libs/random/random_speed.cpp ]
+#       [ run libs/random/statistic_tests.cpp ]
+       ;
+}
+

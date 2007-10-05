@@ -1,0 +1,10 @@
+*.pyc
+*.exp
+*.lib
+*.obj
+*.arg
+*.dll
+.sconsign
+cache
+*.cpp
+*.pch
