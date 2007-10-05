@@ -570,7 +570,7 @@ inline std::basic_string<Char> regex_replace
 (
     std::basic_string<Char> const &str
   , basic_regex<typename std::basic_string<Char>::const_iterator> const &re
-  , std::basic_string<Char> const &fmt
+  , std::basic_string<typename mpl::identity<Char>::type> const &fmt
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
