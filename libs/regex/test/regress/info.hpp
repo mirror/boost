@@ -67,7 +67,7 @@ private:
    {
 #ifdef TEST_THREADS
       static boost::once_flag f = BOOST_ONCE_INIT;
-      boost::call_once(&init_data, f);
+      boost::call_once(f,&init_data);
       return do_get_data();
 #else
       static data_type d;
