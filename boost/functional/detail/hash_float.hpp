@@ -15,23 +15,35 @@
 #endif
 
 #include <boost/functional/detail/float_functions.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/limits.hpp>
 #include <boost/assert.hpp>
 
-// Don't use fpclassify or _fpclass for stlport.
-#if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-#  if defined(__GLIBCPP__) || defined(__GLIBCXX__)
-// GNU libstdc++ 3
-#    if (defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH)) && \
-        !(defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
-#      define BOOST_HASH_USE_FPCLASSIFY
-#    endif
-#  elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-// Dinkumware Library, on Visual C++ 
-#    if defined(BOOST_MSVC)
-#      define BOOST_HASH_USE_FPCLASS
-#    endif
+// Select implementation for the current platform.
+
+// Cygwn
+#if defined(__CYGWIN__)
+#  if defined(__i386__) || defined(_M_IX86)
+#    define BOOST_HASH_USE_x86_BINARY_HASH
 #  endif
+
+// STLport
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+// _fpclass and fpclassify aren't good enough on STLport.
+
+// GNU libstdc++ 3
+#elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
+#  if (defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH)) && \
+      !(defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
+#    define BOOST_HASH_USE_FPCLASSIFY
+#  endif
+
+// Dinkumware Library, on Visual C++ 
+#elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
+#  if defined(BOOST_MSVC)
+#    define BOOST_HASH_USE_FPCLASS
+#  endif
+
 #endif
 
 namespace boost
@@ -43,6 +55,33 @@ namespace boost
             seed ^= value + (seed<<6) + (seed>>2);
         }
 
+// A simple, non-portable hash algorithm for x86.
+#if defined(BOOST_HASH_USE_x86_BINARY_HASH)
+        inline std::size_t float_hash_impl(float v)
+        {
+            boost::uint32_t* ptr = (boost::uint32_t*)&v;
+            std::size_t seed = *ptr;
+            return seed;
+        }
+
+        inline std::size_t float_hash_impl(double v)
+        {
+            boost::uint32_t* ptr = (boost::uint32_t*)&v;
+            std::size_t seed = *ptr++;
+            hash_float_combine(seed, *ptr);
+            return seed;
+        }
+
+        inline std::size_t float_hash_impl(long double v)
+        {
+            boost::uint32_t* ptr = (boost::uint32_t*)&v;
+            std::size_t seed = *ptr++;
+            hash_float_combine(seed, *ptr++);
+            hash_float_combine(seed, *(boost::uint16_t*)ptr);
+            return seed;
+        }
+
+#else
         template <class T>
         inline std::size_t float_hash_impl(T v)
         {
@@ -68,6 +107,7 @@ namespace boost
 
             return seed;
         }
+#endif
 
         template <class T>
         inline std::size_t float_hash_value(T v)
@@ -111,7 +151,7 @@ namespace boost
                 return 0;
             }
 #else
-            return float_hash_impl(v);
+            return v == 0 ? 0 : float_hash_impl(v);
 #endif
         }
     }
