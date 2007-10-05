@@ -132,7 +132,7 @@
 #   endif
 
 #elif defined(__BORLANDC__)
-#   if (__BORLANDC__ < 0x600)
+#   if (__BORLANDC__ < 0x590)
 #       define BOOST_TYPEOF_NO_FUNCTION_TYPES
 #       define BOOST_TYPEOF_NO_MEMBER_FUNCTION_TYPES
 #   endif
