@@ -106,6 +106,38 @@ namespace boost { namespace type_of {
     typedef _typeof_encode_fraction<self_t::iteration> fraction_type;
 #endif
 
+#ifdef __BORLANDC__
+namespace boost { namespace type_of {
+    template<typename Pos,typename Iter>
+    struct generic_typeof_fraction_iter {
+        typedef generic_typeof_fraction_iter<Pos,Iter> self_t;
+        static const int pos=(Pos::value);
+        static const int iteration=(pos/5);
+        static const int where=pos%5;
+        typedef typename Iter::template _apply_next<self_t::iteration>::type fraction_type;
+        typedef generic_typeof_fraction_iter<typename Pos::next,Iter> next;
+        typedef typename v_iter<fraction_type,mpl::int_<self_t::where> >::type type;
+    };
+}}
+#define BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr) \
+        template<int _Typeof_Iteration>\
+        struct _typeof_encode_fraction {\
+            typedef _typeof_encode_fraction<_Typeof_Iteration> self_t;\
+            BOOST_STATIC_CONSTANT(int,_typeof_encode_offset = (_Typeof_Iteration*BOOST_TYPEOF_LIMIT_SIZE));\
+            typedef boost::type_of::offset_vector<BOOST_TYPEOF_VECTOR(0)<>,boost::mpl::size_t<self_t::_typeof_encode_offset> > _typeof_start_vector;\
+            BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE,BOOST_TYPEOF_NESTED_TYPEITEM,expr)\
+            template<int Next>\
+            struct _apply_next {\
+                typedef _typeof_encode_fraction<Next> type;\
+            };\
+        };\
+        template<typename Pos>\
+        struct _typeof_fraction_iter {\
+            typedef boost::type_of::generic_typeof_fraction_iter<Pos,_typeof_encode_fraction<0> > self_t;\
+            typedef typename self_t::next next;\
+            typedef typename self_t::type type;\
+        };
+#else
 #define BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr) \
         template<int _Typeof_Iteration>\
         struct _typeof_encode_fraction {\
@@ -124,7 +156,7 @@ namespace boost { namespace type_of {
             typedef typename boost::type_of::v_iter<fraction_type,boost::mpl::int_<self_t::where> >::type type;\
             typedef _typeof_fraction_iter<typename Pos::next> next;\
         };
-
+#endif
 #ifdef __MWERKS__
 
 # define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
