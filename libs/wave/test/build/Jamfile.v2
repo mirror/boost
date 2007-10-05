@@ -12,10 +12,17 @@
 #
 # These are the sources to compile for the testwave application
 #
-SOURCES = testwave testwave_app
+SOURCES_STATIC = testwave testwave_app
     ;
     
-path-constant TESTWAVE_DIR : ../testwave/testfiles ;    
+SOURCES_DYNAMIC = testwave_dll testwave_app_dll
+    ;
+
+SOURCES = $(SOURCE_STATIC) $(SOURCES_DYNAMIC)
+    ;
+    
+path-constant TESTWAVE_DIR : ../testwave/testfiles 
+    ;
 
 #
 # This are the arguments for the testwave executable
@@ -33,12 +40,6 @@ TESTWAVE_FILES = test.cfg
     ;
 
 project wave/test
-    : requirements
-        <threading>single
-        <variant>debug
-        <define>BOOST_LIB_DIAGNOSTIC=1
-        <define>BOOST_ALL_NO_LIB=1
-        <link>shared:<define>BOOST_ALL_DYN_LINK=1
     ;
 
 for local source in $(SOURCES)
@@ -57,7 +58,7 @@ test-suite wave
         [   
             run
             # sources
-                ../testwave/$(SOURCES).cpp
+                ../testwave/$(SOURCES_DYNAMIC).cpp
                 /boost/wave//boost_wave 
                 /boost/program_options//boost_program_options
                 /boost/filesystem//boost_filesystem    
@@ -71,7 +72,12 @@ test-suite wave
             # input files
             :
             # requirements
-            :
+                <threading>single
+                <variant>debug
+                <define>BOOST_LIB_DIAGNOSTIC=1
+                <define>BOOST_ALL_NO_LIB=1
+                <link>shared:<define>BOOST_ALL_DYN_LINK=1
+            :    
             # name
                 testwave_dll
         ]
@@ -79,7 +85,7 @@ test-suite wave
         [   
             run
             # sources
-                ../testwave/$(SOURCES).cpp
+                ../testwave/$(SOURCES_STATIC).cpp
                 /boost/wave//boost_wave/<link>static
                 /boost/program_options//boost_program_options/<link>static
                 /boost/filesystem//boost_filesystem/<link>static
@@ -93,7 +99,11 @@ test-suite wave
             # input files
             : 
             # requirements
-	              <link>static     # Linking to DLL tested by testwave_dll
+                <threading>single
+                <variant>debug
+                <define>BOOST_LIB_DIAGNOSTIC=1
+                <define>BOOST_ALL_NO_LIB=1
+	        <link>static     # Linking to DLL tested by testwave_dll
             : 
             # name
                 testwave
