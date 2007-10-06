@@ -13,6 +13,7 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/or.hpp>
 #include <boost/tuple/tuple.hpp>
 
 namespace boost { namespace fusion

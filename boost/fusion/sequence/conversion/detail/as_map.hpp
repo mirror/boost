@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PP_IS_ITERATING
@@ -15,7 +15,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/inc.hpp>
 #include <boost/preprocessor/dec.hpp>
-#include <boost/fusion/sequence/container/map/map_fwd.hpp>
+#include <boost/fusion/sequence/container/map/map.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
@@ -24,7 +24,7 @@ namespace boost { namespace fusion { namespace detail
 {
     template <int size>
     struct as_map;
-    
+
     template <>
     struct as_map<0>
     {
@@ -33,7 +33,7 @@ namespace boost { namespace fusion { namespace detail
         {
             typedef map<> type;
         };
-        
+
         template <typename Iterator>
         static typename apply<Iterator>::type
         call(Iterator)
@@ -84,7 +84,7 @@ namespace boost { namespace fusion { namespace detail
             BOOST_PP_REPEAT(N, BOOST_FUSION_VALUE_OF_ITERATOR, _)
             typedef map<BOOST_PP_ENUM_PARAMS(N, T)> type;
         };
-        
+
         template <typename Iterator>
         static typename apply<Iterator>::type
         call(Iterator const& i0)
