@@ -98,6 +98,7 @@ class StoragePolicy
 #include <functional>
 #include <limits>
 #include <stdexcept>
+#include <iosfwd>
 #include <cstddef>
 #include <cstring>
 #include <cstdlib>
