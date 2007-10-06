@@ -8,6 +8,6 @@
 =============================================================================*/
 
 // This file is necessary only because Boost.Build V2 isn't able to handle
-// several testcases using the same sorce files.
+// several testcases using the same source files.
 
 #include "testwave_app.cpp"
