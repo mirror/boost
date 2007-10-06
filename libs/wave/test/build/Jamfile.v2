@@ -72,11 +72,10 @@ test-suite wave
             # input files
             :
             # requirements
-                <threading>single
+                <threading>multi
                 <variant>debug
-                <define>BOOST_LIB_DIAGNOSTIC=1
-                <define>BOOST_ALL_NO_LIB=1
                 <link>shared:<define>BOOST_ALL_DYN_LINK=1
+#                <define>BOOST_LIB_DIAGNOSTIC=1
             :    
             # name
                 testwave_dll
@@ -99,11 +98,10 @@ test-suite wave
             # input files
             : 
             # requirements
-                <threading>single
+                <threading>multi
                 <variant>debug
-                <define>BOOST_LIB_DIAGNOSTIC=1
-                <define>BOOST_ALL_NO_LIB=1
 	        <link>static     # Linking to DLL tested by testwave_dll
+#                <define>BOOST_LIB_DIAGNOSTIC=1
             : 
             # name
                 testwave
@@ -125,6 +123,8 @@ test-suite wave
             # input files
             :
             # requirements
+                <threading>multi
+                <variant>debug
             :
             # name
                 test_slex_lexer
@@ -145,6 +145,8 @@ test-suite wave
             # input files
             :
             # requirements
+                <threading>multi
+                <variant>debug
             :
             # name
                 test_re2c_lexer
