@@ -17,7 +17,7 @@
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
 
 
-[template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical report on C++ Library Extensions]]
+[template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 [template syntax_option_type[] [link boost_regex.ref.syntax_option_type `syntax_option_type`]]
 [template error_type[] [link boost_regex.ref.error_type `error_type`]]
 [template bad_expression[] [link boost_regex.ref.bad_expression `bad_expression`]]
@@ -100,3 +100,4 @@
 [include history.qbk]
 
 [endsect]
+
