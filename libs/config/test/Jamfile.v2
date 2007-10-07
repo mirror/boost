@@ -15,7 +15,7 @@ path-constant DOT : . ;
 include $(DOT)/options_v2.jam ;
 
 run config_info.cpp ;
-run math_info.cpp : : : <toolset>borland:<runtime-link>static ;
+run math_info.cpp : : : <toolset>borland:<runtime-link>static <toolset>borland:<link>static ;
 run config_test.cpp ;
 run limits_test.cpp ../../test/build//boost_test_exec_monitor ;
 run abi/abi_test.cpp abi/main.cpp  ;
@@ -356,5 +356,6 @@ test-suite "BOOST_NO_VOID_RETURNS" :
 test-suite "BOOST_NO_INTRINSIC_WCHAR_T" : 
 [ run no_wchar_t_pass.cpp ]
 [ compile-fail no_wchar_t_fail.cpp ] ;
+
 
 
