@@ -29,6 +29,11 @@ void function_pointer_tests()
     compile_time_tests((void(**)()) 0);
     compile_time_tests((int(**)(int)) 0);
 
+    std::cout<<"sizeof(void(*)()) = "<<sizeof(void(*)())<<"\n";
+    std::cout<<"sizeof(int(*)(int)) = "<<sizeof(int(*)(int))<<"\n";
+    std::cout<<"sizeof(void*) = "<<sizeof(void*)<<"\n";
+    std::cout<<"sizeof(std::size_t) = "<<sizeof(std::size_t)<<"\n";
+
     HASH_NAMESPACE::hash<void(*)()> hasher_void;
     HASH_NAMESPACE::hash<int(*)(int)> hasher_int;
 
