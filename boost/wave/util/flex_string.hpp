@@ -1406,7 +1406,7 @@ template <typename E,
     class Storage = AllocatorStringStorage<E, A> >
 class flex_string : private Storage
 {
-#if defined(THROW_ON_ENFORCE)
+#if defined(BOOST_WAVE_FLEXSTRING_THROW_ON_ENFORCE)
     template <typename Exception>
     static void Enforce(bool condition, Exception*, const char* msg)
     { if (!condition) boost::throw_exception(Exception(msg)); }
@@ -1414,8 +1414,9 @@ class flex_string : private Storage
     template <typename Exception>
     static inline void Enforce(bool condition, Exception*, const char* msg)
     { BOOST_ASSERT(condition && msg); }
-#endif // defined(THROW_ON_ENFORCE)
+#endif // defined(BOOST_WAVE_FLEXSTRING_THROW_ON_ENFORCE)
 
+#ifndef NDEBUG
     bool Sane() const
     {
         return
@@ -1429,9 +1430,9 @@ class flex_string : private Storage
 
     struct Invariant;
     friend struct Invariant;
+    
     struct Invariant
     {
-#ifndef NDEBUG
         Invariant(const flex_string& s) : s_(s)
         {
             BOOST_ASSERT(s_.Sane());
@@ -1442,10 +1443,8 @@ class flex_string : private Storage
         }
     private:
         const flex_string& s_;
-#else
-        Invariant(const flex_string&) {} 
-#endif
     };
+#endif
     
 public:
     // types
@@ -1645,7 +1644,9 @@ public:
     
     flex_string& append(const value_type* s, const size_type n)
     { 
-        Invariant checker(*this); checker;
+#ifndef NDEBUG
+        Invariant checker(*this); 
+#endif
         static std::less_equal<const value_type*> le;
         if (le(&*begin(), s) && le(s, &*end())) // aliasing
         {
@@ -1700,7 +1701,9 @@ public:
     
     flex_string& assign(const value_type* s, size_type n)
     {
-        Invariant checker(*this); checker; 
+#ifndef NDEBUG
+        Invariant checker(*this); 
+#endif
         if (size() >= n)
         {
             std::copy(s, s + n, begin());
@@ -1763,7 +1766,9 @@ private:
     flex_string& InsertImplDiscr(iterator p, 
         size_type n, value_type c, Selector<1>)
     { 
-        Invariant checker(*this); checker; 
+#ifndef NDEBUG
+        Invariant checker(*this); 
+#endif
         assert(p >= begin() && p <= end());
         if (capacity() - size() < n)
         {
@@ -1799,7 +1804,9 @@ private:
     void InsertImpl(iterator i,
         FwdIterator s1, FwdIterator s2, std::forward_iterator_tag)
     { 
-        Invariant checker(*this); checker; 
+#ifndef NDEBUG
+        Invariant checker(*this); 
+#endif
         const size_type pos = i - begin();
         const typename std::iterator_traits<FwdIterator>::difference_type n2 = 
             std::distance(s1, s2);
@@ -1861,7 +1868,9 @@ public:
     
     flex_string& erase(size_type pos = 0, size_type n = npos)
     { 
-        Invariant checker(*this); checker;
+#ifndef NDEBUG
+        Invariant checker(*this); 
+#endif
         Enforce(pos <= length(), (std::out_of_range*)0, "");
         Procust(n, length() - pos);
         std::copy(begin() + pos + n, end(), begin() + pos);
@@ -1910,7 +1919,9 @@ public:
     flex_string& replace(size_type pos, size_type n1, 
         StrOrLength s_or_n2, NumOrChar n_or_c)
     {
-        Invariant checker(*this); checker;
+#ifndef NDEBUG
+        Invariant checker(*this); 
+#endif
         Enforce(pos <= size(), (std::out_of_range*)0, "");
         Procust(n1, length() - pos);
         const iterator b = begin() + pos;
@@ -1963,7 +1974,9 @@ private:
     void ReplaceImpl(iterator i1, iterator i2,
         FwdIterator s1, FwdIterator s2, std::forward_iterator_tag)
     { 
-        Invariant checker(*this); checker;
+#ifndef NDEBUG
+        Invariant checker(*this); 
+#endif
         const typename std::iterator_traits<iterator>::difference_type n1 = 
             i2 - i1;
         assert(n1 >= 0);
