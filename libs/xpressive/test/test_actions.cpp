@@ -122,7 +122,7 @@ void test4()
 void test4_aux()
 {
     using namespace boost::xpressive;
-    placeholder< std::map<std::string, int> > const _map = {};
+    placeholder< std::map<std::string, int> > const _map = {{}};
 
     sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ _map[s1] = as<int>(s2) ];
     sregex rx = pair >> *(+_s >> pair);
