@@ -7,6 +7,9 @@
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// Acknowledgements: Thanks to Markus Sch\:opflin for helping to track down
+// a tricky formatting bug on HP Tru64.
 
 #ifndef BOOST_XPRESSIVE_MATCH_RESULTS_HPP_EAN_10_04_2005
 #define BOOST_XPRESSIVE_MATCH_RESULTS_HPP_EAN_10_04_2005
@@ -122,6 +125,7 @@ struct case_converting_iterator
 
     case_converting_iterator operator ++(int)
     {
+        BOOST_ASSERT(!"The idiomatic '*out++ = x;' breaks the case_converting_iterator. :-(");
         case_converting_iterator tmp(*this);
         ++*this;
         return tmp;
@@ -201,6 +205,19 @@ struct noop_output_iterator
         return *this;
     }
 };
+
+// Don't use std::copy() because on Tru64 (at least), it uses
+// post-increment and assign on the output iterator, which 
+// breaks the case_converting_iterator defined above.
+template<typename In, typename Out>
+Out copy_(In first, In last, Out result)
+{
+    for(; first != last; ++result, ++first)
+    {
+        *result = *first;
+    }
+    return result;
+}
 
 } // detail
 
@@ -439,7 +456,7 @@ public:
 
         if(0 != (regex_constants::format_literal & flags))
         {
-            return std::copy(cur, end, out);
+            return detail::copy_(cur, end, out);
         }
         else if(0 != (regex_constants::format_perl & flags))
         {
@@ -652,7 +669,8 @@ private:
                 break;
 
             default:
-                *out++ = *cur++;
+                *out = *cur++;
+                ++out;
                 break;
             }
         }
@@ -671,7 +689,7 @@ private:
             {
             case BOOST_XPR_CHAR_(char_type, '&'):
                 ++cur;
-                out = std::copy(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
+                out = detail::copy_(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
                 break;
 
             case BOOST_XPR_CHAR_(char_type, '\\'):
@@ -679,7 +697,8 @@ private:
                 break;
 
             default:
-                *out++ = *cur++;
+                *out = *cur++;
+                ++out;
                 break;
             }
         }
@@ -714,7 +733,8 @@ private:
                 break;
 
             default:
-                *iout++ = *cur++;
+                *iout = *cur++;
+                ++iout;
                 break;
             }
         }
@@ -797,7 +817,8 @@ private:
                 // else fall-through
 
             default:
-                *out++ = *cur++;
+                *out = *cur++;
+                ++out;
                 break;
             }
         }
@@ -817,26 +838,28 @@ private:
     {
         if(cur == end)
         {
-            *out++ = BOOST_XPR_CHAR_(char_type, '$');
+            *out = BOOST_XPR_CHAR_(char_type, '$');
+            ++out;
         }
         else if(BOOST_XPR_CHAR_(char_type, '$') == *cur)
         {
-            *out++ = *cur++;
+            *out = *cur++;
+            ++out;
         }
         else if(BOOST_XPR_CHAR_(char_type, '&') == *cur) // whole match
         {
             ++cur;
-            out = std::copy(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
+            out = detail::copy_(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
         }
         else if(BOOST_XPR_CHAR_(char_type, '`') == *cur) // prefix
         {
             ++cur;
-            out = std::copy(this->prefix().first, this->prefix().second, out);
+            out = detail::copy_(this->prefix().first, this->prefix().second, out);
         }
         else if(BOOST_XPR_CHAR_(char_type, '\'') == *cur) // suffix
         {
             ++cur;
-            out = std::copy(this->suffix().first, this->suffix().second, out);
+            out = detail::copy_(this->suffix().first, this->suffix().second, out);
         }
         else if(-1 != this->traits_->value(*cur, 10)) // a sub-match
         {
@@ -844,12 +867,14 @@ private:
             int sub = detail::toi(cur, end, *this->traits_, 10, max);
             detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
             if(this->sub_matches_[ sub ].matched)
-                out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+                out = detail::copy_(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
         }
         else
         {
-            *out++ = BOOST_XPR_CHAR_(char_type, '$');
-            *out++ = *cur++;
+            *out = BOOST_XPR_CHAR_(char_type, '$');
+            ++out;
+            *out = *cur++;
+            ++out;
         }
 
         return out;
@@ -875,39 +900,46 @@ private:
 
         if(cur == end)
         {
-            *out++ = BOOST_XPR_CHAR_(char_type, '\\');
-            return out;
+            *out = BOOST_XPR_CHAR_(char_type, '\\');
+            return ++out;
         }
 
         char_type ch = *cur++;
         switch(ch)
         {
         case BOOST_XPR_CHAR_(char_type, 'a'):
-            *out++ = BOOST_XPR_CHAR_(char_type, '\a');
+            *out = BOOST_XPR_CHAR_(char_type, '\a');
+            ++out;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'e'):
-            *out++ = converter(27);
+            *out = converter(27);
+            ++out;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'f'):
-            *out++ = BOOST_XPR_CHAR_(char_type, '\f');
+            *out = BOOST_XPR_CHAR_(char_type, '\f');
+            ++out;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'n'):
-            *out++ = BOOST_XPR_CHAR_(char_type, '\n');
+            *out = BOOST_XPR_CHAR_(char_type, '\n');
+            ++out;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'r'):
-            *out++ = BOOST_XPR_CHAR_(char_type, '\r');
+            *out = BOOST_XPR_CHAR_(char_type, '\r');
+            ++out;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 't'):
-            *out++ = BOOST_XPR_CHAR_(char_type, '\t');
+            *out = BOOST_XPR_CHAR_(char_type, '\t');
+            ++out;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'v'):
-            *out++ = BOOST_XPR_CHAR_(char_type, '\v');
+            *out = BOOST_XPR_CHAR_(char_type, '\v');
+            ++out;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'x'):
@@ -916,14 +948,16 @@ private:
             {
                 detail::ensure(++cur != end, error_escape, "unexpected end of format found");
                 tmp = cur;
-                *out++ = converter(detail::toi(cur, end, *this->traits_, 16, 0xffff));
+                *out = converter(detail::toi(cur, end, *this->traits_, 16, 0xffff));
+                ++out;
                 detail::ensure(4 == std::distance(tmp, cur) && cur != end && BOOST_XPR_CHAR_(char_type, '}') == *cur++
                   , error_escape, "invalid hex escape : must be \\x { HexDigit HexDigit HexDigit HexDigit }");
             }
             else
             {
                 tmp = cur;
-                *out++ = converter(detail::toi(cur, end, *this->traits_, 16, 0xff));
+                *out = converter(detail::toi(cur, end, *this->traits_, 16, 0xff));
+                ++out;
                 detail::ensure(2 == std::distance(tmp, cur), error_escape
                   , "invalid hex escape : must be \\x HexDigit HexDigit");
             }
@@ -939,42 +973,48 @@ private:
               , "invalid escape control letter; must be one of a-z or A-Z"
             );
             // Convert to character according to ECMA-262, section 15.10.2.10:
-            *out++ = converter(*cur % 32);
+            *out = converter(*cur % 32);
+            ++out;
             ++cur;
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'l'):
             if(!set_transform(out, detail::Lower, detail::Next))
             {
-                *out++ = BOOST_XPR_CHAR_(char_type, 'l');
+                *out = BOOST_XPR_CHAR_(char_type, 'l');
+                ++out;
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'L'):
             if(!set_transform(out, detail::Lower, detail::Rest))
             {
-                *out++ = BOOST_XPR_CHAR_(char_type, 'L');
+                *out = BOOST_XPR_CHAR_(char_type, 'L');
+                ++out;
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'u'):
             if(!set_transform(out, detail::Upper, detail::Next))
             {
-                *out++ = BOOST_XPR_CHAR_(char_type, 'u');
+                *out = BOOST_XPR_CHAR_(char_type, 'u');
+                ++out;
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'U'):
             if(!set_transform(out, detail::Upper, detail::Rest))
             {
-                *out++ = BOOST_XPR_CHAR_(char_type, 'U');
+                *out = BOOST_XPR_CHAR_(char_type, 'U');
+                ++out;
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'E'):
             if(!set_transform(out, detail::None, detail::Rest))
             {
-                *out++ = BOOST_XPR_CHAR_(char_type, 'E');
+                *out = BOOST_XPR_CHAR_(char_type, 'E');
+                ++out;
             }
             break;
 
@@ -984,11 +1024,12 @@ private:
             {
                 int sub = this->traits_->value(ch, 10);
                 if(this->sub_matches_[ sub ].matched)
-                    out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+                    out = detail::copy_(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
             }
             else
             {
-                *out++ = ch;
+                *out = ch;
+                ++out;
             }
             break;
         }
@@ -1021,7 +1062,7 @@ private:
             if(this->named_marks_[i].name_ == name)
             {
                 std::size_t sub = this->named_marks_[i].mark_nbr_;
-                return std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+                return detail::copy_(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
             }
         }
 
