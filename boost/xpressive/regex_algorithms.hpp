@@ -25,11 +25,9 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/utility/save_restore.hpp>
 
-#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
-# define BOOST_XPR_NONDEDUCED_TYPE_(x) x
-#else
-# define BOOST_XPR_NONDEDUCED_TYPE_(x) typename mpl::identity<x>::type
-#endif
+/// INTERNAL ONLY
+///
+#define BOOST_XPR_NONDEDUCED_TYPE_(x) typename mpl::identity<x>::type
 
 namespace boost { namespace xpressive
 {

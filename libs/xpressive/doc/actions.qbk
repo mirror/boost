@@ -11,14 +11,14 @@
 
 Imagine you want to parse an input string and build a `std::map<>` from it. For
 something like that, matching a regular expression isn't enough. You want to 
-/do something/ when parts of your regular expression matches. Xpressive lets
+/do something/ when parts of your regular expression match. Xpressive lets
 you attach semantic actions to parts of your static regular expressions. This
 section shows you how.
 
 [h2 Semantic Actions]
 
 Consider the following code, which uses xpressive's semantic actions to parse
-of string of word/integer pairs and stuffs them into a `std::map<>`. It is
+a string of word/integer pairs and stuffs them into a `std::map<>`. It is
 described below.
 
     #include <string>
@@ -85,8 +85,9 @@ that you can use in expressions that are executed lazily. That is why we can
 say `ref(result)[s1]`, even though `result` doesn't have an `operator[]` that
 would accept `s1`.]
 
+[h3 Lazy Action Execution]
 
-
+TODO
 
 [endsect]
 

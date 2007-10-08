@@ -95,6 +95,8 @@ and dynamic.
 
 [include actions.qbk]
 
+[include symbols.qbk]
+
 [include traits.qbk]
 
 [include tips_n_tricks.qbk]
