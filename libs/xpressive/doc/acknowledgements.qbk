@@ -18,7 +18,8 @@ to thank [@http://moderncppdesign.com/ Andrei Alexandrescu] for his input
 regarding the behavior of nested regex objects, and 
 [@http://boost.org/people/dave_abrahams.htm Dave Abrahams] for his suggestions
 regarding the regex domain-specific embedded language. Noel Belcourt helped
-porting xpressive to the Metrowerks CodeWarrior compiler.
+porting xpressive to the Metrowerks CodeWarrior compiler. Markus Schöpflin
+helped to track down a bug on HP Tru64.
 
 I would also like to thank
 [@http://boost.org/people/thomas_witt.html Thomas Witt] for acting as

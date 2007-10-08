@@ -53,7 +53,7 @@ pattern modifier. For instance:
   cpp_regex_traits<char> cpptraits(loc);
   sregex cpprx1 = imbue(cpptraits)( +_w );
 
-  // A sharthand for above
+  // A shorthand for above
   sregex cpprx2 = imbue(loc)( +_w );
 
 The `imbue()` pattern modifier must wrap the entire pattern. It is an error to `imbue` only

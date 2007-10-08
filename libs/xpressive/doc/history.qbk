@@ -13,12 +13,13 @@ New Features:
 
 * Semantic actions
 * Custom assertions
-* Better errors for invalid static regexes
-* Dynamic regex grammars
 * Named captures
+* Dynamic regex grammars
 * Recursive dynamic regexes with [^(?R)] construct
+* Support for searching non-character data
+* Better errors for invalid static regexes
 * Range-based regex algorithm interface
-* `format_perl`, `format_sed`, and `format_all`
+* `match_flag_type::format_perl`, `match_flag_type::format_sed`, and `match_flag_type::format_all`
 * `operator+(std::string, sub_match<>)` and variants
 * Version 2 regex traits get `tolower()` and `toupper()`
 
