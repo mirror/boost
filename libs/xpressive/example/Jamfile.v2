@@ -14,3 +14,10 @@ exe examples
     :
         <include>$(BOOST_ROOT)
     ;
+
+exe numbers
+    :
+        numbers.cpp
+    :
+        <include>$(BOOST_ROOT)
+    ;
