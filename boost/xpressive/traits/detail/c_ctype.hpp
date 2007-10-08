@@ -64,7 +64,7 @@ inline std::string classname_a(FwdIter begin, FwdIter end)
     for(std::size_t i = 0; i < name.size(); ++i)
     {
         using namespace std;
-        name[i] = tolower(static_cast<unsigned char>(name[i]));
+        name[i] = static_cast<char>(tolower(static_cast<unsigned char>(name[i])));
     }
     return name;
 }

@@ -33,6 +33,10 @@ namespace boost { namespace xpressive { namespace detail
         typedef typename Traits::char_type char_type;
         Traits const &traits_;
 
+        explicit char_translate(Traits const &traits)
+          : traits_(traits)
+        {}
+
         char_type operator ()(char_type ch1) const
         {
             return this->traits_.translate(ch1);
@@ -47,6 +51,10 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef typename Traits::char_type char_type;
         Traits const &traits_;
+
+        explicit char_translate(Traits const &traits)
+          : traits_(traits)
+        {}
 
         char_type operator ()(char_type ch1) const
         {
@@ -66,7 +74,7 @@ namespace boost { namespace xpressive { namespace detail
         attr_matcher(int slot, Matcher &matcher, Traits const& traits)
           : slot_(slot-1)
         {
-            char_translate<Traits, ICase> trans = {traits};
+            char_translate<Traits, ICase> trans(traits);
             this->sym_.load(matcher, trans);
         }
 
@@ -74,7 +82,7 @@ namespace boost { namespace xpressive { namespace detail
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
             BidiIter tmp = state.cur_;
-            char_translate<Traits, ICase> trans = {traits_cast<Traits>(state)};
+            char_translate<Traits, ICase> trans(traits_cast<Traits>(state));
             result_type const &result = this->sym_(state.cur_, state.end_, trans);
             if(result)
             {

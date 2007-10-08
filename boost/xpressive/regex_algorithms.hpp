@@ -25,6 +25,12 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/utility/save_restore.hpp>
 
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+# define BOOST_XPR_NONDEDUCED_TYPE_(x) x
+#else
+# define BOOST_XPR_NONDEDUCED_TYPE_(x) typename mpl::identity<x>::type
+#endif
+
 namespace boost { namespace xpressive
 {
 
@@ -106,7 +112,7 @@ inline bool regex_match
 template<typename Char>
 inline bool regex_match
 (
-    typename mpl::identity<Char *>::type begin
+    BOOST_XPR_NONDEDUCED_TYPE_(Char) *begin
   , match_results<Char *> &what
   , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
@@ -159,7 +165,7 @@ inline bool regex_match
 template<typename Char>
 inline bool regex_match
 (
-    typename mpl::identity<Char *>::type begin
+    BOOST_XPR_NONDEDUCED_TYPE_(Char) *begin
   , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
@@ -381,7 +387,7 @@ inline bool regex_search
 template<typename Char>
 inline bool regex_search
 (
-    typename mpl::identity<Char *>::type begin
+    BOOST_XPR_NONDEDUCED_TYPE_(Char) *begin
   , match_results<Char *> &what
   , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
@@ -434,7 +440,7 @@ inline bool regex_search
 template<typename Char>
 inline bool regex_search
 (
-    typename mpl::identity<Char *>::type begin
+    BOOST_XPR_NONDEDUCED_TYPE_(Char) *begin
   , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
@@ -570,7 +576,7 @@ inline std::basic_string<Char> regex_replace
 (
     std::basic_string<Char> const &str
   , basic_regex<typename std::basic_string<Char>::const_iterator> const &re
-  , std::basic_string<typename mpl::identity<Char>::type> const &fmt
+  , std::basic_string<BOOST_XPR_NONDEDUCED_TYPE_(Char)> const &fmt
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {

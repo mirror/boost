@@ -75,14 +75,14 @@ namespace detail
     inline char c_tolower(char ch)
     {
         using namespace std;
-        return tolower(static_cast<unsigned char>(ch));
+        return static_cast<char>(tolower(static_cast<unsigned char>(ch)));
     }
 
     template<>
     inline char c_toupper(char ch)
     {
         using namespace std;
-        return toupper(static_cast<unsigned char>(ch));
+        return static_cast<char>(toupper(static_cast<unsigned char>(ch)));
     }
 
     #ifndef BOOST_XPRESSIVE_NO_WREGEX

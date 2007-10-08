@@ -106,6 +106,13 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Traits>
     struct set_fill_visitor
     {
+        typedef typename Traits::char_type char_type;
+
+        set_fill_visitor(char_type *buffer, Traits const &traits)
+          : buffer_(buffer)
+          , traits_(traits)
+        {}
+
         template<typename Char>
         void accept(Char ch)
         {
@@ -114,7 +121,7 @@ namespace boost { namespace xpressive { namespace detail
             );
         }
 
-        typename Traits::char_type *buffer_;
+        char_type *buffer_;
         Traits const &traits_;
     };
 
@@ -141,7 +148,7 @@ namespace boost { namespace xpressive { namespace detail
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             typename apply<Expr, State, Visitor>::type set;
-            set_fill_visitor<typename Visitor::traits_type> filler = {set.set_, visitor.traits()};
+            set_fill_visitor<typename Visitor::traits_type> filler(set.set_, visitor.traits());
             Grammar::call(expr, state, filler);
             return set;
         }

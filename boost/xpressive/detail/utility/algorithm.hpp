@@ -22,6 +22,7 @@
 #include <boost/range/value_type.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -58,6 +59,7 @@ FwdIter find_nth_if(FwdIter begin, FwdIter end, Diff count, Pred pred)
 template<typename InIter, typename Traits>
 int toi(InIter &begin, InIter end, Traits const &traits, int radix = 10, int max = INT_MAX)
 {
+    detail::ignore_unused(traits);
     int i = 0, c = 0;
     for(; begin != end && -1 != (c = traits.value(*begin, radix)); ++begin)
     {
