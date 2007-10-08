@@ -64,7 +64,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &)
         {
             return proto::as_expr(proto::arg(expr));
         }
@@ -103,7 +103,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &, State const &, Visitor &)
         {
             typename apply<Expr, State, Visitor>::type that = {{}};
             return that;
@@ -184,7 +184,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &visitor)
         {
             return typename apply<Expr, State, Visitor>::type(
                 Expr::proto_arg0::proto_base_expr::proto_arg0::nbr_type::value
