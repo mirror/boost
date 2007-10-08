@@ -16,6 +16,7 @@
 
 #include <boost/detail/workaround.hpp>
 #include "boost/date_time/c_time.hpp"
+#include "boost/date_time/time_clock.hpp"
 #include "boost/cstdint.hpp"
 #include "boost/shared_ptr.hpp"
 
