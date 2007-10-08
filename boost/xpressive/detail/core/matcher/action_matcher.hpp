@@ -175,8 +175,10 @@ namespace boost { namespace xpressive { namespace detail
                             Expr
                         >::type
                     >::type
-                >::type::type
-            result_type;
+                >::type
+            temp_type;
+            
+            typedef typename temp_type::type result_type;
 
             result_type operator ()(Expr const &expr, action_context const &ctx) const
             {

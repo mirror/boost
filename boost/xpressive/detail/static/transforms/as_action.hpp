@@ -187,7 +187,7 @@ namespace boost { namespace xpressive { namespace detail
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return typename apply<Expr, State, Visitor>::type(
-                Expr::proto_arg0::proto_arg0::nbr_type::value
+                Expr::proto_arg0::proto_base_expr::proto_arg0::nbr_type::value
               , proto::arg(proto::right(expr))
               , visitor.traits()
             );
