@@ -136,6 +136,9 @@
 
 #elif BOOST_PP_ITERATION_DEPTH() == 1
 
+    #define ARG_COUNT BOOST_PP_MAX(1, BOOST_PP_ITERATION())
+    #define IS_TERMINAL 0 == BOOST_PP_ITERATION()
+
         /// \brief Representation of a node in an expression tree.
         /// 
         /// \c proto::expr\<\> is a node in an expression template tree. It
@@ -157,10 +160,6 @@
         ///             type is \c boost::proto::tag::terminal, in which case
         ///             \c Args must be \c proto::args1\<T\>, where \c T can be any
         ///             type.
-
-    #define ARG_COUNT BOOST_PP_MAX(1, BOOST_PP_ITERATION())
-    #define IS_TERMINAL 0 == BOOST_PP_ITERATION()
-
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {
