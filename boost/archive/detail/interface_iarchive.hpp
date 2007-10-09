@@ -32,7 +32,7 @@ namespace serialization {
 namespace archive {
 namespace detail {
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer;
+class BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer;
 
 template<class Archive>
 class interface_iarchive 
@@ -51,9 +51,9 @@ public:
     }
 
     template<class T>
-    const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer * 
+    const basic_pointer_iserializer * 
     register_type(T * = NULL){
-        const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_iserializer & bpis =
+        const basic_pointer_iserializer & bpis =
             pointer_iserializer<Archive, T>::get_instance();
         this->This()->register_basic_serializer(bpis.get_basic_serializer());
         return & bpis;

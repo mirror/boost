@@ -71,16 +71,15 @@ protected:
 public:
     // note: NOT part of the public interface
     void register_basic_serializer(
-        const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer & bos
+        const basic_oserializer & bos
     );
     void save_object(
         const void *x, 
-        const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer & bos
+        const basic_oserializer & bos
     );
     void save_pointer(
         const void * t, 
-        const BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
-            basic_pointer_oserializer * bpos_ptr
+        const basic_pointer_oserializer * bpos_ptr
     );
     void save_null_pointer(){
         vsave(NULL_POINTER_TAG);

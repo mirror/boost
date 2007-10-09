@@ -20,6 +20,7 @@
 #include <cstddef>
 
 #include <boost/config.hpp>
+#include <boost/archive/detail/auto_link_archive.hpp>
 
 namespace std{
     #if defined(__LIBCOMO__)
@@ -58,7 +59,7 @@ public:
 template<>
 class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t>
 {
-    virtual std::codecvt_base::result
+    virtual BOOST_ARCHIVE_DECL(std::codecvt_base::result)
     do_out(
         std::mbstate_t & state,
         const wchar_t * first1,
@@ -68,7 +69,7 @@ class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t>
         char * last2,
         char * & next2
     ) const;
-    virtual std::codecvt_base::result
+    virtual BOOST_ARCHIVE_DECL(std::codecvt_base::result)
     do_in(
         std::mbstate_t & state,
         const char * first1,
