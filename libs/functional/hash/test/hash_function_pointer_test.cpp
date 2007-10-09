@@ -43,6 +43,14 @@ void function_pointer_tests()
     BOOST_TEST(hasher_void(0) == hasher_void(0));
     BOOST_TEST(hasher_void(&void_func1) == hasher_void(&void_func1));
     BOOST_TEST(hasher_void(&void_func1) != hasher_void(&void_func2));
+    if(hasher_void(&void_func1) == hasher_void(&void_func2)) {
+        std::cerr<<std::hex;
+        std::cerr<<"&void_func1: "<<(void*)void_func1<<"\n";
+        std::cerr<<"&void_func2: "<<(void*)void_func2<<"\n";
+        std::cerr<<"hasher_void(&void_func1): "<<hasher_void(&void_func1)<<"\n";
+        std::cerr<<"hasher_void(&void_func2): "<<hasher_void(&void_func2)<<"\n";
+        std::cerr<<std::dec;
+    }
     BOOST_TEST(hasher_void(&void_func1) != hasher_void(0));
     BOOST_TEST(hasher_int(0) == hasher_int(0));
     BOOST_TEST(hasher_int(&int_func1) == hasher_int(&int_func1));
