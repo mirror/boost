@@ -11,5 +11,8 @@
 exe quick_start
     :   ../quick_start.cpp 
         /boost/wave//boost_wave
+        /boost/system//boost_system
+        /boost/thread//boost_thread
+        /boost/date_time//boost_date_time
     ;  
 

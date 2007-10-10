@@ -22,6 +22,7 @@ exe wave
     /boost//serialization
     /boost//system
     /boost//thread
+    /boost//date_time
     :
 #   <debug-symbols>on
     :

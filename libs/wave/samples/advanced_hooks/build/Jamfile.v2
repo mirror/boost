@@ -11,5 +11,7 @@
 exe advanced_hooks
     :   ../advanced_hooks.cpp 
         /boost/wave//boost_wave
+        /boost/thread//boost_thread
+        /boost/date_time//boost_date_time
     ;  
 

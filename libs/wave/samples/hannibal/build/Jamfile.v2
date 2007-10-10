@@ -14,5 +14,7 @@ exe hannibal
         /boost/filesystem//boost_filesystem
         /boost/program_options//boost_program_options
         /boost/system//boost_system
+        /boost/thread//boost_thread
+        /boost/date_time//boost_date_time
     ;  
 
