@@ -516,28 +516,28 @@ void exception_safety_test() {
 
     circular_buffer<MyInteger> cb1(3, 5);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb1.set_capacity(5), exception);
+    BOOST_CHECK_THROW(cb1.set_capacity(5), std::exception);
     BOOST_CHECK(cb1.capacity() == 3);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb1.rset_capacity(5), exception);
+    BOOST_CHECK_THROW(cb1.rset_capacity(5), std::exception);
     BOOST_CHECK(cb1.capacity() == 3);
     generic_test(cb1);
 
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(circular_buffer<MyInteger> cb2(5, 10), exception);
+    BOOST_CHECK_THROW(circular_buffer<MyInteger> cb2(5, 10), std::exception);
 
     circular_buffer<MyInteger> cb3(5, 10);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(circular_buffer<MyInteger> cb4(cb3), exception);
+    BOOST_CHECK_THROW(circular_buffer<MyInteger> cb4(cb3), std::exception);
 
-    vector<MyInteger> v(5, 10);
+    vector<MyInteger> v(5, MyInteger(10));
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(circular_buffer<MyInteger> cb5(8, v.begin(), v.end()), exception);
+    BOOST_CHECK_THROW(circular_buffer<MyInteger> cb5(8, v.begin(), v.end()), std::exception);
 
     circular_buffer<MyInteger> cb6(5, 10);
     circular_buffer<MyInteger> cb7(8, 3);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb7 = cb6, exception);
+    BOOST_CHECK_THROW(cb7 = cb6, std::exception);
     BOOST_CHECK(cb7.size() == 8);
     BOOST_CHECK(cb7.capacity() == 8);
     BOOST_CHECK(cb7[0] == 3);
@@ -546,138 +546,138 @@ void exception_safety_test() {
 
     circular_buffer<MyInteger> cb8(5, 10);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb8.push_front(1), exception);
+    BOOST_CHECK_THROW(cb8.push_front(1), std::exception);
 
     circular_buffer<MyInteger> cb9(5);
     cb9.push_back(1);
     cb9.push_back(2);
     cb9.push_back(3);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb9.insert(cb9.begin() + 1, 4), exception);
+    BOOST_CHECK_THROW(cb9.insert(cb9.begin() + 1, 4), std::exception);
 
     circular_buffer<MyInteger> cb10(5);
     cb10.push_back(1);
     cb10.push_back(2);
     cb10.push_back(3);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb10.rinsert(cb10.begin() + 1, 4), exception);
+    BOOST_CHECK_THROW(cb10.rinsert(cb10.begin() + 1, 4), std::exception);
 
     circular_buffer<MyInteger> cb11(5);
     cb11.push_back(1);
     cb11.push_back(2);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb11.rinsert(cb11.begin(), 1), exception);
+    BOOST_CHECK_THROW(cb11.rinsert(cb11.begin(), 1), std::exception);
 
     circular_buffer<MyInteger> cb12(5, 1);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb12.assign(4, 2), exception);
+    BOOST_CHECK_THROW(cb12.assign(4, 2), std::exception);
 
     circular_buffer<MyInteger> cb13(5, 1);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb13.assign(6, 2), exception);
+    BOOST_CHECK_THROW(cb13.assign(6, 2), std::exception);
 
     circular_buffer<MyInteger> cb14(5);
     cb14.push_back(1);
     cb14.push_back(2);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb14.insert(cb14.begin(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb14.insert(cb14.begin(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb15(5);
     cb15.push_back(1);
     cb15.push_back(2);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb15.insert(cb15.end(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb15.insert(cb15.end(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb16(5);
     cb16.push_back(1);
     cb16.push_back(2);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb16.rinsert(cb16.begin(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb16.rinsert(cb16.begin(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb17(5);
     cb17.push_back(1);
     cb17.push_back(2);
     MyInteger::set_exception_trigger(3);
-    BOOST_CHECK_THROW(cb17.rinsert(cb17.end(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb17.rinsert(cb17.end(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb18(5, 0);
     cb18.push_back(1);
     cb18.push_back(2);
     cb18.pop_front();
     MyInteger::set_exception_trigger(4);
-    BOOST_CHECK_THROW(cb18.linearize(), exception);
+    BOOST_CHECK_THROW(cb18.linearize(), std::exception);
 
     circular_buffer<MyInteger> cb19(5, 0);
     cb19.push_back(1);
     cb19.push_back(2);
     MyInteger::set_exception_trigger(5);
-    BOOST_CHECK_THROW(cb19.linearize(), exception);
+    BOOST_CHECK_THROW(cb19.linearize(), std::exception);
 
     circular_buffer<MyInteger> cb20(5, 0);
     cb20.push_back(1);
     cb20.push_back(2);
     MyInteger::set_exception_trigger(6);
-    BOOST_CHECK_THROW(cb20.linearize(), exception);
+    BOOST_CHECK_THROW(cb20.linearize(), std::exception);
 
     circular_buffer<MyInteger> cb21(5);
     cb21.push_back(1);
     cb21.push_back(2);
     cb21.push_back(3);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb21.insert(cb21.begin() + 1, 4), exception);
+    BOOST_CHECK_THROW(cb21.insert(cb21.begin() + 1, 4), std::exception);
 
     circular_buffer<MyInteger> cb22(5);
     cb22.push_back(1);
     cb22.push_back(2);
     cb22.push_back(3);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb22.insert(cb22.end(), 4), exception);
+    BOOST_CHECK_THROW(cb22.insert(cb22.end(), 4), std::exception);
 
     circular_buffer<MyInteger> cb23(5, 0);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb23.insert(cb23.begin() + 1, 4), exception);
+    BOOST_CHECK_THROW(cb23.insert(cb23.begin() + 1, 4), std::exception);
 
     circular_buffer<MyInteger> cb24(5);
     cb24.push_back(1);
     cb24.push_back(2);
     cb24.push_back(3);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb24.rinsert(cb24.begin() + 1, 4), exception);
+    BOOST_CHECK_THROW(cb24.rinsert(cb24.begin() + 1, 4), std::exception);
 
     circular_buffer<MyInteger> cb25(5, 0);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb25.rinsert(cb25.begin() + 3, 4), exception);
+    BOOST_CHECK_THROW(cb25.rinsert(cb25.begin() + 3, 4), std::exception);
 
     circular_buffer<MyInteger> cb26(5);
     cb26.push_back(1);
     cb26.push_back(2);
     MyInteger::set_exception_trigger(5);
-    BOOST_CHECK_THROW(cb26.insert(cb26.begin(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb26.insert(cb26.begin(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb27(5);
     cb27.push_back(1);
     cb27.push_back(2);
     MyInteger::set_exception_trigger(5);
-    BOOST_CHECK_THROW(cb27.insert(cb27.end(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb27.insert(cb27.end(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb28(5);
     cb28.push_back(1);
     cb28.push_back(2);
     MyInteger::set_exception_trigger(5);
-    BOOST_CHECK_THROW(cb28.rinsert(cb28.begin(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb28.rinsert(cb28.begin(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb29(5);
     cb29.push_back(1);
     cb29.push_back(2);
     MyInteger::set_exception_trigger(5);
-    BOOST_CHECK_THROW(cb29.rinsert(cb29.end(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb29.rinsert(cb29.end(), 10, 3), std::exception);
 
     circular_buffer<MyInteger> cb30(10);
     cb30.push_back(1);
     cb30.push_back(2);
     cb30.push_back(3);
     MyInteger::set_exception_trigger(2);
-    BOOST_CHECK_THROW(cb30.rinsert(cb30.begin(), 10, 3), exception);
+    BOOST_CHECK_THROW(cb30.rinsert(cb30.begin(), 10, 3), std::exception);
 
 #endif // #if !defined(BOOST_NO_EXCEPTIONS)
 }
