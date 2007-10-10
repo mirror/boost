@@ -238,7 +238,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &, State const &state, Visitor &visitor)
         {
             sub_match<typename State::iterator> const &sub = state.sub_matches_[ visitor ];
             return proto::as_expr(sub);

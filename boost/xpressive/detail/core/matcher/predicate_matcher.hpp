@@ -54,7 +54,7 @@ namespace boost { namespace xpressive { namespace detail
         struct eval_terminal<Expr, any_matcher>
         {
             typedef sub_match<BidiIter> const &result_type;
-            result_type operator()(Expr &expr, predicate_context const &ctx) const
+            result_type operator()(Expr &, predicate_context const &ctx) const
             {
                 return ctx.sub_matches_[ctx.sub_];
             }

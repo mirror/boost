@@ -63,7 +63,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &visitor)
         {
             typename Grammar::template apply<Expr, true_xpression, Visitor>::type const &
                 expr2 = Grammar::call(expr, true_xpression(), visitor);
@@ -88,7 +88,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &, Visitor &visitor)
         {
             return typename apply<Expr, State, Visitor>::type(
                 Grammar::call(expr, true_xpression(), visitor)
