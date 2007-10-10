@@ -64,6 +64,7 @@ test-suite wave
                 /boost/filesystem//boost_filesystem    
                 /boost/system//boost_system    
                 /boost/thread//boost_thread
+                /boost/thread//boost_date_time
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -90,6 +91,7 @@ test-suite wave
                 /boost/filesystem//boost_filesystem/<link>static
                 /boost/system//boost_system/<link>static
                 /boost/thread//boost_thread/<link>static
+                /boost/thread//boost_date_time/<link>static
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -117,6 +119,7 @@ test-suite wave
                 /boost/filesystem//boost_filesystem
                 /boost/thread//boost_thread
                 /boost/system//boost_system
+                /boost/thread//boost_date_time
             :
             # arguments
             :
@@ -139,6 +142,7 @@ test-suite wave
                 /boost/filesystem//boost_filesystem
                 /boost/thread//boost_thread
                 /boost/system//boost_system
+                /boost/thread//boost_date_time
             :
             # arguments
             :
