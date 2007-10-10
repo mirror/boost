@@ -33,7 +33,7 @@ lib boost_wave
     $(SOURCES)
     ../../filesystem/build//boost_filesystem
     ../../thread/build//boost_thread
-    ../../date_time//boost_date_time
+    ../../date_time/build//boost_date_time
     ;
 
 for local source in $(SOURCES)
