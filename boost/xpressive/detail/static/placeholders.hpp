@@ -11,6 +11,9 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable:4510) // default constructor could not be generated
+# pragma warning(disable:4610) // can never be instantiated - user defined constructor required
 #endif
 
 #include <string>
@@ -29,8 +32,6 @@ struct mark_placeholder
     BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, true)
 
     int mark_number_;
-
-    //operator int() const { return this->mark_number_; }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,5 +123,9 @@ struct attribute_placeholder
 };
 
 }}} // namespace boost::xpressive::detail
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif
