@@ -93,6 +93,16 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
+    // AssertionFunctor
+    //
+    struct AssertionFunctor
+      : proto::function<
+            proto::terminal<check_tag>
+          , proto::terminal<proto::_>
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
     // predicate_matcher
     //
     template<typename Predicate>
@@ -111,23 +121,24 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Next>
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
-            typedef typename Predicate::proto_arg0::predicate_type predicate_type;
-            return this->match_(state, next, proto::is_expr<predicate_type>());
+            // Predicate is check(assertion), where assertion can be
+            // a lambda or a function object. 
+            return this->match_(state, next, proto::matches<Predicate, AssertionFunctor>());
         }
 
     private:
         template<typename BidiIter, typename Next>
-        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const
         {
             sub_match<BidiIter> const &sub = state.sub_match(this->sub_);
-            return proto::arg(this->predicate_).pred(sub) && next.match(state);
+            return proto::arg(proto::arg_c<1>(this->predicate_))(sub) && next.match(state);
         }
 
         template<typename BidiIter, typename Next>
-        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const
         {
             predicate_context<BidiIter> ctx(this->sub_, state.sub_matches_);
-            return proto::eval(proto::arg(this->predicate_).pred, ctx) && next.match(state);
+            return proto::eval(proto::arg_c<1>(this->predicate_), ctx) && next.match(state);
         }
     };
 

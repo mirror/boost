@@ -77,6 +77,9 @@ namespace boost { namespace xpressive
 
             T value;
         };
+
+        struct check_tag
+        {};
     }
 
     namespace op
@@ -687,13 +690,9 @@ namespace boost { namespace xpressive
         return reference<T const>(t);
     }
 
-    template<typename Predicate>
-    typename proto::terminal<detail::predicate_placeholder<Predicate> >::type const
-    check(Predicate const &pred)
-    {
-        detail::predicate_placeholder<Predicate> p = {pred};
-        return proto::as_expr(p);
-    }
+    /// check(), for testing custom assertions
+    ///
+    proto::terminal<detail::check_tag>::type const check = {{}};
 
     template<typename T, int I = 0, typename Dummy = proto::is_proto_expr>
     struct placeholder

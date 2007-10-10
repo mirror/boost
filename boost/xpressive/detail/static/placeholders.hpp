@@ -100,18 +100,6 @@ struct self_placeholder
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// predicate_placeholder
-//
-template<typename Predicate>
-struct predicate_placeholder
-{
-    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
-
-    typedef Predicate predicate_type;
-    Predicate pred;
-};
-
-///////////////////////////////////////////////////////////////////////////////
 // attribute_placeholder
 //
 template<typename Nbr>

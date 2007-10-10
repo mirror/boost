@@ -237,6 +237,15 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
+    // CheckAssertion
+    struct CheckAssertion
+      : proto::function<
+            proto::terminal<check_tag>
+          , proto::_
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
     // action_transform
     //  Turn A[B] into (mark_begin(n) >> A >> mark_end(n) >> action_matcher<B>(n))
     //  If A and B use attributes, wrap the above expression in
@@ -261,7 +270,7 @@ namespace boost { namespace xpressive { namespace detail
 
             typedef
                 typename mpl::if_<
-                    proto::matches<action_type, proto::terminal<predicate_placeholder<proto::_> > >
+                    proto::matches<action_type, CheckAssertion>
                   , predicate_matcher<action_copy_type>
                   , action_matcher<action_copy_type>
                 >::type

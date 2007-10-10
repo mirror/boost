@@ -5,11 +5,7 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <map>
-#include <list>
-#include <stack>
-#include <numeric>
-#include <boost/version.hpp>
+#include <iostream>
 #include <boost/xpressive/xpressive_static.hpp>
 #include <boost/xpressive/regex_actions.hpp>
 #include <boost/test/unit_test.hpp>
@@ -50,6 +46,50 @@ void test2()
     BOOST_CHECK_EQUAL(std::distance(first, last), 2);
 }
 
+struct days_per_month_type
+{
+    int operator[](int i) const
+    {
+        std::cout << "HERE " << i << std::endl;
+        return 29;
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// test3
+//  more complicated use of custom assertions to validate a date
+void test3()
+{
+    int const days_per_month[] =
+        {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31};
+
+    mark_tag month(1), day(2);
+    // find a valid date of the form month/day/year.
+    sregex date = 
+        (
+            // Month must be between 1 and 12 inclusive
+            (month= _d >> !_d)     [ check(as<int>(_) >= 1
+                                        && as<int>(_) <= 12) ]
+        >>  '/'
+            // Day must be between 1 and 31 inclusive
+        >>  (day=   _d >> !_d)     [ check(as<int>(_) >= 1
+                                        && as<int>(_) <= 31) ]
+        >>  '/'
+            // Only consider years between 1970 and 2038
+        >>  (_d >> _d >> _d >> _d) [ check(as<int>(_) >= 1970
+                                        && as<int>(_) <= 2038) ]
+        )
+        // Ensure the month actually has that many days.
+        [ check( ref(days_per_month)[as<int>(month)-1] >= as<int>(day) ) ]
+    ;
+
+    smatch what;
+    std::string str("99/99/9999 2/30/2006 2/28/2006");
+
+    BOOST_REQUIRE(regex_search(str, what, date));
+    BOOST_CHECK_EQUAL(what[0], "2/28/2006");
+}
+
 using namespace boost::unit_test;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,6 +100,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test_suite *test = BOOST_TEST_SUITE("test_assert");
     test->add(BOOST_TEST_CASE(&test1));
     test->add(BOOST_TEST_CASE(&test2));
+    test->add(BOOST_TEST_CASE(&test3));
     return test;
 }
 
