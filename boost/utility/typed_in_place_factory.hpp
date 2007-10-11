@@ -54,8 +54,8 @@ public:
 
   void* apply (void* address, std::size_t n) const
   {
-    for(char* next = address = this->apply(address); !! --n;)
-      this->apply(next = next+sizeof(T));
+    for(void* next = address = this->apply(address); !! --n;)
+      this->apply(next = static_cast<char *>(next) + sizeof(T));
     return address; 
   }
 
