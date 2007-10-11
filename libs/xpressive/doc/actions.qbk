@@ -349,6 +349,47 @@ with references to variables. The regex object is never mutated in any way
 during any of the regex algorithms, so they are safe to use in multiple
 threads.]
 
+The syntax for late-bound action arguments is a little different if you are
+using _regex_iterator_ or _regex_token_iterator_. The regex iterators accept
+an extra constructor parameter for specifying the argument bindings. There is
+a `let()` function that you can use to bind variables to their placeholders.
+The following code demonstrates how.
+
+    // Define a placeholder for a map object:
+    placeholder<std::map<std::string, int> > _map;
+    
+    // Match a word and an integer, separated by =>,
+    // and then stuff the result into a std::map<>
+    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )
+        [ _map[s1] = as<int>(s2) ];
+    
+    // The string to parse
+    std::string str("aaa=>1 bbb=>23 ccc=>456");
+    
+    // Here is the actual map to fill in:
+    std::map<std::string, int> result;
+    
+    // Create a regex_iterator to find all the matches
+    sregex_iterator it(str.begin(), str.end(), pair, let(_map=result));
+    sregex_iterator end;
+    
+    // step through all the matches, and fill in
+    // the result map
+    while(it != end)
+        ++it;
+    
+    std::cout << result["aaa"] << '\n';
+    std::cout << result["bbb"] << '\n';
+    std::cout << result["ccc"] << '\n';
+
+This program displays:
+
+[pre
+1
+23
+456
+]
+
 [h2 User-Defined Assertions]
 
 You are probably already familiar with regular expression /assertions/. In
