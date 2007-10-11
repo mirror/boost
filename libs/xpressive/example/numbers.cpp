@@ -51,39 +51,39 @@ void example1()
         map_list_of("zero",0)("dozen",12)("score",20);
 
     // n is the integer result
-    long n = 0;
+    local<long> n(0);
     // temp stores intermediate values
-    long temp = 0;
+    local<long> temp(0);
 
-    // initialize the delimiters between words
+    // delimiters between words must be spaces, end-of-sequence, or punctuation
     sregex delim =
-        +_s | eos | '-' | ',';
+        +_s | eos | +punct;
 
     // initialize the regular expressions for named numbers
     sregex ones_rx =
-        ( a1 = ones_map ) [ ref(n) += a1 ] >> delim;
+        ( a1 = ones_map ) [ n += a1 ] >> delim;
 
     sregex tens_rx =
             ones_rx
         |
         (
-            ( a1 = tens_map ) [ ref(n) += a1 ] >> delim
+            ( a1 = tens_map ) [ n += a1 ] >> delim
             >> !ones_rx
         )
         | 
-        (   ( a1 = teens_map ) [ ref(n) += a1 ] >> delim
+        (   ( a1 = teens_map ) [ n += a1 ] >> delim
         );
 
     sregex hundreds_rx =
         (   ( tens_rx >> "hundred"  >> delim )
-            [ ref(n) *= 100 ]
+            [ n *= 100 ]
             >> !tens_rx
         ) 
         | tens_rx;
 
     sregex thousands_rx = 
         (   ( hundreds_rx >> "thousand" >> delim )
-            [ ref(temp) += ref(n) * 1000, ref(n) = 0 ]
+            [ temp += n * 1000, n = 0 ]
             >> !hundreds_rx
         )
         | hundreds_rx
@@ -91,16 +91,18 @@ void example1()
 
     sregex millions_rx = 
         (   ( hundreds_rx >> "million" >> delim )
-            [ ref(temp) += ref(n) * 1000000, ref(n) = 0 ]
+            [ temp += n * 1000000, n = 0 ]
             >> !thousands_rx
         )
         | thousands_rx;
 
+    // Note: this uses two attribues, a1 and a2, and it uses
+    // a default attribute value of 1 for a1. 
     sregex specials_rx =
         ( !((a1 = ones_map) >> delim) >> (a2 = specials_map) ) 
-            [ ref(n) = (a1 | 1) * a2 ] 
+            [ n = (a1 | 1) * a2 ] 
         >> delim
-        >> !("and" >> delim >> ones_rx);
+        >> !("and" >> +_s >> ones_rx);
 
     sregex number_rx = 
         bow 
@@ -108,7 +110,7 @@ void example1()
         (   specials_rx
         | 
             millions_rx
-            [ref(n) += ref(temp), ref(temp) = 0 ] 
+            [n += temp, temp = 0 ] 
         );
 
     // this is the input string
@@ -142,8 +144,8 @@ void example1()
 
     for( ; cur != end; ++cur )
     {
-        std::cout << *cur << " = " << n << '\n';
-        n = 0;
+        std::cout << *cur << " = " << n.get() << '\n';
+        n.get() = 0;
     }
     std::cout << '\n';
 }
