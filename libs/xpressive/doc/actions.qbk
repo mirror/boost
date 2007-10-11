@@ -128,6 +128,82 @@ it is only /executed/ twice: once for each digit that precedes a `'!'`
 character. When the `'?'` character is encountered, the match algorithm
 backtracks, removing the final action from the queue.
 
+[h3 Lazy Functions]
+
+So far, we've seen how to write semantic actions consisting of variables and
+operators. But what if you want to be able to call a function from a semantic
+action? Xpressive provides a mechanism to do this.
+
+The first step is to define a function object type. Here, for instance, is a 
+function object type that calls `push()` on its argument:
+
+    struct push_impl
+    {
+        // Result type, needed for tr1::result_of
+        typedef void result_type;
+
+        template<typename Sequence, typename Value>
+        void operator()(Sequence &seq, Value const &val) const
+        {
+            seq.push(val);
+        }
+    };
+
+The next step is to use xpressive's `function<>` template to define a function
+object named `push`:
+
+    // Global "push" function object.
+    function<push_impl>::type const push = {{}};
+
+The initialization looks a bit odd, but this is because `push` is being 
+statically initialized. That means it doesn't need to be constructed
+at runtime. We can use `push` in semantic actions as follows:
+
+    std::stack<int> ints;
+    // Match digits, cast them to an int
+    // and push it on the stack.
+    sregex rex = (+_d)[push(ref(ints), as<int>(_))];
+
+You'll notice that doing it this way causes member function invocations
+to look like ordinary function invocations. You can choose to write your
+semantic action in a different way that makes it look a bit more like
+a member function call:
+
+    sregex rex = (+_d)[ref(ints)->*push(as<int>(_))];
+
+Xpressive recognizes the use of the `->*` and treats this expression
+exactly the same as the one above.
+
+When your function object must return a type that depends on its
+arguments, you can use a `result<>` member template instead of the
+`result_type` typedef. Here, for example, is a `first` function object
+that returns the `first` member of a `std::pair<>` or _sub_match_:
+
+    // Function object that returns the 
+    // first element of a pair.
+    struct first_impl
+    {
+        template<typename Sig> struct result {};
+
+        template<typename This, typename Pair>
+        struct result<This(Pair)>
+        {
+            typedef typename remove_reference<Pair>
+                ::type::first_type type;
+        };
+
+        template<typename Pair>
+        typename Pair::first_type
+        operator()(Pair const &p) const
+        {
+            return p.first;
+        }
+    };
+
+    // OK, use as first(s1) to get the begin iterator
+    // of the sub-match referred to by s1.    
+    function<first_impl> const first = {{}};
+
 [h3 Referring to Local Variables]
 
 As we've seen in the examples above, we can refer to local variables within
@@ -206,88 +282,72 @@ We can use `local<>` to rewrite the above example as follows:
     assert( i.get() == 2 );
 
 Notice that we use `local<>::get()` to access the value of the local
-variable. Also, beware that `local<>` can be uses to create a dangling
+variable. Also, beware that `local<>` can be used to create a dangling
 reference, just as `reference<>` can.
 
-[h3 Lazy Functions]
+[h3 Referring to Non-Local Variables]
 
-So far, we've seen how to write semantic actions consisting of variables and
-operators. But what if you want to be able to call a function from a semantic
-action? Xpressive provides a mechanism to do this.
+In the beginning of this
+section, we used a regex with a semantic action to parse a string of
+word/integer pairs and stuff them into a `std::map<>`. That required that
+the map and the regex be defined together and used before either could
+go out of scope. What if we wanted to define the regex once and use it
+to fill lots of different maps? We would rather pass the map into the
+_regex_match_ algorithm rather than embed a reference to it directly in
+the regex object. What we can do instead is define a placeholder and use
+that in the semantic action instead of the map itself. Later, when we
+call one of the regex algorithms, we can bind the reference to an actual
+map object. The following code shows how.
+    
+    // Define a placeholder for a map object:
+    placeholder<std::map<std::string, int> > _map;
+    
+    // Match a word and an integer, separated by =>,
+    // and then stuff the result into a std::map<>
+    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )
+        [ _map[s1] = as<int>(s2) ];
+    
+    // Match one or more word/integer pairs, separated
+    // by whitespace.
+    sregex rx = pair >> *(+_s >> pair);
 
-The first step is to define a function object type. Here, for instance, is a 
-function object type that calls `push()` on its argument:
+    // The string to parse
+    std::string str("aaa=>1 bbb=>23 ccc=>456");
 
-    struct push_impl
+    // Here is the actual map to fill in:
+    std::map<std::string, int> result;
+    
+    // Bind the _map placeholder to the actual map
+    smatch what;
+    what.let( _map = result );
+
+    // Execute the match and fill in result map
+    if(regex_match(str, what, rx))
     {
-        // Result type, needed for tr1::result_of
-        typedef void result_type;
+        std::cout << result["aaa"] << '\n';
+        std::cout << result["bbb"] << '\n';
+        std::cout << result["ccc"] << '\n';
+    }
 
-        template<typename Sequence, typename Value>
-        void operator()(Sequence &seq, Value const &val) const
-        {
-            seq.push(val);
-        }
-    };
+This program displays:
 
-The next step is to use xpressive's `function<>` template to define a function
-object named `push`:
+[pre
+1
+23
+456
+]
 
-    // Global "push" function object.
-    function<push_impl>::type const push = {{}};
+We use `placeholder<>` here to define `_map`, which stands in for a 
+`std::map<>` variable. We can use the placeholder in the semantic action as if
+it were a map. Then, we define a _match_results_ struct and bind an actual map
+to the placeholder with "`what.let( _map = result );`". The _regex_match_ call 
+behaves as if the placeholder in the semantic action had been replaced with a
+reference to `result`.
 
-The initialization looks a bit odd, but this is because `push` is being 
-statically initialized. That means it doesn't need to be constructed
-at runtime. We can use `push` in semantic actions as follows:
-
-    std::stack<int> ints;
-    // Match digits, cast them to an int
-    // and push it on the stack.
-    sregex rex = (+_d)[push(ref(ints), as<int>(_))];
-
-You'll notice that doing it this way causes member function invocations
-to look like ordinary function invocations. You can choose to write your
-semantic action in a different way that makes it look a bit more like
-a member function call:
-
-    sregex rex = (+_d)[ref(ints)->*push(as<int>(_))];
-
-Xpressive recognizes the use of the `->*` and treats this expression
-exactly the same as the one above.
-
-When your function object must return a type that depends on its
-arguments, you can use a `result<>` member template instead of the
-`result_type` typedef. Here, for example, is a `first` function object
-that returns the `first` member of a `std::pair<>` or _sub_match_:
-
-    // Function object that returns the 
-    // first element of a pair.
-    struct first_impl
-    {
-        template<typename Sig> struct result {};
-
-        template<typename This, typename Pair>
-        struct result<This(Pair)>
-        {
-            typedef typename remove_reference<Pair>
-                ::type::first_type type;
-        };
-
-        template<typename Pair>
-        typename Pair::first_type
-        operator()(Pair const &p) const
-        {
-            return p.first;
-        }
-    };
-
-    // OK, use as first(s1) to get the begin iterator
-    // of the sub-match referred to by s1.    
-    function<first_impl> const first = {{}};
-
-[h3 Late-Bound Variables]
-
-TODO describe placeholder<> and match_results<>::let().
+[note Placeholders in semantic actions are not /actually/ replaced at runtime
+with references to variables. The regex object is never mutated in any way
+during any of the regex algorithms, so they are safe to use in multiple
+threads.]
 
 [h2 User-Defined Assertions]
 
