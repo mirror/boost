@@ -258,7 +258,7 @@ exactly the same as the one above.
 When your function object must return a type that depends on its
 arguments, you can use a `result<>` member template instead of the
 `result_type` typedef. Here, for example, is a `first` function object
-that returns the `first` member of a `std::pair<>`:
+that returns the `first` member of a `std::pair<>` or _sub_match_:
 
     // Function object that returns the 
     // first element of a pair.
@@ -285,5 +285,103 @@ that returns the `first` member of a `std::pair<>`:
     // of the sub-match referred to by s1.    
     function<first_impl> const first = {{}};
 
-[endsect]
+[h3 Late-Bound Variables]
 
+TODO describe placeholder<> and match_results<>::let().
+
+[h2 User-Defined Assertions]
+
+You are probably already familiar with regular expression /assertions/. In
+Perl, some examples are the [^^] and [^$] assertions, which you can use to
+match the beginning and end of a string, respectively. Xpressive lets you 
+define your own assertions. A custom assertion is a contition which must be
+true at a point in the match in order for the match to succeed. You can check
+a custom assertion with xpressive's _check_ function.
+
+There are a couple of ways to define a custom assertion. The simplest is to
+use a function object. Let's say that you want to ensure that a sub-expression
+matches a sub-string that is either 3 or 6 characters long. The following
+struct defines such a predicate:
+
+    // A predicate that is true IFF a sub-match is
+    // either 3 or 6 characters long.
+    struct three_or_six
+    {
+        bool operator()(ssub_match const &sub) const
+        {
+            return sub.length() == 3 || sub.length() == 6;
+        }
+    };
+
+You can use this predicate within a regular expression as follows:
+
+    // match words of 3 characters or 6 characters.
+    sregex rx = (bow >> +_w >> eow)[ check(three_or_six()) ] ;
+
+The above regular expression will find whole words that are either 3 or 6
+characters long. The `three_or_six` predicate accepts a _sub_match_ that refers
+back to the part of the string matched by the sub-expression to which the
+custom assertion is attached.
+
+[note The custom assertion participates in determining whether the match
+succeeds or fails. Unlike actions, which execute lazily, custom assertions
+execute immediately while the regex engine is searching for a match.]
+
+Custom assertions can also be defined inline using the same syntax as for
+semantic actions. Below is the same custom assertion written inline:
+
+    // match words of 3 characters or 6 characters.
+    sregex rx = (bow >> +_w >> eow)[ check(length(_)==3 || length(_)==6) ] ;
+
+In the above, `length()` is a lazy function that calls the `length()` member
+function of its argument, and `_` is a placeholder that receives the 
+`sub_match`.
+
+Once you get the hang of writing custom assertions inline, they can be
+very powerful. For example, you can write a regular expression that
+only matches valid dates (for some suitably liberal definition of the
+term ["valid]).
+
+    int const days_per_month[] =
+        {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31};
+
+    mark_tag month(1), day(2);
+    // find a valid date of the form month/day/year.
+    sregex date = 
+        (
+            // Month must be between 1 and 12 inclusive
+            (month= _d >> !_d)     [ check(as<int>(_) >= 1
+                                        && as<int>(_) <= 12) ]
+        >>  '/'
+            // Day must be between 1 and 31 inclusive
+        >>  (day=   _d >> !_d)     [ check(as<int>(_) >= 1
+                                        && as<int>(_) <= 31) ]
+        >>  '/'
+            // Only consider years between 1970 and 2038
+        >>  (_d >> _d >> _d >> _d) [ check(as<int>(_) >= 1970
+                                        && as<int>(_) <= 2038) ]
+        )
+        // Ensure the month actually has that many days!
+        [ check( ref(days_per_month)[as<int>(month)-1] >= as<int>(day) ) ]
+    ;
+
+    smatch what;
+    std::string str("99/99/9999 2/30/2006 2/28/2006");
+
+    if(regex_search(str, what, date))
+    {
+        std::cout << what[0] << std::endl;
+    }
+
+The above program prints out the following:
+
+[pre
+2/28/2006
+]
+
+Notice how the inline custom assertions are used to range-check the values for
+the month, day and year. The regular expression doesn't match `"99/99/9999"` or
+`"2/30/2006"` because they are not valid dates. (There is no 99th month, and
+February doesn't have 30 days.)
+
+[endsect]
