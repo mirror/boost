@@ -100,13 +100,6 @@
               : lambda_matches<Expr0, Grammar0>
             {};
 
-        #if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(4))
-            template<template<typename> class T, typename Expr0>
-            struct lambda_matches<T<Expr0>, T<proto::_> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
-              : mpl::true_
-            {};
-        #endif
-
             // vararg_matches_impl
             template<typename Args1, typename Back, long From, long To>
             struct vararg_matches_impl;

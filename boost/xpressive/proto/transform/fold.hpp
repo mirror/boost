@@ -82,14 +82,14 @@
 
             template<typename Expr, typename State, typename Visitor>
             struct apply
-              : detail::fold_impl<Grammar, Expr, State, Visitor>
+              : detail::fold_impl<Grammar, typename Expr::proto_base_expr, State, Visitor>
             {};
 
             template<typename Expr, typename State, typename Visitor>
             static typename apply<Expr, State, Visitor>::type
             call(Expr const &expr, State const &state, Visitor &visitor)
             {
-                return apply<Expr, State, Visitor>::call(expr, state, visitor);
+                return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
             }
         };
 
@@ -103,14 +103,14 @@
 
             template<typename Expr, typename State, typename Visitor>
             struct apply
-              : detail::reverse_fold_impl<Grammar, Expr, State, Visitor>
+              : detail::reverse_fold_impl<Grammar, typename Expr::proto_base_expr, State, Visitor>
             {};
 
             template<typename Expr, typename State, typename Visitor>
             static typename apply<Expr, State, Visitor>::type
             call(Expr const &expr, State const &state, Visitor &visitor)
             {
-                return apply<Expr, State, Visitor>::call(expr, state, visitor);
+                return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
             }
         };
 

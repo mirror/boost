@@ -121,6 +121,21 @@ struct regex_iterator
         this->next_();
     }
 
+    template<typename LetExpr>
+    regex_iterator
+    (
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
+      , detail::let_<LetExpr> const &args
+      , regex_constants::match_flag_type flags = regex_constants::match_default
+    )
+      : impl_(new impl_type_(begin, begin, end, &rex, flags))
+    {
+        detail::bind_args(args, this->impl_->what_);
+        this->next_();
+    }
+
     regex_iterator(regex_iterator<BidiIter> const &that)
       : impl_(that.impl_) // COW
     {
@@ -200,15 +215,19 @@ private:
     {
         if(1 != this->impl_->use_count())
         {
+            // This is OK, the use_count is > 1
+            impl_type_ *that = this->impl_.get();
             this->impl_ = new impl_type_
             (
-                this->impl_->state_.begin_
-              , this->impl_->state_.cur_
-              , this->impl_->state_.end_
-              , this->impl_->rex_
-              , this->impl_->flags_
-              , this->impl_->not_null_
+                that->state_.begin_
+              , that->state_.cur_
+              , that->state_.end_
+              , that->rex_
+              , that->flags_
+              , that->not_null_
             );
+            detail::core_access<BidiIter>::get_action_args(this->impl_->what_)
+                = detail::core_access<BidiIter>::get_action_args(that->what_);
         }
     }
 

@@ -235,6 +235,12 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Locale, typename BidiIter>
     struct regex_traits_type;
 
+    template<typename Expr>
+    struct let_;
+
+    template<typename Args, typename BidiIter>
+    void bind_args(let_<Args> const &, match_results<BidiIter> &);
+
     ///////////////////////////////////////////////////////////////////////////////
     // Misc.
     struct no_next;

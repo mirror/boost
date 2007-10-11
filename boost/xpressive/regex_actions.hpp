@@ -36,6 +36,7 @@
 
 // Doxygen can't handle proto :-(
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+# include <boost/xpressive/proto/transform/fold.hpp>
 # include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #endif
 
@@ -80,6 +81,53 @@ namespace boost { namespace xpressive
 
         struct check_tag
         {};
+
+        template<typename Grammar>
+        struct BindArg
+          : Grammar
+        {
+            template<typename Expr, typename State, typename Visitor>
+            struct apply
+            {
+                typedef State type;
+            };
+
+            template<typename Expr, typename State, typename Visitor>
+            static State call(Expr const &expr, State const &state, Visitor &visitor)
+            {
+                visitor.let(expr);
+                return state;
+            }
+        };
+
+        struct let_tag
+        {};
+
+        struct BindArgs
+          : boost::proto::transform::fold<
+                boost::proto::function<
+                    boost::proto::transform::state<boost::proto::terminal<let_tag> >
+                  , boost::proto::vararg< BindArg< boost::proto::assign<boost::proto::_, boost::proto::_> > > 
+                >
+            >
+        {};
+
+        struct let_domain
+          : boost::proto::domain<boost::proto::pod_generator<let_> >
+        {};
+
+        template<typename Expr>
+        struct let_
+        {
+            BOOST_PROTO_EXTENDS(Expr, let_<Expr>, let_domain)
+            BOOST_PROTO_EXTENDS_FUNCTION(Expr, let_<Expr>, let_domain)
+        };
+
+        template<typename Args, typename BidiIter>
+        void bind_args(let_<Args> const &args, match_results<BidiIter> &what)
+        {
+            BindArgs::call(args, 0, what);
+        }
     }
 
     namespace op
@@ -693,6 +741,10 @@ namespace boost { namespace xpressive
     /// check(), for testing custom assertions
     ///
     proto::terminal<detail::check_tag>::type const check = {{}};
+
+    /// let(), for binding references to non-local variables
+    ///
+    detail::let_<proto::terminal<detail::let_tag>::type> const let = {{{}}};
 
     template<typename T, int I = 0, typename Dummy = proto::is_proto_expr>
     struct placeholder

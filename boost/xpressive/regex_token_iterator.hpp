@@ -166,6 +166,26 @@ struct regex_token_iterator
     /// \param begin The beginning of the character range to search.
     /// \param end The end of the character range to search.
     /// \param rex The regex pattern to search for.
+    /// \param args A let() expression with argument bindings for semantic actions.
+    /// \pre \c [begin,end) is a valid range.
+    template<typename LetExpr>
+    regex_token_iterator
+    (
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
+      , detail::let_<LetExpr> const &args
+    )
+      : impl_(new impl_type_(begin, begin, end, &rex))
+    {
+        detail::bind_args(args, this->impl_->iter_.what_);
+        this->next_();
+    }
+
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
     /// \pre \c [begin,end) is a valid range.
     /// \pre \c subs is either an integer greater or equal to -1,
     ///     or else an array or non-empty \c std::vector\<\> of such integers.
@@ -180,6 +200,30 @@ struct regex_token_iterator
     )
       : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(subs)))
     {
+        this->next_();
+    }
+
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \param args A let() expression with argument bindings for semantic actions.
+    /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
+    /// \pre \c [begin,end) is a valid range.
+    /// \pre \c subs is either an integer greater or equal to -1,
+    ///     or else an array or non-empty \c std::vector\<\> of such integers.
+    template<typename Subs, typename LetExpr>
+    regex_token_iterator
+    (
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
+      , Subs const &subs
+      , detail::let_<LetExpr> const &args
+      , regex_constants::match_flag_type flags = regex_constants::match_default
+    )
+      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(subs)))
+    {
+        detail::bind_args(args, this->impl_->iter_.what_);
         this->next_();
     }
 
@@ -278,6 +322,12 @@ private:
                 // BUGBUG This is expensive -- it causes the sequence_stack to be cleared.
                 // Find a better way
                 clone->iter_.what_ = this->impl_->iter_.what_;
+            }
+            else
+            {
+                // At the very least, copy the action args
+                detail::core_access<BidiIter>::get_action_args(clone->iter_.what_)
+                    = detail::core_access<BidiIter>::get_action_args(this->impl_->iter_.what_);
             }
 
             this->impl_.swap(clone);
