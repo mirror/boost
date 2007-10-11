@@ -1,10 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file symbols.hpp
 ///   Contains the Ternary Search Trie implementation.
-/// Based on the following papers:
+/// Based on the following paper:
 /// J. Bentley and R. Sedgewick. (1998) Ternary search trees. Dr. Dobbs Journal
-/// G. Badr and B.J. Oommen. (2005) Self-Adjusting of Ternary Search Tries Using
-///     Conditional Rotations and Randomized Heuristics
 //
 //  Copyright 2007 David Jenkins. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -81,7 +79,6 @@ namespace boost { namespace xpressive { namespace detail
               , lo(0)
               , eq(0)
               , hi(0)
-              , tau(0)
             {}
 
             ~node()
@@ -98,7 +95,6 @@ namespace boost { namespace xpressive { namespace detail
                 std::swap(lo, that.lo);
                 std::swap(eq, that.eq);
                 std::swap(hi, that.hi);
-                std::swap(tau, that.tau);
             }
 
             char_type ch;
@@ -109,7 +105,6 @@ namespace boost { namespace xpressive { namespace detail
                 result_type result;
             };
             node* hi;
-            long tau;
         };
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -154,39 +149,6 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         ///////////////////////////////////////////////////////////////////////////////
-        // conditional rotation : the goal is to minimize the overall
-        //     weighted path length of each binary search tree
-        // 
-        bool const cond_rotation(bool left, node* const i, node* const j) const
-        {
-            // don't rotate top node in binary search tree
-            if (i == j)
-                return false;
-            // calculate psi (the rotation condition)
-            node* const k = (left ? i->hi : i->lo);
-            long psi = 2*i->tau - j->tau - (k ? k->tau : 0);
-            if (psi <= 0)
-                return false;
-
-            // recalculate the tau values
-            j->tau += -i->tau + (k ? k->tau : 0);
-            i->tau +=  j->tau - (k ? k->tau : 0);
-            // fixup links and swap nodes
-            if (left)
-            {
-                j->lo = k;
-                i->hi = i;
-            }
-            else
-            {
-                j->hi = k;
-                i->lo = i;
-            }
-            (*i).swap(*j);
-            return true;
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////
         // search : find a string in the TST
         // 
         template<typename BidiIter, typename Trans>
@@ -198,12 +160,8 @@ namespace boost { namespace xpressive { namespace detail
             char_type c1 = (begin != end ? trans(*begin) : 0);
             while(p)
             {
-                ++p->tau;
                 if(c1 == p->ch)
                 {
-                    // conditional rotation test
-                    if (this->cond_rotation(left, p, p2))
-                        p = p2;
                     if (0 == p->ch)
                     {
                         // it's a match!
