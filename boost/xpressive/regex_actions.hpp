@@ -796,6 +796,8 @@ namespace boost { namespace xpressive
             ignore_unused(xpressive::str);
             ignore_unused(xpressive::insert);
             ignore_unused(xpressive::make_pair);
+            ignore_unused(xpressive::check);
+            ignore_unused(xpressive::let);
         }
     }
 
