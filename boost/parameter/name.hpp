@@ -16,7 +16,8 @@
 # include <boost/mpl/placeholders.hpp>
 
 # if !defined(BOOST_NO_SFINAE) \
-  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+  && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 
 #  include <boost/utility/enable_if.hpp>
 #  include <boost/mpl/lambda.hpp>

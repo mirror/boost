@@ -725,7 +725,7 @@ struct parameters
     // ::type).
 
 
-#ifndef BOOST_NO_SFINAE
+#if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
     // If NamedList satisfies the PS0, PS1, ..., this is a
     // metafunction returning parameters.  Otherwise it 
     // has no nested ::type.
@@ -775,7 +775,7 @@ struct parameters
 #endif
     >
     struct match
-# ifndef BOOST_NO_SFINAE
+# if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
       : match_base<
             typename aux::make_arg_list<
                 typename BOOST_PARAMETER_build_arg_list(
