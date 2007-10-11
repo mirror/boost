@@ -209,8 +209,13 @@ namespace boost
     template <class T> std::size_t hash_value(T* v)
 #endif
     {
+#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
         std::size_t x = static_cast<std::size_t>(
            reinterpret_cast<std::ptrdiff_t>(v));
+#else
+        std::size_t x = static_cast<std::size_t>(
+           reinterpret_cast<void*>(v));
+#endif
         return x + (x >> 3);
     }
 
