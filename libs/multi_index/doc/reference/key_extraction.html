@@ -63,6 +63,12 @@ Compiler specifics
       <li><a href="#boost_multi_index_mem_fun">Macro <code>BOOST_MULTI_INDEX_MEM_FUN</code></a></li>
     </ul>
   </li>
+  <li><a href="#global_fun_synopsis">Header
+    <code>"boost/multi_index/global_fun.hpp"</code> synopsis</a>
+    <ul>
+      <li><a href="#global_fun">Class template <code>global_fun</code></a></li>
+    </ul>
+  </li>
   <li><a href="#composite_key_synopsis">Header
     <code>"boost/multi_index/composite_key.hpp"</code> synopsis</a>
     <ul>
@@ -131,12 +137,13 @@ for every <code>k1</code> of type <code>const KeyFromValue</code> and
 </p>
 
 <p>
-Boost.MultiIndex provides five general-purpose key extractors:
+Boost.MultiIndex provides six general-purpose key extractors:
 <ul>
   <li><a href="#identity"><code>identity</code></a>,</li>
   <li><a href="#member"><code>member</code></a>,</li>
   <li><a href="#const_mem_fun"><code>const_mem_fun</code></a>,</li>
-  <li><a href="#mem_fun"><code>mem_fun</code></a> and</li>
+  <li><a href="#mem_fun"><code>mem_fun</code></a>,</li>
+  <li><a href="#global_fun"><code>global_fun</code></a> and</li>
   <li><a href="#composite_key"><code>composite_key</code></a>,</li>
 </ul>
 plus replacements for some of them:
@@ -178,6 +185,7 @@ ultimately dereferencing to values of <code>Type&amp;</code> or
 <span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index</span><span class=special>/</span><span class=identifier>identity</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
 <span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index</span><span class=special>/</span><span class=identifier>member</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
 <span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index</span><span class=special>/</span><span class=identifier>mem_fun</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index</span><span class=special>/</span><span class=identifier>global_fun</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
 <span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index</span><span class=special>/</span><span class=identifier>composite_key</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
 </pre></blockquote>
 
@@ -770,6 +778,147 @@ for MSVC++ 6.0 or lower.
 </p>
 
 <h2>
+<a name="global_fun_synopsis">Header
+<a href="../../../../boost/multi_index/global_fun.hpp">
+<code>"boost/multi_index/global_fun.hpp"</code></a> synopsis</a></h2>
+
+<blockquote><pre>
+<span class=keyword>namespace</span> <span class=identifier>boost</span><span class=special>{</span>
+
+<span class=keyword>namespace</span> <span class=identifier>multi_index</span><span class=special>{</span>
+
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>class</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Type</span><span class=special>,</span><span class=identifier>Type</span> <span class=special>(*</span><span class=identifier>PtrToFunction</span><span class=special>)(</span><span class=identifier>Value</span><span class=special>)&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>global_fun</span><span class=special>;</span>
+
+<span class=special>}</span> <span class=comment>// namespace boost::multi_index</span> 
+
+<span class=special>}</span> <span class=comment>// namespace boost</span>
+</pre></blockquote>
+
+<h3><a name="global_fun">Class template <code>global_fun</code></a></h3>
+
+<p>
+<code>global_fun</code> is a <a href="#key_extractors"><code>Key Extractor</code></a>
+based on a given global or static member function accepting the base type as argument
+and returning the associated key.
+</p>
+
+<blockquote><pre>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>class</span> <span class=identifier>Value</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Type</span><span class=special>,</span><span class=identifier>Type</span> <span class=special>(*</span><span class=identifier>PtrToFunction</span><span class=special>)(</span><span class=identifier>Value</span><span class=special>)&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>global_fun</span>
+<span class=special>{</span>
+  <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>remove_reference</span><span class=special>&lt;</span><span class=identifier>Type</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>result_type</span><span class=special>;</span>
+
+  <span class=comment>// Only provided under the following circumstances:
+  //   - If Value is a reference to a constant type, only provided
+  //     when const ChainedPtr&amp; is not convertible to Value;
+  //   - if Value is a reference to a non-const type, only provided
+  //     when ChainedPtr&amp; is not convertible to Value;
+  //   - else, only provided when const ChainedPtr&amp; is not
+  //     convertible to const Value&amp;.</span>
+  <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+  
+  <span class=comment>// only provided if Value is a reference type</span>
+  <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=identifier>Value</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+
+  <span class=comment>// only provided if Value is not a reference type</span>
+  <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>Value</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+
+  <span class=comment>// only provided if Value is not a reference type</span>
+  <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>reference_wrapper</span><span class=special>&lt;</span><span class=keyword>const</span> <span class=identifier>Value</span><span class=special>&gt;&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+
+  <span class=comment>// only provided if Value is a reference type</span>
+  <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span>
+    <span class=keyword>const</span> <span class=identifier>reference_wrapper</span><span class=special>&lt;</span>
+      <span class=identifier>remove_reference</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>&gt;&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+
+  <span class=comment>// only provided if Value is not a reference type or is
+  // a reference to a constant type</span>
+  <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span>
+    <span class=keyword>const</span> <span class=identifier>reference_wrapper</span><span class=special>&lt;</span>
+      <span class=keyword>typename</span> <span class=identifier>remove_const</span><span class=special>&lt;</span>
+        <span class=keyword>typename</span> <span class=identifier>remove_reference</span><span class=special>&lt;</span><span class=identifier>Value</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>&gt;::</span><span class=identifier>type</span><span class=special>&gt;&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+<span class=special>};</span>
+</pre></blockquote>
+
+<p>
+<code>PtrToFunction</code> specifies the particular function used to extract
+the key of type <code>Type</code> from some <code>BaseType</code>.
+<code>global_fun</code> supports the following function signatures:
+<ul>
+  <li><code>Type f(BaseType)</code> (<code>Value</code> is <code>BaseType</code>),</li>
+  <li><code>Type f(const BaseType&amp;)</code> (<code>Value</code> is <code>const BaseType&amp;</code>),</li>
+  <li><code>Type f(BaseType&amp;)</code> (<code>Value</code> is <code>BaseType&amp;</code>).</li>
+</ul>
+<code>global_fun&lt;Type,Value,PtrToFunction&gt;</code> is a model of:
+<ul>
+  <li><a href="#key_extractors"><code>Key Extractor</code></a>
+    from <code>reference_wrapper&lt;BaseType></code>,</li>
+  <li><a href="#key_extractors"><code>Key Extractor</code></a>
+    from any <a href="#chained_pointers">chained pointer</a>
+    to <code>BaseType</code>.</li>
+</ul>
+When <code>Value</code> is <code>BaseType</code> or
+<code>const BaseType&amp;</code>,
+<code>global_fun&lt;Type,Value,PtrToFunction&gt;</code> is also a model of:
+<ul>
+  <li><a href="#key_extractors"><code>Key Extractor</code></a>
+    from <code>BaseType</code>,</li>
+  <li><a href="#key_extractors"><code>Key Extractor</code></a>
+    from <code>reference_wrapper&lt;const BaseType></code>,</li>
+  <li><a href="#key_extractors"><code>Key Extractor</code></a>
+    from any <a href="#chained_pointers">chained pointer</a>
+    to <code>const BaseType</code>.</li>
+</ul>
+</p>
+
+<h4><code>global_fun</code> members</h4>
+
+<code>template&lt;typename ChainedPtr> Type operator()(const ChainedPtr&amp; x)const;</code>
+
+<blockquote>
+<b>Requires:</b> <code>ChainedPtr</code> is a <a href="#chained_pointers">chained pointer</a>
+type to <code>Value</code>.<br>
+<b>Returns:</b> <code>PtrToFunction)(y)</code>, where <code>y</code> is the
+object chained-pointed to by <code>x</code>.
+</blockquote>
+
+<code>Type operator()(Value x)const;</code>
+
+<blockquote>
+<b>Returns:</b> <code>PtrToFunction(x)</code>.
+</blockquote>
+
+<code>Type operator()(const Value&amp; x)const;</code>
+
+<blockquote>
+<b>Returns:</b> <code>PtrToFunction(x)</code>.
+</blockquote>
+
+<code>Type operator()(const reference_wrapper&lt;const Value&gt;&amp; x)const;</code>
+
+<blockquote>
+<b>Returns:</b> <code>PtrToFunction(x.get())</code>.
+</blockquote>
+
+<code>
+Type operator()(<br>
+&nbsp;&nbsp;const reference_wrapper&lt;remove_reference&lt;Value&gt;::type&gt;&amp; x)const;</code>
+
+<blockquote>
+<b>Returns:</b> <code>PtrToFunction(x.get())</code>.
+</blockquote>
+
+<code>Type operator()(<br>
+&nbsp;&nbsp;const reference_wrapper&lt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;typename remove_const&lt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typename remove_reference&lt;Value&gt;::type&gt;::type&gt;&amp; x)const;</code>
+
+<blockquote>
+<b>Returns:</b> <code>PtrToFunction(x.get())</code>.
+</blockquote>
+
+<h2>
 <a name="composite_key_synopsis">Header
 <a href="../../../../boost/multi_index/composite_key.hpp">
 <code>"boost/multi_index/composite_key.hpp"</code></a> synopsis</a></h2>
@@ -787,7 +936,7 @@ for MSVC++ 6.0 or lower.
   
 <span class=comment>// comparison operators for composite_key_result:</span>
 
-<span class=comment>// <b>OP</b> is any of =,&lt;,!=,&gt;,&gt;=,&lt;=</span>
+<span class=comment>// <b>OP</b> is any of ==,&lt;,!=,&gt;,&gt;=,&lt;=</span>
 
 <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompositeKey1</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>CompositeKey2</span><span class=special>&gt;</span>
 <span class=keyword>bool</span> <span class=keyword>operator</span> <b><i>OP</i></b><span class=special>(</span>
@@ -1005,7 +1154,7 @@ instantiations as their extracted key.
 
 <span class=comment>// comparison:</span>
   
-<span class=comment>// <b>OP</b> is any of =,&lt;,!=,&gt;,&gt;=,&lt;=</span>
+<span class=comment>// <b>OP</b> is any of ==,&lt;,!=,&gt;,&gt;=,&lt;=</span>
 
 <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>CompositeKey1</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>CompositeKey2</span><span class=special>&gt;</span>
 <span class=keyword>bool</span> <span class=keyword>operator</span> <b><i>OP</i></b><span class=special>(</span>
@@ -2072,9 +2221,22 @@ is lexicographical. Also, the following types are
 <code>composite_key_result&lt;composite_key&lt;K0,...,Kk> ></code>, with
 <code>Ki::result_type = Qi</code> for all <code>i = 0,...,k</code>.
 </blockquote>
-provided that each <code>Qi</code> is either <code>Ti</code> or a
-<a href="ord_indices.html#set_operations"><code>Compatible Key</code></a>
-of <code>Comparei</code>. In this case, the comparison is done
+provided that 
+<ul>
+  <li>for <code>i = 0,...,min(j,k)-1</code>, <code>Qi</code> is either <code>Ti</code>
+    or <i>not coarser</i> than <code>Ti</code> (<code>Qi</code> is a
+    <a href="ord_indices.html#set_operations"><code>Compatible Key</code></a>
+    of <code>Comparei</code> and there are no two distinct elements of
+    <code>Ti</code> equivalent to one single element of <code>Qi</code>);
+  </li>
+  <li>
+    <code>Qm</code> (with <code>m = min(j,k)</code>) is either <code>Tm</code> or a
+    <a href="ord_indices.html#set_operations"><code>Compatible Key</code></a>
+    of <code>Comparem</code>.
+  </li>
+</ul>
+
+In this case, the comparison is done
 lexicographically only on the first <code>1+min(j,k)</code> elements.
 </p>
 
@@ -2101,9 +2263,9 @@ Compiler specifics
 
 <br>
 
-<p>Revised July 13th 2006</p>
+<p>Revised August 2nd 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

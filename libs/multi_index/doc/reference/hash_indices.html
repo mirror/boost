@@ -44,9 +44,11 @@ Sequenced indices
           <li><a href="#instantiation_types">Instantiation types</a></li>
           <li><a href="#types">Nested types</a></li>
           <li><a href="#constructors">Constructors, copy and assignment</a></li>
+          <li><a href="#iterators">Iterators</a></li>
           <li><a href="#modifiers">Modifiers</a></li>
           <li><a href="#observers">Observers</a></li>
           <li><a href="#lookup">Lookup</a></li>
+          <li><a href="#bucket_interface">Bucket interface</a></li>
           <li><a href="#hash_policy">Hash policy</a></li>
           <li><a href="#serialization">Serialization</a></li>
         </ul>
@@ -248,7 +250,12 @@ do not exactly conform to the requirements for unordered associative containers.
   <span class=identifier>const_iterator</span> <span class=identifier>begin</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
   <span class=identifier>iterator</span>       <span class=identifier>end</span><span class=special>();</span>
   <span class=identifier>const_iterator</span> <span class=identifier>end</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>const_iterator</span> <span class=identifier>cbegin</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>const_iterator</span> <span class=identifier>cend</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
  
+  <span class=identifier>iterator</span>       <span class=identifier>iterator_to</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
+  <span class=identifier>const_iterator</span> <span class=identifier>iterator_to</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+
   <span class=comment>// modifiers:</span>
 
   <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span> <span class=identifier>insert</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
@@ -262,7 +269,11 @@ do not exactly conform to the requirements for unordered associative containers.
 
   <span class=keyword>bool</span> <span class=identifier>replace</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Modifier</span><span class=special>&gt;</span> <span class=keyword>bool</span> <span class=identifier>modify</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=identifier>Modifier</span> <span class=identifier>mod</span><span class=special>);</span>
+  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Modifier</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Rollback</span><span class=special>&gt;</span>
+  <span class=keyword>bool</span> <span class=identifier>modify</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=identifier>Modifier</span> <span class=identifier>mod</span><span class=special>,</span><span class=identifier>Rollback</span> <span class=identifier>back</span><span class=special>);</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Modifier</span><span class=special>&gt;</span> <span class=keyword>bool</span> <span class=identifier>modify_key</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=identifier>Modifier</span> <span class=identifier>mod</span><span class=special>);</span>
+  <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Modifier</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Rollback</span><span class=special>&gt;</span>
+  <span class=keyword>bool</span> <span class=identifier>modify_key</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=identifier>Modifier</span> <span class=identifier>mod</span><span class=special>,</span><span class=identifier>Rollback</span> <span class=identifier>back</span><span class=special>);</span>
   
   <span class=keyword>void</span> <span class=identifier>clear</span><span class=special>();</span>
   <span class=keyword>void</span> <span class=identifier>swap</span><span class=special>(</span><b>index class name</b><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
@@ -313,6 +324,11 @@ do not exactly conform to the requirements for unordered associative containers.
   <span class=identifier>const_local_iterator</span> <span class=identifier>begin</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   <span class=identifier>local_iterator</span>       <span class=identifier>end</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>);</span>
   <span class=identifier>const_local_iterator</span> <span class=identifier>end</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>const_local_iterator</span> <span class=identifier>cbegin</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>const_local_iterator</span> <span class=identifier>cend</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
+
+  <span class=identifier>local_iterator</span>       <span class=identifier>local_iterator_to</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
+  <span class=identifier>const_local_iterator</span> <span class=identifier>local_iterator_to</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>value_type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=comment>// hash policy:</span>
 
@@ -432,6 +448,18 @@ Assignment, on the other hand, is provided. Upon construction,
 where <code>a</code> and <code>b</code> are the <code>multi_index_container</code>
 objects to which <code>*this</code> and <code>x</code> belong, respectively.<br>
 <b>Returns:</b> <code>*this</code>.<br>
+</blockquote>
+
+<h4><a name="iterators">Iterators</a></h4>
+
+<code>iterator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iterator_to(const value_type&amp; x);</br>
+const_iterator iterator_to(const value_type&amp; x)const;</code>
+  
+<blockquote>
+<b>Requires:</b> <code>x</code> is a reference to an element of the container.</br>
+<b>Returns:</b> An iterator to <code>x</code>.<br>
+<b>Complexity:</b> Constant.<br>
+<b>Exception safety:</b> <code>nothrow</code>.<br>
 </blockquote>
 
 <h4><a name="modifiers">Modifiers</a></h4>
@@ -589,6 +617,41 @@ user-provided operation (except possibly <code>mod</code>), then
 the element pointed to by <code>position</code> is erased.
 </blockquote>
 
+<code>template&lt;typename Modifier,typename Rollback><br>
+bool modify(iterator position,Modifier mod,Rollback back);</code>
+
+<blockquote>
+<b>Requires:</b> <code>Modifier</code> and <code>Rollback</code> are models of
+<a href="http://www.sgi.com/tech/stl/UnaryFunction.html">
+<code>Unary Function</code></a> accepting arguments of type
+<code>value_type&amp;</code>. <code>position</code> is a valid dereferenceable
+iterator of the index. The sequence of operations <code>mod(e)</code>,
+<code>back(e)</code>, where <code>e</code> is the element
+pointed to by <code>position</code>, restores all keys of the element
+to their original state.</br>
+<b>Effects:</b> Calls <code>mod(e)</code> where <code>e</code> is the element
+pointed to by <code>position</code> and tries to rearrange <code>*position</code> into
+all the indices of the <code>multi_index_container</code>. Rearrangement is successful if
+<ul>
+  <li>the index is non-unique OR no other element exists
+    with  equivalent key,</li>
+  <li>AND rearrangement is allowed by all other indices of the
+    <code>multi_index_container</code>.</li>
+</ul>
+If the rearrangement fails, <code>back(e)</code> is invoked and the
+element is kept at its original position in all indices.<br>
+<b>Postconditions:</b> Validity of <code>position</code> is preserved except if
+the element is erased under the conditions described below.<br>
+<b>Returns:</b> <code>true</code> if the operation succeeded, <code>false</code>
+otherwise.<br>
+<b>Complexity:</b> <code>O(M(n))</code>.<br>
+<b>Exception safety:</b> Strong, except if <code>back</code> throws an
+exception, in which case the modified element is erased. If <code>back</code>
+throws inside the handling code executing after some other user-provided
+operation has thrown, it is the exception generated by <code>back</code> that
+is rethrown.
+</blockquote>
+
 <a name="modify_key">    
 <code>template&lt;typename Modifier> bool modify_key(iterator position,Modifier mod);</code></a>
 
@@ -600,26 +663,31 @@ from <code>value_type</code>. <code>Modifier</code> is a model of
 <code>Unary Function</code></a> accepting arguments of type
 <code>key_type&amp;</code>. <code>position</code> is a valid dereferenceable
 iterator of the index.</br>
-<b>Effects:</b> Calls <code>mod(k)</code> where <code>k</code> is the key
-obtained by the internal <code>KeyFromValue</code> object of the index from
-the element pointed to by <code>position</code>, and rearranges
-<code>*position</code> into all the indices of the <code>multi_index_container</code>.
-Rearrangement is successful if
-<ul>
-  <li>the index is non-unique OR no other element exists
-    with  equivalent key,</li>
-  <li>AND rearrangement is allowed by all other indices of the
-    <code>multi_index_container</code>.</li>
-</ul>
-If the rearrangement fails, the element is erased.<br>
-<b>Postconditions:</b>Validity of <code>position</code> is preserved if
-the operation succeeds.<br>
-<b>Returns:</b> <code>true</code> if the operation succeeded, <code>false</code>
-otherwise.<br>
-<b>Complexity:</b> <code>O(M(n))</code>.<br>
-<b>Exception safety:</b> Basic. If an exception is thrown by some
-user-provided operation (except possibly <code>mod</code>), then
-the element pointed to by <code>position</code> is erased.
+<b>Effects:</b> Equivalent to <code>modify(position,mod')</code>,
+with <code>mod'</code> defined in such a way that
+<code>mod'(x)</code> is the same as <code>mod(key(x))</code>, where
+<code>key</code> is the internal <code>KeyFromValue</code> object of the index.
+</blockquote>
+
+<code>template&lt;typename Modifier,typename Rollback><br>
+bool modify_key(iterator position,Modifier mod,Rollback back);</code>
+
+<blockquote>
+<b>Requires:</b> <code>key_from_value</code> is a read/write
+<a href="key_extraction.html#key_extractors"><code>Key Extractor</code></a>
+from <code>value_type</code>. <code>Modifier</code> and <code>Rollback</code>
+are models of <a href="http://www.sgi.com/tech/stl/UnaryFunction.html">
+<code>Unary Function</code></a> accepting arguments of type
+<code>key_type&amp;</code>. <code>position</code> is a valid dereferenceable
+iterator of the index.
+The sequence of operations <code>mod(k)</code>,
+<code>back(k)</code>, where <code>k</code> is the key of the element
+pointed to by <code>position</code>, restores k to its original state.</br>
+<b>Effects:</b> Equivalent to <code>modify(position,mod',back')</code>,
+with <code>mod'</code> and <code>back</code> defined in such a way that
+<code>mod'(x)</code> is the same as <code>mod(key(x))</code> and
+<code>back'(x)</code> is the same as <code>back(key(x))</code>, where
+<code>key</code> is the internal <code>KeyFromValue</code> object of the index.
 </blockquote>
 
 <h4><a name="observers">Observers</a></h4>
@@ -768,7 +836,8 @@ std::pair&lt;iterator,iterator> equal_range(const CompatibleKey&amp; x)const;
 <b>Requires:</b> <code>CompatibleKey</code> is a compatible key of
 (<code>hasher</code>, <code>key_equal</code>).</br>
 <b>Effects:</b> Returns a range containing all elements with keys equivalent
-to <code>x</code> (and only those).<br>
+to <code>x</code> (and only those), or (<code>end()</code>,<code>end()</code>)
+if no such elements exist.<br>
 <b>Complexity:</b> Average case <code>O(count(x))</code>, worst case
 <code>O(n)</code>.<br>
 </blockquote>
@@ -786,9 +855,22 @@ std::pair&lt;iterator,iterator> equal_range(</br>
 <code>CompatiblePred</code>) is a compatible extension of
 (<code>hasher</code>, <code>key_equal</code>).</br>
 <b>Effects:</b> Returns a range containing all elements with keys equivalent
-to <code>x</code> (and only those).<br>
+to <code>x</code> (and only those), or (<code>end()</code>,<code>end()</code>)
+if no such elements exist.<br>
 <b>Complexity:</b> Average case <code>O(count(x,hash,eq))</code>, worst case
 <code>O(n)</code>.<br>
+</blockquote>
+
+<h4><a name="bucket_interface">Bucket interface</a></h4>
+
+<code>local_iterator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local_iterator_to(const value_type&amp; x);</br>
+const_local_iterator local_iterator_to(const value_type&amp; x)const;</code>
+  
+<blockquote>
+<b>Requires:</b> <code>x</code> is a reference to an element of the container.</br>
+<b>Returns:</b> An iterator to <code>x</code>.<br>
+<b>Complexity:</b> Constant.<br>
+<b>Exception safety:</b> <code>nothrow</code>.<br>
 </blockquote>
 
 
@@ -895,9 +977,9 @@ Sequenced indices
 
 <br>
 
-<p>Revised July 13th 2006</p>
+<p>Revised July 2nd 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

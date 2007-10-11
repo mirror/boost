@@ -41,6 +41,7 @@ Container creation
       <li><a href="#member"><code>member</code></a></li>
       <li><a href="#const_mem_fun"><code>const_mem_fun</code>
         and <code>mem_fun</code></a></li>
+      <li><a href="#global_fun"><code>global_fun</code></a></li>
     </ul>
   </li>
   <li><a href="#user_defined_key_extractors">User-defined key extractors</a></li>
@@ -242,6 +243,68 @@ of Boost.MultiIndex key extractors</a>.
 
 <p><a href="../examples.html#example2">Example 2</a> in the examples section
 provides a complete program showing how to use <code>const_mem_fun</code>.
+<p>
+
+<h3><a name="global_fun"><code>global_fun</code></a></h3>
+
+<p>
+Whereas <code>const_mem_fun</code> and <code>mem_fun</code> are based on a
+given member function of the base type from where the key is extracted,
+<a href="../reference/key_extraction.html#global_fun"><code>global_fun</code></a>
+takes a global function (or static member function) accepting the base
+type as its parameter and returning the key:
+</p>
+
+<blockquote><pre>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index_container</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index</span><span class=special>/</span><span class=identifier>ordered_index</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index</span><span class=special>/</span><span class=identifier>global_fun</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+
+<span class=keyword>struct</span> <span class=identifier>rectangle</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=identifier>x0</span><span class=special>,</span><span class=identifier>y0</span><span class=special>;</span>
+  <span class=keyword>int</span> <span class=identifier>x1</span><span class=special>,</span><span class=identifier>y1</span><span class=special>;</span>
+<span class=special>};</span>
+
+<span class=keyword>unsigned</span> <span class=keyword>long</span> <span class=identifier>area</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>rectangle</span><span class=special>&amp;</span> <span class=identifier>r</span><span class=special>)</span>
+<span class=special>{</span>
+  <span class=keyword>return</span> <span class=special>(</span><span class=keyword>unsigned</span> <span class=keyword>long</span><span class=special>)(</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>x1</span><span class=special>-</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>x0</span><span class=special>)*(</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>x1</span><span class=special>-</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>x0</span><span class=special>)+</span>
+         <span class=special>(</span><span class=keyword>unsigned</span> <span class=keyword>long</span><span class=special>)(</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>y1</span><span class=special>-</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>y0</span><span class=special>)*(</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>y1</span><span class=special>-</span><span class=identifier>r</span><span class=special>.</span><span class=identifier>y0</span><span class=special>);</span>
+<span class=special>}</span>
+
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=identifier>rectangle</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=comment>// sort by increasing area</span>
+    <span class=identifier>ordered_non_unique</span><span class=special>&lt;</span><span class=identifier>global_fun</span><span class=special>&lt;</span><span class=keyword>const</span> <span class=identifier>rectangle</span><span class=special>&amp;,</span><span class=keyword>unsigned</span> <span class=keyword>long</span><span class=special>,&amp;</span><span class=identifier>area</span><span class=special>&gt;</span> <span class=special>&gt;</span>
+  <span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>rectangle_container</span><span class=special>;</span>
+</pre></blockquote>
+
+<p>
+The specification of <code>global_fun</code> obeys the following syntax:
+</p>
+
+<blockquote><pre>
+<span class=identifier>global_fun</span><span class=special>&lt;</span><span class=identifier><i>(argument type)</i></span><span class=special>,</span><span class=identifier><i>(key type)</i></span><span class=special>,</span><span class=identifier><i>(pointer to function)</i></span><span class=special>&gt;</span>
+</pre></blockquote>
+
+<p>
+where the argument type and key type must match <i>exactly</i> those in the
+signature of the function used; for instance, in the example above the argument
+type is <code>const rectangle&amp;</code>, without omitting the "<code>const</code>"
+and "<code>&amp;</code>" parts. So, although most of the time the base type will be
+accepted by constant reference, <code>global_fun</code> is also prepared to take
+functions accepting their argument by value or by non-constant reference: this
+latter case cannot generally be used directly in the specification of
+<code>multi_index_container</code>s as their elements are treated as constant,
+but the section on <a href="#advanced_key_extractors">advanced features
+of Boost.MultiIndex key extractors</a> describes valid use cases of
+key extraction based on such functions with a non-constant reference argument.
+</p>
+
+<p><a href="../examples.html#example2">Example 2</a> in the examples section
+uses <code>gobal_fun</code>.
 <p>
 
 <h2><a name="user_defined_key_extractors">User-defined key extractors</a></h2>
@@ -632,10 +695,12 @@ following final type:
 <blockquote><pre>
 <span class=keyword>struct</span> <span class=identifier>T</span>
 <span class=special>{</span>
-  <span class=keyword>int</span>       <span class=identifier>i</span><span class=special>;</span>
-  <span class=keyword>const</span> <span class=keyword>int</span> <span class=identifier>j</span><span class=special>;</span>
-  <span class=keyword>int</span>       <span class=identifier>f</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
-  <span class=keyword>int</span>       <span class=identifier>g</span><span class=special>();</span>
+  <span class=keyword>int</span>        <span class=identifier>i</span><span class=special>;</span>
+  <span class=keyword>const</span> <span class=keyword>int</span>  <span class=identifier>j</span><span class=special>;</span>
+  <span class=keyword>int</span>        <span class=identifier>f</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=keyword>int</span>        <span class=identifier>g</span><span class=special>();</span>
+  <span class=keyword>static</span> <span class=keyword>int</span> <span class=identifier>gf</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>T</span><span class=special>&amp;);</span>
+  <span class=keyword>static</span> <span class=keyword>int</span> <span class=identifier>gg</span><span class=special>(</span><span class=identifier>T</span><span class=special>&amp;);</span>
 <span class=special>};</span>
 </pre></blockquote>
 
@@ -656,7 +721,7 @@ each of its members.
   <th>read/write?</th>
 </tr>
 <tr>
-  <td align="center" rowspan="4"><code>T</code></td>
+  <td align="center" rowspan="6"><code>T</code></td>
   <td><code>i</code></td>
   <td><code>member&lt;T,int,&amp;T::i></code></td>
   <td align="center">yes</td>
@@ -680,9 +745,21 @@ each of its members.
   <td align="center">no</td>
   <td align="center">no</td>
 </tr>
+<tr>
+  <td><code>gf()</code></td>
+  <td><code>global_fun&lt;const T&amp;,int,&amp;T::gf></code></td>
+  <td align="center">yes</td>
+  <td align="center">no</td>
+</tr>
+<tr>
+  <td><code>gg()</code></td>
+  <td><code>global_fun&lt;T&amp;,int,&amp;T::gg></code></td>
+  <td align="center">no</td>
+  <td align="center">no</td>
+</tr>
 
 <tr class="odd_tr">
-  <td align="center" rowspan="4"><code>reference_wrapper&lt;T></code></td>
+  <td align="center" rowspan="6"><code>reference_wrapper&lt;T></code></td>
   <td><code>i</code></td>
   <td><code>member&lt;T,int,&amp;T::i></code></td>
   <td align="center">yes</td>
@@ -706,9 +783,21 @@ each of its members.
   <td align="center">yes</td>
   <td align="center">no</td>
 </tr>
+<tr class="odd_tr">
+  <td><code>gf()</code></td>
+  <td><code>global_fun&lt;const T&amp;,int,&amp;T::gf></code></td>
+  <td align="center">yes</td>
+  <td align="center">no</td>
+</tr>
+<tr class="odd_tr">
+  <td><code>gg()</code></td>
+  <td><code>global_fun&lt;T&amp;,int,&amp;T::gg></code></td>
+  <td align="center">yes</td>
+  <td align="center">no</td>
+</tr>
 
 <tr>
-  <td align="center" rowspan="4"><code>reference_wrapper&lt;const T></code></td>
+  <td align="center" rowspan="6"><code>reference_wrapper&lt;const T></code></td>
   <td><code>i</code></td>
   <td><code>member&lt;T,const int,&amp;T::i></code></td>
   <td align="center">yes</td>
@@ -730,9 +819,19 @@ each of its members.
   <td><code>g()</code></td>
   <td colspan="3">&nbsp;</td>
 </tr>
+<tr>
+  <td><code>gf()</code></td>
+  <td><code>global_fun&lt;const T&amp;,int,&amp;T::gf></code></td>
+  <td align="center">yes</td>
+  <td align="center">no</td>
+</tr>
+<tr>
+  <td><code>gg()</code></td>
+  <td colspan="3">&nbsp;</td>
+</tr>
 
 <tr class="odd_tr">
-  <td align="center" rowspan="4">chained pointer to <code>T</code><br>
+  <td align="center" rowspan="6">chained pointer to <code>T</code><br>
     or to <code>reference_wrapper&lt;T></code></td>
   <td><code>i</code></td>
   <td><code>member&lt;T,int,&amp;T::i></code></td>
@@ -757,9 +856,21 @@ each of its members.
   <td align="center">yes</td>
   <td align="center">no</td>
 </tr>
+<tr class="odd_tr">
+  <td><code>gf()</code></td>
+  <td><code>global_fun&lt;const T&amp;,int,&amp;T::gf></code></td>
+  <td align="center">yes</td>
+  <td align="center">no</td>
+</tr>
+<tr class="odd_tr">
+  <td><code>gg()</code></td>
+  <td><code>global_fun&lt;T&amp;,int,&amp;T::gg></code></td>
+  <td align="center">yes</td>
+  <td align="center">no</td>
+</tr>
 
 <tr>
-  <td align="center" rowspan="4">chained pointer to <code>const T</code><br>
+  <td align="center" rowspan="6">chained pointer to <code>const T</code><br>
     or to <code>reference_wrapper&lt;const T></code></td>
   <td><code>i</code></td>
   <td><code>member&lt;T,const int,&amp;T::i></code></td>
@@ -782,6 +893,16 @@ each of its members.
   <td><code>g()</code></td>
   <td colspan="3">&nbsp;</td>
 </tr>
+<tr>
+  <td><code>gf()</code></td>
+  <td><code>global_fun&lt;const T&amp;,int,&amp;T::gf></code></td>
+  <td align="center">yes</td>
+  <td align="center">no</td>
+</tr>
+<tr>
+  <td><code>gg()</code></td>
+  <td colspan="3">&nbsp;</td>
+</tr>
 
 </table>
 </p>
@@ -790,10 +911,12 @@ each of its members.
 The column "applicable to <code>const</code> elements?" states whether the
 corresponding key extractor can be used when passed constant elements (this
 relates to the elements specified in the first column, not the referenced
-<code>T</code> objects). The only negative case is for <code>T::g</code> when
-the elements are raw <code>T</code> objects, which make sense as we are dealing
-with a non-constant member function: this also implies that <code>multi_index_container</code>s
-of elements of <code>T</code> cannot be sorted by <code>T::g</code>, because
+<code>T</code> objects). The only negative cases are for <code>T::g</code> and
+<code>T:gg</code> when the elements are raw <code>T</code> objects, which make sense
+as we are dealing with a non-constant member function (<code>T::g</code>)
+and a function taking <code>T</code> by
+non-constant reference: this also implies that <code>multi_index_container</code>s
+of elements of <code>T</code> cannot be sorted by <code>T::g</code> or <code>T::gg</code>, because
 elements contained within a <code>multi_index_container</code> are treated as constant.
 </p>
 
@@ -804,7 +927,7 @@ The column "read/write?" shows which combinations yield
 
 <p>
 Some care has to be taken to preserve <code>const</code>-correctness in the
-specification of the key extractors: in some sense, the <code>const</code>
+specification of <code>member</code> key extractors: in some sense, the <code>const</code>
 qualifier is carried along to the member part, even if that particular
 member is not defined as <code>const</code>. For instance, if the elements
 are of type <code>const T *</code>, sorting by <code>T::i</code> is <i>not</i>
@@ -832,9 +955,9 @@ Container creation
 
 <br>
 
-<p>Revised February 6th 2006</p>
+<p>Revised June 11th 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

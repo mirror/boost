@@ -31,7 +31,6 @@
 #include <boost/multi_index/detail/access_specifier.hpp>
 #include <boost/multi_index/detail/base_type.hpp>
 #include <boost/multi_index/detail/converter.hpp>
-#include <boost/multi_index/detail/def_ctor_tuple_cons.hpp>
 #include <boost/multi_index/detail/header_holder.hpp>
 #include <boost/multi_index/detail/has_tag.hpp>
 #include <boost/multi_index/detail/no_duplicate_tags.hpp>
@@ -72,8 +71,14 @@ class multi_index_container:
         Value,IndexSpecifierList,Allocator>::type
     >::type>,
   BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS detail::header_holder<
-    typename detail::multi_index_node_type<
-      Value,IndexSpecifierList,Allocator>::type,
+    typename detail::prevent_eti<
+      Allocator,
+      typename boost::detail::allocator::rebind_to<
+        Allocator,
+        typename detail::multi_index_node_type<
+          Value,IndexSpecifierList,Allocator>::type
+      >::type
+    >::type::pointer,
     multi_index_container<Value,IndexSpecifierList,Allocator> >,
   public detail::multi_index_base_type<
     Value,IndexSpecifierList,Allocator>::type
@@ -97,13 +102,18 @@ private:
 
   typedef typename detail::multi_index_base_type<
       Value,IndexSpecifierList,Allocator>::type   super;
-  typedef ::boost::base_from_member<
-    typename boost::detail::allocator::rebind_to<
+  typedef typename
+  boost::detail::allocator::rebind_to<
       Allocator,
       typename super::node_type
-    >::type>                                      bfm_allocator;
+  >::type                                         node_allocator;
+  typedef ::boost::base_from_member<
+    node_allocator>                               bfm_allocator;
   typedef detail::header_holder<
-    typename super::node_type,
+    typename detail::prevent_eti<
+      Allocator,
+      node_allocator
+    >::type::pointer,
     multi_index_container>                        bfm_header;
 
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
@@ -116,15 +126,8 @@ public:
    * brought forward here to save us some typename's.
    */
 
-#if defined(BOOST_MSVC)
-  typedef 
-    detail::default_constructible_tuple_cons<
-      typename super::ctor_args_list>              ctor_args_list;
-#else
-  typedef typename super::ctor_args_list           ctor_args_list;
-#endif
-
-  typedef IndexSpecifierList                       index_specifier_type_list;
+  typedef typename super::ctor_args_list          ctor_args_list;
+  typedef IndexSpecifierList                      index_specifier_type_list;
  
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
   /* MSVC++ 6.0 chokes on moderately long index lists (around 6 indices
@@ -430,17 +433,18 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
   node_type* header()const
   {
-    return bfm_header::member;
+    return &*bfm_header::member;
   }
 
   node_type* allocate_node()
   {
-    return bfm_allocator::member.allocate(1);
+    return &*bfm_allocator::member.allocate(1);
   }
 
   void deallocate_node(node_type* x)
   {
-    bfm_allocator::member.deallocate(x,1);
+    typedef typename node_allocator::pointer node_pointer;
+    bfm_allocator::member.deallocate(static_cast<node_pointer>(x),1);
   }
 
   bool empty_()const
@@ -527,6 +531,16 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
   void swap_(multi_index_container<Value,IndexSpecifierList,Allocator>& x)
   {
+    if(bfm_allocator::member!=x.bfm_allocator::member){
+
+#if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
+      std::swap(bfm_allocator::member,x.bfm_allocator::member);
+#else
+      using std::swap;
+      swap(bfm_allocator::member,x.bfm_allocator::member);
+#endif
+
+    }
     std::swap(bfm_header::member,x.bfm_header::member);
     super::swap_(x);
     std::swap(node_count,x.node_count);
@@ -538,7 +552,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   }
 
   template<typename Modifier>
-  bool modify_(Modifier mod,node_type* x)
+  bool modify_(Modifier& mod,node_type* x)
   {
     mod(const_cast<value_type&>(x->value()));
 
@@ -553,6 +567,42 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     BOOST_CATCH(...){
       deallocate_node(x);
       --node_count;
+      BOOST_RETHROW;
+    }
+    BOOST_CATCH_END
+  }
+
+  template<typename Modifier,typename Rollback>
+  bool modify_(Modifier& mod,Rollback& back,node_type* x)
+  {
+    mod(const_cast<value_type&>(x->value()));
+
+    bool b;
+    BOOST_TRY{
+      b=super::modify_rollback_(x);
+    }
+    BOOST_CATCH(...){
+      BOOST_TRY{
+        back(const_cast<value_type&>(x->value()));
+        BOOST_RETHROW;
+      }
+      BOOST_CATCH(...){
+        this->erase_(x);
+        BOOST_RETHROW;
+      }
+      BOOST_CATCH_END
+    }
+    BOOST_CATCH_END
+
+    BOOST_TRY{
+      if(!b){
+        back(const_cast<value_type&>(x->value()));
+        return false;
+      }
+      else return true;
+    }
+    BOOST_CATCH(...){
+      this->erase_(x);
       BOOST_RETHROW;
     }
     BOOST_CATCH_END

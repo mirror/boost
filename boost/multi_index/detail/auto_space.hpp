@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Joaquín M López Muñoz.
+/* Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -16,6 +16,7 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
 #include <boost/detail/allocator_utilities.hpp>
+#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
 
@@ -44,8 +45,15 @@ namespace detail{
 template<typename T,typename Allocator=std::allocator<T> >
 struct auto_space:private noncopyable
 {
+  typedef typename prevent_eti<
+    Allocator,
+    typename boost::detail::allocator::rebind_to<
+      Allocator,T
+    >::type
+  >::type::pointer pointer;
+
   explicit auto_space(const Allocator& al=Allocator(),std::size_t n=1):
-  al_(al),n_(n),data_(n_?al_.allocate(n_):0)
+  al_(al),n_(n),data_(n_?al_.allocate(n_):pointer(0))
   {}
 
   ~auto_space()
@@ -55,10 +63,20 @@ struct auto_space:private noncopyable
 
   Allocator get_allocator()const{return al_;}
 
-  T* data()const{return data_;}
+  pointer data()const{return data_;}
 
   void swap(auto_space& x)
   {
+    if(al_!=x.al_){
+
+#if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
+      std::swap(al_,x.al_);
+#else
+      using std::swap;
+      swap(al_,x.al_);
+#endif
+
+    }
     std::swap(n_,x.n_);
     std::swap(data_,x.data_);
   }
@@ -67,7 +85,7 @@ private:
   typename boost::detail::allocator::rebind_to<
     Allocator,T>::type                          al_;
   std::size_t                                   n_;
-  T*                                            data_;
+  pointer                                       data_;
 };
 
 template<typename T,typename Allocator>

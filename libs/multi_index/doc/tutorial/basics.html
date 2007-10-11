@@ -956,15 +956,69 @@ original value is kept and the method returns without altering the container, bu
 leaves no trace of the previous value of the element. Integrity constraints
 thus lead to the following policy: when a collision happens in the
 process of calling <code>modify</code>, the element is erased and the method returns
-<code>false</code>. This difference in behavior between <code>replace</code> and
-<code>modify</code> has to be considered by the programmer on a case-by-case basis.
+<code>false</code>. There is a further version of <code>modify</code> which
+accepts a <i>rollback</i> functor to undo the changes in case of collision:
 </p>
 
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>change_id</span>
+<span class=special>{</span>
+  <span class=identifier>change_id</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>new_id</span><span class=special>):</span><span class=identifier>new_id</span><span class=special>(</span><span class=identifier>new_id</span><span class=special>){}</span>
+
+  <span class=keyword>void</span> <span class=keyword>operator</span><span class=special>()(</span><span class=identifier>employee</span><span class=special>&amp;</span> <span class=identifier>e</span><span class=special>)</span>
+  <span class=special>{</span>
+    <span class=identifier>e</span><span class=special>.</span><span class=identifier>id</span><span class=special>=</span><span class=identifier>new_id</span><span class=special>;</span>
+  <span class=special>}</span>
+
+<span class=keyword>private</span><span class=special>:</span>
+  <span class=keyword>int</span> <span class=identifier>new_id</span><span class=special>;</span>
+<span class=special>};</span>
+<span class=special>...</span>
+<span class=identifier>employee_set</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it</span><span class=special>=...</span>
+
+<span class=keyword>int</span> <span class=identifier>old_id</span><span class=special>=</span><span class=identifier>it</span><span class=special>-&gt;</span><span class=identifier>id</span><span class=special>;</span> <span class=comment>// keep the original id
+
+// try to modify the id, restore it in case of collisions</span>
+<span class=identifier>es</span><span class=special>.</span><span class=identifier>modify</span><span class=special>(</span><span class=identifier>it</span><span class=special>,</span><span class=identifier>change_id</span><span class=special>(</span><span class=number>321</span><span class=special>),</span><span class=identifier>change_id</span><span class=special>(</span><span class=identifier>old_id</span><span class=special>));</span>
+</pre></blockquote>
+
+<p>In the example, <code>change_id(old_id)</code> is invoked to restore the original
+conditions when the modification results in collisions with some other element.
+The differences in behavior between <code>replace</code>, <code>modify</code> and
+<code>modify</code> with rollback have to be considered by the programmer on a
+case-by-case basis to determine the best updating mechanism.
+</p>
+
+<p align="center">
+<table cellspacing="0">
+  <caption><b>Behavior of the different updating mechanisms.</b></caption>
+<tr>
+  <th align="center">updating function</th>
+  <th>If there is a collision...</th>
+</tr>
+<tr>
+  <td align="center"><code>replace(it,x)</code></td>
+  <td>replacement does not take place.</td>
+</tr>
+<tr class="odd_tr">
+  <td align="center"><code>modify(it,mod)</code></td>
+  <td>the element is erased.</td>
+</tr>
+<tr>
+  <td align="center"><code>modify(it,mod,back)</code></td>
+  <td><code>back</code> is used to restore the original conditions.
+    (If <code>back</code> throws, the element is erased.)
+  </td>
+</tr>
+</table>
+</p>
+
+
 <p>
-A key-based version of <code>modify</code>, named
-<a href="../reference/ord_indices.html#modify_key"><code>modify_key</code></a>, is
-provided as well. In this case, the modifying functor is passed a reference to
-the <code>key_value</code> part of the element instead of the whole object.
+Key-based versions of <code>modify</code>, named
+<a href="../reference/ord_indices.html#modify_key"><code>modify_key</code></a>, are
+provided as well. In this case, the modifying functors are passed a reference to
+the <code>key_type</code> part of the element instead of the whole object.
 </p>
 
 <blockquote><pre>
@@ -990,8 +1044,8 @@ the <code>key_value</code> part of the element instead of the whole object.
 </pre></blockquote>
 
 <p>
-Just as <code>modify</code> does, <code>modify_key</code> erases the element if
-the modification results in collisions in some index. <code>modify</code> and
+Like <code>modify</code>, there are versions of <code>modify_key</code> with and
+without rollback. <code>modify</code> and
 <code>modify_key</code> are particularly well suited to use in conjunction to
 <a href="../../../../libs/lambda/index.html">Boost.Lambda</a>
 for defining the modifying functors:
@@ -1205,9 +1259,9 @@ Index types
 
 <br>
 
-<p>Revised July 13th 2006</p>
+<p>Revised July 17th 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

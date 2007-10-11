@@ -1,6 +1,6 @@
 /* Boost.MultiIndex performance test.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -16,6 +16,7 @@
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
+#include <boost/next_prior.hpp>
 #include <climits>
 #include <ctime>
 #include <iomanip>
@@ -163,7 +164,7 @@ struct list_wrapper:List
   pair<iterator,bool> insert(const value_type& v)
   {
     List::push_back(v);
-    return pair<iterator,bool>(--List::end(),true);
+    return pair<iterator,bool>(boost::prior(List::end()),true);
   }
 };
 

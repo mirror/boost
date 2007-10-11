@@ -17,6 +17,7 @@
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
+#include <boost/next_prior.hpp>
 #include <boost/ref.hpp>
 #include <boost/test/test_tools.hpp>
 #include <vector>
@@ -87,7 +88,7 @@ static void local_test_rearrange(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
   CHECK_EQUAL(sc,{3 _ 2 _ 4 _ 5 _ 0 _ 1});
   BOOST_CHECK(std::distance(it,it2)==3);
 
-  sc.relocate(--(sc.end()),it,it2);
+  sc.relocate(boost::prior(sc.end()),it,it2);
   CHECK_EQUAL(sc,{3 _ 0 _ 2 _ 4 _ 5 _ 1});
 
   std::vector<boost::reference_wrapper<const value_type> > v;

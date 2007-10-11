@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for replace(), modify() and modify_key().
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -15,6 +15,7 @@
 #include "pre_multi_index.hpp"
 #include "employee.hpp"
 #include "pair_of_ints.hpp"
+#include <boost/next_prior.hpp>
 #include <boost/test/test_tools.hpp>
 
 using namespace boost::multi_index;
@@ -64,34 +65,44 @@ void test_update()
     BOOST_CHECK(!ii2.replace(ii2.begin(),pair_of_ints(0,5)));
     BOOST_CHECK(!ii1.replace(project<1>(iis,iis.begin()),pair_of_ints(5,11)));
     BOOST_CHECK(!iis.replace(iis.begin(),pair_of_ints(11,5)));
-    BOOST_CHECK(!iis.replace(++iis.begin(),pair_of_ints(10,5)));
+    BOOST_CHECK(!iis.replace(boost::next(iis.begin()),pair_of_ints(10,5)));
     BOOST_CHECK(!ii1.replace(
-      project<1>(iis,++iis.begin()),pair_of_ints(5,10)));
-    BOOST_CHECK(!iis.replace(--iis.end(),pair_of_ints(5,10)));
-    BOOST_CHECK(!ii2.replace(--ii2.end(),pair_of_ints(10,5)));
+      project<1>(iis,boost::next(iis.begin())),pair_of_ints(5,10)));
+    BOOST_CHECK(!iis.replace(boost::prior(iis.end()),pair_of_ints(5,10)));
+    BOOST_CHECK(!ii2.replace(boost::prior(ii2.end()),pair_of_ints(10,5)));
 
     BOOST_CHECK(iis.modify(iis.begin(),increment_first));
     BOOST_CHECK(ii2.modify(ii2.begin(),increment_first));
     BOOST_CHECK(ii1.modify(project<1>(iis,iis.begin()),increment_first));
-    BOOST_CHECK(ii2.modify(ii2.begin(),increment_first));
+    BOOST_CHECK(ii2.modify(ii2.begin(),increment_first,decrement_first));
+
+    BOOST_CHECK(!iis.modify(iis.begin(),increment_first,decrement_first));
+    BOOST_CHECK(iis.size()==3);
 
     BOOST_CHECK(!iis.modify(iis.begin(),increment_first));
     BOOST_CHECK(iis.size()==2);
 
     iis.insert(pair_of_ints(0,0));
-    BOOST_CHECK(ii2.modify(--ii2.end(),increment_second));
+    BOOST_CHECK(ii2.modify(boost::prior(ii2.end()),increment_second));
     BOOST_CHECK(iis.modify(iis.begin(),increment_second));
-    BOOST_CHECK(ii2.modify(--ii2.end(),increment_second));
-    BOOST_CHECK(iis.modify(iis.begin(),increment_second));
+    BOOST_CHECK(ii2.modify(boost::prior(ii2.end()),increment_second));
+    BOOST_CHECK(iis.modify(iis.begin(),increment_second,decrement_second));
 
-    BOOST_CHECK(!ii2.modify(--ii2.end(),increment_second));
+    BOOST_CHECK(!ii2.modify(
+      boost::prior(ii2.end()),increment_second,decrement_second));
+    BOOST_CHECK(ii2.size()==3);
+
+    BOOST_CHECK(!ii2.modify(boost::prior(ii2.end()),increment_second));
     BOOST_CHECK(ii2.size()==2);
 
     iis.insert(pair_of_ints(0,0));
     BOOST_CHECK(iis.modify_key(iis.begin(),increment_int));
+    BOOST_CHECK(iis.modify_key(iis.begin(),increment_int,decrement_int));
     BOOST_CHECK(iis.modify_key(iis.begin(),increment_int));
     BOOST_CHECK(iis.modify_key(iis.begin(),increment_int));
-    BOOST_CHECK(iis.modify_key(iis.begin(),increment_int));
+
+    BOOST_CHECK(!iis.modify_key(iis.begin(),increment_int,decrement_int));
+    BOOST_CHECK(iis.size()==3);
 
     BOOST_CHECK(!iis.modify_key(iis.begin(),increment_int));
     BOOST_CHECK(iis.size()==2);
@@ -99,8 +110,11 @@ void test_update()
     nth_index_iterator<int_int_set,1>::type it=ii1.find(5);
     BOOST_CHECK(ii1.modify_key(it,increment_int));
     BOOST_CHECK(ii1.modify_key(it,increment_int));
+    BOOST_CHECK(ii1.modify_key(it,increment_int,decrement_int));
     BOOST_CHECK(ii1.modify_key(it,increment_int));
-    BOOST_CHECK(ii1.modify_key(it,increment_int));
+
+    BOOST_CHECK(!ii1.modify_key(it,increment_int,decrement_int));
+    BOOST_CHECK(ii1.size()==2);
 
     BOOST_CHECK(!ii1.modify_key(it,increment_int));
     BOOST_CHECK(ii1.size()==1);
@@ -127,23 +141,30 @@ void test_update()
     BOOST_CHECK(!iis.replace(p2,pair_of_ints(10,5)));
     BOOST_CHECK(!iis.replace(p2,pair_of_ints(5,10)));
     BOOST_CHECK(!iis.replace(p3,pair_of_ints(5,10)));
-    BOOST_CHECK(!ii1.replace(--ii1.end(),pair_of_ints(10,5)));
+    BOOST_CHECK(!ii1.replace(boost::prior(ii1.end()),pair_of_ints(10,5)));
 
     BOOST_CHECK(iis.modify(p1,increment_first));
     BOOST_CHECK(ii1.modify(ii1.begin(),increment_first));
     BOOST_CHECK(iis.modify(p1,increment_first));
-    BOOST_CHECK(ii1.modify(ii1.begin(),increment_first));
+    BOOST_CHECK(ii1.modify(ii1.begin(),increment_first,decrement_first));
+
+    BOOST_CHECK(!iis.modify(p1,increment_first,decrement_first));
+    BOOST_CHECK(iis.size()==3);
 
     BOOST_CHECK(!iis.modify(p1,increment_first));
     BOOST_CHECK(iis.size()==2);
 
     p1=iis.insert(pair_of_ints(0,0)).first;
-    BOOST_CHECK(ii1.modify(--ii1.end(),increment_second));
-    BOOST_CHECK(iis.modify(p1,increment_second));
-    BOOST_CHECK(ii1.modify(--ii1.end(),increment_second));
+    BOOST_CHECK(ii1.modify(boost::prior(ii1.end()),increment_second));
+    BOOST_CHECK(iis.modify(p1,increment_second,decrement_second));
+    BOOST_CHECK(ii1.modify(boost::prior(ii1.end()),increment_second));
     BOOST_CHECK(iis.modify(p1,increment_second));
 
-    BOOST_CHECK(!ii1.modify(--ii1.end(),increment_second));
+    BOOST_CHECK(!ii1.modify(
+      boost::prior(ii1.end()),increment_second,decrement_second));
+    BOOST_CHECK(ii1.size()==3);
+
+    BOOST_CHECK(!ii1.modify(boost::prior(ii1.end()),increment_second));
     BOOST_CHECK(ii1.size()==2);
   }
 }

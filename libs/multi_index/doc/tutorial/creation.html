@@ -32,6 +32,7 @@ Debugging support
 <ul>
   <li><a href="#value_semantics">Value semantics</a></li>
   <li><a href="#ctor_args_list">Use of <code>ctor_args_list</code></a></li>
+  <li><a href="#special_allocator">Special allocator support</a></li>
   <li><a href="#serialization">Serialization</a></li>
 </ul>
 
@@ -191,6 +192,60 @@ A program is provided in the <a href="../examples.html#example3">examples sectio
 puts in practise these concepts.
 </p>
 
+<h2><a name="special_allocator">Special allocator support</a></h2>
+
+<p>
+Boost.MultiIndex allows for a slightly more general class of allocators
+than strictly required by the C++ standard, as explained in detail in the
+<a href="../reference/multi_index_container.html#instantiation_types">reference</a>.
+An important type of non-standard allocators supported are those provided by the
+<a href="../../../interprocess/index.html">Boost Interprocess Library</a>;
+this opens up the possibility of placing <code>multi_index_container</code>s
+in shared memory.
+</p>
+
+<blockquote><pre>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>interprocess</span><span class=special>/</span><span class=identifier>allocators</span><span class=special>/</span><span class=identifier>allocator</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>interprocess</span><span class=special>/</span><span class=identifier>managed_shared_memory</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+
+<span class=keyword>namespace</span> <span class=identifier>bip</span><span class=special>=</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>interprocess</span><span class=special>;</span>
+
+<span class=comment>// a shared memory compatible allocator of ints</span>
+<span class=keyword>typedef</span> <span class=identifier>bip</span><span class=special>::</span><span class=identifier>allocator</span><span class=special>&lt;</span>
+  <span class=keyword>int</span><span class=special>,</span><span class=identifier>bip</span><span class=special>::</span><span class=identifier>managed_shared_memory</span><span class=special>::</span><span class=identifier>segment_manager</span>
+<span class=special>&gt;</span> <span class=identifier>shared_int_allocator</span><span class=special>;</span>
+
+<span class=comment>// define a shared memory compatible multi_index_container
+// using shared_int_allocator</span>
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=keyword>int</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=identifier>sequenced</span><span class=special>&lt;&gt;,</span>
+    <span class=identifier>ordered_unique</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;</span>
+  <span class=special>&gt;,</span>
+  <span class=identifier>shared_int_allocator</span>
+<span class=special>&gt;</span> <span class=identifier>unique_int_list</span><span class=special>;</span>
+
+<span class=special>...</span>
+
+<span class=comment>// create a managed memory segment</span>
+<span class=identifier>bip</span><span class=special>::</span><span class=identifier>managed_shared_memory</span> <span class=identifier>seg</span><span class=special>(</span>
+  <span class=identifier>bip</span><span class=special>::</span><span class=identifier>create_only</span><span class=special>,</span><span class=string>&quot;SharedMemoryID&quot;</span><span class=special>,</span><span class=number>65536</span><span class=special>);</span>
+
+<span class=comment>// construct a unique_int_list into the segment</span>
+<span class=identifier>unique_int_list</span><span class=special>*</span> <span class=identifier>puil</span><span class=special>=</span><span class=identifier>seg</span><span class=special>.</span><span class=identifier>construct</span><span class=special>&lt;</span><span class=identifier>unique_int_list</span><span class=special>&gt;</span>
+  <span class=special>(</span><span class=string>&quot;UniqueIntListID&quot;</span><span class=special>)</span> <span class=comment>// object identifier within the segment
+  // Construction args: first a ctor arg list, then a
+  // shared memory allocator obtained from the segment object.</span>
+  <span class=special>(</span><span class=identifier>unique_int_list</span><span class=special>::</span><span class=identifier>ctor_args_list</span><span class=special>(),</span>
+   <span class=identifier>unique_int_list</span><span class=special>::</span><span class=identifier>allocator_type</span><span class=special>(</span><span class=identifier>seg</span><span class=special>.</span><span class=identifier>get_segment_manager</span><span class=special>()));</span>
+   </pre></blockquote>
+
+<p>
+The examples section includes a <a href="../examples.html#example12">program</a>
+that further explores this capability.
+</p>
+
 <h2><a name="serialization">Serialization</a></h2>
 
 <p>
@@ -285,7 +340,7 @@ Debugging support
 
 <br>
 
-<p>Revised February 27th 2007</p>
+<p>Revised July 17th 2007</p>
 
 <p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

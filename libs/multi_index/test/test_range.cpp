@@ -104,15 +104,17 @@ void test_range()
     std::bind1st(std::less<int>(),7),        /* 7 <  x */
     std::bind2nd(std::less_equal<int>(),7)); /* x <= 7 */
   CHECK_VOID_RANGE(p);
+  BOOST_CHECK(p.first==is.upper_bound(7));
 
   p=is.range(
     std::bind1st(std::less_equal<int>(),8), /* 8 <= x */
     std::bind2nd(std::less<int>(),2));      /* x <  2 */
   CHECK_VOID_RANGE(p);
+  BOOST_CHECK(p.first==is.lower_bound(8));
 
   p=is.range(
     std::bind1st(std::less<int>(),4),  /* 4 < x */
     std::bind2nd(std::less<int>(),5)); /* x < 5 */
   CHECK_VOID_RANGE(p);
-  BOOST_CHECK(p.first!=is.end()&&p.second!=is.end());
+  BOOST_CHECK(p.first!=is.end());
 }

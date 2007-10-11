@@ -493,7 +493,8 @@ scheme outlined in the
 <ol>
   <li><code>Value</code> is the
     <a href="http://www.sgi.com/tech/stl/Assignable.html"><code>Assignable</code></a>
-    type of the elements contained.</li>
+    type of the elements contained.
+  </li>
   <li><code>IndexSpecifierList</code> specifies the indices that the
     <code>multi_index_container</code> is composed of. It must be a non-empty
     <a href="../../../../libs/mpl/doc/refmanual/forward-sequence.html">
@@ -503,8 +504,27 @@ scheme outlined in the
     syntactic convenience, the
     <a href="indices.html#indexed_by"><code>indexed_by</code></a>
     MPL sequence can be used.
-  <li><code>Allocator</code> must comply with the C++ requirements for
-    allocators <b>[lib.allocator.requirements]</b>.
+  </li>
+  <li><code>Allocator</code> must be an allocator of <code>Value</code> objects
+    satisfying the associated C++ requirements at <b>[lib.allocator.requirements]</b>.
+    The following relaxations to the standard requirements are allowed:
+    <ul>
+      <li>Non-equal allocator instances are supported: swapping two non-equal
+        instances must not throw any exception.
+      </li>
+      <li>For every type <code>T</code>,
+        the type <code>Allocator::rebind&lt;T&gt;::other::pointer</code> can be any
+        kind of
+        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html"><code>Random
+        Access Iterator</code></a>, provided that it is explicitly constructible from
+        the literal <code>0</code> (standing here as the null pointer) or from any
+        <code>p</code> of type <code>T*</code> pointing into an area allocated by
+        some instance of <code>Allocator</code> or some other allocator type rebound
+        from <code>Allocator</code>. A <code>pointer</code> constructed from
+        <code>p</code> shall dereference to <code>*p</code>.
+      </li>
+    </ul>
+  </li>
 </ol>
 Indices of a given <code>multi_index_container</code> instantiation cannot have
 duplicate <a href="indices.html#tags">tags</a>, either within a single
@@ -882,9 +902,9 @@ Index reference
 
 <br>
 
-<p>Revised February 6th 2006</p>
+<p>Revised July 17th 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

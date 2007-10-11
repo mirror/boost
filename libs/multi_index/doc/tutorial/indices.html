@@ -48,6 +48,7 @@ Key extraction
 	</ul>
   </li>
   <li><a href="#rearrange">Index rearranging</a></li>
+  <li><a href="#iterator_to"><code>iterator_to</code></a></li>
   <li><a href="#ordered_node_compression">Ordered indices node compression</a></li>
 </ul>
 
@@ -90,6 +91,7 @@ some added benefits, functionally or in the area of performance.
 </tr>
 <tr class="odd_tr">
   <td align="center"><code>&nbsp;&nbsp;random_access&nbsp;&nbsp;</code></td>
+</tr>
 </table>
 </p>
 
@@ -608,13 +610,65 @@ thus, <code>rearrange</code> does not accept the following:
 <blockquote><pre>
 <span class=comment>// undefined behavior: [rbegin(),rend()) is not free with respect
 // to the base index</span>
-<span class=identifier>c</span><span class=special>.</span><span class=identifier>rearrange</span><span class=special>(</span><span class=identifier>c</span><span class=special>.</span><span class=identifier>rbegin</span><span class=special>());</span></pre></blockquote>
+<span class=identifier>c</span><span class=special>.</span><span class=identifier>rearrange</span><span class=special>(</span><span class=identifier>c</span><span class=special>.</span><span class=identifier>rbegin</span><span class=special>());</span>
+</pre></blockquote>
 
 <p>
 The view concept is defined in detail in the
 <a href="../reference/indices.html#views">reference</a>.
 See <a href="../examples.html#example11">example 11</a> in the examples section
 for a demonstration of use of <code>rearrange</code>.
+</p>
+
+<h2><a name="iterator_to"><code>iterator_to</code></a></h2>
+
+<p>
+All indices of Boost.MultiIndex provide a member function called <code>iterator_to</code>
+which returns an iterator to a given element of the container:
+</p>
+
+<blockquote><pre>
+<span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=keyword>int</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span><span class=identifier>sequenced</span><span class=special>&lt;&gt;</span> <span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>c</span><span class=special>;</span>
+<span class=special>...</span>
+<span class=comment>// convoluted way to do to c.pop_back()</span>
+<span class=identifier>c</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(</span><span class=identifier>c</span><span class=special>.</span><span class=identifier>iterator_to</span><span class=special>(</span><span class=identifier>c</span><span class=special>.</span><span class=identifier>back</span><span class=special>()));</span> 
+
+<span class=comment>// The following, though similar to the previous code,
+// does not work: iterator_to accepts a reference to
+// the element in the container, not a copy.</span>
+<span class=keyword>int</span> <span class=identifier>x</span><span class=special>=</span><span class=identifier>c</span><span class=special>.</span><span class=identifier>back</span><span class=special>();</span>
+<span class=identifier>c</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(</span><span class=identifier>c</span><span class=special>.</span><span class=identifier>iterator_to</span><span class=special>(</span><span class=identifier>x</span><span class=special>));</span> <span class=comment>// run-time failure ensues</span>
+</pre></blockquote>
+
+<p>
+<code>iterator_to</code> provides a way to retrieve an iterator to an element
+from a pointer to the element, thus making iterators and pointers interchangeable
+for the purposes of element pointing (not so for traversal) in many situations.
+This notwithstanding, it is not the aim of <code>iterator_to</code> to
+promote the usage of pointers as substitutes for real iterators: the latter are
+specifically designed for handling the elements of a container,
+and not only benefit from the iterator orientation of container interfaces,
+but are also capable of exposing many more programming bugs than raw pointers, both
+at compile and run time. <code>iterator_to</code> is thus meant to be used
+in scenarios where access via iterators is not suitable or desireable:
+<ul>
+  <li>Interoperability with preexisting APIs based on pointers or references.</li>
+  <li>Publication of pointer-based interfaces (for instance, when
+    designing a C-compatible library).
+  </li>
+  <li>The exposure of pointers in place of iterators can act as a <i>type
+    erasure</i> barrier effectively decoupling the user of the code
+    from the implementation detail of which particular container is being
+    used. Similar techniques, like the famous Pimpl idiom, are used
+    in large projects to reduce dependencies and build times.
+  </li>
+  <li>Self-referencing contexts where an element acts upon its owner
+    container and no iterator to itself is available.
+  </li>
+</ul>
 </p>
 
 <h2><a name="ordered_node_compression">Ordered indices node compression</a></h2>
@@ -664,9 +718,9 @@ Key extraction
 
 <br>
 
-<p>Revised February 6th 2006</p>
+<p>Revised July 17th 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

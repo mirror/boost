@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for modifier memfuns.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -11,9 +11,12 @@
 #include "test_modifiers.hpp"
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
+#include <boost/next_prior.hpp>
+#include <iterator>
 #include <vector>
 #include "pre_multi_index.hpp"
 #include "employee.hpp"
+#include <boost/next_prior.hpp>
 #include <boost/test/test_tools.hpp>
 
 class always_one
@@ -283,4 +286,31 @@ void test_modifiers()
   aoc.insert(always_one());
   aoc.erase(*(aoc.begin()));
   BOOST_CHECK(aoc.empty());
+
+  /* Testcases for compliance with "as close to hint as possible"
+   * proposed behavior for associative containers:
+   *   http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#233
+   *   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1780.html
+   */
+
+  typedef multi_index_container<
+    int,
+    indexed_by<
+      ordered_non_unique<identity<int> >
+    >
+  > int_non_unique_container;
+
+  int_non_unique_container c;
+  c.insert(0);c.insert(0);
+  c.insert(1);c.insert(1);
+  c.insert(2);c.insert(2);
+
+  BOOST_CHECK(std::distance(c.begin(),c.insert(c.begin(),1))==2);
+  BOOST_CHECK(std::distance(c.begin(),c.insert(boost::next(c.begin()),1))==2);
+  BOOST_CHECK(std::distance(c.begin(),c.insert(c.lower_bound(1),1))==2);
+  BOOST_CHECK(
+    std::distance(c.begin(),c.insert(boost::next(c.lower_bound(1)),1))==3);
+  BOOST_CHECK(std::distance(c.begin(),c.insert(c.upper_bound(1),1))==8);
+  BOOST_CHECK(std::distance(c.begin(),c.insert(boost::prior(c.end()),1))==9);
+  BOOST_CHECK(std::distance(c.begin(),c.insert(c.end(),1))==10);
 }

@@ -1,6 +1,6 @@
 /* Boost.MultiIndex serialization tests template.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -26,9 +26,7 @@ struct all_indices_equal_helper
   static bool compare(
     const MultiIndexContainer& m1,const MultiIndexContainer& m2)
   {
-    using namespace boost::multi_index;
-
-    if(!(get<N>(m1)==get<N>(m2))){
+    if(!(boost::multi_index::get<N>(m1)==boost::multi_index::get<N>(m2))){
       return false;
     }
     return all_indices_equal_helper<N-1>::compare(m1,m2);
@@ -60,8 +58,6 @@ bool all_indices_equal(
 template<class MultiIndexContainer>
 void test_serialization(const MultiIndexContainer& m)
 {
-  using namespace boost::multi_index;
-
   typedef typename MultiIndexContainer::iterator       iterator;
   typedef typename MultiIndexContainer::const_iterator const_iterator;
 
@@ -100,10 +96,10 @@ void test_serialization(const MultiIndexContainer& m)
     iterator it4;
     it4=--it2;
     BOOST_CHECK(it==it4);
-    BOOST_CHECK(it==project<0>(m2,it4));
+    BOOST_CHECK(it==boost::multi_index::project<0>(m2,it4));
   }
   iterator it2;
   ia>>it2;
   BOOST_CHECK(it_end==it2);
-  BOOST_CHECK(it_end==project<0>(m2,it2));
+  BOOST_CHECK(it_end==boost::multi_index::project<0>(m2,it2));
 }

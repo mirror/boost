@@ -31,7 +31,7 @@ Tests
 
 <ul>
   <li><a href="#example1">Example 1: basic usage</a></li>
-  <li><a href="#example2">Example 2: using member functions as keys</a></li>
+  <li><a href="#example2">Example 2: using functions as keys</a></li>
   <li><a href="#example3">Example 3: constructing <code>multi_index_container</code>s
     with <code>ctor_args_list</code></a></li>
   <li><a href="#example4">Example 4: bidirectional map</a></li>
@@ -42,6 +42,7 @@ Tests
   <li><a href="#example9">Example 9: serialization and MRU lists</a></li>
   <li><a href="#example10">Example 10: random access indices</a></li>
   <li><a href="#example11">Example 11: index rearrangement</a></li>
+  <li><a href="#example12">Example 12: using Boost.Interprocess allocators</a></li>
 </ul>
 
 <h2><a name="example1">Example 1: basic usage</a></h2>
@@ -55,23 +56,23 @@ Basic program showing the multi-indexing capabilities of Boost.MultiIndex
 with an admittedly boring set of <code>employee</code> records.
 </p>
 
-<h2><a name="example2">Example 2: using member functions as keys</a></h2>
+<h2><a name="example2">Example 2: using functions as keys</a></h2>
 
 <p>
-See <a href="../example/memfun_key.cpp">source code</a>.
+See <a href="../example/fun_key.cpp">source code</a>.
 </p>
 
 <p>
 Usually keys assigned to an index are based on a member variable of the
 element, but key extractors can be defined which take their value from
-a member function. This has some similarity with the concept of
+a member function or a global function. This has some similarity with the concept of
 <i>calculated keys</i> supported by some relational database engines.
 The example shows how to use the predefined <code>const_mem_fun</code>
-key extractor to deal with this situation.
+and <code>global_fun</code> key extractors to deal with this situation.
 </p>
 
 <p>
-Keys based on member functions usually will not be actual references,
+Keys based on functions usually will not be actual references,
 but rather the temporary values resulting from the invocation of the
 member function used. This implies that <code>modify_key</code> cannot be
 applied to this type of extractors, which is a perfectly logical
@@ -109,6 +110,12 @@ such that no two elements exists with the same <code>first</code>
 guarantees uniqueness of the first member). Fast lookup is provided
 for both keys. The program features a tiny Spanish-English
 dictionary with online query of words in both languages.
+</p>
+
+<p>
+This bidirectional map can be considered as a primitive precursor
+to the full-fledged container provided by
+<a href="../../bimap/index.html">Boost.Bimap</a>.
 </p>
 
 <h2><a name="example5">Example 5: sequenced indices</a></h2>
@@ -412,6 +419,23 @@ is used to apply to the deck a shuffle performed externally on an
 auxiliary data structure.
 </p>
 
+<h2><a name="example12">Example 12: using Boost.Interprocess allocators</a></h2>
+
+<p>
+See <a href="../example/ip_allocator.cpp">source code</a>.
+</p>
+
+<p>
+Boost.MultiIndex supports special allocators such as those provided by
+<a href="../../interprocess/index.html">Boost.Interprocess</a>,
+which allows for <code>multi_index_container</code>s to be placed in shared
+memory. The example features a front-end to a small book database
+implemented by means of a <code>multi_index_container</code> stored
+in a Boost.Interprocess memory mapped file. The reader can verify that several
+instances of the program correctly work simultaneously and immediately see
+the changes to the database performed by any other instance.
+</p>
+
 <hr>
 
 <div class="prev_link"><a href="performance.html"><img src="prev.gif" alt="performance" border="0"><br>
@@ -426,9 +450,9 @@ Tests
 
 <br>
 
-<p>Revised March 3rd 2006</p>
+<p>Revised July 16th 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
