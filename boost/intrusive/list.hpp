@@ -859,7 +859,7 @@ class list_impl
    template<class Iterator, class Disposer>
    void dispose_and_assign(Disposer disposer, Iterator b, Iterator e)
    {
-      this->clear(disposer);
+      this->clear_and_dispose(disposer);
       this->insert(this->end(), b, e);
    }
 
