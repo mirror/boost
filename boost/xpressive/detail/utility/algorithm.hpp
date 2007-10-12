@@ -16,6 +16,7 @@
 #include <string>
 #include <climits>
 #include <algorithm>
+#include <boost/version.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/size.hpp>
@@ -119,9 +120,11 @@ struct range_data<T *>
 {};
 
 template<typename T> std::ptrdiff_t is_null_terminated(T const &) { return 0; }
+#if BOOST_VERSION >= 103500
 inline std::ptrdiff_t is_null_terminated(char const *) { return 1; }
 #ifndef BOOST_XPRESSIVE_NO_WREGEX
 inline std::ptrdiff_t is_null_terminated(wchar_t const *) { return 1; }
+#endif
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
