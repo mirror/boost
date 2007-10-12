@@ -28,6 +28,10 @@
 #include <boost/type_traits/is_const.hpp>
 #endif
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+#include <boost/type_traits/is_function.hpp>
+#endif
+
 namespace boost
 {
     std::size_t hash_value(bool);
@@ -214,7 +218,9 @@ namespace boost
            reinterpret_cast<std::ptrdiff_t>(v));
 #else
         std::size_t x = static_cast<std::size_t>(
-           reinterpret_cast<void*>(v));
+            boost::is_function<T>::value ?
+               reinterpret_cast<std::ptrdiff_t>((void*) v) :
+               reinterpret_cast<std::ptrdiff_t>(v));
 #endif
         return x + (x >> 3);
     }
