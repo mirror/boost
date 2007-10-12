@@ -9,7 +9,7 @@
 
 [h2 Overview]
 
-Symbol tables can be built into Xpressive regular expressions with just a 
+Symbol tables can be built into xpressive regular expressions with just a 
 `std::map<>`. The map keys are the strings to be matched and the map values are
 the data to be returned to your semantic action. Xpressive attributes, named
 `a1`, `a2`, through `a9`, hold the value corresponding to a matching key so
@@ -18,7 +18,7 @@ for an attribute if a symbol is not found.
 
 [h2 Symbol Tables]
 
-An Xpressive symbol table is just a `std::map<>`, where the key is a string type
+An xpressive symbol table is just a `std::map<>`, where the key is a string type
 and the value can be anything. For example, the following regular expression
 matches a key from map1 and assigns the corresponding value to the attribute
 `a1`. Then, in the semantic action, it assigns the value stored in attribute
@@ -102,7 +102,8 @@ sees the inner `a1`, and the outer semantic action sees the outer one. They can
 even have different types.
 
 [note Xpressive builds a hidden ternary search trie from the map so it can
-search quickly. The hidden ternary search trie is "self adjusting", so after each
+search quickly. If BOOST_DISABLE_THREADS is defined,
+the hidden ternary search trie "self adjusts", so after each
 search it restructures itself to improve the efficiency of future searches
 based on the frequency of previous searches.]
 

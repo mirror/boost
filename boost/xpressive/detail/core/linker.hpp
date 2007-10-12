@@ -278,7 +278,7 @@ private:
 #if BOOST_VERSION >= 103500
         fusion::for_each(alternates.derived(), alt_link_pred(this, peeker, next));
 #else
-        fusion::for_each(alternates.base(), alt_link_pred(this, peeker, next));
+        fusion::for_each(alternates.cast(), alt_link_pred(this, peeker, next));
 #endif
     }
 
