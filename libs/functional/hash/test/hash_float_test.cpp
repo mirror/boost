@@ -198,30 +198,15 @@ void float_tests(char const* name, T* = 0)
 #endif
 }
 
-void hash_float_tests()
+int main()
 {
     std::cerr<<"Compiler: "<<BOOST_COMPILER<<"\n";
     std::cerr<<"Platform: "<<BOOST_PLATFORM<<"\n";
     std::cerr<<"Library: "<<BOOST_STDLIB<<"\n\n";
 
     float_tests("float", (float*) 0);
-}
-
-void hash_double_tests()
-{
     float_tests("double", (double*) 0);
-}
-
-void hash_long_double_tests()
-{
     float_tests("long double", (long double*) 0);
-}
-
-int main()
-{
-    hash_float_tests();
-    hash_double_tests();
-    hash_long_double_tests();
 
     return boost::report_errors();
 }
