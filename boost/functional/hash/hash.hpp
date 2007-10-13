@@ -28,10 +28,6 @@
 #include <boost/type_traits/is_const.hpp>
 #endif
 
-#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
-#include <boost/type_traits/is_function.hpp>
-#endif
-
 namespace boost
 {
     std::size_t hash_value(bool);
@@ -213,15 +209,9 @@ namespace boost
     template <class T> std::size_t hash_value(T* v)
 #endif
     {
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
         std::size_t x = static_cast<std::size_t>(
            reinterpret_cast<std::ptrdiff_t>(v));
-#else
-        std::size_t x = static_cast<std::size_t>(
-            boost::is_function<T>::value ?
-               reinterpret_cast<std::ptrdiff_t>((void*) v) :
-               reinterpret_cast<std::ptrdiff_t>(v));
-#endif
+
         return x + (x >> 3);
     }
 
@@ -475,10 +465,14 @@ namespace boost
     struct hash<T*>
         : public std::unary_function<T*, std::size_t>
     {
-        std::size_t operator()(T* v) const \
-        { \
-            return boost::hash_value(v); \
-        } \
+        std::size_t operator()(T* v) const
+        {
+#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+            return boost::hash_value(v);
+#else
+            return boost::hash_value<T*>(v);
+#endif
+        }
     };
 #else
     namespace hash_detail
@@ -495,7 +489,11 @@ namespace boost
             {
                 std::size_t operator()(T val) const
                 {
+#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 590)
                     return boost::hash_value(val);
+#else
+                    return boost::hash_value<T>(val);
+#endif
                 }
             };
         };
