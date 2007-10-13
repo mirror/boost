@@ -11,8 +11,7 @@ int main()
     std::cerr<<"Platform: "<<BOOST_PLATFORM<<"\n";
     std::cerr<<"Library: "<<BOOST_STDLIB<<"\n\n";
 
-    float_tests("float", (float*) 0);
-    float_tests("double", (double*) 0);
+    float_tests("long double", (long double*) 0);
 
     return boost::report_errors();
 }
