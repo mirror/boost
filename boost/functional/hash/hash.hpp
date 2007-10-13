@@ -88,6 +88,9 @@ namespace boost
     template <class K, class T, class C, class A>
     std::size_t hash_value(std::multimap<K, T, C, A> const& v);
 
+    template <class T>
+    std::size_t hash_value(std::complex<T> const&);
+
     // Implementation
 
     namespace hash_detail
@@ -138,6 +141,7 @@ namespace boost
     {
         return static_cast<std::size_t>(v);
     }
+
     inline std::size_t hash_value(char v)
     {
         return static_cast<std::size_t>(v);
