@@ -2,7 +2,7 @@
 /// \file debug.hpp
 /// Utilities for debugging proto expression trees
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 

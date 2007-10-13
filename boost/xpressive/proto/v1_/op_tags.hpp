@@ -4,7 +4,7 @@
 /// the base tags unary_tag, binary_tag and nary_tag, as well as the is_unary\<\>,
 /// is_binary\<\> and is_nary\<\> predicates.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
