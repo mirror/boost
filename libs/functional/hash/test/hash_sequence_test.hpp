@@ -9,6 +9,11 @@
 
 #include <boost/preprocessor/cat.hpp>
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4245) // signed/unsigned mismatch
+#endif
+
 namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
 {
     template <class T>
@@ -62,6 +67,10 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
         integer_tests((CONTAINER_TYPE<double>*) 0);
     }
 }
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
 #undef CONTAINER_TYPE
 #endif
