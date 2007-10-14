@@ -21,6 +21,9 @@
 
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/detail/str_types.hpp>
+
+#include <boost/detail/workaround.hpp>
+
 #include <cstring>
 #include <cwchar>
 
@@ -104,15 +107,23 @@ namespace boost
     template< class Char, std::size_t sz >
     inline iterator_range<Char*> as_literal( Char (&arr)[sz] )
     {
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590)) && __BORLANDC__ >= 0x590
+        return boost::make_iterator_range<Char*>( arr, arr + sz - 1 );
+#else
         return boost::make_iterator_range( arr, arr + sz - 1 );
+#endif
     }
 
     
     template< class Char, std::size_t sz >
-    inline iterator_range<const Char*> as_literal( const Char (&arr)[sz] )
+	inline iterator_range<const Char*> as_literal( const Char (&arr)[sz] )
     {
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590)) && __BORLANDC__ >= 0x590
+        return boost::make_iterator_range<const Char*>( arr, arr + sz - 1 );
+#else
         return boost::make_iterator_range( arr, arr + sz - 1 );
-    }
+#endif
+	}
 }
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
