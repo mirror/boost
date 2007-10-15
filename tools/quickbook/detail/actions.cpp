@@ -935,21 +935,24 @@ namespace quickbook
                 snippet += "\n\n```\n" + code + "```\n\n";
             }
 
-            snippet += "'''<calloutlist>'''";
-            for (size_t i = 0; i < callouts.size(); ++i)
+            if(callouts.size() > 0)
             {
-                snippet += "'''<callout arearefs=\"";
-                snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "co\" ";
-                snippet += "id=\"";
-                snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "\">";
-                snippet += "'''";
+              snippet += "'''<calloutlist>'''";
+              for (size_t i = 0; i < callouts.size(); ++i)
+              {
+                  snippet += "'''<callout arearefs=\"";
+                  snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "co\" ";
+                  snippet += "id=\"";
+                  snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "\">";
+                  snippet += "'''";
 
-                snippet += "'''<para>'''";
-                snippet += callouts[i];
-                snippet += "'''</para>'''";
-                snippet += "'''</callout>'''";
+                  snippet += "'''<para>'''";
+                  snippet += callouts[i];
+                  snippet += "'''</para>'''";
+                  snippet += "'''</callout>'''";
+              }
+              snippet += "'''</calloutlist>'''";
             }
-            snippet += "'''</calloutlist>'''";
         }
 
         std::vector<std::string> tinfo;
