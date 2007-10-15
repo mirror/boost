@@ -67,6 +67,7 @@ struct bucket_impl : public Slist
       //This bucket is still in use!
       BOOST_INTRUSIVE_INVARIANT_ASSERT(Slist::empty());
       //Slist::clear();
+      return *this;
    }
 
    static typename Slist::difference_type get_bucket_num
