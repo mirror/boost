@@ -1,15 +1,16 @@
 #!/bin/sh
 #   Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
-# 
+#
 #   Distributed under the Boost Software License, Version 1.0.
 #   (See accompanying file LICENSE_1_0.txt or copy at
 #   http://www.boost.org/LICENSE_1_0.txt)
 
 # User configuration
-DOCBOOK_XSL_VERSION=1.68.1
+DOCBOOK_XSL_VERSION=1.73.2
 DOCBOOK_DTD_VERSION=4.2
-FOP_VERSION=0.20.5
-FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xml/fop/
+FOP_VERSION=0.94
+FOP_JDK_VERSION=1.4
+FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xmlgraphics/fop
 SOURCEFORGE_MIRROR=http://dl.sourceforge.net
 HTTP_GET_CMD="curl -O"
 
@@ -99,17 +100,17 @@ if test ! -f "$JAVA" && test ! -x "$JAVA"; then
   HAVE_FOP="no"
 else
   echo "Searching for Java... $JAVA.";
-  FOP_TARBALL="fop-$FOP_VERSION-bin.tar.gz"
+  FOP_TARBALL="fop-$FOP_VERSION-bin-jdk$FOP_JDK_VERSION.tar.gz"
   FOP_URL="$FOP_MIRROR/$FOP_TARBALL"
   FOP_DIR="$PWD/fop-$FOP_VERSION"
-  FOP="$FOP_DIR/fop.sh"
+  FOP="$FOP_DIR/fop"
   if test -f $FOP_TARBALL; then
     echo "Using existing FOP distribution (version $FOP_VERSION)."
   else
-    echo "Downloading FOP distribution version $FOP_VERSION..." 
+    echo "Downloading FOP distribution version $FOP_VERSION..."
     $HTTP_GET_CMD $FOP_URL
   fi
- 
+
   if test ! -d $FOP_DIR; then
     echo -n "Expanding FOP distribution into $FOP_DIR... ";
     gunzip -cd $FOP_TARBALL | tar xf -
@@ -122,7 +123,7 @@ fi
 JAM_CONFIG_OUT="$HOME/user-config.jam"
 if test -r "$HOME/user-config.jam"; then
   JAM_CONFIG_IN="user-config-backup.jam"
-  cp $JAM_CONFIG_OUT user-config-backup.jam 
+  cp $JAM_CONFIG_OUT user-config-backup.jam
   JAM_CONFIG_IN_TEMP="yes"
   echo -n "Updating Boost.Jam configuration in $JAM_CONFIG_OUT... "
 
@@ -130,7 +131,7 @@ elif test -r "$BOOST_ROOT/tools/build/v2/user-config.jam"; then
   JAM_CONFIG_IN="$BOOST_ROOT/tools/build/v2/user-config.jam";
   JAM_CONFIG_IN_TEMP="no"
   echo -n "Writing Boost.Jam configuration to $JAM_CONFIG_OUT... "
-else 
+else
   echo "ERROR: Please set the BOOST_ROOT environment variable to refer to your"
   echo "Boost installation or copy user-config.jam into your home directory."
   exit 0
@@ -139,8 +140,8 @@ fi
 cat > setup_boostbook.awk <<EOF
 BEGIN { using_boostbook = 0; eaten=0 }
 
-/^\s*using boostbook/ { 
-  using_boostbook = 1; 
+/^\s*using boostbook/ {
+  using_boostbook = 1;
   print "using boostbook";
   print "  : $DOCBOOK_XSL_DIR";
   print "  : $DOCBOOK_DTD_DIR";
@@ -156,7 +157,7 @@ using_boostbook==1 { eaten=1 }
 
 /^.*$/             { if (eaten == 0) print; eaten=0 }
 
-END { 
+END {
   if (using_boostbook==0) {
     print "using boostbook";
     print "  : $DOCBOOK_XSL_DIR";
