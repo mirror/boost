@@ -19,6 +19,7 @@
 #include <boost/intrusive/slist_hook.hpp>
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/intrusive/options.hpp>
+#include <boost/functional/hash.hpp>
 #include "smart_ptr.hpp"
 
 namespace boost{
