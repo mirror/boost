@@ -107,6 +107,8 @@ namespace
       && local.find("doc/xml") != 0
       // ignore some web files
       && leaf != ".htaccess"
+      // ignore svn files:
+      && leaf != ".svn"
       ;
   }
 
