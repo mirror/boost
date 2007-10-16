@@ -111,7 +111,7 @@ void test_replace()
    TEST_REGEX_REPLACE("(a(c)?)|(b)", perl, "acab", match_default|format_all, "(?1(?2(C:):A):B:)", "C:AB:");
    TEST_REGEX_REPLACE("x", icase, "xx", match_default|format_all, "a", "aa");
    TEST_REGEX_REPLACE("x", basic|icase, "xx", match_default|format_all, "a", "aa");
-   TEST_REGEX_REPLACE("x", extended|icase, "xx", match_default|format_all, "a", "aa");
+   TEST_REGEX_REPLACE("x", boost::regex::extended|icase, "xx", match_default|format_all, "a", "aa");
    TEST_REGEX_REPLACE("x", emacs|icase, "xx", match_default|format_all, "a", "aa");
    TEST_REGEX_REPLACE("x", literal|icase, "xx", match_default|format_all, "a", "aa");
    // literals:

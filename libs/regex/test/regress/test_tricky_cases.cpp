@@ -134,92 +134,92 @@ void test_tricky_cases2()
 {
    using namespace boost::regex_constants;
    
-   TEST_REGEX_SEARCH("a(((b)))c", extended, "abc", match_default, make_array(0, 3, 1, 2, 1, 2, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b|(c))d", extended, "abd", match_default, make_array(0, 3, 1, 2, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|(c))d", extended, "acd", match_default, make_array(0, 3, 1, 2, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b*|c)d", extended, "abbd", match_default, make_array(0, 4, 1, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(((b)))c", boost::regex::extended, "abc", match_default, make_array(0, 3, 1, 2, 1, 2, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b|(c))d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|(c))d", boost::regex::extended, "acd", match_default, make_array(0, 3, 1, 2, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b*|c)d", boost::regex::extended, "abbd", match_default, make_array(0, 4, 1, 3, -2, -2));
    // just gotta have one DFA-buster, of course
-   TEST_REGEX_SEARCH("a[ab]{20}", extended, "aaaaabaaaabaaaabaaaab", match_default, make_array(0, 21, -2, -2));
+   TEST_REGEX_SEARCH("a[ab]{20}", boost::regex::extended, "aaaaabaaaabaaaabaaaab", match_default, make_array(0, 21, -2, -2));
    // and an inline expansion in case somebody gets tricky
-   TEST_REGEX_SEARCH("a[ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab]", extended, "aaaaabaaaabaaaabaaaab", match_default, make_array(0, 21, -2, -2));
+   TEST_REGEX_SEARCH("a[ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab]", boost::regex::extended, "aaaaabaaaabaaaabaaaab", match_default, make_array(0, 21, -2, -2));
    // and in case somebody just slips in an NFA...
-   TEST_REGEX_SEARCH("a[ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab](wee|week)(knights|night)", extended, "aaaaabaaaabaaaabaaaabweeknights", match_default, make_array(0, 31, 21, 24, 24, 31, -2, -2));
+   TEST_REGEX_SEARCH("a[ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab][ab](wee|week)(knights|night)", boost::regex::extended, "aaaaabaaaabaaaabaaaabweeknights", match_default, make_array(0, 31, 21, 24, 24, 31, -2, -2));
    // one really big one
-   TEST_REGEX_SEARCH("1234567890123456789012345678901234567890123456789012345678901234567890", extended, "a1234567890123456789012345678901234567890123456789012345678901234567890b", match_default, make_array(1, 71, -2, -2));
+   TEST_REGEX_SEARCH("1234567890123456789012345678901234567890123456789012345678901234567890", boost::regex::extended, "a1234567890123456789012345678901234567890123456789012345678901234567890b", match_default, make_array(1, 71, -2, -2));
    // fish for problems as brackets go past 8
-   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn]", extended, "xacegikmoq", match_default, make_array(1, 8, -2, -2));
-   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn][op]", extended, "xacegikmoq", match_default, make_array(1, 9, -2, -2));
-   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn][op][qr]", extended, "xacegikmoqy", match_default, make_array(1, 10, -2, -2));
-   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn][op][q]", extended, "xacegikmoqy", match_default, make_array(1, 10, -2, -2));
+   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn]", boost::regex::extended, "xacegikmoq", match_default, make_array(1, 8, -2, -2));
+   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn][op]", boost::regex::extended, "xacegikmoq", match_default, make_array(1, 9, -2, -2));
+   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn][op][qr]", boost::regex::extended, "xacegikmoqy", match_default, make_array(1, 10, -2, -2));
+   TEST_REGEX_SEARCH("[ab][cd][ef][gh][ij][kl][mn][op][q]", boost::regex::extended, "xacegikmoqy", match_default, make_array(1, 10, -2, -2));
    // and as parenthesis go past 9:
-   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)", extended, "zabcdefghi", match_default, make_array(1, 9, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, -2, -2));
-   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)(i)", extended, "zabcdefghij", match_default, make_array(1, 10, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, -2, -2));
-   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)", extended, "zabcdefghijk", match_default, make_array(1, 11, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, -2, -2));
-   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)(k)", extended, "zabcdefghijkl", match_default, make_array(1, 12, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, -2, -2));
-   TEST_REGEX_SEARCH("(a)d|(b)c", extended, "abc", match_default, make_array(1, 3, -1, -1, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("_+((www)|(ftp)|(mailto)):_*", extended, "_wwwnocolon _mailto:", match_default, make_array(12, 20, 13, 19, -1, -1, -1, -1, 13, 19, -2, -2));
+   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)", boost::regex::extended, "zabcdefghi", match_default, make_array(1, 9, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, -2, -2));
+   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)(i)", boost::regex::extended, "zabcdefghij", match_default, make_array(1, 10, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, -2, -2));
+   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)", boost::regex::extended, "zabcdefghijk", match_default, make_array(1, 11, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, -2, -2));
+   TEST_REGEX_SEARCH("(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)(k)", boost::regex::extended, "zabcdefghijkl", match_default, make_array(1, 12, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, -2, -2));
+   TEST_REGEX_SEARCH("(a)d|(b)c", boost::regex::extended, "abc", match_default, make_array(1, 3, -1, -1, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("_+((www)|(ftp)|(mailto)):_*", boost::regex::extended, "_wwwnocolon _mailto:", match_default, make_array(12, 20, 13, 19, -1, -1, -1, -1, 13, 19, -2, -2));
    // subtleties of matching
    TEST_REGEX_SEARCH("a\\(b\\)\\?c\\1d", basic|bk_plus_qm, "acd", match_default, make_array(0, 3, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b?c)+d", extended, "accd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("(wee|week)(knights|night)", extended, "weeknights", match_default, make_array(0, 10, 0, 3, 3, 10, -2, -2));
-   TEST_REGEX_SEARCH(".*", extended, "abc", match_default, make_array(0, 3, -2, 3, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|(c))d", extended, "abd", match_default, make_array(0, 3, 1, 2, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|(c))d", extended, "acd", match_default, make_array(0, 3, 1, 2, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b*|c|e)d", extended, "abbd", match_default, make_array(0, 4, 1, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b*|c|e)d", extended, "acd", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b*|c|e)d", extended, "ad", match_default, make_array(0, 2, 1, 1, -2, -2));
-   TEST_REGEX_SEARCH("a(b?)c", extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b?)c", extended, "ac", match_default, make_array(0, 2, 1, 1, -2, -2));
-   TEST_REGEX_SEARCH("a(b+)c", extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b+)c", extended, "abbbc", match_default, make_array(0, 5, 1, 4, -2, -2));
-   TEST_REGEX_SEARCH("a(b*)c", extended, "ac", match_default, make_array(0, 2, 1, 1, -2, -2));
-   TEST_REGEX_SEARCH("(a|ab)(bc([de]+)f|cde)", extended, "abcdef", match_default, make_array(0, 6, 0, 1, 1, 6, 3, 5, -2, -2));
-   TEST_REGEX_SEARCH("a([bc]?)c", extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a([bc]?)c", extended, "ac", match_default, make_array(0, 2, 1, 1, -2, -2));
-   TEST_REGEX_SEARCH("a([bc]+)c", extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a([bc]+)c", extended, "abcc", match_default, make_array(0, 4, 1, 3, -2, -2));
-   TEST_REGEX_SEARCH("a([bc]+)bc", extended, "abcbc", match_default, make_array(0, 5, 1, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(bb+|b)b", extended, "abb", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(bbb+|bb+|b)b", extended, "abb", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(bbb+|bb+|b)b", extended, "abbb", match_default, make_array(0, 4, 1, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(bbb+|bb+|b)bb", extended, "abbb", match_default, make_array(0, 4, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("(.*).*", extended, "abcdef", match_default, make_array(0, 6, 0, 6, -2, 6, 6, 6, 6, -2, -2));
-   TEST_REGEX_SEARCH("(a*)*", extended, "bc", match_default, make_array(0, 0, 0, 0, -2, 1, 1, 1, 1, -2, 2, 2, 2, 2, -2, -2));
-   TEST_REGEX_SEARCH("xyx*xz", extended, "xyxxxxyxxxz", match_default, make_array(5, 11, -2, -2));
+   TEST_REGEX_SEARCH("a(b?c)+d", boost::regex::extended, "accd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("(wee|week)(knights|night)", boost::regex::extended, "weeknights", match_default, make_array(0, 10, 0, 3, 3, 10, -2, -2));
+   TEST_REGEX_SEARCH(".*", boost::regex::extended, "abc", match_default, make_array(0, 3, -2, 3, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|(c))d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|(c))d", boost::regex::extended, "acd", match_default, make_array(0, 3, 1, 2, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b*|c|e)d", boost::regex::extended, "abbd", match_default, make_array(0, 4, 1, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b*|c|e)d", boost::regex::extended, "acd", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b*|c|e)d", boost::regex::extended, "ad", match_default, make_array(0, 2, 1, 1, -2, -2));
+   TEST_REGEX_SEARCH("a(b?)c", boost::regex::extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b?)c", boost::regex::extended, "ac", match_default, make_array(0, 2, 1, 1, -2, -2));
+   TEST_REGEX_SEARCH("a(b+)c", boost::regex::extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b+)c", boost::regex::extended, "abbbc", match_default, make_array(0, 5, 1, 4, -2, -2));
+   TEST_REGEX_SEARCH("a(b*)c", boost::regex::extended, "ac", match_default, make_array(0, 2, 1, 1, -2, -2));
+   TEST_REGEX_SEARCH("(a|ab)(bc([de]+)f|cde)", boost::regex::extended, "abcdef", match_default, make_array(0, 6, 0, 1, 1, 6, 3, 5, -2, -2));
+   TEST_REGEX_SEARCH("a([bc]?)c", boost::regex::extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a([bc]?)c", boost::regex::extended, "ac", match_default, make_array(0, 2, 1, 1, -2, -2));
+   TEST_REGEX_SEARCH("a([bc]+)c", boost::regex::extended, "abc", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a([bc]+)c", boost::regex::extended, "abcc", match_default, make_array(0, 4, 1, 3, -2, -2));
+   TEST_REGEX_SEARCH("a([bc]+)bc", boost::regex::extended, "abcbc", match_default, make_array(0, 5, 1, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(bb+|b)b", boost::regex::extended, "abb", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(bbb+|bb+|b)b", boost::regex::extended, "abb", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(bbb+|bb+|b)b", boost::regex::extended, "abbb", match_default, make_array(0, 4, 1, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(bbb+|bb+|b)bb", boost::regex::extended, "abbb", match_default, make_array(0, 4, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("(.*).*", boost::regex::extended, "abcdef", match_default, make_array(0, 6, 0, 6, -2, 6, 6, 6, 6, -2, -2));
+   TEST_REGEX_SEARCH("(a*)*", boost::regex::extended, "bc", match_default, make_array(0, 0, 0, 0, -2, 1, 1, 1, 1, -2, 2, 2, 2, 2, -2, -2));
+   TEST_REGEX_SEARCH("xyx*xz", boost::regex::extended, "xyxxxxyxxxz", match_default, make_array(5, 11, -2, -2));
    // do we get the right subexpression when it is used more than once?
-   TEST_REGEX_SEARCH("a(b|c)*d", extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c)*d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c)+d", extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c)+d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c?)+d", extended, "ad", match_default, make_array(0, 2, 1, 1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){0,0}d", extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){0,1}d", extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){0,1}d", extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){0,2}d", extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){0,2}d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){0,}d", extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){0,}d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){1,1}d", extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){1,2}d", extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){1,2}d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){1,}d", extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){1,}d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){2,2}d", extended, "acbd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){2,2}d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){2,4}d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){2,4}d", extended, "abcbd", match_default, make_array(0, 5, 3, 4, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){2,4}d", extended, "abcbcd", match_default, make_array(0, 6, 4, 5, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){2,}d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|c){2,}d", extended, "abcbd", match_default, make_array(0, 5, 3, 4, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c)*d", boost::regex::extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c)*d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c)+d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c)+d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c?)+d", boost::regex::extended, "ad", match_default, make_array(0, 2, 1, 1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){0,0}d", boost::regex::extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){0,1}d", boost::regex::extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){0,1}d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){0,2}d", boost::regex::extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){0,2}d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){0,}d", boost::regex::extended, "ad", match_default, make_array(0, 2, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){0,}d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){1,1}d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){1,2}d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){1,2}d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){1,}d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){1,}d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){2,2}d", boost::regex::extended, "acbd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){2,2}d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){2,4}d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){2,4}d", boost::regex::extended, "abcbd", match_default, make_array(0, 5, 3, 4, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){2,4}d", boost::regex::extended, "abcbcd", match_default, make_array(0, 6, 4, 5, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){2,}d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c){2,}d", boost::regex::extended, "abcbd", match_default, make_array(0, 5, 3, 4, -2, -2));
    // perl only:
    TEST_REGEX_SEARCH("a(b|c?)+d", perl, "abcd", match_default, make_array(0, 4, 3, 3, -2, -2));
    TEST_REGEX_SEARCH("a(b+|((c)*))+d", perl, "abd", match_default, make_array(0, 3, 2, 2, 2, 2, -1, -1, -2, -2));
    TEST_REGEX_SEARCH("a(b+|((c)*))+d", perl, "abcd", match_default, make_array(0, 4, 3, 3, 3, 3, 2, 3, -2, -2));
    // posix only:
-   TEST_REGEX_SEARCH("a(b|c?)+d", extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b|((c)*))+d", extended, "abcd", match_default, make_array(0, 4, 2, 3, 2, 3, 2, 3, -2, -2));
-   TEST_REGEX_SEARCH("a(b+|((c)*))+d", extended, "abd", match_default, make_array(0, 3, 1, 2, -1, -1, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("a(b+|((c)*))+d", extended, "abcd", match_default, make_array(0, 4, 2, 3, 2, 3, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|c?)+d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b|((c)*))+d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, 2, 3, 2, 3, -2, -2));
+   TEST_REGEX_SEARCH("a(b+|((c)*))+d", boost::regex::extended, "abd", match_default, make_array(0, 3, 1, 2, -1, -1, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("a(b+|((c)*))+d", boost::regex::extended, "abcd", match_default, make_array(0, 4, 2, 3, 2, 3, 2, 3, -2, -2));
    // literals:
    TEST_REGEX_SEARCH("\\**?/{}", literal, "\\**?/{}", match_default, make_array(0, 7, -2, -2));
    TEST_REGEX_SEARCH("\\**?/{}", literal, "\\**?/{", match_default, make_array(-2, -2));
@@ -238,27 +238,27 @@ void test_tricky_cases2()
    TEST_REGEX_SEARCH("^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*", perl, "#define some_symbol(x) #x", match_default, make_array(0, 25, -1, -1, -2, -2));
    // try to match C++ syntax elements:
    // line comment:
-   TEST_REGEX_SEARCH("//[^\\n]*", extended&~no_escape_in_lists, "++i //here is a line comment\n", match_default, make_array(4, 28, -2, -2));
+   TEST_REGEX_SEARCH("//[^\\n]*", boost::regex::extended&~no_escape_in_lists, "++i //here is a line comment\n", match_default, make_array(4, 28, -2, -2));
    // block comment:
-   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", extended&~no_escape_in_lists, "/* here is a block comment */", match_default, make_array(0, 29, 26, 27, -2, -2));
-   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", extended&~no_escape_in_lists, "/**/", match_default, make_array(0, 4, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", extended&~no_escape_in_lists, "/***/", match_default, make_array(0, 5, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", extended&~no_escape_in_lists, "/****/", match_default, make_array(0, 6, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", extended&~no_escape_in_lists, "/*****/", match_default, make_array(0, 7, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", extended&~no_escape_in_lists, "/*****/*/", match_default, make_array(0, 7, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", boost::regex::extended&~no_escape_in_lists, "/* here is a block comment */", match_default, make_array(0, 29, 26, 27, -2, -2));
+   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", boost::regex::extended&~no_escape_in_lists, "/**/", match_default, make_array(0, 4, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", boost::regex::extended&~no_escape_in_lists, "/***/", match_default, make_array(0, 5, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", boost::regex::extended&~no_escape_in_lists, "/****/", match_default, make_array(0, 6, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", boost::regex::extended&~no_escape_in_lists, "/*****/", match_default, make_array(0, 7, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("/\\*([^*]|\\*+[^*/])*\\*+/", boost::regex::extended&~no_escape_in_lists, "/*****/*/", match_default, make_array(0, 7, -1, -1, -2, -2));
    // preprossor directives:
-   TEST_REGEX_SEARCH("^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*", extended&~no_escape_in_lists, "#define some_symbol", match_default, make_array(0, 19, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*", extended&~no_escape_in_lists, "#define some_symbol(x) #x", match_default, make_array(0, 25, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*", boost::regex::extended&~no_escape_in_lists, "#define some_symbol", match_default, make_array(0, 19, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*", boost::regex::extended&~no_escape_in_lists, "#define some_symbol(x) #x", match_default, make_array(0, 25, -1, -1, -2, -2));
    // perl only:
    TEST_REGEX_SEARCH("^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*", perl, "#define some_symbol(x) \\  \r\n  foo();\\\r\n   printf(#x);", match_default, make_array(0, 53, 30, 42, -2, -2));
    // POSIX leftmost longest checks:
-   TEST_REGEX_SEARCH("(aaa)|(\\w+)", extended&~no_escape_in_lists, "a", match_default, make_array(0, 1, -1, -1, 0, 1, -2, -2));
-   TEST_REGEX_SEARCH("(aaa)|(\\w+)", extended&~no_escape_in_lists, "aa", match_default, make_array(0, 2, -1, -1, 0, 2, -2, -2));
-   TEST_REGEX_SEARCH("(aaa)|(\\w+)", extended&~no_escape_in_lists, "aaa", match_default, make_array(0, 3, 0, 3, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("(aaa)|(\\w+)", extended&~no_escape_in_lists, "aaaa", match_default, make_array(0, 4, -1, -1, 0, 4, -2, -2));
-   TEST_REGEX_SEARCH("($)|(\\>)", extended&~no_escape_in_lists, "aaaa", match_default, make_array(4, 4, 4, 4, -1, -1, -2, -2));
-   TEST_REGEX_SEARCH("($)|(\\>)", extended&~no_escape_in_lists, "aaaa", match_default|match_not_eol, make_array(4, 4, -1, -1, 4, 4, -2, -2));
-   TEST_REGEX_SEARCH("(aaa)(ab)*", extended, "aaaabab", match_default, make_array(0, 7, 0, 3, 5, 7, -2, -2));
+   TEST_REGEX_SEARCH("(aaa)|(\\w+)", boost::regex::extended&~no_escape_in_lists, "a", match_default, make_array(0, 1, -1, -1, 0, 1, -2, -2));
+   TEST_REGEX_SEARCH("(aaa)|(\\w+)", boost::regex::extended&~no_escape_in_lists, "aa", match_default, make_array(0, 2, -1, -1, 0, 2, -2, -2));
+   TEST_REGEX_SEARCH("(aaa)|(\\w+)", boost::regex::extended&~no_escape_in_lists, "aaa", match_default, make_array(0, 3, 0, 3, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("(aaa)|(\\w+)", boost::regex::extended&~no_escape_in_lists, "aaaa", match_default, make_array(0, 4, -1, -1, 0, 4, -2, -2));
+   TEST_REGEX_SEARCH("($)|(\\>)", boost::regex::extended&~no_escape_in_lists, "aaaa", match_default, make_array(4, 4, 4, 4, -1, -1, -2, -2));
+   TEST_REGEX_SEARCH("($)|(\\>)", boost::regex::extended&~no_escape_in_lists, "aaaa", match_default|match_not_eol, make_array(4, 4, -1, -1, 4, 4, -2, -2));
+   TEST_REGEX_SEARCH("(aaa)(ab)*", boost::regex::extended, "aaaabab", match_default, make_array(0, 7, 0, 3, 5, 7, -2, -2));
 }
 
 void test_tricky_cases3()
