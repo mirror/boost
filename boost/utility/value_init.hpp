@@ -31,6 +31,16 @@
 #include <cstring>
 #include <new>
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#if _MSC_VER >= 1310
+// When using MSVC 7.1 or higher, placement new, "new (&x) T()", may trigger warning C4345:
+// "behavior change: an object of POD type constructed with an initializer of the form ()
+// will be default-initialized".  There is no need to worry about this, though.
+#pragma warning(disable: 4345)
+#endif
+#endif
+
 namespace boost {
 
 namespace vinit_detail {
@@ -88,6 +98,11 @@ class non_const_T_base
   private :
     mutable typename ::boost::aligned_storage<sizeof(T), ::boost::alignment_of<T>::value>::type x;
 } ;
+
+#ifdef BOOST_MSVC
+// Restores the state of warning C4345.
+#pragma warning(pop)
+#endif
 
 #else
 
