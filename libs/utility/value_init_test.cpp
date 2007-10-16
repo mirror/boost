@@ -60,6 +60,20 @@ struct NonPOD : NonPODBase
   std::string id ;
 } ;
 
+//
+// Sample aggregate POD struct type
+//
+struct AggregatePODStruct
+{
+  float f;
+  char  c;
+  int   i;
+};
+
+bool operator == ( AggregatePODStruct const& lhs, AggregatePODStruct const& rhs )
+{ return lhs.f == rhs.f && lhs.c == rhs.c && lhs.i == rhs.i ; }
+
+
 template<class T>
 void test ( T const& y, T const& z )
 {
@@ -97,6 +111,10 @@ int test_main(int, char **)
 
   NonPOD NonPOD_object( std::string("NonPOD_object") );
   test<NonPOD *>( 0, &NonPOD_object ) ;
+
+  AggregatePODStruct zeroInitializedAggregatePODStruct = { 0.0f, '\0', 0 };
+  AggregatePODStruct nonZeroInitializedAggregatePODStruct = { 1.25f, 'a', -1 };
+  test(zeroInitializedAggregatePODStruct, nonZeroInitializedAggregatePODStruct);
 
   return 0;
 }
