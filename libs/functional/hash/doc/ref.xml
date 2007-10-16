@@ -406,8 +406,6 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         </method>
       </struct-specialization>
 
-      <free-function-group name="Support functions (Boost extension).">
-
       <!--
         boost::hash_combine
         -->
@@ -501,10 +499,6 @@ for(; first != last; ++first)
           has basic exception safety.
         </para></throws>
       </overloaded-function>
-
-      </free-function-group>
-
-      <free-function-group name="Overloadable hash implementation (Boost extension).">
 
       <!--
         boost::hash_value - integers
@@ -803,7 +797,6 @@ return seed;</programlisting></entry>
           </informaltable>
         </returns>
       </overloaded-function>
-      </free-function-group>
     </namespace>
   </header>
 </library-reference>

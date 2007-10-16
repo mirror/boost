@@ -10,7 +10,7 @@
 __boost_hash__ is written to be as portable as possible, but unfortunately, several
 older compilers don't support argument dependent lookup (ADL) - the mechanism
 used for customisation.  On those compilers custom overloads for `hash_value`
-need to be declared in the boost namespace.
+needs to be declared in the boost namespace.
 
 On a strictly standards compliant compiler, an overload defined in the
 boost namespace won't be found when __boost_hash__ is instantiated,
