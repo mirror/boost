@@ -12,13 +12,10 @@
 
 using namespace boost::xpressive;
 
-struct three_or_six
+bool three_or_six(ssub_match const &sub)
 {
-    bool operator()(ssub_match const &sub) const
-    {
-        return sub.length() == 3 || sub.length() == 6;
-    }
-};
+    return sub.length() == 3 || sub.length() == 6;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // test1
@@ -27,7 +24,7 @@ void test1()
 {
     std::string str("foo barbaz fink");
     // match words of 3 characters or 6 characters.
-    sregex rx = (bow >> +_w >> eow)[ check(three_or_six()) ] ;
+    sregex rx = (bow >> +_w >> eow)[ check(&three_or_six) ] ;
 
     sregex_iterator first(str.begin(), str.end(), rx), last;
     BOOST_CHECK_EQUAL(std::distance(first, last), 2);
@@ -45,15 +42,6 @@ void test2()
     sregex_iterator first(str.begin(), str.end(), rx), last;
     BOOST_CHECK_EQUAL(std::distance(first, last), 2);
 }
-
-struct days_per_month_type
-{
-    int operator[](int i) const
-    {
-        std::cout << "HERE " << i << std::endl;
-        return 29;
-    }
-};
 
 ///////////////////////////////////////////////////////////////////////////////
 // test3
