@@ -174,9 +174,6 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter>
     struct regex_impl;
 
-    template<typename BidiIter>
-    struct regex_matcher;
-
     struct epsilon_matcher;
 
     template<typename BidiIter>
@@ -193,9 +190,6 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Xpr>
     struct lookbehind_matcher;
-
-    template<typename Cond>
-    struct assert_word_placeholder;
 
     template<bool IsBoundary>
     struct word_boundary;

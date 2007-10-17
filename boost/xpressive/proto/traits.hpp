@@ -49,7 +49,7 @@
         #define BOOST_PROTO_IS_ARRAY_(T) boost::is_array<T>
     #endif
 
-    #if BOOST_WORKAROUND( BOOST_MSVC, == 1400 )
+    #if BOOST_WORKAROUND( BOOST_MSVC, >= 1400 )
         #pragma warning(push)
         #pragma warning(disable: 4180) // warning C4180: qualifier applied to function type has no meaning; ignored
     #endif

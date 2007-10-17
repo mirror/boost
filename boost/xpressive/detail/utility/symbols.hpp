@@ -24,6 +24,7 @@
 #include <boost/range/result_iterator.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
+#include <boost/range/value_type.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -116,7 +117,9 @@ namespace boost { namespace xpressive { namespace detail
                 result_type result;
             };
             node* hi;
+            #ifdef BOOST_DISABLE_THREADS
             long tau;
+            #endif
         };
 
         ///////////////////////////////////////////////////////////////////////////////

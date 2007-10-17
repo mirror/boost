@@ -127,7 +127,7 @@
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const &)()>::type>));
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>));
 
-        #if BOOST_WORKAROUND(BOOST_MSVC, == 1400)
+        #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
             template<typename T> T &make_ref_(T &t);
             template<typename T> T const &make_ref_(T const &t);
             #define BOOST_PROTO_REF(x) detail::make_ref_(x)
