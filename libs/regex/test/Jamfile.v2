@@ -4,7 +4,14 @@
 # http://www.boost.org/LICENSE_1_0.txt.
 
 project
-    : requirements <threading>multi <link>shared:<define>BOOST_REGEX_DYN_LINK=1 <toolset>msvc-7.1:<define>TEST_MFC=1 <toolset>msvc-7.0:<define>TEST_MFC=1
+    : requirements 
+      <threading>multi 
+      <link>shared:<define>BOOST_REGEX_DYN_LINK=1 
+      <toolset>msvc-7.1:<define>TEST_MFC=1 
+      <toolset>msvc-7.0:<define>TEST_MFC=1
+      # There are unidentified linker problems on these platforms:
+      <toolset>mipspro-7.4:<link>static
+      <toolset>sun-5.9:<link>static
     ;
 
 #
@@ -131,6 +138,7 @@ test-suite regex
  ]
 ;
       
+
 
 
 

@@ -125,12 +125,24 @@ rule check-icu-config ( )
             }
             else
             {
-               ECHO WARNING: ICU shared data library not found in path. ;
-               ECHO HINT:    If the regex library fails to link then try again ;
-               ECHO          with the environment variable ICU_LINK set to contain ;
-               ECHO          the linker options required to link to ICU. ;
-               ECHO          Defaulting to look for libicudata ... ;
-               gICU_DATA_LIB = icudata ;
+               local os = [ modules.peek : OS ] ;
+               echo $(os) ;
+               if $(os) != "DARWIN"
+               {
+                  ECHO WARNING: ICU shared data library not found in path. ;
+                  ECHO HINT:    If the regex library fails to link then try again ;
+                  ECHO          with the environment variable ICU_LINK set to contain ;
+                  ECHO          the linker options required to link to ICU. ;
+               }
+               else
+               {
+                  ECHO WARNING: ICU shared data library not found in path. ;
+                  ECHO HINT:    If the regex library fails to link then try again ;
+                  ECHO          with the environment variable ICU_LINK set to contain ;
+                  ECHO          the linker options required to link to ICU. ;
+                  ECHO          Defaulting to look for libicudata ... ;
+                  gICU_DATA_LIB = icudata ;
+               }
             }
 #End of addition by Tommy Nordgren
          }
@@ -231,6 +243,7 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 	     <toolset>gcc-cygwin:<link>static
 	     $(BOOST_REGEX_ICU_OPTS)
     ;
+
 
 
 
