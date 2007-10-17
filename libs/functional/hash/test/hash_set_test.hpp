@@ -19,7 +19,7 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
     template <class T>
     void integer_tests(T* = 0)
     {
-        const int number_of_containers = 11;
+        const int number_of_containers = 12;
         T containers[number_of_containers];
 
         for(int i = 0; i < 5; ++i) {
@@ -35,6 +35,11 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
         containers[9].insert(-1);
         containers[10].insert(-1);
         containers[10].insert(1);
+        containers[11].insert(1);
+        containers[11].insert(2);
+        containers[11].insert(3);
+        containers[11].insert(4);
+        containers[11].insert(5);
 
         HASH_NAMESPACE::hash<T> hasher;
 

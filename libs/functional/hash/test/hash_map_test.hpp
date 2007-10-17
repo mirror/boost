@@ -8,6 +8,7 @@
 #else
 
 #include <boost/preprocessor/cat.hpp>
+
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #pragma warning(disable:4245) // signed/unsigned mismatch
