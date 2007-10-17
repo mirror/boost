@@ -28,6 +28,7 @@
 #include <boost/intrusive/link_mode.hpp>
 #include <cstddef>
 #include <iterator>
+#include <algorithm>
 
 namespace boost {
 namespace intrusive {
@@ -418,7 +419,7 @@ class rbtree_impl
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
-   //! <b>Throws</b>: If the comparison functor's none swap call throws.
+   //! <b>Throws</b>: If the comparison functor's swap call throws.
    void swap(rbtree_impl& other)
    {
       //This can throw
