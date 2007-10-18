@@ -21,7 +21,13 @@
 #include <boost/type_traits/is_abstract.hpp>
 #endif
 
-#ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#if defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || \
+  (defined(BOOST_MSVC) && (BOOST_MSVC<1310))
+
+#define BOOST_LCAST_NO_COMPILE_TIME_PRECISION
+#endif
+
+#ifdef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
 #include <boost/assert.hpp>
 #else
 #include <boost/static_assert.hpp>
@@ -31,7 +37,7 @@ namespace boost { namespace detail {
 
 class lcast_abstract_stub {};
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
 // Calculate an argument to pass to std::ios_base::precision from
 // lexical_cast. See alternative implementation for broken standard
 // libraries in lcast_get_precision below. Keep them in sync, please.
@@ -92,7 +98,7 @@ struct lcast_precision
 template<class T>
 inline std::streamsize lcast_get_precision(T* = 0)
 {
-#if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
+#ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
     return lcast_precision<T>::value;
 #else // Follow lcast_precision algorithm at run-time:
 

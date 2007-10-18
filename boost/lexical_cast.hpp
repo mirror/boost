@@ -307,7 +307,7 @@ namespace boost
 #undef BOOST_AUX_LEXICAL_CAST_DEF
 #undef BOOST_AUX_LEXICAL_CAST_DEF1
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
 // This #if is in sync with lcast_precision
 
         // Helper for floating point types.
@@ -376,7 +376,7 @@ namespace boost
     };
 
 #endif // #ifndef DISABLE_WIDE_CHAR_SUPPORT
-#endif // #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#endif // #ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
     }
 
     namespace detail // '0' and '-' constants
