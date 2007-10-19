@@ -25,6 +25,7 @@
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/options.hpp>
 #include <functional>
+#include <algorithm>
 #include <cstddef>
 
 namespace boost {
