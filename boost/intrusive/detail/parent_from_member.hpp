@@ -28,7 +28,7 @@ inline std::size_t offset_from_pointer_to_member(const Member Parent::* ptr_to_m
    #if defined(BOOST_MSVC) || (defined (BOOST_WINDOWS) && defined(BOOST_INTEL))
    //This works with gcc, msvc, ac++, ibmcpp
    return *(const std::ptrdiff_t*)(void*)&ptr_to_member;
-   #elif defined(__GNUC__) || defined(__HP_aCC) || defined(BOOST_INTEL) || defined (__IBMCPP__)
+   #elif defined(__GNUC__) || defined(__HP_aCC) || defined(BOOST_INTEL) || defined (__IBMCPP__) || defined (__DECCXX)
    const Parent * const parent = 0;
    const char *const member = reinterpret_cast<const char*>(&(parent->*ptr_to_member));
    return std::size_t(member - reinterpret_cast<const char*>(parent));
