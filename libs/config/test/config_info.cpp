@@ -10,6 +10,9 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/config for most recent version.
+//
+//  Revision $Id$
+//
 
 #include <boost/config.hpp>
 #include <boost/version.hpp>
@@ -1006,6 +1009,8 @@ void print_boost_macros()
    PRINT_MACRO(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE);
    PRINT_MACRO(BOOST_NO_USING_TEMPLATE);
    PRINT_MACRO(BOOST_NO_VOID_RETURNS);
+
+
 
 
 
