@@ -14,7 +14,7 @@
 # pragma once
 #endif
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(__BORLANDC__)
 #pragma message("Warning: boost/functional/hash/map.hpp is deprecated, use boost/functional/hash.hpp instead.")
 #else
 #warning "boost/functional/hash/map.hpp is deprecated, use boost/functional/hash.hpp instead."
