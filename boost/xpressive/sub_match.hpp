@@ -70,7 +70,13 @@ public:
     typedef typename detail::string_type<value_type>::type string_type;
     typedef BidiIter iterator;
 
-    explicit sub_match(BidiIter first = BidiIter(), BidiIter second = BidiIter(), bool matched_ = false)
+    sub_match()
+      : std::pair<BidiIter, BidiIter>()
+      , matched(false)
+    {
+    }
+
+    sub_match(BidiIter first, BidiIter second, bool matched_ = false)
       : std::pair<BidiIter, BidiIter>(first, second)
       , matched(matched_)
     {

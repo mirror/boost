@@ -19,7 +19,7 @@
 #ifndef BOOST_NO_STL_LOCALE
 # include <boost/typeof/std/locale.hpp>
 #endif
-//#include <boost/xpressive/proto/proto_typeof.hpp>
+#include <boost/xpressive/proto/proto_typeof.hpp>
 #include <boost/xpressive/xpressive_fwd.hpp>
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
@@ -30,9 +30,9 @@
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::set_initializer)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::keeper_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::modifier_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::lookahead_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::lookbehind_tag)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::generic_quant_tag, (unsigned int)(unsigned int))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::lookahead_tag, (bool))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::lookbehind_tag, (bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::basic_regex, (typename))
 
 ///////////////////////////////////////////////////////////////////////////////

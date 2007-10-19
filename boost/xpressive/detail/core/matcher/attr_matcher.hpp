@@ -71,7 +71,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef typename Matcher::value_type::second_type const* result_type;
 
-        attr_matcher(int slot, Matcher &matcher, Traits const& traits)
+        attr_matcher(int slot, Matcher const &matcher, Traits const& traits)
           : slot_(slot-1)
         {
             char_translate<Traits, ICase> trans(traits);

@@ -163,9 +163,6 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Modifier>
     struct modifier_op;
 
-    template<typename Left, typename Right>
-    struct modifier_sequencer;
-
     struct icase_modifier;
 
     template<typename BidiIter, typename ICase, typename Traits>
