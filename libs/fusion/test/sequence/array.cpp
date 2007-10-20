@@ -8,7 +8,7 @@
 
 #include <boost/detail/lightweight_test.hpp>
 
-#include <boost/fusion/adapted/array.hpp>
+#include <boost/fusion/sequence/adapted/array.hpp>
 #include <boost/array.hpp>
 
 #include <boost/fusion/sequence/intrinsic.hpp>

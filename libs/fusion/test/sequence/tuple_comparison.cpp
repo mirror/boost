@@ -6,7 +6,7 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/tuple/tuple.hpp>
-#include <boost/fusion/adapted/mpl.hpp>
+#include <boost/fusion/sequence/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE tuple
 #include "comparison.hpp"

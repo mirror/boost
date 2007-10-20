@@ -3,16 +3,15 @@
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2006 Dan Marsden
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 
-#include <boost/fusion/container/deque/deque.hpp>
-#include <boost/fusion/container/deque/front_extended_deque.hpp>
+#include <boost/fusion/sequence/container/deque/deque.hpp>
+#include <boost/fusion/sequence/container/deque/front_extended_deque.hpp>
 #include <boost/fusion/sequence/comparison.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/mpl.hpp>
 
 #include <boost/fusion/sequence/intrinsic.hpp>
 #include <boost/fusion/iterator.hpp>

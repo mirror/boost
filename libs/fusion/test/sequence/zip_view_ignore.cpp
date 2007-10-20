@@ -6,8 +6,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/container/vector.hpp>
-#include <boost/fusion/view/zip_view.hpp>
+#include <boost/fusion/sequence/container/vector.hpp>
+#include <boost/fusion/sequence/view/zip_view.hpp>
 #include <boost/fusion/support/unused.hpp>
 #include <boost/fusion/iterator.hpp>
 #include <boost/fusion/sequence/intrinsic.hpp>

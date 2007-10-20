@@ -17,12 +17,12 @@
 
 #include <boost/mpl/int.hpp>
 
-#include <boost/fusion/container/vector.hpp>
-#include <boost/fusion/container/list.hpp>
+#include <boost/fusion/sequence/container/vector.hpp>
+#include <boost/fusion/sequence/container/list.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
-#include <boost/fusion/view/single_view.hpp>
-#include <boost/fusion/view/iterator_range.hpp>
+#include <boost/fusion/sequence/view/single_view.hpp>
+#include <boost/fusion/sequence/view/iterator_range.hpp>
 #include <boost/fusion/iterator/advance.hpp>
 #include <boost/fusion/algorithm/transformation/join.hpp>
 

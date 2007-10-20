@@ -13,7 +13,7 @@
 #include <boost/blank.hpp>
 
 #include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/container/vector.hpp>
+#include <boost/fusion/sequence/container/vector.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/assert.hpp>

@@ -10,7 +10,7 @@
 
 #include <boost/fusion/algorithm/iteration/accumulate.hpp>
 #include <boost/fusion/algorithm/transformation/zip.hpp>
-#include <boost/fusion/container/vector.hpp>
+#include <boost/fusion/sequence/container/vector.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/type_traits/remove_reference.hpp>

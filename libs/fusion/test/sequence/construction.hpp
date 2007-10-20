@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/container/list/cons.hpp>
+#include <boost/fusion/sequence/container/list/cons.hpp>
 
 #if !defined(FUSION_AT)
 #define FUSION_AT at_c

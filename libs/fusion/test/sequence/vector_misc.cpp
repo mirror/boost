@@ -5,9 +5,9 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/container/vector/convert.hpp>
-#include <boost/fusion/adapted/mpl.hpp>
+#include <boost/fusion/sequence/container/vector/vector.hpp>
+#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/sequence/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE vector
 #include "misc.hpp"

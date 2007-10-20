@@ -6,7 +6,7 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
-#include <boost/fusion/adapted/variant.hpp>
+#include <boost/fusion/sequence/adapted/variant.hpp>
 
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/fusion/support/is_view.hpp>

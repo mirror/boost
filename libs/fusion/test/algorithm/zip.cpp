@@ -9,7 +9,7 @@
 #include <boost/fusion/algorithm/transformation/zip.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
-#include <boost/fusion/adapted/mpl.hpp>
+#include <boost/fusion/sequence/adapted/mpl.hpp>
 #include <boost/mpl/vector.hpp>
 
 int main()

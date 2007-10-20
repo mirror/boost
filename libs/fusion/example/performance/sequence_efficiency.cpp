@@ -10,8 +10,8 @@
 #define FUSION_MAX_VECTOR_SIZE 30
 
 #include <boost/fusion/algorithm/iteration/accumulate.hpp>
-#include <boost/fusion/container/vector.hpp>
-#include <boost/fusion/container/list.hpp>
+#include <boost/fusion/sequence/container/vector.hpp>
+#include <boost/fusion/sequence/container/list.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
