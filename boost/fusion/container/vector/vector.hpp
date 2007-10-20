@@ -9,7 +9,7 @@
 
 #include <boost/fusion/container/vector/vector_fwd.hpp>
 #include <boost/fusion/container/vector/detail/vector_n_chooser.hpp>
-#include <boost/fusion/sequence/conversion/detail/as_vector.hpp>
+#include <boost/fusion/container/vector/detail/as_vector.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/bool.hpp>

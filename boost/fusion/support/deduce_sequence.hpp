@@ -10,7 +10,7 @@
 #define BOOST_FUSION_SUPPORT_DEDUCE_SEQUENCE_HPP_INCLUDED
 
 #include <boost/fusion/support/deduce.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/mpl.hpp>
 #include <boost/mpl/transform.hpp>
 

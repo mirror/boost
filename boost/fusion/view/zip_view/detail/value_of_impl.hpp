@@ -8,7 +8,7 @@
 #if !defined(FUSION_VALUE_OF_IMPL_20060124_2147)
 #define FUSION_VALUE_OF_IMPL_20060124_2147
 
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/mpl/placeholders.hpp>

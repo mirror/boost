@@ -18,7 +18,7 @@
 #include <boost/fusion/view/zip_view/detail/value_of_impl.hpp>
 #include <boost/fusion/view/zip_view/detail/equal_to_impl.hpp>
 
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 
 namespace boost { namespace fusion {
     

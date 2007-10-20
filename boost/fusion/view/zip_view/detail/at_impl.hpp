@@ -10,7 +10,7 @@
 
 #include <boost/fusion/container/vector.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>

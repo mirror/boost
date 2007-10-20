@@ -23,7 +23,7 @@
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 
 #include <boost/fusion/functional/adapter/limits.hpp>
 #include <boost/fusion/functional/adapter/detail/access.hpp>

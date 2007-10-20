@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_POP_BACK_10022005_1801)
@@ -10,7 +10,7 @@
 #include <boost/mpl/pop_back.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/fusion/algorithm/transformation/pop_back.hpp>
-#include <boost/fusion/mpl/detail/as.hpp>
+#include <boost/fusion/sequence/convert.hpp>
 
 namespace boost { namespace mpl
 {
@@ -23,12 +23,13 @@ namespace boost { namespace mpl
         template <typename Sequence>
         struct apply
         {
-            typedef typename 
-                fusion::result_of::pop_back<Sequence>::type 
+            typedef typename
+                fusion::result_of::pop_back<Sequence>::type
             result;
-            
-            typedef typename 
-                fusion::detail::as<typename fusion::detail::tag_of<Sequence>::type, result>::type 
+
+            typedef typename
+                fusion::result_of::convert<
+                    typename fusion::detail::tag_of<Sequence>::type, result>::type
             type;
         };
     };

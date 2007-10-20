@@ -54,7 +54,7 @@ namespace boost { namespace fusion { namespace detail
     typedef typename fusion::result_of::value_of<BOOST_PP_CAT(I, n)>::type      \
         BOOST_PP_CAT(T, n);
 
-#define BOOST_PP_FILENAME_1 <boost/fusion/sequence/conversion/detail/as_vector.hpp>
+#define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/detail/as_vector.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_VECTOR_SIZE)
 #include BOOST_PP_ITERATE()
 

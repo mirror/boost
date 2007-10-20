@@ -17,7 +17,7 @@
 #include <boost/fusion/view/zip_view/detail/size_impl.hpp>
 #include <boost/fusion/view/zip_view/detail/at_impl.hpp>
 #include <boost/fusion/view/zip_view/detail/value_at_impl.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/algorithm/query/find_if.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>

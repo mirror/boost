@@ -11,7 +11,7 @@
 #include <boost/fusion/container/vector.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/support/unused.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>

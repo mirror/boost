@@ -9,10 +9,9 @@
 
 #include <boost/fusion/sequence/sequence_facade.hpp>
 #include <boost/fusion/sequence/comparison.hpp>
-#include <boost/fusion/sequence/conversion.hpp>
 #include <boost/fusion/sequence/generation.hpp>
 #include <boost/fusion/sequence/intrinsic.hpp>
 #include <boost/fusion/sequence/io.hpp>
-#include <boost/fusion/adapted.hpp>
+#include <boost/fusion/sequence/convert.hpp>
 
 #endif
