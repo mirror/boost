@@ -195,18 +195,18 @@ if [ check-icu-config ]
    {
       if $(gICU_CORE_LIB)
       {
-         lib icucore : : <name>$(gICU_CORE_LIB) $(ICU_SEARCH_OPTS) ;
+         lib icucore : : <name>$(gICU_CORE_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
          ICU_EXTRA_SOURCE = icucore ;
       }
       if $(gICU_IN_LIB)
       {
-         lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) ;
+         lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
          ICU_EXTRA_SOURCE += icuin ;
       }
 #Added by Tommy Nordgren libicudata must be linked against on Mac OS X
       if $(gICU_DATA_LIB)
       {
-         lib icudata : : <name>$(gICU_DATA_LIB) $(ICU_SEARCH_OPTS) ;
+         lib icudata : : <name>$(gICU_DATA_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
          ICU_EXTRA_SOURCE += icudata ;
       }
 #End of addition by Tommy Nordgren
@@ -245,6 +245,7 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
     ;
 
 alias icu_options : $(ICU_EXTRA_SOURCE) : : : $(BOOST_REGEX_ICU_OPTS) ;
+
 
 
 
