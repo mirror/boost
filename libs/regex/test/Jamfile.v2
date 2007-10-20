@@ -12,7 +12,6 @@ project
       # There are unidentified linker problems on these platforms:
       <toolset>mipspro-7.4:<link>static
       <toolset>sun-5.9:<link>static
-      <source>../build//icu_options
     ;
 
 #
@@ -56,14 +55,14 @@ local regress-sources = regress/$(R_SOURCE) ;
 
 test-suite regex
       : 
-      [ run regress/$(R_SOURCE) ../build//boost_regex      
+      [ run regress/$(R_SOURCE) ../build//boost_regex ../build//icu_options
         : # command line
         : # input files
         : # requirements
         : regex_regress ]
 
       [ run regress/$(R_SOURCE) ../build//boost_regex
-                                ../../thread/build//boost_thread
+                                ../../thread/build//boost_thread ../build//icu_options
         : # command line
         : # input files
         : # requirements
@@ -132,10 +131,4 @@ test-suite regex
  ]
 ;
       
-
-
-
-
-
-
 
