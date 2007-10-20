@@ -10,7 +10,7 @@
 #include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/iterator/mpl/convert_iterator.hpp>
-#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
+#include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 #include <boost/fusion/view/reverse_view/detail/deref_impl.hpp>
 #include <boost/fusion/view/reverse_view/detail/next_impl.hpp>
 #include <boost/fusion/view/reverse_view/detail/prior_impl.hpp>

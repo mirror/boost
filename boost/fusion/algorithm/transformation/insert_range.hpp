@@ -14,7 +14,7 @@
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
+#include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 
 namespace boost { namespace fusion
 {

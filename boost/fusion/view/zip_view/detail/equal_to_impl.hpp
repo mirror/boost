@@ -8,7 +8,7 @@
 #if !defined(FUSION_EQUAL_TO_IMPL_20060128_1423)
 #define FUSION_EQUAL_TO_IMPL_20060128_1423
 
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/mpl.hpp>
 
 #include <boost/mpl/lambda.hpp>
 #include <boost/mpl/and.hpp>

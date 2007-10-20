@@ -13,6 +13,6 @@
 #include <boost/fusion/sequence/generation.hpp>
 #include <boost/fusion/sequence/intrinsic.hpp>
 #include <boost/fusion/sequence/io.hpp>
-#include <boost/fusion/sequence/adapted.hpp>
+#include <boost/fusion/adapted.hpp>
 
 #endif

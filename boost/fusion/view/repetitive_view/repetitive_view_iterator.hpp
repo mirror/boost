@@ -11,7 +11,7 @@
 #include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/iterator/mpl/convert_iterator.hpp>
-#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
+#include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/view/repetitive_view/detail/deref_impl.hpp>

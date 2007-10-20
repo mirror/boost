@@ -15,7 +15,7 @@
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
+#include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 
 namespace boost { namespace fusion
 {

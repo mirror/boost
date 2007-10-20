@@ -20,7 +20,7 @@
 #include <boost/fusion/view/iterator_range.hpp>
 #include <boost/fusion/view/ext_/multiple_view.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
-#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
+#include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 
 namespace boost { namespace fusion
 {

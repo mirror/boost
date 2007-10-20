@@ -11,7 +11,7 @@
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/fusion/support/category_of.hpp>
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_convertible.hpp>

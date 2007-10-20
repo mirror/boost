@@ -21,7 +21,7 @@
 #include <boost/fusion/algorithm/query/find_if.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/algorithm/transformation/remove.hpp>
 
 #include <boost/mpl/assert.hpp>

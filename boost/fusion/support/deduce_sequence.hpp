@@ -11,7 +11,7 @@
 
 #include <boost/fusion/support/deduce.hpp>
 #include <boost/fusion/sequence/conversion/as_vector.hpp>
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/mpl/transform.hpp>
 
 namespace boost { namespace fusion { namespace traits

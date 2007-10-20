@@ -16,7 +16,7 @@
 #include <boost/fusion/view/iterator_range/detail/end_impl.hpp>
 #include <boost/fusion/view/iterator_range/detail/at_impl.hpp>
 #include <boost/fusion/view/iterator_range/detail/value_at_impl.hpp>
-#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
+#include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 #include <boost/mpl/bool.hpp>
 
 namespace boost { namespace fusion
