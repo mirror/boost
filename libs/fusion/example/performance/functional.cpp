@@ -7,8 +7,8 @@
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
 
-#include <boost/fusion/sequence/container/list.hpp>
-#include <boost/fusion/sequence/container/vector.hpp>
+#include <boost/fusion/container/list.hpp>
+#include <boost/fusion/container/vector.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 #include <boost/fusion/functional/adapter/unfused_generic.hpp>
 #include <boost/fusion/functional/adapter/unfused_rvalue_args.hpp>

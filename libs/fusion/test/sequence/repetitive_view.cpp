@@ -7,10 +7,10 @@
 ==============================================================================*/
 
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/sequence/view/repetitive_view.hpp>
+#include <boost/fusion/view/repetitive_view.hpp>
 
-#include <boost/fusion/sequence/container/vector.hpp>
-#include <boost/fusion/sequence/view/joint_view.hpp>
+#include <boost/fusion/container/vector.hpp>
+#include <boost/fusion/view/joint_view.hpp>
 #include <boost/fusion/algorithm/transformation/zip.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 

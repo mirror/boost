@@ -2,12 +2,13 @@
     Copyright (C) 1999-2003 Jaakko Järvi
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/sequence/intrinsic.hpp>
 #include <boost/fusion/support/is_sequence.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/mpl/find.hpp>
 #include <boost/mpl/equal.hpp>
 #include <boost/mpl/int.hpp>
@@ -105,7 +106,7 @@ struct test_intrinsics2
     BOOST_STATIC_ASSERT((boost::mpl::equal<seq2, target2>::value));
 
 #endif
-    
+
     typedef boost::fusion::FUSION_SEQUENCE<int> target3;
     typedef boost::mpl::push_front<seq0, int>::type seq3;
     BOOST_STATIC_ASSERT((boost::mpl::equal<seq3, target3>::value));
@@ -170,9 +171,9 @@ test()
         BOOST_STATIC_ASSERT(!traits::is_sequence<int>::value);
         BOOST_STATIC_ASSERT(!traits::is_sequence<char>::value);
     }
-    
+
     {   // testing mpl compatibility
-        
+
         // test begin, end, next, prior, advance, size, deref, etc.
         //~ typedef FUSION_SEQUENCE<int, float, bool, char> tuple_type;
         //~ test_intrinsics1<tuple_type> test1;
@@ -181,7 +182,7 @@ test()
         // test an algorithm
         typedef FUSION_SEQUENCE<int, float, double> t1;
         typedef boost::mpl::find<t1, float>::type iter;
-        typedef boost::mpl::deref<iter>::type type;        
+        typedef boost::mpl::deref<iter>::type type;
         BOOST_STATIC_ASSERT((boost::is_same<type, float>::value));
 
     }

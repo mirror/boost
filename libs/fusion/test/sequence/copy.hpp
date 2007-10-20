@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/mpl/insert_range.hpp>
 #include <boost/mpl/vector.hpp>

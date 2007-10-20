@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <boost/fusion/tuple.hpp>
 #include <boost/fusion/sequence/conversion/as_vector.hpp>
-#include <boost/fusion/sequence/adapted/mpl.hpp>
+#include <boost/fusion/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE tuple
 #define FUSION_AT get

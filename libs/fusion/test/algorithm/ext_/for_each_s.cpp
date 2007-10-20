@@ -5,13 +5,13 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/sequence/container/vector/vector.hpp>
-#include <boost/fusion/sequence/adapted/mpl.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
+#include <boost/fusion/adapted/mpl.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/algorithm/iteration/ext_/for_each_s.hpp>
 #include <boost/mpl/vector_c.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/sequence/container/ext_/tree.hpp>
+#include <boost/fusion/container/ext_/tree.hpp>
 
 struct print
 {

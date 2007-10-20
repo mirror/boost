@@ -7,11 +7,11 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/algorithm/iteration/ext_/for_each_s.hpp>
 #include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
-#include <boost/fusion/sequence/container/vector/vector.hpp>
-#include <boost/fusion/sequence/container/ext_/tree.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
+#include <boost/fusion/container/ext_/tree.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/sequence/view/iterator_range/iterator_range.hpp>
-#include <boost/fusion/sequence/view/ext_/segmented_iterator_range.hpp>
+#include <boost/fusion/view/iterator_range/iterator_range.hpp>
+#include <boost/fusion/view/ext_/segmented_iterator_range.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>

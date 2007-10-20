@@ -7,7 +7,7 @@
 ==============================================================================*/
 
 #include <boost/fusion/support/deduce_sequence.hpp>
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 #include <boost/mpl/equal.hpp>

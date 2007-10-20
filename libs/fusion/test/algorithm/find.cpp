@@ -5,10 +5,10 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/sequence/container/vector/vector.hpp>
-#include <boost/fusion/sequence/adapted/mpl.hpp>
-#include <boost/fusion/sequence/container/set/set.hpp>
-#include <boost/fusion/sequence/container/map/map.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
+#include <boost/fusion/adapted/mpl.hpp>
+#include <boost/fusion/container/set/set.hpp>
+#include <boost/fusion/container/map/map.hpp>
 #include <boost/fusion/algorithm/query/find.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/mpl/vector.hpp>

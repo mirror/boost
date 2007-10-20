@@ -28,7 +28,7 @@
 #include <boost/fusion/support/deduce_sequence.hpp>
 
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/mpl.hpp>
 #include <boost/fusion/sequence/intrinsic/front.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>

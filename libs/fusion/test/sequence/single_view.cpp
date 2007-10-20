@@ -6,7 +6,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
-#include <boost/fusion/sequence/view/single_view/single_view.hpp>
+#include <boost/fusion/view/single_view/single_view.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 
