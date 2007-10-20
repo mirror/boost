@@ -8,7 +8,7 @@
 #if !defined(FUSION_JOIN_200601222109)
 #define FUSION_JOIN_200601222109
 
-#include <boost/fusion/view/joint_view.hpp>
+#include <boost/fusion/sequence/view/joint_view.hpp>
 
 namespace boost { namespace fusion {
 

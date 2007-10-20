@@ -8,8 +8,8 @@
 #define FUSION_PUSH_BACK_07162005_0235
 
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
-#include <boost/fusion/view/joint_view/joint_view.hpp>
-#include <boost/fusion/view/single_view/single_view.hpp>
+#include <boost/fusion/sequence/view/joint_view/joint_view.hpp>
+#include <boost/fusion/sequence/view/single_view/single_view.hpp>
 
 namespace boost { namespace fusion
 {

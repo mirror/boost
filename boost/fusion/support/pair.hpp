@@ -2,12 +2,13 @@
     Copyright (c) 2005 Joel de Guzman
     Copyright (c) 2006 Tobias Schwinger
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_PAIR_07222005_1203)
 #define FUSION_PAIR_07222005_1203
 
+#include <boost/fusion/support/detail/compiler_config.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 
@@ -22,7 +23,7 @@ namespace boost { namespace fusion
 
         pair(typename detail::call_param<Second>::type val)
             : second(val) {}
-
+        
         template <typename Second2>
         pair(pair<First, Second2> const& rhs)
             : second(rhs.second) {}
@@ -44,7 +45,7 @@ namespace boost { namespace fusion
         template<typename First, typename Second>
         struct make_pair
         {
-            typedef fusion::pair<First,
+            typedef fusion::pair<First, 
                         typename detail::as_fusion_element<Second>::type> type;
         };
 
@@ -83,16 +84,16 @@ namespace boost { namespace fusion
         is >> p.second;
         return is;
     }
-
+    
     template <typename First, typename SecondL, typename SecondR>
-    inline bool
+    inline bool 
     operator==(pair<First, SecondL> const& l, pair<First, SecondR> const& r)
     {
         return l.second == r.second;
     }
 
     template <typename First, typename SecondL, typename SecondR>
-    inline bool
+    inline bool 
     operator!=(pair<First, SecondL> const& l, pair<First, SecondR> const& r)
     {
         return l.second != r.second;

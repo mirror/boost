@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_VARIANT)
 #define FUSION_INCLUDE_VARIANT
 
-#include <boost/fusion/adapted/variant.hpp>
+#include <boost/fusion/sequence/adapted/variant.hpp>
 
 #endif

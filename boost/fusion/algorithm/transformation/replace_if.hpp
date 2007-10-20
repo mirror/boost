@@ -7,7 +7,7 @@
 #if !defined(FUSION_REPLACE_IF_08182005_0939)
 #define FUSION_REPLACE_IF_08182005_0939
 
-#include <boost/fusion/view/transform_view/transform_view.hpp>
+#include <boost/fusion/sequence/view/transform_view/transform_view.hpp>
 #include <boost/fusion/algorithm/transformation/detail/replace_if.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>

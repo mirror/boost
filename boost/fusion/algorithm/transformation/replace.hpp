@@ -7,7 +7,7 @@
 #if !defined(FUSION_REPLACE_08182005_0830)
 #define FUSION_REPLACE_08182005_0830
 
-#include <boost/fusion/view/transform_view/transform_view.hpp>
+#include <boost/fusion/sequence/view/transform_view/transform_view.hpp>
 #include <boost/fusion/algorithm/transformation/detail/replace.hpp>
 
 namespace boost { namespace fusion

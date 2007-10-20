@@ -12,7 +12,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
-#include <boost/fusion/container/list/list.hpp>
+#include <boost/fusion/sequence/container/list/list.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 
 namespace boost { namespace fusion

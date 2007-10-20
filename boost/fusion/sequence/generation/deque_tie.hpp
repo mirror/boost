@@ -14,7 +14,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
-#include <boost/fusion/container/deque/deque.hpp>
+#include <boost/fusion/sequence/container/deque/deque.hpp>
 
 namespace boost { namespace fusion
 {

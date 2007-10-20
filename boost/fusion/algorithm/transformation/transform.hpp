@@ -7,7 +7,7 @@
 #if !defined(FUSION_TRANSFORM_07052005_1057)
 #define FUSION_TRANSFORM_07052005_1057
 
-#include <boost/fusion/view/transform_view/transform_view.hpp>
+#include <boost/fusion/sequence/view/transform_view/transform_view.hpp>
 
 namespace boost { namespace fusion
 {

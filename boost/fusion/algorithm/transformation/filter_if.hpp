@@ -7,7 +7,7 @@
 #if !defined(FUSION_FILTER_IF_07172005_0818)
 #define FUSION_FILTER_IF_07172005_0818
 
-#include <boost/fusion/view/filter_view/filter_view.hpp>
+#include <boost/fusion/sequence/view/filter_view/filter_view.hpp>
 
 namespace boost { namespace fusion
 {

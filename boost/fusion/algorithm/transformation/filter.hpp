@@ -8,7 +8,7 @@
 #if !defined(FUSION_FILTER_02122005_1839)
 #define FUSION_FILTER_02122005_1839
 
-#include <boost/fusion/view/filter_view/filter_view.hpp>
+#include <boost/fusion/sequence/view/filter_view/filter_view.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace fusion

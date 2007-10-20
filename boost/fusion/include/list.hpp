@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_LIST)
 #define FUSION_INCLUDE_LIST
 
-#include <boost/fusion/container/list/list.hpp>
+#include <boost/fusion/sequence/container/list/list.hpp>
 
 #endif

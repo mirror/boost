@@ -7,7 +7,7 @@
 #if !defined(FUSION_CONS_TIE_07182005_0854)
 #define FUSION_CONS_TIE_07182005_0854
 
-#include <boost/fusion/container/list/cons.hpp>
+#include <boost/fusion/sequence/container/list/cons.hpp>
 
 namespace boost { namespace fusion
 {
