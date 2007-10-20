@@ -7,11 +7,11 @@
 #if !defined(FUSION_CLEAR_10022005_1442)
 #define FUSION_CLEAR_10022005_1442
 
-#include <boost/fusion/sequence/container/vector/vector_fwd.hpp>
-#include <boost/fusion/sequence/container/list/list_fwd.hpp>
-#include <boost/fusion/sequence/container/map/map_fwd.hpp>
-#include <boost/fusion/sequence/container/set/set_fwd.hpp>
-#include <boost/fusion/sequence/container/deque/deque_fwd.hpp>
+#include <boost/fusion/container/vector/vector_fwd.hpp>
+#include <boost/fusion/container/list/list_fwd.hpp>
+#include <boost/fusion/container/map/map_fwd.hpp>
+#include <boost/fusion/container/set/set_fwd.hpp>
+#include <boost/fusion/container/deque/deque_fwd.hpp>
 
 namespace boost { namespace fusion
 {

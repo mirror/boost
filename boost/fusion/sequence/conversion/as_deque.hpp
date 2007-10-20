@@ -9,7 +9,7 @@
 #define FUSION_AS_DEQUE_20061213_2207
 
 #include <boost/fusion/sequence/conversion/detail/as_deque.hpp>
-#include <boost/fusion/sequence/container/deque/deque.hpp>
+#include <boost/fusion/container/deque/deque.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 

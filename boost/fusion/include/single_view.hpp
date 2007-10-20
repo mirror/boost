@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_SINGLE_VIEW)
 #define FUSION_INCLUDE_SINGLE_VIEW
 
-#include <boost/fusion/sequence/view/single_view.hpp>
+#include <boost/fusion/view/single_view.hpp>
 
 #endif

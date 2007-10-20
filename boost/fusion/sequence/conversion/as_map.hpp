@@ -8,7 +8,7 @@
 #define FUSION_AS_MAP_09232005_1340
 
 #include <boost/fusion/sequence/conversion/detail/as_map.hpp>
-#include <boost/fusion/sequence/container/map/map.hpp>
+#include <boost/fusion/container/map/map.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 

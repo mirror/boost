@@ -7,7 +7,7 @@
 #if !defined(FUSION_AS_LIST_09232005_1215)
 #define FUSION_AS_LIST_09232005_1215
 
-#include <boost/fusion/sequence/container/list/cons.hpp>
+#include <boost/fusion/container/list/cons.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>

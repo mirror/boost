@@ -9,7 +9,7 @@
 #define FUSION_MAKE_CONS_07172005_0918
 
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
-#include <boost/fusion/sequence/container/list/cons.hpp>
+#include <boost/fusion/container/list/cons.hpp>
 
 namespace boost { namespace fusion
 {

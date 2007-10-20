@@ -8,9 +8,9 @@
 #define FUSION_INSERT_RANGE_009172005_1147
 
 #include <boost/fusion/iterator/mpl/convert_iterator.hpp>
-#include <boost/fusion/sequence/container/vector/vector10.hpp>
-#include <boost/fusion/sequence/view/joint_view/joint_view.hpp>
-#include <boost/fusion/sequence/view/iterator_range/iterator_range.hpp>
+#include <boost/fusion/container/vector/vector10.hpp>
+#include <boost/fusion/view/joint_view/joint_view.hpp>
+#include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>

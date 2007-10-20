@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_VECTOR)
 #define FUSION_INCLUDE_VECTOR
 
-#include <boost/fusion/sequence/container/vector/vector.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
 
 #endif

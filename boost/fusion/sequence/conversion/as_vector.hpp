@@ -8,7 +8,7 @@
 #define FUSION_AS_VECTOR_09222005_1104
 
 #include <boost/fusion/sequence/conversion/detail/as_vector.hpp>
-#include <boost/fusion/sequence/container/vector/vector.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 

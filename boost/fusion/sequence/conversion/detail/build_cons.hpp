@@ -7,7 +7,7 @@
 #if !defined(FUSION_BUILD_CONS_09232005_1222)
 #define FUSION_BUILD_CONS_09232005_1222
 
-#include <boost/fusion/sequence/container/list/cons.hpp>
+#include <boost/fusion/container/list/cons.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/value_of.hpp>

@@ -8,7 +8,7 @@
 #define FUSION_AS_SET_09232005_1341
 
 #include <boost/fusion/sequence/conversion/detail/as_set.hpp>
-#include <boost/fusion/sequence/container/set/set.hpp>
+#include <boost/fusion/container/set/set.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 
