@@ -14,9 +14,11 @@
 # pragma once
 #endif
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(__EDG__)
+#elif defined(_MSC_VER) || defined(__BORLANDC__) || defined(__DMC__)
 #pragma message("Warning: boost/functional/hash/deque.hpp is deprecated, use boost/functional/hash.hpp instead.")
-#else
+#elif defined(__GNUC__) || defined(__HP_aCC) || \
+    defined(__SUNPRO_CC) || defined(__IBMCPP__)
 #warning "boost/functional/hash/deque.hpp is deprecated, use boost/functional/hash.hpp instead."
 #endif
 
