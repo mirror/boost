@@ -10,9 +10,9 @@
 #include <boost/fusion/container/map/map.hpp>
 #include <boost/fusion/sequence/generation/make_map.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
-#include <boost/fusion/sequence/conversion/as_set.hpp>
-#include <boost/fusion/sequence/conversion/as_map.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
+#include <boost/fusion/container/set/convert.hpp>
+#include <boost/fusion/container/map/convert.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/iterator/deref.hpp>

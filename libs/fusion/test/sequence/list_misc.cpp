@@ -6,7 +6,7 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/container/list/list.hpp>
-#include <boost/fusion/sequence/conversion/as_list.hpp>
+#include <boost/fusion/container/list/convert.hpp>
 
 #define FUSION_SEQUENCE list
 #define FUSION_FORWARD_ONLY

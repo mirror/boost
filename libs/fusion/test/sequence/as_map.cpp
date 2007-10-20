@@ -9,8 +9,8 @@
 #include <boost/fusion/adapted/mpl.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
 #include <boost/fusion/sequence/generation/make_list.hpp>
-#include <boost/fusion/sequence/conversion/as_map.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/map/convert.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/algorithm/transformation/push_back.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/intrinsic/at_key.hpp>

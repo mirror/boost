@@ -19,7 +19,7 @@
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/container/list/list.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/comparison/not_equal_to.hpp>
 #include <boost/fusion/sequence/comparison/less.hpp>
