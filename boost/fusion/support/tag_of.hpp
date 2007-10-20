@@ -1,17 +1,17 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_TAG_OF_09232005_0845)
 #define FUSION_TAG_OF_09232005_0845
 
+#include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/fusion/support/tag_of_fwd.hpp>
 #include <boost/fusion/support/detail/is_mpl_sequence.hpp>
 #include <boost/mpl/has_xxx.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/bool.hpp>
@@ -26,13 +26,13 @@ namespace boost
     namespace tuples
     {
         struct null_type;
-        
+
         template <
-            class T0, class T1, class T2, class T3, class T4, 
+            class T0, class T1, class T2, class T3, class T4,
             class T5, class T6, class T7, class T8, class T9
         >
         class tuple;
-    
+
         template <class Head, class Tail>
         struct cons;
     }
@@ -53,7 +53,7 @@ namespace boost { namespace fusion
         {};
 
         template <
-            class T0, class T1, class T2, class T3, class T4, 
+            class T0, class T1, class T2, class T3, class T4,
             class T5, class T6, class T7, class T8, class T9
         >
         struct is_specialized<tuples::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >

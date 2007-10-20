@@ -11,6 +11,7 @@
 #include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/iterator/mpl/convert_iterator.hpp>
+#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/view/repetitive_view/detail/deref_impl.hpp>
@@ -21,7 +22,7 @@ namespace boost { namespace fusion
 {
     struct repetitive_view_iterator_tag;
 
-    template<typename Sequence, typename Pos = 
+    template<typename Sequence, typename Pos =
         typename result_of::begin<Sequence>::type>
     struct repetitive_view_iterator
         : iterator_base< repetitive_view_iterator<Sequence,Pos> >

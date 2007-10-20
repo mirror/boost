@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_JOINT_VIEW_ITERATOR_07162005_0140)
@@ -10,6 +10,7 @@
 #include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/iterator/mpl/convert_iterator.hpp>
+#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
 #include <boost/fusion/sequence/view/joint_view/detail/deref_impl.hpp>
 #include <boost/fusion/sequence/view/joint_view/detail/next_impl.hpp>
 #include <boost/fusion/sequence/view/joint_view/detail/value_of_impl.hpp>

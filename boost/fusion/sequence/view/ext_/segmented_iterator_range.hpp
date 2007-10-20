@@ -12,6 +12,7 @@
 #include <boost/mpl/minus.hpp>
 #include <boost/mpl/next_prior.hpp>
 #include <boost/mpl/and.hpp>
+#include <boost/fusion/iterator/mpl/convert_iterator.hpp>
 #include <boost/fusion/sequence/container/list/cons.hpp>
 #include <boost/fusion/sequence/view/joint_view.hpp>
 #include <boost/fusion/sequence/view/single_view.hpp>
@@ -19,6 +20,7 @@
 #include <boost/fusion/sequence/view/iterator_range.hpp>
 #include <boost/fusion/sequence/view/ext_/multiple_view.hpp>
 #include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
+#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
 
 namespace boost { namespace fusion
 {

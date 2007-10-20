@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_ITERATOR_RANGE_05062005_1224)
@@ -10,12 +10,13 @@
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/category_of.hpp>
+#include <boost/fusion/iterator/distance.hpp>
+#include <boost/fusion/iterator/mpl/convert_iterator.hpp>
 #include <boost/fusion/sequence/view/iterator_range/detail/begin_impl.hpp>
 #include <boost/fusion/sequence/view/iterator_range/detail/end_impl.hpp>
 #include <boost/fusion/sequence/view/iterator_range/detail/at_impl.hpp>
 #include <boost/fusion/sequence/view/iterator_range/detail/value_at_impl.hpp>
-#include <boost/fusion/iterator/mpl/convert_iterator.hpp>
-#include <boost/fusion/iterator/distance.hpp>
+#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
 #include <boost/mpl/bool.hpp>
 
 namespace boost { namespace fusion

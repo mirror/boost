@@ -2,7 +2,7 @@
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2006 Dan Marsden
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_STRICTEST_TRAVERSAL_20060123_2101)
@@ -16,8 +16,8 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace fusion {
-    
+namespace boost { namespace fusion
+{
     struct forward_traversal_tag;
     struct bidirectional_traversal_tag;
     struct random_access_traversal_tag;
@@ -58,7 +58,7 @@ namespace boost { namespace fusion {
         template<typename Sequence>
         struct strictest_traversal
             : result_of::fold<
-            Sequence, fusion::random_access_traversal_tag, 
+            Sequence, fusion::random_access_traversal_tag,
             strictest_traversal_impl>
         {};
 

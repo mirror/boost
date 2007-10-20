@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -29,7 +29,7 @@ namespace boost { namespace fusion { namespace traits
         };
     }
 
-    // We cannot use fusion::transform_view here as result_of looses cv qualifiers
+    // We cannot use fusion::transform_view here as result_of loses cv qualifiers
     // on built in types
     template <class Sequence>
     struct deduce_sequence
