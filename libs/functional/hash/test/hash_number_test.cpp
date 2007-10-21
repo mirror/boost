@@ -156,7 +156,6 @@ int main()
 
     NUMERIC_TEST(float, float)
     NUMERIC_TEST(double, double)
-    NUMERIC_TEST(long double, ldouble)
 
     bool_test();
 
