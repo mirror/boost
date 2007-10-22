@@ -25,13 +25,25 @@ void ptr_set_test()
     enum { max_cnt = 10, size = 100 };
     C  c;
     BOOST_CHECK( c.size() == 0 );
-    
+    c.insert( c.end(), new T );
+    c.insert( c.end(), new T );
+
     const C c2( c.begin(), c.end() );
     BOOST_CHECK( c.size() == c2.size() );
     
     C c3;
     
     BOOST_MESSAGE( "finished construction test" ); 
+
+    C a_copy( c );
+    BOOST_CHECK_EQUAL( a_copy.size(), c.size() );
+    a_copy = a_copy;
+    BOOST_CHECK_EQUAL( a_copy.size(), c.size() );
+    c.clear();
+    a_copy = c;
+    a_copy = a_copy;
+    BOOST_CHECK( a_copy.empty() );
+    BOOST_MESSAGE( "finished copying test" ); 
                  
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();

@@ -42,7 +42,16 @@ void reversible_container_test()
         
     c.assign( c3 );
     BOOST_MESSAGE( "finished construction test" ); 
-                      
+
+    C a_copy( c );
+    BOOST_CHECK_EQUAL( a_copy.size(), c.size() );
+    a_copy = a_copy;
+    BOOST_CHECK_EQUAL( a_copy.size(), c.size() );
+    a_copy.clear();
+    a_copy = a_copy;
+    BOOST_CHECK( a_copy.empty() );
+    BOOST_MESSAGE( "finished copying test" ); 
+
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
         hide_warning(alloc);
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();
