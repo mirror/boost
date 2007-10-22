@@ -13,6 +13,7 @@
 #ifndef _BOOST_UBLAS_VECTOR_ASSIGN_
 #define _BOOST_UBLAS_VECTOR_ASSIGN_
 
+#include <boost/numeric/ublas/functional.hpp> // scalar_assign
 // Required for make_conformant storage
 #include <vector>
 
