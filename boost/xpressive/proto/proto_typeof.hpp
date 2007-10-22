@@ -64,6 +64,7 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::subscript)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::if_else_)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::function)
 
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::exprns_::is_proto_expr)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::refns_::ref_, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::exprns_::expr, (typename)(typename)(long))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::utility::literal, (typename)(typename))

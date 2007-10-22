@@ -21,6 +21,14 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
+    struct keeper_tag
+    {};
+
+    struct lookahead_tag
+    {};
+
+    struct lookbehind_tag
+    {};
 
     template<typename Grammar>
     struct as_lookahead

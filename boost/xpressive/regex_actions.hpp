@@ -32,7 +32,10 @@
 #include <boost/xpressive/detail/core/matcher/attr_begin_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
-#include <boost/typeof/std/string.hpp> // very often needed by client code.
+
+// These are very often needed by client code.
+#include <boost/typeof/std/map.hpp>
+#include <boost/typeof/std/string.hpp>
 
 // Doxygen can't handle proto :-(
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
@@ -720,18 +723,24 @@ namespace boost { namespace xpressive
       , ((op::const_cast_)(typename))
     )
 
+    /// val()
+    ///
     template<typename T>
     value<T> const val(T const &t)
     {
         return value<T>(t);
     }
 
+    /// ref()
+    ///
     template<typename T>
     reference<T> const ref(T &t)
     {
         return reference<T>(t);
     }
 
+    /// cref()
+    ///
     template<typename T>
     reference<T const> const cref(T const &t)
     {
@@ -746,7 +755,10 @@ namespace boost { namespace xpressive
     ///
     detail::let_<proto::terminal<detail::let_tag>::type> const let = {{{}}};
 
-    template<typename T, int I = 0, typename Dummy = proto::is_proto_expr>
+    /// placeholder<T>, for defining a placeholder to stand in fo
+    /// a variable of type T in a semantic action.
+    ///
+    template<typename T, int I, typename Dummy>
     struct placeholder
     {
         typedef placeholder<T, I, Dummy> this_type;

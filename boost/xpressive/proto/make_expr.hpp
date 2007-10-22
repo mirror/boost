@@ -241,8 +241,8 @@
                     BOOST_PROTO_VARARG_TEMPLATE_, ~                                                 \
                   , BOOST_PP_SEQ_PUSH_FRONT(                                                        \
                         BOOST_PROTO_SEQ_PUSH_FRONT(                                                 \
-                            BOOST_PP_TUPLE_ELEM(4, 2, DATA)\
-                          , (BOOST_PP_TUPLE_ELEM(4, 3, DATA))\
+                            BOOST_PP_TUPLE_ELEM(4, 2, DATA)                                         \
+                          , (BOOST_PP_TUPLE_ELEM(4, 3, DATA))                                       \
                         )                                                                           \
                       , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                             \
                     )                                                                               \

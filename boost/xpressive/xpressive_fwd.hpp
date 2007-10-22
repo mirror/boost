@@ -133,6 +133,18 @@ namespace boost { namespace xpressive
     >
     struct regex_compiler;
 
+    template<typename T>
+    struct value;
+
+    template<typename T>
+    struct reference;
+
+    template<typename T>
+    struct local;
+
+    template<typename T, int I = 0, typename Dummy = proto::is_proto_expr>
+    struct placeholder;
+
     ///////////////////////////////////////////////////////////////////////////////
     // Common typedefs
     //
