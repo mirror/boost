@@ -123,31 +123,10 @@ void bcp_implementation::scan_svn_path(const fs::path& p)
                         if(fs::exists(properties))
                         {
                            fileview prop(properties);
-                           boost::regex_token_iterator<const char*> 
-                              mime_it(prop.begin(), prop.end(), entry_line_expression, 1);
 
-                           bool have_mime = false;
-
-                           while(mime_it != j)
-                           {
-                              std::string prop = mime_it->str();
-                              if(prop == "svn:mime-type")
-                              {
-                                 have_mime = true;
-                                 if(++mime_it != j && ++mime_it != j && 
-                                    mime_it->str().find("text/") != 0)
-                                 {
-                                    binary = true;
-                                 }
-                              }
-                              ++mime_it;
-                           }
-                           /*
-                           if(!have_mime)
-                           {
-                              std::cerr << "CAUTION: file " << fpath << " does not have a mime type set." << std::endl;
-                           }
-                           */
+                           static const boost::regex mime_type(
+                              "svn:mime-type[[:blank:]]*(?:\\n|\\r|\\r\\n)[^\\r\\n]*(?:\\n|\\r|\\r\\n)[[:blank:]]*text/");
+                           binary = regex_search(prop.begin(), prop.end(), mime_type) ? false : true;
                         }
                      }
                   }
