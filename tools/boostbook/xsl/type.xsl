@@ -1136,9 +1136,11 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:apply-templates select="para" mode="annotation"/>
           </xsl:if>
           <xsl:apply-templates select="description"/>
-          <variablelist spacing="compact">
-            <xsl:apply-templates select="enumvalue" mode="reference"/>
-          </variablelist>
+          <xsl:if test="enumvalue/purpose | enumvalue/description">
+            <variablelist spacing="compact">
+              <xsl:apply-templates select="enumvalue" mode="reference"/>
+            </variablelist>
+          </xsl:if>
         </xsl:with-param>
 
       </xsl:call-template>
