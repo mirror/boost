@@ -26,7 +26,7 @@ TT_TEST_BEGIN(is_union)
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<f1>::value, false);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<enum_UDT>::value, false);
 
-#ifdef BOOST_HAS_TYPE_TRAITS_INTRINSICS
+#if defined(BOOST_HAS_TYPE_TRAITS_INTRINSICS) && !defined(__sgi)
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<union_UDT>::value, true);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<POD_union_UDT>::value, true);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<empty_union_UDT>::value, true);
