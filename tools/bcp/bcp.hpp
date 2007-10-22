@@ -20,6 +20,7 @@ public:
    virtual void enable_list_mode() = 0;
    virtual void enable_summary_list_mode() = 0;
    virtual void enable_cvs_mode() = 0;
+   virtual void enable_svn_mode() = 0;
    virtual void enable_unix_lines() = 0;
    virtual void enable_scan_mode() = 0;
    virtual void enable_license_mode() = 0;

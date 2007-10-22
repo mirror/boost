@@ -107,6 +107,10 @@ int cpp_main(int argc, char* argv[])
       {
          papp->enable_cvs_mode();
       }
+      else if(0 == std::strcmp("--svn", argv[i]))
+      {
+         papp->enable_svn_mode();
+      }
       else if(0 == std::strcmp("--scan", argv[i]))
       {
          papp->enable_scan_mode();
