@@ -104,6 +104,11 @@
 
 #endif
 
+#ifdef __IBMCPP_TR1__
+   // turn on support for everything:
+#  define BOOST_HAS_TR1
+#endif
+
 #include <boost/config.hpp>
 
 #endif
