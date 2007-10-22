@@ -139,14 +139,8 @@ namespace ptr_container_detail
         Cont      c_;
 
     public:
-        Cont& c_private()                { return c_; }
-        const Cont& c_private() const    { return c_; }
-
-    protected: // todo: use base() instead of c_private().
-        Cont& base()                     { return c_; }
-
-    public:
-        const Cont& base() const         { return c_; }
+        Cont&       base()               { return c_; }
+        const Cont& base() const         { return c_; }        
         
     public: // typedefs
         typedef  Ty_*          value_type;
@@ -200,12 +194,6 @@ namespace ptr_container_detail
             sd.release(); 
         }
         
-        void insert_clones_and_release( scoped_deleter& sd ) // strong
-        {
-            c_.insert( sd.begin(), sd.end() );
-            sd.release();
-        }
-
         template< class ForwardIterator >
         void clone_assign( ForwardIterator first, 
                            ForwardIterator last ) // strong 
@@ -243,10 +231,20 @@ namespace ptr_container_detail
             sd.release();
         }
 
+        void insert_clones_and_release( scoped_deleter& sd ) // strong
+        {
+            c_.insert( sd.begin(), sd.end() );
+            sd.release();
+        }
+
         template< class I >
         void remove( I i )
         { 
             null_policy_deallocate_clone( Config::get_const_pointer(i) );
+//#ifndef NDEBUG
+//            *i = 0xbadbad;
+//#endif
+            
         }
 
         template< class I >
@@ -353,6 +351,20 @@ namespace ptr_container_detail
         reversible_ptr_container( const Compare& comp,
                                   const allocator_type& a )
         : c_( comp, a ) {}
+
+        template< class InputIterator, class Compare >
+        reversible_ptr_container( InputIterator first,
+                                  InputIterator last,
+                                  const Compare& comp,
+                                  const allocator_type& a )
+        : c_( comp, a ) 
+        {
+            if( first == last )
+                return;
+
+            scoped_deleter sd( first, last );
+            insert_clones_and_release( sd );    
+        }
 
         template< class PtrContainer, class Compare >
         reversible_ptr_container( std::auto_ptr<PtrContainer> clone, 
@@ -639,9 +651,10 @@ namespace ptr_container_detail
     PC( std::auto_ptr<this_type> r )                \
     : base_type ( r ) { }                           \
                                                     \
-    void operator=( std::auto_ptr<this_type> r )    \
+    PC& operator=( std::auto_ptr<this_type> r )     \
     {                                               \
         base_type::operator=( r );                  \
+        return *this;                               \
     }                                               \
                                                     \
     std::auto_ptr<this_type> release()              \
@@ -674,6 +687,14 @@ namespace ptr_container_detail
    BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type )
     
     } // namespace 'ptr_container_detail'
+
+    //
+    // @remark: expose movability of internal move-pointer
+    //
+    namespace ptr_container
+    {        
+        using ptr_container_detail::move;
+    }
 
 } // namespace 'boost'  
 

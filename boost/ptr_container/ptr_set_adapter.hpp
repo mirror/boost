@@ -129,42 +129,42 @@ namespace ptr_container_detail
                  
         iterator find( const key_type& x )                                                
         {                                                                            
-            return iterator( this->c_private().
+            return iterator( this->base().
                              find( const_cast<key_type*>(&x) ) );            
         }                                                                            
 
         const_iterator find( const key_type& x ) const                                    
         {                                                                            
-            return const_iterator( this->c_private().
+            return const_iterator( this->base().
                                    find( const_cast<key_type*>(&x) ) );                  
         }                                                                            
 
         size_type count( const key_type& x ) const                                        
         {                                                                            
-            return this->c_private().count( const_cast<key_type*>(&x) );                      
+            return this->base().count( const_cast<key_type*>(&x) );                      
         }                                                                            
                                                                                      
         iterator lower_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().
+            return iterator( this->base().
                              lower_bound( const_cast<key_type*>(&x) ) );                   
         }                                                                            
                                                                                      
         const_iterator lower_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().
+            return const_iterator( this->base().
                                    lower_bound( const_cast<key_type*>(&x) ) );       
         }                                                                            
                                                                                      
         iterator upper_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().
+            return iterator( this->base().
                              upper_bound( const_cast<key_type*>(&x) ) );           
         }                                                                            
                                                                                      
         const_iterator upper_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().
+            return const_iterator( this->base().
                                    upper_bound( const_cast<key_type*>(&x) ) );             
         }                                                                            
                                                                                      
@@ -172,7 +172,7 @@ namespace ptr_container_detail
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_iterator> 
-                p = this->c_private().
+                p = this->base().
                 equal_range( const_cast<key_type*>(&x) );   
             return make_iterator_range( iterator( p.first ), 
                                         iterator( p.second ) );      
@@ -182,7 +182,7 @@ namespace ptr_container_detail
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator> 
-                p = this->c_private().
+                p = this->base().
                 equal_range( const_cast<key_type*>(&x) ); 
             return make_iterator_range( const_iterator( p.first ), 
                                         const_iterator( p.second ) );    
@@ -271,7 +271,7 @@ namespace ptr_container_detail
             
             auto_type ptr( x );                                
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
-                 res = this->c_private().insert( x );       
+                 res = this->base().insert( x );       
             if( res.second )                                                 
                 ptr.release();                                                  
             return std::make_pair( iterator( res.first ), res.second );     
@@ -290,7 +290,7 @@ namespace ptr_container_detail
 
             auto_type ptr( x );                                
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator 
-                res = this->c_private().insert( where.base(), x );
+                res = this->base().insert( where.base(), x );
             if( *res == x )                                                 
                 ptr.release();                                                  
             return iterator( res);
@@ -441,7 +441,7 @@ namespace ptr_container_detail
     
             auto_type ptr( x );                                
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                 res = this->c_private().insert( x );                         
+                 res = this->base().insert( x );                         
             ptr.release();                                                      
             return iterator( res );                                             
         }

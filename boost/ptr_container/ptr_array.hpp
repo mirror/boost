@@ -131,8 +131,8 @@ namespace boost
 
             this->enforce_null_policy( r, "Null pointer in 'ptr_array::replace()'" );
 
-            auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
-            this->c_private()[idx] = r;                                 // nothrow
+            auto_type res( static_cast<U*>( this->base()[idx] ) ); // nothrow
+            this->base()[idx] = r;                                 // nothrow
             return move(res);                                           // nothrow
         }
 
@@ -151,8 +151,8 @@ namespace boost
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( idx >= N, bad_index,
                                                  "'replace()' aout of bounds" );
 
-            auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
-            this->c_private()[idx] = ptr.release();                     // nothrow
+            auto_type res( static_cast<U*>( this->base()[idx] ) ); // nothrow
+            this->base()[idx] = ptr.release();                     // nothrow
             return move(res);                                           // nothrow
         }
 
@@ -187,7 +187,7 @@ namespace boost
         bool is_null() const
         {
             BOOST_STATIC_ASSERT( idx < N );
-            return this->c_private()[idx] == 0;
+            return this->base()[idx] == 0;
         }
         
     public: // serialization

@@ -51,7 +51,7 @@ namespace boost
           : base_class(alloc)
         {
             if( n > 0 )
-                this->c_private().reserve( n );
+                this->base().reserve( n );
         }
 
     public: // serialization

@@ -157,14 +157,14 @@ namespace ptr_container_detail
 
         mapped_reference insert_lookup( const key_type& key )
         {
-            void*& ref = this->c_private()[key];
+            void*& ref = this->base()[key];
             if( ref )
             {
                 return *static_cast<mapped_type>(ref);
             }
             else
             {
-                eraser e(&this->c_private(),key); // nothrow
+                eraser e(&this->base(),key); // nothrow
                 mapped_type res = new T();        // strong 
                 ref = res;                        // nothrow
                 e.release();                      // nothrow
@@ -203,44 +203,44 @@ namespace ptr_container_detail
 
         iterator find( const key_type& x )                                                
         {                                                                            
-            return iterator( this->c_private().find( x ) );                                
+            return iterator( this->base().find( x ) );                                
         }                                                                            
 
         const_iterator find( const key_type& x ) const                                    
         {                                                                            
-            return const_iterator( this->c_private().find( x ) );                          
+            return const_iterator( this->base().find( x ) );                          
         }                                                                            
 
         size_type count( const key_type& x ) const                                        
         {                                                                            
-            return this->c_private().count( x );                                           
+            return this->base().count( x );                                           
         }                                                                            
                                                                                      
         iterator lower_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().lower_bound( x ) );                         
+            return iterator( this->base().lower_bound( x ) );                         
         }                                                                            
                                                                                      
         const_iterator lower_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().lower_bound( x ) );                   
+            return const_iterator( this->base().lower_bound( x ) );                   
         }                                                                            
                                                                                      
         iterator upper_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().upper_bound( x ) );                         
+            return iterator( this->base().upper_bound( x ) );                         
         }                                                                            
                                                                                      
         const_iterator upper_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().upper_bound( x ) );                   
+            return const_iterator( this->base().upper_bound( x ) );                   
         }                                                                            
                                                                                      
         iterator_range<iterator> equal_range( const key_type& x )                    
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_iterator>
-                 p = this->c_private().equal_range( x );   
+                 p = this->base().equal_range( x );   
             return make_iterator_range( iterator( p.first ), iterator( p.second ) );      
         }                                                                            
                                                                                      
@@ -248,7 +248,7 @@ namespace ptr_container_detail
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator> 
-                p = this->c_private().equal_range( x ); 
+                p = this->base().equal_range( x ); 
             return make_iterator_range( const_iterator( p.first ), 
                                         const_iterator( p.second ) );    
         }                                                                            
@@ -350,7 +350,7 @@ namespace ptr_container_detail
         {
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
                 res = 
-                this->c_private().insert( std::make_pair( key, ptr.get() ) ); // strong, commit      
+                this->base().insert( std::make_pair( key, ptr.get() ) ); // strong, commit      
             if( res.second )                                                  // nothrow     
                 ptr.release();                                                // nothrow
         }
@@ -418,7 +418,7 @@ namespace ptr_container_detail
             auto_type ptr( x );                                              // nothrow
 
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
-                 res = this->c_private().insert( std::make_pair( key, x ) ); // strong, commit      
+                 res = this->base().insert( std::make_pair( key, x ) ); // strong, commit      
             if( res.second )                                             // nothrow     
                 ptr.release();                                           // nothrow
             return std::make_pair( iterator( res.first ), res.second );  // nothrow        
@@ -535,7 +535,7 @@ namespace ptr_container_detail
 
         void safe_insert( const key_type& key, auto_type ptr ) // strong
         {
-            this->c_private().insert( 
+            this->base().insert( 
                            std::make_pair( key, ptr.get() ) ); // strong, commit      
             ptr.release();                                     // nothrow
         }
@@ -600,7 +600,7 @@ namespace ptr_container_detail
 
             auto_type ptr( x );         // nothrow
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                res = this->c_private().insert( std::make_pair( key, x ) );
+                res = this->base().insert( std::make_pair( key, x ) );
                                         // strong, commit        
             ptr.release();              // notrow
             return iterator( res );           
