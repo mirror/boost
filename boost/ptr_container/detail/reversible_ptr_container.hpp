@@ -142,6 +142,12 @@ namespace ptr_container_detail
         Cont& c_private()                { return c_; }
         const Cont& c_private() const    { return c_; }
 
+    protected: // todo: use base() instead of c_private().
+        Cont& base()                     { return c_; }
+
+    public:
+        const Cont& base() const         { return c_; }
+        
     public: // typedefs
         typedef  Ty_*          value_type;
         typedef  Ty_*          pointer;
@@ -276,25 +282,8 @@ namespace ptr_container_detail
             ForwardIterator iter = begin;
             std::advance( iter, n );
             return iter;
-        }
-        
-    private:
-        reversible_ptr_container( const reversible_ptr_container& );
-        void operator=( const reversible_ptr_container& );
-        
-    public: // foundation! should be protected!
-        explicit reversible_ptr_container( const allocator_type& a = allocator_type() ) 
-         : c_( a )
-        {}
-        
-        template< class PtrContainer >
-        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )
-          : c_( allocator_type() )                
-        { 
-            swap( *clone ); 
-        }
+        }        
 
-    private:
         template< class I >
         void constructor_impl( I first, I last, std::input_iterator_tag ) // basic
         {
@@ -313,8 +302,37 @@ namespace ptr_container_detail
             clone_back_insert( first, last );
         }
 
+    public: // foundation! should be protected!
+        explicit reversible_ptr_container( const allocator_type& a = allocator_type() ) 
+         : c_( a )
+        {}
+        
+        template< class PtrContainer >
+        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )
+          : c_( allocator_type() )                
+        { 
+            swap( *clone ); 
+        }
 
-    public:
+        explicit reversible_ptr_container( const reversible_ptr_container& r ) 
+        {
+            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+        }
+
+        template< class PtrContainer >
+        reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
+        {
+            swap( *clone );
+            return *this;
+        }
+
+        reversible_ptr_container& operator=( const reversible_ptr_container& r ) // strong 
+        {
+            reversible_ptr_container clone( r );
+            swap( clone );
+            return *this;
+        }
+
         // overhead: null-initilization of container pointer (very cheap compared to cloning)
         // overhead: 1 heap allocation (very cheap compared to cloning)
         template< class InputIterator >
@@ -350,12 +368,6 @@ namespace ptr_container_detail
             remove_all();
         }
         
-        template< class PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )     
-        {
-            swap( *clone );
-        }
-
     public:
         
         allocator_type get_allocator() const                   
