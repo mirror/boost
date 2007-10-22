@@ -336,7 +336,7 @@ inline tribool operator==(tribool x, tribool y)
   if (indeterminate(x) || indeterminate(y))
     return indeterminate;
   else
-    return x && y || !x && !y;
+    return (x && y) || (!x && !y);
 }
 
 /**
@@ -399,7 +399,7 @@ inline tribool operator!=(tribool x, tribool y)
   if (indeterminate(x) || indeterminate(y))
     return indeterminate;
   else
-    return !(x && y || !x && !y);
+    return !((x && y) || (!x && !y));
 }
 
 /**
