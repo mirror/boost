@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_VECTOR_07072005_1244)
@@ -9,7 +9,6 @@
 
 #include <boost/fusion/sequence/container/vector/vector_fwd.hpp>
 #include <boost/fusion/sequence/container/vector/detail/vector_n_chooser.hpp>
-#include <boost/fusion/sequence/conversion/detail/as_vector.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/bool.hpp>
@@ -24,11 +23,11 @@ namespace boost { namespace fusion
     struct fusion_sequence_tag;
 
     template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, typename T)>
-    struct vector 
+    struct vector
         : sequence_base<vector<BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, T)> >
     {
     private:
-        
+
         typedef typename detail::vector_n_chooser<
             BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, T)>::type
         vector_n;
@@ -37,7 +36,7 @@ namespace boost { namespace fusion
         friend struct vector;
 
     public:
-    
+
         typedef typename vector_n::types types;
         typedef typename vector_n::fusion_tag fusion_tag;
         typedef typename vector_n::tag tag;
@@ -93,10 +92,10 @@ namespace boost { namespace fusion
             typename mpl::at_c<types, N>::type
         >::type
         at_impl(mpl::int_<N> index)
-        { 
-            return vec.at_impl(index); 
+        {
+            return vec.at_impl(index);
         }
-        
+
         template <int N>
         typename add_reference<
             typename add_const<
@@ -104,8 +103,8 @@ namespace boost { namespace fusion
             >::type
         >::type
         at_impl(mpl::int_<N> index) const
-        { 
-            return vec.at_impl(index); 
+        {
+            return vec.at_impl(index);
         }
 
         template <typename I>
@@ -113,8 +112,8 @@ namespace boost { namespace fusion
             typename mpl::at<types, I>::type
         >::type
         at_impl(I index)
-        { 
-            return vec.at_impl(mpl::int_<I::value>()); 
+        {
+            return vec.at_impl(mpl::int_<I::value>());
         }
 
         template<typename I>
@@ -124,21 +123,21 @@ namespace boost { namespace fusion
             >::type
         >::type
         at_impl(I index) const
-        { 
+        {
             return vec.at_impl(mpl::int_<I::value>());
-        }        
+        }
 
     private:
-        
+
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
-        static vector_n const& 
+        static vector_n const&
         ctor_helper(vector const& rhs, mpl::true_)
         {
             return rhs.vec;
         }
 
         template <typename T>
-        static T const& 
+        static T const&
         ctor_helper(T const& rhs, mpl::false_)
         {
             return rhs;
