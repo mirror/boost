@@ -110,7 +110,7 @@ struct match_state
     typedef detail::matchable<BidiIter> matchable;
     typedef xpressive::match_results<BidiIter> match_results;
     typedef detail::sub_match_impl<BidiIter> sub_match_impl;
-    typedef detail::actionable<BidiIter> actionable;
+    typedef detail::actionable actionable;
 
     BidiIter cur_;
     sub_match_impl *sub_matches_;
@@ -314,7 +314,7 @@ struct memento
 {
     sub_match_impl<BidiIter> *old_sub_matches_;
     std::size_t nested_results_count_;
-    actionable<BidiIter> const **action_list_tail_;
+    actionable const **action_list_tail_;
     attr_context attr_context_;
 };
 

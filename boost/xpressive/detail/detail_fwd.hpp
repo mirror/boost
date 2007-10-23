@@ -296,7 +296,6 @@ namespace boost { namespace xpressive { namespace detail
     template<typename T, typename U>
     struct action_arg;
 
-    template<typename BidiIter>
     struct actionable;
 
     template<typename Char>

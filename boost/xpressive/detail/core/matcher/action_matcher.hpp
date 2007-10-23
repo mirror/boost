@@ -232,12 +232,12 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // action
     //
-    template<typename BidiIter, typename Actor>
+    template<typename Actor>
     struct action
-      : actionable<BidiIter>
+      : actionable
     {
         action(Actor const &actor)
-          : actionable<BidiIter>()
+          : actionable()
           , actor_(actor)
         {
         }
@@ -437,10 +437,10 @@ namespace boost { namespace xpressive { namespace detail
         {
             // Bind the arguments
             typedef typename BindActionArgs::apply<Actor, match_state<BidiIter>, int>::type action_type;
-            action<BidiIter, action_type> actor(BindActionArgs::call(this->actor_, state, this->sub_));
+            action<action_type> actor(BindActionArgs::call(this->actor_, state, this->sub_));
 
             // Put the action in the action list
-            actionable<BidiIter> const **action_list_tail = state.action_list_tail_;
+            actionable const **action_list_tail = state.action_list_tail_;
             *state.action_list_tail_ = &actor;
             state.action_list_tail_ = &actor.next;
 

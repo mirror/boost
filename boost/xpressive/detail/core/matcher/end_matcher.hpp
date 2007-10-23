@@ -65,7 +65,7 @@ namespace boost { namespace xpressive { namespace detail
             s0.matched = true;
 
             // Now execute any actions that have been queued
-            for(actionable<BidiIter> const *actor = state.action_list_.next; 0 != actor; actor = actor->next)
+            for(actionable const *actor = state.action_list_.next; 0 != actor; actor = actor->next)
             {
                 actor->execute(state.action_args_);
             }

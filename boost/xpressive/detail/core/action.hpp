@@ -21,7 +21,6 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // actionable
     //
-    template<typename BidiIter>
     struct actionable
     {
         virtual ~actionable() {}
@@ -29,10 +28,9 @@ namespace boost { namespace xpressive { namespace detail
 
         actionable()
           : next(0)
-        {
-        }
+        {}
 
-        actionable<BidiIter> const *next;
+        actionable const *next;
     };
 
 }}} // namespace boost::xpressive::detail
