@@ -36,6 +36,9 @@
 #endif
 #include <cstddef>
 
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || BOOST_WORKAROUND(BOOST_MSVC, == 1400) 
+    #pragma warning( disable : 4996 )
+#endif
 
 /*! \file
     Defines the \c iterator_class and related functions. 
