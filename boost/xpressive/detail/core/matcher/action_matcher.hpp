@@ -40,24 +40,28 @@ namespace boost { namespace xpressive { namespace detail
 {
 
     #if BOOST_VERSION >= 103500
+    struct DataMember
+      : proto::mem_ptr<proto::_, proto::terminal<proto::_> >
+    {};
+
+    template<typename Expr, long N>
+    struct child_
+      : remove_reference<typename mpl::if_<
+            is_const<Expr>
+          , typename proto::result_of::arg_c<Expr, N>::const_reference
+          , typename proto::result_of::arg_c<Expr, N>::reference
+        >::type>
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // mem_ptr_eval
     //  Rewrites expressions of the form x->*foo(a) into foo(x, a) and then
     //  evaluates them.
-    template<typename Expr, typename Context>
+    template<typename Expr, typename Context, bool IsDataMember = proto::matches<Expr, DataMember>::value>
     struct mem_ptr_eval
     {
-        typedef typename remove_reference<typename mpl::if_<
-            is_const<Expr>
-          , typename proto::result_of::right<Expr>::const_reference
-          , typename proto::result_of::right<Expr>::reference
-        >::type>::type right_type;
-
-        typedef typename remove_reference<typename mpl::if_<
-            is_const<Expr>
-          , typename proto::result_of::left<Expr>::const_reference
-          , typename proto::result_of::left<Expr>::reference
-        >::type>::type left_type;
+        typedef typename child_<Expr, 0>::type left_type;
+        typedef typename child_<Expr, 1>::type right_type;
 
         typedef
             typename proto::result_of::arg<
@@ -87,6 +91,32 @@ namespace boost { namespace xpressive { namespace detail
                     fusion::push_front(fusion::pop_front(proto::children_of(proto::right(expr))), boost::ref(proto::left(expr)))
                   , proto::eval_fun<Context>(ctx)
                 )
+            );
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // mem_ptr_eval
+    //  Rewrites expressions of the form x->*foo into foo(x) and then
+    //  evaluates them.
+    template<typename Expr, typename Context>
+    struct mem_ptr_eval<Expr, Context, true>
+    {
+        typedef typename child_<Expr, 0>::type left_type;
+        typedef typename child_<Expr, 1>::type right_type;
+
+        typedef
+            typename proto::result_of::arg<right_type>::type
+        function_type;
+
+        typedef typename boost::result_of<
+            function_type(typename proto::result_of::eval<left_type, Context>::type)
+        >::type result_type;
+
+        result_type operator()(Expr &expr, Context &ctx) const
+        {
+            return proto::arg(proto::right(expr))(
+                proto::eval(proto::left(expr), ctx)
             );
         }
     };

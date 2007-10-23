@@ -86,14 +86,11 @@ namespace boost { namespace proto
 
         template<typename This, typename Expr>
         struct result<This(Expr)>
-        {
-            typedef
-                typename Context::template eval<UNREF(Expr)>::result_type
-            type;
-        };
+          : proto::result_of::eval<UNREF(Expr), Context>
+        {};
 
         template<typename Expr>
-        typename result<eval_fun(Expr)>::type
+        typename proto::result_of::eval<Expr, Context>::type
         operator()(Expr &expr) const
         {
             return proto::eval(expr, this->ctx_);
