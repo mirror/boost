@@ -127,6 +127,7 @@ void check_sub_range()
     BOOST_CHECK_EQUAL( cr.front(), 'h' );
     BOOST_CHECK_EQUAL( cr.back(), 'd' );
     BOOST_CHECK_EQUAL( cr[1], 'e' );
+    BOOST_CHECK_EQUAL( cr(1), 'e' );
 
     rrr = make_iterator_range( str, 1, -1 );
     BOOST_CHECK( rrr == as_literal("ello worl") );
