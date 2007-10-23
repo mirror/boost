@@ -49,6 +49,11 @@
 #  define BOOST_TR1_USE_OLD_TUPLE
 #endif
 
+#ifdef __IBMCPP_TR1__
+   // turn on support for everything:
+#  define BOOST_HAS_TR1
+#endif
+
 #ifdef BOOST_HAS_TR1
    // turn on support for everything:
 #  define BOOST_HAS_TR1_ARRAY
@@ -104,13 +109,9 @@
 
 #endif
 
-#ifdef __IBMCPP_TR1__
-   // turn on support for everything:
-#  define BOOST_HAS_TR1
-#endif
-
 #include <boost/config.hpp>
 
 #endif
+
 
 
