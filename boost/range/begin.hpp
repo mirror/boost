@@ -39,7 +39,7 @@ namespace range_detail
 
     template< typename C >
     inline BOOST_DEDUCED_TYPENAME range_iterator<C>::type
-    range_begin( C& c )
+    boost_range_begin( C& c )
     {
         return c.begin();
     }
@@ -49,13 +49,13 @@ namespace range_detail
     //////////////////////////////////////////////////////////////////////
 
     template< typename Iterator >
-    inline Iterator range_begin( const std::pair<Iterator,Iterator>& p )
+    inline Iterator boost_range_begin( const std::pair<Iterator,Iterator>& p )
     {
         return p.first;
     }
 
     template< typename Iterator >
-    inline Iterator range_begin( std::pair<Iterator,Iterator>& p )
+    inline Iterator boost_range_begin( std::pair<Iterator,Iterator>& p )
     {
         return p.first;
     }
@@ -68,13 +68,13 @@ namespace range_detail
     // May this be discarded? Or is it needed for bad compilers?
     //
     template< typename T, std::size_t sz >
-    inline const T* range_begin( const T (&array)[sz] )
+    inline const T* boost_range_begin( const T (&array)[sz] )
     {
         return array;
     }
 
     template< typename T, std::size_t sz >
-    inline T* range_begin( T (&array)[sz] )
+    inline T* boost_range_begin( T (&array)[sz] )
     {
         return array;
     }
@@ -95,7 +95,7 @@ inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type begin( T& r )
     /**/
     using namespace range_detail;
 #endif
-    return range_begin( r );
+    return boost_range_begin( r );
 }
 
 template< class T >
@@ -106,7 +106,7 @@ inline BOOST_DEDUCED_TYPENAME range_iterator<const T>::type begin( const T& r )
     /**/
     using namespace range_detail;
 #endif
-    return range_begin( r );
+    return boost_range_begin( r );
 }
 
 } // namespace boost

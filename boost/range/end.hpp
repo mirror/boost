@@ -40,7 +40,7 @@ namespace range_detail
         //////////////////////////////////////////////////////////////////////
         template< typename C >
         inline BOOST_DEDUCED_TYPENAME range_iterator<C>::type
-        range_end( C& c )
+        boost_range_end( C& c )
         {
             return c.end();
         }
@@ -50,13 +50,13 @@ namespace range_detail
         //////////////////////////////////////////////////////////////////////
 
         template< typename Iterator >
-        inline Iterator range_end( const std::pair<Iterator,Iterator>& p )
+        inline Iterator boost_range_end( const std::pair<Iterator,Iterator>& p )
         {
             return p.second;
         }
 
         template< typename Iterator >
-        inline Iterator range_end( std::pair<Iterator,Iterator>& p )
+        inline Iterator boost_range_end( std::pair<Iterator,Iterator>& p )
         {
             return p.second;
         }
@@ -66,13 +66,13 @@ namespace range_detail
         //////////////////////////////////////////////////////////////////////
 
         template< typename T, std::size_t sz >
-        inline const T* range_end( const T (&array)[sz] )
+        inline const T* boost_range_end( const T (&array)[sz] )
         {
             return range_detail::array_end<T,sz>( array );
         }
 
         template< typename T, std::size_t sz >
-        inline T* range_end( T (&array)[sz] )
+        inline T* boost_range_end( T (&array)[sz] )
         {
             return range_detail::array_end<T,sz>( array );
         }
@@ -91,7 +91,7 @@ inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type end( T& r )
     /**/
     using namespace range_detail;
 #endif
-    return range_end( r );
+    return boost_range_end( r );
 }
 
 template< class T >
@@ -102,7 +102,7 @@ inline BOOST_DEDUCED_TYPENAME range_iterator<const T>::type end( const T& r )
     /**/
     using namespace range_detail;
 #endif
-    return range_end( r );
+    return boost_range_end( r );
 }
 
 } // namespace 'boost'
