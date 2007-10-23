@@ -565,12 +565,12 @@ namespace boost
     namespace Linux = linux_error;
 # endif
 
-    template<> struct is_error_code_enum<linux_error::linux_error_code>
+    template<> struct is_error_code_enum<linux_error::linux_errno>
       { static const bool value = true; };
 
     namespace linux_error
     {
-      inline error_code make_error_code( linux_error_code e )
+      inline error_code make_error_code( linux_errno e )
         { return error_code( e, system_category ); }
     }
 
