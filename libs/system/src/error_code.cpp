@@ -30,7 +30,7 @@
 #include <cassert>
 
 using namespace boost::system;
-using namespace boost::system::posix;
+using namespace boost::system::posix_error;
 
 #include <cstring> // for strerror/strerror_r
 

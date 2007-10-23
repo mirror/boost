@@ -89,7 +89,7 @@ errno</code>.</p>
       struct is_error_condition_enum { static const bool value = false; };
 
     //  portable error_conditions
-    namespace posix
+    namespace posix_error
     {
       enum posix_errno
       {
@@ -174,9 +174,9 @@ errno</code>.</p>
         wrong_protocol_type             //EPROTOTYPE
       };
 
-    } // namespace posix
+    } // namespace posix_error
 
-    template<> struct is_error_condition_enum<posix::posix_errno>&lt;posix::posix_errno&gt;
+    template<> struct is_error_condition_enum<posix::posix_errno>&lt;posix_error::posix_errno&gt;
       { static const bool value = true; };
 
     bool operator==( const error_code &amp; lhs, const error_code &amp; rhs );
@@ -192,8 +192,8 @@ errno</code>.</p>
     bool operator&lt;( const error_code &amp; lhs, const error_code &amp; rhs );
     bool operator&lt;( const error_condition &amp; lhs, const error_condition &amp; rhs );
 
-    error_code make_error_code( posix::posix_errno e );
-    error_condition make_error_condition( posix::posix_errno e );
+    error_code make_error_code( posix_error::posix_errno e );
+    error_condition make_error_condition( posix_error::posix_errno e );
 
     template &lt;class charT, class traits&gt;
       std::basic_ostream&lt;charT,traits&gt;&amp;
@@ -607,11 +607,11 @@ bool operator!=( const error_condition &amp; condition, const error_code &amp; c
   &nbsp; || (lhs.category() == rhs.category() &amp;&amp; lhs.value() &lt; rhs.value())</code>.</p>
   <p><i>Throws: </i>Nothing.</p>
 </blockquote>
-<pre>error_code make_error_code( posix::posix_errno e );</pre>
+<pre>error_code make_error_code( posix_error::posix_errno e );</pre>
 <blockquote>
   <p><i>Returns:</i> <code>error_code( e, posix_category)</code>.</p>
 </blockquote>
-<pre>error_condition make_error_condition( posix::posix_errno e );</pre>
+<pre>error_condition make_error_condition( posix_error::posix_errno e );</pre>
 <blockquote>
   <p><i>Returns:</i> <code>error_condition( e, posix_category)</code>.</p>
 </blockquote>
@@ -699,7 +699,7 @@ Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->September 19, 2007<!--webbot bot="Timestamp" endspan i-checksum="38025" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->October 23, 2007<!--webbot bot="Timestamp" endspan i-checksum="30853" --> </font>
 </p>
 
 </body>

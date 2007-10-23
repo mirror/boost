@@ -49,9 +49,8 @@ namespace boost
 
     //  portable error_conditions  -------------------------------------------//
 
-    namespace posix
+    namespace posix_error
     {
-
       enum posix_errno
       {
         success = 0,
@@ -135,9 +134,13 @@ namespace boost
         wrong_protocol_type = EPROTOTYPE
       };
 
-    } // namespace posix
+    } // namespace posix_error
 
-    template<> struct is_error_condition_enum<posix::posix_errno>
+# ifndef BOOST_SYSTEM_NO_DEPRECATED
+    namespace posix = posix_error;
+# endif
+
+    template<> struct is_error_condition_enum<posix_error::posix_errno>
       { static const bool value = true; };
 
     //  class error_category  ------------------------------------------------//
@@ -398,9 +401,9 @@ namespace boost
         + reinterpret_cast<std::size_t>(&ec.category());
     }
 
-    //  make_* functions for posix::posix_errno  -----------------------------//
+    //  make_* functions for posix_error::posix_errno  -----------------------------//
 
-    namespace posix
+    namespace posix_error
     {
       //  explicit conversion:
       inline error_code make_error_code( posix_errno e )
@@ -478,7 +481,7 @@ namespace boost
 
 # ifdef __CYGWIN__
 
-    namespace cygwin
+    namespace cygwin_error
     {
       enum cygwin_errno
       {
@@ -486,12 +489,12 @@ namespace boost
         no_package = ENOPKG,
         no_share = ENOSHARE
       };
-    }  // namespace cygwin
+    }  // namespace cygwin_error
 
-    template<> struct is_error_code_enum<cygwin::cygwin_errno>
+    template<> struct is_error_code_enum<cygwin_error::cygwin_errno>
       { static const bool value = true; };
 
-    namespace cygwin
+    namespace cygwin_error
     {
       inline error_code make_error_code( cygwin_errno e )
         { return error_code( e, system_category ); }
@@ -499,9 +502,9 @@ namespace boost
 
 # elif defined(linux) || defined(__linux) || defined(__linux__)
 
-    namespace Linux  // linux lowercase name preempted by use as predefined macro
+    namespace linux_error
     {
-      enum linux_error
+      enum linux_errno
       {
         advertise_error = EADV,
         bad_exchange = EBADE,
@@ -556,14 +559,18 @@ namespace boost
         unattached = EUNATCH,
         unclean = EUCLEAN
       };
-    }  // namespace Linux
+    }  // namespace linux_error
 
-    template<> struct is_error_code_enum<Linux::linux_error>
+# ifndef BOOST_SYSTEM_NO_DEPRECATED
+    namespace Linux = linux_error;
+# endif
+
+    template<> struct is_error_code_enum<linux_error::linux_error_code>
       { static const bool value = true; };
 
-    namespace Linux
+    namespace linux_error
     {
-      inline error_code make_error_code( linux_error e )
+      inline error_code make_error_code( linux_error_code e )
         { return error_code( e, system_category ); }
     }
 
@@ -580,9 +587,9 @@ namespace boost
     //
     //      error_code( ::GetLastError(), system_category )
 
-    namespace windows
+    namespace windows_error
     {
-      enum windows_error
+      enum windows_error_code
       {
         success = 0,
         // These names and values are based on Windows winerror.h
@@ -646,12 +653,16 @@ namespace boost
 
     }  // namespace windows
 
-    template<> struct is_error_code_enum<windows::windows_error>
+# ifndef BOOST_SYSTEM_NO_DEPRECATED
+    namespace windows = windows_error;
+# endif
+
+    template<> struct is_error_code_enum<windows_error::windows_error_code>
       { static const bool value = true; };
 
-    namespace windows
+    namespace windows_error
     {
-      inline error_code make_error_code( windows_error e )
+      inline error_code make_error_code( windows_error_code e )
         { return error_code( e, system_category ); }
     }
 
