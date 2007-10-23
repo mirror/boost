@@ -57,24 +57,24 @@ namespace Foo
         // to be defined because X defines the proper set of
         // nested types.
         //
-        inline X::iterator range_begin( X& x )
+        inline X::iterator boost_range_begin( X& x )
         {
                 return x.vec.begin();
         }
 
 
-        inline X::const_iterator range_begin( const X& x )
+        inline X::const_iterator boost_range_begin( const X& x )
         {
                 return x.vec.begin();
         }
 
 
-        inline X::iterator range_end( X& x )
+        inline X::iterator boost_range_end( X& x )
         {
                 return x.vec.end();
         }
 
-        inline X::const_iterator range_end( const X& x )
+        inline X::const_iterator boost_range_end( const X& x )
         {
                 return x.vec.end();
         }
