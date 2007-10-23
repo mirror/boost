@@ -19,6 +19,7 @@
 
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/functions.hpp>
+#include <boost/range/as_literal.hpp> 
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include <iostream>
@@ -79,12 +80,12 @@ void check_iterator_range()
     BOOST_CHECK( rr.equal( r ) );
 
     rr  = make_iterator_range( str.begin(), str.begin() + 5 );
-    BOOST_CHECK( rr == "hello" );
-    BOOST_CHECK( rr != "hell" );
-    BOOST_CHECK( rr < "hello dude" );
-    BOOST_CHECK( "hello" == rr );
-    BOOST_CHECK( "hell"  != rr );
-    BOOST_CHECK( ! ("hello dude" < rr ) );
+    BOOST_CHECK( rr == as_literal("hello") );
+    BOOST_CHECK( rr != as_literal("hell") );
+    BOOST_CHECK( rr < as_literal("hello dude") );
+    BOOST_CHECK( as_literal("hello") == rr );
+    BOOST_CHECK( as_literal("hell")  != rr );
+    BOOST_CHECK( ! (as_literal("hello dude") < rr ) );
     irange rrr = rr;
     BOOST_CHECK( rrr == rr );
     BOOST_CHECK( !( rrr != rr ) );
@@ -96,7 +97,7 @@ void check_iterator_range()
     BOOST_CHECK_EQUAL( cr[1], 'e' );
 
     rrr = make_iterator_range( str, 1, -1 );
-    BOOST_CHECK( rrr == "ello worl" );
+    BOOST_CHECK( rrr == as_literal("ello worl") );
     rrr = make_iterator_range( rrr, -1, 1 );
     BOOST_CHECK( rrr == str );
 
