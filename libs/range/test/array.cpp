@@ -62,6 +62,8 @@ void check_array()
     BOOST_CHECK_EQUAL( end( ca ), ca + size( ca ) );
     BOOST_CHECK_EQUAL( empty( ca ),false );
 
+    const char A[] = "\0A";
+	BOOST_CHECK_EQUAL( boost::size(A), 3u );
 }
 
 using boost::unit_test::test_suite;
