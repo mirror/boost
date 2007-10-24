@@ -484,13 +484,6 @@ namespace assign_detail
             return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
         }
 
-        template< class U, std::size_t M >
-        operator array<U,M>() const
-        {
-            BOOST_STATIC_ASSERT( M == N );
-            return this-> BOOST_NESTED_TEMPLATE convert_to_container< array<U,M> >();
-        }
-
     private:
         void insert( T& r )
         {
