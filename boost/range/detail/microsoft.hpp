@@ -30,8 +30,8 @@
     #define BOOST_RANGE_DETAIL_MICROSOFT_range_end              range_end
 #else
     #define BOOST_RANGE_DETAIL_MICROSOFT_range_mutable_iterator range_mutable_iterator
-    #define BOOST_RANGE_DETAIL_MICROSOFT_range_begin            boost_range_begin
-    #define BOOST_RANGE_DETAIL_MICROSOFT_range_end              boost_range_end
+    #define BOOST_RANGE_DETAIL_MICROSOFT_range_begin            range_begin
+    #define BOOST_RANGE_DETAIL_MICROSOFT_range_end              range_end
 #endif
 
 
