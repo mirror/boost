@@ -5,16 +5,16 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/sequence/container/vector/vector10.hpp>
-#include <boost/fusion/sequence/adapted/mpl.hpp>
+#include <boost/fusion/container/vector/vector10.hpp>
+#include <boost/fusion/adapted/mpl.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 
-#include <boost/fusion/sequence/container/vector/vector20.hpp>
-#include <boost/fusion/sequence/container/vector/vector30.hpp>
-#include <boost/fusion/sequence/container/vector/vector40.hpp>
-#include <boost/fusion/sequence/container/vector/vector50.hpp>
+#include <boost/fusion/container/vector/vector20.hpp>
+#include <boost/fusion/container/vector/vector30.hpp>
+#include <boost/fusion/container/vector/vector40.hpp>
+#include <boost/fusion/container/vector/vector50.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_empty.hpp>

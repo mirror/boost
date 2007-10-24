@@ -5,17 +5,17 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/fusion/sequence/adapted/std_pair.hpp>
+#include <boost/fusion/adapted/std_pair.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/empty.hpp>
 #include <boost/fusion/sequence/intrinsic/front.hpp>
 #include <boost/fusion/sequence/intrinsic/back.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
-#include <boost/fusion/sequence/container/vector/vector.hpp>
-#include <boost/fusion/sequence/container/list/list.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
+#include <boost/fusion/container/list/list.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/comparison/not_equal_to.hpp>
 #include <boost/fusion/sequence/comparison/less.hpp>

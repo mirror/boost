@@ -6,9 +6,9 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#include <boost/fusion/sequence/container/deque/deque.hpp>
-#include <boost/fusion/sequence/conversion/as_deque.hpp>
-#include <boost/fusion/sequence/adapted/mpl.hpp>
+#include <boost/fusion/container/deque/deque.hpp>
+#include <boost/fusion/container/deque/convert.hpp>
+#include <boost/fusion/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE deque
 #include "misc.hpp"

@@ -6,7 +6,7 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/sequence/intrinsic/swap.hpp>
-#include <boost/fusion/sequence/container/vector.hpp>
+#include <boost/fusion/container/vector.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/detail/lightweight_test.hpp>

@@ -9,9 +9,9 @@
 
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/support/category_of.hpp>
-#include <boost/fusion/sequence/view/zip_view.hpp>
-#include <boost/fusion/sequence/container/vector.hpp>
-#include <boost/fusion/sequence/container/list.hpp>
+#include <boost/fusion/view/zip_view.hpp>
+#include <boost/fusion/container/vector.hpp>
+#include <boost/fusion/container/list.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/sequence/intrinsic/front.hpp>
@@ -22,7 +22,7 @@
 #include <boost/fusion/iterator/advance.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/sequence/adapted/mpl.hpp>
+#include <boost/fusion/adapted/mpl.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/equal_to.hpp>
 

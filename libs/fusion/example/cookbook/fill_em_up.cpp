@@ -24,8 +24,8 @@
 ==============================================================================*/
 
 // We'll use these containers as examples
-#include <boost/fusion/sequence/container/list.hpp>
-#include <boost/fusion/sequence/container/vector.hpp>
+#include <boost/fusion/container/list.hpp>
+#include <boost/fusion/container/vector.hpp>
 
 // For doing I/O
 #include <boost/fusion/sequence/io.hpp>
