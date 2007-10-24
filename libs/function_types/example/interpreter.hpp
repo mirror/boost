@@ -14,11 +14,11 @@
 // ==========================
 //
 // When a function is registered, an 'invoker' template is instantiated with
-// the function's type. The 'invoker' fetches a value from the 'token_parser' 
+// the function's type. The 'invoker' fetches a value from the 'token_parser'
 // for each parameter of the function into a tuple and finally invokes the the
 // function with these values as arguments. The invoker's entrypoint, which
 // is a function of the callable builtin that describes the function to call and
-// a reference to the 'token_parser', is partially bound to the registered 
+// a reference to the 'token_parser', is partially bound to the registered
 // function and put into a map so it can be found by name during parsing.
 
 #include <map>
@@ -36,9 +36,9 @@
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-#include <boost/fusion/algorithm/transformation/push_back.hpp>
-#include <boost/fusion/sequence/container/list/cons.hpp>
-#include <boost/fusion/functional/invocation/invoke.hpp>
+#include <boost/fusion/include/push_back.hpp>
+#include <boost/fusion/include/cons.hpp>
+#include <boost/fusion/include/invoke.hpp>
 
 #include <boost/mpl/begin.hpp>
 #include <boost/mpl/end.hpp>
@@ -58,7 +58,7 @@ namespace example
 
   class interpreter
   {
-    class token_parser; 
+    class token_parser;
     typedef boost::function<void(token_parser &)> invoker_function;
     typedef std::map<std::string, invoker_function> dictionary;
 
@@ -66,7 +66,7 @@ namespace example
   public:
     // Registers a function with the interpreter.
     template<typename Function>
-    typename boost::enable_if< ft::is_nonmember_callable_builtin<Function> 
+    typename boost::enable_if< ft::is_nonmember_callable_builtin<Function>
     >::type register_function(std::string const & name, Function f);
 
     // Parse input for functions to call.
@@ -76,13 +76,13 @@ namespace example
     template< typename Function
     , class From = typename mpl::begin< ft::parameter_types<Function> >::type
     , class To   = typename mpl::end< ft::parameter_types<Function> >::type
-    > 
+    >
     struct invoker;
   };
 
   class interpreter::token_parser
   {
-    typedef boost::token_iterator_generator< 
+    typedef boost::token_iterator_generator<
         boost::char_separator<char> >::type token_iterator;
 
     token_iterator itr_at, itr_to;
@@ -101,7 +101,7 @@ namespace example
     // Returns a token of given type.
     // We just apply boost::lexical_cast to whitespace separated string tokens
     // for simplicity.
-    template<typename RequestedType> 
+    template<typename RequestedType>
     typename remove_cv_ref<RequestedType>::type get()
     {
       if (! this->has_more_tokens())
@@ -111,8 +111,8 @@ namespace example
       {
         typedef typename remove_cv_ref<RequestedType>::type result_type;
         result_type result = boost::lexical_cast
-            <typename remove_cv_ref<result_type>::type>(*this->itr_at); 
-        ++this->itr_at; 
+            <typename remove_cv_ref<result_type>::type>(*this->itr_at);
+        ++this->itr_at;
         return result;
       }
 
@@ -129,7 +129,7 @@ namespace example
   {
     // add an argument to a Fusion cons-list for each parameter type
     template<typename Args>
-    static inline 
+    static inline
     void apply(Function func, token_parser & parser, Args const & args)
     {
       typedef typename mpl::deref<From>::type arg_type;
@@ -144,7 +144,7 @@ namespace example
   {
     // the argument list is complete, now call the function
     template<typename Args>
-    static inline 
+    static inline
     void apply(Function func, token_parser &, Args const & args)
     {
       fusion::invoke(func,args);
@@ -156,7 +156,7 @@ namespace example
   interpreter::register_function(std::string const & name, Function f)
   {
     // instantiate and store the invoker by name
-    this->map_invokers[name] = boost::bind( 
+    this->map_invokers[name] = boost::bind(
         & invoker<Function>::template apply<fusion::nil>, f,_1,fusion::nil() );
   }
 
@@ -177,9 +177,9 @@ namespace example
       // look up function
       dictionary::const_iterator entry = map_invokers.find( func_name );
       if (entry == map_invokers.end())
-        throw std::runtime_error("unknown function: " + func_name); 
-   
-      // call the invoker which controls argument parsing 
+        throw std::runtime_error("unknown function: " + func_name);
+
+      // call the invoker which controls argument parsing
       entry->second(parser);
     }
   }
