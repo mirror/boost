@@ -290,6 +290,20 @@ ul.auto-toc {
 <div class="document" id="boost-pointer-container-library">
 <h1 class="title"><img alt="Boost" src="boost.png" /> Pointer Container Library</h1>
 <h2 class="subtitle" id="usage-guidelines">Usage Guidelines</h2>
+<div class="contents local topic">
+<ul class="simple">
+<li><a class="reference" href="#choosing-the-right-container" id="id8" name="id8">Choosing the right container</a></li>
+<li><a class="reference" href="#recommended-practice-for-object-oriented-programming" id="id9" name="id9">Recommended practice for Object-Oriented Programming</a><ul>
+<li><a class="reference" href="#make-base-classes-abstract-and-without-data" id="id10" name="id10">1. Make base classes abstract and without data</a></li>
+<li><a class="reference" href="#make-virtual-functions-private-and-provide-a-non-virtual-public-forwarding-function" id="id11" name="id11">2. Make virtual functions private and provide a non-virtual public forwarding function</a></li>
+<li><a class="reference" href="#derive-your-base-class-from-boost-noncopyable" id="id12" name="id12">3. Derive your base class from <tt class="docutils literal"><span class="pre">boost::noncopyable</span></tt></a></li>
+<li><a class="reference" href="#avoid-null-pointers-in-containers-if-possible" id="id13" name="id13">4. Avoid null-pointers in containers (if possible)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id8" id="choosing-the-right-container" name="choosing-the-right-container">Choosing the right container</a></h1>
 <p>The recommended usage pattern of the container classes are the same as the 
 for normal standard containers.</p>
 <p><tt class="docutils literal"><span class="pre">ptr_vector</span></tt>, <tt class="docutils literal"><span class="pre">ptr_list</span></tt> and <tt class="docutils literal"><span class="pre">ptr_deque</span></tt> offer the programmer different 
@@ -306,19 +320,115 @@ one element for each key. Otherwise, it supports equivalent keys.
 <tt class="docutils literal"><span class="pre">ptr_set</span></tt> and <tt class="docutils literal"><span class="pre">ptr_map</span></tt> support unique keys.  
 <tt class="docutils literal"><span class="pre">ptr_multiset</span></tt> and <tt class="docutils literal"><span class="pre">ptr_multimap</span></tt> 
 support equivalent keys.</p>
-<p><strong>Navigate:</strong></p>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id9" id="recommended-practice-for-object-oriented-programming" name="recommended-practice-for-object-oriented-programming">Recommended practice for Object-Oriented Programming</a></h1>
+<p>Idiomtic Object-Oriented Programming in C++ looks a bit different from 
+the way it is done in other languages. This is partly because C++ 
+has both value and reference semantics, and partly because C++ is more flexible
+than other languages. Below is a list of recommendations that you are
+encouraged to follow:</p>
+<div class="section">
+<h2><a class="toc-backref" href="#id10" id="make-base-classes-abstract-and-without-data" name="make-base-classes-abstract-and-without-data">1. Make base classes abstract and without data</a></h2>
+<p>The has the following advantages:</p>
+<blockquote>
+<ol class="loweralpha simple">
+<li>It reduces <em>coupling</em> because you do not have to maintain or update state</li>
+</ol>
+<!--  -->
+<ol class="loweralpha simple" start="2">
+<li>It helps you to avoid <em>slicing</em></li>
+</ol>
+<!--  -->
+<ol class="loweralpha simple" start="3">
+<li>It ensures you <em>override</em> the right function</li>
+</ol>
+</blockquote>
+<p>You might also want to read the following articles:</p>
+<ul class="simple">
+<li>Kevlin Henney's <a class="reference" href="http://www.two-sdg.demon.co.uk/curbralan/papers/SixOfTheBest.pdf">Six of the best</a></li>
+</ul>
+<ul class="simple">
+<li>Jack Reeves' <a class="reference" href="http://www.ddj.com/documents/s=10011/q=1/cuj0602reeves/0602reeves.html">Multiple Inheritance Considered Useful</a></li>
+</ul>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id11" id="make-virtual-functions-private-and-provide-a-non-virtual-public-forwarding-function" name="make-virtual-functions-private-and-provide-a-non-virtual-public-forwarding-function">2. Make virtual functions private and provide a non-virtual public forwarding function</a></h2>
+<p>In code:</p>
+<pre class="literal-block">
+class Polymorphic
+{
+private:
+    virtual int do_foo() = 0;
+    
+public:
+    int foo()
+    {
+        return do_foo();
+    }
+    ...
+};      
+</pre>
+<p>This has the following advantages:</p>
+<blockquote>
+<ol class="loweralpha simple">
+<li>It makes sure all calls to the virtual function always goes through one place in your code</li>
+</ol>
+<!--  -->
+<ol class="loweralpha simple" start="2">
+<li>It enables you to check preconditions and postconditions inside the forwarding function</li>
+</ol>
+</blockquote>
+<p>You might also want to read Herb Sutter's article <a class="reference" href="http://www.gotw.ca/publications/mill18.htm">Virtuality</a>.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id12" id="derive-your-base-class-from-boost-noncopyable" name="derive-your-base-class-from-boost-noncopyable">3. Derive your base class from <tt class="docutils literal docutils literal"><span class="pre">boost::noncopyable</span></tt></a></h2>
+<p>Having an abstact base class prevents slicing when the base class is involved, but
+it does not prevent it for classes further down the hierarchy. This is where
+<a class="reference" href="http://www.boost.org/libs/utility/utility.htm#Class_noncopyable">boost::noncopyable</a> is handy to use:</p>
+<pre class="literal-block">
+class Polymorphic : boost::noncopyable
+{
+  ...
+};
+</pre>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id13" id="avoid-null-pointers-in-containers-if-possible" name="avoid-null-pointers-in-containers-if-possible">4. Avoid null-pointers in containers (if possible)</a></h2>
+<p>By default the pointer containers do not allow you to store null-pointer in them.
+As you might know, this behavior can be changed explicitly with the use
+of <a class="reference" href="reference.html#class-nullable">boost::nullable</a>.</p>
+<p>The primary reason to avoid null-pointers 
+is that you have to check for null-pointers every time the container is
+used. This extra checking is easy to forget, and it is somewhat contradictory to
+the spirit of OO where you replace special cases with dynamic dispatch.</p>
+<p>Often, however, you need to place some special object in the container because you
+do not have enough information to construct a full object. In that case
+you might be able to use the Null Object pattern which simply dictates that
+you implement virtual functions from the abstract base-class 
+as empty functions or with dummy return values. This means that
+your OO-code still does not need to worry about null-pointers.</p>
+<p>You might want to read</p>
+<ul class="simple">
+<li>Kevlin Henney's <a class="reference" href="http://www.two-sdg.demon.co.uk/curbralan/papers/europlop/NullObject.pdf">Null Object - Something for Nothing</a></li>
+</ul>
+<p>Finally you might end up in a situation where not even the Null Object can help
+you. That is when you truly need <tt class="docutils literal"><span class="pre">container&lt;</span> <span class="pre">nullable&lt;T&gt;</span> <span class="pre">&gt;</span></tt>.</p>
+<hr><p><strong>Navigate:</strong></p>
 <ul class="simple">
 <li><a class="reference" href="ptr_container.html">home</a></li>
 <li><a class="reference" href="reference.html">reference</a></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
+<hr><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
 </div>
 </body>
 </html>

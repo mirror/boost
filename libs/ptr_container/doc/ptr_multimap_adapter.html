@@ -294,12 +294,24 @@ ul.auto-toc {
 <p>This class is used to build custom pointer containers with
 an underlying multimap-like container. The interface of the class is an extension
 of the interface from <tt class="docutils literal"><span class="pre">associative_ptr_container</span></tt>.</p>
-<p><strong>See also:</strong></p>
+<p><strong>Hierarchy:</strong></p>
 <ul class="simple">
-<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
-<li><a class="reference" href="associative_ptr_container.html">associative_ptr_container</a></li>
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a><ul>
+<li><a class="reference" href="associative_ptr_container.html">associative_ptr_container</a><ul>
+<li><a class="reference" href="ptr_set_adapter.html">ptr_set_adapter</a></li>
+<li><a class="reference" href="ptr_multiset_adapter.html">ptr_multiset_adapter</a></li>
+<li><a class="reference" href="ptr_map_adapter.html">ptr_map_adapter</a></li>
+<li><tt class="docutils literal"><span class="pre">ptr_multi_map_adapter</span></tt><ul>
+<li><a class="reference" href="ptr_set.html">ptr_set</a></li>
+<li><a class="reference" href="ptr_multiset.html">ptr_multi_set</a></li>
+<li><a class="reference" href="ptr_map.html">ptr_map</a></li>
 <li><a class="reference" href="ptr_multimap.html">ptr_multimap</a></li>
-<li><a class="reference" href="ptr_container.html#map-iterator-operations">new map iterators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p><strong>Navigate:</strong></p>
 <ul class="simple">
@@ -318,6 +330,16 @@ namespace boost
     &gt;
     class ptr_multimap_adapter 
     {
+    public: // <a class="reference" href="#typedefs">typedefs</a>
+        typedef VoidPtrMap::key_type key_type;
+        typedef T*                   mapped_type;
+        typedef T&amp;                   mapped_reference;
+        typedef const T&amp;             const_mapped_reference;
+        typedef ...                  value_type;
+        typedef ...                  reference;
+        typedef ...                  const_reference;
+        typedef ...                  pointer;
+        typedef ...                  const_pointer;  
         
     public: // <a class="reference" href="#modifiers">modifiers</a>         
         iterator  insert( key_type&amp; k, T* x ); 
@@ -338,6 +360,34 @@ namespace boost
 </div>
 <div class="section">
 <h1><a id="semantics" name="semantics">Semantics</a></h1>
+<p>. <span class="target" id="typedefs">typedefs</span>:</p>
+<div class="section">
+<h2><a id="semantics-typedefs" name="semantics-typedefs">Semantics: typedefs</a></h2>
+<p>The following types are implementation defined:</p>
+<pre class="literal-block">
+typedef ... value_type;
+typedef ... reference;
+typedef ... const_reference;
+typedef ... pointer;
+typedef ... const_pointer;  
+</pre>
+<p>However, the structure of the type mimics <tt class="docutils literal"><span class="pre">std::pair</span></tt> s.t. one
+can use <tt class="docutils literal"><span class="pre">first</span></tt> and <tt class="docutils literal"><span class="pre">second</span></tt> members. The reference-types
+are not real references and the pointer-types are not real pointers.
+However, one may still write</p>
+<pre class="literal-block">
+map_type::value_type       a_value      = *m.begin();
+a_value.second-&gt;foo();
+map_type::reference        a_reference  = *m.begin();
+a_reference.second-&gt;foo();
+map_type::const_reference  a_creference = *const_begin(m);
+map_type::pointer          a_pointer    = &amp;*m.begin();
+a_pointer-&gt;second-&gt;foo();
+map_type::const_pointer    a_cpointer   = &amp;*const_begin(m);
+</pre>
+<p>The difference compared to <tt class="docutils literal"><span class="pre">std::map&lt;Key,T*&gt;</span></tt> is that constness
+is propagated to the pointer (that is, to <tt class="docutils literal"><span class="pre">second</span></tt>) in <tt class="docutils literal"><span class="pre">const_itertor</span></tt>.</p>
+</div>
 <div class="section">
 <h2><a id="semantics-modifiers" name="semantics-modifiers"><span id="modifiers"></span>Semantics: modifiers</a></h2>
 <ul>
@@ -416,11 +466,11 @@ namespace boost
 </blockquote>
 </li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
+<hr><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
 </tr>
 </tbody>
 </table>

@@ -293,12 +293,19 @@ ul.auto-toc {
 <h1><a id="class-ptr-array" name="class-ptr-array">Class <tt class="docutils literal"><span class="pre">ptr_array</span></tt></a></h1>
 <p>A <tt class="docutils literal"><span class="pre">ptr_array&lt;T,size&gt;</span></tt> is a pointer container that uses an underlying <tt class="docutils literal"><span class="pre">boost::array&lt;void*,size&gt;</span></tt>
 to store the pointers. The class is useful when there is no requirement
-of dynamic expansion and when absolute no overhead is tolerable.</p>
-<p><strong>See also:</strong></p>
+of dynamic expansion and when no overhead is tolerable.</p>
+<p><strong>Hierarchy:</strong></p>
 <ul class="simple">
-<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
-<li><a class="reference" href="ptr_sequence_adapter.html">ptr_sequence_adapter</a></li>
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a><ul>
+<li><a class="reference" href="ptr_sequence_adapter.html">ptr_sequence_adapter</a><ul>
 <li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a></li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a></li>
+<li><tt class="docutils literal"><span class="pre">ptr_array</span></tt></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p><strong>Navigate:</strong></p>
 <ul class="simple">
@@ -545,11 +552,11 @@ namespace boost
 </blockquote>
 </li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
+<hr><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
 </tr>
 </tbody>
 </table>

@@ -21,6 +21,7 @@ that you read it all from top to bottom.
 * `Null values`_
 * `Clonability`_
 * `New functions`_
+* `std::auto_ptr<U> overloads`_
 * `Algorithms`_
 
 Basic usage
@@ -37,8 +38,9 @@ Let us assume that we have an OO-hierarchy of animals
     class animal : `boost::noncopyable <http://www.boost.org/libs/utility/utility.htm#Class_noncopyable>`_
     {
     public:
-        virtual      ~animal() {}
-        virtual void eat() = 0;
+        virtual      ~animal()   {}
+        virtual void eat()       = 0;
+	virtual int  age() const = 0;
         // ...
     };
     
@@ -181,7 +183,25 @@ to avoid the clumsiness::
     animals["bobo"].set_name("bobo");
 
 This requires a default constructor for animals and
-a function to do the initialization, in this case ``set_name()``;
+a function to do the initialization, in this case ``set_name()``.
+
+A better alternative is to use `Boost.Assign <../../assign/index.html>`_
+to help you out. In particular, consider
+
+- `ptr_push_back(), ptr_push_front(), ptr_insert() and ptr_map_insert() <../../assign/doc/index.html#ptr_push_back>`_
+
+- `ptr_list_of() <../../assign/doc/index.html#ptr_list_of>`_
+
+For example, the above insertion may now be written ::
+	
+     boost::ptr_multimap<std::string,animal> animals;
+
+     using namespace boost::assign;
+     ptr_map_insert<monkey>( animals )( "bobo", "bobo" );
+     ptr_map_insert<elephant>( animals )( "bobo", "bobo" );
+     ptr_map_insert<whale>( animals )( "anna", "anna" );
+     ptr_map_insert<emu>( animals )( "anna", "anna" );
+					
     
 Null values
 -----------
@@ -249,7 +269,7 @@ can exploit the clonability of the animal objects. For example ::
     another_zoo.assign( zoo.begin(), zoo.end() );
 
 will fill another zoo with clones of the first zoo. Similarly,
-insert() can now insert clones into your pointer container ::
+``insert()`` can now insert clones into your pointer container ::
 
     another_zoo.insert( another_zoo.begin(), zoo.begin(), zoo.end() );
 
@@ -273,7 +293,15 @@ animal from the zoo ::
 You can think of ``auto_type`` as a non-copyable form of 
 ``std::auto_ptr``. Notice that when you release an object, the
 pointer is removed from the container and the containers size
-shrinks. You can also release the entire container if you
+shrinks. For containers that store nulls, we can exploit that
+``auto_type`` is convertible to ``bool``::
+
+    if( ptr_vector< nullable<T> >::auto_type r = vec.pop_back() )
+    {
+      ...
+    }  
+
+You can also release the entire container if you
 want to return it from a function ::
 
     std::auto_ptr< boost::ptr_deque<animal> > get_zoo()
@@ -302,23 +330,26 @@ If you want to replace an element, you can easily do so ::
     zoo_type::auto_type old_animal = zoo.replace( zoo.begin(), new monkey("bibi") ); 
     zoo.replace( 2, old_animal.release() ); // for random access containers
 
-A map is a little different to iterator over than standard maps.
+A map is slightly different to iterator over than standard maps.
 Now we say ::
 
     typedef boost::ptr_map<std::string, boost::nullable<animal> > animal_map;
     animal_map map;
     ...
-    for( animal_map::iterator i = map.begin();
-         i != map.end(); ++i )
+    for( animal_map::const_iterator i = map.begin(), e = map.end(); i != e; ++i )
     {
-        std::cout << "\n key: " << i.key();
+        std::cout << "\n key: " << i->first;
         std::cout << "\n age: ";
         
         if( boost::is_null(i) )
             std::cout << "unknown";
         else
-            std::cout << i->age(); 
+            std::cout << i->second->age(); 
      }
+
+Except for the check for null, this looks like it would with a normal map. But if ``age()`` had 
+not been a ``const`` member function,
+it would not have compiled.
             
 Maps can also be indexed with bounds-checking ::
 
@@ -330,6 +361,25 @@ Maps can also be indexed with bounds-checking ::
     {
         // "bobo" not found
     }        
+
+``std::auto_ptr<U>`` overloads
+------------------------------
+
+Evetime there is a function that takes a ``T*`` parameter, there is
+also a function taking an ``std::auto_ptr<U>`` parameter. This is of course done
+to make the library intregrate seamless with ``std::auto_ptr``. For example ::
+
+  std::ptr_vector<Base> vec;
+  vec.push_back( new Base );
+  
+is complemented by ::
+
+  std::auto_ptr<Derived> p( new Derived );
+  vec.push_back( p );  	
+
+Notice that the template argument for ``std::auto_ptr`` does not need to
+follow the template argument for ``ptr_vector`` as long as ``Derived*``
+can be implicitly converted to ``Base*``.
 
 Algorithms
 ----------
@@ -367,11 +417,26 @@ Finally you may want to merge together two sorted containers::
          
 That is all; now you have learned all the basics!
 
+.. raw:: html 
+
+        <hr>
+	
+**See also**
+
+- `Usage guidelines <guidelines.html>`_ 
+
+- `Cast utilities <../../conversion/cast.htm#Polymorphic_castl>`_
+
 **Navigate**
 
-  - `home <ptr_container.html>`_
-  - `examples <examples.html>`_
+- `home <ptr_container.html>`_
+- `examples <examples.html>`_
 
+.. raw:: html 
 
-:copyright:     Thorsten Ottosen 2004-2005. 
+        <hr>
+
+:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+
+__ http://www.boost.org/LICENSE_1_0.txt
 

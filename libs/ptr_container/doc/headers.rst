@@ -34,21 +34,33 @@ Library headers
 
 ``<boost/ptr_container/ptr_map_adapter.hpp>``            classes `ptr_map_adapter <ptr_map_adapter.html>`_ and `ptr_multimap_adapter <ptr_multimap_adapter.html>`_
 
-``<boost/ptr_container/exception.hpp>``                  classes ``bad_ptr_container_operation``, ``bad_index``
-                                                           and ``bad_pointer``
-``<boost/ptr_container/indirect_fun.hpp>``               class ``indirect_fun``
+``<boost/ptr_container/exception.hpp>``                  classes `bad_ptr_container_operation`_, `bad_index`_
+                                                           and `bad_pointer`_
+``<boost/ptr_container/indirect_fun.hpp>``               class `indirect_fun`_
 
-``<boost/ptr_container/nullable.hpp>``                   class ``nullable``
+``<boost/ptr_container/nullable.hpp>``                   class `nullable`_
 ======================================================= =============================================================
 
 .. _`heap_clone_allocator`: reference.html#the-clone-allocator-concept
 .. _`view_clone_allocator`: reference.html#the-clone-allocator-concept
+.. _`bad_ptr_container_operation`: reference.html#exception-classes
+.. _`bad_index`: reference.html#exception-classes
+.. _`bad_pointer`: reference.html#exception-classes
+.. _`nullable`: reference.html#class-nullable
+.. _`indirect_fun`: indirect_fun.html
+
 
 **Navigate:**
 
 - `home <ptr_container.html>`_
 - `reference <reference.html>`_
 
+.. raw:: html 
 
-:copyright:     Thorsten Ottosen 2004-2005.
+        <hr>
+
+:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+
+__ http://www.boost.org/LICENSE_1_0.txt
+
 

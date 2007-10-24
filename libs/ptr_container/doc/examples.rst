@@ -22,7 +22,9 @@ Some examples are given here and in the accompanying test files:
 
         my_container.push_back( 0 );            // throws bad_ptr 
         my_container.replace( an_iterator, 0 ); // throws bad_ptr
-        my_container.insert( an_iterator, 0 );  // throws bad_ptr                                                                 
+        my_container.insert( an_iterator, 0 );  // throws bad_ptr       
+	std::auto_ptr<T> p( 0 );
+	my_container.push_back( p );            // throws bad_ptr                                                          
 
 .. _`Example 2`:
 
@@ -67,7 +69,7 @@ Some examples are given here and in the accompanying test files:
          // a class that has no normal copy semantics
         class X : boost::noncopyable { public: X* clone() const; ... };
                                                                            
-        // this will be found by the library by argument dependent lookup                                                                   
+        // this will be found by the library by argument dependent lookup (ADL)                                                                  
         X* new_clone( const X& x ) 
         { return x.clone(); }
                                                                            
@@ -88,10 +90,12 @@ Some examples are given here and in the accompanying test files:
         class X { ... };                     // assume 'X' is Clonable 
         X x;                                 // and 'X' can be stack-allocated 
         ptr_list<X> list; 
-        list.push_back( x );                 // clone 'x' and then insert the resulting pointer 
-        list.push_back( new_clone( x );      // do it manually
+        list.push_back( new_clone( x ) );    // insert a clone
         list.push_back( new X );             // always give the pointer directly to the container to avoid leaks
         list.push_back( &x );                // don't do this!!! 
+	std::auto_ptr<X> p( new X );
+	list.push_back( p );                 // give up ownership
+	BOOST_ASSERT( p.get() == 0 );
 
 
 .. _`Example 6`:
@@ -110,7 +114,8 @@ Some examples are given here and in the accompanying test files:
         auto_type ptr2 = deq.release( deq.begin() + 2 ); // use an iterator to determine the element to release
         ptr            = deq.release_front();            // supported for 'ptr_list' and 'ptr_deque'
                                         
-
+	deq.push_back( ptr.release() );                  // give ownership back to the container
+	
 
 .. _`Example 7`:
 
@@ -127,7 +132,8 @@ Some examples are given here and in the accompanying test files:
         //
         list.transfer( list.begin(), vec.begin(), vec );           // make the first element of 'vec' the first element of 'list'
         vec.transfer( vec.end(), list.begin(), list.end(), list ); // put all the lists element into the vector                                 
-                                
+                      
+We can also transfer objects from ``ptr_container<Derived>`` to ``ptr_container<Base`` without any problems.		  
 
 .. _`Example 8`:
 
@@ -138,7 +144,7 @@ Some examples are given here and in the accompanying test files:
 
 :incomplete_type_test.cpp_: Shows how to implement the Composite pattern.
 :simple_test.cpp_: Shows how the usage of pointer container compares with a 
-  container of pointer pointers
+  container of smart pointers
 :view_example.cpp_: Shows how to use a pointer container as a view into other container
 :tree_test.cpp_: Shows how to make a tree-structure
 :array_test.cpp_: Shows how to make an n-ary tree 
@@ -150,16 +156,17 @@ Some examples are given here and in the accompanying test files:
 .. _array_test.cpp : ../test/ptr_array.cpp
 
 
+
+9. A large example
+++++++++++++++++++
+
+This examples shows many of the most common
+features at work. The example provide lots of comments.
+
+.. raw:: html
+	:file: tutorial_example.html
+
 ..
-		9. A large example
-		++++++++++++++++++
-
-		This examples shows many of the most common
-		features at work.
-
-		.. raw:: html
-			:file: tut1.html
-
 		10. Changing the Clone Allocator
 		++++++++++++++++++++++++++++++++
 
@@ -170,10 +177,21 @@ Some examples are given here and in the accompanying test files:
 		.. raw:: html
 			:file: tut2.html
 
+.. raw:: html 
+
+        <hr>
+
 **Navigate:**
 
 - `home <ptr_container.html>`_
 - `reference <reference.html>`_
 
-:copyright:     Thorsten Ottosen 2004-2005. 
+.. raw:: html 
+
+        <hr>
+
+:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+
+__ http://www.boost.org/LICENSE_1_0.txt
+
 

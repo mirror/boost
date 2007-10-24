@@ -10,23 +10,24 @@ Class ``ptr_sequence_adapter``
 This section describes all the common operations for all the pointer
 sequences:
 
-- ptr_vector_,
-- ptr_list_,
-- ptr_deque_,
-
-.. _ptr_vector : ptr_vector.html
-.. _ptr_list : ptr_list.html
-.. _ptr_deque : ptr_deque.html
+- `ptr_vector <ptr_vector.html>`_
+- `ptr_list <ptr_list.html>`_ 
+- `ptr_deque <ptr_deque.html>`_
 
 
 The ``ptr_sequence_adapter`` is also a concrete class that you can use to create custom pointer
 containers from.
 
-**See also:**
+**Hierarchy:**
 
-- reversible_ptr_container__
+- `reversible_ptr_container <reversible_ptr_container.html>`_
 
-__ reversible_ptr_container.html
+  - ``ptr_sequence_adapter``
+
+    - `ptr_vector <ptr_vector.html>`_
+    - `ptr_list <ptr_list.html>`_ 
+    - `ptr_deque <ptr_deque.html>`_
+    - `ptr_array <ptr_array.html>`_
 
 **Navigate:**
 
@@ -79,14 +80,16 @@ __ reversible_ptr_container.html
                 iterator  erase( const Range& r );
 
             public: // `pointer container requirements`_
-
-                void  transfer( iterator before, iterator object,
-                                ptr_sequence_adapter& from );
-                void  transfer( iterator before, iterator first, iterator last,
-                                ptr_sequence_adapter& from );
-                void template< class Range>
-                void transfer( iterator before, const Range& r, ptr_sequence_adapter& from );
-                void transfer( iterator before, ptr_sequence_adapter& from );
+		template< class PtrSequence >
+                void transfer( iterator before, typename PtrSequence::iterator object,
+                               PtrSequence& from );				
+		template< class PtrSequence >
+                void transfer( iterator before, typename PtrSequence::iterator first, typename PtrSequence::iterator last,
+                               PtrSequence& from );
+                void template< class PtrSequence, class Range >
+                void transfer( iterator before, const Range& r, PtrSequence& from );
+		template< class PtrSequence >
+                void transfer( iterator before, PtrSequence& from );
 
             public: // `algorithms`_
 
@@ -330,47 +333,48 @@ Semantics: modifiers
 Semantics: pointer container requirements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You cannot use ``transfer()`` to move elements between two
-different types of containers. This is to avoid
-problems with different allocators. The requirement might be
-weakened in the future.
+You can use ``transfer()`` to move elements between two containers of the same type. Furthermore,
+you can also move elements from a container of type ``T`` to a container of type ``U`` as long as
+``T::value_type`` is convertible to ``U::value_type``. An example would be transferring from ``boost::ptr_vector<Derived>``
+to ``boost::ptr_deque<Base>``.
 
+(**Remark:** *When moving elements between two different containers, it is your responsibility to make sure the allocators are compatible.* 
+*The special latitude of being able to transfer between two different containers is only available for Sequences and not for Associative Containers.*)
 
-- ``void transfer( iterator before, iterator object, ptr_sequence_adapter& from );``
+..
 
-    - Requirements: ``not from.empty()``
+- ``template< class PtrSequence > void transfer( iterator before, typename PtrSequence::iterator object, PtrSequence& from );``   
 
     - Effects: Inserts the object defined by ``object`` into the container and remove it from ``from``.
       Insertion takes place before ``before``.
 
-    - Postconditions: ``size()`` is one more, ``from.size()`` is one less.
+    - Postconditions: If ``from.empty()``, nothing happens. Otherwise
+      ``size()`` is one more, ``from.size()`` is one less.
 
     - Exception safety: Strong guarantee
 
 
-- ``void transfer( iterator before, iterator first, iterator last, ptr_sequence_adapter& from );``
+- ``template< class PtrSequence > void transfer( iterator before, typename PtrSequence::iterator first, typename PtrSequence::iterator last, PtrSequence& from );``
 
-    - Requirements: ``not from.empty()``
+    - Requirements: ``from.size() >= std::distance(first,last)``
 
     - Effects: Inserts the objects defined by the range ``[first,last)`` into the container and remove it from ``from``.
       Insertion takes place before ``before``.
 
-    - Postconditions: Let ``N == std::distance(first,last);`` then ``size()`` is ``N`` more, ``from.size()`` is ``N`` less.
+    - Postconditions: If ``from.empty()``, nothing happens. Otherwise, 
+      let ``N == std::distance(first,last);`` then ``size()`` is ``N`` more, ``from.size()`` is ``N`` less.
 
     - Exception safety: Strong guarantee
+    
+    - Complexity: Linear or better
 
-- ``template< class Range> void transfer( iterator before, const Range& r, ptr_sequence_adapter& from );``
+- ``void template< class PtrSequence, class Range > void transfer( iterator before, const Range& r, PtrSequence& from );``
 
     - Effects: ``transfer(before, boost::begin(r), boost::end(r), from);``
 
-- ``void transfer( iterator before, ptr_sequence_adapter& from );``
+- ``template< class PtrSequence> void transfer( iterator before, PtrSequence& from );``
 
-    - Effects: Transfers all objects from ``from`` into the container. Insertion
-      takes place before ``before``.
-
-    - Postconditions: ``from.empty();``
-
-    - Exception safety: Strong guarantee
+    - Effects: ``transfer(before, from, from);``
 
 .. _`algorithms`:
 
@@ -420,6 +424,12 @@ contain any nulls*.
     - Postconditions: (Container versions) ``r.empty()``  
     - Exception safety: nothrow guarantee (the behavior is undefined if the comparison operator throws)
 
+.. raw:: html 
+
+        <hr>
     
-:copyright:     Thorsten Ottosen 2004-2005. 
+:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+
+__ http://www.boost.org/LICENSE_1_0.txt
+
     

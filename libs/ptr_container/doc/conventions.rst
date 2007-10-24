@@ -113,11 +113,21 @@ insertion and deletion only invalidates the deleted
 element and elements following it; all elements before the inserted/deleted
 element remain valid.
 
+.. raw:: html 
+
+        <hr>
 
 **Navigate:**
 
 - `home <ptr_container.html>`_
 - `reference <reference.html>`_
 
-:copyright:     Thorsten Ottosen 2004-2005. 
+.. raw:: html 
+
+        <hr>
+
+:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+
+__ http://www.boost.org/LICENSE_1_0.txt
+
 

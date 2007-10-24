@@ -294,15 +294,24 @@ ul.auto-toc {
 <p>This section describes all the common operations for all the pointer
 sequences:</p>
 <ul class="simple">
-<li><a class="reference" href="ptr_vector.html">ptr_vector</a>,</li>
-<li><a class="reference" href="ptr_list.html">ptr_list</a>,</li>
-<li><a class="reference" href="ptr_deque.html">ptr_deque</a>,</li>
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a></li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a></li>
 </ul>
 <p>The <tt class="docutils literal"><span class="pre">ptr_sequence_adapter</span></tt> is also a concrete class that you can use to create custom pointer
 containers from.</p>
-<p><strong>See also:</strong></p>
+<p><strong>Hierarchy:</strong></p>
 <ul class="simple">
-<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a></li>
+<li><a class="reference" href="reversible_ptr_container.html">reversible_ptr_container</a><ul>
+<li><tt class="docutils literal"><span class="pre">ptr_sequence_adapter</span></tt><ul>
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a></li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a></li>
+<li><a class="reference" href="ptr_array.html">ptr_array</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p><strong>Navigate:</strong></p>
 <ul class="simple">
@@ -352,14 +361,16 @@ namespace boost
         iterator  erase( const Range&amp; r );
 
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
-
-        void  transfer( iterator before, iterator object,
-                        ptr_sequence_adapter&amp; from );
-        void  transfer( iterator before, iterator first, iterator last,
-                        ptr_sequence_adapter&amp; from );
-        void template&lt; class Range&gt;
-        void transfer( iterator before, const Range&amp; r, ptr_sequence_adapter&amp; from );
-        void transfer( iterator before, ptr_sequence_adapter&amp; from );
+        template&lt; class PtrSequence &gt;
+        void transfer( iterator before, typename PtrSequence::iterator object,
+                       PtrSequence&amp; from );                             
+        template&lt; class PtrSequence &gt;
+        void transfer( iterator before, typename PtrSequence::iterator first, typename PtrSequence::iterator last,
+                       PtrSequence&amp; from );
+        void template&lt; class PtrSequence, class Range &gt;
+        void transfer( iterator before, const Range&amp; r, PtrSequence&amp; from );
+        template&lt; class PtrSequence &gt;
+        void transfer( iterator before, PtrSequence&amp; from );
 
     public: // <a class="reference" href="#algorithms">algorithms</a>
 
@@ -608,47 +619,49 @@ Exception safety: Strong guarantee -->
 </div>
 <div class="section">
 <h2><a id="semantics-pointer-container-requirements" name="semantics-pointer-container-requirements"><span id="pointer-container-requirements"></span>Semantics: pointer container requirements</a></h2>
-<p>You cannot use <tt class="docutils literal"><span class="pre">transfer()</span></tt> to move elements between two
-different types of containers. This is to avoid
-problems with different allocators. The requirement might be
-weakened in the future.</p>
+<p>You can use <tt class="docutils literal"><span class="pre">transfer()</span></tt> to move elements between two containers of the same type. Furthermore,
+you can also move elements from a container of type <tt class="docutils literal"><span class="pre">T</span></tt> to a container of type <tt class="docutils literal"><span class="pre">U</span></tt> as long as
+<tt class="docutils literal"><span class="pre">T::value_type</span></tt> is convertible to <tt class="docutils literal"><span class="pre">U::value_type</span></tt>. An example would be transferring from <tt class="docutils literal"><span class="pre">boost::ptr_vector&lt;Derived&gt;</span></tt>
+to <tt class="docutils literal"><span class="pre">boost::ptr_deque&lt;Base&gt;</span></tt>.</p>
+<p>(<strong>Remark:</strong> <em>When moving elements between two different containers, it is your responsibility to make sure the allocators are compatible.</em> 
+<em>The special latitude of being able to transfer between two different containers is only available for Sequences and not for Associative Containers.</em>)</p>
+<!--  -->
 <ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">iterator</span> <span class="pre">object,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">PtrSequence</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">typename</span> <span class="pre">PtrSequence::iterator</span> <span class="pre">object,</span> <span class="pre">PtrSequence&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
-<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
 <li>Effects: Inserts the object defined by <tt class="docutils literal"><span class="pre">object</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.
 Insertion takes place before <tt class="docutils literal"><span class="pre">before</span></tt>.</li>
-<li>Postconditions: <tt class="docutils literal"><span class="pre">size()</span></tt> is one more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is one less.</li>
+<li>Postconditions: If <tt class="docutils literal"><span class="pre">from.empty()</span></tt>, nothing happens. Otherwise
+<tt class="docutils literal"><span class="pre">size()</span></tt> is one more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is one less.</li>
 <li>Exception safety: Strong guarantee</li>
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">iterator</span> <span class="pre">first,</span> <span class="pre">iterator</span> <span class="pre">last,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">PtrSequence</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">typename</span> <span class="pre">PtrSequence::iterator</span> <span class="pre">first,</span> <span class="pre">typename</span> <span class="pre">PtrSequence::iterator</span> <span class="pre">last,</span> <span class="pre">PtrSequence&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
-<li>Requirements: <tt class="docutils literal"><span class="pre">not</span> <span class="pre">from.empty()</span></tt></li>
+<li>Requirements: <tt class="docutils literal"><span class="pre">from.size()</span> <span class="pre">&gt;=</span> <span class="pre">std::distance(first,last)</span></tt></li>
 <li>Effects: Inserts the objects defined by the range <tt class="docutils literal"><span class="pre">[first,last)</span></tt> into the container and remove it from <tt class="docutils literal"><span class="pre">from</span></tt>.
 Insertion takes place before <tt class="docutils literal"><span class="pre">before</span></tt>.</li>
-<li>Postconditions: Let <tt class="docutils literal"><span class="pre">N</span> <span class="pre">==</span> <span class="pre">std::distance(first,last);</span></tt> then <tt class="docutils literal"><span class="pre">size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> less.</li>
+<li>Postconditions: If <tt class="docutils literal"><span class="pre">from.empty()</span></tt>, nothing happens. Otherwise, 
+let <tt class="docutils literal"><span class="pre">N</span> <span class="pre">==</span> <span class="pre">std::distance(first,last);</span></tt> then <tt class="docutils literal"><span class="pre">size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> more, <tt class="docutils literal"><span class="pre">from.size()</span></tt> is <tt class="docutils literal"><span class="pre">N</span></tt> less.</li>
 <li>Exception safety: Strong guarantee</li>
+<li>Complexity: Linear or better</li>
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Range&gt;</span> <span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">const</span> <span class="pre">Range&amp;</span> <span class="pre">r,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">PtrSequence,</span> <span class="pre">class</span> <span class="pre">Range</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">const</span> <span class="pre">Range&amp;</span> <span class="pre">r,</span> <span class="pre">PtrSequence&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">transfer(before,</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r),</span> <span class="pre">from);</span></tt></li>
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">ptr_sequence_adapter&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">PtrSequence&gt;</span> <span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">PtrSequence&amp;</span> <span class="pre">from</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
-<li>Effects: Transfers all objects from <tt class="docutils literal"><span class="pre">from</span></tt> into the container. Insertion
-takes place before <tt class="docutils literal"><span class="pre">before</span></tt>.</li>
-<li>Postconditions: <tt class="docutils literal"><span class="pre">from.empty();</span></tt></li>
-<li>Exception safety: Strong guarantee</li>
+<li>Effects: <tt class="docutils literal"><span class="pre">transfer(before,</span> <span class="pre">from,</span> <span class="pre">from);</span></tt></li>
 </ul>
 </blockquote>
 </li>
@@ -722,11 +735,11 @@ ensuring the new sequence is also sorted</li>
 </blockquote>
 </li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
+<hr><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
 </tr>
 </tbody>
 </table>

@@ -10,6 +10,29 @@ Class ``reversible_ptr_container``
 This class is not a real class that can be found in the library. 
 Its purpose is to present the general interface of all the pointer containers.
 
+**Hierarchy:**
+
+- ``reversible_ptr_container``
+
+  - `ptr_sequence_adapter <ptr_sequence_adapter.html>`_
+
+    - `ptr_vector <ptr_vector.html>`_
+    - `ptr_list <ptr_list.html>`_ 
+    - `ptr_deque <ptr_deque.html>`_
+    - `ptr_array <ptr_array.html>`_
+    
+  - `associative_ptr_container <associative_ptr_container.html>`_ 
+  
+    - `ptr_set_adapter <ptr_set_adapter.html>`_
+    - `ptr_multiset_adapter <ptr_multiset_adapter.html>`_
+    - `ptr_map_adapter <ptr_map_adapter.html>`_
+    - `ptr_multi_map_adapter <ptr_multimap_adapter.html>`_
+
+      - `ptr_set <ptr_set.html>`_
+      - `ptr_multi_set <ptr_multiset.html>`_ 
+      - `ptr_map <ptr_map.html>`_
+      - `ptr_multimap <ptr_multimap.html>`_
+
 **Navigate:**
 
 - `home <ptr_container.html>`_
@@ -71,13 +94,18 @@ Its purpose is to present the general interface of all the pointer containers.
                 void      clear():
             
             public: // `pointer container requirements`_
-            
                 auto_type                                replace( iterator position, T* x );
 		template< class U >
 		auto_type                                replace( iterator position, std::auto_ptr<U> x );    
                 std::auto_ptr<reversible_ptr_container>  clone() const;    
                 std::auto_ptr<reversible_ptr_container>  release();
                 auto_type                                release( iterator position );
+		
+	    public: // `serialization`_
+	        template< class Archive >
+	        void save( Archive& ar, const unsigned version ) const;  
+	        template< class Archive >
+	        void load( Archive& ar, const unsigned version );	
             
             }; //  class 'reversible_ptr_container'
 
@@ -167,12 +195,15 @@ functionality unless you know what you are doing*).
 - ``typedef ... auto_type``
 
 This declaration hides a pointer pointer type. You can rely on the following
-operations::
+operations 
+
+.. parsed-literal:: 
 
     T* operator->() const;
     T& operator*() const;
     T* release();
     ~auto_type();
+    operator *implementation-defined bool*\ ();
 
 The destructor will delete the stored object. It might help to
 think it is just an ``std::auto_ptr<T>``.
@@ -399,6 +430,41 @@ Semantics: null predicate
 
     - Returns: ``*i.base() == 0;``
 
+.. _`serialization`:
 
-:copyright:     Thorsten Ottosen 2004-2005. 
+Semantics: serialization
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+All containers can be serialized by means of
+`Boost.Serialization`__. For an overview, see
+`Serialization of Pointer Containers`_.
+
+.. __: ../../serialization/index.html
+.. _`Serialization of Pointer Containers`: reference.html#serialization
+
+- ``template< class Archive > void save( Archive& ar, const unsigned version ) const;``
+    
+    - Effects: Saves the container to the archive.
+  
+    - Remarks: This function is called automatically be stream operators in
+      Boost.Serialization
+	
+- ``template< class Archive >
+  void load( Archive& ar, const unsigned version );``	
+
+    - Effects: Clears the container and then loads a new container from the archive.
+  
+    - Remarks: This function is called automatically be stream operators in
+      Boost.Serialization
+	     
+    - Exception safety: Basic guarantee
+
+
+.. raw:: html 
+
+        <hr>
+
+:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+
+__ http://www.boost.org/LICENSE_1_0.txt
 

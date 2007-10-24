@@ -293,6 +293,32 @@ ul.auto-toc {
 <h1><a id="class-reversible-ptr-container" name="class-reversible-ptr-container">Class <tt class="docutils literal"><span class="pre">reversible_ptr_container</span></tt></a></h1>
 <p>This class is not a real class that can be found in the library. 
 Its purpose is to present the general interface of all the pointer containers.</p>
+<p><strong>Hierarchy:</strong></p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">reversible_ptr_container</span></tt><ul>
+<li><a class="reference" href="ptr_sequence_adapter.html">ptr_sequence_adapter</a><ul>
+<li><a class="reference" href="ptr_vector.html">ptr_vector</a></li>
+<li><a class="reference" href="ptr_list.html">ptr_list</a></li>
+<li><a class="reference" href="ptr_deque.html">ptr_deque</a></li>
+<li><a class="reference" href="ptr_array.html">ptr_array</a></li>
+</ul>
+</li>
+<li><a class="reference" href="associative_ptr_container.html">associative_ptr_container</a><ul>
+<li><a class="reference" href="ptr_set_adapter.html">ptr_set_adapter</a></li>
+<li><a class="reference" href="ptr_multiset_adapter.html">ptr_multiset_adapter</a></li>
+<li><a class="reference" href="ptr_map_adapter.html">ptr_map_adapter</a></li>
+<li><a class="reference" href="ptr_multimap_adapter.html">ptr_multi_map_adapter</a><ul>
+<li><a class="reference" href="ptr_set.html">ptr_set</a></li>
+<li><a class="reference" href="ptr_multiset.html">ptr_multi_set</a></li>
+<li><a class="reference" href="ptr_map.html">ptr_map</a></li>
+<li><a class="reference" href="ptr_multimap.html">ptr_multimap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <p><strong>Navigate:</strong></p>
 <ul class="simple">
 <li><a class="reference" href="ptr_container.html">home</a></li>
@@ -352,13 +378,18 @@ namespace boost
         void      clear():
     
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
-    
         auto_type                                replace( iterator position, T* x );
         template&lt; class U &gt;
         auto_type                                replace( iterator position, std::auto_ptr&lt;U&gt; x );    
         std::auto_ptr&lt;reversible_ptr_container&gt;  clone() const;    
         std::auto_ptr&lt;reversible_ptr_container&gt;  release();
         auto_type                                release( iterator position );
+        
+    public: // <a class="reference" href="#serialization">serialization</a>
+        template&lt; class Archive &gt;
+        void save( Archive&amp; ar, const unsigned version ) const;  
+        template&lt; class Archive &gt;
+        void load( Archive&amp; ar, const unsigned version );       
     
     }; //  class 'reversible_ptr_container'
 
@@ -446,12 +477,13 @@ functionality unless you know what you are doing</em>).</p>
 <li><tt class="docutils literal"><span class="pre">typedef</span> <span class="pre">...</span> <span class="pre">auto_type</span></tt></li>
 </ul>
 <p>This declaration hides a pointer pointer type. You can rely on the following
-operations:</p>
+operations</p>
 <pre class="literal-block">
 T* operator-&gt;() const;
 T&amp; operator*() const;
 T* release();
 ~auto_type();
+operator <em>implementation-defined bool</em>();
 </pre>
 <p>The destructor will delete the stored object. It might help to
 think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;T&gt;</span></tt>.</p>
@@ -626,10 +658,10 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;class</span> <span class="pre">U&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
-<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">replace(</span> <span class="pre">position,</span> <span class="pre">x.release()</span> <span class="pre">)</span></tt></li>
+<li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">replace(</span> <span class="pre">position,</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>
 </ul>
 </blockquote>
 </li>
@@ -703,11 +735,39 @@ objects are compared and not the pointers to objects.</p>
 </blockquote>
 </li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
+</div>
+<div class="section">
+<h2><a id="semantics-serialization" name="semantics-serialization"><span id="serialization"></span>Semantics: serialization</a></h2>
+<p>All containers can be serialized by means of
+<a class="reference" href="../../serialization/index.html">Boost.Serialization</a>. For an overview, see
+<a class="reference" href="reference.html#serialization">Serialization of Pointer Containers</a>.</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Archive</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">save(</span> <span class="pre">Archive&amp;</span> <span class="pre">ar,</span> <span class="pre">const</span> <span class="pre">unsigned</span> <span class="pre">version</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Saves the container to the archive.</li>
+<li>Remarks: This function is called automatically be stream operators in
+Boost.Serialization</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Archive</span> <span class="pre">&gt;</span>
+<span class="pre">void</span> <span class="pre">load(</span> <span class="pre">Archive&amp;</span> <span class="pre">ar,</span> <span class="pre">const</span> <span class="pre">unsigned</span> <span class="pre">version</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Clears the container and then loads a new container from the archive.</li>
+<li>Remarks: This function is called automatically be stream operators in
+Boost.Serialization</li>
+<li>Exception safety: Basic guarantee</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">copyright:</th><td class="field-body">Thorsten Ottosen 2004-2005.</td>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
 </tr>
 </tbody>
 </table>

@@ -9,17 +9,18 @@ Class ``ptr_array``
 
 A ``ptr_array<T,size>`` is a pointer container that uses an underlying ``boost::array<void*,size>``
 to store the pointers. The class is useful when there is no requirement
-of dynamic expansion and when absolute no overhead is tolerable.
+of dynamic expansion and when no overhead is tolerable.
 
-**See also:**
+**Hierarchy:**
 
-- reversible_ptr_container_
-- ptr_sequence_adapter_
-- ptr_vector_
+- `reversible_ptr_container <reversible_ptr_container.html>`_
 
-.. _reversible_ptr_container: reversible_ptr_container.html 
-.. _ptr_sequence_adapter: ptr_sequence_adapter.html
-.. _ptr_vector: ptr_vector.html
+  - `ptr_sequence_adapter <ptr_sequence_adapter.html>`_
+
+    - `ptr_vector <ptr_vector.html>`_
+    - `ptr_list <ptr_list.html>`_ 
+    - `ptr_deque <ptr_deque.html>`_
+    - ``ptr_array``
 
 **Navigate:**
 
@@ -250,5 +251,12 @@ Semantics: pointer container requirements
 
     - Exception safety: Nothrow guarantee
 
-:copyright:     Thorsten Ottosen 2004-2005. 
+.. raw:: html 
+
+        <hr>
+
+:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+
+__ http://www.boost.org/LICENSE_1_0.txt
+
 
