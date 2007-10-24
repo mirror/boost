@@ -18,6 +18,7 @@
 #include <boost/intrusive/list_hook.hpp>
 #include <boost/intrusive/slist_hook.hpp>
 #include <boost/intrusive/unordered_set_hook.hpp>
+#include <boost/intrusive/splay_set_hook.hpp>
 #include <boost/intrusive/options.hpp>
 #include <boost/functional/hash.hpp>
 #include "smart_ptr.hpp"
@@ -33,15 +34,31 @@ struct set_base_hook_type
 
 template<class VoidPointer>
 struct set_auto_base_hook_type
-{  typedef set_base_hook<link_mode<auto_unlink>, void_pointer<VoidPointer>, tag<my_tag> > type;  };
+{  typedef set_base_hook<link_mode<auto_unlink>, void_pointer<VoidPointer>, tag<my_tag>, optimize_size<true> > type;  };
 
 template<class VoidPointer>
 struct set_member_hook_type
-{  typedef set_member_hook<void_pointer<VoidPointer> > type;  };
+{  typedef set_member_hook<void_pointer<VoidPointer>, optimize_size<true> > type;  };
 
 template<class VoidPointer>
 struct set_auto_member_hook_type
 {  typedef set_member_hook<link_mode<auto_unlink>, void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct splay_set_base_hook_type
+{  typedef splay_set_base_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct splay_set_auto_base_hook_type
+{  typedef splay_set_base_hook<link_mode<auto_unlink>, void_pointer<VoidPointer>, tag<my_tag> > type;  };
+
+template<class VoidPointer>
+struct splay_set_member_hook_type
+{  typedef splay_set_member_hook<void_pointer<VoidPointer> > type;  };
+
+template<class VoidPointer>
+struct splay_set_auto_member_hook_type
+{  typedef splay_set_member_hook<link_mode<auto_unlink>, void_pointer<VoidPointer> > type;  };
 
 template<class VoidPointer>
 struct list_base_hook_type
@@ -95,6 +112,8 @@ template<class VoidPointer, bool ConstantTimeSize>
 struct testvalue
    :  set_base_hook_type<VoidPointer>::type
    ,  set_auto_base_hook_type<VoidPointer>::type
+   ,  splay_set_base_hook_type<VoidPointer>::type
+   ,  splay_set_auto_base_hook_type<VoidPointer>::type
    ,  list_base_hook_type<VoidPointer>::type
    ,  list_auto_base_hook_type<VoidPointer>::type
    ,  slist_base_hook_type<VoidPointer>::type
@@ -102,29 +121,38 @@ struct testvalue
    ,  uset_base_hook_type<VoidPointer>::type
    ,  uset_auto_base_hook_type<VoidPointer>::type
 {
-   typedef typename set_auto_base_hook_type<VoidPointer>::type       set_auto_base_hook_t;
-   typedef typename set_base_hook_type<VoidPointer>::type            set_base_hook_t;
-   typedef typename set_auto_member_hook_type<VoidPointer>::type     set_auto_member_hook_t;
-   typedef typename set_member_hook_type<VoidPointer>::type          set_member_hook_t;
+   typedef typename set_auto_base_hook_type<VoidPointer>::type          set_auto_base_hook_t;
+   typedef typename set_base_hook_type<VoidPointer>::type               set_base_hook_t;
+   typedef typename set_auto_member_hook_type<VoidPointer>::type        set_auto_member_hook_t;
+   typedef typename set_member_hook_type<VoidPointer>::type             set_member_hook_t;
 
-   typedef typename uset_auto_base_hook_type<VoidPointer>::type      unordered_set_auto_base_hook_t;
-   typedef typename uset_base_hook_type<VoidPointer>::type           unordered_set_base_hook_t;
-   typedef typename uset_auto_member_hook_type<VoidPointer>::type    unordered_set_auto_member_hook_t;
-   typedef typename uset_member_hook_type<VoidPointer>::type         unordered_set_member_hook_t;
+   typedef typename splay_set_auto_base_hook_type<VoidPointer>::type    splay_set_auto_base_hook_t;
+   typedef typename splay_set_base_hook_type<VoidPointer>::type         splay_set_base_hook_t;
+   typedef typename splay_set_auto_member_hook_type<VoidPointer>::type  splay_set_auto_member_hook_t;
+   typedef typename splay_set_member_hook_type<VoidPointer>::type       splay_set_member_hook_t;
 
-   typedef typename list_auto_base_hook_type<VoidPointer>::type      list_auto_base_hook_t;
-   typedef typename list_base_hook_type<VoidPointer>::type           list_base_hook_t;
-   typedef typename list_auto_member_hook_type<VoidPointer>::type    list_auto_member_hook_t;
-   typedef typename list_member_hook_type<VoidPointer>::type         list_member_hook_t;
+   typedef typename uset_auto_base_hook_type<VoidPointer>::type         unordered_set_auto_base_hook_t;
+   typedef typename uset_base_hook_type<VoidPointer>::type              unordered_set_base_hook_t;
+   typedef typename uset_auto_member_hook_type<VoidPointer>::type       unordered_set_auto_member_hook_t;
+   typedef typename uset_member_hook_type<VoidPointer>::type            unordered_set_member_hook_t;
 
-   typedef typename slist_auto_base_hook_type<VoidPointer>::type     slist_auto_base_hook_t;
-   typedef typename slist_base_hook_type<VoidPointer>::type          slist_base_hook_t;
-   typedef typename slist_auto_member_hook_type<VoidPointer>::type   slist_auto_member_hook_t;
-   typedef typename slist_member_hook_type<VoidPointer>::type        slist_member_hook_t;
+   typedef typename list_auto_base_hook_type<VoidPointer>::type         list_auto_base_hook_t;
+   typedef typename list_base_hook_type<VoidPointer>::type              list_base_hook_t;
+   typedef typename list_auto_member_hook_type<VoidPointer>::type       list_auto_member_hook_t;
+   typedef typename list_member_hook_type<VoidPointer>::type            list_member_hook_t;
+
+   typedef typename slist_auto_base_hook_type<VoidPointer>::type        slist_auto_base_hook_t;
+   typedef typename slist_base_hook_type<VoidPointer>::type             slist_base_hook_t;
+   typedef typename slist_auto_member_hook_type<VoidPointer>::type      slist_auto_member_hook_t;
+   typedef typename slist_member_hook_type<VoidPointer>::type           slist_member_hook_t;
 
    //Set members
    set_member_hook_t       set_node_;
    set_auto_member_hook_t  set_auto_node_;
+
+   //SplaySet members
+   splay_set_member_hook_t       splay_set_node_;
+   splay_set_auto_member_hook_t  splay_set_auto_node_;
 
    //Unordered set members
    unordered_set_member_hook_t      unordered_set_node_;
@@ -163,6 +191,11 @@ struct testvalue
       this->set_node_ = src.set_node_;
       this->set_auto_node_ = src.set_auto_node_;
 
+      splay_set_base_hook_t::operator=(src);
+      splay_set_auto_base_hook_t::operator=(src);
+      this->splay_set_node_ = src.splay_set_node_;
+      this->splay_set_auto_node_ = src.splay_set_auto_node_;
+
       unordered_set_base_hook_t::operator=(src);
       unordered_set_auto_base_hook_t::operator=(src);
       this->unordered_set_node_ = src.unordered_set_node_;
@@ -189,6 +222,12 @@ struct testvalue
       set_auto_base_hook_t::swap_nodes(other);
       set_node_.swap_nodes(other.set_node_);
       set_auto_node_.swap_nodes(other.set_auto_node_);
+
+      //SplaySet 
+      splay_set_base_hook_t::swap_nodes(other);
+      splay_set_auto_base_hook_t::swap_nodes(other);
+      splay_set_node_.swap_nodes(other.splay_set_node_);
+      splay_set_auto_node_.swap_nodes(other.splay_set_auto_node_);
 
       //Unordered set 
       unordered_set_base_hook_t::swap_nodes(other);

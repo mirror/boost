@@ -9,8 +9,8 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-//[doc_rbtree_algorithms_code
-#include <boost/intrusive/rbtree_algorithms.hpp>
+//[doc_splaytree_algorithms_code
+#include <boost/intrusive/splaytree_algorithms.hpp>
 #include <cassert>
 
 struct my_node
@@ -24,23 +24,19 @@ struct my_node
    int      int_;
 };
 
-//Define our own rbtree_node_traits
-struct my_rbtree_node_traits
+//Define our own splaytree_node_traits
+struct my_splaytree_node_traits
 {
    typedef my_node                                    node;
    typedef my_node *                                  node_ptr;
    typedef const my_node *                            const_node_ptr;
-   typedef int                                        color;
+
    static node_ptr get_parent(const_node_ptr n)       {  return n->parent_;   }  
    static void set_parent(node_ptr n, node_ptr parent){  n->parent_ = parent; }  
    static node_ptr get_left(const_node_ptr n)         {  return n->left_;     }  
    static void set_left(node_ptr n, node_ptr left)    {  n->left_ = left;     }  
    static node_ptr get_right(const_node_ptr n)        {  return n->right_;    }  
    static void set_right(node_ptr n, node_ptr right)  {  n->right_ = right;   }  
-   static color get_color(const_node_ptr n)           {  return n->color_;    }  
-   static void set_color(node_ptr n, color c)         {  n->color_ = c;       }
-   static color black()                               {  return color(0);     }
-   static color red()                                 {  return color(1);     }
 };
 
 struct node_ptr_compare
@@ -51,10 +47,10 @@ struct node_ptr_compare
 
 int main()
 {
-   typedef boost::intrusive::rbtree_algorithms<my_rbtree_node_traits> algo;
+   typedef boost::intrusive::splaytree_algorithms<my_splaytree_node_traits> algo;
    my_node header, two(2), three(3);
 
-   //Create an empty rbtree container:
+   //Create an empty splaytree container:
    //"header" will be the header node of the tree
    algo::init_header(&header);
 

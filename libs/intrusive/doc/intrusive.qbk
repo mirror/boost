@@ -788,7 +788,7 @@ Like the rest of [*Boost.Intrusive] containers,
 the section [link intrusive.usage How to use Boost.Intrusive]:
 
 *  [*`tag<class Tag>`] (for base hooks only): This argument serves as a tag,
-   so you can derive from more than one list hook.
+   so you can derive from more than one slist hook.
    Default: `tag<default_tag>`.
 
 *  [*`link_mode<link_mode_type LinkMode>`]: The linking policy.
@@ -920,29 +920,38 @@ Now let's see an small example using both hooks:
 
 [endsect]
 
-[section:set_multiset Intrusive associative containers: set, multiset]
+[section:set_multiset Intrusive associative containers: set, multiset, rbtree]
 
 [*Boost.Intrusive] also offers associative containers that can be very useful
 when creating more complex associative containers, like containers maintaining
-one or more indices with different sorting semantics.
-The memory overhead of these containers is usually 3 pointers and an integer. If
-pointers have 2 byte alignment (which is usually true in most systems),
-[*Boost.Intrusive] optimizes this overhead to 3 pointers.
+one or more indices with different sorting semantics. Boost.Intrusive associative 
+containers, like most STL associative container implemenatations are based on
+red-black trees.
 
-An empty, non constant-time size [classref boost::intrusive::set set] or
-[classref boost::intrusive::multiset multiset]
-has also the size of 3 pointers and an integer (3 pointers when optimized).
-[classref boost::intrusive::set set] and
-[classref boost::intrusive::multiset multiset] have logarithmic complexity in many
+The memory overhead of these containers is usually 3 pointers and an integer.
+This size can be reduced to 3 pointers if pointers have even alignment
+(which is usually true in most systems).
+
+An empty, non constant-time size [classref boost::intrusive::set set],
+[classref boost::intrusive::multiset multiset] or
+[classref boost::intrusive::rbtree rbtree]
+has also the size of 3 pointers and an integer (3 pointers when optimized for size).
+These containers have logarithmic complexity in many
 operations like
 searches, insertions, erasures, etc... [classref boost::intrusive::set set] and
 [classref boost::intrusive::multiset multiset] are the
 intrusive equivalents of standard `std::set` and `std::multiset` containers.
 
-[section:set_multiset_hooks set and multiset hooks]
-
+[classref boost::intrusive::rbtree rbtree] is a superset of 
 [classref boost::intrusive::set set] and
-[classref boost::intrusive::multiset multiset] share the same hooks.
+[classref boost::intrusive::multiset multiset] containers that offers
+functions to insert unique and multiple keys.
+
+[section:set_multiset_hooks set, multiset and rbtree hooks]
+
+[classref boost::intrusive::set set],
+[classref boost::intrusive::multiset multiset] and
+[classref boost::intrusive::rbtree rbtree] share the same hooks.
 This is an advantage, because the same
 user type can be inserted first in a [classref boost::intrusive::multiset multiset]
 and after that in [classref boost::intrusive::set set] without
@@ -971,10 +980,10 @@ changing the definition of the user class.
 [classref boost::intrusive::set_base_hook set_base_hook] and
 [classref boost::intrusive::set_member_hook set_member_hook] receive
 the same options explained in the section
-[link intrusive.usage How to use Boost.Intrusive]:
+[link intrusive.usage How to use Boost.Intrusive] plus a size optimization option:
 
 *  [*`tag<class Tag>`] (for base hooks only): This argument serves as a tag,
-   so you can derive from more than one list hook.
+   so you can derive from more than one base hook.
    Default: `tag<default_tag>`.
 
 *  [*`link_mode<link_mode_type LinkMode>`]: The linking policy.
@@ -984,9 +993,16 @@ the same options explained in the section
    internally in the hook and propagated to the container.
    Default: `void_pointer<void*>`.
 
+*  [*`optimize_size<bool Enable>`]: The hook will be optimized for size
+   instead of speed. The hook will embed the color bit of the red-black
+   tree node in the parent pointer if pointer alignment is even.
+   Optimizing the size will reduce speed performance a bit since masking
+   operations will be needed to access parent pointer and color attributes.
+   Default: `optimize_size<false>`.
+
 [endsect]
 
-[section:set_multiset_containers set and multiset containers]
+[section:set_multiset_containers set, multiset and rbtree containers]
 
 [c++]
 
@@ -996,8 +1012,11 @@ the same options explained in the section
    template <class T, class ...Options>
    class multiset;
 
-[classref boost::intrusive::set set] and [classref boost::intrusive::multiset multiset]
-receive the same options explained in the section [link intrusive.usage How to use Boost.Intrusive]:
+   template <class T, class ...Options>
+   class rbtree;
+
+These containers receive the same options explained in the section
+[link intrusive.usage How to use Boost.Intrusive]:
 
 *  [*`base_hook<class Hook>`] / [*`member_hook<class T, class Hook, Hook T::* PtrToMember>`] / 
    [*`value_traits<class ValueTraits>`]: To specify the hook type or value traits used
@@ -1110,7 +1129,7 @@ the same options explained in the section
 [link intrusive.usage How to use Boost.Intrusive]:
 
 *  [*`tag<class Tag>`] (for base hooks only): This argument serves as a tag,
-   so you can derive from more than one list hook.
+   so you can derive from more than one base hook.
    Default: `tag<default_tag>`.
 
 *  [*`link_mode<link_mode_type LinkMode>`]: The linking policy.
@@ -1235,6 +1254,142 @@ the unordered container:
 
 [import ../example/doc_bucket_traits.cpp]
 [doc_bucket_traits]
+
+[endsect]
+
+[endsect]
+
+[section:splay_set_multiset Intrusive splay tree-based associative containers: splay_set, splay_multiset]
+
+C++ associative containers are usually based on red-black tree implementations (e.g.: STL,
+Boost.Intrusive associative containers). However, there are other interesting data structures
+that offer some advantages (and also disadvantages).
+
+Splay trees are self-adjusting binary search trees used tipically in caches, memory
+allocators and other applications, because splay trees have a "caching effect": recently
+accessed elements have better access times that elements accessed less frequently.
+For more information on splay trees see [@http://en.wikipedia.org/wiki/Splay_tree Wikipedia].
+
+[*Boost.Intrusive] offers 3 containers based on splay trees:
+[classref boost::intrusive::splay_set splay_set],
+[classref boost::intrusive::splay_multiset splay_multiset] and
+[classref boost::intrusive::splaytree splaytree]. The first two are similar to
+[classref boost::intrusive::set set] or
+[classref boost::intrusive::multiset multiset] and the latter is a generalization
+that offers functions both to insert unique and multiple keys.
+
+The memory overhead of these containers with Boost.Intrusive hooks is usually 3 pointers.
+An empty, non constant-time size splay container has also the size of 3 pointers.
+
+[section:splay_set_multiset_disadvantages Advantages and disadvantages of splay tree based containers]
+
+Splay tree based intrusive containers have logarithmic complexity in many
+operations like searches, insertions, erasures, etc... but if some elements are
+more frequently accessed than others, splay trees perform faster searches than equivalent
+balanced binary trees (such as red-black trees).
+
+The caching effect offered by splay trees comes with a cost: the tree must be
+rebalanced when a element is searched. This disallows const versions of search
+functions like `find()`, `lower_bound()`, `upper_bound()`, `equal_range()`,
+`count()`...
+
+Because of this, splay-tree based associative containers are not drop-in
+replacements of [classref boost::intrusive::set set]/
+[classref boost::intrusive::splay_set splay_set].
+
+Apart from this, if element searches are randomized, the tree will be rebalanced
+without taking advantage of the cache effect, so splay trees can offer worse
+performance than other balanced trees for some search patterns.
+
+[endsect]
+
+[section:splay_set_multiset_hooks splay_set, splay_multiset and splaytree hooks]
+
+[classref boost::intrusive::set set],
+[classref boost::intrusive::multiset multiset] and
+[classref boost::intrusive::splaytree splaytree]
+share the same hooks.
+
+[c++]
+
+   template <class ...Options>
+   class splay_set_base_hook;
+
+*  [classref boost::intrusive::splay_set_base_hook splay_set_base_hook]:
+   the user class derives publicly from this class to make
+   it compatible with splay tree based containers.
+
+[c++]
+
+   template <class ...Options>
+   class splay_set_member_hook;
+
+*  [classref boost::intrusive::set_member_hook set_member_hook]:
+   the user class contains a public member of this class to make
+   it compatible with splay tree based containers.
+
+[classref boost::intrusive::splay_set_base_hook splay_set_base_hook] and
+[classref boost::intrusive::splay_set_member_hook splay_set_member_hook] receive
+the same options explained in the section
+[link intrusive.usage How to use Boost.Intrusive]:
+
+*  [*`tag<class Tag>`] (for base hooks only): This argument serves as a tag,
+   so you can derive from more than one base hook.
+   Default: `tag<default_tag>`.
+
+*  [*`link_mode<link_mode_type LinkMode>`]: The linking policy.
+   Default: `link_mode<safe_link>`.
+
+*  [*`void_pointer<class VoidPointer>`]: The pointer type to be used
+   internally in the hook and propagated to the container.
+   Default: `void_pointer<void*>`.
+
+[endsect]
+
+[section:set_multiset_containers splay_set, splay_multiset and splaytree containers]
+
+[c++]
+
+   template <class T, class ...Options>
+   class splay_set;
+
+   template <class T, class ...Options>
+   class splay_multiset;
+
+   template <class T, class ...Options>
+   class splaytree;
+
+These containers receive the same options explained in the section
+[link intrusive.usage How to use Boost.Intrusive]:
+
+*  [*`base_hook<class Hook>`] / [*`member_hook<class T, class Hook, Hook T::* PtrToMember>`] / 
+   [*`value_traits<class ValueTraits>`]: To specify the hook type or value traits used
+   to configure the container (to know about value traits go to the section
+   titled [link intrusive.value_traits Containers with custom ValueTraits].
+
+*  [*`constant_time_size<bool Enabled>`]: To activate the constant-time `size()` operation.
+   Default: `constant_time_size<true>`
+
+*  [*`size_type<bool Enabled>`]: To specify the type that will be used to store the size
+   of the container. Default: `size_type<std::size_t>`
+
+And they also can receive an additional option:
+
+*  [*`compare<class Compare>`]: Comparison function for the objects to be inserted
+   in containers. The comparison functor must induce a strict weak ordering.
+   Default: `compare< std::less<T> >`
+
+[endsect]
+
+[section:splay_set_multiset_example Example]
+
+Now let's see an small example using both hooks and
+[classref boost::intrusive::splay_set splay_set]/
+[classref boost::intrusive::splay_multiset splay_multiset]
+containers:
+
+[import ../example/doc_splay_set.cpp]
+[doc_splay_set_code]
 
 [endsect]
 
@@ -1520,7 +1675,7 @@ On the other hand, `local_iterator_to` functions
 have their `s_local_iterator_to` static alternatives.
 
 Alternative static functions are available under certain circunstances
-explained in the [link: stateful_value_traits Stateful value traits] section,
+explained in the [link intrusive.value_traits.stateful_value_traits Stateful value traits] section,
 but the programmer uses hooks provided by [*Boost.Intrusive], those functions
 will be available.
 
@@ -1903,6 +2058,66 @@ with our nodes:
 
 For a complete rbtree of functions see
 [classref boost::intrusive::rbtree_algorithms rbtree_algorithms reference].
+
+[endsect]
+
+[section:splaytree_algorithms Intrusive splay tree algorithms]
+
+These algorithms are static
+members of the [classref boost::intrusive::rbtree_algorithms splaytree_algorithms] class:
+
+[c++]
+
+   template<class NodeTraits>
+   struct splaytree_algorithms;
+
+
+An empty tree is formed by a node whose pointer to the parent node is null,
+the pointers to the left and right nodes to itself.
+[classref boost::intrusive::splaytree_algorithms rbtree_algorithms]
+is configured with a NodeTraits class, which encapsulates 
+the information about the node to be manipulated. NodeTraits must support the
+following interface:
+
+[*Typedefs]:
+
+*  `node`: The type of the node that forms the circular rbtree
+
+*  `node_ptr`: The type of a pointer to a node (usually node*)
+
+*  `const_node_ptr`: The type of a pointer to a const node (usually const node*)
+
+[*Static functions]:
+
+*  `static node_ptr get_parent(const_node_ptr n);`:
+   Returns a pointer to the parent node stored in "n".
+
+*  `static void set_parent(node_ptr n, node_ptr p);`:
+   Sets the pointer to the parent node stored in "n" to "p".
+
+*  `static node_ptr get_left(const_node_ptr n);`:
+   Returns a pointer to the left node stored in "n".
+
+*  `static void set_left(node_ptr n, node_ptr l);`:
+   Sets the pointer to the left node stored in "n" to "l".
+
+*  `static node_ptr get_right(const_node_ptr n);`:
+   Returns a pointer to the right node stored in "n".
+
+*  `static void set_right(node_ptr n, node_ptr r);`:
+   Sets the pointer to the right node stored in "n" to "r".
+
+*  `static color get_color(const_node_ptr n);`:
+   Returns the color stored in "n".
+
+Once we have a node traits configuration we can use [*Boost.Intrusive] algorithms
+with our nodes:
+
+[import ../example/doc_splaytree_algorithms.cpp]
+[doc_splaytree_algorithms_code]
+
+For a complete rbtree of functions see
+[classref boost::intrusive::splaytree_algorithms splaytree_algorithms reference].
 
 [endsect]
 
@@ -2721,6 +2936,18 @@ exception handling in the library.
 *  GCC 3.4.3/Solaris 11
 *  GCC 4.0/Mac Os 10.4.1
 *  SunCC 5.8/Solaris 11
+
+[endsect]
+
+[section:references References]
+
+* SGI's [@http://www.sgi.com/tech/stl/ STL Programmer's Guide].
+   [*Boost.Intrusive] is based on STL concepts and interface.
+
+* Dr. Dobb's, September 1, 2005: [@http://www.ddj.com/architect/184402007 ['Implementing Splay Trees in C++] ].
+   [*Boost.Intrusive] splay containers code is based on this article.
+
+* Olaf's original intrusive container library: [@http://freenet-homepage.de/turtle++/intrusive.html ['STL-like intrusive containers] ].
 
 [endsect]
 

@@ -136,6 +136,9 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\options.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_bit.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\rbtree.hpp">
 			</File>
 			<File
@@ -152,6 +155,18 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\slist_hook.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\splay_set.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\splay_set_hook.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\splaytree.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\splaytree_algorithms.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\trivial_value_traits.hpp">
@@ -196,9 +211,6 @@
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\parent_from_member.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_bit.hpp">
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\pointer_to_other.hpp">
 				</File>
 				<File
@@ -208,7 +220,16 @@
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\slist_node.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\splaytree_node.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\transform_iterator.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\tree_algorithms.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\tree_node.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\utilities.hpp">
@@ -306,6 +327,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_slist_algorithms.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_splay_algorithms.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_splay_set.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_stateful_value_traits.cpp">

@@ -317,7 +317,7 @@ void test_unordered_multiset<ValueTraits>
          src(testset1.begin(), testset1.end());
       std::multiset<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
-      BOOST_TEST (src == dst);
+      BOOST_TEST (src.size() == dst.size() && std::equal(src.begin(), src.end(), dst.begin()));
       testset2.clear_and_dispose(test::delete_disposer<value_type>());
       BOOST_TEST (testset2.empty());
    }
@@ -334,7 +334,7 @@ void test_unordered_multiset<ValueTraits>
          src(testset1.begin(), testset1.end());
       std::multiset<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
-      BOOST_TEST (src == dst);
+      BOOST_TEST (src.size() == dst.size() && std::equal(src.begin(), src.end(), dst.begin()));
       testset2.clear_and_dispose(test::delete_disposer<value_type>());
       BOOST_TEST (testset2.empty());
    }
@@ -351,7 +351,7 @@ void test_unordered_multiset<ValueTraits>
          src(testset1.begin(), testset1.end());
       std::multiset<typename ValueTraits::value_type>
          dst(testset2.begin(), testset2.end());
-      BOOST_TEST (src == dst);
+      BOOST_TEST (src.size() == dst.size() && std::equal(src.begin(), src.end(), dst.begin()));
       testset2.clear_and_dispose(test::delete_disposer<value_type>());
       BOOST_TEST (testset2.empty());
    }

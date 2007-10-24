@@ -12,3 +12,4 @@ Create a new assertion for each type of error
 Add resize() to list
 Optimize rehash for when shrinking: there is no need to hash the values.
 Add BOOST_STATIC_ASSERT to s_iterator_to functions and fix documentation on this issue.
+rbtree::count() is recursive.
