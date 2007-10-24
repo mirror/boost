@@ -121,7 +121,7 @@ EOF
 #
 #	 now for the main target for this library:
 	echo ./$subdir$stlport_suffix/$libname.lib : $all_obj >> $tout
-	echo "	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:\"$subdir$stlport_suffix/$libname.pdb\" /debug /machine:I386 /out:\"$subdir$stlport_suffix/$libname.dll\" /implib:\"$subdir$stlport_suffix/$libname.lib\" /LIBPATH:\"\$(STLPORT_PATH)\\lib\" \$(XLFLAGS) \$(ICU_LINK_OPTS) $all_obj" >> $tout
+	echo "	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /dll /incremental:yes /pdb:\"$subdir$stlport_suffix/$libname.pdb\" /debug /machine:I386 /out:\"$subdir$stlport_suffix/$libname.dll\" /implib:\"$subdir$stlport_suffix/$libname.lib\" /LIBPATH:\"\$(STLPORT_PATH)\\lib\" \$(XLFLAGS) \$(ICU_LINK_OPTS) $all_obj" >> $tout
 	echo "" >> $tout
 }
 
@@ -473,6 +473,7 @@ vc6_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

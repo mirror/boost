@@ -6,7 +6,11 @@
 # locate all the header dependencies:
 for file in ../../../boost/regex/*.hpp ; do
 	if [ -f $file ]; then
-		header="$header $file"
+		if [ $file != ../../../boost/regex/concepts.hpp ]; then
+			if [ $file != ../../../boost/regex/mfc.hpp ]; then
+				header="$header $file"
+			fi
+		fi
 	fi
 done
 
@@ -56,5 +60,7 @@ done
 
 boost_version=$(grep 'define.*BOOST_LIB_VERSION' ../../../boost/version.hpp | sed 's/.*"\([^"]*\)".*/\1/')
 echo Boost version tag = $boost_version
+
+
 
 
