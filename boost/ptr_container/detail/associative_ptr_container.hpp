@@ -135,6 +135,12 @@ namespace ptr_container_detail
             return res;                                          // nothrow
         }
 
+        template< class Range >
+        iterator erase( const Range& r )
+        {
+            return erase( boost::begin(r), boost::end(r) );
+        }
+
     protected:
 
         template< class AssociatePtrCont >

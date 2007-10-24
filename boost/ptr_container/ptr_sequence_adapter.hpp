@@ -429,6 +429,40 @@ namespace ptr_container_detail
             return this->base()[idx] == 0;
         }
 
+    public: // resize
+
+        void resize( size_type size )
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( boost::next( this->begin(), size ), this->end() );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_back( new T ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }
+
+        void resize( size_type size, T* to_clone )
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( boost::next( this->begin(), size ), this->end() );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_back( this->null_policy_allocate_clone( to_clone ) ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );        
+        }
+          
     public: // algorithms
 
         void sort( iterator first, iterator last )

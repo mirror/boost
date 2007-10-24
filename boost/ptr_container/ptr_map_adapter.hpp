@@ -282,7 +282,7 @@ namespace ptr_container_detail
 
             auto_type old( where->second );       // nothrow
             where.base()->second = ptr.release(); // nothrow, commit
-            return move( old );
+            return boost::ptr_container::move( old );
         }
 
         template< class U >
@@ -364,9 +364,10 @@ namespace ptr_container_detail
                 {
                     const_reference p = *first.base();     // nothrow                    
                     auto_type ptr( this->null_policy_allocate_clone( p.second ) ); 
-                                                              // strong 
-                    this->safe_insert( p.first, ptr_container_detail::
-                                                move( ptr ) );// strong, commit
+                                                           // strong 
+                    this->safe_insert( p.first, 
+                                       boost::ptr_container::move( ptr ) );
+                                                           // strong, commit 
                 }
                 ++first;                                                      
             }                                                                 
@@ -452,7 +453,7 @@ namespace ptr_container_detail
             return this->single_transfer( first, last, from );
         }
 
-#ifdef BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE 
 #else    
 
         template< class PtrMapAdapter, class Range >
@@ -548,8 +549,9 @@ namespace ptr_container_detail
                 const_reference pair = *first.base();     // nothrow                     
                 auto_type ptr( this->null_policy_allocate_clone( pair.second ) );    
                                                           // strong
-                safe_insert( pair.first, ptr_container_detail::
-                                         move( ptr ) );   // strong, commit
+                safe_insert( pair.first, 
+                             boost::ptr_container::move( ptr ) );
+                                                         // strong, commit 
                 ++first;                                                      
             }                                                                 
         }
@@ -627,7 +629,7 @@ namespace ptr_container_detail
             return this->multi_transfer( first, last, from );
         }
 
-#ifdef BOOST_NO_SFINAE
+#ifdef BOOST_NO_SFINAE 
 #else    
 
         template<  class PtrMapAdapter, class Range >

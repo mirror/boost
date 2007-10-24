@@ -133,7 +133,7 @@ namespace boost
 
             auto_type res( static_cast<U*>( this->base()[idx] ) ); // nothrow
             this->base()[idx] = r;                                 // nothrow
-            return move(res);                                           // nothrow
+            return boost::ptr_container::move(res);                // nothrow 
         }
 
         template< size_t idx, class V >
@@ -153,7 +153,7 @@ namespace boost
 
             auto_type res( static_cast<U*>( this->base()[idx] ) ); // nothrow
             this->base()[idx] = ptr.release();                     // nothrow
-            return move(res);                                           // nothrow
+            return boost::ptr_container::move(res);                // nothrow 
         }
 
         template< class V >
