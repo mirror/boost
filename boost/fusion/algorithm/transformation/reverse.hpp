@@ -7,7 +7,7 @@
 #if !defined(FUSION_REVERSE_07212005_1230)
 #define FUSION_REVERSE_07212005_1230
 
-#include <boost/fusion/sequence/view/reverse_view/reverse_view.hpp>
+#include <boost/fusion/view/reverse_view/reverse_view.hpp>
 
 namespace boost { namespace fusion
 {

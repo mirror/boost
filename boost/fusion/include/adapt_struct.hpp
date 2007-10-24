@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_ADAPT_STRUCT)
 #define FUSION_INCLUDE_ADAPT_STRUCT
 
-#include <boost/fusion/sequence/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 #endif

@@ -7,7 +7,7 @@
 #if !defined(FUSION_TUPLE_FORWARD_10032005_0956)
 #define FUSION_TUPLE_FORWARD_10032005_0956
 
-#include <boost/fusion/sequence/container/vector/limits.hpp>
+#include <boost/fusion/container/vector/limits.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
 namespace boost { namespace fusion

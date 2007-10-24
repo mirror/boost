@@ -17,7 +17,7 @@
 
 #include <boost/utility/result_of.hpp>
 
-#include <boost/fusion/sequence/container/vector/vector.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
 
 #include <boost/fusion/functional/adapter/limits.hpp>
 #include <boost/fusion/functional/adapter/detail/access.hpp>

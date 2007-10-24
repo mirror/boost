@@ -11,7 +11,7 @@
 #include <algorithm>
 
 #include <boost/fusion/support/is_sequence.hpp>
-#include <boost/fusion/sequence/view/zip_view.hpp>
+#include <boost/fusion/view/zip_view.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/fusion/sequence/intrinsic/front.hpp>

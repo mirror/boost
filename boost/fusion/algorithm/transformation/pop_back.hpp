@@ -7,7 +7,7 @@
 #if !defined(FUSION_POP_BACK_09172005_1038)
 #define FUSION_POP_BACK_09172005_1038
 
-#include <boost/fusion/sequence/view/iterator_range/iterator_range.hpp>
+#include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/iterator/prior.hpp>

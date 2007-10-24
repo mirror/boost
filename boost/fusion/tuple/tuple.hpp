@@ -8,7 +8,7 @@
 #define FUSION_TUPLE_10032005_0810
 
 #include <boost/fusion/tuple/tuple_fwd.hpp>
-#include <boost/fusion/sequence/container/vector/vector.hpp>
+#include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>

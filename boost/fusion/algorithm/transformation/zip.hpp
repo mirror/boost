@@ -9,10 +9,10 @@
 #if !defined(FUSION_ZIP_HPP_20060125_2058)
 #define FUSION_ZIP_HPP_20060125_2058
 
-#include <boost/fusion/sequence/view/zip_view.hpp>
-#include <boost/fusion/sequence/adapted/mpl.hpp>
-#include <boost/fusion/sequence/container/vector.hpp>
-#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/view/zip_view.hpp>
+#include <boost/fusion/adapted/mpl.hpp>
+#include <boost/fusion/container/vector.hpp>
+#include <boost/fusion/container/vector/convert.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>

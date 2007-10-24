@@ -7,7 +7,7 @@
 #if !defined(FUSION_CLEAR_09172005_1127)
 #define FUSION_CLEAR_09172005_1127
 
-#include <boost/fusion/sequence/container/vector/vector10.hpp>
+#include <boost/fusion/container/vector/vector10.hpp>
 
 namespace boost { namespace fusion
 {

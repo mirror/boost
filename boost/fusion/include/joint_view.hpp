@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_JOINT_VIEW)
 #define FUSION_INCLUDE_JOINT_VIEW
 
-#include <boost/fusion/sequence/view/joint_view.hpp>
+#include <boost/fusion/view/joint_view.hpp>
 
 #endif
