@@ -15,7 +15,7 @@
 #if BOOST_VERSION < 103500
 # include <boost/spirit/fusion/sequence/cons.hpp>
 #else
-# include <boost/fusion/sequence/container/list/cons.hpp>
+# include <boost/fusion/include/cons.hpp>
 #endif
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>

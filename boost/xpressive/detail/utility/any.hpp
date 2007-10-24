@@ -15,7 +15,7 @@
 // In Boost 1.33+, we have a cons list in Fusion, so just include it.
 
 # if BOOST_VERSION >= 103500
-#  include <boost/fusion/algorithm/query/any.hpp> // Boost 1.35+ has Fusion2
+#  include <boost/fusion/include/any.hpp> // Boost 1.35+ has Fusion2
 # else
 #  include <boost/spirit/fusion/algorithm/any.hpp> // Fusion1
 # endif

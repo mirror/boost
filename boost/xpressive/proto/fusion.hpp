@@ -21,18 +21,18 @@
 #include <boost/mpl/next_prior.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/fusion/support/is_view.hpp>
-#include <boost/fusion/support/tag_of_fwd.hpp>
-#include <boost/fusion/support/category_of.hpp>
-#include <boost/fusion/support/iterator_base.hpp>
-#include <boost/fusion/sequence/intrinsic/mpl.hpp>
-#include <boost/fusion/sequence/intrinsic.hpp>
-#include <boost/fusion/sequence/view/single_view.hpp>
-#include <boost/fusion/sequence/view/transform_view.hpp>
+#include <boost/fusion/include/is_view.hpp>
+#include <boost/fusion/include/tag_of_fwd.hpp>
+#include <boost/fusion/include/category_of.hpp>
+#include <boost/fusion/include/iterator_base.hpp>
+#include <boost/fusion/include/mpl.hpp>
+#include <boost/fusion/include/intrinsic.hpp>
+#include <boost/fusion/include/single_view.hpp>
+#include <boost/fusion/include/transform_view.hpp>
 #include <boost/fusion/support/ext_/is_segmented.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
-#include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
+#include <boost/fusion/view/ext_/segmented_iterator.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 #define UNREF(x) typename remove_reference<x>::type

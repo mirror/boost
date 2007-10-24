@@ -30,10 +30,10 @@
 #include <boost/xpressive/proto/context.hpp>
 #if BOOST_VERSION >= 103500
 # include <boost/xpressive/proto/fusion.hpp>
-# include <boost/fusion/sequence/view/transform_view.hpp>
-# include <boost/fusion/functional/invocation/invoke.hpp>
-# include <boost/fusion/algorithm/transformation/push_front.hpp>
-# include <boost/fusion/algorithm/transformation/pop_front.hpp>
+# include <boost/fusion/include/transform_view.hpp>
+# include <boost/fusion/include/invoke.hpp>
+# include <boost/fusion/include/push_front.hpp>
+# include <boost/fusion/include/pop_front.hpp>
 #endif
 
 namespace boost { namespace xpressive { namespace detail

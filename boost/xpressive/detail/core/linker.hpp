@@ -25,7 +25,7 @@
 #include <boost/version.hpp>
 
 #if BOOST_VERSION >= 103500
-# include <boost/fusion/algorithm/iteration/for_each.hpp>
+# include <boost/fusion/include/for_each.hpp>
 #else
 # include <boost/spirit/fusion/algorithm/for_each.hpp>
 #endif

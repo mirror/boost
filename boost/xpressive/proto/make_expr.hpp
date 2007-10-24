@@ -52,9 +52,9 @@
     #include <boost/xpressive/proto/domain.hpp>
     #include <boost/xpressive/proto/generate.hpp>
     #if BOOST_VERSION >= 103500
-    # include <boost/fusion/sequence/intrinsic/at.hpp>
-    # include <boost/fusion/sequence/intrinsic/value_at.hpp>
-    # include <boost/fusion/sequence/intrinsic/size.hpp>
+    # include <boost/fusion/include/at.hpp>
+    # include <boost/fusion/include/value_at.hpp>
+    # include <boost/fusion/include/size.hpp>
     namespace boost { namespace proto { namespace detail
     {
         namespace fusion_ = fusion;
