@@ -37,23 +37,6 @@ namespace boost
 namespace assign_detail
 {
     /////////////////////////////////////////////////////////////////////////
-    // Part 0: common conversion code
-    /////////////////////////////////////////////////////////////////////////
-
-    template< class T >
-    struct assign_decay
-    {
-        //
-        // Add constness to array parameters
-        // to support string literals properly
-        //
-        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            ::boost::is_array<T>,
-            ::boost::decay<const T>,
-            ::boost::decay<T> >::type type;
-    };
-    
-    /////////////////////////////////////////////////////////////////////////
     // Part 1: flexible and efficient interface
     /////////////////////////////////////////////////////////////////////////    
 
