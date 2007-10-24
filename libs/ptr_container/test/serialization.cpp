@@ -125,7 +125,12 @@ void test_serialization_helper()
     BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
     BOOST_CHECK_EQUAL( (*vec2.begin()).i, -1 );
     BOOST_CHECK_EQUAL( (*--vec2.end()).i, 0 );
-    BOOST_CHECK_EQUAL( dynamic_cast<Derived&>(*--vec2.end()).i2, 1 );
+
+    typename Cont::iterator i = vec2.end();
+    --i;
+    Derived* d = dynamic_cast<Derived*>( &*i ); 
+    BOOST_CHECK_EQUAL( d->i2, 1 );
+
 }
 
 template< class Map >
@@ -153,8 +158,10 @@ void test_serialization_map_helper()
     BOOST_CHECK_EQUAL( m.size(), m2.size() );
     BOOST_CHECK_EQUAL( m2.find(key1)->second->i, -1 );
     BOOST_CHECK_EQUAL( m2.find(key2)->second->i, 0 );
-    BOOST_CHECK_EQUAL( dynamic_cast<Derived&>( *m2.find(key2)->second ).i2, 1 );
-    
+
+    typename Map::iterator i = m2.find(key2);
+    Derived* d = dynamic_cast<Derived*>( i->second ); 
+    BOOST_CHECK_EQUAL( d->i2, 1 ); 
 }
 
 //

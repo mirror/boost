@@ -126,7 +126,8 @@ void ptr_map_test()
     c3.insert( c.begin(), c.end() );
     c.insert( c3 );
     c.erase( c.begin() );
-    c3.erase( c3.begin(), c3.end() );
+    BOOST_CHECK( c3.end() == c3.erase( boost::make_iterator_range(c3) ) );
+    c3.erase( a_key );
 
     BOOST_CHECK( c3.empty() );
     c.swap( c3 );
@@ -329,7 +330,7 @@ void test_map()
     // @remark: taking the adress of an rvalue is not valid, though
     //          many compilers accept it.
     //
-    //map_type::pointer          a_pointer    = &*m2.begin();
+    // map_type::pointer          a_pointer    = &*m2.begin();
     //a_pointer->second->foo();
     //map_type::const_pointer    a_cpointer   = &*const_begin(m2);
    
