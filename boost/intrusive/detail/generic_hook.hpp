@@ -32,6 +32,7 @@ enum
 ,  SlistBaseHook
 ,  SetBaseHook
 ,  UsetBaseHook
+,  SplaySetBaseHook
 };
 
 struct no_default_definer{};
@@ -50,6 +51,10 @@ struct default_definer<Hook, SlistBaseHook>
 template <class Hook>
 struct default_definer<Hook, SetBaseHook>
 {  typedef Hook default_set_hook;  };
+
+template <class Hook>
+struct default_definer<Hook, SplaySetBaseHook>
+{  typedef Hook default_splay_set_hook;  };
 
 template <class Hook>
 struct default_definer<Hook, UsetBaseHook>
@@ -115,7 +120,7 @@ class generic_hook
       static const link_mode_type link_mode = LinkMode;
       typedef Tag                                     tag;
       typedef typename GetNodeAlgorithms::type        node_algorithms;
-      typedef typename node_algorithms::node_traits    node_traits;
+      typedef typename node_algorithms::node_traits   node_traits;
       typedef typename node_traits::node              node;
       typedef typename node_traits::node_ptr          node_ptr;
       typedef typename node_traits::const_node_ptr    const_node_ptr;

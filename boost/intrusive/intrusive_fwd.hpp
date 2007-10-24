@@ -141,6 +141,7 @@ template
    < class O1  = none
    , class O2  = none
    , class O3  = none
+   , class O4  = none
    >
 class set_base_hook;
 
@@ -148,8 +149,51 @@ template
    < class O1  = none
    , class O2  = none
    , class O3  = none
+   , class O4  = none
    >
 class set_member_hook;
+
+//splaytree/splay_set/splay_multiset
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class splaytree;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class splay_set;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class splay_multiset;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class splay_set_base_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class splay_set_member_hook;
 
 //hash/unordered
 //rbtree/set/multiset

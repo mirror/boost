@@ -24,6 +24,7 @@
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/options.hpp>
+#include <iterator>
 #include <functional>
 #include <algorithm>
 #include <cstddef>
@@ -906,7 +907,7 @@ class slist_impl
    void dispose_and_assign(Disposer disposer, Iterator b, Iterator e)
    {
       this->clear_and_dispose(disposer);
-      this->insert_after(before_begin(), b, e, disposer);
+      this->insert_after(this->before_begin(), b, e, disposer);
    }
 
    //! <b>Requires</b>: prev is an iterator to an element or x.end()/x.before_begin() in x.

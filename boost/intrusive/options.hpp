@@ -282,14 +282,14 @@ struct void_pointer
 //!the tag of a base hook. A type can not have two
 //!base hooks of the same type, so a tag can be used
 //!to differentiate two base hooks with otherwise same type
-template<class BaseTag>
+template<class Tag>
 struct tag
 {
 /// @cond
    template<class Base>
    struct pack : Base
    {
-      typedef BaseTag tag;
+      typedef Tag tag;
    };
 /// @endcond
 };
@@ -306,6 +306,22 @@ struct link_mode
    struct pack : Base
    {
       static const link_mode_type link_mode = LinkType;
+   };
+/// @endcond
+};
+
+//!This option setter specifies the type of
+//!a void pointer. This will instruct the hook
+//!to use this type of pointer instead of the
+//!default one
+template<bool Enabled>
+struct optimize_size
+{
+/// @cond
+   template<class Base>
+   struct pack : Base
+   {
+      static const bool optimize_size = Enabled;
    };
 /// @endcond
 };
@@ -416,6 +432,7 @@ struct hook_defaults
       , void_pointer<void*>
       , link_mode<safe_link>
       , tag<default_tag>
+      , optimize_size<false>
       >::type
 {};
 

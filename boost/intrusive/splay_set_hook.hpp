@@ -10,15 +10,14 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-
-#ifndef BOOST_INTRUSIVE_SET_HOOK_HPP
-#define BOOST_INTRUSIVE_SET_HOOK_HPP
+#ifndef BOOST_INTRUSIVE_SPLAY_SET_HOOK_HPP
+#define BOOST_INTRUSIVE_SPLAY_SET_HOOK_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
-#include <boost/intrusive/detail/rbtree_node.hpp>
-#include <boost/intrusive/rbtree_algorithms.hpp>
+#include <boost/intrusive/detail/tree_node.hpp>
+#include <boost/intrusive/splaytree_algorithms.hpp>
 #include <boost/intrusive/options.hpp>
 #include <boost/intrusive/detail/generic_hook.hpp>
 
@@ -26,44 +25,43 @@ namespace boost {
 namespace intrusive {
 
 /// @cond
-template<class VoidPointer, bool OptimizeSize = false>
-struct get_set_node_algo
+template<class VoidPointer>
+struct get_splay_set_node_algo
 {
-   typedef rbtree_algorithms<rbtree_node_traits<VoidPointer, OptimizeSize> > type;
+   typedef splaytree_algorithms<tree_node_traits<VoidPointer> > type;
 };
 /// @endcond
 
-//! Helper metafunction to define a \c set_base_hook that yields to the same
+//! Helper metafunction to define a \c splay_set_base_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1 = none, class O2 = none, class O3 = none, class O4 = none>
+template<class O1 = none, class O2 = none, class O3 = none>
 #endif
-struct make_set_base_hook
+struct make_splay_set_base_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3, O4>::type packed_options;
+      < hook_defaults, O1, O2, O3>::type packed_options;
 
    typedef detail::generic_hook
-   < get_set_node_algo<typename packed_options::void_pointer
-                      ,packed_options::optimize_size>
+   < get_splay_set_node_algo<typename packed_options::void_pointer>
    , typename packed_options::tag
    , packed_options::link_mode
-   , detail::SetBaseHook
+   , detail::SplaySetBaseHook
    > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
-//! Derive a class from set_base_hook in order to store objects in 
-//! in an set/multiset. set_base_hook holds the data necessary to maintain 
+//! Derive a class from splay_set_base_hook in order to store objects in 
+//! in an set/multiset. splay_set_base_hook holds the data necessary to maintain 
 //! the set/multiset and provides an appropriate value_traits class for set/multiset.
 //! 
 //! The first integer template argument defines a tag to identify the node. 
 //! The same tag value can be used in different classes, but if a class is 
-//! derived from more than one set_base_hook, then each set_base_hook needs its 
+//! derived from more than one splay_set_base_hook, then each splay_set_base_hook needs its 
 //! unique tag.
 //!
 //! The second boolean template parameter will specify the linking mode of the hook.
@@ -73,17 +71,17 @@ struct make_set_base_hook
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1, class O2, class O3, class O4>
+template<class O1, class O2, class O3>
 #endif
-class set_base_hook
-   :  public make_set_base_hook<O1, O2, O3, O4>::type
+class splay_set_base_hook
+   :  public make_splay_set_base_hook<O1, O2, O3>::type
 {
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
    //! <b>Throws</b>: Nothing. 
-   set_base_hook();
+   splay_set_base_hook();
 
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state. The argument is ignored.
@@ -94,7 +92,7 @@ class set_base_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   set_base_hook(const set_base_hook& );
+   splay_set_base_hook(const splay_set_base_hook& );
 
    //! <b>Effects</b>: Empty function. The argument is ignored.
    //! 
@@ -104,7 +102,7 @@ class set_base_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   set_base_hook& operator=(const set_base_hook& );
+   splay_set_base_hook& operator=(const splay_set_base_hook& );
 
    //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
    //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
@@ -112,7 +110,7 @@ class set_base_hook
    //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
    //! <b>Throws</b>: Nothing. 
-   ~set_base_hook();
+   ~splay_set_base_hook();
 
    //! <b>Effects</b>: Swapping two nodes swaps the position of the elements 
    //!   related to those nodes in one or two containers. That is, if the node 
@@ -126,7 +124,7 @@ class set_base_hook
    //! <b>Complexity</b>: Constant 
    //!
    //! <b>Throws</b>: Nothing. 
-   void swap_nodes(set_base_hook &other);
+   void swap_nodes(splay_set_base_hook &other);
 
    //! <b>Precondition</b>: link_mode must be \c safe_link or \c auto_unlink.
    //!
@@ -145,22 +143,21 @@ class set_base_hook
    #endif
 };
 
-//! Helper metafunction to define a \c set_member_hook that yields to the same
+//! Helper metafunction to define a \c splay_set_member_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1 = none, class O2 = none, class O3 = none, class O4 = none>
+template<class O1 = none, class O2 = none, class O3 = none>
 #endif
-struct make_set_member_hook
+struct make_splay_set_member_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3, O4>::type packed_options;
+      < hook_defaults, O1, O2, O3>::type packed_options;
 
    typedef detail::generic_hook
-   < get_set_node_algo<typename packed_options::void_pointer
-                      ,packed_options::optimize_size>
+   < get_splay_set_node_algo<typename packed_options::void_pointer>
    , member_tag
    , packed_options::link_mode
    , detail::NoBaseHook
@@ -169,8 +166,8 @@ struct make_set_member_hook
    typedef implementation_defined type;
 };
 
-//! Put a public data member set_member_hook in order to store objects of this class in
-//! an set/multiset. set_member_hook holds the data necessary for maintaining the
+//! Put a public data member splay_set_member_hook in order to store objects of this class in
+//! an set/multiset. splay_set_member_hook holds the data necessary for maintaining the
 //! set/multiset and provides an appropriate value_traits class for set/multiset.
 //! 
 //! The first boolean template parameter will specify the linking mode of the hook.
@@ -180,17 +177,17 @@ struct make_set_member_hook
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1, class O2, class O3, class O4>
+template<class O1, class O2, class O3>
 #endif
-class set_member_hook
-   :  public make_set_member_hook<O1, O2, O3, O4>::type
+class splay_set_member_hook
+   :  public make_splay_set_member_hook<O1, O2, O3>::type
 {
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
    //! <b>Throws</b>: Nothing. 
-   set_member_hook();
+   splay_set_member_hook();
 
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state. The argument is ignored.
@@ -201,7 +198,7 @@ class set_member_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   set_member_hook(const set_member_hook& );
+   splay_set_member_hook(const splay_set_member_hook& );
 
    //! <b>Effects</b>: Empty function. The argument is ignored.
    //! 
@@ -211,7 +208,7 @@ class set_member_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   set_member_hook& operator=(const set_member_hook& );
+   splay_set_member_hook& operator=(const splay_set_member_hook& );
 
    //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
    //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
@@ -219,7 +216,7 @@ class set_member_hook
    //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
    //! <b>Throws</b>: Nothing. 
-   ~set_member_hook();
+   ~splay_set_member_hook();
 
    //! <b>Effects</b>: Swapping two nodes swaps the position of the elements 
    //!   related to those nodes in one or two containers. That is, if the node 
@@ -233,7 +230,7 @@ class set_member_hook
    //! <b>Complexity</b>: Constant 
    //!
    //! <b>Throws</b>: Nothing. 
-   void swap_nodes(set_member_hook &other);
+   void swap_nodes(splay_set_member_hook &other);
 
    //! <b>Precondition</b>: link_mode must be \c safe_link or \c auto_unlink.
    //!
@@ -257,4 +254,4 @@ class set_member_hook
 
 #include <boost/intrusive/detail/config_end.hpp>
 
-#endif //BOOST_INTRUSIVE_SET_HOOK_HPP
+#endif //BOOST_INTRUSIVE_SPLAY_SET_HOOK_HPP

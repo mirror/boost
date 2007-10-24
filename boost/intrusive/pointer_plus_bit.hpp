@@ -44,7 +44,10 @@ struct has_pointer_plus_bit<void*, N>
 //!has_pointer_plus_bit<>::value is non-zero can make use of these
 //!operations to embed the bit in the pointer.
 template<class Pointer>
-struct pointer_plus_bit;
+struct pointer_plus_bit
+{
+   static const bool value = false;
+};
 
 //!This is the specialization to embed an extra bit of information
 //!in a raw pointer. The extra bit is stored in the lower bit of the pointer.

@@ -253,6 +253,14 @@ template<typename T>
 struct add_const
 {  typedef const T type;   };
 
+template<typename T>
+struct remove_const
+{  typedef  T type;   };
+
+template<typename T>
+struct remove_const<const T>
+{  typedef T type;   };
+
 template<class T>
 struct remove_reference
 {

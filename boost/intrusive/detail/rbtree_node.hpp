@@ -157,17 +157,18 @@ struct rbtree_node_traits_dispatch<VoidPointer, true>
 {};
 
 //Inherit from the detail::link_dispatch depending on the embedding capabilities
-template<class VoidPointer>
+template<class VoidPointer, bool OptimizeSize = false>
 struct rbtree_node_traits
    :  public rbtree_node_traits_dispatch
          < VoidPointer
-         , has_pointer_plus_bit
+         , OptimizeSize &&
+            has_pointer_plus_bit
             < VoidPointer
             , detail::alignment_of<compact_rbtree_node<VoidPointer> >::value 
             >::value
          >
 {};
-
+/*
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //                   Implementation of the rbtree iterator                 //
@@ -291,7 +292,7 @@ class rbtree_iterator
       node_ptr nodeptr_;
    } members_;
 };
-
+*/
 } //namespace intrusive 
 } //namespace boost 
 

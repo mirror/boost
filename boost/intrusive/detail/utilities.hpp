@@ -42,13 +42,13 @@ struct internal_base_hook_bool
    template <class U> static one test(...);
    template <class U> static two_or_three<U::boost_intrusive_tags::is_base_hook>
       test (detail::bool_<U::boost_intrusive_tags::is_base_hook>* = 0);
-   static const int value = sizeof(test<T>(0));
+   static const std::size_t value = sizeof(test<T>(0));
 };
 
 template <class T>
 struct internal_base_hook_bool_is_true
 {
-   static const bool value = internal_base_hook_bool<T>::value == 3;
+   static const bool value = internal_base_hook_bool<T>::value > sizeof(one)*2;
 };
 
 template <class T>
@@ -59,7 +59,7 @@ struct external_value_traits_bool
    template <class U> static one test(...);
    template <class U> static two_or_three<U::external_value_traits>
       test (detail::bool_<U::external_value_traits>* = 0);
-   static const int value = sizeof(test<T>(0));
+   static const std::size_t value = sizeof(test<T>(0));
 };
 
 template <class T>
@@ -70,13 +70,13 @@ struct external_bucket_traits_bool
    template <class U> static one test(...);
    template <class U> static two_or_three<U::external_bucket_traits>
       test (detail::bool_<U::external_bucket_traits>* = 0);
-   static const int value = sizeof(test<T>(0));
+   static const std::size_t value = sizeof(test<T>(0));
 };
 
 template <class T>
 struct external_value_traits_is_true
 {
-   static const bool value = external_value_traits_bool<T>::value == 3;
+   static const bool value = external_value_traits_bool<T>::value > sizeof(one)*2;
 };
 
 template<class Node, class Tag, link_mode_type LinkMode, int>
