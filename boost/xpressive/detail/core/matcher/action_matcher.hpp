@@ -20,6 +20,7 @@
 #include <boost/ref.hpp>
 #include <boost/assert.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -177,7 +178,12 @@ namespace boost { namespace xpressive { namespace detail
                 action_args_type::const_iterator where_ = ctx.args().find(&typeid(proto::arg(expr)));
                 if(where_ == ctx.args().end())
                 {
-                    throw regex_error(regex_constants::error_badarg, "An argument to an action was unspecified");
+                    boost::throw_exception(
+                        regex_error(
+                            regex_constants::error_badarg
+                          , "An argument to an action was unspecified"
+                        )
+                    );
                 }
                 return proto::arg(expr).cast(where_->second);
             }

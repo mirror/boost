@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
@@ -67,7 +68,9 @@ struct matchable_ex
 
     virtual void repeat(quant_spec const &, sequence<BidiIter> &) const
     {
-        throw regex_error(regex_constants::error_badrepeat, "expression cannot be quantified");
+        boost::throw_exception(
+            regex_error(regex_constants::error_badrepeat, "expression cannot be quantified")
+        );
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

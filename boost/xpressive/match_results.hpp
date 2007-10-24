@@ -31,6 +31,7 @@
 #include <boost/integer.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/numeric/conversion/converter.hpp>
 #if BOOST_ITERATOR_ADAPTORS_VERSION >= 0x0200
@@ -88,8 +89,12 @@ struct char_overflow_handler_
     {
         if(numeric::cInRange != result)
         {
-            throw regex_error(regex_constants::error_escape,
-                "character escape too large to fit in target character type");
+            boost::throw_exception(
+                regex_error(
+                    regex_constants::error_escape
+                  , "character escape too large to fit in target character type"
+                )
+            );
         }
     }
 };
@@ -633,7 +638,12 @@ private:
                 return this->sub_matches_[ this->named_marks_[i].mark_nbr_ ];
             }
         }
-        throw regex_error(regex_constants::error_badmark, "invalid named back-reference");
+        boost::throw_exception(
+            regex_error(regex_constants::error_badmark, "invalid named back-reference")
+        );
+        // Should never execute, but if it does, this returns
+        // a "null" sub_match.
+        return this->sub_matches_[this->sub_matches_.size()];
     }
 
     /// INTERNAL ONLY
@@ -1030,7 +1040,9 @@ private:
             }
         }
 
-        throw regex_error(error_badmark, "invalid named back-reference");
+        boost::throw_exception(regex_error(error_badmark, "invalid named back-reference"));
+        // Should never get here
+        return out;
     }
 
     regex_id_type regex_id_;

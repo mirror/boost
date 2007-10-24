@@ -20,6 +20,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_integral.hpp>
@@ -559,25 +560,25 @@ namespace boost { namespace xpressive
 
             void operator()() const
             {
-                throw Except();
+                boost::throw_exception(Except());
             }
 
             template<typename A0>
             void operator()(A0 const &a0) const
             {
-                throw Except(a0);
+                boost::throw_exception(Except(a0));
             }
 
             template<typename A0, typename A1>
             void operator()(A0 const &a0, A1 const &a1) const
             {
-                throw Except(a0, a1);
+                boost::throw_exception(Except(a0, a1));
             }
 
             template<typename A0, typename A1, typename A2>
             void operator()(A0 const &a0, A1 const &a1, A2 const &a2) const
             {
-                throw Except(a0, a1, a2);
+                boost::throw_exception(Except(a0, a1, a2));
             }
         };
     }

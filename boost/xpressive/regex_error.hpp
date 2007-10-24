@@ -16,6 +16,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <boost/throw_exception.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 
 //{{AFX_DOC_COMMENT
@@ -76,9 +77,9 @@ inline bool ensure(bool predicate, regex_constants::error_type code, char const 
 {
     if(!predicate)
     {
-        throw regex_error(code, str);
+        boost::throw_exception(regex_error(code, str));
     }
-    return true;
+    return predicate;
 }
 
 }}} // namespace boost::xpressive::detail

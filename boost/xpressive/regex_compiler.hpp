@@ -21,6 +21,7 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/xpressive/basic_regex.hpp>
@@ -357,7 +358,10 @@ private:
             return detail::make_dynamic<BidiIter>(detail::regex_byref_matcher<BidiIter>(this->self_));
 
         case token_rule_assign:
-            throw regex_error(error_badrule, "rule assignments must be at the front of the regex");
+            boost::throw_exception(
+                regex_error(error_badrule, "rule assignments must be at the front of the regex")
+            );
+            break;
 
         case token_rule_ref:
             {
@@ -403,7 +407,8 @@ private:
                     );
                 }
             }
-            throw regex_error(error_badmark, "invalid named back-reference");
+            boost::throw_exception(regex_error(error_badmark, "invalid named back-reference"));
+            break;
 
         default:
             mark_nbr = static_cast<int>(++this->mark_count_);
@@ -539,7 +544,8 @@ private:
             return this->parse_charset(begin, end);
 
         case token_invalid_quantifier:
-            throw regex_error(error_badrepeat, "quantifier not expected");
+            boost::throw_exception(regex_error(error_badrepeat, "quantifier not expected"));
+            break;
 
         case token_quote_meta_begin:
             return detail::make_literal_xpression<BidiIter>
@@ -548,11 +554,13 @@ private:
             );
 
         case token_quote_meta_end:
-            throw regex_error
-            (
-                error_escape
-              , "found quote-meta end without corresponding quote-meta begin"
+            boost::throw_exception(
+                regex_error(
+                    error_escape
+                  , "found quote-meta end without corresponding quote-meta begin"
+                )
             );
+            break;
 
         case token_end_of_pattern:
             break;
