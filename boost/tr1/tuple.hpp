@@ -47,8 +47,8 @@ using ::boost::get;
 
 #else
 
-#include <boost/fusion/tuple.hpp>
-#include <boost/fusion/sequence/adapted/std_pair.hpp>
+#include <boost/fusion/include/tuple.hpp>
+#include <boost/fusion/include/std_pair.hpp>
 
 namespace std{ namespace tr1{
 
