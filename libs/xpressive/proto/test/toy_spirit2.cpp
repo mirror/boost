@@ -23,9 +23,9 @@
 # include <boost/spirit/fusion/algorithm/fold.hpp>
 # include <boost/spirit/fusion/algorithm/any.hpp>
 #else
-#include <boost/fusion/algorithm/iteration/for_each.hpp>
-#include <boost/fusion/algorithm/iteration/fold.hpp>
-#include <boost/fusion/algorithm/query/any.hpp>
+#include <boost/fusion/include/for_each.hpp>
+#include <boost/fusion/include/fold.hpp>
+#include <boost/fusion/include/any.hpp>
 #endif
 #include <boost/test/unit_test.hpp>
 

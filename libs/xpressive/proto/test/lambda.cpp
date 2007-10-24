@@ -16,7 +16,7 @@
 # include <boost/spirit/fusion/sequence/tuple.hpp>
 namespace boost { namespace fusion { namespace result_of { using namespace meta; }}}
 #else
-# include <boost/fusion/tuple.hpp>
+# include <boost/fusion/include/tuple.hpp>
 #endif
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/sstream.hpp>
