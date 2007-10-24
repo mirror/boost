@@ -32,6 +32,10 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::keeper_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::modifier_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::lookahead_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::lookbehind_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::check_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::mark_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::word_begin)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::word_end)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::generic_quant_tag, (unsigned int)(unsigned int))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::basic_regex, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::word_boundary, (bool))
@@ -43,6 +47,9 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::tracking_ptr, (typename
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::regex_impl, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::let_, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::action_arg, (typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::named_mark, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::sub_match, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::nested_results, (typename))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Placeholders
