@@ -15,22 +15,10 @@ namespace po = boost::program_options;
 #include <boost/function.hpp>
 using namespace boost;
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
-
 #include <sstream>
 using namespace std;
 
-#define TEST_CHECK_THROW(expression, exception, description) \
-    try \
-    { \
-        expression; \
-        BOOST_ERROR(description);\
-        throw 10; \
-    } \
-    catch(exception &) \
-    { \
-    }
+#include "minitest.hpp"
 
 vector<string> sv(char* array[], unsigned size)
 {
@@ -288,7 +276,7 @@ void test_multiple_assignments_with_different_option_description()
 
 } 
 
-int test_main(int, char* [])
+int main(int, char* [])
 {
     test_variable_map();
     test_semantic_values();

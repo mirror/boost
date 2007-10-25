@@ -45,13 +45,13 @@ void test_winmain()
     TEST("1\\\\1 ", {"1\\\\1"});    
 }
 
-int test_main(int, char*[])
+int main(int, char*[])
 {
     test_winmain();
     return 0;
 }
 #else
-int test_main(int, char*[])
+int main(int, char*[])
 {
     return 0;
 }

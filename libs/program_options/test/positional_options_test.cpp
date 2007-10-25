@@ -12,7 +12,8 @@ namespace po = boost::program_options;
 
 
 #include <boost/limits.hpp>
-#include <boost/test/test_tools.hpp>
+
+#include "minitest.hpp"
 
 #include <vector>
 using namespace std;
@@ -81,7 +82,7 @@ void test_parsing()
                       too_many_positional_options_error);
 }
 
-int test_main(int, char* [])
+int main(int, char* [])
 {
     test_positional_options();
     test_parsing();

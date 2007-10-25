@@ -10,13 +10,12 @@ using namespace boost::program_options;
 #include <boost/function.hpp>
 using namespace boost;
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
-
 #include <utility>
 #include <string>
 #include <sstream>
 using namespace std;
+
+#include "minitest.hpp"
 
 void test_type()
 {
@@ -77,7 +76,7 @@ void test_formatting()
     ss << desc;
 }
 
-int test_main(int, char* [])
+int main(int, char* [])
 {
     test_type();
     test_approximation();

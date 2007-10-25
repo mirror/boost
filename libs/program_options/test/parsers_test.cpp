@@ -14,9 +14,6 @@ namespace po = boost::program_options;
 #include <boost/function.hpp>
 using namespace boost;
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
-
 #include <sstream>
 #include <iostream>
 using namespace std;
@@ -26,6 +23,8 @@ using namespace std;
 #else
 #include <cstdlib> // for putenv
 #endif
+
+#include "minitest.hpp"
 
 #define TEST_CHECK_THROW(expression, exception, description) \
     try \
@@ -259,7 +258,7 @@ void test_unregistered()
     check_value(a3[1], "m1.v1", "1");
 }
 
-int test_main(int, char* [])
+int main(int, char* [])
 {
     test_command_line();
     test_config_file();

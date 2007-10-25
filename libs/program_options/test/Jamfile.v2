@@ -2,8 +2,8 @@
 project
     : requirements 
     <library>../build//boost_program_options
-    <library>/boost/test//boost_test_exec_monitor/<link>static
     <link>static
+    <variant>debug
     
 #    <define>_GLIBCXX_CONCEPT_CHECKS
 #    <define>_GLIBCXX_DEBUG

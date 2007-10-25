@@ -15,7 +15,7 @@
 #include <boost/program_options/detail/convert.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 
-#include <boost/test/test_tools.hpp>
+#include "minitest.hpp"
 
 using namespace std;
 
@@ -121,7 +121,7 @@ void test_convert(const std::string& input,
     BOOST_CHECK(ref == input);
 }
 
-int test_main(int ac, char* av[])
+int main(int ac, char* av[])
 {       
     std::string input = file_content("utf8.txt");
     std::string expected = file_content("ucs2.txt");
