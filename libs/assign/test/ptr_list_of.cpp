@@ -18,7 +18,7 @@
 
 #include <boost/assign/ptr_list_of.hpp>
 #include <boost/test/test_tools.hpp>
-#include <boost/ptr_container/ptr_deque.hpp>
+#include <boost/ptr_container/ptr_container.hpp>
 
 struct Foo
 {
@@ -39,22 +39,25 @@ inline bool operator<( Foo l, Foo r )
     return l.i < r.i;
 }
 
-void check_ptr_list_of()
+template< class PtrCont >
+void check_ptr_list_of_impl()
 {
     using namespace std;
     using namespace boost;
     using namespace boost::assign;
 
-    ptr_deque<Foo> deq;
-    //
-    // Many compilers (gcc, cw, ...) need the trailing
-    // '.to_container( a_container )' to work 
-    // 
-    deq = ptr_list_of<Foo>( 42 )()()( 3, 3 )( "foo", 2, 1 ).to_container( deq );
+    PtrCont deq;
+    deq = ptr_list_of<Foo>( 42 )()()( 3, 3 )( "foo", 2, 1 );
     BOOST_CHECK( deq.size() == 5 );
     
 }
 
+void check_ptr_list_of()
+{
+    check_ptr_list_of_impl< boost::ptr_deque<Foo> >();
+    check_ptr_list_of_impl< boost::ptr_list<Foo> >();
+    check_ptr_list_of_impl< boost::ptr_vector<Foo> >();
+}
 
 
 #include <boost/test/unit_test.hpp>
