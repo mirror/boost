@@ -63,12 +63,10 @@ namespace member_at {
 
     struct info  {};
 
-};
+}
 
 } // namespace relation
 } // namespace bimaps
 } // namespace boost
 
 #endif // BOOST_BIMAP_RELATION_MEMBER_AT_HPP
-
-

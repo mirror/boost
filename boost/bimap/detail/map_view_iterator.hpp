@@ -88,7 +88,7 @@ struct map_view_iterator : public map_view_iterator_base<Tag,Relation,CoreIterat
 
     // Serialization support
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     friend class ::boost::serialization::access;
 
@@ -169,7 +169,7 @@ struct const_map_view_iterator :
 
     // Serialization support
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     friend class ::boost::serialization::access;
 

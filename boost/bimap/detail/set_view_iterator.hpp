@@ -86,7 +86,7 @@ struct set_view_iterator : public set_view_iterator_base<CoreIterator>::type
 
     // Serialization support
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     friend class ::boost::serialization::access;
 
@@ -162,7 +162,7 @@ struct const_set_view_iterator : public const_set_view_iterator_base<CoreIterato
 
     // Serialization support
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER();
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     friend class ::boost::serialization::access;
 
