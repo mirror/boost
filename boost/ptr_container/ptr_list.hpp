@@ -41,9 +41,9 @@ namespace boost
         typedef ptr_list<T,CloneAllocator,Allocator> this_type;
         
     public:
-        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list, 
-                                                          base_class,
-                                                          this_type );
+        BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_list, 
+                                                      base_class,
+                                                      this_type );
         
     public:
         using base_class::merge;

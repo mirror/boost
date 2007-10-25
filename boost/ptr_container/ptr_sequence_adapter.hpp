@@ -153,16 +153,29 @@ namespace ptr_container_detail
          
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
                                                  base_type )
-    
+
+        template< class U >
+        ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq>& r )
+          : base_type( r )
+        { }
+        
         template< class PtrContainer >
         ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
           : base_type( clone )
         { }
 
+        template< class U >
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter<U,VoidPtrSeq>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
+        
         template< class PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_sequence_adapter& operator=( std::auto_ptr<PtrContainer> clone )    
         {
             base_type::operator=( clone );
+            return *this;
         }
 
         /////////////////////////////////////////////////////////////
@@ -312,11 +325,6 @@ namespace ptr_container_detail
         template< class InputIterator >
         void assign( InputIterator first, InputIterator last ) // strong
         { 
-//#ifdef BOOST_NO_SFINAE
-//#else
-//            BOOST_STATIC_ASSERT(( boost::is_convertible< typename iterator_reference<InputIterator>::type,
-//                                                         reference_type >::value ));
-//#endif            
             base_type temp( first, last );
             this->swap( temp );
         }
@@ -418,7 +426,27 @@ namespace ptr_container_detail
             this->base().
                 insert( before.base(),
                         from.begin().base(), from.end().base() ); // strong
-            from.base().clear();                             // nothrow
+            from.base().clear();                                  // nothrow
+        }
+
+    public: // C-array support
+    
+        void transfer( iterator before, T** from, 
+                       size_type size, bool delete_from = true ) // strong 
+        {
+            BOOST_ASSERT( from != 0 );
+            this->base().insert( before.base(), from, from + size ); // strong
+            if( delete_from )
+                delete[] from;
+        }
+
+        T** c_array() // nothrow
+        {
+            if( this->empty() )
+                return 0;
+            T** res = reinterpret_cast<T**>( &this->begin().base()[0] );
+            BOOST_ASSERT( &*this->begin().base() == (void**)res );
+            return res;
         }
 
     public: // null functions
@@ -441,13 +469,14 @@ namespace ptr_container_detail
             else if( size > old_size )
             {
                 for( ; old_size != size; ++old_size )
-                    this->push_back( new T ); 
+                    this->push_back( new BOOST_DEDUCED_TYPENAME 
+                                     boost::remove_pointer<value_type>::type ); 
             }
 
             BOOST_ASSERT( this->size() == size );
         }
 
-        void resize( size_type size, T* to_clone )
+        void resize( size_type size, value_type to_clone )
         {
             size_type old_size = this->size();
             if( old_size > size )

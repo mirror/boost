@@ -59,7 +59,7 @@ namespace ptr_container_detail
                                   const Allocator& a )
          : base_type( comp, a )
        { }
-
+                                                     
        template< class InputIterator, class Compare, class Allocator >
        associative_ptr_container( InputIterator first, InputIterator last,
                                   const Compare& comp,
@@ -77,6 +77,12 @@ namespace ptr_container_detail
                       BOOST_DEDUCED_TYPENAME Config::allocator_type() )
        { }
 
+       template< class C, class V >
+       associative_ptr_container( const associative_ptr_container<C,V>& r )
+         : base_type( r.begin(), r.end(), key_compare(), 
+                      BOOST_DEDUCED_TYPENAME Config::allocator_type() )
+       { }
+
        template< class PtrContainer >
        associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
        {
@@ -84,6 +90,14 @@ namespace ptr_container_detail
            return *this;
        }
 
+       template< class C, class V >
+       associative_ptr_container& operator=( const associative_ptr_container<C,V>& r ) // strong 
+       {
+           associative_ptr_container clone( r );
+           this->swap( clone );
+           return *this;   
+       }
+        
        associative_ptr_container& operator=( const associative_ptr_container& r ) // strong
        {
            associative_ptr_container clone( r );
@@ -110,17 +124,18 @@ namespace ptr_container_detail
             this->remove( before );                      // nothrow
             iterator res( before );                      // nothrow
             ++res;                                       // nothrow
-            this->base().erase( before.base() );    // nothrow
+            this->base().erase( before.base() );         // nothrow
             return res;                                  // nothrow
         }
 
         size_type erase( const key_type& x ) // nothrow
         {
-            iterator i( this->base().find( x ) );  // nothrow
+            iterator i( this->base().find( x ) );       
+                                                        // nothrow
             if( i == this->end() )                      // nothrow
                 return 0u;                              // nothrow
             this->remove( i );                          // nothrow
-            return this->base().erase( x );        // nothrow
+            return this->base().erase( x );             // nothrow 
         }
 
         iterator erase( iterator first,
@@ -131,15 +146,21 @@ namespace ptr_container_detail
                 ++res;                                           // nothrow
 
             this->remove( first, last );                         // nothrow
-            this->base().erase( first.base(), last.base() );// nothrow
+            this->base().erase( first.base(), last.base() );     // nothrow
             return res;                                          // nothrow
         }
 
+#ifdef BOOST_NO_SFINAE
+#else    
         template< class Range >
-        iterator erase( const Range& r )
+        BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_convertible<Range&,key_type&>, 
+                                                  iterator >::type
+        erase( const Range& r )
         {
             return erase( boost::begin(r), boost::end(r) );
         }
+
+#endif
 
     protected:
 

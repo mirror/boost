@@ -241,10 +241,6 @@ namespace ptr_container_detail
         void remove( I i )
         { 
             null_policy_deallocate_clone( Config::get_const_pointer(i) );
-//#ifndef NDEBUG
-//            *i = 0xbadbad;
-//#endif
-            
         }
 
         template< class I >
@@ -254,7 +250,7 @@ namespace ptr_container_detail
                 remove( first );
         }
 
-        static void enforce_null_policy( Ty_* x, const char* msg )
+        static void enforce_null_policy( const Ty_* x, const char* msg )
         {
             if( !allow_null )
             {
@@ -317,6 +313,13 @@ namespace ptr_container_detail
             constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
         }
 
+        template< class C, class V >
+        explicit reversible_ptr_container( const reversible_ptr_container<C,V>& r ) 
+        {
+            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+        }
+
+
         template< class PtrContainer >
         reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
         {
@@ -331,6 +334,13 @@ namespace ptr_container_detail
             return *this;
         }
 
+        template< class C, class V >
+        reversible_ptr_container& operator=( const reversible_ptr_container<C,V>& r ) // strong 
+        {
+            reversible_ptr_container clone( r );
+            swap( clone );
+            return *this;
+        }
         // overhead: null-initilization of container pointer (very cheap compared to cloning)
         // overhead: 1 heap allocation (very cheap compared to cloning)
         template< class InputIterator >
@@ -647,7 +657,6 @@ namespace ptr_container_detail
     // is buggy on most compilers, so we use a macro instead
     //
 #define BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type ) \
-                                                    \
     PC( std::auto_ptr<this_type> r )                \
     : base_type ( r ) { }                           \
                                                     \
@@ -670,6 +679,19 @@ namespace ptr_container_detail
        return std::auto_ptr<this_type>( new this_type( this->begin(), this->end() ) ); \
     }
 
+#define BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type ) \
+                                                                      \
+    template< class U >                                               \
+    PC( const PC<U>& r ) : base_type( r ) { }                         \
+                                                                      \
+    template< class U >                                               \
+    PC& operator=( const PC<U>& r )                                   \
+    {                                                                 \
+        base_type::operator=( r );                                    \
+        return *this;                                                 \
+    }                                               
+     
+
 #define BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                       \
     typedef BOOST_DEDUCED_TYPENAME base_type::iterator        iterator;                \
     typedef BOOST_DEDUCED_TYPENAME base_type::size_type       size_type;               \
@@ -679,14 +701,16 @@ namespace ptr_container_detail
     template< class InputIterator >                                                    \
     PC( InputIterator first, InputIterator last,                                       \
     const allocator_type& a = allocator_type() ) : base_type( first, last, a ) {}      
-    
-
                  
 #define BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )           \
    BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                                    \
    BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type )
-    
-    } // namespace 'ptr_container_detail'
+
+#define BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( PC, base_type, this_type )  \
+    BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )  \
+    BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type )
+
+} // namespace 'ptr_container_detail'
 
     //
     // @remark: expose movability of internal move-pointer

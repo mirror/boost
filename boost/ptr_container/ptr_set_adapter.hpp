@@ -103,30 +103,56 @@ namespace ptr_container_detail
 
     public:
         
-       template< class Compare, class Allocator >
-       ptr_set_adapter_base( const Compare& comp,
+        template< class Compare, class Allocator >
+        ptr_set_adapter_base( const Compare& comp,
                              const Allocator& a ) 
          : base_type( comp, a ) 
-       { }
-
-       template< class InputIterator, class Compare, class Allocator >
-       ptr_set_adapter_base( InputIterator first, InputIterator last,
+        { }
+        
+        template< class InputIterator, class Compare, class Allocator >
+        ptr_set_adapter_base( InputIterator first, InputIterator last,
                              const Compare& comp,
                              const Allocator& a ) 
          : base_type( first, last, comp, a ) 
-       { }
-
+        { }
+        
+        template< class U, class Set >
+        ptr_set_adapter_base( const ptr_set_adapter_base<U,Set>& r )
+          : base_type( r )
+        { }
+        
         template< class PtrContainer >
         ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
          : base_type( clone )
         { }
+
+        template< class U, class Set >
+        ptr_set_adapter_base& operator=( const ptr_set_adapter_base<U,Set>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
         
         template< typename PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_set_adapter_base& operator=( std::auto_ptr<PtrContainer> clone )    
         {
             base_type::operator=( clone );
+            return *this;
         }
-                 
+
+        using base_type::erase;
+        
+        size_type erase( const key_type& x ) // nothrow
+        {
+            iterator i( this->base().find( const_cast<key_type*>(&x) ) );       
+                                                                    // nothrow
+            if( i == this->end() )                                  // nothrow
+                return 0u;                                          // nothrow
+            this->remove( i );                                      // nothrow
+            return this->base().erase( const_cast<key_type*>(&x) ); // nothrow 
+        }
+
+
         iterator find( const key_type& x )                                                
         {                                                                            
             return iterator( this->base().
@@ -244,7 +270,7 @@ namespace ptr_container_detail
         {
             BOOST_ASSERT( this->empty() ); 
         }
-        
+
         template< class InputIterator, class Compare, class Allocator >
         ptr_set_adapter( InputIterator first, InputIterator last, 
                          const Compare& comp = Compare(),
@@ -255,9 +281,22 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-        template< class T >
-        ptr_set_adapter( std::auto_ptr<T> r ) : base_type( r )
+        template< class U, class Set >
+        ptr_set_adapter( const ptr_set_adapter<U,Set>& r )
+          : base_type( r )
         { }
+        
+        template< class PtrContainer >
+        ptr_set_adapter( std::auto_ptr<PtrContainer> clone )
+         : base_type( clone )
+        { }
+
+        template< class U, class Set >
+        ptr_set_adapter& operator=( const ptr_set_adapter<U,Set>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
 
         template< class T >
         void operator=( std::auto_ptr<T> r ) 
@@ -337,7 +376,7 @@ namespace ptr_container_detail
             return this->single_transfer( first, last, from );
         }
 
-#ifdef BOOST_NO_SFINAE || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#ifdef BOOST_NO_SFINAE 
 #else    
 
         template< class PtrSetAdapter, class Range >
@@ -414,10 +453,23 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-        template< class T >
-        ptr_multiset_adapter( std::auto_ptr<T> r ) : base_type( r )
+        template< class U, class Set >
+        ptr_multiset_adapter( const ptr_multiset_adapter<U,Set>& r )
+          : base_type( r )
+        { }
+        
+        template< class PtrContainer >
+        ptr_multiset_adapter( std::auto_ptr<PtrContainer> clone )
+         : base_type( clone )
         { }
 
+        template< class U, class Set >
+        ptr_multiset_adapter& operator=( const ptr_multiset_adapter<U,Set>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
+        
         template< class T >
         void operator=( std::auto_ptr<T> r ) 
         {
@@ -458,7 +510,7 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-#ifdef BOOST_NO_SFINAE || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#ifdef BOOST_NO_SFINAE
 #else    
         
         template< class Range >
@@ -486,7 +538,7 @@ namespace ptr_container_detail
             return this->multi_transfer( first, last, from );
         }
 
-#ifdef BOOST_NO_SFINAE || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#ifdef BOOST_NO_SFINAE
 #else    
         
         template< class PtrSetAdapter, class Range >

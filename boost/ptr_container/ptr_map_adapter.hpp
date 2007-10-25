@@ -174,10 +174,6 @@ namespace ptr_container_detail
         
     public:
 
-        ptr_map_adapter_base( const allocator_type& a = allocator_type() )
-        : base_type(a)
-        { }
-
         template< class InputIterator >
         ptr_map_adapter_base( InputIterator first, InputIterator last,
                               const allocator_type& a = allocator_type() )
@@ -354,7 +350,7 @@ namespace ptr_container_detail
             if( res.second )                                                  // nothrow     
                 ptr.release();                                                // nothrow
         }
-    
+
         template< class II >                                               
         void map_basic_clone_and_insert( II first, II last )                  
         {       
@@ -388,9 +384,37 @@ namespace ptr_container_detail
             map_basic_clone_and_insert( first, last );
         }
 
+        ptr_map_adapter( const ptr_map_adapter& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
+        template< class Key, class U >
+        ptr_map_adapter( const ptr_map_adapter<Key,U>& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
         template< class U >
         ptr_map_adapter( std::auto_ptr<U> r ) : base_type( r )
         { }
+
+        ptr_map_adapter& operator=( const ptr_map_adapter& r )
+        {
+            ptr_map_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
+
+        template< class Key, class U >
+        ptr_map_adapter& operator=( const ptr_map_adapter<Key,U> r ) 
+         {
+            ptr_map_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
 
         template< class U >
         void operator=( std::auto_ptr<U> r )
@@ -571,10 +595,38 @@ namespace ptr_container_detail
             map_basic_clone_and_insert( first, last );
         }
 
+        ptr_multimap_adapter( const ptr_multimap_adapter& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
+        template< class Key, class U >
+        ptr_multimap_adapter( const ptr_multimap_adapter<Key,U>& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
         template< class U >
         ptr_multimap_adapter( std::auto_ptr<U> r ) : base_type( r )
         { }
 
+        ptr_multimap_adapter& operator=( const ptr_multimap_adapter& r )
+        {
+            ptr_multimap_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
+
+        template< class Key, class U >
+        ptr_multimap_adapter& operator=( const ptr_multimap_adapter<Key,U> r ) 
+         {
+            ptr_multimap_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
+        
         template< class U >
         void operator=( std::auto_ptr<U> r )
         {  

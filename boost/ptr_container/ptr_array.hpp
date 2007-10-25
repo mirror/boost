@@ -70,9 +70,6 @@ namespace boost
         typedef ptr_array<T,N,CloneAllocator>
                           this_type;
 
-        ptr_array( const this_type& );
-        void operator=( const this_type& );
-
     public:
         typedef std::size_t size_type;
         typedef U*          value_type;
@@ -86,12 +83,47 @@ namespace boost
         ptr_array() : base_class()
         { }
 
+        ptr_array( const ptr_array& r )
+        {
+            size_t i = 0;
+            for( ; i != N; ++i )
+                this->base()[i] = this->null_policy_allocate_clone( 
+                                        static_cast<T*>( r.base()[i] ) ); 
+        }
+
+        template< class U >
+        ptr_array( const ptr_array<U,N>& r )
+        {
+            size_t i = 0;
+            for( ; i != N; ++i )
+                this->base()[i] = this->null_policy_allocate_clone( 
+                                        static_cast<U*>( r.base()[i] ) ); 
+        }
+
         ptr_array( std::auto_ptr<this_type> r )
         : base_class( r ) { }
 
-        void operator=( std::auto_ptr<this_type> r )
+        ptr_array& operator=( const ptr_array& r )
+        {
+            ptr_array clone( r );
+            this->swap( clone );
+            return *this;
+            
+        }
+
+        template< class U >
+        ptr_array& operator=( const ptr_array<U,N>& r )
+        {
+            ptr_array clone( r );
+            this->swap( clone );
+            return *this;
+            
+        }
+
+        ptr_array& operator=( std::auto_ptr<this_type> r )
         {
             base_class::operator=(r);
+            return *this;
         }
 
         std::auto_ptr<this_type> release()
@@ -107,7 +139,7 @@ namespace boost
             for( size_t i = 0; i != N; ++i )
             {
                 if( ! is_null(i) )
-                    pa->replace( i, CloneAllocator::allocate_clone( (*this)[i] ) );
+                    pa->replace( i, this->null_policy_allocate_clone( &(*this)[i] ) ); 
             }
             return pa;
         }

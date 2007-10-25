@@ -41,8 +41,8 @@ namespace boost
         typedef ptr_map<Key,T,Compare,CloneAllocator,Allocator> this_type;
         
     public:
-        explicit ptr_map( const Compare& comp = Compare(),
-                          const Allocator& a  = Allocator() ) 
+        ptr_map( const Compare& comp = Compare(),
+                 const Allocator& a  = Allocator() ) 
           : base_type( comp, a ) { }
 
         template< class InputIterator >
@@ -55,6 +55,16 @@ namespace boost
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map, base_type, 
                                                       this_type );
 
+        template< class U >
+        ptr_map( const ptr_map<Key,U>& r ) : base_type( r )
+        { }
+
+        template< class U >
+        ptr_map& operator=( const ptr_map<Key,U>& r )
+        {
+            base_type::operator=( r );
+            return *this;
+        }
     };
     
 
@@ -93,6 +103,16 @@ namespace boost
                                                       base_type,
                                                       this_type );
 
+        template< class U >
+        ptr_multimap( const ptr_multimap<Key,U>& r ) : base_type( r )
+        { }
+
+        template< class U >
+        ptr_multimap& operator=( const ptr_multimap<Key,U>& r )
+        {
+            base_type::operator=( r );
+            return *this;
+        }
     };
 
     //////////////////////////////////////////////////////////////////////////////
