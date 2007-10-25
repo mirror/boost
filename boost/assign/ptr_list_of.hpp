@@ -58,10 +58,11 @@ namespace assign_detail
         generic_ptr_list() : values_( 32u )
         { }
 
+        /*
         generic_ptr_list( const generic_ptr_list& r )
         {
             values_.swap(r.values_);
-        }
+        }*/
         
         generic_ptr_list( release_type r ) : values_(r)
         { }
@@ -79,11 +80,19 @@ namespace assign_detail
 
     public:
 
-        template< class PtrContainer >
-        operator std::auto_ptr<PtrContainer>() const 
+        operator impl_type() const
         {
-            PtrContainer* type = 0;
-            return convert( type );
+            return values_;        
+        }
+ 
+        template< template<class,class,class> class Seq, class U,
+                  class CA, class A > 
+        operator Seq<U,CA,A>() const 
+        {
+            Seq<U,CA,A> result;
+            result.transfer( result.end(), values_ );
+            BOOST_ASSERT( empty() );
+            return result;
         }
 
         template< class PtrContainer >
