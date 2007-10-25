@@ -9,8 +9,8 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
 
-#include <boost/test/unit_test.hpp>
 #include "test_data.hpp"
+#include <boost/test/unit_test.hpp>
 #include <boost/ptr_container/exception.hpp>
 #include <boost/range/sub_range.hpp>
 #include <boost/cast.hpp>
@@ -261,6 +261,34 @@ void test_transfer()
 
 
 
+template< class BaseContainer, class DerivedContainer, class Derived >
+void map_container_assignment_test()
+{
+    DerivedContainer derived;
+    std::string foo( "foo" );
+    std::string bar( "foo" );
+    derived.insert( foo, new Derived );
+    derived.insert( bar, new Derived );
+
+    BaseContainer base_container( derived );
+    BOOST_CHECK_EQUAL( derived.size(), base_container.size() );
+    base_container.clear();
+    //
+    // Compilers choke on this one claming that the copy-constructor
+    //   must be public! Go figure.
+    //
+    // base_container = derived;
+    //BOOST_CHECK_EQUAL( derived.size(), base_container.size() );
+    //
+    BaseContainer base2( base_container );
+    BOOST_CHECK_EQUAL( base2.size(), base_container.size() );
+    base2 = base_container;
+    BOOST_CHECK_EQUAL( base2.size(), base_container.size() );
+    base_container = base_container;
+}
+
+
+
 #include <boost/ptr_container/ptr_map.hpp>
 
 using namespace std;
@@ -278,6 +306,26 @@ void test_map()
     ptr_map_test< ptr_multimap<int, nullable<Base> >, Base, Derived_class >();
     ptr_map_test< ptr_multimap<int, nullable<Value> >, Value, Value >();
 
+    map_container_assignment_test< ptr_map<std::string,Base>,
+                                   ptr_map<std::string,Derived_class>,
+                                   Derived_class>();
+    map_container_assignment_test< ptr_map<std::string, nullable<Base> >,
+                                   ptr_map<std::string,Derived_class>,
+                                   Derived_class>();                            
+    map_container_assignment_test< ptr_map<std::string, nullable<Base> >,
+                                   ptr_map<std::string, nullable<Derived_class> >, 
+                                   Derived_class>();                               
+   map_container_assignment_test< ptr_multimap<std::string,Base>,
+                                   ptr_multimap<std::string,Derived_class>,
+                                   Derived_class>();
+    map_container_assignment_test< ptr_multimap<std::string, nullable<Base> >,
+                                   ptr_multimap<std::string,Derived_class>,
+                                   Derived_class>();                            
+    map_container_assignment_test< ptr_multimap<std::string, nullable<Base> >,
+                                   ptr_multimap<std::string, nullable<Derived_class> >, 
+                                   Derived_class>();                               
+
+                                      
     test_transfer< ptr_map<int,Derived_class>, ptr_map<int,Base>, Derived_class >();
     test_transfer< ptr_multimap<int,Derived_class>, ptr_multimap<int,Base>, Derived_class >();
     

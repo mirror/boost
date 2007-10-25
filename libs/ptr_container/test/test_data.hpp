@@ -255,3 +255,28 @@ void transfer_test( Cont1& from, Cont2& to )
     BOOST_CHECK( !to.empty() );
 }
 
+
+//
+// test of copy operations
+//
+
+template< class BaseContainer, class DerivedContainer, class Derived >
+void container_assignment_test()
+{
+    DerivedContainer derived;
+    derived.insert( derived.begin(), new Derived );
+    derived.insert( derived.begin(), new Derived );
+
+    BaseContainer base( derived );
+    BOOST_CHECK_EQUAL( derived.size(), base.size() );
+    base.clear();
+    base = derived;
+    BOOST_CHECK_EQUAL( derived.size(), base.size() );
+    BaseContainer base2( base );
+    BOOST_CHECK_EQUAL( base2.size(), base.size() );
+    base2 = base;
+    BOOST_CHECK_EQUAL( base2.size(), base.size() );
+    base = base;
+}
+
+

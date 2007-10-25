@@ -43,6 +43,7 @@ void ptr_set_test()
     a_copy = c;
     a_copy = a_copy;
     BOOST_CHECK( a_copy.empty() );
+    
     BOOST_MESSAGE( "finished copying test" ); 
                  
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
@@ -73,11 +74,22 @@ void ptr_set_test()
     c3.insert( c.begin(), c.end() ); 
     c.erase( c.begin() );
     c3.erase( c3.begin(), c3.end() );
+    t = new T;
+    c.insert( new T );
+    c.erase( *t );
     
     BOOST_CHECK( c3.empty() );
     c.swap( c3 );
     BOOST_CHECK( !c3.empty() );
+    BOOST_CHECK( c.empty() );
     c3.clear();
+    //
+    // remark: we cannot pass c3 directly as it would
+    //         extract const iterators ... and the 
+    //         current standard does not allow erase()
+    //         to be given const iterators
+    //
+    c3.erase( boost::make_iterator_range(c3) );
     BOOST_CHECK( c3.empty() );
     BOOST_MESSAGE( "finished modifiers test" ); 
              
@@ -97,8 +109,14 @@ void ptr_set_test()
 #endif    
     c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), c3 );
     BOOST_CHECK( c3.empty() == false );
-    c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), c3.end(), c3 );
-    BOOST_CHECK( c3.empty() );
+    c.clear();
+    unsigned long c3size = c3.size();
+    unsigned long num  = c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), 
+                                                               c3.end(), 
+                                                               c3 );
+    BOOST_CHECK( num > 0 ); 
+    BOOST_CHECK_EQUAL( num, c.size() );
+    BOOST_CHECK( c3.empty() ); 
     BOOST_CHECK( !c.empty() );
     c3. BOOST_NESTED_TEMPLATE transfer<C>( c );
     BOOST_CHECK( !c3.empty() );

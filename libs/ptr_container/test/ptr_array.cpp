@@ -91,7 +91,18 @@ void test_array()
     BOOST_CHECK_THROW( (vec.replace(10u, new int(0))), bad_ptr_container_operation );
     BOOST_CHECK_THROW( (vec.replace(10u, std::auto_ptr<int>(new int(0)))), bad_ptr_container_operation ); 
     BOOST_CHECK_THROW( (vec.replace(0u, 0)), bad_ptr_container_operation ); 
+
+    ptr_array<Derived_class,2> derived;
+    derived.replace( 0, new Derived_class );
+    derived.replace( 1, new Derived_class );
+    ptr_array<Base,2> base( derived );
     
+    BOOST_MESSAGE( "finished derived to base test" ); 
+
+    base = derived;   
+    ptr_array<Base,2> base2( base );
+    base2 = base;
+    base  = base;
 }
 
 template< class C, class B, class T >
@@ -144,7 +155,6 @@ void test_array_interface()
         BOOST_CHECK_EQUAL( c3.is_null(i), true );
 
     BOOST_MESSAGE( "finished element access test" ); 
-
 }
 
 using boost::unit_test::test_suite;

@@ -12,6 +12,7 @@
 #include <boost/test/unit_test.hpp>
 #include "sequence_test_data.hpp"
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_list.hpp>
 #include <boost/assign/list_inserter.hpp>
 
 void test_ptr_vector()
@@ -25,7 +26,21 @@ void test_ptr_vector()
     reversible_container_test< ptr_vector< nullable<Value> >, Value, Value >();
 #endif    
 
+    container_assignment_test< ptr_vector<Base>, ptr_vector<Derived_class>, 
+                               Derived_class>();
+    container_assignment_test< ptr_vector< nullable<Base> >, 
+                               ptr_vector< nullable<Derived_class> >, 
+                               Derived_class>();
+    container_assignment_test< ptr_vector< nullable<Base> >, 
+                               ptr_vector<Derived_class>, 
+                               Derived_class>();
+    container_assignment_test< ptr_vector<Base>, 
+                               ptr_vector< nullable<Derived_class> >, 
+                               Derived_class>();                           
+                               
     test_transfer< ptr_vector<Derived_class>, ptr_vector<Base>, Derived_class>();
+    test_transfer< ptr_vector<Derived_class>, ptr_list<Base>, Derived_class>();
+     
     random_access_algorithms_test< ptr_vector<int> >();
 
 
@@ -63,6 +78,14 @@ void test_ptr_vector()
     BOOST_CHECK( vec2 < vec );
     BOOST_CHECK( vec2 <= vec );
     BOOST_CHECK( vec >= vec2 );
+
+    const int data_size = 10;
+    int** array = new int*[data_size];
+    for( int i = 0; i != data_size; ++i ) 
+        array[i] = new int(i);
+        
+    vec.transfer( vec.begin(), array, data_size );
+    array = vec.c_array();
     
 }
 
