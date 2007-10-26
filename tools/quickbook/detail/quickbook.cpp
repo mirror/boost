@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -39,6 +40,7 @@ namespace quickbook
     unsigned qbk_minor_version = 0;
     unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
     bool ms_errors = false; // output errors/warnings as if for VS
+    std::vector<std::string> include_path;
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -164,6 +166,7 @@ main(int argc, char* argv[])
             ("output-file", value<std::string>(), "output file")
             ("debug", "debug mode (for developers)")
             ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
+            ("include-path,I", value< std::vector<std::string> >(), "include path")
         ;
 
         positional_options_description p;
@@ -223,6 +226,11 @@ main(int argc, char* argv[])
             quickbook::current_time = &lt;
             quickbook::current_gm_time = &gmt;
             quickbook::debug_mode = false;
+        }
+        
+        if (vm.count("include-path"))
+        {
+            quickbook::include_path = vm["include-path"].as< std::vector<std::string> >();
         }
 
         if (vm.count("input-file"))

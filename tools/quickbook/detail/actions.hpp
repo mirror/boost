@@ -44,6 +44,7 @@ namespace quickbook
     extern unsigned qbk_major_version;
     extern unsigned qbk_minor_version;
     extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
+    extern std::vector<std::string> include_path;
 
     // forward declarations
     struct actions;

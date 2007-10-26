@@ -162,6 +162,8 @@ Features include:
   contain paragraphs.
 * `\n` and `[br]` are now deprecated.
 * __cond__. Ala C++ #ifdef.
+* Searching of included and imported files in an extensible search path with
+  `--include-path` (`-I`) option.
 
 [endsect]
 

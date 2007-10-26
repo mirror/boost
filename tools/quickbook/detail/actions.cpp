@@ -987,17 +987,40 @@ namespace quickbook
         boost::spirit::parse(first, last, g);
     }
 
+    namespace
+    {
+        fs::path include_search(fs::path const & current, std::string const & name)
+        {
+            fs::path path(name,fs::native);
+            
+            // If the path is relative, try and resolve it.
+            if (!path.is_complete())
+            {
+                // See if it can be found locally first.
+                if (fs::exists(current / path))
+                {
+                    return current / path;
+                }
+                
+                // Search in each of the include path locations.
+                BOOST_FOREACH(std::string const & p, include_path)
+                {
+                    fs::path full(p,fs::native);
+                    full /= path;
+                    if (fs::exists(full))
+                    {
+                        return full;
+                    }
+                }
+            }
+            
+            return path;
+        }
+    }
+
     void import_action::operator()(iterator first, iterator last) const
     {
-        fs::path path(std::string(first, last), fs::native);
-
-        // check to see if the path is complete and if not, make it relative to the current path
-        if (!path.is_complete())
-        {
-            path = actions.filename.branch_path() / path;
-            path.normalize();
-        }
-
+        fs::path path = include_search(actions.filename.branch_path(), std::string(first,last));
         std::string ext = fs::extension(path);
         std::vector<template_symbol> storage;
         load_snippets(path.string(), storage, ext, actions.doc_id);
@@ -1020,15 +1043,8 @@ namespace quickbook
 
     void include_action::operator()(iterator first, iterator last) const
     {
-        fs::path filein(std::string(first, last), fs::native);
+        fs::path filein = include_search(actions.filename.branch_path(), std::string(first,last));
         std::string doc_type, doc_id, doc_dirname, doc_last_revision;
-
-        // check to see if the path is complete and if not, make it relative to the current path
-        if (!filein.is_complete())
-        {
-            filein = actions.filename.branch_path() / filein;
-            filein.normalize();
-        }
 
         // swap the filenames
         std::swap(actions.filename, filein);
