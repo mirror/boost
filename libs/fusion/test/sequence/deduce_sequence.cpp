@@ -35,7 +35,7 @@ struct test_seq_ctor
 #define TEST_SAME_ELEMENTS(a,b) BOOST_TEST(( boost::mpl::equal< a, b >::type::value ))
 
 typedef fusion::vector<int, int const, int &, int const &> args1;
-typedef fusion::vector<int, int const, int &, int> storable1;
+typedef fusion::vector<int, int, int &, int> storable1;
 template struct test_seq_ctor<args1>;
 
 typedef fusion::vector< reference_wrapper<int> &, reference_wrapper<int const> &,
@@ -45,7 +45,7 @@ template struct test_seq_ctor<args2>;
 
 
 typedef fusion::vector<int *, int const *, int const * const, int const * &, int const * const &> args3;
-typedef fusion::vector<int *, int const *, int const * const, int const * &, int const * > storable3;
+typedef fusion::vector<int *, int const *, int const *, int const * &, int const * > storable3;
 template struct test_seq_ctor<args3>;
 
 typedef fusion::vector<int(&)[2], int const(&)[2]> args4;
