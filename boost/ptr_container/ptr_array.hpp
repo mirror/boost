@@ -221,32 +221,6 @@ namespace boost
             BOOST_STATIC_ASSERT( idx < N );
             return this->base()[idx] == 0;
         }
-        
-    public: // serialization
-
-        template< class Archive >
-        void save( Archive& ar, const unsigned ) const
-        {
-            this->save_helper( ar );
-        }
-
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) // basic
-        {
-            for( size_type i = 0u; i != N; ++i )
-            {
-                //
-                // Remark: pointers are not tracked,
-                // so we need not call ar.reset_object_address(v, u)
-                //
-                T* p;
-                ar & p;
-                this->replace( i, p );
-            }
-        }
-
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
-
     };
 
     //////////////////////////////////////////////////////////////////////////////

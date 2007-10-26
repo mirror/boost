@@ -181,8 +181,7 @@ namespace ptr_container_detail
                                   AssociatePtrCont& from ) // basic
         {
             BOOST_ASSERT( (void*)&from != (void*)this );
-            BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
-
+ 
             size_type res = 0;
             for( ; first != last; )
             {
@@ -219,7 +218,6 @@ namespace ptr_container_detail
                                    AssociatePtrCont& from ) // basic
         {
             BOOST_ASSERT( (void*)&from != (void*)this );
-            BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
             size_type res = 0;
             for( ; first != last; )

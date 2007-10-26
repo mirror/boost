@@ -35,10 +35,6 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
-#include <boost/serialization/split_member.hpp>
-#include <algorithm>
-#include <exception>
-#include <memory>
 #include <typeinfo>
 
 namespace boost
@@ -46,13 +42,6 @@ namespace boost
     
 namespace ptr_container_detail
 {
-
-    template< class T >
-    inline T const& serialize_as_const( T const& r )
-    {
-        return r;
-    }
-
     template< class CloneAllocator >
     struct clone_deleter
     {
@@ -500,7 +489,6 @@ namespace ptr_container_detail
 
         iterator erase( iterator first, iterator last ) // nothrow
         {
-            //BOOST_ASSERT( !empty() );
             remove( first, last );
             return iterator( c_.erase( first.base(),
                                        last.base() ) );
@@ -543,13 +531,8 @@ namespace ptr_container_detail
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( empty(), bad_ptr_container_operation,
                                                  "'replace()' on empty container" );
 
-            auto_type old( Config::get_pointer( where ) );  // nothrow
-            
-//#if defined( __GNUC__ ) || defined( __MWERKS__ ) || defined( __COMO__ )
+            auto_type old( Config::get_pointer( where ) );  // nothrow            
             const_cast<void*&>(*where.base()) = ptr.release();                
-//#else
-//            *where.base() = ptr.release(); // nothrow, commit
-//#endif            
             return boost::ptr_container_detail::move( old );
         }
 
@@ -578,65 +561,7 @@ namespace ptr_container_detail
         {
             return replace( idx, x.release() );
         }
-
-    //
-    // serialization
-    //
-    
-    protected:
-
-        template< class Archive >
-        void save_helper( Archive& ar ) const
-        {
-            const_iterator i = this->begin(), e = this->end();
-            for( ; i != e; ++i )
-                ar & ptr_container_detail::serialize_as_const( 
-                                 static_cast<value_type>( *i.base() ) );
-        }
-
-    public: 
-
-        template< class Archive >
-        void save( Archive& ar, const unsigned ) const
-        {
-            ar & ptr_container_detail::serialize_as_const( this->size() );
-            this->save_helper( ar );
-        }
-
-    protected:
-
-        template< class Archive >
-        void load_helper( Archive& ar, size_type n )
-        {   
-            //
-            // Called after an appropriate reserve on c.
-            //
-
-            this->clear();            
-            for( size_type i = 0u; i != n; ++i )
-            {
-                //
-                // Remark: pointers are not tracked,
-                // so we need not call ar.reset_object_address(v, u)
-                //
-                value_type ptr;
-                ar & ptr;
-                this->insert( this->end(), ptr );
-            }
-        }
-
-    public:
-        
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) 
-        {
-            size_type n;
-            ar & n;
-            this->load_helper( ar, n ); 
-        }
-        
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
-        
+                
     }; // 'reversible_ptr_container'
 
 

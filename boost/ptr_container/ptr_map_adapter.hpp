@@ -164,7 +164,7 @@ namespace ptr_container_detail
             }
             else
             {
-                eraser e(&this->base(),key); // nothrow
+                eraser e(&this->base(),key);      // nothrow
                 mapped_type res = new T();        // strong 
                 ref = res;                        // nothrow
                 e.release();                      // nothrow
@@ -286,21 +286,6 @@ namespace ptr_container_detail
         {
             return replace( where, x.release() );
         }
-
-    public: // serialization
-
-        template< class Archive >
-        void save( Archive& ar, const unsigned ) const
-        {
-            ar & ptr_container_detail::serialize_as_const( this->size() );
-
-            const_iterator i = this->begin(), e = this->end();
-            for( ; i != e; ++i )
-            {
-                ar & i->first;
-                ar & ptr_container_detail::serialize_as_const( i->second );
-            }
-        }
     };
     
 } // ptr_container_detail
@@ -347,8 +332,8 @@ namespace ptr_container_detail
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
                 res = 
                 this->base().insert( std::make_pair( key, ptr.get() ) ); // strong, commit      
-            if( res.second )                                                  // nothrow     
-                ptr.release();                                                // nothrow
+            if( res.second )                                             // nothrow     
+                ptr.release();                                           // nothrow
         }
 
         template< class II >                                               
@@ -440,13 +425,13 @@ namespace ptr_container_detail
         std::pair<iterator,bool> insert_impl( const key_type& key, mapped_type x ) // strong
         {
             this->enforce_null_policy( x, "Null pointer in ptr_map_adapter::insert()" );
-            auto_type ptr( x );                                              // nothrow
+            auto_type ptr( x );                                         // nothrow
 
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
                  res = this->base().insert( std::make_pair( key, x ) ); // strong, commit      
-            if( res.second )                                             // nothrow     
-                ptr.release();                                           // nothrow
-            return std::make_pair( iterator( res.first ), res.second );  // nothrow        
+            if( res.second )                                            // nothrow     
+                ptr.release();                                          // nothrow
+            return std::make_pair( iterator( res.first ), res.second ); // nothrow        
         }
         
     public:
@@ -496,29 +481,6 @@ namespace ptr_container_detail
         {
             return transfer( from.begin(), from.end(), from );
         }
-
-    public: // serialization
-
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) // strong
-        {
-            this->clear();
-            size_type n;
-            ar & n;
-
-            for( size_type i = 0u; i != n; ++i )
-            {
-                key_type  key;
-                T*        value;
-                ar & key;
-                ar & value;
-                std::pair<iterator,bool> p = this->insert( key, value );
-                ar.reset_object_address( &p.first->first, &key ); 
-            }
-        }
-
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
-        
   };
   
   /////////////////////////////////////////////////////////////////////////
@@ -575,7 +537,7 @@ namespace ptr_container_detail
                                                           // strong
                 safe_insert( pair.first, 
                              boost::ptr_container::move( ptr ) );
-                                                         // strong, commit 
+                                                          // strong, commit 
                 ++first;                                                      
             }                                                                 
         }
@@ -700,28 +662,6 @@ namespace ptr_container_detail
             transfer( from.begin(), from.end(), from );
             BOOST_ASSERT( from.empty() );
         }
-
-    public: // serialization
-
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) // basic
-        {
-            this->clear();
-            size_type n;
-            ar & n;
-
-            for( size_type i = 0u; i != n; ++i )
-            {
-                key_type  key;
-                T*        value;
-                ar & key;
-                ar & value;
-                iterator p = this->insert( key, value );
-                ar.reset_object_address( &p->first, &key );
-            }
-        }
-
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     };
 

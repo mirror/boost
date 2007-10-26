@@ -18,7 +18,6 @@
 #define BOOST_STATIC_MOVE_PTR_HPP_INCLUDED
 
 #include <boost/config.hpp> // Member template friends, put size_t in std.
-#include <algorithm>        // swap.
 #include <cstddef>          // size_t
 #include <boost/compressed_pair.hpp> 
 #include <boost/ptr_container/detail/default_deleter.hpp>       

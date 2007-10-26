@@ -22,19 +22,12 @@
 #include <boost/ptr_container/detail/void_ptr_iterator.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/iterator/iterator_categories.hpp>
 
 
 namespace boost
 {   
 namespace ptr_container_detail
-{
-
-
-    
-    
+{    
     template
     < 
         class T, 
@@ -186,9 +179,9 @@ namespace ptr_container_detail
         {
             this->enforce_null_policy( x, "Null pointer in 'push_back()'" );
 
-            auto_type ptr( x );                // notrow
+            auto_type ptr( x );           // notrow
             this->base().push_back( x );  // strong, commit
-            ptr.release();                     // nothrow
+            ptr.release();                // nothrow
         }
 
         template< class U >
@@ -201,9 +194,9 @@ namespace ptr_container_detail
         {
             this->enforce_null_policy( x, "Null pointer in 'push_front()'" );
 
-            auto_type ptr( x );                // nothrow
+            auto_type ptr( x );           // nothrow
             this->base().push_front( x ); // strong, commit
-            ptr.release();                     // nothrow
+            ptr.release();                // nothrow
         }
 
         template< class U >
@@ -217,9 +210,9 @@ namespace ptr_container_detail
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
                                                  bad_ptr_container_operation,
                                           "'pop_back()' on empty container" );
-            auto_type ptr( static_cast<value_type>( 
-                         this->base().back() ) ); // nothrow
-            this->base().pop_back();              // nothrow
+            auto_type ptr( static_cast<value_type>( this->base().back() ) );      
+                                                       // nothrow
+            this->base().pop_back();                   // nothrow
             return ptr_container_detail::move( ptr );  // nothrow
         }
 
@@ -228,9 +221,9 @@ namespace ptr_container_detail
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
                                                  bad_ptr_container_operation,
                                          "'pop_front()' on empty container" ); 
-            auto_type ptr( static_cast<value_type>(
-                        this->base().front() ) ); // nothrow 
-            this->base().pop_front();             // nothrow
+            auto_type ptr( static_cast<value_type>( this->base().front() ) ); 
+                                         // nothrow 
+            this->base().pop_front();    // nothrow
             return ptr_container_detail::move( ptr ); 
         }
         
@@ -385,10 +378,8 @@ namespace ptr_container_detail
             if( from.empty() )
                 return;
             this->base().
-                insert( before.base(), 
-                        first.base(), last.base() ); // strong
-            from.base().erase( first.base(),
-                               last.base() );   // nothrow
+                insert( before.base(), first.base(), last.base() ); // strong
+            from.base().erase( first.base(), last.base() );         // nothrow
         }
 
         template< class PtrSeqAdapter >
@@ -399,10 +390,8 @@ namespace ptr_container_detail
             BOOST_ASSERT( (void*)&from != (void*)this );
             if( from.empty() )
                 return;
-            this->base().
-                insert( before.base(),
-                        *object.base() );                 // strong
-            from.base().erase( object.base() );      // nothrow
+            this->base().insert( before.base(), *object.base() ); // strong 
+            from.base().erase( object.base() );                  // nothrow 
         }
 
 #ifdef BOOST_NO_SFINAE
