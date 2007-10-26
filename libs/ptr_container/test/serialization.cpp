@@ -9,15 +9,23 @@
 // For more information, see http://www.boost.org/libs/ptr_container/
 //
 
+#include <boost/config.hpp>
+#ifdef BOOST_MSVC
+#pragma warning( disable: 4996 )
+#endif
+
 #include <boost/test/unit_test.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_deque.hpp>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_array.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/ptr_container/serialize.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/utility.hpp>
@@ -47,7 +55,7 @@ struct Base
     template< class Archive >
     void serialize( Archive& ar, const unsigned int version )
     {
-        ar & i;
+        ar & boost::serialization::make_nvp( "i", i );
     }
 
     Base() : i(42)
@@ -72,8 +80,9 @@ struct Derived : Base
     template< class Archive >
     void serialize( Archive& ar, const unsigned int version )
     {
-        ar & boost::serialization::base_object<Base>( *this );
-        ar & i2;
+        ar & boost::serialization::make_nvp( "Base",  
+                 boost::serialization::base_object<Base>( *this ) );
+        ar & boost::serialization::make_nvp( "i2", i2 );
     }
 
     Derived() : Base(42), i2(42)
@@ -102,7 +111,7 @@ void add( boost::ptr_array<U,2>& c, T* r, unsigned n )
     c.replace( n, r );
 }
 
-template< class Cont >
+template< class Cont, class OArchive, class IArchive >
 void test_serialization_helper()
 {
     Cont vec;
@@ -110,16 +119,15 @@ void test_serialization_helper()
     add( vec, new Derived( 1 ), 1u );
 
     std::ofstream ofs("filename");
-    boost::archive::text_oarchive oa(ofs);
-    oa << as_const(vec);
+    OArchive oa(ofs);
+    oa << boost::serialization::make_nvp( "container", as_const(vec) );
     ofs.close();
 
     
-    
     std::ifstream ifs("filename", std::ios::binary);
-    boost::archive::text_iarchive ia(ifs);
+    IArchive ia(ifs);
     Cont vec2;
-    ia >> vec2;
+    ia >> boost::serialization::make_nvp( "container", vec2 );
     ifs.close();
 
     BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
@@ -133,7 +141,7 @@ void test_serialization_helper()
 
 }
 
-template< class Map >
+template< class Map, class OArchive, class IArchive >
 void test_serialization_map_helper()
 {
     Map m;
@@ -143,16 +151,15 @@ void test_serialization_map_helper()
     BOOST_CHECK_EQUAL( m.size(), 2u );
 
     std::ofstream ofs("filename");
-    boost::archive::text_oarchive oa(ofs);
-    oa << as_const(m);
+    OArchive oa(ofs);
+    oa << boost::serialization::make_nvp( "container", as_const(m) );
     ofs.close();
-
 
     
     std::ifstream ifs("filename", std::ios::binary);
-    boost::archive::text_iarchive ia(ifs);
+    IArchive ia(ifs);
     Map m2;
-    ia >> m2;
+    ia >> boost::serialization::make_nvp( "container", m2 );
     ifs.close();
 
     BOOST_CHECK_EQUAL( m.size(), m2.size() );
@@ -193,26 +200,43 @@ void test_hierarchy()
 // test initializer
 // 
 void test_serialization()
-{
+{          
     test_hierarchy();
-    test_serialization_helper< boost::ptr_deque<Base> >();
-    test_serialization_helper< boost::ptr_list<Base> >();
-    test_serialization_helper< boost::ptr_vector<Base> >();
-    test_serialization_helper< boost::ptr_array<Base,2> >();
-  
-    test_serialization_helper< boost::ptr_set<Base> >();
-    test_serialization_helper< boost::ptr_multiset<Base> >();
+    test_serialization_helper< boost::ptr_deque<Base>,
+                               boost::archive::text_oarchive,
+                               boost::archive::text_iarchive >();
+    test_serialization_helper< boost::ptr_list<Base>,
+                               boost::archive::text_oarchive,
+                               boost::archive::text_iarchive>();
+    test_serialization_helper< boost::ptr_vector<Base>, 
+                               boost::archive::text_oarchive, 
+                               boost::archive::text_iarchive>();
+    test_serialization_helper< boost::ptr_vector<Base>, 
+                               boost::archive::xml_oarchive, 
+                               boost::archive::xml_iarchive>();
+    test_serialization_helper< boost::ptr_array<Base,2>, 
+                               boost::archive::text_oarchive,
+                               boost::archive::text_iarchive>();
+    test_serialization_helper< boost::ptr_set<Base>,
+                               boost::archive::text_oarchive,
+                               boost::archive::text_iarchive>();
+    test_serialization_helper< boost::ptr_multiset<Base>, 
+                               boost::archive::text_oarchive,
+                               boost::archive::text_iarchive>();
 
-    test_serialization_map_helper< boost::ptr_map<std::string,Base> >();
+    test_serialization_map_helper< boost::ptr_map<std::string,Base>, 
+                                   boost::archive::text_oarchive,
+                                   boost::archive::text_iarchive>();
+    test_serialization_map_helper< boost::ptr_multimap<std::string,Base>, 
+                                   boost::archive::text_oarchive,
+                                   boost::archive::text_iarchive>();
 
-//
-// GCC hangs when calling find() on a multimap!
-//      
-//#if !BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0300))
-
-    test_serialization_map_helper< boost::ptr_multimap<std::string,Base> >();
-    
-//#endif
+    test_serialization_map_helper< boost::ptr_map<std::string,Base>, 
+                                   boost::archive::xml_oarchive,
+                                   boost::archive::xml_iarchive>();
+    test_serialization_map_helper< boost::ptr_multimap<std::string,Base>, 
+                                   boost::archive::xml_oarchive,
+                                   boost::archive::xml_iarchive>();
 
 }
 
