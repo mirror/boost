@@ -19,3 +19,5 @@ lib boost_signals : $(SOURCES).cpp
         <define>BOOST_SIGNALS_NO_LIB=1
         <link>shared:<define>BOOST_SIGNALS_DYN_LINK=1
     ;
+
+boost-install boost_signals ;

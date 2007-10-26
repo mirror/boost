@@ -11,6 +11,8 @@
 import mpi ;
 import python ;
 
+libraries = ;
+
 if [ mpi.configured ]
 {
 
@@ -50,6 +52,8 @@ lib boost_mpi
     <library>../../serialization/build//boost_serialization
     <library>/mpi//mpi [ mpi.extra-requirements ]
   ;
+  
+libraries += boost_mpi ;  
 
   if [ python.configured ]
   {
@@ -69,6 +73,7 @@ lib boost_mpi
       : # Usage requirements
         <library>/mpi//mpi [ mpi.extra-requirements ]
       ;
+    libraries += boost_mpi_python ;   
 
     python-extension mpi 
       : # Sources
@@ -103,3 +108,5 @@ else
   ECHO "note: to suppress this message, pass \"--without-mpi\" to bjam." ;
   ECHO "note: otherwise, you can safely ignore this message." ;
 }
+
+boost-install $(libraries) ;

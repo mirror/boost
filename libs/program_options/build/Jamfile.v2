@@ -17,12 +17,4 @@ lib boost_program_options
     <link>shared:<define>BOOST_PROGRAM_OPTIONS_DYN_LINK=1 # tell source we're building dll's
     ;
 
-install dist-lib
-    :
-    boost_program_options
-    :
-    <install-type>LIB
-    <location>../../../dist/lib
-    ;
-
-explicit dist-lib ;
+boost-install boost_program_options ;

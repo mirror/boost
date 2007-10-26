@@ -85,3 +85,5 @@ lib boost_wserialization
 	  <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1	
           <conditional>@include-spirit
 	;
+
+boost-install boost_serialization boost_wserialization ;

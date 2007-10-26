@@ -51,12 +51,4 @@ for local source in $(SOURCES)
     obj $(source) : $(source).cpp : $(requirements) ;
 }
 
-install dist-lib
-    :
-    boost_wave
-    :
-    <install-type>LIB
-    <location>../../../dist/lib
-    ;
-
-explicit dist-lib ;
+boost-install boost_wave ;
