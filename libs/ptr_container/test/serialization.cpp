@@ -19,13 +19,8 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_deque.hpp>
-#include <boost/ptr_container/ptr_list.hpp>
-#include <boost/ptr_container/ptr_array.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
-#include <boost/ptr_container/serialize.hpp>
+#include <boost/ptr_container/ptr_container.hpp>
+#include <boost/ptr_container/serialize_ptr_container.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/utility.hpp>
