@@ -11,7 +11,7 @@
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/unused.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
-#include <boost/fusion/view/zip_view/detail/strictest_traversal.hpp>
+#include <boost/fusion/view/detail/strictest_traversal.hpp>
 #include <boost/fusion/view/zip_view/detail/begin_impl.hpp>
 #include <boost/fusion/view/zip_view/detail/end_impl.hpp>
 #include <boost/fusion/view/zip_view/detail/size_impl.hpp>

@@ -8,7 +8,7 @@
 #if !defined(FUSION_ZIP_VIEW_ITERATOR_FWD)
 #define FUSION_ZIP_VIEW_ITERATOR_FWD
 
-#include <boost/fusion/view/zip_view/detail/strictest_traversal.hpp>
+#include <boost/fusion/view/detail/strictest_traversal.hpp>
 
 namespace boost { namespace fusion {
 
