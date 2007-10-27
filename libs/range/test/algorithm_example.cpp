@@ -37,7 +37,7 @@ namespace
     }
     
     template< typename Range, typename T >
-    inline typename boost::range_const_iterator<Range>::type 
+    inline typename boost::range_iterator<Range>::type 
     find( const Range& c, const T& value )
     {
        return std::find( boost::begin( c ), boost::end( c ), value );
@@ -47,7 +47,7 @@ namespace
     // replace first value and return its index
     //                                
     template< class Range, class T >
-    inline typename boost::range_size<Range>::type
+    inline typename boost::range_difference<Range>::type
     my_generic_replace( Range& c, const T& value, const T& replacement )
     {
        typename boost::range_iterator<Range>::type found = find( c, value );
