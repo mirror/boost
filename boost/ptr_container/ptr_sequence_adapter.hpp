@@ -148,12 +148,12 @@ namespace ptr_container_detail
                                                  base_type )
 
         template< class U >
-        ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq>& r )
+        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq>& r )
           : base_type( r )
         { }
         
         template< class PtrContainer >
-        ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
+        explicit ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
           : base_type( clone )
         { }
 
@@ -420,21 +420,28 @@ namespace ptr_container_detail
 
     public: // C-array support
     
-        void transfer( iterator before, T** from, 
+        void transfer( iterator before, value_type* from, 
                        size_type size, bool delete_from = true ) // strong 
         {
             BOOST_ASSERT( from != 0 );
-            this->base().insert( before.base(), from, from + size ); // strong
             if( delete_from )
-                delete[] from;
+            {
+                BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
+                    deleter( from, size );                                // nothrow
+                this->base().insert( before.base(), from, from + size );  // strong
+                deleter.release();                                        // nothrow
+            }
+            else
+            {
+                this->base().insert( before.base(), from, from + size ); // strong
+            }
         }
 
-        T** c_array() // nothrow
+        value_type* c_array() // nothrow
         {
             if( this->empty() )
                 return 0;
             T** res = reinterpret_cast<T**>( &this->begin().base()[0] );
-            BOOST_ASSERT( &*this->begin().base() == (void**)res );
             return res;
         }
 

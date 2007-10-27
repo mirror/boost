@@ -105,24 +105,24 @@ namespace ptr_container_detail
         
         template< class Compare, class Allocator >
         ptr_set_adapter_base( const Compare& comp,
-                             const Allocator& a ) 
+                              const Allocator& a ) 
          : base_type( comp, a ) 
         { }
         
         template< class InputIterator, class Compare, class Allocator >
         ptr_set_adapter_base( InputIterator first, InputIterator last,
-                             const Compare& comp,
-                             const Allocator& a ) 
+                              const Compare& comp,
+                              const Allocator& a ) 
          : base_type( first, last, comp, a ) 
         { }
         
         template< class U, class Set >
-        ptr_set_adapter_base( const ptr_set_adapter_base<U,Set>& r )
+        explicit ptr_set_adapter_base( const ptr_set_adapter_base<U,Set>& r )
           : base_type( r )
         { }
         
         template< class PtrContainer >
-        ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
+        explicit ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
          : base_type( clone )
         { }
 
@@ -264,8 +264,8 @@ namespace ptr_container_detail
 
     public:
         
-        explicit ptr_set_adapter( const key_compare& comp = key_compare(),
-                                  const allocator_type& a = allocator_type() ) 
+        explicit  ptr_set_adapter( const key_compare& comp = key_compare(),
+                                   const allocator_type& a = allocator_type() ) 
           : base_type( comp, a ) 
         {
             BOOST_ASSERT( this->empty() ); 
@@ -282,12 +282,12 @@ namespace ptr_container_detail
         }
 
         template< class U, class Set >
-        ptr_set_adapter( const ptr_set_adapter<U,Set>& r )
+        explicit ptr_set_adapter( const ptr_set_adapter<U,Set>& r )
           : base_type( r )
         { }
         
         template< class PtrContainer >
-        ptr_set_adapter( std::auto_ptr<PtrContainer> clone )
+        explicit ptr_set_adapter( std::auto_ptr<PtrContainer> clone )
          : base_type( clone )
         { }
 
@@ -439,8 +439,8 @@ namespace ptr_container_detail
     
     public:
 
-        explicit ptr_multiset_adapter( const key_compare& comp = key_compare(),
-                                       const allocator_type& a = allocator_type() )
+        ptr_multiset_adapter( const key_compare& comp = key_compare(),
+                              const allocator_type& a = allocator_type() )
         : base_type( comp, a ) 
         { }
     
@@ -454,12 +454,12 @@ namespace ptr_container_detail
         }
 
         template< class U, class Set >
-        ptr_multiset_adapter( const ptr_multiset_adapter<U,Set>& r )
+        explicit ptr_multiset_adapter( const ptr_multiset_adapter<U,Set>& r )
           : base_type( r )
         { }
         
         template< class PtrContainer >
-        ptr_multiset_adapter( std::auto_ptr<PtrContainer> clone )
+        explicit ptr_multiset_adapter( std::auto_ptr<PtrContainer> clone )
          : base_type( clone )
         { }
 

@@ -83,7 +83,7 @@ namespace boost
         ptr_array() : base_class()
         { }
 
-        ptr_array( const ptr_array& r )
+        explicit ptr_array( const ptr_array& r )
         {
             size_t i = 0;
             for( ; i != N; ++i )
@@ -92,7 +92,7 @@ namespace boost
         }
 
         template< class U >
-        ptr_array( const ptr_array<U,N>& r )
+        explicit ptr_array( const ptr_array<U,N>& r )
         {
             size_t i = 0;
             for( ; i != N; ++i )
@@ -100,7 +100,7 @@ namespace boost
                                         static_cast<U*>( r.base()[i] ) ); 
         }
 
-        ptr_array( std::auto_ptr<this_type> r )
+        explicit ptr_array( std::auto_ptr<this_type> r )
         : base_class( r ) { }
 
         ptr_array& operator=( const ptr_array& r )

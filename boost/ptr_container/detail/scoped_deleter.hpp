@@ -34,9 +34,15 @@ namespace boost
             bool              released_;
             
         public:
-            scoped_deleter( size_type size ) : 
-                ptrs_( new T*[size] ), stored_( 0 ), 
-                released_( false )
+            scoped_deleter( T** a, size_type size ) 
+                : ptrs_( a ), stored_( size ), released_( false )
+            { 
+                BOOST_ASSERT( a );
+            }
+            
+            scoped_deleter( size_type size ) 
+                : ptrs_( new T*[size] ), stored_( 0 ), 
+                 released_( false )
             {
                 BOOST_ASSERT( size > 0 );
             }

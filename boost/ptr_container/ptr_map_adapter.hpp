@@ -181,20 +181,21 @@ namespace ptr_container_detail
         { }
  
         template< class Compare, class Allocator >
-        explicit ptr_map_adapter_base( const Compare& comp,
-                                       const Allocator& a ) 
+        ptr_map_adapter_base( const Compare& comp,
+                              const Allocator& a ) 
         : base_type( comp, a ) 
         { }
-
+              
         template< class PtrContainer >
-        ptr_map_adapter_base( std::auto_ptr<PtrContainer> clone ) 
+        explicit ptr_map_adapter_base( std::auto_ptr<PtrContainer> clone ) 
         : base_type( clone )
         { }
         
         template< typename PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_map_adapter_base& operator=( std::auto_ptr<PtrContainer> clone )    
         {
             base_type::operator=( clone );
+            return *this;
         }        
 
         iterator find( const key_type& x )                                                
@@ -357,7 +358,7 @@ namespace ptr_container_detail
     public:
 
         explicit ptr_map_adapter( const key_compare& comp = key_compare(),
-                                  const allocator_type& a = allocator_type()  ) 
+                                  const allocator_type& a = allocator_type() ) 
           : base_type( comp, a ) { }
     
         template< class InputIterator >
@@ -369,14 +370,14 @@ namespace ptr_container_detail
             map_basic_clone_and_insert( first, last );
         }
 
-        ptr_map_adapter( const ptr_map_adapter& r )
+        explicit ptr_map_adapter( const ptr_map_adapter& r )
           : base_type( key_compare(), allocator_type() )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
         }
         
         template< class Key, class U >
-        ptr_map_adapter( const ptr_map_adapter<Key,U>& r )
+        explicit ptr_map_adapter( const ptr_map_adapter<Key,U>& r )
           : base_type( key_compare(), allocator_type() )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
@@ -394,7 +395,7 @@ namespace ptr_container_detail
         }
 
         template< class Key, class U >
-        ptr_map_adapter& operator=( const ptr_map_adapter<Key,U> r ) 
+        ptr_map_adapter& operator=( const ptr_map_adapter<Key,U>& r ) 
          {
             ptr_map_adapter clone( r );
             this->swap( clone );
@@ -402,9 +403,10 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        void operator=( std::auto_ptr<U> r )
+        ptr_map_adapter& operator=( std::auto_ptr<U> r )
         {  
             base_type::operator=( r );
+            return *this;
         }
 
         using base_type::release;
@@ -557,21 +559,21 @@ namespace ptr_container_detail
             map_basic_clone_and_insert( first, last );
         }
 
-        ptr_multimap_adapter( const ptr_multimap_adapter& r )
+        explicit ptr_multimap_adapter( const ptr_multimap_adapter& r )
           : base_type( key_compare(), allocator_type() )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
         }
         
         template< class Key, class U >
-        ptr_multimap_adapter( const ptr_multimap_adapter<Key,U>& r )
+        explicit ptr_multimap_adapter( const ptr_multimap_adapter<Key,U>& r )
           : base_type( key_compare(), allocator_type() )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
         }
         
         template< class U >
-        ptr_multimap_adapter( std::auto_ptr<U> r ) : base_type( r )
+        explicit ptr_multimap_adapter( std::auto_ptr<U> r ) : base_type( r )
         { }
 
         ptr_multimap_adapter& operator=( const ptr_multimap_adapter& r )
@@ -582,7 +584,7 @@ namespace ptr_container_detail
         }
 
         template< class Key, class U >
-        ptr_multimap_adapter& operator=( const ptr_multimap_adapter<Key,U> r ) 
+        ptr_multimap_adapter& operator=( const ptr_multimap_adapter<Key,U>& r ) 
          {
             ptr_multimap_adapter clone( r );
             this->swap( clone );
@@ -590,9 +592,10 @@ namespace ptr_container_detail
         }
         
         template< class U >
-        void operator=( std::auto_ptr<U> r )
+        ptr_multimap_adapter& operator=( std::auto_ptr<U> r )
         {  
             base_type::operator=( r );
+            return *this;
         }
 
         using base_type::release;

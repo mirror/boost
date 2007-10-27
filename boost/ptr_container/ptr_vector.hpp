@@ -46,8 +46,8 @@ namespace boost
                                                       base_class,
                                                       this_type );
         
-        ptr_vector( size_type n,
-                    const allocator_type& alloc = allocator_type() )
+        explicit ptr_vector( size_type n,
+                             const allocator_type& alloc = allocator_type() )
           : base_class(alloc)
         {
             this->base().reserve( n );

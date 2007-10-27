@@ -286,7 +286,7 @@ namespace ptr_container_detail
         }
 
     public: // foundation! should be protected!
-        explicit reversible_ptr_container( const allocator_type& a = allocator_type() ) 
+        reversible_ptr_container( const allocator_type& a = allocator_type() ) 
          : c_( a )
         {}
         
@@ -582,7 +582,7 @@ namespace ptr_container_detail
     // is buggy on most compilers, so we use a macro instead
     //
 #define BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type ) \
-    PC( std::auto_ptr<this_type> r )                \
+    explicit PC( std::auto_ptr<this_type> r )       \
     : base_type ( r ) { }                           \
                                                     \
     PC& operator=( std::auto_ptr<this_type> r )     \
@@ -607,7 +607,7 @@ namespace ptr_container_detail
 #define BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type ) \
                                                                       \
     template< class U >                                               \
-    PC( const PC<U>& r ) : base_type( r ) { }                         \
+    explicit PC( const PC<U>& r ) : base_type( r ) { }                \
                                                                       \
     template< class U >                                               \
     PC& operator=( const PC<U>& r )                                   \
@@ -622,10 +622,10 @@ namespace ptr_container_detail
     typedef BOOST_DEDUCED_TYPENAME base_type::size_type       size_type;               \
     typedef BOOST_DEDUCED_TYPENAME base_type::const_reference const_reference;         \
     typedef BOOST_DEDUCED_TYPENAME base_type::allocator_type  allocator_type;          \
-    PC( const allocator_type& a = allocator_type() ) : base_type(a) {}                 \
+    explicit PC( const allocator_type& a = allocator_type() ) : base_type(a) {}                 \
     template< class InputIterator >                                                    \
     PC( InputIterator first, InputIterator last,                                       \
-    const allocator_type& a = allocator_type() ) : base_type( first, last, a ) {}      
+        const allocator_type& a = allocator_type() ) : base_type( first, last, a ) {}  
                  
 #define BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )           \
    BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                                    \

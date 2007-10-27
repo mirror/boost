@@ -68,17 +68,17 @@ namespace ptr_container_detail
        { }
 
        template< class PtrContainer >
-       associative_ptr_container( std::auto_ptr<PtrContainer> r )
+       explicit associative_ptr_container( std::auto_ptr<PtrContainer> r )
          : base_type( r, key_compare() )
        { }
 
-       associative_ptr_container( const associative_ptr_container& r )
+       explicit associative_ptr_container( const associative_ptr_container& r )
          : base_type( r.begin(), r.end(), key_compare(), 
                       BOOST_DEDUCED_TYPENAME Config::allocator_type() )
        { }
 
        template< class C, class V >
-       associative_ptr_container( const associative_ptr_container<C,V>& r )
+       explicit associative_ptr_container( const associative_ptr_container<C,V>& r )
          : base_type( r.begin(), r.end(), key_compare(), 
                       BOOST_DEDUCED_TYPENAME Config::allocator_type() )
        { }

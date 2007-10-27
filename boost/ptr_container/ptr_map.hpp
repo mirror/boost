@@ -41,8 +41,8 @@ namespace boost
         typedef ptr_map<Key,T,Compare,CloneAllocator,Allocator> this_type;
         
     public:
-        ptr_map( const Compare& comp = Compare(),
-                 const Allocator& a  = Allocator() ) 
+        explicit ptr_map( const Compare& comp = Compare(),
+                          const Allocator& a  = Allocator() ) 
           : base_type( comp, a ) { }
 
         template< class InputIterator >
