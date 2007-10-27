@@ -60,22 +60,14 @@ free-standing functions so syntactic and/or semantic differences can be removed.
             more flexible, compact and maintainable client code
         </li>
         <li  >
-            correct handling of null-terminated strings
-            <p>
-            <b>Warning:</b><i> support for null-terminated strings is deprecated and will
-              disappear in the next Boost release (1.34). </i>
-             </p>
+        safe use of built-in arrays
         </li>
-        <li  >
-        safe use of built-in arrays (for legacy code; why else would you use
-        built-in arrays?) </li>
 
     </ul>
     </p>
     <p  >
-    Below are given a small example (the complete example can be found <a href="../test/algorithm_example.cpp" target="_self" >here</a>
-    ):
-    <blockquote>
+    Below are given a small example (the complete example can be found <a 
+    href="../test/algorithm_example.cpp" target="_self" >here</a>): <blockquote>
         <pre  >
 <span class=comment>
     //
@@ -89,7 +81,7 @@ free-standing functions so syntactic and/or semantic differences can be removed.
     </span><span class=special>}
 
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardReadableRange</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
-    </span><span class=keyword>inline </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>range_const_iterator</span><span class=special>&lt; </span><span
+    </span><span class=keyword>inline </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>range_iterator</span><span class=special>&lt; </span><span class=keyword>const </span><span
 class=identifier>ForwardReadableRange </span><span class=special>&gt;::</span><span class=identifier>type
     </span><span class=identifier>find</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>ForwardReadableRange</span><span class=special>&amp; </span><span class=identifier>c</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>value </span><span class=special>)
     </span><span class=special>{
@@ -100,7 +92,7 @@ class=identifier>ForwardReadableRange </span><span class=special>&gt;::</span><s
     // replace first value and return its index
     //
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardReadableWriteableRange</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
-    </span><span class=keyword>inline </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>range_size</span><span class=special>&lt; </span><span class=identifier>ForwardReadableWriteableRange </span><span class=special>&gt;::</span><span class=identifier>type
+    </span><span class=keyword>inline </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>range_difference</span><span class=special>&lt; </span><span class=identifier>ForwardReadableWriteableRange </span><span class=special>&gt;::</span><span class=identifier>type
     </span><span class=identifier>my_generic_replace</span><span class=special>( </span><span class=identifier>ForwardReadableWriteableRange</span><span class=special>&amp; </span><span class=identifier>c</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>value</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>replacement </span><span class=special>)
     </span><span class=special>{
        </span><span class=keyword>typename </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>range_iterator</span><span class=special>&lt; </span><span class=identifier>ForwardReadableWriteableRange </span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>found </span><span class=special>= </span><span class=identifier>find</span><span class=special>( </span><span class=identifier>c</span><span class=special>, </span><span class=identifier>value </span><span class=special>);
@@ -146,7 +138,7 @@ Notice that we have to
 
     <hr>
     <p>
-    (C) Copyright Thorsten Ottosen 2003-2004
+    (C) Copyright Thorsten Ottosen 2003-2007
     </p>
 
     <br>

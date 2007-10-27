@@ -2,7 +2,7 @@
 use-project boost : $(BOOST_ROOT) ;
 
 
-#import boostbook : boostbook ;
+import boostbook : boostbook ;
 import quickbook ;
 
 xml boost_range : boost_range.qbk ;
@@ -11,8 +11,12 @@ boostbook standalone
   :
     boost_range
   :
-    <xsl:param>generate.section.toc.level=4
-    <xsl:param>chunk.first.sections=7
-    <xsl:param>toc.section.depth=10
+    <xsl:param>toc.max.depth=2
+    <xsl:param>toc.section.depth=4
+    <xsl:param>chunk.section.depth=2
+ 
+#    <xsl:param>generate.section.toc.level=4
+#    <xsl:param>chunk.first.sections=7
+#    <xsl:param>toc.section.depth=10
   ;
 
