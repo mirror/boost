@@ -273,13 +273,9 @@ void map_container_assignment_test()
     BaseContainer base_container( derived );
     BOOST_CHECK_EQUAL( derived.size(), base_container.size() );
     base_container.clear();
-    //
-    // Compilers choke on this one claming that the copy-constructor
-    //   must be public! Go figure.
-    //
-    // base_container = derived;
-    //BOOST_CHECK_EQUAL( derived.size(), base_container.size() );
-    //
+    base_container = derived;
+    BOOST_CHECK_EQUAL( derived.size(), base_container.size() );
+    
     BaseContainer base2( base_container );
     BOOST_CHECK_EQUAL( base2.size(), base_container.size() );
     base2 = base_container;
@@ -374,13 +370,6 @@ void test_map()
     map_type::reference        a_reference  = *m2.begin();
     a_reference.second->foo();
     map_type::const_reference  a_creference = *const_begin(m2);
-    //
-    // @remark: taking the adress of an rvalue is not valid, though
-    //          many compilers accept it.
-    //
-    // map_type::pointer          a_pointer    = &*m2.begin();
-    //a_pointer->second->foo();
-    //map_type::const_pointer    a_cpointer   = &*const_begin(m2);
    
     //
     //

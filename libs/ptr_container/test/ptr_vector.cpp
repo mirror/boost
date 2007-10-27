@@ -85,7 +85,8 @@ void test_ptr_vector()
         array[i] = new int(i);
         
     vec.transfer( vec.begin(), array, data_size );
-    array = vec.c_array();
+    int** array2 = vec.c_array();
+    BOOST_CHECK( array2 != array );
     
 }
 
