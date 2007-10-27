@@ -150,7 +150,7 @@ namespace ptr_container_detail
             return res;                                          // nothrow
         }
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
         template< class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_convertible<Range&,key_type&>, 

@@ -376,7 +376,7 @@ namespace ptr_container_detail
             return this->single_transfer( first, last, from );
         }
 
-#ifdef BOOST_NO_SFINAE 
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
 
         template< class PtrSetAdapter, class Range >
@@ -510,7 +510,7 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
         
         template< class Range >
@@ -538,7 +538,7 @@ namespace ptr_container_detail
             return this->multi_transfer( first, last, from );
         }
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
         
         template< class PtrSetAdapter, class Range >

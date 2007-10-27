@@ -53,7 +53,7 @@ namespace ptr_container_detail
                         BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_iterator, const U >
                     const_iterator;
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
         template< class Iter >
         static U* get_pointer( Iter i )
@@ -394,7 +394,7 @@ namespace ptr_container_detail
             from.base().erase( object.base() );                  // nothrow 
         }
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else
         
         template< class PtrSeqAdapter, class Range >
