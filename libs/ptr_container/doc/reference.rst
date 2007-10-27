@@ -8,15 +8,15 @@
 Reference
 =========
 
-The documentation is divided into a an explanation for 
+The documentation is divided into an explanation for 
 each container. When containers have the same interface, that common interface is explained only once,
 but links are always provided to more relevant information.
 Please make sure you understand 
-the `Clonable <reference.html#the-clonable-concept>`_ concept and 
+the `Cloneable <reference.html#the-Cloneable-concept>`_ concept and 
 the `Clone Allocator <reference.html#the-clone-allocator-concept>`_ concept. 
 
 - `Conventions <conventions.html>`_
-- `The Clonable concept`_
+- `The Cloneable concept`_
 - `The Clone Allocator concept`_
 
 - `Class hierarchy`_:
@@ -50,48 +50,48 @@ the `Clone Allocator <reference.html#the-clone-allocator-concept>`_ concept.
 
 
 ..
-	- Class `reversible_ptr_container <reversible_ptr_container.html>`_
-	- Class `associative_ptr_container <associative_ptr_container.html>`_
-	- `Pointer container adapters`_
-	
-	  - `ptr_sequence_adapter <ptr_sequence_adapter.html>`_
-	  - `ptr_set_adapter <ptr_set_adapter.html>`_
-	  - `ptr_multiset_adapter <ptr_multiset_adapter.html>`_
-	  - `ptr_map_adapter <ptr_map_adapter.html>`_
-	  - `ptr_multimap_adapter <ptr_multimap_adapter.html>`_    
-	- `Sequence containers`_
-	
-	  - `ptr_vector <ptr_vector.html>`_
-	  - `ptr_deque <ptr_deque.html>`_
-	  - `ptr_list <ptr_list.html>`_
-	  - `ptr_array <ptr_array.html>`_
-	- `Associative containers`_
-	
-	  - `ptr_set <ptr_set.html>`_
-	  - `ptr_multiset <ptr_multiset.html>`_
-	  - `ptr_map <ptr_map.html>`_
-	  - `ptr_multimap <ptr_multimap.html>`_
+        - Class `reversible_ptr_container <reversible_ptr_container.html>`_
+        - Class `associative_ptr_container <associative_ptr_container.html>`_
+        - `Pointer container adapters`_
+        
+          - `ptr_sequence_adapter <ptr_sequence_adapter.html>`_
+          - `ptr_set_adapter <ptr_set_adapter.html>`_
+          - `ptr_multiset_adapter <ptr_multiset_adapter.html>`_
+          - `ptr_map_adapter <ptr_map_adapter.html>`_
+          - `ptr_multimap_adapter <ptr_multimap_adapter.html>`_    
+        - `Sequence containers`_
+        
+          - `ptr_vector <ptr_vector.html>`_
+          - `ptr_deque <ptr_deque.html>`_
+          - `ptr_list <ptr_list.html>`_
+          - `ptr_array <ptr_array.html>`_
+        - `Associative containers`_
+        
+          - `ptr_set <ptr_set.html>`_
+          - `ptr_multiset <ptr_multiset.html>`_
+          - `ptr_map <ptr_map.html>`_
+          - `ptr_multimap <ptr_multimap.html>`_
 
 
 
-The Clonable concept
-++++++++++++++++++++
+The Cloneable concept
++++++++++++++++++++++
 
 **Refinement of**
 
 - Heap Allocable
 - Heap Deallocable
 
-The Clonable concept is introduced to formalize the requirements for 
-copying heap-allocated objects.  A type ``T`` might be Clonable even though it 
+The Cloneable concept is introduced to formalize the requirements for 
+copying heap-allocated objects.  A type ``T`` might be Cloneable even though it 
 is not Assignable or Copy Constructible.  Notice that many operations on 
-the containers does not even require the stored type to be Clonable.  
+the containers do not even require the stored type to be Cloneable.  
 
 **Notation**
 
 ======================= ============================================  =================== =====================
    **Type**                **Object** (``const`` or non-``const``)        **Pointer**        **Describes**
-   ``T``                  ``a``                                           ``ptr``            A Clonable type
+   ``T``                  ``a``                                           ``ptr``            A Cloneable type
 ======================= ============================================  =================== =====================       
        
 **Valid expressions**
@@ -122,29 +122,29 @@ of the two functions is given:
         template< class T >
         void delete_clone( const T* t )
         {
-            checked_delete( r );
+            checked_delete( t );
         }
     }
 
 
-Notice that this implementation  makes normal Copy Constructible classes are automatically 
-Clonable unless ``operator new()`` or ``operator delete()`` are hidden. 
+Notice that this implementation  makes normal Copy Constructible classes automatically 
+Cloneable unless ``operator new()`` or ``operator delete()`` are hidden. 
 
 The two functions represent a layer of indirection which is necessary to support 
 classes that are not Copy Constructible by default.  Notice that the implementation 
 relies on argument-dependent lookup (ADL) to find the right version of 
 ``new_clone()`` and ``delete_clone()``. This means that one does not need to overload or specialize 
-the function is the boost namespace, but it can be placed together with 
+the function in the boost namespace, but it can be placed together with 
 the rest of the interface of the class.  If you are implementing a class 
 inline in headers, remember to forward declare the functions.
  
-**Warning: We are considering to remove the default implementation above. Therefore always make sure that you overload the functions for your types and do not rely on the defaults in any way.**  
+**Warning: We are considering the removal of default implementation above. Therefore always make sure that you overload the functions for your types and do not rely on the defaults in any way.**  
 
 The Clone Allocator concept
 +++++++++++++++++++++++++++
 
 The Clone Allocator concept is introduced to formalize the way
-pointer containers controls memory of
+pointer containers control memory of
 the stored objects (and not the pointers to the stored objects).
 The clone allocator allows
 users to apply custom allocators/deallocators for the cloned objects.
@@ -174,7 +174,7 @@ Clone Allocator requirements
                                                                      ``a`` object                                                          ``typeid(*CloneAllocator::allocate_clone(a)) == typeid(a)``
   ``CloneAllocator::deallocate_clone(ptr);``     ``void``            Deallocate an object previously allocated with 
                                                                      ``CloneAllocator::allocate_clone()`` or a compatible allocator. 
-								     Must not throw.
+                                                                     Must not throw.
 ============================================== ============= ============================================================================= =============================================================
 
 
@@ -202,7 +202,7 @@ purposes you will never have to change this default.
             }
     
             template< class U >
-            static void deallocate_clone( const U* r ) const
+            static void deallocate_clone( const U* r )
             {
                 delete_clone( r );
             }
@@ -319,7 +319,7 @@ Serialization
 +++++++++++++
 
 As of version 1.34.0 of Boost, the library support
-serialization as defined by `Boost.Serialization`__.
+serialization via `Boost.Serialization`__.
 
 .. __: ../../serialization/index.html
 
@@ -332,20 +332,20 @@ pay special attention to these parts of Boost.Serialization:
 
 1. Output/saving requires a const-reference::
 
-	//
-	// serialization helper: we can't save a non-const object
-	// 
-	template< class T >
-	inline T const& as_const( T const& r )
-	{
-	    return r;
-	}
-	...
-	Container cont;
+        //
+        // serialization helper: we can't save a non-const object
+        // 
+        template< class T >
+        inline T const& as_const( T const& r )
+        {
+            return r;
+        }
+        ...
+        Container cont;
 
-	std::ofstream ofs("filename");
-	boost::archive::text_oarchive oa(ofs);
-	oa << as_const(cont);
+        std::ofstream ofs("filename");
+        boost::archive::text_oarchive oa(ofs);
+        oa << as_const(cont);
 
    See `Compile time trap when saving a non-const value`__ for
    details.
@@ -354,58 +354,58 @@ pay special attention to these parts of Boost.Serialization:
 
 2. Derived classes need to call ``base_object()`` function::
 
-	struct Derived : Base
-	{
-	    template< class Archive >
-	    void serialize( Archive& ar, const unsigned int version )
-	    {
-		ar & boost::serialization::base_object<Base>( *this );
-		...
-	    }	
-	};
-	
+        struct Derived : Base
+        {
+            template< class Archive >
+            void serialize( Archive& ar, const unsigned int version )
+            {
+                ar & boost::serialization::base_object<Base>( *this );
+                ...
+            }   
+        };
+        
    For details, see `Derived Classes`_.
    
 .. _`Derived Classes`: ../../serialization/doc/tutorial.html#derivedclasses
-	    
+            
 3. You need to use ``BOOST_CLASS_EXPORT`` to register the
    derived classes in your class hierarchy::
   
-	BOOST_CLASS_EXPORT( Derived )
+        BOOST_CLASS_EXPORT( Derived )
 
    See `Export Key`__ and `Object Tracking`_
    for details.
    
 .. __: ../../serialization/doc/traits.html#export 
 .. _`Object Tracking`: ../../serialization/doc/special.html
-	
-Remember these three issues and it will save you a lot of trouble.
+        
+Remember these three issues and it might save you some trouble.
 
 ..
-	Map iterator operations
-	+++++++++++++++++++++++
-	
-	The map iterators are a bit different compared to the normal ones.  The 
-	reason is that it is a bit clumsy to access the key and the mapped object 
-	through i->first and i->second, and one tends to forget what is what. 
-	Moreover, and more importantly, we also want to hide the pointer as much as possibble.
-	The new style can be illustrated with a small example:: 
-	
-	    typedef ptr_map<string,int> map_t;
-	    map_t  m;
-	    m[ "foo" ] = 4; // insert pair
-	    m[ "bar" ] = 5; // ditto
-	    ...
-	    for( map_t::iterator i = m.begin(); i != m.end(); ++i )
-	    {
-		     *i += 42; // add 42 to each value
-		     cout << "value=" << *i << ", key=" << i.key() << "n";
-	    } 
-	    
-	So the difference from the normal map iterator is that 
-	
-	- ``operator*()`` returns a reference to the mapped object (normally it returns a reference to a ``std::pair``, and
-	- that the key can be accessed through the ``key()`` function. 
+        Map iterator operations
+        +++++++++++++++++++++++
+        
+        The map iterators are a bit different compared to the normal ones.  The 
+        reason is that it is a bit clumsy to access the key and the mapped object 
+        through i->first and i->second, and one tends to forget what is what. 
+        Moreover, and more importantly, we also want to hide the pointer as much as possibble.
+        The new style can be illustrated with a small example:: 
+        
+            typedef ptr_map<string,int> map_t;
+            map_t  m;
+            m[ "foo" ] = 4; // insert pair
+            m[ "bar" ] = 5; // ditto
+            ...
+            for( map_t::iterator i = m.begin(); i != m.end(); ++i )
+            {
+                     *i += 42; // add 42 to each value
+                     cout << "value=" << *i << ", key=" << i.key() << "n";
+            } 
+            
+        So the difference from the normal map iterator is that 
+        
+        - ``operator*()`` returns a reference to the mapped object (normally it returns a reference to a ``std::pair``, and
+        - that the key can be accessed through the ``key()`` function. 
 
 Class ``nullable``
 ++++++++++++++++++
@@ -460,7 +460,7 @@ hierarchy looks as follows::
                 bad_pointer( const char* what );
             };
         }
-	
+        
 Disabling the use of exceptions
 +++++++++++++++++++++++++++++++
 
@@ -471,11 +471,11 @@ of throwing an exception, the library simply calls `BOOST_ASSERT`__.
 
 .. __: ../../utility/assert.html
 
-To diable exceptions, simly define this macro before including any header::
+To disable exceptions, simly define this macro before including any header::
 
-	#define BOOST_PTR_CONTAINER_NO_EXCEPTIONS 1
-	#include <boost/ptr_container/ptr_vector.hpp>
-	
+        #define BOOST_PTR_CONTAINER_NO_EXCEPTIONS 1
+        #include <boost/ptr_container/ptr_vector.hpp>
+        
 It is, however, recommended that you define the macro on the command-line, so
 you are absolutely certain that all headers are compiled the same way. Otherwise
 you might end up breaking the One Definition Rule.
@@ -495,7 +495,7 @@ is also defined.
 
         <hr>
 
-:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+:Copyright:     Thorsten Ottosen 2004-2007. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
 
 __ http://www.boost.org/LICENSE_1_0.txt
 

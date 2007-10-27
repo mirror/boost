@@ -10,8 +10,8 @@
 :Authors:       Thorsten Ottosen
 :Contact:       nesotto@cs.aau.dk or tottosen@dezide.com
 :Organizations: `Department of Computer Science`_, Aalborg University, and `Dezide Aps`_
-:date:          29th of April 2006
-:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+:date:          27th of October 2007
+:Copyright:     Thorsten Ottosen 2004-2007. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
 
 __ http://www.boost.org/LICENSE_1_0.txt
 
@@ -36,30 +36,32 @@ and designs for dealing with OO specific problems
 * `Library headers`_
 * FAQ_
 * `Upgrading from Boost v. 1.33.*`_
+* `Upgrading from Boost v. 1.34.*`_
+* `Future Developments`_
 * Acknowledgements_
 * References_
 
 ..
-	  - `Conventions <conventions.html>`_
-	  - `The Clonable Concept <reference.html#the-clonable-concept>`_
-	  - `The Clone Allocator Concept <reference.html#the-clone-allocator-concept>`_
-	  - `Pointer container adapters <reference.html#pointer-container-adapters>`_
-	  - `Sequence container classes <reference.html#sequence-containers>`_
-	
-	    - `ptr_vector <ptr_vector.html>`_
-	    - `ptr_deque <ptr_deque.html>`_
-	    - `ptr_list <ptr_list.html>`_
-	    - `ptr_array <ptr_array.html>`_
-	  - `Associative container classes  <reference.html#associative-containers>`_
-	
-	    - `ptr_set <ptr_set.html>`_
-	    - `ptr_multiset <ptr_multiset.html>`_
-	    - `ptr_map <ptr_map.html>`_
-	    - `ptr_multimap <ptr_multimap.html>`_
-	  - `Indirected functions <indirect_fun.html>`_
-	  - `Class nullable <reference.html#class-nullable>`_
-	  - `Exception classes <reference.html#exception-classes>`_
-	  
+          - `Conventions <conventions.html>`_
+          - `The Clonable Concept <reference.html#the-clonable-concept>`_
+          - `The Clone Allocator Concept <reference.html#the-clone-allocator-concept>`_
+          - `Pointer container adapters <reference.html#pointer-container-adapters>`_
+          - `Sequence container classes <reference.html#sequence-containers>`_
+        
+            - `ptr_vector <ptr_vector.html>`_
+            - `ptr_deque <ptr_deque.html>`_
+            - `ptr_list <ptr_list.html>`_
+            - `ptr_array <ptr_array.html>`_
+          - `Associative container classes  <reference.html#associative-containers>`_
+        
+            - `ptr_set <ptr_set.html>`_
+            - `ptr_multiset <ptr_multiset.html>`_
+            - `ptr_map <ptr_map.html>`_
+            - `ptr_multimap <ptr_multimap.html>`_
+          - `Indirected functions <indirect_fun.html>`_
+          - `Class nullable <reference.html#class-nullable>`_
+          - `Exception classes <reference.html#exception-classes>`_
+          
 
 
 .. _Tutorial: tutorial.html
@@ -128,13 +130,13 @@ The advantages of pointer containers are
    
 .. 
  
-7. Propagates constness s.t. one cannot modify the objects via a ``const_iterator``.
+7. Propagates constness such that one cannot modify the objects via a ``const_iterator``.
 
 ..
 
-8. Built-in support for deep-copy semantics via the `The Clobable Concept`__
+8. Built-in support for deep-copy semantics via the `the Cloneable concept`__
 
-.. __: reference.html#the-clonable-concept
+.. __: reference.html#the-cloneable-concept
 
 The disadvantages are
 
@@ -172,18 +174,67 @@ Apart from the above change, the library now also introduces
 
 - ``std::auto_ptr<T>`` overloads::
 
-	std::auto_ptr<T> p( new T );
-	container.push_back( p );
+        std::auto_ptr<T> p( new T );
+        container.push_back( p );
 
 - Derived-to-Base conversion in ``transfer()``::
 
-	boost::ptr_vector<Base>  vec;
-	boost::ptr_list<Derived> list;
-	...
-	vec.transfer( vec.begin(), list ); // now ok
+        boost::ptr_vector<Base>  vec;
+        boost::ptr_list<Derived> list;
+        ...
+        vec.transfer( vec.begin(), list ); // now ok
 
 Also note that `Boost.Assign <../../assign/index.html>`_ introduces better support
 for pointer containers. 
+
+====================================
+ Upgrading from Boost v. ``1.34.*``
+====================================
+
+Serialization have now been made optional thanks to Sebastian Ramacher.
+You simply include ``<boost/ptr_container/serialize.hpp>`` or perhaps
+just one of the more specialized headers.
+
+All containers are now copy-constructible and assignable. So you can e.g. now
+do:: 
+
+    boost::ptr_vector<Derived> derived = ...;
+    boost::ptr_vector<Base>    base( derived );
+    base = derived;
+    
+As the example shows, derived-to-base class conversions are also allowed.
+ 
+A few general functions have been added::
+
+    VoidPtrContainer&       base();
+    const VoidPtrContainer& base() const;
+
+These allow direct access to the wrapped container which is
+somtimes needed when you want to provide extra functionality.
+    
+A few new functions have been added to sequences::
+
+    void resize( size_type size );
+    void resize( size_type size, T* to_clone );
+
+``ptr_vector<T>`` has a few new helper functions to integrate better with C-arrays::
+
+    void transfer( iterator before, T** from, size_type size, bool delete_from = true );
+    T**  c_array();
+
+Finally you can now also "copy" and "assign" an ``auto_type`` ptr by calling ``move()``::
+
+    boost::ptr_vector<T>::auto_type move_ptr = ...;
+    return boost::ptr_container::move( move_ptr );
+
+=====================
+ Future Developments
+=====================
+
+There are indications that the ``void*`` implementation has a slight
+performance overhead compared to a ``T*`` based implementation. Furthermore, a 
+``T*`` based implementation is so much easier to use type-safely 
+with algorithms. Therefore I anticipate to move to a ``T*`` based implementation.
 
 ================
 Acknowledgements
@@ -205,6 +256,8 @@ The following people have been very helpful:
 - Jonathan Wakely for his great help with GCC compatibility and bug fixes
 - Pavel Chikulaev for comments and bug-fixes
 - Andreas Hommel for fixing the nasty Metrowerks bug
+- Charles Brockman for his many comments on the documentation
+- Sebastian Ramacher for implementing the optinal serialization support
 
 ==========
 References

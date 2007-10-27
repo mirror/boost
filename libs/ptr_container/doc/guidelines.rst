@@ -35,7 +35,7 @@ support equivalent keys.
 Recommended practice for Object-Oriented Programming
 ----------------------------------------------------
 
-Idiomtic Object-Oriented Programming in C++ looks a bit different from 
+Idiomatic Object-Oriented Programming in C++ looks a bit different from 
 the way it is done in other languages. This is partly because C++ 
 has both value and reference semantics, and partly because C++ is more flexible
 than other languages. Below is a list of recommendations that you are
@@ -44,16 +44,16 @@ encouraged to follow:
 1. Make base classes abstract and without data
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-The has the following advantages:
+This has the following advantages:
 
-	a. It reduces *coupling* because you do not have to maintain or update state
+        a. It reduces *coupling* because you do not have to maintain or update state
 
-	..
-		
+        ..
+                
         b. It helps you to avoid *slicing*
-	
-	..
-	
+        
+        ..
+        
         c. It ensures you *override* the right function
 
 You might also want to read the following articles:
@@ -72,26 +72,26 @@ You might also want to read the following articles:
 
 In code::
 
-	class Polymorphic
-	{
-	private:
-	    virtual int do_foo() = 0;
-	    
+        class Polymorphic
+        {
+        private:
+            virtual int do_foo() = 0;
+            
         public:
-	    int foo()
-	    {
-	        return do_foo();
-	    }
-	    ...
-	};	
-	
+            int foo()
+            {
+                return do_foo();
+            }
+            ...
+        };      
+        
 This has the following advantages:
 
-	a. It makes sure all calls to the virtual function always goes through one place in your code
-	
-	..
-	
-	b. It enables you to check preconditions and postconditions inside the forwarding function
+        a. It makes sure all calls to the virtual function always goes through one place in your code
+        
+        ..
+        
+        b. It enables you to check preconditions and postconditions inside the forwarding function
 
 You might also want to read Herb Sutter's article `Virtuality`__.
 
@@ -104,10 +104,10 @@ Having an abstact base class prevents slicing when the base class is involved, b
 it does not prevent it for classes further down the hierarchy. This is where
 `boost::noncopyable`__ is handy to use::
 
-	class Polymorphic : boost::noncopyable
-	{
-	  ...
-	};
+        class Polymorphic : boost::noncopyable
+        {
+          ...
+        };
 
 .. __ : http://www.boost.org/libs/utility/utility.htm#Class_noncopyable
 

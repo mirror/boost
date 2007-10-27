@@ -359,6 +359,8 @@ namespace boost
         iterator  erase( iterator first, iterator last );
         template&lt; class Range &gt;
         iterator  erase( const Range&amp; r );
+        void      resize( size_type size );
+        void      resize( size_type size, T* to_clone );
 
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
         template&lt; class PtrSequence &gt;
@@ -612,6 +614,26 @@ Exception safety: Strong guarantee -->
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">erase(</span> <span class="pre">boost::begin(r),</span> <span class="pre">boost::end(r)</span> <span class="pre">);</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">resize(</span> <span class="pre">size_type</span> <span class="pre">size</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Resizes the container. If elements are erased, it happens from the back. If elements are inserted, it happens at the back.</li>
+<li>Requirements: <tt class="docutils literal"><span class="pre">T</span></tt> is default constructible</li>
+<li>Postcondition: <tt class="docutils literal"><span class="pre">size()</span> <span class="pre">==</span> <span class="pre">size;</span></tt></li>
+<li>Exception safety: Basic guarantee under expansion; nothrow guarantee otherwise</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">resize(</span> <span class="pre">size_type</span> <span class="pre">size,</span> <span class="pre">T*</span> <span class="pre">to_clone</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Resizes the container. If elements are erased, it happens from the back. If elements are inserted, clones of <tt class="docutils literal"><span class="pre">*to_clone</span></tt> are inserted at the back.</li>
+<li>Postcondition: <tt class="docutils literal"><span class="pre">size()</span> <span class="pre">==</span> <span class="pre">size;</span></tt></li>
+<li>Exception safety: Basic guarantee under expansion; nothrow guarantee otherwise</li>
+<li>Remarks: <tt class="docutils literal"><span class="pre">to_clone</span> <span class="pre">==</span> <span class="pre">0</span></tt> is valid if the container supports nulls. The container does not take ownership of <tt class="docutils literal"><span class="pre">to_clone</span></tt>.</li>
 </ul>
 </blockquote>
 </li>

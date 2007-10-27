@@ -296,7 +296,7 @@ ul.auto-toc {
 <li><a class="reference" href="#null-pointers-cannot-be-stored-in-the-containers" id="id2" name="id2">1. Null pointers cannot be stored in the containers</a></li>
 <li><a class="reference" href="#iterators-and-other-operations-return-indirected-values" id="id3" name="id3">2. Iterators and other operations return indirected values</a></li>
 <li><a class="reference" href="#copy-semantics-of-pointer-containers" id="id4" name="id4">3. Copy-semantics of pointer containers</a></li>
-<li><a class="reference" href="#making-a-non-copyable-type-clonable" id="id5" name="id5">4. Making a non-copyable type Clonable</a></li>
+<li><a class="reference" href="#making-a-non-copyable-type-cloneable" id="id5" name="id5">4. Making a non-copyable type Cloneable</a></li>
 <li><a class="reference" href="#objects-are-cloned-before-insertion-inserted-pointers-are-owned-by-the-container" id="id6" name="id6">5. Objects are cloned before insertion, inserted pointers are owned by the container</a></li>
 <li><a class="reference" href="#transferring-ownership-of-a-single-element" id="id7" name="id7">6. Transferring ownership of a single element</a></li>
 <li><a class="reference" href="#transferring-ownership-of-pointers-between-different-pointer-containers" id="id8" name="id8">7. Transferring ownership of pointers between different pointer containers</a></li>
@@ -335,12 +335,12 @@ ptr_vector&lt;T&gt; vec1;
 ptr_vector&lt;T&gt; vec2( vec1.clone() ); // deep copy objects of 'vec1' and use them to construct 'vec2', could be very expensive
 vec2 = vec1.release();              // give up ownership of pointers in 'vec1' and pass the ownership to 'vec2', rather cheap
 vec2.release();                     // give up ownership; the objects will be deallocated if not assigned to another container
-vec1 = vec2;                        // compile time error: 'operator=()' not defined 
-ptr_vector&lt;T&gt; vec3( vec1 );         // compile time error: copy-constructor not defined 
+vec1 = vec2;                        // deep copy objects of 'vec2' and assign them to 'vec1', could be very expensive 
+ptr_vector&lt;T&gt; vec3( vec1 );         // deep copy objects of 'vec1', could be very expensive
 </pre>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id5" id="making-a-non-copyable-type-clonable" name="making-a-non-copyable-type-clonable"><span id="example-4"></span>4. Making a non-copyable type Clonable</a></h1>
+<h1><a class="toc-backref" href="#id5" id="making-a-non-copyable-type-cloneable" name="making-a-non-copyable-type-cloneable"><span id="example-4"></span>4. Making a non-copyable type Cloneable</a></h1>
 <pre class="literal-block">
  // a class that has no normal copy semantics
 class X : boost::noncopyable { public: X* clone() const; ... };
@@ -349,7 +349,7 @@ class X : boost::noncopyable { public: X* clone() const; ... };
 X* new_clone( const X&amp; x ) 
 { return x.clone(); }
                                                                    
-// we can now use the interface that requires clonability
+// we can now use the interface that requires cloneability
 ptr_vector&lt;X&gt; vec1, vec2;
 ...
 vec2 = vec1.clone();                                 // 'clone()' requires cloning &lt;g&gt; 
@@ -359,7 +359,7 @@ vec2.insert( vec2.end(), vec1.begin(), vec1.end() ); // inserting always means i
 <div class="section">
 <h1><a class="toc-backref" href="#id6" id="objects-are-cloned-before-insertion-inserted-pointers-are-owned-by-the-container" name="objects-are-cloned-before-insertion-inserted-pointers-are-owned-by-the-container"><span id="example-5"></span>5. Objects are cloned before insertion, inserted pointers are owned by the container</a></h1>
 <pre class="literal-block">
-class X { ... };                     // assume 'X' is Clonable 
+class X { ... };                     // assume 'X' is Cloneable 
 X x;                                 // and 'X' can be stack-allocated 
 ptr_list&lt;X&gt; list; 
 list.push_back( new_clone( x ) );    // insert a clone
@@ -396,7 +396,7 @@ ptr_list&lt;X&gt; list; ptr_vector&lt;X&gt; vec;
 list.transfer( list.begin(), vec.begin(), vec );           // make the first element of 'vec' the first element of 'list'
 vec.transfer( vec.end(), list.begin(), list.end(), list ); // put all the lists element into the vector                                 
 </pre>
-<p>We can also transfer objects from <tt class="docutils literal"><span class="pre">ptr_container&lt;Derived&gt;</span></tt> to <tt class="docutils literal"><span class="pre">ptr_container&lt;Base</span></tt> without any problems.</p>
+<p>We can also transfer objects from <tt class="docutils literal"><span class="pre">ptr_container&lt;Derived&gt;</span></tt> to <tt class="docutils literal"><span class="pre">ptr_container&lt;Base&gt;</span></tt> without any problems.</p>
 </div>
 <div class="section">
 <h1><a class="toc-backref" href="#id9" id="selected-test-files" name="selected-test-files"><span id="example-8"></span>8. Selected test files</a></h1>
@@ -429,7 +429,7 @@ features at work. The example provide lots of comments.</p>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> </title>
-<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="stylesheet" href="default.css" type="text/css">
 </head>
 
 <body>

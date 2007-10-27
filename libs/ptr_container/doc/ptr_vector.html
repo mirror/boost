@@ -330,7 +330,7 @@ namespace boost
                               &gt;
     {
     public: // <a class="reference" href="#construction">construction</a>
-        ptr_vector( size_type to_reserve );
+        explicit ptr_vector( size_type to_reserve );
     
     public: // <a class="reference" href="#capacity">capacity</a>
         size_type  capacity() const;
@@ -347,6 +347,11 @@ namespace boost
        template&lt; class U &gt;
        auto_type replace( size_type idx, std::auto_ptr&lt;U&gt; x );  
        bool      is_null( size_type idx ) const;
+       
+    public: // <a class="reference" href="#c-array-support">C-array support</a>
+       void transfer( iterator before, T** from, size_type size, bool delete_from = true );
+       T**  c_array();
+
     };
    
 } // namespace 'boost'  
@@ -357,7 +362,7 @@ namespace boost
 <div class="section">
 <h2><a id="semantics-construction" name="semantics-construction"><span id="construction"></span>Semantics: construction</a></h2>
 <ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_vector(</span> <span class="pre">size_type</span> <span class="pre">to_reserve</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">ptr_vector(</span> <span class="pre">size_type</span> <span class="pre">to_reserve</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>constructs an empty vector with a buffer
@@ -447,11 +452,35 @@ of size least <tt class="docutils literal"><span class="pre">to_reserve</span></
 </blockquote>
 </li>
 </ul>
+</div>
+<div class="section">
+<h2><a id="semantics-c-array-support" name="semantics-c-array-support"><span id="c-array-support"></span>Semantics: C-array support</a></h2>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">transfer(</span> <span class="pre">iterator</span> <span class="pre">before,</span> <span class="pre">T**</span> <span class="pre">from,</span> <span class="pre">size_type</span> <span class="pre">size,</span> <span class="pre">bool</span> <span class="pre">delete_from</span> <span class="pre">=</span> <span class="pre">true</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Requirements:  <tt class="docutils literal"><span class="pre">from</span> <span class="pre">!=</span> <span class="pre">0</span></tt></li>
+<li>Effects: Takes ownership of the dynamic array <tt class="docutils literal"><span class="pre">from</span></tt></li>
+<li>Exception safety: Strong guarantee if <tt class="docutils literal"><span class="pre">delete_from</span> <span class="pre">==</span> <span class="pre">true</span></tt>; if <tt class="docutils literal"><span class="pre">delete_from</span> <span class="pre">==</span> <span class="pre">false</span></tt>,
+and an exception is thrown, the container fails to take ownership.</li>
+<li>Remarks: Eventually calls <tt class="docutils literal"><span class="pre">delete[]</span> <span class="pre">from</span></tt> if <tt class="docutils literal"><span class="pre">delete_from</span> <span class="pre">==</span> <span class="pre">true</span></tt>.</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">T**</span> <span class="pre">c_array();</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Returns: <tt class="docutils literal"><span class="pre">0</span></tt> if the container is empty; otherwise a pointer to the first element of the stored array</li>
+<li>Throws: Nothing</li>
+</ul>
+</blockquote>
+</li>
+</ul>
 <hr><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2007. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
 </tr>
 </tbody>
 </table>

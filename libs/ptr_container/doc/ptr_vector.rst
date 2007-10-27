@@ -47,7 +47,7 @@ to store the pointers.
                                       >
             {
             public: // `construction`_
-                ptr_vector( size_type to_reserve );
+                explicit ptr_vector( size_type to_reserve );
             
             public: // capacity_
                 size_type  capacity() const;
@@ -61,9 +61,14 @@ to store the pointers.
 
             public: // `pointer container requirements`_
                auto_type replace( size_type idx, T* x );  
-	       template< class U >
-	       auto_type replace( size_type idx, std::auto_ptr<U> x );  
+               template< class U >
+               auto_type replace( size_type idx, std::auto_ptr<U> x );  
                bool      is_null( size_type idx ) const;
+               
+            public: // `C-array support`_
+               void transfer( iterator before, T** from, size_type size, bool delete_from = true );
+               T**  c_array();
+
             };
            
         } // namespace 'boost'  
@@ -77,7 +82,7 @@ Semantics
 Semantics: construction
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-- ``ptr_vector( size_type to_reserve );``
+- ``explicit ptr_vector( size_type to_reserve );``
 
     - constructs an empty vector with a buffer
       of size least ``to_reserve``
@@ -155,11 +160,34 @@ Semantics: pointer container requirements
 
     - Exception safety: Nothrow guarantee
 
+
+.. _`C-array support`:
+
+Semantics: C-array support
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- ``void transfer( iterator before, T** from, size_type size, bool delete_from = true );``
+
+    - Requirements:  ``from != 0``
+    
+    - Effects: Takes ownership of the dynamic array ``from``
+    
+    - Exception safety: Strong guarantee if ``delete_from == true``; if ``delete_from == false``,
+      and an exception is thrown, the container fails to take ownership.                  
+    
+    - Remarks: Eventually calls ``delete[] from`` if ``delete_from == true``.   
+         
+- ``T** c_array();``
+
+    - Returns: ``0`` if the container is empty; otherwise a pointer to the first element of the stored array
+
+    - Throws: Nothing
+    
 .. raw:: html 
 
         <hr>
 
-:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+:Copyright:     Thorsten Ottosen 2004-2007. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
 
 __ http://www.boost.org/LICENSE_1_0.txt
 

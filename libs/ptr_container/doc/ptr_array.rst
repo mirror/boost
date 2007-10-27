@@ -46,7 +46,15 @@ of dynamic expansion and when no overhead is tolerable.
             {
             public: // `construct/copy/destroy`_
                 ptr_array();
-                ptr_array( std::auto_ptr<ptr_array>& r );
+                explicit ptr_array( const ptr_array& r );
+                template< class U >
+                explicit ptr_array( const ptr_array<U,N>& r );                
+                explicit ptr_array( std::auto_ptr<ptr_array>& r );
+                
+                ptr_array& operator=( const ptr_array& r );
+                template< class U >
+                ptr_array& operator=( const ptr_array<U,N>& r );
+                ptr_array& operator=( std::auto_ptr<this_type> r );
 
             public: // `iterators`_
 
@@ -73,11 +81,11 @@ of dynamic expansion and when no overhead is tolerable.
  
                 template< size_t idx >
                 auto_type replace( T* r );
-		template< size_t idx, class U >
-		auto_type replace( std::auto_ptr<U> r );
+                template< size_t idx, class U >
+                auto_type replace( std::auto_ptr<U> r );
                 auto_type replace( size_t idx, T* r );
-		template< class U >
-		auto_type replace( size_t idx, std::auto_ptr<U> r );
+                template< class U >
+                auto_type replace( size_t idx, std::auto_ptr<U> r );
 
             public: // `pointer container requirements`_
                 std::auto_ptr<ptr_array>  clone() const;    
@@ -106,12 +114,32 @@ Semantics: construct/copy/destroy
 
 - ``ptr_array();``
 
-    - Effects: construct array where each element is null
+    - Effects: constructs array where each element is null
     
+-   ``explicit ptr_array( const ptr_array& r );``
+-   ``template< class U >
+    explicit ptr_array( const ptr_array<U,N>& r );``
+    
+    - Effects: Constructs array by cloning ``r``                 
+         
 - ``ptr_array( std::auto_ptr<ptr_array>& r );``
 
     - Effects: take ownership of the supplied pointers
+
+- ``ptr_array& operator=( const ptr_array& r );``
+
+- ``template< class U > ptr_array& operator=( const ptr_array<U,N>& r );``
+
+    - Effects: Assigns a clone of ``r``
     
+    - Exception safety: Strong guarantee
+    
+- ``ptr_array& operator=( std::auto_ptr<this_type> r );``
+
+   - Effects: take ownership of the supplied pointers
+
+   - Throws: Nothing
+
 .. _`element access`:
 
 Semantics: element access

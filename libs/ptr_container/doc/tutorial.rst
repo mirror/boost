@@ -19,7 +19,7 @@ that you read it all from top to bottom.
 * `Sequence containers`_
 * `Associative containers`_
 * `Null values`_
-* `Clonability`_
+* `Cloneability`_
 * `New functions`_
 * `std::auto_ptr<U> overloads`_
 * `Algorithms`_
@@ -40,7 +40,7 @@ Let us assume that we have an OO-hierarchy of animals
     public:
         virtual      ~animal()   {}
         virtual void eat()       = 0;
-	virtual int  age() const = 0;
+        virtual int  age() const = 0;
         // ...
     };
     
@@ -69,7 +69,7 @@ Zoo::
         }
     };
 
-Notice how just pass the class name to the container; there
+Notice how we just pass the class name to the container; there
 is no ``*`` to indicate it is a pointer.
 With this declaration we can now say::
     
@@ -83,7 +83,7 @@ and never rely on copy-semantics.
 Indirected interface
 --------------------
 
-As particular feature of the pointer containers is that
+A particular feature of the pointer containers is that
 the query interface is indirected. For example, ::
 
     boost::ptr_vector<animal> vec;
@@ -109,7 +109,7 @@ now becomes ::
 Sequence containers
 -------------------
 
-The sequence containers used when you do not need to
+The sequence containers are used when you do not need to
 keep an ordering on your elements. You can basically
 expect all operations of the normal standard containers
 to be available. So, for example, with a  ``ptr_deque``
@@ -119,10 +119,10 @@ and ``ptr_list`` object you can say::
     deq.push_front( new animal );    
     deq.pop_front();
 
-because ``std::deque`` and ``std::list`` has ``push_front()``
-and ``pop_front`` members. 
+because ``std::deque`` and ``std::list`` have ``push_front()``
+and ``pop_front()`` members. 
 
-If the standard sequence support
+If the standard sequence supports
 random access, so does the pointer container; for example::
 
     for( boost::ptr_deque<animal>::size_type i = 0u;
@@ -193,7 +193,7 @@ to help you out. In particular, consider
 - `ptr_list_of() <../../assign/doc/index.html#ptr_list_of>`_
 
 For example, the above insertion may now be written ::
-	
+        
      boost::ptr_multimap<std::string,animal> animals;
 
      using namespace boost::assign;
@@ -201,7 +201,7 @@ For example, the above insertion may now be written ::
      ptr_map_insert<elephant>( animals )( "bobo", "bobo" );
      ptr_map_insert<whale>( animals )( "anna", "anna" );
      ptr_map_insert<emu>( animals )( "anna", "anna" );
-					
+                                        
     
 Null values
 -----------
@@ -238,11 +238,11 @@ If the container support random access, you may also check this as ::
 Note that it is meaningless to insert
 null into ``ptr_set`` and ``ptr_multiset``. 
 
-Clonability
------------
+Cloneability
+------------
 
 In OO programming it is typical to prohibit copying of objects; the 
-objects may sometimes be allowed to be clonable; for example,::
+objects may sometimes be allowed to be Cloneable; for example,::
 
     animal* animal::clone() const
     {
@@ -261,7 +261,7 @@ the object hierarchy::
     }
 
 That is all, now a lot of functions in a pointer container
-can exploit the clonability of the animal objects. For example ::
+can exploit the cloneability of the animal objects. For example ::
 
     typedef boost::ptr_list<animal> zoo_type;
     zoo_type zoo, another_zoo;
@@ -276,8 +276,21 @@ will fill another zoo with clones of the first zoo. Similarly,
 The whole container can now also be cloned ::
 
     zoo_type yet_another_zoo = zoo.clone();
-    
 
+Copying or assigning the container has the same effect as cloning (though it is slightly cheaper)::    
+
+    zoo_type yet_another_zoo = zoo;
+    
+Copying also support derived-to-base class conversions::
+
+    boost::ptr_vector<monkey> monkeys = boost::assign::ptr_list_of<monkey>( "bobo" )( "bebe")( "uhuh" );
+    boost::ptr_vector<animal> animals = monkeys;
+
+This also works for maps::
+
+    boost::ptr_map<std::string,monkey> monkeys = ...;
+    boost::ptr_map<std::string,animal> animals = monkeys;
+    
 New functions
 -------------
 
@@ -330,7 +343,7 @@ If you want to replace an element, you can easily do so ::
     zoo_type::auto_type old_animal = zoo.replace( zoo.begin(), new monkey("bibi") ); 
     zoo.replace( 2, old_animal.release() ); // for random access containers
 
-A map is slightly different to iterator over than standard maps.
+A map is slightly different to iterate over than standard maps.
 Now we say ::
 
     typedef boost::ptr_map<std::string, boost::nullable<animal> > animal_map;
@@ -365,9 +378,9 @@ Maps can also be indexed with bounds-checking ::
 ``std::auto_ptr<U>`` overloads
 ------------------------------
 
-Evetime there is a function that takes a ``T*`` parameter, there is
+Every time there is a function that takes a ``T*`` parameter, there is
 also a function taking an ``std::auto_ptr<U>`` parameter. This is of course done
-to make the library intregrate seamless with ``std::auto_ptr``. For example ::
+to make the library intregrate seamlessly with ``std::auto_ptr``. For example ::
 
   std::ptr_vector<Base> vec;
   vec.push_back( new Base );
@@ -375,7 +388,7 @@ to make the library intregrate seamless with ``std::auto_ptr``. For example ::
 is complemented by ::
 
   std::auto_ptr<Derived> p( new Derived );
-  vec.push_back( p );  	
+  vec.push_back( p );   
 
 Notice that the template argument for ``std::auto_ptr`` does not need to
 follow the template argument for ``ptr_vector`` as long as ``Derived*``
@@ -408,7 +421,7 @@ If you just want to remove certain elements, use ``erase_if``::
 
     zoo.erase_if( my_predicate() );
 
-Finally you may want to merge together two sorted containers::
+Finally you may want to merge two sorted containers::
 
     boost::ptr_vector<animal> another_zoo = ...;
     another_zoo.sort();                      // sorted wrt. to same order as 'zoo'
@@ -420,7 +433,7 @@ That is all; now you have learned all the basics!
 .. raw:: html 
 
         <hr>
-	
+        
 **See also**
 
 - `Usage guidelines <guidelines.html>`_ 

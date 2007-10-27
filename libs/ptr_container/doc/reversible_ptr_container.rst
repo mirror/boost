@@ -67,12 +67,20 @@ Its purpose is to present the general interface of all the pointer containers.
             
             public: // `construct/copy/destroy`_
                 reversible_ptr_container();
-                reversible_ptr_container( auto_ptr<reversible_ptr_container> r );
+                explicit reversible_ptr_container( const reversible_ptr_container& r );                
+                template< class Derived >
+                explicit reversible_ptr_container( const reversible_ptr_container<Derived>& r );
+                explicit reversible_ptr_container( std::auto_ptr<reversible_ptr_container> r );
                 template< class InputIterator >
                 reversible_ptr_container( InputIterator first, InputIterator last );
+                
                 ~reversible_ptr_container();
-                void operator=( std::auto_ptr<reversible_ptr_container> r )  
-                allocator_type get_allocator() const;                                      
+
+                reversible_ptr_container&  operator=( const reversible_ptr_container& r );
+                template<class Derived>
+                reversible_ptr_container&  operator=( const reversible_ptr_container<Derived>& r );
+                reversible_ptr_container&  operator=( std::auto_ptr<reversible_ptr_container> r );
+                allocator_type             get_allocator() const;                                      
             
             public: // `iterators`_
                 iterator                begin();
@@ -87,26 +95,22 @@ Its purpose is to present the general interface of all the pointer containers.
             public: // `capacity`_
                 size_type  size() const;
                 size_type  max_size() const;
-                bool       empty() const;	
+                bool       empty() const;       
             
             public: // `modifiers`_
-                void      swap( reversible_ptr_container& r );
-                void      clear():
+                void                     swap( reversible_ptr_container& r );
+                void                     clear():
+                VoidPtrContainer&        base();
+                const VoidPtrContainer&  base() const;
             
             public: // `pointer container requirements`_
                 auto_type                                replace( iterator position, T* x );
-		template< class U >
-		auto_type                                replace( iterator position, std::auto_ptr<U> x );    
+                template< class U >
+                auto_type                                replace( iterator position, std::auto_ptr<U> x );    
                 std::auto_ptr<reversible_ptr_container>  clone() const;    
                 std::auto_ptr<reversible_ptr_container>  release();
                 auto_type                                release( iterator position );
-		
-	    public: // `serialization`_
-	        template< class Archive >
-	        void save( Archive& ar, const unsigned version ) const;  
-	        template< class Archive >
-	        void load( Archive& ar, const unsigned version );	
-            
+                            
             }; //  class 'reversible_ptr_container'
 
             // `comparison`_            
@@ -138,7 +142,7 @@ Its purpose is to present the general interface of all the pointer containers.
             void swap( reversible_ptr_container<T,CA,VPC>& x,
                        reversible_ptr_container<T,CA,VPC>& y );
 
-            // clonability_
+            // cloneability_
             template< class T,  class CA, class VPC >
             reversible_ptr_container<T,CA,VPC>*
             new_clone( const reversible_ptr_container<T,CA,VPC>& r );
@@ -146,6 +150,11 @@ Its purpose is to present the general interface of all the pointer containers.
             // `null predicate`_
             template< class Iterator >
             bool is_null( Iterator i );
+            
+            // `serialization`_
+            template<class Archive, class T, class CA, class VPC>
+            void serialize( Archive& ar, reversible_ptr_container<T,CÁ,VPC>& c, const unsigned int version );
+
 
         } // namespace 'boost'
 
@@ -205,8 +214,17 @@ operations
     ~auto_type();
     operator *implementation-defined bool*\ ();
 
-The destructor will delete the stored object. It might help to
-think it is just an ``std::auto_ptr<T>``.
+The destructor will delete the stored object *using the clone allocator of the container*
+(this explains why we cannot use ``std::auto_ptr<T>``). It might help to
+think it is just an ``std::auto_ptr<T>``. You can also return
+the pointer from a function or assign it to another pointer via the ``move()``
+function
+
+.. parsed-literal::
+
+    auto_type ptr   = ...;
+    auto_type other = boost::ptr_container::move( ptr );
+    return boost::ptr_container::move( other );
 
 .. _construct/copy/destroy:
 
@@ -225,6 +243,16 @@ Semantics: construct/copy/destroy
         - Effects: Constructs a container with ``n`` clones of ``x``
 
         - Postconditions: ``size() == n``
+    
+- ``explicit reversible_ptr_container( const reversible_ptr_container& r );``
+
+    - Effects: Constructs a container by cloning all elements of ``r``
+    
+- ``template< class Derived > explicit reversible_ptr_container( const reversible_ptr_container<Derived>& r );``
+
+    - Effects: Constructs a container by cloning all elements of ``r``
+    
+    - Requirements: ``Derived`` is derived from ``T`` 
 
 - ``explicit reversible_ptr_container( std::auto_ptr< reversible_ptr_container > r );``
 
@@ -242,11 +270,25 @@ Semantics: construct/copy/destroy
 
 - ``~reversible_ptr_container();``
 
-    - Effects: Deletes the stored objects
+    - Effects: Deletes the stored objects via the clone allocator
 
     - Throws: Nothing
 
-- ``void operator=( std::auto_ptr<reversible_ptr_container> r );``
+- ``reversible_ptr_container& operator=( const reversible_ptr_container& r );``
+
+    - Effects: Assigns a clone of ``r``
+    
+    - Exception safety: strong guarantee
+    
+- ``template<class Derived> reversible_ptr_container& operator=( const reversible_ptr_container<Derived>& r );``
+
+    - Effects: Assigns a clone of ``r``
+    
+    - Requirements: ``Derived`` is derived from ``T`` 
+    
+    - Exception safety: Strong guarantee
+
+- ``reversible_ptr_container& operator=( std::auto_ptr<reversible_ptr_container> r );``
 
     - Effects: Deletes the stored objects and then takes ownership of the supplied pointers
 
@@ -337,6 +379,11 @@ Semantics: modifiers
 
     - Throws: Nothing
 
+- ``VoidPtrContainer& base();``
+
+- ``const VoidPtrContainer& base() const;``
+
+    - Returns: a reference to the wrapped container
 
 .. _`pointer container requirements`:
 
@@ -401,10 +448,10 @@ So ::
 has the effect one would expect of normal standard containers. Hence
 objects are compared and not the pointers to objects.
 
-.. _`clonability`:
+.. _`cloneability`:
 
-Semantics: clonability
-^^^^^^^^^^^^^^^^^^^^^^
+Semantics: cloneability
+^^^^^^^^^^^^^^^^^^^^^^^
 
 -  ``template< class T, class CloneAllocator >
    reversible_ptr_container<T,CA,VPC>* 
@@ -442,29 +489,25 @@ All containers can be serialized by means of
 .. __: ../../serialization/index.html
 .. _`Serialization of Pointer Containers`: reference.html#serialization
 
-- ``template< class Archive > void save( Archive& ar, const unsigned version ) const;``
-    
-    - Effects: Saves the container to the archive.
-  
-    - Remarks: This function is called automatically be stream operators in
-      Boost.Serialization
-	
-- ``template< class Archive >
-  void load( Archive& ar, const unsigned version );``	
+ ::
+ 
+    template<class Archive, class T, class CA, class VPC>
+    void serialize( Archive& ar, reversible_ptr_container<T,CA,VPC>& c, const unsigned int version );
+            
 
-    - Effects: Clears the container and then loads a new container from the archive.
-  
-    - Remarks: This function is called automatically be stream operators in
-      Boost.Serialization
-	     
-    - Exception safety: Basic guarantee
+- Effects: Saves or loads the container to/from the archive.
+
+- Remarks: This function is called automatically be stream operators in
+  Boost.Serialization
+    
+- Exception safety: Loading gives the basic guarantee
 
 
 .. raw:: html 
 
         <hr>
 
-:Copyright:     Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
+:Copyright:     Thorsten Ottosen 2004-2007. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see LICENSE_1_0.txt__).
 
 __ http://www.boost.org/LICENSE_1_0.txt
 
