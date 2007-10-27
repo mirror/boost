@@ -17,8 +17,6 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/iterator.hpp>
-#include <boost/range/const_iterator.hpp>
-#include <boost/range/result_iterator.hpp>
 #include <boost/range/as_literal.hpp>
 
 #include <boost/algorithm/string/finder.hpp>
@@ -50,7 +48,7 @@ namespace boost {
         */
         template<typename RangeT, typename FinderT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
+            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         find( 
             RangeT& Input, 
             const FinderT& Finder)
@@ -78,7 +76,7 @@ namespace boost {
         */
         template<typename Range1T, typename Range2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
+            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
         find_first( 
             Range1T& Input, 
             const Range2T& Search)
@@ -104,7 +102,7 @@ namespace boost {
         */
         template<typename Range1T, typename Range2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
+            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
         ifind_first( 
             Range1T& Input, 
             const Range2T& Search,
@@ -131,7 +129,7 @@ namespace boost {
         */
         template<typename Range1T, typename Range2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
+            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
         find_last( 
             Range1T& Input, 
             const Range2T& Search)
@@ -157,7 +155,7 @@ namespace boost {
         */
         template<typename Range1T, typename Range2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
+            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
         ifind_last( 
             Range1T& Input, 
             const Range2T& Search,
@@ -185,7 +183,7 @@ namespace boost {
         */
         template<typename Range1T, typename Range2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
+            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
         find_nth( 
             Range1T& Input, 
             const Range2T& Search,
@@ -215,7 +213,7 @@ namespace boost {
         */
         template<typename Range1T, typename Range2T>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<Range1T>::type>
+            BOOST_STRING_TYPENAME range_iterator<Range1T>::type>
         ifind_nth( 
             Range1T& Input, 
             const Range2T& Search,
@@ -247,7 +245,7 @@ namespace boost {
         */
         template<typename RangeT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
+            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         find_head( 
             RangeT& Input, 
             int N)
@@ -278,7 +276,7 @@ namespace boost {
         */
         template<typename RangeT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
+            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         find_tail( 
             RangeT& Input, 
             int N)
@@ -307,7 +305,7 @@ namespace boost {
         */
         template<typename RangeT, typename PredicateT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
+            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         find_token( 
             RangeT& Input,
             PredicateT Pred,

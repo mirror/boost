@@ -17,7 +17,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
-#include <boost/range/result_iterator.hpp>
+#include <boost/range/iterator.hpp>
 #include <boost/range/as_literal.hpp>
 
 #include <boost/algorithm/string/find_format.hpp>
@@ -54,7 +54,7 @@ namespace boost {
             typename CharT, 
             typename RegexTraitsT>
         inline iterator_range< 
-            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type >
+            BOOST_STRING_TYPENAME range_iterator<RangeT>::type >
         find_regex( 
             RangeT& Input, 
             const basic_regex<CharT, RegexTraitsT>& Rx,

@@ -19,7 +19,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
-#include <boost/range/result_iterator.hpp>
+#include <boost/range/iterator.hpp>
 #include <boost/range/value_type.hpp>
 #include <boost/range/as_literal.hpp>
 
@@ -76,12 +76,12 @@ namespace boost {
         {
             function_requires< 
                 FinderConcept<FinderT,
-                BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type> >();
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type> >();
 
             iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(as_literal(Input));
 
             typedef BOOST_STRING_TYPENAME 
-                range_result_iterator<RangeT>::type input_iterator_type;
+                range_iterator<RangeT>::type input_iterator_type;
             typedef find_iterator<input_iterator_type> find_iterator_type;
             typedef detail::copy_iterator_rangeF<
                 BOOST_STRING_TYPENAME 
@@ -145,12 +145,12 @@ namespace boost {
         {
             function_requires< 
                 FinderConcept<FinderT,
-                BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type> >();
+                BOOST_STRING_TYPENAME range_iterator<RangeT>::type> >();
 
             iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_input(as_literal(Input));
 
             typedef BOOST_STRING_TYPENAME 
-                range_result_iterator<RangeT>::type input_iterator_type;
+                range_iterator<RangeT>::type input_iterator_type;
             typedef split_iterator<input_iterator_type> find_iterator_type;
             typedef detail::copy_iterator_rangeF<
                 BOOST_STRING_TYPENAME 

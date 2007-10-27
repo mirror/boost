@@ -18,7 +18,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
-#include <boost/range/result_iterator.hpp>
+#include <boost/range/iterator.hpp>
 #include <boost/range/as_literal.hpp>
 
 #include <boost/algorithm/string/detail/find_iterator.hpp>
@@ -185,12 +185,12 @@ namespace boost {
          */
         template<typename RangeT, typename FinderT>
         inline find_iterator< 
-            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
+            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         make_find_iterator(
             RangeT& Collection,
             FinderT Finder)
         {
-            return find_iterator<BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>(
+            return find_iterator<BOOST_STRING_TYPENAME range_iterator<RangeT>::type>(
                 Collection, Finder);
         }
 
@@ -363,12 +363,12 @@ namespace boost {
          */
         template<typename RangeT, typename FinderT>
         inline split_iterator< 
-            BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
+            BOOST_STRING_TYPENAME range_iterator<RangeT>::type>
         make_split_iterator(
             RangeT& Collection,
             FinderT Finder)
         {
-            return split_iterator<BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>(
+            return split_iterator<BOOST_STRING_TYPENAME range_iterator<RangeT>::type>(
                 Collection, Finder);
         }
 
