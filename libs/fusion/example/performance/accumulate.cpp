@@ -15,6 +15,8 @@
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/adapted/array.hpp>
 
+#include <boost/type_traits/remove_reference.hpp>
+
 #include <algorithm>
 #include <numeric>
 #include <functional>
@@ -75,14 +77,15 @@ namespace
         return result / iter;
     }
 
-
     struct poly_add
     {
+        template<typename Sig>
+        struct result;
+
         template<typename Lhs, typename Rhs>
-        struct result
-        {
-            typedef Lhs type;
-        };
+        struct result<poly_add(Lhs,Rhs)>
+            : boost::remove_reference<Lhs>
+        {};
 
         template<typename Lhs, typename Rhs>
         Lhs operator()(const Lhs& lhs, const Rhs& rhs) const
@@ -93,11 +96,13 @@ namespace
 
     struct poly_mult
     {
+        template<typename Sig>
+        struct result;
+
         template<typename Lhs, typename Rhs>
-        struct result
-        {
-            typedef Lhs type;
-        };
+        struct result<poly_mult(Lhs, Rhs)>
+            : boost::remove_reference<Lhs>
+        {};
 
         template<typename Lhs, typename Rhs>
         Lhs operator()(const Lhs& lhs, const Rhs& rhs) const

@@ -13,6 +13,8 @@
 #include <boost/fusion/container/vector.hpp>
 #include <boost/fusion/container/list.hpp>
 
+#include <boost/type_traits/remove_reference.hpp>
+
 #include <boost/lexical_cast.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/preprocessor/enum.hpp>
@@ -59,11 +61,13 @@ namespace
 {
     struct poly_add
     {
+        template<typename Sig>
+        struct result;
+
         template<typename Lhs, typename Rhs>
-        struct result
-        {
-            typedef Lhs type;
-        };
+        struct result<poly_add(Lhs, Rhs)>
+            : boost::remove_reference<Lhs>
+        {};
 
         template<typename Lhs, typename Rhs>
         Lhs operator()(const Lhs& lhs, const Rhs& rhs) const

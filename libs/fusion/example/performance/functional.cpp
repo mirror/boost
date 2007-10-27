@@ -13,8 +13,8 @@
 #include <boost/fusion/functional/adapter/unfused_generic.hpp>
 #include <boost/fusion/functional/adapter/unfused_rvalue_args.hpp>
 #include <boost/fusion/functional/adapter/fused_function_object.hpp>
-#include <boost/fusion/functional/adapter/unfused_typed.hpp>
 
+#include <boost/utility/result_of.hpp>
 #include <boost/config.hpp>
 #include <boost/timer.hpp>
 #include <algorithm>
@@ -265,12 +265,6 @@ int main()
         total += res;
     }
     {
-        typedef boost::fusion::vector<int,int,int,int> s;
-        boost::fusion::unfused_typed<F,s> f;
-        std::cout << "unfused_typed<F,s>                             " << call_unfused(f,res) << std::endl;
-        total += res;
-    }
-    {
         boost::fusion::unfused_rvalue_args<F> f;
         std::cout << "unfused_rvalue_args<F>                         " << call_unfused(f,res) << std::endl;
         total += res;
@@ -294,13 +288,6 @@ int main()
     {
         boost::fusion::fused_function_object<U> f;
         std::cout << "without random access                          " << call_fused(f,res) << std::endl;
-        total += res;
-    }
-    std::cout << std::endl << "Loopback:" << std::endl;
-    {
-        typedef boost::fusion::vector<int,int,int,int> s;
-        boost::fusion::unfused_typed< boost::fusion::fused_function_object<U>, s > f;
-        std::cout << "unfused_typed<fused_function_object<U>,s >     " << call_unfused(f,res) << std::endl;
         total += res;
     }
     {
