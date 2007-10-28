@@ -60,7 +60,8 @@ namespace boost {
     struct SinglePassRangeConcept {
         typedef typename range_value<T>::type range_value;
         typedef typename range_iterator<T>::type range_iterator;
-        typedef typename range_const_iterator<T>::type range_const_iterator;
+        //typedef typename range_iterator<const T>::type range_const_iterator;
+
         void constraints()
         {
             function_requires<
@@ -80,7 +81,6 @@ namespace boost {
         }
         T a;
         range_iterator i;
-        range_const_iterator ci;
         bool b;
     };
 
@@ -88,7 +88,6 @@ namespace boost {
     template<typename T>
     struct ForwardRangeConcept {
         typedef typename range_difference<T>::type range_difference;
-        typedef typename range_size<T>::type range_size;
         void constraints()
         {
             function_requires<
@@ -99,17 +98,13 @@ namespace boost {
                     typename range_iterator<T>::type
                 >
             >();
-            s = boost::size(a);
         }
-        T a;
-        range_size s;
     };
 
     //! Check if a type T models the BidirectionalRange range concept.
     template<typename T>
     struct BidirectionalRangeConcept {
         typedef typename range_reverse_iterator<T>::type range_reverse_iterator;
-        typedef typename range_const_reverse_iterator<T>::type range_const_reverse_iterator;
         void constraints()
         {
             function_requires<
@@ -131,12 +126,13 @@ namespace boost {
         }
         T a;
         range_reverse_iterator i;
-        range_const_reverse_iterator ci;
     };
 
     //! Check if a type T models the RandomAccessRange range concept.
     template<typename T>
     struct RandomAccessRangeConcept {
+        typedef typename range_size<T>::type range_size;
+
         void constraints()
         {
             function_requires<
@@ -147,7 +143,12 @@ namespace boost {
                     typename range_iterator<T>::type
                 >
             >();
-            }
+         
+            s = boost::size(a);
+         }
+        
+        T a;
+        range_size s;
     };
 
 } // namespace boost
