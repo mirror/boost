@@ -1,5 +1,3 @@
-
-
 // Boost.Range MFC Extension
 //
 // Copyright Shunsuke Sogame 2005-2006.

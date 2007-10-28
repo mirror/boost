@@ -15,6 +15,7 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
+#include <boost/range/concepts.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
 #include <boost/static_assert.hpp>
