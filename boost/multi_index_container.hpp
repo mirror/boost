@@ -96,8 +96,8 @@ class multi_index_container:
 private:
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template <typename,typename,typename> friend class  detail::index_base;
-  template <typename,typename>          friend class  detail::header_holder;
-  template <typename,typename>          friend class  detail::converter;
+  template <typename,typename>          friend struct detail::header_holder;
+  template <typename,typename>          friend struct detail::converter;
 #endif
 
   typedef typename detail::multi_index_base_type<
