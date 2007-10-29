@@ -21,10 +21,10 @@
 # pragma once
 #endif
 
-#include <boost/range/iterator.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/value_type.hpp>
+#include <boost/range/const_iterator.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -39,8 +39,8 @@ namespace boost { namespace xpressive { namespace detail
         typedef typename range_value<Map>::type::first_type key_type;
         typedef typename range_value<Map>::type::second_type value_type;
         typedef typename range_value<key_type>::type char_type;
-        typedef typename range_iterator<Map const>::type iterator;
-        typedef typename range_iterator<key_type const>::type key_iterator;
+        typedef typename range_const_iterator<Map>::type iterator;
+        typedef typename range_const_iterator<key_type>::type key_iterator;
         typedef value_type const *result_type;
 
         // copies of this symbol table share the TST
