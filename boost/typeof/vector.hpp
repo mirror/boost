@@ -138,9 +138,12 @@ namespace boost { namespace type_of {
 
 namespace boost { namespace type_of {
 
+#   if   BOOST_TYPEOF_LIMIT_SIZE < 50
     template<class V, class T> struct push_back {
         typedef V type;
-    }; //default behaviour is to let push_back ignore T, and return the input vector.
+    };
+#   endif
+    //default behaviour is to let push_back ignore T, and return the input vector.
     //This is to let BOOST_TYPEOF_NESTED_TYPEDEF work properly with the default vector.
 #     define  BOOST_PP_LOCAL_MACRO  BOOST_TYPEOF_spec_push_back
 #     define  BOOST_PP_LOCAL_LIMITS \
