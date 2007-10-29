@@ -429,7 +429,7 @@ namespace boost { namespace date_time {
     typedef std::basic_string<CharT> string_type;
     typedef CharT                    char_type;
     typedef boost::date_time::period_parser<date_type, CharT>  period_parser_type;
-    typedef special_values_parser<date_type,CharT> special_values_parser_type; 
+    typedef boost::date_time::special_values_parser<date_type,CharT> special_values_parser_type; 
     typedef std::vector<std::basic_string<CharT> > input_collection_type;
     typedef format_date_parser<date_type, CharT> format_date_parser_type;
     // date_generators stuff goes here
