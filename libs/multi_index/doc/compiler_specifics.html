@@ -46,12 +46,13 @@ along with suitable workarounds when available.
       <li><a href="#gcc_4_darwin">Darwin GCC 4.0</a></li>
     </ul>
   </li>
-  <li><a href="#acc_612">HP aC++ A.06.12 for HP-UX</a></li>
+  <li><a href="#acc_612">HP aC++ A.06.12 for HP-UX and later</a></li>
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
+  <li><a href="#va_90">IBM VisualAge C++ V9.0 for AIX</a></li>
   <li><a href="#intel_90_lin">Intel C++ Compiler for Linux 9.0 and later</a></li>
   <li><a href="#intel_7x_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></li>
   <li><a href="#intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></li>
-  <li><a href="#intel_em64t_91_win">Intel C++ Compiler Extended Memory 64 Technology 9.1 for Windows</a></li>
+  <li><a href="#intel_100_win64">Intel C++ Compiler for Windows 64-bit 10.0</a></li>
   <li><a href="#cw_83">Metrowerks CodeWarrior 8.3</a></li>
   <li><a href="#cw_9x">Metrowerks CodeWarrior 9 and later</a></li>
   <li>
@@ -79,7 +80,7 @@ along with suitable workarounds when available.
     </ul>
   </li>
   <li><a href="#msvc_80_x86_amd64">Microsoft Visual C++ 8.0 x64 cross-compiler</a></li>
-  <li><a href="#sun_11">Sun Studio 11 for Solaris</a></li>
+  <li><a href="#sun_10">Sun Studio 10 for Solaris and later</a></li>
   <li><a href="#portability">Portability techniques</a>
     <ul>
       <li><a href="#member_offset">Use of <code>member_offset</code></a></li>
@@ -100,12 +101,17 @@ along with suitable workarounds when available.
 <h2><a name="bcb_64">Borland C++ Builder 6.4 and later</a></h2>
 
 <p>
-Currently, Boost.MultiIndex cannot be used with any of BCB 6.4 up to BCB 2006.
+Currently, Boost.MultiIndex cannot be used with any of BCB 6.4 up to BCB 2006
+and CodeGear C++Builder 2007.
 The number of problems encountered during the tests makes it unlikely that
 future versions of the library can be made to work under these compilers.
 </p>
 
 <h2><a name="comeau_433_win_vc7_71">Comeau C/C++ 4.3.3 for Windows (VC++ 7.0/7.1 backend)</a></h2>
+
+<p>
+<b>Note:</b> Last tested in Boost 1.34.1. The information might be no longer accurate.
+</p>
 
 <p>
 No problems have been detected with this compiler. The library fails to compile,
@@ -115,8 +121,7 @@ however, when Microsoft Visual C++ 6.0 is used as the backend.
 <h2><a name="compaq_65">Compaq C++ 6.5-042 for Tru64 UNIX and later</a></h2>
 
 <p>
-No problems have been detected with this compiler. Versions 6.5-042,
-7.1-005 and 7.1-006 have been tested.
+No problems have been detected with this compiler. Last tested for version 7.1-006.
 </p>
 
 <h2><a name="gcc_32">GNU GCC 3.2 and later</a></h2>
@@ -126,20 +131,14 @@ No problems have been detected with several versions of this compiler
 starting from 3.2. The following versions have been explicitly tested:
 <ul>
   <li>GCC 3.2 20020927 (prerelease) under Cygwin 1.5.7,</li>
-  <li>GCC 3.2.3 under Linux,</li>
-  <li>GCC 3.3.5 (qnx-nto) under QNX 6.3.0 and QNX 6.3.2,
-  <li>GCC 3.3.6 under Linux,</li>
-  <li>GCC 3.4.2 (mingw-special) under Win32,
-    (mingw-special) + STLport 5.0.1 under Win32,</li>
-  <li>GCC 3.4.3 under Solaris,</li>
-  <li>GCC 3.4.4 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
-  <li>GCC 3.4.5 under Linux and Linux x86-64, (mingw-special) under Win32,
-    (mingw-special) + STLport 5.0.1 under Win32,
-    (mingw-special) + STLport 5.1.0 under Win32,</li>
-  <li>GCC 4.0.1 (Apple build 5250) under Mac OS,</li>
-  <li>GCC 4.0.3 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
-  <li>GCC 4.1.0 under Linux and Linux x86-64,</li>
-  <li>GCC 4.1.1 (OpenPKG-2-STABLE) under Solaris.</li>
+  <li>GCC 3.4.2 under HP-UX IA64,</li>
+  <li>GCC 3.4.4 (cygming special) under Cygwin 1.5.22,</li>
+  <li>GCC 3.4.5 (mingw special) under Win32,</li>
+  <li>GCC 3.4.6 under Linux x86-64,</li>
+  <li>GCC 4.0.1 (Apple build 5367) under Mac OS,</li>
+  <li>GCC 4.1.2 (OpenPKG-CURRENT) under Solaris,</li>
+  <li>GCC 4.2.1 under HP-UX IA64 and Linux x86-64, (mingw32-2) under Win32,</li>
+  <li>GCC 4.2.2 under Linux.</li>
 </ul>
 Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
 </p>
@@ -172,18 +171,17 @@ release of GNU GCC 4.0.0, so the invariant-checking mode is available from this
 upgrade.
 </p>
 
-<h2><a name="acc_612">HP aC++ A.06.12 for HP-UX</a></h2>
+<h2><a name="acc_612">HP aC++ A.06.12 for HP-UX and later</a></h2>
 
 <p>
 No problems have been detected with this compiler.
+Last tested for version A.06.14.
 </p>
 
 <h2><a name="va_60">IBM VisualAge C++ V6.0 for AIX</a></h2>
 
 <p>
-<b>Note:</b> This information was last checked for Boost 1.33.1. There is a
-possibility that changes in Boost since that release have
-caused problems with this platform.
+<b>Note:</b> Last tested in Boost 1.33.1. The information might be no longer accurate. 
 </p>
 
 <blockquote><hr></blockquote>
@@ -214,7 +212,33 @@ Serialization capabilities are not available as Boost.Serialization is not
 supported on this platform.
 </p>
 
+<h2><a name="va_90">IBM VisualAge C++ V9.0 for AIX</a></h2>
+
+<p>
+<a href="reference/key_extraction.html#member"><code>member</code></a> not supported,
+refer to the section on
+<a href="#member_offset">use of <code>member_offset</code></a> for workarounds.
+<code>member_offset</code> causes the compiler to emit warnings about the
+use of <code>offsetof</code> with non-POD types: these warnings can be suppressed
+by setting the compiler option <code>-qsuppress=1540-1281</code>, or, alternatively,
+by inserting the following preprocessor directive:
+</p>
+
+<blockquote><pre>
+<span class=preprocessor>#pragma</span> <span class=identifier>info</span><span class=special>(</span><span class=identifier>nolan</span><span class=special>)</span>
+</pre></blockquote>
+
+<p>
+This latter pragma, however, may also eliminate other warnings not related
+to the use of <code>offsetof</code>.
+Other than this, Boost.MultiIndex works without problems.
+</p>
+
 <h2><a name="intel_90_lin">Intel C++ Compiler for Linux 9.0 and later</a></h2>
+
+<p>
+<b>Note:</b> Last tested in Boost 1.34.1. The information might be no longer accurate.
+</p>
 
 <p>
 No problems have been detected with this compilers from version 9.0.
@@ -246,11 +270,11 @@ disabled by default. This will cause problems with many Boost libraries,
 and in particular with the serialization part of Boost.MultiIndex.
 Argument dependent lookup is enabled by adding
 <code>/Qoption,c,--arg_dep_lookup</code> to the project options.
-Other than this, Boost.MultiIndex works without problems. Compiler versions
-from 8.0 to 9.1 have been tested.
+Other than this, Boost.MultiIndex works without problems.
+Last tested for compiler version 10.0.
 </p>
 
-<h2><a name="intel_em64t_91_win">Intel C++ Compiler Extended Memory 64 Technology 9.1 for Windows</a></h2>
+<h2><a name="intel_100_win64">Intel C++ Compiler for Windows 64-bit 10.0</a></h2>
 
 <p>
 No problems have been detected with this compiler.
@@ -276,11 +300,15 @@ objects of derived types. For instance:
 </pre></blockquote>
 
 <p>
-Other than this, Boost.MultiIndex works without problems under the
-two operating systems tested: Mac OS and Windows.
+Other than this, Boost.MultiIndex works without problems under Mac OS and Windows (last
+tested under Windows only).
 </p>
 
 <h2><a name="cw_9x">Metrowerks CodeWarrior 9 and later</a></h2>
+
+<p>
+<b>Note:</b> Last tested in Boost 1.34.1. The information might be no longer accurate.
+</p>
 
 <p>
 Boost.MultiIndex works correctly with versions of this compiler from 9.0 to
@@ -642,13 +670,19 @@ No problems have been detected with this configuration.
 No problems have been detected with this compiler.
 </p>
 
-<h2><a name="sun_11">Sun Studio 11 for Solaris</a></h2>
+<h2><a name="sun_10">Sun Studio 10 for Solaris and later</a></h2>
 
 <p>
-No problems have been detected with this platform. The exact compiler version
-tested was Sun C++ 5.8 Patch 121017-03 2006/07/19. The option
-<code>-library=stlport4</code> was used to replace the default standard
-library with STLport.
+No problems have been detected with this platform. The exact compiler versions
+tested were:
+<ul>
+  <li>Sun C++ 5.7 Patch 117830-07 2006/03/15 (Sun Studio 10),</li>
+  <li>Sun C++ 5.8 Patch 121017-09 2007/01/17 (Sun Studio 11),</li>
+  <li>Sun C++ 5.9 (Sun Studio 12).</li>
+</ul>
+  
+The option <code>-library=stlport4</code> was used to replace the default
+standard library with STLport.
 </p>
 
 <h2><a name="portability">Portability techniques</a></h2>
@@ -666,7 +700,7 @@ to work correctly with <code>member</code>:
 <ul>
   <li>MSVC++ 6.0/7.0,</li>
   <li>Intel C++ 7.0/7.1 for Windows,</li>
-  <li>VisualAge 6.0 for AIX.</li>
+  <li>VisualAge 6.0/9.0 for AIX.</li>
 </ul>
 This program can help determine if your compiler
 properly supports pointers to members as non-type template parameters:
@@ -1071,9 +1105,9 @@ Performance
 
 <br>
 
-<p>Revised October 16th 2006</p>
+<p>Revised October 29th 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
