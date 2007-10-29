@@ -1,14 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
-<!--
-   Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
-  
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file LICENSE_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt)
-  -->
-<chapter id="reference">
+<section id="reference">
   <title>Reference</title>
-  <para>Elements:<itemizedlist spacing="compact"><listitem><simpara><link linkend="boostbook.dtd.boostbook">Element <sgmltag>boostbook</sgmltag> - Defines a BoostBook book</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class">Element <sgmltag>class</sgmltag> - Declares a class or class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class-specialization">Element <sgmltag>class-specialization</sgmltag> - A specialization (partial or full) of a class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.code">Element <sgmltag>code</sgmltag> - Mimics the <sgmltag>code</sgmltag> tag in HTML</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-fail-test">Element <sgmltag>compile-fail-test</sgmltag> - A testcase that should fail to compile</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-test">Element <sgmltag>compile-test</sgmltag> - A testcase that should compile correctly</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.complexity">Element <sgmltag>complexity</sgmltag> - The time/space/etc. complexity of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.constructor">Element <sgmltag>constructor</sgmltag> - Declares a constructor of the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.copy-assignment">Element <sgmltag>copy-assignment</sgmltag> - Declares a copy-assignment operator</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.data-member">Element <sgmltag>data-member</sgmltag> - Declares a data member of a class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.default">Element <sgmltag>default</sgmltag> - The default value of a function or template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.description">Element <sgmltag>description</sgmltag> - Detailed description of a construct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.destructor">Element <sgmltag>destructor</sgmltag> - Declares a destructor for the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.effects">Element <sgmltag>effects</sgmltag> - Declares the side effects of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enum">Element <sgmltag>enum</sgmltag> - Declares an enumeration type</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enumvalue">Element <sgmltag>enumvalue</sgmltag> - A single value of an enumeration</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.free-function-group">Element <sgmltag>free-function-group</sgmltag> - A set of functions that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.function">Element <sgmltag>function</sgmltag> - Declares a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.functionname">Element <sgmltag>functionname</sgmltag> - References a function with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.header">Element <sgmltag>header</sgmltag> - Declares a C++ header with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.if-fails">Element <sgmltag>if-fails</sgmltag> - What it means when a testcase fails</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.inherit">Element <sgmltag>inherit</sgmltag> - Declares a base class of the enclosing class or struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.lib">Element <sgmltag>lib</sgmltag> - A library dependency</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library">Element <sgmltag>library</sgmltag> - Top-level element for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library-reference">Element <sgmltag>library-reference</sgmltag> - Declares the reference material for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategory">Element <sgmltag>librarycategory</sgmltag> - Declares that the enclosing library is in this category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorydef">Element <sgmltag>librarycategorydef</sgmltag> - Defines a new library category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorylist">Element <sgmltag>librarycategorylist</sgmltag> - Categorized listing of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryinfo">Element <sgmltag>libraryinfo</sgmltag> - Provides information about a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarylist">Element <sgmltag>librarylist</sgmltag> - Placeholder for an alphabetical list of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryname">Element <sgmltag>libraryname</sgmltag> - References a library of the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarypurpose">Element <sgmltag>librarypurpose</sgmltag> - Describes in one short sentence or phrase the purpose of a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-fail-test">Element <sgmltag>link-fail-test</sgmltag> - Declares a test that should compile but fail to link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-test">Element <sgmltag>link-test</sgmltag> - Declares a test that should compile and link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method">Element <sgmltag>method</sgmltag> - Declares a method, i.e., a member function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method-group">Element <sgmltag>method-group</sgmltag> - A set of methods that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.namespace">Element <sgmltag>namespace</sgmltag> - Declares a namespace</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.notes">Element <sgmltag>notes</sgmltag> - Non-normative notes about a function's semantics</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-function">Element <sgmltag>overloaded-function</sgmltag> - An overloaded function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-method">Element <sgmltag>overloaded-method</sgmltag> - An overloaded method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.parameter">Element <sgmltag>parameter</sgmltag> - A function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.paramtype">Element <sgmltag>paramtype</sgmltag> - The type of a function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.postconditions">Element <sgmltag>postconditions</sgmltag> - Conditions that must hold after the function returns</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.precondition">Element <sgmltag>precondition</sgmltag> - Conditions that must be met prior to executing a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.programlisting">Element <sgmltag>programlisting</sgmltag> - A sample of program code</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.purpose">Element <sgmltag>purpose</sgmltag> - A short description of an entity's use</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.rationale">Element <sgmltag>rationale</sgmltag> - Describes the rationale for a particular function's design</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requirement">Element <sgmltag>requirement</sgmltag> - A requirement/property in the Jamfile for a testcase</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requires">Element <sgmltag>requires</sgmltag> - Declares the requirements of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.returns">Element <sgmltag>returns</sgmltag> - Description of the return value of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-fail-test">Element <sgmltag>run-fail-test</sgmltag> - A testcase that should compile and link, but fail on execution</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-test">Element <sgmltag>run-test</sgmltag> - A testcase that should compile, link, and execute</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.signature">Element <sgmltag>signature</sgmltag> - One signature of an overloaded function or method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.snippet">Element <sgmltag>snippet</sgmltag> - Pulls in a code snippet from a <sgmltag>programlisting</sgmltag> element</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.source">Element <sgmltag>source</sgmltag> - Defines source code for a test</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.specialization">Element <sgmltag>specialization</sgmltag> - Defines the specialization arguments for a class specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.static-constant">Element <sgmltag>static-constant</sgmltag> - Declares a static constant, e.g., <code>const int foo = 5;</code>.</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct">Element <sgmltag>struct</sgmltag> - Declares a C++ struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct-specialization">Element <sgmltag>struct-specialization</sgmltag> - A specialization (full or partial) of a struct template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template">Element <sgmltag>template</sgmltag> - Declares the template parameters of a class or function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-arg">Element <sgmltag>template-arg</sgmltag> - A template argument in a specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-nontype-parameter">Element <sgmltag>template-nontype-parameter</sgmltag> - A nontype template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-type-parameter">Element <sgmltag>template-type-parameter</sgmltag> - Declares a template type parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-varargs">Element <sgmltag>template-varargs</sgmltag> - Declares a variable-length list of template parameters</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.testsuite">Element <sgmltag>testsuite</sgmltag> - Describes a library testsuite</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.throws">Element <sgmltag>throws</sgmltag> - Description of the exceptions thrown by a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.type">Element <sgmltag>type</sgmltag> - The type of an element or return type of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.typedef">Element <sgmltag>typedef</sgmltag> - Declares a typedef</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union">Element <sgmltag>union</sgmltag> - Declares a C++ union or union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union-specialization">Element <sgmltag>union-specialization</sgmltag> - A specialization (full or partial) of a union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-class">Element <sgmltag>using-class</sgmltag> - Injects the method and function names of a class into the local scope</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-namespace">Element <sgmltag>using-namespace</sgmltag> - Injects the declared names from a namespace into the local scope</link></simpara></listitem></itemizedlist></para>
+  <para>Elements:<itemizedlist spacing="compact"><listitem><simpara><link linkend="boostbook.dtd.access">Element <sgmltag>access</sgmltag> - Declares an access specification for class members</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.boostbook">Element <sgmltag>boostbook</sgmltag> - Defines a BoostBook book</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class">Element <sgmltag>class</sgmltag> - Declares a class or class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.class-specialization">Element <sgmltag>class-specialization</sgmltag> - A specialization (partial or full) of a class template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.code">Element <sgmltag>code</sgmltag> - Mimics the <sgmltag>code</sgmltag> tag in HTML</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-fail-test">Element <sgmltag>compile-fail-test</sgmltag> - A testcase that should fail to compile</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.compile-test">Element <sgmltag>compile-test</sgmltag> - A testcase that should compile correctly</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.complexity">Element <sgmltag>complexity</sgmltag> - The time/space/etc. complexity of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.constructor">Element <sgmltag>constructor</sgmltag> - Declares a constructor of the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.copy-assignment">Element <sgmltag>copy-assignment</sgmltag> - Declares a copy-assignment operator</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.data-member">Element <sgmltag>data-member</sgmltag> - Declares a data member of a class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.default">Element <sgmltag>default</sgmltag> - The default value of a function or template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.description">Element <sgmltag>description</sgmltag> - Detailed description of a construct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.destructor">Element <sgmltag>destructor</sgmltag> - Declares a destructor for the enclosing class</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.effects">Element <sgmltag>effects</sgmltag> - Declares the side effects of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enum">Element <sgmltag>enum</sgmltag> - Declares an enumeration type</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.enumvalue">Element <sgmltag>enumvalue</sgmltag> - A single value of an enumeration</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.free-function-group">Element <sgmltag>free-function-group</sgmltag> - A set of functions that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.function">Element <sgmltag>function</sgmltag> - Declares a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.functionname">Element <sgmltag>functionname</sgmltag> - References a function with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.header">Element <sgmltag>header</sgmltag> - Declares a C++ header with the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.if-fails">Element <sgmltag>if-fails</sgmltag> - What it means when a testcase fails</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.inherit">Element <sgmltag>inherit</sgmltag> - Declares a base class of the enclosing class or struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.lib">Element <sgmltag>lib</sgmltag> - A library dependency</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library">Element <sgmltag>library</sgmltag> - Top-level element for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.library-reference">Element <sgmltag>library-reference</sgmltag> - Declares the reference material for a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategory">Element <sgmltag>librarycategory</sgmltag> - Declares that the enclosing library is in this category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorydef">Element <sgmltag>librarycategorydef</sgmltag> - Defines a new library category</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarycategorylist">Element <sgmltag>librarycategorylist</sgmltag> - Categorized listing of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryinfo">Element <sgmltag>libraryinfo</sgmltag> - Provides information about a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarylist">Element <sgmltag>librarylist</sgmltag> - Placeholder for an alphabetical list of libraries</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.libraryname">Element <sgmltag>libraryname</sgmltag> - References a library of the given name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.librarypurpose">Element <sgmltag>librarypurpose</sgmltag> - Describes in one short sentence or phrase the purpose of a library</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-fail-test">Element <sgmltag>link-fail-test</sgmltag> - Declares a test that should compile but fail to link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.link-test">Element <sgmltag>link-test</sgmltag> - Declares a test that should compile and link</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method">Element <sgmltag>method</sgmltag> - Declares a method, i.e., a member function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.method-group">Element <sgmltag>method-group</sgmltag> - A set of methods that are grouped together under one name</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.namespace">Element <sgmltag>namespace</sgmltag> - Declares a namespace</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.notes">Element <sgmltag>notes</sgmltag> - Non-normative notes about a function's semantics</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-function">Element <sgmltag>overloaded-function</sgmltag> - An overloaded function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.overloaded-method">Element <sgmltag>overloaded-method</sgmltag> - An overloaded method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.parameter">Element <sgmltag>parameter</sgmltag> - A function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.paramtype">Element <sgmltag>paramtype</sgmltag> - The type of a function parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.postconditions">Element <sgmltag>postconditions</sgmltag> - Conditions that must hold after the function returns</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.precondition">Element <sgmltag>precondition</sgmltag> - Conditions that must be met prior to executing a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.programlisting">Element <sgmltag>programlisting</sgmltag> - A sample of program code</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.purpose">Element <sgmltag>purpose</sgmltag> - A short description of an entity's use</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.rationale">Element <sgmltag>rationale</sgmltag> - Describes the rationale for a particular function's design</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requirement">Element <sgmltag>requirement</sgmltag> - A requirement/property in the Jamfile for a testcase</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.requires">Element <sgmltag>requires</sgmltag> - Declares the requirements of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.returns">Element <sgmltag>returns</sgmltag> - Description of the return value of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-fail-test">Element <sgmltag>run-fail-test</sgmltag> - A testcase that should compile and link, but fail on execution</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.run-test">Element <sgmltag>run-test</sgmltag> - A testcase that should compile, link, and execute</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.signature">Element <sgmltag>signature</sgmltag> - One signature of an overloaded function or method</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.snippet">Element <sgmltag>snippet</sgmltag> - Pulls in a code snippet from a <sgmltag>programlisting</sgmltag> element</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.source">Element <sgmltag>source</sgmltag> - Defines source code for a test</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.specialization">Element <sgmltag>specialization</sgmltag> - Defines the specialization arguments for a class specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.static-constant">Element <sgmltag>static-constant</sgmltag> - Declares a static constant, e.g., <code>const int foo = 5;</code>.</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct">Element <sgmltag>struct</sgmltag> - Declares a C++ struct</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.struct-specialization">Element <sgmltag>struct-specialization</sgmltag> - A specialization (full or partial) of a struct template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template">Element <sgmltag>template</sgmltag> - Declares the template parameters of a class or function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-arg">Element <sgmltag>template-arg</sgmltag> - A template argument in a specialization</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-nontype-parameter">Element <sgmltag>template-nontype-parameter</sgmltag> - A nontype template parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-type-parameter">Element <sgmltag>template-type-parameter</sgmltag> - Declares a template type parameter</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.template-varargs">Element <sgmltag>template-varargs</sgmltag> - Declares a variable-length list of template parameters</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.testsuite">Element <sgmltag>testsuite</sgmltag> - Describes a library testsuite</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.throws">Element <sgmltag>throws</sgmltag> - Description of the exceptions thrown by a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.type">Element <sgmltag>type</sgmltag> - The type of an element or return type of a function</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.typedef">Element <sgmltag>typedef</sgmltag> - Declares a typedef</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union">Element <sgmltag>union</sgmltag> - Declares a C++ union or union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.union-specialization">Element <sgmltag>union-specialization</sgmltag> - A specialization (full or partial) of a union template</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-class">Element <sgmltag>using-class</sgmltag> - Injects the method and function names of a class into the local scope</link></simpara></listitem><listitem><simpara><link linkend="boostbook.dtd.using-namespace">Element <sgmltag>using-namespace</sgmltag> - Injects the declared names from a namespace into the local scope</link></simpara></listitem></itemizedlist></para>
   <refentry id="boostbook.dtd.class-specialization">
     <refmeta>
       <refentrytitle>
@@ -20,7 +13,7 @@
       <refpurpose>A specialization (partial or full) of a class template</refpurpose>
     </refnamediv>
     <refsynopsisdiv>class-specialization ::= 
-  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.specialization">specialization</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>?, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
+  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.specialization">specialization</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>?, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.access">access</link>| <link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
@@ -36,7 +29,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -140,7 +133,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -176,7 +169,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -218,7 +211,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -258,7 +251,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>specifiers</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The specifiers for this function, e.g., inline, static, etc.</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -294,7 +287,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -339,7 +332,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -377,7 +370,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -413,7 +406,7 @@
   this:</para>
 
   <programlisting>&lt;library-reference&gt;
-  &lt;header name=&quot;boost/any.hpp&quot;&gt;
+  &lt;header name="boost/any.hpp"&gt;
     &lt;!-- C++ constructs in this header --&gt;
   &lt;/header&gt;
 &lt;/library-reference&gt;</programlisting>
@@ -440,7 +433,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -480,7 +473,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -499,7 +492,7 @@
       <refpurpose>Declares a C++ union or union template</refpurpose>
     </refnamediv>
     <refsynopsisdiv>union ::= 
-  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>*, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
+  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>*, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.access">access</link>| <link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
@@ -515,7 +508,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -535,13 +528,10 @@
       <refpurpose>Declares a base class of the enclosing class or struct</refpurpose>
     </refnamediv>
     <refsynopsisdiv>inherit ::= 
-  (ANY)
+  (<link linkend="boostbook.dtd.type">type</link>, <link linkend="boostbook.dtd.purpose">purpose</link>?)
 </refsynopsisdiv>
     <refsection><title>Description</title>
-  <para>This element contains the name of the class inherited. The
-  content model is free-form, as the inherited class may be an
-  instantiation of a template and may have markup in it (e.g.,
-  <sgmltag>classname</sgmltag> tags).</para>
+  <para>This element contains the type of the class inherited.</para>
 </refsection>
     <refsection>
       <title>Attributes</title>
@@ -557,8 +547,8 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
-<row><entry>access</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry/></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+<row><entry>access</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The access specifier ("public", "private", or "protected") of the inheritance.</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -582,7 +572,7 @@
     <refsection><title>Description</title>
   <para>Variable-length template parameter lists are not allowed in
   C++, but because they are sometimes needed in documentation they are
-  allowed in BoostBook. This element generally expands to &quot;...&quot; and
+  allowed in BoostBook. This element generally expands to "..." and
   can be used anywhere any other template parameter can be
   used.</para>
 </refsection>
@@ -600,7 +590,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -654,7 +644,7 @@
   behavior. Constructors, destructors, member functions, and free
   functions all use the same documentation method, although the
   top-level tags differ.</para>
-    
+
   <para>The behavior of functions in BoostBook is documenting using a
   style similar to that of the C++ standard, with clauses describing
   the requirements, effects, postconditions, exception behavior, and
@@ -662,18 +652,18 @@
 
   <para>The following example illustrates some constructors and a
   destructor for <classname>boost::any</classname>. Note that one of
-  the constructors takes a single parameter whose name is &quot;other&quot; and
+  the constructors takes a single parameter whose name is "other" and
   whose type, <code>const any&amp;</code> is contained in the
   &lt;paramtype&gt; element; any number of parameters may be specified
   in this way.</para>
 
-  <programlisting>&lt;class name=&quot;any&quot;&gt;
+  <programlisting>&lt;class name="any"&gt;
   &lt;constructor&gt;
     &lt;postconditions&gt;&lt;para&gt;&lt;this-&gt;empty()&gt;&lt;/para&gt;&lt;/postconditions&gt;
   &lt;/constructor&gt;
 
   &lt;constructor&gt;
-    &lt;parameter name=&quot;other&quot;&gt;
+    &lt;parameter name="other"&gt;
       &lt;paramtype&gt;const &lt;classname&gt;any&lt;/classname&gt;&amp;amp;&lt;/paramtype&gt;
     &lt;/parameter&gt;
 
@@ -683,12 +673,12 @@
         so that any content is equivalent in both type and value to the
         content of &lt;code&gt;other&lt;/code&gt;, or empty if
         &lt;code&gt;other&lt;/code&gt; is
-        empty. 
+        empty.
       &lt;/simpara&gt;
     &lt;/effects&gt;
 
     &lt;throws&gt;
-      &lt;simpara&gt;May fail with a 
+      &lt;simpara&gt;May fail with a
         &lt;classname&gt;std::bad_alloc&lt;/classname&gt; exception or any
         exceptions arising from the copy constructor of the
         contained type.
@@ -718,7 +708,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>specifiers</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The specifiers for this function, e.g., inline, static, etc.</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
@@ -755,7 +745,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -829,7 +819,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>cv</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>cv-qualifiers for this method, e.g., const volatile</entry></row>
 <row><entry>specifiers</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The specifiers for this function, e.g., inline, static, etc.</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
@@ -905,7 +895,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>specifiers</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The specifiers for this function, e.g., inline, static, etc.</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -932,12 +922,12 @@
   element. As in C++, namespaces can be nested and contain other C++
   constructs, such as classes or functions. The <code>name</code>
   attribute of a &lt;namespace&gt; element gives the namespace name
-  (e.g., &quot;boost&quot;). The <libraryname>Any</libraryname> library is
+  (e.g., "boost"). The <libraryname>Any</libraryname> library is
   defined entirely within namespace boost by:</para>
 
   <programlisting>&lt;library-reference&gt;
-  &lt;header name=&quot;boost/any.hpp&quot;&gt;
-    &lt;namespace name=&quot;boost&quot;&gt;  
+  &lt;header name="boost/any.hpp"&gt;
+    &lt;namespace name="boost"&gt;
       &lt;!-- C++ constructs in the boost namespace --&gt;
     &lt;/namespace&gt;
   &lt;/header&gt;
@@ -957,7 +947,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1016,7 +1006,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1060,7 +1050,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1095,7 +1085,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1131,7 +1121,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1166,7 +1156,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1202,7 +1192,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1221,7 +1211,7 @@
       <refpurpose>A specialization (full or partial) of a union template</refpurpose>
     </refnamediv>
     <refsynopsisdiv>union-specialization ::= 
-  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.specialization">specialization</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>?, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
+  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.specialization">specialization</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>?, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.access">access</link>| <link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
@@ -1237,7 +1227,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1273,7 +1263,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1308,7 +1298,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1343,7 +1333,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1372,7 +1362,7 @@
   requirement gives the value of that feature. A requirement such as
   <code>&lt;includes&gt;foo.hpp</code> would be encoded as
   <code>&lt;requirement
-  name=&quot;includes&quot;&gt;foo.hpp&lt;/requirement&gt;</code>.</para>
+  name="includes"&gt;foo.hpp&lt;/requirement&gt;</code>.</para>
 </refsection>
     <refsection>
       <title>Attributes</title>
@@ -1421,7 +1411,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1456,7 +1446,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1491,7 +1481,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -1561,7 +1551,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1605,7 +1595,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>cv</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>cv-qualifiers for this method, e.g., const volatile</entry></row>
 <row><entry>specifiers</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The specifiers for this function, e.g., inline, static, etc.</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
@@ -1676,7 +1666,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1745,7 +1735,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1780,7 +1770,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -1857,7 +1847,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>cv</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>cv-qualifiers for this method, e.g., const volatile</entry></row>
 <row><entry>specifiers</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>The specifiers for this function, e.g., inline, static, etc.</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
@@ -1899,11 +1889,49 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
+        </tgroup>
+      </informaltable>
+    </refsection>
+  </refentry>
+  <refentry id="boostbook.dtd.access">
+    <refmeta>
+      <refentrytitle>
+          BoostBook element <sgmltag>access</sgmltag></refentrytitle>
+      <manvolnum>9</manvolnum>
+    </refmeta>
+    <refnamediv>
+      <refname>access</refname>
+      <refpurpose>Declares an access specification for class members</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>access ::= 
+    (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)+
+  </refsynopsisdiv>
+    <refsection><title>Description</title>
+    <para>The access specifications of class members (public, private, or protected) may be determined by enclosing them in an &lt;access&gt; element.</para>
+  </refsection>
+    <refsection>
+      <title>Attributes</title>
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Type</entry>
+              <entry>Value</entry>
+              <entry>Purpose</entry>
+            </row>
+          </thead>
+          <tbody>
+  
+  <row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
+  <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the access specification, e.g. "public", "private", or "protected".</entry></row>
+  <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
+  </tbody>
         </tgroup>
       </informaltable>
     </refsection>
@@ -1919,18 +1947,18 @@
       <refpurpose>Declares a class or class template</refpurpose>
     </refnamediv>
     <refsynopsisdiv>class ::= 
-  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>*, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
+  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>*, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.access">access</link>| <link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
 </refsynopsisdiv>
     <refsection><title>Description</title>
   <para>C++ classes and class templates are described via the
-  &lt;class&gt; element. Each class has a name (e.g., &quot;any&quot;) given by
+  &lt;class&gt; element. Each class has a name (e.g., "any") given by
   the <code>name</code> attribute, a purpose given by the
   &lt;purpose&gt; element, documentation, and a set of types,
   functions, base classes, and data members. Here is a minimal
   definition of the <classname>boost::any</classname> class:</para>
 
-  <programlisting>&lt;namespace name=&quot;boost&quot;&gt;
-  &lt;class name=&quot;any&quot;&gt;
+  <programlisting>&lt;namespace name="boost"&gt;
+  &lt;class name="any"&gt;
     &lt;purpose&gt;
       A class whose instances can hold instances of any type that satisfies
       ValueType requirements.
@@ -1955,9 +1983,9 @@
   inheritance from the class <classname>std::bad_cast</classname>. It
   also defines the &lt;purpose&gt; element, which contains a short
   description of the use of the class.</para>
-    
-  <programlisting>&lt;class name=&quot;bad_any_cast&quot;&gt;
-  &lt;inherit access=&quot;public&quot;&gt;&lt;classname&gt;std::bad_cast&lt;/classname&gt;&lt;/inherit&gt;
+
+  <programlisting>&lt;class name="bad_any_cast"&gt;
+  &lt;inherit access="public"&gt;&lt;classname&gt;std::bad_cast&lt;/classname&gt;&lt;/inherit&gt;
   &lt;purpose&gt;&lt;para&gt;The exception thrown in the event of a failed
   &lt;functionname&gt;any_cast&lt;/functionname&gt; of an
   &lt;classname&gt;any&lt;/classname&gt; value.&lt;/para&gt;&lt;/purpose&gt;
@@ -1980,7 +2008,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2003,7 +2031,7 @@
   (#PCDATA)
 </refsynopsisdiv>
     <refsection><title>Description</title>
-  <para>All library category definitions should be in <filename>doc/src/boost.xml</filename>, and the names of categories must be prefixed with &quot;<code>category:</code>&quot;.</para>
+  <para>All library category definitions should be in <filename>doc/src/boost.xml</filename>, and the names of categories must be prefixed with "<code>category:</code>".</para>
 </refsection>
     <refsection>
       <title>Attributes</title>
@@ -2019,7 +2047,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2055,7 +2083,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2090,7 +2118,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2131,7 +2159,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2200,7 +2228,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2235,7 +2263,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2270,7 +2298,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2306,7 +2334,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>dirname</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry/></row>
 <row><entry>url</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry/></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
@@ -2350,7 +2378,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2385,7 +2413,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2405,7 +2433,7 @@
       <refpurpose>A specialization (full or partial) of a struct template</refpurpose>
     </refnamediv>
     <refsynopsisdiv>struct-specialization ::= 
-  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.specialization">specialization</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>?, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
+  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.specialization">specialization</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>?, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.access">access</link>| <link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
@@ -2421,7 +2449,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2441,7 +2469,7 @@
       <refpurpose>Declares a C++ struct</refpurpose>
     </refnamediv>
     <refsynopsisdiv>struct ::= 
-  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>*, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
+  (<link linkend="boostbook.dtd.template">template</link>?, <link linkend="boostbook.dtd.inherit">inherit</link>*, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?, (<link linkend="boostbook.dtd.access">access</link>| <link linkend="boostbook.dtd.static-constant">static-constant</link>| <link linkend="boostbook.dtd.typedef">typedef</link>| <link linkend="boostbook.dtd.enum">enum</link>| <link linkend="boostbook.dtd.copy-assignment">copy-assignment</link>| <link linkend="boostbook.dtd.constructor">constructor</link>| <link linkend="boostbook.dtd.destructor">destructor</link>| <link linkend="boostbook.dtd.method-group">method-group</link>| <link linkend="boostbook.dtd.free-function-group">free-function-group</link>| <link linkend="boostbook.dtd.function">function</link>| <link linkend="boostbook.dtd.method">method</link>| <link linkend="boostbook.dtd.overloaded-function">overloaded-function</link>| <link linkend="boostbook.dtd.overloaded-method">overloaded-method</link>| <link linkend="boostbook.dtd.data-member">data-member</link>| <link linkend="boostbook.dtd.class">class</link>| <link linkend="boostbook.dtd.class-specialization">class-specialization</link>| <link linkend="boostbook.dtd.struct">struct</link>| <link linkend="boostbook.dtd.struct-specialization">struct-specialization</link>| <link linkend="boostbook.dtd.union">union</link>| <link linkend="boostbook.dtd.union-specialization">union-specialization</link>)*)
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
@@ -2457,7 +2485,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2510,7 +2538,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2546,7 +2574,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2581,7 +2609,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2616,7 +2644,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2651,7 +2679,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2686,7 +2714,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2721,7 +2749,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>name</entry><entry>#REQUIRED</entry><entry>CDATA</entry><entry>The name of the element being declared to referenced</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
@@ -2757,7 +2785,7 @@
           </thead>
           <tbody>
 
-<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep &quot;last revised&quot; information in sync with CVS changes</entry></row>
+<row><entry>last-revision</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Set to $Date$ to keep "last revised" information in sync with CVS changes</entry></row>
 <row><entry>id</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>A global identifier for this element</entry></row>
 <row><entry>xml:base</entry><entry>#IMPLIED</entry><entry>CDATA</entry><entry>Implementation detail used by XIncludes</entry></row>
 </tbody>
@@ -2765,4 +2793,4 @@
       </informaltable>
     </refsection>
   </refentry>
-</chapter>
+</section>

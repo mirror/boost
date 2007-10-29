@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
    Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
-  
+
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file LICENSE_1_0.txt or copy at
    http://www.boost.org/LICENSE_1_0.txt)
@@ -21,7 +21,7 @@
   <xsl:include href="macro.xsl"/>
   <xsl:include href="testing/testsuite.xsl"/>
   <xsl:include href="caramel/concept2docbook.xsl"/>
-  
+
   <xsl:template name="namespace-synopsis">
     <xsl:param name="indentation" select="0"/>
     <!-- Open namespace-->
@@ -32,7 +32,7 @@
       <xsl:with-param name="text" select="concat('namespace ',@name)"/>
     </xsl:call-template>
     <xsl:text> {</xsl:text>
-    
+
     <!-- Emit namespace types -->
     <xsl:apply-templates select="class|class-specialization|
                                  struct|struct-specialization|
@@ -40,19 +40,19 @@
                                  typedef|enum|data-member" mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:apply-templates>
-    
+
     <!-- Emit namespace functions -->
-    <xsl:apply-templates 
-      select="free-function-group|function|overloaded-function" 
+    <xsl:apply-templates
+      select="free-function-group|function|overloaded-function"
       mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:apply-templates>
-    
+
     <!-- Emit namespaces -->
     <xsl:apply-templates select="namespace" mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:apply-templates>
-    
+
     <!-- Close namespace -->
     <xsl:text>&#10;</xsl:text>
     <xsl:call-template name="indent">
@@ -89,7 +89,7 @@
     <xsl:apply-templates select="class|class-specialization|
                                  struct|struct-specialization|
                                  union|union-specialization|enum|function|
-                                 overloaded-function|data-member" 
+                                 overloaded-function|data-member"
       mode="namespace-reference"/>
   </xsl:template>
 

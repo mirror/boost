@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
    Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
-  
+
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file LICENSE_1_0.txt or copy at
    http://www.boost.org/LICENSE_1_0.txt)
@@ -110,9 +110,9 @@
   <!-- Strip the qualifiers off a qualified name and return the unqualified
        name. For instance, "boost::python::function" would become just
        "function".
-       Must handle ns::foo                    -> foo 
-       Must handle ns::foo<bar::baz>          -> foo<bar::baz> 
-       Must handle ns::foo<bar::baz>::nested  -> nested  
+       Must handle ns::foo                    -> foo
+       Must handle ns::foo<bar::baz>          -> foo<bar::baz>
+       Must handle ns::foo<bar::baz>::nested  -> nested
        Must handle ns::foo<x>::bar<y>         -> bar<y> -->
   <xsl:template name="strip-qualifiers">
     <xsl:param name="name"/>
@@ -157,7 +157,7 @@
     <xsl:param name="depth" select="1"/>
 
     <!-- Determine the set of ancestor namespaces -->
-    <xsl:variable name="ancestors" 
+    <xsl:variable name="ancestors"
       select="ancestor::namespace|
                   ancestor::class|ancestor::struct|ancestor::union|
                   ancestor::class-specialization|ancestor::struct-specialization|ancestor::union-specialization"/>
@@ -279,16 +279,16 @@
                   $context/ancestor::*/using-class |
                   $context/ancestor::class |
                   $context/ancestor::struct"/>
-        
+
         <!-- The name of the current directive -->
         <xsl:variable name="this-context">
           <xsl:apply-templates select="$directives[$index]" mode="print-name"/>
         </xsl:variable>
-        
+
         <!-- Check if we have a match -->
-        <xsl:variable name="have-match" 
+        <xsl:variable name="have-match"
           select="$fully-qualified-name = concat($prefix, $name)"/>
-        
+
         <xsl:if test="$have-match">
           <xsl:choose>
             <xsl:when test="$mode='matches'">
@@ -306,7 +306,7 @@
             </xsl:when>
           </xsl:choose>
         </xsl:if>
-        
+
         <xsl:if test="(not($index &gt; count($directives))) and
                       (not($have-match) or ($mode = 'matches'))">
           <xsl:variable name="first-branch">
@@ -324,7 +324,7 @@
               </xsl:call-template>
             </xsl:if>
           </xsl:variable>
-          
+
           <xsl:choose>
             <xsl:when test="string($first-branch) != ''">
               <xsl:copy-of select="$first-branch"/>
@@ -338,12 +338,12 @@
                 <xsl:with-param name="node" select="$node"/>
                 <xsl:with-param name="mode" select="$mode"/>
                 <xsl:with-param name="index" select="$index + 1"/>
-                <xsl:with-param name="prefix" 
+                <xsl:with-param name="prefix"
                   select="concat($this-context, '::')"/>
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:if>        
+        </xsl:if>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -372,19 +372,19 @@
 
   <xsl:template name="cxx-link-name">
     <!-- The actual lookup node -->
-    <xsl:param name="lookup"/> 
+    <xsl:param name="lookup"/>
 
     <!-- The type of name to lookup (e.g., class) -->
-    <xsl:param name="type"/> 
+    <xsl:param name="type"/>
 
     <!-- The name we are looking for -->
-    <xsl:param name="name"/> 
+    <xsl:param name="name"/>
 
     <!-- The name we will display  -->
     <xsl:param name="display-name"/>
 
     <!-- The name we are looking for (unqualified)-->
-    <xsl:param name="unqualified-name"/> 
+    <xsl:param name="unqualified-name"/>
 
     <!-- The list of nodes that match the lookup node in both name and type -->
     <xsl:param name="nodes"/>
