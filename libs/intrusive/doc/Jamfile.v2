@@ -32,7 +32,10 @@ doxygen autodoc
                   "hashtable_impl=hashtable" \\
                   "splay_set_impl=splay_set" \\
                   "splay_multiset_impl=splay_multiset" \\
-                  "splaytree_impl=splaytree""
+                  "splaytree_impl=splaytree" \\
+                  "avl_set_impl=avl_set" \\
+                  "avl_multiset_impl=avl_multiset" \\
+                  "avltree_impl=avltree""
    ;
 
 xml intrusive : intrusive.qbk ;

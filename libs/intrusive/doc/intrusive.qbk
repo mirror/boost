@@ -928,7 +928,8 @@ one or more indices with different sorting semantics. Boost.Intrusive associativ
 containers, like most STL associative container implemenatations are based on
 red-black trees.
 
-The memory overhead of these containers is usually 3 pointers and an integer.
+The memory overhead of these containers is usually 3 pointers and a bit (with
+alignment issues, this means 3 pointers and an integer).
 This size can be reduced to 3 pointers if pointers have even alignment
 (which is usually true in most systems).
 
@@ -1259,11 +1260,11 @@ the unordered container:
 
 [endsect]
 
-[section:splay_set_multiset Intrusive splay tree-based associative containers: splay_set, splay_multiset]
+[section:splay_set_multiset Intrusive splay tree based associative containers: splay_set, splay_multiset and , splay_tree]
 
 C++ associative containers are usually based on red-black tree implementations (e.g.: STL,
-Boost.Intrusive associative containers). However, there are other interesting data structures
-that offer some advantages (and also disadvantages).
+Boost.Intrusive associative containers). However, there are other interesting data
+structures that offer some advantages (and also disadvantages).
 
 Splay trees are self-adjusting binary search trees used tipically in caches, memory
 allocators and other applications, because splay trees have a "caching effect": recently
@@ -1305,8 +1306,8 @@ performance than other balanced trees for some search patterns.
 
 [section:splay_set_multiset_hooks splay_set, splay_multiset and splaytree hooks]
 
-[classref boost::intrusive::set set],
-[classref boost::intrusive::multiset multiset] and
+[classref boost::intrusive::splay_set splay_set],
+[classref boost::intrusive::splay_multiset splay_multiset] and
 [classref boost::intrusive::splaytree splaytree]
 share the same hooks.
 
@@ -1394,6 +1395,135 @@ containers:
 [endsect]
 
 [endsect]
+
+
+[section:avl_set_multiset Intrusive avl tree based associative containers: avl_set, avl_multiset and avltree]
+
+Similar to red-black trees, AVL trees are balanced binary trees. 
+AVL trees are often compared with red-black trees because they support the same set of operations
+and because red-black trees also take O(log n) time for the basic operations. 
+AVL trees are more rigidly balanced than Red-Black trees, leading to slower insertion and
+removal but faster retrieval, so AVL trees perform better
+than red-black trees for lookup-intensive applications. 
+
+[*Boost.Intrusive] offers 3 containers based on avl trees:
+[classref boost::intrusive::avl_set avl_set],
+[classref boost::intrusive::avl_multiset avl_multiset] and
+[classref boost::intrusive::avltree avltree]. The first two are similar to
+[classref boost::intrusive::set set] or
+[classref boost::intrusive::multiset multiset] and the latter is a generalization
+that offers functions both to insert unique and multiple keys.
+
+The memory overhead of these containers with Boost.Intrusive hooks is usually 3
+pointers and 2 bits (due to alignment, this usually means 3 pointers plus an integer).
+This size can be reduced to 3 pointers if pointers have 4 byte alignment
+(which is usually true in 32 bit systems).
+
+An empty, non constant-time size [classref boost::intrusive::avl_set avl_set],
+[classref boost::intrusive::avl_multiset avl_multiset] or
+[classref boost::intrusive::avltree avltree]
+has also the size of 3 pointers and an integer (3 pointers when optimized for size).
+
+[section:avl_set_multiset_hooks avl_set, avl_multiset and avltree hooks]
+
+[classref boost::intrusive::avl_set avl_set],
+[classref boost::intrusive::avl_multiset avl_multiset] and
+[classref boost::intrusive::avltree avltree]
+share the same hooks.
+
+[c++]
+
+   template <class ...Options>
+   class avl_set_base_hook;
+
+*  [classref boost::intrusive::avl_set_base_hook avl_set_base_hook]:
+   the user class derives publicly from this class to make
+   it compatible with avl tree based containers.
+
+[c++]
+
+   template <class ...Options>
+   class avl_set_member_hook;
+
+*  [classref boost::intrusive::set_member_hook set_member_hook]:
+   the user class contains a public member of this class to make
+   it compatible with avl tree based containers.
+
+[classref boost::intrusive::avl_set_base_hook avl_set_base_hook] and
+[classref boost::intrusive::avl_set_member_hook avl_set_member_hook] receive
+the same options explained in the section
+[link intrusive.usage How to use Boost.Intrusive] plus an option to optimize
+the size of the node:
+
+*  [*`tag<class Tag>`] (for base hooks only): This argument serves as a tag,
+   so you can derive from more than one base hook.
+   Default: `tag<default_tag>`.
+
+*  [*`link_mode<link_mode_type LinkMode>`]: The linking policy.
+   Default: `link_mode<safe_link>`.
+
+*  [*`void_pointer<class VoidPointer>`]: The pointer type to be used
+   internally in the hook and propagated to the container.
+   Default: `void_pointer<void*>`.
+
+*  [*`optimize_size<bool Enable>`]: The hook will be optimized for size
+   instead of speed. The hook will embed the balance bits of the AVL
+   tree node in the parent pointer if pointer alignment is multiple of 4.
+   Optimizing the size will reduce speed performance a bit since masking
+   operations will be needed to access parent pointer and balance factor attributes.
+   Default: `optimize_size<false>`.
+
+[endsect]
+
+[section:set_multiset_containers avl_set, avl_multiset and avltree containers]
+
+[c++]
+
+   template <class T, class ...Options>
+   class avl_set;
+
+   template <class T, class ...Options>
+   class avl_multiset;
+
+   template <class T, class ...Options>
+   class avltree;
+
+These containers receive the same options explained in the section
+[link intrusive.usage How to use Boost.Intrusive]:
+
+*  [*`base_hook<class Hook>`] / [*`member_hook<class T, class Hook, Hook T::* PtrToMember>`] / 
+   [*`value_traits<class ValueTraits>`]: To specify the hook type or value traits used
+   to configure the container (to know about value traits go to the section
+   titled [link intrusive.value_traits Containers with custom ValueTraits].
+
+*  [*`constant_time_size<bool Enabled>`]: To activate the constant-time `size()` operation.
+   Default: `constant_time_size<true>`
+
+*  [*`size_type<bool Enabled>`]: To specify the type that will be used to store the size
+   of the container. Default: `size_type<std::size_t>`
+
+And they also can receive an additional option:
+
+*  [*`compare<class Compare>`]: Comparison function for the objects to be inserted
+   in containers. The comparison functor must induce a strict weak ordering.
+   Default: `compare< std::less<T> >`
+
+[endsect]
+
+[section:avl_set_multiset_example Example]
+
+Now let's see an small example using both hooks and
+[classref boost::intrusive::avl_set avl_set]/
+[classref boost::intrusive::avl_multiset avl_multiset]
+containers:
+
+[import ../example/doc_avl_set.cpp]
+[doc_avl_set_code]
+
+[endsect]
+
+[endsect]
+
 
 [section:advanced_lookups_insertions Advanced lookup and insertion functions for associative containers]
 
@@ -2056,7 +2186,7 @@ with our nodes:
 [import ../example/doc_rbtree_algorithms.cpp]
 [doc_rbtree_algorithms_code]
 
-For a complete rbtree of functions see
+For a complete list of functions see
 [classref boost::intrusive::rbtree_algorithms rbtree_algorithms reference].
 
 [endsect]
@@ -2064,7 +2194,7 @@ For a complete rbtree of functions see
 [section:splaytree_algorithms Intrusive splay tree algorithms]
 
 These algorithms are static
-members of the [classref boost::intrusive::rbtree_algorithms splaytree_algorithms] class:
+members of the [classref boost::intrusive::splaytree_algorithms splaytree_algorithms] class:
 
 [c++]
 
@@ -2074,14 +2204,14 @@ members of the [classref boost::intrusive::rbtree_algorithms splaytree_algorithm
 
 An empty tree is formed by a node whose pointer to the parent node is null,
 the pointers to the left and right nodes to itself.
-[classref boost::intrusive::splaytree_algorithms rbtree_algorithms]
+[classref boost::intrusive::splaytree_algorithms splaytree_algorithms]
 is configured with a NodeTraits class, which encapsulates 
 the information about the node to be manipulated. NodeTraits must support the
 following interface:
 
 [*Typedefs]:
 
-*  `node`: The type of the node that forms the circular rbtree
+*  `node`: The type of the node that forms the circular splaytree
 
 *  `node_ptr`: The type of a pointer to a node (usually node*)
 
@@ -2107,17 +2237,85 @@ following interface:
 *  `static void set_right(node_ptr n, node_ptr r);`:
    Sets the pointer to the right node stored in "n" to "r".
 
-*  `static color get_color(const_node_ptr n);`:
-   Returns the color stored in "n".
-
 Once we have a node traits configuration we can use [*Boost.Intrusive] algorithms
 with our nodes:
 
 [import ../example/doc_splaytree_algorithms.cpp]
 [doc_splaytree_algorithms_code]
 
-For a complete rbtree of functions see
+For a complete list of functions see
 [classref boost::intrusive::splaytree_algorithms splaytree_algorithms reference].
+
+[endsect]
+
+[section:avltree_algorithms Intrusive avl tree algorithms]
+
+[classref boost::intrusive::avltree_algorithms avltree_algorithms] have the same
+interface as [classref boost::intrusive::rbtree_algorithms rbtree_algorithms].
+
+[c++]
+
+   template<class NodeTraits>
+   struct avltree_algorithms;
+
+[classref boost::intrusive::avltree_algorithms avltree_algorithms]
+is configured with a NodeTraits class, which encapsulates 
+the information about the node to be manipulated. NodeTraits must support the
+following interface:
+
+[*Typedefs]:
+
+*  `node`: The type of the node that forms the circular avltree
+
+*  `node_ptr`: The type of a pointer to a node (usually node*)
+
+*  `const_node_ptr`: The type of a pointer to a const node (usually const node*)
+
+*  `balance`: A type that can represent 3 balance types (usually an integer)
+
+[*Static functions]:
+
+*  `static node_ptr get_parent(const_node_ptr n);`:
+   Returns a pointer to the parent node stored in "n".
+
+*  `static void set_parent(node_ptr n, node_ptr p);`:
+   Sets the pointer to the parent node stored in "n" to "p".
+
+*  `static node_ptr get_left(const_node_ptr n);`:
+   Returns a pointer to the left node stored in "n".
+
+*  `static void set_left(node_ptr n, node_ptr l);`:
+   Sets the pointer to the left node stored in "n" to "l".
+
+*  `static node_ptr get_right(const_node_ptr n);`:
+   Returns a pointer to the right node stored in "n".
+
+*  `static void set_right(node_ptr n, node_ptr r);`:
+   Sets the pointer to the right node stored in "n" to "r".
+
+*  `static balance get_balance(const_node_ptr n);`:
+   Returns the balance factor stored in "n".
+
+*  `static void set_balance(node_ptr n, balance b);`:
+   Sets the balance factor stored in "n" to "b".
+
+*  `static balance negative();`:
+   Returns a value representing a negative balance factor.
+
+*  `static balance zero();`:
+   Returns a value representing a zero balance factor.
+
+*  `static balance positive();`:
+   Returns a value representing a positive balance factor.
+
+Once we have a node traits configuration we can use [*Boost.Intrusive] algorithms
+with our nodes:
+
+[import ../example/doc_avltree_algorithms.cpp]
+[doc_avltree_algorithms_code]
+
+For a complete list of functions see
+[classref boost::intrusive::avltree_algorithms avltree_algorithms reference].
 
 [endsect]
 
@@ -2976,8 +3174,12 @@ helpful discussions.
    [*Tom Brinkman] and [*Steven Watanabe]
    for their comments and reviews in the Boost.Intrusive formal review.
 
-*  Thanks to of Julienne Walker  and The EC Team ([@http://eternallyconfuzzled.com]) for their
-   great algorithms.
+*  Thanks to of [*Julienne Walker] and [*The EC Team] ([@http://eternallyconfuzzled.com])
+   for their great algorithms.
+
+*  Thanks to [*Daniel K. O.] for his AVL tree rebalancing code.
+
+*  Thanks to [*Ralf Mattethat] for his splay tree article and code.
 
 *  Special thanks to [*Steven Watanabe] and [*Tobias Schwinger] for their
    invaluable suggestions and improvements.
