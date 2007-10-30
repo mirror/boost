@@ -2,7 +2,7 @@
 #define BOOST_DETAIL_SP_COUNTED_BASE_ACC_IA64_HPP_INCLUDED
 
 //
-//  detail/sp_counted_base_gcc_ia64.hpp - aC++ on HP-UX IA64
+//  detail/sp_counted_base_acc_ia64.hpp - aC++ on HP-UX IA64
 //
 //  Copyright 2007 Baruch Zilber
 //  Copyright 2007 Boris Gubenko
