@@ -195,6 +195,50 @@ template
    >
 class splay_set_member_hook;
 
+//avltree/avl_set/avl_multiset
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class avltree;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class avl_set;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class avl_multiset;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class avl_set_base_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class avl_set_member_hook;
+
 //hash/unordered
 //rbtree/set/multiset
 template

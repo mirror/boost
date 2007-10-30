@@ -693,8 +693,7 @@ class tree_algorithms
    {
       node_ptr end = uncast(header);
       node_ptr y = lower_bound(header, key, comp);
-      node_ptr r = (y == end || comp(key, y)) ? end : y;
-      return r;
+      return (y == end || comp(key, y)) ? end : y;
    }
 
    //! <b>Requires</b>: "header" must be the header node of a tree.
@@ -1243,16 +1242,39 @@ class tree_algorithms
 
    // delete node                        | complexity : constant        | exception : nothrow
    static void erase(node_ptr header, node_ptr z)
-   {  erase(header, z, nop_erase_fixup());  }
+   {
+      data_for_rebalance ignored;
+      erase(header, z, nop_erase_fixup(), ignored);
+   }
 
    struct data_for_rebalance
    {
       node_ptr x;
       node_ptr x_parent;
+      node_ptr y;
    };
 
    template<class F>
-   static void erase(node_ptr header, node_ptr z, F z_and_successor_fixup, data_for_rebalance * info = 0)
+   static void erase(node_ptr header, node_ptr z, F z_and_successor_fixup, data_for_rebalance &info)
+   {
+      erase_impl(header, z, info);
+      if(info.y != z){
+         z_and_successor_fixup(z, info.y);
+      }
+   }
+
+   static void unlink(node_ptr node)
+   {
+      node_ptr x = NodeTraits::get_parent(node);
+      if(x){
+         while(!is_header(x))
+            x = NodeTraits::get_parent(x);
+         erase(x, node);
+      }
+   }
+
+   private:
+   static void erase_impl(node_ptr header, node_ptr z, data_for_rebalance &info)
    {
       node_ptr y(z);
       node_ptr x;
@@ -1287,7 +1309,6 @@ class tree_algorithms
             x_parent = y;
          tree_algorithms::replace_own (z, y, header);
          NodeTraits::set_parent(y, NodeTraits::get_parent(z));
-         z_and_successor_fixup(z, y);
       }
       else {   // y == z --> z has only one child, or none
          x_parent = NodeTraits::get_parent(z);
@@ -1305,22 +1326,12 @@ class tree_algorithms
                               tree_algorithms::maximum(x));
          }
       }
-      
-      if(info){
-         info->x = x;
-         info->x_parent = x_parent;
-      }
+
+      info.x = x;
+      info.x_parent = x_parent;
+      info.y = y;
    }
 
-   static void unlink(node_ptr node)
-   {
-      node_ptr x = NodeTraits::get_parent(node);
-      if(x){
-         while(!is_header(x))
-            x = NodeTraits::get_parent(x);
-         erase(x, node);
-      }
-   }
 };
 
 }  //namespace detail {

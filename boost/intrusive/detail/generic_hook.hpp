@@ -33,6 +33,7 @@ enum
 ,  SetBaseHook
 ,  UsetBaseHook
 ,  SplaySetBaseHook
+,  AvlSetBaseHook
 };
 
 struct no_default_definer{};
@@ -53,12 +54,16 @@ struct default_definer<Hook, SetBaseHook>
 {  typedef Hook default_set_hook;  };
 
 template <class Hook>
+struct default_definer<Hook, UsetBaseHook>
+{  typedef Hook default_uset_hook;  };
+
+template <class Hook>
 struct default_definer<Hook, SplaySetBaseHook>
 {  typedef Hook default_splay_set_hook;  };
 
 template <class Hook>
-struct default_definer<Hook, UsetBaseHook>
-{  typedef Hook default_uset_hook;  };
+struct default_definer<Hook, AvlSetBaseHook>
+{  typedef Hook default_avl_set_hook;  };
 
 template <class Hook, unsigned int BaseHookType>
 struct make_default_definer
