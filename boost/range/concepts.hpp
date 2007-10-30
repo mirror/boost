@@ -76,8 +76,8 @@ namespace boost {
         }
         void const_constraints(const T& a)
         {
-            ci = boost::begin(a);
-            ci = boost::end(a);
+            //ci = boost::begin(a);
+            //ci = boost::end(a);
         }
         T a;
         range_iterator i;
@@ -121,8 +121,8 @@ namespace boost {
             }
         void const_constraints(const T& a)
         {
-            ci = boost::rbegin(a);
-            ci = boost::rend(a);
+            //ci = boost::rbegin(a);
+            //ci = boost::rend(a);
         }
         T a;
         range_reverse_iterator i;
