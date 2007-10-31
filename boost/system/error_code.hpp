@@ -171,9 +171,11 @@ namespace boost
     static const error_category &  system_category = get_system_category();
     static const error_category &  posix_category = get_posix_category();
     
+# ifndef BOOST_SYSTEM_NO_DEPRECATED
     //  deprecated synonyms
     static const error_category &  errno_ecat  = get_posix_category();
     static const error_category &  native_ecat = get_system_category();
+# endif
 
     //  class error_condition  -----------------------------------------------//
 
