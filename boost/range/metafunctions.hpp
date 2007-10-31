@@ -16,7 +16,10 @@
 #endif
 
 #include <boost/range/iterator.hpp>
+#include <boost/range/result_iterator.hpp>
 #include <boost/range/reverse_iterator.hpp>
+#include <boost/range/const_reverse_iterator.hpp>
+#include <boost/range/reverse_result_iterator.hpp>
 #include <boost/range/value_type.hpp>
 #include <boost/range/size_type.hpp>
 #include <boost/range/difference_type.hpp>
