@@ -61,7 +61,7 @@ user code is to monitor the discussions on the Boost developers list.
 
 [section Using the configure script]
 
-[note
+[important
 This configure script only sets up the Boost headers for use with a particular
 compiler. It has no effect on Boost.Build, or how the libraries are built.
 ]
