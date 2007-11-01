@@ -8,7 +8,7 @@
 
 #include <cstddef>
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || (!defined(_AIX) && defined(__IBMCPP__)  && (__IBMCPP__ >= 800)) 
 #if !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
 #endif
