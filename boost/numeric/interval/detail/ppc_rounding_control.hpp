@@ -51,10 +51,14 @@ struct ppc_rounding_control
 
 } // namespace detail
 
+// Do not declare the following C99 symbols if <math.h> provides them.
+// Otherwise, conflicts may occur, due to differences between prototypes.
+#if !defined(_ISOC99_SOURCE) && !defined(__USE_ISOC99)
 extern "C" {
   float rintf(float);
   double rint(double);
 }
+#endif
 
 template<>
 struct rounding_control<float>:
