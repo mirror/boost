@@ -704,16 +704,16 @@ void test_relops( T const* )
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
-  T v0(18);
-  T v1(19);
-  T v2(19);
+  T v0(0);
+  T v1(1);
+  T v2(1);
 
   optional<T> def0 ;
   optional<T> def1 ;
   optional<T> opt0(v0);
   optional<T> opt1(v1);
   optional<T> opt2(v2);
-
+  
   // Check identity
   BOOST_CHECK ( def0 == def0 ) ;
   BOOST_CHECK ( opt0 == opt0 ) ;
@@ -751,6 +751,33 @@ void test_relops( T const* )
   BOOST_CHECK ( opt1 >  opt0 ) ;
   BOOST_CHECK ( opt1 <= opt2 ) ;
   BOOST_CHECK ( opt1 >= opt0 ) ;
+  
+  // Compare against a value directly
+  BOOST_CHECK ( opt0 == v0 ) ;
+  BOOST_CHECK ( opt0 != v1 ) ;
+  BOOST_CHECK ( opt1 == v2 ) ;
+  BOOST_CHECK ( opt0 <  v1 ) ;
+  BOOST_CHECK ( opt1 >  v0 ) ;
+  BOOST_CHECK ( opt1 <= v2 ) ;
+  BOOST_CHECK ( opt1 >= v0 ) ;
+  BOOST_CHECK ( v0 != opt1 ) ;
+  BOOST_CHECK ( v1 == opt2 ) ;
+  BOOST_CHECK ( v0 <  opt1 ) ;
+  BOOST_CHECK ( v1 >  opt0 ) ;
+  BOOST_CHECK ( v1 <= opt2 ) ;
+  BOOST_CHECK ( v1 >= opt0 ) ;
+  BOOST_CHECK (   def0 != v0  ) ;
+  BOOST_CHECK ( !(def0 == v0) ) ;
+  BOOST_CHECK (   def0 <  v0  ) ;
+  BOOST_CHECK ( !(def0 >  v0) ) ;
+  BOOST_CHECK (   def0 <= v0  ) ;
+  BOOST_CHECK ( !(def0 >= v0) ) ;
+  BOOST_CHECK (   v0 != def0  ) ;
+  BOOST_CHECK ( !(v0 == def0) ) ;
+  BOOST_CHECK ( !(v0 <  def0) ) ;
+  BOOST_CHECK (   v0 >  def0  ) ;
+  BOOST_CHECK ( !(v0 <= def0) ) ;
+  BOOST_CHECK (   v0 >= opt0  ) ;
 }
 
 template<class T>
@@ -767,11 +794,33 @@ void test_none( T const* )
   BOOST_CHECK ( def0    == none ) ;
   BOOST_CHECK ( non_def != none ) ;
   BOOST_CHECK ( !def1           ) ;
+  BOOST_CHECK ( !(non_def <  none) ) ; 
+  BOOST_CHECK (   non_def >  none  ) ;
+  BOOST_CHECK ( !(non_def <= none) ) ;
+  BOOST_CHECK (   non_def >= none  ) ;
 
   non_def = none ;
   BOOST_CHECK ( !non_def ) ;
 
   test_default_implicit_construction(T(1),none);
+}
+
+template<class T>
+void test_arrow( T const* )
+{
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
+  T a(1234);
+
+  optional<T>        oa(a) ;
+  optional<T> const coa(a) ;
+  
+  BOOST_CHECK ( coa->V() == 1234 ) ;
+  
+  oa->V() = 4321 ;
+  
+  BOOST_CHECK (     a.V() = 1234 ) ;
+  BOOST_CHECK ( (*oa).V() = 4321 ) ;
 }
 
 void test_with_builtin_types()
@@ -804,6 +853,7 @@ void test_with_class_type()
   test_throwing_swap( ARG(X) );
   test_relops( ARG(X) ) ;
   test_none( ARG(X) ) ;
+  test_arrow( ARG(X) ) ;
   BOOST_CHECK ( X::count == 0 ) ;
 }
 
