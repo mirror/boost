@@ -331,9 +331,9 @@ class optional
 
     template&lt;class U&gt; explicit optional ( optional&lt;U&gt; const&amp; rhs ) ;
 
-    template&lt;class InPlaceFactory&gt; explicit optional ( InPlaceFactory const&amp; f ) ;
+    template&lt;InPlaceFactory&gt; explicit optional ( InPlaceFactory const&amp; f ) ;
 
-    template&lt;class TypedInPlaceFactory&gt; explicit optional ( TypedInPlaceFactory const&amp; f ) ;
+    template&lt;TypedInPlaceFactory&gt; explicit optional ( TypedInPlaceFactory const&amp; f ) ;
 
     optional&amp; operator = ( none_t ) ;
 
@@ -343,9 +343,9 @@ class optional
 
     template&lt;class U&gt; optional&amp; operator = ( optional&lt;U&gt; const&amp rhs ) ;
 
-    template&lt;class InPlaceFactory&gt; optional&amp; operator = ( InPlaceFactory const&amp f ) ;
+    template&lt;InPlaceFactory&gt; optional&amp; operator = ( InPlaceFactory const&amp f ) ;
 
-    template&lt;class TypedInPlaceFactory&gt; optional&amp; operator = ( TypedInPlaceFactory const&amp f ) ;
+    template&lt;TypedInPlaceFactory&gt; optional&amp; operator = ( TypedInPlaceFactory const&amp f ) ;
 
     T const& get() const ;
     T&       get() ;
