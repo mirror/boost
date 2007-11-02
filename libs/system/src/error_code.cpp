@@ -345,6 +345,7 @@ namespace
 //Chris
   std::string system_error_category::message( int ev ) const
   {
+# ifndef BOOST_NO_ANSI_APIS  
     LPVOID lpMsgBuf;
     ::FormatMessageA( 
         FORMAT_MESSAGE_ALLOCATE_BUFFER | 
@@ -359,6 +360,27 @@ namespace
     );
     std::string str( static_cast<LPCSTR>(lpMsgBuf) );
     ::LocalFree( lpMsgBuf ); // free the buffer
+# else  // WinCE workaround
+    LPVOID lpMsgBuf;
+    ::FormatMessageW( 
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+        FORMAT_MESSAGE_FROM_SYSTEM | 
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        ev,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        (LPWSTR) &lpMsgBuf,
+        0,
+        NULL 
+    );
+    
+    int num_chars = (wcslen( static_cast<LPCWSTR>(lpMsgBuf) ) + 1) * 2;
+    LPSTR narrow_buffer = (LPSTR)_alloca( num_chars );
+    ::WideCharToMultiByte(CP_ACP, 0, static_cast<LPCWSTR>(lpMsgBuf), -1, narrow_buffer, num_chars, NULL, NULL);
+
+    std::string str( narrow_buffer );
+    ::LocalFree( lpMsgBuf ); // free the buffer
+# endif
     while ( str.size()
       && (str[str.size()-1] == '\n' || str[str.size()-1] == '\r') )
         str.erase( str.size()-1 );
