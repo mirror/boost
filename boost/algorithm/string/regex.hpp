@@ -634,6 +634,12 @@ namespace boost {
     using algorithm::find_all_regex;
     using algorithm::split_regex;
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    using algorithm::join_if;
+#else  // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    using algorithm::join_if_regex;
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
 } // namespace boost
 
 
