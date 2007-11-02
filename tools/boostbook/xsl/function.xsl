@@ -995,12 +995,13 @@
     <xsl:call-template name="function.documentation">
       <xsl:with-param name="text">
         <para>
-          <xsl:attribute name="id">
-            <xsl:call-template name="generate.id"/>
-          </xsl:attribute>
-
           <xsl:call-template name="preformatted">
             <xsl:with-param name="text">
+              <xsl:call-template name="anchor">
+                <xsl:with-param name="to">
+                  <xsl:call-template name="generate.id"/>
+                </xsl:with-param>
+              </xsl:call-template>
               <xsl:for-each select="signature">
                 <xsl:call-template name="function">
                   <xsl:with-param name="indentation" select="0"/>
