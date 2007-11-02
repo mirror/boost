@@ -82,14 +82,14 @@
 
   <!-- Emit namespace reference -->
   <xsl:template match="namespace" mode="reference">
-    <xsl:apply-templates select="namespace|typedef|free-function-group"
+    <xsl:apply-templates select="namespace|free-function-group"
       mode="reference">
       <xsl:with-param name="indentation" select="0"/>
     </xsl:apply-templates>
     <xsl:apply-templates select="class|class-specialization|
                                  struct|struct-specialization|
                                  union|union-specialization|enum|function|
-                                 overloaded-function|data-member"
+                                 overloaded-function|data-member|typedef"
       mode="namespace-reference"/>
   </xsl:template>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
    Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
+   Copyright (c) 2007 Frank Mori Hess <fmhess@users.sourceforge.net>
 
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file LICENSE_1_0.txt or copy at
@@ -379,7 +380,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
   </xsl:template>
 
   <!-- Emit a typedef reference entry -->
-  <xsl:template match="typedef" mode="reference">
+  <xsl:template match="typedef" mode="namespace-reference">
     <!-- True if this typedef was compacted -->
     <xsl:variable name="compact"
       select="not (para|description) and ($boost.compact.typedef='1')"/>
@@ -409,6 +410,26 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:apply-templates select="description"/>
         </xsl:with-param>
       </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="typedef" mode="reference">
+    <!-- True if this typedef was compacted -->
+    <xsl:variable name="compact"
+      select="not (para|description) and ($boost.compact.typedef='1')"/>
+
+    <xsl:if test="not ($compact)">
+      <listitem>
+        <para>
+          <xsl:call-template name="type.typedef.display.aligned">
+            <xsl:with-param name="compact" select="false()"/>
+            <xsl:with-param name="indentation" select="0"/>
+            <xsl:with-param name="is-reference" select="true()"/>
+            <xsl:with-param name="link-type" select="'anchor'"/>
+          </xsl:call-template>
+        </para>
+        <xsl:apply-templates select="description"/>
+      </listitem>
     </xsl:if>
   </xsl:template>
 
@@ -698,9 +719,26 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:call-template name="indent">
         <xsl:with-param name="indentation" select="$indentation + 2"/>
       </xsl:call-template>
-      <xsl:call-template name="highlight-comment">
-        <xsl:with-param name="text" select="'// types'"/>
-      </xsl:call-template>
+      <emphasis>
+        <xsl:text>// </xsl:text>
+        <!-- True if there are any non-compacted typedefs -->
+        <xsl:variable name="have-typedef-references"
+          select="typedef and ((typedef/para|typedef/description) or ($boost.compact.typedef='0'))"/>
+        <xsl:choose>
+          <xsl:when test="$have-typedef-references">
+            <xsl:call-template name="internal-link">
+              <xsl:with-param name="to">
+                <xsl:call-template name="generate.id"/>
+                <xsl:text>types</xsl:text>
+              </xsl:with-param>
+              <xsl:with-param name="text" select="'types'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>types</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </emphasis>
 
       <xsl:variable name="max-type-length">
         <xsl:call-template name="find-max-type-length"/>
@@ -863,7 +901,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:if test="contains(local-name(.), 'class')">
       <xsl:if test="count(static-constant|typedef|enum|
         copy-assignment|constructor|destructor|method-group|
-        function|method|overloaded-method|data-member|
+        method|overloaded-method|data-member|
         class|class-specialization|
         struct|struct-specialization|
         union|union-specialization) &gt; 0">
@@ -900,7 +938,42 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template name="member-typedefs-reference">
+    <!-- True if there are any non-compacted typedefs -->
+    <xsl:variable name="have-typedef-references"
+      select="typedef and ((typedef/para|typedef/description) or ($boost.compact.typedef='0'))"/>
+    <xsl:if test="$have-typedef-references">
+      <xsl:call-template name="member-documentation">
+        <xsl:with-param name="name">
+          <xsl:call-template name="anchor">
+            <xsl:with-param name="to">
+              <xsl:call-template name="generate.id"/>
+              <xsl:text>types</xsl:text>
+            </xsl:with-param>
+            <xsl:with-param name="text" select="''"/>
+          </xsl:call-template>
+          <xsl:call-template name="monospaced">
+            <xsl:with-param name="text">
+              <xsl:call-template name="object-name"/>
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:text> </xsl:text>
+          <xsl:call-template name="access-name"/>
+          <xsl:text> types</xsl:text>
+        </xsl:with-param>
+        <xsl:with-param name="text">
+          <orderedlist>
+            <xsl:apply-templates select="typedef" mode="reference"/>
+          </orderedlist>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+ </xsl:template>
+
   <xsl:template name="class-members-reference">
+
+    <xsl:call-template name="member-typedefs-reference"/>
+
     <xsl:call-template name="construct-copy-destruct-reference"/>
 
     <xsl:apply-templates
