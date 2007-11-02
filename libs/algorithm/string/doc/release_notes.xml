@@ -8,6 +8,10 @@
 -->
 
 <section id="string_algo.release_notes" last-revision="$Date$">
+
+    <using-namespace name="boost"/>
+    <using-namespace name="boost::algorithm"/>
+
     <title>Release Notes</title>
 
     <itemizedlist>
@@ -18,6 +22,24 @@
         <listitem>
             <para><emphasis role="bold">1.33</emphasis></para>
             <para>Internal version of collection traits removed, library adapted to Boost.Range</para>
+        </listitem>
+        <listitem>
+            <para><emphasis role="bold">1.34</emphasis></para>
+            <itemizedlist>
+                <listitem>
+                    <functionname>lexicographical_compare()</functionname>
+                </listitem>
+                <listitem>
+                    <functionname>join()</functionname> and <functionname>join_if()</functionname> 
+                </listitem>
+                <listitem>
+                    New comparison predicates <code>is_less</code>, <code>is_not_greater</code>
+                </listitem>
+                <listitem>
+                     Negative indexes support (like Perl) in various algorihtms
+                     (<code>*_head/tail</code>, <code>*_nth</code>).
+                </listitem>                                      
+            </itemizedlist>
         </listitem>
     </itemizedlist>
 </section>

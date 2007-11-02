@@ -31,6 +31,7 @@ doxygen autodoc
     [ glob ../../../../boost/algorithm/string/trim.hpp ]
     [ glob ../../../../boost/algorithm/string/predicate.hpp ]
     [ glob ../../../../boost/algorithm/string/split.hpp ]
+    [ glob ../../../../boost/algorithm/string/iter_find.hpp ]
     [ glob ../../../../boost/algorithm/string/erase.hpp ]
     [ glob ../../../../boost/algorithm/string/join.hpp ]
     [ glob ../../../../boost/algorithm/string/replace.hpp ]

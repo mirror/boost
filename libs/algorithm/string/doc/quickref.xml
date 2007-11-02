@@ -151,7 +151,7 @@
                     </row>
                     <row>
                         <entry><code>lexicographical_compare</code></entry>
-                        <entry>Check if a string is lexicographicaly less then another one</entry>
+                        <entry>Check if a string is lexicographically less then another one</entry>
                         <entry>
                             <functionname>lexicographical_compare()</functionname>
                             <sbr/>
@@ -434,7 +434,7 @@
                             <functionname>find_all_regex()</functionname>
                         </entry>
                     </row>
-                        <row>
+                    <row>
                         <entry>split</entry>
                         <entry>Split input into parts</entry>
                         <entry>
@@ -442,7 +442,21 @@
                             <sbr/>
                             <functionname>split_regex()</functionname>
                         </entry>
-                   </row>
+					</row>
+					<row>
+						<entry>iter_find</entry>
+						<entry>Iteratively apply the finder to the input to find all matching substrings</entry>
+						<entry>
+							<functionname>iter_find()</functionname>
+						</entry>
+					</row>
+					<row>
+						<entry>iter_split</entry>
+						<entry>Use the finder to find matching substrings in the input and use them as separators to split the input into parts</entry>
+						<entry>
+							<functionname>iter_split()</functionname>
+						</entry>
+					</row>
                 </tbody>
             </tgroup>
         </table>
