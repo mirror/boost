@@ -2067,7 +2067,7 @@ boostbook standalone
 
 [section:ref Quick Reference]
 
-[cpp]
+[c++]
 
 [template ordered_list_sample[]
 [pre'''
