@@ -88,7 +88,7 @@ namespace
      || (defined(__osf__) && !defined(_REENTRANT))\
      || (defined(__vms))
       const char * c_str = std::strerror( ev );
-      return std::string( c_str ? c_str : "invalid_argument" );
+      return std::string( c_str ? c_str : "Unknown error" );
   # else
       char buf[64];
       char * bp = buf;
@@ -96,7 +96,7 @@ namespace
   #  if defined(__CYGWIN__) || defined(__USE_GNU)
       // Oddball version of strerror_r
       const char * c_str = strerror_r( ev, bp, sz );
-      return std::string( c_str ? c_str : "invalid_argument" );
+      return std::string( c_str ? c_str : "Unknown error" );
   #  else
       // POSIX version of strerror_r
       int result;
@@ -107,7 +107,7 @@ namespace
   #  if defined (__sgi)
         const char * c_str = strerror( ev );
         result = 0;
-        return std::string( c_str ? c_str : "invalid_argument" );
+        return std::string( c_str ? c_str : "Unknown error" );
   #  else
         result = strerror_r( ev, bp, sz );
   #  endif
@@ -128,7 +128,7 @@ namespace
       }
       try
       {
-      std::string msg( ( result == invalid_argument ) ? "invalid_argument" : bp );
+      std::string msg( ( result == invalid_argument ) ? "Unknown error" : bp );
       if ( sz > sizeof(buf) ) std::free( bp );
         sz = 0;
       return msg;
@@ -347,7 +347,7 @@ namespace
   {
 # ifndef BOOST_NO_ANSI_APIS  
     LPVOID lpMsgBuf;
-    ::FormatMessageA( 
+    DWORD retval = ::FormatMessageA( 
         FORMAT_MESSAGE_ALLOCATE_BUFFER | 
         FORMAT_MESSAGE_FROM_SYSTEM | 
         FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -358,11 +358,14 @@ namespace
         0,
         NULL 
     );
+    if (retval == 0)
+        return std::string("Unknown error");
+        
     std::string str( static_cast<LPCSTR>(lpMsgBuf) );
     ::LocalFree( lpMsgBuf ); // free the buffer
 # else  // WinCE workaround
     LPVOID lpMsgBuf;
-    ::FormatMessageW( 
+    DWORD retval = ::FormatMessageW( 
         FORMAT_MESSAGE_ALLOCATE_BUFFER | 
         FORMAT_MESSAGE_FROM_SYSTEM | 
         FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -373,10 +376,13 @@ namespace
         0,
         NULL 
     );
+    if (retval == 0)
+        return std::string("Unknown error");
     
     int num_chars = (wcslen( static_cast<LPCWSTR>(lpMsgBuf) ) + 1) * 2;
     LPSTR narrow_buffer = (LPSTR)_alloca( num_chars );
-    ::WideCharToMultiByte(CP_ACP, 0, static_cast<LPCWSTR>(lpMsgBuf), -1, narrow_buffer, num_chars, NULL, NULL);
+    if (::WideCharToMultiByte(CP_ACP, 0, static_cast<LPCWSTR>(lpMsgBuf), -1, narrow_buffer, num_chars, NULL, NULL) == 0)
+        return std::string("Unknown error");
 
     std::string str( narrow_buffer );
     ::LocalFree( lpMsgBuf ); // free the buffer

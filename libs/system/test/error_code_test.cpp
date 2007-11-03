@@ -144,6 +144,19 @@ int test_main( int, char ** )
   BOOST_CHECK( system_category == native_ecat );
   BOOST_CHECK( posix_category == errno_ecat );
 
+  // test error_code and error_condition message(),
+  // see Boost.Filesystem operations_test for code specific message() tests
+  ec = error_code( -1, system_category );
+  BOOST_CHECK( ec.message() == "Unknown error" );
+  ec = error_code( BOOST_ACCESS_ERROR_MACRO, system_category );
+  BOOST_CHECK( ec.message() != "" );
+  BOOST_CHECK( ec.message() != "Unknown error" );
+  dec = error_condition( -1, posix_category );
+  BOOST_CHECK( dec.message() == "Unknown error" );
+  dec = error_condition( BOOST_ACCESS_ERROR_MACRO, posix_category );
+  BOOST_CHECK( dec.message() != "" );
+  BOOST_CHECK( dec.message() != "Unknown error" );
+
 #ifdef BOOST_WINDOWS_API
   std::cout << "Windows tests...\n";
   // these tests probe the Windows posix decoder
