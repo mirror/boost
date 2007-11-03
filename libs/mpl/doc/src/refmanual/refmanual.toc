@@ -12,6 +12,7 @@ Algorithms/Inserters
 Algorithms/Iteration Algorithms
 Algorithms/Querying Algorithms
 Algorithms/Transformation Algorithms
+Algorithms/Runtime Algorithms
 Metafunctions
 Metafunctions/Concepts
 Metafunctions/Type Selection

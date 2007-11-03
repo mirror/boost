@@ -2,6 +2,8 @@
 compile aux_/largest_int.cpp ;
 compile aux_/msvc_is_class.cpp ;
 compile aux_/template_arity.cpp ;
+compile aux_/preprocessor/is_seq.cpp ;
+compile aux_/preprocessor/token_equal.cpp ;
 
 compile advance.cpp ;
 compile always.cpp ;
@@ -42,7 +44,7 @@ compile inherit.cpp ;
 compile insert.cpp ;
 compile insert_range.cpp ;
 run int.cpp ;
-run integral_c.cpp ;
+run integral_c.cpp : : : <toolset>vacpp:<cxxflags>-qchars=signed ;
 compile is_placeholder.cpp ;
 compile is_sequence.cpp ;
 compile iterator_tags.cpp ;

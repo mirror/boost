@@ -3,295 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Zip Iterator</title>
 <meta name="author" content="David Abrahams, Thomas Becker" />
 <meta name="organization" content="Boost Consulting, Zephyr Associates, Inc." />
-<meta name="date" content="2004-11-01" />
+<meta name="date" content="2006-09-11" />
 <meta name="copyright" content="Copyright David Abrahams and Thomas Becker 2003." />
-<style type="text/css">
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date$
-:Revision: $Revision$
-:Copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-
-See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
-customize this style sheet.
-*/
-
-/* used to remove borders from tables and images */
-.borderless, table.borderless td, table.borderless th {
-  border: 0 }
-
-table.borderless td, table.borderless th {
-  /* Override padding for "table.docutils td" with "! important".
-     The right padding separates the table cells. */
-  padding: 0 0.5em 0 0 ! important }
-
-.first {
-  /* Override more specific margin styles with "! important". */
-  margin-top: 0 ! important }
-
-.last, .with-subtitle {
-  margin-bottom: 0 ! important }
-
-.hidden {
-  display: none }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-blockquote.epigraph {
-  margin: 2em 5em ; }
-
-dl.docutils dd {
-  margin-bottom: 0.5em }
-
-/* Uncomment (and remove this text!) to get bold-faced definition list terms
-dl.docutils dt {
-  font-weight: bold }
-*/
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.admonition, div.attention, div.caution, div.danger, div.error,
-div.hint, div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.admonition p.admonition-title, div.hint p.admonition-title,
-div.important p.admonition-title, div.note p.admonition-title,
-div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-/* Uncomment (and remove this text!) to get reduced vertical space in
-   compound paragraphs.
-div.compound .compound-first, div.compound .compound-middle {
-  margin-bottom: 0.5em }
-
-div.compound .compound-last, div.compound .compound-middle {
-  margin-top: 0.5em }
-*/
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em ;
-  margin-right: 2em }
-
-div.footer, div.header {
-  clear: both;
-  font-size: smaller }
-
-div.line-block {
-  display: block ;
-  margin-top: 1em ;
-  margin-bottom: 1em }
-
-div.line-block div.line-block {
-  margin-top: 0 ;
-  margin-bottom: 0 ;
-  margin-left: 1.5em }
-
-div.sidebar {
-  margin-left: 1em ;
-  border: medium outset ;
-  padding: 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
-
-div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
-  margin-top: 0.4em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr.docutils {
-  width: 75% }
-
-img.align-left {
-  clear: left }
-
-img.align-right {
-  clear: right }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.attribution {
-  text-align: right ;
-  margin-left: 50% }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
-
-p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
-
-p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option {
-  white-space: nowrap }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-span.section-subtitle {
-  /* font-size relative to parent (h1..h6 element) */
-  font-size: 80% }
-
-table.citation {
-  border-left: solid 1px gray;
-  margin-left: 1px }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.docutils {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.footnote {
-  border-left: solid 1px black;
-  margin-left: 1px }
-
-table.docutils td, table.docutils th,
-table.docinfo td, table.docinfo th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap ;
-  padding-left: 0 }
-
-h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
-  font-size: 100% }
-
-tt.docutils {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
-</style>
+<link rel="stylesheet" href="../../../rst.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="zip-iterator">
@@ -303,11 +21,11 @@ ul.auto-toc {
 <tr><th class="docinfo-name">Author:</th>
 <td>David Abrahams, Thomas Becker</td></tr>
 <tr><th class="docinfo-name">Contact:</th>
-<td><a class="first reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="last reference" href="mailto:thomas&#64;styleadvisor.com">thomas&#64;styleadvisor.com</a></td></tr>
+<td><a class="first reference external" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="last reference external" href="mailto:thomas&#64;styleadvisor.com">thomas&#64;styleadvisor.com</a></td></tr>
 <tr><th class="docinfo-name">Organization:</th>
-<td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, <a class="last reference" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td></tr>
+<td><a class="first reference external" href="http://www.boost-consulting.com">Boost Consulting</a>, <a class="last reference external" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2004-11-01</td></tr>
+<td>2006-09-11</td></tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright David Abrahams and Thomas Becker 2003.</td></tr>
 </tbody>
@@ -331,18 +49,18 @@ the results of dereferencing the individual iterators.</td>
 </tr>
 </tbody>
 </table>
-<div class="contents topic">
-<p class="topic-title first"><a id="table-of-contents" name="table-of-contents">Table of Contents</a></p>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference" href="#zip-iterator-synopsis" id="id1" name="id1"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> synopsis</a></li>
-<li><a class="reference" href="#zip-iterator-requirements" id="id2" name="id2"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#zip-iterator-models" id="id3" name="id3"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#zip-iterator-operations" id="id4" name="id4"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> operations</a></li>
-<li><a class="reference" href="#examples" id="id5" name="id5">Examples</a></li>
+<li><a class="reference internal" href="#zip-iterator-synopsis" id="id1"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> synopsis</a></li>
+<li><a class="reference internal" href="#zip-iterator-requirements" id="id2"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> requirements</a></li>
+<li><a class="reference internal" href="#zip-iterator-models" id="id3"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> models</a></li>
+<li><a class="reference internal" href="#zip-iterator-operations" id="id4"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> operations</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
 </ul>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id1" id="zip-iterator-synopsis" name="zip-iterator-synopsis"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> synopsis</a></h1>
+<div class="section" id="zip-iterator-synopsis">
+<h1><a class="toc-backref" href="#id1"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> synopsis</a></h1>
 <!-- Copyright David Abrahams 2006. Distributed under the Boost -->
 <!-- Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -392,12 +110,12 @@ iterators, then <tt class="docutils literal"><span class="pre">iterator_category
 <tt class="docutils literal"><span class="pre">iterator_category</span></tt> will be convertible to <tt class="docutils literal"><span class="pre">boost::bidirectional_traversal_tag</span></tt>,
 but no longer to <tt class="docutils literal"><span class="pre">boost::random_access_traversal_tag</span></tt>.</p>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id2" id="zip-iterator-requirements" name="zip-iterator-requirements"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> requirements</a></h1>
+<div class="section" id="zip-iterator-requirements">
+<h1><a class="toc-backref" href="#id2"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> requirements</a></h1>
 <p>All iterator types in the argument <tt class="docutils literal"><span class="pre">IteratorTuple</span></tt> shall model Readable Iterator.</p>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id3" id="zip-iterator-models" name="zip-iterator-models"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> models</a></h1>
+<div class="section" id="zip-iterator-models">
+<h1><a class="toc-backref" href="#id3"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> models</a></h1>
 <p>The resulting <tt class="docutils literal"><span class="pre">zip_iterator</span></tt> models Readable Iterator.</p>
 <p>The fact that the <tt class="docutils literal"><span class="pre">zip_iterator</span></tt> models only Readable Iterator does not
 prevent you from modifying the values that the individual iterators point
@@ -418,8 +136,8 @@ models the least refined standard traversal concept in this set.</p>
 <tt class="docutils literal"><span class="pre">zip_iterator&lt;IteratorTuple2&gt;</span></tt> if and only if <tt class="docutils literal"><span class="pre">IteratorTuple1</span></tt>
 is interoperable with <tt class="docutils literal"><span class="pre">IteratorTuple2</span></tt>.</p>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id4" id="zip-iterator-operations" name="zip-iterator-operations"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> operations</a></h1>
+<div class="section" id="zip-iterator-operations">
+<h1><a class="toc-backref" href="#id4"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt> operations</a></h1>
 <p>In addition to the operations required by the concepts modeled by
 <tt class="docutils literal"><span class="pre">zip_iterator</span></tt>, <tt class="docutils literal"><span class="pre">zip_iterator</span></tt> provides the following
 operations.</p>
@@ -538,8 +256,8 @@ initialized to <tt class="docutils literal"><span class="pre">t</span></tt>.</td
 <!-- Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id5" id="examples" name="examples">Examples</a></h1>
+<div class="section" id="examples">
+<h1><a class="toc-backref" href="#id5">Examples</a></h1>
 <p>There are two main types of applications of the <tt class="docutils literal"><span class="pre">zip_iterator</span></tt>. The first
 one concerns runtime efficiency: If one has several controlled sequences
 of the same length that must be somehow processed, e.g., with the
@@ -638,6 +356,12 @@ the_transform_iterator it_end(
   );
 </pre>
 </div>
+</div>
+<div class="footer">
+<hr class="footer" />
+<a class="reference external" href="zip_iterator.rst">View document source</a>.
+Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
 </div>
 </body>
 </html>

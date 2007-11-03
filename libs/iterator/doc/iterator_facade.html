@@ -3,295 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>Iterator Facade</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
-<meta name="date" content="2004-11-01" />
+<meta name="date" content="2006-09-11" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003." />
-<style type="text/css">
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date$
-:Revision: $Revision$
-:Copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-
-See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
-customize this style sheet.
-*/
-
-/* used to remove borders from tables and images */
-.borderless, table.borderless td, table.borderless th {
-  border: 0 }
-
-table.borderless td, table.borderless th {
-  /* Override padding for "table.docutils td" with "! important".
-     The right padding separates the table cells. */
-  padding: 0 0.5em 0 0 ! important }
-
-.first {
-  /* Override more specific margin styles with "! important". */
-  margin-top: 0 ! important }
-
-.last, .with-subtitle {
-  margin-bottom: 0 ! important }
-
-.hidden {
-  display: none }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-blockquote.epigraph {
-  margin: 2em 5em ; }
-
-dl.docutils dd {
-  margin-bottom: 0.5em }
-
-/* Uncomment (and remove this text!) to get bold-faced definition list terms
-dl.docutils dt {
-  font-weight: bold }
-*/
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.admonition, div.attention, div.caution, div.danger, div.error,
-div.hint, div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.admonition p.admonition-title, div.hint p.admonition-title,
-div.important p.admonition-title, div.note p.admonition-title,
-div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-/* Uncomment (and remove this text!) to get reduced vertical space in
-   compound paragraphs.
-div.compound .compound-first, div.compound .compound-middle {
-  margin-bottom: 0.5em }
-
-div.compound .compound-last, div.compound .compound-middle {
-  margin-top: 0.5em }
-*/
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em ;
-  margin-right: 2em }
-
-div.footer, div.header {
-  clear: both;
-  font-size: smaller }
-
-div.line-block {
-  display: block ;
-  margin-top: 1em ;
-  margin-bottom: 1em }
-
-div.line-block div.line-block {
-  margin-top: 0 ;
-  margin-bottom: 0 ;
-  margin-left: 1.5em }
-
-div.sidebar {
-  margin-left: 1em ;
-  border: medium outset ;
-  padding: 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
-
-div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
-  margin-top: 0.4em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr.docutils {
-  width: 75% }
-
-img.align-left {
-  clear: left }
-
-img.align-right {
-  clear: right }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.attribution {
-  text-align: right ;
-  margin-left: 50% }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
-
-p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
-
-p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option {
-  white-space: nowrap }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-span.section-subtitle {
-  /* font-size relative to parent (h1..h6 element) */
-  font-size: 80% }
-
-table.citation {
-  border-left: solid 1px gray;
-  margin-left: 1px }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.docutils {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.footnote {
-  border-left: solid 1px black;
-  margin-left: 1px }
-
-table.docutils td, table.docutils th,
-table.docinfo td, table.docinfo th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap ;
-  padding-left: 0 }
-
-h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
-  font-size: 100% }
-
-tt.docutils {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
-</style>
+<link rel="stylesheet" href="../../../rst.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="iterator-facade">
@@ -303,13 +21,13 @@ ul.auto-toc {
 <tr><th class="docinfo-name">Author:</th>
 <td>David Abrahams, Jeremy Siek, Thomas Witt</td></tr>
 <tr><th class="docinfo-name">Contact:</th>
-<td><a class="first reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference" href="mailto:jsiek&#64;osl.iu.edu">jsiek&#64;osl.iu.edu</a>, <a class="last reference" href="mailto:witt&#64;ive.uni-hannover.de">witt&#64;ive.uni-hannover.de</a></td></tr>
+<td><a class="first reference external" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference external" href="mailto:jsiek&#64;osl.iu.edu">jsiek&#64;osl.iu.edu</a>, <a class="last reference external" href="mailto:witt&#64;ive.uni-hannover.de">witt&#64;ive.uni-hannover.de</a></td></tr>
 <tr><th class="docinfo-name">Organization:</th>
-<td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
-Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport
+<td><a class="first reference external" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference external" href="http://www.osl.iu.edu">Open Systems
+Lab</a>, University of Hanover <a class="last reference external" href="http://www.ive.uni-hannover.de">Institute for Transport
 Railway Operation and Construction</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2004-11-01</td></tr>
+<td>2006-09-11</td></tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.</td></tr>
 </tbody>
@@ -330,46 +48,46 @@ and associated types, to be supplied by a derived iterator class.</td>
 </tr>
 </tbody>
 </table>
-<div class="contents topic">
-<p class="topic-title first"><a id="table-of-contents" name="table-of-contents">Table of Contents</a></p>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
 <ul class="simple">
-<li><a class="reference" href="#overview" id="id23" name="id23">Overview</a><ul>
-<li><a class="reference" href="#usage" id="id24" name="id24">Usage</a></li>
-<li><a class="reference" href="#iterator-core-access" id="id25" name="id25">Iterator Core Access</a></li>
-<li><a class="reference" href="#operator" id="id26" name="id26"><tt class="docutils literal"><span class="pre">operator[]</span></tt></a></li>
-<li><a class="reference" href="#id2" id="id27" name="id27"><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></li>
+<li><a class="reference internal" href="#overview" id="id23">Overview</a><ul>
+<li><a class="reference internal" href="#usage" id="id24">Usage</a></li>
+<li><a class="reference internal" href="#iterator-core-access" id="id25">Iterator Core Access</a></li>
+<li><a class="reference internal" href="#operator" id="id26"><tt class="docutils literal"><span class="pre">operator[]</span></tt></a></li>
+<li><a class="reference internal" href="#id2" id="id27"><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#reference" id="id28" name="id28">Reference</a><ul>
-<li><a class="reference" href="#iterator-facade-requirements" id="id29" name="id29"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
-<li><a class="reference" href="#iterator-facade-operations" id="id30" name="id30"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+<li><a class="reference internal" href="#reference" id="id28">Reference</a><ul>
+<li><a class="reference internal" href="#iterator-facade-requirements" id="id29"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
+<li><a class="reference internal" href="#iterator-facade-operations" id="id30"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tutorial-example" id="id31" name="id31">Tutorial Example</a><ul>
-<li><a class="reference" href="#the-problem" id="id32" name="id32">The Problem</a></li>
-<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id33" name="id33">A Basic Iterator Using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id34" name="id34">Template Arguments for <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#derived" id="id35" name="id35"><tt class="docutils literal"><span class="pre">Derived</span></tt></a></li>
-<li><a class="reference" href="#value" id="id36" name="id36"><tt class="docutils literal"><span class="pre">Value</span></tt></a></li>
-<li><a class="reference" href="#categoryortraversal" id="id37" name="id37"><tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
-<li><a class="reference" href="#id12" id="id38" name="id38"><tt class="docutils literal"><span class="pre">Reference</span></tt></a></li>
-<li><a class="reference" href="#difference" id="id39" name="id39"><tt class="docutils literal"><span class="pre">Difference</span></tt></a></li>
+<li><a class="reference internal" href="#tutorial-example" id="id31">Tutorial Example</a><ul>
+<li><a class="reference internal" href="#the-problem" id="id32">The Problem</a></li>
+<li><a class="reference internal" href="#a-basic-iterator-using-iterator-facade" id="id33">A Basic Iterator Using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference internal" href="#template-arguments-for-iterator-facade" id="id34">Template Arguments for <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference internal" href="#derived" id="id35"><tt class="docutils literal"><span class="pre">Derived</span></tt></a></li>
+<li><a class="reference internal" href="#value" id="id36"><tt class="docutils literal"><span class="pre">Value</span></tt></a></li>
+<li><a class="reference internal" href="#categoryortraversal" id="id37"><tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
+<li><a class="reference internal" href="#id12" id="id38"><tt class="docutils literal"><span class="pre">Reference</span></tt></a></li>
+<li><a class="reference internal" href="#difference" id="id39"><tt class="docutils literal"><span class="pre">Difference</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#constructors-and-data-members" id="id40" name="id40">Constructors and Data Members</a></li>
-<li><a class="reference" href="#implementing-the-core-operations" id="id41" name="id41">Implementing the Core Operations</a></li>
+<li><a class="reference internal" href="#constructors-and-data-members" id="id40">Constructors and Data Members</a></li>
+<li><a class="reference internal" href="#implementing-the-core-operations" id="id41">Implementing the Core Operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#a-constant-node-iterator" id="id42" name="id42">A constant <tt class="docutils literal"><span class="pre">node_iterator</span></tt></a></li>
-<li><a class="reference" href="#interoperability" id="id43" name="id43">Interoperability</a></li>
-<li><a class="reference" href="#telling-the-truth" id="id44" name="id44">Telling the Truth</a></li>
-<li><a class="reference" href="#wrap-up" id="id45" name="id45">Wrap Up</a></li>
+<li><a class="reference internal" href="#a-constant-node-iterator" id="id42">A constant <tt class="docutils literal"><span class="pre">node_iterator</span></tt></a></li>
+<li><a class="reference internal" href="#interoperability" id="id43">Interoperability</a></li>
+<li><a class="reference internal" href="#telling-the-truth" id="id44">Telling the Truth</a></li>
+<li><a class="reference internal" href="#wrap-up" id="id45">Wrap Up</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id23" id="overview" name="overview">Overview</a></h1>
+<div class="section" id="overview">
+<h1><a class="toc-backref" href="#id23">Overview</a></h1>
 <!-- Distributed under the Boost -->
 <!-- Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -392,7 +110,7 @@ include the associated types exposed through iterator traits:
 <tt class="docutils literal"><span class="pre">value_type</span></tt>, <tt class="docutils literal"><span class="pre">reference</span></tt>, <tt class="docutils literal"><span class="pre">difference_type</span></tt>, and
 <tt class="docutils literal"><span class="pre">iterator_category</span></tt>.</p>
 <p>Iterator facade uses the Curiously Recurring Template
-Pattern (CRTP) <a class="citation-reference" href="#cop95" id="id1" name="id1">[Cop95]</a> so that the user can specify the behavior
+Pattern (CRTP) <a class="citation-reference" href="#cop95" id="id1">[Cop95]</a> so that the user can specify the behavior
 of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> in a derived class.  Former designs used
 policy objects to specify the behavior, but that approach was
 discarded for several reasons:</p>
@@ -415,8 +133,8 @@ iterators, and a separate <tt class="docutils literal"><span class="pre">iterato
 impossible.</li>
 </ol>
 </blockquote>
-<div class="section">
-<h2><a class="toc-backref" href="#id24" id="usage" name="usage">Usage</a></h2>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id24">Usage</a></h2>
 <p>The user of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from a
 specialization of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> and passes the derived
 iterator class as <tt class="docutils literal"><span class="pre">iterator_facade</span></tt>'s first template parameter.
@@ -479,8 +197,8 @@ constructor. Finally, if the iterator is to model Forward Traversal
 Iterator or a more-refined iterator concept, a default constructor is
 required.</p>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id25" id="iterator-core-access" name="iterator-core-access">Iterator Core Access</a></h2>
+<div class="section" id="iterator-core-access">
+<h2><a class="toc-backref" href="#id25">Iterator Core Access</a></h2>
 <p><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> and the operator implementations need to be able
 to access the core member functions in the derived class.  Making the
 core member functions public would expose an implementation detail to
@@ -513,19 +231,19 @@ standardize the gateway protocol.  Note that even if
 open a safety loophole, as every core member function preserves the
 invariants of the iterator.</p>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id26" id="operator" name="operator"><tt class="docutils literal"><span class="pre">operator[]</span></tt></a></h2>
+<div class="section" id="operator">
+<h2><a class="toc-backref" href="#id26"><tt class="docutils literal"><span class="pre">operator[]</span></tt></a></h2>
 <p>The indexing operator for a generalized iterator presents special
 challenges.  A random access iterator's <tt class="docutils literal"><span class="pre">operator[]</span></tt> is only
 required to return something convertible to its <tt class="docutils literal"><span class="pre">value_type</span></tt>.
 Requiring that it return an lvalue would rule out currently-legal
 random-access iterators which hold the referenced value in a data
-member (e.g. <a class="reference" href="counting_iterator.html"><tt class="docutils literal"><span class="pre">counting_iterator</span></tt></a>), because <tt class="docutils literal"><span class="pre">*(p+n)</span></tt> is a reference
+member (e.g. <a class="reference external" href="counting_iterator.html"><tt class="docutils literal"><span class="pre">counting_iterator</span></tt></a>), because <tt class="docutils literal"><span class="pre">*(p+n)</span></tt> is a reference
 into the temporary iterator <tt class="docutils literal"><span class="pre">p+n</span></tt>, which is destroyed when
 <tt class="docutils literal"><span class="pre">operator[]</span></tt> returns.</p>
 <p>Writable iterators built with <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> implement the
-semantics required by the preferred resolution to <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299">issue 299</a> and
-adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="docutils literal"><span class="pre">p[n]</span></tt> is an object
+semantics required by the preferred resolution to <a class="reference external" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299">issue 299</a> and
+adopted by proposal <a class="reference external" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="docutils literal"><span class="pre">p[n]</span></tt> is an object
 convertible to the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>, and <tt class="docutils literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is
 equivalent to <tt class="docutils literal"><span class="pre">*(p</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt> (Note: This result object may be
 implemented as a proxy containing a copy of <tt class="docutils literal"><span class="pre">p+n</span></tt>).  This approach
@@ -536,8 +254,8 @@ the implementation of her iterator is free to implement an
 class; it will hide the one supplied by <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> from
 clients of her iterator.</p>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id27" id="id2" name="id2"><span id="operator-arrow"></span><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></h2>
+<div class="section" id="id2">
+<span id="operator-arrow"></span><h2><a class="toc-backref" href="#id27"><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></h2>
 <p>The <tt class="docutils literal"><span class="pre">reference</span></tt> type of a readable iterator (and today's input
 iterator) need not in fact be a reference, so long as it is
 convertible to the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>.  When the <tt class="docutils literal"><span class="pre">value_type</span></tt>
@@ -552,14 +270,14 @@ satisfied by the <tt class="docutils literal"><span class="pre">iterator_facade<
 <table class="docutils citation" frame="void" id="cop95" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a name="cop95">[Cop95]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id10">2</a>)</em> [Coplien, 1995] Coplien, J., Curiously Recurring Template
+<tr><td class="label">[Cop95]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id10">2</a>)</em> [Coplien, 1995] Coplien, J., Curiously Recurring Template
 Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 </tbody>
 </table>
 </div>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id28" id="reference" name="reference">Reference</a></h1>
+<div class="section" id="reference">
+<h1><a class="toc-backref" href="#id28">Reference</a></h1>
 <!-- Distributed under the Boost -->
 <!-- Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -580,11 +298,11 @@ class iterator_facade {
     typedef Reference reference;
     typedef Value* pointer;
     typedef Difference difference_type;
-    typedef /* see <a class="reference" href="#iterator-category">below</a> */ iterator_category;
+    typedef /* see <a class="reference internal" href="#iterator-category">below</a> */ iterator_category;
 
     reference operator*() const;
-    /* see <a class="reference" href="#operator-arrow">below</a> */ operator-&gt;() const;
-    /* see <a class="reference" href="#brackets">below</a> */ operator[](difference_type n) const;
+    /* see <a class="reference internal" href="#operator-arrow">below</a> */ operator-&gt;() const;
+    /* see <a class="reference internal" href="#brackets">below</a> */ operator[](difference_type n) const;
     Derived&amp; operator++();
     Derived operator++(int);
     Derived&amp; operator--();
@@ -636,7 +354,7 @@ operator &gt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 // Iterator difference
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-/* see <a class="reference" href="#minus">below</a> */
+/* see <a class="reference internal" href="#minus">below</a> */
 operator-(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
           iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 
@@ -688,7 +406,7 @@ Derived operator+ (typename Derived::difference_type n,
                    X1 = C
            }
 
-      2. <a class="reference" href="new-iter-concepts.html#category-to-traversal"><em>category-to-traversal</em></a>(X) is convertible to the most
+      2. <a class="reference external" href="new-iter-concepts.html#category-to-traversal"><em>category-to-traversal</em></a>(X) is convertible to the most
          derived traversal tag type to which X is also
          convertible, and not to any more-derived traversal tag
          type.
@@ -722,8 +440,8 @@ struct enable_if_interoperable
     &gt;
 {};
 </pre>
-<div class="section">
-<h2><a class="toc-backref" href="#id29" id="iterator-facade-requirements" name="iterator-facade-requirements"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Requirements</a></h2>
+<div class="section" id="iterator-facade-requirements">
+<h2><a class="toc-backref" href="#id29"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Requirements</a></h2>
 <p>The following table describes the typical valid expressions on
 <tt class="docutils literal"><span class="pre">iterator_facade</span></tt>'s <tt class="docutils literal"><span class="pre">Derived</span></tt> parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
@@ -736,8 +454,8 @@ object of type <tt class="docutils literal"><span class="pre">X</span></tt>, <tt
 object of a single pass iterator type interoperable with <tt class="docutils literal"><span class="pre">X</span></tt>, and <tt class="docutils literal"><span class="pre">z</span></tt>
 is a constant object of a random access traversal iterator type
 interoperable with <tt class="docutils literal"><span class="pre">X</span></tt>.</p>
-<div class="topic">
-<p class="topic-title first"><a id="core-operations" name="core-operations"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Core Operations</a></p>
+<div class="topic" id="core-operations">
+<p class="topic-title first"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="21%" />
@@ -796,8 +514,8 @@ Iterator</td>
 </table>
 </div>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id30" id="iterator-facade-operations" name="iterator-facade-operations"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
+<div class="section" id="iterator-facade-operations">
+<h2><a class="toc-backref" href="#id30"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
 <p>The operations in this section are described in terms of operations on
 the core interface of <tt class="docutils literal"><span class="pre">Derived</span></tt> which may be inaccessible
 (i.e. private).  The implementation should access these operations
@@ -811,7 +529,7 @@ through member functions of class <tt class="docutils literal"><span class="pre"
 </tr>
 </tbody>
 </table>
-<p><tt class="docutils literal"><span class="pre">operator-&gt;()</span> <span class="pre">const;</span></tt> (see <a class="reference" href="#operator-arrow">below</a>)</p>
+<p><tt class="docutils literal"><span class="pre">operator-&gt;()</span> <span class="pre">const;</span></tt> (see <a class="reference internal" href="#operator-arrow">below</a>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1140,18 +858,18 @@ operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 </table>
 </div>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id31" id="tutorial-example" name="tutorial-example">Tutorial Example</a></h1>
+<div class="section" id="tutorial-example">
+<h1><a class="toc-backref" href="#id31">Tutorial Example</a></h1>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <p>In this section we'll walk through the implementation of a few
 iterators using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt>, based around the simple
 example of a linked list of polymorphic objects.  This example was
-inspired by a <a class="reference" href="http://thread.gmane.org/gmane.comp.lib.boost.user/5100">posting</a> by Keith Macdonald on the <a class="reference" href="../../../more/mailing_lists.htm#users">Boost-Users</a>
+inspired by a <a class="reference external" href="http://thread.gmane.org/gmane.comp.lib.boost.user/5100">posting</a> by Keith Macdonald on the <a class="reference external" href="../../../more/mailing_lists.htm#users">Boost-Users</a>
 mailing list.</p>
-<div class="section">
-<h2><a class="toc-backref" href="#id32" id="the-problem" name="the-problem">The Problem</a></h2>
+<div class="section" id="the-problem">
+<h2><a class="toc-backref" href="#id32">The Problem</a></h2>
 <p>Say we've written a polymorphic linked list node base class:</p>
 <pre class="literal-block">
 # include &lt;iostream&gt;
@@ -1212,8 +930,8 @@ inline std::ostream&amp; operator&lt;&lt;(std::ostream&amp; s, node_base const&a
 <p>Our first challenge is to build an appropriate iterator over these
 lists.</p>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id33" id="a-basic-iterator-using-iterator-facade" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a></h2>
+<div class="section" id="a-basic-iterator-using-iterator-facade">
+<h2><a class="toc-backref" href="#id33">A Basic Iterator Using <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a></h2>
 <p>We will construct a <tt class="docutils literal"><span class="pre">node_iterator</span></tt> class using inheritance from
 <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> to implement most of the iterator's operations.</p>
 <pre class="literal-block">
@@ -1226,45 +944,45 @@ class node_iterator
    ...
 };
 </pre>
-<div class="section">
-<h3><a class="toc-backref" href="#id34" id="template-arguments-for-iterator-facade" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a></h3>
+<div class="section" id="template-arguments-for-iterator-facade">
+<h3><a class="toc-backref" href="#id34">Template Arguments for <tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a></h3>
 <p><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> has several template parameters, so we must decide
 what types to use for the arguments. The parameters are <tt class="docutils literal"><span class="pre">Derived</span></tt>,
 <tt class="docutils literal"><span class="pre">Value</span></tt>, <tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt>, <tt class="docutils literal"><span class="pre">Reference</span></tt>, and <tt class="docutils literal"><span class="pre">Difference</span></tt>.</p>
-<div class="section">
-<h4><a class="toc-backref" href="#id35" id="derived" name="derived"><tt class="docutils literal"><span class="pre">Derived</span></tt></a></h4>
+<div class="section" id="derived">
+<h4><a class="toc-backref" href="#id35"><tt class="docutils literal"><span class="pre">Derived</span></tt></a></h4>
 <p>Because <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> is meant to be used with the CRTP
-<a class="citation-reference" href="#cop95" id="id10" name="id10">[Cop95]</a> the first parameter is the iterator class name itself,
+<a class="citation-reference" href="#cop95" id="id10">[Cop95]</a> the first parameter is the iterator class name itself,
 <tt class="docutils literal"><span class="pre">node_iterator</span></tt>.</p>
 </div>
-<div class="section">
-<h4><a class="toc-backref" href="#id36" id="value" name="value"><tt class="docutils literal"><span class="pre">Value</span></tt></a></h4>
+<div class="section" id="value">
+<h4><a class="toc-backref" href="#id36"><tt class="docutils literal"><span class="pre">Value</span></tt></a></h4>
 <p>The <tt class="docutils literal"><span class="pre">Value</span></tt> parameter determines the <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s
 <tt class="docutils literal"><span class="pre">value_type</span></tt>.  In this case, we are iterating over <tt class="docutils literal"><span class="pre">node_base</span></tt>
 objects, so <tt class="docutils literal"><span class="pre">Value</span></tt> will be <tt class="docutils literal"><span class="pre">node_base</span></tt>.</p>
 </div>
-<div class="section">
-<h4><a class="toc-backref" href="#id37" id="categoryortraversal" name="categoryortraversal"><tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
-<p>Now we have to determine which <a class="reference" href="new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">iterator traversal concept</a> our
+<div class="section" id="categoryortraversal">
+<h4><a class="toc-backref" href="#id37"><tt class="docutils literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
+<p>Now we have to determine which <a class="reference external" href="new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">iterator traversal concept</a> our
 <tt class="docutils literal"><span class="pre">node_iterator</span></tt> is going to model.  Singly-linked lists only have
-forward links, so our iterator can't can't be a <a class="reference" href="new-iter-concepts.html#bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">bidirectional
+forward links, so our iterator can't can't be a <a class="reference external" href="new-iter-concepts.html#bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">bidirectional
 traversal iterator</a>.  Our iterator should be able to make multiple
 passes over the same linked list (unlike, say, an
 <tt class="docutils literal"><span class="pre">istream_iterator</span></tt> which consumes the stream it traverses), so it
-must be a <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a>.  Therefore, we'll pass
-<tt class="docutils literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position <a class="footnote-reference" href="#category" id="id11" name="id11">[1]</a>.</p>
+must be a <a class="reference external" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a>.  Therefore, we'll pass
+<tt class="docutils literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position<a class="footnote-reference" href="#category" id="id11"><sup>1</sup></a>.</p>
 <table class="docutils footnote" frame="void" id="category" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id11" name="category">[1]</a></td><td><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
+<tr><td class="label"><a class="fn-backref" href="#id11">[1]</a></td><td><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
 tags, so we could have passed <tt class="docutils literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
 either way, the resulting iterator's <tt class="docutils literal"><span class="pre">iterator_category</span></tt> will
 end up being <tt class="docutils literal"><span class="pre">std::forward_iterator_tag</span></tt>.</td></tr>
 </tbody>
 </table>
 </div>
-<div class="section">
-<h4><a class="toc-backref" href="#id38" id="id12" name="id12"><tt class="docutils literal"><span class="pre">Reference</span></tt></a></h4>
+<div class="section" id="id12">
+<h4><a class="toc-backref" href="#id38"><tt class="docutils literal"><span class="pre">Reference</span></tt></a></h4>
 <p>The <tt class="docutils literal"><span class="pre">Reference</span></tt> argument becomes the type returned by
 <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s dereference operation, and will also be the
 same as <tt class="docutils literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::reference</span></tt>.  The
@@ -1272,8 +990,8 @@ library's default for this parameter is <tt class="docutils literal"><span class
 <tt class="docutils literal"><span class="pre">node_base&amp;</span></tt> is a good choice for the iterator's <tt class="docutils literal"><span class="pre">reference</span></tt>
 type, we can omit this argument, or pass <tt class="docutils literal"><span class="pre">use_default</span></tt>.</p>
 </div>
-<div class="section">
-<h4><a class="toc-backref" href="#id39" id="difference" name="difference"><tt class="docutils literal"><span class="pre">Difference</span></tt></a></h4>
+<div class="section" id="difference">
+<h4><a class="toc-backref" href="#id39"><tt class="docutils literal"><span class="pre">Difference</span></tt></a></h4>
 <p>The <tt class="docutils literal"><span class="pre">Difference</span></tt> argument determines how the distance between
 two <tt class="docutils literal"><span class="pre">node_iterator</span></tt>s will be measured and will also be the
 same as <tt class="docutils literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::difference_type</span></tt>.
@@ -1299,15 +1017,15 @@ class node_iterator
 </pre>
 </div>
 </div>
-<div class="section">
-<h3><a class="toc-backref" href="#id40" id="constructors-and-data-members" name="constructors-and-data-members">Constructors and Data Members</a></h3>
+<div class="section" id="constructors-and-data-members">
+<h3><a class="toc-backref" href="#id40">Constructors and Data Members</a></h3>
 <p>Next we need to decide how to represent the iterator's position.
 This representation will take the form of data members, so we'll
 also need to write constructors to initialize them.  The
 <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s position is quite naturally represented using
 a pointer to a <tt class="docutils literal"><span class="pre">node_base</span></tt>.  We'll need a constructor to build an
 iterator from a <tt class="docutils literal"><span class="pre">node_base*</span></tt>, and a default constructor to
-satisfy the <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements <a class="footnote-reference" href="#default" id="id13" name="id13">[2]</a>.
+satisfy the <a class="reference external" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements<a class="footnote-reference" href="#default" id="id13"><sup>2</sup></a>.
 Our <tt class="docutils literal"><span class="pre">node_iterator</span></tt> then becomes:</p>
 <pre class="literal-block">
 # include &quot;node.hpp&quot;
@@ -1337,20 +1055,20 @@ class node_iterator
 <table class="docutils footnote" frame="void" id="default" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id13" name="default">[2]</a></td><td>Technically, the C++ standard places almost no
+<tr><td class="label"><a class="fn-backref" href="#id13">[2]</a></td><td>Technically, the C++ standard places almost no
 requirements on a default-constructed iterator, so if we were
 really concerned with efficiency, we could've written the
 default constructor to leave <tt class="docutils literal"><span class="pre">m_node</span></tt> uninitialized.</td></tr>
 </tbody>
 </table>
 </div>
-<div class="section">
-<h3><a class="toc-backref" href="#id41" id="implementing-the-core-operations" name="implementing-the-core-operations">Implementing the Core Operations</a></h3>
-<p>The last step is to implement the <a class="reference" href="#core-operations">core operations</a> required by
+<div class="section" id="implementing-the-core-operations">
+<h3><a class="toc-backref" href="#id41">Implementing the Core Operations</a></h3>
+<p>The last step is to implement the <a class="reference internal" href="#core-operations">core operations</a> required by
 the concepts we want our iterator to model.  Referring to the
-<a class="reference" href="#core-operations">table</a>, we can see that the first three rows are applicable
+<a class="reference internal" href="#core-operations">table</a>, we can see that the first three rows are applicable
 because <tt class="docutils literal"><span class="pre">node_iterator</span></tt> needs to satisfy the requirements for
-<a class="reference" href="new-iter-concepts.html#readable-iterators-lib-readable-iterators">readable iterator</a>, <a class="reference" href="new-iter-concepts.html#single-pass-iterators-lib-single-pass-iterators">single pass iterator</a>, and <a class="reference" href="new-iter-concepts.html#incrementable-iterators-lib-incrementable-iterators">incrementable
+<a class="reference external" href="new-iter-concepts.html#readable-iterators-lib-readable-iterators">readable iterator</a>, <a class="reference external" href="new-iter-concepts.html#single-pass-iterators-lib-single-pass-iterators">single pass iterator</a>, and <a class="reference external" href="new-iter-concepts.html#incrementable-iterators-lib-incrementable-iterators">incrementable
 iterator</a>.</p>
 <p>We therefore need to supply <tt class="docutils literal"><span class="pre">dereference</span></tt>,
 <tt class="docutils literal"><span class="pre">equal</span></tt>, and <tt class="docutils literal"><span class="pre">increment</span></tt> members.  We don't want these members
@@ -1392,11 +1110,11 @@ class node_iterator
 };
 </pre>
 <p>Voilà; a complete and conforming readable, forward-traversal
-iterator!  For a working example of its use, see <a class="reference" href="../example/node_iterator1.cpp">this program</a>.</p>
+iterator!  For a working example of its use, see <a class="reference external" href="../example/node_iterator1.cpp">this program</a>.</p>
 </div>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id42" id="a-constant-node-iterator" name="a-constant-node-iterator">A constant <tt class="docutils literal"><span class="pre">node_iterator</span></tt></a></h2>
+<div class="section" id="a-constant-node-iterator">
+<h2><a class="toc-backref" href="#id42">A constant <tt class="docutils literal"><span class="pre">node_iterator</span></tt></a></h2>
 <div class="sidebar">
 <p class="first sidebar-title">Constant and Mutable iterators</p>
 <p>The term <strong>mutable iterator</strong> means an iterator through which
@@ -1496,8 +1214,8 @@ typedef node_iter&lt;node_base&gt; node_iterator;
 typedef node_iter&lt;node_base const&gt; node_const_iterator;
 </pre>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id43" id="interoperability" name="interoperability">Interoperability</a></h2>
+<div class="section" id="interoperability">
+<h2><a class="toc-backref" href="#id43">Interoperability</a></h2>
 <p>Our <tt class="docutils literal"><span class="pre">const_node_iterator</span></tt> works perfectly well on its own, but
 taken together with <tt class="docutils literal"><span class="pre">node_iterator</span></tt> it doesn't quite meet
 expectations.  For example, we'd like to be able to pass a
@@ -1507,9 +1225,9 @@ just as you can with <tt class="docutils literal"><span class="pre">std::list&lt
 <tt class="docutils literal"><span class="pre">node_const_iterator</span></tt> into the same list, we should be able to
 compare them for equality.</p>
 <p>This expected ability to use two different iterator types together
-is known as <a class="reference" href="new-iter-concepts.html#interoperable-iterators-lib-interoperable-iterators"><strong>interoperability</strong></a>.  Achieving interoperability in
+is known as <a class="reference external" href="new-iter-concepts.html#interoperable-iterators-lib-interoperable-iterators"><strong>interoperability</strong></a>.  Achieving interoperability in
 our case is as simple as templatizing the <tt class="docutils literal"><span class="pre">equal</span></tt> function and
-adding a templatized converting constructor <a class="footnote-reference" href="#broken" id="id16" name="id16">[3]</a> <a class="footnote-reference" href="#random" id="id17" name="id17">[4]</a>:</p>
+adding a templatized converting constructor<a class="footnote-reference" href="#broken" id="id16"><sup>3</sup></a><a class="footnote-reference" href="#random" id="id17"><sup>4</sup></a>:</p>
 <pre class="literal-block">
 template &lt;class Value&gt;
 class node_iter
@@ -1554,23 +1272,23 @@ typedef impl::node_iterator&lt;node_base const&gt; node_const_iterator;
 <table class="docutils footnote" frame="void" id="broken" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id16" name="broken">[3]</a></td><td>If you're using an older compiler and it can't handle
-this example, see the <a class="reference" href="../example/node_iterator2.hpp">example code</a> for workarounds.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id16">[3]</a></td><td>If you're using an older compiler and it can't handle
+this example, see the <a class="reference external" href="../example/node_iterator2.hpp">example code</a> for workarounds.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="random" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id17" name="random">[4]</a></td><td>If <tt class="docutils literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
+<tr><td class="label"><a class="fn-backref" href="#id17">[4]</a></td><td>If <tt class="docutils literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference external" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
 traversal iterator</a>, we'd have had to templatize its
 <tt class="docutils literal"><span class="pre">distance_to</span></tt> function as well.</td></tr>
 </tbody>
 </table>
 <p>You can see an example program which exercises our interoperable
-iterators <a class="reference" href="../example/node_iterator2.cpp">here</a>.</p>
+iterators <a class="reference external" href="../example/node_iterator2.cpp">here</a>.</p>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id44" id="telling-the-truth" name="telling-the-truth">Telling the Truth</a></h2>
+<div class="section" id="telling-the-truth">
+<h2><a class="toc-backref" href="#id44">Telling the Truth</a></h2>
 <p>Now <tt class="docutils literal"><span class="pre">node_iterator</span></tt> and <tt class="docutils literal"><span class="pre">node_const_iterator</span></tt> behave exactly as
 you'd expect... almost.  We can compare them and we can convert in
 one direction: from <tt class="docutils literal"><span class="pre">node_iterator</span></tt> to <tt class="docutils literal"><span class="pre">node_const_iterator</span></tt>.
@@ -1579,15 +1297,15 @@ If we try to convert from <tt class="docutils literal"><span class="pre">node_co
 constructor tries to initialize <tt class="docutils literal"><span class="pre">node_iterator</span></tt>'s <tt class="docutils literal"><span class="pre">m_node</span></tt>, a
 <tt class="docutils literal"><span class="pre">node*</span></tt> with a <tt class="docutils literal"><span class="pre">node</span> <span class="pre">const*</span></tt>.  So what's the problem?</p>
 <p>The problem is that
-<tt class="docutils literal"><span class="pre">boost::</span></tt><a class="reference" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a><tt class="docutils literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
-will be <tt class="docutils literal"><span class="pre">true</span></tt>, but it should be <tt class="docutils literal"><span class="pre">false</span></tt>.  <a class="reference" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a>
+<tt class="docutils literal"><span class="pre">boost::</span></tt><a class="reference external" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a><tt class="docutils literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
+will be <tt class="docutils literal"><span class="pre">true</span></tt>, but it should be <tt class="docutils literal"><span class="pre">false</span></tt>.  <a class="reference external" href="../../type_traits/index.html#relationships"><tt class="docutils literal"><span class="pre">is_convertible</span></tt></a>
 lies because it can only see as far as the <em>declaration</em> of
 <tt class="docutils literal"><span class="pre">node_iter</span></tt>'s converting constructor, but can't look inside at
 the <em>definition</em> to make sure it will compile.  A perfect solution
 would make <tt class="docutils literal"><span class="pre">node_iter</span></tt>'s converting constructor disappear when
 the <tt class="docutils literal"><span class="pre">m_node</span></tt> conversion would fail.</p>
 <p>In fact, that sort of magic is possible using
-<a class="reference" href="../../utility/enable_if.html"><tt class="docutils literal"><span class="pre">boost::enable_if</span></tt></a>.  By rewriting the converting constructor as
+<a class="reference external" href="../../utility/enable_if.html"><tt class="docutils literal"><span class="pre">boost::enable_if</span></tt></a>.  By rewriting the converting constructor as
 follows, we can remove it from the overload set when it's not
 appropriate:</p>
 <pre class="literal-block">
@@ -1611,14 +1329,20 @@ public:
     : m_node(other.m_node) {}
 </pre>
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id45" id="wrap-up" name="wrap-up">Wrap Up</a></h2>
+<div class="section" id="wrap-up">
+<h2><a class="toc-backref" href="#id45">Wrap Up</a></h2>
 <p>This concludes our <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> tutorial, but before you
-stop reading we urge you to take a look at <a class="reference" href="iterator_adaptor.html"><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt></a>.
+stop reading we urge you to take a look at <a class="reference external" href="iterator_adaptor.html"><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt></a>.
 There's another way to approach writing these iterators which might
 even be superior.</p>
 </div>
 </div>
+</div>
+<div class="footer">
+<hr class="footer" />
+<a class="reference external" href="iterator_facade.rst">View document source</a>.
+Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
 </div>
 </body>
 </html>

@@ -3,295 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.5: http://docutils.sourceforge.net/" />
 <title>The Boost.Iterator Library Boost</title>
-<style type="text/css">
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:Date: $Date$
-:Revision: $Revision$
-:Copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-
-See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
-customize this style sheet.
-*/
-
-/* used to remove borders from tables and images */
-.borderless, table.borderless td, table.borderless th {
-  border: 0 }
-
-table.borderless td, table.borderless th {
-  /* Override padding for "table.docutils td" with "! important".
-     The right padding separates the table cells. */
-  padding: 0 0.5em 0 0 ! important }
-
-.first {
-  /* Override more specific margin styles with "! important". */
-  margin-top: 0 ! important }
-
-.last, .with-subtitle {
-  margin-bottom: 0 ! important }
-
-.hidden {
-  display: none }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-blockquote.epigraph {
-  margin: 2em 5em ; }
-
-dl.docutils dd {
-  margin-bottom: 0.5em }
-
-/* Uncomment (and remove this text!) to get bold-faced definition list terms
-dl.docutils dt {
-  font-weight: bold }
-*/
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.admonition, div.attention, div.caution, div.danger, div.error,
-div.hint, div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.admonition p.admonition-title, div.hint p.admonition-title,
-div.important p.admonition-title, div.note p.admonition-title,
-div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-/* Uncomment (and remove this text!) to get reduced vertical space in
-   compound paragraphs.
-div.compound .compound-first, div.compound .compound-middle {
-  margin-bottom: 0.5em }
-
-div.compound .compound-last, div.compound .compound-middle {
-  margin-top: 0.5em }
-*/
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em ;
-  margin-right: 2em }
-
-div.footer, div.header {
-  clear: both;
-  font-size: smaller }
-
-div.line-block {
-  display: block ;
-  margin-top: 1em ;
-  margin-bottom: 1em }
-
-div.line-block div.line-block {
-  margin-top: 0 ;
-  margin-bottom: 0 ;
-  margin-left: 1.5em }
-
-div.sidebar {
-  margin-left: 1em ;
-  border: medium outset ;
-  padding: 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
-
-div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
-  margin-top: 0.4em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr.docutils {
-  width: 75% }
-
-img.align-left {
-  clear: left }
-
-img.align-right {
-  clear: right }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.attribution {
-  text-align: right ;
-  margin-left: 50% }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
-
-p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
-
-p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option {
-  white-space: nowrap }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-span.section-subtitle {
-  /* font-size relative to parent (h1..h6 element) */
-  font-size: 80% }
-
-table.citation {
-  border-left: solid 1px gray;
-  margin-left: 1px }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.docutils {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.footnote {
-  border-left: solid 1px black;
-  margin-left: 1px }
-
-table.docutils td, table.docutils th,
-table.docinfo td, table.docinfo th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap ;
-  padding-left: 0 }
-
-h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
-  font-size: 100% }
-
-tt.docutils {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
-</style>
+<link rel="stylesheet" href="../../../rst.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="the-boost-iterator-library-logo">
-<h1 class="title">The Boost.Iterator Library <a class="reference" href="../../../index.htm"><img alt="Boost" src="../../../boost.png" /></a></h1>
+<h1 class="title">The Boost.Iterator Library <a class="reference external" href="../../../index.htm"><img alt="Boost" src="../../../boost.png" /></a></h1>
+
+<!-- Distributed under the Boost -->
+<!-- Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <!-- Distributed under the Boost -->
 <!-- Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
@@ -302,10 +24,10 @@ ul.auto-toc {
 <tbody valign="top">
 <tr class="field"><th class="field-name">Authors:</th><td class="field-body">David Abrahams, Jeremy Siek, Thomas Witt</td>
 </tr>
-<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference" href="mailto:jsiek&#64;osl.iu.edu">jsiek&#64;osl.iu.edu</a>, <a class="reference" href="mailto:witt&#64;styleadvisor.com">witt&#64;styleadvisor.com</a></td>
+<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a>, <a class="reference external" href="mailto:jsiek&#64;osl.iu.edu">jsiek&#64;osl.iu.edu</a>, <a class="reference external" href="mailto:witt&#64;styleadvisor.com">witt&#64;styleadvisor.com</a></td>
 </tr>
-<tr class="field"><th class="field-name">organizations:</th><td class="field-body"><a class="reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems
-Lab</a>, <a class="reference" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td>
+<tr class="field"><th class="field-name">organizations:</th><td class="field-body"><a class="reference external" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference external" href="http://www.osl.iu.edu">Open Systems
+Lab</a>, <a class="reference external" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td>
 </tr>
 <tr class="field"><th class="field-name">date:</th><td class="field-body">$Date$</td>
 </tr>
@@ -318,7 +40,7 @@ Lab</a>, <a class="reference" href="http://www.styleadvisor.com">Zephyr Associat
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Abstract:</th><td class="field-body">The Boost Iterator Library contains two parts. The first
-is a system of <a class="reference" href="../../../more/generic_programming.html#concept">concepts</a> which extend the C++ standard
+is a system of <a class="reference external" href="../../../more/generic_programming.html#concept">concepts</a> which extend the C++ standard
 iterator requirements. The second is a framework of
 components for building iterators based on these
 extended concepts and includes several useful iterator
@@ -335,24 +57,24 @@ older Boost Iterator Adaptor Library.</td>
 </tr>
 </tbody>
 </table>
-<div class="contents topic">
-<p class="topic-title first"><a id="table-of-contents" name="table-of-contents"><strong>Table of Contents</strong></a></p>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title first"><strong>Table of Contents</strong></p>
 <ul class="simple">
-<li><a class="reference" href="#new-style-iterators" id="id22" name="id22">New-Style Iterators</a></li>
-<li><a class="reference" href="#iterator-facade-and-adaptor" id="id23" name="id23">Iterator Facade and Adaptor</a></li>
-<li><a class="reference" href="#specialized-adaptors" id="id24" name="id24">Specialized Adaptors</a></li>
-<li><a class="reference" href="#iterator-utilities" id="id25" name="id25">Iterator Utilities</a><ul>
-<li><a class="reference" href="#traits" id="id26" name="id26">Traits</a></li>
-<li><a class="reference" href="#testing-and-concept-checking" id="id27" name="id27">Testing and Concept Checking</a></li>
+<li><a class="reference internal" href="#new-style-iterators" id="id22">New-Style Iterators</a></li>
+<li><a class="reference internal" href="#iterator-facade-and-adaptor" id="id23">Iterator Facade and Adaptor</a></li>
+<li><a class="reference internal" href="#specialized-adaptors" id="id24">Specialized Adaptors</a></li>
+<li><a class="reference internal" href="#iterator-utilities" id="id25">Iterator Utilities</a><ul>
+<li><a class="reference internal" href="#traits" id="id26">Traits</a></li>
+<li><a class="reference internal" href="#testing-and-concept-checking" id="id27">Testing and Concept Checking</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#upgrading-from-the-old-boost-iterator-adaptor-library" id="id28" name="id28">Upgrading from the old Boost Iterator Adaptor Library</a></li>
-<li><a class="reference" href="#history" id="id29" name="id29">History</a></li>
+<li><a class="reference internal" href="#upgrading-from-the-old-boost-iterator-adaptor-library" id="id28">Upgrading from the old Boost Iterator Adaptor Library</a></li>
+<li><a class="reference internal" href="#history" id="id29">History</a></li>
 </ul>
 </div>
 <hr class="docutils" />
-<div class="section">
-<h1><a class="toc-backref" href="#id22" id="new-style-iterators" name="new-style-iterators">New-Style Iterators</a></h1>
+<div class="section" id="new-style-iterators">
+<h1><a class="toc-backref" href="#id22">New-Style Iterators</a></h1>
 <p>The iterator categories defined in C++98 are extremely limiting
 because they bind together two orthogonal concepts: traversal and
 element access.  For example, because a random access iterator is
@@ -361,17 +83,17 @@ it is impossible to capture the capabilities of
 <tt class="docutils literal"><span class="pre">vector&lt;bool&gt;::iterator</span></tt> using the C++98 categories.  This is the
 infamous &quot;<tt class="docutils literal"><span class="pre">vector&lt;bool&gt;</span></tt> is not a container, and its iterators
 aren't random access iterators&quot;, debacle about which Herb Sutter
-wrote two papers for the standards comittee (<a class="reference" href="http://www.gotw.ca/publications/N1185.pdf">n1185</a> and <a class="reference" href="http://www.gotw.ca/publications/N1211.pdf">n1211</a>),
-and a <a class="reference" href="http://www.gotw.ca/gotw/050.htm">Guru of the Week</a>.  New-style iterators go well beyond
+wrote two papers for the standards comittee (<a class="reference external" href="http://www.gotw.ca/publications/N1185.pdf">n1185</a> and <a class="reference external" href="http://www.gotw.ca/publications/N1211.pdf">n1211</a>),
+and a <a class="reference external" href="http://www.gotw.ca/gotw/050.htm">Guru of the Week</a>.  New-style iterators go well beyond
 patching up <tt class="docutils literal"><span class="pre">vector&lt;bool&gt;</span></tt>, though: there are lots of other
 iterators already in use which can't be adequately represented by
 the existing concepts.  For details about the new iterator
 concepts, see our</p>
 <blockquote>
-<a class="reference" href="new-iter-concepts.html">Standard Proposal For New-Style Iterators</a> (<a class="reference" href="new-iter-concepts.pdf">PDF</a>)</blockquote>
+<a class="reference external" href="new-iter-concepts.html">Standard Proposal For New-Style Iterators</a> (<a class="reference external" href="new-iter-concepts.pdf">PDF</a>)</blockquote>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id23" id="iterator-facade-and-adaptor" name="iterator-facade-and-adaptor">Iterator Facade and Adaptor</a></h1>
+<div class="section" id="iterator-facade-and-adaptor">
+<h1><a class="toc-backref" href="#id23">Iterator Facade and Adaptor</a></h1>
 <p>Writing standard-conforming iterators is tricky, but the need comes
 up often.  In order to ease the implementation of new iterators,
 the Boost.Iterator library provides the <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> class template,
@@ -387,54 +109,54 @@ behavior as possible.</p>
 <p>The documentation for these two classes can be found at the following
 web pages:</p>
 <ul class="simple">
-<li><a class="reference" href="iterator_facade.html"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a> (<a class="reference" href="iterator_facade.pdf">PDF</a>)</li>
-<li><a class="reference" href="iterator_adaptor.html"><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt></a> (<a class="reference" href="iterator_adaptor.pdf">PDF</a>)</li>
+<li><a class="reference external" href="iterator_facade.html"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt></a> (<a class="reference external" href="iterator_facade.pdf">PDF</a>)</li>
+<li><a class="reference external" href="iterator_adaptor.html"><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt></a> (<a class="reference external" href="iterator_adaptor.pdf">PDF</a>)</li>
 </ul>
-<p>Both <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> and <tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> as well as many of the <a class="reference" href="#specialized-adaptors">specialized
+<p>Both <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> and <tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> as well as many of the <a class="reference internal" href="#specialized-adaptors">specialized
 adaptors</a> mentioned below have been proposed for standardization,
 and accepted into the first C++ technical report; see our</p>
 <blockquote>
-<a class="reference" href="facade-and-adaptor.html">Standard Proposal For Iterator Facade and Adaptor</a> (<a class="reference" href="facade-and-adaptor.pdf">PDF</a>)</blockquote>
+<a class="reference external" href="facade-and-adaptor.html">Standard Proposal For Iterator Facade and Adaptor</a> (<a class="reference external" href="facade-and-adaptor.pdf">PDF</a>)</blockquote>
 <p>for more details.</p>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id24" id="specialized-adaptors" name="specialized-adaptors">Specialized Adaptors</a></h1>
+<div class="section" id="specialized-adaptors">
+<h1><a class="toc-backref" href="#id24">Specialized Adaptors</a></h1>
 <p>The iterator library supplies a useful suite of standard-conforming
-iterator templates based on the Boost <a class="reference" href="#iterator-facade-and-adaptor">iterator facade and adaptor</a>.</p>
+iterator templates based on the Boost <a class="reference internal" href="#iterator-facade-and-adaptor">iterator facade and adaptor</a>.</p>
 <ul class="simple">
-<li><a class="reference" href="counting_iterator.html"><tt class="docutils literal"><span class="pre">counting_iterator</span></tt></a> (<a class="reference" href="counting_iterator.pdf">PDF</a>): an iterator over a sequence of consecutive values.
+<li><a class="reference external" href="counting_iterator.html"><tt class="docutils literal"><span class="pre">counting_iterator</span></tt></a> (<a class="reference external" href="counting_iterator.pdf">PDF</a>): an iterator over a sequence of consecutive values.
 Implements a &quot;lazy sequence&quot;</li>
-<li><a class="reference" href="filter_iterator.html"><tt class="docutils literal"><span class="pre">filter_iterator</span></tt></a> (<a class="reference" href="filter_iterator.pdf">PDF</a>): an iterator over the subset of elements of some
+<li><a class="reference external" href="filter_iterator.html"><tt class="docutils literal"><span class="pre">filter_iterator</span></tt></a> (<a class="reference external" href="filter_iterator.pdf">PDF</a>): an iterator over the subset of elements of some
 sequence which satisfy a given predicate</li>
-<li><a class="reference" href="function_output_iterator.html"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt></a> (<a class="reference" href="function_output_iterator.pdf">PDF</a>): an output iterator wrapping a unary function
+<li><a class="reference external" href="function_output_iterator.html"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt></a> (<a class="reference external" href="function_output_iterator.pdf">PDF</a>): an output iterator wrapping a unary function
 object; each time an element is written into the dereferenced
 iterator, it is passed as a parameter to the function object.</li>
-<li><a class="reference" href="indirect_iterator.html"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt></a> (<a class="reference" href="indirect_iterator.pdf">PDF</a>): an iterator over the objects <em>pointed-to</em> by the
+<li><a class="reference external" href="indirect_iterator.html"><tt class="docutils literal"><span class="pre">indirect_iterator</span></tt></a> (<a class="reference external" href="indirect_iterator.pdf">PDF</a>): an iterator over the objects <em>pointed-to</em> by the
 elements of some sequence.</li>
-<li><a class="reference" href="permutation_iterator.html"><tt class="docutils literal"><span class="pre">permutation_iterator</span></tt></a> (<a class="reference" href="permutation_iterator.pdf">PDF</a>): an iterator over the elements of some random-access
+<li><a class="reference external" href="permutation_iterator.html"><tt class="docutils literal"><span class="pre">permutation_iterator</span></tt></a> (<a class="reference external" href="permutation_iterator.pdf">PDF</a>): an iterator over the elements of some random-access
 sequence, rearranged according to some sequence of integer indices.</li>
-<li><a class="reference" href="reverse_iterator.html"><tt class="docutils literal"><span class="pre">reverse_iterator</span></tt></a> (<a class="reference" href="reverse_iterator.pdf">PDF</a>): an iterator which traverses the elements of some
+<li><a class="reference external" href="reverse_iterator.html"><tt class="docutils literal"><span class="pre">reverse_iterator</span></tt></a> (<a class="reference external" href="reverse_iterator.pdf">PDF</a>): an iterator which traverses the elements of some
 bidirectional sequence in reverse.  Corrects many of the
 shortcomings of C++98's <tt class="docutils literal"><span class="pre">std::reverse_iterator</span></tt>.</li>
-<li><a class="reference" href="../../utility/shared_container_iterator.html"><tt class="docutils literal"><span class="pre">shared_container_iterator</span></tt></a>: an iterator over elements of a container whose
-lifetime is maintained by a <a class="reference" href="../../smart_ptr/shared_ptr.htm"><tt class="docutils literal"><span class="pre">shared_ptr</span></tt></a> stored in the iterator.</li>
-<li><a class="reference" href="transform_iterator.html"><tt class="docutils literal"><span class="pre">transform_iterator</span></tt></a> (<a class="reference" href="transform_iterator.pdf">PDF</a>): an iterator over elements which are the result of
+<li><a class="reference external" href="../../utility/shared_container_iterator.html"><tt class="docutils literal"><span class="pre">shared_container_iterator</span></tt></a>: an iterator over elements of a container whose
+lifetime is maintained by a <a class="reference external" href="../../smart_ptr/shared_ptr.htm"><tt class="docutils literal"><span class="pre">shared_ptr</span></tt></a> stored in the iterator.</li>
+<li><a class="reference external" href="transform_iterator.html"><tt class="docutils literal"><span class="pre">transform_iterator</span></tt></a> (<a class="reference external" href="transform_iterator.pdf">PDF</a>): an iterator over elements which are the result of
 applying some functional transformation to the elements of an
 underlying sequence.  This component also replaces the old
 <tt class="docutils literal"><span class="pre">projection_iterator_adaptor</span></tt>.</li>
-<li><a class="reference" href="zip_iterator.html"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt></a> (<a class="reference" href="zip_iterator.pdf">PDF</a>): an iterator over tuples of the elements at corresponding
+<li><a class="reference external" href="zip_iterator.html"><tt class="docutils literal"><span class="pre">zip_iterator</span></tt></a> (<a class="reference external" href="zip_iterator.pdf">PDF</a>): an iterator over tuples of the elements at corresponding
 positions of heterogeneous underlying iterators.</li>
 </ul>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id25" id="iterator-utilities" name="iterator-utilities">Iterator Utilities</a></h1>
-<div class="section">
-<h2><a class="toc-backref" href="#id26" id="traits" name="traits">Traits</a></h2>
+<div class="section" id="iterator-utilities">
+<h1><a class="toc-backref" href="#id25">Iterator Utilities</a></h1>
+<div class="section" id="traits">
+<h2><a class="toc-backref" href="#id26">Traits</a></h2>
 <ul class="simple">
-<li><a class="reference" href="pointee.html"><tt class="docutils literal"><span class="pre">pointee.hpp</span></tt></a> (<a class="reference" href="pointee.pdf">PDF</a>): Provides the capability to deduce the referent types
+<li><a class="reference external" href="pointee.html"><tt class="docutils literal"><span class="pre">pointee.hpp</span></tt></a> (<a class="reference external" href="pointee.pdf">PDF</a>): Provides the capability to deduce the referent types
 of pointers, smart pointers and iterators in generic code.  Used
 in <tt class="docutils literal"><span class="pre">indirect_iterator</span></tt>.</li>
-<li><a class="reference" href="iterator_traits.html"><tt class="docutils literal"><span class="pre">iterator_traits.hpp</span></tt></a> (<a class="reference" href="iterator_traits.pdf">PDF</a>): Provides <a class="reference" href="../../mpl/doc/index.html">MPL</a>-compatible metafunctions which
+<li><a class="reference external" href="iterator_traits.html"><tt class="docutils literal"><span class="pre">iterator_traits.hpp</span></tt></a> (<a class="reference external" href="iterator_traits.pdf">PDF</a>): Provides <a class="reference external" href="../../mpl/doc/index.html">MPL</a>-compatible metafunctions which
 retrieve an iterator's traits.  Also corrects for the deficiencies
 of broken implementations of <tt class="docutils literal"><span class="pre">std::iterator_traits</span></tt>.</li>
 </ul>
@@ -442,26 +164,26 @@ of broken implementations of <tt class="docutils literal"><span class="pre">std:
 testing iterator interoperability -->
 <!-- comment! __ interoperable.pdf -->
 </div>
-<div class="section">
-<h2><a class="toc-backref" href="#id27" id="testing-and-concept-checking" name="testing-and-concept-checking">Testing and Concept Checking</a></h2>
+<div class="section" id="testing-and-concept-checking">
+<h2><a class="toc-backref" href="#id27">Testing and Concept Checking</a></h2>
 <ul class="simple">
-<li><a class="reference" href="iterator_concepts.html"><tt class="docutils literal"><span class="pre">iterator_concepts.hpp</span></tt></a> (<a class="reference" href="iterator_concepts.pdf">PDF</a>): Concept checking classes for the new iterator concepts.</li>
-<li><a class="reference" href="iterator_archetypes.html"><tt class="docutils literal"><span class="pre">iterator_archetypes.hpp</span></tt></a> (<a class="reference" href="iterator_archetypes.pdf">PDF</a>): Concept archetype classes for the new iterators concepts.</li>
+<li><a class="reference external" href="iterator_concepts.html"><tt class="docutils literal"><span class="pre">iterator_concepts.hpp</span></tt></a> (<a class="reference external" href="iterator_concepts.pdf">PDF</a>): Concept checking classes for the new iterator concepts.</li>
+<li><a class="reference external" href="iterator_archetypes.html"><tt class="docutils literal"><span class="pre">iterator_archetypes.hpp</span></tt></a> (<a class="reference external" href="iterator_archetypes.pdf">PDF</a>): Concept archetype classes for the new iterators concepts.</li>
 </ul>
 </div>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id28" id="upgrading-from-the-old-boost-iterator-adaptor-library" name="upgrading-from-the-old-boost-iterator-adaptor-library">Upgrading from the old Boost Iterator Adaptor Library</a></h1>
+<div class="section" id="upgrading-from-the-old-boost-iterator-adaptor-library">
+<h1><a class="toc-backref" href="#id28">Upgrading from the old Boost Iterator Adaptor Library</a></h1>
 <p id="upgrading">If you have been using the old Boost Iterator Adaptor library to
 implement iterators, you probably wrote a <tt class="docutils literal"><span class="pre">Policies</span></tt> class which
 captures the core operations of your iterator.  In the new library
 design, you'll move those same core operations into the body of the
 iterator class itself.  If you were writing a family of iterators,
-you probably wrote a <a class="reference" href="../../../more/generic_programming.html#type_generator">type generator</a> to build the
+you probably wrote a <a class="reference external" href="../../../more/generic_programming.html#type_generator">type generator</a> to build the
 <tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> specialization you needed; in the new library
 design you don't need a type generator (though may want to keep it
 around as a compatibility aid for older code) because, due to the
-use of the Curiously Recurring Template Pattern (CRTP) <a class="citation-reference" href="#cop95" id="id21" name="id21">[Cop95]</a>,
+use of the Curiously Recurring Template Pattern (CRTP) <a class="citation-reference" href="#cop95" id="id21">[Cop95]</a>,
 you can now define the iterator class yourself and acquire
 functionality through inheritance from <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> or
 <tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt>.  As a result, you also get much finer control
@@ -475,8 +197,8 @@ template argument, if explicitly specified) is a true reference
 type, <tt class="docutils literal"><span class="pre">transform_iterator</span></tt> will behave like
 <tt class="docutils literal"><span class="pre">projection_iterator</span></tt> used to.</p>
 </div>
-<div class="section">
-<h1><a class="toc-backref" href="#id29" id="history" name="history">History</a></h1>
+<div class="section" id="history">
+<h1><a class="toc-backref" href="#id29">History</a></h1>
 <p>In 2000 Dave Abrahams was writing an iterator for a container of
 pointers, which would access the pointed-to elements when
 dereferenced.  Naturally, being a library writer, he decided to
@@ -504,7 +226,7 @@ library you see today.</p>
 <table class="docutils citation" frame="void" id="cop95" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id21" name="cop95">[Cop95]</a></td><td>[Coplien, 1995] Coplien, J., Curiously Recurring Template
+<tr><td class="label"><a class="fn-backref" href="#id21">[Cop95]</a></td><td>[Coplien, 1995] Coplien, J., Curiously Recurring Template
 Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 </tbody>
 </table>
@@ -516,6 +238,12 @@ LocalWords:  RandomAccessTraversalIterator dereferenceable Incrementable tmp
 LocalWords:  incrementable xxx min prev inplace png oldeqnew AccessTag struct
 LocalWords:  TraversalTag typename lvalues DWA Hmm JGS -->
 </div>
+</div>
+<div class="footer">
+<hr class="footer" />
+<a class="reference external" href="index.rst">View document source</a>.
+Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
 </div>
 </body>
 </html>

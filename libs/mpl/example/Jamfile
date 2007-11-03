@@ -1,9 +1,0 @@
-
-import testing ;
-
-run fsm/player.cpp ;
-run fsm/player2.cpp ;
-run inherit_linearly.cpp ;
-run inherit_multiply.cpp ;
-run tuple_from_list.cpp ;
-compile integer.cpp ;
