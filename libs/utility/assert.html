@@ -47,13 +47,15 @@ void assertion_failed(char const * expr, char const * function, char const * fil
 		<P>As is the case with <STRONG>&lt;cassert&gt;</STRONG>, <STRONG>&lt;boost/assert.hpp&gt;</STRONG>
 			can be included multiple times in a single translation unit. <STRONG>BOOST_ASSERT</STRONG>
 			will be redefined each time as specified above.</P>
-		<p><STRONG>&lt;boost/assert.hpp&gt;</STRONG> also defines the macro <STRONG>BOOST_VERIFY</STRONG>.
-			It has exactly the same behavior as <STRONG>BOOST_ASSERT</STRONG>, except 
-			that the expression that is passed to <STRONG>BOOST_VERIFY</STRONG> is always 
-			evaluated.</p>
+		<p><STRONG>&lt;boost/assert.hpp&gt;</STRONG> also defines the macro <STRONG>BOOST_VERIFY</STRONG>. 
+			It has exactly the same behavior as <STRONG>BOOST_ASSERT</STRONG>, except that 
+			the expression that is passed to <STRONG>BOOST_VERIFY</STRONG> is always 
+			evaluated. This is useful when the asserted expression has desirable side 
+			effects; it can also help suppress warnings about unused variables when the 
+			only use of the variable is inside an assertion.</p>
 		<p><br>
-			<small>Copyright © 2002, 2007 by Peter Dimov. Distributed under the Boost 
-				Software License, Version 1.0. See accompanying file <A href="../../LICENSE_1_0.txt">
-					LICENSE_1_0.txt</A> or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>.</small></p>
+			<small>Copyright © 2002, 2007 by Peter Dimov. Distributed under the Boost Software 
+				License, Version 1.0. See accompanying file <A href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
+				or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>.</small></p>
 	</body>
 </html>
