@@ -41,7 +41,12 @@ namespace
     BOOST_CHECK( ex.code().value() == v );
     BOOST_CHECK( ex.code().category() == system_category );
 # ifdef BOOST_WINDOWS_API
-    LANGID language_id = ::GetUserDefaultUILanguage();
+    LANGID language_id;
+#   ifndef __MINGW32__
+      language_id = ::GetUserDefaultUILanguage();
+#   else
+      language_id = 0x0409; // Assume US English
+#   endif
     // std::cout << "GetUserDefaultUILanguage() returns " << language_id << '\n';
     if ( language_id == 0x0409 )  // English (United States)
     {
