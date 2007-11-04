@@ -147,15 +147,15 @@ int test_main( int, char ** )
   // test error_code and error_condition message(),
   // see Boost.Filesystem operations_test for code specific message() tests
   ec = error_code( -1, system_category );
-  BOOST_CHECK( ec.message() == "Unknown error" );
+  BOOST_CHECK( ec.message().substr( 0, 13) == "Unknown error" );
   ec = error_code( BOOST_ACCESS_ERROR_MACRO, system_category );
   BOOST_CHECK( ec.message() != "" );
-  BOOST_CHECK( ec.message() != "Unknown error" );
+  BOOST_CHECK( ec.message().substr( 0, 13) != "Unknown error" );
   dec = error_condition( -1, posix_category );
-  BOOST_CHECK( dec.message() == "Unknown error" );
+  BOOST_CHECK( dec.message().substr( 0, 13) == "Unknown error" );
   dec = error_condition( BOOST_ACCESS_ERROR_MACRO, posix_category );
   BOOST_CHECK( dec.message() != "" );
-  BOOST_CHECK( dec.message() != "Unknown error" );
+  BOOST_CHECK( dec.message().substr( 0, 13) != "Unknown error" );
 
 #ifdef BOOST_WINDOWS_API
   std::cout << "Windows tests...\n";
