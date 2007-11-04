@@ -377,6 +377,90 @@ for a variety of types.
 
 [endsect]
 
+[section Sequence Fascade]
+
+[heading Description]
+The __sequence_fascade__ template provides an intrusive mechanism for
+producing a conforming Fusion iterator.
+
+[heading Synopsis]
+    template<typename Derived, typename TravesalTag, typename IsView = mpl::false_>
+    struct sequence_fascade;
+
+[heading Usage]
+The user of __sequence_fascade__ derives his sequence type from a specialization of __sequence_fascade__ and passes the derived sequence type as the first template parameter. The second template parameter should be the traversal category of the sequence being implemented. The 3rd parameter should be set to `mpl::true_` if the sequence is a view.
+
+The user must the implement the key expressions required by their sequence type.
+
+[table Parameters
+[[Name][Description]]
+[[`sequence`, `Seq`][A type derived from __sequence_fascade__]]
+[[`N`][An __mpl_integral_constant__]]
+]
+
+[table Key Expressions
+[[Expression][Result]]
+[[`sequence::template begin<Seq>::type`][The type of an iterator to the beginning of a sequence of type `Seq`]]
+[[`sequence::template begin<Seq>::call(seq)`][An iterator to the beginning of sequence `seq`]]
+[[`sequence::template end<Seq>::type`][The type of an iterator to the end of a sequence of type `Seq`]]
+[[`sequence::template end<Seq>::call(seq)`][An iterator to the end of sequence `seq`]]
+[[`sequence::template size<Seq>::type`][The size of a sequence of type `Seq` as an __mpl_integral_constant__]]
+[[`sequence::template size<Seq>::call(seq)`][The size of sequence `seq`]]
+[[`sequence::template at<Seq, N>::type`][The type of element `N` in a sequence of type `Seq`]]
+[[`sequence::template at<Seq, N>::call(seq)`][Element `N` in sequence `seq`]]
+[[`sequence::template value_at<Sequence, N>::type`][The type of the `N`th element in a sequence of type `Seq`]]
+]
+
+[heading Header]
+    #include <boost/fusion/sequence/sequence_facade.hpp>
+
+[endsect]
+
+[section Iterator Fascade]
+
+[heading Description]
+The __iterator_fascade__ template provides an intrusive mechanism for
+producing a conforming Fusion iterator.
+
+[heading Synopsis]
+
+    template<typename Derived, typename TravesalTag>
+    struct iterator_fascade;
+
+[heading Usage]
+The user of iterator_facade derives his iterator type from a specialization of iterator_facade and passes the derived iterator type as the first template parameter. The second template parameter should be the traversal category of the iterator being implemented.
+
+The user must the implement the key expressions required by their iterator type.
+
+[table Parameters
+[[Name][Description]]
+[[`iterator`, `It`, `It1`, `It2`][A type derived from __iterator_fascade__]]
+[[`N`][An __mpl_integral_constant__]]
+]
+
+[table Key Expressions
+[[Expression][Result][Default]]
+[[`iterator::template value_of<It>::type`][The element stored at iterator position `It`][None]]
+[[`iterator::template deref<It>::type`][The type returned when dereferencing an iterator of type `It`][None]]
+[[`iterator::template deref<It>::call(it)`][Dereferences iterator `it`][None]]
+[[`iterator::template next<It>::type`][The type of the next element from `It`][None]]
+[[`iterator::template next<It>::call(it)`][The next iterator after `it`][None]]
+[[`iterator::template prior<It>::type`][The type of the next element from `It`][None]]
+[[`iterator::template prior<It>::call(it)`][The next iterator after `it`][None]]
+[[`iterator::template advance<It, N>::type`][The type of an iterator advanced `N` elements from `It`][Implemented in terms of `next` and `prior`]]
+[[`iterator::template advance<It, N>::call(it)`][An iterator advanced `N` elements from `it`][Implemented in terms of `next` and `prior`]]
+[[`iterator::template distance<It1, It2>::type`][The distance between iterators of type `It1` and `It2` as an __mpl_integral_constant__][None]]
+[[`iterator::template distance<It1, It2>::call(it1, it2)`][The distance between iterator `it1` and `it2`][None]]
+[[`iterator::template equal_to<It1, It2>::type`][The distance between iterators of type `It1` and `It2`][`boost::same_type<It1, It2>::type`]]
+[[`iterator::template equal_to<It1, It2>::call(it1, it2)`][The distance between iterators `it1` and `it2`][`boost::same_type<It1, It2>::type()`]]
+]
+
+[heading Header]
+
+    #include <boost/fusion/iterator/iterator_facade.hpp>
+
+[endsect]
+
 [section Macros]
 
 [section BOOST_FUSION_ADAPT_STRUCT]
