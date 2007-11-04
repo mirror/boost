@@ -38,7 +38,7 @@ namespace boost { namespace xpressive { namespace detail
 
     struct type_info_less;
 
-    typedef std::map<std::type_info const *, void *, detail::type_info_less> action_args_type;
+    typedef std::map<std::type_info const *, void *, type_info_less> action_args_type;
 
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders

@@ -29,6 +29,7 @@
     #include <boost/utility/result_of.hpp>
     #include <boost/type_traits/remove_cv.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
+    #include <boost/xpressive/proto/traits.hpp> // for arg_c
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
     namespace boost { namespace proto

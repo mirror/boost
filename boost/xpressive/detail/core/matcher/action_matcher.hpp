@@ -29,6 +29,8 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/context.hpp>
+#include <boost/xpressive/match_results.hpp> // for type_info_less
+#include <boost/xpressive/detail/static/transforms/as_action.hpp> // for 'read_attr'
 #if BOOST_VERSION >= 103500
 # include <boost/xpressive/proto/fusion.hpp>
 # include <boost/fusion/include/transform_view.hpp>

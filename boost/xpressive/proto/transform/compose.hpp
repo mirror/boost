@@ -13,6 +13,7 @@
 #define BOOST_PROTO_TRANSFORM_COMPOSE_HPP_EAN_04_01_2007
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/mpl/bool.hpp> // mpl::true_
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 

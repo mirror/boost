@@ -98,7 +98,7 @@
                 static Expr const &make(Expr const &expr)
                 {
                     return expr;
-                };
+                }
             };
 
             template<template<typename> class Extends>

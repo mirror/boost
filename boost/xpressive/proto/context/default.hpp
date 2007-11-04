@@ -32,6 +32,7 @@
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/eval.hpp>
+    #include <boost/xpressive/proto/traits.hpp> // for proto::arg_c()
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
     // If we're generating doxygen documentation, hide all the nasty

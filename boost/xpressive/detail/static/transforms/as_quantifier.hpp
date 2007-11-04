@@ -204,7 +204,7 @@ namespace boost { namespace xpressive { namespace detail
             return typename apply<Expr, State, Visitor>::type(
                 Grammar::call(expr, alternate_end_xpression(), visitor)
             );
-        };
+        }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -233,7 +233,7 @@ namespace boost { namespace xpressive { namespace detail
                 Grammar::call(expr, alternate_end_xpression(), visitor)
               , mark_number
             );
-        };
+        }
     };
 
     ///////////////////////////////////////////////////////////////////////////////

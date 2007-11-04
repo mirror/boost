@@ -12,6 +12,7 @@
 #define BOOST_PROTO_TRANSFORM_BRANCH_HPP_EAN_12_16_2006
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
