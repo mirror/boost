@@ -13,7 +13,7 @@ namespace fake
   using namespace boost;
   
   template<typename RanIter>
-  BOOST_CONCEPT_WHERE(
+  BOOST_CONCEPT_REQUIRES(
       ((Mutable_RandomAccessIterator<RanIter>))
       ((LessThanComparable<typename Mutable_RandomAccessIterator<RanIter>::value_type>))
     

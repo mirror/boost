@@ -21,9 +21,20 @@ struct usage_requirements
     ~usage_requirements() { ((Model*)0)->~Model(); }
 };
 
-#  define BOOST_CONCEPT_USAGE(model)                                    \
-    BOOST_CONCEPT_ASSERT((boost::concept::usage_requirements<model>));  \
-    ~model()
+#  if BOOST_WORKAROUND(__GNUC__, <= 3)
+
+#   define BOOST_CONCEPT_USAGE(model)                                    \
+      model(); /* at least 2.96 and 3.4.3 both need this :( */           \
+      BOOST_CONCEPT_ASSERT((boost::concept::usage_requirements<model>)); \
+      ~model()
+
+#  else
+
+#   define BOOST_CONCEPT_USAGE(model)                                    \
+      BOOST_CONCEPT_ASSERT((boost::concept::usage_requirements<model>)); \
+      ~model()
+
+#  endif
 
 # endif 
 
