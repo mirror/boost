@@ -37,6 +37,37 @@
 #   define  BOOST_PP_ITERATION_LIMITS \
         (0,BOOST_PP_SEQ_SIZE(BOOST_FT_CC_NAMES_SEQ)-1)
 #   include BOOST_PP_ITERATE()
+#   if !defined(BOOST_FT_config_valid) && BOOST_FT_CC_PREPROCESSING
+#     define BOOST_FT_cc_id 1
+#     define BOOST_FT_cc_name implicit_cc
+#     define BOOST_FT_cc BOOST_PP_EMPTY
+#     define BOOST_FT_cond callable_builtin
+#     include BOOST_PP_EXPAND ( <BOOST_FT_cc_file> )
+#     undef BOOST_FT_cond
+#     undef BOOST_FT_cc_name
+#     undef BOOST_FT_cc
+#     undef BOOST_FT_cc_id
+#   elif !defined(BOOST_FT_config_valid) // and generating preprocessed file
+BOOST_PP_EXPAND(#) ifndef BOOST_FT_config_valid
+BOOST_PP_EXPAND(#)   define BOOST_FT_cc_id 1
+BOOST_PP_EXPAND(#)   define BOOST_FT_cc_name implicit_cc
+BOOST_PP_EXPAND(#)   define BOOST_FT_cc BOOST_PP_EMPTY
+BOOST_PP_EXPAND(#)   define BOOST_FT_cond callable_builtin
+#define _()
+BOOST_PP_EXPAND(#)   include BOOST_PP_EXPAND _()( <BOOST_FT_cc_file> )
+#undef _
+BOOST_PP_EXPAND(#)   undef BOOST_FT_cond
+BOOST_PP_EXPAND(#)   undef BOOST_FT_cc_name
+BOOST_PP_EXPAND(#)   undef BOOST_FT_cc
+BOOST_PP_EXPAND(#)   undef BOOST_FT_cc_id
+BOOST_PP_EXPAND(#) else
+BOOST_PP_EXPAND(#)   undef BOOST_FT_config_valid
+BOOST_PP_EXPAND(#) endif
+
+#   else
+#     undef BOOST_FT_config_valid
+#   endif
+
 #   include <boost/function_types/detail/encoding/aliases_undef.hpp>
 #   include <boost/function_types/detail/encoding/undef.hpp>
 
@@ -53,6 +84,7 @@
 #   define BOOST_FT_cond BOOST_PP_CAT(BOOST_FT_CC_,BOOST_FT_cc_pp_name)
 
 #   if BOOST_FT_cond
+#     define BOOST_FT_config_valid 1
 #     include BOOST_PP_EXPAND(<BOOST_FT_cc_file>)
 #   endif
 
@@ -87,6 +119,7 @@ BOOST_PP_EXPAND(#) define BOOST_FT_cond BOOST_FT_cc_cond_v
 #   undef BOOST_FT_cc_inf
 
 BOOST_PP_EXPAND(#) if BOOST_FT_cond
+BOOST_PP_EXPAND(#)   define BOOST_FT_config_valid 1
 #define _()
 BOOST_PP_EXPAND(#)   include BOOST_PP_EXPAND _()(<BOOST_FT_cc_file>)
 #undef _
