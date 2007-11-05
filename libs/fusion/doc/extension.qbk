@@ -377,24 +377,24 @@ for a variety of types.
 
 [endsect]
 
-[section Sequence Fascade]
+[section Sequence Facade]
 
 [heading Description]
-The __sequence_fascade__ template provides an intrusive mechanism for
+The __sequence_facade__ template provides an intrusive mechanism for
 producing a conforming Fusion iterator.
 
 [heading Synopsis]
     template<typename Derived, typename TravesalTag, typename IsView = mpl::false_>
-    struct sequence_fascade;
+    struct sequence_facade;
 
 [heading Usage]
-The user of __sequence_fascade__ derives his sequence type from a specialization of __sequence_fascade__ and passes the derived sequence type as the first template parameter. The second template parameter should be the traversal category of the sequence being implemented. The 3rd parameter should be set to `mpl::true_` if the sequence is a view.
+The user of __sequence_facade__ derives his sequence type from a specialization of __sequence_facade__ and passes the derived sequence type as the first template parameter. The second template parameter should be the traversal category of the sequence being implemented. The 3rd parameter should be set to `mpl::true_` if the sequence is a view.
 
 The user must the implement the key expressions required by their sequence type.
 
 [table Parameters
 [[Name][Description]]
-[[`sequence`, `Seq`][A type derived from __sequence_fascade__]]
+[[`sequence`, `Seq`][A type derived from __sequence_facade__]]
 [[`N`][An __mpl_integral_constant__]]
 ]
 
@@ -416,16 +416,16 @@ The user must the implement the key expressions required by their sequence type.
 
 [endsect]
 
-[section Iterator Fascade]
+[section Iterator Facade]
 
 [heading Description]
-The __iterator_fascade__ template provides an intrusive mechanism for
+The __iterator_facade__ template provides an intrusive mechanism for
 producing a conforming Fusion iterator.
 
 [heading Synopsis]
 
     template<typename Derived, typename TravesalTag>
-    struct iterator_fascade;
+    struct iterator_facade;
 
 [heading Usage]
 The user of iterator_facade derives his iterator type from a specialization of iterator_facade and passes the derived iterator type as the first template parameter. The second template parameter should be the traversal category of the iterator being implemented.
@@ -434,7 +434,7 @@ The user must the implement the key expressions required by their iterator type.
 
 [table Parameters
 [[Name][Description]]
-[[`iterator`, `It`, `It1`, `It2`][A type derived from __iterator_fascade__]]
+[[`iterator`, `It`, `It1`, `It2`][A type derived from __iterator_facade__]]
 [[`N`][An __mpl_integral_constant__]]
 ]
 

@@ -290,8 +290,8 @@
 [def __quick_start__            [link fusion.quick_start Quick Start]]
 [def __organization__           [link fusion.organization Orgainization]]
 [def __extension__              [link fusion.extension Extension]]
-[def __sequence_fascade__       [link fusion.extension.sequence_fascade `sequence_fascade`]]
-[def __iterator_fascade__       [link fusion.extension.iterator_fascade `iterator_fascade`]]
+[def __sequence_facade__       [link fusion.extension.sequence_facade `sequence_facade`]]
+[def __iterator_facade__       [link fusion.extension.iterator_facade `iterator_facade`]]
 
 [include preface.qbk]
 [include introduction.qbk]
