@@ -66,6 +66,23 @@ BOOST_CONCEPT_ASSERT((<em>concept checking class template specialization</em>));
   <strong>Note:</strong> this macro can be used at global, class, or function
   scope.</p>
 
+  <pre>
+#include "boost/concept/requires.hpp"
+
+<font color="gray">template &lt;…<em>template parameters</em>…&gt;</font>
+BOOST_CONCEPT_REQUIRES(
+  ((<em>concept checking class template specialization<sub>1</sub></em>)) 
+  ((<em>concept checking class template specialization<sub>2</sub></em>))… 
+  ((<em>concept checking class template specialization<sub>n</sub></em>))<strong>,</strong>
+  (<em>function return type</em>)
+) <font color="gray"><em>function_template_name</em>(…<em>function parameters</em>…)</font>
+</pre>
+
+  <p><strong>Effects:</strong> causes a compilation failure if the
+  given concepts are not satisfied.<br />
+  <strong>Note:</strong> this macro is intended to be used in place of
+  a function template's return type.</p>
+
   <h3><a name="basic-concepts" id="basic-concepts">Basic Concept Checking
   Classes</a></h3>
   <pre>
