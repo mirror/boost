@@ -73,7 +73,11 @@ namespace boost { namespace fusion
 
     // Unary Version
     template <typename Sequence, typename F>
+#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+    struct transform_view<Sequence, F, void_> : sequence_base<transform_view<Sequence, F, void_> >
+#else
     struct transform_view<Sequence, F> : sequence_base<transform_view<Sequence, F> >
+#endif
     {
         typedef transform_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL

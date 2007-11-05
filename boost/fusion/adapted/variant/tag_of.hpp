@@ -18,7 +18,11 @@ namespace boost { namespace fusion
     namespace traits
     {
         template<BOOST_VARIANT_ENUM_PARAMS(typename T)>
+#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+        struct tag_of<boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)>, void >
+#else
         struct tag_of<boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)> >
+#endif
         {
             typedef variant_tag type;
         };

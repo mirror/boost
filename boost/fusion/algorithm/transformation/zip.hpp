@@ -17,6 +17,7 @@
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/iteration/iterate.hpp>
 #include <boost/mpl/vector.hpp>
@@ -53,7 +54,13 @@ namespace boost { namespace fusion {
     namespace result_of
     {
         template< BOOST_PP_ENUM_PARAMS(ZIP_ITERATION, typename T) >
+#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+        #define TEXT(z, n, text) , text
+        struct zip< BOOST_PP_ENUM_PARAMS(ZIP_ITERATION, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(ZIP_ITERATION), FUSION_MAX_ZIP_SEQUENCES, TEXT, void_) >
+        #undef TEXT
+#else
         struct zip< BOOST_PP_ENUM_PARAMS(ZIP_ITERATION, T) >
+#endif
         {
             typedef mpl::vector< BOOST_PP_ENUM_PARAMS(ZIP_ITERATION, T) > sequences;
             typedef typename mpl::transform<sequences, add_reference<mpl::_> >::type ref_params;

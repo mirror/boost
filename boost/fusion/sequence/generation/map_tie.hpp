@@ -13,6 +13,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/fusion/container/map/map.hpp>
 #include <boost/fusion/container/map/limits.hpp>
 #include <boost/fusion/support/pair.hpp>
@@ -80,7 +81,14 @@ namespace boost { namespace fusion
             BOOST_PP_ENUM_PARAMS(N, typename K)
           , BOOST_PP_ENUM_PARAMS(N, typename D)
         >
+#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+        #define TEXT(z, n, text) , text
+
+        struct map_tie<BOOST_PP_ENUM_PARAMS(N, K), BOOST_PP_ENUM_PARAMS(N, D) BOOST_PP_REPEAT_FROM_TO(N, FUSION_MAX_MAP_SIZE, TEXT, void_) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_MAP_SIZE, TEXT, void_)>
+        #undef TEXT
+#else
         struct map_tie<BOOST_PP_ENUM_PARAMS(N, K), BOOST_PP_ENUM_PARAMS(N, D)>
+#endif
         {
             typedef map<BOOST_PP_ENUM(N, BOOST_FUSION_TIED_PAIR, _)> type;
         };

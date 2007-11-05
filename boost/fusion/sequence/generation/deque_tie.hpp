@@ -14,6 +14,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/fusion/container/deque/deque.hpp>
 
 namespace boost { namespace fusion
@@ -53,7 +54,13 @@ namespace boost { namespace fusion
     namespace result_of
     {
         template <BOOST_PP_ENUM_PARAMS(N, typename T)>
+#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+        #define TEXT(z, n, text) , text
+        struct deque_tie< BOOST_PP_ENUM_PARAMS(N, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_DEQUE_SIZE, TEXT, void_) >
+        #undef TEXT
+#else
         struct deque_tie<BOOST_PP_ENUM_PARAMS(N, T)>
+#endif
         {
             typedef deque<BOOST_PP_ENUM(N, BOOST_FUSION_REF, _)> type;
         };

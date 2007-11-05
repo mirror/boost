@@ -20,7 +20,11 @@ namespace boost { namespace fusion
     namespace traits
     {
         template <typename T1, typename T2>
+#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+        struct tag_of<std::pair<T1, T2>, void >
+#else
         struct tag_of<std::pair<T1, T2> >
+#endif
         {
             typedef struct_tag type;
         };
