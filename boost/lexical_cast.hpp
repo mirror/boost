@@ -52,9 +52,9 @@ namespace boost
         {
         }
         bad_lexical_cast(
-            const std::type_info &source_type,
-            const std::type_info &target_type) :
-            source(&source_type), target(&target_type)
+            const std::type_info &source_type_arg,
+            const std::type_info &target_type_arg) :
+            source(&source_type_arg), target(&target_type_arg)
         {
         }
         const std::type_info &source_type() const
