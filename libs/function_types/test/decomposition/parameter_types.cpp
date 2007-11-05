@@ -24,7 +24,7 @@ typedef C (C::*mem_func_ptr)(C,int);
 typedef C (C::*c_mem_func_ptr)(C,C) const;
 typedef C (C::*v_mem_func_ptr)(C) volatile;
 typedef C (C::*cv_mem_func_ptr)() const volatile;
-
+typedef C C::*mem_ptr;
 
 BOOST_MPL_ASSERT((
   mpl::equal< ft::parameter_types<func>, mpl::vector<C> >
@@ -54,3 +54,6 @@ BOOST_MPL_ASSERT((
   mpl::equal< ft::parameter_types<cv_mem_func_ptr>, mpl::vector<C const volatile &> >
 ));
 
+BOOST_MPL_ASSERT((
+  mpl::equal< ft::parameter_types<mem_ptr>, mpl::vector<C &> >
+));
