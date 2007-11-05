@@ -1086,6 +1086,7 @@ Thanks go to the following people for supporting the development of this
 library in one or the other way:
 
 * David Abrahams
+* Tom Brinkman
 * Aleksey Gurtovoy
 * Jody Hagins
 * Hartmut Kaiser 
@@ -1093,9 +1094,11 @@ library in one or the other way:
 * John Maddock 
 * Paul Mensonides
 * Alexander Nasonov
+* Richard Smith
 * Rob Stewart
 * Jonathan Turkanis
 * Pavel Vozenilek
+* Steven Watanabe
 
 [endsect]
 
