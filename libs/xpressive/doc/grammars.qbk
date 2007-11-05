@@ -149,8 +149,10 @@ example from above.
 
                 compiler.compile("(? $group  = ) \\( (? $expr ) \\) ", x);
                 compiler.compile("(? $factor = ) \\d+ | (? $group ) ", x);
-                compiler.compile("(? $term   = ) (? $factor ) ( \\* (? $factor ) | / (? $factor ) )* ", x);
-         expr = compiler.compile("(? $expr   = ) (? $term )   ( \\+ (? $term )   | - (? $term )   )* ", x);
+                compiler.compile("(? $term   = ) (? $factor )"
+                                 " ( \\* (? $factor ) | / (? $factor ) )* ", x);
+         expr = compiler.compile("(? $expr   = ) (? $term )"
+                                 "   ( \\+ (? $term ) | - (? $term )   )* ", x);
     }
 
     std::string str("foo 9*(10+3) bar");
