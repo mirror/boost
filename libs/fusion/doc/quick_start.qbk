@@ -11,6 +11,7 @@ over which components to include (see section __organization__ for
 details).]:
 
     #include <boost/fusion/sequence.hpp>
+    #include <boost/fusion/include/sequence.hpp>
 
 Let's begin with a `__vector__` [footnote Unless otherwise noted, components are 
 in namespace `boost::fusion`. For the sake of simplicity, code in this 
@@ -32,6 +33,7 @@ the similarity ends there. You can do a lot more with Fusion `__vector__` or
 First, let's include the algorithms:
 
     #include <boost/fusion/algorithm.hpp>
+    #include <boost/fusion/include/algorithm.hpp>
     
 Now, let's write a function object that prints XML of the form <type>data</type> 
 for each member in the tuple. 

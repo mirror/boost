@@ -52,14 +52,13 @@ link against.
     * map
     * set
     * vector
+    * generation
 * mpl
 * functional
 * sequence
     * comparison
-    * conversion
     * intrinsic
     * io
-    * utility
 * iterator
 * support
 
@@ -69,7 +68,9 @@ If, for example, you want to use `list`, depending on the granularity that
 you desire, you may do so by including one of
 
     #include <boost/fusion/container.hpp>
+    #include <boost/fusion/include/container.hpp>
     #include <boost/fusion/container/list.hpp>
+    #include <boost/fusion/include/list.hpp>
 
 The first includes all containers The second includes only `list`
 [footnote Modules may contain smaller components. Header file

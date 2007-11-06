@@ -52,6 +52,7 @@ tag type for operations involving our sequence. This is done by specializing
 `traits::tag_of` for our sequence type.
 
     #include <boost/fusion/support/tag_of_fwd.hpp>
+    #include <boost/fusion/include/tag_of_fwd.hpp>
 
     namespace boost { namespace fusion { namespace traits {        
         template<>
@@ -67,6 +68,7 @@ support for groups of related types. This feature is not necessary
 for our sequence, but for an example see the code in:
 
     #include <boost/fusion/adapted/array/tag_of.hpp>
+    #include <boost/fusion/include/tag_of.hpp>
 
 [heading Designing a suitable iterator]
 
@@ -457,6 +459,7 @@ The user must the implement the key expressions required by their iterator type.
 [heading Header]
 
     #include <boost/fusion/iterator/iterator_facade.hpp>
+    #include <boost/fusion/include/iterator_facade.hpp>
 
 [endsect]
 

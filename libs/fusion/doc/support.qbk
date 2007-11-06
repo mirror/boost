@@ -40,6 +40,7 @@ specialized to accomodate clients which provide Fusion conforming sequences.
 [heading Header]
 
     #include <boost/fusion/support/is_sequence.hpp>
+    #include <boost/fusion/include/is_sequence.hpp>
 
 [heading Example]
 
@@ -93,6 +94,7 @@ may be specialized to accomodate clients providing Fusion conforming views.
 [heading Header]
 
     #include <boost/fusion/support/is_view.hpp>
+    #include <boost/fusion/include/is_view.hpp>
 
 [heading Example]
 
@@ -147,6 +149,7 @@ conforming sequences.
 [heading Header]
 
     #include <boost/fusion/support/tag_of.hpp>
+    #include <boost/fusion/include/tag_of.hpp>
 
 [heading Example]
 
@@ -243,6 +246,7 @@ __sequence__ or __iterator__.
 [heading Header]
 
     #include <boost/fusion/support/category_of.hpp>
+    #include <boost/fusion/include/category_of.hpp>
 
 [heading Example]
 
@@ -266,6 +270,7 @@ __note_boost_ref__).
 [heading Header]
 
     #include <boost/fusion/support/deduce.hpp>
+    #include <boost/fusion/include/deduce.hpp>
 
 [heading Synopsis]
     namespace traits
@@ -309,6 +314,7 @@ constructor accepting the original type as its argument.
 [heading Header]
 
     #include <boost/fusion/support/deduce_sequence.hpp>
+    #include <boost/fusion/include/deduce_sequence.hpp>
 
 [heading Synopsis]
     namespace traits
@@ -413,6 +419,7 @@ It is used as elements in __map__s, for example.
 [heading Header]
 
     #include <boost/fusion/support/pair.hpp>
+    #include <boost/fusion/include/pair.hpp>
 
 [heading Example]
 

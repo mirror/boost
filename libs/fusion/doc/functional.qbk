@@ -1220,6 +1220,7 @@ __element_conversion__ is applied to the target function.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_fused.hpp>
+    #include <boost/fusion/include/make_fused.hpp>
 
 [heading Example]
     float sub(float a, float b) { return a - b; }
@@ -1268,6 +1269,7 @@ The usual __element_conversion__ applied to the target function.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_fused_procedure.hpp>
+    #include <boost/fusion/include/make_fused_procedure.hpp>
 
 [heading Example]
     __vector__<int,int,int> v(1,2,3);
@@ -1310,6 +1312,7 @@ The usual __element_conversion__ is applied to the target function.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_fused_function_object.hpp>
+    #include <boost/fusion/include/make_fused_function_object.hpp>
 
 [heading Example]
     struct sub
@@ -1371,6 +1374,7 @@ The usual __element_conversion__ is applied to the target function.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_unfused_generic.hpp>
+    #include <boost/fusion/include/make_unfused_generic.hpp>
 
 [heading Example]
     struct bottles_song
@@ -1439,6 +1443,7 @@ The usual __element_conversion__ is applied to the target function.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_unfused_lvalue_args.hpp>
+    #include <boost/fusion/include/make_unfused_lvalue_args.hpp>
 
 [heading Example]
     struct fused_incrementer
@@ -1498,6 +1503,7 @@ The usual __element_conversion__ is applied to the target function.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_unfused_rvalue_args.hpp>
+    #include <boost/fusion/include/make_unfused_rvalue_args.hpp>
 
 [heading Example]
     struct sequence_printer
@@ -1540,6 +1546,7 @@ Returns the result type of __make_fused__.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_fused.hpp>
+    #include <boost/fusion/include/make_fused.hpp>
 
 [heading Synopsis]
     namespace result_of
@@ -1564,6 +1571,7 @@ Returns the result type of __make_fused_procedure__.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_fused_procedure.hpp>
+    #include <boost/fusion/include/make_fused_procedure.hpp>
 
 [heading Synopsis]
     namespace result_of
@@ -1588,6 +1596,7 @@ Returns the result type of __make_fused_function_object__.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_fused_function_object.hpp>
+    #include <boost/fusion/include/make_fused_function_object.hpp>
 
 [heading Synopsis]
     namespace result_of
@@ -1612,6 +1621,7 @@ Returns the result type of __make_unfused_generic__.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_unfused_generic.hpp>
+    #include <boost/fusion/include/make_unfused_generic.hpp>
 
 [heading Synopsis]
     namespace result_of
@@ -1636,6 +1646,7 @@ Returns the result type of __make_unfused_lvalue_args__.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_unfused_lvalue_args.hpp>
+    #include <boost/fusion/include/make_unfused_lvalue_args.hpp>
 
 [heading Synopsis]
     namespace result_of
@@ -1660,6 +1671,7 @@ Returns the result type of __make_unfused_rvalue_args__.
 [heading Header]
 
     #include <boost/fusion/functional/generation/make_unfused_rvalue_args.hpp>
+    #include <boost/fusion/include/make_unfused_rvalue_args.hpp>
 
 [heading Synopsis]
     namespace result_of

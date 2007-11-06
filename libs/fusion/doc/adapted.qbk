@@ -12,6 +12,7 @@ and from __mpl__ and Fusion].
 [heading Header]
 
     #include <boost/fusion/adapted.hpp>
+    #include <boost/fusion/include/adapted.hpp>
 
 [section std::pair]
 
@@ -21,6 +22,7 @@ makes `std::pair` a fully conforming __random_access_sequence__.
 [heading Header]
 
     #include <boost/fusion/adapted/std_pair.hpp>
+    #include <boost/fusion/include/std_pair.hpp>
 
 [heading Model of]
 
@@ -47,6 +49,7 @@ header makes all __mpl__ sequences fully conforming fusion sequences.
 [heading Header]
 
     #include <boost/fusion/adapted/mpl.hpp>
+    #include <boost/fusion/include/mpl.hpp>
 
 [heading Model of]
 
@@ -79,6 +82,7 @@ header makes `boost::array` a fully conforming __random_access_sequence__.
 [heading Header]
 
     #include <boost/fusion/adapted/array.hpp>
+    #include <boost/fusion/include/array.hpp>
 
 [heading Model of]
 
@@ -107,6 +111,7 @@ header makes `boost::tuple` a fully conforming __forward_sequence__.
 [heading Header]
 
     #include <boost/fusion/adapted/boost_tuple.hpp>
+    #include <boost/fusion/include/boost_tuple.hpp>
 
 [heading Model of]
 
@@ -134,6 +139,7 @@ being populated with a default constructed value of that type.
 [heading Header]
 
     #include <boost/fusion/adapted/variant.hpp>
+    #include <boost/fusion/include/variant.hpp>
 
 [heading Model of]
 

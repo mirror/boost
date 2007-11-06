@@ -11,6 +11,7 @@ Sequence's elements.
 [heading Header]
 
     #include <boost/fusion/sequence.hpp>
+    #include <boost/fusion/include/sequence.hpp>
 
 [section Concepts]
 
@@ -349,6 +350,7 @@ have default implementations that will work in majority of cases].
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic.hpp>
+    #include <boost/fusion/include/intrinsic.hpp>
 
 [section Functions]
 
@@ -388,6 +390,7 @@ else, __random_access_iterator__ if `seq` is a __random_access_sequence__.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/begin.hpp>
+    #include <boost/fusion/include/begin.hpp>
 
 [heading Example]
 
@@ -433,6 +436,7 @@ the sequence.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/end.hpp>
+    #include <boost/fusion/include/end.hpp>
 
 [heading Example]
 
@@ -473,6 +477,7 @@ to `false`.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/empty.hpp>
+    #include <boost/fusion/include/empty.hpp>
 
 [heading Example]
 
@@ -520,6 +525,7 @@ the first element in the sequence.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/front.hpp>
+    #include <boost/fusion/include/front.hpp>
 
 [heading Example]
 
@@ -567,6 +573,7 @@ last element in the sequence.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/back.hpp>
+    #include <boost/fusion/include/back.hpp>
 
 [heading Example]
 
@@ -606,6 +613,7 @@ in the sequence.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/size.hpp>
+    #include <boost/fusion/include/size.hpp>
 
 [heading Example]
 
@@ -658,6 +666,7 @@ sequence.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/at.hpp>
+    #include <boost/fusion/include/at.hpp>
 
 [heading Example]
 
@@ -710,6 +719,7 @@ sequence.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/at_c.hpp>
+    #include <boost/fusion/include/at_c.hpp>
 
 [heading Example]
 
@@ -752,6 +762,7 @@ associated with Key, else, evaluates to `false`.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/has_key.hpp>
+    #include <boost/fusion/include/has_key.hpp>
 
 [heading Example]
 
@@ -800,6 +811,7 @@ convertable to the element associated with Key.
 [heading Header]
 
     #include <boost/fusion/sequence/intrinsic/at_key.hpp>
+    #include <boost/fusion/include/at_key.hpp>
 
 [heading Example]
 
@@ -1340,1175 +1352,6 @@ Returns the return type of swap.
 
 [endsect]
 
-[section Generation]
-
-These are the functions that you can use to generate various forms of
-__containers__ from elemental values.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation.hpp>
-
-[section Functions]
-
-[section make_list]
-
-[heading Description]
-
-Create a __list__ from one or more values.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    typename __result_of_make_list__<T0, T1,... TN>::type
-    make_list(T0 const& x0, T1 const& x1... TN const& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
-before including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_LIST_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                   [Description]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]  [The arguments to `make_list`]]
-]
-
-[heading Expression Semantics]
-
-    make_list(x0, x1,... xN);
-
-[*Return type]: __result_of_make_list__`<T0, T1,... TN>::type`
-
-[*Semantics]: Create a __list__ from `x0, x1,... xN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_list.hpp>
-
-[heading Example]
-
-    make_list(123, "hello", 12.5)
-
-[heading See also]
-
-__note_boost_ref__
-
-[endsect]
-
-[section make_cons]
-
-[heading Description]
-
-Create a __cons__ from `car` (/head/) and optional `cdr` (/tail/).
-
-[heading Synopsis]
-
-    template <typename Car>
-    typename __result_of_make_cons__<Car>::type
-    make_cons(Car const& car);
-
-    template <typename Car, typename Cdr>
-    typename __result_of_make_cons__<Car, Cdr>::type
-    make_cons(Car const& car, Cdr const& cdr);
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                   [Description]]
-    [[`car`]            [Instance of `Car`]             [The list's head]]
-    [[`cdr`]            [Instance of `Cdr`]             [The list's tail (optional)]]
-]
-
-[heading Expression Semantics]
-
-    make_cons(car, cdr);
-
-[*Return type]: __result_of_make_cons__`<Car, Cdr>::type` or
-__result_of_make_cons__`<Car>::type`
-
-[*Semantics]: Create a __cons__ from `car` (/head/) and optional `cdr` (/tail/).
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_cons.hpp>
-
-[heading Example]
-
-    make_cons('x', make_cons(123))
-
-[heading See also]
-
-__note_boost_ref__
-
-[endsect]
-
-[section make_vector]
-
-[heading Description]
-
-Create a __vector__ from one or more values.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    typename __result_of_make_vector__<T0, T1,... TN>::type
-    make_vector(T0 const& x0, T1 const& x1... TN const& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
-defaults to `10`. You may define the preprocessor constant
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
-default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                   [Description]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]  [The arguments to `make_vector`]]
-]
-
-[heading Expression Semantics]
-
-    make_vector(x0, x1,... xN);
-
-[*Return type]: __result_of_make_vector__`<T0, T1,... TN>::type`
-
-[*Semantics]: Create a __vector__ from `x0, x1,... xN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_vector.hpp>
-
-[heading Example]
-
-    make_vector(123, "hello", 12.5)
-
-[heading See also]
-
-__note_boost_ref__
-
-[endsect]
-
-[section make_set]
-
-[heading Description]
-
-Create a __set__ from one or more values.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    typename __result_of_make_set__<T0, T1,... TN>::type
-    make_set(T0 const& x0, T1 const& x1... TN const& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`set` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                   [Description]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]  [The arguments to `make_set`]]
-]
-
-[heading Expression Semantics]
-
-    make_set(x0, x1,... xN);
-
-[*Return type]: __result_of_make_set__`<T0, T1,... TN>::type`
-
-[*Semantics]: Create a __set__ from `x0, x1,... xN`.
-
-[*Precondition]: There may be no duplicate key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_set.hpp>
-
-[heading Example]
-
-    make_set(123, "hello", 12.5)
-
-[heading See also]
-
-__note_boost_ref__
-
-[endsect]
-
-[section make_map]
-
-[heading Description]
-
-Create a __map__ from one or more key/data pairs.
-
-[heading Synopsis]
-
-    template <
-        typename K0, typename K1,... typename KN
-      , typename T0, typename T1,... typename TN>
-    typename __result_of_make_map__<K0, K0,... KN, T0, T1,... TN>::type
-    make_map(T0 const& x0, T1 const& x1... TN const& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`map` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                   [Description]]
-    [[`K0, K1,... KN`]  [The key types]                 [Keys associated with `x0, x1,... xN`]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]  [The arguments to `make_map`]]
-]
-
-[heading Expression Semantics]
-
-    make_map<K0, K1,... KN>(x0, x1,... xN);
-
-[*Return type]: __result_of_make_map__`<K0, K0,... KN, T0, T1,... TN>::type`
-
-[*Semantics]: Create a __map__ from `K0, K1,... KN` keys and
-`x0, x1,... xN` data.
-
-[*Precondition]: There may be no duplicate key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_map.hpp>
-
-[heading Example]
-
-    make_map(
-        __fusion_make_pair__<int>('X')
-      , __fusion_make_pair__<double>("Men"))
-
-[heading See also]
-
-__note_boost_ref__, __fusion_pair__
-
-[endsect]
-
-[section Tiers]
-
-Tiers are sequences, where all elements are non-const reference types. They
-are constructed with a call to a couple of /tie/ function templates. The
-succeeding sections document the various /tier/ flavors.
-
-* __list_tie__
-* __vector_tie__
-* __map_tie__
-
-Example:
-
-    int i; char c; double d;
-      ...
-    __vector_tie__(i, c, a);
-
-The __vector_tie__ function creates a __vector__ of type
-`__vector__<int&, char&, double&>`. The same result could be achieved with the call
-__make_vector__(__boost_ref_call__(i), __boost_ref_call__(c), __boost_ref_call__(a))
-[footnote see __boost_ref__ for details about `ref`].
-
-A /tie/ can be used to 'unpack' another tuple into variables. E.g.:
-
-    int i; char c; double d;
-    __vector_tie__(i, c, d) = __make_vector__(1,'a', 5.5);
-    std::cout << i << " " <<  c << " " << d;
-
-This code prints 1 a 5.5 to the standard output stream. A sequence
-unpacking operation like this is found for example in ML and Python. It is
-convenient when calling functions which return sequences.
-
-[heading Ignore]
-
-There is also an object called /ignore/ which allows you to ignore an
-element assigned by a sequence. The idea is that a function may return a
-sequence, only part of which you are interested in. For example:
-
-    char c;
-    __vector_tie__(ignore, c) = __make_vector__(1, 'a');
-
-[endsect]
-
-[section list_tie]
-
-[heading Description]
-
-Constructs a tie using a __list__ sequence.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    __list__<T0&, T1&,... TN&>
-    list_tie(T0& x0, T1& x1... TN& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
-before including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_LIST_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                       [Description]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]      [The arguments to `list_tie`]]
-]
-
-[heading Expression Semantics]
-
-    list_tie(x0, x1,... xN);
-
-[*Return type]: __list__<T0&, T1&,... TN&>
-
-[*Semantics]: Create a __list__ of references from `x0, x1,... xN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/list_tie.hpp>
-
-[heading Example]
-
-    int i = 123;
-    double d = 123.456;
-    list_tie(i, d)
-
-[endsect]
-
-[section vector_tie]
-
-[heading Description]
-
-Constructs a tie using a __vector__ sequence.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    __vector__<T0&, T1&,... TN&>
-    vector_tie(T0& x0, T1& x1... TN& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
-defaults to `10`. You may define the preprocessor constant
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
-default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                       [Description]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]      [The arguments to `vector_tie`]]
-]
-
-[heading Expression Semantics]
-
-    vector_tie(x0, x1,... xN);
-
-[*Return type]: __vector__<T0&, T1&,... TN&>
-
-[*Semantics]: Create a __vector__ of references from `x0, x1,... xN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/vector_tie.hpp>
-
-[heading Example]
-
-    int i = 123;
-    double d = 123.456;
-    vector_tie(i, d)
-
-[endsect]
-
-[section map_tie]
-
-[heading Description]
-
-Constructs a tie using a __map__ sequence.
-
-[heading Synopsis]
-
-    template <typename K0, typename K1,... typename KN, typename D0, typename D1,... typename DN>
-    __map__<__pair__<K0, D0&>, __pair__<K1, D1&>,... __pair__<KN, DN&> >
-    map_tie(D0& d0, D1& d1... DN& dN);
-
-The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
-where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
-defaults to `10`, and a corresponding number of key types.
-You may define the preprocessor constant  `FUSION_MAX_MAP_SIZE` before
-including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_MAP_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]                       [Description]]
-    [[`K0, K1,... KN`]  [Any type][The key types associated with each of the `x1,x2,...,xN` values]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]                      [The arguments to `map_tie`]]
-]
-
-[heading Expression Semantics]
-
-    map_tie<K0, K1,... KN>(x0, x1,... xN);
-
-[*Return type]: __map__<__pair__<K0, D0&>, __pair__<K1, D1&>,... __pair__<KN, DN&> >
-
-[*Semantics]: Create a __map__ of references from `x0, x1,... xN` with keys `K0, K1,... KN`
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/map_tie.hpp>
-
-[heading Example]
-
-    struct int_key;
-    struct double_key;
-    ...
-    int i = 123;
-    double d = 123.456;
-    map_tie<int_key, double_key>(i, d)
-
-[endsect]
-
-[endsect]
-
-[section MetaFunctions]
-
-[section make_list]
-
-[heading Description]
-
-Returns the result type of __make_list__.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    struct make_list;
-
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
-before including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_LIST_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]       [Description]]
-    [[`T0, T1,... TN`]  [Any type]          [Template arguments to `make_list`]]
-]
-
-[heading Expression Semantics]
-
-    result_of::make_list<T0, T1,... TN>::type
-
-[*Return type]: A __list__ with elements of types converted following the
-rules for __element_conversion__.
-
-[*Semantics]: Create a __list__ from `T0, T1,... TN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_list.hpp>
-
-[heading Example]
-
-    result_of::make_list<int, const char(&)[7], double>::type
-
-[endsect]
-
-[section make_cons]
-
-[heading Description]
-
-Returns the result type of __make_cons__.
-
-[heading Synopsis]
-
-    template <typename Car, typename Cdr = nil>
-    struct make_cons;
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]               [Description]]
-    [[`Car`]            [Any type]                  [The list's head type]]
-    [[`Cdr`]            [A `cons`]                  [The list's tail type (optional)]]
-]
-
-[heading Expression Semantics]
-
-    result_of::make_cons<Car, Cdr>::type
-
-[*Return type]: A __cons__ with head element, `Car`, of type converted
-following the rules for __element_conversion__, and tail, `Cdr`.
-
-[*Semantics]: Create a __cons__ from `Car` (/head/) and optional `Cdr` (/tail/).
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_cons.hpp>
-
-[heading Example]
-
-    result_of::make_cons<char, result_of::make_cons<int>::type>::type
-
-[endsect]
-
-[section make_vector]
-
-[heading Description]
-
-Returns the result type of __make_vector__.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    struct make_vector;
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
-defaults to `10`. You may define the preprocessor constant
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
-default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]       [Description]]
-    [[`T0, T1,... TN`]  [Any type]          [Template arguments to `make_vector`]]
-]
-
-[heading Expression Semantics]
-
-    result_of::make_vector<T0, T1,... TN>::type
-
-[*Return type]: A __vector__ with elements of types converted following the
-rules for __element_conversion__.
-
-[*Semantics]: Create a __vector__ from `T0, T1,... TN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_list.hpp>
-
-[heading Example]
-
-    result_of::make_vector<int, const char(&)[7], double>::type
-
-[endsect]
-
-[section make_set]
-
-[heading Description]
-
-Returns the result type of __make_set__.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    struct make_set;
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`set` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]       [Description]]
-    [[`T0, T1,... TN`]  [Any type]          [The arguments to `make_set`]]
-]
-
-[heading Expression Semantics]
-
-    result_of::make_set<T0, T1,... TN>::type
-
-[*Return type]: A __set__ with elements of types converted following the
-rules for __element_conversion__.
-
-[*Semantics]: Create a __set__ from `T0, T1,... TN`.
-
-[*Precondition]: There may be no duplicate key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_set.hpp>
-
-[heading Example]
-
-    result_of::make_set<int, char, double>::type
-
-[endsect]
-
-[section make_map]
-
-[heading Description]
-
-Returns the result type of __make_map__.
-
-[heading Synopsis]
-
-    template <
-        typename K0, typename K1,... typename KN
-      , typename T0, typename T1,... typename TN>
-    struct make_map;
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
-`map` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
-definable predefined maximum that defaults to `10`. You may define the
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
-header to change the default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]           [Description]]
-    [[`K0, K1,... KN`]  [Any type]              [Keys associated with `T0, T1,... TN`]]
-    [[`T0, T1,... TN`]  [Any type]              [Data associated with keys `K0, K1,... KN`]]
-]
-
-[heading Expression Semantics]
-
-    resulf_of::make_map<K0, K1,... KN, T0, T1,... TN>::type;
-
-[*Return type]: __result_of_make_map__`<K0, K0,... KN, T0, T1,... TN>::type`
-
-[*Semantics]: A __map__ with __fusion_pair__ elements where the
-`second_type` is converted following the rules for __element_conversion__.
-
-[*Precondition]: There may be no duplicate key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/make_map.hpp>
-
-[heading Example]
-
-    result_of::make_map<int, double, char, double>::type
-
-[heading See also]
-
-__fusion_pair__
-
-[endsect]
-
-[section list_tie]
-
-[heading Description]
-
-Returns the result type of __list_tie__.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    struct list_tie;
-
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
-before including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_LIST_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]       [Description]]
-    [[`T0, T1,... TN`]  [Any type]          [The arguments to `list_tie`]]
-]
-
-[heading Expression Semantics]
-
-    result_of::list_tie<T0, T1,... TN>::type;
-
-[*Return type]: __list__<T0&, T1&,... TN&>
-
-[*Semantics]: Create a __list__ of references from `T0, T1,... TN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/list_tie.hpp>
-
-[heading Example]
-
-    result_of::list_tie<int, double>::type
-
-[endsect]
-
-[section vector_tie]
-
-[heading Description]
-
-Returns the result type of __vector_tie__.
-
-[heading Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    struct vector_tie;
-
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
-defaults to `10`. You may define the preprocessor constant
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
-default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]       [Description]]
-    [[`T0, T1,... TN`]  [Any type]          [The arguments to `vector_tie`]]
-]
-
-[heading Expression Semantics]
-
-    result_of::vector_tie<T0, T1,... TN>::type;
-
-[*Return type]: __vector__<T0&, T1&,... TN&>
-
-[*Semantics]: Create a __vector__ of references from `T0, T1,... TN`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/vector_tie.hpp>
-
-[heading Example]
-
-    result_of::vector_tie<int, double>::type
-
-[endsect]
-
-[section map_tie]
-
-[heading Description]
-
-Returns the result type of __map_tie__.
-
-[heading Synopsis]
-
-    template <typename K0, typename K1,... typename KN, typename D0, typename D1,... typename DN>
-    struct map_tie;
-
-The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
-where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
-defaults to `10`. You may define the preprocessor constant
-`FUSION_MAX_MAP_SIZE` before including any Fusion header to change the
-default. Example:
-
-    #define FUSION_MAX_MAP_SIZE 20
-
-[heading Parameters]
-
-[table
-    [[Parameter]        [Requirement]       [Description]]
-    [[`K0, K1,... KN`]  [Any type]          [The key types for `map_tie`]]
-    [[`D0, D1,... DN`]  [Any type]          [The arguments types for `map_tie`]]
-]
-
-[heading Expression Semantics]
-
-    result_of::map_tie<K0, K1,... KN, D0, D1,... DN>::type;
-
-[*Return type]: __map__<__pair__<K0, D0&>, __pair__<K1, D1&>,... __pair__<KN, DN&> >
-
-[*Semantics]: Create a __map__ of references from `D0, D1,... DN` with keys `K0, K1,... KN`
-
-[heading Header]
-
-    #include <boost/fusion/sequence/generation/map_tie.hpp>
-
-[heading Example]
-
-    struct int_key;
-    struct double_key;
-    ...
-    result_of::map_tie<int_key, double_key, int, double>::type
-
-[endsect]
-
-[endsect]
-
-[endsect]
-
-[section Conversion]
-
-All fusion sequences can be converted to one of the __containers__ types
-using one of these conversion functions.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion.hpp>
-
-[section Functions]
-
-[section as_list]
-
-[heading Description]
-
-Convert a fusion sequence to a __list__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    typename result_of::as_list<Sequence>::type
-    as_list(Sequence& seq);
-
-    template <typename Sequence>
-    typename result_of::as_list<Sequence const>::type
-    as_list(Sequence const& seq);
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`seq`]        [An instance of Sequence]   [The sequence to convert.]]
-]
-
-[heading Expression Semantics]
-
-    as_list(seq);
-
-[*Return type]: __result_of_as_list__`<Sequence>::type`
-
-[*Semantics]: Convert a fusion sequence, `seq`, to a __list__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_list.hpp>
-
-[heading Example]
-
-    as_list(__make_vector__('x', 123, "hello"))
-
-[endsect]
-
-[section as_vector]
-
-[heading Description]
-
-Convert a fusion sequence to a __vector__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    typename result_of::as_vector<Sequence>::type
-    as_vector(Sequence& seq);
-
-    template <typename Sequence>
-    typename result_of::as_vector<Sequence const>::type
-    as_vector(Sequence const& seq);
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`seq`]        [An instance of Sequence]   [The sequence to convert.]]
-]
-
-[heading Expression Semantics]
-
-    as_vector(seq);
-
-[*Return type]: __result_of_as_vector__`<Sequence>::type`
-
-[*Semantics]: Convert a fusion sequence, `seq`, to a __vector__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_vector.hpp>
-
-[heading Example]
-
-    as_vector(__make_list__('x', 123, "hello"))
-
-[endsect]
-
-[section as_set]
-
-[heading Description]
-
-Convert a fusion sequence to a __set__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    typename result_of::as_set<Sequence>::type
-    as_set(Sequence& seq);
-
-    template <typename Sequence>
-    typename result_of::as_set<Sequence const>::type
-    as_set(Sequence const& seq);
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`seq`]        [An instance of Sequence]   [The sequence to convert.]]
-]
-
-[heading Expression Semantics]
-
-    as_set(seq);
-
-[*Return type]: __result_of_as_set__`<Sequence>::type`
-
-[*Semantics]: Convert a fusion sequence, `seq`, to a __set__.
-
-[*Precondition]: There may be no duplicate key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_set.hpp>
-
-[heading Example]
-
-    as_set(__make_vector__('x', 123, "hello"))
-
-[endsect]
-
-[section as_map]
-
-[heading Description]
-
-Convert a fusion sequence to a __map__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    typename result_of::as_map<Sequence>::type
-    as_map(Sequence& seq);
-
-    template <typename Sequence>
-    typename result_of::as_map<Sequence const>::type
-    as_map(Sequence const& seq);
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`seq`]        [An instance of Sequence]   [The sequence to convert.]]
-]
-
-[heading Expression Semantics]
-
-    as_map(seq);
-
-[*Return type]: __result_of_as_map__`<Sequence>::type`
-
-[*Semantics]: Convert a fusion sequence, `seq`, to a __map__.
-
-[*Precondition]: The elements of the sequence are assumed to be
-__fusion_pair__s. There may be no duplicate __fusion_pair__ key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_map.hpp>
-
-[heading Example]
-
-    as_map(__make_vector__(
-        __fusion_make_pair__<int>('X')
-      , __fusion_make_pair__<double>("Men")))
-
-[endsect]
-
-[endsect]
-
-[section Metafunctions]
-
-[section as_list]
-
-[heading Description]
-
-Returns the result type of __as_list__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    struct as_list;
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`Sequence`]   [A fusion __sequence__]     [The sequence type to convert.]]
-]
-
-[heading Expression Semantics]
-
-    result_of::as_list<Sequence>::type;
-
-[*Return type]: A __list__ with same elements as the input sequence,
-`Sequence`.
-
-[*Semantics]: Convert a fusion sequence, `Sequence`, to a __list__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_list.hpp>
-
-[heading Example]
-
-    result_of::as_list<__vector__<char, int> >::type
-
-[endsect]
-
-[section as_vector]
-
-[heading Description]
-
-Returns the result type of __as_vector__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    struct as_vector;
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`Sequence`]   [A fusion __sequence__]     [The sequence to convert.]]
-]
-
-[heading Expression Semantics]
-
-    result_of::as_vector<Sequence>::type;
-
-[*Return type]: A __vector__ with same elements as the input sequence,
-`Sequence`.
-
-[*Semantics]: Convert a fusion sequence, `Sequence`, to a __vector__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_vector.hpp>
-
-[heading Example]
-
-    result_of::as_vector<__list__<char, int> >::type
-
-[endsect]
-
-[section as_set]
-
-[heading Description]
-
-Returns the result type of __as_set__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    struct as_set;
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`Sequence`]   [A fusion __sequence__]     [The sequence to convert.]]
-]
-
-[heading Expression Semantics]
-
-    result_of::as_set<Sequence>::type;
-
-[*Return type]: A __set__ with same elements as the input sequence,
-`Sequence`.
-
-[*Semantics]: Convert a fusion sequence, `Sequence`, to a __set__.
-
-[*Precondition]: There may be no duplicate key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_set.hpp>
-
-[heading Example]
-
-    result_of::as_set<__vector__<char, int> >::type
-
-[endsect]
-
-[section as_map]
-
-[heading Description]
-
-Returns the result type of __as_map__.
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    struct as_map;
-
-[heading Parameters]
-
-[table
-    [[Parameter]    [Requirement]               [Description]]
-    [[`Sequence`]   [A fusion __sequence__]     [The sequence to convert.]]
-]
-
-[heading Expression Semantics]
-
-    result_of::as_map<Sequence>::type;
-
-[*Return type]: A __map__ with same elements as the input sequence,
-`Sequence`.
-
-[*Semantics]: Convert a fusion sequence, `Sequence`, to a __map__.
-
-[*Precondition]: The elements of the sequence are assumed to be
-__fusion_pair__s. There may be no duplicate __fusion_pair__ key types.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/conversion/as_map.hpp>
-
-[heading Example]
-
-    result_of::as_map<__vector__<
-        __fusion_pair__<int, char>
-      , __fusion_pair__<double, std::string> > >::type
-
-[endsect]
-
-[endsect]
-
-[endsect]
-
 [section Operator]
 
 These operators, like the __algorithms__, work generically on all Fusion
@@ -2572,6 +1415,7 @@ representation may not be unambiguously parseable.
 [heading Header]
 
     #include <boost/fusion/sequence/io.hpp>
+    #include <boost/fusion/include/io.hpp>
 
 [section in]
 
@@ -2604,6 +1448,7 @@ Read a __sequence__ from an input stream.
 [heading Header]
 
     #include <boost/fusion/sequence/io/in.hpp>
+    #include <boost/fusion/include/in.hpp>
 
 [heading Example]
 
@@ -2643,6 +1488,7 @@ Write a __sequence__ to an output stream.
 [heading Header]
 
     #include <boost/fusion/sequence/io/out.hpp>
+    #include <boost/fusion/include/out.hpp>
 
 [heading Example]
 
@@ -2662,6 +1508,7 @@ performed only until the result is clear.
 [heading Header]
 
     #include <boost/fusion/sequence/comparison.hpp>
+    #include <boost/fusion/include/comparison.hpp>
 
 [section equal]
 
@@ -2706,6 +1553,7 @@ e and f, e == f  returns true.
 [heading Header]
 
     #include <boost/fusion/sequence/comparison/equal_to.hpp>
+    #include <boost/fusion/include/equal_to.hpp>
 
 [heading Example]
 
@@ -2754,6 +1602,7 @@ Returns !(a == b).
 [heading Header]
 
     #include <boost/fusion/sequence/comparison/not_equal_to.hpp>
+    #include <boost/fusion/include/not_equal_to.hpp>
 
 [heading Example]
 
@@ -2802,6 +1651,7 @@ compile time error.
 [heading Header]
 
     #include <boost/fusion/sequence/comparison/less.hpp>
+    #include <boost/fusion/include/less.hpp>
 
 [heading Example]
 
@@ -2850,6 +1700,7 @@ compile time error.
 [heading Header]
 
     #include <boost/fusion/sequence/comparison/less_equal.hpp>
+    #include <boost/fusion/include/less_equal.hpp>
 
 [heading Example]
 
@@ -2898,6 +1749,7 @@ compile time error.
 [heading Header]
 
     #include <boost/fusion/sequence/comparison/less_equal.hpp>
+    #include <boost/fusion/include/less_equal.hpp>
 
 [heading Example]
 
@@ -2946,6 +1798,7 @@ compile time error.
 [heading Header]
 
     #include <boost/fusion/sequence/comparison/greater_equal.hpp>
+    #include <boost/fusion/include/greater_equal.hpp>
 
 [heading Example]
 

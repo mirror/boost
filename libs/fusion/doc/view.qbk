@@ -11,6 +11,7 @@ lazy nature make them very cheap to copy and be passed around by value.
 [heading Header]
 
     #include <boost/fusion/view.hpp>
+    #include <boost/fusion/include/view.hpp>
 
 [section single_view]
 
@@ -19,6 +20,7 @@ lazy nature make them very cheap to copy and be passed around by value.
 [heading Header]
 
     #include <boost/fusion/view/single_view.hpp>
+    #include <boost/fusion/include/single_view.hpp>
 
 [heading Synopsis]
 
@@ -73,6 +75,7 @@ presents only those elements for which its predicate evaluates to
 [heading Header]
 
     #include <boost/fusion/view/filter_view.hpp>
+    #include <boost/fusion/include/filter_view.hpp>
 
 [heading Synopsis]
 
@@ -134,6 +137,7 @@ by a pair of iterators.
 [heading Header]
 
     #include <boost/fusion/view/iterator_range.hpp>
+    #include <boost/fusion/include/iterator_range.hpp>
 
 [heading Synopsis]
 
@@ -201,6 +205,7 @@ defined in __forward_sequence__.
 [heading Header]
 
     #include <boost/fusion/view/joint_view.hpp>
+    #include <boost/fusion/include/joint_view.hpp>
 
 [heading Synopsis]
 
@@ -260,6 +265,7 @@ is constructed from a __sequence__ of references to the component __sequence__s.
 [heading Header]
 
     #include <boost/fusion/view/zip_view.hpp>
+    #include <boost/fusion/include/zip_view.hpp>
 
 [heading Synopsis]
 
@@ -319,6 +325,7 @@ its underlying sequence or sequences.
 [heading Header]
 
     #include <boost/fusion/view/transform_view.hpp>
+    #include <boost/fusion/include/transform_view.hpp>
 
 [heading Synopsis]
 
@@ -413,6 +420,7 @@ element will be its last and the last element will be its first.
 [heading Header]
 
     #include <boost/fusion/view/reverse_view.hpp>
+    #include <boost/fusion/include/reverse_view.hpp>
 
 [heading Synopsis]
 
