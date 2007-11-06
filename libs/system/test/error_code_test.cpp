@@ -20,9 +20,6 @@
 
 #include <boost/test/minimal.hpp>
 #include <boost/system/error_code.hpp>
-#include <boost/system/cygwin_error.hpp>
-#include <boost/system/linux_error.hpp>
-#include <boost/system/windows_error.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
