@@ -1,115 +1,179 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="example"
 	ProjectGUID="{5B83CA94-A2A6-43A6-8363-E5F4731443F7}"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(BOOST_ROOT)"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="FALSE"
-				ExceptionHandling="FALSE"
+				AdditionalIncludeDirectories="..\..\.."
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_SCL_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE"
+				MinimalRebuild="false"
+				ExceptionHandling="0"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				TreatWChar_tAsBuiltInType="TRUE"
-				ForceConformanceInForLoopScope="TRUE"
-				RuntimeTypeInfo="TRUE"
+				TreatWChar_tAsBuiltInType="true"
+				ForceConformanceInForLoopScope="true"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/example.exe"
 				LinkIncremental="2"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/example.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(BOOST_ROOT)"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\..\.."
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SCL_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/example.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -118,475 +182,712 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
 			<File
-				RelativePath=".\main.cpp">
+				RelativePath=".\main.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd;ipp">
+			Filter="h;hpp;hxx;hm;inl;inc;xsd;ipp"
+			>
 		</Filter>
 		<Filter
 			Name="xpressive Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd;ipp"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 			<File
-				RelativePath="..\..\..\boost\xpressive\basic_regex.hpp">
+				RelativePath="..\..\..\boost\xpressive\basic_regex.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\match_results.hpp">
+				RelativePath="..\..\..\boost\xpressive\match_results.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_algorithms.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_actions.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_compiler.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_algorithms.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_constants.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_compiler.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_error.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_constants.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_iterator.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_error.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_primitives.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_iterator.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_token_iterator.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_primitives.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\regex_traits.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_token_iterator.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\sub_match.hpp">
+				RelativePath="..\..\..\boost\xpressive\regex_traits.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\xpressive.hpp">
+				RelativePath="..\..\..\boost\xpressive\sub_match.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\xpressive_dynamic.hpp">
+				RelativePath="..\..\..\boost\xpressive\xpressive.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\xpressive_fwd.hpp">
+				RelativePath="..\..\..\boost\xpressive\xpressive_dynamic.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\boost\xpressive\xpressive_static.hpp">
+				RelativePath="..\..\..\boost\xpressive\xpressive_fwd.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\boost\xpressive\xpressive_static.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\boost\xpressive\xpressive_typeof.hpp"
+				>
 			</File>
 			<Filter
 				Name="detail"
-				Filter="">
+				>
 				<File
-					RelativePath="..\..\..\boost\xpressive\detail\detail_fwd.hpp">
+					RelativePath="..\..\..\boost\xpressive\detail\detail_fwd.hpp"
+					>
 				</File>
 				<Filter
 					Name="core"
-					Filter="">
+					>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\access.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\access.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\action.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\action.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\action_state.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\adaptor.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\adaptor.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\finder.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\finder.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\flow_control.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\flow_control.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\icase.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\icase.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\linker.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\linker.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\matchers.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\matchers.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\optimize.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\optimize.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\peeker.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\peeker.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\quant_style.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\quant_style.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\regex_impl.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\regex_impl.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\results_cache.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\results_cache.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\state.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\state.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\sub_match_impl.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\sub_match_impl.hpp">
-					</File>
-					<File
-						RelativePath="..\..\..\boost\xpressive\detail\core\sub_match_vector.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\core\sub_match_vector.hpp"
+						>
 					</File>
 					<Filter
 						Name="matcher"
-						Filter="">
+						>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\action_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\action_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\alternate_end_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\alternate_end_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\alternate_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\alternate_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\any_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\any_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_bol_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_bol_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_bos_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_bos_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_eol_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_eol_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_eos_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_eos_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_line_base.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_line_base.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_word_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\assert_word_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\charset_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\attr_begin_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\end_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\attr_end_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\epsilon_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\attr_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\keeper_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\charset_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\literal_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\end_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\logical_newline_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\epsilon_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\lookahead_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\keeper_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\lookbehind_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\literal_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\mark_begin_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\logical_newline_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\mark_end_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\lookahead_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\mark_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\lookbehind_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\optional_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\mark_begin_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\posix_charset_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\mark_end_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\range_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\mark_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\regex_byref_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\optional_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\regex_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\posix_charset_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\repeat_begin_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\predicate_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\repeat_end_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\range_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\set_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\regex_byref_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\simple_repeat_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\regex_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\string_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\repeat_begin_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\true_matcher.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\repeat_end_matcher.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\set_matcher.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\simple_repeat_matcher.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\string_matcher.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\true_matcher.hpp"
+							>
 						</File>
 					</Filter>
 				</Filter>
 				<Filter
 					Name="static"
-					Filter="">
+					>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\as_xpr.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\compile.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\compile.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\grammar.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\is_pure.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\is_pure.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\modifier.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\modifier.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\placeholders.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\placeholders.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\regex_operators.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\static.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\static.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\transmogrify.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\type_traits.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\type_traits.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\static\width_of.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\static\visitor.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\detail\static\width_of.hpp"
+						>
 					</File>
 					<Filter
-						Name="productions"
-						Filter="">
+						Name="transforms"
+						>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\alt_compilers.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_action.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\charset_transforms.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_alternate.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\complement_compiler.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_independent.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\domain_tags.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_inverse.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\independent_compiler.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_marker.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\marker_compiler.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_matcher.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\marker_transform.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_modifier.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\modify_compiler.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_quantifier.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\noop_compiler.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_sequence.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\productions.hpp">
-						</File>
-						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\quant_compilers.hpp">
-						</File>
-						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\quant_traits.hpp">
-						</File>
-						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\quant_transforms.hpp">
-						</File>
-						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\set_compilers.hpp">
-						</File>
-						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\transmogrify.hpp">
-						</File>
-						<File
-							RelativePath="..\..\..\boost\xpressive\detail\static\productions\visitor.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\static\transforms\as_set.hpp"
+							>
 						</File>
 					</Filter>
 				</Filter>
 				<Filter
 					Name="utility"
-					Filter="">
+					>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\algorithm.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\algorithm.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\any.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\any.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\boyer_moore.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\boyer_moore.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\cons.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\cons.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\counted_base.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\counted_base.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\dont_care.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\dont_care.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\hash_peek_bitset.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\hash_peek_bitset.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\ignore_unused.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\ignore_unused.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\literals.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\literals.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\never_true.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\never_true.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\save_restore.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\save_restore.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\sequence_stack.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\sequence_stack.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\tracking_ptr.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\symbols.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\traits_utils.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\tracking_ptr.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\utility\width.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\utility\traits_utils.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\detail\utility\width.hpp"
+						>
 					</File>
 					<Filter
 						Name="chset"
-						Filter="">
+						>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\basic_chset.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\basic_chset.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\basic_chset.ipp">
+							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\basic_chset.ipp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\chset.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\chset.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\range_run.hpp">
+							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\range_run.hpp"
+							>
 						</File>
 						<File
-							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\range_run.ipp">
+							RelativePath="..\..\..\boost\xpressive\detail\utility\chset\range_run.ipp"
+							>
 						</File>
 					</Filter>
 				</Filter>
 				<Filter
 					Name="dynamic"
-					Filter="">
+					>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\dynamic\dynamic.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\dynamic.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\dynamic\matchable.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\matchable.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parse_charset.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parse_charset.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parser.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parser.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parser_enum.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parser_enum.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parser_traits.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parser_traits.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\detail\dynamic\sequence.hpp">
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\sequence.hpp"
+						>
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="traits"
-				Filter="">
+				>
 				<File
-					RelativePath="..\..\..\boost\xpressive\traits\c_regex_traits.hpp">
+					RelativePath="..\..\..\boost\xpressive\traits\c_regex_traits.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\traits\cpp_regex_traits.hpp">
+					RelativePath="..\..\..\boost\xpressive\traits\cpp_regex_traits.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\traits\null_regex_traits.hpp">
+					RelativePath="..\..\..\boost\xpressive\traits\null_regex_traits.hpp"
+					>
 				</File>
 				<Filter
 					Name="detail"
-					Filter="">
+					>
 					<File
-						RelativePath="..\..\..\boost\xpressive\traits\detail\c_ctype.hpp">
+						RelativePath="..\..\..\boost\xpressive\traits\detail\c_ctype.hpp"
+						>
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="proto"
-				Filter="">
+				>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\basic_expr.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\args.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\compile.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\context.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\fusion.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\debug.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\operators.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\deep_copy.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\proto.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\domain.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\proto_fwd.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\eval.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\proto_typeof.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\expr.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\ref.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\extends.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\tags.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\fusion.hpp"
+					>
 				</File>
 				<File
-					RelativePath="..\..\..\boost\xpressive\proto\traits.hpp">
+					RelativePath="..\..\..\boost\xpressive\proto\generate.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\literal.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\make_expr.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\matches.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\operators.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\proto.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\proto_fwd.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\proto_typeof.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\ref.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\tags.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\traits.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\transform.hpp"
+					>
 				</File>
 				<Filter
-					Name="compiler"
-					Filter="">
+					Name="context"
+					>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\compiler\branch.hpp">
+						RelativePath="..\..\..\boost\xpressive\proto\context\callable.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\compiler\conditional.hpp">
+						RelativePath="..\..\..\boost\xpressive\proto\context\default.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\compiler\error.hpp">
+						RelativePath="..\..\..\boost\xpressive\proto\context\null.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="transform"
+					>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\apply.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\compiler\fold.hpp">
+						RelativePath="..\..\..\boost\xpressive\proto\transform\arg.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\compiler\switch.hpp">
+						RelativePath="..\..\..\boost\xpressive\proto\transform\branch.hpp"
+						>
 					</File>
 					<File
-						RelativePath="..\..\..\boost\xpressive\proto\compiler\transform.hpp">
+						RelativePath="..\..\..\boost\xpressive\proto\transform\compose.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\construct.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\fold.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\fold_tree.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\function.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\list.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\transform\pass_through.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="detail"
+					>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\detail\funop.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\detail\prefix.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\proto\detail\suffix.hpp"
+						>
 					</File>
 				</Filter>
 			</Filter>
