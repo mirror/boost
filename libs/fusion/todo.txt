@@ -1,7 +1,11 @@
+* Improve extension docs
+
+* Document sequence/convert
+
 * Consider object equivalent of functions and algorithms (so you can do
   transform(iterators, deref()) with needing to put together a wrapper for deref).
 
-* Make algorithms work with mutable data 
+* Make algorithms work with mutable data
 
 * Consider segmented sequence / algorithm support
 
@@ -81,17 +85,17 @@ tosh:
 * Provide infinity-aware default implementation for Incrementable Sequences
 
   Thoughts: It would probably be cleaner to have infinity conceptually
-  orthogonal so there can be infinite Bidi/RA/Assoc Sequences. 
+  orthogonal so there can be infinite Bidi/RA/Assoc Sequences.
   OTOH it complicates things in way that might not be worth it...
 
-* Implement always_view/always with repetitive_view<single_view<T> > 
+* Implement always_view/always with repetitive_view<single_view<T> >
   semantics - using repetitive_view will for this purpose will be way
   too much overhead.
 
 ? Functional wrappers for intrinsics/algorithms.
 
 * Rewrite functional benchmark
- 
+
 ==========================================================
 
 From the fusion review (please mark all done items):
