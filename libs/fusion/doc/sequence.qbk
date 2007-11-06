@@ -1,4 +1,4 @@
-[section Sequences]
+[section Sequence]
 
 Like __mpl__, the Sequence is a fundamental concept in Fusion. A Sequence
 may or may not actually store or contain data. __containers__ are sequences
@@ -337,1065 +337,9 @@ you can use `__result_of_value_at_key__<S, N>`.]
 
 [endsect]
 
-[section Containers]
+[section Intrinsic]
 
-Fusion provides a few predefined sequences out of the box. These
-/containers/ actually hold heterogenously typed data; unlike
-__views__. These containers are more or less counterparts of those in __stl__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/container.hpp>
-
-[section vector]
-
-[heading Description]
-
-`vector` is a __random_access_sequence__ of heterogenous typed
-data structured as a simple `struct` where each element is held
-as a member variable. `vector` is the simplest of the Fusion
-sequence container, and in many cases the most efficient.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/container/vector.hpp>
-    #include <boost/fusion/sequence/container/vector/vector_fwd.hpp>
-
-    // numbered forms
-    #include <boost/fusion/sequence/container/vector/vector10.hpp>
-    #include <boost/fusion/sequence/container/vector/vector20.hpp>
-    #include <boost/fusion/sequence/container/vector/vector30.hpp>
-    #include <boost/fusion/sequence/container/vector/vector40.hpp>
-    #include <boost/fusion/sequence/container/vector/vector50.hpp>
-
-[heading Synopsis]
-
-[*Numbered forms]
-
-    template <>
-    struct vector0;
-
-    template <typename T0>
-    struct vector1;
-
-    template <typename T0, typename T1>
-    struct vector2;
-
-    template <typename T0, typename T1, typename T2>
-    struct vector3;
-
-    ...
-
-    template <typename T0, typename T1, typename T2..., typename TN>
-    struct vectorN;
-
-[*Variadic form]
-
-    template <
-        typename T0 = __unspecified__
-      , typename T1 = __unspecified__
-      , typename T2 = __unspecified__
-        ...
-      , typename TN = __unspecified__
-    >
-    struct vector;
-
-The numbered form accepts the exact number of elements. Example:
-
-    vector3<int, char, double>
-
-The variadic form accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, where
-`FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
-defaults to `10`. Example:
-
-    vector<int, char, double>
-
-You may define the preprocessor constant `FUSION_MAX_VECTOR_SIZE` before
-including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_VECTOR_SIZE 20
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [['unspecified]]]
-]
-
-[heading Model of]
-
-* __random_access_sequence__
-
-[variablelist Notation
-    [[`v`]              [Instance of `vector`]]
-    [[`V`]              [A `vector` type]]
-    [[`e0`...`en`]      [Heterogeneous values]]
-    [[`s`]              [A __forward_sequence__]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __random_access_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`V()`]                [Creates a vector with default constructed elements.]]
-    [[`V(e0, e1,... en)`]   [Creates a vector with elements `e0`...`en`.]]
-    [[`V(s)`]               [Copy constructs a vector from a __forward_sequence__, `s`.]]
-    [[`v = s`]              [Assigns to a vector, `v`, from a __forward_sequence__, `s`.]]
-]
-
-[heading Example]
-
-    vector<int, float> v(12, 5.5f);
-    std::cout << __at_c__<0>(v) << std::endl;
-    std::cout << __at_c__<1>(v) << std::endl;
-
-[endsect]
-
-[section cons]
-
-[heading Description]
-
-`cons` is a simple __forward_sequence__. It is a lisp style recursive list
-structure where `car` is the /head/ and `cdr` is the /tail/: usually
-another cons structure or `nil`: the empty list. Fusion's __list__ is built
-on top of this more primitive data structure. It is more efficient than
-__vector__ when the target sequence is constructed piecemeal (a data at a
-time). The runtime cost of access to each element is peculiarly constant
-(see __recursive_inline__).
-
-[heading Header]
-
-    #include <boost/fusion/sequence/container/list/cons.hpp>
-
-[heading Synopsis]
-
-    template <typename Car, typename Cdr = nil>
-    struct cons;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`Car`]                [Head type]                 []]
-    [[`Cdr`]                [Tail type]                 [`nil`]]
-]
-
-[heading Model of]
-
-* __forward_sequence__
-
-[variablelist Notation
-    [[`nil`]            [An empty `cons`]]
-    [[`C`]              [A `cons` type]]
-    [[`l`, `l2`]        [Instances of `cons`]]
-    [[`car`]            [An arbitrary data]]
-    [[`cdr`]            [Another `cons` list]]
-    [[`s`]              [A __forward_sequence__]]
-    [[`N`]              [An __mpl_integral_constant__]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`nil()`]              [Creates an empty list.]]
-    [[`C()`]                [Creates a cons with default constructed elements.]]
-    [[`C(car)`]             [Creates a cons with `car` head and default constructed tail.]]
-    [[`C(car, cdr)`]        [Creates a cons with `car` head and `cdr` tail.]]
-    [[`C(s)`]               [Copy constructs a cons from a __forward_sequence__, `s`.]]
-    [[`l = s`]              [Assigns to a cons, `l`, from a __forward_sequence__, `s`.]]
-    [[`__at__<N>(l)`]           [The Nth element from the beginning of the sequence; see __at__.]]
-]
-
-[blurb __note__ `__at__<N>(l)` is provided for convenience and compatibility
-with the original __tuple__ library, despite `cons` being a
-__forward_sequence__ only (`at` is supposed to be a
-__random_access_sequence__ requirement). The runtime complexity of __at__ is
-constant (see __recursive_inline__).]
-
-[heading Example]
-
-    cons<int, cons<float> > l(12, cons<float>(5.5f));
-    std::cout << __at_c__<0>(l) << std::endl;
-    std::cout << __at_c__<1>(l) << std::endl;
-
-[endsect]
-
-[section list]
-
-[heading Description]
-
-`list` is a __forward_sequence__ of heterogenous typed data built on top of
-__cons__. It is more efficient than __vector__ when the target sequence is
-constructed piecemeal (a data at a time). The runtime cost of access to
-each element is peculiarly constant (see __recursive_inline__).
-
-[heading Header]
-
-    #include <boost/fusion/sequence/container/list.hpp>
-    #include <boost/fusion/sequence/container/list/list_forward.hpp>
-
-[heading Synopsis]
-
-    template <
-        typename T0 = __unspecified__
-      , typename T1 = __unspecified__
-      , typename T2 = __unspecified__
-        ...
-      , typename TN = __unspecified__
-    >
-    struct list;
-
-The variadic class interface accepts `0` to `FUSION_MAX_LIST_SIZE`
-elements, where `FUSION_MAX_LIST_SIZE` is a user definable predefined
-maximum that defaults to `10`. Example:
-
-    list<int, char, double>
-
-You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` before
-including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_LIST_SIZE 20
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [['unspecified-type]]]
-]
-
-[heading Model of]
-
-* __forward_sequence__
-
-[variablelist Notation
-    [[`L`]              [A `list` type]]
-    [[`l`]              [An instance of `list`]]
-    [[`e0`...`en`]      [Heterogeneous values]]
-    [[`s`]              [A __forward_sequence__]]
-    [[`N`]              [An __mpl_integral_constant__]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`L()`]                [Creates a list with default constructed elements.]]
-    [[`L(e0, e1,... en)`]   [Creates a list with elements `e0`...`en`.]]
-    [[`L(s)`]               [Copy constructs a list from a __forward_sequence__, `s`.]]
-    [[`l = s`]              [Assigns to a list, `l`, from a __forward_sequence__, `s`.]]
-    [[`__at__<N>(l)`]           [The Nth element from the beginning of the sequence; see __at__.]]
-]
-
-[blurb __note__ `__at__<n>(l)` is provided for convenience and compatibility
-with the original __tuple__ library, despite `list` being a
-__forward_sequence__ only (__at__ is supposed to be a
-__random_access_sequence__ requirement). The runtime complexity of __at__ is
-constant (see __recursive_inline__).]
-
-[heading Example]
-
-    list<int, float> l(12, 5.5f);
-    std::cout << __at_c__<0>(l) << std::endl;
-    std::cout << __at_c__<1>(l) << std::endl;
-
-[endsect]
-
-[section set]
-
-[heading Description]
-
-set is an __associative_sequence__ of heteregenous typed data elements.
-Type identity is used to impose an equivalence relation on keys. The
-element's type is its key. A set may contain at most one element for each
-key. Membership testing and element key lookup has constant runtime
-complexity (see __overloaded_functions__).
-
-[heading Header]
-
-    #include <boost/fusion/sequence/container/set.hpp>
-
-[heading Synopsis]
-
-    template <
-        typename T0 = __unspecified__
-      , typename T1 = __unspecified__
-      , typename T2 = __unspecified__
-        ...
-      , typename TN = __unspecified__
-    >
-    struct set;
-
-The variadic class interface accepts `0` to `FUSION_MAX_SET_SIZE` elements,
-where `FUSION_MAX_SET_SIZE` is a user definable predefined maximum that
-defaults to `10`. Example:
-
-    set<int, char, double>
-
-You may define the preprocessor constant `FUSION_MAX_SET_SIZE` before
-including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_SET_SIZE 20
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [['unspecified-type]]]
-]
-
-[heading Model of]
-
-* __associative_sequence__
-* __forward_sequence__
-
-[variablelist Notation
-    [[`S`]              [A `set` type]]
-    [[`s`]              [An instance of `set`]]
-    [[`e0`...`en`]      [Heterogeneous values]]
-    [[`fs`]             [A __forward_sequence__]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __random_access_sequence__ and __associative_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`S()`]                [Creates a set with default constructed elements.]]
-    [[`S(e0, e1,... en)`]   [Creates a set with elements `e0`...`en`.]]
-    [[`S(fs)`]              [Copy constructs a set from a __forward_sequence__ `fs`.]]
-    [[`s = fs`]             [Assigns to a set, `s`, from a __forward_sequence__ `fs`.]]
-]
-
-[heading Example]
-
-    typedef set<int, float> S;
-    S s(12, 5.5f);
-    std::cout << __at_key__<int>(s) << std::endl;
-    std::cout << __at_key__<float>(s) << std::endl;
-    std::cout << __result_of_has_key__<S, double>::value << std::endl;
-
-[endsect]
-
-[section map]
-
-[heading Description]
-
-map is an __associative_sequence__ of heteregenous typed data elements.
-Each element is a key/data pair (see __fusion_pair__) where the key has no
-data (type only). Type identity is used to impose an equivalence relation
-on keys. A map may contain at most one element for each key. Membership
-testing and element key lookup has constant runtime complexity (see
-__overloaded_functions__).
-
-[heading Header]
-
-    #include <boost/fusion/sequence/container/map.hpp>
-
-[heading Synopsis]
-
-    template <
-        typename T0 = __unspecified__
-      , typename T1 = __unspecified__
-      , typename T2 = __unspecified__
-        ...
-      , typename TN = __unspecified__
-    >
-    struct map;
-
-The variadic class interface accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
-where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
-defaults to `10`. Example:
-
-    map<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> >
-
-You may define the preprocessor constant `FUSION_MAX_MAP_SIZE` before
-including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_MAP_SIZE 20
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [['unspecified-type]]]
-]
-
-[heading Model of]
-
-* __associative_sequence__
-* __forward_sequence__
-
-[variablelist Notation
-    [[`M`]              [A `map` type]]
-    [[`m`]              [An instance of `map`]]
-    [[`e0`...`en`]      [Heterogeneous key/value pairs (see __fusion_pair__)]]
-    [[`s`]              [A __forward_sequence__]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __random_access_sequence__ and __associative_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`M()`]                [Creates a map with default constructed elements.]]
-    [[`M(e0, e1,... en)`]   [Creates a map with element pairs `e0`...`en`.]]
-    [[`M(s)`]               [Copy constructs a map from a __forward_sequence__ `s`.]]
-    [[`m = s`]              [Assigns to a map, `m`, from a __forward_sequence__ `s`.]]
-]
-
-[heading Example]
-
-    typedef map<
-        __pair__<int, char>
-      , __pair__<double, std::string> >
-    map_type;
-
-    map_type m(
-        __fusion_make_pair__<int>('X')
-      , __fusion_make_pair__<double>("Men"));
-
-    std::cout << __at_key__<int>(m) << std::endl;
-    std::cout << __at_key__<double>(m) << std::endl;
-
-[endsect]
-
-[endsect]
-
-[section Views]
-
-Views are sequences that do not actually contain data, but instead impart
-an alternative presentation over the data from one or more underlying
-sequences. Views are proxies. They provide an efficient yet purely
-functional way to work on potentially expensive sequence operations. Views
-are inherently lazy. Their elements are only computed on demand only when
-the elements of the underlying sequence(s) are actually accessed. Views'
-lazy nature make them very cheap to copy and be passed around by value.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view.hpp>
-
-[section single_view]
-
-`single_view` is a view into a value as a single element sequence.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view/single_view.hpp>
-
-[heading Synopsis]
-
-    template <typename T>
-    struct single_view;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`T`]                  [Any type]                  []]
-]
-
-[heading Model of]
-
-* __forward_sequence__
-
-[variablelist Notation
-    [[`S`]              [A `single_view` type]]
-    [[`s`, `s2`]        [Instances of `single_view`]]
-    [[`x`]              [An instance of `T`]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`S(x)`]               [Creates a `single_view` from `x`.]]
-    [[`S(s)`]               [Copy constructs a `single_view` from another `single_view`, `s`.]]
-    [[`s = s2`]             [Assigns to a `single_view`, `s`, from another `single_view`, `s2`.]]
-]
-
-[heading Example]
-
-    single_view<int> view(3);
-    std::cout << view << std::endl;
-
-[endsect]
-
-[section filter_view]
-
-[heading Description]
-
-`filter_view` is a view into a subset of its underlying sequence's elements
-satisfying a given predicate (an __mpl__ metafunction). The `filter_view`
-presents only those elements for which its predicate evaluates to
-`mpl::true_`.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view/filter_view.hpp>
-
-[heading Synopsis]
-
-    template <typename Sequence, typename Pred>
-    struct filter_view;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`Sequence`]           [A __forward_sequence__]    []]
-    [[`Pred`]               [Unary Metafunction
-                             returning an `mpl::bool_`] []]
-]
-
-[heading Model of]
-
-* __forward_sequence__
-
-[variablelist Notation
-    [[`F`]              [A `filter_view` type]]
-    [[`f`, `f2`]        [Instances of `filter_view`]]
-    [[`s`]              [A __forward_sequence__]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`F(s)`]               [Creates a `filter_view` given a sequence, `s`.]]
-    [[`F(f)`]               [Copy constructs a `filter_view` from another `filter_view`, `f`.]]
-    [[`f = f2`]             [Assigns to a `filter_view`, `f`, from another `filter_view`, `f2`.]]
-]
-
-[heading Example]
-
-    using boost::mpl::_;
-    using boost::mpl::not_;
-    using boost::is_class;
-
-    typedef __vector__<std::string, char, long, bool, double> vector_type;
-
-    vector_type v("a-string", '@', 987654, true, 6.6);
-    filter_view<vector_type const, not_<is_class<_> > > view(v);
-    std::cout << view << std::endl;
-
-[endsect]
-
-[section iterator_range]
-
-[heading Description]
-
-`iterator_range` presents a sub-range of its underlying sequence delimited
-by a pair of iterators.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view/iterator_range.hpp>
-
-[heading Synopsis]
-
-    template <typename First, typename Last>
-    struct iterator_range;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`First`]              [A fusion __iterator__]     []]
-    [[`Last`]               [A fusion __iterator__]     []]
-]
-
-[heading Model of]
-
-* __forward_sequence__, __bidirectional_sequence__ or
-__random_access_sequence__ depending on the traversal characteristics (see
-__traversal_concept__) of its underlying sequence.
-
-[variablelist Notation
-    [[`IR`]             [An `iterator_range` type]]
-    [[`f`]              [An instance of `First`]]
-    [[`l`]              [An instance of `Last`]]
-    [[`ir`, `ir2`]      [Instances of `iterator_range`]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`IR(f, l)`]           [Creates an `iterator_range` given iterators, `f` and `l`.]]
-    [[`IR(ir)`]             [Copy constructs an `iterator_range` from another `iterator_range`, `ir`.]]
-    [[`ir = ir2`]           [Assigns to a `iterator_range`, `ir`, from another `iterator_range`, `ir2`.]]
-]
-
-[heading Example]
-
-    char const* s = "Ruby";
-    typedef __vector__<int, char, double, char const*> vector_type;
-    vector_type vec(1, 'x', 3.3, s);
-
-    typedef __result_of_begin__<vector_type>::type A;
-    typedef __result_of_end__<vector_type>::type B;
-    typedef __result_of_next__<A>::type C;
-    typedef __result_of_prior__<B>::type D;
-
-    C c(vec);
-    D d(vec);
-
-    iterator_range<C, D> range(c, d);
-    std::cout << range << std::endl;
-
-[endsect]
-
-[section joint_view]
-
-[heading Description]
-
-`joint_view` presents a view which is a concatenation of two sequences.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view/joint_view.hpp>
-
-[heading Synopsis]
-
-    template <typename Sequence1, typename Sequence2>
-    struct joint_view;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]                   [Default]]
-    [[`Sequence1`]          [A __forward_sequence__]        []]
-    [[`Sequence2`]          [A __forward_sequence__]        []]
-]
-
-[heading Model of]
-
-* __forward_sequence__
-
-[variablelist Notation
-    [[`JV`]             [A `joint_view` type]]
-    [[`s1`]             [An instance of `Sequence1`]]
-    [[`s2`]             [An instance of `Sequence2`]]
-    [[`jv`, `jv2`]      [Instances of `joint_view`]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`JV(s1, s2)`]         [Creates a `joint_view` given sequences, `s1` and `s2`.]]
-    [[`JV(jv)`]             [Copy constructs a `joint_view` from another `joint_view`, `jv`.]]
-    [[`jv = jv2`]           [Assigns to a `joint_view`, `jv`, from another `joint_view`, `jv2`.]]
-]
-
-[heading Example]
-
-    __vector__<int, char> v1(3, 'x');
-    __vector__<std::string, int> v2("hello", 123);
-    joint_view<
-        __vector__<int, char>
-      , __vector__<std::string, int>
-    > view(v1, v2);
-    std::cout << view << std::endl;
-
-[endsect]
-
-[section zip_view]
-
-[heading Description]
-
-`zip_view` presents a view which iterates over a collection of __sequence__s in parallel. A `zip_view`
-is constructed from a __sequence__ of references to the component __sequence__s.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view/zip_view.hpp>
-
-[heading Synopsis]
-
-    template <typename Sequences>
-    struct zip_view;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]                   [Default]]
-    [[`Sequences`]          [A __forward_sequence__ of references to other Fusion __sequence__s]        []]
-]
-
-[heading Model of]
-
-* __forward_sequence__, __bidirectional_sequence__ or
-__random_access_sequence__ depending on the traversal characteristics (see
-__traversal_concept__) of its underlying sequence.
-
-[variablelist Notation
-    [[`ZV`]             [A `joint_view` type]]
-    [[`s`]             [An instance of `Sequences`]]
-    [[`zv1`, `zv2`]             [Instances of `ZV`]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`ZV(s)`]              [Creates a `zip_view` given a sequence of references to the component __sequence__s.]]
-    [[`ZV(zv1)`]             [Copy constructs a `zip_view` from another `zip_view`, `zv`.]]
-    [[`zv1 = zv2`]           [Assigns to a `zip_view`, `zv`, from another `zip_view`, `zv2`.]]
-]
-
-[heading Example]
-    typedef __vector__<int,int> vec1;
-    typedef __vector__<char,char> vec2;
-    vec1 v1(1,2);
-    vec2 v2('a','b');
-    typedef __vector__<vec1&, vec2&> sequences;
-    std::cout << zip_view<sequences>(sequences(v1, v2)) << std::endl; // ((1 a) (2 b))
-
-[endsect]
-
-[section transform_view]
-
-The unary version of `transform_view` presents a view of its underlying
-sequence given a unary function object or function pointer. The binary
-version of `transform_view` presents a view of 2 underlying sequences,
-given a binary function object or function pointer. The `transform_view` 
-inherits the traversal characteristics (see __traversal_concept__)  of 
-its underlying sequence or sequences.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view/transform_view.hpp>
-
-[heading Synopsis]
-
-[*Unary Version]
-
-    template <typename Sequence, typename F1>
-    struct transform_view;
-
-[*Binary Version]
-
-    template <typename Sequence1, typename Sequence2, typename F2>
-    struct transform_view;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]                           [Default]]
-    [[`Sequence`]           [A __forward_sequence__]                []]
-    [[`Sequence1`]          [A __forward_sequence__]                []]
-    [[`Sequence2`]          [A __forward_sequence__]                []]
-    [[`F1`]                  [A unary function object or function pointer. `__boost_result_of_call__<F1(E)>::type` is the return type of an instance of `F1` when called with a value of each element type `E` in the input sequence.]                   []]
-    [[`F2`]                  [A binary function object or function pointer. `__boost_result_of_call__<F2(E1, E2)>::type` is the return type of an instance of `F2` when called with a value of each corresponding pair of element type `E1` and `E2` in the input sequences.]                   []]
-]
-
-[heading Model of]
-
-* __forward_sequence__, __bidirectional_sequence__ or
-__random_access_sequence__ depending on the traversal characteristics (see
-__traversal_concept__) of its underlying sequence.
-
-[variablelist Notation
-    [[`TV`]             [A `transform_view` type]]
-    [[`BTV`]            [A binary `transform_view` type]]
-    [[`UTV`]            [A unary `transform_view` type]]
-    [[`f1`]              [An instance of `F1`]]
-    [[`f2`]              [An instance of `F2`]]
-    [[`s`]              [An instance of `Sequence`]]
-    [[`s1`]             [An instance of `Sequence1`]]
-    [[`s2`]             [An instance of `Sequence2`]]
-    [[`tv`, `tv2`]      [Instances of `transform_view`]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __forward_sequence__, __bidirectional_sequence__ or
-__random_access_sequence__ depending on the traversal characteristics (see
-__traversal_concept__) of its underlying sequence or sequences.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`UTV(s, f1)`]          [Creates a unary `transform_view` given sequence,
-                             `s` and unary function object or function pointer, `f1`.]]
-    [[`BTV(s1, s2, f2)`]     [Creates a binary `transform_view` given sequences, `s1` and `s2`
-                             and binary function object or function pointer, `f2`.]]
-    [[`TV(tv)`]             [Copy constructs a `transform_view` from another `transform_view`, `tv`.]]
-    [[`tv = tv2`]           [Assigns to a `transform_view`, `tv`, from another `transform_view`, `tv2`.]]
-]
-
-[heading Example]
-
-    struct square
-    {
-        template<typename Sig>
-        struct result;
-
-        template<typename U>
-        struct result<square(U)>
-        : remove_reference<U>
-        {};
-
-        template <typename T>
-        T operator()(T x) const
-        {
-            return x * x;
-        }
-    };
-
-    typedef __vector__<int, short, double> vector_type;
-    vector_type vec(2, 5, 3.3);
-
-    transform_view<vector_type, square> transform(vec, square());
-    std::cout << transform << std::endl;
-
-[endsect]
-
-[section reverse_view]
-
-`reverse_view` presents a reversed view of underlying sequence. The first
-element will be its last and the last element will be its first.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/view/reverse_view.hpp>
-
-[heading Synopsis]
-
-    template <typename Sequence>
-    struct reverse_view;
-
-[heading Template parameters]
-
-[table
-    [[Parameter]            [Description]                           [Default]]
-    [[`Sequence`]           [A __bidirectional_sequence__]          []]
-]
-
-[heading Model of]
-
-* __bidirectional_sequence__
-
-[variablelist Notation
-    [[`RV`]             [A `reverse_view` type]]
-    [[`s`]              [An instance of `Sequence`]]
-    [[`rv`, `rv2`]      [Instances of `reverse_view`]]
-]
-
-[heading Expression Semantics]
-
-Semantics of an expression is defined only where it differs from, or is not
-defined in __bidirectional_sequence__.
-
-[table
-    [[Expression]           [Semantics]]
-    [[`RV(s)`]              [Creates a unary `reverse_view` given sequence, `s`.]]
-    [[`RV(rv)`]             [Copy constructs a `reverse_view` from another `reverse_view`, `rv`.]]
-    [[`rv = rv2`]           [Assigns to a `reverse_view`, `rv`, from another `reverse_view`, `rv2`.]]
-]
-
-[heading Example]
-
-    typedef __vector__<int, short, double> vector_type;
-    vector_type vec(2, 5, 3.3);
-
-    reverse_view<vector_type> reverse(vec);
-    std::cout << reverse << std::endl;
-
-[endsect]
-
-[endsect]
-
-[section Adapted]
-
-Fusion provides a couple of adapters for other sequences such as
-`std::pair`, __mpl__ sequences, and `boost::array`. These adapters are
-written using Fusion's non-intrusive __extension__ mechanism. If you wish
-to use these sequences with fusion, simply include the necessary files and
-they will be regarded as first-class, fully conforming fusion sequences
-[footnote Fusion sequences may also be adapted as fully conforming __mpl__
-sequences (see __intrinsics__). That way, we can have 2-way adaptation to
-and from __mpl__ and Fusion].
-
-[heading Header]
-
-    #include <boost/fusion/sequence/adapted.hpp>
-
-[section std::pair]
-
-This module provides adapters for `std::pair`. Including the module header
-makes `std::pair` a fully conforming __random_access_sequence__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/adapted/std_pair.hpp>
-
-[heading Model of]
-
-* __random_access_sequence__
-
-[heading Example]
-
-    std::pair<int, std::string> p(123, "Hola!!!");
-    std::cout << __at_c__<0>(p) << std::endl;
-    std::cout << __at_c__<1>(p) << std::endl;
-    std::cout << p << std::endl;
-
-[heading See also]
-
-__std_pair_doc__, __tr1_tuple_pair__
-
-[endsect]
-
-[section mpl sequence]
-
-This module provides adapters for __mpl__ sequences. Including the module
-header makes all __mpl__ sequences fully conforming fusion sequences.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/adapted/mpl.hpp>
-
-[heading Model of]
-
-* __forward_sequence__ (If the __mpl__ sequence is a forward sequence.)
-* __bidirectional_sequence__ (If the __mpl__ sequence is a bidirectional sequence.)
-* __random_access_sequence__ (If the __mpl__ sequence is a random access sequence.)
-
-[heading Example]
-
-    mpl::vector_c<int, 123, 456> vec_c;
-    fusion::vector2<int, long> v(vec_c);
-    std::cout << __at_c__<0>(v) << std::endl;
-    std::cout << __at_c__<1>(v) << std::endl;
-
-    v = mpl::vector_c<int, 456, 789>();
-    std::cout << __at_c__<0>(v) << std::endl;
-    std::cout << __at_c__<1>(v) << std::endl;
-
-[heading See also]
-
-__mpl__
-
-[endsect]
-
-[section boost::array]
-
-This module provides adapters for `boost::array`. Including the module
-header makes `boost::array` a fully conforming __random_access_sequence__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/adapted/array.hpp>
-
-[heading Model of]
-
-* __random_access_sequence__
-
-[heading Example]
-
-    boost::array<int,3> arr = {{1,2,3}};
-
-    std::cout << *__begin__(arr) << std::endl;
-    std::cout << *__next__(__begin__(arr)) << std::endl;
-    std::cout << *__advance_c__<2>(__begin__(arr)) << std::endl;
-    std::cout << *__prior__(__end__(arr)) << std::endl;
-    std::cout << __at_c__<2>(arr) << std::endl;
-
-[heading See also]
-
-__boost_array_library__
-
-[endsect]
-
-[section boost::tuple]
-This module provides adapters for `boost::tuple`. Including the module
-header makes `boost::tuple` a fully conforming __forward_sequence__.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/adapted/boost_tuple.hpp>
-
-[heading Model of]
-
-* __forward_sequence__
-
-[heading Example]
-
-    boost::tuple<int,std::string> example_tuple(101, "hello");
-    std::cout << *boost::fusion::begin(example_tuple) << '\n';
-    std::cout << *boost::fusion::next(boost::fusion::begin(example_tuple)) << '\n';
-
-[heading See also]
-
-__boost_tuple_library__
-
-[endsect]
-
-[section boost::variant]
-This module provides adapters for `boost::variant`. Including the module
-header makes `boost::variant` a fully conforming __forward_sequence__.
-The variant acts as a sequence of the types that can be contained in the variant.
-Accessing types not currently stored int the variant will lead to the variant
-being populated with a default constructed value of that type.
-
-[heading Header]
-
-    #include <boost/fusion/sequence/adapted/variant.hpp>
-
-[heading Model of]
-
-* __forward_sequence__
-
-[heading Example]
-
-    boost::variant<int,std::string> example_variant = 101;
-    std::cout << example_variant << '\n';
-    *boost::fusion::find<std::string>(example_variant) = "hello";
-    std::cout << example_variant << '\n';
-
-[heading See also]
-
-__boost_variant_library__
-
-[endsect]
-
-[endsect]
-
-[section Intrinsics]
-
-Intrinsics form the essential interface of every Fusion __sequence__. __stl__
+Intrinsic form the essential interface of every Fusion __sequence__. __stl__
 counterparts of these functions are usually implemented as member
 functions. Intrinsic functions, unlike __algorithms__, are not generic
 across the full __sequence__ repertoire. They need to be implemented for
@@ -1891,8 +835,7 @@ Performs an element by element swap of the elements in 2 sequences.
 
 [*Semantics]: Calls `swap(a1, b1)` for corresponding elements in `seq1` and `seq2`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/swap.hpp>
+/sequence/intrinsic/swap.hpp>
 
 [heading Example]
     __vector__<int, std::string> v1(1, "hello"), v2(2, "world");
@@ -1930,8 +873,7 @@ Returns the result type of __begin__.
 
 [*Semantics]: Returns the type of an iterator to the first element of `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/begin.hpp>
+/sequence/intrinsic/begin.hpp>
 
 [heading Example]
     typedef __vector__<int> vec;
@@ -1964,8 +906,7 @@ Returns the result type of __end__.
 
 [*Semantics]: Returns the type of an iterator one past the end of `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/end.hpp>
+/sequence/intrinsic/end.hpp>
 
 [heading Example]
     typedef __vector__<int> vec;
@@ -1998,8 +939,7 @@ Returns the result type of __empty__.
 
 [*Semantics]: Returns `mpl::true_` if `Seq` has zero elements, `mpl::false_` otherwise.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/empty.hpp>
+/sequence/intrinsic/empty.hpp>
 
 [heading Example]
     typedef __vector__<> empty_vec;
@@ -2034,8 +974,7 @@ Returns the result type of __front__.
 
 [*Semantics]: The type returned by dereferencing an iterator to the first element in `Seq`. Equivalent to `__result_of_deref__<__result_of_begin__<Seq>::type>::type`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/front.hpp>
+/sequence/intrinsic/front.hpp>
 
 [heading Example]
     typedef __vector__<int,char> vec;
@@ -2067,8 +1006,7 @@ Returns the result type of __back__.
 
 [*Semantics]: The type returned by dereferencing an iterator to the last element in the sequence. Equivalent to `__result_of_deref__<__result_of_prior__<__result_of_end__<Seq>::type>::type>::type`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/back.hpp>
+/sequence/intrinsic/back.hpp>
 
 [heading Example]
     typedef __vector__<int,char> vec;
@@ -2100,8 +1038,7 @@ Returns the result type of __size__.
 
 [*Semantics]: Returns the number of elements in `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/size.hpp>
+/sequence/intrinsic/size.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -2141,8 +1078,7 @@ the actual element type, use __result_of_value_at__].
 
 [*Semantics]: Returns the result type of using __at__ to access the `N`th element of `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/at.hpp>
+/sequence/intrinsic/at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -2181,8 +1117,7 @@ get the actual element type, use __result_of_value_at_c__].
 
 [*Semantics]: Returns the result type of using __at_c__ to access the `M`th element of `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/at.hpp>
+/sequence/intrinsic/at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -2218,8 +1153,7 @@ Returns the actual type at a given index from the __sequence__.
 
 [*Semantics]: Returns the actual type at the `N`th element of `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/value_at.hpp>
+/sequence/intrinsic/value_at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -2255,8 +1189,7 @@ Returns the actual type at a given index from the __sequence__.
 
 [*Semantics]: Returns the actual type at the `M`th element of `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/value_at.hpp>
+/sequence/intrinsic/value_at.hpp>
 
 [heading Example]
     typedef __vector__<int,float,char> vec;
@@ -2291,8 +1224,7 @@ Returns the result type of __has_key__.
 
 [*Semantics]: Returns `mpl::true_` if `Seq` contains an element with key type `Key`, returns `mpl::false_` otherwise.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/has_key.hpp>
+/sequence/intrinsic/has_key.hpp>
 
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
@@ -2332,8 +1264,7 @@ you want to get the actual element type, use __result_of_value_at_key__].
 
 [*Semantics]: Returns the result of using __at_key__ to access the element with key type `Key` in `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/at_key.hpp>
+/sequence/intrinsic/at_key.hpp>
 
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
@@ -2369,8 +1300,7 @@ Returns the actual element type associated with a Key from the __sequence__.
 [*Semantics]: Returns the actual element type associated with key type
 `Key` in `Seq`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
+/sequence/intrinsic/value_at_key.hpp>
 
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
@@ -2402,8 +1332,7 @@ Returns the return type of swap.
 
 [*Semantics]: Always returns `void`.
 
-[heading Header]
-    #include <boost/fusion/sequence/intrinsic/swap.hpp>
+/sequence/intrinsic/swap.hpp>
 
 [endsect]
 
@@ -3580,7 +2509,7 @@ __fusion_pair__s. There may be no duplicate __fusion_pair__ key types.
 
 [endsect]
 
-[section Operators]
+[section Operator]
 
 These operators, like the __algorithms__, work generically on all Fusion
 sequences. All conforming Fusion sequences automatically get these

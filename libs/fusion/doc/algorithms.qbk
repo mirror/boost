@@ -35,6 +35,7 @@ may use one of the __conversion__ functions to convert back to the original
 sequence type.
 
 [heading Header]
+
     #include <boost/fusion/algorithm.hpp>
 
 [section Iteration]
@@ -43,6 +44,7 @@ The iteration algorithms provide the fundamental algorithms for traversing
 a sequence repeatedly applying an operation to its elements.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/iteration.hpp>
 
 [section Functions]
@@ -79,6 +81,7 @@ For a sequence `Seq`, initial state, and binary function object or function poin
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/iteration/fold.hpp>
 
 [heading Example]
@@ -130,6 +133,7 @@ For a sequence `Seq`, initial state, and binary function object or function poin
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/iteration/accumulate.hpp>
 
 [heading Example]
@@ -179,6 +183,7 @@ Applies a unary function object to each element of a sequence.
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/iteration/for_each.hpp>
 
 [heading Example]
@@ -235,6 +240,7 @@ type `State` and binary function object or function pointer of type `F`.
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `F`.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/iteration/fold.hpp>
 
 [endsect]
@@ -273,6 +279,7 @@ type `State` and binary function object or function pointer of type `F`.
 Linear, exactly `__result_of_size__<Sequence>::value` applications of `F`.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/iteration/accumulate.hpp>
 
 [endsect]
@@ -311,6 +318,7 @@ The return type is always `void`.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/iteration/for_each.hpp>
 
 [endsect]
@@ -323,6 +331,7 @@ Constant.
 The query algorithms provide support for searching and analyzing sequences.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query.hpp>
 
 [section Functions]
@@ -357,6 +366,7 @@ For a sequence `seq` and unary function object `f`, `any` returns true if `f` re
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/any.hpp>
 
 [heading Example]
@@ -404,6 +414,7 @@ For a sequence `seq` and unary function object `f`, `all` returns true if `f` re
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/all.hpp>
 
 [heading Example]
@@ -451,6 +462,7 @@ For a sequence `seq` and unary function object `f`, `none` returns true if `f` r
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/none.hpp>
 
 [heading Example]
@@ -504,6 +516,7 @@ Equivalent to `__find_if__<boost::is_same<_, T> >(seq)`
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/find.hpp>
 
 [heading Example]
@@ -549,8 +562,8 @@ or `__end__(seq)` if there is no such element.
 [heading Complexity]
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
-[heading Header]
-    #include <boost/fusion/algorithm/query/find_if.hpp>
+
+/algorithm/query/find_if.hpp>
 
 [heading Example]
     const __vector__<double,int> vec(1.0,2);
@@ -589,6 +602,7 @@ Returns the number of elements of a given type within a sequence.
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/count.hpp>
 
 [heading Example]
@@ -628,6 +642,7 @@ Returns the number of elements within a sequence with a type for which a given u
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/count_if.hpp>
 
 [heading Example]
@@ -672,6 +687,7 @@ A metafunction returning the result type of __any__.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/any.hpp>
 
 [endsect]
@@ -708,6 +724,7 @@ A metafunction returning the result type of __all__.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/all.hpp>
 
 [endsect]
@@ -744,6 +761,7 @@ A metafunction returning the result type of __none__.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/none.hpp>
 
 [endsect]
@@ -780,6 +798,7 @@ Returns the result type of `find`, given the sequence and search types.
 Linear, at most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/find.hpp>
 
 [endsect]
@@ -816,6 +835,7 @@ Returns the result type of `find_if` given the sequence and predicate types.
 Linear. At most `__result_of_size__<Sequence>::value` comparisons.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/find_if.hpp>
 
 [endsect]
@@ -852,6 +872,7 @@ A metafunction that returns the result type of `count` given the sequence and se
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/count.hpp>
 
 [endsect]
@@ -888,6 +909,7 @@ A metafunction that returns the result type of `count_if` given the sequence and
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/query/count_if.hpp>
 
 [endsect]
@@ -904,6 +926,7 @@ it is important that the lifetime of the input arguments is greater than the
 period during which you wish to use the results.]
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation.hpp>
 
 [section Functions]
@@ -938,6 +961,7 @@ Equivalent to `__filter_if__<boost::same_type<_, T> >(seq)`.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/filter.hpp>
 
 [heading Example]
@@ -977,6 +1001,7 @@ to `boost::mpl::true_`. The order of the retained elements is the same as in the
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/filter_if.hpp>
 
 [heading Example]
@@ -1036,6 +1061,7 @@ with elements created by applying `f(e)` to each element of `e` of `seq`.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/transform.hpp>
 
 [heading Example]
@@ -1084,6 +1110,7 @@ Replaces each value within a sequence of a given type and value with a new value
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/replace.hpp>
 
 [heading Example]
@@ -1124,6 +1151,7 @@ with `new_value` assigned to each element for which `f` evaluates to `true`.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/replace_if.hpp>
 
 [heading Example]
@@ -1170,6 +1198,7 @@ those of type `T`. Equivalent to `__remove_if__<boost::is_same<_,T> >(seq)`.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/remove.hpp>
 
 [heading Example]
@@ -1210,6 +1239,7 @@ Equivalent to `__filter__<boost::mpl::not_<Pred> >(seq)`.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/remove_if.hpp>
 
 [heading Example]
@@ -1245,6 +1275,7 @@ Returns a new sequence with the elements of the original in reverse order.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/reverse.hpp>
 
 [heading Example]
@@ -1279,6 +1310,7 @@ __clear__ returns an empty sequence.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/clear.hpp>
 
 [heading Example]
@@ -1333,6 +1365,7 @@ in the range [`first`,`last`).
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/erase.hpp>
 
 [heading Example]
@@ -1372,6 +1405,7 @@ elements of the original except those with a given key.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/erase_key.hpp>
 
 [heading Example]
@@ -1412,6 +1446,7 @@ type and value of `t` inserted at iterator `pos`.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/insert.hpp>
 
 [heading Example]
@@ -1453,6 +1488,7 @@ Returns a new sequence with another sequence inserted at a specified iterator.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/insert_range.hpp>
 
 [heading Example]
@@ -1489,6 +1525,7 @@ Takes 2 sequences and returns a sequence containing the elements of the first fo
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/join.hpp>
 
 [heading Example]
@@ -1529,6 +1566,7 @@ Zips sequences together to form a single sequence, whos members are tuples of th
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/zip.hpp>
 
 [heading Example]
@@ -1565,6 +1603,7 @@ Returns a new sequence, with the last element of the original removed.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/pop_back.hpp>
 
 [heading Example]
@@ -1600,6 +1639,7 @@ Returns a new sequence, with the first element of the original removed.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/pop_front.hpp>
 
 [heading Example]
@@ -1637,6 +1677,7 @@ Returns a new sequence with an element added at the end.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/push_back.hpp>
 
 [heading Example]
@@ -1674,6 +1715,7 @@ Returns a new sequence with an element added at the beginning.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/push_front.hpp>
 
 [heading Example]
@@ -1717,6 +1759,7 @@ Returns the result type of __filter__ given the sequence type and type to retain
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/filter.hpp>
 
 [endsect]
@@ -1753,6 +1796,7 @@ Returns the result type of __filter_if__ given the sequence and unary __mpl_lamb
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/filter_if.hpp>
 
 [endsect]
@@ -1808,6 +1852,7 @@ with elements created by applying `f(e)` to each element of `e` of `seq`.
 Constant. Returns a view which is lazily evaluated.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/transform.hpp>
 
 [heading Example]
@@ -1857,6 +1902,7 @@ Returns the result type of __replace__, given the types of the input sequence an
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/replace.hpp>
 
 [endsect]
@@ -1894,6 +1940,7 @@ Returns the result type of __replace_if__, given the types of the sequence, __po
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/replace_if.hpp>
 
 [endsect]
@@ -1930,6 +1977,7 @@ Returns the result type of __remove__, given the sequence and removal types.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/remove.hpp>
 
 [endsect]
@@ -1966,6 +2014,7 @@ Returns the result type of __remove_if__, given the input sequence and unary __m
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/remove_if.hpp>
 
 [endsect]
@@ -2000,6 +2049,7 @@ Returns the result type of __reverse__, given the input sequence type.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/reverse.hpp>
 
 [endsect]
@@ -2034,6 +2084,7 @@ Returns the result type of __clear__, given the input sequence type.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/clear.hpp>
 
 [endsect]
@@ -2077,6 +2128,7 @@ Returns the result type of __erase__, given the input sequence and range delimit
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/erase.hpp>
 
 [endsect]
@@ -2113,6 +2165,7 @@ Returns the result type of __erase_key__, given the sequence and key types.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/erase_key.hpp>
 
 [endsect]
@@ -2151,6 +2204,7 @@ Returns the result type of __insert__, given the sequence, position iterator and
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/insert.hpp>
 
 [endsect]
@@ -2189,6 +2243,7 @@ Returns the result type of __insert_range__, given the input sequence, position 
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/insert_range.hpp>
 
 [endsect]
@@ -2219,6 +2274,7 @@ Returns the result of joining 2 sequences, given the sequence types.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/join.hpp>
 
 [endsect]
@@ -2251,6 +2307,7 @@ Zips sequences together to form a single sequence, whos members are tuples of th
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/transformation/zip.hpp>
 
 [endsect]
@@ -2285,6 +2342,7 @@ Returns the result type of __pop_back__, given the input sequence type.
 Constant.
 
 [heading Header]
+
     #include <boost/fusion/algorithm/tranformation/pop_back.hpp>
 
 [endsect]
@@ -2318,8 +2376,7 @@ Returns the result type of __pop_front__, given the input sequence type.
 [heading Complexity]
 Constant.
 
-[heading Header]
-    #include <boost/fusion/algorithm/transformation/pop_front.hpp>
+/algorithm/transformation/pop_front.hpp>
 
 [endsect]
 
@@ -2354,8 +2411,7 @@ Returns the result type of __push_back__, given the types of the input sequence 
 [heading Complexity]
 Constant.
 
-[heading Header]
-    #include <boost/fusion/algorithm/transformation/push_back.hpp>
+/algorithm/transformation/push_back.hpp>
 
 [endsect]
 
@@ -2390,8 +2446,7 @@ Returns the result type of __push_front__, given the types of the input sequence
 [heading Complexity]
 Constant.
 
-[heading Header]
-    #include <boost/fusion/algorithm/transformation/push_front.hpp>
+/algorithm/transformation/push_front.hpp>
 
 [endsect]
 

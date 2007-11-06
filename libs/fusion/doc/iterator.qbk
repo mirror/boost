@@ -1,16 +1,16 @@
-[section Iterators]
-Like __mpl__ and __stl__, iterators are a fundamental concept in Fusion. 
+[section Iterator]
+
+Like __mpl__ and __stl__, iterators are a fundamental concept in Fusion.
 As with __mpl__ and __stl__ iterators describe positions, and
 provide access to data within an underlying __sequence__.
 
-[heading Header]
-    #include <boost/fusion/iterator.hpp>
+/iterator.hpp>
 
 [section Concepts]
 
 Fusion iterators are divided into different traversal categories.
-__forward_iterator__ is the most basic concept. __bidirectional_iterator__ 
-is a refinement of __forward_iterator__. __random_access_iterator__ is a 
+__forward_iterator__ is the most basic concept. __bidirectional_iterator__
+is a refinement of __forward_iterator__. __random_access_iterator__ is a
 refinement of __bidirectional_iterator__.
 
 [section Forward Iterator]
@@ -111,7 +111,7 @@ element at a time.
 __forward_iterator__
 
 [heading Expression requirements]
-In addition to the requirements defined in __forward_iterator__, 
+In addition to the requirements defined in __forward_iterator__,
 the following expressions must be valid:
 
 [table
@@ -138,7 +138,7 @@ in __forward_iterator__
 ]
 
 [heading Invariants]
-In addition to the invariants of __forward_iterator__, 
+In addition to the invariants of __forward_iterator__,
 the following invariants always hold:
 
 * `__prior__(__next__(i)) == i && __prior__(__next__(i)) == __next__(__prior__(i))`
@@ -172,7 +172,7 @@ sequence.
 __bidirectional_iterator__
 
 [heading Expression requirements]
-In addition to the requirements defined in __bidirectional_iterator__, 
+In addition to the requirements defined in __bidirectional_iterator__,
 the following expressions must be valid:
 
 [table
@@ -204,7 +204,7 @@ the following expressions must be valid:
 [endsect]
 
 [section Functions]
-Fusion provides functions for manipulating iterators, analogous to the similar functions 
+Fusion provides functions for manipulating iterators, analogous to the similar functions
 from the __mpl__ library.
 
 [section deref]
@@ -230,12 +230,11 @@ Deferences an iterator.
 
 [*Semantics]: Dereferences the iterator `i`.
 
-[heading Header]
-    #include <boost/fusion/iterator/deref.hpp>
+/iterator/deref.hpp>
 
 [heading Example]
     typedef __vector__<int,int&> vec;
-    
+
     int i(0);
     vec v(1,i);
     assert(__deref__(__begin__(v)) == 1);
@@ -267,8 +266,7 @@ Moves an iterator 1 position forwards.
 
 [*Semantics]: Returns an iterator to the next element after `i`.
 
-[heading Header]
-    #include <boost/fusion/iterator/next.hpp>
+/iterator/next.hpp>
 
 [heading Example]
     typedef __vector__<int,int,int> vec;
@@ -303,8 +301,7 @@ Moves an iterator 1 position backwards.
 
 [*Semantics]: Returns an iterator to the element prior to `i`.
 
-[heading Header]
-    #include <boost/fusion/iterator/prior.hpp>
+/iterator/prior.hpp>
 
 [heading Example]
     typedef __vector__<int,int> vec;
@@ -339,8 +336,7 @@ Returns the distance between 2 iterators.
 
 [*Semantics]: Returns the distance between iterators `i` and `j`.
 
-[heading Header]
-    #include <boost/fusion/iterator/distance.hpp>
+/iterator/distance.hpp>
 
 [heading Example]
     typedef __vector__<int,int,int> vec;
@@ -360,7 +356,7 @@ Moves an iterator by a specified distance.
         typename I,
         typename M
         >
-    typename __result_of_advance__<I, M>::type advance(I const& i); 
+    typename __result_of_advance__<I, M>::type advance(I const& i);
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
@@ -375,8 +371,7 @@ Moves an iterator by a specified distance.
 
 [*Semantics]: Returns an iterator to the element `M` positions from `i`. If `i` is a __bidirectional_iterator__ then `M` may be negative.
 
-[heading Header]
-    #include <boost/fusion/iterator/advance.hpp>
+/iterator/advance.hpp>
 
 [heading Example]
     typedef __vector__<int,int,int> vec;
@@ -396,7 +391,7 @@ Moves an iterator by a specified distance.
         typename I,
         int N
         >
-    typename __result_of_advance_c__<I, N>::type advance_c(I const& i); 
+    typename __result_of_advance_c__<I, N>::type advance_c(I const& i);
 
 [table Parameters
     [[Parameter]    [Requirement]   [Description]]
@@ -411,8 +406,7 @@ Moves an iterator by a specified distance.
 
 [*Semantics]: Returns an iterator to the element `N` positions from `i`. If `i` is a __bidirectional_iterator__ then `N` may be negative.
 
-[heading Header]
-    #include <boost/fusion/iterator/advance.hpp>
+/iterator/advance.hpp>
 
 [heading Example]
     typedef __vector__<int,int,int> vec;
@@ -424,7 +418,8 @@ Moves an iterator by a specified distance.
 
 [endsect]
 
-[section Operators]
+[section Operator]
+
 Overloaded operators are provided to provide a more natural syntax for dereferencing iterators, and comparing them for equality.
 
 [section:operator_unary_star Operator *]
@@ -450,12 +445,11 @@ Dereferences an iterator.
 
 [*Semantics]: Equivalent to `__deref__(i)`.
 
-[heading Header]
-    #include <boost/fusion/iterator/deref.hpp>
+/iterator/deref.hpp>
 
 [heading Example]
     typedef __vector__<int,int&> vec;
-    
+
     int i(0);
     vec v(1,i);
     assert(*__begin__(v) == 1);
@@ -488,8 +482,7 @@ Compares 2 iterators for equality.
 
 [*Semantics]: Equivalent to `__result_of_equal_to__<I,J>::value` where `I` and `J` are the types of `i` and `j` respectively.
 
-[heading Header]
-    #include <boost/fusion/iterator/equal_to.hpp>
+/iterator/equal_to.hpp>
 
 [endsect]
 
@@ -516,8 +509,7 @@ Compares 2 iterators for inequality.
 
 [*Semantics]: Equivalent to `!__result_of_equal_to__<I,J>::value` where `I` and `J` are the types of `i` and `j` respectively.
 
-[heading Header]
-    #include <boost/fusion/iterator/equal_to.hpp>
+/iterator/equal_to.hpp>
 
 [endsect]
 
@@ -552,8 +544,7 @@ Returns the type stored at the position of an iterator.
 
 [*Semantics]: Returns the type stored in a sequence at iterator position `I`.
 
-[heading Header]
-    #include <boost/fusion/iterator/value_of.hpp>
+/iterator/value_of.hpp>
 
 [heading Example]
     typedef __vector__<int,int&,const int&> vec;
@@ -593,8 +584,7 @@ Returns the type that will be returned by dereferencing an iterator.
 
 [*Semantics]: Returns the result of dereferencing an iterator of type `I`.
 
-[heading Header]
-    #include <boost/fusion/iterator/deref.hpp>
+/iterator/deref.hpp>
 
 [heading Example]
     typedef __vector__<int,int&> vec;
@@ -636,8 +626,7 @@ Returns the type of the next iterator in a sequence.
 
 [*Semantics]: Returns an iterator to the next element in the sequence after `I`.
 
-[heading Header]
-    #include <boost/fusion/iterator/next.hpp>
+/iterator/next.hpp>
 
 [heading Example]
     typedef __vector__<int,double> vec;
@@ -673,8 +662,7 @@ Returns the type of the previous iterator in a sequence.
 
 [*Semantics]: Returns an iterator to the previous element in the sequence before `I`.
 
-[heading Header]
-    #include <boost/fusion/iterator/prior.hpp>
+/iterator/prior.hpp>
 
 [heading Example]
     typedef __vector__<int,double> vec;
@@ -714,8 +702,7 @@ Returns a true-valued __mpl_integral_constant__ if `I` and `J` are equal.
 
 [*Semantics]: Returns `boost::mpl::true_` if `I` and `J` are iterators to the same position. Returns `boost::mpl::false_` otherwise.
 
-[heading Header]
-    #include <boost/fusion/iterator/equal_to.hpp>
+/iterator/equal_to.hpp>
 
 [heading Example]
     typedef __vector__<int,double> vec;
@@ -753,8 +740,7 @@ Returns the distance between two iterators.
 
 [*Semantics]: Returns the distance between iterators of types `I` and `J`.
 
-[heading Header]
-    #include <boost/fusion/iterator/distance.hpp>
+/iterator/distance.hpp>
 
 [heading Example]
     typedef __vector__<int,double,char> vec;
@@ -795,8 +781,7 @@ Moves an iterator a specified distance.
 
 [*Semantics]: Returns an iterator a distance `M` from `I`. If `I` is a __bidirectional_iterator__ then `M` may be negative.
 
-[heading Header]
-    #include <boost/fusion/iterator/advance.hpp>
+/iterator/advance.hpp>
 
 [heading Example]
     typedef __vector__<int,double,char> vec;
@@ -836,8 +821,7 @@ Moves an iterator by a specified distance.
 
 [*Semantics]: Returns an iterator a distance `N` from `I`. If `I` is a __bidirectional_iterator__ then `N` may be negative. Equivalent to `__result_of_advance__<I, boost::mpl::int_<N> >::type`.
 
-[heading Header]
-    #include <boost/fusion/iterator/advance.hpp>
+/iterator/advance.hpp>
 
 [heading Example]
     typedef __vector__<int,double,char> vec;

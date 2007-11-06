@@ -1,0 +1,437 @@
+[section Container]
+
+Fusion provides a few predefined sequences out of the box. These
+/containers/ actually hold heterogenously typed data; unlike
+__views__. These containers are more or less counterparts of those in __stl__.
+
+[heading Header]
+
+    #include <boost/fusion/container.hpp>
+
+[section vector]
+
+[heading Description]
+
+`vector` is a __random_access_sequence__ of heterogenous typed
+data structured as a simple `struct` where each element is held
+as a member variable. `vector` is the simplest of the Fusion
+sequence container, and in many cases the most efficient.
+
+[heading Header]
+
+    #include <boost/fusion/container/vector.hpp>
+    #include <boost/fusion/container/vector/vector_fwd.hpp>
+
+    // numbered forms
+    #include <boost/fusion/container/vector/vector10.hpp>
+    #include <boost/fusion/container/vector/vector20.hpp>
+    #include <boost/fusion/container/vector/vector30.hpp>
+    #include <boost/fusion/container/vector/vector40.hpp>
+    #include <boost/fusion/container/vector/vector50.hpp>
+
+[heading Synopsis]
+
+[*Numbered forms]
+
+    template <>
+    struct vector0;
+
+    template <typename T0>
+    struct vector1;
+
+    template <typename T0, typename T1>
+    struct vector2;
+
+    template <typename T0, typename T1, typename T2>
+    struct vector3;
+
+    ...
+
+    template <typename T0, typename T1, typename T2..., typename TN>
+    struct vectorN;
+
+[*Variadic form]
+
+    template <
+        typename T0 = __unspecified__
+      , typename T1 = __unspecified__
+      , typename T2 = __unspecified__
+        ...
+      , typename TN = __unspecified__
+    >
+    struct vector;
+
+The numbered form accepts the exact number of elements. Example:
+
+    vector3<int, char, double>
+
+The variadic form accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, where
+`FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
+defaults to `10`. Example:
+
+    vector<int, char, double>
+
+You may define the preprocessor constant `FUSION_MAX_VECTOR_SIZE` before
+including any Fusion header to change the default. Example:
+
+    #define FUSION_MAX_VECTOR_SIZE 20
+
+[heading Template parameters]
+
+[table
+    [[Parameter]            [Description]               [Default]]
+    [[`T0`...`TN`]          [Element types]             [['unspecified]]]
+]
+
+[heading Model of]
+
+* __random_access_sequence__
+
+[variablelist Notation
+    [[`v`]              [Instance of `vector`]]
+    [[`V`]              [A `vector` type]]
+    [[`e0`...`en`]      [Heterogeneous values]]
+    [[`s`]              [A __forward_sequence__]]
+]
+
+[heading Expression Semantics]
+
+Semantics of an expression is defined only where it differs from, or is not
+defined in __random_access_sequence__.
+
+[table
+    [[Expression]           [Semantics]]
+    [[`V()`]                [Creates a vector with default constructed elements.]]
+    [[`V(e0, e1,... en)`]   [Creates a vector with elements `e0`...`en`.]]
+    [[`V(s)`]               [Copy constructs a vector from a __forward_sequence__, `s`.]]
+    [[`v = s`]              [Assigns to a vector, `v`, from a __forward_sequence__, `s`.]]
+]
+
+[heading Example]
+
+    vector<int, float> v(12, 5.5f);
+    std::cout << __at_c__<0>(v) << std::endl;
+    std::cout << __at_c__<1>(v) << std::endl;
+
+[endsect]
+
+[section cons]
+
+[heading Description]
+
+`cons` is a simple __forward_sequence__. It is a lisp style recursive list
+structure where `car` is the /head/ and `cdr` is the /tail/: usually
+another cons structure or `nil`: the empty list. Fusion's __list__ is built
+on top of this more primitive data structure. It is more efficient than
+__vector__ when the target sequence is constructed piecemeal (a data at a
+time). The runtime cost of access to each element is peculiarly constant
+(see __recursive_inline__).
+
+[heading Header]
+
+    #include <boost/fusion/container/list/cons.hpp>
+
+[heading Synopsis]
+
+    template <typename Car, typename Cdr = nil>
+    struct cons;
+
+[heading Template parameters]
+
+[table
+    [[Parameter]            [Description]               [Default]]
+    [[`Car`]                [Head type]                 []]
+    [[`Cdr`]                [Tail type]                 [`nil`]]
+]
+
+[heading Model of]
+
+* __forward_sequence__
+
+[variablelist Notation
+    [[`nil`]            [An empty `cons`]]
+    [[`C`]              [A `cons` type]]
+    [[`l`, `l2`]        [Instances of `cons`]]
+    [[`car`]            [An arbitrary data]]
+    [[`cdr`]            [Another `cons` list]]
+    [[`s`]              [A __forward_sequence__]]
+    [[`N`]              [An __mpl_integral_constant__]]
+]
+
+[heading Expression Semantics]
+
+Semantics of an expression is defined only where it differs from, or is not
+defined in __forward_sequence__.
+
+[table
+    [[Expression]           [Semantics]]
+    [[`nil()`]              [Creates an empty list.]]
+    [[`C()`]                [Creates a cons with default constructed elements.]]
+    [[`C(car)`]             [Creates a cons with `car` head and default constructed tail.]]
+    [[`C(car, cdr)`]        [Creates a cons with `car` head and `cdr` tail.]]
+    [[`C(s)`]               [Copy constructs a cons from a __forward_sequence__, `s`.]]
+    [[`l = s`]              [Assigns to a cons, `l`, from a __forward_sequence__, `s`.]]
+    [[`__at__<N>(l)`]           [The Nth element from the beginning of the sequence; see __at__.]]
+]
+
+[blurb __note__ `__at__<N>(l)` is provided for convenience and compatibility
+with the original __tuple__ library, despite `cons` being a
+__forward_sequence__ only (`at` is supposed to be a
+__random_access_sequence__ requirement). The runtime complexity of __at__ is
+constant (see __recursive_inline__).]
+
+[heading Example]
+
+    cons<int, cons<float> > l(12, cons<float>(5.5f));
+    std::cout << __at_c__<0>(l) << std::endl;
+    std::cout << __at_c__<1>(l) << std::endl;
+
+[endsect]
+
+[section list]
+
+[heading Description]
+
+`list` is a __forward_sequence__ of heterogenous typed data built on top of
+__cons__. It is more efficient than __vector__ when the target sequence is
+constructed piecemeal (a data at a time). The runtime cost of access to
+each element is peculiarly constant (see __recursive_inline__).
+
+[heading Header]
+
+    #include <boost/fusion/container/list.hpp>
+    #include <boost/fusion/container/list/list_forward.hpp>
+
+[heading Synopsis]
+
+    template <
+        typename T0 = __unspecified__
+      , typename T1 = __unspecified__
+      , typename T2 = __unspecified__
+        ...
+      , typename TN = __unspecified__
+    >
+    struct list;
+
+The variadic class interface accepts `0` to `FUSION_MAX_LIST_SIZE`
+elements, where `FUSION_MAX_LIST_SIZE` is a user definable predefined
+maximum that defaults to `10`. Example:
+
+    list<int, char, double>
+
+You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` before
+including any Fusion header to change the default. Example:
+
+    #define FUSION_MAX_LIST_SIZE 20
+
+[heading Template parameters]
+
+[table
+    [[Parameter]            [Description]               [Default]]
+    [[`T0`...`TN`]          [Element types]             [['unspecified-type]]]
+]
+
+[heading Model of]
+
+* __forward_sequence__
+
+[variablelist Notation
+    [[`L`]              [A `list` type]]
+    [[`l`]              [An instance of `list`]]
+    [[`e0`...`en`]      [Heterogeneous values]]
+    [[`s`]              [A __forward_sequence__]]
+    [[`N`]              [An __mpl_integral_constant__]]
+]
+
+[heading Expression Semantics]
+
+Semantics of an expression is defined only where it differs from, or is not
+defined in __forward_sequence__.
+
+[table
+    [[Expression]           [Semantics]]
+    [[`L()`]                [Creates a list with default constructed elements.]]
+    [[`L(e0, e1,... en)`]   [Creates a list with elements `e0`...`en`.]]
+    [[`L(s)`]               [Copy constructs a list from a __forward_sequence__, `s`.]]
+    [[`l = s`]              [Assigns to a list, `l`, from a __forward_sequence__, `s`.]]
+    [[`__at__<N>(l)`]           [The Nth element from the beginning of the sequence; see __at__.]]
+]
+
+[blurb __note__ `__at__<n>(l)` is provided for convenience and compatibility
+with the original __tuple__ library, despite `list` being a
+__forward_sequence__ only (__at__ is supposed to be a
+__random_access_sequence__ requirement). The runtime complexity of __at__ is
+constant (see __recursive_inline__).]
+
+[heading Example]
+
+    list<int, float> l(12, 5.5f);
+    std::cout << __at_c__<0>(l) << std::endl;
+    std::cout << __at_c__<1>(l) << std::endl;
+
+[endsect]
+
+[section set]
+
+[heading Description]
+
+set is an __associative_sequence__ of heteregenous typed data elements.
+Type identity is used to impose an equivalence relation on keys. The
+element's type is its key. A set may contain at most one element for each
+key. Membership testing and element key lookup has constant runtime
+complexity (see __overloaded_functions__).
+
+[heading Header]
+
+    #include <boost/fusion/container/set.hpp>
+
+[heading Synopsis]
+
+    template <
+        typename T0 = __unspecified__
+      , typename T1 = __unspecified__
+      , typename T2 = __unspecified__
+        ...
+      , typename TN = __unspecified__
+    >
+    struct set;
+
+The variadic class interface accepts `0` to `FUSION_MAX_SET_SIZE` elements,
+where `FUSION_MAX_SET_SIZE` is a user definable predefined maximum that
+defaults to `10`. Example:
+
+    set<int, char, double>
+
+You may define the preprocessor constant `FUSION_MAX_SET_SIZE` before
+including any Fusion header to change the default. Example:
+
+    #define FUSION_MAX_SET_SIZE 20
+
+[heading Template parameters]
+
+[table
+    [[Parameter]            [Description]               [Default]]
+    [[`T0`...`TN`]          [Element types]             [['unspecified-type]]]
+]
+
+[heading Model of]
+
+* __associative_sequence__
+* __forward_sequence__
+
+[variablelist Notation
+    [[`S`]              [A `set` type]]
+    [[`s`]              [An instance of `set`]]
+    [[`e0`...`en`]      [Heterogeneous values]]
+    [[`fs`]             [A __forward_sequence__]]
+]
+
+[heading Expression Semantics]
+
+Semantics of an expression is defined only where it differs from, or is not
+defined in __random_access_sequence__ and __associative_sequence__.
+
+[table
+    [[Expression]           [Semantics]]
+    [[`S()`]                [Creates a set with default constructed elements.]]
+    [[`S(e0, e1,... en)`]   [Creates a set with elements `e0`...`en`.]]
+    [[`S(fs)`]              [Copy constructs a set from a __forward_sequence__ `fs`.]]
+    [[`s = fs`]             [Assigns to a set, `s`, from a __forward_sequence__ `fs`.]]
+]
+
+[heading Example]
+
+    typedef set<int, float> S;
+    S s(12, 5.5f);
+    std::cout << __at_key__<int>(s) << std::endl;
+    std::cout << __at_key__<float>(s) << std::endl;
+    std::cout << __result_of_has_key__<S, double>::value << std::endl;
+
+[endsect]
+
+[section map]
+
+[heading Description]
+
+map is an __associative_sequence__ of heteregenous typed data elements.
+Each element is a key/data pair (see __fusion_pair__) where the key has no
+data (type only). Type identity is used to impose an equivalence relation
+on keys. A map may contain at most one element for each key. Membership
+testing and element key lookup has constant runtime complexity (see
+__overloaded_functions__).
+
+[heading Header]
+
+    #include <boost/fusion/container/map.hpp>
+
+[heading Synopsis]
+
+    template <
+        typename T0 = __unspecified__
+      , typename T1 = __unspecified__
+      , typename T2 = __unspecified__
+        ...
+      , typename TN = __unspecified__
+    >
+    struct map;
+
+The variadic class interface accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
+defaults to `10`. Example:
+
+    map<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> >
+
+You may define the preprocessor constant `FUSION_MAX_MAP_SIZE` before
+including any Fusion header to change the default. Example:
+
+    #define FUSION_MAX_MAP_SIZE 20
+
+[heading Template parameters]
+
+[table
+    [[Parameter]            [Description]               [Default]]
+    [[`T0`...`TN`]          [Element types]             [['unspecified-type]]]
+]
+
+[heading Model of]
+
+* __associative_sequence__
+* __forward_sequence__
+
+[variablelist Notation
+    [[`M`]              [A `map` type]]
+    [[`m`]              [An instance of `map`]]
+    [[`e0`...`en`]      [Heterogeneous key/value pairs (see __fusion_pair__)]]
+    [[`s`]              [A __forward_sequence__]]
+]
+
+[heading Expression Semantics]
+
+Semantics of an expression is defined only where it differs from, or is not
+defined in __random_access_sequence__ and __associative_sequence__.
+
+[table
+    [[Expression]           [Semantics]]
+    [[`M()`]                [Creates a map with default constructed elements.]]
+    [[`M(e0, e1,... en)`]   [Creates a map with element pairs `e0`...`en`.]]
+    [[`M(s)`]               [Copy constructs a map from a __forward_sequence__ `s`.]]
+    [[`m = s`]              [Assigns to a map, `m`, from a __forward_sequence__ `s`.]]
+]
+
+[heading Example]
+
+    typedef map<
+        __pair__<int, char>
+      , __pair__<double, std::string> >
+    map_type;
+
+    map_type m(
+        __fusion_make_pair__<int>('X')
+      , __fusion_make_pair__<double>("Men"));
+
+    std::cout << __at_key__<int>(m) << std::endl;
+    std::cout << __at_key__<double>(m) << std::endl;
+
+[endsect]
+
+[endsect]

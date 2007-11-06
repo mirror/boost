@@ -3,8 +3,7 @@
 Components to call functions and function objects and to make Fusion code
 callable through a function object interface.
 
-[heading Header]
-    #include <boost/fusion/functional.hpp>
+/functional.hpp>
 
 [heading Fused and unfused forms]
 
@@ -283,8 +282,7 @@ arguments.
 [*Semantics]: Invokes `f` with the elements in `s` as arguments and returns 
 the result of the call expression.
 
-[heading Header]
-    #include <boost/fusion/functional/invocation/invoke.hpp>
+/functional/invocation/invoke.hpp>
 
 [heading Example]
     __std_plus_doc__<int> add;
@@ -347,8 +345,7 @@ implemented).
 
 [*Semantics]: Invokes `f` with the elements in `s` as arguments.
 
-[heading Header]
-    #include <boost/fusion/functional/invocation/invoke_procedure.hpp>
+/functional/invocation/invoke_procedure.hpp>
 
 [heading Example]
     __vector__<int,int> v(1,2);
@@ -405,8 +402,7 @@ arguments.
 [*Semantics]: Invokes `f` with the elements in `s` as arguments and returns the
 result of the call expression.
 
-[heading Header]
-    #include <boost/fusion/functional/invocation/invoke_function_object.hpp>
+/functional/invocation/invoke_function_object.hpp>
 
 [heading Example]
     struct sub
@@ -548,8 +544,7 @@ In case of the latter, a freestanding [^get_pointer] function must be
 defined (Boost provides this function for [^std::auto_ptr] and 
 __boost_shared_ptr_call__).
 
-[heading Header]
-    #include <boost/fusion/functional/adapter/fused.hpp>
+/functional/adapter/fused.hpp>
 
 [heading Synopsis]
     template <typename Function>
@@ -625,8 +620,7 @@ The target function must not be a pointer to a member object (dereferencing
 such a pointer without returning anything does not make sense, so this case
 is not implemented).
 
-[heading Header]
-    #include <boost/fusion/functional/adapter/fused_procedure.hpp>
+/functional/adapter/fused_procedure.hpp>
 
 [heading Synopsis]
     template <typename Function>
@@ -699,8 +693,7 @@ reference. Const qualification is preserved and propagated appropriately
 target function object that is const or, if the target function object
 is held by value, the adapter is const).
 
-[heading Header]
-    #include <boost/fusion/functional/adapter/fused_function_object.hpp>
+/functional/adapter/fused_function_object.hpp>
 
 [heading Synopsis]
     template <class Function>
@@ -799,8 +792,7 @@ reference. Const qualification is preserved and propagated appropriately
 the target function object is const - or, in case the target function 
 object is held by value, the adapter is const).
 
-[heading Header]
-    #include <boost/fusion/functional/adapter/unfused_generic.hpp>
+/functional/adapter/unfused_generic.hpp>
 
 [heading Synopsis]
     template <class Function>
@@ -907,8 +899,7 @@ reference. Const qualification is preserved and propagated appropriately
 the target function object is const - or, in case the target function 
 object is held by value, the adapter is const).
 
-[heading Header]
-    #include <boost/fusion/functional/adapter/unfused_lvalue_args.hpp>
+/functional/adapter/unfused_lvalue_args.hpp>
 
 [heading Synopsis]
     template <class Function>
@@ -989,8 +980,7 @@ reference. Const qualification is preserved and propagated appropriately
 the target function object is const - or, in case the target function object
 is held by value, the adapter is const).
 
-[heading Header]
-    #include <boost/fusion/functional/adapter/unfused_rvalue_args.hpp>
+/functional/adapter/unfused_rvalue_args.hpp>
 
 [heading Synopsis]
     template <class Function>
@@ -1081,8 +1071,7 @@ Therefore the adapter is always treated as if it was const. ]
 non-reference elements, the element is copied only once - the call operator's 
 signature is optimized automatically to avoid by-value parameters.]
 
-[heading Header]
-    #include <boost/fusion/functional/adapter/unfused_typed.hpp>
+/functional/adapter/unfused_typed.hpp>
 
 [heading Synopsis]
     template <class Function, class Sequence>

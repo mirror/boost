@@ -1,7 +1,8 @@
-[section Tuples]
+[section Tuple]
+
 The TR1 technical report describes extensions to the C++ standard library.
 Many of these extensions will be considered for the next
-iteration of the C++ standard. TR1 describes a tuple type, and 
+iteration of the C++ standard. TR1 describes a tuple type, and
 support for treating `std::pair` as a type of tuple.
 
 Fusion provides full support for the __tr1__tuple__ interface, and the extended
@@ -22,8 +23,7 @@ in future releases of fusion.
         typename TN = __unspecified__>
     class tuple;
 
-[heading Header]
-    #include <boost/fusion/tuple.hpp>
+/tuple.hpp>
 
 [section Construction]
 
@@ -119,7 +119,7 @@ The __tr1__tuple__ provides the `get` function to provide access to it's element
     template<int I, T>
     RJ get(T& t);
 
-[*Requires]: `0 < I <= N`. The program is ill formed if `I` is out of bounds. 
+[*Requires]: `0 < I <= N`. The program is ill formed if `I` is out of bounds.
 `T` is any fusion sequence type, including `tuple`.
 
 [*Return type]: `RJ` is equivalent to `__result_of_at_c__<I,T>::type`.
@@ -129,7 +129,7 @@ The __tr1__tuple__ provides the `get` function to provide access to it's element
     template<int I, typename T>
     PJ get(T const& t);
 
-[*Requires]: `0 < I <= N`. The program is ill formed if `I` is out of bounds. 
+[*Requires]: `0 < I <= N`. The program is ill formed if `I` is out of bounds.
 `T` is any fusion sequence type, including `tuple`.
 
 [*Return type]: `PJ` is equivalent to `__result_of_at_c__<I,T>::type`.

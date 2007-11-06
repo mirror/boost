@@ -66,7 +66,7 @@ that can be used in conjuction with `boost::enable_if` to provide tag
 support for groups of related types. This feature is not necessary
 for our sequence, but for an example see the code in:
 
-    #include <boost/fusion/sequence/adapted/mpl/tag_of.hpp>
+    #include <boost/fusion/adapted/array/tag_of.hpp>
 
 [heading Designing a suitable iterator]
 
@@ -411,8 +411,7 @@ The user must the implement the key expressions required by their sequence type.
 [[`sequence::template value_at<Sequence, N>::type`][The type of the `N`th element in a sequence of type `Seq`]]
 ]
 
-[heading Header]
-    #include <boost/fusion/sequence/sequence_facade.hpp>
+/sequence/sequence_facade.hpp>
 
 [endsect]
 
@@ -493,8 +492,7 @@ part of the sequence.
 The macro should be used at global scope, and `struct_name` should be the fully
 namespace qualified name of the struct to be converted.
 
-[heading Header]
-    #include <boost/fusion/adapted/struct/adapt_struct.hpp>
+/adapted/struct/adapt_struct.hpp>
 
 [heading Example]
     namespace demo
@@ -546,8 +544,7 @@ that will be part of the sequence.
 The macro should be used at global scope, and `struct_name` should be the fully
 namespace qualified name of the struct to be converted.
 
-[heading Header]
-    #include <boost/fusion/adapted/struct/adapt_assoc_struct.hpp>
+/adapted/struct/adapt_assoc_struct.hpp>
 
 [heading Example]
     namespace demo
