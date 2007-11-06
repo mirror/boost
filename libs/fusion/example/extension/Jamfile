@@ -13,6 +13,8 @@ import testing ;
 {
     test-suite example :
 
-    [ run test_example.cpp :  :  :  : ] ;
+    [ run test_example.cpp :  :  :  : ]
+    [ run triple.cpp :  :  :  : ]
+    ;
 }
 
