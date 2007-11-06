@@ -9,7 +9,7 @@
 #include <boost/fusion/view/joint_view/joint_view.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/mpl/vector_c.hpp>
 

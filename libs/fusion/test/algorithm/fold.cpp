@@ -10,7 +10,7 @@
 #include <boost/fusion/adapted/mpl.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 #include <boost/fusion/algorithm/iteration/accumulate.hpp>
 #include <boost/type_traits/is_same.hpp>

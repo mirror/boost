@@ -10,7 +10,7 @@
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/algorithm/transformation/push_back.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/mpl/vector_c.hpp>

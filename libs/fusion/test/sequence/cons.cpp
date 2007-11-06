@@ -8,10 +8,10 @@
 #include <string>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/list/cons.hpp>
-#include <boost/fusion/sequence/generation/make_cons.hpp>
-#include <boost/fusion/sequence/generation/cons_tie.hpp>
+#include <boost/fusion/container/generation/make_cons.hpp>
+#include <boost/fusion/container/generation/cons_tie.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>

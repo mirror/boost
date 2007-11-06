@@ -11,7 +11,7 @@
 #include <boost/fusion/container/deque/deque.hpp>
 #include <boost/fusion/container/deque/front_extended_deque.hpp>
 #include <boost/fusion/sequence/comparison.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/mpl.hpp>
 
 #include <boost/fusion/sequence/intrinsic.hpp>

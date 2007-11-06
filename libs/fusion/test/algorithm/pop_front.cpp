@@ -9,7 +9,7 @@
 #include <boost/fusion/adapted/mpl.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/algorithm/transformation/pop_front.hpp>
 #include <boost/mpl/vector_c.hpp>
 

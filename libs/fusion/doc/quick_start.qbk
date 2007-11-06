@@ -5,7 +5,7 @@ ancestor `std::pair`. The tuple is a generalization of `std::pair` for
 multiple heterogeneous elements (triples, quadruples, etc.). The tuple is 
 more or less a synonym for fusion's `__vector__`. 
 
-For starters, we shall include all of Fusion's __sequence__s [footnote There 
+For starters, we shall include all of Fusion's __sequence__(s) [footnote There 
 are finer grained header files available if you wish to have more control 
 over which components to include (see section __organization__ for 
 details).]:

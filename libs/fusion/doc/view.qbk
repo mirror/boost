@@ -259,7 +259,7 @@ defined in __forward_sequence__.
 
 [heading Description]
 
-`zip_view` presents a view which iterates over a collection of __sequence__s in parallel. A `zip_view`
+`zip_view` presents a view which iterates over a collection of __sequence__(s) in parallel. A `zip_view`
 is constructed from a __sequence__ of references to the component __sequence__s.
 
 [heading Header]

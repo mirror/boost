@@ -7,7 +7,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 
-#include <boost/fusion/sequence/generation/map_tie.hpp>
+#include <boost/fusion/container/generation/map_tie.hpp>
 #include <boost/fusion/sequence/intrinsic/at_key.hpp>
 
 struct key_zero;

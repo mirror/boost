@@ -1064,7 +1064,7 @@ Returns the result type of __size__.
 [heading Description]
 
 Returns the result type of __at__[footnote __result_of_at__ reflects the
-actual return type of the function __at__. __sequence__s typically return
+actual return type of the function __at__. __sequence__(s) typically return
 references to its elements via the __at__ function. If you want to get
 the actual element type, use __result_of_value_at__].
 
@@ -1103,7 +1103,7 @@ the actual element type, use __result_of_value_at__].
 [heading Description]
 
 Returns the result type of __at_c__[footnote __result_of_at_c__ reflects
-the actual return type of the function __at_c__. __sequence__s typically
+the actual return type of the function __at_c__. __sequence__(s) typically
 return references to its elements via the __at_c__ function. If you want to
 get the actual element type, use __result_of_value_at_c__].
 
@@ -1362,9 +1362,9 @@ operators for free.
 
 The I/O operators: `<<` and `>>` work generically on all Fusion sequences.
 The global `operator<<` has been overloaded for generic output streams such
-that __sequence__s are output by recursively calling `operator<<` for each
+that __sequence__(s) are output by recursively calling `operator<<` for each
 element. Analogously, the global `operator>>` has been overloaded to
-extract __sequence__s from generic input streams by recursively calling
+extract __sequence__(s) from generic input streams by recursively calling
 `operator>>` for each element.
 
 The default delimiter between the elements is space, and the __sequence__
@@ -1406,9 +1406,9 @@ The code:
     std::cin >> set_open('[') >> set_close(']') >> set_delimiter(':');
     std::cin >> j;
 
-reads the data into the __vector__s `i` and `j`.
+reads the data into the __vector__(s) `i` and `j`.
 
-Note that extracting __sequence__s with `std::string` or C-style string
+Note that extracting __sequence__(s) with `std::string` or C-style string
 elements does not generally work, since the streamed __sequence__
 representation may not be unambiguously parseable.
 
@@ -1526,7 +1526,7 @@ Compare two sequences for equality.
 
 [table
     [[Parameter]    [Requirement]                       [Description]]
-    [[`a, b`]       [Instances of __sequence__]         [__sequence__s to compare]]
+    [[`a, b`]       [Instances of __sequence__]         [__sequence__(s) to compare]]
 ]
 
 [heading Expression Semantics]
@@ -1577,7 +1577,7 @@ Compare two sequences for inequality.
 
 [table
     [[Parameter]    [Requirement]                       [Description]]
-    [[`a, b`]       [Instances of __sequence__]         [__sequence__s to compare]]
+    [[`a, b`]       [Instances of __sequence__]         [__sequence__(s) to compare]]
 ]
 
 [heading Expression Semantics]
@@ -1628,7 +1628,7 @@ Lexicographically compare two sequences.
 
 [table
     [[Parameter]    [Requirement]                       [Description]]
-    [[`a, b`]       [Instances of __sequence__]         [__sequence__s to compare]]
+    [[`a, b`]       [Instances of __sequence__]         [__sequence__(s) to compare]]
 ]
 
 [heading Expression Semantics]
@@ -1677,7 +1677,7 @@ Lexicographically compare two sequences.
 
 [table
     [[Parameter]    [Requirement]                       [Description]]
-    [[`a, b`]       [Instances of __sequence__]         [__sequence__s to compare]]
+    [[`a, b`]       [Instances of __sequence__]         [__sequence__(s) to compare]]
 ]
 
 [heading Expression Semantics]
@@ -1726,7 +1726,7 @@ Lexicographically compare two sequences.
 
 [table
     [[Parameter]    [Requirement]                       [Description]]
-    [[`a, b`]       [Instances of __sequence__]         [__sequence__s to compare]]
+    [[`a, b`]       [Instances of __sequence__]         [__sequence__(s) to compare]]
 ]
 
 [heading Expression Semantics]
@@ -1775,7 +1775,7 @@ Lexicographically compare two sequences.
 
 [table
     [[Parameter]    [Requirement]                       [Description]]
-    [[`a, b`]       [Instances of __sequence__]         [__sequence__s to compare]]
+    [[`a, b`]       [Instances of __sequence__]         [__sequence__(s) to compare]]
 ]
 
 [heading Expression Semantics]

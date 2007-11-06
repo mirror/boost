@@ -9,7 +9,7 @@
 #include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/container/ext_/tree.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/view/iterator_range/iterator_range.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator_range.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>

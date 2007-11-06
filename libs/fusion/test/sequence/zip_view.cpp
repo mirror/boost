@@ -19,7 +19,7 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/advance.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/adapted/mpl.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/equal_to.hpp>

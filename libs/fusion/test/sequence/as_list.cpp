@@ -7,8 +7,8 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/adapted/mpl.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
-#include <boost/fusion/sequence/generation/make_list.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_list.hpp>
 #include <boost/fusion/container/list/convert.hpp>
 #include <boost/fusion/algorithm/transformation/push_back.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>

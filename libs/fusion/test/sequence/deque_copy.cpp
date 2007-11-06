@@ -7,8 +7,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/container/deque/deque.hpp>
-#include <boost/fusion/sequence/generation/make_deque.hpp>
-#include <boost/fusion/sequence/generation/deque_tie.hpp>
+#include <boost/fusion/container/generation/make_deque.hpp>
+#include <boost/fusion/container/generation/deque_tie.hpp>
 
 #define FUSION_SEQUENCE deque
 #include "copy.hpp"

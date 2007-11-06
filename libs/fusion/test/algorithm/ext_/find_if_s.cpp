@@ -10,7 +10,7 @@
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/algorithm/query/ext_/find_if_s.hpp>
 #include <boost/fusion/container/ext_/tree.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/vector_c.hpp>
 #include <boost/mpl/less.hpp>

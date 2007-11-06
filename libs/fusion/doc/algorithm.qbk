@@ -30,7 +30,7 @@ sequence specific and need to be implemented N times over N different
 sequences are now implemented only once. That is to say that Fusion
 sequences are cheaply extensible. However, an important caveat is that the
 result of a sequence extending operation like __push_back__ does not retain
-the properties of the original sequence such as associativity of __set__s.
+the properties of the original sequence such as associativity of __set__(s).
 To regain the original sequence, __conversion__ functions are provided. You
 may use one of the __conversion__ functions to convert back to the original
 sequence type.

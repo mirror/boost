@@ -1,9 +1,9 @@
 [section Extension]
 
-[section The Full Extension Mechanism]
+[section:ext_full The Full Extension Mechanism]
 
 The Fusion library is designed to be extensible, new sequences types can easily
-be added. In fact, the library support for `std::pair`, `boost::array` and __mpl__ 
+be added. In fact, the library support for `std::pair`, `boost::array` and __mpl__
 sequences is entirely provided using the extension mechanism.
 
 The process for adding a new sequence type to Fusion is:
@@ -30,7 +30,7 @@ are going to use the type:
             {}
         };
     }
-    
+
 We are going to pretend that this type has been provided by a 3rd party
 library, and therefore cannot be modified. We shall work through all the
 necessary steps to enable `example_struct` to serve as an __associative_sequence__
@@ -54,7 +54,7 @@ tag type for operations involving our sequence. This is done by specializing
     #include <boost/fusion/support/tag_of_fwd.hpp>
     #include <boost/fusion/include/tag_of_fwd.hpp>
 
-    namespace boost { namespace fusion { namespace traits {        
+    namespace boost { namespace fusion { namespace traits {
         template<>
         struct tag_of<example_struct>
         {
@@ -62,8 +62,8 @@ tag type for operations involving our sequence. This is done by specializing
         };
     }}}
 
-`traits::tag_of` also has a second template argument, 
-that can be used in conjuction with `boost::enable_if` to provide tag 
+`traits::tag_of` also has a second template argument,
+that can be used in conjuction with `boost::enable_if` to provide tag
 support for groups of related types. This feature is not necessary
 for our sequence, but for an example see the code in:
 
@@ -100,7 +100,7 @@ A quick summary of the details of our iterator:
 # The iterator is parameterized by the type it is iterating over, and the index of the current element.
 # The typedefs `struct_type` and `index` provide convenient access to information we will need later in
   the implementation.
-# The typedef `category` allows the `traits::__category_of__` metafunction to establish 
+# The typedef `category` allows the `traits::__category_of__` metafunction to establish
   the traversal category of the iterator.
 # The constructor stores a reference to the `example_struct` being iterated over.
 
@@ -113,7 +113,7 @@ add features to our implementation.
 [heading A first couple of instructive features]
 
 To start with, we will get the __result_of_value_of__ metafunction working. To
-do this, we provide a specialization of the `boost::fusion::extension::value_of_impl` template for 
+do this, we provide a specialization of the `boost::fusion::extension::value_of_impl` template for
 our iterator's tag type.
 
     template<>
@@ -188,7 +188,7 @@ specialization of `deref_impl`.
     }
 
 The use of `deref_impl` is very similar to that of `value_of_impl`, but it also
-provides some runtime functionality this time via the `call` static member function. 
+provides some runtime functionality this time via the `call` static member function.
 To see how `deref_impl` is used, lets have a look at the implementation of __deref__:
 
     namespace result_of
@@ -213,7 +213,7 @@ same way as the __value_of__ implementation. The runtime functionality used
 by __deref__ is provided by the `call` static function of the selected
 __mpl_metafunction_class__.
 
-The actual implementation of `deref_impl` is slightly more complex than that of  `value_of_impl`. 
+The actual implementation of `deref_impl` is slightly more complex than that of  `value_of_impl`.
 We also need to implement the `call` function, which returns a reference
 to the appropriate member of the underlying sequence. We also require a little
 bit of metaprogramming to return `const` references if the underlying sequence
@@ -261,7 +261,7 @@ __random_access_iterator__ `distance_impl` and `advance_impl` also need to be pr
 in order to satisfy the necessary complexity guarantees. As our iterator is
 a __random_access_iterator__ we will have to implement all of these functions.
 
-Full implementations of `prior_impl`, `advance_impl`, `distance_impl` and `equal_to_impl` are 
+Full implementations of `prior_impl`, `advance_impl`, `distance_impl` and `equal_to_impl` are
 provided in the example code.
 
 [heading Implementing the intrinsic functions of the sequence]
@@ -279,7 +279,7 @@ an `impl` type specialized for our sequence tag:
 
 We've some similar formalities to complete, providing `category_of_impl` so Fusion
 can correctly identify our sequence type, and `is_view_impl` so Fusion can correctly
-identify our sequence as not being a __view__ type. Implementations are 
+identify our sequence as not being a __view__ type. Implementations are
 provide in the example code.
 
 Now we've completed some formalities, on to more interesting features. Lets get
@@ -304,7 +304,7 @@ our sequence.
 
 The implementation uses the same ideas we have applied throughout, in this case
 we are just creating one of the iterators we developed earlier, pointing to the
-first element in the sequence. The implementation of __end__ is very similar, and 
+first element in the sequence. The implementation of __end__ is very similar, and
 is provided in the example code.
 
 For our __random_access_sequence__ we will also need to implement `size_impl`,
@@ -312,10 +312,10 @@ For our __random_access_sequence__ we will also need to implement `size_impl`,
 
 [heading Enabling our type as an associative container]
 
-In order for `example_struct` to serve as an associative container, 
+In order for `example_struct` to serve as an associative container,
 we need to enable 3 lookup features, __at_key__, __value_at_key__ and __has_key__.
 We also need to provide an implementation of the `is_associative` trait
-so that our sequence can be correctly identified as an associative container. 
+so that our sequence can be correctly identified as an associative container.
 
 To implement `at_key_impl` we need to associate the `fields::age` and `fields::age`
 types described in the __quick_start__ guide with the appropriate members of `example_struct`.
@@ -465,7 +465,7 @@ The user must the implement the key expressions required by their iterator type.
 
 [section Macros]
 
-[section BOOST_FUSION_ADAPT_STRUCT]
+[section:adapt_struct BOOST_FUSION_ADAPT_STRUCT]
 
 [heading Description]
 BOOST_FUSION_ADAPT_STRUCT is a macro that can be used to generate all the
@@ -515,7 +515,7 @@ namespace qualified name of the struct to be converted.
 
 [endsect]
 
-[section BOOST_FUSION_ADAPT_ASSOC_STRUCT]
+[section:adapt_assoc BOOST_FUSION_ADAPT_ASSOC_STRUCT]
 
 [heading Description]
 BOOST_FUSION_ADAPT_ASSOC_STRUCT is a macro that can be used to generate all the
@@ -539,9 +539,9 @@ and __associative_sequence__.
         )
 
 The above macro generates the necessary code to adapt `struct_name`
-as a model of __random_access_sequence__ and __associative_sequence__. 
+as a model of __random_access_sequence__ and __associative_sequence__.
 The sequence of `(member_typeN, member_nameN, key_typeN)`
-triples declare the type, name and key type of each of the struct members 
+triples declare the type, name and key type of each of the struct members
 that will be part of the sequence.
 
 The macro should be used at global scope, and `struct_name` should be the fully

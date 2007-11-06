@@ -6,7 +6,7 @@
 ==============================================================================*/
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/fusion/container/set/set.hpp>
-#include <boost/fusion/sequence/generation/make_set.hpp>
+#include <boost/fusion/container/generation/make_set.hpp>
 #include <boost/fusion/sequence/intrinsic/at_key.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
 #include <boost/fusion/sequence/intrinsic/has_key.hpp>

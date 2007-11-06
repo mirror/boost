@@ -11,7 +11,7 @@
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/view/filter_view/filter_view.hpp>
-#include <boost/fusion/sequence/generation/make_vector.hpp>
+#include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/is_same.hpp>
