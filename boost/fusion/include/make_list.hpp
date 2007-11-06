@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_MAKE_LIST)
 #define FUSION_INCLUDE_MAKE_LIST
 
-#include <boost/fusion/sequence/generation/make_list.hpp>
+#include <boost/fusion/container/generation/make_list.hpp>
 
 #endif

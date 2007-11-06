@@ -19,7 +19,7 @@
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/fusion/view/filter_view.hpp>
 #include <boost/fusion/container/list/cons.hpp> // for nil
-#include <boost/fusion/sequence/generation/make_cons.hpp>
+#include <boost/fusion/container/generation/make_cons.hpp>
 #include <boost/fusion/iterator/distance.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/support/ext_/is_segmented.hpp>

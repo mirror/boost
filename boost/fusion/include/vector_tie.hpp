@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_VECTOR_TIE)
 #define FUSION_INCLUDE_VECTOR_TIE
 
-#include <boost/fusion/sequence/generation/vector_tie.hpp>
+#include <boost/fusion/container/generation/vector_tie.hpp>
 
 #endif

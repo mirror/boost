@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_CONS_TIE)
 #define FUSION_INCLUDE_CONS_TIE
 
-#include <boost/fusion/sequence/generation/cons_tie.hpp>
+#include <boost/fusion/container/generation/cons_tie.hpp>
 
 #endif

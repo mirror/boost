@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_MAKE_CONS)
 #define FUSION_INCLUDE_MAKE_CONS
 
-#include <boost/fusion/sequence/generation/make_cons.hpp>
+#include <boost/fusion/container/generation/make_cons.hpp>
 
 #endif

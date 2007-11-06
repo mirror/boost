@@ -10,6 +10,6 @@
 #include <boost/fusion/tuple/tuple.hpp>
 #include <boost/fusion/tuple/make_tuple.hpp>
 #include <boost/fusion/tuple/tuple_tie.hpp>
-#include <boost/fusion/sequence/generation/ignore.hpp>
+#include <boost/fusion/container/generation/ignore.hpp>
 
 #endif

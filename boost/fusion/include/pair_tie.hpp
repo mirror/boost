@@ -7,6 +7,6 @@
 #if !defined(FUSION_INCLUDE_PAIR_TIE)
 #define FUSION_INCLUDE_PAIR_TIE
 
-#include <boost/fusion/sequence/generation/pair_tie.hpp>
+#include <boost/fusion/container/generation/pair_tie.hpp>
 
 #endif
