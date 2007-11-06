@@ -350,7 +350,7 @@ void test_binding()
   optional<int const&> orci1 = ci ;
   BOOST_CHECK(  &(*orci1) == &ci ) ;
 	
-  optional<int const&> orci2 = ci ;
+  optional<int const&> orci2(ci) ;
   BOOST_CHECK(  &(*orci2) == &ci ) ;
 }
 
