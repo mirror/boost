@@ -413,7 +413,13 @@ The user must the implement the key expressions required by their sequence type.
 [[`sequence::template value_at<Sequence, N>::type`][The type of the `N`th element in a sequence of type `Seq`]]
 ]
 
-/sequence/sequence_facade.hpp>
+[heading Include]
+
+    #include <boost/fusion/sequence/sequence_facade.hpp>
+    #include <boost/fusion/include/sequence_facade.hpp>
+
+[heading Example]
+A full worked example using __sequence_facade__ is provided in triple.cpp in the extension examples.
 
 [endsect]
 
@@ -460,6 +466,9 @@ The user must the implement the key expressions required by their iterator type.
 
     #include <boost/fusion/iterator/iterator_facade.hpp>
     #include <boost/fusion/include/iterator_facade.hpp>
+
+[heading Example]
+A full worked example using __iterator_facade__ is provided in triple.cpp in the extension examples.
 
 [endsect]
 
