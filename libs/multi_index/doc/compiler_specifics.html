@@ -49,7 +49,7 @@ along with suitable workarounds when available.
   <li><a href="#acc_612">HP aC++ A.06.12 for HP-UX and later</a></li>
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
   <li><a href="#va_90">IBM VisualAge C++ V9.0 for AIX</a></li>
-  <li><a href="#intel_90_lin">Intel C++ Compiler for Linux 9.0 and later</a></li>
+  <li><a href="#intel_81_lin">Intel C++ Compiler for Linux 8.1 and later</a></li>
   <li><a href="#intel_7x_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></li>
   <li><a href="#intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></li>
   <li><a href="#intel_100_win64">Intel C++ Compiler for Windows 64-bit 10.0</a></li>
@@ -80,6 +80,7 @@ along with suitable workarounds when available.
     </ul>
   </li>
   <li><a href="#msvc_80_x86_amd64">Microsoft Visual C++ 8.0 x64 cross-compiler</a></li>
+  <li><a href="#msvc_90">Microsoft Visual C++ 9.0</a></li>
   <li><a href="#sun_10">Sun Studio 10 for Solaris and later</a></li>
   <li><a href="#portability">Portability techniques</a>
     <ul>
@@ -131,11 +132,14 @@ No problems have been detected with several versions of this compiler
 starting from 3.2. The following versions have been explicitly tested:
 <ul>
   <li>GCC 3.2 20020927 (prerelease) under Cygwin 1.5.7,</li>
+  <li>GCC 3.3.6 under Linux,</li>
   <li>GCC 3.4.2 under HP-UX IA64,</li>
-  <li>GCC 3.4.4 (cygming special) under Cygwin 1.5.22,</li>
+  <li>GCC 3.4.3 under Linux x86-64,</li>
+  <li>GCC 3.4.4 under Linux, (cygming special) under Cygwin 1.5.22,</li>
   <li>GCC 3.4.5 (mingw special) under Win32,</li>
   <li>GCC 3.4.6 under Linux x86-64,</li>
-  <li>GCC 4.0.1 (Apple build 5367) under Mac OS,</li>
+  <li>GCC 4.0.1 under Linux x86-64, (Apple builds 5363 and 5367) under Mac OS,</li>
+  <li>GCC 4.1.1 under Linux x86-64,</li>
   <li>GCC 4.1.2 (OpenPKG-CURRENT) under Solaris,</li>
   <li>GCC 4.2.1 under HP-UX IA64 and Linux x86-64, (mingw32-2) under Win32,</li>
   <li>GCC 4.2.2 under Linux.</li>
@@ -234,14 +238,11 @@ to the use of <code>offsetof</code>.
 Other than this, Boost.MultiIndex works without problems.
 </p>
 
-<h2><a name="intel_90_lin">Intel C++ Compiler for Linux 9.0 and later</a></h2>
+<h2><a name="intel_81_lin">Intel C++ Compiler for Linux 8.1 and later</a></h2>
 
 <p>
-<b>Note:</b> Last tested in Boost 1.34.1. The information might be no longer accurate.
-</p>
-
-<p>
-No problems have been detected with this compilers from version 9.0.
+No problems have been detected with this compiler.
+Tested from version 8.1 to 9.1.
 </p>
 
 <h2><a name="intel_7x_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></h2>
@@ -668,6 +669,13 @@ No problems have been detected with this configuration.
 
 <p>
 No problems have been detected with this compiler.
+</p>
+
+<h2><a name="msvc_90">Microsoft Visual C++ 9.0</a></h2>
+
+<p>
+No problems have been detected with this compiler.
+The Beta 2 version of this product was used for the testing. 
 </p>
 
 <h2><a name="sun_10">Sun Studio 10 for Solaris and later</a></h2>
@@ -1105,7 +1113,7 @@ Performance
 
 <br>
 
-<p>Revised October 29th 2007</p>
+<p>Revised November 6th 2007</p>
 
 <p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
