@@ -72,6 +72,9 @@
 
 #if _MSC_VER <= 1400  // 1400 == VC++ 8.0
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#endif
+
+#if _MSC_VER <= 1500  // 1500 == VC++ 9.0
 #  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #endif
 
@@ -156,6 +159,8 @@
 #     define BOOST_COMPILER_VERSION 7.1
 #   elif _MSC_VER == 1400
 #     define BOOST_COMPILER_VERSION 8.0
+#   elif _MSC_VER == 1500
+#     define BOOST_COMPILER_VERSION 9.0
 #   else
 #     define BOOST_COMPILER_VERSION _MSC_VER
 #   endif
@@ -171,7 +176,7 @@
 #endif
 //
 // last known and checked version is 1400 (VC8):
-#if (_MSC_VER > 1400)
+#if (_MSC_VER > 1500)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
