@@ -2,9 +2,8 @@
     Copyright (c) 2004 Joel de Guzman
     http://spirit.sourceforge.net/
 
-    Use, modification and distribution is subject to the Boost Software
-    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
-    http://www.boost.org/LICENSE_1_0.txt)
+    Distributed under the Boost Software License, Version 1.0. (See accompany-
+    ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
 /*=============================================================================
@@ -260,6 +259,20 @@
         padding: 0.5em 0.5em 0.5em 0.5em;
         border: 1pt solid white;
         font-size: 80%;
+    }
+
+    table.simplelist
+    {
+        width: auto !important;
+        margin: 0em !important;
+        padding: 0em !important;
+    }
+    table.simplelist td
+    {
+        margin: 0em !important;
+        padding: 0em !important;
+        text-align: left !important;
+        font-size: 9pt !important;
     }
 
 /*=============================================================================
@@ -523,9 +536,23 @@
             border: 1px solid gray;
         }
 
+        table.simplelist tr td
+        {
+            border: none !important;
+        }
+    
     /* Misc */
         span.highlight
         {
             font-weight: bold;
         }
+    }
+
+/*=============================================================================
+    Images
+=============================================================================*/
+
+    span.inlinemediaobject img
+    {
+        vertical-align: middle;
     }
