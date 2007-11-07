@@ -2,9 +2,8 @@
     Copyright (c) 2004 Joel de Guzman
     http://spirit.sourceforge.net/
 
-    Use, modification and distribution is subject to the Boost Software
-    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
-    http://www.boost.org/LICENSE_1_0.txt)
+    Distributed under the Boost Software License, Version 1.0. (See accompany-
+    ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
 /*=============================================================================
@@ -187,6 +186,21 @@
     }
 
 /*=============================================================================
+    Copyright footer
+=============================================================================*/
+    .copyright-footer
+    {
+        text-align: right;
+        font-size: 90%;
+    }
+
+    .copyright-footer p
+    {
+        text-align: right;
+        font-size: 90%;
+    }
+
+/*=============================================================================
     Table of contents
 =============================================================================*/
 
@@ -247,6 +261,20 @@
         font-size: 80%;
     }
 
+    table.simplelist
+    {
+        width: auto !important;
+        margin: 0em !important;
+        padding: 0em !important;
+    }
+    table.simplelist td
+    {
+        margin: 0em !important;
+        padding: 0em !important;
+        text-align: left !important;
+        font-size: 9pt !important;
+    }
+
 /*=============================================================================
     Blurbs
 =============================================================================*/
@@ -256,35 +284,18 @@
     div.important,
     div.caution,
     div.warning,
-    div.sidebar
+    p.blurb
     {
         font-size: 9pt; /* A little bit smaller than the main text */
         line-height: 1.2;
         display: block;
         margin: 1pc 4% 0pc 4%;
-        padding: 0.5pc 0.5pc 0.0pc 0.5pc;
+        padding: 0.5pc 0.5pc 0.5pc 0.5pc;
     }
 
-    div.sidebar img
+    p.blurb img
     {
         padding: 1pt;
-    }
-
-/*=============================================================================
-    Callouts
-=============================================================================*/
-    .line_callout_bug img
-    {
-        float: left;
-        position:relative;
-        left: 4px;
-        top: -12px;
-        clear: left;
-        margin-left:-22px;
-    }
-
-    .callout_bug img
-    {
     }
 
 /*=============================================================================
@@ -426,7 +437,7 @@
         div.important,
         div.caution,
         div.warning,
-        div.sidebar
+        p.blurb
         {
             border: 1px solid #DCDCDC;
         }
@@ -449,6 +460,11 @@
         {
             background-color: #F0F0F0;
             border: 1px solid #DCDCDC;
+        }
+
+        .copyright-footer
+        {
+            color: #8F8F8F;
         }
 
     /* Misc */
@@ -520,9 +536,23 @@
             border: 1px solid gray;
         }
 
+        table.simplelist tr td
+        {
+            border: none !important;
+        }
+    
     /* Misc */
         span.highlight
         {
             font-weight: bold;
         }
+    }
+
+/*=============================================================================
+    Images
+=============================================================================*/
+
+    span.inlinemediaobject img
+    {
+        vertical-align: middle;
     }
