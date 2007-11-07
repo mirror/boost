@@ -30,7 +30,7 @@ void load(Archive& ar, ptr_array<T, N, CloneAllocator>& c, unsigned int version)
     for(size_type i = 0u; i != N; ++i)
     {
         T* p;
-        ar >> boost::serialization::make_nvp( ptr_container_detail::item, p );
+        ar >> boost::serialization::make_nvp( ptr_container_detail::item(), p );
         c.replace(i, p);
     }
 }

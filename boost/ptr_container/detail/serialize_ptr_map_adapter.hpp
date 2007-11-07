@@ -22,15 +22,15 @@ void save(Archive& ar, const ptr_container_detail::ptr_map_adapter_base<T, VoidP
     typedef ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator> container;
     typedef BOOST_DEDUCED_TYPENAME container::const_iterator const_iterator;
 
-    ar << boost::serialization::make_nvp( ptr_container_detail::count, 
+    ar << boost::serialization::make_nvp( ptr_container_detail::count(), 
                                           ptr_container_detail::serialize_as_const(c.size()) );
 
     const_iterator i = c.begin(), e = c.end();
     for(; i != e; ++i)
     {
-        ar << boost::serialization::make_nvp( ptr_container_detail::first, i->first );
-        ar << boost::serialization::make_nvp( ptr_container_detail::second,
-                                 ptr_container_detail::serialize_as_const(i->second) );
+        ar << boost::serialization::make_nvp( ptr_container_detail::first(), i->first );
+        ar << boost::serialization::make_nvp( ptr_container_detail::second(),
+                                              ptr_container_detail::serialize_as_const(i->second) );
     }
 }
 
@@ -44,14 +44,14 @@ void load(Archive& ar, ptr_map_adapter<T, VoidPtrMap, CloneAllocator>& c, unsign
 
     c.clear();
     size_type n;
-    ar >> boost::serialization::make_nvp( ptr_container_detail::count, n );
+    ar >> boost::serialization::make_nvp( ptr_container_detail::count(), n );
 
     for(size_type i = 0u; i != n; ++i)
     {
         key_type key;
         T* value;
-        ar >> boost::serialization::make_nvp( ptr_container_detail::first, key );
-        ar >> boost::serialization::make_nvp( ptr_container_detail::second, value );
+        ar >> boost::serialization::make_nvp( ptr_container_detail::first(), key );
+        ar >> boost::serialization::make_nvp( ptr_container_detail::second(), value );
         std::pair<iterator, bool> p = c.insert(key, value);
         ar.reset_object_address(&p.first->first, &key); 
     }
@@ -67,14 +67,14 @@ void load(Archive& ar, ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator>& c, u
 
     c.clear();
     size_type n;
-    ar >> boost::serialization::make_nvp( ptr_container_detail::count, n );
+    ar >> boost::serialization::make_nvp( ptr_container_detail::count(), n );
 
     for(size_type i = 0u; i != n; ++i)
     {
         key_type key;
         T* value;
-        ar >> boost::serialization::make_nvp( ptr_container_detail::first, key );
-        ar >> boost::serialization::make_nvp( ptr_container_detail::second, value );
+        ar >> boost::serialization::make_nvp( ptr_container_detail::first(), key );
+        ar >> boost::serialization::make_nvp( ptr_container_detail::second(), value );
         iterator p = c.insert(key, value);
         ar.reset_object_address(&p->first, &key);
     }

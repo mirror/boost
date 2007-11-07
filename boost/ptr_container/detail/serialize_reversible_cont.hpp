@@ -31,7 +31,7 @@ void save_helper(Archive& ar, const ptr_container_detail::reversible_ptr_contain
 
     const_iterator i = c.begin(), e = c.end();
     for(; i != e; ++i)
-        ar << boost::serialization::make_nvp( ptr_container_detail::item, 
+        ar << boost::serialization::make_nvp( ptr_container_detail::item(), 
                 ptr_container_detail::serialize_as_const(static_cast<value_type>(*i.base()))); 
     }
 
@@ -55,7 +55,7 @@ void load_helper(Archive& ar, ptr_container_detail::reversible_ptr_container<Con
         // so we need not call ar.reset_object_address(v, u)
         //
         value_type ptr;
-        ar >> boost::serialization::make_nvp( ptr_container_detail::item, ptr ); 
+        ar >> boost::serialization::make_nvp( ptr_container_detail::item(), ptr ); 
         c.insert(c.end(), ptr);
     }
 }
@@ -68,7 +68,7 @@ namespace serialization
 template<class Archive, class Config, class CloneAllocator>
 void save(Archive& ar, const ptr_container_detail::reversible_ptr_container<Config, CloneAllocator>& c, unsigned int version)
 {   
-    ar << boost::serialization::make_nvp( ptr_container_detail::count, 
+    ar << boost::serialization::make_nvp( ptr_container_detail::count(), 
                                           ptr_container_detail::serialize_as_const(c.size()) );
     ptr_container_detail::save_helper(ar, c);
 }
@@ -80,7 +80,7 @@ void load(Archive& ar, ptr_container_detail::reversible_ptr_container<Config, Cl
     typedef BOOST_DEDUCED_TYPENAME container_type::size_type size_type;
     
     size_type n;
-    ar >> boost::serialization::make_nvp( ptr_container_detail::count, n );
+    ar >> boost::serialization::make_nvp( ptr_container_detail::count(), n );
     ptr_container_detail::load_helper(ar, c, n);
     
 }
