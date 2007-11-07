@@ -1,13 +1,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Partial Matches</title>
+<title> Partial Matches</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="Boost.Regex">
 <link rel="up" href="../index.html" title="Boost.Regex">
-<link rel="prev" href="captures.html" title="Understanding Marked Sub-Expressions and Captures">
-<link rel="next" href="syntax.html" title="Regular Expression Syntax">
+<link rel="prev" href="captures.html" title=" Understanding Marked Sub-Expressions
+    and Captures">
+<link rel="next" href="syntax.html" title=" Regular Expression Syntax">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +25,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_regex.partial_matches"></a><a href="partial_matches.html" title="Partial Matches"> Partial Matches</a>
-</h2></div></div></div>
+<a name="boost_regex.partial_matches"></a><a href="partial_matches.html" title=" Partial Matches"> Partial Matches</a></h2></div></div></div>
 <p>
-      The <a href="ref/match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>
-      <code class="computeroutput"><span class="identifier">match_partial</span></code> can be passed
-      to the following algorithms: <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>, <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, and <a href="ref/deprecated_interfaces/regex_grep.html" title="regex_grep (Deprecated)"><code class="computeroutput"><span class="identifier">regex_grep</span></code></a>, and used with the iterator
-      <a href="ref/regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a>.
+      The <a href="ref/match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a>
+      <tt class="computeroutput"><span class="identifier">match_partial</span></tt> can be passed
+      to the following algorithms: <a href="ref/regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>, <a href="ref/regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a>, and <a href="ref/deprecated_interfaces/regex_grep.html" title="
+        regex_grep (Deprecated)"><tt class="computeroutput"><span class="identifier">regex_grep</span></tt></a>, and used with the iterator
+      <a href="ref/regex_iterator.html" title=" regex_iterator"><tt class="computeroutput"><span class="identifier">regex_iterator</span></tt></a>.
       When used it indicates that partial as well as full matches should be found.
       A partial match is one that matched one or more characters at the end of the
       text input, but did not match all of the regular expression (although it may
@@ -40,9 +41,10 @@
       into memory (or even into a memory mapped file), or are of indeterminate length
       (for example the source may be a socket or similar). Partial and full matches
       can be differentiated as shown in the following table (the variable M represents
-      an instance of <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> as filled in by <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>,
-      <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
-      or <a href="ref/deprecated_interfaces/regex_grep.html" title="regex_grep (Deprecated)"><code class="computeroutput"><span class="identifier">regex_grep</span></code></a>):
+      an instance of <a href="ref/match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a> as filled in by <a href="ref/regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>,
+      <a href="ref/regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a>
+      or <a href="ref/deprecated_interfaces/regex_grep.html" title="
+        regex_grep (Deprecated)"><tt class="computeroutput"><span class="identifier">regex_grep</span></tt></a>):
     </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -184,7 +186,7 @@
 <p>
       The following example tests to see whether the text could be a valid credit
       card number, as the user presses a key, the character entered would be added
-      to the string being built up, and passed to <code class="computeroutput"><span class="identifier">is_possible_card_number</span></code>.
+      to the string being built up, and passed to <tt class="computeroutput"><span class="identifier">is_possible_card_number</span></tt>.
       If this returns true then the text could be a valid card number, so the user
       interface's OK button would be enabled. If it returns false, then this is not
       yet a valid card number, but could be with more input, so the user interface
@@ -295,7 +297,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

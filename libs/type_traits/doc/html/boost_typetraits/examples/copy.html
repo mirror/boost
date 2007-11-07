@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>An Optimized Version of std::copy</title>
+<title> An Optimized Version
+      of std::copy</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="up" href="../examples.html" title="Examples">
-<link rel="prev" href="../examples.html" title="Examples">
-<link rel="next" href="fill.html" title="An Optimised Version of std::fill">
+<link rel="up" href="../examples.html" title=" Examples">
+<link rel="prev" href="../examples.html" title=" Examples">
+<link rel="next" href="fill.html" title=" An Optimised Version
+      of std::fill">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,13 +26,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.examples.copy"></a><a href="copy.html" title="An Optimized Version of std::copy"> An Optimized Version
-      of std::copy</a>
-</h3></div></div></div>
+<a name="boost_typetraits.examples.copy"></a><a href="copy.html" title=" An Optimized Version
+      of std::copy"> An Optimized Version
+      of std::copy</a></h3></div></div></div>
 <p>
-        Demonstrates a version of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span></code>
-        that uses <code class="computeroutput"><a href="../reference/has_trivial_assign.html" title="has_trivial_assign">has_trivial_assign</a></code>
-        to determine whether to use <code class="computeroutput"><span class="identifier">memcpy</span></code>
+        Demonstrates a version of <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span></tt>
+        that uses <tt class="computeroutput"><a href="../reference/has_trivial_assign.html" title=" has_trivial_assign">has_trivial_assign</a></tt>
+        to determine whether to use <tt class="computeroutput"><span class="identifier">memcpy</span></tt>
         to optimise the copy operation (see <a href="../../../../libs/type_traits/examples/copy_example.cpp" target="_top">copy_example.cpp</a>):
       </p>
 <pre class="programlisting">
@@ -43,7 +45,7 @@
 <span class="keyword">namespace</span> <span class="identifier">detail</span><span class="special">{</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">I1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">I2</span><span class="special">,</span> <span class="keyword">bool</span> <span class="identifier">b</span><span class="special">&gt;</span>
-<span class="identifier">I2</span> <span class="identifier">copy_imp</span><span class="special">(</span><span class="identifier">I1</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">I1</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">I2</span> <span class="identifier">out</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span> <span class="identifier">b</span><span class="special">&gt;&amp;)</span>
+<span class="identifier">I2</span> <span class="identifier">copy_imp</span><span class="special">(</span><span class="identifier">I1</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">I1</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">I2</span> <span class="identifier">out</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span> <span class="identifier">b</span><span class="special">&gt;&amp;)</span>
 <span class="special">{</span>
    <span class="keyword">while</span><span class="special">(</span><span class="identifier">first</span> <span class="special">!=</span> <span class="identifier">last</span><span class="special">)</span>
    <span class="special">{</span>
@@ -55,7 +57,7 @@
 <span class="special">}</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span><span class="special">*</span> <span class="identifier">copy_imp</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">first</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">out</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">&amp;)</span>
+<span class="identifier">T</span><span class="special">*</span> <span class="identifier">copy_imp</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">first</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">T</span><span class="special">*</span> <span class="identifier">out</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/integral_constant.html" title=" integral_constant">true_type</a><span class="special">&amp;)</span>
 <span class="special">{</span>
    <span class="identifier">memcpy</span><span class="special">(</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">first</span><span class="special">,</span> <span class="special">(</span><span class="identifier">last</span><span class="special">-</span><span class="identifier">first</span><span class="special">)*</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">T</span><span class="special">));</span>
    <span class="keyword">return</span> <span class="identifier">out</span><span class="special">+(</span><span class="identifier">last</span><span class="special">-</span><span class="identifier">first</span><span class="special">);</span>
@@ -73,16 +75,20 @@
 </span>   <span class="comment">// requirement we detect with overload resolution):
 </span>   <span class="comment">//
 </span>   <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">I1</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="identifier">value_type</span><span class="special">;</span>
-   <span class="keyword">return</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">copy_imp</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/has_trivial_assign.html" title="has_trivial_assign">has_trivial_assign</a><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;());</span>
+   <span class="keyword">return</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">copy_imp</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/has_trivial_assign.html" title=" has_trivial_assign">has_trivial_assign</a><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;());</span>
 <span class="special">}</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
-      Ramey and Jeremy Siek</small></td>
+      Ramey and Jeremy Siek<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
+        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

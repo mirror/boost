@@ -1,12 +1,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>High Level Class RegEx (Deprecated)</title>
+<title> High
+        Level Class RegEx (Deprecated)</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../deprecated_interfaces.html" title="Deprecated Interfaces">
-<link rel="prev" href="regex_split.html" title="regex_split (deprecated)">
+<link rel="prev" href="regex_split.html" title="
+        regex_split (deprecated)">
 <link rel="next" href="../../background_information.html" title="Background Information">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -24,9 +26,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.deprecated_interfaces.old_regex"></a><a href="old_regex.html" title="High Level Class RegEx (Deprecated)"> High
-        Level Class RegEx (Deprecated)</a>
-</h4></div></div></div>
+<a name="boost_regex.ref.deprecated_interfaces.old_regex"></a><a href="old_regex.html" title=" High
+        Level Class RegEx (Deprecated)"> High
+        Level Class RegEx (Deprecated)</a></h4></div></div></div>
 <p>
           The high level wrapper class RegEx is now deprecated and does not form
           part of the regular expression standardization proposal. This type still
@@ -136,7 +138,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">();</span></code>
+                  <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">();</span></tt>
                 </p>
                 </td>
 <td>
@@ -149,7 +151,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RegEx</span><span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span></code>
+                  <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RegEx</span><span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
@@ -162,40 +164,40 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">c</span><span class="special">,</span> <span class="keyword">bool</span>
+                  <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">c</span><span class="special">,</span> <span class="keyword">bool</span>
                   <span class="identifier">icase</span> <span class="special">=</span>
-                  <span class="keyword">false</span><span class="special">);</span></code>
+                  <span class="keyword">false</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Constructs an instance of RegEx, setting the expression to <span class="emphasis"><em>c</em></span>,
                   if <span class="emphasis"><em>icase</em></span> is true then matching is insensitive
-                  to case, otherwise it is sensitive to case. Throws <a href="../bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> on failure.
+                  to case, otherwise it is sensitive to case. Throws <a href="../bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> on failure.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">bool</span>
+                  <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">bool</span>
                   <span class="identifier">icase</span> <span class="special">=</span>
-                  <span class="keyword">false</span><span class="special">);</span></code>
+                  <span class="keyword">false</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Constructs an instance of RegEx, setting the expression to <span class="emphasis"><em>s</em></span>,
                   if <span class="emphasis"><em>icase</em></span> is true then matching is insensitive
-                  to case, otherwise it is sensitive to case. Throws <a href="../bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> on failure.
+                  to case, otherwise it is sensitive to case. Throws <a href="../bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> on failure.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">&amp;</span>
-                  <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">RegEx</span><span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span></code>
+                  <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">&amp;</span>
+                  <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">RegEx</span><span class="special">&amp;</span> <span class="identifier">o</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
@@ -207,68 +209,68 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">&amp;</span>
-                  <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">p</span><span class="special">);</span></code>
+                  <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">&amp;</span>
+                  <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">p</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Assignment operator, equivalent to calling <code class="computeroutput"><span class="identifier">SetExpression</span><span class="special">(</span><span class="identifier">p</span><span class="special">,</span> <span class="keyword">false</span><span class="special">)</span></code>. Throws <a href="../bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> on failure.
-                </p>
-                </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">&amp;</span>
-                  <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span></code>
-                </p>
-                </td>
-<td>
-                <p>
-                  Assignment operator, equivalent to calling <code class="computeroutput"><span class="identifier">SetExpression</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="keyword">false</span><span class="special">)</span></code>. Throws <a href="../bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> on failure.
+                  Assignment operator, equivalent to calling <tt class="computeroutput"><span class="identifier">SetExpression</span><span class="special">(</span><span class="identifier">p</span><span class="special">,</span> <span class="keyword">false</span><span class="special">)</span></tt>. Throws <a href="../bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> on failure.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">&amp;</span>
+                  <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span></tt>
+                </p>
+                </td>
+<td>
+                <p>
+                  Assignment operator, equivalent to calling <tt class="computeroutput"><span class="identifier">SetExpression</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="keyword">false</span><span class="special">)</span></tt>. Throws <a href="../bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> on failure.
+                </p>
+                </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">SetExpression</span><span class="special">(</span><span class="identifier">constchar</span><span class="special">*</span>
                   <span class="identifier">p</span><span class="special">,</span>
                   <span class="keyword">bool</span> <span class="identifier">icase</span>
-                  <span class="special">=</span> <span class="keyword">false</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="keyword">false</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Sets the current expression to <span class="emphasis"><em>p</em></span>, if <span class="emphasis"><em>icase</em></span>
                   is true then matching is insensitive to case, otherwise it is sensitive
-                  to case. Throws <a href="../bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> on failure.
+                  to case. Throws <a href="../bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> on failure.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">SetExpression</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">bool</span>
                   <span class="identifier">icase</span> <span class="special">=</span>
-                  <span class="keyword">false</span><span class="special">);</span></code>
+                  <span class="keyword">false</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Sets the current expression to <span class="emphasis"><em>s</em></span>, if <span class="emphasis"><em>icase</em></span>
                   is true then matching is insensitive to case, otherwise it is sensitive
-                  to case. Throws <a href="../bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> on failure.
+                  to case. Throws <a href="../bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> on failure.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">Expression</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code>
+                  <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">Expression</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
@@ -280,17 +282,17 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Match</span><span class="special">(</span><span class="keyword">const</span>
+                  <tt class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Match</span><span class="special">(</span><span class="keyword">const</span>
                   <span class="keyword">char</span><span class="special">*</span>
                   <span class="identifier">p</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Attempts to match the current expression against the text <span class="emphasis"><em>p</em></span>
-                  using the match flags <span class="emphasis"><em>flags</em></span> - see <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>. Returns
+                  using the match flags <span class="emphasis"><em>flags</em></span> - see <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a>. Returns
                   <span class="emphasis"><em>true</em></span> if the expression matches the whole of
                   the input string.
                 </p>
@@ -299,17 +301,17 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Match</span><span class="special">(</span><span class="keyword">const</span>
+                  <tt class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Match</span><span class="special">(</span><span class="keyword">const</span>
                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span>
                   <span class="identifier">s</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Attempts to match the current expression against the text <span class="emphasis"><em>s</em></span>
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   Returns <span class="emphasis"><em>true</em></span> if the expression matches the
                   whole of the input string.
                 </p>
@@ -318,17 +320,17 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Search</span><span class="special">(</span><span class="keyword">const</span>
+                  <tt class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Search</span><span class="special">(</span><span class="keyword">const</span>
                   <span class="keyword">char</span><span class="special">*</span>
                   <span class="identifier">p</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Attempts to find a match for the current expression somewhere in
-                  the text <span class="emphasis"><em>p</em></span> using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  the text <span class="emphasis"><em>p</em></span> using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   Returns <span class="emphasis"><em>true</em></span> if the match succeeds.
                 </p>
                 </td>
@@ -336,17 +338,17 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Search</span><span class="special">(</span><span class="keyword">const</span>
+                  <tt class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Search</span><span class="special">(</span><span class="keyword">const</span>
                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span>
                   <span class="identifier">s</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Attempts to find a match for the current expression somewhere in
-                  the text <span class="emphasis"><em>s</em></span> using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> flags.
+                  the text <span class="emphasis"><em>s</em></span> using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> flags.
                   Returns <span class="emphasis"><em>true</em></span> if the match succeeds.
                 </p>
                 </td>
@@ -354,19 +356,19 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Grep</span><span class="special">(</span><span class="identifier">GrepCallback</span> <span class="identifier">cb</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="keyword">char</span><span class="special">*</span>
                   <span class="identifier">p</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the text <span class="emphasis"><em>p</em></span>
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
-                  For each match found calls the call-back function cb as: <code class="computeroutput"><span class="identifier">cb</span><span class="special">(*</span><span class="keyword">this</span><span class="special">);</span></code>
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
+                  For each match found calls the call-back function cb as: <tt class="computeroutput"><span class="identifier">cb</span><span class="special">(*</span><span class="keyword">this</span><span class="special">);</span></tt>
                   If at any stage the call-back function returns <span class="emphasis"><em>false</em></span>
                   then the grep operation terminates, otherwise continues until no
                   further matches are found. Returns the number of matches found.
@@ -376,19 +378,19 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Grep</span><span class="special">(</span><span class="identifier">GrepCallback</span> <span class="identifier">cb</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span>
                   <span class="identifier">s</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the text <span class="emphasis"><em>s</em></span>
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> flags.
-                  For each match found calls the call-back function cb as: <code class="computeroutput"><span class="identifier">cb</span><span class="special">(*</span><span class="keyword">this</span><span class="special">);</span></code>
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> flags.
+                  For each match found calls the call-back function cb as: <tt class="computeroutput"><span class="identifier">cb</span><span class="special">(*</span><span class="keyword">this</span><span class="special">);</span></tt>
                   If at any stage the call-back function returns false then the grep
                   operation terminates, otherwise continues until no further matches
                   are found. Returns the number of matches found.
@@ -398,18 +400,18 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Grep</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;&amp;</span>
                   <span class="identifier">v</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
                   <span class="identifier">flags</span> <span class="special">=</span>
-                  <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the text <span class="emphasis"><em>p</em></span>
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> flags.
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> flags.
                   For each match pushes a copy of what matched onto <span class="emphasis"><em>v</em></span>.
                   Returns the number of matches found.
                 </p>
@@ -418,18 +420,18 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Grep</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;&amp;</span>
                   <span class="identifier">v</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
                   <span class="identifier">flags</span> <span class="special">=</span>
-                  <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the text <span class="emphasis"><em>s</em></span>
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   For each match pushes a copy of what matched onto <span class="emphasis"><em>v</em></span>.
                   Returns the number of matches found.
                 </p>
@@ -438,18 +440,18 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Grep</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="keyword">int</span><span class="special">&gt;&amp;</span> <span class="identifier">v</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="keyword">char</span><span class="special">*</span>
                   <span class="identifier">p</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the text <span class="emphasis"><em>p</em></span>
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   For each match pushes the starting index of what matched onto
                   <span class="emphasis"><em>v</em></span>. Returns the number of matches found.
                 </p>
@@ -458,18 +460,18 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Grep</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="keyword">int</span><span class="special">&gt;&amp;</span> <span class="identifier">v</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span>
                   <span class="identifier">s</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the text <span class="emphasis"><em>s</em></span>
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   For each match pushes the starting index of what matched onto
                   <span class="emphasis"><em>v</em></span>. Returns the number of matches found.
                 </p>
@@ -478,20 +480,20 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">GrepFiles</span><span class="special">(</span><span class="identifier">GrepFileCallback</span> <span class="identifier">cb</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="keyword">char</span><span class="special">*</span>
                   <span class="identifier">files</span><span class="special">,</span>
                   <span class="keyword">bool</span> <span class="identifier">recurse</span>
                   <span class="special">=</span> <span class="keyword">false</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
                   <span class="identifier">flags</span> <span class="special">=</span>
-                  <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the files files
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   For each match calls the call-back function cb. If the call-back
                   returns false then the algorithm returns without considering further
                   matches in the current file, or any further files.
@@ -505,7 +507,7 @@
                   Returns the total number of matches found.
                 </p>
                 <p>
-                  May throw an exception derived from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code>
+                  May throw an exception derived from <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></tt>
                   if file io fails.
                 </p>
                 </td>
@@ -513,20 +515,20 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">GrepFiles</span><span class="special">(</span><span class="identifier">GrepFileCallback</span> <span class="identifier">cb</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span>
                   <span class="identifier">files</span><span class="special">,</span>
                   <span class="keyword">bool</span> <span class="identifier">recurse</span>
                   <span class="special">=</span> <span class="keyword">false</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
                   <span class="identifier">flags</span> <span class="special">=</span>
-                  <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Finds all matches of the current expression in the files files
-                  using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   For each match calls the call-back function cb.
                 </p>
                 <p>
@@ -543,7 +545,7 @@
                   Returns the total number of matches found.
                 </p>
                 <p>
-                  May throw an exception derived from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code>
+                  May throw an exception derived from <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></tt>
                   if file io fails.
                 </p>
                 </td>
@@ -551,20 +553,20 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">FindFiles</span><span class="special">(</span><span class="identifier">FindFilesCallback</span> <span class="identifier">cb</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="keyword">char</span><span class="special">*</span>
                   <span class="identifier">files</span><span class="special">,</span>
                   <span class="keyword">bool</span> <span class="identifier">recurse</span>
                   <span class="special">=</span> <span class="keyword">false</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
                   <span class="identifier">flags</span> <span class="special">=</span>
-                  <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Searches files to find all those which contain at least one match
-                  of the current expression using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  of the current expression using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   For each matching file calls the call-back function cb. If the
                   call-back returns false then the algorithm returns without considering
                   any further files.
@@ -578,7 +580,7 @@
                   Returns the total number of files found.
                 </p>
                 <p>
-                  May throw an exception derived from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code>
+                  May throw an exception derived from <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></tt>
                   if file io fails.
                 </p>
                 </td>
@@ -586,20 +588,20 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">FindFiles</span><span class="special">(</span><span class="identifier">FindFilesCallback</span> <span class="identifier">cb</span><span class="special">,</span> <span class="keyword">const</span>
                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span>
                   <span class="identifier">files</span><span class="special">,</span>
                   <span class="keyword">bool</span> <span class="identifier">recurse</span>
                   <span class="special">=</span> <span class="keyword">false</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
                   <span class="identifier">flags</span> <span class="special">=</span>
-                  <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Searches files to find all those which contain at least one match
-                  of the current expression using the <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a> <span class="emphasis"><em>flags</em></span>.
+                  of the current expression using the <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a> <span class="emphasis"><em>flags</em></span>.
                   For each matching file calls the call-back function cb.
                 </p>
                 <p>
@@ -615,7 +617,7 @@
                   Returns the total number of files found.
                 </p>
                 <p>
-                  May throw an exception derived from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code>
+                  May throw an exception derived from <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></tt>
                   if file io fails.
                 </p>
                 </td>
@@ -623,14 +625,14 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">Merge</span><span class="special">(</span><span class="keyword">const</span>
+                  <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">Merge</span><span class="special">(</span><span class="keyword">const</span>
                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span>
                   <span class="identifier">in</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">fmt</span><span class="special">,</span> <span class="keyword">bool</span>
                   <span class="identifier">copy</span> <span class="special">=</span>
                   <span class="keyword">true</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
@@ -643,22 +645,22 @@
                   If <span class="emphasis"><em>copy</em></span> is true then all unmatched sections
                   of input are copied unchanged to output, if the flag <span class="emphasis"><em>format_first_only</em></span>
                   is set then only the first occurance of the pattern found is replaced.
-                  Returns the new string. See also <a href="../../format.html" title="Search and Replace Format String Syntax">format
-                  string syntax</a>, and <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>.
+                  Returns the new string. See also <a href="../../format.html" title=" Search and Replace Format String Syntax">format
+                  string syntax</a>, and <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a>.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">Merge</span><span class="special">(</span><span class="keyword">const</span>
+                  <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">Merge</span><span class="special">(</span><span class="keyword">const</span>
                   <span class="keyword">char</span><span class="special">*</span>
                   <span class="identifier">in</span><span class="special">,</span>
                   <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">fmt</span><span class="special">,</span> <span class="keyword">bool</span>
                   <span class="identifier">copy</span> <span class="special">=</span>
                   <span class="keyword">true</span><span class="special">,</span>
                   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span>
-                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
@@ -671,19 +673,19 @@
                   If <span class="emphasis"><em>copy</em></span> is true then all unmatched sections
                   of input are copied unchanged to output, if the flag <span class="emphasis"><em>format_first_only</em></span>
                   is set then only the first occurance of the pattern found is replaced.
-                  Returns the new string. See also <a href="../../format.html" title="Search and Replace Format String Syntax">format
-                  string syntax</a>, and <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>.
+                  Returns the new string. See also <a href="../../format.html" title=" Search and Replace Format String Syntax">format
+                  string syntax</a>, and <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a>.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="identifier">Split</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;&amp;</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="identifier">Split</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;&amp;</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span>
                   <span class="identifier">flags</span> <span class="special">=</span>
                   <span class="identifier">match_default</span><span class="special">,</span>
                   <span class="keyword">unsigned</span> <span class="identifier">max_count</span>
-                  <span class="special">=</span> <span class="special">~</span><span class="number">0</span><span class="special">);</span></code>
+                  <span class="special">=</span> <span class="special">~</span><span class="number">0</span><span class="special">);</span></tt>
                 </p>
                 </td>
 <td>
@@ -704,17 +706,17 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Position</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span>
-                  <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></code>
+                  <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Returns the position of what matched sub-expression <span class="emphasis"><em>i</em></span>.
-                  If <code class="computeroutput"><span class="identifier">i</span> <span class="special">=</span>
-                  <span class="number">0</span></code> then returns the position
-                  of the whole match. Returns <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">npos</span></code>
+                  If <tt class="computeroutput"><span class="identifier">i</span> <span class="special">=</span>
+                  <span class="number">0</span></tt> then returns the position
+                  of the whole match. Returns <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">npos</span></tt>
                   if the supplied index is invalid, or if the specified sub-expression
                   did not participate in the match.
                 </p>
@@ -723,16 +725,16 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Length</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span>
-                  <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></code>
+                  <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Returns the length of what matched sub-expression i. If <code class="computeroutput"><span class="identifier">i</span> <span class="special">=</span>
-                  <span class="number">0</span></code> then returns the length
-                  of the whole match. Returns <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">npos</span></code>
+                  Returns the length of what matched sub-expression i. If <tt class="computeroutput"><span class="identifier">i</span> <span class="special">=</span>
+                  <span class="number">0</span></tt> then returns the length
+                  of the whole match. Returns <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">npos</span></tt>
                   if the supplied index is invalid, or if the specified sub-expression
                   did not participate in the match.
                 </p>
@@ -741,8 +743,8 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Matched</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span>
-                  <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></code>
+                  <tt class="computeroutput"><span class="keyword">bool</span> <span class="identifier">Matched</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span>
+                  <span class="number">0</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
@@ -755,23 +757,23 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
-                  <span class="identifier">Line</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></code>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <span class="identifier">Line</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Returns the line on which the match occurred, indexes start from
-                  1 not zero, if no match occurred then returns <code class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">npos</span></code>.
+                  1 not zero, if no match occurred then returns <tt class="computeroutput"><span class="identifier">RegEx</span><span class="special">::</span><span class="identifier">npos</span></tt>.
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="keyword">int</span>
                   <span class="identifier">Marks</span><span class="special">()</span>
-                  <span class="keyword">const</span><span class="special">;</span></code>
+                  <span class="keyword">const</span><span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
@@ -785,14 +787,14 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">What</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></code>
+                  <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">What</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
                   Returns a copy of what matched sub-expression <span class="emphasis"><em>i</em></span>.
-                  If <code class="computeroutput"><span class="identifier">i</span> <span class="special">=</span>
-                  <span class="number">0</span></code> then returns a copy of
+                  If <tt class="computeroutput"><span class="identifier">i</span> <span class="special">=</span>
+                  <span class="number">0</span></tt> then returns a copy of
                   the whole match. Returns a null string if the index is invalid
                   or if the specified sub-expression did not participate in a match.
                 </p>
@@ -801,13 +803,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">int</span>
-                  <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span> <span class="special">;</span></code>
+                  <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="keyword">operator</span><span class="special">[](</span><span class="keyword">int</span>
+                  <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span> <span class="special">;</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  Returns <code class="computeroutput"><span class="identifier">what</span><span class="special">(</span><span class="identifier">i</span><span class="special">);</span></code>
+                  Returns <tt class="computeroutput"><span class="identifier">what</span><span class="special">(</span><span class="identifier">i</span><span class="special">);</span></tt>
                   Can be used to simplify access to sub-expression matches, and make
                   usage more perl-like.
                 </p>
@@ -818,7 +820,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

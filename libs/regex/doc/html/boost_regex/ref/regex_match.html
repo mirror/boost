@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>regex_match</title>
+<title> regex_match</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Boost.Regex">
-<link rel="up" href="../ref.html" title="Reference">
-<link rel="prev" href="sub_match.html" title="sub_match">
-<link rel="next" href="regex_search.html" title="regex_search">
+<link rel="up" href="../ref.html" title=" Reference">
+<link rel="prev" href="sub_match.html" title=" sub_match">
+<link rel="next" href="regex_search.html" title=" regex_search">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,14 +24,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.ref.regex_match"></a><a href="regex_match.html" title="regex_match"> regex_match</a>
-</h3></div></div></div>
+<a name="boost_regex.ref.regex_match"></a><a href="regex_match.html" title=" regex_match"> regex_match</a></h3></div></div></div>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 </pre>
 <p>
-        The algorithm <a href="regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
-        determines whether a given regular expression matches <span class="bold"><strong>all</strong></span>
+        The algorithm <a href="regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>
+        determines whether a given regular expression matches <span class="bold"><b>all</b></span>
         of a given character sequence denoted by a pair of bidirectional-iterators,
         the algorithm is defined as follows, the main use of this function is data
         input validation.
@@ -41,10 +40,10 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../../doc/html/images/important.png"></td>
 <th align="left">Important</th>
 </tr>
-<tr><td align="left" valign="top"><p>
-          Note that the result is true only if the expression matches the <span class="bold"><strong>whole</strong></span> of the input sequence. If you want to search
-          for an expression somewhere within the sequence then use <a href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>. If you want to match
-          a prefix of the character string then use <a href="regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a> with the flag match_continuous
+<tr><td colspan="2" align="left" valign="top"><p>
+          Note that the result is true only if the expression matches the <span class="bold"><b>whole</b></span> of the input sequence. If you want to search
+          for an expression somewhere within the sequence then use <a href="regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a>. If you want to match
+          a prefix of the character string then use <a href="regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a> with the flag match_continuous
           set.
         </p></td></tr>
 </table></div>
@@ -81,10 +80,10 @@
                  <span class="keyword">const</span> <span class="identifier">basic_regex</span> <span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
                  <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
-<a name="boost_regex.ref.regex_match.description"></a><h5>
-<a name="id564196"></a>
+<a name="boost_regex.ref.regex_match.description"></a><h4>
+<a name="id530617"></a>
         <a href="regex_match.html#boost_regex.ref.regex_match.description">Description</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">BidirectionalIterator</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">BidirectionalIterator</span> <span class="identifier">last</span><span class="special">,</span>
@@ -93,19 +92,19 @@
                  <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Requires</strong></span>: Type BidirectionalIterator meets
+        <span class="bold"><b>Requires</b></span>: Type BidirectionalIterator meets
         the requirements of a Bidirectional Iterator (24.1.4).
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Determines whether there is an
+        <span class="bold"><b>Effects</b></span>: Determines whether there is an
         exact match between the regular expression <span class="emphasis"><em>e</em></span>, and all
         of the character sequence [first, last), parameter <span class="emphasis"><em>flags</em></span>
-        (see <a href="match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>)
+        (see <a href="match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a>)
         is used to control how the expression is matched against the character sequence.
         Returns true if such a match exists, false otherwise.
       </p>
 <p>
-        <span class="bold"><strong>Throws</strong></span>: <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code>
+        <span class="bold"><b>Throws</b></span>: <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></tt>
         if the complexity of matching the expression against an N character string
         begins to exceed O(N<sup>2</sup>), or if the program runs out of stack space while matching
         the expression (if Boost.Regex is configured in recursive mode), or if the
@@ -113,7 +112,7 @@
         in non-recursive mode).
       </p>
 <p>
-        <span class="bold"><strong>Postconditions</strong></span>: If the function returns
+        <span class="bold"><b>Postconditions</b></span>: If the function returns
         false, then the effect on parameter <span class="emphasis"><em>m</em></span> is undefined,
         otherwise the effects on parameter <span class="emphasis"><em>m</em></span> are given in the
         table:
@@ -139,127 +138,127 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></tt>
               </p>
               </td>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">e</span><span class="special">.</span><span class="identifier">mark_count</span><span class="special">()</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">empty</span><span class="special">()</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="keyword">false</span></code>
+                <tt class="computeroutput"><span class="identifier">e</span><span class="special">.</span><span class="identifier">mark_count</span><span class="special">()</span></tt>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">empty</span><span class="special">()</span></tt>
               </p>
               </td>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">first</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">last</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">first</span></code>
+                <tt class="computeroutput"><span class="keyword">false</span></tt>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">matched</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span></tt>
               </p>
               </td>
 <td>
               <p>
-                <code class="computeroutput"><span class="keyword">false</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">last</span></code>
+                <tt class="computeroutput"><span class="identifier">first</span></tt>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">last</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">last</span></tt>
               </p>
               </td>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">last</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">matched</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="keyword">false</span></code>
+                <tt class="computeroutput"><span class="identifier">first</span></tt>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">matched</span></tt>
               </p>
               </td>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">first</span></code>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">second</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">last</span></code>
+                <tt class="computeroutput"><span class="keyword">false</span></tt>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">matched</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">last</span></tt>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">last</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">last</span></tt>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">matched</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="keyword">false</span></tt>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">first</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">first</span></tt>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">second</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">last</span></tt>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">].</span><span class="identifier">matched</span></tt>
               </p>
               </td>
 <td>
@@ -272,41 +271,41 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">first</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">first</span></tt>
               </p>
               </td>
 <td>
               <p>
-                For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, the start of the sequence that
+                For all integers <tt class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></tt>, the start of the sequence that
                 matched sub-expression <span class="emphasis"><em>n</em></span>. Alternatively, if
                 sub-expression <span class="emphasis"><em>n</em></span> did not participate in the
-                match, then <code class="computeroutput"><span class="identifier">last</span></code>.
+                match, then <tt class="computeroutput"><span class="identifier">last</span></tt>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">second</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">second</span></tt>
               </p>
               </td>
 <td>
               <p>
-                For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, the end of the sequence that matched
+                For all integers <tt class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></tt>, the end of the sequence that matched
                 sub-expression <span class="emphasis"><em>n</em></span>. Alternatively, if sub-expression
-                <span class="emphasis"><em>n</em></span> did not participate in the match, then <code class="computeroutput"><span class="identifier">last</span></code>.
+                <span class="emphasis"><em>n</em></span> did not participate in the match, then <tt class="computeroutput"><span class="identifier">last</span></tt>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">matched</span></code>
+                <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">].</span><span class="identifier">matched</span></tt>
               </p>
               </td>
 <td>
               <p>
-                For all integers <code class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>, true if sub-expression <span class="emphasis"><em>n</em></span>
+                For all integers <tt class="computeroutput"><span class="identifier">n</span> <span class="special">&lt;</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></tt>, true if sub-expression <span class="emphasis"><em>n</em></span>
                 participated in the match, false otherwise.
               </p>
               </td>
@@ -320,10 +319,10 @@
                <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Behaves "as if" by constructing
-        an instance of <code class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> <span class="identifier">what</span></code>,
-        and then returning the result of <code class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">what</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span>
-        <span class="identifier">flags</span><span class="special">)</span></code>.
+        <span class="bold"><b>Effects</b></span>: Behaves "as if" by constructing
+        an instance of <tt class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span> <span class="identifier">what</span></tt>,
+        and then returning the result of <tt class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">what</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span>
+        <span class="identifier">flags</span><span class="special">)</span></tt>.
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
@@ -332,9 +331,9 @@
                <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">str</span><span class="special">,</span> <span class="identifier">str</span>
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">str</span><span class="special">,</span> <span class="identifier">str</span>
         <span class="special">+</span> <span class="identifier">char_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;::</span><span class="identifier">length</span><span class="special">(</span><span class="identifier">str</span><span class="special">),</span>
-        <span class="identifier">m</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>.
+        <span class="identifier">m</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></tt>.
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ST</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">SA</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Allocator</span><span class="special">,</span>
@@ -345,7 +344,7 @@
                <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></tt>.
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
@@ -354,9 +353,9 @@
                <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">str</span><span class="special">,</span> <span class="identifier">str</span>
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">str</span><span class="special">,</span> <span class="identifier">str</span>
         <span class="special">+</span> <span class="identifier">char_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;::</span><span class="identifier">length</span><span class="special">(</span><span class="identifier">str</span><span class="special">),</span>
-        <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>.
+        <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></tt>.
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ST</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">SA</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">&gt;</span>
@@ -365,12 +364,12 @@
                <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">regex_match</span><span class="special">(</span><span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">)</span></tt>.
       </p>
-<a name="boost_regex.ref.regex_match.examples"></a><h5>
-<a name="id567381"></a>
+<a name="boost_regex.ref.regex_match.examples"></a><h4>
+<a name="id533809"></a>
         <a href="regex_match.html#boost_regex.ref.regex_match.examples">Examples</a>
-      </h5>
+      </h4>
 <p>
         The following example processes an ftp response:
       </p>
@@ -409,7 +408,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

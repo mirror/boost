@@ -1,13 +1,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>has_nothrow_copy</title>
+<title> has_nothrow_copy</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="up" href="../reference.html" title="Alphabetical Reference">
-<link rel="prev" href="has_nothrow_constructor.html" title="has_nothrow_constructor">
-<link rel="next" href="has_nothrow_cp_cons.html" title="has_nothrow_copy_constructor">
+<link rel="up" href="../reference.html" title=" Alphabetical Reference">
+<link rel="prev" href="has_nothrow_constructor.html" title="
+      has_nothrow_constructor">
+<link rel="next" href="has_nothrow_cp_cons.html" title=" has_nothrow_copy_constructor">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,49 +25,52 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.has_nothrow_copy"></a><a href="has_nothrow_copy.html" title="has_nothrow_copy"> has_nothrow_copy</a>
-</h3></div></div></div>
+<a name="boost_typetraits.reference.has_nothrow_copy"></a><a href="has_nothrow_copy.html" title=" has_nothrow_copy"> has_nothrow_copy</a></h3></div></div></div>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">has_nothrow_copy</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<span class="keyword">struct</span> <span class="identifier">has_nothrow_copy</span> <span class="special">:</span> <span class="keyword">public</span> <i class="replaceable"><tt><a href="integral_constant.html" title=" integral_constant">true_type</a>-or-<a href="integral_constant.html" title=" integral_constant">false_type</a></tt></i> <span class="special">{};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">has_nothrow_copy_constructor</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<span class="keyword">struct</span> <span class="identifier">has_nothrow_copy_constructor</span> <span class="special">:</span> <span class="keyword">public</span> <i class="replaceable"><tt><a href="integral_constant.html" title=" integral_constant">true_type</a>-or-<a href="integral_constant.html" title=" integral_constant">false_type</a></tt></i> <span class="special">{};</span>
 </pre>
 <p>
-        <span class="bold"><strong>Inherits:</strong></span> If T is a (possibly cv-qualified)
-        type with a non-throwing copy-constructor then inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise inherits from <a href="integral_constant.html" title="integral_constant">false_type</a>.
-        Type <code class="computeroutput"><span class="identifier">T</span></code> must be a complete
+        <span class="bold"><b>Inherits:</b></span> If T is a (possibly cv-qualified)
+        type with a non-throwing copy-constructor then inherits from <a href="integral_constant.html" title=" integral_constant">true_type</a>,
+        otherwise inherits from <a href="integral_constant.html" title=" integral_constant">false_type</a>.
+        Type <tt class="computeroutput"><span class="identifier">T</span></tt> must be a complete
         type.
       </p>
 <p>
         These two traits are synonyms for each other.
       </p>
 <p>
-        <span class="bold"><strong>Compiler Compatibility:</strong></span> If the compiler
+        <span class="bold"><b>Compiler Compatibility:</b></span> If the compiler
         does not support partial-specialization of class templates, then this template
         can not be used with function types.
       </p>
 <p>
-        Without some (as yet unspecified) help from the compiler, <code class="computeroutput"><span class="identifier">has_nothrow_copy</span></code>
+        Without some (as yet unspecified) help from the compiler, <tt class="computeroutput"><span class="identifier">has_nothrow_copy</span></tt>
         will never report that a class or struct has a non-throwing copy-constructor;
         this is always safe, if possibly sub-optimal. Currently (May 2005) only Visual
-        C++ 8 has the necessary compiler <a href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
+        C++ 8 has the necessary compiler <a href="../intrinsics.html" title=" Support for Compiler Intrinsics">intrinsics</a>
         to ensure that this trait "just works".
       </p>
 <p>
-        <span class="bold"><strong>Header:</strong></span> <code class="computeroutput"> <span class="preprocessor">#include</span>
-        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">has_nothrow_copy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-        or <code class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        <span class="bold"><b>Header:</b></span> <tt class="computeroutput"> <span class="preprocessor">#include</span>
+        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">has_nothrow_copy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
+        or <tt class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
-      Ramey and Jeremy Siek</small></td>
+      Ramey and Jeremy Siek<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
+        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

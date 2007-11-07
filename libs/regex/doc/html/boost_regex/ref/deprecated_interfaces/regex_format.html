@@ -1,13 +1,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>regex_format (Deprecated)</title>
+<title>
+        regex_format (Deprecated)</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../deprecated_interfaces.html" title="Deprecated Interfaces">
 <link rel="prev" href="../deprecated_interfaces.html" title="Deprecated Interfaces">
-<link rel="next" href="regex_grep.html" title="regex_grep (Deprecated)">
+<link rel="next" href="regex_grep.html" title="
+        regex_grep (Deprecated)">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,27 +26,27 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.deprecated_interfaces.regex_format"></a><a href="regex_format.html" title="regex_format (Deprecated)">
-        regex_format (Deprecated)</a>
-</h4></div></div></div>
+<a name="boost_regex.ref.deprecated_interfaces.regex_format"></a><a href="regex_format.html" title="
+        regex_format (Deprecated)">
+        regex_format (Deprecated)</a></h4></div></div></div>
 <p>
-          The algorithm <code class="computeroutput"><span class="identifier">regex_format</span></code>
-          is deprecated; new code should use <a href="../match_results.html#boost_regex.match_results_format"><code class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;&gt;::</span><span class="identifier">format</span></code></a> instead. Existing code
+          The algorithm <tt class="computeroutput"><span class="identifier">regex_format</span></tt>
+          is deprecated; new code should use <a href="../match_results.html#boost_regex.match_results_format"><tt class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;&gt;::</span><span class="identifier">format</span></tt></a> instead. Existing code
           will continue to compile, the following documentation is taken from the
           previous version of Boost.Regex and will not be further updated:
         </p>
-<a name="boost_regex.ref.deprecated_interfaces.regex_format.algorithm_regex_format"></a><h5>
-<a name="id624790"></a>
+<a name="boost_regex.ref.deprecated_interfaces.regex_format.algorithm_regex_format"></a><h4>
+<a name="id591505"></a>
           <a href="regex_format.html#boost_regex.ref.deprecated_interfaces.regex_format.algorithm_regex_format">Algorithm
           regex_format</a>
-        </h5>
+        </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-          The algorithm <code class="computeroutput"><span class="identifier">regex_format</span></code>
+          The algorithm <tt class="computeroutput"><span class="identifier">regex_format</span></tt>
           takes the results of a match and creates a new string based upon a format
-          string, <code class="computeroutput"><span class="identifier">regex_format</span></code> can
+          string, <tt class="computeroutput"><span class="identifier">regex_format</span></tt> can
           be used for search and replace operations:
         </p>
 <pre class="programlisting">
@@ -60,7 +62,7 @@
                            <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
 </pre>
 <p>
-          The library also defines the following convenience variation of <code class="computeroutput"><span class="identifier">regex_format</span></code>, which returns the result
+          The library also defines the following convenience variation of <tt class="computeroutput"><span class="identifier">regex_format</span></tt>, which returns the result
           directly as a string, rather than outputting to an iterator.
         </p>
 <div class="note"><table border="0" summary="Note">
@@ -68,7 +70,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
             This version may not be available, or may be available in a more limited
             form, depending upon your compilers capabilities
           </p></td></tr>
@@ -110,7 +112,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">OutputIterator</span> <span class="identifier">out</span></code>
+                  <tt class="computeroutput"><span class="identifier">OutputIterator</span> <span class="identifier">out</span></tt>
                 </p>
                 </td>
 <td>
@@ -123,12 +125,12 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span></code>
+                  <tt class="computeroutput"><span class="keyword">const</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;&amp;</span> <span class="identifier">m</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  An instance of <a href="../match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> obtained
+                  An instance of <a href="../match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a> obtained
                   from one of the matching algorithms above, and denoting what matched.
                 </p>
                 </td>
@@ -136,7 +138,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">fmt</span></code>
+                  <tt class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">fmt</span></tt>
                 </p>
                 </td>
 <td>
@@ -149,7 +151,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="keyword">unsigned</span> <span class="identifier">flags</span></code>
+                  <tt class="computeroutput"><span class="keyword">unsigned</span> <span class="identifier">flags</span></tt>
                 </p>
                 </td>
 <td>
@@ -161,16 +163,19 @@
 </tbody>
 </table></div>
 <p>
-          Format flags are described under <a href="../match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>.
+          Format flags are described under <a href="../match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a>.
         </p>
 <p>
           The format string syntax (and available options) is described more fully
-          under <a href="../../format.html" title="Search and Replace Format String Syntax">format strings</a>.
+          under <a href="../../format.html" title=" Search and Replace Format String Syntax">format strings</a>.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

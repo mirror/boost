@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>regex_grep (Deprecated)</title>
+<title>
+        regex_grep (Deprecated)</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
 <link rel="up" href="../deprecated_interfaces.html" title="Deprecated Interfaces">
-<link rel="prev" href="regex_format.html" title="regex_format (Deprecated)">
-<link rel="next" href="regex_split.html" title="regex_split (deprecated)">
+<link rel="prev" href="regex_format.html" title="
+        regex_format (Deprecated)">
+<link rel="next" href="regex_split.html" title="
+        regex_split (deprecated)">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,12 +27,12 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.deprecated_interfaces.regex_grep"></a><a href="regex_grep.html" title="regex_grep (Deprecated)">
-        regex_grep (Deprecated)</a>
-</h4></div></div></div>
+<a name="boost_regex.ref.deprecated_interfaces.regex_grep"></a><a href="regex_grep.html" title="
+        regex_grep (Deprecated)">
+        regex_grep (Deprecated)</a></h4></div></div></div>
 <p>
-          The algorithm <code class="computeroutput"><span class="identifier">regex_grep</span></code>
-          is deprecated in favor of <a href="../regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> which provides
+          The algorithm <tt class="computeroutput"><span class="identifier">regex_grep</span></tt>
+          is deprecated in favor of <a href="../regex_iterator.html" title=" regex_iterator"><tt class="computeroutput"><span class="identifier">regex_iterator</span></tt></a> which provides
           a more convenient and standard library friendly interface.
         </p>
 <p>
@@ -40,7 +43,7 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-          <code class="computeroutput"><span class="identifier">regex_grep</span></code> allows you to
+          <tt class="computeroutput"><span class="identifier">regex_grep</span></tt> allows you to
           search through a bidirectional-iterator range and locate all the (non-overlapping)
           matches with a given regular expression. The function is declared as:
         </p>
@@ -54,8 +57,8 @@
 </pre>
 <p>
           The library also defines the following convenience versions, which take
-          either a <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span></code>, or a <code class="computeroutput"><span class="keyword">const</span>
-          <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;&gt;&amp;</span></code>
+          either a <tt class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span></tt>, or a <tt class="computeroutput"><span class="keyword">const</span>
+          <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;&gt;&amp;</span></tt>
           in place of a pair of iterators.
         </p>
 <pre class="programlisting">
@@ -72,7 +75,7 @@
             <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-          The parameters for the primary version of <code class="computeroutput"><span class="identifier">regex_grep</span></code>
+          The parameters for the primary version of <tt class="computeroutput"><span class="identifier">regex_grep</span></tt>
           have the following meanings:
         </p>
 <p>
@@ -94,9 +97,9 @@
         </p>
 <p>
           The algorithm finds all of the non-overlapping matches of the expression
-          <span class="emphasis"><em>e</em></span>, for each match it fills a <code class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;</span></code> structure, which contains information
+          <span class="emphasis"><em>e</em></span>, for each match it fills a <tt class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;</span></tt> structure, which contains information
           on what matched, and calls the predicate <span class="emphasis"><em>foo</em></span>, passing
-          the <code class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;</span></code>
+          the <tt class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;</span></tt>
           as a single argument. If the predicate returns <span class="emphasis"><em>true</em></span>,
           then the grep operation continues, otherwise it terminates without searching
           for further matches. The function returns the number of matches found.
@@ -120,12 +123,12 @@
           utilities would output the results to the screen, another program could
           index a file based on a regular expression and store a set of bookmarks
           in a list, or a text file conversion utility would output to file. The
-          results of one <code class="computeroutput"><span class="identifier">regex_grep</span></code>
-          can even be chained into another <code class="computeroutput"><span class="identifier">regex_grep</span></code>
+          results of one <tt class="computeroutput"><span class="identifier">regex_grep</span></tt>
+          can even be chained into another <tt class="computeroutput"><span class="identifier">regex_grep</span></tt>
           to create recursive parsers.
         </p>
 <p>
-          The algorithm may throw <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code>
+          The algorithm may throw <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></tt>
           if the complexity of matching the expression against an <span class="emphasis"><em>N</em></span>
           character string begins to exceed O(N<sup>2</sup>), or if the program runs out of
           stack space while matching the expression (if Boost.Regex is configured
@@ -133,7 +136,7 @@
           (if Boost.Regex is configured in non-recursive mode).
         </p>
 <p>
-          Example: convert the example from <a href="../regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a> to use <code class="computeroutput"><span class="identifier">regex_grep</span></code> instead:
+          Example: convert the example from <a href="../regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a> to use <tt class="computeroutput"><span class="identifier">regex_grep</span></tt> instead:
         </p>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span> 
@@ -195,7 +198,7 @@
 <span class="special">}</span>
 </pre>
 <p>
-          Example: Use <code class="computeroutput"><span class="identifier">regex_grep</span></code>
+          Example: Use <tt class="computeroutput"><span class="identifier">regex_grep</span></tt>
           to call a global callback function:
         </p>
 <pre class="programlisting">
@@ -255,8 +258,8 @@
 <span class="special">}</span>
 </pre>
 <p>
-          Example: use <code class="computeroutput"><span class="identifier">regex_grep</span></code>
-          to call a class member function, use the standard library adapters <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">mem_fun</span></code> and <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">bind1st</span></code>
+          Example: use <tt class="computeroutput"><span class="identifier">regex_grep</span></tt>
+          to call a class member function, use the standard library adapters <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">mem_fun</span></tt> and <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">bind1st</span></tt>
           to convert the member function into a predicate:
         </p>
 <pre class="programlisting">
@@ -370,7 +373,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

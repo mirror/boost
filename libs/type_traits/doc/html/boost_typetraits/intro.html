@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Introduction</title>
+<title> Introduction</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="prev" href="../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="next" href="background.html" title="Background and Tutorial">
+<link rel="next" href="background.html" title=" Background and Tutorial">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_typetraits.intro"></a><a href="intro.html" title="Introduction"> Introduction</a>
-</h2></div></div></div>
+<a name="boost_typetraits.intro"></a><a href="intro.html" title=" Introduction"> Introduction</a></h2></div></div></div>
 <p>
       The Boost type-traits library contains a set of very specific traits classes,
       each of which encapsulate a single trait from the C++ type system; for example,
@@ -34,24 +33,28 @@
     </p>
 <p>
       The type-traits classes share a unified design: each class inherits from a
-      the type <a href="reference/integral_constant.html" title="integral_constant">true_type</a>
-      if the type has the specified property and inherits from <a href="reference/integral_constant.html" title="integral_constant">false_type</a>
+      the type <a href="reference/integral_constant.html" title=" integral_constant">true_type</a>
+      if the type has the specified property and inherits from <a href="reference/integral_constant.html" title=" integral_constant">false_type</a>
       otherwise.
     </p>
 <p>
       The type-traits library also contains a set of classes that perform a specific
       transformation on a type; for example, they can remove a top-level const or
       volatile qualifier from a type. Each class that performs a transformation defines
-      a single typedef-member <code class="computeroutput"><span class="identifier">type</span></code>
+      a single typedef-member <tt class="computeroutput"><span class="identifier">type</span></tt>
       that is the result of the transformation.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
-      Ramey and Jeremy Siek</small></td>
+      Ramey and Jeremy Siek<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
+        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

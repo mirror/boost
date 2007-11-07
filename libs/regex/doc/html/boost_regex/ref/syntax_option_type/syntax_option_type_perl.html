@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Options for Perl Regular Expressions</title>
+<title>
+        Options for Perl Regular Expressions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
-<link rel="up" href="../syntax_option_type.html" title="syntax_option_type">
-<link rel="prev" href="syntax_option_type_overview.html" title="Overview of syntax_option_type">
-<link rel="next" href="syntax_option_type_extended.html" title="Options for POSIX Extended Regular Expressions">
+<link rel="up" href="../syntax_option_type.html" title=" syntax_option_type">
+<link rel="prev" href="syntax_option_type_overview.html" title="
+        Overview of syntax_option_type">
+<link rel="next" href="syntax_option_type_extended.html" title="
+        Options for POSIX Extended Regular Expressions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +27,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.syntax_option_type.syntax_option_type_perl"></a><a href="syntax_option_type_perl.html" title="Options for Perl Regular Expressions">
-        Options for Perl Regular Expressions</a>
-</h4></div></div></div>
+<a name="boost_regex.ref.syntax_option_type.syntax_option_type_perl"></a><a href="syntax_option_type_perl.html" title="
+        Options for Perl Regular Expressions">
+        Options for Perl Regular Expressions</a></h4></div></div></div>
 <p>
           One of the following must always be set for perl regular expressions:
         </p>
@@ -73,11 +76,12 @@
                   part 10, RegExp (Regular Expression) Objects (FWD.1).
                 </p>
                 <p>
-                  This is functionally identical to the <a href="../../syntax/perl_syntax.html" title="Perl Regular Expression Syntax">Perl
+                  This is functionally identical to the <a href="../../syntax/perl_syntax.html" title=" Perl Regular Expression
+      Syntax">Perl
                   regular expression syntax</a>.
                 </p>
                 <p>
-                  Boost.Regex also recognizes all of the perl-compatible <code class="computeroutput"><span class="special">(?...)</span></code> extensions in this mode.
+                  Boost.Regex also recognizes all of the perl-compatible <tt class="computeroutput"><span class="special">(?...)</span></tt> extensions in this mode.
                 </p>
                 </td>
 </tr>
@@ -211,7 +215,7 @@
                 <p>
                   Specifies that when a regular expression is matched against a character
                   container sequence, then no sub-expression matches are to be stored
-                  in the supplied <a href="../match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> structure.
+                  in the supplied <a href="../match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a> structure.
                 </p>
                 </td>
 </tr>
@@ -249,7 +253,7 @@
                 </td>
 <td>
                 <p>
-                  Specifies that character ranges of the form <code class="computeroutput"><span class="special">[</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">b</span><span class="special">]</span></code>
+                  Specifies that character ranges of the form <tt class="computeroutput"><span class="special">[</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">b</span><span class="special">]</span></tt>
                   should be locale sensitive.
                 </p>
                 </td>
@@ -286,7 +290,7 @@
                 </td>
 <td>
                 <p>
-                  Prevents <a href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> from throwing
+                  Prevents <a href="../basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a> from throwing
                   an exception when an invalid expression is encountered.
                 </p>
                 </td>
@@ -325,9 +329,9 @@
 <td>
                 <p>
                   Normally whether Boost.Regex will match "." against a
-                  newline character is determined by the match flag <code class="computeroutput"><span class="identifier">match_dot_not_newline</span></code>. Specifying
-                  this flag is equivalent to prefixing the expression with <code class="computeroutput"><span class="special">(?-</span><span class="identifier">s</span><span class="special">)</span></code> and therefore causes "."
-                  not to match a newline character regardless of whether <code class="computeroutput"><span class="identifier">match_not_dot_newline</span></code> is set
+                  newline character is determined by the match flag <tt class="computeroutput"><span class="identifier">match_dot_not_newline</span></tt>. Specifying
+                  this flag is equivalent to prefixing the expression with <tt class="computeroutput"><span class="special">(?-</span><span class="identifier">s</span><span class="special">)</span></tt> and therefore causes "."
+                  not to match a newline character regardless of whether <tt class="computeroutput"><span class="identifier">match_not_dot_newline</span></tt> is set
                   in the match flags.
                 </p>
                 </td>
@@ -346,9 +350,9 @@
 <td>
                 <p>
                   Normally whether Boost.Regex will match "." against a
-                  newline character is determined by the match flag <code class="computeroutput"><span class="identifier">match_dot_not_newline</span></code>. Specifying
-                  this flag is equivalent to prefixing the expression with <code class="computeroutput"><span class="special">(?</span><span class="identifier">s</span><span class="special">)</span></code> and therefore causes "."
-                  to match a newline character regardless of whether <code class="computeroutput"><span class="identifier">match_not_dot_newline</span></code> is set
+                  newline character is determined by the match flag <tt class="computeroutput"><span class="identifier">match_dot_not_newline</span></tt>. Specifying
+                  this flag is equivalent to prefixing the expression with <tt class="computeroutput"><span class="special">(?</span><span class="identifier">s</span><span class="special">)</span></tt> and therefore causes "."
+                  to match a newline character regardless of whether <tt class="computeroutput"><span class="identifier">match_not_dot_newline</span></tt> is set
                   in the match flags.
                 </p>
                 </td>
@@ -376,7 +380,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>is_reference</title>
+<title> is_reference</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="up" href="../reference.html" title="Alphabetical Reference">
-<link rel="prev" href="is_stateless.html" title="is_stateless">
-<link rel="next" href="is_union.html" title="is_union">
+<link rel="up" href="../reference.html" title=" Alphabetical Reference">
+<link rel="prev" href="is_stateless.html" title=" is_stateless">
+<link rel="next" href="is_union.html" title=" is_union">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,40 +24,39 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.is_reference"></a><a href="is_reference.html" title="is_reference"> is_reference</a>
-</h3></div></div></div>
+<a name="boost_typetraits.reference.is_reference"></a><a href="is_reference.html" title=" is_reference"> is_reference</a></h3></div></div></div>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">is_reference</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<span class="keyword">struct</span> <span class="identifier">is_reference</span> <span class="special">:</span> <span class="keyword">public</span> <i class="replaceable"><tt><a href="integral_constant.html" title=" integral_constant">true_type</a>-or-<a href="integral_constant.html" title=" integral_constant">false_type</a></tt></i> <span class="special">{};</span>
 </pre>
 <p>
-        <span class="bold"><strong>Inherits:</strong></span> If T is a reference pointer type
-        then inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise inherits from <a href="integral_constant.html" title="integral_constant">false_type</a>.
+        <span class="bold"><b>Inherits:</b></span> If T is a reference pointer type
+        then inherits from <a href="integral_constant.html" title=" integral_constant">true_type</a>,
+        otherwise inherits from <a href="integral_constant.html" title=" integral_constant">false_type</a>.
       </p>
 <p>
-        <span class="bold"><strong>C++ Standard Reference:</strong></span> 3.9.2 and 8.3.2.
+        <span class="bold"><b>C++ Standard Reference:</b></span> 3.9.2 and 8.3.2.
       </p>
 <p>
-        <span class="bold"><strong>Compiler Compatibility:</strong></span> If the compiler
+        <span class="bold"><b>Compiler Compatibility:</b></span> If the compiler
         does not support partial-specialization of class templates, then this template
         may report the wrong result for function types, and for types that are both
         const and volatile qualified.
       </p>
 <p>
-        <span class="bold"><strong>Header:</strong></span> <code class="computeroutput"> <span class="preprocessor">#include</span>
-        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_reference</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-        or <code class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        <span class="bold"><b>Header:</b></span> <tt class="computeroutput"> <span class="preprocessor">#include</span>
+        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_reference</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
+        or <tt class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
       </p>
 <p>
-        <span class="bold"><strong>Examples:</strong></span>
+        <span class="bold"><b>Examples:</b></span>
       </p>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
           </p>
 <p>
-            <code class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span></code>
-            inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            <tt class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span></tt>
+            inherits from <tt class="computeroutput"><a href="integral_constant.html" title=" integral_constant">true_type</a></tt>.
           </p>
 <p>
         </p>
@@ -66,8 +65,8 @@
 <p>
           </p>
 <p>
-            <code class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="keyword">const</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span></code>
-            is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            <tt class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="keyword">const</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span></tt>
+            is the type <tt class="computeroutput"><a href="integral_constant.html" title=" integral_constant">true_type</a></tt>.
           </p>
 <p>
         </p>
@@ -76,7 +75,7 @@
 <p>
           </p>
 <p>
-            <code class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(&amp;)(</span><span class="keyword">long</span><span class="special">)&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
+            <tt class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(&amp;)(</span><span class="keyword">long</span><span class="special">)&gt;::</span><span class="identifier">value</span></tt> is an integral constant expression
             that evaluates to <span class="emphasis"><em>true</em></span> (the argument in this case
             is a reference to a function).
           </p>
@@ -87,7 +86,7 @@
 <p>
           </p>
 <p>
-            <code class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value_type</span></code> is the type <code class="computeroutput"><span class="keyword">bool</span></code>.
+            <tt class="computeroutput"><span class="identifier">is_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value_type</span></tt> is the type <tt class="computeroutput"><span class="keyword">bool</span></tt>.
           </p>
 <p>
         </p>
@@ -95,10 +94,14 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
-      Ramey and Jeremy Siek</small></td>
+      Ramey and Jeremy Siek<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
+        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

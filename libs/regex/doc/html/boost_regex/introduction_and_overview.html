@@ -1,13 +1,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Introduction and Overview</title>
+<title>Introduction and
+    Overview</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="Boost.Regex">
 <link rel="up" href="../index.html" title="Boost.Regex">
-<link rel="prev" href="install.html" title="Building and Installing the Library">
-<link rel="next" href="unicode.html" title="Unicode and Boost.Regex">
+<link rel="prev" href="install.html" title=" Building and Installing the Library">
+<link rel="next" href="unicode.html" title=" Unicode and Boost.Regex">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,9 +25,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_regex.introduction_and_overview"></a><a href="introduction_and_overview.html" title="Introduction and Overview">Introduction and
-    Overview</a>
-</h2></div></div></div>
+<a name="boost_regex.introduction_and_overview"></a><a href="introduction_and_overview.html" title="Introduction and
+    Overview">Introduction and
+    Overview</a></h2></div></div></div>
 <p>
       Regular expressions are a form of pattern-matching that are often used in text
       processing; many users will be familiar with the Unix utilities grep, sed and
@@ -39,11 +40,11 @@
       libraries can not do.
     </p>
 <p>
-      The class <a href="ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
+      The class <a href="ref/basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>
       is the key class in this library; it represents a "machine readable"
-      regular expression, and is very closely modeled on <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></code>,
+      regular expression, and is very closely modeled on <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></tt>,
       think of it as a string plus the actual state-machine required by the regular
-      expression algorithms. Like <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></code>
+      expression algorithms. Like <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></tt>
       there are two typedefs that are almost always the means by which this class
       is referenced:
     </p>
@@ -99,7 +100,7 @@
       regular expression engine, consequently escapes in regular expressions have
       to be doubled up when embedding them in C/C++ code. Also note that all the
       examples assume that your compiler supports argument-dependent-lookup lookup,
-      if yours doesn't (for example VC6), then you will have to add some <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span></code> prefixes
+      if yours doesn't (for example VC6), then you will have to add some <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span></tt> prefixes
       to some of the function calls in the examples.
     </p>
 <p>
@@ -112,7 +113,7 @@
       the utilities sed and Perl will already be ahead here; we need two strings
       - one a regular expression - the other a "format string" that provides
       a description of the text to replace the match with. In Boost.Regex this search
-      and replace operation is performed with the algorithm <a href="ref/regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a>, for our credit card
+      and replace operation is performed with the algorithm <a href="ref/regex_replace.html" title=" regex_replace"><tt class="computeroutput"><span class="identifier">regex_replace</span></tt></a>, for our credit card
       example we can write two algorithms like this to provide the format conversions:
     </p>
 <pre class="programlisting">
@@ -141,7 +142,7 @@
       expression match, however in general the result of a match contains a number
       of sub-expression matches in addition to the overall match. When the library
       needs to report a regular expression match it does so using an instance of
-      the class <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>,
+      the class <a href="ref/match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a>,
       as before there are typedefs of this class for the most common cases:
     </p>
 <pre class="programlisting">
@@ -155,12 +156,12 @@
 <span class="special">}</span>
 </pre>
 <p>
-      The algorithms <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
-      and <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
-      make use of <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
-      to report what matched; the difference between these algorithms is that <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
+      The algorithms <a href="ref/regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a>
+      and <a href="ref/regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>
+      make use of <a href="ref/match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a>
+      to report what matched; the difference between these algorithms is that <a href="ref/regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>
       will only find matches that consume <span class="emphasis"><em>all</em></span> of the input text,
-      where as <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
+      where as <a href="ref/regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a>
       will search for a match anywhere within the text being matched.
     </p>
 <p>
@@ -169,21 +170,22 @@
       of seamlessly searching almost any kind of data.
     </p>
 <p>
-      For search and replace operations, in addition to the algorithm <a href="ref/regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a> that we have already
-      seen, the <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
-      class has a <code class="computeroutput"><span class="identifier">format</span></code> member that
+      For search and replace operations, in addition to the algorithm <a href="ref/regex_replace.html" title=" regex_replace"><tt class="computeroutput"><span class="identifier">regex_replace</span></tt></a> that we have already
+      seen, the <a href="ref/match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a>
+      class has a <tt class="computeroutput"><span class="identifier">format</span></tt> member that
       takes the result of a match and a format string, and produces a new string
       by merging the two.
     </p>
 <p>
       For iterating through all occurences of an expression within a text, there
-      are two iterator types: <a href="ref/regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> will enumerate over
-      the <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a>
-      objects found, while <a href="ref/regex_token_iterator.html" title="regex_token_iterator"><code class="computeroutput"><span class="identifier">regex_token_iterator</span></code></a> will enumerate
+      are two iterator types: <a href="ref/regex_iterator.html" title=" regex_iterator"><tt class="computeroutput"><span class="identifier">regex_iterator</span></tt></a> will enumerate over
+      the <a href="ref/match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a>
+      objects found, while <a href="ref/regex_token_iterator.html" title=" regex_token_iterator"><tt class="computeroutput"><span class="identifier">regex_token_iterator</span></tt></a> will enumerate
       a series of strings (similar to perl style split operations).
     </p>
 <p>
-      For those that dislike templates, there is a high level wrapper class <a href="ref/deprecated_interfaces/old_regex.html" title="High Level Class RegEx (Deprecated)"><code class="computeroutput"><span class="identifier">RegEx</span></code></a>
+      For those that dislike templates, there is a high level wrapper class <a href="ref/deprecated_interfaces/old_regex.html" title=" High
+        Level Class RegEx (Deprecated)"><tt class="computeroutput"><span class="identifier">RegEx</span></tt></a>
       that is an encapsulation of the lower level template code - it provides a simplified
       interface for those that don't need the full power of the library, and supports
       only narrow characters, and the "extended" regular expression syntax.
@@ -191,12 +193,12 @@
       C++ standard library proposal.
     </p>
 <p>
-      The POSIX API functions: <a href="ref/posix.html#boost_regex.ref.posix.regcomp"><code class="computeroutput"><span class="identifier">regcomp</span></code></a>, <a href="ref/posix.html#boost_regex.ref.posix.regexec"><code class="computeroutput"><span class="identifier">regexec</span></code></a>, <a href="ref/posix.html#boost_regex.ref.posix.regfree"><code class="computeroutput"><span class="identifier">regfree</span></code></a> and [regerr], are available
+      The POSIX API functions: <a href="ref/posix.html#boost_regex.ref.posix.regcomp"><tt class="computeroutput"><span class="identifier">regcomp</span></tt></a>, <a href="ref/posix.html#boost_regex.ref.posix.regexec"><tt class="computeroutput"><span class="identifier">regexec</span></tt></a>, <a href="ref/posix.html#boost_regex.ref.posix.regfree"><tt class="computeroutput"><span class="identifier">regfree</span></tt></a> and [regerr], are available
       in both narrow character and Unicode versions, and are provided for those who
       need compatibility with these API's.
     </p>
 <p>
-      Finally, note that the library now has <a href="background_information/locale.html" title="Localization">run-time
+      Finally, note that the library now has <a href="background_information/locale.html" title=" Localization">run-time
       localization support</a>, and recognizes the full POSIX regular expression
       syntax - including advanced features like multi-character collating elements
       and equivalence classes - as well as providing compatibility with other regular
@@ -205,7 +207,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

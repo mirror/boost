@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>basic_regex</title>
+<title> basic_regex</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Boost.Regex">
-<link rel="up" href="../ref.html" title="Reference">
-<link rel="prev" href="../ref.html" title="Reference">
-<link rel="next" href="match_results.html" title="match_results">
+<link rel="up" href="../ref.html" title=" Reference">
+<link rel="prev" href="../ref.html" title=" Reference">
+<link rel="next" href="match_results.html" title=" match_results">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,38 +24,39 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.ref.basic_regex"></a><a href="basic_regex.html" title="basic_regex"> basic_regex</a>
-</h3></div></div></div>
-<a name="boost_regex.ref.basic_regex.synopsis"></a><h5>
-<a name="id516124"></a>
+<a name="boost_regex.ref.basic_regex"></a><a href="basic_regex.html" title=" basic_regex"> basic_regex</a></h3></div></div></div>
+<a name="boost_regex.ref.basic_regex.synopsis"></a><h4>
+<a name="id482525"></a>
         <a href="basic_regex.html#boost_regex.ref.basic_regex.synopsis">Synopsis</a>
-      </h5>
+      </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-        The template class <code class="computeroutput"><span class="identifier">basic_regex</span></code>
+        The template class <tt class="computeroutput"><span class="identifier">basic_regex</span></tt>
         encapsulates regular expression parsing and compilation. The class takes
         two template parameters:
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-<code class="computeroutput"><span class="identifier">charT</span></code>: determines the character
-          type, i.e. either <code class="computeroutput"><span class="keyword">char</span></code> or
-          <code class="computeroutput"><span class="keyword">wchar_t</span></code>; see <a href="concepts/charT_concept.html" title="charT Requirements">charT
+<tt class="computeroutput"><span class="identifier">charT</span></tt>: determines the character
+          type, i.e. either <tt class="computeroutput"><span class="keyword">char</span></tt> or
+          <tt class="computeroutput"><span class="keyword">wchar_t</span></tt>; see <a href="concepts/charT_concept.html" title=" charT Requirements">charT
           concept</a>.
         </li>
 <li>
-<code class="computeroutput"><span class="identifier">traits</span></code>: determines the
+<tt class="computeroutput"><span class="identifier">traits</span></tt>: determines the
           behavior of the character type, for example which character class names
-          are recognized. A default traits class is provided: <code class="computeroutput"><span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span></code>. See also <a href="concepts/traits_concept.html" title="Traits Class Requirements">traits
+          are recognized. A default traits class is provided: <tt class="computeroutput"><span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span></tt>. See also <a href="concepts/traits_concept.html" title=" Traits Class
+        Requirements">traits
           concept</a>.
         </li>
 </ul></div>
 <p>
-        For ease of use there are two typedefs that define the two standard <code class="computeroutput"><span class="identifier">basic_regex</span></code> instances, unless you want
+        For ease of use there are two typedefs that define the two standard <tt class="computeroutput"><span class="identifier">basic_regex</span></tt> instances, unless you want
         to use custom traits classes or non-standard character types (for example
-        see <a href="non_std_strings/icu.html" title="Working With Unicode and ICU String Types">unicode support</a>),
+        see <a href="non_std_strings/icu.html" title=" Working With
+        Unicode and ICU String Types">unicode support</a>),
         you won't need to use anything other than these:
       </p>
 <pre class="programlisting">
@@ -70,9 +71,9 @@
 <span class="special">}</span>
 </pre>
 <p>
-        The definition of <code class="computeroutput"><span class="identifier">basic_regex</span></code>
-        follows: it is based very closely on class <code class="computeroutput"><span class="identifier">basic_string</span></code>,
-        and fulfils the requirements for a constant-container of <code class="computeroutput"><span class="identifier">charT</span></code>.
+        The definition of <tt class="computeroutput"><span class="identifier">basic_regex</span></tt>
+        follows: it is based very closely on class <tt class="computeroutput"><span class="identifier">basic_string</span></tt>,
+        and fulfils the requirements for a constant-container of <tt class="computeroutput"><span class="identifier">charT</span></tt>.
       </p>
 <pre class="programlisting">
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
@@ -88,66 +89,66 @@
    <span class="keyword">typedef</span>          <span class="keyword">const</span> <span class="identifier">charT</span><span class="special">&amp;</span>                         <span class="identifier">const_reference</span><span class="special">;</span>           
    <span class="keyword">typedef</span>          <span class="identifier">std</span><span class="special">::</span><span class="identifier">ptrdiff_t</span>                       <span class="identifier">difference_type</span><span class="special">;</span>                 
    <span class="keyword">typedef</span>          <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span>                          <span class="identifier">size_type</span><span class="special">;</span>
-   <span class="keyword">typedef</span>          <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a>  <span class="identifier">flag_type</span><span class="special">;</span>
+   <span class="keyword">typedef</span>          <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a>  <span class="identifier">flag_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">locale_type</span>                  <span class="identifier">locale_type</span><span class="special">;</span>
 
    <span class="comment">// constants:
 </span>   <span class="comment">// main option selection:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">normal</span>          
+</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">normal</span>          
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">ECMAScript</span>      
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">ECMAScript</span>      
                                                 <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">JavaScript</span>      
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">JavaScript</span>      
                                                 <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">JScript</span>         
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">JScript</span>         
                                                 <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">basic</span>           
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">basic</span>           
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">basic</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">extended</span>        
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">extended</span>        
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">extended</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">awk</span>             
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">awk</span>             
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">awk</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">grep</span>            
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">grep</span>            
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">grep</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">egrep</span>           
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">egrep</span>           
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">egrep</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">sed</span>             
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">sed</span>             
                                                 <span class="special">=</span> <span class="identifier">basic</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">sed</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">perl</span>            
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">perl</span>            
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">perl</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">literal</span>         
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">literal</span>         
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">literal</span><span class="special">;</span>
 
    <span class="comment">// modifiers specific to perl expressions:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_m</span>        
+</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_mod_m</span>        
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_m</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_s</span>        
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_mod_s</span>        
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_s</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">mod_s</span>           
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">mod_s</span>           
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">mod_s</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">mod_x</span>           
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">mod_x</span>           
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">mod_x</span><span class="special">;</span>
 
    <span class="comment">// modifiers specific to POSIX basic expressions:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_plus_qm</span>      
+</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">bk_plus_qm</span>      
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_plus_qm</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_vbar</span>         
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">bk_vbar</span>         
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_vbar</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_char_classes</span> 
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_char_classes</span> 
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_char_classes</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_intervals</span>    
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_intervals</span>    
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_intervals</span>
 
    <span class="comment">// common modifiers:
-</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">nosubs</span>          
+</span>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">nosubs</span>          
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">nosubs</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">optimize</span>        
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">optimize</span>        
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">optimize</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">collate</span>         
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">collate</span>         
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">collate</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">newline_alt</span>     
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">newline_alt</span>     
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">newline_alt</span><span class="special">;</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_except</span>       
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_except</span>       
                                                 <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">newline_alt</span><span class="special">;</span>
 
    <span class="comment">// construct/copy/destroy:
@@ -245,79 +246,79 @@
 
 <span class="special">}</span> <span class="comment">// namespace boost
 </span></pre>
-<a name="boost_regex.ref.basic_regex.description"></a><h5>
-<a name="id522059"></a>
+<a name="boost_regex.ref.basic_regex.description"></a><h4>
+<a name="id488473"></a>
         <a href="basic_regex.html#boost_regex.ref.basic_regex.description">Description</a>
-      </h5>
+      </h4>
 <p>
-        Class <code class="computeroutput"><span class="identifier">basic_regex</span></code> has the
+        Class <tt class="computeroutput"><span class="identifier">basic_regex</span></tt> has the
         following public members:
       </p>
 <pre class="programlisting">
 <span class="comment">// main option selection:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">normal</span>           
+</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">normal</span>           
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">ECMAScript</span>       
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">ECMAScript</span>       
                                           <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">JavaScript</span>       
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">JavaScript</span>       
                                           <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">JScript</span>          
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">JScript</span>          
                                           <span class="special">=</span> <span class="identifier">normal</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">basic</span>            
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">basic</span>            
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">basic</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">extended</span>         
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">extended</span>         
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">extended</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">awk</span>              
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">awk</span>              
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">awk</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">grep</span>             
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">grep</span>             
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">grep</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">egrep</span>            
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">egrep</span>            
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">egrep</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">sed</span>              
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">sed</span>              
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">sed</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">perl</span>             
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">perl</span>             
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">perl</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">literal</span>          
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">literal</span>          
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">literal</span><span class="special">;</span>
 
 <span class="comment">// modifiers specific to perl expressions:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_m</span>         
+</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_mod_m</span>         
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_m</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_mod_s</span>         
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_mod_s</span>         
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_mod_s</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">mod_s</span>            
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">mod_s</span>            
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">mod_s</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">mod_x</span>            
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">mod_x</span>            
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">mod_x</span><span class="special">;</span>
 
 <span class="comment">// modifiers specific to POSIX basic expressions:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_plus_qm</span>       
+</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">bk_plus_qm</span>       
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_plus_qm</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">bk_vbar</span>          
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">bk_vbar</span>          
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">bk_vbar</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_char_classes</span>  
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_char_classes</span>  
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_char_classes</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">no_intervals</span>     
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">no_intervals</span>     
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">no_intervals</span>
 
 <span class="comment">// common modifiers:
-</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">nosubs</span>           
+</span><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">nosubs</span>           
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">nosubs</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">optimize</span>         
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">optimize</span>         
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">optimize</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">collate</span>          
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">collate</span>          
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">collate</span><span class="special">;</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> <span class="identifier">newline_alt</span>      
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">regex_constants</span><span class="special">::</span> <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> <span class="identifier">newline_alt</span>      
                                           <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">newline_alt</span><span class="special">;</span>
 </pre>
 <p>
-        The meaning of these options is documented in the <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a> section.
+        The meaning of these options is documented in the <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a> section.
       </p>
 <p>
         The static constant members are provided as synonyms for the constants declared
-        in namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span></code>; for each constant of type
-        <a href="syntax_option_type.html" title="syntax_option_type"><code class="computeroutput"><span class="identifier">syntax_option_type</span></code></a>
-        declared in namespace <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span></code>
+        in namespace <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span></tt>; for each constant of type
+        <a href="syntax_option_type.html" title=" syntax_option_type"><tt class="computeroutput"><span class="identifier">syntax_option_type</span></tt></a>
+        declared in namespace <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex_constants</span></tt>
         then a constant with the same name, type and value is declared within the
         scope of basic_regex.
       </p>
@@ -327,12 +328,12 @@
 <span class="identifier">basic_regex</span><span class="special">();</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
-        <code class="computeroutput"><span class="identifier">basic_regex</span></code>.
+        <span class="bold"><b>Effects</b></span>: Constructs an object of class
+        <tt class="computeroutput"><span class="identifier">basic_regex</span></tt>.
       </p>
 <div class="table">
-<a name="id523997"></a><p class="title"><b>Table 1. basic_regex default construction postconditions</b></p>
-<div class="table-contents"><table class="table" summary="basic_regex default construction postconditions">
+<a name="id490413"></a><p class="title"><b>Table 1. basic_regex default construction postconditions</b></p>
+<table class="table" summary="basic_regex default construction postconditions">
 <colgroup>
 <col>
 <col>
@@ -353,67 +354,67 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">true</span></code>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
-<td>
-            <p>
-              <code class="computeroutput"><span class="number">0</span></code>
+              <tt class="computeroutput"><span class="keyword">true</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">size</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;()</span></code>
+              <tt class="computeroutput"><span class="number">0</span></tt>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">str</span><span class="special">()</span></tt>
+            </p>
+            </td>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;()</span></tt>
             </p>
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct2"></a><p>
+<a name="boost_regex.basic_regex.construct2"></a><p>
       </p>
 <pre class="programlisting">
 <span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Requires</strong></span>: <span class="emphasis"><em>p</em></span> shall not
+        <span class="bold"><b>Requires</b></span>: <span class="emphasis"><em>p</em></span> shall not
         be a null pointer.
       </p>
 <p>
-        <span class="bold"><strong>Throws</strong></span>: <a href="bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> if <span class="emphasis"><em>p</em></span>
-        is not a valid regular expression, unless the flag <code class="computeroutput"><span class="identifier">no_except</span></code>
+        <span class="bold"><b>Throws</b></span>: <a href="bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> if <span class="emphasis"><em>p</em></span>
+        is not a valid regular expression, unless the flag <tt class="computeroutput"><span class="identifier">no_except</span></tt>
         is set in <span class="emphasis"><em>f</em></span>.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
-        <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>;
+        <span class="bold"><b>Effects</b></span>: Constructs an object of class
+        <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>;
         the object's internal finite state machine is constructed from the regular
         expression contained in the null-terminated string <span class="emphasis"><em>p</em></span>,
-        and interpreted according to the <a href="syntax_option_type.html" title="syntax_option_type">option
+        and interpreted according to the <a href="syntax_option_type.html" title=" syntax_option_type">option
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id524397"></a><p class="title"><b>Table 2. Postconditions for basic_regex construction</b></p>
-<div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
+<a name="id490814"></a><p class="title"><b>Table 2. Postconditions for basic_regex construction</b></p>
+<table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
 <col>
@@ -434,43 +435,43 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">char_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;::</span><span class="identifier">length</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span></code>
+              <tt class="computeroutput"><span class="keyword">false</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">size</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span></code>
+              <tt class="computeroutput"><span class="identifier">char_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;::</span><span class="identifier">length</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">str</span><span class="special">()</span></tt>
+            </p>
+            </td>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">)</span></tt>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -482,7 +483,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -492,34 +493,34 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct3"></a><p>
+<a name="boost_regex.basic_regex.construct3"></a><p>
       </p>
 <pre class="programlisting">
 <span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p2</span><span class="special">,</span> 
             <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Requires</strong></span>: <span class="emphasis"><em>p1</em></span> and <span class="emphasis"><em>p2</em></span>
-        are not null pointers, <code class="computeroutput"><span class="identifier">p1</span> <span class="special">&lt;</span> <span class="identifier">p2</span></code>.
+        <span class="bold"><b>Requires</b></span>: <span class="emphasis"><em>p1</em></span> and <span class="emphasis"><em>p2</em></span>
+        are not null pointers, <tt class="computeroutput"><span class="identifier">p1</span> <span class="special">&lt;</span> <span class="identifier">p2</span></tt>.
       </p>
 <p>
-        <span class="bold"><strong>Throws</strong></span>: bad_expression if [p1,p2) is not
-        a valid regular expression, unless the flag <code class="computeroutput"><span class="identifier">no_except</span></code>
+        <span class="bold"><b>Throws</b></span>: bad_expression if [p1,p2) is not
+        a valid regular expression, unless the flag <tt class="computeroutput"><span class="identifier">no_except</span></tt>
         is set in <span class="emphasis"><em>f</em></span>.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
-        <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>;
+        <span class="bold"><b>Effects</b></span>: Constructs an object of class
+        <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>;
         the object's internal finite state machine is constructed from the regular
         expression contained in the sequence of characters [p1,p2), and interpreted
-        according the <a href="syntax_option_type.html" title="syntax_option_type">option flags</a>
+        according the <a href="syntax_option_type.html" title=" syntax_option_type">option flags</a>
         specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id524943"></a><p class="title"><b>Table 3. Postconditions for basic_regex construction</b></p>
-<div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
+<a name="id491362"></a><p class="title"><b>Table 3. Postconditions for basic_regex construction</b></p>
+<table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
 <col>
@@ -540,43 +541,43 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></code>
+              <tt class="computeroutput"><span class="keyword">false</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">size</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></code>
+              <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">distance</span><span class="special">(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">str</span><span class="special">()</span></tt>
+            </p>
+            </td>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p1</span><span class="special">,</span><span class="identifier">p2</span><span class="special">)</span></tt>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -588,7 +589,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -598,33 +599,33 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct4"></a><p>
+<a name="boost_regex.basic_regex.construct4"></a><p>
       </p>
 <pre class="programlisting">
 <span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">size_type</span> <span class="identifier">len</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Requires</strong></span>: <span class="emphasis"><em>p</em></span> shall not
-        be a null pointer, <code class="computeroutput"><span class="identifier">len</span> <span class="special">&lt;</span>
-        <span class="identifier">max_size</span><span class="special">()</span></code>.
+        <span class="bold"><b>Requires</b></span>: <span class="emphasis"><em>p</em></span> shall not
+        be a null pointer, <tt class="computeroutput"><span class="identifier">len</span> <span class="special">&lt;</span>
+        <span class="identifier">max_size</span><span class="special">()</span></tt>.
       </p>
 <p>
-        <span class="bold"><strong>Throws</strong></span>: <a href="bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> if <span class="emphasis"><em>p</em></span>
-        is not a valid regular expression, unless the flag <code class="computeroutput"><span class="identifier">no_except</span></code>
+        <span class="bold"><b>Throws</b></span>: <a href="bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> if <span class="emphasis"><em>p</em></span>
+        is not a valid regular expression, unless the flag <tt class="computeroutput"><span class="identifier">no_except</span></tt>
         is set in <span class="emphasis"><em>f</em></span>.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
-        <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>;
+        <span class="bold"><b>Effects</b></span>: Constructs an object of class
+        <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>;
         the object's internal finite state machine is constructed from the regular
         expression contained in the sequence of characters [p, p+len), and interpreted
         according the option flags specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id525478"></a><p class="title"><b>Table 4. Postconditions for basic_regex construction</b></p>
-<div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
+<a name="id491897"></a><p class="title"><b>Table 4. Postconditions for basic_regex construction</b></p>
+<table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
 <col>
@@ -645,19 +646,19 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
+              <tt class="computeroutput"><span class="keyword">false</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">size</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -669,19 +670,19 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">str</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">,</span> <span class="identifier">len</span><span class="special">)</span></code>
+              <tt class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">p</span><span class="special">,</span> <span class="identifier">len</span><span class="special">)</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -693,7 +694,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -703,16 +704,16 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct5"></a><p>
+<a name="boost_regex.basic_regex.construct5"></a><p>
       </p>
 <pre class="programlisting">
 <span class="identifier">basic_regex</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
-        <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
+        <span class="bold"><b>Effects</b></span>: Constructs an object of class
+        <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>
         as a copy of the object <span class="emphasis"><em>e</em></span>.
       </p>
 <a name="boost_regex.basic_regex.construct6"></a><p>
@@ -723,21 +724,21 @@
             <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Throws</strong></span>: <a href="bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> if <span class="emphasis"><em>s</em></span>
-        is not a valid regular expression, unless the flag <code class="computeroutput"><span class="identifier">no_except</span></code>
+        <span class="bold"><b>Throws</b></span>: <a href="bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> if <span class="emphasis"><em>s</em></span>
+        is not a valid regular expression, unless the flag <tt class="computeroutput"><span class="identifier">no_except</span></tt>
         is set in <span class="emphasis"><em>f</em></span>.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
-        <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>;
+        <span class="bold"><b>Effects</b></span>: Constructs an object of class
+        <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>;
         the object's internal finite state machine is constructed from the regular
         expression contained in the string <span class="emphasis"><em>s</em></span>, and interpreted
-        according to the <a href="syntax_option_type.html" title="syntax_option_type">option
+        according to the <a href="syntax_option_type.html" title=" syntax_option_type">option
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id526115"></a><p class="title"><b>Table 5. Postconditions for basic_regex construction</b></p>
-<div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
+<a name="id492536"></a><p class="title"><b>Table 5. Postconditions for basic_regex construction</b></p>
+<table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
 <col>
@@ -758,31 +759,31 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="keyword">false</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">size</span><span class="special">()</span></tt>
+            </p>
+            </td>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></tt>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">str</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -794,7 +795,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -806,7 +807,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -816,9 +817,9 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.construct7"></a><p>
+<a name="boost_regex.basic_regex.construct7"></a><p>
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ForwardIterator</span><span class="special">&gt;</span>
@@ -826,21 +827,21 @@
             <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Throws</strong></span>: <a href="bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> if the sequence [first,
-        last) is not a valid regular expression, unless the flag <code class="computeroutput"><span class="identifier">no_except</span></code>
+        <span class="bold"><b>Throws</b></span>: <a href="bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> if the sequence [first,
+        last) is not a valid regular expression, unless the flag <tt class="computeroutput"><span class="identifier">no_except</span></tt>
         is set in <span class="emphasis"><em>f</em></span>.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Constructs an object of class
-        <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>;
+        <span class="bold"><b>Effects</b></span>: Constructs an object of class
+        <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>;
         the object's internal finite state machine is constructed from the regular
         expression contained in the sequence of characters [first, last), and interpreted
-        according to the <a href="syntax_option_type.html" title="syntax_option_type">option
+        according to the <a href="syntax_option_type.html" title=" syntax_option_type">option
         flags</a> specified in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id526591"></a><p class="title"><b>Table 6. Postconditions for basic_regex construction</b></p>
-<div class="table-contents"><table class="table" summary="Postconditions for basic_regex construction">
+<a name="id493013"></a><p class="title"><b>Table 6. Postconditions for basic_regex construction</b></p>
+<table class="table" summary="Postconditions for basic_regex construction">
 <colgroup>
 <col>
 <col>
@@ -861,43 +862,43 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">distance</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></code>
+              <tt class="computeroutput"><span class="keyword">false</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">size</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></code>
+              <tt class="computeroutput"><span class="identifier">distance</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">str</span><span class="special">()</span></tt>
+            </p>
+            </td>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;(</span><span class="identifier">first</span><span class="special">,</span><span class="identifier">last</span><span class="special">)</span></tt>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -909,7 +910,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -919,15 +920,15 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.opeq1"></a><p>
+<a name="boost_regex.basic_regex.opeq1"></a><p>
       </p>
 <pre class="programlisting">
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">())</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">())</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.opeq2"></a><p>
       </p>
@@ -935,11 +936,11 @@
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Requires</strong></span>: <span class="emphasis"><em>p</em></span> shall not
+        <span class="bold"><b>Requires</b></span>: <span class="emphasis"><em>p</em></span> shall not
         be a null pointer.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">)</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">)</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.opeq3"></a><p>
       </p>
@@ -948,7 +949,7 @@
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">ST</span><span class="special">,</span> <span class="identifier">SA</span><span class="special">&gt;&amp;</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.begin"></a><p>
       </p>
@@ -956,7 +957,7 @@
 <span class="identifier">const_iterator</span> <span class="identifier">begin</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns a starting iterator to
+        <span class="bold"><b>Effects</b></span>: Returns a starting iterator to
         a sequence of characters representing the regular expression.
       </p>
 <a name="boost_regex.basic_regex.end"></a><p>
@@ -965,7 +966,7 @@
 <span class="identifier">const_iterator</span> <span class="identifier">end</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns termination iterator to
+        <span class="bold"><b>Effects</b></span>: Returns termination iterator to
         a sequence of characters representing the regular expression.
       </p>
 <a name="boost_regex.basic_regex.size"></a><p>
@@ -974,7 +975,7 @@
 <span class="identifier">size_type</span> <span class="identifier">size</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the length of the sequence
+        <span class="bold"><b>Effects</b></span>: Returns the length of the sequence
         of characters representing the regular expression.
       </p>
 <a name="boost_regex.basic_regex.max_size"></a><p>
@@ -983,7 +984,7 @@
 <span class="identifier">size_type</span> <span class="identifier">max_size</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the maximum length of the
+        <span class="bold"><b>Effects</b></span>: Returns the maximum length of the
         sequence of characters representing the regular expression.
       </p>
 <a name="boost_regex.basic_regex.empty"></a><p>
@@ -992,7 +993,7 @@
 <span class="keyword">bool</span> <span class="identifier">empty</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns true if the object does
+        <span class="bold"><b>Effects</b></span>: Returns true if the object does
         not contain a valid regular expression, otherwise false.
       </p>
 <a name="boost_regex.basic_regex.mark_count"></a><p>
@@ -1001,7 +1002,7 @@
 <span class="keyword">unsigned</span> <span class="identifier">mark_count</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the number of marked sub-expressions
+        <span class="bold"><b>Effects</b></span>: Returns the number of marked sub-expressions
         within the regular expresion.
       </p>
 <a name="boost_regex.basic_regex.assign1"></a><p>
@@ -1010,7 +1011,7 @@
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">that</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">that</span><span class="special">.</span><span class="identifier">str</span><span class="special">(),</span> <span class="identifier">that</span><span class="special">.</span><span class="identifier">flags</span><span class="special">())</span></code></a>.
+        <span class="bold"><b>Effects</b></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><tt class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">that</span><span class="special">.</span><span class="identifier">str</span><span class="special">(),</span> <span class="identifier">that</span><span class="special">.</span><span class="identifier">flags</span><span class="special">())</span></tt></a>.
       </p>
 <a name="boost_regex.basic_regex.assign2"></a><p>
       </p>
@@ -1018,7 +1019,7 @@
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></code></a>.
+        <span class="bold"><b>Effects</b></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><tt class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></tt></a>.
       </p>
 <a name="boost_regex.basic_regex.assign3"></a><p>
       </p>
@@ -1026,7 +1027,7 @@
 <span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span> <span class="identifier">ptr</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">len</span><span class="special">,</span> <span class="identifier">flag_type</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">,</span> <span class="identifier">len</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></code></a>.
+        <span class="bold"><b>Effects</b></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><tt class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">ptr</span><span class="special">,</span> <span class="identifier">len</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></tt></a>.
       </p>
 <a name="boost_regex.basic_regex.assign4"></a><p>
       </p>
@@ -1036,22 +1037,22 @@
                   <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Throws</strong></span>: <a href="bad_expression.html" title="bad_expression"><code class="computeroutput"><span class="identifier">bad_expression</span></code></a> if <span class="emphasis"><em>s</em></span>
-        is not a valid regular expression, unless the flag <code class="computeroutput"><span class="identifier">no_except</span></code>
+        <span class="bold"><b>Throws</b></span>: <a href="bad_expression.html" title=" bad_expression"><tt class="computeroutput"><span class="identifier">bad_expression</span></tt></a> if <span class="emphasis"><em>s</em></span>
+        is not a valid regular expression, unless the flag <tt class="computeroutput"><span class="identifier">no_except</span></tt>
         is set in <span class="emphasis"><em>f</em></span>.
       </p>
 <p>
-        <span class="bold"><strong>Returns</strong></span>: *this.
+        <span class="bold"><b>Returns</b></span>: *this.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Assigns the regular expression
+        <span class="bold"><b>Effects</b></span>: Assigns the regular expression
         contained in the string <span class="emphasis"><em>s</em></span>, interpreted according the
-        <a href="syntax_option_type.html" title="syntax_option_type">option flags</a> specified
+        <a href="syntax_option_type.html" title=" syntax_option_type">option flags</a> specified
         in <span class="emphasis"><em>f</em></span>.
       </p>
 <div class="table">
-<a name="id528460"></a><p class="title"><b>Table 7. Postconditions for basic_regex::assign</b></p>
-<div class="table-contents"><table class="table" summary="Postconditions for basic_regex::assign">
+<a name="id494890"></a><p class="title"><b>Table 7. Postconditions for basic_regex::assign</b></p>
+<table class="table" summary="Postconditions for basic_regex::assign">
 <colgroup>
 <col>
 <col>
@@ -1072,31 +1073,31 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
             <p>
-              <code class="computeroutput"><span class="keyword">false</span></code>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">size</span><span class="special">()</span></code>
-            </p>
-            </td>
-<td>
-            <p>
-              <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="keyword">false</span></tt>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">str</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">size</span><span class="special">()</span></tt>
+            </p>
+            </td>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span></tt>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <tt class="computeroutput"><span class="identifier">str</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -1108,7 +1109,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -1120,7 +1121,7 @@
 <tr>
 <td>
             <p>
-              <code class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></code>
+              <tt class="computeroutput"><span class="identifier">mark_count</span><span class="special">()</span></tt>
             </p>
             </td>
 <td>
@@ -1130,9 +1131,9 @@
             </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="boost_regex.basic_regex.assign5"></a><p>
+<a name="boost_regex.basic_regex.assign5"></a><p>
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InputIterator</span><span class="special">&gt;</span>
@@ -1140,12 +1141,12 @@
                     <span class="identifier">flag_type</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">regex_constants</span><span class="special">::</span><span class="identifier">normal</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Requires</strong></span>: The type <code class="computeroutput"><span class="identifier">InputIterator</span></code>
+        <span class="bold"><b>Requires</b></span>: The type <tt class="computeroutput"><span class="identifier">InputIterator</span></tt>
         corresponds to the <a href="http://input_iterator" target="_top">Input Iterator requirements
         (24.1.1)</a>.
       </p>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><code class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></code></a>.
+        <span class="bold"><b>Effects</b></span>: Returns <a href="basic_regex.html#boost_regex.basic_regex.assign4"><tt class="computeroutput"><span class="identifier">assign</span><span class="special">(</span><span class="identifier">string_type</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">),</span> <span class="identifier">f</span><span class="special">)</span></tt></a>.
       </p>
 <a name="boost_regex.basic_regex.flags"></a><p>
       </p>
@@ -1153,9 +1154,9 @@
 <span class="identifier">flag_type</span> <span class="identifier">flags</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns a copy of the <a href="syntax_option_type.html" title="syntax_option_type">regular
+        <span class="bold"><b>Effects</b></span>: Returns a copy of the <a href="syntax_option_type.html" title=" syntax_option_type">regular
         expression syntax flags</a> that were passed to the object's constructor,
-        or the last call to <code class="computeroutput"><span class="identifier">assign</span></code>.
+        or the last call to <tt class="computeroutput"><span class="identifier">assign</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.status"></a><p>
       </p>
@@ -1163,7 +1164,7 @@
 <span class="keyword">int</span> <span class="identifier">status</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns zero if the expression
+        <span class="bold"><b>Effects</b></span>: Returns zero if the expression
         contains a valid regular expression, otherwise an error code. This member
         function is retained for use in environments that cannot use exception handling.
       </p>
@@ -1173,7 +1174,7 @@
 <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">str</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns a copy of the character
+        <span class="bold"><b>Effects</b></span>: Returns a copy of the character
         sequence passed to the object's constructor, or the last call to assign.
       </p>
 <a name="boost_regex.basic_regex.compare"></a><p>
@@ -1182,9 +1183,9 @@
 <span class="keyword">int</span> <span class="identifier">compare</span><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: If <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span> <span class="special">==</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">()</span></code> then returns <code class="computeroutput"><span class="identifier">str</span><span class="special">().</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">())</span></code>,
-        otherwise returns <code class="computeroutput"><span class="identifier">flags</span><span class="special">()</span>
-        <span class="special">-</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">()</span></code>.
+        <span class="bold"><b>Effects</b></span>: If <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span> <span class="special">==</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">()</span></tt> then returns <tt class="computeroutput"><span class="identifier">str</span><span class="special">().</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">())</span></tt>,
+        otherwise returns <tt class="computeroutput"><span class="identifier">flags</span><span class="special">()</span>
+        <span class="special">-</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">flags</span><span class="special">()</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.imbue"></a><p>
       </p>
@@ -1192,14 +1193,14 @@
 <span class="identifier">locale_type</span> <span class="identifier">imbue</span><span class="special">(</span><span class="identifier">locale_type</span> <span class="identifier">l</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">traits_inst</span><span class="special">.</span><span class="identifier">imbue</span><span class="special">(</span><span class="identifier">l</span><span class="special">)</span></code> where
-        <code class="computeroutput"><span class="identifier">traits_inst</span></code> is a (default
-        initialized) instance of the template parameter <code class="computeroutput"><span class="identifier">traits</span></code>
-        stored within the object. Calls to <code class="computeroutput"><span class="identifier">imbue</span></code>
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">traits_inst</span><span class="special">.</span><span class="identifier">imbue</span><span class="special">(</span><span class="identifier">l</span><span class="special">)</span></tt> where
+        <tt class="computeroutput"><span class="identifier">traits_inst</span></tt> is a (default
+        initialized) instance of the template parameter <tt class="computeroutput"><span class="identifier">traits</span></tt>
+        stored within the object. Calls to <tt class="computeroutput"><span class="identifier">imbue</span></tt>
         invalidate any currently contained regular expression.
       </p>
 <p>
-        <span class="bold"><strong>Postcondition</strong></span>: <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span> <span class="special">==</span> <span class="keyword">true</span></code>.
+        <span class="bold"><b>Postcondition</b></span>: <tt class="computeroutput"><span class="identifier">empty</span><span class="special">()</span> <span class="special">==</span> <span class="keyword">true</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.getloc"></a><p>
       </p>
@@ -1207,8 +1208,8 @@
 <span class="identifier">locale_type</span> <span class="identifier">getloc</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns the result of <code class="computeroutput"><span class="identifier">traits_inst</span><span class="special">.</span><span class="identifier">getloc</span><span class="special">()</span></code>
-        where <code class="computeroutput"><span class="identifier">traits_inst</span></code> is a (default
+        <span class="bold"><b>Effects</b></span>: Returns the result of <tt class="computeroutput"><span class="identifier">traits_inst</span><span class="special">.</span><span class="identifier">getloc</span><span class="special">()</span></tt>
+        where <tt class="computeroutput"><span class="identifier">traits_inst</span></tt> is a (default
         initialized) instance of the template parameter traits stored within the
         object.
       </p>
@@ -1218,28 +1219,28 @@
 <span class="keyword">void</span> <span class="identifier">swap</span><span class="special">(</span><span class="identifier">basic_regex</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span> <span class="keyword">throw</span><span class="special">();</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Swaps the contents of the two regular
+        <span class="bold"><b>Effects</b></span>: Swaps the contents of the two regular
         expressions.
       </p>
 <p>
-        <span class="bold"><strong>Postcondition</strong></span>: <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> contains the regular expression that
+        <span class="bold"><b>Postcondition</b></span>: <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt> contains the regular expression that
         was in <span class="emphasis"><em>e</em></span>, <span class="emphasis"><em>e</em></span> contains the regular
-        expression that was in <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>.
+        expression that was in <tt class="computeroutput"><span class="special">*</span><span class="keyword">this</span></tt>.
       </p>
 <p>
-        <span class="bold"><strong>Complexity</strong></span>: constant time.
+        <span class="bold"><b>Complexity</b></span>: constant time.
       </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top"><p>
-          Comparisons between <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> objects are provided
+<tr><td colspan="2" align="left" valign="top"><p>
+          Comparisons between <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a> objects are provided
           on an experimental basis: please note that these are not present in the
           <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Technical
           Report on C++ Library Extensions</a>, so use with care if you are writing
-          code that may need to be ported to other implementations of <a href="basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>.
+          code that may need to be ported to other implementations of <a href="basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>.
         </p></td></tr>
 </table></div>
 <a name="boost_regex.basic_regex.op_eq"></a><p>
@@ -1250,8 +1251,8 @@
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
-        <span class="special">==</span> <span class="number">0</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns <tt class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
+        <span class="special">==</span> <span class="number">0</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.op_ne"></a><p>
       </p>
@@ -1261,8 +1262,8 @@
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
-        <span class="special">!=</span> <span class="number">0</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns <tt class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
+        <span class="special">!=</span> <span class="number">0</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.op_lt"></a><p>
       </p>
@@ -1272,8 +1273,8 @@
                <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
-        <span class="special">&lt;</span> <span class="number">0</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns <tt class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
+        <span class="special">&lt;</span> <span class="number">0</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.op_le"></a><p>
       </p>
@@ -1283,8 +1284,8 @@
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
-        <span class="special">&lt;=</span> <span class="number">0</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns <tt class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
+        <span class="special">&lt;=</span> <span class="number">0</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.op_ge"></a><p>
       </p>
@@ -1294,8 +1295,8 @@
                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
-        <span class="special">&gt;=</span> <span class="number">0</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns <tt class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
+        <span class="special">&gt;=</span> <span class="number">0</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.op_gt"></a><p>
       </p>
@@ -1305,15 +1306,15 @@
                <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
-        <span class="special">&gt;</span> <span class="number">0</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns <tt class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">compare</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span>
+        <span class="special">&gt;</span> <span class="number">0</span></tt>.
       </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/html/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
           The basic_regex stream inserter is provided on an experimental basis, and
           outputs the textual representation of the expression to the stream.
         </p></td></tr>
@@ -1327,7 +1328,7 @@
                <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">re_traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: Returns <code class="computeroutput"><span class="special">(</span><span class="identifier">os</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">())</span></code>.
+        <span class="bold"><b>Effects</b></span>: Returns <tt class="computeroutput"><span class="special">(</span><span class="identifier">os</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">str</span><span class="special">())</span></tt>.
       </p>
 <a name="boost_regex.basic_regex.op_swap"></a><p>
       </p>
@@ -1337,12 +1338,15 @@
          <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><strong>Effects</strong></span>: calls <code class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span></code>.
+        <span class="bold"><b>Effects</b></span>: calls <tt class="computeroutput"><span class="identifier">lhs</span><span class="special">.</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">rhs</span><span class="special">)</span></tt>.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2007 John Maddock</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

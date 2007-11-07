@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Support for Compiler Intrinsics</title>
+<title> Support for Compiler Intrinsics</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="prev" href="user_defined.html" title="User Defined Specializations">
-<link rel="next" href="mpl.html" title="MPL Interoperability">
+<link rel="prev" href="user_defined.html" title=" User Defined Specializations">
+<link rel="next" href="mpl.html" title=" MPL Interoperability">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_typetraits.intrinsics"></a><a href="intrinsics.html" title="Support for Compiler Intrinsics"> Support for Compiler Intrinsics</a>
-</h2></div></div></div>
+<a name="boost_typetraits.intrinsics"></a><a href="intrinsics.html" title=" Support for Compiler Intrinsics"> Support for Compiler Intrinsics</a></h2></div></div></div>
 <p>
       There are some traits that can not be implemented within the current C++ language:
       to make these traits "just work" with user defined types, some kind
@@ -38,16 +37,18 @@
       for all types (but all have safe fallback positions if this support is unavailable):
     </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="reference/is_union.html" title="is_union">is_union</a></li>
-<li><a href="reference/is_pod.html" title="is_pod">is_pod</a></li>
-<li><a href="reference/has_trivial_constructor.html" title="has_trivial_constructor">has_trivial_constructor</a></li>
-<li><a href="reference/has_trivial_copy.html" title="has_trivial_copy">has_trivial_copy</a></li>
-<li><a href="reference/has_trivial_assign.html" title="has_trivial_assign">has_trivial_assign</a></li>
-<li><a href="reference/has_trivial_destructor.html" title="has_trivial_destructor">has_trivial_destructor</a></li>
-<li><a href="reference/has_nothrow_constructor.html" title="has_nothrow_constructor">has_nothrow_constructor</a></li>
-<li><a href="reference/has_nothrow_copy.html" title="has_nothrow_copy">has_nothrow_copy</a></li>
-<li><a href="reference/has_nothrow_assign.html" title="has_nothrow_assign">has_nothrow_assign</a></li>
-<li><a href="reference/has_virtual_destructor.html" title="has_virtual_destructor">has_virtual_destructor</a></li>
+<li><a href="reference/is_union.html" title=" is_union">is_union</a></li>
+<li><a href="reference/is_pod.html" title=" is_pod">is_pod</a></li>
+<li><a href="reference/has_trivial_constructor.html" title="
+      has_trivial_constructor">has_trivial_constructor</a></li>
+<li><a href="reference/has_trivial_copy.html" title=" has_trivial_copy">has_trivial_copy</a></li>
+<li><a href="reference/has_trivial_assign.html" title=" has_trivial_assign">has_trivial_assign</a></li>
+<li><a href="reference/has_trivial_destructor.html" title=" has_trivial_destructor">has_trivial_destructor</a></li>
+<li><a href="reference/has_nothrow_constructor.html" title="
+      has_nothrow_constructor">has_nothrow_constructor</a></li>
+<li><a href="reference/has_nothrow_copy.html" title=" has_nothrow_copy">has_nothrow_copy</a></li>
+<li><a href="reference/has_nothrow_assign.html" title=" has_nothrow_assign">has_nothrow_assign</a></li>
+<li><a href="reference/has_virtual_destructor.html" title=" has_virtual_destructor">has_virtual_destructor</a></li>
 </ul></div>
 <p>
       The following traits classes can't be portably implemented in the C++ language,
@@ -55,15 +56,15 @@
       all the compilers we know about:
     </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="reference/is_empty.html" title="is_empty">is_empty</a></li>
-<li><a href="reference/is_polymorphic.html" title="is_polymorphic">is_polymorphic</a></li>
+<li><a href="reference/is_empty.html" title=" is_empty">is_empty</a></li>
+<li><a href="reference/is_polymorphic.html" title=" is_polymorphic">is_polymorphic</a></li>
 </ul></div>
 <p>
       The following traits classes are dependent on one or more of the above:
     </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="reference/is_class.html" title="is_class">is_class</a></li>
-<li><a href="reference/is_stateless.html" title="is_stateless">is_stateless</a></li>
+<li><a href="reference/is_class.html" title=" is_class">is_class</a></li>
+<li><a href="reference/is_stateless.html" title=" is_stateless">is_stateless</a></li>
 </ul></div>
 <p>
       The hooks for compiler-intrinsic support are defined in <a href="../../../boost/type_traits/intrinsics.hpp" target="_top">boost/type_traits/intrinsics.hpp</a>,
@@ -71,8 +72,8 @@
       of the following macros:
     </p>
 <div class="table">
-<a name="id498521"></a><p class="title"><b>Table 1.4. Macros for Compiler Intrinsics</b></p>
-<div class="table-contents"><table class="table" summary="Macros for Compiler Intrinsics">
+<a name="id464633"></a><p class="title"><b>Table 1.4. Macros for Compiler Intrinsics</b></p>
+<table class="table" summary="Macros for Compiler Intrinsics">
 <colgroup>
 <col>
 <col>
@@ -174,8 +175,8 @@
           </td>
 <td>
           <p>
-            Should evaluate to true if <code class="computeroutput"><span class="identifier">T</span>
-            <span class="identifier">x</span><span class="special">;</span></code>
+            Should evaluate to true if <tt class="computeroutput"><span class="identifier">T</span>
+            <span class="identifier">x</span><span class="special">;</span></tt>
             can not throw
           </p>
           </td>
@@ -188,7 +189,7 @@
           </td>
 <td>
           <p>
-            Should evaluate to true if <code class="computeroutput"><span class="identifier">T</span><span class="special">(</span><span class="identifier">t</span><span class="special">)</span></code> can not throw
+            Should evaluate to true if <tt class="computeroutput"><span class="identifier">T</span><span class="special">(</span><span class="identifier">t</span><span class="special">)</span></tt> can not throw
           </p>
           </td>
 </tr>
@@ -200,11 +201,11 @@
           </td>
 <td>
           <p>
-            Should evaluate to true if <code class="computeroutput"><span class="identifier">T</span>
+            Should evaluate to true if <tt class="computeroutput"><span class="identifier">T</span>
             <span class="identifier">t</span><span class="special">,</span>
             <span class="identifier">u</span><span class="special">;</span>
             <span class="identifier">t</span> <span class="special">=</span>
-            <span class="identifier">u</span></code> can not throw
+            <span class="identifier">u</span></tt> can not throw
           </p>
           </td>
 </tr>
@@ -221,16 +222,19 @@
           </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break">
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
-      Ramey and Jeremy Siek</small></td>
+      Ramey and Jeremy Siek<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
+        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

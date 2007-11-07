@@ -1,13 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Type Traits that Transform One Type to Another</title>
+<title> Type Traits that
+      Transform One Type to Another</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="up" href="../category.html" title="Type Traits by Category">
-<link rel="prev" href="value_traits/relate.html" title="Relationships Between Two Types">
-<link rel="next" href="alignment.html" title="Synthesizing Types with Specific Alignments">
+<link rel="up" href="../category.html" title=" Type Traits by Category">
+<link rel="prev" href="value_traits/relate.html" title=" Relationships
+        Between Two Types">
+<link rel="next" href="alignment.html" title=" Synthesizing Types
+      with Specific Alignments">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,78 +27,79 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.category.transform"></a><a href="transform.html" title="Type Traits that Transform One Type to Another"> Type Traits that
-      Transform One Type to Another</a>
-</h3></div></div></div>
+<a name="boost_typetraits.category.transform"></a><a href="transform.html" title=" Type Traits that
+      Transform One Type to Another"> Type Traits that
+      Transform One Type to Another</a></h3></div></div></div>
 <p>
         The following templates transform one type to another, based upon some well-defined
-        rule. Each template has a single member called <code class="computeroutput"><span class="identifier">type</span></code>
+        rule. Each template has a single member called <tt class="computeroutput"><span class="identifier">type</span></tt>
         that is the result of applying the transformation to the template argument
-        <code class="computeroutput"><span class="identifier">T</span></code>.
+        <tt class="computeroutput"><span class="identifier">T</span></tt>.
       </p>
 <p>
-        <span class="bold"><strong>Synopsis:</strong></span>
+        <span class="bold"><b>Synopsis:</b></span>
       </p>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/add_const.html" title="add_const">add_const</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/add_const.html" title=" add_const">add_const</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/add_cv.html" title="add_cv">add_cv</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/add_cv.html" title=" add_cv">add_cv</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/add_pointer.html" title="add_pointer">add_pointer</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/add_pointer.html" title=" add_pointer">add_pointer</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/add_reference.html" title="add_reference">add_reference</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/add_reference.html" title=" add_reference">add_reference</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/add_volatile.html" title="add_volatile">add_volatile</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/add_volatile.html" title=" add_volatile">add_volatile</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/decay.html" title="decay">decay</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/decay.html" title=" decay">decay</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/floating_point_promotion.html" title="floating_point_promotion">floating_point_promotion</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/floating_point_promotion.html" title="
+      floating_point_promotion">floating_point_promotion</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/integral_promotion.html" title="integral_promotion">integral_promotion</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/integral_promotion.html" title=" integral_promotion">integral_promotion</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/make_signed.html" title="make_signed">make_signed</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/make_signed.html" title=" make_signed">make_signed</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/make_unsigned.html" title="make_unsigned">make_unsigned</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/make_unsigned.html" title=" make_unsigned">make_unsigned</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/promote.html" title="promote">promote</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/promote.html" title=" promote">promote</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/remove_all_extents.html" title="remove_all_extents">remove_all_extents</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/remove_all_extents.html" title=" remove_all_extents">remove_all_extents</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/remove_const.html" title="remove_const">remove_const</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/remove_const.html" title=" remove_const">remove_const</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/remove_cv.html" title="remove_cv">remove_cv</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/remove_cv.html" title=" remove_cv">remove_cv</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/remove_extent.html" title="remove_extent">remove_extent</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/remove_extent.html" title=" remove_extent">remove_extent</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/remove_pointer.html" title="remove_pointer">remove_pointer</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/remove_pointer.html" title=" remove_pointer">remove_pointer</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/remove_reference.html" title="remove_reference">remove_reference</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/remove_reference.html" title=" remove_reference">remove_reference</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <a href="../reference/remove_volatile.html" title="remove_volatile">remove_volatile</a><span class="special">;</span>
+<span class="keyword">struct</span> <a href="../reference/remove_volatile.html" title=" remove_volatile">remove_volatile</a><span class="special">;</span>
 </pre>
-<a name="boost_typetraits.category.transform.broken_compiler_workarounds_"></a><h5>
-<a name="id496277"></a>
+<a name="boost_typetraits.category.transform.broken_compiler_workarounds_"></a><h4>
+<a name="id462389"></a>
         <a href="transform.html#boost_typetraits.category.transform.broken_compiler_workarounds_">Broken
         Compiler Workarounds:</a>
-      </h5>
+      </h4>
 <p>
         For all of these templates support for partial specialization of class templates
         is required to correctly implement the transformation. On the other hand,
@@ -129,8 +133,8 @@
 </pre>
 <p>
         and the second part provides the library's users with a mechanism to make
-        the above code work not only for <code class="computeroutput"><span class="keyword">char</span></code>,
-        <code class="computeroutput"><span class="keyword">int</span></code> or other built-in type,
+        the above code work not only for <tt class="computeroutput"><span class="keyword">char</span></tt>,
+        <tt class="computeroutput"><span class="keyword">int</span></tt> or other built-in type,
         but for their own types as well:
       </p>
 <pre class="programlisting">
@@ -146,16 +150,20 @@
 </span></pre>
 <p>
         Note that the macro BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION evaluates
-        to nothing on those compilers that <span class="bold"><strong>do</strong></span> support
+        to nothing on those compilers that <span class="bold"><b>do</b></span> support
         partial specialization.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
-      Ramey and Jeremy Siek</small></td>
+      Ramey and Jeremy Siek<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
+        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
