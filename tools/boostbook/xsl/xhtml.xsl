@@ -171,7 +171,7 @@ set       toc,title
                                  $time, ' ', $timezone)"/>
   </xsl:template>
 
-
+  <!-- Footer Copyright -->
   <xsl:template match="copyright" mode="boost.footer">
     <xsl:if test="position() &gt; 1">
       <br/>
@@ -192,6 +192,11 @@ set       toc,title
     </xsl:call-template>
     <xsl:call-template name="gentext.space"/>
     <xsl:apply-templates select="holder" mode="titlepage.mode"/>
+  </xsl:template>
+
+  <!-- Footer License -->
+  <xsl:template match="legalnotice" mode="boost.footer">
+    <xsl:apply-templates select="para" mode="titlepage.mode" />
   </xsl:template>
 
   <xsl:template name="user.footer.content">
@@ -230,10 +235,14 @@ set       toc,title
           </xsl:if>
         </td>
         <td align="right">
-          <small>
-            <xsl:apply-templates select="ancestor::*/*/copyright"
-              mode="boost.footer"/>
-          </small>
+          <div class = "copyright-footer">
+            <small>
+              <xsl:apply-templates select="ancestor::*/*/copyright"
+                mode="boost.footer"/>
+              <xsl:apply-templates select="ancestor::*/*/legalnotice"
+                mode="boost.footer"/>
+            </small>
+          </div>
         </td>
       </tr>
     </table>
