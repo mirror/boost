@@ -30,7 +30,7 @@
           invoke_function_object">
           invoke_function_object</a></h5></div></div></div>
 <a name="fusion.functional.invocation.functions.invoke_fobj.description"></a><h6>
-<a name="id656659"></a>
+<a name="id657008"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.description">Description</a>
           </h6>
 <p>
@@ -43,12 +43,12 @@
             and/or to control the const qualification of a function object.
           </p>
 <a name="fusion.functional.invocation.functions.invoke_fobj.synopsis"></a><h6>
-<a name="id656715"></a>
+<a name="id657063"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
-    <span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">,</span> 
+    <span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <a href="../metafunctions/invoke_fobj.html" title="
@@ -56,7 +56,7 @@
 <span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">Function</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Sequence</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span>
-    <span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">,</span> 
+    <span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">,</span>
     <span class="keyword">class</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <a href="../metafunctions/invoke_fobj.html" title="
@@ -64,7 +64,7 @@
 <span class="identifier">invoke_function_object</span><span class="special">(</span><span class="identifier">Function</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Sequence</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.invocation.functions.invoke_fobj.parameters"></a><h6>
-<a name="id657095"></a>
+<a name="id657444"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -132,7 +132,7 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.invocation.functions.invoke_fobj.expression_semantics"></a><h6>
-<a name="id657256"></a>
+<a name="id657604"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -152,7 +152,7 @@
             /functional/invocation/invoke_function_object.hpp&gt;
           </p>
 <a name="fusion.functional.invocation.functions.invoke_fobj.example"></a><h6>
-<a name="id657399"></a>
+<a name="id657747"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -162,7 +162,7 @@
     <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">;</span>
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Self</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">T</span><span class="special">)</span> <span class="special">&gt;</span> 
+    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">T</span><span class="special">)</span> <span class="special">&gt;</span>
     <span class="special">{</span> <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">type</span><span class="special">;</span> <span class="special">};</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -179,7 +179,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.invocation.functions.invoke_fobj.see_also"></a><h6>
-<a name="id657949"></a>
+<a name="id658297"></a>
             <a href="invoke_fobj.html#fusion.functional.invocation.functions.invoke_fobj.see_also">See
             also</a>
           </h6>
@@ -194,8 +194,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
-      Schwinger</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

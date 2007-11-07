@@ -1,3 +1,10 @@
+[/==============================================================================
+    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
 [library Fusion
     [quickbook 1.3]
     [version 2.0]
@@ -34,7 +41,7 @@
 [def __boost_any__              [@http://boost.org/doc/html/any.html Boost.Any]]
 [def __new_iterator_concepts__  [@http://boost.org/libs/iterator/doc/new-iter-concepts.html New Iterator Concepts]]
 [def __boost_array_library__    [@http://www.boost.org/doc/html/array.html Boost.Array Library]]
-[def __boost_variant_library__    [@http://www.boost.org/doc/html/variant.html Boost.Variant Library]]
+[def __boost_variant_library__  [@http://www.boost.org/doc/html/variant.html Boost.Variant Library]]
 [def __boost_tuple_library__    [@http://www.boost.org/libs/tuple/doc/tuple_users_guide.html Boost.Tuple Library]]
 [def __boost_ref__              [@http://www.boost.org/doc/html/ref.html Boost.Ref]]
 [def __boost_ref_call__         [@http://www.boost.org/doc/html/ref.html `ref`]]

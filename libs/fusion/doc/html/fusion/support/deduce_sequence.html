@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.support.deduce_sequence"></a><a href="deduce_sequence.html" title="deduce_sequence">deduce_sequence</a></h3></div></div></div>
 <a name="fusion.support.deduce_sequence.description"></a><h4>
-<a name="id465038"></a>
+<a name="id465139"></a>
         <a href="deduce_sequence.html#fusion.support.deduce_sequence.description">Description</a>
       </h4>
 <p>
@@ -39,7 +39,7 @@
         original type as its argument.
       </p>
 <a name="fusion.support.deduce_sequence.header"></a><h4>
-<a name="id465099"></a>
+<a name="id465200"></a>
         <a href="deduce_sequence.html#fusion.support.deduce_sequence.header">Header</a>
       </h4>
 <pre class="programlisting">
@@ -47,13 +47,13 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">deduce_sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.deduce_sequence.synopsis"></a><h4>
-<a name="id465257"></a>
+<a name="id465358"></a>
         <a href="deduce_sequence.html#fusion.support.deduce_sequence.synopsis">Synopsis</a>
       </h4>
 <pre class="programlisting">
 <span class="keyword">namespace</span> <span class="identifier">traits</span>
 <span class="special">{</span>
-    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Sequence</span><span class="special">&gt;</span> 
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">deduce_sequence</span>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
@@ -61,7 +61,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.support.deduce_sequence.example"></a><h4>
-<a name="id465389"></a>
+<a name="id465490"></a>
         <a href="deduce_sequence.html#fusion.support.deduce_sequence.example">Example</a>
       </h4>
 <pre class="programlisting">
@@ -76,23 +76,26 @@
 <span class="special">};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T0</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">&gt;</span>
-<span class="identifier">holder</span><span class="special">&lt;</span> <a href="../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="identifier">T0</span> <span class="keyword">const</span> <span class="special">&amp;,</span> <span class="identifier">T1</span> <span class="keyword">const</span> <span class="special">&amp;&gt;</span> <span class="special">&gt;</span> 
+<span class="identifier">holder</span><span class="special">&lt;</span> <a href="../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="identifier">T0</span> <span class="keyword">const</span> <span class="special">&amp;,</span> <span class="identifier">T1</span> <span class="keyword">const</span> <span class="special">&amp;&gt;</span> <span class="special">&gt;</span>
 <span class="identifier">make_holder</span><span class="special">(</span><span class="identifier">T0</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a0</span><span class="special">,</span> <span class="identifier">T1</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a1</span><span class="special">)</span>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <a href="../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="identifier">T0</span> <span class="keyword">const</span> <span class="special">&amp;,</span> <span class="identifier">T1</span> <span class="keyword">const</span> <span class="special">&amp;&gt;</span> <span class="identifier">arg_vec_t</span><span class="special">;</span>
-    <span class="keyword">return</span> <span class="identifier">holder</span><span class="special">&lt;</span><span class="identifier">arg_vec_t</span><span class="special">&gt;(</span> <span class="identifier">arg_vec_t</span><span class="special">(</span><span class="identifier">a0</span><span class="special">,</span><span class="identifier">a1</span><span class="special">)</span> <span class="special">);</span> 
+    <span class="keyword">return</span> <span class="identifier">holder</span><span class="special">&lt;</span><span class="identifier">arg_vec_t</span><span class="special">&gt;(</span> <span class="identifier">arg_vec_t</span><span class="special">(</span><span class="identifier">a0</span><span class="special">,</span><span class="identifier">a1</span><span class="special">)</span> <span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <a name="fusion.support.deduce_sequence.see_also"></a><h4>
-<a name="id465948"></a>
+<a name="id466049"></a>
         <a href="deduce_sequence.html#fusion.support.deduce_sequence.see_also">See also</a>
       </h4>
 <div class="itemizedlist"><ul type="disc"><li><a href="deduce.html" title="deduce"><tt class="computeroutput"><span class="identifier">deduce</span></tt></a></li></ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
-      Schwinger</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

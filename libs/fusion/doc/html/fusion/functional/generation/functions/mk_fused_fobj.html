@@ -31,7 +31,7 @@
           make_fused_function_object">
           make_fused_function_object</a></h5></div></div></div>
 <a name="fusion.functional.generation.functions.mk_fused_fobj.description"></a><h6>
-<a name="id673994"></a>
+<a name="id674349"></a>
             <a href="mk_fused_fobj.html#fusion.functional.generation.functions.mk_fused_fobj.description">Description</a>
           </h6>
 <p>
@@ -42,7 +42,7 @@
             conversion</em></span></a> is applied to the target function.
           </p>
 <a name="fusion.functional.generation.functions.mk_fused_fobj.synopsis"></a><h6>
-<a name="id674065"></a>
+<a name="id674420"></a>
             <a href="mk_fused_fobj.html#fusion.functional.generation.functions.mk_fused_fobj.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -52,7 +52,7 @@
 <span class="identifier">make_fused_function_object</span><span class="special">(</span><span class="identifier">F</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <a name="fusion.functional.generation.functions.mk_fused_fobj.parameters"></a><h6>
-<a name="id674221"></a>
+<a name="id674576"></a>
             <a href="mk_fused_fobj.html#fusion.functional.generation.functions.mk_fused_fobj.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -99,7 +99,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.generation.functions.mk_fused_fobj.expression_semantics"></a><h6>
-<a name="id674336"></a>
+<a name="id674691"></a>
             <a href="mk_fused_fobj.html#fusion.functional.generation.functions.mk_fused_fobj.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -114,7 +114,7 @@
             for <tt class="computeroutput"><span class="identifier">f</span></tt>.
           </p>
 <a name="fusion.functional.generation.functions.mk_fused_fobj.header"></a><h6>
-<a name="id674464"></a>
+<a name="id674818"></a>
             <a href="mk_fused_fobj.html#fusion.functional.generation.functions.mk_fused_fobj.header">Header</a>
           </h6>
 <pre class="programlisting">
@@ -122,7 +122,7 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">make_fused_function_object</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.generation.functions.mk_fused_fobj.example"></a><h6>
-<a name="id674635"></a>
+<a name="id674990"></a>
             <a href="mk_fused_fobj.html#fusion.functional.generation.functions.mk_fused_fobj.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -132,7 +132,7 @@
     <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">;</span>
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Self</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">T</span><span class="special">)</span> <span class="special">&gt;</span> 
+    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">T</span><span class="special">)</span> <span class="special">&gt;</span>
     <span class="special">{</span> <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">type</span><span class="special">;</span> <span class="special">};</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -151,7 +151,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.generation.functions.mk_fused_fobj.see_also"></a><h6>
-<a name="id675375"></a>
+<a name="id675729"></a>
             <a href="mk_fused_fobj.html#fusion.functional.generation.functions.mk_fused_fobj.see_also">See
             also</a>
           </h6>
@@ -164,8 +164,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
-      Schwinger</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

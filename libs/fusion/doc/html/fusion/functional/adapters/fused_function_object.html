@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.fused_function_object"></a><a href="fused_function_object.html" title="fused_function_object">fused_function_object</a></h4></div></div></div>
 <a name="fusion.functional.adapters.fused_function_object.description"></a><h5>
-<a name="id661713"></a>
+<a name="id662065"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.description">Description</a>
         </h5>
 <p>
@@ -49,7 +49,7 @@
           /functional/adapter/fused_function_object.hpp&gt;
         </p>
 <a name="fusion.functional.adapters.fused_function_object.synopsis"></a><h5>
-<a name="id661794"></a>
+<a name="id662147"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -57,7 +57,7 @@
 <span class="keyword">class</span> <span class="identifier">fused_function_object</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.template_parameters"></a><h5>
-<a name="id661877"></a>
+<a name="id662231"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.template_parameters">Template
           parameters</a>
         </h5>
@@ -104,7 +104,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_function_object.model_of"></a><h5>
-<a name="id661994"></a>
+<a name="id662348"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.model_of">Model
           of</a>
         </h5>
@@ -141,7 +141,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_function_object.expression_semantics"></a><h5>
-<a name="id662215"></a>
+<a name="id662568"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -205,7 +205,7 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_function_object.example"></a><h5>
-<a name="id662471"></a>
+<a name="id662825"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -214,9 +214,9 @@
     <span class="identifier">fused_function_object</span><span class="special">&lt;</span><span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">n_ary_transform</span><span class="special">(</span><span class="identifier">SeqOfSeqs</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">f</span><span class="special">)</span>
 <span class="special">{</span>
-    <span class="keyword">return</span> <a href="../../algorithm/transformation/functions/transform.html" title="transform"><tt class="computeroutput"><span class="identifier">transform</span></tt></a><span class="special">(</span><span class="identifier">zip_view</span><span class="special">&lt;</span><span class="identifier">SeqOfSeqs</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">),</span> 
+    <span class="keyword">return</span> <a href="../../algorithm/transformation/functions/transform.html" title="transform"><tt class="computeroutput"><span class="identifier">transform</span></tt></a><span class="special">(</span><span class="identifier">zip_view</span><span class="special">&lt;</span><span class="identifier">SeqOfSeqs</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">),</span>
         <span class="identifier">fused_function_object</span><span class="special">&lt;</span><span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;&gt;(</span><span class="identifier">f</span><span class="special">));</span>
-<span class="special">}</span> 
+<span class="special">}</span>
 
 <span class="keyword">struct</span> <span class="identifier">sub</span>
 <span class="special">{</span>
@@ -224,7 +224,7 @@
     <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">;</span>
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Self</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">T</span><span class="special">)</span> <span class="special">&gt;</span> 
+    <span class="keyword">struct</span> <span class="identifier">result</span><span class="special">&lt;</span> <span class="identifier">Self</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">T</span><span class="special">)</span> <span class="special">&gt;</span>
     <span class="special">{</span> <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">type</span><span class="special">;</span> <span class="special">};</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -243,7 +243,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_function_object.see_also"></a><h5>
-<a name="id663529"></a>
+<a name="id663883"></a>
           <a href="fused_function_object.html#fusion.functional.adapters.fused_function_object.see_also">See
           also</a>
         </h5>
@@ -257,8 +257,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
-      Schwinger</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

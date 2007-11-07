@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.fused_procedure"></a><a href="fused_procedure.html" title="fused_procedure">fused_procedure</a></h4></div></div></div>
 <a name="fusion.functional.adapters.fused_procedure.description"></a><h5>
-<a name="id660152"></a>
+<a name="id660500"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.description">Description</a>
         </h5>
 <p>
@@ -66,7 +66,7 @@
           /functional/adapter/fused_procedure.hpp&gt;
         </p>
 <a name="fusion.functional.adapters.fused_procedure.synopsis"></a><h5>
-<a name="id660316"></a>
+<a name="id660669"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -74,7 +74,7 @@
 <span class="keyword">class</span> <span class="identifier">fused_procedure</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.template_parameters"></a><h5>
-<a name="id660397"></a>
+<a name="id660750"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.template_parameters">Template
           parameters</a>
         </h5>
@@ -120,7 +120,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.model_of"></a><h5>
-<a name="id660512"></a>
+<a name="id660865"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.model_of">Model
           of</a>
         </h5>
@@ -156,7 +156,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_procedure.expression_semantics"></a><h5>
-<a name="id660732"></a>
+<a name="id661086"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -220,16 +220,16 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.example"></a><h5>
-<a name="id660989"></a>
+<a name="id661343"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.example">Example</a>
         </h5>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SequenceOfSequences</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Func</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">n_ary_for_each</span><span class="special">(</span><span class="identifier">SequenceOfSequences</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">f</span><span class="special">)</span>
 <span class="special">{</span>
-    <a href="../../algorithm/iteration/functions/for_each.html" title="for_each"><tt class="computeroutput"><span class="identifier">for_each</span></tt></a><span class="special">(</span><a href="../../view/zip_view.html" title="zip_view"><tt class="computeroutput"><span class="identifier">zip_view</span></tt></a><span class="special">&lt;</span><span class="identifier">SequenceOfSequences</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">),</span> 
+    <a href="../../algorithm/iteration/functions/for_each.html" title="for_each"><tt class="computeroutput"><span class="identifier">for_each</span></tt></a><span class="special">(</span><a href="../../view/zip_view.html" title="zip_view"><tt class="computeroutput"><span class="identifier">zip_view</span></tt></a><span class="special">&lt;</span><span class="identifier">SequenceOfSequences</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">),</span>
         <span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;&gt;(</span><span class="identifier">f</span><span class="special">));</span>
-<span class="special">}</span> 
+<span class="special">}</span>
 
 <span class="keyword">void</span> <span class="identifier">try_it</span><span class="special">()</span>
 <span class="special">{</span>
@@ -241,7 +241,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.see_also"></a><h5>
-<a name="id661597"></a>
+<a name="id661951"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.see_also">See
           also</a>
         </h5>
@@ -254,8 +254,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
-      Schwinger</small></td>
+<td align="right"><div class="copyright-footer"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p></small></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

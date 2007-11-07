@@ -1,9 +1,16 @@
+[/==============================================================================
+    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
 [section Change log]
 
 This section summarizes significant changes to the Fusion library.
 
 * Sep 27, 2006: Added `boost::tuple` support.
 * Nov 17, 2006: Added `boost::variant` support.
-* Feb 15, 2007: Added functional module. 
+* Feb 15, 2007: Added functional module.
 
 [endsect]

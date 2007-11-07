@@ -1,3 +1,10 @@
+[/==============================================================================
+    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
 [section Preface]
 
 [:['["Algorithms + Data Structures = Programs.]]]
@@ -13,32 +20,32 @@ as sequences, and Fusion has a suite of algorithms that operate upon the
 various sequence types, using an iterator concept that binds everything
 together.
 
-The architecture is modeled after __mpl__ which in turn is modeled after 
-__stl__. It is named "fusion" because the library is a "fusion" of compile 
-time metaprogramming with runtime programming. 
+The architecture is modeled after __mpl__ which in turn is modeled after
+__stl__. It is named "fusion" because the library is a "fusion" of compile
+time metaprogramming with runtime programming.
 
 [heading Motivation]
 
-Tuples are powerful beasts. After having developed two significant projects 
+Tuples are powerful beasts. After having developed two significant projects
 (__spirit__ and __phoenix__) that relied heavily metaprogramming, it
-became apparent that tuples are a powerful means to simplify otherwise tricky 
-tasks; especially those that require a combination of metaprogramming and 
-manipulation of heterogenous data types with values. While __mpl__ is an 
-extremely powerful metaprogramming tool, __mpl__ focuses on type 
-manipulation only. Ultimately, you'll have to map these types to real 
-values to make them useful in the runtime world where all the real action 
-takes place. 
+became apparent that tuples are a powerful means to simplify otherwise tricky
+tasks; especially those that require a combination of metaprogramming and
+manipulation of heterogenous data types with values. While __mpl__ is an
+extremely powerful metaprogramming tool, __mpl__ focuses on type
+manipulation only. Ultimately, you'll have to map these types to real
+values to make them useful in the runtime world where all the real action
+takes place.
 
-As __spirit__ and __phoenix__ evolved, patterns and idioms related to tuple 
-manipulation emerged. Soon, it became clear that those patterns and idioms 
-were best assembled in a tuples algorithms library. __david_abrahams__ 
-outlined such a scheme in 2002. At that time, it just so happened that 
-__spirit__ and __phoenix__ had an adhoc collection of tuple manipulation 
+As __spirit__ and __phoenix__ evolved, patterns and idioms related to tuple
+manipulation emerged. Soon, it became clear that those patterns and idioms
+were best assembled in a tuples algorithms library. __david_abrahams__
+outlined such a scheme in 2002. At that time, it just so happened that
+__spirit__ and __phoenix__ had an adhoc collection of tuple manipulation
 and traversal routines. It was an instant /AHA!/ moment.
 
 [heading How to use this manual]
 
-Some icons are used to mark certain topics indicative of their relevance. 
+Some icons are used to mark certain topics indicative of their relevance.
 These icons precede some text to indicate:
 
 [table Icons

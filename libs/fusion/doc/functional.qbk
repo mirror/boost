@@ -1,3 +1,10 @@
+[/==============================================================================
+    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
 [section Functional]
 
 Components to call functions and function objects and to make Fusion code
@@ -11,7 +18,7 @@ What is a function call?
 
     f (a,b,c)
 
-It is a name and a tuple written next to each other, left-to-right. 
+It is a name and a tuple written next to each other, left-to-right.
 
 Although the C++ syntax does not allow to replace [^(a,b,c)] with some Fusion
 __sequence__, introducing yet another function provides a solution:
@@ -23,27 +30,27 @@ to achieve the same effect:
 
    f tuple <=> ``f'`` (tuple)
 
-Now, [^f'] is an unary function that takes the arguments to `f` as a tuple;  
+Now, [^f'] is an unary function that takes the arguments to `f` as a tuple;
 [^f'] is the /fused/ form of `f`.
-Reading the above equivalence right-to-left to get the inverse transformation, 
+Reading the above equivalence right-to-left to get the inverse transformation,
 `f` is the /unfused/ form of [^f'].
 
 [heading Calling functions and function objects]
 
 Having generic C++ code call back arbitrary functions provided by the client
-used to be a heavily repetitive task, as different functions can differ in 
+used to be a heavily repetitive task, as different functions can differ in
 arity, invocation syntax and other properties that might be part of the type.
 Transporting arguments as Fusion sequences and factoring out the invocation
-makes Fusion algorithms applicable to function arguments and also reduces 
+makes Fusion algorithms applicable to function arguments and also reduces
 the problem to one invocation syntax and a fixed arity (instead of an arbitrary
 number of arbitrary arguments times several syntactic variants times additional
 properties).
 
 Transforming an unfused function into its fused counterpart allows n-ary
 calls from an algorithm that invokes an unary __poly_func_obj__ with
-__sequence__ arguments. 
+__sequence__ arguments.
 
-The library provides several function templates to invoke different kinds of 
+The library provides several function templates to invoke different kinds of
 functions and adapters to transform them into fused form, respectively.
 Every variant has a corresponding generator function template that returns
 an adapter instance for the given argument.
@@ -52,13 +59,13 @@ an adapter instance for the given argument.
 
 Transforming a fused function into its unfused counterpart allows to create
 function objects to accept arbitrary calls. In other words, an unary function
-object can be implemented instead of (maybe heavily overloaded) function 
+object can be implemented instead of (maybe heavily overloaded) function
 templates or function call operators.
 
-The library provides several adapter variants that implement this 
-transformation, ranging from strictly typed to fully generic. The latter 
+The library provides several adapter variants that implement this
+transformation, ranging from strictly typed to fully generic. The latter
 provides a reusable, approximate solution to __the_forwarding_problem__.
-Every generic variant has a corresponding generator function template that 
+Every generic variant has a corresponding generator function template that
 returns an adapter instance for the given argument.
 
 [/ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ]
@@ -70,7 +77,7 @@ returns an adapter instance for the given argument.
 
 [heading Description]
 
-A pointer to a function, a pointer to member function, a pointer to member 
+A pointer to a function, a pointer to member function, a pointer to member
 data, or a class type whose objects can appear immediately to the left of a
 function call operator.
 
@@ -90,7 +97,7 @@ function call operator.
   bind(std::less<int>(), _1, 5)
   lambda::_1 += lambda::_2;
   fusion::__make_fused_function_object__(std::less<int>())
-  
+
 
 [endsect]
 
@@ -99,8 +106,8 @@ function call operator.
 
 [heading Description]
 
-A non-member-pointer __callable_obj__ type: A pointer to a function or a class 
-type whose objects can appear immediately to the left of a function call operator. 
+A non-member-pointer __callable_obj__ type: A pointer to a function or a class
+type whose objects can appear immediately to the left of a function call operator.
 
 [heading Refinement of]
 * __callable_obj__
@@ -132,7 +139,7 @@ type whose objects can appear immediately to the left of a function call operato
   bind(std::less<int>(), _1, 5)
   lambda::_1 += lambda::_2;
   fusion::__make_fused_function_object__(std::less<int>())
-  
+
 [endsect]
 
 
@@ -140,15 +147,15 @@ type whose objects can appear immediately to the left of a function call operato
 
 [heading Description]
 
-__callable_obj__ types that work with __boost_result_of__ to determine the 
+__callable_obj__ types that work with __boost_result_of__ to determine the
 result of a call.
 
 [heading Refinement of]
 * __callable_obj__
 
-[blurb note Once C++ supports the [^decltype] keyword, all models of 
-__callable_obj__ will also be models of __def_callable_obj__, because 
-function objects won't need client-side support for `result_of`. 
+[blurb note Once C++ supports the [^decltype] keyword, all models of
+__callable_obj__ will also be models of __def_callable_obj__, because
+function objects won't need client-side support for `result_of`.
 ]
 
 [variablelist Notation
@@ -186,13 +193,13 @@ function objects won't need client-side support for `result_of`.
 
 [section:poly Polymorphic Function Object]
 
-[heading Description] 
+[heading Description]
 
 A non-member-pointer __def_callable_obj__ type.
 
 [heading Refinement of]
 * __reg_callable_obj__
-* __def_callable_obj__ 
+* __def_callable_obj__
 
 [variablelist Notation
     [[`F`][A possibly const-qualified Polymorphic Function Object type]]
@@ -245,24 +252,24 @@ The first template parameter can be specialized explicitly to avoid copying
 and/or to control the const qualification of a function object.
 
 If the target function is a pointer to a class members, the corresponding
-object can be specified as a reference, pointer, or smart pointer. 
-In case of the latter, a freestanding [^get_pointer] function must be 
-defined (Boost provides this function for [^std::auto_ptr] and 
+object can be specified as a reference, pointer, or smart pointer.
+In case of the latter, a freestanding [^get_pointer] function must be
+defined (Boost provides this function for [^std::auto_ptr] and
 __boost_shared_ptr_call__).
 
 [heading Synopsis]
     template<
-        typename Function, 
+        typename Function,
         class Sequence
         >
     typename __result_of_invoke__<Function, Sequence>::type
     invoke(Function f, Sequence & s);
 
     template<
-        typename Function, 
+        typename Function,
         class Sequence
         >
-    typename __result_of_invoke__<Function, Sequence const>::type 
+    typename __result_of_invoke__<Function, Sequence const>::type
     invoke(Function f, Sequence const & s);
 
 [heading Parameters]
@@ -279,7 +286,7 @@ __boost_shared_ptr_call__).
 [*Return type]: Return type of `f` when invoked with the elements in `s` as its
 arguments.
 
-[*Semantics]: Invokes `f` with the elements in `s` as arguments and returns 
+[*Semantics]: Invokes `f` with the elements in `s` as arguments and returns
 the result of the call expression.
 
 /functional/invocation/invoke.hpp>
@@ -308,7 +315,7 @@ and/or to control the const qualification of a function object.
 
 For pointers to class members corresponding object can be specified as
 a reference, pointer, or smart pointer. In case of the latter, a freestanding
-[^get_pointer] function must be defined (Boost provides this function for 
+[^get_pointer] function must be defined (Boost provides this function for
 [^std::auto_ptr] and __boost_shared_ptr_call__).
 
 The target function must not be a pointer to a member object (dereferencing
@@ -317,14 +324,14 @@ implemented).
 
 [heading Synopsis]
     template<
-        typename Function, 
+        typename Function,
         class Sequence
         >
     typename __result_of_invoke_procedure__<Function, Sequence>::type
     invoke_procedure(Function f, Sequence & s);
 
     template<
-        typename Function, 
+        typename Function,
         class Sequence
         >
     typename __result_of_invoke_procedure__<Function, Sequence const>::type
@@ -372,14 +379,14 @@ and/or to control the const qualification of a function object.
 
 [heading Synopsis]
     template<
-        typename Function, 
+        typename Function,
         class Sequence
         >
     typename __result_of_invoke_function_object__<Function, Sequence>::type
     invoke_function_object(Function f, Sequence & s);
 
     template<
-        typename Function, 
+        typename Function,
         class Sequence
         >
     typename __result_of_invoke_function_object__<Function, Sequence const>::type
@@ -411,7 +418,7 @@ result of the call expression.
         struct result;
 
         template <class Self, typename T>
-        struct result< Self(T,T) > 
+        struct result< Self(T,T) >
         { typedef typename remove_reference<T>::type type; };
 
         template<typename T>
@@ -448,9 +455,9 @@ Returns the result type of __invoke__.
     namespace result_of
     {
         template<
-            typename Function, 
+            typename Function,
             class Sequence
-            > 
+            >
         struct invoke
         {
             typedef __unspecified__ type;
@@ -472,9 +479,9 @@ Returns the result type of __invoke_procedure__.
     namespace result_of
     {
         template<
-            typename Function, 
+            typename Function,
             class Sequence
-            > 
+            >
         struct invoke_procedure
         {
             typedef __unspecified__ type;
@@ -496,9 +503,9 @@ Returns the result type of __invoke_function_object__.
     namespace result_of
     {
         template<
-            class Function, 
+            class Function,
             class Sequence
-            > 
+            >
         struct invoke_function_object
         {
             typedef __unspecified__ type;
@@ -527,11 +534,11 @@ Function object templates to transform a particular target function.
 
 An unary __poly_func_obj__ adapter template for __def_callable_obj__ target
 functions. It takes a __forward_sequence__ that contains the arguments for the
-target function. 
+target function.
 
-The type of the target function is allowed to be const qualified or a 
-reference. Const qualification is preserved and propagated appropriately 
-(in other words, only const versions of [^operator()] can be used for a 
+The type of the target function is allowed to be const qualified or a
+reference. Const qualification is preserved and propagated appropriately
+(in other words, only const versions of [^operator()] can be used for a
 target function object that is const or, if the target function object
 is held by value, the adapter is const - these semantics have nothing to
 do with the const qualification of a member function, which is referring
@@ -539,9 +546,9 @@ to the type of object pointed to by [^this] which is specified with the
 first element in the sequence passed to the adapter).
 
 If the target function is a pointer to a class members, the corresponding
-object can be specified as a reference, pointer, or smart pointer. 
-In case of the latter, a freestanding [^get_pointer] function must be 
-defined (Boost provides this function for [^std::auto_ptr] and 
+object can be specified as a reference, pointer, or smart pointer.
+In case of the latter, a freestanding [^get_pointer] function must be
+defined (Boost provides this function for [^std::auto_ptr] and
 __boost_shared_ptr_call__).
 
 /functional/adapter/fused.hpp>
@@ -559,13 +566,13 @@ __boost_shared_ptr_call__).
 
 [heading Model of]
 
-* __poly_func_obj__ 
+* __poly_func_obj__
 * __def_callable_obj__
 
 [variablelist Notation
     [[`R`] [A possibly const qualified __def_callable_obj__ type or reference type thereof]]
-    [[`r`] [An object convertible to `R`]] 
-    [[`s`] [A __sequence__ of arguments that are accepted by `r`]] 
+    [[`r`] [An object convertible to `R`]]
+    [[`s`] [A __sequence__ of arguments that are accepted by `r`]]
     [[`f`] [An instance of `fused<R>`]]
 ]
 
@@ -596,13 +603,13 @@ __boost_shared_ptr_call__).
 [heading Description]
 
 An unary __poly_func_obj__ adapter template for __callable_obj__ target
-functions. It takes a __forward_sequence__ that contains the arguments for 
+functions. It takes a __forward_sequence__ that contains the arguments for
 the target function.
 
 The result is discared and the adapter's return type is `void`.
 
-The type of the target function is allowed to be const qualified or a 
-reference. Const qualification is preserved and propagated appropriately 
+The type of the target function is allowed to be const qualified or a
+reference. Const qualification is preserved and propagated appropriately
 (in other words, only const versions of [^operator()] can be used for a
 target function object that is const or, if the target function object
 is held by value, the adapter is const - these semantics have nothing to
@@ -611,9 +618,9 @@ to the type of object pointed to by [^this] which is specified with the
 first element in the sequence passed to the adapter).
 
 If the target function is a pointer to a members function, the corresponding
-object can be specified as a reference, pointer, or smart pointer. 
-In case of the latter, a freestanding [^get_pointer] function must be 
-defined (Boost provides this function for [^std::auto_ptr] and 
+object can be specified as a reference, pointer, or smart pointer.
+In case of the latter, a freestanding [^get_pointer] function must be
+defined (Boost provides this function for [^std::auto_ptr] and
 __boost_shared_ptr_call__).
 
 The target function must not be a pointer to a member object (dereferencing
@@ -635,13 +642,13 @@ is not implemented).
 
 [heading Model of]
 
-* __poly_func_obj__ 
-* __def_callable_obj__ 
+* __poly_func_obj__
+* __def_callable_obj__
 
 [variablelist Notation
     [[`R`] [A possibly const qualified __callable_obj__ type or reference type thereof]]
-    [[`r`] [An object convertible to `R`]] 
-    [[`s`] [A __sequence__ of arguments that are accepted by `r`]] 
+    [[`r`] [An object convertible to `R`]]
+    [[`s`] [A __sequence__ of arguments that are accepted by `r`]]
     [[`f`] [An instance of `fused<R>`]]
 ]
 
@@ -658,9 +665,9 @@ is not implemented).
     template<class SequenceOfSequences, class Func>
     void n_ary_for_each(SequenceOfSequences const & s, Func const & f)
     {
-        __for_each__(__zip_view__<SequenceOfSequences>(s), 
+        __for_each__(__zip_view__<SequenceOfSequences>(s),
             fused_procedure<Func const &>(f));
-    } 
+    }
 
     void try_it()
     {
@@ -684,12 +691,12 @@ is not implemented).
 [heading Description]
 
 An unary __poly_func_obj__ adapter template for a __poly_func_obj__ target
-function. It takes a __forward_sequence__ that contains the arguments for the 
+function. It takes a __forward_sequence__ that contains the arguments for the
 target function.
 
-The type of the target function is allowed to be const qualified or a 
-reference. Const qualification is preserved and propagated appropriately 
-(in other words, only const versions of [^operator()] can be used for an 
+The type of the target function is allowed to be const qualified or a
+reference. Const qualification is preserved and propagated appropriately
+(in other words, only const versions of [^operator()] can be used for an
 target function object that is const or, if the target function object
 is held by value, the adapter is const).
 
@@ -708,13 +715,13 @@ is held by value, the adapter is const).
 
 [heading Model of]
 
-* __poly_func_obj__ 
-* __def_callable_obj__ 
+* __poly_func_obj__
+* __def_callable_obj__
 
 [variablelist Notation
     [[`R`] [A possibly const qualified __poly_func_obj__ type or reference type thereof]]
-    [[`r`] [An object convertible to `R`]] 
-    [[`s`] [A __sequence__ of arguments that are accepted by `r`]] 
+    [[`r`] [An object convertible to `R`]]
+    [[`s`] [A __sequence__ of arguments that are accepted by `r`]]
     [[`f`] [An instance of `fused<R>`]]
 ]
 
@@ -733,9 +740,9 @@ is held by value, the adapter is const).
         fused_function_object<Func const &> >::type
     n_ary_transform(SeqOfSeqs const & s, Func const & f)
     {
-        return __transform__(zip_view<SeqOfSeqs>(s), 
+        return __transform__(zip_view<SeqOfSeqs>(s),
             fused_function_object<Func const &>(f));
-    } 
+    }
 
     struct sub
     {
@@ -743,7 +750,7 @@ is held by value, the adapter is const).
         struct result;
 
         template <class Self, typename T>
-        struct result< Self(T,T) > 
+        struct result< Self(T,T) >
         { typedef typename remove_reference<T>::type type; };
 
         template<typename T>
@@ -776,20 +783,20 @@ is held by value, the adapter is const).
 [heading Description]
 
 An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
-target function. When called, its arguments are bundled to a 
+target function. When called, its arguments are bundled to a
 __random_access_sequence__ of references that is passed to the target function.
-Non-const __lvalue__ arguments are transported as references to non-const, otherwise 
-references to const are used. 
+Non-const __lvalue__ arguments are transported as references to non-const, otherwise
+references to const are used.
 
-[blurb __tip__ Detecting mutable LValues on a per-argument basis is currently a 
-compile time expensive operation (see __the_forwarding_problem__ for 
-details). Therefore, there are two, lightweight and more restricted variants 
+[blurb __tip__ Detecting mutable LValues on a per-argument basis is currently a
+compile time expensive operation (see __the_forwarding_problem__ for
+details). Therefore, there are two, lightweight and more restricted variants
 of this class template, __unfused_lvalue_args__ and __unfused_rvalue_args__.]
 
-The type of the target function is allowed to be const qualified or a 
-reference. Const qualification is preserved and propagated appropriately 
-(in other words, only const versions of [^operator()] can be used if 
-the target function object is const - or, in case the target function 
+The type of the target function is allowed to be const qualified or a
+reference. Const qualification is preserved and propagated appropriately
+(in other words, only const versions of [^operator()] can be used if
+the target function object is const - or, in case the target function
 object is held by value, the adapter is const).
 
 /functional/adapter/unfused_generic.hpp>
@@ -797,7 +804,7 @@ object is held by value, the adapter is const).
 [heading Synopsis]
     template <class Function>
     class unfused_generic;
-    
+
 [heading Template parameters]
 
 [table
@@ -808,14 +815,14 @@ object is held by value, the adapter is const).
 [heading Model of]
 
 * __poly_func_obj__
-* __def_callable_obj__ 
+* __def_callable_obj__
 
 [variablelist Notation
     [[`F`]         [A possibly const qualified, unary __poly_func_obj__ type or reference type thereof]]
-    [[`f`]         [An object convertible to `F`]] 
+    [[`f`]         [An object convertible to `F`]]
     [[`UG`]        [The type `unfused_generic<F>`]]
     [[`ug`]        [An instance of `UG`, initialized with `f`]]
-    [[`a0`...`aN`] [Arguments to `ug`]] 
+    [[`a0`...`aN`] [Arguments to `ug`]]
 ]
 
 [heading Expression Semantics]
@@ -856,11 +863,11 @@ object is held by value, the adapter is const).
     };
 
     template <typename Function, typename T>
-    unfused_generic< fused_bound_1st<Function,T> > 
+    unfused_generic< fused_bound_1st<Function,T> >
     bind_1st(Function f, T const & x)
     {
         return unfused_generic< fused_bound_1st<Function,T> >(
-            fused_bound_1st<Function,T>(f,x) ); 
+            fused_bound_1st<Function,T>(f,x) );
     }
 
     int test_func(int a, int b, int c)
@@ -889,14 +896,14 @@ object is held by value, the adapter is const).
 [heading Description]
 
 An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
-target function. When called, its arguments are bundled to a 
+target function. When called, its arguments are bundled to a
 __random_access_sequence__ of references that is passed to the target function
-object. Only __lvalue__ arguments are accepted. 
+object. Only __lvalue__ arguments are accepted.
 
-The type of the target function is allowed to be const qualified or a 
-reference. Const qualification is preserved and propagated appropriately 
-(in other words, only const versions of [^operator()] can be used if 
-the target function object is const - or, in case the target function 
+The type of the target function is allowed to be const qualified or a
+reference. Const qualification is preserved and propagated appropriately
+(in other words, only const versions of [^operator()] can be used if
+the target function object is const - or, in case the target function
 object is held by value, the adapter is const).
 
 /functional/adapter/unfused_lvalue_args.hpp>
@@ -904,7 +911,7 @@ object is held by value, the adapter is const).
 [heading Synopsis]
     template <class Function>
     class unfused_lvalue_args;
-    
+
 [heading Template parameters]
 
 [table
@@ -919,10 +926,10 @@ object is held by value, the adapter is const).
 
 [variablelist Notation
     [[`F`]         [A possibly const qualified, unary __poly_func_obj__ type or reference type thereof]]
-    [[`f`]         [An object convertible to `F`]] 
+    [[`f`]         [An object convertible to `F`]]
     [[`UL`]        [The type `unfused_lvalue_args<F>`]]
     [[`ul`]        [An instance of `UL`, initialized with `f`]]
-    [[`a0`...`aN`] [Arguments to `ul`]] 
+    [[`a0`...`aN`] [Arguments to `ul`]]
 ]
 
 [heading Expression Semantics]
@@ -937,9 +944,9 @@ object is held by value, the adapter is const).
 [heading Example]
     struct fused_incrementer
     {
-        template <class Seq> 
-        struct result 
-        { 
+        template <class Seq>
+        struct result
+        {
             typedef void type;
         };
 
@@ -970,13 +977,13 @@ object is held by value, the adapter is const).
 [heading Description]
 
 An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
-target function. When called, its arguments are bundled to a 
+target function. When called, its arguments are bundled to a
 __random_access_sequence__ of references that is passed to the target
 function object. All referenced objects in the sequence are const qualified.
 
-The type of the target function is allowed to be const qualified or a 
-reference. Const qualification is preserved and propagated appropriately 
-(in other words, only const versions of [^operator()] can be used if 
+The type of the target function is allowed to be const qualified or a
+reference. Const qualification is preserved and propagated appropriately
+(in other words, only const versions of [^operator()] can be used if
 the target function object is const - or, in case the target function object
 is held by value, the adapter is const).
 
@@ -985,7 +992,7 @@ is held by value, the adapter is const).
 [heading Synopsis]
     template <class Function>
     class unfused_rvalue_args;
-    
+
 [heading Template parameters]
 
 [table
@@ -1000,10 +1007,10 @@ is held by value, the adapter is const).
 
 [variablelist Notation
     [[`F`]         [A possibly const qualified, unary __poly_func_obj__ type or reference type thereof]]
-    [[`f`]         [An object convertible to `F`]] 
+    [[`f`]         [An object convertible to `F`]]
     [[`UR`]        [The type `unfused_rvalue_args<F>`]]
     [[`ur`]        [An instance of `UR`, initialized with `f`]]
-    [[`a0`...`aN`] [Arguments to `ur`]] 
+    [[`a0`...`aN`] [Arguments to `ur`]]
 ]
 
 [heading Expression Semantics]
@@ -1018,9 +1025,9 @@ is held by value, the adapter is const).
 [heading Example]
     struct sequence_printer
     {
-        template <class Seq> 
-        struct result 
-        { 
+        template <class Seq>
+        struct result
+        {
             typedef void type;
         };
 
@@ -1051,24 +1058,24 @@ is held by value, the adapter is const).
 [heading Description]
 
 An n-ary __poly_func_obj__ adapter template for an unary __poly_func_obj__
-target function. When called, its arguments are bundled to a 
+target function. When called, its arguments are bundled to a
 __random_access_sequence__ that is passed to the target function object.
 
 The call operators of  esulting function objects are strictly typed
 (in other words, non-templatized) with the types from a __sequence__.
 
-The type of the target function is allowed to be const qualified or a 
-reference. Const qualification is preserved and propagated appropriately 
-(in other words, only const versions of [^operator()] can be used if 
+The type of the target function is allowed to be const qualified or a
+reference. Const qualification is preserved and propagated appropriately
+(in other words, only const versions of [^operator()] can be used if
 the target function object is const - or, in case the target function object
 is held by value, the adapter is const).
 
 [blurb __note__ For Microsoft Visual C++ 7.1 (Visual Studio 2003) the detection
 of the Function Object's const qualification easily causes an internal error.
-Therefore the adapter is always treated as if it was const. ] 
+Therefore the adapter is always treated as if it was const. ]
 
-[blurb __tip__ If the type sequence passed to this template contains 
-non-reference elements, the element is copied only once - the call operator's 
+[blurb __tip__ If the type sequence passed to this template contains
+non-reference elements, the element is copied only once - the call operator's
 signature is optimized automatically to avoid by-value parameters.]
 
 /functional/adapter/unfused_typed.hpp>
@@ -1076,7 +1083,7 @@ signature is optimized automatically to avoid by-value parameters.]
 [heading Synopsis]
     template <class Function, class Sequence>
     class unfused_typed;
-    
+
 [heading Template parameters]
 
 [table
@@ -1093,10 +1100,10 @@ signature is optimized automatically to avoid by-value parameters.]
 [variablelist Notation
     [[`F`]         [A possibly const qualified, unary __poly_func_obj__ type or reference type thereof]]
     [[`f`]         [An object convertible to `F`]]
-    [[`S`]         [A __sequence__ of parameter types]] 
+    [[`S`]         [A __sequence__ of parameter types]]
     [[`UT`]        [The type `unfused_typed<F,S>`]]
     [[`ut`]        [An instance of `UT`, initialized with `f`]]
-    [[`a0`...`aN`] [Arguments to `ut`, convertible to the types in `S`]] 
+    [[`a0`...`aN`] [Arguments to `ut`, convertible to the types in `S`]]
 ]
 
 [heading Expression Semantics]
@@ -1106,7 +1113,7 @@ signature is optimized automatically to avoid by-value parameters.]
     [[`UT(f)`]         [Creates a fused function as described above, initializes the target function with `f`.]]
     [[`UT()`]          [Creates a fused function as described above, attempts to use `F`'s default constructor.]]
     [[`ut(a0`...`aN)`] [Calls `f` with an instance of `S` (or a subsequence of `S` starting at the first element,
-                        if fewer arguments are given and the overload hasn't been disabled) initialized with 
+                        if fewer arguments are given and the overload hasn't been disabled) initialized with
                         `a0`...`aN`.]]
 ]
 
@@ -1151,7 +1158,7 @@ signature is optimized automatically to avoid by-value parameters.]
         {
             typedef typename remove_reference<Seq>::type seq;
 
-            typedef unfused_typed< fused_parallel_adder<seq>, 
+            typedef unfused_typed< fused_parallel_adder<seq>,
                 typename mpl::transform<seq, remove_reference<_> >::type > type;
         };
 
@@ -1168,7 +1175,7 @@ signature is optimized automatically to avoid by-value parameters.]
     {
         int a = 2; char b = 'X';
         // the second call is strictly typed with the types deduced from the
-        // first call 
+        // first call
         parallel_add(a,b)(3,2);
         parallel_add(a,b)(3);
         parallel_add(a,b)();
@@ -1244,8 +1251,8 @@ __element_conversion__ is applied to the target function.
 [section:mk_fused_proc make_fused_procedure]
 
 [heading Description]
-Creates a __fused_procedure__ adapter for a given __def_callable_obj__. 
-The usual __element_conversion__ applied to the target function. 
+Creates a __fused_procedure__ adapter for a given __def_callable_obj__.
+The usual __element_conversion__ applied to the target function.
 
 [heading Synopsis]
     template <typename F>
@@ -1287,8 +1294,8 @@ The usual __element_conversion__ applied to the target function.
 [section:mk_fused_fobj make_fused_function_object]
 
 [heading Description]
-Creates a __fused_function_object__ adapter for a given __def_callable_obj__. 
-The usual __element_conversion__ is applied to the target function. 
+Creates a __fused_function_object__ adapter for a given __def_callable_obj__.
+The usual __element_conversion__ is applied to the target function.
 
 [heading Synopsis]
     template <typename F>
@@ -1321,7 +1328,7 @@ The usual __element_conversion__ is applied to the target function.
         struct result;
 
         template <class Self, typename T>
-        struct result< Self(T,T) > 
+        struct result< Self(T,T) >
         { typedef typename remove_reference<T>::type type; };
 
         template<typename T>
@@ -1349,8 +1356,8 @@ The usual __element_conversion__ is applied to the target function.
 [section:mk_unfused_genrc make_unfused_generic]
 
 [heading Description]
-Creates a __unfused_generic__ adapter for a given, unary __poly_func_obj__. 
-The usual __element_conversion__ is applied to the target function. 
+Creates a __unfused_generic__ adapter for a given, unary __poly_func_obj__.
+The usual __element_conversion__ is applied to the target function.
 
 [heading Synopsis]
     template <typename F>
@@ -1381,21 +1388,21 @@ The usual __element_conversion__ is applied to the target function.
     {
         typedef void result_type;
 
-        template<class Seq> 
+        template<class Seq>
         void operator()(Seq & s) const
         {
             typename result_of::at_c<Seq,0>::type n = at_c<0>(s);
             typename result_of::at_c<Seq,1>::type what = at_c<1>(s);
 
-            std::cout 
-                << n << " bottles of " << what << " on the wall.\n" 
+            std::cout
+                << n << " bottles of " << what << " on the wall.\n"
                 << n << " bottles of " << what << "!\n"
                 << "Take one down - pass it around.\n";
 
             n -= 1; // glug glug...
 
             std::cout
-                << n << " bottles of " << what << " on the wall.\n" 
+                << n << " bottles of " << what << " on the wall.\n"
                 << std::endl;
         }
     };
@@ -1418,8 +1425,8 @@ The usual __element_conversion__ is applied to the target function.
 [section:mk_unfused_lvargs make_unfused_lvalue_args]
 
 [heading Description]
-Creates a __unfused_lvalue_args__ adapter for a given, unary __poly_func_obj__. 
-The usual __element_conversion__ is applied to the target function. 
+Creates a __unfused_lvalue_args__ adapter for a given, unary __poly_func_obj__.
+The usual __element_conversion__ is applied to the target function.
 
 [heading Synopsis]
     template <typename F>
@@ -1448,9 +1455,9 @@ The usual __element_conversion__ is applied to the target function.
 [heading Example]
     struct fused_incrementer
     {
-        template <class Seq> 
-        struct result 
-        { 
+        template <class Seq>
+        struct result
+        {
             typedef void type;
         };
 
@@ -1478,8 +1485,8 @@ The usual __element_conversion__ is applied to the target function.
 [section:mk_unfused_rvargs make_unfused_rvalue_args]
 
 [heading Description]
-Creates a __unfused_rvalue_args__ adapter for a given, unary __poly_func_obj__. 
-The usual __element_conversion__ is applied to the target function. 
+Creates a __unfused_rvalue_args__ adapter for a given, unary __poly_func_obj__.
+The usual __element_conversion__ is applied to the target function.
 
 [heading Synopsis]
     template <typename F>
@@ -1508,9 +1515,9 @@ The usual __element_conversion__ is applied to the target function.
 [heading Example]
     struct sequence_printer
     {
-        template <class Seq> 
-        struct result 
-        { 
+        template <class Seq>
+        struct result
+        {
             typedef void type;
         };
 

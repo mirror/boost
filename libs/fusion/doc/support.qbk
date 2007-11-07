@@ -1,3 +1,10 @@
+[/==============================================================================
+    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
 [section Support]
 
 A couple of classes and metafunctions provide basic support for Fusion.
@@ -6,8 +13,8 @@ A couple of classes and metafunctions provide basic support for Fusion.
 
 [heading Description]
 
-Metafunction that evaluates to `mpl::true_` if a certain type `T` is a 
-conforming Fusion __sequence__, `mpl::false_` otherwise. This may be 
+Metafunction that evaluates to `mpl::true_` if a certain type `T` is a
+conforming Fusion __sequence__, `mpl::false_` otherwise. This may be
 specialized to accomodate clients which provide Fusion conforming sequences.
 
 [heading Synopsis]
@@ -15,7 +22,7 @@ specialized to accomodate clients which provide Fusion conforming sequences.
     namespace traits
     {
         template <typename T>
-        struct is_sequence 
+        struct is_sequence
         {
             typedef __unspecified__ type;
         };
@@ -34,7 +41,7 @@ specialized to accomodate clients which provide Fusion conforming sequences.
 
 [*Return type]: An __mpl_boolean_constant__.
 
-[*Semantics]: Metafunction that evaluates to `mpl::true_` if a certain type 
+[*Semantics]: Metafunction that evaluates to `mpl::true_` if a certain type
 `T` is a conforming Fusion sequence, `mpl::false_` otherwise.
 
 [heading Header]
@@ -57,11 +64,11 @@ specialized to accomodate clients which provide Fusion conforming sequences.
 
 [heading Description]
 
-Metafunction that evaluates to `mpl::true_` if a certain type `T` is a 
-conforming Fusion __view__, `mpl::false_` otherwise. A view is a 
-specialized sequence that does not actually contain data. Views hold 
-sequences which may be other views. In general, views are held by other 
-views by value, while non-views are held by other views by reference. `is_view` 
+Metafunction that evaluates to `mpl::true_` if a certain type `T` is a
+conforming Fusion __view__, `mpl::false_` otherwise. A view is a
+specialized sequence that does not actually contain data. Views hold
+sequences which may be other views. In general, views are held by other
+views by value, while non-views are held by other views by reference. `is_view`
 may be specialized to accomodate clients providing Fusion conforming views.
 
 [heading Synopsis]
@@ -69,7 +76,7 @@ may be specialized to accomodate clients providing Fusion conforming views.
     namespace traits
     {
         template <typename T>
-        struct is_view 
+        struct is_view
         {
             typedef __unspecified__ type;
         };
@@ -88,7 +95,7 @@ may be specialized to accomodate clients providing Fusion conforming views.
 
 [*Return type]: An __mpl_boolean_constant__.
 
-[*Semantics]: Metafunction that evaluates to `mpl::true_` if a certain type 
+[*Semantics]: Metafunction that evaluates to `mpl::true_` if a certain type
 `T` is a conforming Fusion view, `mpl::false_` otherwise.
 
 [heading Header]
@@ -113,11 +120,11 @@ may be specialized to accomodate clients providing Fusion conforming views.
 
 [heading Description]
 
-All conforming Fusion sequences and iterators have an associated tag type. The 
-purpose of the tag is to enable __tag_dispatching__ from  __intrinsic__ 
-functions to implementations appropriate for the type. 
+All conforming Fusion sequences and iterators have an associated tag type. The
+purpose of the tag is to enable __tag_dispatching__ from  __intrinsic__
+functions to implementations appropriate for the type.
 
-This metafunction may be specialized to accomodate clients providing Fusion 
+This metafunction may be specialized to accomodate clients providing Fusion
 conforming sequences.
 
 [heading Synopsis]
@@ -125,7 +132,7 @@ conforming sequences.
     namespace traits
     {
         template<typename Sequence>
-        struct tag_of 
+        struct tag_of
         {
             typedef __unspecified__ type;
         };
@@ -167,8 +174,8 @@ conforming sequences.
 
 [heading Description]
 
-A metafunction that establishes the conceptual classification of a particular 
-__sequence__ or __iterator__ (see __iterator_concepts__ and 
+A metafunction that establishes the conceptual classification of a particular
+__sequence__ or __iterator__ (see __iterator_concepts__ and
 __sequence_concepts__).
 
 [heading Synopsis]
@@ -176,7 +183,7 @@ __sequence_concepts__).
     namespace traits
     {
         template <typename T>
-        struct category_of 
+        struct category_of
         {
             typedef __unspecified__ type;
         };
@@ -200,16 +207,16 @@ For Iterators, the return type is derived from one of:
 		namespace boost { namespace fusion
 		{
 		    struct incrementable_traversal_tag {};
-		
+
 		    struct single_pass_traversal_tag
 		        : incrementable_traversal_tag {};
-		
+
 		    struct forward_traversal_tag
 		        : single_pass_traversal_tag {};
-		
+
 		    struct bidirectional_traversal_tag
 		        : forward_traversal_tag {};
-		
+
 		    struct random_access_traversal_tag
 		        : bidirectional_traversal_tag {};
 		}}
@@ -219,16 +226,16 @@ For Sequences, the return type is derived from one of:
 		namespace boost { namespace fusion
 		{
 		    struct incrementable_sequence_tag {};
-		
+
 		    struct single_pass_sequence_tag
 		        : incrementable_sequence_tag {};
-		
+
 		    struct forward_traversal_tag
 		        : single_pass_sequence_tag {};
-		
+
 		    struct bidirectional_traversal_tag
 		        : forward_traversal_tag {};
-		
+
 		    struct random_access_traversal_tag
 		        : bidirectional_traversal_tag {};
 		}}
@@ -240,7 +247,7 @@ And optionally from:
 		    struct associative_sequence_tag {};
 		}}
 
-[*Semantics]: Establishes the conceptual classification of a particular 
+[*Semantics]: Establishes the conceptual classification of a particular
 __sequence__ or __iterator__.
 
 [heading Header]
@@ -263,8 +270,8 @@ __sequence__ or __iterator__.
 [heading Description]
 Metafunction to apply __element_conversion__ to the full argument type.
 
-It removes references to `const`, references to array types are kept, even 
-if the array is `const`. Reference wrappers are removed (see 
+It removes references to `const`, references to array types are kept, even
+if the array is `const`. Reference wrappers are removed (see
 __note_boost_ref__).
 
 [heading Header]
@@ -275,7 +282,7 @@ __note_boost_ref__).
 [heading Synopsis]
     namespace traits
     {
-        template <typename T> 
+        template <typename T>
         struct deduce
         {
             typedef __unspecified__ type;
@@ -319,7 +326,7 @@ constructor accepting the original type as its argument.
 [heading Synopsis]
     namespace traits
     {
-        template <class Sequence> 
+        template <class Sequence>
         struct deduce_sequence
         {
             typedef __unspecified__ type;
@@ -338,11 +345,11 @@ constructor accepting the original type as its argument.
     };
 
     template <typename T0, typename T1>
-    holder< __vector__<T0 const &, T1 const &> > 
+    holder< __vector__<T0 const &, T1 const &> >
     make_holder(T0 const & a0, T1 const & a1)
     {
         typedef __vector__<T0 const &, T1 const &> arg_vec_t;
-        return holder<arg_vec_t>( arg_vec_t(a0,a1) ); 
+        return holder<arg_vec_t>( arg_vec_t(a0,a1) );
     }
 
 [heading See also]
@@ -354,8 +361,8 @@ constructor accepting the original type as its argument.
 
 [heading Description]
 
-Fusion `pair` type is a half runtime pair. A half runtime pair is similar 
-to a __std_pair__, but, unlike __std_pair__, the first type does not have data. 
+Fusion `pair` type is a half runtime pair. A half runtime pair is similar
+to a __std_pair__, but, unlike __std_pair__, the first type does not have data.
 It is used as elements in __map__s, for example.
 
 [heading Synopsis]
@@ -408,7 +415,7 @@ It is used as elements in __map__s, for example.
     [[`P(s)`]           [Construct a pair given value for the second type, `s`.]]
     [[`P(p2)`]          [Copy constructs a pair from another pair, `p2`.]]
     [[`p = p2`]         [Assigns a pair, p1, from another pair, `p2`.]]
-    [[make_pair<F>(s)]  [Make a pair given the first type, `F`, and a value for 
+    [[make_pair<F>(s)]  [Make a pair given the first type, `F`, and a value for
                         the second type, `s`. The second type assumes the type of `s`]]
     [[`o << p`]         [Output `p` to output stream, `o`.]]
     [[`i >> p`]         [Input `p` from input stream, `i`.]]

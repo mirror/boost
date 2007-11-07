@@ -1,3 +1,10 @@
+[/==============================================================================
+    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
 [section Organization]
 
 The library is organized into layers of modules, with each module addressing a particular
@@ -9,14 +16,14 @@ The library is organized in three layers:
 
 [:[$images/fusion_org.png]]
 
-The entire library is found in the "boost/fusion" directory. Modules are
+The entire library is found in the `"boost/fusion"` directory. Modules are
 organized in directories. Each module has its own header file placed in
 the same directory with the actual module-directory. For example, there
-exists "boost/fusion/support.hpp" in the same directory as
+exists `"boost/fusion/support.hpp"` in the same directory as
 "boost/fusion/support". Everything, except those found inside "detail"
 directories, is public.
 
-There is also a "boost/fusion/include/" directory that contains all the
+There is also a `"boost/fusion/include/"` directory that contains all the
 headers to all the components and modules. If you are unsure where to
 find a specific component or module, or don't want to fuss with
 hierarchy and nesting, use this.
