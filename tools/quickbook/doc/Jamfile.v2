@@ -11,6 +11,7 @@ boostbook standalone
     :
         <xsl:param>boost.root=../../../..
         <xsl:param>boost.libraries=../../../../libs/libraries.htm
+        <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
         <xsl:param>generate.section.toc.level=3
         <xsl:param>chunk.section.depth=2
         <xsl:param>chunk.first.sections=1
