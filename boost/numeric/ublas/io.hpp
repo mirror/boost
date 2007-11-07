@@ -15,6 +15,7 @@
 
 // Only forward definition required to define stream operations
 #include <iosfwd>
+#include <sstream>
 #include <boost/numeric/ublas/matrix_expression.hpp>
 
 
