@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:transform Type Traits that Transform One Type to Another]
 
 The following templates transform one type to another, 
@@ -108,3 +115,4 @@ Note that the macro BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION evaluates
 to nothing on those compilers that *do* support partial specialization.
 
 [endsect]
+

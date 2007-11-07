@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:remove_all_extents remove_all_extents]
 
    template <class T>
@@ -34,3 +41,4 @@ __header ` #include <boost/type_traits/remove_all_extents.hpp>` or ` #include <b
 ]
 
 [endsect]
+

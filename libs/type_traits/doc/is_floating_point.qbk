@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:is_floating_point is_floating_point]
    template <class T>
    struct is_floating_point : public __tof {};
@@ -21,3 +28,4 @@ expression that evaluates to /true/.]
 [:`is_floating_point<T>::value_type` is the type `bool`.]
 
 [endsect]
+

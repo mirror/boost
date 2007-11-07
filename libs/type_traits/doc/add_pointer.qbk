@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:add_pointer add_pointer]
 
    template <class T>
@@ -35,3 +42,4 @@ __header ` #include <boost/type_traits/add_pointer.hpp>` or ` #include <boost/ty
 ]
 
 [endsect]
+

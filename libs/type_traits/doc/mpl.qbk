@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:mpl MPL Interoperability]
 
 All the value based traits in this library conform to MPL's requirements
@@ -10,3 +17,4 @@ from [@../../libs/mpl/doc/refmanual/bool.html `boost::mpl::false_`], and `__inte
 [@../../libs/mpl/doc/refmanual/integral-c.html `boost::mpl::integral_c<T,v>`] (provided `T` is not `bool`)
 
 [endsect]
+

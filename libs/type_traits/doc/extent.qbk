@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:extent extent]
    template <class T, std::size_t N = 0>
    struct extent : public __integral_constant<std::size_t, EXTENT(T,N)> {};
@@ -31,3 +38,4 @@ expression that evaluates to /0/.]
 [:`extent<T>::value_type` is the type `std::size_t`.]
 
 [endsect]
+

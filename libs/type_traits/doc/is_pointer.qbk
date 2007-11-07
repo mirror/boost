@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:is_pointer is_pointer]
    template <class T>
    struct is_pointer : public __tof {};
@@ -35,3 +42,4 @@ However, note that there is no way in general to auto-magically detect smart poi
 so such a trait would have to be partially specialised for each supported smart pointer type.]
 
 [endsect]
+

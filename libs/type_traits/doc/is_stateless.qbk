@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:is_stateless is_stateless]
    template <class T>
    struct is_stateless : public __tof {};
@@ -30,3 +37,4 @@ if possibly sub-optimal.  Currently (May 2005) only MWCW 9 and Visual C++ 8 have
 compiler __intrinsics to make this template work automatically.
 
 [endsect]
+

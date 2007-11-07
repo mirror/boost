@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:intrinsics Support for Compiler Intrinsics]
 
 There are some traits that can not be implemented within the current C++ language:
@@ -52,3 +59,4 @@ a matter of defining one of more of the following macros:
 ]
 
 [endsect]
+

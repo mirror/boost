@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:has_trivial_assign has_trivial_assign]
    template <class T>
    struct has_trivial_assign : public __tof {};
@@ -37,3 +44,4 @@ expression that evaluates to /false/.]
 [:`has_trivial_assign<T>::value_type` is the type `bool`.]
 
 [endsect]
+

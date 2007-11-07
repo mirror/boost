@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:background Background and Tutorial]
 
 The following is an updated version of the article "C++ Type traits"
@@ -311,4 +318,5 @@ helpful comments when preparing this article.
 # For those of you who are wondering why this shouldn't be const-qualified, remember that references are always implicitly constant (for example, you can't re-assign a reference). Remember also that "const T &" is something completely different. For this reason, cv-qualifiers on template type arguments that are references are ignored.
 
 [endsect]
+
 

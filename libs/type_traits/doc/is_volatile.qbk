@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:is_volatile is_volatile]
    template <class T>
    struct is_volatile : public __tof {};
@@ -25,3 +32,4 @@ at the top level in this case.]
 [:`is_volatile<T>::value_type` is the type `bool`.]
 
 [endsect]
+

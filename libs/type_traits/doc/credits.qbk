@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:credits Credits]
 
 This documentation was pulled together by John Maddock, using 
@@ -31,3 +38,4 @@ should be directed to boost@lists.boost.org
 www.boost.org/more/mailing_lists.htm#main] for subscription details).
 
 [endsect]
+
