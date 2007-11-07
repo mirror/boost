@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2006-2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 
 [section:unicode Unicode and Boost.Regex]
 
@@ -32,3 +39,4 @@ of text that is encoded in either UTF-8, UTF-16, or UTF-32.  See:
 ICU string class support].
 
 [endsect]
+

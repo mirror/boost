@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2006-2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 [section:partial_matches Partial Matches]
 
 The [match_flag_type] `match_partial` can be passed to the following algorithms: 
@@ -137,5 +144,6 @@ gets searched a second time as the start of the next batch of text:
    }
 
 [endsect]
+
 
 

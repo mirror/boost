@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2006-2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 
 [section:captures Understanding Marked Sub-Expressions and Captures]
 
@@ -190,3 +197,4 @@ therefore to use this feature you need to:
 * Pass the match_extra flag to the particular algorithms where you actually need the captures information (regex_search, regex_match, or regex_iterator).
     
 [endsect]
+

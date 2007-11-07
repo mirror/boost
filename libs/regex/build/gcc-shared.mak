@@ -1,3 +1,7 @@
+# copyright John Maddock 2006-7
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
 #
 # auto generated makefile for gcc compiler
 #
@@ -183,4 +187,5 @@ boost_regex-gcc-d-1_35_clean :
 
 ./gcc/libboost_regex-gcc-d-1_35.so : gcc/boost_regex-gcc-d-1_35_shared/c_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/cregex.o gcc/boost_regex-gcc-d-1_35_shared/fileiter.o gcc/boost_regex-gcc-d-1_35_shared/icu.o gcc/boost_regex-gcc-d-1_35_shared/instances.o gcc/boost_regex-gcc-d-1_35_shared/posix_api.o gcc/boost_regex-gcc-d-1_35_shared/regex.o gcc/boost_regex-gcc-d-1_35_shared/regex_debug.o gcc/boost_regex-gcc-d-1_35_shared/regex_raw_buffer.o gcc/boost_regex-gcc-d-1_35_shared/regex_traits_defaults.o gcc/boost_regex-gcc-d-1_35_shared/static_mutex.o gcc/boost_regex-gcc-d-1_35_shared/usinstances.o gcc/boost_regex-gcc-d-1_35_shared/w32_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/wc_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/wide_posix_api.o gcc/boost_regex-gcc-d-1_35_shared/winstances.o
 	$(LINKER) -o gcc/libboost_regex-gcc-d-1_35.so $(LDFLAGS)  $(ICU_LDFLAGS)  gcc/boost_regex-gcc-d-1_35_shared/c_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/cregex.o gcc/boost_regex-gcc-d-1_35_shared/fileiter.o gcc/boost_regex-gcc-d-1_35_shared/icu.o gcc/boost_regex-gcc-d-1_35_shared/instances.o gcc/boost_regex-gcc-d-1_35_shared/posix_api.o gcc/boost_regex-gcc-d-1_35_shared/regex.o gcc/boost_regex-gcc-d-1_35_shared/regex_debug.o gcc/boost_regex-gcc-d-1_35_shared/regex_raw_buffer.o gcc/boost_regex-gcc-d-1_35_shared/regex_traits_defaults.o gcc/boost_regex-gcc-d-1_35_shared/static_mutex.o gcc/boost_regex-gcc-d-1_35_shared/usinstances.o gcc/boost_regex-gcc-d-1_35_shared/w32_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/wc_regex_traits.o gcc/boost_regex-gcc-d-1_35_shared/wide_posix_api.o gcc/boost_regex-gcc-d-1_35_shared/winstances.o $(ICU_LIBS) $(LIBS)
+
 

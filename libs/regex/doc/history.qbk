@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2006-2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 
 [section:history History]
 
@@ -58,4 +65,5 @@
 * Changed the match flags so that they are a distinct type (not an integer), if you try to pass the match flags as an integer rather than match_flag_type to the regex algorithms then you will now get a compiler error.
     
 [endsect]
+
 

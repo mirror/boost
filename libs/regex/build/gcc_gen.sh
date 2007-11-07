@@ -108,7 +108,7 @@ function gcc_gen()
 	
 	
 	cat > $out << EOF
-# copyright John Maddock 2006
+# copyright John Maddock 2006-7
 # Distributed under the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
@@ -192,6 +192,10 @@ function gcc_gen_shared()
 	
 	
 	cat > $out << EOF
+# copyright John Maddock 2006-7
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
 #
 # auto generated makefile for gcc compiler
 #
@@ -266,6 +270,7 @@ gcc_gen_shared
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

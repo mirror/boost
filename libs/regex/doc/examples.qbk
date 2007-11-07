@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2006-2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 
 [section:examples Test and Example Programs]
 
@@ -105,3 +112,4 @@ The following are deprecated:
 [@../../example/snippets/regex_split_example_2.cpp regex_split_example_2.cpp] : regex_split example: spit out linked URL's.
 
 [endsect]
+

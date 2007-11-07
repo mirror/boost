@@ -1,4 +1,4 @@
-# copyright John Maddock 2006
+# copyright John Maddock 2006-7
 # Distributed under the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt.
@@ -189,4 +189,5 @@ boost_regex-gcc-d-1_35_clean :
 ./gcc/libboost_regex-gcc-d-1_35.a : gcc/boost_regex-gcc-d-1_35/c_regex_traits.o gcc/boost_regex-gcc-d-1_35/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_35/cregex.o gcc/boost_regex-gcc-d-1_35/fileiter.o gcc/boost_regex-gcc-d-1_35/icu.o gcc/boost_regex-gcc-d-1_35/instances.o gcc/boost_regex-gcc-d-1_35/posix_api.o gcc/boost_regex-gcc-d-1_35/regex.o gcc/boost_regex-gcc-d-1_35/regex_debug.o gcc/boost_regex-gcc-d-1_35/regex_raw_buffer.o gcc/boost_regex-gcc-d-1_35/regex_traits_defaults.o gcc/boost_regex-gcc-d-1_35/static_mutex.o gcc/boost_regex-gcc-d-1_35/usinstances.o gcc/boost_regex-gcc-d-1_35/w32_regex_traits.o gcc/boost_regex-gcc-d-1_35/wc_regex_traits.o gcc/boost_regex-gcc-d-1_35/wide_posix_api.o gcc/boost_regex-gcc-d-1_35/winstances.o
 	ar -r gcc/libboost_regex-gcc-d-1_35.a  gcc/boost_regex-gcc-d-1_35/c_regex_traits.o gcc/boost_regex-gcc-d-1_35/cpp_regex_traits.o gcc/boost_regex-gcc-d-1_35/cregex.o gcc/boost_regex-gcc-d-1_35/fileiter.o gcc/boost_regex-gcc-d-1_35/icu.o gcc/boost_regex-gcc-d-1_35/instances.o gcc/boost_regex-gcc-d-1_35/posix_api.o gcc/boost_regex-gcc-d-1_35/regex.o gcc/boost_regex-gcc-d-1_35/regex_debug.o gcc/boost_regex-gcc-d-1_35/regex_raw_buffer.o gcc/boost_regex-gcc-d-1_35/regex_traits_defaults.o gcc/boost_regex-gcc-d-1_35/static_mutex.o gcc/boost_regex-gcc-d-1_35/usinstances.o gcc/boost_regex-gcc-d-1_35/w32_regex_traits.o gcc/boost_regex-gcc-d-1_35/wc_regex_traits.o gcc/boost_regex-gcc-d-1_35/wide_posix_api.o gcc/boost_regex-gcc-d-1_35/winstances.o
 	-ar -s gcc/libboost_regex-gcc-d-1_35.a
+
 

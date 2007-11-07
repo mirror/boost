@@ -1,3 +1,10 @@
+[/ 
+  Copyright 2006-2007 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
 
 [section:perl_syntax Perl Regular Expression Syntax]
 
@@ -505,4 +512,5 @@ flags `no_mod_m`, `mod_x`, `mod_s`, and `no_mod_s`].
 
 
 [endsect]
+
 
