@@ -13,7 +13,8 @@
 #include <boost/xpressive/xpressive_static.hpp>
 #include <boost/xpressive/regex_actions.hpp>
 
-using namespace boost::xpressive;
+namespace x = boost::xpressive;
+using namespace x;
 
 int main(int argc, char *argv[])
 {
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
                 | as_xpr("?<!")         [top(strings) += " ~after( "]
                 | nil                   [top(strings) += " ( s" + as<std::string>(++mark_nbr) + "= "]
               )
-            >> ref(regex)
+            >> x::ref(regex)
             >> as_xpr(')')              [top(strings) += " ) "]
             ;
 

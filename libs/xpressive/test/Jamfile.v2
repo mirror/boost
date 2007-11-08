@@ -11,6 +11,7 @@ project
         <toolset>msvc-7.1:<debug-symbols>off
         <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
         <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
+        <toolset>msvc-9.0:<define>_SCL_SECURE_NO_DEPRECATE
         <toolset>gcc:<cxxflags>-ftemplate-depth-1024
 #        <toolset>gcc:<cxxflags>-W
 #        <toolset>gcc:<cxxflags>-Wall
