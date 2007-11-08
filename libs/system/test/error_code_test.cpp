@@ -149,7 +149,8 @@ int test_main( int, char ** )
   ec = error_code( -1, system_category );
   std::cout << "error_code message for -1 is \"" << ec.message() << "\"\n";
 #if defined(BOOST_WINDOWS_API)
-  BOOST_CHECK( ec.message() == "Unknown error" );
+  // Borland appends newline, so just check text
+  BOOST_CHECK( ec.message().substr(0,13) == "Unknown error" );
 #elif  defined(linux) || defined(__linux) || defined(__linux__)
   // Linux appends value to message as unsigned, so it varies with # of bits
   BOOST_CHECK( ec.message().substr(0,13) == "Unknown error" );
@@ -168,7 +169,8 @@ int test_main( int, char ** )
   dec = error_condition( -1, posix_category );
   std::cout << "error_condition message for -1 is \"" << dec.message() << "\"\n";
 #if defined(BOOST_WINDOWS_API)
-  BOOST_CHECK( dec.message() == "Unknown error" );
+  // Borland appends newline, so just check text
+  BOOST_CHECK( dec.message().substr(0,13) == "Unknown error" );
 #elif  defined(linux) || defined(__linux) || defined(__linux__)
   // Linux appends value to message as unsigned, so it varies with # of bits
   BOOST_CHECK( dec.message().substr(0,13) == "Unknown error" );
