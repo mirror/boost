@@ -237,12 +237,10 @@ set       toc,title
         </td>
         <td align="right">
           <div class = "copyright-footer">
-            <small>
-              <xsl:apply-templates select="ancestor::*/*/copyright"
-                mode="boost.footer"/>
-              <xsl:apply-templates select="ancestor::*/*/legalnotice"
-                mode="boost.footer"/>
-            </small>
+            <xsl:apply-templates select="ancestor::*/*/copyright"
+              mode="boost.footer"/>
+            <xsl:apply-templates select="ancestor::*/*/legalnotice"
+              mode="boost.footer"/>
           </div>
         </td>
       </tr>
