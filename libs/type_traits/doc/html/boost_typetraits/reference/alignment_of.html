@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> alignment_of</title>
+<title>alignment_of</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="up" href="../reference.html" title=" Alphabetical Reference">
-<link rel="prev" href="aligned_storage.html" title=" aligned_storage">
-<link rel="next" href="decay.html" title=" decay">
+<link rel="up" href="../reference.html" title="Alphabetical Reference">
+<link rel="prev" href="aligned_storage.html" title="aligned_storage">
+<link rel="next" href="decay.html" title="decay">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,35 +24,36 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.alignment_of"></a><a href="alignment_of.html" title=" alignment_of"> alignment_of</a></h3></div></div></div>
+<a name="boost_typetraits.reference.alignment_of"></a><a href="alignment_of.html" title="alignment_of"> alignment_of</a>
+</h3></div></div></div>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">alignment_of</span> <span class="special">:</span> <span class="keyword">public</span> <a href="integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">ALIGNOF</span><span class="special">(</span><span class="identifier">T</span><span class="special">)&gt;</span> <span class="special">{};</span>
+<span class="keyword">struct</span> <span class="identifier">alignment_of</span> <span class="special">:</span> <span class="keyword">public</span> <a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">ALIGNOF</span><span class="special">(</span><span class="identifier">T</span><span class="special">)&gt;</span> <span class="special">{};</span>
 </pre>
 <p>
-        <span class="bold"><b>Inherits:</b></span> Class template alignment<span class="underline">of inherits from `</span>_integral_constant&lt;std::size_t,
-        ALIGNOF(T)&gt;<tt class="computeroutput"><span class="special">,</span> <span class="identifier">where</span>
-        </tt>ALIGNOF(T)` is the alignment of type T.
+        <span class="bold"><strong>Inherits:</strong></span> Class template alignment<span class="underline">of inherits from `</span>_integral_constant&lt;std::size_t,
+        ALIGNOF(T)&gt;<code class="computeroutput"><span class="special">,</span> <span class="identifier">where</span>
+        </code>ALIGNOF(T)` is the alignment of type T.
       </p>
 <p>
-        <span class="emphasis"><em>Note: strictly speaking you should only rely on the value of <tt class="computeroutput"><span class="identifier">ALIGNOF</span><span class="special">(</span><span class="identifier">T</span><span class="special">)</span></tt> being
+        <span class="emphasis"><em>Note: strictly speaking you should only rely on the value of <code class="computeroutput"><span class="identifier">ALIGNOF</span><span class="special">(</span><span class="identifier">T</span><span class="special">)</span></code> being
         a multiple of the true alignment of T, although in practice it does compute
         the correct value in all the cases we know about.</em></span>
       </p>
 <p>
-        <span class="bold"><b>Header:</b></span> <tt class="computeroutput"> <span class="preprocessor">#include</span>
-        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">alignment_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
-        or <tt class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
+        <span class="bold"><strong>Header:</strong></span> <code class="computeroutput"> <span class="preprocessor">#include</span>
+        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">alignment_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        or <code class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       </p>
 <p>
-        <span class="bold"><b>Examples:</b></span>
+        <span class="bold"><strong>Examples:</strong></span>
       </p>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span></tt>
-            inherits from <tt class="computeroutput"><a href="integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">ALIGNOF</span><span class="special">(</span><span class="keyword">int</span><span class="special">)&gt;</span></tt>.
+            <code class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span></code>
+            inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">ALIGNOF</span><span class="special">(</span><span class="keyword">int</span><span class="special">)&gt;</span></code>.
           </p>
 <p>
         </p>
@@ -61,7 +62,7 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;::</span><span class="identifier">type</span></tt> is the type <tt class="computeroutput"><a href="integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">ALIGNOF</span><span class="special">(</span><span class="keyword">char</span><span class="special">)&gt;</span></tt>.
+            <code class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">ALIGNOF</span><span class="special">(</span><span class="keyword">char</span><span class="special">)&gt;</span></code>.
           </p>
 <p>
         </p>
@@ -70,8 +71,8 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> is an integral constant expression
-            with value <tt class="computeroutput"><span class="identifier">ALIGNOF</span><span class="special">(</span><span class="keyword">double</span><span class="special">)</span></tt>.
+            <code class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
+            with value <code class="computeroutput"><span class="identifier">ALIGNOF</span><span class="special">(</span><span class="keyword">double</span><span class="special">)</span></code>.
           </p>
 <p>
         </p>
@@ -80,7 +81,7 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value_type</span></tt> is the type <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span></tt>.
+            <code class="computeroutput"><span class="identifier">alignment_of</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value_type</span></code> is the type <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span></code>.
           </p>
 <p>
         </p>
@@ -93,8 +94,7 @@
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
       Ramey and Jeremy Siek<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
-        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
-        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p></small></div></td>
 </tr></table>
 <hr>

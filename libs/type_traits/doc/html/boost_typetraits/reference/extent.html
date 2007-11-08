@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> extent</title>
+<title>extent</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="up" href="../reference.html" title=" Alphabetical Reference">
-<link rel="prev" href="decay.html" title=" decay">
-<link rel="next" href="floating_point_promotion.html" title="
-      floating_point_promotion">
+<link rel="up" href="../reference.html" title="Alphabetical Reference">
+<link rel="prev" href="decay.html" title="decay">
+<link rel="next" href="floating_point_promotion.html" title="floating_point_promotion">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,36 +24,37 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.extent"></a><a href="extent.html" title=" extent"> extent</a></h3></div></div></div>
+<a name="boost_typetraits.reference.extent"></a><a href="extent.html" title="extent"> extent</a>
+</h3></div></div></div>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">N</span> <span class="special">=</span> <span class="number">0</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">extent</span> <span class="special">:</span> <span class="keyword">public</span> <a href="integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)&gt;</span> <span class="special">{};</span>
+<span class="keyword">struct</span> <span class="identifier">extent</span> <span class="special">:</span> <span class="keyword">public</span> <a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)&gt;</span> <span class="special">{};</span>
 </pre>
 <p>
-        <span class="bold"><b>Inherits:</b></span> Class template extent inherits
-        from <tt class="computeroutput"><a href="integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)&gt;</span></tt>,
-        where <tt class="computeroutput"><span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)</span></tt> is the number of elements in the N'th array
-        dimention of type <tt class="computeroutput"><span class="identifier">T</span></tt>.
+        <span class="bold"><strong>Inherits:</strong></span> Class template extent inherits
+        from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)&gt;</span></code>,
+        where <code class="computeroutput"><span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)</span></code> is the number of elements in the N'th array
+        dimention of type <code class="computeroutput"><span class="identifier">T</span></code>.
       </p>
 <p>
-        If <tt class="computeroutput"><span class="identifier">T</span></tt> is not an array type,
-        or if <tt class="computeroutput"><span class="identifier">N</span> <span class="special">&gt;</span>
-        <a href="rank.html" title=" rank">rank</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></tt>, or if the N'th array bound is incomplete,
-        then <tt class="computeroutput"><span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)</span></tt> is zero.
+        If <code class="computeroutput"><span class="identifier">T</span></code> is not an array type,
+        or if <code class="computeroutput"><span class="identifier">N</span> <span class="special">&gt;</span>
+        <a href="rank.html" title="rank">rank</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></code>, or if the N'th array bound is incomplete,
+        then <code class="computeroutput"><span class="identifier">EXTENT</span><span class="special">(</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">N</span><span class="special">)</span></code> is zero.
       </p>
 <p>
-        <span class="bold"><b>Header:</b></span> <tt class="computeroutput"> <span class="preprocessor">#include</span>
-        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">extent</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
-        or <tt class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
+        <span class="bold"><strong>Header:</strong></span> <code class="computeroutput"> <span class="preprocessor">#include</span>
+        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">extent</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        or <code class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       </p>
 <p>
-        <span class="bold"><b>Examples:</b></span>
+        <span class="bold"><strong>Examples:</strong></span>
       </p>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[</span><span class="number">1</span><span class="special">]&gt;</span></tt> inherits from <tt class="computeroutput"><a href="integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span></tt>.
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[</span><span class="number">1</span><span class="special">]&gt;</span></code> inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span></code>.
           </p>
 <p>
         </p>
@@ -63,8 +63,8 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">[</span><span class="number">2</span><span class="special">][</span><span class="number">3</span><span class="special">][</span><span class="number">4</span><span class="special">],</span>
-            <span class="number">1</span><span class="special">&gt;::</span><span class="identifier">type</span></tt> is the type <tt class="computeroutput"><a href="integral_constant.html" title=" integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span></tt>.
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">[</span><span class="number">2</span><span class="special">][</span><span class="number">3</span><span class="special">][</span><span class="number">4</span><span class="special">],</span>
+            <span class="number">1</span><span class="special">&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span></code>.
           </p>
 <p>
         </p>
@@ -73,7 +73,7 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[</span><span class="number">4</span><span class="special">]&gt;::</span><span class="identifier">value</span></tt>
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[</span><span class="number">4</span><span class="special">]&gt;::</span><span class="identifier">value</span></code>
             is an integral constant expression that evaluates to <span class="emphasis"><em>4</em></span>.
           </p>
 <p>
@@ -83,7 +83,7 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[][</span><span class="number">2</span><span class="special">]&gt;::</span><span class="identifier">value</span></tt> is an integral constant expression
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[][</span><span class="number">2</span><span class="special">]&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
             that evaluates to <span class="emphasis"><em>0</em></span>.
           </p>
 <p>
@@ -93,7 +93,7 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[][</span><span class="number">2</span><span class="special">],</span> <span class="number">1</span><span class="special">&gt;::</span><span class="identifier">value</span></tt>
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[][</span><span class="number">2</span><span class="special">],</span> <span class="number">1</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
             is an integral constant expression that evaluates to <span class="emphasis"><em>2</em></span>.
           </p>
 <p>
@@ -103,7 +103,7 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*&gt;::</span><span class="identifier">value</span></tt> is an integral constant expression
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*&gt;::</span><span class="identifier">value</span></code> is an integral constant expression
             that evaluates to <span class="emphasis"><em>0</em></span>.
           </p>
 <p>
@@ -113,7 +113,7 @@
 <p>
           </p>
 <p>
-            <tt class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value_type</span></tt> is the type <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span></tt>.
+            <code class="computeroutput"><span class="identifier">extent</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value_type</span></code> is the type <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span></code>.
           </p>
 <p>
         </p>
@@ -126,8 +126,7 @@
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
       Ramey and Jeremy Siek<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
-        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
-        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p></small></div></td>
 </tr></table>
 <hr>

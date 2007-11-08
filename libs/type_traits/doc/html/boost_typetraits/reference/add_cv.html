@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> add_cv</title>
+<title>add_cv</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
-<link rel="up" href="../reference.html" title=" Alphabetical Reference">
-<link rel="prev" href="add_const.html" title=" add_const">
-<link rel="next" href="add_pointer.html" title=" add_pointer">
+<link rel="up" href="../reference.html" title="Alphabetical Reference">
+<link rel="prev" href="add_const.html" title="add_const">
+<link rel="next" href="add_pointer.html" title="add_pointer">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,38 +24,39 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.add_cv"></a><a href="add_cv.html" title=" add_cv"> add_cv</a></h3></div></div></div>
+<a name="boost_typetraits.reference.add_cv"></a><a href="add_cv.html" title="add_cv"> add_cv</a>
+</h3></div></div></div>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">add_cv</span>
 <span class="special">{</span>
-   <span class="keyword">typedef</span> <i class="replaceable"><tt>see-below</tt></i> <span class="identifier">type</span><span class="special">;</span>
+   <span class="keyword">typedef</span> <em class="replaceable"><code>see-below</code></em> <span class="identifier">type</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
-        <span class="bold"><b>type:</b></span> The same type as <tt class="computeroutput"><span class="identifier">T</span>
-        <span class="keyword">const</span> <span class="keyword">volatile</span></tt>
-        for all <tt class="computeroutput"><span class="identifier">T</span></tt>.
+        <span class="bold"><strong>type:</strong></span> The same type as <code class="computeroutput"><span class="identifier">T</span>
+        <span class="keyword">const</span> <span class="keyword">volatile</span></code>
+        for all <code class="computeroutput"><span class="identifier">T</span></code>.
       </p>
 <p>
-        <span class="bold"><b>C++ Standard Reference:</b></span> 3.9.3.
+        <span class="bold"><strong>C++ Standard Reference:</strong></span> 3.9.3.
       </p>
 <p>
-        <span class="bold"><b>Compiler Compatibility:</b></span> If the compiler
+        <span class="bold"><strong>Compiler Compatibility:</strong></span> If the compiler
         does not support partial specialization of class-templates then this template
-        will compile, but the member <tt class="computeroutput"><span class="identifier">type</span></tt>
-        will always be the same as type <tt class="computeroutput"><span class="identifier">T</span></tt>
+        will compile, but the member <code class="computeroutput"><span class="identifier">type</span></code>
+        will always be the same as type <code class="computeroutput"><span class="identifier">T</span></code>
         except where <a href="../category/transform.html#boost_typetraits.category.transform.broken_compiler_workarounds_">compiler
         workarounds</a> have been applied.
       </p>
 <p>
-        <span class="bold"><b>Header:</b></span> <tt class="computeroutput"> <span class="preprocessor">#include</span>
-        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">add_cv</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
-        or <tt class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
+        <span class="bold"><strong>Header:</strong></span> <code class="computeroutput"> <span class="preprocessor">#include</span>
+        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">add_cv</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        or <code class="computeroutput"> <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       </p>
 <div class="table">
-<a name="id470419"></a><p class="title"><b>Table 1.6. Examples</b></p>
-<table class="table" summary="Examples">
+<a name="id504366"></a><p class="title"><b>Table 1.6. Examples</b></p>
+<div class="table-contents"><table class="table" summary="Examples">
 <colgroup>
 <col>
 <col>
@@ -76,57 +77,58 @@
 <tr>
 <td>
             <p>
-              <tt class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
+              <code class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
             </p>
             </td>
 <td>
             <p>
-              <tt class="computeroutput"><span class="keyword">int</span> <span class="keyword">const</span>
-              <span class="keyword">volatile</span></tt>
-            </p>
-            </td>
-</tr>
-<tr>
-<td>
-            <p>
-              <tt class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span></tt>
-            </p>
-            </td>
-<td>
-            <p>
-              <tt class="computeroutput"><span class="keyword">int</span><span class="special">&amp;</span></tt>
+              <code class="computeroutput"><span class="keyword">int</span> <span class="keyword">const</span>
+              <span class="keyword">volatile</span></code>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <tt class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*&gt;::</span><span class="identifier">type</span></tt>
+              <code class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span></code>
             </p>
             </td>
 <td>
             <p>
-              <tt class="computeroutput"><span class="keyword">int</span><span class="special">*</span>
-              <span class="keyword">const</span> <span class="keyword">volatile</span></tt>
+              <code class="computeroutput"><span class="keyword">int</span><span class="special">&amp;</span></code>
             </p>
             </td>
 </tr>
 <tr>
 <td>
             <p>
-              <tt class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="keyword">const</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
+              <code class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*&gt;::</span><span class="identifier">type</span></code>
             </p>
             </td>
 <td>
             <p>
-              <tt class="computeroutput"><span class="keyword">int</span> <span class="keyword">const</span>
-              <span class="keyword">volatile</span></tt>
+              <code class="computeroutput"><span class="keyword">int</span><span class="special">*</span>
+              <span class="keyword">const</span> <span class="keyword">volatile</span></code>
+            </p>
+            </td>
+</tr>
+<tr>
+<td>
+            <p>
+              <code class="computeroutput"><span class="identifier">add_cv</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="keyword">const</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            </p>
+            </td>
+<td>
+            <p>
+              <code class="computeroutput"><span class="keyword">int</span> <span class="keyword">const</span>
+              <span class="keyword">volatile</span></code>
             </p>
             </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 </div>
+<br class="table-break">
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
@@ -135,8 +137,7 @@
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
       Ramey and Jeremy Siek<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
-        file LICENSE_1_0.txt or copy at &lt;ulink url="http://www.boost.org<span class="emphasis"><em>LICENSE_1_0.txt"&gt;
-        http:</em></span>/www.boost.org/LICENSE_1_0.txt &lt;/ulink&gt;)
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p></small></div></td>
 </tr></table>
 <hr>
