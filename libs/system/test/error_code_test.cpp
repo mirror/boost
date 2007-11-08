@@ -151,7 +151,8 @@ int test_main( int, char ** )
 #if defined(BOOST_WINDOWS_API)
   BOOST_CHECK( ec.message() == "Unknown error" );
 #elif  defined(linux) || defined(__linux) || defined(__linux__)
-  BOOST_CHECK( ec.message() == "Unknown error 4294967295" );
+  // Linux appends value to message as unsigned, so it varies with # of bits
+  BOOST_CHECK( ec.message().substr(0,13) == "Unknown error" );
 #elif defined(__hpux)
   BOOST_CHECK( ec.message() == "" );
 #elif defined(__osf__)
@@ -169,7 +170,8 @@ int test_main( int, char ** )
 #if defined(BOOST_WINDOWS_API)
   BOOST_CHECK( dec.message() == "Unknown error" );
 #elif  defined(linux) || defined(__linux) || defined(__linux__)
-  BOOST_CHECK( dec.message() == "Unknown error 4294967295" );
+  // Linux appends value to message as unsigned, so it varies with # of bits
+  BOOST_CHECK( dec.message().substr(0,13) == "Unknown error" );
 #elif defined(__hpux)
   BOOST_CHECK( dec.message() == "" );
 #elif defined(__osf__)
