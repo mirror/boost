@@ -35,16 +35,14 @@
     enough functionality to satisfy the needs of the generic code
     <i>if a suitable layer of indirection is applied </i>.  For
     example, raw arrays are often suitable for use with generic code that
-    works with containers, provided a suitable adapter is used. Likewise, null
-    terminated strings can be treated as containers of characters, if suitably
-    adapted.
+    works with containers, provided a suitable adapter is used. 
     </p>
 
     <p>
      This library therefore provides the means to adapt standard-like
-     containers,
-    null terminated strings, <code>std::pairs</code> of iterators, and raw
-    arrays (and more), such that the same generic code can work with them all.
+     containers, <code>std::pairs</code> of iterators, and raw arrays (and 
+     more), such that
+    the same generic code can work with them all.
 The basic idea is to add another layer of indirection using <a
 href="../../mpl/doc/refmanual/metafunction.html">metafunctions</a> and
 free-standing functions so syntactic and/or semantic differences can be removed.

@@ -225,8 +225,8 @@ __ http://msdn2.microsoft.com/en-US/library/15e672bd.aspx
 
 .. _Boost C++ Libraries: http://www.boost.org/
 .. _Boost: `Boost C++ Libraries`_
-.. _Boost.Range: http://www.boost.org/libs/range/
-.. _forward: http://www.boost.org/libs/range/doc/range.html#forward_range
-.. _bidirectional: http://www.boost.org/libs/range/doc/range.html#forward_range
-.. _random access: http://www.boost.org/libs/range/doc/range.html#random_access_range
+.. _Boost.Range: ../index.html
+.. _forward: range.html#forward_range
+.. _bidirectional: range.html#forward_range
+.. _random access: range.html#random_access_range
 
