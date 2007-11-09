@@ -6,7 +6,7 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(BOOST_FUSION_STRUCT_24122005_1744)
-#define BOOST_FUSION_STD_STRUCT_24122005_1744
+#define BOOST_FUSION_STRUCT_24122005_1744
 
 #include <boost/fusion/adapted/struct/extension.hpp>
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
