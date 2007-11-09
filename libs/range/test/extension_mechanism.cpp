@@ -44,7 +44,6 @@ namespace Foo
                 typedef std::vector<int>       data_t;
                 typedef data_t::iterator       iterator;
                 typedef data_t::const_iterator const_iterator;
-                typedef data_t::size_type      size_type;
 
                 data_t vec;
 

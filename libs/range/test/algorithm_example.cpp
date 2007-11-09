@@ -64,14 +64,14 @@ void check_algorithm()
     //
     // usage
     //
-    const unsigned N = 5;                     
+    const int N = 5;                     
     std::vector<int> my_vector;
     int values[] = { 1,2,3,4,5,6,7,8,9 };
     my_vector.assign( values, values + 9 );
     typedef std::vector<int>::iterator iterator;
     std::pair<iterator,iterator>       my_view( boost::begin( my_vector ), 
                                                 boost::begin( my_vector ) + N );
-    BOOST_CHECK_EQUAL( my_generic_replace( my_vector, 4, 2 ), 3u );
+    BOOST_CHECK_EQUAL( my_generic_replace( my_vector, 4, 2 ), 3 );
     BOOST_CHECK_EQUAL( my_generic_replace( my_view, 4, 2 ), N );
 
 }
