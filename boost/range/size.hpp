@@ -17,14 +17,17 @@
 
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
-#include <boost/range/size_type.hpp>
+#include <boost/range/difference_type.hpp>
+#include <boost/assert.hpp>
 
 namespace boost 
 {
 
     template< class T >
-    inline BOOST_DEDUCED_TYPENAME range_size<T>::type size( const T& r )
+    inline BOOST_DEDUCED_TYPENAME range_difference<T>::type size( const T& r )
     {
+        BOOST_ASSERT( (boost::end( r ) - boost::begin( r )) >= 0 &&
+                      "reachability invariant broken!" );
         return boost::end( r ) - boost::begin( r );
     }
 

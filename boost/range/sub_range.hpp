@@ -38,6 +38,7 @@ namespace boost
         typedef BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type   const_iterator;
         typedef BOOST_DEDUCED_TYPENAME range_difference<ForwardRange>::type       difference_type;
         typedef BOOST_DEDUCED_TYPENAME range_size<ForwardRange>::type             size_type;
+        typedef BOOST_DEDUCED_TYPENAME base::reference                            reference;
 
     public:
         sub_range() : base() 
@@ -100,11 +101,11 @@ namespace boost
         const_iterator  begin() const    { return base::begin(); }
         iterator        end()            { return base::end();   }
         const_iterator  end() const      { return base::end();   }
-        size_type       size() const     { return base::size();  }   
+        difference_type size() const     { return base::size();  }   
 
         
     public: // convenience
-        value_type& front()
+        reference front()
         {
             return base::front();
         }
@@ -114,7 +115,7 @@ namespace boost
             return base::front();
         }
 
-        value_type& back()
+        reference back()
         {
             return base::back();
         }
@@ -124,12 +125,12 @@ namespace boost
             return base::back();
         }
 
-        value_type& operator[]( size_type sz )
+        reference operator[]( difference_type sz )
         {
             return base::operator[](sz);
         }
 
-        const value_type& operator[]( size_type sz ) const
+        const value_type& operator[]( difference_type sz ) const
         {
             return base::operator[](sz);
         }
