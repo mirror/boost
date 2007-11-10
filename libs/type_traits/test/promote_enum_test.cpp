@@ -29,6 +29,7 @@
 #include <climits>
 
 #include "promote_util.hpp"
+#include <boost/detail/workaround.hpp>
 
 enum IntEnum1 { IntEnum1_min = -5      , IntEnum1_max = 5        };
 enum IntEnum2 { IntEnum2_min = SHRT_MIN, IntEnum2_max = SHRT_MAX };
@@ -90,8 +91,8 @@ void test_promote_to_int_or_uint()
 #endif
 }
 
-#if (defined(BOOST_MSVC) && BOOST_MSVC <= 1400 ) || \
-    (defined(BOOST_INTEL_WIN) && BOOST_INTEL_WIN <= 1000)
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500) ) || \
+    BOOST_WORKAROUND(BOOST_INTEL_WIN, BOOST_TESTED_AT(1000))
 // Don't test UIntEnum on VC++ 8.0 and Intel for Windows 9.0,
 // they are broken. More info is on top of this file.
 #else
