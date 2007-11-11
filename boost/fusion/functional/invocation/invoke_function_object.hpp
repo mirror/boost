@@ -114,8 +114,7 @@ namespace boost { namespace fusion
 
             typedef typename boost::result_of<
 #define M(z,j,data)                                                             \
-    typename boost::remove_reference<                                          \
-        typename result_of::at_c<Sequence,j>::type >::type 
+        typename result_of::at_c<Sequence,j>::type 
                 Function (BOOST_PP_ENUM(N,M,~)) >::type result_type;
 #undef M
 
