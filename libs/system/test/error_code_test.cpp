@@ -20,6 +20,9 @@
 
 #include <boost/test/minimal.hpp>
 #include <boost/system/error_code.hpp>
+#include <boost/system/cygwin_error.hpp>
+#include <boost/system/linux_error.hpp>
+#include <boost/system/windows_error.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -244,19 +247,19 @@ int test_main( int, char ** )
 # ifdef __CYGWIN__
 
   std::cout << "Cygwin tests...\n";
-  ec = cygwin::no_package;
-  BOOST_CHECK( ec == cygwin::no_package );
+  ec = cygwin_error::no_package;
+  BOOST_CHECK( ec == cygwin_error::no_package );
   BOOST_CHECK( ec == error_code( ENOPKG, system_category ) );
-  BOOST_CHECK( ec == error_code( cygwin::no_package, system_category ) );
+  BOOST_CHECK( ec == error_code( cygwin_error::no_package, system_category ) );
   BOOST_CHECK( ec.default_error_condition().category() == system_category );
 
 # elif defined(linux) || defined(__linux) || defined(__linux__)
 
   std::cout << "Linux tests...\n";
-  ec = Linux::dot_dot_error;
-  BOOST_CHECK( ec == Linux::dot_dot_error );
+  ec = linux_error::dot_dot_error;
+  BOOST_CHECK( ec == linux_error::dot_dot_error );
   BOOST_CHECK( ec == error_code( EDOTDOT, system_category ) );
-  BOOST_CHECK( ec == error_code( Linux::dot_dot_error, system_category ) );
+  BOOST_CHECK( ec == error_code( linux_error::dot_dot_error, system_category ) );
   BOOST_CHECK( ec.default_error_condition().category() == system_category );
 
 # endif
