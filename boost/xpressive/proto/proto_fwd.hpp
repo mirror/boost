@@ -412,7 +412,6 @@ namespace boost { namespace proto
 
     namespace functional
     {
-        struct compile;
         struct left;
         struct right;
         struct unref;

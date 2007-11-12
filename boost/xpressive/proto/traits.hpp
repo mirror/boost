@@ -637,7 +637,7 @@
 
     }}
 
-    #if BOOST_WORKAROUND( BOOST_MSVC, == 1400 )
+    #if BOOST_WORKAROUND( BOOST_MSVC, >= 1400 )
         #pragma warning(pop)
     #endif
 
