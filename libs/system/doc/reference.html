@@ -38,6 +38,7 @@
   <tr>
     <td width="100%" bgcolor="#E8F5FF">
       <a href="#Introduction">Introduction</a><br>
+      <a href="#Macros">Macros</a><br>
       <a href="#Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a><br>
       <a href="#Class-error_category">Class <code>error_category</code></a><br>
       &nbsp;&nbsp;&nbsp;<a href="#Class-error_category-synopsis">Class <code>error_category</code> synopsis</a><br>
@@ -68,8 +69,51 @@
 <p>This reference documentation describes components that&nbsp; 
 programs may use to report error conditions originating from the operating 
 system or other low-level application program interfaces.</p>
-<p>System Library components do not change the value of <code>
+<p>Boost.System library components never change the value of <code>
 errno</code>.</p>
+<h2><a name="Macros">Macros</a></h2>
+<p>Users may defined the following macros if desired. Sensible defaults are 
+provided, so users may ignore these macros if they prefer.</p>
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
+  <tr>
+    <td><b><i>Macro Name</i></b></td>
+    <td><b><i>Default</i></b></td>
+    <td><b><i>Effect if defined</i></b></td>
+  </tr>
+  <tr>
+    <td valign="top"><code>BOOST_WINDOWS_API</code></td>
+    <td valign="top">Defined if Windows is detected by Boost.System's automatic configuration 
+    code, otherwise not defined.</td>
+    <td valign="top">Implementation uses the Microsoft Windows native 
+    application program interface (API).</td>
+  </tr>
+  <tr>
+    <td valign="top"><code>BOOST_POSIX_API</code></td>
+    <td valign="top">Defined if Windows is not detected by Boost.System's automatic configuration 
+    code.</td>
+    <td valign="top">Implementation uses the POSIX native 
+    application program interface (API).</td>
+  </tr>
+  <tr>
+    <td valign="top"><code>BOOST_SYSTEM_DYN_LINK</code></td>
+    <td valign="top">Defined if <code>BOOST_ALL_DYN_LINK</code> is defined, 
+    otherwise not defined.</td>
+    <td valign="top">Boost.System library is dynamically linked. If not defined, 
+    static linking is assumed.</td>
+  </tr>
+  <tr>
+    <td valign="top"><code>BOOST_SYSTEM_NO_LIB</code></td>
+    <td valign="top">Defined if <code>BOOST_ALL_NO_LIB</code> is defined, 
+    otherwise not defined.</td>
+    <td valign="top">Boost.System library does not use the Boost auto-link 
+    facility.</td>
+  </tr>
+  <tr>
+    <td valign="top"><code>BOOST_SYSTEM_NO_DEPRECATED</code></td>
+    <td valign="top">Not defined.</td>
+    <td valign="top">Deprecated features are excluded.</td>
+  </tr>
+</table>
 <h2><a name="Header-error_code">Header &lt;boost/system/error_code.hpp&gt;</a></h2>
 <h3>&lt;boost/system/error_code.hpp&gt; synopsis</h3>
 <blockquote>
@@ -699,7 +743,7 @@ Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->October 23, 2007<!--webbot bot="Timestamp" endspan i-checksum="30853" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->November 12, 2007<!--webbot bot="Timestamp" endspan i-checksum="39581" --> </font>
 </p>
 
 </body>

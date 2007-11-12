@@ -43,6 +43,22 @@
       <a href="#Acknowledgements">Acknowledgements</a>
     </td>
   </tr>
+  <tr>
+    <td width="100%" bgcolor="#D7EEFF" align="center">
+      <b><i>Headers</i></b></td>
+  </tr>
+  <tr>
+    <td width="100%" bgcolor="#E8F5FF">
+      <a href="reference.html#Header-error_code">&lt;boost/system/error_code.hpp&gt;</a><br>
+      <a href="reference.html#Header-system_error">
+      &lt;boost/system/system_error.hpp&gt;</a><br>
+      <a href="../../../boost/system/cygwin_error.hpp">
+      &lt;boost/system/cygwin_error.hpp&gt;</a><br>
+      <a href="../../../boost/system/linux_error.hpp">
+      &lt;boost/system/linux_error.hpp&gt;</a><br>
+      <a href="../../../boost/system/windows_error.hpp">
+      &lt;boost/system/windows_error.hpp&gt;</a></td>
+  </tr>
 </table>
 
 <h2><a name="Introduction">Introduction</a></h2>
@@ -73,6 +89,10 @@ than via throwing exceptions. Otherwise, when errors are not exceptional
 occurrences and must be dealt with as they arise, programs become littered with 
 try/catch blocks, unreadable, and very inefficient. The Boost System library 
 supports both error reporting by exception and by error code.</p>
+<p>In addition to portable errors codes and conditions supported by the <code>
+error_code.hpp</code> header, system-specific headers support the Cygwin, Linux, 
+and Windows platforms. These headers are effectively no-ops if included for 
+platforms other than their intended target.</p>
 <h2><a name="Design_Rationale">Design Rationale</a></h2>
 <p>Class <code>error_code</code>&nbsp; and <code>error_condition</code> are designed as a value types so 
 they can be copied 
@@ -117,7 +137,7 @@ Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->September 14, 2007<!--webbot bot="Timestamp" endspan i-checksum="37985" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->November 12, 2007<!--webbot bot="Timestamp" endspan i-checksum="39581" --> </font>
 </p>
 
 </body>
