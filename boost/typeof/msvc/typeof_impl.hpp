@@ -104,7 +104,7 @@ namespace boost
                 typedef T type;
             };
         };
-#elif BOOST_WORKAROUND(BOOST_MSVC,==1400)
+#elif BOOST_WORKAROUND(BOOST_MSVC,>=1400)
         struct msvc_extract_type_default_param {};
 
         template<typename ID, typename T = msvc_extract_type_default_param>
