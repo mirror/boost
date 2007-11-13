@@ -9,7 +9,8 @@
 #define BOOST_XPRESSIVE_DETAIL_CORE_MATCHER_PREDICATE_MATCHER_HPP_EAN_03_22_2007
 
 // MS compatible compilers support #pragma once
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if define
+d(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
 
@@ -35,7 +36,7 @@ namespace boost { namespace xpressive { namespace detail
         {}
 
         // eval_terminal
-        template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
+        template<typename Expr, typename Arg>
         struct eval_terminal
           : proto::default_eval<Expr, predicate_context const>
         {};
@@ -78,7 +79,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr>
         struct eval<Expr, proto::tag::terminal>
-          : eval_terminal<Expr>
+          : eval_terminal<Expr, typename proto::result_of::arg<Expr>::type>
         {};
 
         #if BOOST_VERSION >= 103500

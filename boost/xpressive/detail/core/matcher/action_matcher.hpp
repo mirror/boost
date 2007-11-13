@@ -146,7 +146,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         // eval_terminal
-        template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
+        template<typename Expr, typename Arg>
         struct eval_terminal
           : proto::default_eval<Expr, action_context const>
         {};
@@ -199,7 +199,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr>
         struct eval<Expr, proto::tag::terminal>
-          : eval_terminal<Expr>
+          : eval_terminal<Expr, typename proto::result_of::arg<Expr>::type>
         {};
 
         // Evaluate attributes like a1|42
