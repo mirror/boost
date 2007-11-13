@@ -120,6 +120,10 @@ namespace date_time {
       FILETIME ft_utc;
       GetSystemTimeAsFileTime(&ft_utc);
       FileTimeToLocalFileTime(&ft_utc,&ft);
+      #elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
+      SYSTEMTIME st;
+      GetSystemTime( &st );
+      SystemTimeToFileTime( &st, &ft );
       #else
       GetSystemTimeAsFileTime(&ft);
       #endif
@@ -134,6 +138,10 @@ namespace date_time {
       FILETIME ft_utc;
       GetSystemTimeAsFileTime(&ft_utc);
       FileTimeToLocalFileTime(&ft_utc,&ft);
+      #elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
+      SYSTEMTIME st;
+      GetSystemTime( &st );
+      SystemTimeToFileTime( &st, &ft );
       #else
       GetSystemTimeAsFileTime(&ft);
       #endif
