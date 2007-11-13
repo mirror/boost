@@ -41,9 +41,13 @@
 
 // Dinkumware Library, on Visual C++ 
 #elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-#  if defined(BOOST_MSVC)
-#    define BOOST_HASH_USE_FPCLASS
-#  endif
+
+// Not using _fpclass because it causes a warning about a conversion
+// from 'long double' to 'double'. Pity.
+// 
+//#  if defined(BOOST_MSVC)
+//#    define BOOST_HASH_USE_FPCLASS
+//#  endif
 
 #endif
 
