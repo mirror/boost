@@ -117,7 +117,7 @@ namespace boost { namespace fusion { namespace detail
     private:
         static type call_(SegmentedRange const &range, mpl::true_)
         {
-            return found::call(range, where::call(*range.where));
+            return found::call(range, where::call(*range.where_));
         }
 
         static type call_(SegmentedRange const &range, mpl::false_)

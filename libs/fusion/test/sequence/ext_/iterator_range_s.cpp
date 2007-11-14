@@ -43,8 +43,8 @@ process_tree(Tree const &tree)
     using namespace fusion;
     using mpl::_;
 
-    typedef typename result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
-    typedef typename result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
+    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,short> >::type short_iter;
+    typedef typename fusion::result_of::find_if_s<Tree const, is_same<_,float> >::type float_iter;
 
     typedef iterator_range<short_iter, float_iter> slice_t;
     BOOST_STATIC_ASSERT(traits::is_segmented<slice_t>::value);

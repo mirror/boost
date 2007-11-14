@@ -12,6 +12,8 @@
 #include <boost/mpl/minus.hpp>
 #include <boost/mpl/next_prior.hpp>
 #include <boost/mpl/and.hpp>
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/fusion/iterator/mpl/convert_iterator.hpp>
 #include <boost/fusion/container/list/cons.hpp>
 #include <boost/fusion/view/joint_view.hpp>
@@ -124,25 +126,36 @@ namespace boost { namespace fusion
             {}
 
             template<typename First, typename Second>
-            struct result;
+            struct result_;
 
             template<typename Second>
-            struct result<right_view, Second>
+            struct result_<right_view, Second>
             {
                 typedef segmented_view<right_view, RightCons> type;
             };
 
             template<typename Second>
-            struct result<left_view, Second>
+            struct result_<left_view, Second>
             {
                 typedef segmented_view<left_view, LeftCons> type;
             };
 
             template<typename Second>
-            struct result<full_view, Second>
+            struct result_<full_view, Second>
             {
                 typedef Second type;
             };
+
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename First, typename Second>
+            struct result<This(First, Second)>
+              : result_<
+                    typename remove_cv<typename remove_reference<First>::type>::type
+                  , typename remove_cv<typename remove_reference<Second>::type>::type
+                >
+            {};
 
             template<typename Second>
             segmented_view<right_view, RightCons> operator ()(right_view, Second &second) const
@@ -226,7 +239,7 @@ namespace boost { namespace fusion
 
                 static type call(Sequence &seq)
                 {
-                    return type(range(seq.cons.car.where, fusion::end(seq.cons.car.sequence)));
+                    return type(range(seq.cons.car.where_, fusion::end(seq.cons.car.sequence)));
                 }
             };
         };
@@ -266,7 +279,7 @@ namespace boost { namespace fusion
                             make_multiple_view<size_minus_1>(detail::full_view())
                           , make_single_view(detail::left_view())
                         )
-                      , segmented_range(fusion::begin(seq.cons.car.sequence), fusion::next(seq.cons.car.where))
+                      , segmented_range(fusion::begin(seq.cons.car.sequence), fusion::next(seq.cons.car.where_))
                       , tfx(seq.cons.cdr)
                     );
                 }
@@ -284,7 +297,7 @@ namespace boost { namespace fusion
 
                 static type call(Sequence &seq)
                 {
-                    return type(range(fusion::begin(seq.cons.car.sequence), seq.cons.car.where));
+                    return type(range(fusion::begin(seq.cons.car.sequence), seq.cons.car.where_));
                 }
             };
         };
@@ -437,7 +450,7 @@ namespace boost { namespace fusion
 
             static type call(cons<Car1> const &cons1, cons<Car2> const &cons2)
             {
-                return type(range(cons1.car.where, cons2.car.where));
+                return type(range(cons1.car.where_, cons2.car.where_));
             }
         };
 
