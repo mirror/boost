@@ -75,7 +75,13 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
    std::list<boost::shared_ptr<boost::thread> > threads;
    for(int i = 0; i < 5; ++i)
    {
-      threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(&run_tests)));
+      try{
+         threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(&run_tests)));
+      }
+      catch(const std::exception& e)
+      {
+         std::cerr << "<note>Thread creation failed with message: " << e.what() << "</note>" << std::endl;
+      }
    }
    std::list<boost::shared_ptr<boost::thread> >::const_iterator a(threads.begin()), b(threads.end());
    while(a != b)
