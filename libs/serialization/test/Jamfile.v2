@@ -206,6 +206,7 @@ rule test-bsl-run_polymorphic_archive ( test-name : sources * ) {
 test-suite "serialization" :
      [ test-bsl-run_files test_array ]
      [ test-bsl-run_files test_binary ]
+     [ test-bsl-run_files test_complex ]
      [ test-bsl-run_files test_contained_class ]
      [ test-bsl-run_files test_cyclic_ptrs ]
      [ test-bsl-run_files test_delete_pointer ]

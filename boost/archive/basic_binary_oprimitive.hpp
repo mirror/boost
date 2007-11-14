@@ -46,7 +46,7 @@ namespace std{
 #include <boost/archive/basic_streambuf_locale_saver.hpp>
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
-#include <boost/type_traits/is_fundamental.hpp>
+#include <boost/serialization/is_bitwise_serializable.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
@@ -113,8 +113,16 @@ public:
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~basic_binary_oprimitive();
 public:
+
     // we provide an optimized save for all fundamental types
-    typedef is_fundamental<mpl::_1> use_array_optimization;
+    // typedef serialization::is_bitwise_serializable<mpl::_1> 
+    //  use_array_optimization;
+    // workaround without using mpl lambdas
+    struct use_array_optimization {
+      template <class T>
+      struct apply : public serialization::is_bitwise_serializable<T> {};
+    };
+    
 
     // the optimized save_array dispatches to save_binary 
     template <class ValueType>

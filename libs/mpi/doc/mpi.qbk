@@ -568,6 +568,11 @@ boost::mpi::is_mpi_datatype `is_mpi_datatype`], e.g.:
     struct is_mpi_datatype<gps_position> : mpl::true_ { };
   } }
 
+For non-template types we have defined a macro to simplify declaring a type 
+as an MPI datatype
+
+  BOOST_IS_MPI_DATATYPE(gps_position)
+
 For composite traits, the specialization of [classref
 boost::mpi::is_mpi_datatype `is_mpi_datatype`] may depend on
 `is_mpi_datatype` itself. For instance, a `boost::array` object is
@@ -1030,6 +1035,58 @@ will likely result in incorrect data being transmitted or unstable
 programs. 
 
 [endsect]
+
+
+
+
+[section:performance_optimizations Performance optimizations]
+[section:serialization_optimizations Serialization optimizations]
+
+To obtain optimal performance for small fixed-length data types not containing
+any pointers it is very important to mark them using the type traits of
+Boost.MPI and Boost.Serialization. 
+
+It was alredy discussed that fixed length types containing no pointers can be 
+using as [classref
+boost::mpi::is_mpi_datatype `is_mpi_datatype`], e.g.:
+
+  namespace boost { namespace mpi {
+    template <>
+    struct is_mpi_datatype<gps_position> : mpl::true_ { };
+  } }
+
+or the equivalent macro 
+
+  BOOST_IS_MPI_DATATYPE(gps_position)
+  
+In addition it can give a substantial performance gain to turn off tracking
+and versioning for these types, if no pointers to these types are used, by
+using the traits classes or helper macros of Boost.Serialization:
+
+  BOOST_CLASS_TRACKING(gps_position,track_never)
+  BOOST_CLASS_IMPLEMENTATION(gps_position,object_serializable)
+
+[endsect]
+  
+[section:homogeneous_machines Homogeneous machines]
+
+More optimizations are possible on homogeneous machines, by avoiding
+MPI_Pack/MPI_Unpack calls but using direct bitwise copy. This feature can be
+enabled by defining the macro BOOST_MPI_HOMOGENEOUS when building Boost.MPI and
+when building the application.
+
+In addition all classes need to be marked both as is_mpi_datatype and
+as is_bitwise_serializable, by using the helper macro of Boost.Serialization:
+
+  BOOST_IS_BITWISE_SERIALIZABLE(gps_position)
+
+Usually it is safe to serialize a class for which is_mpi_datatype is true 
+by using binary copy of the bits. The exception are classes for which
+some members should be skipped for serialization.
+
+[endsect]
+[endsect]
+
 
 [section:c_mapping Mapping from C MPI to Boost.MPI]
 

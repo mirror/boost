@@ -49,7 +49,7 @@ namespace std{
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/mpl/placeholders.hpp>
-#include <boost/type_traits/is_fundamental.hpp>
+#include <boost/serialization/is_bitwise_serializable.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -113,7 +113,12 @@ public:
     ~basic_binary_iprimitive();
 public:
     // we provide an optimized load for all fundamental types
-    typedef is_fundamental<mpl::_1> use_array_optimization;
+    //typedef serialization::is_bitwise_serializable<mpl::_1> 
+    //  use_array_optimization;
+    struct use_array_optimization {
+      template <class T>
+      struct apply : public serialization::is_bitwise_serializable<T> {};
+    };
 
     // the optimized load_array dispatches to load_binary 
     template <class ValueType>
@@ -160,7 +165,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
         static_cast<Elem *>(address), 
         s
     );
-    if(scount != static_cast<std::size_t>(s))
+    if(scount != static_cast<std::streamsize>(s))
         boost::throw_exception(
             archive_exception(archive_exception::stream_error)
         );
