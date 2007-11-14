@@ -2063,6 +2063,16 @@ boostbook standalone
     ;
 ]
 
+[heading Is there an easy way to convert BoostBook docs to QuickBook?]
+
+There's a stylesheet that allows Boostbook generated HTML to be viewed
+as quickbook source, see
+[@http://svn.boost.org/trac/boost/wiki/QuickbookSourceStylesheetProject],
+so it's then just a cut and paste job to convert the BoostBook to
+QuickBook (which IMO is a whole lot easier to edit and maintain).
+
+--John Maddock
+
 [endsect] [/faq]
 
 [section:ref Quick Reference]
