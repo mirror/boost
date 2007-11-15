@@ -354,13 +354,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
 #ifndef BOOST_UBLAS_STRICT_HERMITIAN
-            if (triangular_type::other (i, j))
-                return at_element (i, j);
-            else {
-                external_logic ().raise ();
-                // arbitary return value
-                return data () [triangular_type::element (layout_type (), j, size_, i, size_)];
+            if (!triangular_type::other (i, j)) {
+                bad_index ().raise ();
+                // NEVER reached
             }
+            return at_element (i, j);
 #else
         if (triangular_type::other (i, j))
             return reference (*this, i, j, data () [triangular_type::element (layout_type (), i, size_, j, size_)]);

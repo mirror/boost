@@ -173,13 +173,11 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator () (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (i < size1_, bad_index ());
             BOOST_UBLAS_CHECK (j < size2_, bad_index ());
-            if (triangular_type::other (i, j))
-                return data () [triangular_type::element (layout_type (), i, size1_, j, size2_)];
-            else {
+            if (!triangular_type::other (i, j)) {
                 bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(zero_);
+                // NEVER reached
             }
+            return data () [triangular_type::element (layout_type (), i, size1_, j, size2_)];
         }
         
         // Element assignment
@@ -1019,34 +1017,22 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator () (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
-            if (triangular_type::other (i, j))
-                return data () (i, j);
-            else if (triangular_type::one (i, j)) {
+            if (!triangular_type::other (i, j)) {
                 bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(one_);
-            } else {
-                bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(zero_);
+                // NEVER reached
             }
+            return data () (i, j);
         }
 #else
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) const {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
-            if (triangular_type::other (i, j))
-                return data () (i, j);
-            else if (triangular_type::one (i, j)) {
+            if (!triangular_type::other (i, j)) {
                 bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(one_);
-            } else {
-                bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(zero_);
+                // NEVER reached
             }
+            return data () (i, j);
         }
 #endif
 
