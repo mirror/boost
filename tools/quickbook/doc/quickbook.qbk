@@ -1,8 +1,8 @@
 [article Quickbook
-    [quickbook 1.3]
-    [version 1.3]
+    [quickbook 1.4]
+    [version 1.4]
     [authors [de Guzman, Joel], [Niebler, Eric]]
-    [copyright 2002 2004 Joel de Guzman, Eric Niebler]
+    [copyright 2002 2004 2006 Joel de Guzman, Eric Niebler]
     [purpose /WikiWiki/ style documentation tool]
     [license
         Distributed under the Boost Software License, Version 1.0.
@@ -11,7 +11,7 @@
     ]
 ]
 
-[/ QuickBook Document version 1.3 ]
+[/ QuickBook Document version 1.4 ]
 [/ Sept 24, 2002 ]
 [/ Sept 2, 2004 ]
 [/ Feb 14, 2005 ]
@@ -32,7 +32,7 @@
 [def __font_styles__        [link quickbook.syntax.phrase.font_styles Font Styles]]
 [def __quotations__         [link quickbook.syntax.phrase.quotations Quotations]]
 [def __replaceable__        [link quickbook.syntax.phrase.replaceable Replaceble]]
-[def __simple_formatting__  [link quickbook.syntax.phrase.simple_formatting formatting Simple formatting]]
+[def __simple_formatting__  [link quickbook.syntax.phrase.simple_formatting Simple formatting]]
 [def __inline_code__        [link quickbook.syntax.phrase.inline_code Inline code]]
 [def __code_blocks__        [link quickbook.syntax.phrase.code_blocks Code blocks]]
 [def __source_mode__        [link quickbook.syntax.phrase.source_mode Source Mode]]
@@ -41,10 +41,11 @@
 [def __links__              [link quickbook.syntax.phrase.links Links]]
 [def __anchor_links__       [link quickbook.syntax.phrase.anchor_links Anchor links]]
 [def __refentry_links__     [link quickbook.syntax.phrase.refentry_links refentry links]]
-[def __code_links__         [link quickbook.syntax.phrase.code_links function, class, member, enum or header links]]
+[def __code_links__         [link quickbook.syntax.phrase.code_links function, class, member, enum, macro, concept or header links]]
 [def __escape__             [link quickbook.syntax.phrase.escape Escape]]
 [def __single_char_escape__ [link quickbook.syntax.phrase.single_char_escape Single char escape]]
 [def __images__             [link quickbook.syntax.phrase.images Images]]
+[def __cond__               [link quickbook.syntax.phrase.cond Conditional Generation]]
 
 [def __document__           [link quickbook.syntax.block.document Document]]
 [def __section__            [link quickbook.syntax.block.section Section]]
@@ -61,17 +62,22 @@
 [def __blockquote__         [link quickbook.syntax.block.blockquote Blockquote]]
 [def __heading__            [link quickbook.syntax.block.headings Heading]]
 [def __macros__             [link quickbook.syntax.block.macros Macros]]
+[def __templates__          [link quickbook.syntax.block.templates Templates]]
 [def __predefined_macros__  [link quickbook.syntax.block.predefined_macros Predefined Macros]]
 [def __blurbs__             [link quickbook.syntax.block.blurbs Blurbs]]
 [def __admonitions__        [link quickbook.syntax.block.admonitions Admonitions]]
 [def __tables__             [link quickbook.syntax.block.tables Tables]]
 [def __variable_lists__     [link quickbook.syntax.block.variable_lists Variable Lists]]
 [def __include__            [link quickbook.syntax.block.include Include]]
+[def __import__             [link quickbook.syntax.block.import Import]]
 
 [section:intro Introduction]
 
 [:[*['["Why program by hand in five days what you can spend five years of your
-life automating?]]]\n\n-- Terrence Parr, author ANTLR/PCCTS]
+life automating?]]]
+
+-- Terrence Parr, author ANTLR/PCCTS
+]
 
 Well, QuickBook started as a weekend hack. It was originally intended to be a
 sample application using __spirit__. What is it? What you are viewing now, this
@@ -80,7 +86,7 @@ one master:
 
 [:[@../quickbook.qbk quickbook.qbk]]
 
-Originally named QuickDoc, this funky tool that never dies evolved into a
+Originally named QuickDoc, this funky tool that never dies, evolved into a
 funkier tool thanks to Eric Niebler who resurrected the project making it
 generate __boostbook__ instead of HTML. The __boostbook__ documentation format
 is an extension of __docbook__, an SGML or XML based format for describing
@@ -138,6 +144,27 @@ Features include:
 * Post-processor bug fix for escaped XML code that it does not recognize.
 * Replaceable, with the \[~replacement\] syntax.
 
+[h3 Version 1.4]
+
+* Generic Headers
+* Code changes to allow full recursion (i.e. Collectors and push/pop functions)
+* Various code cleanup/maintenance
+* Templates!
+* \[conceptref\] for referencing BoostBook <concept> entities.
+* Allow escape of spaces. The escaped space is removed from the output. Syntax:
+  `\ `.
+* Nested comments are now allowed.
+* Quickbook blocks can nest inside comments.
+* __import__ facility.
+* Callouts on imported code
+* Simple markups can now span a whole block.
+* __blurbs__, __admonitions__ and table cells (see __tables__) may now
+  contain paragraphs.
+* `\n` and `[br]` are now deprecated.
+* __cond__. Ala C++ #ifdef.
+* Searching of included and imported files in an extensible search path with
+  `--include-path` (`-I`) option.
+
 [endsect]
 
 [section:syntax Syntax Summary]
@@ -163,6 +190,20 @@ Can be placed anywhere.
 [pre
 '''[/ comment (no output generated) ]'''
 ]
+
+[/ for testing only... ]
+
+[pre
+'''[/ comments can be nested [/ some more here] ]'''
+]
+
+[/ for testing [/ only ] ]
+
+[pre
+'''[/ Quickbook blocks can nest inside comments. [*Comment this out too!] ]'''
+]
+
+[/ for testing [*only ] ]
 
 [endsect]
 
@@ -198,7 +239,7 @@ When you want content that may or must be replaced by the user, use the syntax:
 [~replacement]
 ''']
 
-This will generate: 
+This will generate:
 
 [~replacement]
 
@@ -215,7 +256,7 @@ will generate:
 ["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 
 Note the proper left and right quote marks. Also, while you can simply use
-ordinary quote marks like "quoted", our quotation, above, will generate correct 
+ordinary quote marks like "quoted", our quotation, above, will generate correct
 DocBook quotations (e.g. <quote>quoted</quote>).
 
 Like all phrase elements, quotations may be nested. Example:
@@ -243,18 +284,24 @@ will generate:
 
 /italic/, *bold*, _underline_, =teletype=
 
-Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
-are much stricter.
+Unlike QuickBook's standard formatting scheme, the rules for simpler
+alternatives are much stricter[footnote Thanks to David Barrett, author of
+[@http://quinthar.com/qwikiwiki/index.php?page=Home Qwiki], for sharing
+these samples and teaching me these obscure formatting rules. I wasn't sure
+at all if __spirit__, being more or less a formal EBNF parser, can handle
+the context sensitivity and ambiguity.].
 
 * Simple markups cannot nest. You can combine a simple markup with a nestable markup.
+* Simple markups cannot contain any other form of quickbook markup.
 * A non-space character must follow the leading markup
 * A non-space character must precede the trailing markup
 * A space or a punctuation must follow the trailing markup
-* If the matching markup cannot be found within a line, the formatting
+* If the matching markup cannot be found within a block, the formatting
   will not be applied. This is to ensure that un-matched formatting markups,
-  which can be a common mistake, does not corrupt anything past a single line.
+  which can be a common mistake, does not corrupt anything past a single block.
   We do not want the rest of the document to be rendered bold just because we
-  forgot a trailing '*'.
+  forgot a trailing '*'. A single block is terminated by two end of lines or
+  the close bracket: ']'.
 * A line starting with the star will be interpreted as an unordered list.
   See __unordered_lists__.
 
@@ -273,12 +320,38 @@ are much stricter.
     [[[^'''*This is bold*.''']]                         [*This is bold*.]]
     [[[^'''*B*. (bold B)''']]                           [*B*. (bold B)]]
     [[[^'''['*Bold-Italic*]''']]                        [['*Bold-Italic*]]]
+    [[[^'''*side-by*/-side/''']]                        [*side-by*/-side/]]
 ]
 
-[blurb __note__ Thanks to David Barrett, author of
-[@http://quinthar.com/qwikiwiki/index.php?page=Home Qwiki], for sharing these samples
-and teaching me these obscure formatting rules. I wasn't sure at all if __spirit__,
-being more or less a formal EBNF parser, can handle the context sensitivity and ambiguity.]
+As mentioned, simple markups cannot go past a single block. The text
+from "have" to "full" in the following paragraph will be rendered as
+bold:
+
+[pre'''
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!*
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+''']
+
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!*
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+
+But in the following paragraph, bold is not applied:
+
+[pre'''
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+''']
+
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
 
 [endsect]
 [section Inline code]
@@ -295,11 +368,9 @@ will generate:
 This text has inlined code `int main() { return 0; }` in it. The code will be
 syntax highlighted.
 
-[blurb __note__
-Note that we simply enclose the code with the tick: [^'''"`"'''], not the
+[note We simply enclose the code with the tick: [^'''"`"'''], not the
 single quote: `"'"`. Note too that [^'''`some code`'''] is preferred over
-[^'''[^some code]'''].
-]
+[^'''[^some code]''']. ]
 
 [endsect]
 [section Code blocks]
@@ -367,7 +438,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
     [[Python]               [[^\[python\]]]]
 ]
 
-[blurb __note__ The source mode strings are lowercase.]
+[note The source mode strings are lowercase.]
 
 [endsect]
 [section line-break]
@@ -376,7 +447,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 [br]
 ''']
 
-[blurb __note__ Note that `\n` is now preferred over `[br]`.]
+[warning `[br]` is now deprecated. __blurbs__, __admonitions__ and
+table cells (see __tables__) may now contain paragraphs.]
 
 [endsect]
 [section Anchors]
@@ -450,7 +522,7 @@ This gets converted into [^<link linkend="xml.refentry">xml.refentry</link>].
 [endsect]
 [section:code_links Code Links]
 
-If you want to link to a function, class, member, enum or header in the reference
+If you want to link to a function, class, member, enum, concept or header in the reference
 section, you can use:
 
 [pre'''
@@ -458,11 +530,13 @@ section, you can use:
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
 [enumref fully::qualified::enum_name The link text]
+[macroref MACRO_NAME The link text]
+[conceptref ConceptName The link text]
 [headerref path/to/header.hpp The link text]
 ''']
 
 Again, the link text is optional. If this is not present, the link text will
-automatically be the function, class, member or enum. Example:
+automatically be the function, class, member, enum, macro, concept or header. Example:
 
 [pre'''
 [classref boost::bar::baz]
@@ -493,7 +567,7 @@ Escaping allows us to pass XML markup to __boostbook__ or __docbook__. For examp
 <emphasis role="bold">This is direct XML markup</emphasis>
 '''
 
-[blurb __alert__ Be careful when using the escape. The text must conform to
+[important Be careful when using the escape. The text must conform to
 __boostbook__/__docbook__ syntax.]
 
 [endsect]
@@ -504,8 +578,14 @@ punctuation immediately after the backslash is passed without any processing.
 This is useful when we need to escape QuickBook punctuations such as `[` and `]`.
 For example, how do you escape the triple quote? Simple: [^\\'\\'\\']
 
-`\n` has a special meaning. It is used to generate line breaks. Note that `\n`
-is now preferred over `[br]`.
+
+`\n` has a special meaning. It is used to generate line breaks.
+
+[warning `\n` and `[br]` are now deprecated. __blurbs__, __admonitions__
+and table cells (see __tables__) may now contain paragraphs.]
+
+The escaped space: `\ ` also has a special meaning. The escaped space is removed
+from the output.
 
 [endsect]
 [section Images]
@@ -527,7 +607,58 @@ of the current page. For example, this:
 
 will generate this[footnote A sample footnote].
 
+[section Macro Expansion]
+
+[pre'''
+__a_macro_identifier__
+''']
+
+See __macros__ for details.
+
 [endsect]
+
+[section Template Expansion]
+
+[pre'''
+[a_template_identifier]
+''']
+
+See __templates__ for details.
+
+[endsect]
+
+[endsect]
+
+[section:cond Conditional Generation]
+
+Like C++ `#ifdef`, you can generate phrases depending on the presence of
+a macro. Example:
+
+[pre'''
+[? __to_be__ To be or not to be]
+''']
+
+[? __to_be__ To be or not to be]
+
+Here, the phrase "To be or not to be" will only be generated if the
+macro symbol '''__to_be__''' has been previously defined. The phrase
+above will not do anything since we haven't defined '''__to_be__'''.
+Now, let's define the symbol:
+
+[pre'''
+[def __to_be__]
+''']
+
+[def __to_be__]
+
+And try again:
+
+[? __to_be__ To be or not to be]
+
+Yes![footnote Conditional Generation makes quickbook turing complete.]
+
+[endsect]
+
 [endsect]
 [section:block Block Level Elements]
 
@@ -616,6 +747,8 @@ Paragraphs start left-flushed and are terminated by two or more newlines. No
 markup is needed for paragraphs. QuickBook automatically detects paragraphs from
 the context. Block markups \[section, endsect, h1, h2, h3, h4, h5, h6, blurb,
 (block-quote) ':', pre, def, table and include \] may also terminate a paragraph.
+ [/ <-- There's a space here. Don't remove. this is intentianal, for testing]
+This is a new paragraph...
 
 [endsect]
 
@@ -790,6 +923,8 @@ syntax highlighted according to the current __source_mode__:
 
         return cgi.escape(text)
 
+[c++]
+
 Macros that are already defined are expanded in source code. Example:
 
 [pre'''
@@ -929,15 +1064,61 @@ and all upper-case are converted to lower-case. For example: Heading
 to link to them. See __anchor_links__ and __section__ for more info.
 
 [endsect]
+[section Generic Heading]
+
+In cases when you don't want to care about the heading level (1 to 6), you
+can use the /Generic Heading/:
+
+[pre'''
+[heading Heading]
+''']
+
+The /Generic Heading/ assumes the level, plus one, of the innermost section
+where it is placed. For example, if it is placed in the outermost section,
+then, it assumes /h2/.
+
+Headings are often used as an alternative to sections. It is used
+particularly if you do not want to start a new section. In many cases,
+however, headings in a particular section is just flat. Example:
+
+[pre'''
+[section A]
+[h2 X]
+[h2 Y]
+[h2 Z]
+[endsect]
+''']
+
+Here we use h2 assuming that section A is the outermost level. If it is
+placed in an inner level, you'll have to use h3, h4, etc. depending on
+where the section is. In general, it is the section level plus one. It is
+rather tedious, however, to scan the section level everytime. If you
+rewrite the example above as shown below, this will be automatic:
+
+[pre'''
+[section A]
+[heading X]
+[heading Y]
+[heading Z]
+[endsect]
+''']
+
+They work well regardless where you place them. You can rearrange sections
+at will without any extra work to ensure correct heading levels. In fact,
+with /section/ and /heading/, you have all you need. /h1/../h6/ becomes
+redundant. /h1/../h6/ might be deprecated in the future.
+
+[endsect]
 [section Macros]
 
 [pre'''
 [def macro_identifier some text]
 ''']
 
-When a macro is defined, the identifier replaces the text anywhere in the file,
-in paragraphs, in markups, etc. macro_identifier is a string of non-white space
-characters except '\]' while the replacement text can be any phrase (even
+When a macro is defined, the identifier replaces the text anywhere in the
+file, in paragraphs, in markups, etc. macro_identifier is a string of non-
+white space characters except '\]'. A macro may not follow an alphabetic
+character or the underscore. The replacement text can be any phrase (even
 marked up). Example:
 
 [pre'''
@@ -950,9 +1131,10 @@ Now everywhere the sf_logo is placed, the picture will be inlined.
 [def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&type=1]]
 sf_logo
 
-[blurb __tip__ It's a good idea to use macro identifiers that are distinguishable.
-For instance, in this document, macro identifiers have two leading and trailing
-underscores (e.g. [^'''__spirit__''']). The reason is to avoid unwanted macro replacement.]
+[tip It's a good idea to use macro identifiers that are distinguishable.
+For instance, in this document, macro identifiers have two leading and
+trailing underscores (e.g. [^'''__spirit__''']). The reason is to avoid
+unwanted macro replacement.]
 
 Links (URLS) and images are good candidates for macros. *1*) They tend to
 change a lot. It is a good idea to place all links and images in one place near the top
@@ -991,10 +1173,271 @@ Quickbook has some predefined macros that you can already use.
 ]
 
 [endsect]
+[section Templates]
+
+Templates provide a more versatile text substitution mechanism. Templates
+come in handy when you need to create parameterizable, multi-line,
+boilerplate text that you specify once and expand many times. Templates
+accept one or more arguments. These arguments act like place-holders for
+text replacement. Unlike simple macros, which are limited to phrase level
+markup, templates can contain block level markup (e.g. paragraphs, code
+blocks and tables).
+
+Example template:
+
+[pre'''
+[template person[name age what]
+
+Hi, my name is [name]. I am [age] years old. I am a [what].
+
+]
+''']
+
+[template person[name age what]
+
+Hi, my name is [name]. I am [age] years old. I am a [what].
+
+]
+
+[heading Template Identifier]
+
+Template identifiers can either consist of:
+
+* An initial alphabetic character or the underscore, followed by
+  zero or more alphanumeric characters or the underscore. This is
+  similar to your typical C/C++ identifier.
+* A single character punctuation (a non-alphanumeric printable character)
+
+[heading Formal Template Arguments]
+
+Template formal arguments are identifiers consisting of an initial
+alphabetic character or the underscore, followed by zero or more
+alphanumeric characters or the underscore. This is similar to your typical
+C/C++ identifier.
+
+A template formal argument temporarily hides a template of the same name at
+the point where the [link quickbook.syntax.block.templates.template_expansion
+template is expanded]. Note that the body of the [^person] template above
+refers to [^name] [^age] and [^what] as [^\[name\]] [^\[age\]] and
+[^\[what\]]. [^name] [^age] and [^what] are actually templates that exist
+in the duration of the template call.
+
+[heading Template Body]
+
+The template body can be just about any QuickBook block or phrase. There
+are actually two forms. Templates may be phrase or block level. Phrase
+templates are of the form:
+
+[pre'''
+[template sample[arg1 arg2...argN] replacement text... ]
+''']
+
+Block templates are of the form:
+
+[pre'''
+[template sample[arg1 arg2...argN]
+replacement text...
+]
+''']
+
+The basic rule is as follows: if a newline immediately follows the argument
+list, then it is a block template, otherwise, it is a phrase template.
+Phrase templates are typically expanded as part of phrases. Like macros,
+block level elements are not allowed in phrase templates.
+
+[heading Template Expansion]
+
+You expand a template this way:
+
+[pre'''
+[template_identifier arg1..arg2..arg3]
+''']
+
+At template expansion, you supply the actual arguments. The template will
+be expanded with your supplied arguments. Example:
+
+[pre'''
+[person James Bond..39..Spy]
+[person Santa Clause..87..Big Red Fatso]
+''']
+
+Which will expand to:
+
+[person James Bond..39..Spy]
+[person Santa Clause..87..Big Red Fatso]
+
+[caution A word of caution: Templates are recursive. A template can call
+another template or even itself, directly or indirectly. There are no
+control structures in QuickBook (yet) so this will always mean infinite
+recursion. QuickBook can detect this situation and report an error if
+recursion exceeds a certain limit.]
+
+Each actual argument can be a word, a text fragment or just about any [link
+quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by the
+double dot [^".."] and terminated by the close parenthesis.
+
+[heading Nullary Templates]
+
+Nullary templates look and act like simple macros. Example:
+
+[pre'''
+[template alpha[]&apos;&apos;&apos;&amp;#945;&apos;&apos;&apos;]
+[template beta[]&apos;&apos;&apos;&amp;#946;&apos;&apos;&apos;]
+''']
+
+[template alpha[]'''&#945;''']
+[template beta[]'''&#946;''']
+
+Expanding:
+
+[pre'''Some squigles...[*[alpha][beta]]''']
+
+We have:
+
+Some squiggles...[*[alpha][beta]]
+
+The difference with macros are
+
+* The explicit [link quickbook.syntax.block.templates.template_expansion
+  template expansion syntax]. This is an advantage because, now, we don't
+  have to use obscure naming conventions like double underscores (e.g.
+  \_\_alpha\_\_) to avoid unwanted
+  macro replacement.
+* The template is expanded at the point where it is invoked. A macro is
+  expanded immediately at its point of declaration. This is subtle and
+  can cause a slight difference in behavior especially if you refer to
+  other macros and templates in the body.
+
+The empty brackets after the template identifier ([^alpha\[\]]) indicates no
+arguments. If the template body does not look like a template argument list, we
+can elide the empty brackets. Example:
+
+[pre'''
+[template aristotle_quote Aristotle: [*['Education is the best provision
+for the journey to old age.]]]
+''']
+
+[template aristotle_quote\ Aristotle: [*['Education is the best provision
+for the journey to old age.]]]
+
+Expanding:
+
+[pre'''
+Here's a quote from [aristotle_quote].
+''']
+
+We have:
+
+Here's a quote from [aristotle_quote].
+
+The disadvantage is that you can't avoid the space between the template
+identifier, `aristotle_quote`, and the template body "Aristotle...". This space
+will be part of the template body. If that space is unwanted, use empty
+brackets or use the space escape: "`\ `". Example:
+
+[pre'''
+[template tag\ _tag]
+''']
+
+[template tag\ _tag]
+
+Then expanding:
+
+[pre'''
+`struct` x[tag];
+''']
+
+We have:
+
+`struct` x[tag];
+
+You have a couple of ways to do it. I personally prefer the explicit empty
+brackets, though.
+
+[heading Simple Arguments]
+
+As mentioned, arguments are separated by the double dot [^".."]. If there
+are less arguments passed than expected, QuickBook attempts to break the
+last argument into two or more arguments following this logic:
+
+* Break the last argument into two, at the first space found ([^'', '\\n',
+  \\t' or '\\r']).
+* Repeat until there are enough arguments or if there are no more spaces
+  found (in which case, an error is reported).
+
+For example:
+
+[pre'''
+[template simple[a b c d] [a][b][c][d]]
+[simple w x y z]
+''']
+
+will produce:
+
+[template simple[a b c d] [a][b][c][d]]
+[simple w x y z]
+
+"w x y z" is initially treated as a single argument because we didn't
+supply any [^".."] separators. However, since [^simple] expects 4
+arguments, "w x y z" is broken down iteratively (applying the logic above)
+until we have "w", "x", "y" and "z".
+
+QuickBook only tries to get the arguments it needs. For example:
+
+[pre'''
+[simple w x y z trail]
+''']
+
+will produce:
+
+[simple w x y z trail]
+
+The arguments being: "w", "x", "y" and "z trail".
+
+It should be obvious now that for simple arguments with no spaces, we can
+get by without separating the arguments with [^".."] separators. It is
+possible to combine [^".."] separators with the argument passing
+simplification presented above. Example:
+
+[pre'''
+[simple what do you think ..m a n?]
+''']
+
+will produce:
+
+[simple what do you think ..m a n?]
+
+[heading Punctuation Templates]
+
+With templates, one of our objectives is to allow us to rewrite QuickBook
+in QuickBook (as a qbk library). For that to happen, we need to accommodate
+single character punctuation templates which are fairly common in
+QuickBook. You might have noticed that single character punctuations are
+allowed as [link quickbook.syntax.block.templates.template_identifier
+template identifiers]. Example:
+
+[pre'''
+[template ![bar] '''<hey>'''[bar]'''</hey>''']
+''']
+
+Now, expanding this:
+
+[pre'''
+[!baz]
+''']
+
+We will have:
+
+[pre
+<hey>baz</hey>
+]
+
+[endsect]
 [section Blurbs]
 
 [pre'''
-[blurb :-) [*An eye catching advertisement or note...]\n\n
+[blurb :-) [*An eye catching advertisement or note...]
+
     __spirit__ is an object-oriented recursive-descent parser generator framework
     implemented using template meta-programming techniques. Expression templates
     allow us to approximate the syntax of Extended Backus-Normal Form (EBNF)
@@ -1004,12 +1447,16 @@ Quickbook has some predefined macros that you can already use.
 
 will generate this:
 
-[blurb :-) [*An eye catching advertisement or note...]\n\n
+[blurb :-) [*An eye catching advertisement or note...]
+
     __spirit__ is an object-oriented recursive-descent parser generator
     framework implemented using template meta-programming techniques. Expression
     templates allow us to approximate the syntax of Extended Backus-Normal Form
     (EBNF) completely in C++.
 ]
+
+[note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever
+appropriate.]
 
 [endsect]
 [section Tables]
@@ -1044,10 +1491,14 @@ big cells to be formatted nicely. Example:
     [
         [Row 0, Col 0: a small cell]
         [
-            Row 0, Col 1:
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
+            Row 0, Col 1: a big fat cell with paragraphs
+
+            Boost provides free peer-reviewed portable C++ source libraries.
+
+            We emphasize libraries that work well with the C++ Standard Library.
+            Boost libraries are intended to be widely useful, and usable across
+            a broad spectrum of applications. The Boost license encourages both
+            commercial and non-commercial use.
         ]
     ]
     [
@@ -1064,10 +1515,14 @@ and thus:
     [
         [Row 0, Col 0: a small cell]
         [
-            Row 0, Col 1:
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
+            Row 0, Col 1: a big fat cell with paragraphs
+
+            Boost provides free peer-reviewed portable C++ source libraries.
+ [/ <-- There's a space here. Don't remove. This is intentional, for testing]
+            We emphasize libraries that work well with the C++ Standard Library.
+            Boost libraries are intended to be widely useful, and usable across
+            a broad spectrum of applications. The Boost license encourages both
+            commercial and non-commercial use.
         ]
     ]
     [
@@ -1119,7 +1574,11 @@ Here's how to have preformatted blocks of code in a table cell:
 [variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
-    [[term 3] [The definition of term 3]]
+    [[term 3] [
+    The definition of term 3.
+
+    Definitions may contain paragraphs.
+    ]]
 ]
 ''']
 
@@ -1128,7 +1587,11 @@ will generate:
 [variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
-    [[term 3] [The definition of term 3]]
+    [[term 3] [
+    The definition of term 3.
+
+    Definitions may contain paragraphs.
+    ]]
 ]
 
 The rules for variable lists are the same as for tables, except that
@@ -1145,34 +1608,511 @@ You can include one QuickBook file from another. The syntax is simply:
 [include someother.qbk]
 ''']
 
-The included file will be processed as if it had be cut and pasted
+The included file will be processed as if it had been cut and pasted
 into the current document, with the following exceptions:
 
 * The '''__FILENAME__''' predefined macro will reflect the name of the
   file currently being processed.
 * Any macros defined in the included file are scoped to that file.
 
-As the number of included QuickBook files grows, so too does the
-likelihood of two sections having the same name. Since QuickBook generates
-an anchor for each section based on the section name, it is possible to
-end up with two identically named anchors, leading to link ambiguities.
-To resolve these ambiguities, the [^\[include\]] directive lets you
-specify a document id to use for the included file. You can use it like
-this:
+The [^\[include\]] directive lets you specify a document id to use for the
+included file. When this id is not explicitly specified, the id defaults to
+the filename ("someother", in the example above). You can specify the id
+like this:
 
 [pre'''
 [include:someid someother.qbk]
 ''']
 
-When using this form, all auto-generated anchors will use "someid" as
-a unique prefix. So for instance, if there is a section in someother.qbk
-named "Intro", the named anchor for that section will be "someid.intro",
-and you can link to it with [^\[link someid.intro The Intro\]].
+All auto-generated anchors will use the document id as a unique prefix. So
+for instance, if there is a top section in someother.qbk named "Intro", the
+named anchor for that section will be "someid.intro", and you can link to
+it with [^\[link someid.intro The Intro\]].
+
+[endsect]
+
+[section Import]
+
+When documenting code, you'd surely need to present code from actual source
+files. While it is possible to copy some code and paste them in your QuickBook
+file, doing so is error prone and the extracted code in the documentation tends
+to get out of sync with the actual code as the code evolves. The problem, as
+always, is that once documentation is written, the tendency is for the docs to
+languish in the archives without maintenance.
+
+QuickBook's import facility provides a nice solution.
+
+[heading Example]
+
+You can effortlessly import code snippets from source code into your QuickBook.
+The following illustrates how this is done:
+
+[pre'''
+[import ../test/stub.cpp]
+[foo]
+[bar]
+''']
+
+The first line:
+
+[pre'''
+[import ../test/stub.cpp]
+''']
+
+collects specially marked-up code snippets from [@../../test/stub.cpp stub.cpp]
+and places them in your QuickBook file as virtual templates. Each of the
+specially marked-up code snippets has a name (e.g. `foo` and `bar` in the
+example above). This shall be the template identifier for that particular code
+snippet. The second and third line above does the actual template expansion:
+
+[pre'''
+[foo]
+[bar]
+''']
+
+And the result is:
+
+[import ../test/stub.cpp]
+[foo]
+[bar]
+
+[heading Code Snippet Markup]
+
+Note how the code snippets in [@../../test/stub.cpp stub.cpp] get marked up. We
+use distinguishable comments following the form:
+
+    //[id
+    some code here
+    //]
+
+The first comment line above initiates a named code-snippet. This prefix will
+not be visible in quickbook. The entire code-snippet in between `//[id` and
+`//]` will be inserted as a template in quickbook with name ['/id/]. The comment
+`//]` ends a code-snippet This too will not be visible in quickbook.
+
+[heading Special Comments]
+
+Special comments of the form:
+
+    //` some [*quickbook] markup here
+
+and:
+
+    /*` some [*quickbook] markup here */
+
+will be parsed by QuickBook. This can contain quickbook /blocks/ (e.g. sections,
+paragraphs, tables, etc). In the first case, the initial slash-slash, tick and
+white-space shall be ignored. In the second, the initial slash-star-tick and the
+final star-slash shall be ignored.
+
+Special comments of the form:
+
+    /*<- this C++ comment will be ignored ->*/
+
+or
+
+    /*<-*/ "this c++ code  will be ignored" /*->*/
+
+or
+
+    //<-
+    private:
+        int some_member;
+    //->
+
+can be used to inhibit code from passing through to quickbook. All text between
+the delimeters will simply be ignored.
+
+[heading Callouts]
+
+Special comments of the form:
+
+    /*< some [*quickbook] markup here >*/
+
+will be regarded as callouts. These will be collected, numbered and
+rendered as a "callout bug" (a small icon with a number). After the
+whole snippet is parsed, the callout list is generated. See
+[@http://www.docbook.org/tdg/en/html/callout.html Callouts] for details.
+Example:
+
+[foo_bar]
+
+This is the actual code:
+
+    //[ foo_bar
+    std::string foo_bar() /*< The /Mythical/ FooBar.
+                          See [@http://en.wikipedia.org/wiki/Foobar Foobar for details] >*/
+    {
+        return "foo-bar"; /*< return 'em, foo-bar man! >*/
+    }
+    //]
+
+The callouts bugs are placed exactly where the special callout comment
+is situated. It can be anywhere in the code. The bugs can be rather
+obtrusive, however. They get in the way of the clarity of the code.
+Another special callout comment style is available:
+
+    /*<< some [*quickbook] markup here >>*/
+
+This is the line-oriented version of the callout. With this, the "bug"
+is placed at the very left of the code block, away from the actual code.
+By placing it at the far left, the code is rendered un-obscured.
+Example:
+
+[class_]
+
+See the actual code here: [@../../test/stub.cpp]
+
+[endsect]
 
 [endsect]
 [endsect]
+
+[section:install Installation and configuration]
+
+This section provides some guidelines on how to install and configure
+BoostBook and Quickbook under several operating systems.
+
+Before continuing, it is very important that you keep this in mind: if you
+try to build some documents and the process breaks due to misconfiguration,
+be absolutely sure to delete any `bin` and `bin.v2` directories generated
+by the build before trying again.  Otherwise your configuration fixes will
+not take any effect.
+
+[section:macosx Mac OS X]
+
+[:['Section contributed by Julio M. Merino Vidal]]
+
+The following instructions explain how to install Docbook XML, Docbook XSL
+and Doxygen in a Mac OS X system, how to configure Boost.Build v2 to
+recognize them and how to build and install Quickbook.  They were taken
+from a 10.4 (Tiger) machine so it is likely that they also apply to future
+versions; they may not work with older ones, though.
+
+The text below assumes you want to install all the necessary utilities in a
+system-wide location, allowing any user in the machine to have access to
+them. Therefore, all files will be put in the `/usr/local` hierarchy.  If
+you do not want this, you can choose any other prefix such as
+`~/Applications` for a single-user installation.
+
+Mac OS X comes with `xsltproc` and all related libraries preinstalled, so
+you do not need to take any extra steps to set them up.  It is probable
+that future versions will include them too, but these instructions may not
+apply to older versions.
+
+To get started:
+
+# Download [@http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip Docbook XML
+  4.2] and unpack it inside `/usr/local/share/xml/docbook/4.2`.
+
+# Download the latest
+  [@http://sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608
+  Docbook XSL] version and unpack it.  Put the results in
+  `/usr/local/share/xsl/docbook`, thus effectively removing the version
+  number from the directory name (for simplicity).
+
+# Add the following to your `user-config.jam` file, which should live in
+  your home directory (`/Users/<your_username>`).  You must already have it
+  somewhere or otherwise you could not be building Boost (i.e. missing
+  tools configuration).
+
+ using xsltproc ;
+
+ using boostbook
+     : "/usr/local/share/xsl/docbook"
+     : "/usr/local/share/xml/docbook/4.2"
+     ;
+
+The above steps are enough to get a functional BoostBook setup.  Quickbook
+will be automatically built when needed.  If you want to avoid these
+rebuilds and install a system-wide Quickbook instead:
+
+# Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
+
+# Build the utility by issuing `bjam --v2`.
+
+# Copy the resulting `quickbook` binary (located under the
+  `BOOST_ROOT/bin.v2` hierarchy) to a safe place.  Following our previous
+  example, you can install it into: `/usr/local/bin`.
+
+# Add the following to your `user-config.jam` file:
+
+ using quickbook
+     : "/usr/local/bin/quickbook" ;
+     ;
+
+Additionally, if you need to build documentation that uses
+[@http://www.doxygen.org Doxygen], you will need to install it too:
+
+# Go to the [@http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
+  downloads section] and get the disk image (`dmg` file) for Mac OS X.
+
+# Open the disk image and drag the Doxygen application to your
+  `Applications` folder to install it.
+
+# Add the following to your `user-config.jam` file:
+
+ using doxygen
+     : /Applications/Doxygen.app/Contents/Resources/doxygen
+     ;
+
+Alternatively, you may want to install all the prerequistes through a
+package system to avoid manual management of the installations.  In that
+case, check out [@http://www.pkgsrc.org pkgsrc].
+
 [endsect]
+
+[section:windows Windows 2000, XP, 2003, Vista]
+
+[python]
+
+[:['Section contributed by Julio M. Merino Vidal]]
+
+The following instructions apply to any Windows system based on Windows
+2000, including Windows XP, Windows 2003 Server and Windows Vista. The
+paths shown below are taken from a Windows Vista machine; you will need to
+adjust them to match your system in case you are running an older version.
+
+# First of all you need to have a copy of `xsltproc` for Windows.  There
+  are many ways to get this tool, but to keep things simple, use the
+  [@http://www.zlatkovic.com/pub/libxml/ binary packages] made by Igor
+  Zlatkovic.  At the very least, you need to download the following
+  packages: `iconv`, `zlib`, `libxml2` and `libxslt`.
+
+# Unpack all these packages in the same directory so that you get unique
+  `bin`, `include` and `lib` directories within the hierarchy.  These
+  instructions use `C:\Users\example\Documents\boost\xml` as the root for
+  all files.
+
+# From the command line, go to the `bin` directory and launch
+  `xsltproc.exe` to ensure it works.  You should get usage information on
+  screen.
+
+# Download [@http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip Docbook XML
+  4.2] and unpack it in the same directory used above.  That is:
+  `C:\Users\example\Documents\boost\xml\docbook-xml`.
+
+# Download the latest
+  [@http://sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608
+  Docbook XSL] version and unpack it, again in the same directory
+  used before.  To make things easier, rename the directory created
+  during the extraction to `docbook-xsl` (bypassing the version name):
+  `C:\Users\example\Documents\boost\xml\docbook-xsl`.
+
+# Add the following to your `user-config.jam` file, which should live in
+  your home directory (`%HOMEDRIVE%%HOMEPATH%`).  You must already have it
+  somewhere or otherwise you could not be building Boost (i.e. missing
+  tools configuration).
+
+ using xsltproc
+     : "C:/Users/example/Documents/boost/xml/bin/xsltproc.exe"
+     ;
+
+ using boostbook
+     : "C:/Users/example/Documents/boost/xml/docbook-xsl"
+     : "C:/Users/example/Documents/boost/xml/docbook-xml"
+     ;
+
+The above steps are enough to get a functional BoostBook setup.  Quickbook
+will be automatically built when needed.  If you want to avoid these
+rebuilds:
+
+# Go to Quickbook's source directory (`BOOST_ROOT\tools\quickbook`).
+
+# Build the utility by issuing `bjam --v2`.
+
+# Copy the resulting `quickbook.exe` binary (located under the
+  `BOOST_ROOT\bin.v2` hierarchy) to a safe place.  Following our previous
+  example, you can install it into:
+  `C:\Users\example\Documents\boost\xml\bin`.
+
+# Add the following to your `user-config.jam` file:
+
+ using quickbook
+     : "C:/Users/example/Documents/boost/xml/bin/quickbook.exe"
+     ;
+
+[endsect]
+
+[section:linux Debian, Ubuntu]
+
+The following instructions apply to Debian and its derivatives. They are based
+on a Ubuntu Edgy install but should work on other Debian based systems.
+
+First install the `bjam`, `xsltproc`, `docbook-xsl` and `docbook-xml` packages.
+For example, using `apt-get`:
+
+    sudo apt-get install xsltproc docbook-xsl docbook-xml
+
+If you're planning on building boost's documentation, you'll also need to
+install the `doxygen` package as well.
+
+Next, we need to configure Boost Build to compile BoostBook files. Add the
+following to your `user-config.jam` file, which should be in your home
+directory. If you don't have one, create a file containing this text. For more
+information on setting up `user-config.jam`, see the
+[@http://boost.org/boost-build2/doc/html/bbv2/advanced/configuration.html Boost
+Build documentation].
+
+    using xsltproc ;
+
+    using boostbook
+        : /usr/share/xml/docbook/stylesheet/nwalsh
+        : /usr/share/xml/docbook/schema/dtd/4.2
+        ;
+
+    # Remove this line if you're not using doxygen
+    using doxygen ;
+
+The above steps are enough to get a functional BoostBook setup.  Quickbook
+will be automatically built when needed.  If you want to avoid these
+rebuilds:
+
+# Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
+
+# Build the utility by issuing `bjam --v2`.
+
+# Copy the resulting `quickbook` binary (located under the
+  `BOOST_ROOT/bin.v2` hierarchy) to a safe place.  The traditional location is
+  `/usr/local/bin`.
+
+# Add the following to your `user-config.jam` file, using the full path of the
+  quickbook executable:
+
+ using quickbook
+     : /usr/local/bin/quickbook
+     ;
+
+[endsect]
+[endsect] [/Installation and configuration]
+
+[section:editors Editor Support]
+
+Editing quickbook files is usually done with text editors both simple and
+powerful. The following sections list the settings for some editors which can
+help make editing quickbook files a bit easier.
+
+[blurb __note__ You may submit your settings, tips, and suggestions to the
+authors, or through the [@https://lists.sourceforge.net/lists/listinfo/boost-
+docs Boost Docs mailing list].]
+
+[section:scite Scintilla Text Editor]
+
+[:['Section contributed by Dean Michael Berris]]
+
+The Scintilla Text Editor (SciTE) is a free source code editor for Win32 and X.
+It uses the SCIntilla source code editing component.
+
+[blurb __tip__ SciTE can be downloaded from [@http://www.scintilla.org/SciTE.html]]
+
+You can use the following settings to highlight quickbook tags when
+editing quickbook files.
+
+[pre'''
+qbk=*.qbk
+lexer.*.qbk=props
+use.tabs.$(qbk)=0
+tab.size.$(qbk)=4
+indent.size.$(qbk)=4
+style.props.32=$(font.base)
+comment.stream.start.props=[/
+comment.stream.end.props=]
+comment.box.start.props=[/
+comment.box.middle.props=
+comment.box.end.props=]
+''']
+
+[blurb __note__ Thanks to Rene Rivera for the above SciTE settings.]
+
+[endsect] [/scite]
+
+[/ KDE support (Kate, KWrite, Konqueror, KDevelop) ]
+[include ../extra/katepart/katepart.qbk]
+
+[endsect] [/editors]
+
+[section:faq Frequently Asked Questions]
+
+[heading Can I use QuickBook for non-Boost documentation?]
+
+QuickBook can be used for non-Boost documentation with a little extra work.
+
+[:['Faq contributed by Michael Marcin]]
+
+When building HTML documentation with BoostBook a Boost C++ Libraries header
+is added to the files. When using QuickBook to document projects outside of
+Boost this is not desirable. This behavior can be overridden at the BoostBook
+level by specifying some XSLT options. When using Boost Build version 2 (BBv2)
+this can be achieved by adding parameters to the BoostBook target declaration.
+
+For example:
+[pre
+using quickbook ;
+
+xml my_doc : my_doc.qbk ;
+
+boostbook standalone
+    :
+        my_doc
+    :
+        <xsl:param>boost.image.src=images/my_project_logo.png
+        <xsl:param>boost.image.alt="\\"My Project\\""
+        <xsl:param>boost.image.w=100
+        <xsl:param>boost.image.h=50
+        <xsl:param>nav.layout=none
+    ;
+]
+
+[heading Is there an easy way to convert BoostBook docs to QuickBook?]
+
+There's a stylesheet that allows Boostbook generated HTML to be viewed
+as quickbook source, see
+[@http://svn.boost.org/trac/boost/wiki/QuickbookSourceStylesheetProject],
+so it's then just a cut and paste job to convert the BoostBook to
+QuickBook (which IMO is a whole lot easier to edit and maintain).
+
+--John Maddock
+
+[endsect] [/faq]
+
 [section:ref Quick Reference]
+
+[c++]
+
+[template ordered_list_sample[]
+[pre'''
+# one
+# two
+# three
+''']
+]
+
+[template unordered_list_sample[]
+[pre'''
+* one
+* two
+* three
+''']
+]
+
+[template table_sample[]
+[pre'''
+[table Title
+[[a][b][c]]
+[[a][b][c]]
+]
+''']
+]
+
+[template var_list_sample[]
+[pre'''
+[variablelist Title
+[[a][b]]
+[[a][b]]
+]
+''']
+]
+
 
 [table Syntax Compendium
     [[To do this...]        [Use this...]                                   [See this...]]
@@ -1187,7 +2127,7 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[inline code]          [[^'''`int main();`''']]                        [__inline_code__]]
     [[code block]           [[^'''``int main();``''']]                      [__code__]]
     [[code escape]          [[^'''``from c++ to QuickBook``''']]            [__escape_back__]]
-    [[line break]           [[^'''[br] or \n''']]                           [__line_break__]]
+    [[line break]           [[^'''[br] or \n''']]                           [__line_break__ *DEPRECATED*]]
     [[anchor]               [[^'''[#anchor]''']]                            [__anchors__]]
     [[link]                 [[^'''[@http://www.boost.org Boost]''']]        [__links__]]
     [[anchor link]          [[^'''[link section.anchor Link text]''']]      [__anchor_links__]]
@@ -1196,6 +2136,8 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[class link]           [[^'''[classref fully::qualified::class_name Link text]''']]        [__code_links__]]
     [[member link]          [[^'''[memberref fully::qualified::member_name Link text]''']]      [__code_links__]]
     [[enum link]            [[^'''[enumref fully::qualified::enum_name Link text]''']]          [__code_links__]]
+    [[macro link]           [[^'''[macroref MACRO_NAME Link text]''']]                          [__code_links__]]
+    [[concept link]         [[^'''[conceptref ConceptName Link text]''']]                       [__code_links__]]
     [[header link]          [[^'''[headerref path/to/header.hpp Link text]''']]                 [__code_links__]]
     [[escape]               [[^\'\'\'escaped text (no processing/formatting)\'\'\']]            [__escape__]]
     [[single char escape]   [[^\\c]]                                        [__single_char_escape__]]
@@ -1203,8 +2145,8 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[begin section]        [[^'''[section The Section Title]''']]          [__section__]]
     [[end section]          [[^'''[endsect]''']]                            [__section__]]
     [[paragraph]            [No markup. Paragraphs start left-flushed and are terminated by two or more newlines.]  [__paragraphs__]]
-    [[ordered list]         [[^# one\n# two\n# three\n]]                    [__ordered_lists__]]
-    [[unordered list]       [[^\* one\n\* two\n\* three\n]]                 [__unordered_lists__]]
+    [[ordered list]         [[ordered_list_sample]]                         [__ordered_lists__]]
+    [[unordered list]       [[unordered_list_sample]]                       [__unordered_lists__]]
     [[code]                 [No markup. Preformatted code starts with a space or a tab.]        [__code__]]
     [[preformatted]         [[^'''[pre preformatted]''']]                   [__preformatted__]]
     [[block quote]          [[^'''[:sometext...]''']]                       [__blockquote__]]
@@ -1215,11 +2157,14 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[heading 5]            [[^'''[h5 Heading 5]''']]                       [__heading__]]
     [[heading 6]            [[^'''[h6 Heading 6]''']]                       [__heading__]]
     [[macro]                [[^'''[def macro_identifier some text]''']]     [__macros__]]
+    [[template]             [[^'''[template[a b] [a] body [b]]''']]         [__templates__]]
     [[blurb]                [[^'''[blurb advertisement or note...]''']]     [__blurbs__]]
     [[admonition]           [[^'''[warning Warning text...]''']]            [__admonitions__]]
-    [[table]                [[^[table Title\n \[\[a\]\[b\]\[c\]\]\n    \[\[a\]\[b\]\[c\]\]\n\]]]    [__tables__]]
-    [[variablelist]         [[^[variablelist Title\n \[\[a\]\[b\]\]\n    \[\[a\]\[b\]\]\n\]]]       [__variable_lists__]]
+    [[table]                [[table_sample]]                                [__tables__]]
+    [[variablelist]         [[var_list_sample]]                             [__variable_lists__]]
     [[include]              [[^'''[include someother.qbk]''']]              [__include__]]
+    [[conditional generation]
+                            [[^'''[? symbol phrase]''']]                    [__cond__]]
 ]
 
 [endsect]

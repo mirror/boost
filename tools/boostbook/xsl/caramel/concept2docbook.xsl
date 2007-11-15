@@ -59,7 +59,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
               <copyright><xsl:copy-of select="document(concat('../concepts/', @file))/copyright/node()"/></copyright>
             </xsl:when>
           </xsl:choose>
-	</xsl:for-each>
+        </xsl:for-each>
       </refentryinfo>
 -->
 
@@ -108,12 +108,12 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
     <!-- This part must be run even if there are no associated types to print out, so the hidden type definitions can be found -->
     <xsl:variable name="definition_list">
       <xsl:call-template name="make-definition-list">
-	<xsl:with-param name="typedefs" select="define-type | associated-type"/>
-	<xsl:with-param name="definition_list">
-	  <xsl:for-each select="param/@name">
-	    @(@<xsl:value-of select="."/>=<xsl:value-of select="."/>@)@
-	  </xsl:for-each>
-	</xsl:with-param>
+        <xsl:with-param name="typedefs" select="define-type | associated-type"/>
+        <xsl:with-param name="definition_list">
+          <xsl:for-each select="param/@name">
+            @(@<xsl:value-of select="."/>=<xsl:value-of select="."/>@)@
+          </xsl:for-each>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
 
@@ -130,12 +130,12 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
 
     <xsl:variable name="notations">
       <xsl:for-each select="notation">
-	@@(@@<xsl:call-template name="unparse-cpp">
-	  <xsl:with-param name="typeref" select="*[1]"/>
-	  <xsl:with-param name="definition_list" select="$definition_list"/>
-	  <xsl:with-param name="ignore-cv" select="true()"/>
-	  <xsl:with-param name="ignore-references" select="true()"/>
-	</xsl:call-template>@@=@@<xsl:value-of select="normalize-space(@variables)"/>@@)@@
+        @@(@@<xsl:call-template name="unparse-cpp">
+          <xsl:with-param name="typeref" select="*[1]"/>
+          <xsl:with-param name="definition_list" select="$definition_list"/>
+          <xsl:with-param name="ignore-cv" select="true()"/>
+          <xsl:with-param name="ignore-references" select="true()"/>
+        </xsl:call-template>@@=@@<xsl:value-of select="normalize-space(@variables)"/>@@)@@
       </xsl:for-each>
     </xsl:variable>
 
@@ -144,9 +144,9 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
     <xsl:if test="definition">
       <refsect1>
       <title>Definitions</title>
-	<xsl:for-each select="definition">
-	  <p><xsl:apply-templates/></p>
-	</xsl:for-each>
+        <xsl:for-each select="definition">
+          <p><xsl:apply-templates/></p>
+        </xsl:for-each>
       </refsect1>
     </xsl:if>
 
@@ -202,8 +202,8 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
                       <xsl:with-param name="notations" select="normalize-space($notations)"/>
                     </xsl:call-template>
                   </type>
-                  
-                  <xsl:comment/> must be 
+
+                  <xsl:comment/> must be
                   <xsl:for-each select="return-type/*">
                     <xsl:if test="position()!=1 and last()!=2">, </xsl:if>
                     <xsl:if test="position()=last() and last()!=1"> and </xsl:if>
@@ -214,7 +214,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
                     </xsl:call-template>
                   </xsl:for-each><xsl:comment/>.
                 </para>
-                
+
                 <xsl:if test="description">
                   <xsl:for-each select="description">
                     <xsl:apply-templates/>
@@ -271,9 +271,9 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
           </thead>
           <tbody>
             <xsl:apply-templates select="valid-expression">
-              <xsl:with-param name="definition_list" 
+              <xsl:with-param name="definition_list"
                 select="$definition_list"/>
-              <xsl:with-param name="notations" 
+              <xsl:with-param name="notations"
                 select="normalize-space($notations)"/>
               <xsl:with-param name="columns" select="$columns"/>
             </xsl:apply-templates>
@@ -282,53 +282,53 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
       </informaltable>
       <!-- Doug prefers the table
       <variablelist>
-	<xsl:for-each select="valid-expression">
-	  <xsl:variable name="as-cxx-value">
-	    <xsl:call-template name="unparse-cpp">
-	      <xsl:with-param name="typeref" select="*[1]"/>
-	      <xsl:with-param name="definition_list" select="$definition_list"/>
-	      <xsl:with-param name="notations" select="normalize-space($notations)"/>
-	    </xsl:call-template>
-	  </xsl:variable>
-	  <varlistentry>
-	    <term><xsl:value-of select="@name"/>: <literal><xsl:value-of select="$as-cxx-value"/></literal></term>
-	    <listitem><variablelist>
-	      <xsl:if test="return-type/*">
-		<varlistentry><term>Return value</term><listitem><para>
-		  <xsl:for-each select="return-type/*">
-		    <xsl:if test="position()!=1 and last()!=2">, </xsl:if>
-		    <xsl:if test="position()=last() and last()!=1"> and </xsl:if>
-		    <xsl:call-template name="unparse-constraint">
-		      <xsl:with-param name="constraint" select="."/>
-		      <xsl:with-param name="definition_list" select="$definition_list"/>
-		      <xsl:with-param name="capitalize" select="position()=1"/>
-		    </xsl:call-template>
-		  </xsl:for-each>
-		</para></listitem></varlistentry>
-	      </xsl:if>
+        <xsl:for-each select="valid-expression">
+          <xsl:variable name="as-cxx-value">
+            <xsl:call-template name="unparse-cpp">
+              <xsl:with-param name="typeref" select="*[1]"/>
+              <xsl:with-param name="definition_list" select="$definition_list"/>
+              <xsl:with-param name="notations" select="normalize-space($notations)"/>
+            </xsl:call-template>
+          </xsl:variable>
+          <varlistentry>
+            <term><xsl:value-of select="@name"/>: <literal><xsl:value-of select="$as-cxx-value"/></literal></term>
+            <listitem><variablelist>
+              <xsl:if test="return-type/*">
+                <varlistentry><term>Return value</term><listitem><para>
+                  <xsl:for-each select="return-type/*">
+                    <xsl:if test="position()!=1 and last()!=2">, </xsl:if>
+                    <xsl:if test="position()=last() and last()!=1"> and </xsl:if>
+                    <xsl:call-template name="unparse-constraint">
+                      <xsl:with-param name="constraint" select="."/>
+                      <xsl:with-param name="definition_list" select="$definition_list"/>
+                      <xsl:with-param name="capitalize" select="position()=1"/>
+                    </xsl:call-template>
+                  </xsl:for-each>
+                </para></listitem></varlistentry>
+              </xsl:if>
 
-	      <xsl:for-each select="precondition">
-		<varlistentry><term>Precondition</term><listitem><para>
-		  <xsl:apply-templates/>
-		</para></listitem></varlistentry>
-	      </xsl:for-each>
+              <xsl:for-each select="precondition">
+                <varlistentry><term>Precondition</term><listitem><para>
+                  <xsl:apply-templates/>
+                </para></listitem></varlistentry>
+              </xsl:for-each>
 
-	      <xsl:for-each select="semantics">
-		<varlistentry><term>Semantics</term><listitem><para>
-		  <xsl:apply-templates/>
-		</para></listitem></varlistentry>
-	      </xsl:for-each>
+              <xsl:for-each select="semantics">
+                <varlistentry><term>Semantics</term><listitem><para>
+                  <xsl:apply-templates/>
+                </para></listitem></varlistentry>
+              </xsl:for-each>
 
-	      <xsl:for-each select="postcondition">
-		<varlistentry><term>Postcondition</term><listitem><para>
-		  <xsl:apply-templates/>
-		</para></listitem></varlistentry>
-	      </xsl:for-each>
+              <xsl:for-each select="postcondition">
+                <varlistentry><term>Postcondition</term><listitem><para>
+                  <xsl:apply-templates/>
+                </para></listitem></varlistentry>
+              </xsl:for-each>
 
-	    </variablelist></listitem>
-	  </varlistentry>
+            </variablelist></listitem>
+          </varlistentry>
 
-	</xsl:for-each>
+        </xsl:for-each>
       </variablelist>
 -->
       </refsect1>
@@ -337,9 +337,9 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
     <xsl:if test="complexity">
       <refsect1>
       <title>Complexity</title>
-	<xsl:for-each select="complexity">
-	  <para><xsl:apply-templates/></para>
-	</xsl:for-each>
+        <xsl:for-each select="complexity">
+          <para><xsl:apply-templates/></para>
+        </xsl:for-each>
       </refsect1>
     </xsl:if>
 
@@ -347,14 +347,14 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
       <refsect1>
       <title>Invariants</title>
       <variablelist>
-	<xsl:for-each select="invariant">
-	  <varlistentry>
-	    <term><xsl:value-of select="@name"/></term>
-	    <listitem>
-	      <para><xsl:apply-templates/></para>
-	    </listitem>
-	  </varlistentry>
-	</xsl:for-each>
+        <xsl:for-each select="invariant">
+          <varlistentry>
+            <term><xsl:value-of select="@name"/></term>
+            <listitem>
+              <para><xsl:apply-templates/></para>
+            </listitem>
+          </varlistentry>
+        </xsl:for-each>
       </variablelist>
       </refsect1>
     </xsl:if>
@@ -362,46 +362,44 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
     <xsl:if test="example-model">
       <refsect1>
       <title>Models</title>
-	<itemizedlist>
-	<xsl:for-each select="example-model">
-	  <listitem>
-	    <simplelist type="inline">
-	    <xsl:for-each select="*">
-	      <xsl:variable name="example-value">
-		<xsl:call-template name="unparse-cpp">
-		  <xsl:with-param name="typeref" select="."/>
-		  <xsl:with-param name="definition_list" select="$definition_list"/>
-		</xsl:call-template>
-	      </xsl:variable>
-	      <member><type><xsl:value-of select="$example-value"/></type></member>
-	    </xsl:for-each>
-	    </simplelist>
-	  </listitem>
-	</xsl:for-each>
-	</itemizedlist>
+        <itemizedlist>
+        <xsl:for-each select="example-model">
+          <listitem>
+            <simplelist type="inline">
+            <xsl:for-each select="*">
+              <xsl:variable name="example-value">
+                <xsl:call-template name="unparse-cpp">
+                  <xsl:with-param name="typeref" select="."/>
+                  <xsl:with-param name="definition_list" select="$definition_list"/>
+                </xsl:call-template>
+              </xsl:variable>
+              <member><type><xsl:value-of select="$example-value"/></type></member>
+            </xsl:for-each>
+            </simplelist>
+          </listitem>
+        </xsl:for-each>
+        </itemizedlist>
       </refsect1>
     </xsl:if>
 
-    <xsl:variable name="see-also-list" select="concept-ref | see-also | refines | refines-when-mutable | models-as-first-arg | models | models-when-mutable"/>
+    <xsl:variable name="see-also-list-0" select="concept-ref | see-also | refines | refines-when-mutable | models-as-first-arg | models | models-when-mutable"/>
+    <xsl:variable name="see-also-list-1" select="$see-also-list-0[string(@name | @concept) != string(../@name)]"/>
+    <xsl:variable name="see-also-list" select="$see-also-list-1[not(string(@name|@concept) = (preceding::*/@name | preceding::*/@concept | ancestor::*/@name | ancestor::*/@concept))]"/>
     <xsl:if test="$see-also-list">
       <refsect1>
-      <title>See also</title>
-      <itemizedlist>
-	<xsl:for-each select="$see-also-list">
-	  <xsl:sort select="string(@name|@concept)" data-type="text"/>
-          <xsl:if test="string(@name|@concept) != string(../@name)">
-	    <xsl:if test="not(string(@name|@concept) = (preceding::*/@name | preceding::*/@concept | ancestor::*/@name | ancestor::*/@concept))">
-	      <listitem>
-                <para>
-                  <xsl:call-template name="concept.link">
-                    <xsl:with-param name="name" select="@name|@concept"/>
-                  </xsl:call-template>
-                </para>
-              </listitem>
-	    </xsl:if>
-	  </xsl:if>
-	</xsl:for-each>
-      </itemizedlist>
+        <title>See also</title>
+        <itemizedlist>
+          <xsl:for-each select="$see-also-list">
+            <xsl:sort select="string(@name|@concept)" data-type="text"/>
+            <listitem>
+              <para>
+                <xsl:call-template name="concept.link">
+                  <xsl:with-param name="name" select="@name|@concept"/>
+                </xsl:call-template>
+              </para>
+            </listitem>
+          </xsl:for-each>
+        </itemizedlist>
       </refsect1>
     </xsl:if>
 
@@ -417,79 +415,79 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
     <xsl:choose>
 
       <xsl:when test="name($constraint)='require-same-type'">
-	<xsl:if test="$type-expr-mode">identical to </xsl:if>
-	<type>
-	  <xsl:call-template name="unparse-cpp">
-	    <xsl:with-param name="typeref" select="$constraint/*[1]"/>
-	    <xsl:with-param name="definition_list" select="definition_list"/>
-	  </xsl:call-template>
-	</type>
+        <xsl:if test="$type-expr-mode">identical to </xsl:if>
+        <type>
+          <xsl:call-template name="unparse-cpp">
+            <xsl:with-param name="typeref" select="$constraint/*[1]"/>
+            <xsl:with-param name="definition_list" select="definition_list"/>
+          </xsl:call-template>
+        </type>
       </xsl:when>
 
       <xsl:when test="name($constraint)='convertible-to'">
-	<xsl:choose>
-	  <xsl:when test="$type-expr-mode">convertible to </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and $capitalize">Convertible to </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and not($capitalize)">convertible to </xsl:when>
-	</xsl:choose>
-	<type>
-	  <xsl:call-template name="unparse-cpp">
-	    <xsl:with-param name="typeref" select="$constraint/*[1]"/>
-	    <xsl:with-param name="definition_list" select="definition_list"/>
-	  </xsl:call-template>
-	</type>
+        <xsl:choose>
+          <xsl:when test="$type-expr-mode">convertible to </xsl:when>
+          <xsl:when test="not($type-expr-mode) and $capitalize">Convertible to </xsl:when>
+          <xsl:when test="not($type-expr-mode) and not($capitalize)">convertible to </xsl:when>
+        </xsl:choose>
+        <type>
+          <xsl:call-template name="unparse-cpp">
+            <xsl:with-param name="typeref" select="$constraint/*[1]"/>
+            <xsl:with-param name="definition_list" select="definition_list"/>
+          </xsl:call-template>
+        </type>
       </xsl:when>
 
       <xsl:when test="name($constraint)='derived-from'">
-	<xsl:choose>
-	  <xsl:when test="$type-expr-mode">derived from </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and $capitalize">Derived from </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and not($capitalize)">derived from </xsl:when>
-	</xsl:choose>
-	<type>
-	  <xsl:call-template name="unparse-cpp">
-	    <xsl:with-param name="typeref" select="$constraint/*[1]"/>
-	    <xsl:with-param name="definition_list" select="definition_list"/>
-	  </xsl:call-template>
-	</type>
+        <xsl:choose>
+          <xsl:when test="$type-expr-mode">derived from </xsl:when>
+          <xsl:when test="not($type-expr-mode) and $capitalize">Derived from </xsl:when>
+          <xsl:when test="not($type-expr-mode) and not($capitalize)">derived from </xsl:when>
+        </xsl:choose>
+        <type>
+          <xsl:call-template name="unparse-cpp">
+            <xsl:with-param name="typeref" select="$constraint/*[1]"/>
+            <xsl:with-param name="definition_list" select="definition_list"/>
+          </xsl:call-template>
+        </type>
       </xsl:when>
 
       <xsl:when test="name($constraint)='assignable-to'">
-	<xsl:choose>
-	  <xsl:when test="$type-expr-mode">assignable to </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and $capitalize">Assignable to </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and not($capitalize)">assignable to </xsl:when>
-	</xsl:choose>
-	<type>
-	  <xsl:call-template name="unparse-cpp">
-	    <xsl:with-param name="typeref" select="$constraint/*[1]"/>
-	    <xsl:with-param name="definition_list" select="definition_list"/>
-	  </xsl:call-template>
-	</type>
+        <xsl:choose>
+          <xsl:when test="$type-expr-mode">assignable to </xsl:when>
+          <xsl:when test="not($type-expr-mode) and $capitalize">Assignable to </xsl:when>
+          <xsl:when test="not($type-expr-mode) and not($capitalize)">assignable to </xsl:when>
+        </xsl:choose>
+        <type>
+          <xsl:call-template name="unparse-cpp">
+            <xsl:with-param name="typeref" select="$constraint/*[1]"/>
+            <xsl:with-param name="definition_list" select="definition_list"/>
+          </xsl:call-template>
+        </type>
       </xsl:when>
 
       <xsl:when test="name($constraint)='models-as-first-arg'">
-	<xsl:choose>
-	  <xsl:when test="$type-expr-mode"> a model </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and $capitalize"> Models </xsl:when>
-	  <xsl:when test="not($type-expr-mode) and not($capitalize)"> models </xsl:when>
-	</xsl:choose>
-	<xsl:if test="$constraint/*"><xsl:comment/>
-	  (along with <xsl:for-each select="$constraint/*"><type>
-	      <xsl:call-template name="unparse-cpp">
-		<xsl:with-param name="typeref" select="."/>
-		<xsl:with-param name="definition_list" select="definition_list"/>
-	      </xsl:call-template>
-	    </type>
-	    <xsl:choose>
-	      <xsl:when test="position()=last()"/>
-	      <xsl:when test="position()=last()-1 and last()=2"> and </xsl:when>
-	      <xsl:when test="position()=last()-1 and last()!=2">, and </xsl:when>
-	      <xsl:otherwise>, </xsl:otherwise>
-	    </xsl:choose><xsl:comment/>
-	  </xsl:for-each><xsl:comment/>) <xsl:comment/>
-	</xsl:if><xsl:comment/>
-	<xsl:if test="$type-expr-mode"> of </xsl:if>
+        <xsl:choose>
+          <xsl:when test="$type-expr-mode"> a model </xsl:when>
+          <xsl:when test="not($type-expr-mode) and $capitalize"> Models </xsl:when>
+          <xsl:when test="not($type-expr-mode) and not($capitalize)"> models </xsl:when>
+        </xsl:choose>
+        <xsl:if test="$constraint/*"><xsl:comment/>
+          (along with <xsl:for-each select="$constraint/*"><type>
+              <xsl:call-template name="unparse-cpp">
+                <xsl:with-param name="typeref" select="."/>
+                <xsl:with-param name="definition_list" select="definition_list"/>
+              </xsl:call-template>
+            </type>
+            <xsl:choose>
+              <xsl:when test="position()=last()"/>
+              <xsl:when test="position()=last()-1 and last()=2"> and </xsl:when>
+              <xsl:when test="position()=last()-1 and last()!=2">, and </xsl:when>
+              <xsl:otherwise>, </xsl:otherwise>
+            </xsl:choose><xsl:comment/>
+          </xsl:for-each><xsl:comment/>) <xsl:comment/>
+        </xsl:if><xsl:comment/>
+        <xsl:if test="$type-expr-mode"> of </xsl:if>
         <xsl:call-template name="concept.link">
           <xsl:with-param name="name" select="$constraint/@concept"/>
         </xsl:call-template>
@@ -504,35 +502,35 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
 
     <xsl:choose>
       <xsl:when test="$typedefs">
-	<xsl:variable name="type_definition">
-	  <xsl:if test="name($typedefs[1]/*[1])!='description'">
-	    <xsl:call-template name="unparse-cpp">
-	      <xsl:with-param name="typeref" select="$typedefs[1]/*[1]"/>
-	      <xsl:with-param name="definition_list" select="$definition_list"/>
-	    </xsl:call-template>
-	  </xsl:if>
-	</xsl:variable>
+        <xsl:variable name="type_definition">
+          <xsl:if test="name($typedefs[1]/*[1])!='description'">
+            <xsl:call-template name="unparse-cpp">
+              <xsl:with-param name="typeref" select="$typedefs[1]/*[1]"/>
+              <xsl:with-param name="definition_list" select="$definition_list"/>
+            </xsl:call-template>
+          </xsl:if>
+        </xsl:variable>
 
-	<xsl:variable name="new_type_definition">
-	  <xsl:choose>
-	    <xsl:when test="name($typedefs[1])='associated-type'">
-	      <xsl:value-of select="$typedefs[1]/@name"/>
-	    </xsl:when>
-	    <xsl:otherwise>
-	      <xsl:value-of select="$type_definition"/>
-	    </xsl:otherwise>
-	  </xsl:choose>
-	</xsl:variable>
+        <xsl:variable name="new_type_definition">
+          <xsl:choose>
+            <xsl:when test="name($typedefs[1])='associated-type'">
+              <xsl:value-of select="$typedefs[1]/@name"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$type_definition"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
 
-	<xsl:call-template name="make-definition-list">
-	  <xsl:with-param name="typedefs" select="$typedefs[position()!=1]"/>
-	  <xsl:with-param name="definition_list" select="concat($definition_list, ' @(@', $typedefs[1]/@name, '=', $new_type_definition, '@)@')"/>
-	</xsl:call-template>
+        <xsl:call-template name="make-definition-list">
+          <xsl:with-param name="typedefs" select="$typedefs[position()!=1]"/>
+          <xsl:with-param name="definition_list" select="concat($definition_list, ' @(@', $typedefs[1]/@name, '=', $new_type_definition, '@)@')"/>
+        </xsl:call-template>
 
       </xsl:when>
 
       <xsl:otherwise> <!-- End of expression list, emit the results that have accumulated -->
-	<xsl:value-of select="$definition_list"/>
+        <xsl:value-of select="$definition_list"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -551,7 +549,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
               <tgroup cols="2">
                 <tbody>
                   <xsl:apply-templates select="associated-type" mode="sgi">
-                    <xsl:with-param name="definition_list" 
+                    <xsl:with-param name="definition_list"
                       select="$definition_list"/>
                   </xsl:apply-templates>
                 </tbody>
@@ -561,7 +559,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
           <xsl:when test="$boost.concept.layout='austern'">
             <itemizedlist>
               <xsl:apply-templates select="associated-type" mode="austern">
-                <xsl:with-param name="definition_list" 
+                <xsl:with-param name="definition_list"
                   select="$definition_list"/>
               </xsl:apply-templates>
             </itemizedlist>
@@ -588,7 +586,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
                   </seg>
                 </seglistitem>
               </xsl:for-each>
-            </segmentedlist>            
+            </segmentedlist>
           </xsl:when>
         </xsl:choose>
       </refsect1>
@@ -600,11 +598,11 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
 
     <xsl:if test="$list!=''">
       <term><varname>
-	<xsl:if test="substring-before($list,' ')=''"><xsl:value-of select="$list"/></xsl:if>
-	<xsl:value-of select="substring-before($list,' ')"/>
+        <xsl:if test="substring-before($list,' ')=''"><xsl:value-of select="$list"/></xsl:if>
+        <xsl:value-of select="substring-before($list,' ')"/>
       </varname></term>
       <xsl:call-template name="comma-list">
-	<xsl:with-param name="list" select="substring-after($list,' ')"/>
+  <xsl:with-param name="list" select="substring-after($list,' ')"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
@@ -629,7 +627,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
     <listitem>
       <para>
         <emphasis role="bold"><xsl:value-of select="@name"/></emphasis>
-      
+
         <xsl:call-template name="preformatted">
           <xsl:with-param name="text">
             <xsl:call-template name="unparse-cpp">
@@ -638,7 +636,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
             </xsl:call-template>
           </xsl:with-param>
         </xsl:call-template>
-        
+
         <xsl:for-each select="description">
           <xsl:apply-templates/>
         </xsl:for-each>
@@ -672,11 +670,11 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
               <xsl:if test="position()=last() and last()!=1"> and </xsl:if>
               <xsl:call-template name="unparse-constraint">
                 <xsl:with-param name="constraint" select="."/>
-                <xsl:with-param name="definition_list" 
+                <xsl:with-param name="definition_list"
                   select="$definition_list"/>
                 <xsl:with-param name="capitalize" select="position()=1"/>
               </xsl:call-template>
-            </xsl:for-each>          
+            </xsl:for-each>
           </simpara>
         </entry>
       </xsl:if>
@@ -732,7 +730,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
         <xsl:for-each select="notation">
           <xsl:variable name="notation_name">
             <xsl:call-template name="comma-list">
-              <xsl:with-param name="list" 
+              <xsl:with-param name="list"
                 select="normalize-space(@variables)"/>
             </xsl:call-template>
           </xsl:variable>
@@ -755,7 +753,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
           </varlistentry>
         </xsl:for-each>
       </variablelist>
-    </refsect1>    
+    </refsect1>
   </xsl:template>
 
   <xsl:template name="concept.link">
@@ -763,7 +761,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
     <xsl:param name="warn" select="true()"/>
     <xsl:param name="text" select="$name"/>
     <xsl:variable name="node" select="key('concepts', $name)"/>
-    
+
     <xsl:choose>
       <xsl:when test="count($node)=0">
         <xsl:if test="$warn">
@@ -785,7 +783,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
           <xsl:with-param name="text" select="$text"/>
         </xsl:call-template>
       </xsl:otherwise>
-    </xsl:choose>    
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="remove-whitespace">
@@ -796,7 +794,7 @@ Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
       <xsl:when test="contains($normalized, ' ')">
         <xsl:value-of select="substring-before($normalized, ' ')"/>
         <xsl:call-template name="remove-whitespace">
-          <xsl:with-param name="text" 
+          <xsl:with-param name="text"
             select="substring-after($normalized, ' ')"/>
         </xsl:call-template>
       </xsl:when>

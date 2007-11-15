@@ -1,15 +1,20 @@
 <!--
-   BoostBook DTD version 1.0
+   BoostBook DTD version 1.1
 
    For further information, see: http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?Boost_Documentation_Format
 
-   Copyright (c) 2002 by Peter Simons <simons@computer.org>.
-   All Rights Reserved.
+   Copyright (c) 2002 by Peter Simons <simons@cryp.to>
+   Copyright (c) 2003-2004 by Douglas Gregor <doug.gregor -at- gmail.com>
+   Copyright (c) 2007 by Frank Mori Hess <fmhess@users.sourceforge.net>
+
+   Distributed under the Boost Software License, Version 1.0.
+   (See accompanying file LICENSE_1_0.txt or copy at
+   http://www.boost.org/LICENSE_1_0.txt)
 
    This DTD module is identified by the PUBLIC and SYSTEM identifiers:
 
-   PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
-   SYSTEM "http://cryp.to/boost-sandbox/libs/documentation/dtd/boostbook.dtd"
+   PUBLIC "-//Boost//DTD BoostBook XML V1.1//EN"
+   SYSTEM "http://www.boost.org/tools/boostbook/dtd/1.1/boostbook.dtd"
 
    $Revision$
    $Date$
@@ -37,7 +42,7 @@
 <!ENTITY % boost.common.attrib "%local.common.attrib;
                                 id            CDATA  #IMPLIED">
 
-<!ENTITY % boost.namespace.mix 
+<!ENTITY % boost.namespace.mix
         "class|class-specialization|struct|struct-specialization|
          union|union-specialization|typedef|enum|
          free-function-group|function|overloaded-function|
@@ -46,23 +51,25 @@
 <!ENTITY % boost.template.mix
         "template-type-parameter|template-nontype-parameter|template-varargs">
 
-<!ENTITY % boost.class.mix
+<!ENTITY % boost.class.members
         "static-constant|typedef|enum|
          copy-assignment|constructor|destructor|method-group|
-         free-function-group|function|method|overloaded-function|
-         overloaded-method|data-member|class|class-specialization|struct|
+         method|overloaded-method|data-member|class|class-specialization|struct|
          struct-specialization|union|union-specialization">
 
+<!ENTITY % boost.class.mix
+        "%boost.class.members;|free-function-group|function|overloaded-function">
+
 <!ENTITY % boost.class.content
-             "template?, inherit*, purpose?, description?, 
-              (%boost.class.mix;)*">
+             "template?, inherit*, purpose?, description?,
+              (%boost.class.mix;|access)*">
 
 <!ENTITY % boost.class-specialization.content
-             "template?, specialization?, inherit?, purpose?, description?, 
-              (%boost.class.mix;)*">
+             "template?, specialization?, inherit?, purpose?, description?,
+              (%boost.class.mix;|access)*">
 
 <!ENTITY % boost.function.semantics
-        "purpose?, description?, requires?, effects?, postconditions?, 
+        "purpose?, description?, requires?, effects?, postconditions?,
          returns?, throws?, complexity?, notes?, rationale?">
 
 <!ENTITY % library.content
@@ -104,7 +111,7 @@
 <!ATTLIST librarycategorylist %boost.common.attrib;>
 
 <!ELEMENT librarycategorydef (#PCDATA)>
-<!ATTLIST librarycategorydef 
+<!ATTLIST librarycategorydef
          name   CDATA   #REQUIRED
          %boost.common.attrib;>
 
@@ -146,6 +153,11 @@
 <!ELEMENT union-specialization (%boost.class-specialization.content;)>
 <!ATTLIST union-specialization
     name  CDATA  #REQUIRED
+    %boost.common.attrib;>
+
+<!ELEMENT access (%boost.class.members;)+>
+<!ATTLIST access
+    name CDATA #REQUIRED
     %boost.common.attrib;>
 
 <!--========= C++ Templates =========-->
@@ -209,7 +221,7 @@
     %boost.common.attrib;>
 
 <!ELEMENT data-member (type, purpose?, description?)>
-<!ATTLIST data-member 
+<!ATTLIST data-member
     name         CDATA  #REQUIRED
     specifiers   CDATA  #IMPLIED
     %boost.common.attrib;>
@@ -229,12 +241,12 @@
     %boost.common.attrib;>
 
 <!ELEMENT constructor (template?, parameter*, %boost.function.semantics;)>
-<!ATTLIST constructor 
+<!ATTLIST constructor
     specifiers   CDATA  #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT destructor (%boost.function.semantics;)>
-<!ATTLIST destructor 
+<!ATTLIST destructor
     specifiers   CDATA  #IMPLIED
     %boost.common.attrib;>
 
@@ -252,12 +264,12 @@
     %boost.common.attrib;>
 
 <!ELEMENT overloaded-method (signature*, %boost.function.semantics;)>
-<!ATTLIST overloaded-method 
+<!ATTLIST overloaded-method
     name  CDATA  #REQUIRED
     %boost.common.attrib;>
 
 <!ELEMENT overloaded-function (signature*, %boost.function.semantics;)>
-<!ATTLIST overloaded-function 
+<!ATTLIST overloaded-function
     name  CDATA  #REQUIRED
     %boost.common.attrib;>
 
@@ -286,12 +298,12 @@
 <!ATTLIST rationale %boost.common.attrib;>
 
 <!ELEMENT functionname (#PCDATA)>
-<!ATTLIST functionname 
+<!ATTLIST functionname
     alt          CDATA  #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT enumname (#PCDATA)>
-<!ATTLIST enumname 
+<!ATTLIST enumname
     alt          CDATA  #IMPLIED
     %boost.common.attrib;>
 
@@ -301,9 +313,9 @@
 <!ELEMENT headername (#PCDATA)>
 <!ATTLIST headername %boost.common.attrib;>
 
-<!ELEMENT copy-assignment 
+<!ELEMENT copy-assignment
     (template?, type?, parameter*, %boost.function.semantics;)>
-<!ATTLIST copy-assignment 
+<!ATTLIST copy-assignment
     cv           CDATA  #IMPLIED
     specifiers   CDATA  #IMPLIED
     %boost.common.attrib;>
@@ -330,7 +342,7 @@
      %boost.common.attrib;>
 
 <!--========== Boost Testsuite Extensions ==========-->
-<!ENTITY % boost.testsuite.tests 
+<!ENTITY % boost.testsuite.tests
         "compile-test|link-test|run-test|
          compile-fail-test|link-fail-test|run-fail-test">
 <!ENTITY % boost.testsuite.test.content
@@ -345,12 +357,12 @@
      name     CDATA #IMPLIED>
 
 <!ELEMENT link-test (%boost.testsuite.test.content;)>
-<!ATTLIST link-test 
+<!ATTLIST link-test
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED>
 
 <!ELEMENT run-test (%boost.testsuite.test.content;)>
-<!ATTLIST run-test 
+<!ATTLIST run-test
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED>
 
@@ -360,12 +372,12 @@
      name     CDATA #IMPLIED>
 
 <!ELEMENT link-fail-test (%boost.testsuite.test.content;)>
-<!ATTLIST link-fail-test 
+<!ATTLIST link-fail-test
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED>
 
 <!ELEMENT run-fail-test (%boost.testsuite.test.content;)>
-<!ATTLIST run-fail-test 
+<!ATTLIST run-fail-test
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED>
 
@@ -378,13 +390,13 @@
 <!ELEMENT lib (#PCDATA)>
 
 <!ELEMENT requirement (#PCDATA)>
-<!ATTLIST requirement 
+<!ATTLIST requirement
      name CDATA #REQUIRED>
 
 <!ELEMENT if-fails ANY>
 
 <!ELEMENT parameter (paramtype, default?, description?)>
-<!ATTLIST parameter 
+<!ATTLIST parameter
      name CDATA #IMPLIED>
 
 <!ELEMENT programlisting ANY>
@@ -393,7 +405,7 @@
 
 <!--========== Customize the DocBook DTD ==========-->
 <!ENTITY % local.tech.char.class "|functionname|libraryname|enumname|code">
-<!ENTITY % local.para.class 
+<!ENTITY % local.para.class
         "|using-namespace|using-class|librarylist|librarycategorylist">
 <!ENTITY % local.descobj.class "|libraryinfo">
 <!ENTITY % local.classname.attrib "alt CDATA #IMPLIED">
@@ -408,5 +420,5 @@
 <!--========== Import DocBook DTD ==========-->
 <!ENTITY % DocBook PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
            "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
- 
+
 %DocBook;

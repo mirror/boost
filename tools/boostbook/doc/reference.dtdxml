@@ -21,22 +21,18 @@
 <entity name="boost.class.content"
         type="param"
 >
-<text-expanded>template?, inherit*, purpose?, description?, 
-              (static-constant|typedef|enum|
-         copy-assignment|constructor|destructor|method-group|
-         free-function-group|function|method|overloaded-function|
-         overloaded-method|data-member|class|class-specialization|struct|
-         struct-specialization|union|union-specialization)*</text-expanded>
-<text>template?, inherit*, purpose?, description?, 
-              (%boost.class.mix;)*</text>
+<text-expanded>template?, inherit*, purpose?, description?,
+              (access|%boost.class.mix;)*</text-expanded>
+<text>template?, inherit*, purpose?, description?,
+              (access|%boost.class.mix;)*</text>
 </entity>
 
 <entity name="boost.function.semantics"
         type="param"
 >
-<text-expanded>purpose?, description?, requires?, effects?, postconditions?, 
+<text-expanded>purpose?, description?, requires?, effects?, postconditions?,
          returns?, throws?, complexity?, notes?, rationale?</text-expanded>
-<text>purpose?, description?, requires?, effects?, postconditions?, 
+<text>purpose?, description?, requires?, effects?, postconditions?,
          returns?, throws?, complexity?, notes?, rationale?</text>
 </entity>
 
@@ -98,19 +94,24 @@
                                 id            CDATA  #IMPLIED</text>
 </entity>
 
-<entity name="boost.class.mix"
+<entity name="boost.class.members"
         type="param"
 >
 <text-expanded>static-constant|typedef|enum|
          copy-assignment|constructor|destructor|method-group|
-         free-function-group|function|method|overloaded-function|
-         overloaded-method|data-member|class|class-specialization|struct|
+         method|overloaded-method|data-member|class|class-specialization|struct|
          struct-specialization|union|union-specialization</text-expanded>
 <text>static-constant|typedef|enum|
          copy-assignment|constructor|destructor|method-group|
-         free-function-group|function|method|overloaded-function|
-         overloaded-method|data-member|class|class-specialization|struct|
+         |method|overloaded-method|data-member|class|class-specialization|struct|
          struct-specialization|union|union-specialization</text>
+</entity>
+
+<entity name="boost.class.mix"
+        type="param"
+>
+<text-expanded>free-function-group|function|overloaded-function|%boost.class.members;</text-expanded>
+<text>free-function-group|function|overloaded-function|%boost.class.members;</text>
 </entity>
 
 <entity name="boost.testsuite.tests"
@@ -196,14 +197,10 @@
 <entity name="boost.class-specialization.content"
         type="param"
 >
-<text-expanded>template?, specialization?, inherit?, purpose?, description?, 
-              (static-constant|typedef|enum|
-         copy-assignment|constructor|destructor|method-group|
-         free-function-group|function|method|overloaded-function|
-         overloaded-method|data-member|class|class-specialization|struct|
-         struct-specialization|union|union-specialization)*</text-expanded>
-<text>template?, specialization?, inherit?, purpose?, description?, 
-              (%boost.class.mix;)*</text>
+<text-expanded>template?, specialization?, inherit?, purpose?, description?,
+              (access|%boost.class.mix;)*</text-expanded>
+<text>template?, specialization?, inherit?, purpose?, description?,
+              (access|%boost.class.mix;)*</text>
 </entity>
 
 <entity name="library.content"
@@ -223,6 +220,7 @@
     <element-name name="purpose" occurrence="?"/>
     <element-name name="description" occurrence="?"/>
     <or-group occurrence="*">
+      <element-name name="access"/>
       <element-name name="static-constant"/>
       <element-name name="typedef"/>
       <element-name name="enum"/>
@@ -296,7 +294,7 @@
 </element>
 
 <attlist name="link-test">
-<attdecl> 
+<attdecl>
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED</attdecl>
 <attribute name="filename"
@@ -329,7 +327,7 @@
 </element>
 
 <attlist name="link-fail-test">
-<attdecl> 
+<attdecl>
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED</attdecl>
 <attribute name="filename"
@@ -494,7 +492,7 @@
 </element>
 
 <attlist name="destructor">
-<attdecl> 
+<attdecl>
     specifiers   CDATA  #IMPLIED
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
@@ -639,7 +637,7 @@
     </or-group>
   </sequence-group>
 </content-model-expanded>
-<content-model> 
+<content-model>
   <sequence-group>
     <element-name name="title" occurrence="?"/>
     <element-name name="section" occurrence="*"/>
@@ -750,6 +748,7 @@
     <element-name name="purpose" occurrence="?"/>
     <element-name name="description" occurrence="?"/>
     <or-group occurrence="*">
+      <element-name name="access"/>
       <element-name name="static-constant"/>
       <element-name name="typedef"/>
       <element-name name="enum"/>
@@ -819,10 +818,7 @@
 <purpose>Declares a base class of the enclosing class or struct</purpose>
 
 <description>
-  <para>This element contains the name of the class inherited. The
-  content model is free-form, as the inherited class may be an
-  instantiation of a template and may have markup in it (e.g.,
-  <sgmltag>classname</sgmltag> tags).</para>
+  <para>This element contains the type of the class inherited.</para>
 </description>
 </element>
 
@@ -837,7 +833,9 @@
 <attribute name="access"
            type="#REQUIRED"
            value="CDATA"
-           default=""/>
+           default="">
+  <purpose>The access specifier ("public", "private", or "protected") of the inheritance.</purpose>
+</attribute>
 <attribute name="id"
            type="#IMPLIED"
            value="CDATA"
@@ -950,7 +948,7 @@
   behavior. Constructors, destructors, member functions, and free
   functions all use the same documentation method, although the
   top-level tags differ.</para>
-    
+
   <para>The behavior of functions in BoostBook is documenting using a
   style similar to that of the C++ standard, with clauses describing
   the requirements, effects, postconditions, exception behavior, and
@@ -979,12 +977,12 @@
         so that any content is equivalent in both type and value to the
         content of &lt;code&gt;other&lt;/code&gt;, or empty if
         &lt;code&gt;other&lt;/code&gt; is
-        empty. 
+        empty.
       &lt;/simpara&gt;
     &lt;/effects&gt;
 
     &lt;throws&gt;
-      &lt;simpara&gt;May fail with a 
+      &lt;simpara&gt;May fail with a
         &lt;classname&gt;std::bad_alloc&lt;/classname&gt; exception or any
         exceptions arising from the copy constructor of the
         contained type.
@@ -1218,7 +1216,7 @@
 </element>
 
 <attlist name="constructor">
-<attdecl> 
+<attdecl>
     specifiers   CDATA  #IMPLIED
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
@@ -1274,7 +1272,7 @@
 
   <programlisting>&lt;library-reference&gt;
   &lt;header name="boost/any.hpp"&gt;
-    &lt;namespace name="boost"&gt;  
+    &lt;namespace name="boost"&gt;
       &lt;!-- C++ constructs in the boost namespace --&gt;
     &lt;/namespace&gt;
   &lt;/header&gt;
@@ -1496,7 +1494,7 @@
 </element>
 
 <attlist name="data-member">
-<attdecl> 
+<attdecl>
     name   CDATA  #REQUIRED
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
@@ -1558,6 +1556,7 @@
     <element-name name="purpose" occurrence="?"/>
     <element-name name="description" occurrence="?"/>
     <or-group occurrence="*">
+      <element-name name="access"/>
       <element-name name="static-constant"/>
       <element-name name="typedef"/>
       <element-name name="enum"/>
@@ -1736,7 +1735,7 @@
 </element>
 
 <attlist name="requirement">
-<attdecl> 
+<attdecl>
      name CDATA #REQUIRED</attdecl>
 <attribute name="name"
            type="#REQUIRED"
@@ -1859,7 +1858,7 @@
 </element>
 
 <attlist name="run-test">
-<attdecl> 
+<attdecl>
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED</attdecl>
 <attribute name="filename"
@@ -1954,7 +1953,7 @@
 </element>
 
 <attlist name="copy-assignment">
-<attdecl> 
+<attdecl>
     cv           CDATA  #IMPLIED
     specifiers   CDATA  #IMPLIED
     %boost.common.attrib;</attdecl>
@@ -2000,7 +1999,7 @@
 </element>
 
 <attlist name="run-fail-test">
-<attdecl> 
+<attdecl>
      filename CDATA #REQUIRED
      name     CDATA #IMPLIED</attdecl>
 <attribute name="filename"
@@ -2159,7 +2158,7 @@
 </element>
 
 <attlist name="parameter">
-<attdecl> 
+<attdecl>
      name CDATA #IMPLIED</attdecl>
 <attribute name="name"
            type="#IMPLIED"
@@ -2255,7 +2254,7 @@
 </element>
 
 <attlist name="overloaded-function">
-<attdecl> 
+<attdecl>
     name  CDATA  #REQUIRED
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
@@ -2276,6 +2275,60 @@
            default=""/>
 </attlist>
 
+  <element name="access"
+          content-type="element">
+  <content-model-expanded>
+    <or-group occurrence="+">
+      <element-name name="static-constant"/>
+      <element-name name="typedef"/>
+      <element-name name="enum"/>
+      <element-name name="copy-assignment"/>
+      <element-name name="constructor"/>
+      <element-name name="destructor"/>
+      <element-name name="method-group"/>
+      <element-name name="method"/>
+      <element-name name="overloaded-method"/>
+      <element-name name="data-member"/>
+      <element-name name="class"/>
+      <element-name name="class-specialization"/>
+      <element-name name="struct"/>
+      <element-name name="struct-specialization"/>
+      <element-name name="union"/>
+      <element-name name="union-specialization"/>
+    </or-group>
+  </content-model-expanded>
+  <content-model>
+    <sequence-group occurrence="+">
+      <parament-name name="boost.class.members"/>
+    </sequence-group>
+  </content-model>
+  <purpose>Declares an access specification for class members</purpose>
+
+  <description>
+    <para>The access specifications of class members (public, private, or protected) may be determined by enclosing them in an &lt;access&gt; element.</para>
+  </description>
+  </element>
+
+  <attlist name="access">
+  <attdecl>
+      name CDATA #REQUIRED
+      %boost.common.attrib;</attdecl>
+  <attribute name="last-revision"
+            type="#IMPLIED"
+            value="CDATA"
+            default=""/>
+  <attribute name="name"
+            type="#REQUIRED"
+            value="CDATA"
+            default="">
+    <purpose>The name of the access specification, e.g. "public", "private", or "protected".</purpose>
+  </attribute>
+  <attribute name="id"
+            type="#IMPLIED"
+            value="CDATA"
+            default=""/>
+  </attlist>
+
 <element name="class"
          content-type="element">
 <content-model-expanded>
@@ -2285,6 +2338,7 @@
     <element-name name="purpose" occurrence="?"/>
     <element-name name="description" occurrence="?"/>
     <or-group occurrence="*">
+      <element-name name="access"/>
       <element-name name="static-constant"/>
       <element-name name="typedef"/>
       <element-name name="enum"/>
@@ -2348,7 +2402,7 @@
   inheritance from the class <classname>std::bad_cast</classname>. It
   also defines the &lt;purpose&gt; element, which contains a short
   description of the use of the class.</para>
-    
+
   <programlisting>&lt;class name="bad_any_cast"&gt;
   &lt;inherit access="public"&gt;&lt;classname&gt;std::bad_cast&lt;/classname&gt;&lt;/inherit&gt;
   &lt;purpose&gt;&lt;para&gt;The exception thrown in the event of a failed
@@ -2402,7 +2456,7 @@
 </element>
 
 <attlist name="librarycategorydef">
-<attdecl> 
+<attdecl>
          name   CDATA   #REQUIRED
          %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
@@ -2524,7 +2578,7 @@
 </element>
 
 <attlist name="overloaded-method">
-<attdecl> 
+<attdecl>
     name  CDATA  #REQUIRED
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
@@ -2813,6 +2867,7 @@
     <element-name name="purpose" occurrence="?"/>
     <element-name name="description" occurrence="?"/>
     <or-group occurrence="*">
+      <element-name name="access"/>
       <element-name name="static-constant"/>
       <element-name name="typedef"/>
       <element-name name="enum"/>
@@ -2874,6 +2929,7 @@
     <element-name name="purpose" occurrence="?"/>
     <element-name name="description" occurrence="?"/>
     <or-group occurrence="*">
+      <element-name name="access"/>
       <element-name name="static-constant"/>
       <element-name name="typedef"/>
       <element-name name="enum"/>
@@ -3224,5 +3280,4 @@
            value="CDATA"
            default=""/>
 </attlist>
-
 </dtd>

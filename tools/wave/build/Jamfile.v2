@@ -11,18 +11,18 @@
 project
     :
     requirements
-#    <link>static
-#    <runtime-link>static
-#    <threading>single
     ;
 
 exe wave
     :
     ../cpp.cpp 
-    /boost/wave//boost_wave
-    /boost/program_options//boost_program_options
-    /boost/filesystem//boost_filesystem
-    /boost/serialization//boost_serialization
+    /boost//wave
+    /boost//program_options
+    /boost//filesystem
+    /boost//serialization
+    /boost//system
+    /boost//thread
+    /boost//date_time
     :
 #   <debug-symbols>on
     :

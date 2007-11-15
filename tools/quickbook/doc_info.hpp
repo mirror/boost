@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2002 2004 Joel de Guzman
+    Copyright (c) 2002 2004 2006 Joel de Guzman
     Copyright (c) 2004 Eric Niebler
     http://spirit.sourceforge.net/
 
@@ -165,7 +165,7 @@ namespace quickbook
                     ;
 
                 hard_space =
-                    (eps_p - (alnum_p | '_')) >> space  // must not be followed by
+                    (eps_p - (alnum_p | '_')) >> space  // must not be preceded by
                     ;                                   // alpha-numeric or underscore
 
                 phrase =

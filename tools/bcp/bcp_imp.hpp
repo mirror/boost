@@ -51,6 +51,7 @@ private:
    void enable_list_mode();
    void enable_summary_list_mode();
    void enable_cvs_mode();
+   void enable_svn_mode();
    void enable_unix_lines();
    void enable_scan_mode();
    void enable_license_mode();
@@ -64,6 +65,7 @@ private:
 private:
    // internal helper functions:
    void scan_cvs_path(const fs::path& p);
+   void scan_svn_path(const fs::path& p);
    void add_path(const fs::path& p);
    void add_directory(const fs::path& p);
    void add_file(const fs::path& p);
@@ -83,6 +85,7 @@ private:
    bool m_list_summary_mode;             // list file summary only
    bool m_license_mode;                  // generate license information for files listed
    bool m_cvs_mode;                      // check cvs for files
+   bool m_svn_mode;                      // check svn for files
    bool m_unix_lines;                    // fix line endings
    bool m_scan_mode;                     // scan non-boost files.
    bool m_bsl_convert_mode;              // try to convert to the BSL

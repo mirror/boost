@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
    Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
   
@@ -137,7 +137,7 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
       <title>Manual setup for all systems</title>
     
       <para>This section describes how to manually configure Boost
-      Boost version 2 (BBv2) for BoostBook. If you can use the
+      Boost version 2 (BBv@) for BoostBook. If you can use the
       automatic setup script, you should. All configuration will
       happen in the BBv2 user configuration file,
       <filename>user-config.jam</filename>. If you do not have a copy
@@ -212,13 +212,9 @@ using boostbook
         documentation for libraries that do not require Doxygen. To
         test this, change into the directory <filename
         class="directory">$BOOST_ROOT/libs/function/doc</filename> and
-        run the command <code>bjam</code>: it should produce HTML
+        run the command <code>bjam --v2</code>: it should produce HTML
         documentation for the Boost.Function library in the
-        <code>html</code> subdirectory. This documentation 
-	will look a little strange, because the BoostBook stylesheet is 
-	missing. You can copy the <code>boostbook.css</code> stylesheet from
-	<filename class="directory">$BOOST_ROOT/doc/html</filename> to
-	fix this problem.</para>
+        <code>html</code> subdirectory.</para>
       </section>
 
       <section id="boostbook.setup.doxygen">

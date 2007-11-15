@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2002 2004 Joel de Guzman
+    Copyright (c) 2002 2004 2006 Joel de Guzman
     Copyright (c) 2004 Eric Niebler
     http://spirit.sourceforge.net/
 
@@ -18,20 +18,10 @@
 
 namespace quickbook { namespace detail
 {
-    void
-    print_char(char ch, std::ostream& out);
-
-    void
-    print_string(std::basic_string<char> const& str, std::ostream& out);
-
-    void
-    print_space(char ch, std::ostream& out);
-
-    void
-    convert_nbsp(std::basic_string<char>& str);
-
-    char
-    filter_identifier_char(char ch);
+    void print_char(char ch, std::ostream& out);
+    void print_string(std::basic_string<char> const& str, std::ostream& out);
+    void print_space(char ch, std::ostream& out);
+    char filter_identifier_char(char ch);
 
     template <typename Iterator>
     inline std::string
@@ -65,17 +55,31 @@ namespace quickbook { namespace detail
     void unindent(std::string& program);
 
     // remove the extension from a filename
-    std::string
-    remove_extension(std::string const& filename);
-    
+    std::string remove_extension(std::string const& filename);
+
     std::string escape_uri(std::string uri);
-    
+
     // Preformats an error/warning message so that it can be parsed by
     // common IDEs. Uses the ms_errors global to determine if VS format
     // or GCC format. Returns the stream to continue ouput of the verbose
     // error message.
-    std::ostream & outerr(const std::string & file, int line);
-    std::ostream & outwarn(const std::string & file, int line);
+    std::ostream & outerr(std::string const& file, int line);
+    std::ostream & outwarn(std::string const& file, int line);
+
+    // load file into memory with extra trailing newlines to eliminate
+    //  the need to check for end of file in the grammar.
+    int load(std::string const& filename, std::string& storage);
+
+    // given a file extension, return the type of the source file
+    // we'll have an internal database for known file types.
+
+    enum file_type
+    {
+        cpp_file
+      , python_file
+    };
+
+    file_type get_file_type(std::string const& extension);
 }}
 
 #endif // BOOST_SPIRIT_QUICKBOOK_UTILS_HPP

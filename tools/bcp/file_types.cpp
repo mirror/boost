@@ -39,7 +39,7 @@ bool bcp_implementation::is_html_file(const fs::path& p)
 
 bool bcp_implementation::is_binary_file(const fs::path& p)
 {
-   if(m_cvs_mode)
+   if(m_cvs_mode || m_svn_mode)
    {
       std::map<fs::path, bool, path_less>::iterator pos = m_cvs_paths.find(p);
       if(pos != m_cvs_paths.end()) return pos->second;

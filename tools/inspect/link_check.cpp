@@ -52,7 +52,11 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
-      if (contents.find( "boostinspect:" "nolink" ) != string::npos) return;
+      if (contents.find( "boostinspect:" "nounlinked" ) != string::npos)
+          m_paths[ relative_to( full_path, fs::initial_path() ) ] |= m_nounlinked_errors;
+
+      bool no_link_errors =
+          (contents.find( "boostinspect:" "nolink" ) != string::npos);
 
       string::const_iterator start( contents.begin() );
       string::const_iterator end( contents.end() );
@@ -64,7 +68,7 @@ namespace boost
         // what[0] contains the whole string iterators.
         // what[1] contains the URL iterators.
         do_url( string( what[1].first, what[1].second ),
-          library_name, full_path );
+          library_name, full_path, no_link_errors );
 
         start = what[0].second; // update search position
         flags |= boost::match_prev_avail; // update flags
@@ -75,7 +79,8 @@ namespace boost
 //  do_url  ------------------------------------------------------------------//
 
     void link_check::do_url( const string & url, const string & library_name,
-      const path & source_path ) // precondition: source_path.is_complete()
+      const path & source_path, bool no_link_errors )
+        // precondition: source_path.is_complete()
     {
       if ( url[0] == '#'
         || url.find( "mailto:" ) == 0
@@ -88,13 +93,15 @@ namespace boost
 
       if ( url.find( "file:" ) == 0 )
       {
-        ++m_invalid_errors;
-        error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + url );
+        if(!no_link_errors) {
+          ++m_invalid_errors;
+          error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + url );
+        }
         return;
       }
 
       // detect characters banned by RFC2396:
-      if ( url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
+      if ( !no_link_errors && url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
       {
         ++m_invalid_errors;
         error( library_name, source_path, string(name()) + " invalid character in URL: " + url );
@@ -107,7 +114,7 @@ namespace boost
       {
         plain_url.erase( pos );
         // detect characters banned by RFC2396 in bookmark:
-        if ( url.find( '#', pos+1 ) != string::npos )
+        if ( !no_link_errors && url.find( '#', pos+1 ) != string::npos )
         {
           ++m_bookmark_errors;
           error( library_name, source_path, string(name()) + " invalid bookmark: " + url );
@@ -123,8 +130,10 @@ namespace boost
       try { target_path = source_path.branch_path() /= path( plain_url, fs::no_check ); }
       catch ( const fs::filesystem_error & )
       {
-        ++m_invalid_errors;
-        error( library_name, source_path, string(name()) + " invalid URL: " + url );
+        if(!no_link_errors) {
+          ++m_invalid_errors;
+          error( library_name, source_path, string(name()) + " invalid URL: " + url );
+        }
         return;
       }
 
@@ -142,7 +151,7 @@ namespace boost
       itr->second |= m_linked_to;
 
       // if target isn't present, the link is broken
-      if ( (itr->second & m_present) == 0 )
+      if ( !no_link_errors && (itr->second & m_present) == 0 )
       {
         ++m_broken_errors;
         error( library_name, source_path, string(name()) + " broken link: " + url );
@@ -158,6 +167,7 @@ namespace boost
      {
 // std::clog << itr->first << " " << itr->second << "\n";
        if ( (itr->second & m_linked_to) != m_linked_to
+         && (itr->second & m_nounlinked_errors) != m_nounlinked_errors
          && (itr->first.rfind( ".html" ) == itr->first.size()-5
           || itr->first.rfind( ".htm" ) == itr->first.size()-4)
          // because they may be redirectors, it is OK if these are unlinked:

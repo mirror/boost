@@ -8,8 +8,9 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#define BOOST_WAVE_SERIALIZATION        1             // enable serialization
-#define BOOST_WAVE_BINARY_SERIALIZATION 1             // use binary archives
+#define BOOST_WAVE_SERIALIZATION        0             // enable serialization
+#define BOOST_WAVE_BINARY_SERIALIZATION 0             // use binary archives
+#define BOOST_WAVE_XML_SERIALIZATION    1             // use XML archives
 
 #include "cpp.hpp"                                    // global configuration
 
@@ -38,6 +39,11 @@
 #include <boost/archive/binary_oarchive.hpp>
 typedef boost::archive::binary_iarchive iarchive;
 typedef boost::archive::binary_oarchive oarchive;
+#elif BOOST_WAVE_XML_SERIALIZATION != 0
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+typedef boost::archive::xml_iarchive iarchive;
+typedef boost::archive::xml_oarchive oarchive;
 #else
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -459,12 +465,13 @@ namespace {
 #endif
                 ifstream ifs (state_file.string().c_str(), mode);
                 if (ifs.is_open()) {
+                    using namespace boost::serialization;
                     iarchive ia(ifs);
                     string version;
                     
-                    ia >> version;      // load version
+                    ia >> make_nvp("version", version);  // load version
                     if (version == CPP_VERSION_FULL_STR)
-                        ia >> ctx;      // load the internal tables from disc
+                        ia >> make_nvp("state", ctx);    // load the internal tables from disc
                     else {
                         cerr << "wave: detected version mismatch while loading state, state was not loaded." << endl;
                         cerr << "      loaded version:   " << version << endl;
@@ -507,10 +514,11 @@ namespace {
                     // this is non-fatal
                 }
                 else {
+                    using namespace boost::serialization;
                     oarchive oa(ofs);
                     string version(CPP_VERSION_FULL_STR);
-                    oa << version; // write version
-                    oa << ctx;                  // write the internal tables to disc
+                    oa << make_nvp("version", version);  // write version
+                    oa << make_nvp("state", ctx);        // write the internal tables to disc
                 }
             }
         }
@@ -519,6 +527,79 @@ namespace {
                  << e.what() << endl;
         }
 #endif
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // list all defined macros
+    bool list_macro_names(context_type const& ctx, std::string filename)
+    {
+    // open file for macro names listing
+        std::ofstream macronames_out;
+        fs::path macronames_file (filename, fs::native);
+
+        if (macronames_file != "-") {
+            macronames_file = fs::complete(macronames_file);
+            fs::create_directories(macronames_file.branch_path());
+            macronames_out.open(macronames_file.string().c_str());
+            if (!macronames_out.is_open()) {
+                cerr << "wave: could not open file for macro name listing: " 
+                     << macronames_file.string() << endl;
+                return false;
+            }
+        }
+        else {
+            macronames_out.copyfmt(cout);
+            macronames_out.clear(cout.rdstate());
+            static_cast<std::basic_ios<char> &>(macronames_out).rdbuf(cout.rdbuf());
+        }
+
+    // simply list all defined macros and its definitions
+        typedef context_type::const_name_iterator name_iterator;
+        name_iterator end = ctx.macro_names_end();
+        for (name_iterator it = ctx.macro_names_begin(); it != end; ++it) 
+        {
+            typedef std::vector<context_type::token_type> parameters_type;
+            
+        bool has_pars = false;
+        bool predef = false;
+        context_type::position_type pos;
+        parameters_type pars;
+        context_type::token_sequence_type def;
+            
+            if (ctx.get_macro_definition(*it, has_pars, predef, pos, pars, def))
+            {
+                macronames_out << *it;
+                if (has_pars) {
+                // list the parameter names for function style macros
+                    macronames_out << "(";
+                    parameters_type::const_iterator pend = pars.end();
+                    for (parameters_type::const_iterator pit = pars.begin();
+                         pit != pend; /**/)
+                    {
+                        macronames_out << (*pit).get_value();
+                        if (++pit != pend)
+                            macronames_out << ", ";
+                    }
+                    macronames_out << ")";
+                }
+                macronames_out << "=";
+
+            // print the macro definition
+                context_type::token_sequence_type::const_iterator dend = def.end();
+                for (context_type::token_sequence_type::const_iterator dit = def.begin();
+                     dit != dend; ++dit)
+                {
+                    macronames_out << (*dit).get_value();
+                }
+
+            // predefined macros get a 'P' appended
+                if (predef) 
+                    macronames_out << " (P)";
+                    
+                macronames_out << std::endl;
+            }
+        }
+        return true;
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -658,6 +739,10 @@ int error_count = 0;
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
                  |  boost::wave::support_option_include_guard_detection
 #endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+                 |  boost::wave::support_option_emit_pragma_directives
+#endif
+                 |  boost::wave::support_option_insert_whitespace
                 ));
         }
         else if (vm.count("variadics")) {
@@ -698,7 +783,19 @@ int error_count = 0;
             ctx.set_language(
                 boost::wave::enable_emit_line_directives(ctx.get_language(), 
                     lineopt != 0));
+        }
 
+    // control whether whitespace should be inserted to disambiguate output
+        if (vm.count("disambiguate")) {
+            int disambiguateopt = vm["disambiguate"].as<int>();
+            if (0 != disambiguateopt && 1 != disambiguateopt) {
+                cerr << "wave: bogus value for --disambiguate command line option: " 
+                    << disambiguateopt << endl;
+                return -1;
+            }
+            ctx.set_language(
+                boost::wave::enable_insert_whitespace(ctx.get_language(), 
+                    disambiguateopt != 0));
         }
 
     // add include directories to the system include search paths
@@ -865,7 +962,7 @@ int error_count = 0;
             cerr << "wave: ignoring the command line option 'state', "
                  << "use it in interactive mode only." << endl;
         }
-        
+
     // >>>>>>>>>>>>> The actual preprocessing happens here. <<<<<<<<<<<<<<<<<<<
     // loop over the input lines if reading from stdin, otherwise this loop
     // will be executed once
@@ -892,8 +989,7 @@ int error_count = 0;
 
                     // print out the current token value
                         if (allow_output) {
-                            if (output.rdstate() & (std::ios::badbit | std::ios::failbit | std::ios::eofbit))
-                            {
+                            if (!output.good()) {
                                 cerr << "wave: problem writing to the current "
                                      << "output file" << endl;
                                 cerr << report_iostate_error(output.rdstate());
@@ -914,6 +1010,7 @@ int error_count = 0;
                 // some preprocessing error
                     if (is_interactive || boost::wave::is_recoverable(e)) {
                         error_count += report_error_message(ctx, e);
+                        ++first;    // advance to the next token
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors
@@ -925,6 +1022,7 @@ int error_count = 0;
                         boost::wave::cpplexer::is_recoverable(e)) 
                     {
                         error_count += report_error_message(e);
+                        ++first;    // advance to the next token
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors
@@ -935,6 +1033,12 @@ int error_count = 0;
 
         if (is_interactive) 
             save_state(vm, ctx);    // write the internal tables to disc
+
+    // list all defined macros at the end of the preprocessing
+        if (vm.count("macronames")) {
+            if (!list_macro_names(ctx, vm["macronames"].as<string>()))
+                return -1;
+        }
     }
     catch (boost::wave::cpp_exception const &e) {
     // some preprocessing error
@@ -1029,6 +1133,8 @@ main (int argc, char *argv[])
 #endif 
             ("listincludes,l", po::value<string>(), 
                 "list names of included files to a file [arg] or to stdout [-]")
+            ("macronames,m", po::value<string>(), 
+                "list all defined macros to a file [arg] or to stdout [-]")
             ("preserve,p", po::value<int>()->default_value(0), 
                 "preserve whitespace\n"
                             "0: no whitespace is preserved (default),\n"
@@ -1038,6 +1144,11 @@ main (int argc, char *argv[])
                 "control the generation of #line directives\n"
                             "0: no #line directives are generated,\n"
                             "1: #line directives will be emitted (default)")
+            ("disambiguate", po::value<int>()->default_value(1), 
+                "control whitespace insertion to disambiguate\n"
+                "consecutive tokens\n"
+                            "0: no additional whitespace is generated,\n"
+                            "1: whitespace is used to disambiguate output (default)")
             ("extended,x", "enable the #pragma wave system() directive")
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
             ("noguard,G", "disable include guard detection")

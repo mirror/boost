@@ -8,9 +8,10 @@
   <section id="escape.escape">
     <title>Escape</title>
     <para>
-      
-<!--quickbook-escape-prefix--><emphasis>Da do do do. Da da da da. That's all I have to say to you.</emphasis>
-<!--quickbook-escape-postfix-->
+      <emphasis>Da do do do. Da da da da. That's all I have to say to you.</emphasis>
+    </para>
+    <para>
+      This letter &#x3B1; should have a space either side of it.
     </para>
   </section>
 </article>
