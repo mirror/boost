@@ -46,7 +46,7 @@ namespace boost
     namespace cygwin_error
     {
       inline error_code make_error_code( cygwin_errno e )
-        { return error_code( e, system_category ); }
+        { return error_code( e, get_system_category() ); }
     }
   }
 }

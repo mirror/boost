@@ -99,7 +99,7 @@ namespace boost
     namespace linux_error
     {
       inline error_code make_error_code( linux_errno e )
-        { return error_code( e, system_category ); }
+        { return error_code( e, get_system_category() ); }
     }
 
   }  // namespace system

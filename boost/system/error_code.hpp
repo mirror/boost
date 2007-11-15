@@ -219,7 +219,7 @@ namespace boost
     public:
 
       // constructors:
-      error_condition() : m_val(0), m_cat(&posix_category) {}
+      error_condition() : m_val(0), m_cat(&get_posix_category()) {}
       error_condition( int val, const error_category & cat ) : m_val(val), m_cat(&cat) {}
 
       template <class ConditionEnum>
@@ -248,7 +248,7 @@ namespace boost
       void clear()
       {
         m_val = 0;
-        m_cat = &posix_category;
+        m_cat = &get_posix_category();
       }
 
       // observers:
@@ -306,7 +306,7 @@ namespace boost
     public:
 
       // constructors:
-      error_code() : m_val(0), m_cat(&system_category) {}
+      error_code() : m_val(0), m_cat(&get_system_category()) {}
       error_code( int val, const error_category & cat ) : m_val(val), m_cat(&cat) {}
 
       template <class CodeEnum>
@@ -334,7 +334,7 @@ namespace boost
       void clear()
       {
         m_val = 0;
-        m_cat = &system_category;
+        m_cat = &get_system_category();
       }
 
       // observers:
@@ -442,11 +442,11 @@ namespace boost
     {
       //  explicit conversion:
       inline error_code make_error_code( posix_errno e )
-        { return error_code( e, posix_category ); }
+        { return error_code( e, get_posix_category() ); }
 
       //  implicit conversion:
       inline error_condition make_error_condition( posix_errno e )
-        { return error_condition( e, posix_category ); }
+        { return error_condition( e, get_posix_category() ); }
     }
 
     //  error_category default implementation  -------------------------------//
