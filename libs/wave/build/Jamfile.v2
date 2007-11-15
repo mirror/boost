@@ -50,6 +50,12 @@ for local source in $(SOURCES)
     {
         requirements += <warnings>off ;
     }
+
+    if $(source) in instantiate_re2c_lexer instantiate_re2c_lexer_str
+    {
+        requirements += <toolset>msvc-8.0:<define>_CRT_SECURE_NO_WARNINGS ;
+    }
+
     obj $(source) : $(source).cpp : $(requirements) ;
 }
 
