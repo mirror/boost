@@ -9,8 +9,7 @@
 #define BOOST_XPRESSIVE_DETAIL_CORE_MATCHER_PREDICATE_MATCHER_HPP_EAN_03_22_2007
 
 // MS compatible compilers support #pragma once
-#if define
-d(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
 
