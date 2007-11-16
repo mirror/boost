@@ -282,9 +282,6 @@ void test8()
 
     std::wstring str(L"Chicago \u041c\u043E\u0441\u043A\u0432\u0430");
     City result1, result2;
-    //int result1p;
-    // ERROR "error C2039: 'population' : is not a member of 'boost::proto::expr<Tag,Args>'	c:\boost\libs\xpressive\test\test_symbols.cpp	277"
-    //sregex rx = (a1= map1)[ xp::ref(result1p) = a1.population ];
     wsregex rx = (a1= map1)[ xp::ref(result1) = a1 ] >> +_s
         >> (a1= map1)[ xp::ref(result2) = a1 ];
     if(!regex_match(str, rx))
