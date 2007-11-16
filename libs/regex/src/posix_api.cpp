@@ -164,7 +164,7 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA*
       {
          if(std::strcmp(e->re_endp, names[i]) == 0)
          {
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400) && !defined(_WIN32_WCE)
             (::sprintf_s)(localbuf, 5, "%d", i);
 #else
             (std::sprintf)(localbuf, "%d", i);
@@ -174,7 +174,7 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA*
             return std::strlen(localbuf) + 1;
          }
       }
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400) && !defined(_WIN32_WCE)
       (::sprintf_s)(localbuf, 5, "%d", 0);
 #else
       (std::sprintf)(localbuf, "%d", 0);

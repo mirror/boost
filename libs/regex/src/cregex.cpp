@@ -354,7 +354,7 @@ void BuildFileList(std::list<std::string>* pl, const char* files, bool recurse)
 
       while(dstart != dend)
       {
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400) && !defined(_WIN32_WCE)
          (::sprintf_s)(buf, sizeof(buf), "%s%s%s", dstart.path(), directory_iterator::separator(), ptr);
 #else
          (std::sprintf)(buf, "%s%s%s", dstart.path(), directory_iterator::separator(), ptr);
