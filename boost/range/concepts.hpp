@@ -82,7 +82,6 @@ namespace boost {
         T a;
         range_iterator i;
         range_const_iterator ci;
-        bool b;
     };
 
     //! Check if a type T models the ForwardRange range concept.

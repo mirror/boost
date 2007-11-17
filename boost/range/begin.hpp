@@ -41,6 +41,11 @@ namespace range_detail
     inline BOOST_DEDUCED_TYPENAME range_iterator<C>::type
     range_begin( C& c )
     {
+        //
+        // If you get a compile-error here, it is most likely because
+        // you have not implemented range_begin() properly in
+        // the namespace of C
+        //
         return c.begin();
     }
 
