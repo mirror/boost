@@ -48,12 +48,12 @@ void check_std_container()
     BOOST_CHECK( begin( vec ) == vec.begin() );
     BOOST_CHECK( end( vec )   == vec.end() );
     BOOST_CHECK( empty( vec ) == vec.empty() );
-    BOOST_CHECK( size( vec ) == vec.size() );
+    BOOST_CHECK( (std::size_t)size( vec ) == vec.size() );
     
     BOOST_CHECK( begin( cvec ) == cvec.begin() );
     BOOST_CHECK( end( cvec )   == cvec.end() );
     BOOST_CHECK( empty( cvec ) == cvec.empty() );
-    BOOST_CHECK( size( cvec ) == cvec.size() );
+    BOOST_CHECK( (std::size_t)size( cvec ) == cvec.size() );
 
 }
 

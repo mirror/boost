@@ -65,17 +65,17 @@ void check_iterator_pair()
     BOOST_CHECK( begin( pair ) == pair.first );
     BOOST_CHECK( end( pair )   == pair.second );
     BOOST_CHECK( empty( pair ) == (pair.first == pair.second) );
-    BOOST_CHECK( size( pair )  == std::size_t( std::distance( pair.first, pair.second ) ) );
+    BOOST_CHECK( size( pair )  == std::distance( pair.first, pair.second ) );
     
     BOOST_CHECK( begin( const_pair ) == const_pair.first );
     BOOST_CHECK( end( const_pair )   == const_pair.second );
     BOOST_CHECK( empty( const_pair ) == (const_pair.first == const_pair.second) );
-    BOOST_CHECK( size( const_pair )  == std::size_t( std::distance( const_pair.first, const_pair.second ) ) );
+    BOOST_CHECK( size( const_pair )  == std::distance( const_pair.first, const_pair.second ) );
 
     BOOST_CHECK( begin( constness_pair ) == constness_pair.first );
     BOOST_CHECK( end( constness_pair )   == constness_pair.second );
     BOOST_CHECK( empty( constness_pair ) == (constness_pair.first == const_pair.second) );
-    BOOST_CHECK( size( constness_pair )  == std::size_t( std::distance( constness_pair.first, constness_pair.second ) ) );
+    BOOST_CHECK( size( constness_pair )  == std::distance( constness_pair.first, constness_pair.second ) );
 
 }
 
