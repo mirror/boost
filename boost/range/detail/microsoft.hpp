@@ -1,9 +1,6 @@
 #ifndef BOOST_RANGE_DETAIL_MICROSOFT_HPP
 #define BOOST_RANGE_DETAIL_MICROSOFT_HPP
 
-
-
-
 // Boost.Range MFC/ATL Extension
 //
 // Copyright Shunsuke Sogame 2005-2006.
@@ -928,7 +925,6 @@ namespace boost { namespace range_detail_microsoft {
 
 
 #endif // defined(BOOST_RANGE_DETAIL_MICROSOFT_TEST)
-
 
 
 
