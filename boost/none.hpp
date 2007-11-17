@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-// See http://www.boost.org/lib/optional/ for documentation.
+// See http://www.boost.org/libs/optional for documentation.
 //
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com

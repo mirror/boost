@@ -6,6 +6,8 @@
 
 // Message Passing Interface
 
+//  See www.boost.org/libs/mpi for documentation.
+
 /** @file mpi.hpp
  *
  *  This file is a top-level convenience header that includes all of

@@ -8,6 +8,8 @@
  * Author: Jeff Garland
  * $Date$
  */
+ 
+ //  See www.boost.org/libs/date_time for documentation.
 
 //gregorian and posix time included by indirectly
 #include "boost/date_time/local_time/local_time.hpp"
