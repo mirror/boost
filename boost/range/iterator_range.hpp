@@ -29,11 +29,13 @@
 #include <boost/assert.hpp>
 #include <iterator>
 #include <algorithm>
-#ifndef BOOST_OLD_IOSTREAMS
-# include <ostream>
-#else
-# include <ostream.h>
-#endif
+#ifndef _STLP_NO_IOSTREAMS
+# ifndef BOOST_OLD_IOSTREAMS
+#  include <ostream>
+# else
+#  include <ostream.h>
+# endif
+#endif // _STLP_NO_IOSTREAMS
 #include <cstddef>
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || BOOST_WORKAROUND(BOOST_MSVC, == 1400) 
@@ -396,7 +398,8 @@ namespace boost
 
 //  iterator range free-standing operators ---------------------------//
 
-#ifndef BOOST_OLD_IOSTREAMS   
+#ifndef _STLP_NO_IOSTREAMS
+# ifndef BOOST_OLD_IOSTREAMS   
 
         //! iterator_range output operator
         /*!
@@ -415,7 +418,7 @@ namespace boost
             return Os;
         }
 
-#else
+# else
 
         //! iterator_range output operator
         /*!
@@ -431,7 +434,8 @@ namespace boost
             return Os;
         }
 
-#endif
+# endif
+#endif // _STLP_NO_IOSTREAMS
 
         /////////////////////////////////////////////////////////////////////
         // comparison operators
