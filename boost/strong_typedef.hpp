@@ -14,7 +14,7 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/serialization for updates, documentation, and revision history.
 
 // macro used to implement a strong typedef.  strong typedef
 // guarentees that two types are distinguised even though the
