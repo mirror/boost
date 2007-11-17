@@ -157,7 +157,7 @@ class=identifier>T</span><span class=special>&amp; </span><span class=identifier
     //
     
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
-    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>range_size</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
+    </span><span class=keyword></span><span class=keyword>typename </span><span class=identifier>range_difference</span><span class=special>&lt;</span><span class=identifier>T</span><span class=special>&gt;::</span><span class=identifier>type
     </span><a href="#size"><span class=identifier>size</span></a><span class=special>( </span><span class=keyword>const </span><span class=identifier>T</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);</span>
     
     <span class=comment>//
@@ -471,12 +471,34 @@ class=identifier>T</span><span class=special>&amp; </span><span class=identifier
                     <td>linear time for pointers to a string, constant time 
                         otherwise</td>
                 </tr>
+                 <tr>
+                    <a name="as_array"></a>
+                    <td><code>as_array(x)</code></td>
+                     <td><code>iterator_range&lt;X></code>                       </td>
+                     <td>
+                                  <code>[boost::begin(x),boost::end(x))</code> 
+                                    
+
+
+                         
+                         </td>   
+                    <td>constant time otherwise</td>
+                </tr>
+
             </table>
         </p>
         <p>
             The special <code>const_</code>-named functions are useful when you 
             want to document clearly that your code is read-only.
         </p>
+            <p>
+                <code>as_literal()</code> can be used <i>internally</i> in string 
+                algorithm librararies to such that arrays of characters are 
+                handled correctly.
+                </p>
+            <p>
+                <code>as_array()</code> can be used with string algorithm libraries to make it clear that arrays of characters are handled like an array and not like a string. 
+                </p>    
             <p>Notice that the above functions should always be called with 
                 qualification (<code>boost::</code>) to prevent <i>unintended</i> 
                 Argument Dependent Lookup (ADL).
