@@ -37,7 +37,7 @@ class MyClass : public set_base_hook<optimize_size<true> >
       {  return a.int_ < b.int_;  }
 };
 
-//Define an set using the base hook that will store values in reverse order
+//Define a set using the base hook that will store values in reverse order
 typedef set< MyClass, compare<std::greater<MyClass> > >     BaseSet;
 
 //Define an multiset using the member hook
@@ -62,12 +62,10 @@ int main()
    assert(sizeof(set_member_hook<>) > 3*sizeof(void*));
 
    //Now insert them in the reverse order in the base hook set
-   for(VectIt it(values.begin()), itend(values.end()); it != itend; ++it)
+   for(VectIt it(values.begin()), itend(values.end()); it != itend; ++it){
       baseset.insert(*it);
-
-   //Now insert them in the same order as in vector in the member hook set
-   for(VectIt it(values.begin()), itend(values.end()); it != itend; ++it)
       membermultiset.insert(*it);
+   }
 
    //Now test sets
    {

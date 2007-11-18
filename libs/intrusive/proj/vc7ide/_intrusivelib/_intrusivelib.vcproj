@@ -118,6 +118,9 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\avltree_algorithms.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\bs_set_hook.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\circular_list_algorithms.hpp">
 			</File>
 			<File
@@ -164,6 +167,15 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\set_hook.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\sg_set.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\sgtree.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\sgtree_algorithms.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\slist.hpp">
@@ -268,6 +280,15 @@
 				RelativePath="..\..\..\test\common_functors.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\test\generic_assoc_test.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\test\generic_multiset_test.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\test\generic_set_test.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\test\itestvalue.hpp">
 			</File>
 			<File
@@ -342,6 +363,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_set.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_sg_set.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_slist.cpp">

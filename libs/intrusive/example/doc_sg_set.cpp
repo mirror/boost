@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,22 +9,21 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-//[doc_avl_set_code
-#include <boost/intrusive/avl_set.hpp>
+//[doc_sg_set_code
+#include <boost/intrusive/sg_set.hpp>
 #include <vector>
 #include <algorithm>
 #include <cassert>
 
 using namespace boost::intrusive;
 
-                  //This is a base hook optimized for size
-class MyClass : public avl_set_base_hook<optimize_size<true> >
+class MyClass : public bs_set_base_hook<>
 {
    int int_;
 
    public:
    //This is a member hook
-   avl_set_member_hook<> member_hook_;
+   bs_set_member_hook<> member_hook_;
 
    MyClass(int i)
       :  int_(i)
@@ -37,12 +36,14 @@ class MyClass : public avl_set_base_hook<optimize_size<true> >
       {  return a.int_ < b.int_;  }
 };
 
-//Define an avl_set using the base hook that will store values in reverse order
-typedef avl_set< MyClass, compare<std::greater<MyClass> > >     BaseSet;
+//Define an sg_set using the base hook that will store values in reverse order
+//and won't execute floating point operations.
+typedef sg_set
+   < MyClass, compare<std::greater<MyClass> >, floating_point<false> >   BaseSet;
 
 //Define an multiset using the member hook
-typedef member_hook<MyClass, avl_set_member_hook<>, &MyClass::member_hook_> MemberOption;
-typedef avl_multiset< MyClass, MemberOption>   MemberMultiset;
+typedef member_hook<MyClass, bs_set_member_hook<>, &MyClass::member_hook_> MemberOption;
+typedef sg_multiset< MyClass, MemberOption>   MemberMultiset;
 
 int main()
 {
@@ -56,28 +57,26 @@ int main()
    BaseSet baseset;
    MemberMultiset membermultiset;
    
-   //Check that size optimization is activated in the base hook 
-   assert(sizeof(avl_set_base_hook<optimize_size<true> >) == 3*sizeof(void*));
-   //Check that size optimization is deactivated in the member hook 
-   assert(sizeof(avl_set_member_hook<>) > 3*sizeof(void*));
-
-   //Now insert them in the sets
+   //Now insert them in the reverse order in the base hook sg_set
    for(VectIt it(values.begin()), itend(values.end()); it != itend; ++it){
       baseset.insert(*it);
       membermultiset.insert(*it);
    }
 
-   //Now test avl_sets
+   //Change balance factor
+   membermultiset.balance_factor(0.9f);
+
+   //Now test sg_sets
    {
       BaseSet::reverse_iterator rbit(baseset.rbegin()), rbitend(baseset.rend());
       MemberMultiset::iterator mit(membermultiset.begin()), mitend(membermultiset.end());
       VectIt it(values.begin()), itend(values.end());
 
-      //Test the objects inserted in the base hook avl_set
+      //Test the objects inserted in the base hook sg_set
       for(; it != itend; ++it, ++rbit)
          if(&*rbit != &*it)   return 1;
 
-      //Test the objects inserted in the member hook avl_set
+      //Test the objects inserted in the member hook sg_set
       for(it = values.begin(); it != itend; ++it, ++mit)
          if(&*mit != &*it) return 1;
    }

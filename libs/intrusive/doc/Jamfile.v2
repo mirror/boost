@@ -33,6 +33,9 @@ doxygen autodoc
                   "splay_set_impl=splay_set" \\
                   "splay_multiset_impl=splay_multiset" \\
                   "splaytree_impl=splaytree" \\
+                  "sg_set_impl=sg_set" \\
+                  "sg_multiset_impl=sg_multiset" \\
+                  "sgtree_impl=sgtree" \\
                   "avl_set_impl=avl_set" \\
                   "avl_multiset_impl=avl_multiset" \\
                   "avltree_impl=avltree""

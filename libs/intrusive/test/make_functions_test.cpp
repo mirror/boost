@@ -68,8 +68,7 @@ int main()
    Set   my_set;
    USet  my_uset(USet::bucket_traits(buckets, 100));
 
-   //Now insert them in the reverse order
-   //in the base hook intrusive list
+   //Now insert them in containers
    for(VectIt it(values.begin()), itend(values.end()); it != itend; ++it){
       my_list.push_front(*it);
       my_slist.push_front(*it);

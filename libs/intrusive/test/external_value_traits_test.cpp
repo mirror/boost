@@ -207,8 +207,7 @@ int main()
    Rbtree &my_rbtree = static_cast<Rbtree &> (cont_holder);
    Hash     &my_hash = static_cast<Hash &>   (cont_holder);
 
-   //Now insert them in the reverse order
-   //in the base hook intrusive list
+   //Now insert them in containers
    for(MyClass * it(&values[0]), *itend(&values[NumElements])
       ; it != itend; ++it){
       my_list.push_front(*it);
@@ -217,7 +216,7 @@ int main()
       my_hash.insert_unique(*it);
    }
 
-   //Now test lists
+   //Now test containers
    {
       List::const_iterator   list_it   (my_list.cbegin());
       Slist::const_iterator  slist_it  (my_slist.cbegin());
@@ -225,7 +224,7 @@ int main()
       Hash::const_iterator   hash_it   (my_hash.cbegin());
       MyClass *it_val(&values[NumElements] - 1), *it_rbeg_val(&values[0]-1);
 
-      //Test the objects inserted in the base hook list
+      //Test inserted objects
       for(; it_val != it_rbeg_val; --it_val, ++list_it, ++slist_it, ++rbtree_it){
          if(&*list_it   != &*it_val)   return 1;
          if(&*slist_it  != &*it_val)   return 1;

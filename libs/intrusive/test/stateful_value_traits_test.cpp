@@ -117,8 +117,7 @@ int main()
                  , slist_traits(values, uset_hook_array)
                  );
 
-   //Now insert them in the reverse order
-   //in the base hook intrusive list
+   //Now insert them in containers
    for(MyClass * it(&values[0]), *itend(&values[NumElements])
       ; it != itend
       ; ++it){

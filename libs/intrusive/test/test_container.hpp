@@ -185,7 +185,7 @@ void test_associative_container_invariants(Container & c, Data & d, boost::intru
 }
 
 template< class Container, class Data >
-void test_associative_container_invariants(Container & c, Data & d, boost::intrusive::detail::false_type)
+void test_associative_container_invariants(Container &, Data &, boost::intrusive::detail::false_type)
 {}
 
 template< class Container, class Data >
@@ -245,7 +245,7 @@ void test_unordered_associative_container_invariants(Container & c, Data & d, bo
 }
 
 template< class Container, class Data >
-void test_unordered_associative_container_invariants(Container & c, Data & d, boost::intrusive::detail::false_type)
+void test_unordered_associative_container_invariants(Container &, Data &, boost::intrusive::detail::false_type)
 {}
 
 template< class Container, class Data >

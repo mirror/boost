@@ -71,6 +71,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "avl_set", "avl_set\avl_set.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sg_multiset", "sg_multiset\sg_multiset.vcproj", "{07022E76-6CB5-92C1-B47F-A10772A79B43}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sg_set", "sg_set\sg_set.vcproj", "{1690A9E7-DB57-971C-F24A-09B752A942F7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -151,6 +159,14 @@ Global
 		{16909EE7-24AF-97C1-C76B-204B971BA959}.Debug.Build.0 = Debug|Win32
 		{16909EE7-24AF-97C1-C76B-204B971BA959}.Release.ActiveCfg = Release|Win32
 		{16909EE7-24AF-97C1-C76B-204B971BA959}.Release.Build.0 = Release|Win32
+		{07022E76-6CB5-92C1-B47F-A10772A79B43}.Debug.ActiveCfg = Debug|Win32
+		{07022E76-6CB5-92C1-B47F-A10772A79B43}.Debug.Build.0 = Debug|Win32
+		{07022E76-6CB5-92C1-B47F-A10772A79B43}.Release.ActiveCfg = Release|Win32
+		{07022E76-6CB5-92C1-B47F-A10772A79B43}.Release.Build.0 = Release|Win32
+		{1690A9E7-DB57-971C-F24A-09B752A942F7}.Debug.ActiveCfg = Debug|Win32
+		{1690A9E7-DB57-971C-F24A-09B752A942F7}.Debug.Build.0 = Debug|Win32
+		{1690A9E7-DB57-971C-F24A-09B752A942F7}.Release.ActiveCfg = Release|Win32
+		{1690A9E7-DB57-971C-F24A-09B752A942F7}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
