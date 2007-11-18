@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2006-2007
+// (C) Copyright Ion Gaztanaga 2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,8 +9,14 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-#ifndef BOOST_INTRUSIVE_RBTREE_HPP
-#define BOOST_INTRUSIVE_RBTREE_HPP
+//
+// The option that yields to non-floating point 1/sqrt(2) alpha is taken
+// from the scapegoat tree implementation of the PSPP library.
+//
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef BOOST_INTRUSIVE_SGTREE_HPP
+#define BOOST_INTRUSIVE_SGTREE_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <algorithm>
@@ -18,17 +24,17 @@
 #include <functional>
 #include <iterator>
 #include <utility>
-
+#include <cmath>
+#include <cstddef>
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/set_hook.hpp>
-#include <boost/intrusive/detail/rbtree_node.hpp>
+#include <boost/intrusive/bs_set_hook.hpp>
 #include <boost/intrusive/detail/tree_node.hpp>
 #include <boost/intrusive/detail/ebo_functor_holder.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/options.hpp>
-#include <boost/intrusive/rbtree_algorithms.hpp>
+#include <boost/intrusive/sgtree_algorithms.hpp>
 #include <boost/intrusive/link_mode.hpp>
 
 namespace boost {
@@ -36,41 +42,148 @@ namespace intrusive {
 
 /// @cond
 
-template <class T>
-struct internal_default_set_hook
+namespace detail{
+
+//! Returns floor(log(n)/log(sqrt(2))) -> floor(2*log2(n))
+//! Undefined if N is 0.
+//!
+//! This function does not use float point operations.
+inline std::size_t calculate_h_sqrt2 (std::size_t n)
 {
-   template <class U> static detail::one test(...);
-   template <class U> static detail::two test(typename U::default_set_hook* = 0);
-   static const bool value = sizeof(test<T>(0)) == sizeof(detail::two);
+   std::size_t f_log2 = detail::floor_log2(n);
+   return (2*f_log2) + (n >= detail::sqrt2_pow_2xplus1 (f_log2));
+}
+
+struct h_alpha_sqrt2_t
+{
+   h_alpha_sqrt2_t(void){}
+   std::size_t operator()(std::size_t n) const
+   {  return calculate_h_sqrt2(n);  }
 };
 
-template <class T>
-struct get_default_set_hook
+struct alpha_0_75_by_max_size_t
 {
-   typedef typename T::default_set_hook type;
+   alpha_0_75_by_max_size_t(void){}
+   std::size_t operator()(std::size_t max_tree_size) const
+   {
+      const std::size_t max_tree_size_limit = ((~std::size_t(0))/std::size_t(3));
+      return max_tree_size > max_tree_size_limit ? max_tree_size/4*3 : max_tree_size*3/4;
+   }
 };
 
-template <class ValueTraits, class Compare, class SizeType, bool ConstantTimeSize>
-struct setopt
+struct h_alpha_t
+{
+   h_alpha_t(float inv_minus_logalpha)
+      :  inv_minus_logalpha_(inv_minus_logalpha)
+   {}
+
+   std::size_t operator()(std::size_t n) const
+   {
+      //Returns floor(log1/alpha(n)) ->
+      // floor(log(n)/log(1/alpha)) ->
+      // floor(log(n)/(-log(alpha)))
+      //return static_cast<std::size_t>(std::log(float(n))*inv_minus_logalpha_);
+      return static_cast<std::size_t>(detail::fast_log2(float(n))*inv_minus_logalpha_);
+   }
+
+   private:
+   //Since the function will be repeatedly called
+   //precalculate constant data to avoid repeated
+   //calls to log and division.
+   //This will store 1/(-std::log(alpha_))
+   float inv_minus_logalpha_;
+};
+
+struct alpha_by_max_size_t
+{
+   alpha_by_max_size_t(float alpha)
+      :  alpha_(alpha)
+   {}
+   
+   float operator()(std::size_t max_tree_size) const
+   {  return float(max_tree_size)*alpha_;   }
+
+   private:
+   float alpha_;
+   float inv_minus_logalpha_;
+};
+
+template<bool Activate>
+struct alpha_holder
+{
+   typedef boost::intrusive::detail::h_alpha_t           h_alpha_t;
+   typedef boost::intrusive::detail::alpha_by_max_size_t multiply_by_alpha_t;
+
+   alpha_holder()
+   {  set_alpha(0.7f);   }
+
+   float get_alpha() const
+   {  return alpha_;  }
+
+   void set_alpha(float alpha)
+   { 
+      alpha_ = alpha;
+      inv_minus_logalpha_ = 1/(-detail::fast_log2(alpha));
+   }
+
+   h_alpha_t get_h_alpha_t() const
+   {  return h_alpha_t(inv_minus_logalpha_);  }
+
+   multiply_by_alpha_t get_multiply_by_alpha_t() const
+   {  return multiply_by_alpha_t(alpha_);  }
+
+   private:
+   float alpha_;
+   float inv_minus_logalpha_;
+};
+
+template<>
+struct alpha_holder<false>
+{
+   //This specialization uses alpha = 1/sqrt(2)
+   //without using floating point operations
+   //Downside: alpha CAN't be changed.
+   typedef boost::intrusive::detail::h_alpha_sqrt2_t           h_alpha_t;
+   typedef boost::intrusive::detail::alpha_0_75_by_max_size_t  multiply_by_alpha_t;
+
+   float get_alpha() const
+   {  return 0.70710677f;  }
+
+   void set_alpha(float)
+   {  //alpha CAN't be changed.
+      assert(0);
+   }
+
+   h_alpha_t get_h_alpha_t() const
+   {  return h_alpha_t();  }
+
+   multiply_by_alpha_t get_multiply_by_alpha_t() const
+   {  return multiply_by_alpha_t();  }
+};
+
+}  //namespace detail{
+
+template <class ValueTraits, class Compare, class SizeType, bool FloatingPoint>
+struct sg_setopt
 {
    typedef ValueTraits  value_traits;
    typedef Compare      compare;
    typedef SizeType     size_type;
-   static const bool constant_time_size = ConstantTimeSize;
+   static const bool floating_point = FloatingPoint;
 };
 
 template <class T>
-struct set_defaults
+struct sg_set_defaults
    :  pack_options
       < none
       , base_hook
          <  typename detail::eval_if_c
-               < internal_default_set_hook<T>::value
-               , get_default_set_hook<T>
+               < internal_default_bs_set_hook<T>::value
+               , get_default_bs_set_hook<T>
                , detail::identity<none>
                >::type
          >
-      , constant_time_size<true>
+      , floating_point<true>
       , size_type<std::size_t>
       , compare<std::less<T> >
       >::type
@@ -78,9 +191,9 @@ struct set_defaults
 
 /// @endcond
 
-//! The class template rbtree is an intrusive red-black tree container, that
-//! is used to construct intrusive set and multiset containers. The no-throw 
-//! guarantee holds only, if the value_compare object 
+//! The class template sgtree is an intrusive scapegoat tree container, that
+//! is used to construct intrusive sg_set and sg_multiset containers.
+//! The no-throw guarantee holds only, if the value_compare object 
 //! doesn't throw.
 //!
 //! The template parameter \c T is the type to be managed by the container.
@@ -89,14 +202,14 @@ struct set_defaults
 //!
 //! The container supports the following options:
 //! \c base_hook<>/member_hook<>/value_traits<>,
-//! \c constant_time_size<>, \c size_type<> and
+//! \c floating_point<>, \c size_type<> and
 //! \c compare<>.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class T, class ...Options>
 #else
 template<class Config>
 #endif
-class rbtree_impl
+class sgtree_impl
 {
    public:
    typedef typename Config::value_traits                             value_traits;
@@ -119,8 +232,8 @@ class rbtree_impl
    typedef typename Config::size_type                                size_type;
    typedef typename Config::compare                                  value_compare;
    typedef value_compare                                             key_compare;
-   typedef tree_iterator<rbtree_impl, false>                         iterator;
-   typedef tree_iterator<rbtree_impl, true>                          const_iterator;
+   typedef tree_iterator<sgtree_impl, false>                         iterator;
+   typedef tree_iterator<sgtree_impl, true>                          const_iterator;
    typedef std::reverse_iterator<iterator>                           reverse_iterator;
    typedef std::reverse_iterator<const_iterator>                     const_reverse_iterator;
    typedef typename real_value_traits::node_traits                   node_traits;
@@ -129,27 +242,35 @@ class rbtree_impl
       <pointer, node>::type                                          node_ptr;
    typedef typename boost::pointer_to_other
       <node_ptr, const node>::type                                   const_node_ptr;
-   typedef rbtree_algorithms<node_traits>                            node_algorithms;
+   typedef sgtree_algorithms<node_traits>                            node_algorithms;
 
-   static const bool constant_time_size = Config::constant_time_size;
-   static const bool stateful_value_traits = detail::store_cont_ptr_on_it<rbtree_impl>::value;
+   static const bool floating_point    = Config::floating_point;
+   static const bool constant_time_size    = true;
+   static const bool stateful_value_traits = detail::store_cont_ptr_on_it<sgtree_impl>::value;
 
    /// @cond
    private:
-   typedef detail::size_holder<constant_time_size, size_type>        size_traits;
+   typedef detail::size_holder<true, size_type>          size_traits;
+   typedef detail::alpha_holder<floating_point>      alpha_traits;
+   typedef typename alpha_traits::h_alpha_t              h_alpha_t;
+   typedef typename alpha_traits::multiply_by_alpha_t    multiply_by_alpha_t;
 
    //noncopyable
-   rbtree_impl (const rbtree_impl&);
-   rbtree_impl operator =(const rbtree_impl&);
+   sgtree_impl (const sgtree_impl&);
+   sgtree_impl operator =(const sgtree_impl&);
 
    enum { safemode_or_autounlink  = 
             (int)real_value_traits::link_mode == (int)auto_unlink   ||
             (int)real_value_traits::link_mode == (int)safe_link     };
 
-   //Constant-time size is incompatible with auto-unlink hooks!
-   BOOST_STATIC_ASSERT(!(constant_time_size && ((int)real_value_traits::link_mode == (int)auto_unlink)));
+   BOOST_STATIC_ASSERT(((int)real_value_traits::link_mode != (int)auto_unlink));
 
-   struct header_plus_size : public size_traits
+   //BOOST_STATIC_ASSERT((
+   //                     (int)real_value_traits::link_mode != (int)auto_unlink ||
+   //                     !floating_point
+   //                   ));
+
+   struct header_plus_alpha : public alpha_traits
    {  node header_;  };
 
    struct node_plus_pred_t : public detail::ebo_functor_holder<value_compare>
@@ -157,17 +278,26 @@ class rbtree_impl
       node_plus_pred_t(const value_compare &comp)
          :  detail::ebo_functor_holder<value_compare>(comp)
       {}
-      header_plus_size header_plus_size_;
+      header_plus_alpha header_plus_alpha_;
+      size_traits size_traits_;
    };
 
-   struct data_t : public rbtree_impl::value_traits
+   struct data_t : public sgtree_impl::value_traits
    {
-      typedef typename rbtree_impl::value_traits value_traits;
+      typedef typename sgtree_impl::value_traits value_traits;
       data_t(const value_compare & comp, const value_traits &val_traits)
          :  value_traits(val_traits), node_plus_pred_(comp)
+         ,  max_tree_size_(0)
       {}
       node_plus_pred_t node_plus_pred_;
+      size_type max_tree_size_;
    } data_;
+
+   float priv_alpha() const
+   {  return this->priv_alpha_traits().get_alpha();  }
+
+   void priv_alpha(float alpha)
+   {  return this->priv_alpha_traits().set_alpha(alpha);  }
   
    const value_compare &priv_comp() const
    {  return data_.node_plus_pred_.get();  }
@@ -176,21 +306,25 @@ class rbtree_impl
    {  return data_.node_plus_pred_.get();  }
 
    const node &priv_header() const
-   {  return data_.node_plus_pred_.header_plus_size_.header_;  }
+   {  return data_.node_plus_pred_.header_plus_alpha_.header_;  }
 
    node &priv_header()
-   {  return data_.node_plus_pred_.header_plus_size_.header_;  }
+   {  return data_.node_plus_pred_.header_plus_alpha_.header_;  }
 
    static node_ptr uncast(const_node_ptr ptr)
-   {
-      return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));
-   }
+   {  return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));  }
 
    size_traits &priv_size_traits()
-   {  return data_.node_plus_pred_.header_plus_size_;  }
+   {  return data_.node_plus_pred_.size_traits_;  }
 
    const size_traits &priv_size_traits() const
-   {  return data_.node_plus_pred_.header_plus_size_;  }
+   {  return data_.node_plus_pred_.size_traits_;  }
+
+   alpha_traits &priv_alpha_traits()
+   {  return data_.node_plus_pred_.header_plus_alpha_;  }
+
+   const alpha_traits &priv_alpha_traits() const
+   {  return data_.node_plus_pred_.header_plus_alpha_;  }
 
    const real_value_traits &get_real_value_traits(detail::bool_<false>) const
    {  return data_;  }
@@ -203,6 +337,12 @@ class rbtree_impl
 
    real_value_traits &get_real_value_traits(detail::bool_<true>)
    {  return data_.get_value_traits(*this);  }
+
+   h_alpha_t get_h_alpha_func() const
+   {  return priv_alpha_traits().get_h_alpha_t();  }
+
+   multiply_by_alpha_t get_alpha_by_max_size_func() const
+   {  return priv_alpha_traits().get_multiply_by_alpha_t(); }
 
    /// @endcond
 
@@ -221,7 +361,7 @@ class rbtree_impl
    //! <b>Complexity</b>: Constant. 
    //! 
    //! <b>Throws</b>: Nothing unless the copy constructor of the value_compare object throws. 
-   rbtree_impl( value_compare cmp = value_compare()
+   sgtree_impl( value_compare cmp = value_compare()
               , const value_traits &v_traits = value_traits()) 
       :  data_(cmp, v_traits)
    {  
@@ -240,7 +380,7 @@ class rbtree_impl
    //! 
    //! <b>Throws</b>: Nothing unless the copy constructor of the value_compare object throws.
    template<class Iterator>
-   rbtree_impl( bool unique, Iterator b, Iterator e
+   sgtree_impl( bool unique, Iterator b, Iterator e
               , value_compare cmp = value_compare()
               , const value_traits &v_traits = value_traits())
       : data_(cmp, v_traits)
@@ -260,7 +400,7 @@ class rbtree_impl
    //! <b>Complexity</b>: Linear to elements contained in *this. 
    //! 
    //! <b>Throws</b>: Nothing.
-   ~rbtree_impl() 
+   ~sgtree_impl() 
    {  this->clear(); }
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the tree.
@@ -366,25 +506,25 @@ class rbtree_impl
    {  return const_reverse_iterator(begin());   }
 
    //! <b>Precondition</b>: end_iterator must be a valid end iterator
-   //!   of rbtree.
+   //!   of sgtree.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the rbtree associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the sgtree associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static rbtree_impl &container_from_end_iterator(iterator end_iterator)
+   static sgtree_impl &container_from_end_iterator(iterator end_iterator)
    {  return priv_container_from_end_iterator(end_iterator);   }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
-   //!   of rbtree.
+   //!   of sgtree.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the rbtree associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the sgtree associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static const rbtree_impl &container_from_end_iterator(const_iterator end_iterator)
+   static const sgtree_impl &container_from_end_iterator(const_iterator end_iterator)
    {  return priv_container_from_end_iterator(end_iterator);   }
 
    //! <b>Effects</b>: Returns the value_compare object used by the tree.
@@ -422,11 +562,13 @@ class rbtree_impl
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: If the comparison functor's swap call throws.
-   void swap(rbtree_impl& other)
+   void swap(sgtree_impl& other)
    {
       //This can throw
       using std::swap;
       swap(priv_comp(), priv_comp());
+      swap(priv_alpha_traits(), priv_alpha_traits());
+      swap(data_.max_tree_size_, other.data_.max_tree_size_);
       //These can't throw
       node_algorithms::swap_tree(node_ptr(&priv_header()), node_ptr(&other.priv_header()));
       if(constant_time_size){
@@ -449,14 +591,18 @@ class rbtree_impl
    //!   No copy-constructors are called.
    iterator insert_equal(reference value)
    {
-      detail::key_nodeptr_comp<value_compare, rbtree_impl>
+      detail::key_nodeptr_comp<value_compare, sgtree_impl>
          key_node_comp(priv_comp(), this);
       node_ptr to_insert(get_real_value_traits().to_node_ptr(value));
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       this->priv_size_traits().increment();
-      return iterator(node_algorithms::insert_equal_upper_bound
-         (node_ptr(&priv_header()), to_insert, key_node_comp), this);
+      std::size_t max_tree_size = (std::size_t)data_.max_tree_size_;
+      node_ptr p = node_algorithms::insert_equal_upper_bound
+         (node_ptr(&priv_header()), to_insert, key_node_comp
+         , (size_type)this->size(), this->get_h_alpha_func(), max_tree_size);
+      data_.max_tree_size_ = (size_type)max_tree_size;
+      return iterator(p, this);
    }
 
    //! <b>Requires</b>: value must be an lvalue, and "hint" must be
@@ -475,14 +621,18 @@ class rbtree_impl
    //!   No copy-constructors are called.
    iterator insert_equal(const_iterator hint, reference value)
    {
-      detail::key_nodeptr_comp<value_compare, rbtree_impl>
+      detail::key_nodeptr_comp<value_compare, sgtree_impl>
          key_node_comp(priv_comp(), this);
       node_ptr to_insert(get_real_value_traits().to_node_ptr(value));
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       this->priv_size_traits().increment();
-      return iterator(node_algorithms::insert_equal
-         (node_ptr(&priv_header()), hint.pointed_node(), to_insert, key_node_comp), this);
+      std::size_t max_tree_size = (std::size_t)data_.max_tree_size_;
+      node_ptr p = node_algorithms::insert_equal
+         (node_ptr(&priv_header()), hint.pointed_node(), to_insert, key_node_comp
+         , (std::size_t)this->size(), this->get_h_alpha_func(), max_tree_size);
+      data_.max_tree_size_ = (size_type)max_tree_size;
+      return iterator(p, this);
    }
 
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue 
@@ -586,7 +736,7 @@ class rbtree_impl
    std::pair<iterator, bool> insert_unique_check
       (const KeyType &key, KeyValueCompare key_value_comp, insert_commit_data &commit_data)
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          comp(key_value_comp, this);
       std::pair<node_ptr, bool> ret = 
          (node_algorithms::insert_unique_check
@@ -603,7 +753,7 @@ class rbtree_impl
       (const_iterator hint, const KeyType &key
       ,KeyValueCompare key_value_comp, insert_commit_data &commit_data)
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          comp(key_value_comp, this);
       std::pair<node_ptr, bool> ret = 
          (node_algorithms::insert_unique_check
@@ -617,8 +767,11 @@ class rbtree_impl
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
       this->priv_size_traits().increment();
+      std::size_t max_tree_size = (std::size_t)data_.max_tree_size_;
       node_algorithms::insert_unique_commit
-               (node_ptr(&priv_header()), to_insert, commit_data);
+         ( node_ptr(&priv_header()), to_insert, commit_data
+         , (std::size_t)this->size(), this->get_h_alpha_func(), max_tree_size);
+      data_.max_tree_size_ = (size_type)max_tree_size;
       return iterator(to_insert, this);
    }
 
@@ -637,7 +790,11 @@ class rbtree_impl
       node_ptr to_erase(i.pointed_node());
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(!node_algorithms::unique(to_erase));
-      node_algorithms::erase(&priv_header(), to_erase);
+      std::size_t max_tree_size = data_.max_tree_size_;
+      node_algorithms::erase
+         ( &priv_header(), to_erase, (std::size_t)this->size()
+         , max_tree_size, this->get_alpha_by_max_size_func());
+      data_.max_tree_size_ = (size_type)max_tree_size;
       this->priv_size_traits().decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
@@ -803,7 +960,7 @@ class rbtree_impl
    void clear_and_dispose(Disposer disposer)
    {
       node_algorithms::clear_and_dispose(node_ptr(&priv_header())
-         , detail::node_disposer<Disposer, rbtree_impl>(disposer, this));
+         , detail::node_disposer<Disposer, sgtree_impl>(disposer, this));
       node_algorithms::init_header(&priv_header());
       this->priv_size_traits().set_size(0);
    }
@@ -857,7 +1014,7 @@ class rbtree_impl
    template<class KeyType, class KeyValueCompare>
    iterator lower_bound(const KeyType &key, KeyValueCompare comp)
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       return iterator(node_algorithms::lower_bound
          (const_node_ptr(&priv_header()), key, key_node_comp), this);
@@ -872,7 +1029,7 @@ class rbtree_impl
    template<class KeyType, class KeyValueCompare>
    const_iterator lower_bound(const KeyType &key, KeyValueCompare comp) const
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       return const_iterator(node_algorithms::lower_bound
          (const_node_ptr(&priv_header()), key, key_node_comp), this);
@@ -897,7 +1054,7 @@ class rbtree_impl
    template<class KeyType, class KeyValueCompare>
    iterator upper_bound(const KeyType &key, KeyValueCompare comp)
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       return iterator(node_algorithms::upper_bound
          (const_node_ptr(&priv_header()), key, key_node_comp), this);
@@ -922,7 +1079,7 @@ class rbtree_impl
    template<class KeyType, class KeyValueCompare>
    const_iterator upper_bound(const KeyType &key, KeyValueCompare comp) const
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       return const_iterator(node_algorithms::upper_bound
          (const_node_ptr(&priv_header()), key, key_node_comp), this);
@@ -946,7 +1103,7 @@ class rbtree_impl
    template<class KeyType, class KeyValueCompare>
    iterator find(const KeyType &key, KeyValueCompare comp)
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       return iterator
          (node_algorithms::find(const_node_ptr(&priv_header()), key, key_node_comp), this);
@@ -970,7 +1127,7 @@ class rbtree_impl
    template<class KeyType, class KeyValueCompare>
    const_iterator find(const KeyType &key, KeyValueCompare comp) const
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       return const_iterator
          (node_algorithms::find(const_node_ptr(&priv_header()), key, key_node_comp), this);
@@ -996,7 +1153,7 @@ class rbtree_impl
    template<class KeyType, class KeyValueCompare>
    std::pair<iterator,iterator> equal_range(const KeyType &key, KeyValueCompare comp)
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       std::pair<node_ptr, node_ptr> ret
          (node_algorithms::equal_range(const_node_ptr(&priv_header()), key, key_node_comp));
@@ -1025,7 +1182,7 @@ class rbtree_impl
    std::pair<const_iterator, const_iterator>
       equal_range(const KeyType &key, KeyValueCompare comp) const
    {
-      detail::key_nodeptr_comp<KeyValueCompare, rbtree_impl>
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
          key_node_comp(comp, this);
       std::pair<node_ptr, node_ptr> ret
          (node_algorithms::equal_range(const_node_ptr(&priv_header()), key, key_node_comp));
@@ -1046,15 +1203,15 @@ class rbtree_impl
    //! 
    //! <b>Throws</b>: If cloner throws.
    template <class Cloner, class Disposer>
-   void clone_from(const rbtree_impl &src, Cloner cloner, Disposer disposer)
+   void clone_from(const sgtree_impl &src, Cloner cloner, Disposer disposer)
    {
       this->clear_and_dispose(disposer);
       if(!src.empty()){
          node_algorithms::clone
             (const_node_ptr(&src.priv_header())
             ,node_ptr(&this->priv_header())
-            ,detail::node_cloner<Cloner, rbtree_impl>(cloner, this)
-            ,detail::node_disposer<Disposer, rbtree_impl>(disposer, this));
+            ,detail::node_cloner<Cloner, sgtree_impl>(cloner, this)
+            ,detail::node_disposer<Disposer, sgtree_impl>(disposer, this));
          this->priv_size_traits().set_size(src.priv_size_traits().get_size());
       }
    }
@@ -1176,6 +1333,58 @@ class rbtree_impl
    static void init_node(reference value)
    { node_algorithms::init(value_traits::to_node_ptr(value)); }
 
+   //! <b>Effects</b>: Rebalances the tree.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   void rebalance()
+   {  node_algorithms::rebalance(node_ptr(&priv_header())); }
+
+   //! <b>Requires</b>: old_root is a node of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the subtree rooted at old_root.
+   //!
+   //! <b>Returns</b>: The new root of the subtree.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   iterator rebalance_subtree(iterator root)
+   {  return iterator(node_algorithms::rebalance_subtree(root.pointed_node()), this); }
+
+   //! <b>Returns</b>: The balance factor (alpha) used in this tree
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   float balance_factor() const
+   {  return this->priv_alpha(); }
+
+   //! <b>Requires</b>: new_alpha must be a value between 0.5 and 1.0
+   //! 
+   //! <b>Effects</b>: Establishes a new balance factor (alpha) and rebalances
+   //!   the tree if the new balance factor is stricter (less) than the old factor.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   void balance_factor(float new_alpha)
+   {
+      BOOST_INTRUSIVE_INVARIANT_ASSERT((new_alpha > 0.5f && new_alpha < 1.0f));
+      if(new_alpha < 0.5f && new_alpha >= 1.0f)  return;
+
+      //The alpha factor CAN't be changed if the fixed, floating operation-less
+      //1/sqrt(2) alpha factor option is activated
+      BOOST_STATIC_ASSERT((floating_point));
+      float old_alpha = this->priv_alpha();
+      this->priv_alpha(new_alpha);
+
+      if(new_alpha < old_alpha){
+         data_.max_tree_size_ = this->size();
+         this->rebalance();
+      }
+   }
 /*
    //! <b>Effects</b>: removes x from a tree of the appropriate type. It has no effect,
    //! if x is not in such a tree. 
@@ -1223,15 +1432,15 @@ class rbtree_impl
    /// @endcond
 
    private:
-   static rbtree_impl &priv_container_from_end_iterator(const const_iterator &end_iterator)
+   static sgtree_impl &priv_container_from_end_iterator(const const_iterator &end_iterator)
    {
-      header_plus_size *r = detail::parent_from_member<header_plus_size, node>
-         ( detail::get_pointer(end_iterator.pointed_node()), &header_plus_size::header_);
+      header_plus_alpha *r = detail::parent_from_member<header_plus_alpha, node>
+         ( detail::get_pointer(end_iterator.pointed_node()), &header_plus_alpha::header_);
       node_plus_pred_t *n = detail::parent_from_member
-         <node_plus_pred_t, header_plus_size>(r, &node_plus_pred_t::header_plus_size_);
+         <node_plus_pred_t, header_plus_alpha>(r, &node_plus_pred_t::header_plus_alpha_);
       data_t *d = detail::parent_from_member<data_t, node_plus_pred_t>(n, &data_t::node_plus_pred_);
-      rbtree_impl *rb  = detail::parent_from_member<rbtree_impl, data_t>(d, &rbtree_impl::data_);
-      return *rb;
+      sgtree_impl *scapegoat  = detail::parent_from_member<sgtree_impl, data_t>(d, &sgtree_impl::data_);
+      return *scapegoat;
    }
 };
 
@@ -1242,9 +1451,9 @@ template<class Config>
 #endif
 inline bool operator<
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const rbtree_impl<T, Options...> &x, const rbtree_impl<T, Options...> &y)
+(const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
-(const rbtree_impl<Config> &x, const rbtree_impl<Config> &y)
+(const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());  }
 
@@ -1255,12 +1464,12 @@ template<class Config>
 #endif
 bool operator==
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const rbtree_impl<T, Options...> &x, const rbtree_impl<T, Options...> &y)
+(const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
-(const rbtree_impl<Config> &x, const rbtree_impl<Config> &y)
+(const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {
-   typedef rbtree_impl<Config> tree_type;
+   typedef sgtree_impl<Config> tree_type;
    typedef typename tree_type::const_iterator const_iterator;
 
    if(tree_type::constant_time_size && x.size() != y.size()){
@@ -1293,9 +1502,9 @@ template<class Config>
 #endif
 inline bool operator!=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const rbtree_impl<T, Options...> &x, const rbtree_impl<T, Options...> &y)
+(const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
-(const rbtree_impl<Config> &x, const rbtree_impl<Config> &y)
+(const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return !(x == y); }
 
@@ -1306,9 +1515,9 @@ template<class Config>
 #endif
 inline bool operator>
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const rbtree_impl<T, Options...> &x, const rbtree_impl<T, Options...> &y)
+(const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
-(const rbtree_impl<Config> &x, const rbtree_impl<Config> &y)
+(const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return y < x;  }
 
@@ -1319,9 +1528,9 @@ template<class Config>
 #endif
 inline bool operator<=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const rbtree_impl<T, Options...> &x, const rbtree_impl<T, Options...> &y)
+(const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
-(const rbtree_impl<Config> &x, const rbtree_impl<Config> &y)
+(const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return !(y < x);  }
 
@@ -1332,9 +1541,9 @@ template<class Config>
 #endif
 inline bool operator>=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const rbtree_impl<T, Options...> &x, const rbtree_impl<T, Options...> &y)
+(const sgtree_impl<T, Options...> &x, const sgtree_impl<T, Options...> &y)
 #else
-(const rbtree_impl<Config> &x, const rbtree_impl<Config> &y)
+(const sgtree_impl<Config> &x, const sgtree_impl<Config> &y)
 #endif
 {  return !(x < y);  }
 
@@ -1345,9 +1554,9 @@ template<class Config>
 #endif
 inline void swap
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(rbtree_impl<T, Options...> &x, rbtree_impl<T, Options...> &y)
+(sgtree_impl<T, Options...> &x, sgtree_impl<T, Options...> &y)
 #else
-(rbtree_impl<Config> &x, rbtree_impl<Config> &y)
+(sgtree_impl<Config> &x, sgtree_impl<Config> &y)
 #endif
 {  x.swap(y);  }
 
@@ -1357,23 +1566,23 @@ template<class T, class O1 = none, class O2 = none
                 , class O5 = none, class O6 = none
                 , class O7 = none
                 >
-struct make_rbtree_opt
+struct make_sgtree_opt
 {
    typedef typename pack_options
-      < set_defaults<T>, O1, O2, O3, O4>::type packed_options;
+      < sg_set_defaults<T>, O1, O2, O3, O4>::type packed_options;
    typedef typename detail::get_value_traits
       <T, typename packed_options::value_traits>::type value_traits;
 
-   typedef setopt
+   typedef sg_setopt
          < value_traits
          , typename packed_options::compare
          , typename packed_options::size_type
-         , packed_options::constant_time_size
+         , packed_options::floating_point
          > type;
 };
 /// @endcond
 
-//! Helper metafunction to define a \c rbtree that yields to the same type when the
+//! Helper metafunction to define a \c sgtree that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class T, class ...Options>
@@ -1381,11 +1590,11 @@ template<class T, class ...Options>
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none>
 #endif
-struct make_rbtree
+struct make_sgtree
 {
    /// @cond
-   typedef rbtree_impl
-      < typename make_rbtree_opt<T, O1, O2, O3, O4>::type
+   typedef sgtree_impl
+      < typename make_sgtree_opt<T, O1, O2, O3, O4>::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
@@ -1393,10 +1602,10 @@ struct make_rbtree
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class T, class O1, class O2, class O3, class O4>
-class rbtree
-   :  public make_rbtree<T, O1, O2, O3, O4>::type
+class sgtree
+   :  public make_sgtree<T, O1, O2, O3, O4>::type
 {
-   typedef typename make_rbtree
+   typedef typename make_sgtree
       <T, O1, O2, O3, O4>::type   Base;
 
    public:
@@ -1409,23 +1618,23 @@ class rbtree
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename real_value_traits::value_type, T>::value));
 
-   rbtree( const value_compare &cmp = value_compare()
+   sgtree( const value_compare &cmp = value_compare()
          , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 
    template<class Iterator>
-   rbtree( bool unique, Iterator b, Iterator e
+   sgtree( bool unique, Iterator b, Iterator e
          , const value_compare &cmp = value_compare()
          , const value_traits &v_traits = value_traits())
       :  Base(unique, b, e, cmp, v_traits)
    {}
 
-   static rbtree &container_from_end_iterator(iterator end_iterator)
-   {  return static_cast<rbtree &>(Base::container_from_end_iterator(end_iterator));   }
+   static sgtree &container_from_end_iterator(iterator end_iterator)
+   {  return static_cast<sgtree &>(Base::container_from_end_iterator(end_iterator));   }
 
-   static const rbtree &container_from_end_iterator(const_iterator end_iterator)
-   {  return static_cast<const rbtree &>(Base::container_from_end_iterator(end_iterator));   }
+   static const sgtree &container_from_end_iterator(const_iterator end_iterator)
+   {  return static_cast<const sgtree &>(Base::container_from_end_iterator(end_iterator));   }
 };
 
 #endif
@@ -1436,4 +1645,4 @@ class rbtree
 
 #include <boost/intrusive/detail/config_end.hpp>
 
-#endif //BOOST_INTRUSIVE_RBTREE_HPP
+#endif //BOOST_INTRUSIVE_SGTREE_HPP

@@ -565,7 +565,7 @@ class slist_impl
       if(node_traits::get_next(first) == root) return;
 
       bool end_found = false;
-      node_ptr new_last;
+      node_ptr new_last(0);
 
       //Now find the new last node according to the shift count.
       //If we find the root node before finding the new last node

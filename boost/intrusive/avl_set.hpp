@@ -113,8 +113,8 @@ class avl_set_impl
    //! <b>Effects</b>: Detaches all elements from this. The objects in the avl_set 
    //!   are not deleted (i.e. no destructors are called).
    //! 
-   //! <b>Complexity</b>: O(log(size()) + size()) if it's a safe-mode or auto-unlink
-   //!   value. Otherwise constant.
+   //! <b>Complexity</b>: Linear to the number of elements on the container.
+   //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
    ~avl_set_impl() 
@@ -1178,8 +1178,8 @@ class avl_multiset_impl
    //! <b>Effects</b>: Detaches all elements from this. The objects in the avl_multiset 
    //!   are not deleted (i.e. no destructors are called).
    //! 
-   //! <b>Complexity</b>: O(log(size()) + size()) if it's a safe-mode or
-   //!   auto-unlink value. Otherwise constant.
+   //! <b>Complexity</b>: Linear to the number of elements on the container.
+   //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
    ~avl_multiset_impl() 

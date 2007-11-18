@@ -291,6 +291,16 @@ class splaytree_algorithms
    static std::size_t count(const_node_ptr node)
    {  return tree_algorithms::count(node);   }
 
+   //! <b>Requires</b>: header is the header node of the tree.
+   //! 
+   //! <b>Effects</b>: Returns the number of nodes above the header.
+   //! 
+   //! <b>Complexity</b>: Linear time.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static std::size_t size(const_node_ptr header)
+   {  return tree_algorithms::size(header);   }
+
    //! <b>Requires</b>: header1 and header2 must be the header nodes
    //!  of two trees.
    //! 
@@ -361,20 +371,18 @@ class splaytree_algorithms
    template<class KeyType, class KeyNodePtrCompare>
    static std::pair<node_ptr, bool> insert_unique_check
       (node_ptr header,  const KeyType &key
-      ,KeyNodePtrCompare comp, insert_commit_data &commit_data, bool splay = true)
+      ,KeyNodePtrCompare comp, insert_commit_data &commit_data)
    {
-      if(splay)
-         splay_down(header, key, comp);
+      splay_down(header, key, comp);
       return tree_algorithms::insert_unique_check(header, key, comp, commit_data);
    }
 
    template<class KeyType, class KeyNodePtrCompare>
    static std::pair<node_ptr, bool> insert_unique_check
       (node_ptr header,  node_ptr hint, const KeyType &key
-      ,KeyNodePtrCompare comp, insert_commit_data &commit_data, bool splay = true)
+      ,KeyNodePtrCompare comp, insert_commit_data &commit_data)
    {
-      if(splay)
-         splay_down(header, key, comp);
+      splay_down(header, key, comp);
       return tree_algorithms::insert_unique_check(header, hint, key, comp, commit_data);
    }
 
@@ -494,28 +502,25 @@ class splaytree_algorithms
    //! <b>Throws</b>: If "comp" throws.
    template<class NodePtrCompare>
    static node_ptr insert_equal
-      (node_ptr header, node_ptr hint, node_ptr new_node, NodePtrCompare comp, bool splay = true)
+      (node_ptr header, node_ptr hint, node_ptr new_node, NodePtrCompare comp)
    {
-      if(splay)
-         splay_down(header, new_node, comp);
+      splay_down(header, new_node, comp);
       return tree_algorithms::insert_equal(header, hint, new_node, comp);
    }
 
    template<class NodePtrCompare>
    static node_ptr insert_equal_upper_bound
-      (node_ptr header, node_ptr new_node, NodePtrCompare comp, bool splay = true)
+      (node_ptr header, node_ptr new_node, NodePtrCompare comp)
    {
-      if(splay)
-         splay_down(header, new_node, comp);
+      splay_down(header, new_node, comp);
       return tree_algorithms::insert_equal_upper_bound(header, new_node, comp);
    }
 
    template<class NodePtrCompare>
    static node_ptr insert_equal_lower_bound
-      (node_ptr header, node_ptr new_node, NodePtrCompare comp, bool splay = true)
+      (node_ptr header, node_ptr new_node, NodePtrCompare comp)
    {
-      if(splay)
-         splay_down(header, new_node, comp);
+      splay_down(header, new_node, comp);
       return tree_algorithms::insert_equal_lower_bound(header, new_node, comp);
    }
 
@@ -629,7 +634,7 @@ class splaytree_algorithms
 
    // top-down splay | complexity : logarithmic    | exception : strong, note A
    template<class KeyType, class KeyNodePtrCompare>
-   static node_ptr splay_down(node_ptr header, const KeyType &key, KeyNodePtrCompare comp, bool splay = true)
+   static node_ptr splay_down(node_ptr header, const KeyType &key, KeyNodePtrCompare comp)
    {
       if(!NodeTraits::get_parent(header))
          return header;
@@ -727,6 +732,28 @@ class splaytree_algorithms
       NodeTraits::set_right(header, rightmost);
       return t;
    }
+
+   //! <b>Requires</b>: header must be the header of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the tree.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   static void rebalance(node_ptr header)
+   {  tree_algorithms::rebalance(header); }
+
+   //! <b>Requires</b>: old_root is a node of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the subtree rooted at old_root.
+   //!
+   //! <b>Returns</b>: The new root of the subtree.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   static node_ptr rebalance_subtree(node_ptr old_root)
+   {  return tree_algorithms::rebalance_subtree(old_root); }
 
    private:
 

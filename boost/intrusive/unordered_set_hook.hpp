@@ -25,10 +25,52 @@ namespace boost {
 namespace intrusive {
 
 /// @cond
+
 template<class VoidPointer>
+struct slist_node_plus_hash
+{
+   typedef typename boost::pointer_to_other
+      <VoidPointer, slist_node_plus_hash>::type   node_ptr;
+   node_ptr    next_;
+   std::size_t hash_;
+};
+
+// slist_node_traits can be used with circular_slist_algorithms and supplies
+// a slist_node holding the pointers needed for a singly-linked list
+// it is used by slist_base_hook and slist_member_hook
+template<class VoidPointer>
+struct slist_node_traits_plus_hash
+{
+   typedef slist_node_plus_hash<VoidPointer> node;
+   typedef typename boost::pointer_to_other
+      <VoidPointer, node>::type          node_ptr;
+   typedef typename boost::pointer_to_other
+      <VoidPointer, const node>::type    const_node_ptr;
+
+   static const bool store_hash = true;
+
+   static node_ptr get_next(const_node_ptr n)
+   {  return n->next_;  }
+
+   static void set_next(node_ptr n, node_ptr next)
+   {  n->next_ = next;  }
+
+   static std::size_t get_hash(const_node_ptr n)
+   {  return n->hash_;  }  
+
+   static void set_hash(node_ptr n, std::size_t h)
+   {  n->hash_ = h;  }  
+};
+
+template<class VoidPointer, bool StoreHash>
 struct get_uset_node_algo
 {
-   typedef circular_slist_algorithms<slist_node_traits<VoidPointer> > type;
+   typedef typename detail::if_c
+      < StoreHash
+      , slist_node_traits_plus_hash<VoidPointer> 
+      , slist_node_traits<VoidPointer> 
+      >::type node_traits_type;
+   typedef circular_slist_algorithms<node_traits_type> type;
 };
 /// @endcond
 
@@ -37,16 +79,18 @@ struct get_uset_node_algo
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1 = none, class O2 = none, class O3 = none>
+template<class O1 = none, class O2 = none, class O3 = none, class O4 = none>
 #endif
 struct make_unordered_set_base_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3>::type packed_options;
+      < hook_defaults, O1, O2, O3, O4>::type packed_options;
 
    typedef detail::generic_hook
-   < get_slist_node_algo<typename packed_options::void_pointer>
+   < get_uset_node_algo<typename packed_options::void_pointer
+                       , packed_options::store_hash
+                       >
    , typename packed_options::tag
    , packed_options::link_mode
    , detail::UsetBaseHook
@@ -59,22 +103,29 @@ struct make_unordered_set_base_hook
 //! in an unordered_set/unordered_multi_set. unordered_set_base_hook holds the data necessary to maintain 
 //! the unordered_set/unordered_multi_set and provides an appropriate value_traits class for unordered_set/unordered_multi_set.
 //! 
-//! The first integer template argument defines a tag to identify the node. 
+//! The hook admits the following options: \c tag<>, \c void_pointer<>,
+//! \c link_mode<> and \c store_hash<>.
+//!
+//! \c tag<> defines a tag to identify the node. 
 //! The same tag value can be used in different classes, but if a class is 
-//! derived from more than one unordered_set_base_hook, then each unordered_set_base_hook needs its 
+//! derived from more than one \c list_base_hook, then each \c list_base_hook needs its 
 //! unique tag.
 //!
-//! The second boolean template parameter will specify the linking mode of the hook.
+//! \c void_pointer<> is the pointer type that will be used internally in the hook
+//! and the the container configured to use this hook.
 //!
-//! The third argument is the pointer type that will be used internally in the hook
-//! and the unordered_set/unordered_multi_set configured from this hook.
+//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
+//! \c auto_unlink or \c safe_link).
+//!
+//! \c store_hash<> will tell the hook to store the hash of the value
+//! to speed up rehashings.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1, class O2, class O3>
+template<class O1, class O2, class O3, class O4>
 #endif
 class unordered_set_base_hook
-   :  public make_unordered_set_base_hook<O1, O2, O3>::type
+   :  public make_unordered_set_base_hook<O1, O2, O3, O4>::type
 {
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
@@ -149,16 +200,18 @@ class unordered_set_base_hook
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1 = none, class O2 = none, class O3 = none>
+template<class O1 = none, class O2 = none, class O3 = none, class O4 = none>
 #endif
 struct make_unordered_set_member_hook
 {
    /// @cond
    typedef typename pack_options
-      < hook_defaults, O1, O2, O3>::type packed_options;
+      < hook_defaults, O1, O2, O3, O4>::type packed_options;
 
    typedef detail::generic_hook
-   < get_uset_node_algo<typename packed_options::void_pointer>
+   < get_uset_node_algo< typename packed_options::void_pointer
+                       , packed_options::store_hash
+                       >
    , member_tag
    , packed_options::link_mode
    , detail::NoBaseHook
@@ -171,17 +224,24 @@ struct make_unordered_set_member_hook
 //! an unordered_set/unordered_multi_set. unordered_set_member_hook holds the data necessary for maintaining the
 //! unordered_set/unordered_multi_set and provides an appropriate value_traits class for unordered_set/unordered_multi_set.
 //! 
-//! The first boolean template parameter will specify the linking mode of the hook.
+//! The hook admits the following options: \c void_pointer<>,
+//! \c link_mode<> and \c store_hash<>.
 //!
-//! The second argument is the pointer type that will be used internally in the hook
-//! and the unordered_set/unordered_multi_set configured from this hook.
+//! \c void_pointer<> is the pointer type that will be used internally in the hook
+//! and the the container configured to use this hook.
+//!
+//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
+//! \c auto_unlink or \c safe_link).
+//!
+//! \c store_hash<> will tell the hook to store the hash of the value
+//! to speed up rehashings.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
-template<class O1, class O2, class O3>
+template<class O1, class O2, class O3, class O4>
 #endif
 class unordered_set_member_hook
-   :  public make_unordered_set_member_hook<O1, O2, O3>::type
+   :  public make_unordered_set_member_hook<O1, O2, O3, O4>::type
 {
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link

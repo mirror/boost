@@ -239,6 +239,48 @@ template
    >
 class avl_set_member_hook;
 
+//sgtree/sg_set/sg_multiset
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class sgtree;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class sg_set;
+
+template
+   < class T
+   , class O1  = none
+   , class O2  = none
+   , class O3  = none
+   , class O4  = none
+   >
+class sg_multiset;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class bs_set_base_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class bs_set_member_hook;
+
 //hash/unordered
 //rbtree/set/multiset
 template
@@ -281,6 +323,7 @@ template
    < class O1  = none
    , class O2  = none
    , class O3  = none
+   , class O4  = none
    >
 class unordered_set_base_hook;
 
@@ -288,6 +331,7 @@ template
    < class O1  = none
    , class O2  = none
    , class O3  = none
+   , class O4  = none
    >
 class unordered_set_member_hook;
 

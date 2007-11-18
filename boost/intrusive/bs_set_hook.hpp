@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007
+// (C) Copyright Ion Gaztanaga 2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -11,14 +10,14 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_INTRUSIVE_SLIST_HOOK_HPP
-#define BOOST_INTRUSIVE_SLIST_HOOK_HPP
+#ifndef BOOST_INTRUSIVE_BS_SET_HOOK_HPP
+#define BOOST_INTRUSIVE_BS_SET_HOOK_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
-#include <boost/intrusive/detail/slist_node.hpp>
-#include <boost/intrusive/circular_slist_algorithms.hpp>
+#include <boost/intrusive/detail/tree_node.hpp>
+#include <boost/intrusive/detail/tree_algorithms.hpp>
 #include <boost/intrusive/options.hpp>
 #include <boost/intrusive/detail/generic_hook.hpp>
 
@@ -27,40 +26,43 @@ namespace intrusive {
 
 /// @cond
 template<class VoidPointer>
-struct get_slist_node_algo
+struct get_bs_set_node_algo
 {
-   typedef circular_slist_algorithms<slist_node_traits<VoidPointer> > type;
+   typedef detail::tree_algorithms<tree_node_traits<VoidPointer> > type;
 };
 /// @endcond
 
-//! Helper metafunction to define a \c slist_base_hook that yields to the same
+//! Helper metafunction to define a \c bs_set_base_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none>
 #endif
-struct make_slist_base_hook
+struct make_bs_set_base_hook
 {
    /// @cond
    typedef typename pack_options
       < hook_defaults, O1, O2, O3>::type packed_options;
 
+   //Scapegoat trees can't be auto unlink trees
+   BOOST_STATIC_ASSERT(((int)packed_options::link_mode != (int)auto_unlink));
+
    typedef detail::generic_hook
-   < get_slist_node_algo<typename packed_options::void_pointer>
+   < get_bs_set_node_algo<typename packed_options::void_pointer>
    , typename packed_options::tag
    , packed_options::link_mode
-   , detail::SlistBaseHook
+   , detail::BsSetBaseHook
    > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
-//! Derive a class from slist_base_hook in order to store objects in 
-//! in an list. slist_base_hook holds the data necessary to maintain the 
-//! list and provides an appropriate value_traits class for list.
+//! Derive a class from bs_set_base_hook in order to store objects in 
+//! in a bs_set/bs_multiset. bs_set_base_hook holds the data necessary to maintain 
+//! the bs_set/bs_multiset and provides an appropriate value_traits class for bs_set/bs_multiset.
 //! 
-//! The hook admits the following options: \c tag<>, \c void_pointer<> and
+//! The hook admits the following options: \c tag<>, \c void_pointer<>,
 //! \c link_mode<>.
 //!
 //! \c tag<> defines a tag to identify the node. 
@@ -68,25 +70,25 @@ struct make_slist_base_hook
 //! derived from more than one \c list_base_hook, then each \c list_base_hook needs its 
 //! unique tag.
 //!
-//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
-//! \c auto_unlink or \c safe_link).
-//!
 //! \c void_pointer<> is the pointer type that will be used internally in the hook
 //! and the the container configured to use this hook.
+//!
+//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
+//! \c auto_unlink or \c safe_link).
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
 template<class O1, class O2, class O3>
 #endif
-class slist_base_hook
-   :  public make_slist_base_hook<O1, O2, O3>::type
+class bs_set_base_hook
+   :  public make_bs_set_base_hook<O1, O2, O3>::type
 {
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
    //! <b>Throws</b>: Nothing. 
-   slist_base_hook();
+   bs_set_base_hook();
 
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state. The argument is ignored.
@@ -97,7 +99,7 @@ class slist_base_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   slist_base_hook(const slist_base_hook& );
+   bs_set_base_hook(const bs_set_base_hook& );
 
    //! <b>Effects</b>: Empty function. The argument is ignored.
    //! 
@@ -107,15 +109,15 @@ class slist_base_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   slist_base_hook& operator=(const slist_base_hook& );
+   bs_set_base_hook& operator=(const bs_set_base_hook& );
 
    //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
    //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
-   //!   object is stored in an slist an assertion is raised. If link_mode is
+   //!   object is stored in a set an assertion is raised. If link_mode is
    //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
    //! <b>Throws</b>: Nothing. 
-   ~slist_base_hook();
+   ~bs_set_base_hook();
 
    //! <b>Effects</b>: Swapping two nodes swaps the position of the elements 
    //!   related to those nodes in one or two containers. That is, if the node 
@@ -129,12 +131,12 @@ class slist_base_hook
    //! <b>Complexity</b>: Constant 
    //!
    //! <b>Throws</b>: Nothing. 
-   void swap_nodes(slist_base_hook &other);
+   void swap_nodes(bs_set_base_hook &other);
 
    //! <b>Precondition</b>: link_mode must be \c safe_link or \c auto_unlink.
    //!
    //! <b>Returns</b>: true, if the node belongs to a container, false
-   //!   otherwise. This function can be used to test whether \c slist::iterator_to 
+   //!   otherwise. This function can be used to test whether \c set::iterator_to 
    //!   will return a valid iterator. 
    //!
    //! <b>Complexity</b>: Constant 
@@ -148,21 +150,24 @@ class slist_base_hook
    #endif
 };
 
-//! Helper metafunction to define a \c slist_member_hook that yields to the same
+//! Helper metafunction to define a \c bs_set_member_hook that yields to the same
 //! type when the same options (either explicitly or implicitly) are used.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
 template<class O1 = none, class O2 = none, class O3 = none>
 #endif
-struct make_slist_member_hook
+struct make_bs_set_member_hook
 {
    /// @cond
    typedef typename pack_options
       < hook_defaults, O1, O2, O3>::type packed_options;
 
+   //Scapegoat trees can't be auto unlink trees
+   BOOST_STATIC_ASSERT(((int)packed_options::link_mode != (int)auto_unlink));
+
    typedef detail::generic_hook
-   < get_slist_node_algo<typename packed_options::void_pointer>
+   < get_bs_set_node_algo<typename packed_options::void_pointer>
    , member_tag
    , packed_options::link_mode
    , detail::NoBaseHook
@@ -171,32 +176,31 @@ struct make_slist_member_hook
    typedef implementation_defined type;
 };
 
-//! Put a public data member slist_member_hook in order to store objects of this class in
-//! an list. slist_member_hook holds the data necessary for maintaining the list and 
-//! provides an appropriate value_traits class for list.
+//! Put a public data member bs_set_member_hook in order to store objects of this class in
+//! a bs_set/bs_multiset. bs_set_member_hook holds the data necessary for maintaining the
+//! bs_set/bs_multiset and provides an appropriate value_traits class for bs_set/bs_multiset.
 //! 
-//! The hook admits the following options: \c void_pointer<> and
-//! \c link_mode<>.
-//! 
-//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
-//! \c auto_unlink or \c safe_link).
+//! The hook admits the following options: \c void_pointer<>, \c link_mode<>.
 //!
 //! \c void_pointer<> is the pointer type that will be used internally in the hook
 //! and the the container configured to use this hook.
+//!
+//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
+//! \c auto_unlink or \c safe_link).
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
 template<class O1, class O2, class O3>
 #endif
-class slist_member_hook
-   :  public make_slist_member_hook<O1, O2, O3>::type
+class bs_set_member_hook
+   :  public make_bs_set_member_hook<O1, O2, O3>::type
 {
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state.
    //! 
    //! <b>Throws</b>: Nothing. 
-   slist_member_hook();
+   bs_set_member_hook();
 
    //! <b>Effects</b>: If link_mode is \c auto_unlink or \c safe_link
    //!   initializes the node to an unlinked state. The argument is ignored.
@@ -207,7 +211,7 @@ class slist_member_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   slist_member_hook(const slist_member_hook& );
+   bs_set_member_hook(const bs_set_member_hook& );
 
    //! <b>Effects</b>: Empty function. The argument is ignored.
    //! 
@@ -217,15 +221,15 @@ class slist_member_hook
    //!   makes classes using the hook STL-compliant without forcing the 
    //!   user to do some additional work. \c swap can be used to emulate
    //!   move-semantics.
-   slist_member_hook& operator=(const slist_member_hook& );
+   bs_set_member_hook& operator=(const bs_set_member_hook& );
 
    //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
    //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
-   //!   object is stored in an slist an assertion is raised. If link_mode is
+   //!   object is stored in a set an assertion is raised. If link_mode is
    //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
    //! <b>Throws</b>: Nothing. 
-   ~slist_member_hook();
+   ~bs_set_member_hook();
 
    //! <b>Effects</b>: Swapping two nodes swaps the position of the elements 
    //!   related to those nodes in one or two containers. That is, if the node 
@@ -239,12 +243,12 @@ class slist_member_hook
    //! <b>Complexity</b>: Constant 
    //!
    //! <b>Throws</b>: Nothing. 
-   void swap_nodes(slist_member_hook &other);
+   void swap_nodes(bs_set_member_hook &other);
 
    //! <b>Precondition</b>: link_mode must be \c safe_link or \c auto_unlink.
    //!
    //! <b>Returns</b>: true, if the node belongs to a container, false
-   //!   otherwise. This function can be used to test whether \c slist::iterator_to 
+   //!   otherwise. This function can be used to test whether \c set::iterator_to 
    //!   will return a valid iterator. 
    //!
    //! <b>Complexity</b>: Constant 
@@ -258,9 +262,27 @@ class slist_member_hook
    #endif
 };
 
+/// @cond
+
+template <class T>
+struct internal_default_bs_set_hook
+{
+   template <class U> static detail::one test(...);
+   template <class U> static detail::two test(typename U::default_bs_set_hook* = 0);
+   static const bool value = sizeof(test<T>(0)) == sizeof(detail::two);
+};
+
+template <class T>
+struct get_default_bs_set_hook
+{
+   typedef typename T::default_bs_set_hook type;
+};
+
+/// @endcond
+
 } //namespace intrusive 
 } //namespace boost 
 
 #include <boost/intrusive/detail/config_end.hpp>
 
-#endif //BOOST_INTRUSIVE_SLIST_HOOK_HPP
+#endif //BOOST_INTRUSIVE_BS_SET_HOOK_HPP

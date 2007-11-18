@@ -217,7 +217,7 @@ class splaytree_impl
 
    //! <b>Effects</b>: Constructs an empty tree. 
    //!   
-   //! <b>Complexity</b>: Constant. 
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: Nothing unless the copy constructor of the value_compare object throws. 
    splaytree_impl( value_compare cmp = value_compare()
@@ -235,7 +235,7 @@ class splaytree_impl
    //!   [b, e).
    //!
    //! <b>Complexity</b>: Linear in N if [b, e) is already sorted using
-   //!   comp and otherwise N * log N, where N is the distance between first and last.
+   //!   comp and otherwise amortized N * log N, where N is the distance between first and last.
    //! 
    //! <b>Throws</b>: Nothing unless the copy constructor of the value_compare object throws.
    template<class Iterator>
@@ -256,7 +256,8 @@ class splaytree_impl
    //!   are not deleted (i.e. no destructors are called), but the nodes according to 
    //!   the value_traits template parameter are reinitialized and thus can be reused. 
    //! 
-   //! <b>Complexity</b>: Linear to elements contained in *this. 
+   //! <b>Complexity</b>: Linear to the number of elements on the container.
+   //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
    ~splaytree_impl() 
@@ -413,10 +414,7 @@ class splaytree_impl
          return this->priv_size_traits().get_size();
       }
       else{
-         const_iterator beg(this->cbegin()), end(this->cend());
-         size_type i = 0;
-         for(;beg != end; ++beg) ++i;
-         return i;
+         return (size_type)node_algorithms::size(const_node_ptr(&priv_header()));
       }
    }
 
@@ -443,8 +441,8 @@ class splaytree_impl
    //! 
    //! <b>Effects</b>: Inserts value into the tree before the lower bound.
    //! 
-   //! <b>Complexity</b>: Average complexity for insert element is at
-   //!   most logarithmic.
+   //! <b>Complexity</b>: Average complexity for insert element is amortized
+   //!   logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -469,7 +467,7 @@ class splaytree_impl
    //!   where it will be inserted. If "hint" is the upper_bound
    //!   the insertion takes constant time (two comparisons in the worst case)
    //! 
-   //! <b>Complexity</b>: Logarithmic in general, but it is amortized
+   //! <b>Complexity</b>: Amortized logarithmic in general, but it is amortized
    //!   constant time if t is inserted immediately before hint.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -494,7 +492,7 @@ class splaytree_impl
    //! <b>Effects</b>: Inserts a each element of a range into the tree
    //!   before the upper bound of the key of each element.
    //! 
-   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the
+   //! <b>Complexity</b>: Insert range is in general amortized O(N * log(N)), where N is the
    //!   size of the range. However, it is linear in N if the range is already sorted
    //!   by value_comp().
    //! 
@@ -517,8 +515,7 @@ class splaytree_impl
    //! <b>Effects</b>: Inserts value into the tree if the value
    //!   is not already present.
    //! 
-   //! <b>Complexity</b>: Average complexity for insert element is at
-   //!   most logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -539,7 +536,7 @@ class splaytree_impl
    //! <b>Effects</b>: Tries to insert x into the tree, using "hint" as a hint
    //!   to where it will be inserted.
    //! 
-   //! <b>Complexity</b>: Logarithmic in general, but it is amortized
+   //! <b>Complexity</b>: Amortized logarithmic in general, but it is amortized
    //!   constant time (two comparisons in the worst case)
    //!   if t is inserted immediately before hint.
    //! 
@@ -561,7 +558,7 @@ class splaytree_impl
    //! 
    //! <b>Effects</b>: Tries to insert each element of a range into the tree.
    //! 
-   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the 
+   //! <b>Complexity</b>: Insert range is in general amortized O(N * log(N)), where N is the 
    //!   size of the range. However, it is linear in N if the range is already sorted 
    //!   by value_comp().
    //! 
@@ -644,7 +641,7 @@ class splaytree_impl
 
    //! <b>Effects</b>: Erases the range pointed to by b end e. 
    //! 
-   //! <b>Complexity</b>: Average complexity for erase range is at most 
+   //! <b>Complexity</b>: Average complexity for erase range is amortized
    //!   O(log(size() + N)), where N is the number of elements in the range.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -658,7 +655,7 @@ class splaytree_impl
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + N).
+   //! <b>Complexity</b>: Amortized O(log(size() + N).
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -672,7 +669,7 @@ class splaytree_impl
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + N).
+   //! <b>Complexity</b>: Amortized O(log(size() + N).
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -712,7 +709,7 @@ class splaytree_impl
    //! <b>Effects</b>: Erases the range pointed to by b end e.
    //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
-   //! <b>Complexity</b>: Average complexity for erase range is at most 
+   //! <b>Complexity</b>: Average complexity for erase range is amortized
    //!   O(log(size() + N)), where N is the number of elements in the range.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -730,7 +727,7 @@ class splaytree_impl
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + N).
+   //! <b>Complexity</b>: Amortized O(log(size() + N).
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -753,7 +750,7 @@ class splaytree_impl
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + N).
+   //! <b>Complexity</b>: Amortized O(log(size() + N).
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -790,7 +787,7 @@ class splaytree_impl
 
    //! <b>Effects</b>: Erases all of the elements calling disposer(p) for
    //!   each node to be erased.
-   //! <b>Complexity</b>: Average complexity for is at most O(log(size() + N)),
+   //! <b>Complexity</b>: Amortized O(log(size() + N)),
    //!   where N is the number of elements in the container.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -808,7 +805,7 @@ class splaytree_impl
 
    //! <b>Effects</b>: Returns the number of contained elements with the given value
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given value.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -817,7 +814,7 @@ class splaytree_impl
 
    //! <b>Effects</b>: Returns the number of contained elements with the given key
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -830,7 +827,7 @@ class splaytree_impl
 
    //! <b>Effects</b>: Returns the number of contained elements with the given value
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given value.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -839,7 +836,7 @@ class splaytree_impl
 
    //! <b>Effects</b>: Returns the number of contained elements with the given key
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -853,7 +850,7 @@ class splaytree_impl
    //! <b>Effects</b>: Returns an iterator to the first element whose
    //!   key is not less than k or end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    iterator lower_bound(const_reference value)
@@ -901,7 +898,7 @@ class splaytree_impl
    //! <b>Effects</b>: Returns an iterator to the first element whose
    //!   key is greater than k or end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    iterator upper_bound(const_reference value)
@@ -911,7 +908,7 @@ class splaytree_impl
    //!   key is greater than k according to comp or end() if that element
    //!   does not exist.
    //!
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    template<class KeyType, class KeyValueCompare>
@@ -951,7 +948,7 @@ class splaytree_impl
    //! <b>Effects</b>: Finds an iterator to the first element whose key is 
    //!   k or end() if that element does not exist.
    //!
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    iterator find(const_reference value)
@@ -960,7 +957,7 @@ class splaytree_impl
    //! <b>Effects</b>: Finds an iterator to the first element whose key is 
    //!   k or end() if that element does not exist.
    //!
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    template<class KeyType, class KeyValueCompare>
@@ -1000,7 +997,7 @@ class splaytree_impl
    //!   an empty range that indicates the position where those elements would be
    //!   if they there is no elements with key k.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    std::pair<iterator,iterator> equal_range(const_reference value)
@@ -1010,7 +1007,7 @@ class splaytree_impl
    //!   an empty range that indicates the position where those elements would be
    //!   if they there is no elements with key k.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    template<class KeyType, class KeyValueCompare>
@@ -1106,7 +1103,7 @@ class splaytree_impl
    //! <b>Effects</b>: Rearranges the splay set so that the element pointed by i
    //!   is placed as the root of the tree, improving future searches of this value.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    void splay_up(iterator i)
@@ -1117,7 +1114,7 @@ class splaytree_impl
    //!   tree. If the element is not present returns the last node compared with the key.
    //!   If the tree is empty, end() is returned.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //!
    //! <b>Returns</b>: An iterator to the new root of the tree, end() if the tree is empty.
    //!
@@ -1135,7 +1132,7 @@ class splaytree_impl
    //!   with a key equivalent to value the element is placed as the root of the
    //!   tree.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Returns</b>: An iterator to the new root of the tree, end() if the tree is empty.
    //!
@@ -1237,6 +1234,26 @@ class splaytree_impl
    //!   used by auto_unlink and safe hooks.
    static void init_node(reference value)
    { node_algorithms::init(value_traits::to_node_ptr(value)); }
+
+   //! <b>Effects</b>: Rebalances the tree.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   void rebalance()
+   {  node_algorithms::rebalance(node_ptr(&priv_header())); }
+
+   //! <b>Requires</b>: old_root is a node of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the subtree rooted at old_root.
+   //!
+   //! <b>Returns</b>: The new root of the subtree.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   iterator rebalance_subtree(iterator root)
+   {  return iterator(node_algorithms::rebalance_subtree(root.pointed_node()), this); }
 
 /*
    //! <b>Effects</b>: removes x from a tree of the appropriate type. It has no effect,

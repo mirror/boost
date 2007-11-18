@@ -56,18 +56,22 @@ struct make_splay_set_base_hook
 };
 
 //! Derive a class from splay_set_base_hook in order to store objects in 
-//! in an set/multiset. splay_set_base_hook holds the data necessary to maintain 
-//! the set/multiset and provides an appropriate value_traits class for set/multiset.
+//! in a splay_set/splay_multiset. splay_set_base_hook holds the data necessary to maintain 
+//! the splay_set/splay_multiset and provides an appropriate value_traits class for splay_set/splay_multiset.
 //! 
-//! The first integer template argument defines a tag to identify the node. 
+//! The hook admits the following options: \c tag<>, \c void_pointer<>,
+//! \c link_mode<> and \c optimize_size<>.
+//!
+//! \c tag<> defines a tag to identify the node. 
 //! The same tag value can be used in different classes, but if a class is 
-//! derived from more than one splay_set_base_hook, then each splay_set_base_hook needs its 
+//! derived from more than one \c list_base_hook, then each \c list_base_hook needs its 
 //! unique tag.
 //!
-//! The second boolean template parameter will specify the linking mode of the hook.
+//! \c void_pointer<> is the pointer type that will be used internally in the hook
+//! and the the container configured to use this hook.
 //!
-//! The third argument is the pointer type that will be used internally in the hook
-//! and the set/multiset configured from this hook.
+//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
+//! \c auto_unlink or \c safe_link).
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
@@ -106,7 +110,7 @@ class splay_set_base_hook
 
    //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
    //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
-   //!   object is stored in an set an assertion is raised. If link_mode is
+   //!   object is stored in a set an assertion is raised. If link_mode is
    //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
    //! <b>Throws</b>: Nothing. 
@@ -166,14 +170,19 @@ struct make_splay_set_member_hook
    typedef implementation_defined type;
 };
 
-//! Put a public data member splay_set_member_hook in order to store objects of this class in
-//! an set/multiset. splay_set_member_hook holds the data necessary for maintaining the
-//! set/multiset and provides an appropriate value_traits class for set/multiset.
+//! Put a public data member splay_set_member_hook in order to store objects of this
+//! class in a splay_set/splay_multiset. splay_set_member_hook holds the data
+//! necessary for maintaining the splay_set/splay_multiset and provides an appropriate
+//! value_traits class for splay_set/splay_multiset.
 //! 
-//! The first boolean template parameter will specify the linking mode of the hook.
+//! The hook admits the following options: \c void_pointer<>,
+//! \c link_mode<> and \c optimize_size<>.
 //!
-//! The second argument is the pointer type that will be used internally in the hook
-//! and the set/multiset configured from this hook.
+//! \c void_pointer<> is the pointer type that will be used internally in the hook
+//! and the the container configured to use this hook.
+//!
+//! \c link_mode<> will specify the linking mode of the hook (\c normal_link,
+//! \c auto_unlink or \c safe_link).
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class ...Options>
 #else
@@ -212,7 +221,7 @@ class splay_set_member_hook
 
    //! <b>Effects</b>: If link_mode is \c normal_link, the destructor does
    //!   nothing (ie. no code is generated). If link_mode is \c safe_link and the
-   //!   object is stored in an set an assertion is raised. If link_mode is
+   //!   object is stored in a set an assertion is raised. If link_mode is
    //!   \c auto_unlink and \c is_linked() is true, the node is unlinked.
    //! 
    //! <b>Throws</b>: Nothing. 

@@ -42,6 +42,8 @@
    #pragma warning (disable : 4522)
    #pragma warning (disable : 4146)
    #pragma warning (disable : 4267) //conversion from 'X' to 'Y', possible loss of data
+   #pragma warning (disable : 4127) //conditional expression is constant
+   #pragma warning (disable : 4706) //assignment within conditional expression
 #endif
 
 //#define BOOST_INTRUSIVE_USE_ITERATOR_FACADE

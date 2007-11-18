@@ -413,10 +413,7 @@ class avltree_impl
       if(constant_time_size)
          return this->priv_size_traits().get_size();
       else{
-         const_iterator beg(this->cbegin()), end(this->cend());
-         size_type i = 0;
-         for(;beg != end; ++beg) ++i;
-         return i;
+         return (size_type)node_algorithms::size(const_node_ptr(&priv_header()));
       }
    }
 

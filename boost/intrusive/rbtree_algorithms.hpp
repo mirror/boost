@@ -334,6 +334,16 @@ class rbtree_algorithms
    static std::size_t count(const_node_ptr node)
    {  return tree_algorithms::count(node);   }
 
+   //! <b>Requires</b>: header is the header node of the tree.
+   //! 
+   //! <b>Effects</b>: Returns the number of nodes above the header.
+   //! 
+   //! <b>Complexity</b>: Linear time.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static std::size_t size(const_node_ptr header)
+   {  return tree_algorithms::size(header);   }
+
    //! <b>Requires</b>: p is a node from the tree except the header.
    //! 
    //! <b>Effects</b>: Returns the next node of the tree.

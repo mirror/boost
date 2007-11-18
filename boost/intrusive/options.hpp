@@ -183,6 +183,30 @@ struct compare
 /// @endcond
 };
 
+//!This option setter for scapegoat containers specifies if
+//!the intrusive scapegoat container should use a non-variable
+//!alpha value that does not need floating-point operations.
+//!
+//!If activated, the fixed alpha value is 1/sqrt(2). This
+//!option also saves some space in the container since 
+//!the alpha value and some additional data does not need
+//!to be stored in the container.
+//!
+//!If the user only needs an alpha value near 1/sqrt(2), this
+//!option also improves performance since avoids logarithm
+//!and division operations when rebalancing the tree.
+template<bool Enabled>
+struct floating_point
+{
+/// @cond
+    template<class Base>
+    struct pack : Base
+    {
+        static const bool floating_point = Enabled;
+    };
+/// @endcond
+};
+
 //!This option setter specifies the equality
 //!functor for the value type
 template<class Equal>
@@ -341,6 +365,23 @@ struct bucket_traits
 /// @endcond
 };
 
+//!This option setter specifies if the unordered hook
+//!should offer room to store the hash value.
+//!Storing the hash in the hook will speed up rehashing
+//!processes in applications where rehashing is frequent,
+//!rehashing might throw or the value is heavy to hash.
+template<bool Enabled>
+struct store_hash
+{
+/// @cond
+    template<class Base>
+    struct pack : Base
+    {
+        static const bool store_hash = Enabled;
+    };
+/// @endcond
+};
+
 //!This option setter specifies if the bucket array will be always power of two.
 //!This allows using masks instead of the default modulo operation to determine
 //!the bucket number from the hash value, leading to better performance.
@@ -386,7 +427,7 @@ template
    , class O7         = none
    , class O8         = none
    , class O9         = none
-   , class Option10        = none
+   , class Option10   = none
    >
 struct pack_options
 {
@@ -433,6 +474,7 @@ struct hook_defaults
       , link_mode<safe_link>
       , tag<default_tag>
       , optimize_size<false>
+      , store_hash<false>
       >::type
 {};
 

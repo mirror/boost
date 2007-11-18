@@ -42,6 +42,23 @@ namespace intrusive {
 
 namespace detail{
 
+template <class T>
+struct store_hash_bool
+{
+   template<bool Add>
+   struct two_or_three {one _[2 + Add];};
+   template <class U> static one test(...);
+   template <class U> static two_or_three<U::store_hash>
+      test (detail::bool_<U::store_hash>* = 0);
+   static const std::size_t value = sizeof(test<T>(0));
+};
+
+template <class T>
+struct store_hash_is_true
+{
+   static const bool value = store_hash_bool<T>::value > sizeof(one)*2;
+};
+
 template<class Config>
 struct bucket_plus_size
    : public detail::size_holder
@@ -320,9 +337,11 @@ class hashtable_impl
 
    static const bool constant_time_size = Config::constant_time_size;
    static const bool stateful_value_traits = detail::store_cont_ptr_on_it<hashtable_impl>::value;
+   static const bool store_hash = detail::store_hash_is_true<node_traits>::value;
 
    /// @cond
    private:
+   typedef detail::bool_<store_hash>                                 store_hash_t;
    typedef detail::size_holder<constant_time_size, size_type>        size_traits;
    typedef detail::data_t<Config>                                    base_type;
    typedef detail::transform_iterator
@@ -737,14 +756,15 @@ class hashtable_impl
 
    iterator insert_equal(reference value)
    {
-      size_type bucket_num, hash_func;
+      size_type bucket_num, hash_value;
       siterator it = this->priv_find
-         (value, this->priv_hasher(), this->priv_equal(), bucket_num, hash_func);
+         (value, this->priv_hasher(), this->priv_equal(), bucket_num, hash_value);
       bucket_type &b = this->priv_buckets()[bucket_num];
       if(it == invalid_local_it(this->get_real_bucket_traits())){
          it = b.before_begin();
       }
       node_ptr n = node_ptr(&from_value_to_node(value));
+      this->priv_store_hash(n, hash_value, store_hash_t());
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(n));
       this->priv_size_traits().increment();
@@ -881,6 +901,7 @@ class hashtable_impl
       bucket_type &b = this->priv_buckets()[bucket_num];
       this->priv_size_traits().increment();
       node_ptr n = node_ptr(&from_value_to_node(value));
+      this->priv_store_hash(n, commit_data.hash, store_hash_t());
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(n));
       return iterator( b.insert_after(b.before_begin(), *n), this);
@@ -1262,8 +1283,8 @@ class hashtable_impl
    const_iterator find
       (const KeyType &key, KeyHasher hash_func, KeyValueEqual equal_func) const
    {
-      size_type bucket_n, hash;
-      siterator sit = this->priv_find(key, hash_func, equal_func, bucket_n, hash);
+      size_type bucket_n, hash_value;
+      siterator sit = this->priv_find(key, hash_func, equal_func, bucket_n, hash_value);
       return const_iterator(sit, this);
    }
 
@@ -1636,10 +1657,9 @@ class hashtable_impl
                siterator i(old_bucket.begin());
                for(;i != end; ++i){
                   const value_type &v = *this->get_real_value_traits().to_value_ptr(i.pointed_node());
-                  const std::size_t hash_value = this->priv_hasher()(v);
+                  const std::size_t hash_value = this->priv_hash_when_rehashing(v, store_hash_t());
                   const size_type new_n = (power_2_buckets)
-                     ?  ( hash_value & (new_buckets_len-1))
-                     :  ( hash_value % new_buckets_len);
+                     ? (hash_value & (new_buckets_len-1)) : (hash_value % new_buckets_len);
                   //If this is a buffer expansion don't move if it's not necessary
                   if(same_buffer && new_n == n){
                      ++before_i;
@@ -1723,6 +1743,19 @@ class hashtable_impl
 
    /// @cond
    private:
+
+   std::size_t priv_hash_when_rehashing(const value_type &v, detail::true_)
+   {  return node_traits::get_hash(this->get_real_value_traits().to_node_ptr(v));  }
+
+   std::size_t priv_hash_when_rehashing(const value_type &v, detail::false_)
+   {  return priv_hasher()(v);   }
+
+   void priv_store_hash(node_ptr p, std::size_t h, detail::true_)
+   {  return node_traits::set_hash(p, h); }
+
+   void priv_store_hash(node_ptr, std::size_t, detail::false_)
+   {}
+   
    static siterator invalid_local_it(const real_bucket_traits &b)
    {  return b.bucket_begin()->end();  }
 

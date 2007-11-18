@@ -19,7 +19,10 @@
 #include <boost/intrusive/detail/ebo_functor_holder.hpp>
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/detail/mpl.hpp>
+#include <boost/intrusive/detail/assert.hpp>
+#include <boost/cstdint.hpp>
 #include <cstddef>
+#include <climits>
 #include <iterator>
 
 namespace boost {
@@ -471,6 +474,75 @@ struct member_hook_traits
          (static_cast<const Hook*>(detail::get_pointer(n)), P);
    }
 };
+
+//This function uses binary search to discover the
+//highest set bit of the integer
+inline std::size_t floor_log2 (std::size_t x)
+{
+   const std::size_t Bits = sizeof(std::size_t)*CHAR_BIT;
+   const bool Size_t_Bits_Power_2= !(Bits & (Bits-1));
+   BOOST_STATIC_ASSERT(Size_t_Bits_Power_2);
+
+   std::size_t n = x;
+   std::size_t log2 = 0;
+   
+   for(std::size_t shift = Bits >> 1; shift; shift >>= 1){
+      std::size_t tmp = n >> shift;
+      if (tmp)
+   	   log2 += shift, n = tmp;
+   }
+
+   return log2;
+}
+
+inline float fast_log2 (float val)
+{
+   boost::uint32_t * const exp_ptr = reinterpret_cast <boost::uint32_t *>(&val);
+   boost::uint32_t x = *exp_ptr;
+   const int log_2 = (int)(((x >> 23) & 255) - 128);
+   x &= ~(255 << 23);
+   x += 127 << 23;
+   *exp_ptr = x;
+
+   val = ((-1.0f/3) * val + 2) * val - 2.0f/3;
+
+   return (val + log_2);
+}
+
+inline std::size_t ceil_log2 (std::size_t x)
+{
+   return ((x & (x-1))!= 0) + floor_log2(x);
+}
+
+template<std::size_t N>
+struct sqrt2_pow_max;
+
+template<>
+struct sqrt2_pow_max<32>
+{
+   static const std::size_t value = 0xb504f334;
+   static const std::size_t pow   = 31;
+};
+
+#ifdef BOOST_NO_INT64_T
+
+template<>
+struct sqrt2_pow_max<64>
+{
+   static const std::size_t value = 0xb504f333f9de6484;
+   static const std::size_t pow   = 63;
+};
+
+#endif
+
+// Returns floor(pow(sqrt(2), x * 2 + 1)).
+// Defined for X from 0 up to the number of bits in size_t minus 1.
+inline std::size_t sqrt2_pow_2xplus1 (std::size_t x)
+{
+   const std::size_t value = sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::value;
+   const std::size_t pow   = sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::pow;
+   return (value >> (pow - x)) + 1;
+}
 
 } //namespace detail
 } //namespace intrusive 

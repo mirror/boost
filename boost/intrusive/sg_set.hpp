@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2007
+// (C) Copyright Ion Gaztanaga 2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -10,18 +9,18 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-#ifndef BOOST_INTRUSIVE_SET_HPP
-#define BOOST_INTRUSIVE_SET_HPP
+#ifndef BOOST_INTRUSIVE_SG_SET_HPP
+#define BOOST_INTRUSIVE_SG_SET_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/rbtree.hpp>
+#include <boost/intrusive/sgtree.hpp>
 #include <iterator>
 
 namespace boost {
 namespace intrusive {
 
-//! The class template set is an intrusive container, that mimics most of 
+//! The class template sg_set is an intrusive container, that mimics most of 
 //! the interface of std::set as described in the C++ standard.
 //! 
 //! The template parameter \c T is the type to be managed by the container.
@@ -37,17 +36,17 @@ template<class T, class ...Options>
 #else
 template<class Config>
 #endif
-class set_impl
+class sg_set_impl
 {
    /// @cond
-   typedef rbtree_impl<Config> tree_type;
+   typedef sgtree_impl<Config> tree_type;
    //! This class is
    //! non-copyable
-   set_impl (const set_impl&);
+   sg_set_impl (const sg_set_impl&);
 
    //! This class is
    //! non-assignable
-   set_impl &operator =(const set_impl&);
+   sg_set_impl &operator =(const sg_set_impl&);
 
    typedef tree_type implementation_defined;
    /// @endcond
@@ -80,14 +79,14 @@ class set_impl
    /// @endcond
 
    public:
-   //! <b>Effects</b>: Constructs an empty set. 
+   //! <b>Effects</b>: Constructs an empty sg_set. 
    //!   
    //! <b>Complexity</b>: Constant. 
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor of the value_compare object throws. 
-   set_impl( const value_compare &cmp = value_compare()
+   sg_set_impl( const value_compare &cmp = value_compare()
            , const value_traits &v_traits = value_traits()) 
       :  tree_(cmp, v_traits)
    {}
@@ -95,7 +94,7 @@ class set_impl
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue of type value_type. 
    //!   cmp must be a comparison function that induces a strict weak ordering.
    //! 
-   //! <b>Effects</b>: Constructs an empty set and inserts elements from 
+   //! <b>Effects</b>: Constructs an empty sg_set and inserts elements from 
    //!   [b, e).
    //! 
    //! <b>Complexity</b>: Linear in N if [b, e) is already sorted using 
@@ -105,23 +104,23 @@ class set_impl
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor/operator() of the value_compare object throws. 
    template<class Iterator>
-   set_impl( Iterator b, Iterator e
+   sg_set_impl( Iterator b, Iterator e
            , const value_compare &cmp = value_compare()
            , const value_traits &v_traits = value_traits())
       : tree_(true, b, e, cmp, v_traits)
    {}
 
-   //! <b>Effects</b>: Detaches all elements from this. The objects in the set 
+   //! <b>Effects</b>: Detaches all elements from this. The objects in the sg_set 
    //!   are not deleted (i.e. no destructors are called).
    //! 
    //! <b>Complexity</b>: Linear to the number of elements on the container.
    //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
-   ~set_impl() 
+   ~sg_set_impl() 
    {}
 
-   //! <b>Effects</b>: Returns an iterator pointing to the beginning of the set.
+   //! <b>Effects</b>: Returns an iterator pointing to the beginning of the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -129,7 +128,7 @@ class set_impl
    iterator begin()
    { return tree_.begin();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the set.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -137,7 +136,7 @@ class set_impl
    const_iterator begin() const
    { return tree_.begin();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the set.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -145,7 +144,7 @@ class set_impl
    const_iterator cbegin() const
    { return tree_.cbegin();  }
 
-   //! <b>Effects</b>: Returns an iterator pointing to the end of the set.
+   //! <b>Effects</b>: Returns an iterator pointing to the end of the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -153,7 +152,7 @@ class set_impl
    iterator end()
    { return tree_.end();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the set.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -161,7 +160,7 @@ class set_impl
    const_iterator end() const
    { return tree_.end();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the set.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -170,7 +169,7 @@ class set_impl
    { return tree_.cend();  }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning of the
-   //!    reversed set.
+   //!    reversed sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -179,7 +178,7 @@ class set_impl
    { return tree_.rbegin();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
-   //!    of the reversed set.
+   //!    of the reversed sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -188,7 +187,7 @@ class set_impl
    { return tree_.rbegin();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
-   //!    of the reversed set.
+   //!    of the reversed sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -197,7 +196,7 @@ class set_impl
    { return tree_.crbegin();  }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the end
-   //!    of the reversed set.
+   //!    of the reversed sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -206,7 +205,7 @@ class set_impl
    { return tree_.rend();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //!    of the reversed set.
+   //!    of the reversed sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -215,7 +214,7 @@ class set_impl
    { return tree_.rend();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //!    of the reversed set.
+   //!    of the reversed sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -224,36 +223,36 @@ class set_impl
    { return tree_.crend();  }
 
    //! <b>Precondition</b>: end_iterator must be a valid end iterator
-   //!   of set.
+   //!   of sg_set.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the set associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the sg_set associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static set_impl &container_from_end_iterator(iterator end_iterator)
+   static sg_set_impl &container_from_end_iterator(iterator end_iterator)
    {
-      return *detail::parent_from_member<set_impl, tree_type>
+      return *detail::parent_from_member<sg_set_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &set_impl::tree_);
+         , &sg_set_impl::tree_);
    }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
-   //!   of set.
+   //!   of sg_set.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the set associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the sg_set associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static const set_impl &container_from_end_iterator(const_iterator end_iterator)
+   static const sg_set_impl &container_from_end_iterator(const_iterator end_iterator)
    {
-      return *detail::parent_from_member<set_impl, tree_type>
+      return *detail::parent_from_member<sg_set_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &set_impl::tree_);
+         , &sg_set_impl::tree_);
    }
 
-   //! <b>Effects</b>: Returns the key_compare object used by the set.
+   //! <b>Effects</b>: Returns the key_compare object used by the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -261,7 +260,7 @@ class set_impl
    key_compare key_comp() const
    { return tree_.value_comp(); }
 
-   //! <b>Effects</b>: Returns the value_compare object used by the set.
+   //! <b>Effects</b>: Returns the value_compare object used by the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -277,7 +276,7 @@ class set_impl
    bool empty() const
    { return tree_.empty(); }
 
-   //! <b>Effects</b>: Returns the number of elements stored in the set.
+   //! <b>Effects</b>: Returns the number of elements stored in the sg_set.
    //! 
    //! <b>Complexity</b>: Linear to elements contained in *this if,
    //!   constant-time size option is enabled. Constant-time otherwise.
@@ -292,7 +291,7 @@ class set_impl
    //! 
    //! <b>Throws</b>: If the swap() call for the comparison functor
    //!   found using ADL throws. Strong guarantee.
-   void swap(set_impl& other)
+   void swap(sg_set_impl& other)
    { tree_.swap(other.tree_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -309,12 +308,12 @@ class set_impl
    //! 
    //! <b>Throws</b>: If cloner throws.
    template <class Cloner, class Disposer>
-   void clone_from(const set_impl &src, Cloner cloner, Disposer disposer)
+   void clone_from(const sg_set_impl &src, Cloner cloner, Disposer disposer)
    {  tree_.clone_from(src.tree_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
-   //! <b>Effects</b>: Tries to inserts value into the set.
+   //! <b>Effects</b>: Tries to inserts value into the sg_set.
    //!
    //! <b>Returns</b>: If the value
    //!   is not already present inserts it and returns a pair containing the
@@ -334,11 +333,11 @@ class set_impl
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
-   //! <b>Effects</b>: Tries to to insert x into the set, using "hint" 
+   //! <b>Effects</b>: Tries to to insert x into the sg_set, using "hint" 
    //!   as a hint to where it will be inserted.
    //!
    //! <b>Returns</b>: An iterator that points to the position where the 
-   //!   new element was inserted into the set.
+   //!   new element was inserted into the sg_set.
    //! 
    //! <b>Complexity</b>: Logarithmic in general, but it's amortized
    //!   constant time if t is inserted immediately before hint.
@@ -352,9 +351,9 @@ class set_impl
 
    //! <b>Requires</b>: key_value_comp must be a comparison function that induces 
    //!   the same strict weak ordering as value_compare. The difference is that
-   //!   key_value_comp compares an arbitrary key with the contained values.
+   //!   key_value_comp compares an ascapegoatitrary key with the contained values.
    //! 
-   //! <b>Effects</b>: Checks if a value can be inserted in the set, using
+   //! <b>Effects</b>: Checks if a value can be inserted in the sg_set, using
    //!   a user provided key instead of the value itself.
    //!
    //! <b>Returns</b>: If there is an equivalent value
@@ -379,7 +378,7 @@ class set_impl
    //!   logarithmic complexity to the insertion: check(O(log(N)) + commit(O(1)).
    //!
    //!   "commit_data" remains valid for a subsequent "insert_commit" only if no more
-   //!   objects are inserted or erased from the set.
+   //!   objects are inserted or erased from the sg_set.
    template<class KeyType, class KeyValueCompare>
    std::pair<iterator, bool> insert_check
       (const KeyType &key, KeyValueCompare key_value_comp, insert_commit_data &commit_data)
@@ -387,9 +386,9 @@ class set_impl
 
    //! <b>Requires</b>: key_value_comp must be a comparison function that induces 
    //!   the same strict weak ordering as value_compare. The difference is that
-   //!   key_value_comp compares an arbitrary key with the contained values.
+   //!   key_value_comp compares an ascapegoatitrary key with the contained values.
    //! 
-   //! <b>Effects</b>: Checks if a value can be inserted in the set, using
+   //! <b>Effects</b>: Checks if a value can be inserted in the sg_set, using
    //!   a user provided key instead of the value itself, using "hint" 
    //!   as a hint to where it will be inserted.
    //!
@@ -416,7 +415,7 @@ class set_impl
    //!   constant-time complexity to the insertion: check(O(1)) + commit(O(1)).
    //!   
    //!   "commit_data" remains valid for a subsequent "insert_commit" only if no more
-   //!   objects are inserted or erased from the set.
+   //!   objects are inserted or erased from the sg_set.
    template<class KeyType, class KeyValueCompare>
    std::pair<iterator, bool> insert_check
       (const_iterator hint, const KeyType &key
@@ -425,10 +424,10 @@ class set_impl
 
    //! <b>Requires</b>: value must be an lvalue of type value_type. commit_data
    //!   must have been obtained from a previous call to "insert_check".
-   //!   No objects should have been inserted or erased from the set between
+   //!   No objects should have been inserted or erased from the sg_set between
    //!   the "insert_check" that filled "commit_data" and the call to "insert_commit".
    //! 
-   //! <b>Effects</b>: Inserts the value in the set using the information obtained
+   //! <b>Effects</b>: Inserts the value in the sg_set using the information obtained
    //!   from the "commit_data" that a previous "insert_check" filled.
    //!
    //! <b>Returns</b>: An iterator to the newly inserted object.
@@ -446,7 +445,7 @@ class set_impl
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue 
    //!   of type value_type.
    //! 
-   //! <b>Effects</b>: Inserts a range into the set.
+   //! <b>Effects</b>: Inserts a range into the sg_set.
    //! 
    //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the
    //!   size of the range. However, it is linear in N if the range is already sorted
@@ -862,10 +861,10 @@ class set_impl
       equal_range(const KeyType& key, KeyValueCompare comp) const
    {  return tree_.equal_range(key, comp);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid iterator i belonging to the set
+   //! <b>Effects</b>: Returns: a valid iterator i belonging to the sg_set
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -877,11 +876,11 @@ class set_impl
    static iterator s_iterator_to(reference value)
    {  return tree_type::s_iterator_to(value);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
    //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
-   //!   set that points to the value
+   //!   sg_set that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -892,10 +891,10 @@ class set_impl
    static const_iterator s_iterator_to(const_reference value)
    {  return tree_type::s_iterator_to(value);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid iterator i belonging to the set
+   //! <b>Effects</b>: Returns: a valid iterator i belonging to the sg_set
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -904,11 +903,11 @@ class set_impl
    iterator iterator_to(reference value)
    {  return tree_.iterator_to(value);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
    //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
-   //!   set that points to the value
+   //!   sg_set that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -916,7 +915,7 @@ class set_impl
    const_iterator iterator_to(const_reference value) const
    {  return tree_.iterator_to(value);  }
 
-   //! <b>Requires</b>: value shall not be in a set/multiset.
+   //! <b>Requires</b>: value shall not be in a sg_set/sg_multiset.
    //! 
    //! <b>Effects</b>: init_node puts the hook of a value in a well-known default
    //!   state.
@@ -960,11 +959,50 @@ class set_impl
    void replace_node(iterator replace_this, reference with_this)
    {  tree_.replace_node(replace_this, with_this);   }
 
+   //! <b>Effects</b>: Rebalances the tree.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   void rebalance()
+   {  tree_.rebalance(); }
+
+   //! <b>Requires</b>: old_root is a node of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the subtree rooted at old_root.
+   //!
+   //! <b>Returns</b>: The new root of the subtree.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   iterator rebalance_subtree(iterator root)
+   {  return tree_.rebalance_subtree(root); }
+
+   //! <b>Returns</b>: The balance factor (alpha) used in this tree
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   float balance_factor() const
+   {  return tree_.balance_factor(); }
+
+   //! <b>Requires</b>: new_alpha must be a value between 0.5 and 1.0
+   //! 
+   //! <b>Effects</b>: Establishes a new balance factor (alpha) and rebalances
+   //!   the tree if the new balance factor is stricter (less) than the old factor.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   void balance_factor(float new_alpha)
+   {  tree_.balance_factor(new_alpha); }
+
    /// @cond
-   friend bool operator==(const set_impl &x, const set_impl &y)
+   friend bool operator==(const sg_set_impl &x, const sg_set_impl &y)
    {  return x.tree_ == y.tree_;  }
 
-   friend bool operator<(const set_impl &x, const set_impl &y)
+   friend bool operator<(const sg_set_impl &x, const sg_set_impl &y)
    {  return x.tree_ < y.tree_;  }
    /// @endcond
 };
@@ -976,9 +1014,9 @@ template<class Config>
 #endif
 inline bool operator!=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+(const sg_set_impl<T, Options...> &x, const sg_set_impl<T, Options...> &y)
 #else
-(const set_impl<Config> &x, const set_impl<Config> &y)
+(const sg_set_impl<Config> &x, const sg_set_impl<Config> &y)
 #endif
 {  return !(x == y); }
 
@@ -989,9 +1027,9 @@ template<class Config>
 #endif
 inline bool operator>
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+(const sg_set_impl<T, Options...> &x, const sg_set_impl<T, Options...> &y)
 #else
-(const set_impl<Config> &x, const set_impl<Config> &y)
+(const sg_set_impl<Config> &x, const sg_set_impl<Config> &y)
 #endif
 {  return y < x;  }
 
@@ -1002,9 +1040,9 @@ template<class Config>
 #endif
 inline bool operator<=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+(const sg_set_impl<T, Options...> &x, const sg_set_impl<T, Options...> &y)
 #else
-(const set_impl<Config> &x, const set_impl<Config> &y)
+(const sg_set_impl<Config> &x, const sg_set_impl<Config> &y)
 #endif
 {  return !(y < x);  }
 
@@ -1015,9 +1053,9 @@ template<class Config>
 #endif
 inline bool operator>=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const set_impl<T, Options...> &x, const set_impl<T, Options...> &y)
+(const sg_set_impl<T, Options...> &x, const sg_set_impl<T, Options...> &y)
 #else
-(const set_impl<Config> &x, const set_impl<Config> &y)
+(const sg_set_impl<Config> &x, const sg_set_impl<Config> &y)
 #endif
 {  return !(x < y);  }
 
@@ -1028,13 +1066,13 @@ template<class Config>
 #endif
 inline void swap
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(set_impl<T, Options...> &x, set_impl<T, Options...> &y)
+(sg_set_impl<T, Options...> &x, sg_set_impl<T, Options...> &y)
 #else
-(set_impl<Config> &x, set_impl<Config> &y)
+(sg_set_impl<Config> &x, sg_set_impl<Config> &y)
 #endif
 {  x.swap(y);  }
 
-//! Helper metafunction to define a \c set that yields to the same type when the
+//! Helper metafunction to define a \c sg_set that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class T, class ...Options>
@@ -1042,11 +1080,11 @@ template<class T, class ...Options>
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none>
 #endif
-struct make_set
+struct make_sg_set
 {
    /// @cond
-   typedef set_impl
-      < typename make_rbtree_opt<T, O1, O2, O3, O4>::type
+   typedef sg_set_impl
+      < typename make_sgtree_opt<T, O1, O2, O3, O4>::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
@@ -1054,10 +1092,10 @@ struct make_set
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class T, class O1, class O2, class O3, class O4>
-class set
-   :  public make_set<T, O1, O2, O3, O4>::type
+class sg_set
+   :  public make_sg_set<T, O1, O2, O3, O4>::type
 {
-   typedef typename make_set
+   typedef typename make_sg_set
       <T, O1, O2, O3, O4>::type   Base;
 
    public:
@@ -1069,29 +1107,29 @@ class set
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   set( const value_compare &cmp = value_compare()
+   sg_set( const value_compare &cmp = value_compare()
          , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 
    template<class Iterator>
-   set( Iterator b, Iterator e
+   sg_set( Iterator b, Iterator e
       , const value_compare &cmp = value_compare()
       , const value_traits &v_traits = value_traits())
       :  Base(b, e, cmp, v_traits)
    {}
 
-   static set &container_from_end_iterator(iterator end_iterator)
-   {  return static_cast<set &>(Base::container_from_end_iterator(end_iterator));   }
+   static sg_set &container_from_end_iterator(iterator end_iterator)
+   {  return static_cast<sg_set &>(Base::container_from_end_iterator(end_iterator));   }
 
-   static const set &container_from_end_iterator(const_iterator end_iterator)
-   {  return static_cast<const set &>(Base::container_from_end_iterator(end_iterator));   }
+   static const sg_set &container_from_end_iterator(const_iterator end_iterator)
+   {  return static_cast<const sg_set &>(Base::container_from_end_iterator(end_iterator));   }
 };
 
 #endif
 
-//! The class template multiset is an intrusive container, that mimics most of 
-//! the interface of std::multiset as described in the C++ standard.
+//! The class template sg_multiset is an intrusive container, that mimics most of 
+//! the interface of std::sg_multiset as described in the C++ standard.
 //! 
 //! The template parameter \c T is the type to be managed by the container.
 //! The user can specify additional options and if no options are provided
@@ -1106,14 +1144,14 @@ template<class T, class ...Options>
 #else
 template<class Config>
 #endif
-class multiset_impl
+class sg_multiset_impl
 {
    /// @cond
-   typedef rbtree_impl<Config> tree_type;
+   typedef sgtree_impl<Config> tree_type;
 
    //Non-copyable and non-assignable
-   multiset_impl (const multiset_impl&);
-   multiset_impl &operator =(const multiset_impl&);
+   sg_multiset_impl (const sg_multiset_impl&);
+   sg_multiset_impl &operator =(const sg_multiset_impl&);
    typedef tree_type implementation_defined;
    /// @endcond
 
@@ -1145,14 +1183,14 @@ class multiset_impl
    /// @endcond
 
    public:
-   //! <b>Effects</b>: Constructs an empty multiset. 
+   //! <b>Effects</b>: Constructs an empty sg_multiset. 
    //!   
    //! <b>Complexity</b>: Constant. 
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor/operator() of the value_compare object throws. 
-   multiset_impl( const value_compare &cmp = value_compare()
+   sg_multiset_impl( const value_compare &cmp = value_compare()
                 , const value_traits &v_traits = value_traits()) 
       :  tree_(cmp, v_traits)
    {}
@@ -1160,7 +1198,7 @@ class multiset_impl
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue of type value_type. 
    //!   cmp must be a comparison function that induces a strict weak ordering.
    //! 
-   //! <b>Effects</b>: Constructs an empty multiset and inserts elements from 
+   //! <b>Effects</b>: Constructs an empty sg_multiset and inserts elements from 
    //!   [b, e).
    //! 
    //! <b>Complexity</b>: Linear in N if [b, e) is already sorted using
@@ -1170,23 +1208,23 @@ class multiset_impl
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
    //!   or the copy constructor/operator() of the value_compare object throws. 
    template<class Iterator>
-   multiset_impl( Iterator b, Iterator e
+   sg_multiset_impl( Iterator b, Iterator e
                 , const value_compare &cmp = value_compare()
                 , const value_traits &v_traits = value_traits())
       : tree_(false, b, e, cmp, v_traits)
    {}
 
-   //! <b>Effects</b>: Detaches all elements from this. The objects in the set 
+   //! <b>Effects</b>: Detaches all elements from this. The objects in the sg_multiset 
    //!   are not deleted (i.e. no destructors are called).
    //! 
    //! <b>Complexity</b>: Linear to the number of elements on the container.
    //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
-   ~multiset_impl() 
+   ~sg_multiset_impl() 
    {}
 
-   //! <b>Effects</b>: Returns an iterator pointing to the beginning of the multiset.
+   //! <b>Effects</b>: Returns an iterator pointing to the beginning of the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1194,7 +1232,7 @@ class multiset_impl
    iterator begin()
    { return tree_.begin();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the multiset.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1202,7 +1240,7 @@ class multiset_impl
    const_iterator begin() const
    { return tree_.begin();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the multiset.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the beginning of the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1210,7 +1248,7 @@ class multiset_impl
    const_iterator cbegin() const
    { return tree_.cbegin();  }
 
-   //! <b>Effects</b>: Returns an iterator pointing to the end of the multiset.
+   //! <b>Effects</b>: Returns an iterator pointing to the end of the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1218,7 +1256,7 @@ class multiset_impl
    iterator end()
    { return tree_.end();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the multiset.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1226,7 +1264,7 @@ class multiset_impl
    const_iterator end() const
    { return tree_.end();  }
 
-   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the multiset.
+   //! <b>Effects</b>: Returns a const_iterator pointing to the end of the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1235,7 +1273,7 @@ class multiset_impl
    { return tree_.cend();  }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning of the
-   //!    reversed multiset.
+   //!    reversed sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1244,7 +1282,7 @@ class multiset_impl
    { return tree_.rbegin();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
-   //!    of the reversed multiset.
+   //!    of the reversed sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1253,7 +1291,7 @@ class multiset_impl
    { return tree_.rbegin();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
-   //!    of the reversed multiset.
+   //!    of the reversed sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1262,7 +1300,7 @@ class multiset_impl
    { return tree_.crbegin();  }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the end
-   //!    of the reversed multiset.
+   //!    of the reversed sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1271,7 +1309,7 @@ class multiset_impl
    { return tree_.rend();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //!    of the reversed multiset.
+   //!    of the reversed sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1280,7 +1318,7 @@ class multiset_impl
    { return tree_.rend();  }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //!    of the reversed multiset.
+   //!    of the reversed sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1289,36 +1327,36 @@ class multiset_impl
    { return tree_.crend();  }
 
    //! <b>Precondition</b>: end_iterator must be a valid end iterator
-   //!   of multiset.
+   //!   of sg_multiset.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the multiset associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the sg_multiset associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static multiset_impl &container_from_end_iterator(iterator end_iterator)
+   static sg_multiset_impl &container_from_end_iterator(iterator end_iterator)
    {
-      return *detail::parent_from_member<multiset_impl, tree_type>
+      return *detail::parent_from_member<sg_multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &multiset_impl::tree_);
+         , &sg_multiset_impl::tree_);
    }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
-   //!   of multiset.
+   //!   of sg_multiset.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the multiset associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the sg_multiset associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
-   static const multiset_impl &container_from_end_iterator(const_iterator end_iterator)
+   static const sg_multiset_impl &container_from_end_iterator(const_iterator end_iterator)
    {
-      return *detail::parent_from_member<multiset_impl, tree_type>
+      return *detail::parent_from_member<sg_multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
-         , &multiset_impl::tree_);
+         , &sg_multiset_impl::tree_);
    }
 
-   //! <b>Effects</b>: Returns the key_compare object used by the multiset.
+   //! <b>Effects</b>: Returns the key_compare object used by the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1326,7 +1364,7 @@ class multiset_impl
    key_compare key_comp() const
    { return tree_.value_comp(); }
 
-   //! <b>Effects</b>: Returns the value_compare object used by the multiset.
+   //! <b>Effects</b>: Returns the value_compare object used by the sg_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1342,7 +1380,7 @@ class multiset_impl
    bool empty() const
    { return tree_.empty(); }
 
-   //! <b>Effects</b>: Returns the number of elements stored in the multiset.
+   //! <b>Effects</b>: Returns the number of elements stored in the sg_multiset.
    //! 
    //! <b>Complexity</b>: Linear to elements contained in *this if,
    //!   constant-time size option is enabled. Constant-time otherwise.
@@ -1351,13 +1389,13 @@ class multiset_impl
    size_type size() const
    { return tree_.size(); }
 
-   //! <b>Effects</b>: Swaps the contents of two multisets.
+   //! <b>Effects</b>: Swaps the contents of two sg_multisets.
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Throws</b>: If the swap() call for the comparison functor
    //!   found using ADL throws. Strong guarantee.
-   void swap(multiset_impl& other)
+   void swap(sg_multiset_impl& other)
    { tree_.swap(other.tree_); }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -1374,12 +1412,12 @@ class multiset_impl
    //! 
    //! <b>Throws</b>: If cloner throws. Basic guarantee.
    template <class Cloner, class Disposer>
-   void clone_from(const multiset_impl &src, Cloner cloner, Disposer disposer)
+   void clone_from(const sg_multiset_impl &src, Cloner cloner, Disposer disposer)
    {  tree_.clone_from(src.tree_, cloner, disposer);  }
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
-   //! <b>Effects</b>: Inserts value into the multiset.
+   //! <b>Effects</b>: Inserts value into the sg_multiset.
    //! 
    //! <b>Returns</b>: An iterator that points to the position where the new
    //!   element was inserted.
@@ -1396,7 +1434,7 @@ class multiset_impl
 
    //! <b>Requires</b>: value must be an lvalue
    //! 
-   //! <b>Effects</b>: Inserts x into the multiset, using pos as a hint to
+   //! <b>Effects</b>: Inserts x into the sg_multiset, using pos as a hint to
    //!   where it will be inserted.
    //! 
    //! <b>Returns</b>: An iterator that points to the position where the new
@@ -1415,7 +1453,7 @@ class multiset_impl
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue 
    //!   of type value_type.
    //! 
-   //! <b>Effects</b>: Inserts a range into the multiset.
+   //! <b>Effects</b>: Inserts a range into the sg_multiset.
    //! 
    //! <b>Returns</b>: An iterator that points to the position where the new
    //!   element was inserted.
@@ -1834,10 +1872,10 @@ class multiset_impl
       equal_range(const KeyType& key, KeyValueCompare comp) const
    {  return tree_.equal_range(key, comp);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid iterator i belonging to the set
+   //! <b>Effects</b>: Returns: a valid iterator i belonging to the sg_multiset
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1849,11 +1887,11 @@ class multiset_impl
    static iterator s_iterator_to(reference value)
    {  return tree_type::s_iterator_to(value);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
    //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
-   //!   set that points to the value
+   //!   sg_multiset that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1864,10 +1902,10 @@ class multiset_impl
    static const_iterator s_iterator_to(const_reference value)
    {  return tree_type::s_iterator_to(value);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
-   //! <b>Effects</b>: Returns: a valid iterator i belonging to the set
+   //! <b>Effects</b>: Returns: a valid iterator i belonging to the sg_multiset
    //!   that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1876,11 +1914,11 @@ class multiset_impl
    iterator iterator_to(reference value)
    {  return tree_.iterator_to(value);  }
 
-   //! <b>Requires</b>: value must be an lvalue and shall be in a set of
+   //! <b>Requires</b>: value must be an lvalue and shall be in a sg_multiset of
    //!   appropriate type. Otherwise the behavior is undefined.
    //! 
    //! <b>Effects</b>: Returns: a valid const_iterator i belonging to the
-   //!   set that points to the value
+   //!   sg_multiset that points to the value
    //! 
    //! <b>Complexity</b>: Constant.
    //! 
@@ -1888,7 +1926,7 @@ class multiset_impl
    const_iterator iterator_to(const_reference value) const
    {  return tree_.iterator_to(value);  }
 
-   //! <b>Requires</b>: value shall not be in a set/multiset.
+   //! <b>Requires</b>: value shall not be in a sg_multiset/sg_multiset.
    //! 
    //! <b>Effects</b>: init_node puts the hook of a value in a well-known default
    //!   state.
@@ -1932,11 +1970,50 @@ class multiset_impl
    void replace_node(iterator replace_this, reference with_this)
    {  tree_.replace_node(replace_this, with_this);   }
 
+   //! <b>Effects</b>: Rebalances the tree.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   void rebalance()
+   {  tree_.rebalance(); }
+
+   //! <b>Requires</b>: old_root is a node of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the subtree rooted at old_root.
+   //!
+   //! <b>Returns</b>: The new root of the subtree.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   iterator rebalance_subtree(iterator root)
+   {  return tree_.rebalance_subtree(root); }
+
+   //! <b>Returns</b>: The balance factor (alpha) used in this tree
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   float balance_factor() const
+   {  return tree_.balance_factor(); }
+
+   //! <b>Requires</b>: new_alpha must be a value between 0.5 and 1.0
+   //! 
+   //! <b>Effects</b>: Establishes a new balance factor (alpha) and rebalances
+   //!   the tree if the new balance factor is stricter (less) than the old factor.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   void balance_factor(float new_alpha)
+   {  tree_.balance_factor(new_alpha); }
+
    /// @cond
-   friend bool operator==(const multiset_impl &x, const multiset_impl &y)
+   friend bool operator==(const sg_multiset_impl &x, const sg_multiset_impl &y)
    {  return x.tree_ == y.tree_;  }
 
-   friend bool operator<(const multiset_impl &x, const multiset_impl &y)
+   friend bool operator<(const sg_multiset_impl &x, const sg_multiset_impl &y)
    {  return x.tree_ < y.tree_;  }
    /// @endcond
 };
@@ -1948,9 +2025,9 @@ template<class Config>
 #endif
 inline bool operator!=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+(const sg_multiset_impl<T, Options...> &x, const sg_multiset_impl<T, Options...> &y)
 #else
-(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+(const sg_multiset_impl<Config> &x, const sg_multiset_impl<Config> &y)
 #endif
 {  return !(x == y); }
 
@@ -1961,9 +2038,9 @@ template<class Config>
 #endif
 inline bool operator>
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+(const sg_multiset_impl<T, Options...> &x, const sg_multiset_impl<T, Options...> &y)
 #else
-(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+(const sg_multiset_impl<Config> &x, const sg_multiset_impl<Config> &y)
 #endif
 {  return y < x;  }
 
@@ -1974,9 +2051,9 @@ template<class Config>
 #endif
 inline bool operator<=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+(const sg_multiset_impl<T, Options...> &x, const sg_multiset_impl<T, Options...> &y)
 #else
-(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+(const sg_multiset_impl<Config> &x, const sg_multiset_impl<Config> &y)
 #endif
 {  return !(y < x);  }
 
@@ -1987,9 +2064,9 @@ template<class Config>
 #endif
 inline bool operator>=
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(const multiset_impl<T, Options...> &x, const multiset_impl<T, Options...> &y)
+(const sg_multiset_impl<T, Options...> &x, const sg_multiset_impl<T, Options...> &y)
 #else
-(const multiset_impl<Config> &x, const multiset_impl<Config> &y)
+(const sg_multiset_impl<Config> &x, const sg_multiset_impl<Config> &y)
 #endif
 {  return !(x < y);  }
 
@@ -2000,13 +2077,13 @@ template<class Config>
 #endif
 inline void swap
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-(multiset_impl<T, Options...> &x, multiset_impl<T, Options...> &y)
+(sg_multiset_impl<T, Options...> &x, sg_multiset_impl<T, Options...> &y)
 #else
-(multiset_impl<Config> &x, multiset_impl<Config> &y)
+(sg_multiset_impl<Config> &x, sg_multiset_impl<Config> &y)
 #endif
 {  x.swap(y);  }
 
-//! Helper metafunction to define a \c multiset that yields to the same type when the
+//! Helper metafunction to define a \c sg_multiset that yields to the same type when the
 //! same options (either explicitly or implicitly) are used.
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class T, class ...Options>
@@ -2014,11 +2091,11 @@ template<class T, class ...Options>
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none>
 #endif
-struct make_multiset
+struct make_sg_multiset
 {
    /// @cond
-   typedef multiset_impl
-      < typename make_rbtree_opt<T, O1, O2, O3, O4>::type
+   typedef sg_multiset_impl
+      < typename make_sgtree_opt<T, O1, O2, O3, O4>::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
@@ -2026,10 +2103,10 @@ struct make_multiset
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 template<class T, class O1, class O2, class O3, class O4>
-class multiset
-   :  public make_multiset<T, O1, O2, O3, O4>::type
+class sg_multiset
+   :  public make_sg_multiset<T, O1, O2, O3, O4>::type
 {
-   typedef typename make_multiset
+   typedef typename make_sg_multiset
       <T, O1, O2, O3, O4>::type   Base;
 
    public:
@@ -2041,23 +2118,23 @@ class multiset
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   multiset( const value_compare &cmp = value_compare()
+   sg_multiset( const value_compare &cmp = value_compare()
            , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 
    template<class Iterator>
-   multiset( Iterator b, Iterator e
+   sg_multiset( Iterator b, Iterator e
            , const value_compare &cmp = value_compare()
            , const value_traits &v_traits = value_traits())
       :  Base(b, e, cmp, v_traits)
    {}
 
-   static multiset &container_from_end_iterator(iterator end_iterator)
-   {  return static_cast<multiset &>(Base::container_from_end_iterator(end_iterator));   }
+   static sg_multiset &container_from_end_iterator(iterator end_iterator)
+   {  return static_cast<sg_multiset &>(Base::container_from_end_iterator(end_iterator));   }
 
-   static const multiset &container_from_end_iterator(const_iterator end_iterator)
-   {  return static_cast<const multiset &>(Base::container_from_end_iterator(end_iterator));   }
+   static const sg_multiset &container_from_end_iterator(const_iterator end_iterator)
+   {  return static_cast<const sg_multiset &>(Base::container_from_end_iterator(end_iterator));   }
 };
 
 #endif
@@ -2067,4 +2144,4 @@ class multiset
 
 #include <boost/intrusive/detail/config_end.hpp>
 
-#endif //BOOST_INTRUSIVE_SET_HPP
+#endif //BOOST_INTRUSIVE_SG_SET_HPP

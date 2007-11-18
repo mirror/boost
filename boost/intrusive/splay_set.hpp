@@ -98,7 +98,7 @@ class splay_set_impl
    //!   [b, e).
    //! 
    //! <b>Complexity</b>: Linear in N if [b, e) is already sorted using 
-   //!   comp and otherwise N * log N, where N is std::distance(last, first).
+   //!   comp and otherwise amortized N * log N, where N is std::distance(last, first).
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
@@ -113,8 +113,8 @@ class splay_set_impl
    //! <b>Effects</b>: Detaches all elements from this. The objects in the splay_set 
    //!   are not deleted (i.e. no destructors are called).
    //! 
-   //! <b>Complexity</b>: O(log(size()) + size()) if it's a safe-mode or auto-unlink
-   //!   value. Otherwise constant.
+   //! <b>Complexity</b>: Linear to the number of elements on the container.
+   //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
    ~splay_set_impl() 
@@ -321,8 +321,7 @@ class splay_set_impl
    //!   returns a pair containing an iterator to the already present value
    //!   and false.
    //! 
-   //! <b>Complexity</b>: Average complexity for insert element is at
-   //!   most logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
    //! 
@@ -339,7 +338,7 @@ class splay_set_impl
    //! <b>Returns</b>: An iterator that points to the position where the 
    //!   new element was inserted into the splay_set.
    //! 
-   //! <b>Complexity</b>: Logarithmic in general, but it's amortized
+   //! <b>Complexity</b>: Amortized logarithmic in general, but it's amortized
    //!   constant time if t is inserted immediately before hint.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
@@ -362,7 +361,7 @@ class splay_set_impl
    //!   pair boolean and fills "commit_data" that is meant to be used with
    //!   the "insert_commit" function.
    //! 
-   //! <b>Complexity</b>: Average complexity is at most logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //!
    //! <b>Throws</b>: If the key_value_comp ordering function throws. Strong guarantee.
    //! 
@@ -398,7 +397,7 @@ class splay_set_impl
    //!   pair boolean and fills "commit_data" that is meant to be used with
    //!   the "insert_commit" function.
    //! 
-   //! <b>Complexity</b>: Logarithmic in general, but it's amortized
+   //! <b>Complexity</b>: Amortized logarithmic in general, but it's amortized
    //!   constant time if t is inserted immediately before hint.
    //!
    //! <b>Throws</b>: If the key_value_comp ordering function throws. Strong guarantee.
@@ -447,7 +446,7 @@ class splay_set_impl
    //! 
    //! <b>Effects</b>: Inserts a range into the splay_set.
    //! 
-   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the
+   //! <b>Complexity</b>: Insert range is amortized O(N * log(N)), where N is the
    //!   size of the range. However, it is linear in N if the range is already sorted
    //!   by value_comp().
    //! 
@@ -474,7 +473,7 @@ class splay_set_impl
 
    //! <b>Effects</b>: Erases the range pointed to by b end e. 
    //! 
-   //! <b>Complexity</b>: Average complexity for erase range is at most 
+   //! <b>Complexity</b>: Average complexity for erase range is amortized
    //!   O(log(size() + N)), where N is the number of elements in the range.
    //! 
    //! <b>Returns</b>: An iterator to the element after the erased elements.
@@ -490,7 +489,7 @@ class splay_set_impl
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size()) + this->count(value)).
+   //! <b>Complexity</b>: Amortized O(log(size()) + this->count(value)).
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
@@ -504,7 +503,7 @@ class splay_set_impl
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + this->count(key, comp)).
+   //! <b>Complexity</b>: Amortized O(log(size() + this->count(key, comp)).
    //! 
    //! <b>Throws</b>: If the comp ordering function throws. Basic guarantee.
    //! 
@@ -556,7 +555,7 @@ class splay_set_impl
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    //! 
-   //! <b>Complexity</b>: O(log(size() + this->count(value)). Basic guarantee.
+   //! <b>Complexity</b>: Amortized O(log(size() + this->count(value)). Basic guarantee.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -574,7 +573,7 @@ class splay_set_impl
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + this->count(key, comp)).
+   //! <b>Complexity</b>: Amortized O(log(size() + this->count(key, comp)).
    //! 
    //! <b>Throws</b>: If comp ordering function throws. Basic guarantee.
    //! 
@@ -613,7 +612,7 @@ class splay_set_impl
 
    //! <b>Effects</b>: Returns the number of contained elements with the given key
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
@@ -623,7 +622,7 @@ class splay_set_impl
    //! <b>Effects</b>: Returns the number of contained elements with the same key
    //!   compared with the given comparison functor.
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
@@ -654,7 +653,7 @@ class splay_set_impl
    //! <b>Effects</b>: Returns an iterator to the first element whose
    //!   key is not less than k or end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator lower_bound(const_reference value)
@@ -668,7 +667,7 @@ class splay_set_impl
    //!   key according to the comparison functor is not less than k or 
    //!   end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //! 
@@ -710,7 +709,7 @@ class splay_set_impl
    //! <b>Effects</b>: Returns an iterator to the first element whose
    //!   key is greater than k or end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator upper_bound(const_reference value)
@@ -724,7 +723,7 @@ class splay_set_impl
    //!   key according to the comparison functor is greater than key or 
    //!   end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //!
@@ -766,7 +765,7 @@ class splay_set_impl
    //! <b>Effects</b>: Finds an iterator to the first element whose value is 
    //!   "value" or end() if that element does not exist.
    //!
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator find(const_reference value)
@@ -780,7 +779,7 @@ class splay_set_impl
    //!   "key" according to the comparison functor or end() if that element 
    //!   does not exist.
    //!
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //!
@@ -823,7 +822,7 @@ class splay_set_impl
    //!   an empty range that indicates the position where those elements would be
    //!   if they there is no elements with key k.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    std::pair<iterator,iterator> equal_range(const_reference value)
@@ -838,7 +837,7 @@ class splay_set_impl
    //!   that indicates the position where those elements would be
    //!   if they there is no elements with key k.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //!
@@ -984,7 +983,7 @@ class splay_set_impl
    //! <b>Effects</b>: Rearranges the splay set so that the element pointed by i
    //!   is placed as the root of the tree, improving future searches of this value.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    void splay_up(iterator i)
@@ -995,7 +994,7 @@ class splay_set_impl
    //!   tree. If the element is not present returns the last node compared with the key.
    //!   If the tree is empty, end() is returned.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Returns</b>: An iterator to the new root of the tree, end() if the tree is empty.
    //!
@@ -1008,13 +1007,33 @@ class splay_set_impl
    //!   with a key equivalent to value the element is placed as the root of the
    //!   tree.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Returns</b>: An iterator to the new root of the tree, end() if the tree is empty.
    //!
    //! <b>Throws</b>: If the predicate throws.
    iterator splay_down(const value_type &value)
    {  return tree_.splay_down(value);   }
+
+   //! <b>Effects</b>: Rebalances the tree.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   void rebalance()
+   {  tree_.rebalance(); }
+
+   //! <b>Requires</b>: old_root is a node of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the subtree rooted at old_root.
+   //!
+   //! <b>Returns</b>: The new root of the subtree.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   iterator rebalance_subtree(iterator root)
+   {  return tree_.rebalance_subtree(root); }
 
    /// @cond
    friend bool operator==(const splay_set_impl &x, const splay_set_impl &y)
@@ -1220,7 +1239,7 @@ class splay_multiset_impl
    //!   [b, e).
    //! 
    //! <b>Complexity</b>: Linear in N if [b, e) is already sorted using
-   //!   comp and otherwise N * log N, where N is the distance between first and last.
+   //!   comp and otherwise amortized N * log N, where N is the distance between first and last.
    //! 
    //! <b>Throws</b>: If value_traits::node_traits::node
    //!   constructor throws (this does not happen with predefined Boost.Intrusive hooks)
@@ -1235,8 +1254,8 @@ class splay_multiset_impl
    //! <b>Effects</b>: Detaches all elements from this. The objects in the set 
    //!   are not deleted (i.e. no destructors are called).
    //! 
-   //! <b>Complexity</b>: O(log(size()) + size()) if it's a safe-mode or
-   //!   auto-unlink value. Otherwise constant.
+   //! <b>Complexity</b>: Linear to the number of elements on the container.
+   //!   if it's a safe-mode or auto-unlink value_type. Constant time otherwise.
    //! 
    //! <b>Throws</b>: Nothing.
    ~splay_multiset_impl() 
@@ -1440,8 +1459,7 @@ class splay_multiset_impl
    //! <b>Returns</b>: An iterator that points to the position where the new
    //!   element was inserted.
    //! 
-   //! <b>Complexity</b>: Average complexity for insert element is at
-   //!   most logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
    //! 
@@ -1458,7 +1476,7 @@ class splay_multiset_impl
    //! <b>Returns</b>: An iterator that points to the position where the new
    //!   element was inserted.
    //! 
-   //! <b>Complexity</b>: Logarithmic in general, but it is amortized
+   //! <b>Complexity</b>: Amortized logarithmic in general, but it is amortized
    //!   constant time if t is inserted immediately before hint.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws. Strong guarantee.
@@ -1476,7 +1494,7 @@ class splay_multiset_impl
    //! <b>Returns</b>: An iterator that points to the position where the new
    //!   element was inserted.
    //! 
-   //! <b>Complexity</b>: Insert range is in general O(N * log(N)), where N is the
+   //! <b>Complexity</b>: Insert range is amortized O(N * log(N)), where N is the
    //!   size of the range. However, it is linear in N if the range is already sorted
    //!   by value_comp().
    //! 
@@ -1505,7 +1523,7 @@ class splay_multiset_impl
    //!
    //! <b>Returns</b>: An iterator to the element after the erased elements.
    //! 
-   //! <b>Complexity</b>: Average complexity for erase range is at most 
+   //! <b>Complexity</b>: Average complexity for erase range is amortized
    //!   O(log(size() + N)), where N is the number of elements in the range.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -1519,7 +1537,7 @@ class splay_multiset_impl
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + this->count(value)).
+   //! <b>Complexity</b>: Amortized O(log(size() + this->count(value)).
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
@@ -1533,7 +1551,7 @@ class splay_multiset_impl
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + this->count(key, comp)).
+   //! <b>Complexity</b>: Amortized O(log(size() + this->count(key, comp)).
    //! 
    //! <b>Throws</b>: If comp ordering function throws. Basic guarantee.
    //! 
@@ -1567,7 +1585,7 @@ class splay_multiset_impl
    //! <b>Effects</b>: Erases the range pointed to by b end e.
    //!   Disposer::operator()(pointer) is called for the removed elements.
    //! 
-   //! <b>Complexity</b>: Average complexity for erase range is at most 
+   //! <b>Complexity</b>: Average complexity for erase range is amortized
    //!   O(log(size() + N)), where N is the number of elements in the range.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -1585,7 +1603,7 @@ class splay_multiset_impl
    //! 
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + this->count(value)).
+   //! <b>Complexity</b>: Amortized O(log(size() + this->count(value)).
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws. Basic guarantee.
    //! 
@@ -1603,7 +1621,7 @@ class splay_multiset_impl
    //!
    //! <b>Returns</b>: The number of erased elements.
    //! 
-   //! <b>Complexity</b>: O(log(size() + this->count(key, comp)).
+   //! <b>Complexity</b>: Amortized O(log(size() + this->count(key, comp)).
    //! 
    //! <b>Throws</b>: If comp ordering function throws. Basic guarantee.
    //! 
@@ -1642,7 +1660,7 @@ class splay_multiset_impl
 
    //! <b>Effects</b>: Returns the number of contained elements with the given key
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
@@ -1652,7 +1670,7 @@ class splay_multiset_impl
    //! <b>Effects</b>: Returns the number of contained elements with the same key
    //!   compared with the given comparison functor.
    //! 
-   //! <b>Complexity</b>: Logarithmic to the number of elements contained plus lineal
+   //! <b>Complexity</b>: Amortized logarithmic to the number of elements contained plus lineal
    //!   to number of objects with the given key.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
@@ -1683,7 +1701,7 @@ class splay_multiset_impl
    //! <b>Effects</b>: Returns an iterator to the first element whose
    //!   key is not less than k or end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator lower_bound(const_reference value)
@@ -1697,7 +1715,7 @@ class splay_multiset_impl
    //!   key according to the comparison functor is not less than k or 
    //!   end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //! 
@@ -1739,7 +1757,7 @@ class splay_multiset_impl
    //! <b>Effects</b>: Returns an iterator to the first element whose
    //!   key is greater than k or end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator upper_bound(const_reference value)
@@ -1753,7 +1771,7 @@ class splay_multiset_impl
    //!   key according to the comparison functor is greater than key or 
    //!   end() if that element does not exist.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //!
@@ -1795,7 +1813,7 @@ class splay_multiset_impl
    //! <b>Effects</b>: Finds an iterator to the first element whose value is 
    //!   "value" or end() if that element does not exist.
    //!
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    iterator find(const_reference value)
@@ -1809,7 +1827,7 @@ class splay_multiset_impl
    //!   "key" according to the comparison functor or end() if that element 
    //!   does not exist.
    //!
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //!
@@ -1852,7 +1870,7 @@ class splay_multiset_impl
    //!   an empty range that indicates the position where those elements would be
    //!   if they there is no elements with key k.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If the internal value_compare ordering function throws.
    std::pair<iterator,iterator> equal_range(const_reference value)
@@ -1867,7 +1885,7 @@ class splay_multiset_impl
    //!   that indicates the position where those elements would be
    //!   if they there is no elements with key k.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: If comp ordering function throws.
    //!
@@ -2013,7 +2031,7 @@ class splay_multiset_impl
    //! <b>Effects</b>: Rearranges the splay set so that the element pointed by i
    //!   is placed as the root of the tree, improving future searches of this value.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Throws</b>: Nothing.
    void splay_up(iterator i)
@@ -2024,7 +2042,7 @@ class splay_multiset_impl
    //!   tree. If the element is not present returns the last node compared with the key.
    //!   If the tree is empty, end() is returned.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Returns</b>: An iterator to the new root of the tree, end() if the tree is empty.
    //!
@@ -2037,13 +2055,33 @@ class splay_multiset_impl
    //!   with a key equivalent to value the element is placed as the root of the
    //!   tree.
    //! 
-   //! <b>Complexity</b>: Logarithmic.
+   //! <b>Complexity</b>: Amortized logarithmic.
    //! 
    //! <b>Returns</b>: An iterator to the new root of the tree, end() if the tree is empty.
    //!
    //! <b>Throws</b>: If the predicate throws.
    iterator splay_down(const value_type &value)
    {  return tree_.splay_down(value);   }
+
+   //! <b>Effects</b>: Rebalances the tree.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear.
+   void rebalance()
+   {  tree_.rebalance(); }
+
+   //! <b>Requires</b>: old_root is a node of a tree.
+   //! 
+   //! <b>Effects</b>: Rebalances the subtree rooted at old_root.
+   //!
+   //! <b>Returns</b>: The new root of the subtree.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements in the subtree.
+   iterator rebalance_subtree(iterator root)
+   {  return tree_.rebalance_subtree(root); }
 
    /// @cond
    friend bool operator==(const splay_multiset_impl &x, const splay_multiset_impl &y)
