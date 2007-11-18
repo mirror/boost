@@ -11,6 +11,7 @@
 #include <boost/spirit/core.hpp>
 
 #include <cctype>
+#include <cstring>
 #include <stdexcept>
 #include <fstream>
 #include <iostream>
