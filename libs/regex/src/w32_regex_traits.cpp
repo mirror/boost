@@ -30,7 +30,7 @@
 #define NOGDI
 #include <windows.h>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(_WIN32_WCE)
 #pragma comment(lib, "user32.lib")
 #endif
 
