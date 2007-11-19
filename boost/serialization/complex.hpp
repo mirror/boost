@@ -26,14 +26,42 @@
 namespace boost { 
 namespace serialization {
 
+
 template<class Archive, class T>
 inline void serialize(
     Archive & ar,
-    std::complex<T> & x,
+    std::complex<T> & t,
+    const unsigned int file_version 
+)
+{
+  boost::serialization::split_free(ar, t, file_version);
+}
+
+template<class Archive, class T>
+inline void save(
+    Archive & ar,
+    std::complex<T> const& x,
     const unsigned int /* file_version */
-){
-    ar & boost::serialization::make_nvp("real", x.real());
-    ar & boost::serialization::make_nvp("imag", x.imag());
+)
+{
+  double re=x.real();
+  double im=x.imag();
+  ar << boost::serialization::make_nvp("real", re);
+  ar << boost::serialization::make_nvp("imag", im);
+}
+
+template<class Archive, class T>
+inline void load(
+    Archive & ar,
+    std::complex<T>& x,
+    const unsigned int /* file_version */ 
+)
+{
+  double re;
+  double im;
+  ar >> boost::serialization::make_nvp("real", re);
+  ar >> boost::serialization::make_nvp("imag", im);
+  x = std::complex<T>(re,im);
 }
 
 /// specialization of serialization traits for complex
