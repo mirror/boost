@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <climits>
 #include <iterator>
+#include <boost/cstdint.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -520,16 +521,16 @@ struct sqrt2_pow_max;
 template<>
 struct sqrt2_pow_max<32>
 {
-   static const std::size_t value = 0xb504f334;
+   static const boost::uint32_t value = 0xb504f334;
    static const std::size_t pow   = 31;
 };
 
-#ifndef BOOST_NO_INT64_T
+#ifdef BOOST_HAS_LONG_LONG
 
 template<>
 struct sqrt2_pow_max<64>
 {
-   static const std::size_t value = 0xb504f333f9de6484;
+   static const boost::uint64_t value = 0xb504f333f9de6484ull;
    static const std::size_t pow   = 63;
 };
 
@@ -539,8 +540,8 @@ struct sqrt2_pow_max<64>
 // Defined for X from 0 up to the number of bits in size_t minus 1.
 inline std::size_t sqrt2_pow_2xplus1 (std::size_t x)
 {
-   const std::size_t value = sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::value;
-   const std::size_t pow   = sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::pow;
+   const std::size_t value = (std::size_t)sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::value;
+   const std::size_t pow   = (std::size_t)sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::pow;
    return (value >> (pow - x)) + 1;
 }
 
