@@ -524,7 +524,7 @@ struct sqrt2_pow_max<32>
    static const std::size_t pow   = 31;
 };
 
-#ifdef BOOST_NO_INT64_T
+#ifndef BOOST_NO_INT64_T
 
 template<>
 struct sqrt2_pow_max<64>
