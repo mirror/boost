@@ -1,4 +1,4 @@
-bo  //
+//
 // Boost.Pointer Container
 //
 //  Copyright Thorsten Ottosen 2003-2005. Use, modification and
