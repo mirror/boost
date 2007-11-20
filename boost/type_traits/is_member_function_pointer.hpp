@@ -62,6 +62,10 @@ struct is_mem_fun_pointer_select<false>
 {
     template <typename T> struct result_
     {
+#if BOOST_WORKAROUND(BOOST_MSVC, > 1400)
+#pragma warning(push)
+#pragma warning(disable:6334)
+#endif
         static T* make_t;
         typedef result_<T> self_type;
 
@@ -69,6 +73,9 @@ struct is_mem_fun_pointer_select<false>
             bool, value = (
                 1 == sizeof(::boost::type_traits::is_mem_fun_pointer_tester(self_type::make_t))
             ));
+#if BOOST_WORKAROUND(BOOST_MSVC, > 1400)
+#pragma warning(pop)
+#endif
     };
 };
 
