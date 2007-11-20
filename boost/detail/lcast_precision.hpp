@@ -83,9 +83,9 @@ struct lcast_precision
         );
 
     BOOST_STATIC_ASSERT(!is_specialized_bin ||
-            limits::digits + 0UL < ULONG_MAX / 30103UL &&
+            (limits::digits + 0UL < ULONG_MAX / 30103UL &&
             precision_bin > limits::digits10 + 0UL &&
-            precision_bin <= streamsize_max + 0UL
+            precision_bin <= streamsize_max + 0UL)
         );
 
     BOOST_STATIC_CONSTANT(std::streamsize, value =
