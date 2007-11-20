@@ -76,6 +76,8 @@ test-suite wave
                 <threading>multi
                 <variant>debug
                 <link>shared:<define>BOOST_ALL_DYN_LINK=1
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
 #                <define>BOOST_LIB_DIAGNOSTIC=1
             :    
             # name
@@ -103,6 +105,8 @@ test-suite wave
                 <threading>multi
                 <variant>debug
 	        <link>static     # Linking to DLL tested by testwave_dll
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
 #                <define>BOOST_LIB_DIAGNOSTIC=1
             : 
             # name
@@ -128,6 +132,8 @@ test-suite wave
             # requirements
                 <threading>multi
                 <variant>debug
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
             :
             # name
                 test_slex_lexer
@@ -151,6 +157,8 @@ test-suite wave
             # requirements
                 <threading>multi
                 <variant>debug
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
             :
             # name
                 test_re2c_lexer
