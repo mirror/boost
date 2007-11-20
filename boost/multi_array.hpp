@@ -429,12 +429,12 @@ public:
 
     std::transform(new_array.index_base_list_.begin(),
                    new_array.index_base_list_.end(),
-                   min_extents.begin(),old_idxes.ranges_.begin(),
+                   min_extents.begin(),new_idxes.ranges_.begin(),
                    detail::multi_array::populate_index_ranges());
 
     std::transform(this->index_base_list_.begin(),
                    this->index_base_list_.end(),
-                   min_extents.begin(),new_idxes.ranges_.begin(),
+                   min_extents.begin(),old_idxes.ranges_.begin(),
                    detail::multi_array::populate_index_ranges());
 
     // Build same-shape views of the two arrays
