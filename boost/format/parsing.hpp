@@ -16,6 +16,7 @@
 
 
 #include <boost/format/format_class.hpp>
+#include <boost/format/exceptions.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/assert.hpp>
 
