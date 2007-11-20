@@ -114,6 +114,14 @@ int test_main(int,char*[]) {
     }
   }
 
+  // Resizing that changes index bases too (impl bug caused an assert)
+  {
+      typedef boost::multi_array<int, 1> ar_t;
+      typedef ar_t::extent_range range;
+      ar_t ar;
+      ar.resize(boost::extents[range(-3, 3)]);
+  }
+
 
   return boost::exit_success;
 }
