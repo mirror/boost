@@ -22,8 +22,8 @@
 
 #ifndef BOOST_NO_WREGEX
 
-#include <boost/cregex.hpp>
 #include <boost/regex.hpp>
+#include <boost/cregex.hpp>
 
 #include <cwchar>
 #include <cstring>

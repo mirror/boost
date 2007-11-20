@@ -19,8 +19,8 @@
 #define BOOST_REGEX_SOURCE
 
 #include <cstdio>
-#include <boost/cregex.hpp>
 #include <boost/regex.hpp>
+#include <boost/cregex.hpp>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
