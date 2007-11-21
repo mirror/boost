@@ -249,7 +249,10 @@ struct is_convertible_basic_impl
     static From _m_from;
 #ifdef BOOST_MSVC
 #pragma warning(push)
-#pragma warning(disable:4244 6334)
+#pragma warning(disable:4244)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#pragma warning(disable:6334)
+#endif
 #endif
     BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
