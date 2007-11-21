@@ -48,8 +48,8 @@ protected:
     }
 	
 #define BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(T) \
-    void save_override(T const & t , int)      \
-	{}                                         \
+    void save_override(T const & , int)        \
+	{}
 
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::class_id_optional_type)
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::version_type)
