@@ -515,33 +515,35 @@ inline std::size_t ceil_log2 (std::size_t x)
    return ((x & (x-1))!= 0) + floor_log2(x);
 }
 
-template<std::size_t N>
+template<class SizeType, std::size_t N>
+struct numbits_eq
+{
+   static const bool value = sizeof(SizeType)*CHAR_BIT == N;
+};
+
+template<class SizeType, class Enabler = void >
 struct sqrt2_pow_max;
 
-template<>
-struct sqrt2_pow_max<32>
+template <class SizeType>
+struct sqrt2_pow_max<SizeType, typename enable_if< numbits_eq<SizeType, 32> >::type>
 {
    static const boost::uint32_t value = 0xb504f334;
    static const std::size_t pow   = 31;
 };
 
-#ifdef BOOST_HAS_LONG_LONG
-
-template<>
-struct sqrt2_pow_max<64>
+template <class SizeType>
+struct sqrt2_pow_max<SizeType, typename enable_if< numbits_eq<SizeType, 64> >::type>
 {
    static const boost::uint64_t value = 0xb504f333f9de6484ull;
    static const std::size_t pow   = 63;
 };
 
-#endif
-
 // Returns floor(pow(sqrt(2), x * 2 + 1)).
 // Defined for X from 0 up to the number of bits in size_t minus 1.
 inline std::size_t sqrt2_pow_2xplus1 (std::size_t x)
 {
-   const std::size_t value = (std::size_t)sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::value;
-   const std::size_t pow   = (std::size_t)sqrt2_pow_max<sizeof(std::size_t)*CHAR_BIT>::pow;
+   const std::size_t value = (std::size_t)sqrt2_pow_max<std::size_t>::value;
+   const std::size_t pow   = (std::size_t)sqrt2_pow_max<std::size_t>::pow;
    return (value >> (pow - x)) + 1;
 }
 
