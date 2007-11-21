@@ -402,6 +402,15 @@
 			Name="perf"
 			Filter="">
 			<File
+				RelativePath="..\..\..\perf\Jamfile.v2">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\perf\perf_list.cpp">
 			</File>
 		</Filter>
