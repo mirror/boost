@@ -16,7 +16,7 @@
 
 #include <boost/test/minimal.hpp>
 
-int test_main( int argc, char* argv[] )
+int test_main( int /*argc*/, char* /*argv*/[] )
 {
   using namespace std;
   using namespace boost;
@@ -95,8 +95,16 @@ int test_main( int argc, char* argv[] )
     typedef token_iterator_generator<escaped_list_separator<char> >::type Iter;
     Iter begin = make_token_iterator<string>(test_string.begin(),
       test_string.end(),escaped_list_separator<char>());
+    Iter begin_c(begin);
     Iter end;
     BOOST_REQUIRE(equal(begin,end,answer));
+
+    while(begin_c != end)
+    {
+       BOOST_REQUIRE(begin_c.at_end() == 0);
+       ++begin_c;
+    }
+    BOOST_REQUIRE(begin_c.at_end());
 
   }
 

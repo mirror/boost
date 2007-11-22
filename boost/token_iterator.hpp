@@ -94,7 +94,7 @@ namespace boost
 
       Type current_token()const{return tok_;}
 
-      bool at_end()const{return valid_;}
+      bool at_end()const{return !valid_;}
 
 
 
