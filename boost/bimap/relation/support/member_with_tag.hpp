@@ -94,7 +94,7 @@ struct member_with_tag
 template< class Relation >
 struct member_with_tag
 <
-    BOOST_DEDUCED_TYPENAME member_at::info, Relation, void
+    member_at::info, Relation, void
 >
 {
     typedef member_at::info type;
