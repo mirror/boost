@@ -70,7 +70,14 @@ void run_tests()
 int cpp_main(int /*argc*/, char * /*argv*/[])
 {
 #ifdef TEST_THREADS
-   get_array_data();  // initialises data.
+   try{
+      get_array_data();  // initialises data.
+   }
+   catch(const std::exception& e)
+   {
+      std::cerr << "TSS Initialisation failed with message: " << e.what() << std::endl;
+      return -1;
+   }
 
    std::list<boost::shared_ptr<boost::thread> > threads;
    for(int i = 0; i < 5; ++i)
