@@ -22,7 +22,7 @@ rule change-test_update-exe-name ( name : type ? : property-set )
 { 
     if [ os.on-windows ] && [ type.is-subtype $(type) EXE ]
     {
-        return test_updat ;
+        return test_updat.exe ;
     }
 } 
 
