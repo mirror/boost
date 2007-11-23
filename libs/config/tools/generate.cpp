@@ -30,7 +30,8 @@ std::string copyright(
 "//  Boost Software License, Version 1.0. (See accompanying file \n"
 "//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
 "\n"
-"//  See http://www.boost.org/libs/config for the most recent version.");
+"//  See http://www.boost.org/libs/config for the most recent version."
+"//\n//  Revision $Id$\n//\n");
 
 std::stringstream config_test1;
 std::stringstream config_test1a;
@@ -128,9 +129,9 @@ void write_jamfile_v2()
       "path-constant DOT : . ;\n"
       "include $(DOT)/options_v2.jam ;\n\n"
       "run config_info.cpp ;\n"
-      "run math_info.cpp : : : <toolset>borland:<runtime-link>static ;\n"
+      "run math_info.cpp : : : <toolset>borland:<runtime-link>static <toolset>borland:<link>static ;\n"
       "run config_test.cpp ;\n"
-      "run limits_test.cpp ;\n"
+      "run limits_test.cpp ../../test/build//boost_test_exec_monitor ;\n"
       "run abi/abi_test.cpp abi/main.cpp  ;\n\n";
    ofs << jamfile_v2.str() << std::endl;
 

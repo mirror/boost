@@ -280,6 +280,12 @@ int main()
       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
       "Macros from <math.h>" << std::endl;
 
+#ifdef __BORLANDC__
+   // Turn off hardware exceptions so we don't just abort 
+   // when calling numeric_limits members.
+   _control87(MCW_EM,MCW_EM);
+#endif
+
    PRINT_EXPRESSION(HUGE_VAL);
 #ifdef HUGE_VALF
    PRINT_EXPRESSION(HUGE_VALF);

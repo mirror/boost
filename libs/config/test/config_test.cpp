@@ -1,11 +1,14 @@
-//  This file was automatically generated on Wed Feb 15 14:14:06 2006
+//  This file was automatically generated on Fri Oct 19 13:34:11 2007
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
 //  Boost Software License, Version 1.0. (See accompanying file 
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/libs/config for the most recent version.
+//  See http://www.boost.org/libs/config for the most recent version.//
+//  Revision $Id$
+//
+
 // Test file for config setup
 // This file should compile, if it does not then
 // one or more macros need to be defined.
@@ -94,6 +97,11 @@ namespace boost_no_exception_std_namespace = empty_boost;
 #else
 namespace boost_no_explicit_function_template_arguments = empty_boost;
 #endif
+#ifndef BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
+#include "boost_no_function_type_spec.ipp"
+#else
+namespace boost_no_function_type_specializations = empty_boost;
+#endif
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #include "boost_no_func_tmp_order.ipp"
 #else
@@ -113,6 +121,16 @@ namespace boost_no_inclass_member_initialization = empty_boost;
 #include "boost_no_integral_int64_t.ipp"
 #else
 namespace boost_no_integral_int64_t = empty_boost;
+#endif
+#ifndef BOOST_NO_IOSFWD
+#include "boost_no_iosfwd.ipp"
+#else
+namespace boost_no_iosfwd = empty_boost;
+#endif
+#ifndef BOOST_NO_IOSTREAM
+#include "boost_no_iostream.ipp"
+#else
+namespace boost_no_iostream = empty_boost;
 #endif
 #ifndef BOOST_NO_IS_ABSTRACT
 #include "boost_no_is_abstract.ipp"
@@ -244,6 +262,11 @@ namespace boost_no_std_min_max = empty_boost;
 #else
 namespace boost_no_std_output_iterator_assign = empty_boost;
 #endif
+#ifndef BOOST_NO_STD_TYPEINFO
+#include "boost_no_std_typeinfo.ipp"
+#else
+namespace boost_no_std_typeinfo = empty_boost;
+#endif
 #ifndef BOOST_NO_STD_USE_FACET
 #include "boost_no_std_use_facet.ipp"
 #else
@@ -268,6 +291,16 @@ namespace boost_no_swprintf = empty_boost;
 #include "boost_no_template_template.ipp"
 #else
 namespace boost_no_template_templates = empty_boost;
+#endif
+#ifndef BOOST_NO_TWO_PHASE_NAME_LOOKUP
+#include "boost_no_two_phase_lookup.ipp"
+#else
+namespace boost_no_two_phase_name_lookup = empty_boost;
+#endif
+#ifndef BOOST_NO_TYPEID
+#include "boost_no_typeid.ipp"
+#else
+namespace boost_no_typeid = empty_boost;
 #endif
 #ifndef BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #include "boost_no_using_breaks_adl.ipp"
@@ -309,6 +342,11 @@ namespace boost_has_bethreads = empty_boost;
 #include "boost_has_clock_gettime.ipp"
 #else
 namespace boost_has_clock_gettime = empty_boost;
+#endif
+#ifdef BOOST_HAS_CONCEPTS
+#include "boost_has_concepts.ipp"
+#else
+namespace boost_has_concepts = empty_boost;
 #endif
 #ifdef BOOST_HAS_DIRENT_H
 #include "boost_has_dirent_h.ipp"
@@ -395,6 +433,11 @@ namespace boost_has_pthread_mutexattr_settype = empty_boost;
 #else
 namespace boost_has_pthread_yield = empty_boost;
 #endif
+#ifdef BOOST_HAS_RVALUE_REFS
+#include "boost_has_rvalue_refs.ipp"
+#else
+namespace boost_has_rvalue_refs = empty_boost;
+#endif
 #ifdef BOOST_HAS_SCHED_YIELD
 #include "boost_has_sched_yield.ipp"
 #else
@@ -414,6 +457,11 @@ namespace boost_has_sigaction = empty_boost;
 #include "boost_has_slist.ipp"
 #else
 namespace boost_has_slist = empty_boost;
+#endif
+#ifdef BOOST_HAS_STATIC_ASSERT
+#include "boost_has_static_assert.ipp"
+#else
+namespace boost_has_static_assert = empty_boost;
 #endif
 #ifdef BOOST_HAS_STDINT_H
 #include "boost_has_stdint_h.ipp"
@@ -515,6 +563,11 @@ namespace boost_has_tr1_utility = empty_boost;
 #else
 namespace boost_has_unistd_h = empty_boost;
 #endif
+#ifdef BOOST_HAS_VARIADIC_TMPL
+#include "boost_has_variadic_tmpl.ipp"
+#else
+namespace boost_has_variadic_tmpl = empty_boost;
+#endif
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
 #include "boost_has_vc6_mem_templ.ipp"
 #else
@@ -546,6 +599,11 @@ int main( int, char *[] )
    if(0 != boost_has_clock_gettime::test())
    {
       std::cerr << "Failed test for BOOST_HAS_CLOCK_GETTIME at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_concepts::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_CONCEPTS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_has_dirent_h::test())
@@ -633,6 +691,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_HAS_PTHREAD_YIELD at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_has_rvalue_refs::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_RVALUE_REFS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_has_sched_yield::test())
    {
       std::cerr << "Failed test for BOOST_HAS_SCHED_YIELD at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -651,6 +714,11 @@ int main( int, char *[] )
    if(0 != boost_has_slist::test())
    {
       std::cerr << "Failed test for BOOST_HAS_SLIST at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_static_assert::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_STATIC_ASSERT at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_has_stdint_h::test())
@@ -753,6 +821,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_HAS_UNISTD_H at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_has_variadic_tmpl::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_VARIADIC_TMPL at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_msvc6_member_templates::test())
    {
       std::cerr << "Failed test for BOOST_MSVC6_MEMBER_TEMPLATES at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -843,6 +916,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_function_type_specializations::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_function_template_ordering::test())
    {
       std::cerr << "Failed test for BOOST_NO_FUNCTION_TEMPLATE_ORDERING at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -861,6 +939,16 @@ int main( int, char *[] )
    if(0 != boost_no_integral_int64_t::test())
    {
       std::cerr << "Failed test for BOOST_NO_INTEGRAL_INT64_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_iosfwd::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_IOSFWD at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_iostream::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_IOSTREAM at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_is_abstract::test())
@@ -993,6 +1081,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_std_typeinfo::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_STD_TYPEINFO at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_std_use_facet::test())
    {
       std::cerr << "Failed test for BOOST_NO_STD_USE_FACET at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1016,6 +1109,16 @@ int main( int, char *[] )
    if(0 != boost_no_template_templates::test())
    {
       std::cerr << "Failed test for BOOST_NO_TEMPLATE_TEMPLATES at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_two_phase_name_lookup::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_TWO_PHASE_NAME_LOOKUP at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_typeid::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_TYPEID at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_function_scope_using_declaration_breaks_adl::test())
