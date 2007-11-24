@@ -33,30 +33,30 @@ int flags = REG_EXTENDED | REG_BASIC | REG_NOSPEC | REG_ICASE | REG_NOSUB |
 
 int main()
 {
-   regex_t re;
+   regex_tA re;
    int result;
-   result = regcomp(&re, expression, REG_AWK);
+   result = regcompA(&re, expression, REG_AWK);
    if(result > REG_NOERROR)
    {
       char buf[256];
-      regerror(result, &re, buf, sizeof(buf));
+      regerrorA(result, &re, buf, sizeof(buf));
       printf(buf);
       return result;
    }
    BOOST_TEST(re.re_nsub == 0);
    matches[0].rm_so = 0;
    matches[0].rm_eo = strlen(text);
-   result = regexec(&re, text, 1, matches, REG_NOTBOL | REG_NOTEOL | REG_STARTEND);
+   result = regexecA(&re, text, 1, matches, REG_NOTBOL | REG_NOTEOL | REG_STARTEND);
    if(result > REG_NOERROR)
    {
       char buf[256];
-      regerror(result, &re, buf, sizeof(buf));
+      regerrorA(result, &re, buf, sizeof(buf));
       printf(buf);
-      regfree(&re);
+      regfreeA(&re);
       return result;
    }
    BOOST_TEST(matches[0].rm_so == matches[0].rm_eo == 1);
-   regfree(&re);
+   regfreeA(&re);
    printf("no errors found\n");
    return boost::report_errors();
 }

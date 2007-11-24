@@ -26,6 +26,7 @@ namespace std{ using ::setlocale; }
 
 test_locale::test_locale(const char* c_name, boost::uint32_t lcid)
 {
+#ifndef UNDER_CE
    // store the name:
    m_old_name = m_name;
    m_name = c_name;
@@ -43,6 +44,9 @@ test_locale::test_locale(const char* c_name, boost::uint32_t lcid)
       s_c_locale = no_test;
       std::cout << "The global C locale: " << c_name << " is not available and will not be tested." << std::endl;
    }
+#else
+  s_c_locale = no_test;
+#endif
 #ifndef BOOST_NO_STD_LOCALE
    // back up the C++ locale and create the new one:
    m_old_cpp_locale = s_cpp_locale_inst;
@@ -69,6 +73,7 @@ test_locale::test_locale(const char* c_name, boost::uint32_t lcid)
    // Start by geting the printable name of the locale.
    // We use this for debugging purposes only:
    //
+#ifndef BOOST_NO_ANSI_APIS
    boost::scoped_array<char> p;
    int r = ::GetLocaleInfoA(
                lcid,               // locale identifier
@@ -83,6 +88,43 @@ test_locale::test_locale(const char* c_name, boost::uint32_t lcid)
                p.get(),            // information buffer
                r+1                 // size of buffer
             );
+#else
+   WCHAR code_page_string[7];
+   int r = ::GetLocaleInfoW(
+               lcid, 
+               LOCALE_IDEFAULTANSICODEPAGE, 
+               code_page_string, 
+               7);
+   BOOST_ASSERT(r != 0);
+
+   UINT code_page = static_cast<UINT>(_wtol(code_page_string));
+
+   boost::scoped_array<wchar_t> wp;
+   r = ::GetLocaleInfoW(
+               lcid,               // locale identifier
+               LOCALE_SCOUNTRY,    // information type
+               0,                  // information buffer
+               0                   // size of buffer
+            );
+   wp.reset(new wchar_t[r+1]);
+   r = ::GetLocaleInfoW(
+               lcid,               // locale identifier
+               LOCALE_SCOUNTRY,    // information type
+               wp.get(),            // information buffer
+               r+1                 // size of buffer
+            );
+
+   int name_size = (r+1) * 2;
+   boost::scoped_array<char> p(new char[name_size]);
+   int conv_r = ::WideCharToMultiByte(
+               code_page, 
+               0,  
+               wp.get(), r,  
+               p.get(), name_size,  
+               NULL, NULL
+            );
+   BOOST_ASSERT(conv_r != 0);
+#endif
    //
    // now see if locale is installed and behave accordingly:
    //
@@ -104,8 +146,10 @@ test_locale::test_locale(const char* c_name, boost::uint32_t lcid)
 test_locale::~test_locale()
 {
    // restore to previous state:
+#ifndef UNDER_CE
    std::setlocale(LC_ALL, m_old_c_locale.c_str());
    s_c_locale = m_old_c_state;
+#endif
 #ifndef BOOST_NO_STD_LOCALE
    s_cpp_locale_inst = m_old_cpp_locale;
 #endif

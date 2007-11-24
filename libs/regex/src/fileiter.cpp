@@ -86,7 +86,14 @@ const char* _fi_sep_alt = _fi_sep;
 
 void mapfile::open(const char* file)
 {
-#if defined(__CYGWIN__)||defined(__CYGWIN32__)
+#if defined(BOOST_NO_ANSI_APIS)
+   int filename_size = strlen(file);
+   LPWSTR wide_file = (LPWSTR)_alloca( (filename_size + 1) * sizeof(WCHAR) );
+   if(::MultiByteToWideChar(CP_ACP, 0,  file, filename_size,  wide_file, filename_size + 1) == 0)
+      hfile = INVALID_HANDLE_VALUE;
+   else
+      hfile = CreateFileW(wide_file, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+#elif defined(__CYGWIN__)||defined(__CYGWIN32__)
    char win32file[ MAX_PATH ];
    cygwin_conv_to_win32_path( file, win32file );
    hfile = CreateFileA(win32file, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
@@ -350,6 +357,48 @@ void mapfile::close()
 
 #endif
 
+inline _fi_find_handle find_first_file(const char* wild,  _fi_find_data& data)
+{
+#ifdef BOOST_NO_ANSI_APIS
+   std::size_t wild_size = std::strlen(wild);
+   LPWSTR wide_wild = (LPWSTR)_alloca( (wild_size + 1) * sizeof(WCHAR) );
+   if (::MultiByteToWideChar(CP_ACP, 0,  wild, wild_size,  wide_wild, wild_size + 1) == 0)
+      return _fi_invalid_handle;
+
+   return FindFirstFileW(wide_wild, &data);
+#else
+   return FindFirstFileA(wild, &data);
+#endif
+}
+
+inline bool find_next_file(_fi_find_handle hf,  _fi_find_data& data)
+{
+#ifdef BOOST_NO_ANSI_APIS
+   return FindNextFileW(hf, &data);
+#else
+   return FindNextFileA(hf, &data);
+#endif
+}
+   
+inline void copy_find_file_result_with_overflow_check(const _fi_find_data& data,  char* path, size_t max_size)
+{
+#ifdef BOOST_NO_ANSI_APIS
+   if (::WideCharToMultiByte(CP_ACP, 0,  data.cFileName, -1,  path, max_size,  NULL, NULL) == 0)
+      re_detail::overflow_error_if_not_zero(1);
+#else
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(path, max_size,  data.cFileName));
+#endif
+}
+
+inline bool is_not_current_or_parent_path_string(const _fi_find_data& data)
+{
+#ifdef BOOST_NO_ANSI_APIS
+   return (std::wcscmp(data.cFileName, L".") && std::wcscmp(data.cFileName, L".."));
+#else
+   return (std::strcmp(data.cFileName, ".") && std::strcmp(data.cFileName, ".."));
+#endif
+}
+
 
 file_iterator::file_iterator()
 {
@@ -413,7 +462,7 @@ file_iterator::file_iterator(const char* wild)
 
    ref = new file_iterator_ref();
    BOOST_REGEX_NOEH_ASSERT(ref)
-   ref->hf = FindFirstFileA(wild, &(ref->_data));
+   ref->hf = find_first_file(wild,  ref->_data);
    ref->count = 1;
 
    if(ref->hf == _fi_invalid_handle)
@@ -423,7 +472,7 @@ file_iterator::file_iterator(const char* wild)
    }
    else
    {
-      re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, (MAX_PATH - (ptr - _path)), ref->_data.cFileName));
+      copy_find_file_result_with_overflow_check(ref->_data,  ptr, (MAX_PATH - (ptr - _path)));
       if(ref->_data.dwFileAttributes & _fi_dir)
          next();
    }
@@ -510,7 +559,7 @@ void file_iterator::next()
       bool cont = true;
       while(cont)
       {
-         cont = FindNextFileA(ref->hf, &(ref->_data));
+         cont = find_next_file(ref->hf, ref->_data);
          if(cont && ((ref->_data.dwFileAttributes & _fi_dir) == 0))
             break;
       }
@@ -523,7 +572,7 @@ void file_iterator::next()
          ptr = _path;
       }
       else
-         re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, MAX_PATH - (ptr - _path), ref->_data.cFileName));
+         copy_find_file_result_with_overflow_check(ref->_data,  ptr, MAX_PATH - (ptr - _path));
    }
 }
 
@@ -593,7 +642,7 @@ directory_iterator::directory_iterator(const char* wild)
    ref = new file_iterator_ref();
    BOOST_REGEX_NOEH_ASSERT(ref)
    ref->count = 1;
-   ref->hf = FindFirstFileA(wild, &(ref->_data));
+   ref->hf = find_first_file(wild,  ref->_data);
    if(ref->hf == _fi_invalid_handle)
    {
       *_path = 0;
@@ -601,8 +650,8 @@ directory_iterator::directory_iterator(const char* wild)
    }
    else
    {
-      re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, MAX_PATH - (ptr - _path), ref->_data.cFileName));
-      if(((ref->_data.dwFileAttributes & _fi_dir) == 0) || (std::strcmp(ref->_data.cFileName, ".") == 0) || (std::strcmp(ref->_data.cFileName, "..") == 0))
+      copy_find_file_result_with_overflow_check(ref->_data,  ptr, MAX_PATH - (ptr - _path));
+      if(((ref->_data.dwFileAttributes & _fi_dir) == 0) || (std::strcmp(ptr, ".") == 0) || (std::strcmp(ptr, "..") == 0))
          next();
    }
 #ifndef BOOST_NO_EXCEPTIONS
@@ -686,10 +735,10 @@ void directory_iterator::next()
       bool cont = true;
       while(cont)
       {
-         cont = FindNextFileA(ref->hf, &(ref->_data));
+         cont = find_next_file(ref->hf, ref->_data);
          if(cont && (ref->_data.dwFileAttributes & _fi_dir))
          {
-            if(std::strcmp(ref->_data.cFileName, ".") && std::strcmp(ref->_data.cFileName, ".."))
+            if(is_not_current_or_parent_path_string(ref->_data))
                break;
          }
       }
@@ -702,7 +751,7 @@ void directory_iterator::next()
          ptr = _path;
       }
       else
-         re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, MAX_PATH - (ptr - _path), ref->_data.cFileName));
+         copy_find_file_result_with_overflow_check(ref->_data,  ptr, MAX_PATH - (ptr - _path));
    }
 }
 

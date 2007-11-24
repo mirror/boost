@@ -143,7 +143,7 @@ int main(int argc, char**argv)
    boost::match_results<std::deque<char>::iterator> dm;
    std::string s1, s2, ts;
    std::deque<char> ds;
-   boost::regex_t r;
+   boost::regex_tA r;
    boost::scoped_array<boost::regmatch_t> matches;
    std::size_t nsubs;
    boost::timer t;
@@ -175,12 +175,12 @@ int main(int argc, char**argv)
          cout << "Error in expression: \"" << e.what() << "\"" << endl;
          continue;
       }
-      int code = regcomp(&r, s1.c_str(), boost::REG_PERL);
+      int code = regcompA(&r, s1.c_str(), boost::REG_PERL);
       if(code != 0)
       {
          char buf[256];
-         regerror(code, &r, buf, 256);
-         cout << "regcomp error: \"" << buf << "\"" << endl;
+         regerrorA(code, &r, buf, 256);
+         cout << "regcompA error: \"" << buf << "\"" << endl;
          continue;
       }
       nsubs = r.re_nsub + 1;
@@ -324,17 +324,17 @@ int main(int argc, char**argv)
          iters = 10;
          tim = 1.1;
          // cache load:
-         regexec(&r, s2.c_str(), nsubs, matches.get(), 0);
+         regex_tA(&r, s2.c_str(), nsubs, matches.get(), 0);
          do{
             iters *= (tim > 0.001) ? (1.1/tim) : 100;
             t.restart();
             for(i = 0; i < iters; ++i)
             {
-               result = regexec(&r, s2.c_str(), nsubs, matches.get(), 0);
+               result = regex_tA(&r, s2.c_str(), nsubs, matches.get(), 0);
             }
             tim = t.elapsed();
          }while(tim < wait_time);
-         cout << "POSIX regexec time: " << (tim * 1000000 / iters) << "us" << endl;
+         cout << "POSIX regex_tA time: " << (tim * 1000000 / iters) << "us" << endl;
 
          if(result == 0)
          {
@@ -360,7 +360,7 @@ int main(int argc, char**argv)
             cout << "\" (matched=" << (matches[0].rm_eo != s2.size()) << ")" << endl << endl;
          }
       }
-      regfree(&r);
+      regfreeA(&r);
    }
 
    if(pbuf)
@@ -372,7 +372,7 @@ int main(int argc, char**argv)
    return 0;
 }
 
-#if defined(_WIN32) && defined(BOOST_REGEX_USE_WIN32_LOCALE)
+#if defined(_WIN32) && defined(BOOST_REGEX_USE_WIN32_LOCALE) && !defined(UNDER_CE)
 #pragma comment(lib, "user32.lib")
 #endif
 

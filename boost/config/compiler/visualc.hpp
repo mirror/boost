@@ -82,9 +82,10 @@
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
-#ifdef _WIN32_WCE
+#if defined(_WIN32_WCE) || defined(UNDER_CE)
 #  define BOOST_NO_THREADEX
 #  define BOOST_NO_GETSYSTEMTIMEASFILETIME
+#  define BOOST_NO_SWPRINTF
 #endif
 
 //   

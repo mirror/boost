@@ -30,7 +30,7 @@
 #define NOGDI
 #include <windows.h>
 
-#if defined(_MSC_VER) && !defined(_WIN32_WCE)
+#if defined(_MSC_VER) && !defined(_WIN32_WCE) && !defined(UNDER_CE)
 #pragma comment(lib, "user32.lib")
 #endif
 
@@ -41,6 +41,18 @@ namespace std{
 #endif
 
 namespace boost{ namespace re_detail{
+
+#ifdef BOOST_NO_ANSI_APIS
+UINT get_code_page_for_locale_id(lcid_type id)
+{
+   WCHAR code_page_string[7];
+   if (::GetLocaleInfoW(id, LOCALE_IDEFAULTANSICODEPAGE, code_page_string, 7) == 0)
+       return 0;
+
+   return static_cast<UINT>(_wtol(code_page_string));
+}
+#endif
+
 
 void w32_regex_traits_char_layer<char>::init() 
 {
@@ -106,8 +118,24 @@ void w32_regex_traits_char_layer<char>::init()
    char char_map[1 << CHAR_BIT];
    for(int ii = 0; ii < (1 << CHAR_BIT); ++ii)
       char_map[ii] = static_cast<char>(ii);
+#ifndef BOOST_NO_ANSI_APIS
    int r = ::LCMapStringA(this->m_locale, LCMAP_LOWERCASE, char_map, 1 << CHAR_BIT, this->m_lower_map, 1 << CHAR_BIT);
    BOOST_ASSERT(r != 0);
+#else
+   UINT code_page = get_code_page_for_locale_id(this->m_locale);
+   BOOST_ASSERT(code_page != 0);
+
+   WCHAR wide_char_map[1 << CHAR_BIT];
+   int conv_r = ::MultiByteToWideChar(code_page, 0,  char_map, 1 << CHAR_BIT,  wide_char_map, 1 << CHAR_BIT);
+   BOOST_ASSERT(conv_r != 0);
+
+   WCHAR wide_lower_map[1 << CHAR_BIT];
+   int r = ::LCMapStringW(this->m_locale, LCMAP_LOWERCASE,  wide_char_map, 1 << CHAR_BIT,  wide_lower_map, 1 << CHAR_BIT);
+   BOOST_ASSERT(r != 0);
+
+   conv_r = ::WideCharToMultiByte(code_page, 0,  wide_lower_map, r,  this->m_lower_map, 1 << CHAR_BIT,  NULL, NULL);
+   BOOST_ASSERT(conv_r != 0);
+#endif
    if(r < (1 << CHAR_BIT))
    {
       // if we have multibyte characters then not all may have been given
@@ -115,7 +143,12 @@ void w32_regex_traits_char_layer<char>::init()
       for(int jj = r; jj < (1 << CHAR_BIT); ++jj)
          this->m_lower_map[jj] = static_cast<char>(jj);
    }
+
+#ifndef BOOST_NO_ANSI_APIS
    r = ::GetStringTypeExA(this->m_locale, CT_CTYPE1, char_map, 1 << CHAR_BIT, this->m_type_map);
+#else
+   r = ::GetStringTypeExW(this->m_locale, CT_CTYPE1, wide_char_map, 1 << CHAR_BIT, this->m_type_map);
+#endif
    BOOST_ASSERT(0 != r);
 }
 
@@ -126,18 +159,48 @@ BOOST_REGEX_DECL lcid_type BOOST_REGEX_CALL w32_get_default_locale()
 
 BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(char c, lcid_type id)
 {
+#ifndef BOOST_NO_ANSI_APIS
    WORD mask;
    if(::GetStringTypeExA(id, CT_CTYPE1, &c, 1, &mask) && (mask & C1_LOWER))
       return true;
    return false;
+#else
+   UINT code_page = get_code_page_for_locale_id(id);
+   if (code_page == 0)
+       return false;
+
+   WCHAR wide_c;
+   if (::MultiByteToWideChar(code_page, 0,  &c, 1,  &wide_c, 1) == 0)
+       return false;
+
+   WORD mask;
+   if(::GetStringTypeExW(id, CT_CTYPE1, &wide_c, 1, &mask) && (mask & C1_LOWER))
+      return true;
+   return false;
+#endif
 }
 
 BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(wchar_t c, lcid_type id)
 {
+#ifndef BOOST_NO_ANSI_APIS
    WORD mask;
    if(::GetStringTypeExW(id, CT_CTYPE1, &c, 1, &mask) && (mask & C1_LOWER))
       return true;
    return false;
+#else
+   UINT code_page = get_code_page_for_locale_id(id);
+   if (code_page == 0)
+       return false;
+
+   WCHAR wide_c;
+   if (::MultiByteToWideChar(code_page, 0,  &c, 1,  &wide_c, 1) == 0)
+       return false;
+
+   WORD mask;
+   if(::GetStringTypeExW(id, CT_CTYPE1, &wide_c, 1, &mask) && (mask & C1_UPPER))
+      return true;
+   return false;
+#endif
 }
 #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
 BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(unsigned short ca, lcid_type id)
@@ -183,12 +246,21 @@ void free_module(void* mod)
 
 BOOST_REGEX_DECL cat_type BOOST_REGEX_CALL w32_cat_open(const std::string& name)
 {
+#ifndef BOOST_NO_ANSI_APIS
    cat_type result(::LoadLibraryA(name.c_str()), &free_module);
    return result;
+#else
+   LPWSTR wide_name = (LPWSTR)_alloca( (name.size() + 1) * sizeof(WCHAR) );
+   if (::MultiByteToWideChar(CP_ACP, 0,  name.c_str(), name.size(),  wide_name, name.size() + 1) == 0)
+       return cat_type();
+
+   cat_type result(::LoadLibraryW(wide_name), &free_module);
+#endif
 }
 
 BOOST_REGEX_DECL std::string BOOST_REGEX_CALL w32_cat_get(const cat_type& cat, lcid_type, int i, const std::string& def)
 {
+#ifndef BOOST_NO_ANSI_APIS
    char buf[256];
    if(0 == ::LoadStringA(
       static_cast<HMODULE>(cat.get()),
@@ -199,6 +271,21 @@ BOOST_REGEX_DECL std::string BOOST_REGEX_CALL w32_cat_get(const cat_type& cat, l
    {
       return def;
    }
+#else
+   WCHAR wbuf[256];
+   int r = ::LoadStringW(
+      static_cast<HMODULE>(cat.get()),
+      i,
+      wbuf,
+      256
+   );
+   if (r == 0)
+      return def;
+
+   LPSTR buf = (LPSTR)_alloca( (r + 1) * 2 );
+   if (::WideCharToMultiByte(CP_ACP, 0,  wbuf, r,  buf, (r + 1) * 2,  NULL, NULL) == 0)
+      return def;
+#endif
    return std::string(buf);
 }
 
@@ -236,6 +323,7 @@ BOOST_REGEX_DECL std::basic_string<unsigned short> BOOST_REGEX_CALL w32_cat_get(
 #endif
 BOOST_REGEX_DECL std::string BOOST_REGEX_CALL w32_transform(lcid_type id, const char* p1, const char* p2)
 {
+#ifndef BOOST_NO_ANSI_APIS
    int bytes = ::LCMapStringA(
       id,       // locale identifier
       LCMAP_SORTKEY,  // mapping transformation type
@@ -255,6 +343,36 @@ BOOST_REGEX_DECL std::string BOOST_REGEX_CALL w32_transform(lcid_type id, const 
       &*result.begin(),  // destination buffer
       bytes        // size of destination buffer
       );
+#else
+   UINT code_page = get_code_page_for_locale_id(id);
+   if(code_page == 0)
+      return std::string(p1, p2);
+
+   int src_len = static_cast<int>(p2 - p1);
+   LPWSTR wide_p1 = (LPWSTR)_alloca( (src_len + 1) * 2 );
+   if(::MultiByteToWideChar(code_page, 0,  p1, src_len,  wide_p1, src_len + 1) == 0)
+      return std::string(p1, p2);
+
+   int bytes = ::LCMapStringW(
+      id,       // locale identifier
+      LCMAP_SORTKEY,  // mapping transformation type
+      wide_p1,  // source string
+      src_len,        // number of characters in source string
+      0,  // destination buffer
+      0        // size of destination buffer
+      );
+   if(!bytes)
+      return std::string(p1, p2);
+   std::string result(++bytes, '\0');
+   bytes = ::LCMapStringW(
+      id,       // locale identifier
+      LCMAP_SORTKEY,  // mapping transformation type
+      wide_p1,  // source string
+      src_len,        // number of characters in source string
+      (LPWSTR)&*result.begin(),  // destination buffer
+      bytes        // size of destination buffer
+      );
+#endif
    if(bytes > static_cast<int>(result.size()))
       return std::string(p1, p2);
    while(result.size() && result[result.size()-1] == '\0')
@@ -335,6 +453,7 @@ BOOST_REGEX_DECL std::basic_string<unsigned short> BOOST_REGEX_CALL w32_transfor
 BOOST_REGEX_DECL char BOOST_REGEX_CALL w32_tolower(char c, lcid_type id)
 {
    char result[2];
+#ifndef BOOST_NO_ANSI_APIS
    int b = ::LCMapStringA(
       id,       // locale identifier
       LCMAP_LOWERCASE,  // mapping transformation type
@@ -344,6 +463,29 @@ BOOST_REGEX_DECL char BOOST_REGEX_CALL w32_tolower(char c, lcid_type id)
       1);        // size of destination buffer
    if(b == 0)
       return c;
+#else
+   UINT code_page = get_code_page_for_locale_id(id);
+   if (code_page == 0)
+      return c;
+
+   WCHAR wide_c;
+   if (::MultiByteToWideChar(code_page, 0,  &c, 1,  &wide_c, 1) == 0)
+      return c;
+
+   WCHAR wide_result;
+   int b = ::LCMapStringW(
+      id,       // locale identifier
+      LCMAP_LOWERCASE,  // mapping transformation type
+      &wide_c,  // source string
+      1,        // number of characters in source string
+      &wide_result,  // destination buffer
+      1);        // size of destination buffer
+   if(b == 0)
+      return c;
+
+   if (::WideCharToMultiByte(code_page, 0,  &wide_result, 1,  result, 2,  NULL, NULL) == 0)
+       return c;
+#endif
    return result[0];
 }
 
@@ -382,6 +524,7 @@ BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL w32_tolower(unsigned short c, l
 BOOST_REGEX_DECL char BOOST_REGEX_CALL w32_toupper(char c, lcid_type id)
 {
    char result[2];
+#ifndef BOOST_NO_ANSI_APIS
    int b = ::LCMapStringA(
       id,       // locale identifier
       LCMAP_UPPERCASE,  // mapping transformation type
@@ -391,6 +534,29 @@ BOOST_REGEX_DECL char BOOST_REGEX_CALL w32_toupper(char c, lcid_type id)
       1);        // size of destination buffer
    if(b == 0)
       return c;
+#else
+   UINT code_page = get_code_page_for_locale_id(id);
+   if(code_page == 0)
+       return c;
+
+   WCHAR wide_c;
+   if (::MultiByteToWideChar(code_page, 0,  &c, 1,  &wide_c, 1) == 0)
+       return c;
+
+   WCHAR wide_result;
+   int b = ::LCMapStringW(
+      id,       // locale identifier
+      LCMAP_UPPERCASE,  // mapping transformation type
+      &wide_c,  // source string
+      1,        // number of characters in source string
+      &wide_result,  // destination buffer
+      1);        // size of destination buffer
+   if(b == 0)
+      return c;
+
+   if (::WideCharToMultiByte(code_page, 0,  &wide_result, 1,  result, 2,  NULL, NULL) == 0)
+       return c;
+#endif
    return result[0];
 }
 
@@ -429,8 +595,21 @@ BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL w32_toupper(unsigned short c, l
 BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is(lcid_type id, boost::uint32_t m, char c)
 {
    WORD mask;
+#ifndef BOOST_NO_ANSI_APIS
    if(::GetStringTypeExA(id, CT_CTYPE1, &c, 1, &mask) && (mask & m & w32_regex_traits_implementation<char>::mask_base))
       return true;
+#else
+   UINT code_page = get_code_page_for_locale_id(id);
+   if(code_page == 0)
+       return false;
+
+   WCHAR wide_c;
+   if (::MultiByteToWideChar(code_page, 0,  &c, 1,  &wide_c, 1) == 0)
+       return false;
+
+   if(::GetStringTypeExW(id, CT_CTYPE1, &wide_c, 1, &mask) && (mask & m & w32_regex_traits_implementation<char>::mask_base))
+      return true;
+#endif
    if((m & w32_regex_traits_implementation<char>::mask_word) && (c == '_'))
       return true;
    return false;
