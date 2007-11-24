@@ -267,14 +267,15 @@ namespace boost
         template<class Source>
         struct lcast_src_length_integral
         {
-#if !defined(__BORLANDC__) || __BORLANDC__ >= 0x581
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
             BOOST_STATIC_CONSTANT(std::size_t, value =
                   std::numeric_limits<Source>::is_signed +
                   std::numeric_limits<Source>::is_specialized + // == 1
                   std::numeric_limits<Source>::digits10 * 2
               );
 #else
-            BOOST_STATIC_CONSTANT(std::size_t, value = 156); // 256bit integers
+            BOOST_STATIC_CONSTANT(std::size_t, value = 156);
+            BOOST_STATIC_ASSERT(sizeof(Source) * CHAR_BIT <= 256);
 #endif
         };
 
@@ -400,14 +401,8 @@ namespace boost
 #endif
     }
 
-    namespace detail // lexical_streambuf and lexical_streambuf_fake
+    namespace detail // lexical_streambuf_fake
     {
-        template<typename CharT>
-        class lexical_streambuf : public std::basic_streambuf<CharT>
-        {
-        };
-
-        template<typename CharT>
         struct lexical_streambuf_fake
         {
         };
@@ -448,7 +443,8 @@ namespace boost
 #endif
 
 #if (defined _MSC_VER)
-# pragma warning( pop ) // C4146: unary minus operator applied to unsigned type, result still unsigned
+# pragma warning( pop ) // C4146: unary minus operator applied to unsigned type,
+                        // result still unsigned
 #endif
     }
 
@@ -459,6 +455,9 @@ namespace boost
         template<typename T, typename CharT>
         CharT* lcast_put_unsigned(T n, CharT* finish)
         {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+            BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+#endif
             CharT thousands_sep = 0;
 
 #ifdef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
@@ -586,7 +585,7 @@ namespace boost
     {
         // String representation of Source has an upper limit.
         template< class CharT // a result of widest_char transformation
-                , class Base  // lexical_streambuf or lexical_streambuf_fake
+                , class Base // lexical_streambuf_fake or basic_streambuf<CharT>
                 >
         class lexical_stream_limited_src : public Base
         {
@@ -913,7 +912,7 @@ namespace boost
 
     namespace detail // lcast_streambuf_for_source
     {
-        // Returns true if optimized stream wrapper uses ostream for formatting.
+        // Returns true if optimized stream wrapper needs ostream for writing.
         template<class Source>
         struct lcast_streambuf_for_source
         {
@@ -941,7 +940,7 @@ namespace boost
 
     namespace detail // lcast_streambuf_for_target
     {
-        // Returns true if optimized stream wrapper use istream for reading.
+        // Returns true if optimized stream wrapper needs istream for reading.
         template<class Target>
         struct lcast_streambuf_for_target
         {
@@ -1025,8 +1024,8 @@ namespace boost
             typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                 lcast_streambuf_for_target<Target>::value ||
                 lcast_streambuf_for_source<Source>::value
-              , lexical_streambuf<CharT>
-              , lexical_streambuf_fake<CharT>
+              , std::basic_streambuf<CharT>
+              , lexical_streambuf_fake
               >::type base;
 
             BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
@@ -1091,7 +1090,7 @@ namespace boost
 }
 
 // Copyright Kevlin Henney, 2000-2005.
-// Copyright Alexander Nasonov, 2006.
+// Copyright Alexander Nasonov, 2006-2007.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
