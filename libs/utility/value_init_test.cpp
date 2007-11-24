@@ -74,9 +74,15 @@ bool operator == ( AggregatePODStruct const& lhs, AggregatePODStruct const& rhs 
 { return lhs.f == rhs.f && lhs.c == rhs.c && lhs.i == rhs.i ; }
 
 
+//
+// This test function tests boost::value_initialized<T> for a specific type T.
+// The first argument (y) is assumed have the value of a value-initialized object.
+// Returns true on success.
+//
 template<class T>
-void test ( T const& y, T const& z )
+bool test ( T const& y, T const& z )
 {
+  const boost::unit_test::counter_t counter_before_test = boost::minimal_test::errors_counter();
   boost::value_initialized<T> x ;
   BOOST_CHECK ( y == x ) ;
   BOOST_CHECK ( y == boost::get(x) ) ;
@@ -100,21 +106,22 @@ void test ( T const& y, T const& z )
   BOOST_CHECK ( y == cx_c ) ;
   BOOST_CHECK ( y == boost::get(cx_c) ) ;
 #endif
+  return boost::minimal_test::errors_counter() == counter_before_test ;
 }
 
 int test_main(int, char **)
 {
-  test( 0,1234 ) ;
-  test( 0.0,12.34 ) ;
-  test( POD(0,0,0.0), POD('a',1234,56.78) ) ;
-  test( NonPOD( std::string() ), NonPOD( std::string("something") ) ) ;
+  BOOST_CHECK ( test( 0,1234 ) ) ;
+  BOOST_CHECK ( test( 0.0,12.34 ) ) ;
+  BOOST_CHECK ( test( POD(0,0,0.0), POD('a',1234,56.78) ) ) ;
+  BOOST_CHECK ( test( NonPOD( std::string() ), NonPOD( std::string("something") ) ) ) ;
 
   NonPOD NonPOD_object( std::string("NonPOD_object") );
-  test<NonPOD *>( 0, &NonPOD_object ) ;
+  BOOST_CHECK ( test<NonPOD *>( 0, &NonPOD_object ) ) ;
 
   AggregatePODStruct zeroInitializedAggregatePODStruct = { 0.0f, '\0', 0 };
   AggregatePODStruct nonZeroInitializedAggregatePODStruct = { 1.25f, 'a', -1 };
-  test(zeroInitializedAggregatePODStruct, nonZeroInitializedAggregatePODStruct);
+  BOOST_CHECK ( test(zeroInitializedAggregatePODStruct, nonZeroInitializedAggregatePODStruct) );
 
   return 0;
 }
