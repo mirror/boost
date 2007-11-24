@@ -25,10 +25,6 @@ namespace boost
       //
       struct iso_9660_limits
       {
-          enum { max_directory_depth = 8 };
-          enum { max_dirname_length = 31 };
-          enum { max_filename_length = 31 }; // > level 2!
-
           static const char name[];
       };
 
