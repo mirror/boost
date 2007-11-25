@@ -1,3 +1,10 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section String Splitting and Tokenization]
 
 _regex_token_iterator_ is the Ginsu knife of the text manipulation world. It slices! It dices! This section describes
@@ -42,7 +49,7 @@ face
 [h2 Example 2: Simple Tokenization, Reloaded]
 
 This example also uses _regex_token_iterator_ to chop a sequence into a series of tokens consisting of words,
-but it uses the regex as a delimiter. When we pass a `-1` as the last parameter to the _regex_token_iterator_ 
+but it uses the regex as a delimiter. When we pass a `-1` as the last parameter to the _regex_token_iterator_
 constructor, it instructs the token iterator to consider as tokens those parts of the input that ['didn't]
 match the regex.
 
@@ -125,6 +132,6 @@ This program displays the following:
 The `sub_matches` array instructs the _regex_token_iterator_ to first take the value of the 2nd sub-match, then
 the 1st sub-match, and finally the 3rd. Incrementing the iterator again instructs it to use _regex_search_ again
 to find the next match. At that point, the process repeats -- the token iterator takes the value of the 2nd
-sub-match, then the 1st, et cetera. 
+sub-match, then the 1st, et cetera.
 
 [endsect]

@@ -15,6 +15,8 @@ TODO (known issues):
   function.
 - Fix the trigraph backslash problem in the re2c (C/C++ and IDL) scanners, if 
   there is the end of the (internal) buffer just in between a '??/' and a '\n'.
+- Change the cpp_exception::what() function to return more meaningful error 
+  texts.
   
 - Do a sourceforge release.
 
@@ -22,6 +24,134 @@ TODO (known issues):
 
 CHANGELOG
 
+- Wave Version 1.3
+- Changed the return value of the 'evaluated_conditional_expression()' pp hook
+  to 'bool' allowing to force Wave to re-evaluate the current conditional
+  expression. This was suggested by Felipe Magno de Almeida.
+- Added a wave::context object as first parameter to all pp hook functions. 
+  This is an interface compatibility breaking change. The new pp-hooks can be 
+  disabled by defining the BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 
+  compile time constant to something not equal to zero. By default this 
+  constant will be defined to zero for Boost V1.35.0 and newer, switching to
+  the new interface by default.
+- Added optional support for the import keyword (needed for the C++ module
+  proposal). The identifier import will be recognized as a keyword, if 
+  the compile time constant BOOST_WAVE_SUPPORT_IMPORT_KEYWORD is defined to 
+  something not equal zero.
+- Added new preprocessing hook functions: found_error_directive() and 
+  found_warning_directive() to be called when #error/#warning directives are
+  encountered. This was suggested by Andreas Sæbjørnsen.
+- Added a new sample to Wave: hannibal, a partial C++ parser implementation
+  initially written by Danny Havenith (http://havenith-verlinden.nl/hannibal/)
+  who agreed to add this here. Thanks!
+- Added new preprocessing hook function: found_line_directive() to be called 
+  when a #line directive is encountered. This was suggested by Andreas
+  Sæbjørnsen.
+- Improved command line handling for the wave applet.
+- Incorporated latest bug fixes for the Hannibal sample provided by Danny 
+  Havenith. 
+- Added loading of a wave.cfg file from anywhere up the filesystem hierarchy 
+  starting from the main input file for the wave driver applet up to the 
+  root of the file system.
+- Added support_option_emit_pragma_directive to allow to control at runtime,
+  whether unknown #pragma directives should be emitted or not. To maintain 
+  compatibility with earlier versions this option is by default on if the
+  compile time constant BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES was defined to 
+  be not equal to zero and it is off otherwise.
+- Enabled XML serialization support.
+- Added the throw_exception preprocessing hook, which gets called for every 
+  occurring error (whenever an exception would have been thrown). The default
+  of this new hook function is to throw the corresponding exception, which 
+  reproduces the old behavior.
+- Implemented a new preprocessing hook: generated_token(), which get's called
+  whenever a token is about to be returned form the library. This function may
+  be used to alter the token before it gets returned to the calling 
+  application.
+- Added a new sample 'real_positions' demonstrating the new generated_token()
+  preprocessing hook and showing how to use Wave with a new token type without 
+  using a new lexer type.
+- Factored out the pure lex_input_interface to simplify writing different lexer 
+  types for Wave.
+- Added the token_statistics sample showing how to use Xpressive to build a 
+  lexer for Wave.
+- Changed the list_includes sample to use a lexer which is based on the lexertl 
+  library written by Ben Hanson (http://www.benhanson.net/lexertl.html).
+- Added a new support_option: insert_whitespace, allowing to switch off 
+  whitespace insertion which is normally (by default) in place to disambiugate
+  C++ tokens, which would otherwise form different tokens in the output.
+- Added a new commandline option to the Wave applet: --disambiguate, allowing
+  to control whitespace insertion. The default value for this option is 
+  --disambiguate=1, resembling the previous behaviour. Specifying the option
+  --disambiguate=0 allows to suppress whitespace insertion alltogether.
+- Added pragma option values push and pop to the line, preserve and output 
+  options allowing to store and restore the current option. The syntax is:
+    #pragma wave options(<option>: push) and
+    #pragma wave options(<option>: pop)
+  where <option> may be line, preserve or output. Thanks to Eric Niebler for 
+  suggesting this feature.
+- Added the possibility to use static pre-compiled DFA tables for the lexertl 
+  based lexer.
+- Incorporated the changes from Andrei's latest version of the flex_string 
+  class.
+- Added the is_macro_defined(name) function to the context object as described 
+  in the documentation. This function is usable with any string type compatible 
+  with std::string.
+- Changed behavior of the --force_include functionality, which now looks for 
+  the file to be (force-)included in the current directory first.
+- Switched to Re2C V0.11.2
+- Added const specifiers to some of the context member functions.
+- Fixed a problem in the SLex C++ lexer (cpp_tokens example).
+- Fixed a runtime problem in the Re2C generated lexers when feeded with
+  empty input files (thanks to Leo Davis for reporting and providing a patch).
+- Added the is_eoi() function to token classes, returning true if the token
+  has been initialized to be the end of input token (T_EOI) (thanks to Ovanes 
+  Markarian for suggesting this).
+- Added missing #includes <cstring>, <cstdlib>, and <new> to flex_string.hpp.
+- Added missing #include <climits> to cpp_chlit_grammar.hpp.
+- Changed found_include_directive hook function to return a bool indicating, 
+  whether the file should be included (true) or skipped (false). Thanks to 
+  Felipe Magno de Almeida for suggesting this feature.
+- Added code to the wave driver applet ignoring a #import directive (the whole
+  directive is passed through to the output) whenever the pp constant 
+  BOOST_WAVE_SUPPORT_MS_EXTENSIONS is defined to something not equal to zero.
+- Fixed the wave driver applet to correctly continue after a error or warning.
+- Added a macro introspection facility allowing to iterate on all defined macro 
+  names.
+- Added a new commandline option --macronames/-m to the Wave driver application
+  which lists all defined macros and their definitions to an optionally 
+  specified file (default is cout).
+- Fixed configuration to take into account thread related build settings.
+- Added the BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS pp constant allowing
+  to recognize large integer literals (larger in size than long/unsigned long) 
+  even if these do not have a 'll' suffix. This pp constant is effective only, 
+  if the target platform supports long long integers (BOOST_HAS_LONG_LONG is 
+  defined).
+- The following preprocessing hooks now return a boolean value, which when 
+  returning 'true' cause the Wave library to skip the execution of the related 
+  preprocessing action:
+    . found_directive: allows to skip the whole directive it is called for
+    . expanding_object_like_macro: allows to skip expansion of the given object
+        like macro, the macro symbol is copied to the output
+    . expanding_function_like_macro: allows to skip the expansion of the given
+        function like macro, the whole macro invocation (including all 
+        macro invocation parameters) are copied to the output without any 
+        further processing.
+- Changed the interpretation of the return value of the found_include_directive 
+  preprocessing hook: a return value of 'false' now processes the file 
+  to be included normally and a return value of 'true' now skips the processing 
+  of the include file directive (the file doesn't get included). 
+  This change was necessary to make the return values of the preprocessing 
+  hooks consistent. Now return 'false' generally means: normal execution and 
+  return 'true' generally means: skip execution of the corresponding 
+  preprocessor action.
+- Fixed compilation problems on gcc, fixed ambiguity with boost code (detail 
+  namespace was ambigious).
+- Fixed predefined macro support to be thread safe.
+- Added missing file to real_positions example. Thanks to Ludovic Aubert for 
+  spotting the problem.
+- Unterminated C++/C comment diagnostics are now a warning and not an error 
+  anymore.
+  
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
@@ -180,7 +310,8 @@ Boost V1.34.0
   generation of a #line directive.
 - Worked around a linker issue for the True64/CXX compiler, complaining about
   multiple defined symbols when using the flex_string class.
-  
+- Added missing documentation for the context::get_macro_definition function.
+
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

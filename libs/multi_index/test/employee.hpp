@@ -1,6 +1,6 @@
 /* Used in Boost.MultiIndex tests.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <ostream>
 #include <string>
+#include "non_std_allocator.hpp"
 
 struct employee
 {
@@ -92,7 +93,8 @@ struct employee_set_indices:
 typedef
   boost::multi_index::multi_index_container<
     employee,
-    employee_set_indices>                employee_set;
+    employee_set_indices,
+    non_std_allocator<employee> >        employee_set;
 
 #if defined(BOOST_NO_MEMBER_TEMPLATES)
 typedef boost::multi_index::nth_index<

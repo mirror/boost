@@ -561,10 +561,10 @@ concept if the following expressions are valid and respect the stated
 semantics.</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="32%" />
-<col width="29%" />
-<col width="13%" />
+<col width="37%" />
 <col width="27%" />
+<col width="12%" />
+<col width="25%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head" colspan="4">Single Pass Iterator Requirements (in addition to Incrementable Iterator and Equality
@@ -596,6 +596,13 @@ relation over its domain</td>
 <tr><td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">!=</span> <span class="pre">b</span></tt></td>
 <td>convertible to <tt class="docutils literal"><span class="pre">bool</span></tt></td>
 <td><tt class="docutils literal"><span class="pre">!(a</span> <span class="pre">==</span> <span class="pre">b)</span></tt></td>
+<td>&nbsp;</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">iterator_traits&lt;X&gt;::difference_type</span></tt></td>
+<td>A signed integral type
+representing the distance
+between iterators</td>
+<td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">iterator_traversal&lt;X&gt;::type</span></tt></td>
@@ -640,11 +647,6 @@ singular value.</td>
 <td><tt class="docutils literal"><span class="pre">r</span> <span class="pre">==</span> <span class="pre">s</span></tt> and <tt class="docutils literal"><span class="pre">r</span></tt> is
 dereferenceable implies
 <tt class="docutils literal"><span class="pre">++r</span> <span class="pre">==</span> <span class="pre">++s.</span></tt></td>
-</tr>
-<tr><td><tt class="docutils literal"><span class="pre">iterator_traits&lt;X&gt;::difference_type</span></tt></td>
-<td>A signed integral type representing
-the distance between iterators</td>
-<td>&nbsp;</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">iterator_traversal&lt;X&gt;::type</span></tt></td>
 <td>Convertible to

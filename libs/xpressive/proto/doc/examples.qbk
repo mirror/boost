@@ -1,0 +1,85 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[import ../example/hello.cpp]
+[import ../example/calc1.cpp]
+[import ../example/calc2.cpp]
+[import ../example/calc3.cpp]
+[import ../example/lazy_vector.cpp]
+[import ../example/mixed.cpp]
+[import ../example/rgb.cpp]
+[import ../example/tarray.cpp]
+[import ../example/vec3.cpp]
+[import ../example/vector.cpp]
+
+[section Examples]
+
+[section Hello World]
+
+blah blah blah
+
+[HelloWorld]
+
+blah blah blah
+
+[endsect]
+
+[section Calc1]
+
+[Calc1]
+
+[endsect]
+
+[section Calc2]
+
+[Calc2]
+
+[endsect]
+
+[section Calc3]
+
+[Calc3]
+
+[endsect]
+
+[section Lazy Vector]
+
+[LazyVector]
+
+[endsect]
+
+[section RGB]
+
+[RGB]
+
+[endsect]
+
+[section TArray]
+
+[TArray]
+
+[endsect]
+
+[section Vec3]
+
+[Vec3]
+
+[endsect]
+
+[section Vector]
+
+[Vector]
+
+[endsect]
+
+[section Mixed]
+
+[Mixed]
+
+[endsect]
+
+[endsect]

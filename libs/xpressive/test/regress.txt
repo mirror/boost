@@ -532,6 +532,22 @@ br6=good</bald> men
 br7=bold
 [end]
 
+[test64.sed]
+str=Now <foo>is</foo> the time for all <BOLD>good</bald> men</bold> to come to the aid of their country.
+pat=<(.*?)>(.*?)</(\1)>
+flg=igd
+sub={\1}\2{/\3}
+res=Now {foo}is{/foo} the time for all {BOLD}good</bald> men{/bold} to come to the aid of their country.
+br0=<foo>is</foo>
+br1=foo
+br2=is
+br3=foo
+br4=<BOLD>good</bald> men</bold>
+br5=BOLD
+br6=good</bald> men
+br7=bold
+[end]
+
 [test68]
 str=Now is the time for all good men to come to the aid of their country.
 pat=o
@@ -578,10 +594,29 @@ res=Foo(FooBar)foobar
 br0=Bar
 [end]
 
+[test72.perl]
+str=FooBarfoobar
+pat=bar
+flg=ip
+sub=($`$&)
+res=Foo(FooBar)foobar
+br0=Bar
+[end]
+
 [test73]
 str=FooBarfoobar
 pat=bar
 flg=gi
+sub=($`$&)
+res=Foo(FooBar)foo(FooBarfoobar)
+br0=Bar
+br1=bar
+[end]
+
+[test73.perl]
+str=FooBarfoobar
+pat=bar
+flg=gip
 sub=($`$&)
 res=Foo(FooBar)foo(FooBarfoobar)
 br0=Bar
@@ -598,6 +633,16 @@ br0=Bar
 br1=bar
 [end]
 
+[test74.perl]
+str=FooBarfoobar
+pat=bar
+flg=gip
+sub=($'$&)
+res=Foo(foobarBar)foo(bar)
+br0=Bar
+br1=bar
+[end]
+
 [test75]
 str=fooooo
 pat=fo{1,}
@@ -605,25 +650,49 @@ flg=
 br0=fooooo
 [end]
 
-;[test76]
-;str=fOO bAr BaZ
-;pat=\w+
-;flg=g
-;sub=\L\u$&
-;res=Foo Bar Baz
-;br0=BaZ
-;[end]
+[test76.perl]
+str=fOO bAr BaZ
+pat=\w+
+flg=gp
+sub=\L\u$&
+res=Foo Bar Baz
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
 
-;[test77]
-;str=fOO bAr BaZ
-;pat=\w+
-;flg=ga
-;sub=a\LA\Ua\Ea
-;res=aaAa aaAa aaAa
-;br0=fOO
-;br1=bAr
-;br2=BaZ
-;[end]
+[test76.all]
+str=fOO bAr BaZ
+pat=\w+
+flg=ga
+sub=\L\u$&
+res=Foo Bar Baz
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
+
+[test77.perl]
+str=fOO bAr BaZ
+pat=\w+
+flg=gp
+sub=a\LA\Ua\Ea
+res=aaAa aaAa aaAa
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
+
+[test77.all]
+str=fOO bAr BaZ
+pat=\w+
+flg=ga
+sub=a\LA\Ua\Ea
+res=aaAa aaAa aaAa
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
 
 [test78]
 str=This (has) parens
@@ -929,93 +998,94 @@ br0=aaaaAa
 br1=Aa
 [end]
 
-; test for possible infinite recursion[end]
+; test for possible infinite recursion
 
-;[test117]
-;str=ab
-;pat=(a|(?=b)(?R))+
-;flg=
-;br0=a
-;br1=
-;[end]
+[test117]
+str=ab
+pat=(a|(?=b)(?R))+
+flg=
+br0=a
+br1=
+[end]
 
-;[test118]
-;str=abba
-;pat=(?R)
-;flg=
-;br0=
-;[end]
+[test118]
+str=abba
+pat=(?R)
+flg=
+br0=
+[end]
 
-;[test119]
-;str=nothere(HE(hehe(a(b(c)))nothere
-;pat=\(((?>[^()]+)|(?R))*\)
-;flg=
-;br0=(a(b(c)))
-;br1=(b(c))
-;[end]
+[test119]
+str=nothere(HE(hehe(a(b(c)))nothere
+pat=\(((?>[^()]+)|(?R))*\)
+flg=
+br0=(a(b(c)))
+br1=(b(c))
+[end]
 
-;[test120]
-;str=1(abcd)(x(y)z)pqr
-;pat=\(((?>[^()]+)|(?R))*\)
-;flg=ga
-;br0=(abcd)
-;br1=abcd
-;br2=(x(y)z)
-;br3=z
-;[end]
+[test120]
+str=1(abcd)(x(y)z)pqr
+pat=\(((?>[^()]+)|(?R))*\)
+flg=ga
+br0=(abcd)
+br1=abcd
+br2=(x(y)z)
+br3=z
+[end]
 
-;[test121]
-;str=()
-;pat=\((?:(?>[^()]+)|(?R))?\)
-;flg=
-;br0=()
-;[end]
+[test121]
+str=()
+pat=\((?:(?>[^()]+)|(?R))?\)
+flg=
+br0=()
+[end]
 
-;[test122]
-;str=12(abcde(fsh)xyz(foo(bar))lmno)89
-;pat=\((?:(?>[^()]+)|(?R))?\)
-;flg=
-;br0=(fsh)
-;[end]
+[test122]
+str=12(abcde(fsh)xyz(foo(bar))lmno)89
+pat=\((?:(?>[^()]+)|(?R))?\)
+flg=
+br0=(fsh)
+[end]
 
-;[test123]
-;str=(ab(xy)cd)
-;pat=\((((?>[^()]+)|(?R))*)\)
-;flg=
-;br0=(ab(xy)cd)
-;br1=ab(xy)cd
-;br2=cd
-;[end]
+[test123]
+str=(ab(xy)cd)
+pat=\((((?>[^()]+)|(?R))*)\)
+flg=
+br0=(ab(xy)cd)
+br1=ab(xy)cd
+br2=cd
+[end]
 
-;[test124]
-;str=(ab(xy)cd)
-;pat=\((123)?(((?>[^()]+)|(?R))*)\)
-;flg=
-;br0=(ab(xy)cd)
-;br1=
-;br2=ab(xy)cd
-;br3=cd
-;[end]
+[test124]
+str=(ab(xy)cd)
+pat=\((123)?(((?>[^()]+)|(?R))*)\)
+flg=
+br0=(ab(xy)cd)
+br1=
+br2=ab(xy)cd
+br3=cd
+[end]
 
-;[test125]
-;str=(123ab(xy)cd)
-;pat=\((123)?(((?>[^()]+)|(?R))*)\)
-;flg=
-;br0=(123ab(xy)cd)
-;br1=123
-;br2=ab(xy)cd
-;br3=cd
-;[end]
+[test125]
+str=(123ab(xy)cd)
+pat=\((123)?(((?>[^()]+)|(?R))*)\)
+flg=
+br0=(123ab(xy)cd)
+br1=123
+br2=ab(xy)cd
+br3=cd
+[end]
 
-;[test126]
-;str=(abcd(xyz<p>qrs)123)
-;pat=\((((?>[^()<>]+)|((?>[^()]+))|(?R))*)\)
-;flg=
-;br0=(abcd(xyz<p>qrs)123)
-;br1=abcd(xyz<p>qrs)123
-;br2=123
+[test126]
+str=(abcd(xyz<p>qrs)123)
+pat=\((((?>[^()<>]+)|((?>[^()]+))|(?R))*)\)
+flg=
+br0=(abcd(xyz<p>qrs)123)
+br1=abcd(xyz<p>qrs)123
+br2=123
 ;br3=<p>qrs
-;[end]
+br3=
+[end]
 
 [test127]
 str=foobar
@@ -1280,6 +1350,21 @@ br5=o
 br6=
 [end]
 
+[test161.sed]
+str=foo
+pat=\w??
+sub=<&>
+flg=gd
+res=<><f><><o><><o><>
+br0=
+br1=f
+br2=
+br3=o
+br4=
+br5=o
+br6=
+[end]
+
 [test162]
 str=foo
 pat=()
@@ -1366,6 +1451,55 @@ str=aA
 pat=[\u0061]+
 flg=i
 br0=aA
+[end]
+
+; Test for backreferences over 9
+[test172]
+str=hellohello
+pat=()()()()()()()()()()()(hello)\12
+br0=hellohello
+br1=
+br2=
+br3=
+br4=
+br5=
+br6=
+br7=
+br8=
+br9=
+br10=
+br11=
+br12=hello
+[end]
+
+; test for named captures
+[test173]
+str=hellohello
+pat=(?P<this>he(ll)o)(?P=this)
+br0=hellohello
+br1=hello
+br2=ll
+[end]
+
+; test for named captures
+[test174]
+str=hellohello
+pat=(?P<this>he(ll)o)(?P=this)
+flg=p
+sub=\u\g<this>, world
+res=Hello, world
+br0=hellohello
+br1=hello
+br2=ll
+[end]
+
+; test for quantified, non-capturing groups, bug report
+[test174]
+str=cabba\nabba\ndaba\n
+pat=^(c[^\r\n]*(?:\r?\n|\r)(?:(?!c)[^\r\n]*(?:\r?\n|\r))*)
+flg=
+br0=cabba\nabba\ndaba\n
+br1=cabba\nabba\ndaba\n
 [end]
 
 ; tests pilfered from Boost.Regex test_tricky_cases.cpp
@@ -3542,4 +3676,24 @@ br1=
 br2=
 br3=
 br4=c
+[end]
+
+[replace1]
+str=acab
+pat=(a(c)?)|(b)
+flg=iga
+sub=(?1(?2(C:):A):B:)
+res=C:AB:
+br0=ac
+br1=ac
+br2=c
+br3=
+br4=a
+br5=a
+br6=
+br7=
+br8=b
+br9=
+br10=
+br11=b
 [end]

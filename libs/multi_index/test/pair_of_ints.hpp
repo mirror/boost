@@ -1,6 +1,6 @@
 /* Used in Boost.MultiIndex tests.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -30,6 +30,21 @@ inline void increment_second(pair_of_ints& p)
 inline void increment_int(int& x)
 {
   ++x;
+}
+
+inline void decrement_first(pair_of_ints& p)
+{
+  --p.first;
+}
+
+inline void decrement_second(pair_of_ints& p)
+{
+  --p.second;
+}
+
+inline void decrement_int(int& x)
+{
+  --x;
 }
 
 #if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)

@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
     http://www.boost.org/
 
-    Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -38,6 +38,8 @@ lexem const lexems[] =
     { "/* some C comment */", boost::wave::T_CCOMMENT },
     { "/* some multiline \n  C comment \n */", boost::wave::T_CCOMMENT },
     { "// some c++ comment\n", boost::wave::T_CPPCOMMENT },
+    { " ", boost::wave::T_SPACE },
+    { "\t\v\f", boost::wave::T_SPACE },
     { "'c'", boost::wave::T_CHARLIT },
     { "'\\n'", boost::wave::T_CHARLIT },
     { "'\\u1234'", boost::wave::T_CHARLIT },
@@ -134,6 +136,9 @@ lexem const lexems[] =
     { "friend", boost::wave::T_FRIEND },
     { "goto", boost::wave::T_GOTO },
     { "if", boost::wave::T_IF },
+#if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
+    { "import", boost::wave::T_IMPORT},
+#endif
     { "inline", boost::wave::T_INLINE },
     { "int", boost::wave::T_INT },
     { "long", boost::wave::T_LONG },

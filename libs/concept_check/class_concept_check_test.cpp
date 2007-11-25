@@ -18,17 +18,17 @@ struct bar { bool operator()(int, char) { return true; } };
 
 class class_requires_test
 {
-  BOOST_CLASS_REQUIRE(int, boost, EqualityComparableConcept);
-  typedef int* int_ptr; typedef const int* const_int_ptr;
-  BOOST_CLASS_REQUIRE2(int_ptr, const_int_ptr, boost, EqualOpConcept);
-  BOOST_CLASS_REQUIRE3(foo, bool, int, boost, UnaryFunctionConcept);
-  BOOST_CLASS_REQUIRE4(bar, bool, int, char, boost, BinaryFunctionConcept);
+    BOOST_CONCEPT_ASSERT((boost::EqualityComparable<int>));
+    typedef int* int_ptr; typedef const int* const_int_ptr;
+    BOOST_CONCEPT_ASSERT((boost::EqualOp<int_ptr,const_int_ptr>));
+    BOOST_CONCEPT_ASSERT((boost::UnaryFunction<foo,bool,int>));
+    BOOST_CONCEPT_ASSERT((boost::BinaryFunction<bar,bool,int,char>));
 };
 
 int
 main()
 {
-  class_requires_test x;
-  boost::ignore_unused_variable_warning(x);
-  return 0;
+    class_requires_test x;
+    boost::ignore_unused_variable_warning(x);
+    return 0;
 }

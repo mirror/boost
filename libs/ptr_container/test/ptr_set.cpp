@@ -23,14 +23,34 @@ void test_transfer()
     transfer_test( from, to );
 }
 
+template< class BaseContainer, class DerivedContainer, class Derived >
+void test_copy()
+{
+    DerivedContainer derived;
+    derived.insert( new Derived );
+    derived.insert( new Derived );
+
+    BaseContainer base( derived );
+    BOOST_CHECK_EQUAL( derived.size(), base.size() );
+    base.clear();
+    base = derived;
+    BOOST_CHECK_EQUAL( derived.size(), base.size() );
+    base = base;
+}
+
 void test_set()
 {    
-
+    srand( 0 );
     ptr_set_test< ptr_set<Base>, Base, Derived_class >();
     ptr_set_test< ptr_set<Value>, Value, Value >();
 
     ptr_set_test< ptr_multiset<Base>, Base, Derived_class >();
     ptr_set_test< ptr_multiset<Value>, Value, Value >();
+
+    test_copy< ptr_set<Base>, ptr_set<Derived_class>, 
+               Derived_class>();
+    test_copy< ptr_multiset<Base>, ptr_multiset<Derived_class>, 
+               Derived_class>();
 
     test_transfer< ptr_set<Derived_class>, ptr_set<Base>, Derived_class>();
     test_transfer< ptr_multiset<Derived_class>, ptr_multiset<Base>, Derived_class>();

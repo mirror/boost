@@ -1,24 +1,29 @@
 // --------------------------------------------------------
 //        (C) Copyright Jeremy Siek   2001.
-//        (C) Copyright Gennaro Prota 2003 - 2004.
+//        (C) Copyright Gennaro Prota 2003 - 2006.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-
+//
+// $Id$
 
 #include "bitset_test.hpp"
-#include "boost/dynamic_bitset.hpp"
+#include "boost/dynamic_bitset/dynamic_bitset.hpp"
 #include "boost/limits.hpp"
 #include "boost/config.hpp"
 
 #include "boost/detail/workaround.hpp"
+
+#define BOOST_BITSET_TEST_COUNT_OF(x) (sizeof(x)/sizeof(x[0]))
+
+
 // Codewarrior 8.3 for Win fails without this.
 // Thanks Howard Hinnant ;)
-#if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
-#pragma parse_func_templ off
+#if defined __MWERKS__ && BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
+# pragma parse_func_templ off
 #endif
 
 
@@ -55,45 +60,32 @@ template <typename Block>
 void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 {
   typedef boost::dynamic_bitset<Block> bitset_type;
-  typedef bitset_test< bitset_type > Tests;
+  typedef bitset_test<bitset_type> Tests;
   const int bits_per_block = bitset_type::bits_per_block;
 
   const std::string long_string = get_long_string();
+  const Block all_1s = static_cast<Block>(-1);
 
   //=====================================================================
   // Test construction from unsigned long
   {
-    const std::size_t ulong_width = std::numeric_limits<unsigned long>::digits;
-    const unsigned long ulong_max =(std::numeric_limits<unsigned long>::max)();
+    typedef unsigned long source_type;
+    const std::size_t source_width = std::numeric_limits<source_type>::digits;
+    const source_type source_max =(std::numeric_limits<source_type>::max)();
 
-    unsigned long numbers[]   = { 0, 1, 40247, ulong_max >> 1, ulong_max };
-    const std::size_t array_count = sizeof(numbers) / sizeof(numbers[0]);
+    source_type numbers[] = { 0, 1, 40247, source_max >> 1, source_max };
+    std::size_t sizes[] =
+    { 0, 7 * source_width / 10, source_width, 13 * source_width / 10,
+         7 * bits_per_block / 10, bits_per_block, 13 * bits_per_block / 10,
+         3 * bits_per_block };
 
-    for (std::size_t i = 0; i < array_count; ++i) {
-      unsigned long number = numbers[i];
-      std::size_t n = 0;
-      Tests::from_unsigned_long(n, number);
+    const std::size_t value_count = BOOST_BITSET_TEST_COUNT_OF(numbers);
+    const std::size_t size_count = BOOST_BITSET_TEST_COUNT_OF(sizes);
 
-      n = std::size_t(0.7 * double(ulong_width));
-      Tests::from_unsigned_long(n, number);
-
-      n = 1 * ulong_width;
-      Tests::from_unsigned_long(n, number);
-
-      n = std::size_t(1.3 * double(ulong_width));
-      Tests::from_unsigned_long(n, number);
-
-      n = std::size_t(0.7 * double(bits_per_block));
-      Tests::from_unsigned_long(n, number);
-
-      n = 1 * bits_per_block;
-      Tests::from_unsigned_long(n, number);
-
-      n = std::size_t(1.3 * double(bits_per_block));
-      Tests::from_unsigned_long(n, number);
-
-      n = 3 * bits_per_block;
-      Tests::from_unsigned_long(n, number);
+    for (std::size_t v = 0; v < value_count; ++v) {
+      for (std::size_t s = 0; s < size_count; ++s) {
+        Tests::from_unsigned_long(sizes[s], numbers[v]);
+      }
     }
   }
   //=====================================================================
@@ -110,7 +102,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     // one hand I should have better tests. On the other one
     // I don't want tests for dynamic_bitset to cope with locales,
     // ctype::widen, etc. (but that's what you deserve when you
-    // don't separate concerns at the library level) - gps
+    // don't separate concerns at the library level)
     //
     run_string_tests<Tests>(
         std::wstring(L"11111000000111111111010101010101010101010111111"));
@@ -123,8 +115,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 
   }
   //=====================================================================
-  // Test construction from a block range
-  // [gps - this comment is erroneous]
+  // test from_block_range
   {
     std::vector<Block> blocks;
     Tests::from_block_range(blocks);
@@ -133,7 +124,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     std::vector<Block> blocks(3);
     blocks[0] = static_cast<Block>(0);
     blocks[1] = static_cast<Block>(1);
-    blocks[2] = ~Block(0);
+    blocks[2] = all_1s;
     Tests::from_block_range(blocks);
   }
   {
@@ -305,7 +296,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     std::vector<Block> blocks(3);
     blocks[0] = static_cast<Block>(0);
     blocks[1] = static_cast<Block>(1);
-    blocks[2] = ~Block(0);
+    blocks[2] = all_1s;
     Tests::append_block_range(a, blocks);
   }
   {
@@ -330,7 +321,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     std::vector<Block> blocks(3);
     blocks[0] = static_cast<Block>(0);
     blocks[1] = static_cast<Block>(1);
-    blocks[2] = ~Block(0);
+    blocks[2] = all_1s;
     Tests::append_block_range(a, blocks);
   }
   //=====================================================================

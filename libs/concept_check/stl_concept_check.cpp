@@ -20,7 +20,7 @@
 #include <vector>
 #include <list>
 #include <deque>
-#ifndef BOOST_NO_SLIST
+#if 0
 #include <slist>
 #endif
 
@@ -43,27 +43,27 @@ main()
   typedef std::list<int> List;
 
   // VC++ missing pointer and const_pointer typedefs
-  function_requires< Mutable_RandomAccessContainerConcept<Vector> >();
-  function_requires< BackInsertionSequenceConcept<Vector> >();
+  function_requires< Mutable_RandomAccessContainer<Vector> >();
+  function_requires< BackInsertionSequence<Vector> >();
 
 #if !(defined(__GNUC__) && defined(BOOST_HIDE_EXPECTED_ERRORS))
 #if !(defined(__sgi) && defined(BOOST_HIDE_EXPECTED_ERRORS))
   // old deque iterator missing n + iter operation
-  function_requires< Mutable_RandomAccessContainerConcept<Deque> >();
+  function_requires< Mutable_RandomAccessContainer<Deque> >();
 #endif
   // warnings about signed and unsigned in old deque version
-  function_requires< FrontInsertionSequenceConcept<Deque> >();
-  function_requires< BackInsertionSequenceConcept<Deque> >();
+  function_requires< FrontInsertionSequence<Deque> >();
+  function_requires< BackInsertionSequence<Deque> >();
 #endif
 
   // VC++ missing pointer and const_pointer typedefs
-  function_requires< Mutable_ReversibleContainerConcept<List> >();
-  function_requires< FrontInsertionSequenceConcept<List> >();
-  function_requires< BackInsertionSequenceConcept<List> >();
+  function_requires< Mutable_ReversibleContainer<List> >();
+  function_requires< FrontInsertionSequence<List> >();
+  function_requires< BackInsertionSequence<List> >();
 
-#ifndef BOOST_NO_SLIST
+#if 0
   typedef BOOST_STD_EXTENSION_NAMESPACE::slist<int> SList;
-  function_requires< FrontInsertionSequenceConcept<SList> >();
+  function_requires< FrontInsertionSequence<SList> >();
 #endif
 
   typedef std::set<int> Set;
@@ -71,21 +71,21 @@ main()
   typedef std::map<int,int> Map;
   typedef std::multimap<int,int> MultiMap;
 
-  function_requires< SortedAssociativeContainerConcept<Set> >();
-  function_requires< SimpleAssociativeContainerConcept<Set> >();
-  function_requires< UniqueAssociativeContainerConcept<Set> >();
+  function_requires< SortedAssociativeContainer<Set> >();
+  function_requires< SimpleAssociativeContainer<Set> >();
+  function_requires< UniqueAssociativeContainer<Set> >();
 
-  function_requires< SortedAssociativeContainerConcept<MultiSet> >();
-  function_requires< SimpleAssociativeContainerConcept<MultiSet> >();
-  function_requires< MultipleAssociativeContainerConcept<MultiSet> >();
+  function_requires< SortedAssociativeContainer<MultiSet> >();
+  function_requires< SimpleAssociativeContainer<MultiSet> >();
+  function_requires< MultipleAssociativeContainer<MultiSet> >();
 
-  function_requires< SortedAssociativeContainerConcept<Map> >();
-  function_requires< UniqueAssociativeContainerConcept<Map> >();
-  function_requires< PairAssociativeContainerConcept<Map> >();
+  function_requires< SortedAssociativeContainer<Map> >();
+  function_requires< UniqueAssociativeContainer<Map> >();
+  function_requires< PairAssociativeContainer<Map> >();
 
-  function_requires< SortedAssociativeContainerConcept<MultiMap> >();
-  function_requires< MultipleAssociativeContainerConcept<MultiMap> >();
-  function_requires< PairAssociativeContainerConcept<MultiMap> >();
+  function_requires< SortedAssociativeContainer<MultiMap> >();
+  function_requires< MultipleAssociativeContainer<MultiMap> >();
+  function_requires< PairAssociativeContainer<MultiMap> >();
 #endif
 
   return 0;

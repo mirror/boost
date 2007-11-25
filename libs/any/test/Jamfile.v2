@@ -8,7 +8,7 @@
 
 test-suite any :
     [ run ../any_test.cpp ]
-    [ run any_to_ref_test.cpp ../../test/build//boost_test_exec_monitor ]
+    [ compile-fail any_cast_cv_failed.cpp ]
     ;
 
 

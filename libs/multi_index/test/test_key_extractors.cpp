@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for key extractors.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -29,6 +29,10 @@ struct test_class
 
   bool bool_mem_fun_const()const{return true;}
   bool bool_mem_fun(){return false;}
+
+  static bool bool_global_fun(test_class){return true;}
+  static bool bool_global_fun_const_ref(const test_class&){return false;}
+  static bool bool_global_fun_ref(test_class&){return true;}
 
   test_class(int i=0):int_member(i),int_cmember(i){}
   test_class(int i,int j):int_member(i),int_cmember(j){}
@@ -69,6 +73,15 @@ typedef BOOST_MULTI_INDEX_MEMBER(test_class,const int,int_cmember) key_cm;
 typedef BOOST_MULTI_INDEX_CONST_MEM_FUN(
           test_class,bool,bool_mem_fun_const)                      key_cmf;
 typedef BOOST_MULTI_INDEX_MEM_FUN(test_class,bool,bool_mem_fun)    key_mf;
+typedef global_fun<test_class,bool,&test_class::bool_global_fun>   key_gf;
+typedef global_fun<
+          const test_class&,bool,
+          &test_class::bool_global_fun_const_ref
+        >                                                          key_gcrf;
+typedef global_fun<
+          test_class&,bool,
+          &test_class::bool_global_fun_ref
+        >                                                          key_grf;
 typedef composite_key<
           test_class,
           idn,
@@ -84,7 +97,7 @@ typedef composite_key<
 typedef composite_key<
           boost::reference_wrapper<test_class>,
           key_mf
-          >                                                        ccompw_key;
+        >                                                          ccompw_key;
 
 #if !defined(BOOST_NO_SFINAE)
 /* testcases for problems with non-copyable classes reported at
@@ -98,6 +111,9 @@ struct test_nc_class
 
   bool bool_mem_fun_const()const{return true;}
   bool bool_mem_fun(){return false;}
+
+  static bool bool_global_fun_const_ref(const test_nc_class&){return false;}
+  static bool bool_global_fun_ref(test_nc_class&){return true;}
 
   test_nc_class(int i=0):int_member(i),int_cmember(i){}
   test_nc_class(int i,int j):int_member(i),int_cmember(j){}
@@ -129,6 +145,14 @@ typedef BOOST_MULTI_INDEX_CONST_MEM_FUN(
           test_nc_class,bool,bool_mem_fun_const)               nc_key_cmf;
 typedef BOOST_MULTI_INDEX_MEM_FUN(
           test_nc_class,bool,bool_mem_fun)                     nc_key_mf;
+typedef global_fun<
+          const test_nc_class&,bool,
+          &test_nc_class::bool_global_fun_const_ref
+        >                                                      nc_key_gcrf;
+typedef global_fun<
+          test_nc_class&,bool,
+          &test_nc_class::bool_global_fun_ref
+        >                                                      nc_key_grf;
 typedef composite_key<
           test_nc_class,
           nc_idn,
@@ -147,6 +171,9 @@ void test_key_extractors()
   key_cm     k_cm;
   key_cmf    k_cmf;
   key_mf     k_mf;
+  key_gf     k_gf;
+  key_gcrf   k_gcrf;
+  key_grf    k_grf;
   compkey    cmpk;
   ccompkey   ccmpk;
   ccompw_key ccmpk_w;
@@ -329,6 +356,71 @@ void test_key_extractors()
   BOOST_CHECK(!k_mf(tpp));
   BOOST_CHECK(!k_mf(tap));
   BOOST_CHECK(!k_mf(tw));
+
+  BOOST_CHECK(k_gf(tr));
+  BOOST_CHECK(k_gf(ctr));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_gf(td));
+  BOOST_CHECK(k_gf(ctdr));
+#endif
+
+  BOOST_CHECK(k_gf(tp));
+  BOOST_CHECK(k_gf(ctp));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_gf(tdp));
+  BOOST_CHECK(k_gf(ctdp));
+#endif
+
+  BOOST_CHECK(k_gf(tpp));
+  BOOST_CHECK(k_gf(ctpp));
+  BOOST_CHECK(k_gf(tap));
+  BOOST_CHECK(k_gf(ctap));
+
+  BOOST_CHECK(k_gf(tw));
+  BOOST_CHECK(k_gf(ctw));
+  
+  BOOST_CHECK(!k_gcrf(tr));
+  BOOST_CHECK(!k_gcrf(ctr));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(!k_gcrf(td));
+  BOOST_CHECK(!k_gcrf(ctdr));
+#endif
+
+  BOOST_CHECK(!k_gcrf(tp));
+  BOOST_CHECK(!k_gcrf(ctp));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(!k_gcrf(tdp));
+  BOOST_CHECK(!k_gcrf(ctdp));
+#endif
+
+  BOOST_CHECK(!k_gcrf(tpp));
+  BOOST_CHECK(!k_gcrf(ctpp));
+  BOOST_CHECK(!k_gcrf(tap));
+  BOOST_CHECK(!k_gcrf(ctap));
+
+  BOOST_CHECK(!k_gcrf(tw));
+  BOOST_CHECK(!k_gcrf(ctw));
+
+  BOOST_CHECK(k_grf(tr));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_grf(td));
+#endif
+
+  BOOST_CHECK(k_grf(tp));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_grf(tdp));
+#endif
+
+  BOOST_CHECK(k_grf(tpp));
+  BOOST_CHECK(k_grf(tap));
+  BOOST_CHECK(k_grf(tw));
+
   BOOST_CHECK(ccmpk_w(tw)==make_tuple(false));
 
 #if !defined(BOOST_NO_SFINAE)
@@ -342,6 +434,8 @@ void test_key_extractors()
   nc_ckey_m     nc_ck_m;
   nc_key_cmf    nc_k_cmf;
   nc_key_mf     nc_k_mf;
+  nc_key_gcrf   nc_k_gcrf;
+  nc_key_grf    nc_k_grf;
   nc_compkey    nc_cmpk;
 
   test_nc_derived_class nc_td(-1,0);
@@ -357,6 +451,9 @@ void test_key_extractors()
   BOOST_CHECK(nc_k_cmf(nc_td));
   BOOST_CHECK(!nc_k_mf(nc_td));
 
+  BOOST_CHECK(!nc_k_gcrf(nc_td));
+  BOOST_CHECK(nc_k_grf(nc_td));
+
   test_nc_class nc_t(1,0);
   BOOST_CHECK(nc_cmpk(nc_td)==make_tuple(boost::cref(nc_t),1,1,true));
 #endif
@@ -370,6 +467,9 @@ void test_key_extractors()
     BOOST_CHECK(k_cm(it)==j);
     BOOST_CHECK(k_cmf(it));
     BOOST_CHECK(!k_mf(it));
+    BOOST_CHECK(k_gf(it));
+    BOOST_CHECK(!k_gcrf(it));
+    BOOST_CHECK(k_grf(it));
     BOOST_CHECK(cmpk(it)==make_tuple(test_class(j),j,j,true));
     BOOST_CHECK(ccmpk(it)==make_tuple(test_class(j),j));
     ++j;

@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for copying and assignment.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -56,6 +56,27 @@ static void test_assign(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
 #if BOOST_WORKAROUND(__MWERKS__,<=0x3003)
 #pragma parse_func_templ reset
 #endif
+
+template<typename Sequence>
+static void test_integral_assign(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
+{
+  /* Special cases described in 23.1.1/9: integral types must not
+   * be taken as iterators in assign(f,l) and insert(p,f,l).
+   */
+
+  Sequence s;
+
+  s.assign(5,10);
+  BOOST_CHECK(s.size()==5&&std::accumulate(s.begin(),s.end(),0)==50);
+  s.assign(2u,5u);
+  BOOST_CHECK(s.size()==2&&std::accumulate(s.begin(),s.end(),0)==10);
+
+  s.clear();
+  s.insert(s.begin(),5,10);
+  BOOST_CHECK(s.size()==5&&std::accumulate(s.begin(),s.end(),0)==50);
+  s.insert(s.begin(),2u,5u);
+  BOOST_CHECK(s.size()==7&&std::accumulate(s.begin(),s.end(),0)==60);
+}
 
 void test_copy_assignment()
 {
@@ -130,7 +151,11 @@ void test_copy_assignment()
   /* MSVC++ 6.0 chokes on test_assign without this explicit instantiation */
   multi_index_container<int,indexed_by<sequenced<> > > s1;
   test_assign<multi_index_container<int,indexed_by<sequenced<> > > >();
+  test_integral_assign<
+    multi_index_container<int,indexed_by<sequenced<> > > >();
 
   multi_index_container<int,indexed_by<random_access<> > > s2;
   test_assign<multi_index_container<int,indexed_by<random_access<> > > >();
+  test_integral_assign<
+    multi_index_container<int,indexed_by<random_access<> > > >();
 }

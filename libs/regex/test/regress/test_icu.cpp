@@ -647,4 +647,3 @@ void test_icu(const wchar_t&, const test_invalid_regex_tag&){}
 void test_icu(const wchar_t&, const test_regex_replace_tag&){}
 
 #endif
-

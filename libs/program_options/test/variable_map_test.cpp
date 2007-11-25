@@ -15,22 +15,10 @@ namespace po = boost::program_options;
 #include <boost/function.hpp>
 using namespace boost;
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
-
 #include <sstream>
 using namespace std;
 
-#define TEST_CHECK_THROW(expression, exception, description) \
-    try \
-    { \
-        expression; \
-        BOOST_ERROR(description);\
-        throw 10; \
-    } \
-    catch(exception &) \
-    { \
-    }
+#include "minitest.hpp"
 
 vector<string> sv(char* array[], unsigned size)
 {
@@ -102,6 +90,25 @@ void test_variable_map()
     BOOST_CHECK(vm3["vee"].as<string>() == "42");
     BOOST_CHECK(vm3["voo"].as<string>() == "1");
     BOOST_CHECK(vm3["iii"].as<int>() == 123);
+
+    options_description desc3;
+    desc3.add_options()
+    ("imp", po::value<int>()->implicit_value(100))
+    ("iim", po::value<int>()->implicit_value(200)->default_value(201))
+    ("mmp,m", po::value<int>()->implicit_value(123)->default_value(124))
+    ;
+    char* cmdline6_[] = {  "--imp=1", "-m" };
+    vector<string> cmdline6 = sv(cmdline6_,
+                                 sizeof(cmdline6_)/sizeof(cmdline6_[0]));
+    parsed_options a6 = command_line_parser(cmdline6).options(desc3).run();
+
+    variables_map vm4;
+    store(a6, vm4);
+    notify(vm4);
+    BOOST_REQUIRE(vm4.size() == 3);
+    BOOST_CHECK(vm4["imp"].as<int>() == 1);
+    BOOST_CHECK(vm4["iim"].as<int>() == 201);
+    BOOST_CHECK(vm4["mmp"].as<int>() == 123);
 }
 
 int stored_value;
@@ -269,7 +276,7 @@ void test_multiple_assignments_with_different_option_description()
 
 } 
 
-int test_main(int, char* [])
+int main(int, char* [])
 {
     test_variable_map();
     test_semantic_values();

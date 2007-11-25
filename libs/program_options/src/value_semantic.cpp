@@ -122,8 +122,8 @@ namespace boost { namespace program_options {
     /* Validates bool value.
         Any of "1", "true", "yes", "on" will be converted to "1".<br>
         Any of "0", "false", "no", "off" will be converted to "0".<br>
-        Case is ignored. Regardless of name passed, parameter will always
-        be optional.
+        Case is ignored. The 'xs' vector can either be empty, in which
+        case the value is 'true', or can contain explicit value.
     */
     BOOST_PROGRAM_OPTIONS_DECL void validate(any& v, const vector<string>& xs,
                        bool*, int)

@@ -9,21 +9,23 @@
 // leaks portably.
 #define BOOST_XPRESSIVE_DEBUG_CYCLE_TEST
 
-#ifdef _MSC_VER
+#include <iostream>
+#include <boost/test/unit_test.hpp>
+#include <boost/xpressive/xpressive.hpp>
+
+#if defined(_MSC_VER) && defined(_DEBUG)
+# define _CRTDBG_MAP_ALLOC
 # include <crtdbg.h>
 #endif
 
-#include <iostream>
-#include <boost/xpressive/xpressive.hpp>
-#include "./test_minimal.hpp"
-
+using namespace boost::unit_test;
 using namespace boost::xpressive;
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
 // regexes referred to by other regexes are kept alive via reference counting.
 // but cycles are handled naturally. the following works as expected and doesn't leak.
-int test_main( int, char*[] )
+void test_main()
 {
     {
         sregex v;
@@ -61,6 +63,7 @@ int test_main( int, char*[] )
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 1)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -88,6 +91,7 @@ int test_main( int, char*[] )
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 2)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -116,6 +120,7 @@ int test_main( int, char*[] )
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 3)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -143,6 +148,7 @@ int test_main( int, char*[] )
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 4)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -188,9 +194,18 @@ int test_main( int, char*[] )
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 5)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
+}
 
-    return 0;
+///////////////////////////////////////////////////////////////////////////////
+// init_unit_test_suite
+//
+test_suite* init_unit_test_suite( int argc, char* argv[] )
+{
+    test_suite *test = BOOST_TEST_SUITE("test_cycles");
+    test->add(BOOST_TEST_CASE(&test_main));
+    return test;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

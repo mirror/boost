@@ -46,20 +46,6 @@ align="middle" width="277" height="86">
 <br>
 </p>
 
-<!-- BEGIN TODO
-TODO:
-<ul>
- <li> ask to Jeremy about reference::operator&amp; and about
-   making reference itself private</li>
- <li>check the whole synopsis against code changes </li>
- <li>document intersects() after we reach consensus</li>
-</ul>
-<br>
-Note:
-   Other things to do are marked by "[gps]"
-END TODO -->
-
-
 <h1>dynamic_bitset&lt;Block, Allocator&gt;</h1>
 
 <h2>Contents</h2>
@@ -145,7 +131,7 @@ public:
     typedef Block <a href="#block_type">block_type</a>;
     typedef Allocator <a href="#allocator_type">allocator_type</a>;
     typedef <i>implementation-defined</i> <a href="#size_type">size_type</a>;
-        
+
     static const int <a href=
        "#bits_per_block">bits_per_block</a> = <i>implementation-defined</i>;
     static const size_type <a href=
@@ -719,7 +705,7 @@ to <tt>std::numeric_limits&lt;Block&gt;::digits</tt>.
 <a name="npos">dynamic_bitset::npos</a>
 </pre>
 
-The maximum value of <tt>size_type</tt>. [gps]
+The maximum value of <tt>size_type</tt>.
 
 <hr>
 <h3><a name="constructors">Constructors</a></h3>
@@ -954,7 +940,7 @@ void <a name=
 </pre>
 
 <b>Effects:</b> This function provides the same end result as the
-following code, but is typically more efficient. [gps]
+following code, but is typically more efficient.
 
 <pre>
 for (; first != last; ++first)
@@ -1194,7 +1180,7 @@ object having the same type as <tt>*this</tt>. Note that if
 any <tt>dynamic_bitset</tt> operation causes <tt>size()</tt> to
 exceed <tt>max_size()</tt> then the <i>behavior is undefined</i>.
 <br><br>[The semantics of this function could change slightly
-when lib issue 197 will be closed - G.P.S.]<br>
+when lib issue 197 will be closed]<br>
 
 <hr>
 <pre>
@@ -1204,32 +1190,6 @@ bool <a name="empty">empty</a>() const;
 <b>Returns:</b> <tt>true</tt> if <tt>this->size() == 0</tt>, <tt>false</tt>
 otherwise. <i>Note</i>: not to be confused with <tt>none()</tt>, that has
 different semantics.
-
-<hr>
- <!--  ***************** To be removed - gps *************************
-<pre>
-void <a name="reserve">reserve</a>(size_type n);
-</pre>
-
-<b>Precondition:</b> <tt>n &lt;= this-&gt;max_size()</tt>.<br>
-<b>Effects:</b> informs the <tt>dynamic_bitset</tt> of a planned
-change in size(), so that reallocations can be managed accordingly.
-If before the call the dynamic_bitset's capacity is >= n then no
-reallocation happens and capacity remains unchanged. Otherwise
-storage is allocated and capacity becomes greater or equal to n.
-In any case, size() does not change.<br>
-<b>Throws:</b> An allocation error if <tt>n &gt; capacity()</tt>
-and memory is exhausted (<tt>std::bad_alloc</tt> if <tt>
-Allocator=std::allocator</tt>). 
-
-<hr>
-<pre>
-size_type <a name="capacity">capacity()</a> const;
-</pre>
-
-<b>Returns:</b> the total number of elements that <tt>*this</tt>
-can hold without requiring reallocation.<br>
- *************************************************************** -->
 
 <hr>
 <pre>
@@ -1576,12 +1536,12 @@ precise specification, given in terms of "as if" rule: first, for each
 valid position i into the bitset <tt>b</tt> let's put:
 
  <tt>character_of(b[i)]) = b[i]? os.widen('1') : os.widen('0');</tt>
- 
+
 Let also <tt>s</tt> be a <tt>std::basic_string&lt;Char, Traits&gt;</tt>
 object, having length <tt>b.size()</tt> and such as, for each <tt>i</tt>
 in <tt>[0, b.size())</tt>,
 
- <tt>s[i] is character_of(b[i])</tt> 
+ <tt>s[i] is character_of(b[i])</tt>
 
 Then, the output, the effects on <tt>os</tt> and the exception behavior
 is the same as outputting the object <tt>s</tt> to <tt>os</tt> (same
@@ -1622,10 +1582,10 @@ were constructed by
 If <tt>bool(k)</tt> is true, it calls <tt>b.clear()</tt>
 then attempts to extract characters from <tt>is</tt>. For each character c
 that is a <i>bitset digit</i> the <i>corresponding bit value</i> is
-appended to the less significant end of <tt>b</tt> (appending may throw - gps ).
+appended to the less significant end of <tt>b</tt> (appending may throw).
 If <tt>is.width()</tt> is greater than zero and smaller than <tt>b.max_size()</tt>
 then the maximum number <tt>n</tt> of bits appended is <tt>is.width()</tt>;
-otherwise <tt>n</tt> = <tt>b.max_size()</tt>. 
+otherwise <tt>n</tt> = <tt>b.max_size()</tt>.
 
 Unless the extractor is exited via an exception, characters are extracted (and
 corresponding bits appended) until any of the following occurs:<br>
@@ -1714,7 +1674,7 @@ applied to their corresponding <tt>dynamic_bitset</tt>s.
 <i>General improvements</i>
 <br><br>
 Several optimizations to member and non-member functions and to the
-nested class <tt>reference</tt>. 
+nested class <tt>reference</tt>.
 
 <hr>
 <h3><a name="see-also">See also</a></h3>

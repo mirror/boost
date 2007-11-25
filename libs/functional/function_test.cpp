@@ -12,9 +12,6 @@
 // $Id$
 // ------------------------------------------------------------------------------
 // $Log$
-// Revision 1.2.24.1  2006/12/02 14:17:26  andreas_huber69
-// Merged L & C issue fixes from trunk to branch.
-//
 // Revision 1.3  2006/12/02 13:57:32  andreas_huber69
 // Fixed license & copyright issues.
 //

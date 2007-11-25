@@ -7,49 +7,32 @@
 
 #include <iostream>
 #include <boost/xpressive/xpressive.hpp>
-#include <boost/xpressive/traits/cpp_regex_traits.hpp>
-#include "./test_minimal.hpp"
+#include <boost/test/unit_test.hpp>
 
+using namespace boost::unit_test;
 using namespace boost::xpressive;
 
 ///////////////////////////////////////////////////////////////////////////////
-// test for a sub-match scoping
 //
-void test5()
+void test_complement()
 {
-    sregex inner = sregex::compile( "(.)\\1" );
-    sregex outer = (s1= _) >> inner >> s1;
-    std::string abba("ABBA");
+    sregex rx1 = ~_n >> ~(set='a') >> ~(set='a','b') >> ~set['a'] >> ~_ln
+        >> ~before('a') >> ~after('a') >> ~alpha >> ~range('a','b') >> ~_b >> ~as_xpr('a');
 
-    BOOST_CHECK(regex_match(abba, outer));
+#ifndef BOOST_XPRESSIVE_NO_WREGEX
+    wsregex rx2 = ~_n >> ~(set=L'a') >> ~(set=L'a',L'b') >> ~set[L'a'] >> ~_ln
+        >> ~before(L'a') >> ~after(L'a') >> ~alpha >> ~range(L'a',L'b') >> ~_b >> ~as_xpr(L'a');
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Ye olde calculator. Test recursive grammar.
+// init_unit_test_suite
 //
-void test6()
+test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
-    sregex group, factor, term, expression;
+    test_suite *test = BOOST_TEST_SUITE("miscelaneous tests");
 
-    group       = '(' >> by_ref(expression) >> ')';
-    factor      = +_d | group;
-    term        = factor >> *(('*' >> factor) | ('/' >> factor));
-    expression  = term >> *(('+' >> term) | ('-' >> term));
+    test->add(BOOST_TEST_CASE(&test_complement));
 
-    smatch what;
-    std::string str("foo 9*(10+3) bar");
-
-    BOOST_REQUIRE(regex_search(str, what, expression));
-    BOOST_CHECK("9*(10+3)" == what[0]);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// test_main
-//
-int test_main( int, char*[] )
-{
-    test5();
-    test6();
-
-    return 0;
+    return test;
 }

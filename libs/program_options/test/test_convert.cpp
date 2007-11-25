@@ -3,6 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <cassert>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -13,6 +14,8 @@
 
 #include <boost/program_options/detail/convert.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
+
+#include "minitest.hpp"
 
 using namespace std;
 
@@ -74,7 +77,7 @@ std::wstring from_8_bit_2(const std::string& s,
 void test_convert(const std::string& input, 
                   const std::string& expected_output)
 {
-    boost::program_options::detail::utf8_codecvt_facet<wchar_t, char> facet;
+    boost::program_options::detail::utf8_codecvt_facet facet;
     
     std::wstring output;
     { 
@@ -118,7 +121,7 @@ void test_convert(const std::string& input,
     BOOST_CHECK(ref == input);
 }
 
-int test_main(int ac, char* av[])
+int main(int ac, char* av[])
 {       
     std::string input = file_content("utf8.txt");
     std::string expected = file_content("ucs2.txt");

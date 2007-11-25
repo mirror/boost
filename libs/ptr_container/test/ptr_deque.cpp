@@ -20,8 +20,19 @@ void test_ptr_deque()
     reversible_container_test< ptr_deque< nullable<Base> >, Base, Derived_class >();
     reversible_container_test< ptr_deque< nullable<Value> >, Value, Value >();
 
-    test_transfer< ptr_deque<Derived_class>, ptr_deque<Base>, Derived_class>();
+    container_assignment_test< ptr_deque<Base>, ptr_deque<Derived_class>, 
+                               Derived_class>();
+    container_assignment_test< ptr_deque< nullable<Base> >, 
+                               ptr_deque< nullable<Derived_class> >, 
+                               Derived_class>();
+    container_assignment_test< ptr_deque< nullable<Base> >, 
+                               ptr_deque<Derived_class>, 
+                               Derived_class>();
+    container_assignment_test< ptr_deque<Base>, 
+                               ptr_deque< nullable<Derived_class> >, 
+                               Derived_class>();                           
 
+    test_transfer< ptr_deque<Derived_class>, ptr_deque<Base>, Derived_class>();
     
     random_access_algorithms_test< ptr_deque<int> >();
     ptr_deque<int> di;

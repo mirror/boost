@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for serialization, part 1.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
  * See http://www.boost.org/libs/multi_index for library home page.
  */
 
-#include "test_serialization.hpp"
+#include "test_serialization1.hpp"
 #include "test_serialization_template.hpp"
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
@@ -16,6 +16,7 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
 #include <boost/multi_index/key_extractors.hpp>
+#include "non_std_allocator.hpp"
 
 using namespace boost::multi_index;
 
@@ -49,7 +50,8 @@ void test_serialization1()
         random_access<>,
         sequenced<>,
         ordered_non_unique<identity<int> >
-      >
+      >,
+      non_std_allocator<int>
     > multi_index_t;
 
     multi_index_t m;

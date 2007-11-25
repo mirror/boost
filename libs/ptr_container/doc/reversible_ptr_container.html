@@ -351,12 +351,20 @@ namespace boost
     
     public: // <a class="reference" href="#construct-copy-destroy">construct/copy/destroy</a>
         reversible_ptr_container();
-        reversible_ptr_container( auto_ptr&lt;reversible_ptr_container&gt; r );
+        explicit reversible_ptr_container( const reversible_ptr_container&amp; r );                
+        template&lt; class Derived &gt;
+        explicit reversible_ptr_container( const reversible_ptr_container&lt;Derived&gt;&amp; r );
+        explicit reversible_ptr_container( std::auto_ptr&lt;reversible_ptr_container&gt; r );
         template&lt; class InputIterator &gt;
         reversible_ptr_container( InputIterator first, InputIterator last );
+        
         ~reversible_ptr_container();
-        void operator=( std::auto_ptr&lt;reversible_ptr_container&gt; r )  
-        allocator_type get_allocator() const;                                      
+
+        reversible_ptr_container&amp;  operator=( const reversible_ptr_container&amp; r );
+        template&lt;class Derived&gt;
+        reversible_ptr_container&amp;  operator=( const reversible_ptr_container&lt;Derived&gt;&amp; r );
+        reversible_ptr_container&amp;  operator=( std::auto_ptr&lt;reversible_ptr_container&gt; r );
+        allocator_type             get_allocator() const;                                      
     
     public: // <a class="reference" href="#iterators">iterators</a>
         iterator                begin();
@@ -374,8 +382,10 @@ namespace boost
         bool       empty() const;       
     
     public: // <a class="reference" href="#modifiers">modifiers</a>
-        void      swap( reversible_ptr_container&amp; r );
-        void      clear():
+        void                     swap( reversible_ptr_container&amp; r );
+        void                     clear():
+        VoidPtrContainer&amp;        base();
+        const VoidPtrContainer&amp;  base() const;
     
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
         auto_type                                replace( iterator position, T* x );
@@ -384,13 +394,7 @@ namespace boost
         std::auto_ptr&lt;reversible_ptr_container&gt;  clone() const;    
         std::auto_ptr&lt;reversible_ptr_container&gt;  release();
         auto_type                                release( iterator position );
-        
-    public: // <a class="reference" href="#serialization">serialization</a>
-        template&lt; class Archive &gt;
-        void save( Archive&amp; ar, const unsigned version ) const;  
-        template&lt; class Archive &gt;
-        void load( Archive&amp; ar, const unsigned version );       
-    
+                    
     }; //  class 'reversible_ptr_container'
 
     // <a class="reference" href="#comparison">comparison</a>            
@@ -422,7 +426,7 @@ namespace boost
     void swap( reversible_ptr_container&lt;T,CA,VPC&gt;&amp; x,
                reversible_ptr_container&lt;T,CA,VPC&gt;&amp; y );
 
-    // <a class="reference" href="#clonability">clonability</a>
+    // <a class="reference" href="#cloneability">cloneability</a>
     template&lt; class T,  class CA, class VPC &gt;
     reversible_ptr_container&lt;T,CA,VPC&gt;*
     new_clone( const reversible_ptr_container&lt;T,CA,VPC&gt;&amp; r );
@@ -430,6 +434,11 @@ namespace boost
     // <a class="reference" href="#null-predicate">null predicate</a>
     template&lt; class Iterator &gt;
     bool is_null( Iterator i );
+    
+    // <a class="reference" href="#serialization">serialization</a>
+    template&lt;class Archive, class T, class CA, class VPC&gt;
+    void serialize( Archive&amp; ar, reversible_ptr_container&lt;T,CÁ,VPC&gt;&amp; c, const unsigned int version );
+
 
 } // namespace 'boost'
 </pre>
@@ -485,8 +494,16 @@ T* release();
 ~auto_type();
 operator <em>implementation-defined bool</em>();
 </pre>
-<p>The destructor will delete the stored object. It might help to
-think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;T&gt;</span></tt>.</p>
+<p>The destructor will delete the stored object <em>using the clone allocator of the container</em>
+(this explains why we cannot use <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;T&gt;</span></tt>). It might help to
+think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;T&gt;</span></tt>. You can also return
+the pointer from a function or assign it to another pointer via the <tt class="docutils literal"><span class="pre">move()</span></tt>
+function</p>
+<pre class="literal-block">
+auto_type ptr   = ...;
+auto_type other = boost::ptr_container::move( ptr );
+return boost::ptr_container::move( other );
+</pre>
 </div>
 <div class="section">
 <h2><a id="semantics-construct-copy-destroy" name="semantics-construct-copy-destroy"><span id="construct-copy-destroy"></span>Semantics: construct/copy/destroy</a></h2>
@@ -506,6 +523,21 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 
 - Postconditions: ``size() == n`` -->
 <ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">reversible_ptr_container(</span> <span class="pre">const</span> <span class="pre">reversible_ptr_container&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Constructs a container by cloning all elements of <tt class="docutils literal"><span class="pre">r</span></tt></li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Derived</span> <span class="pre">&gt;</span> <span class="pre">explicit</span> <span class="pre">reversible_ptr_container(</span> <span class="pre">const</span> <span class="pre">reversible_ptr_container&lt;Derived&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Constructs a container by cloning all elements of <tt class="docutils literal"><span class="pre">r</span></tt></li>
+<li>Requirements: <tt class="docutils literal"><span class="pre">Derived</span></tt> is derived from <tt class="docutils literal"><span class="pre">T</span></tt></li>
+</ul>
+</blockquote>
+</li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">reversible_ptr_container(</span> <span class="pre">std::auto_ptr&lt;</span> <span class="pre">reversible_ptr_container</span> <span class="pre">&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
@@ -526,12 +558,29 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 <li><p class="first"><tt class="docutils literal"><span class="pre">~reversible_ptr_container();</span></tt></p>
 <blockquote>
 <ul class="simple">
-<li>Effects: Deletes the stored objects</li>
+<li>Effects: Deletes the stored objects via the clone allocator</li>
 <li>Throws: Nothing</li>
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">void</span> <span class="pre">operator=(</span> <span class="pre">std::auto_ptr&lt;reversible_ptr_container&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">reversible_ptr_container&amp;</span> <span class="pre">operator=(</span> <span class="pre">const</span> <span class="pre">reversible_ptr_container&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Assigns a clone of <tt class="docutils literal"><span class="pre">r</span></tt></li>
+<li>Exception safety: strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;class</span> <span class="pre">Derived&gt;</span> <span class="pre">reversible_ptr_container&amp;</span> <span class="pre">operator=(</span> <span class="pre">const</span> <span class="pre">reversible_ptr_container&lt;Derived&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Assigns a clone of <tt class="docutils literal"><span class="pre">r</span></tt></li>
+<li>Requirements: <tt class="docutils literal"><span class="pre">Derived</span></tt> is derived from <tt class="docutils literal"><span class="pre">T</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">reversible_ptr_container&amp;</span> <span class="pre">operator=(</span> <span class="pre">std::auto_ptr&lt;reversible_ptr_container&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: Deletes the stored objects and then takes ownership of the supplied pointers</li>
@@ -643,6 +692,15 @@ think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr
 </ul>
 </blockquote>
 </li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">VoidPtrContainer&amp;</span> <span class="pre">base();</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">const</span> <span class="pre">VoidPtrContainer&amp;</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Returns: a reference to the wrapped container</li>
+</ul>
+</blockquote>
+</li>
 </ul>
 </div>
 <div class="section">
@@ -708,7 +766,7 @@ operation( const ptr_container&amp; l, const ptr_container&amp; r );
 objects are compared and not the pointers to objects.</p>
 </div>
 <div class="section">
-<h2><a id="semantics-clonability" name="semantics-clonability"><span id="clonability"></span>Semantics: clonability</a></h2>
+<h2><a id="semantics-cloneability" name="semantics-cloneability"><span id="cloneability"></span>Semantics: cloneability</a></h2>
 <ul>
 <li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">T,</span> <span class="pre">class</span> <span class="pre">CloneAllocator</span> <span class="pre">&gt;</span>
 <span class="pre">reversible_ptr_container&lt;T,CA,VPC&gt;*</span> 
@@ -741,33 +799,23 @@ objects are compared and not the pointers to objects.</p>
 <p>All containers can be serialized by means of
 <a class="reference" href="../../serialization/index.html">Boost.Serialization</a>. For an overview, see
 <a class="reference" href="reference.html#serialization">Serialization of Pointer Containers</a>.</p>
-<ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Archive</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">save(</span> <span class="pre">Archive&amp;</span> <span class="pre">ar,</span> <span class="pre">const</span> <span class="pre">unsigned</span> <span class="pre">version</span> <span class="pre">)</span> <span class="pre">const;</span></tt></p>
 <blockquote>
+<pre class="literal-block">
+template&lt;class Archive, class T, class CA, class VPC&gt;
+void serialize( Archive&amp; ar, reversible_ptr_container&lt;T,CA,VPC&gt;&amp; c, const unsigned int version );
+</pre>
+</blockquote>
 <ul class="simple">
-<li>Effects: Saves the container to the archive.</li>
+<li>Effects: Saves or loads the container to/from the archive.</li>
 <li>Remarks: This function is called automatically be stream operators in
 Boost.Serialization</li>
-</ul>
-</blockquote>
-</li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Archive</span> <span class="pre">&gt;</span>
-<span class="pre">void</span> <span class="pre">load(</span> <span class="pre">Archive&amp;</span> <span class="pre">ar,</span> <span class="pre">const</span> <span class="pre">unsigned</span> <span class="pre">version</span> <span class="pre">);</span></tt></p>
-<blockquote>
-<ul class="simple">
-<li>Effects: Clears the container and then loads a new container from the archive.</li>
-<li>Remarks: This function is called automatically be stream operators in
-Boost.Serialization</li>
-<li>Exception safety: Basic guarantee</li>
-</ul>
-</blockquote>
-</li>
+<li>Exception safety: Loading gives the basic guarantee</li>
 </ul>
 <hr><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2006. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Thorsten Ottosen 2004-2007. Use, modification and distribution is subject to the Boost Software License, Version 1.0 (see <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">LICENSE_1_0.txt</a>).</td>
 </tr>
 </tbody>
 </table>

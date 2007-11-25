@@ -11,6 +11,8 @@
 project boost/wave
     : requirements
       <link>shared:<define>BOOST_ALL_DYN_LINK=1
+      <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+      <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
     : source-location ../src
     ;
 
@@ -31,7 +33,9 @@ SOURCES =
 lib boost_wave
     :
     $(SOURCES)
-    /boost/filesystem//boost_filesystem
+    ../../filesystem/build//boost_filesystem
+    ../../thread/build//boost_thread
+    ../../date_time/build//boost_date_time
     ;
 
 for local source in $(SOURCES)
@@ -46,15 +50,13 @@ for local source in $(SOURCES)
     {
         requirements += <warnings>off ;
     }
+
+    if $(source) in instantiate_re2c_lexer instantiate_re2c_lexer_str
+    {
+        requirements += <toolset>msvc-8.0:<define>_CRT_SECURE_NO_WARNINGS ;
+    }
+
     obj $(source) : $(source).cpp : $(requirements) ;
 }
 
-install dist-lib
-    :
-    boost_wave
-    :
-    <install-type>LIB
-    <location>../../../dist/lib
-    ;
-
-explicit dist-lib ;
+boost-install boost_wave ;

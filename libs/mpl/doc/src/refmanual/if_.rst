@@ -1,5 +1,10 @@
 .. Metafunctions/Type Selection//if_ |10
 
+.. Copyright Aleksey Gurtovoy, David Abrahams 2007.
+.. Distributed under the Boost
+.. Software License, Version 1.0. (See accompanying
+.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 if\_
 ====
 
@@ -74,6 +79,23 @@ Example
 
     BOOST_MPL_ASSERT(( is_same<t1, char> ));
     BOOST_MPL_ASSERT(( is_same<t2, long> ));
+
+
+.. parsed-literal::
+
+    // allocates space for an object of class T on heap or "inplace"
+    // depending on its size
+    template< typename T > struct lightweight
+    {
+        // ...
+        typedef typename if\_<
+              less_equal< sizeof\_<T>, sizeof\_<T*> >
+            , inplace_storage<T>
+            , heap_storage<T>
+            >::type impl_t;
+
+        impl_t impl;
+    };
 
 
 See also

@@ -327,7 +327,15 @@ namespace boost
     {
     public: // <a class="reference" href="#construct-copy-destroy">construct/copy/destroy</a>
         ptr_array();
-        ptr_array( std::auto_ptr&lt;ptr_array&gt;&amp; r );
+        explicit ptr_array( const ptr_array&amp; r );
+        template&lt; class U &gt;
+        explicit ptr_array( const ptr_array&lt;U,N&gt;&amp; r );                
+        explicit ptr_array( std::auto_ptr&lt;ptr_array&gt;&amp; r );
+        
+        ptr_array&amp; operator=( const ptr_array&amp; r );
+        template&lt; class U &gt;
+        ptr_array&amp; operator=( const ptr_array&lt;U,N&gt;&amp; r );
+        ptr_array&amp; operator=( std::auto_ptr&lt;this_type&gt; r );
 
     public: // <a class="reference" href="reversible_ptr_container.html#iterators">iterators</a>
 
@@ -380,14 +388,40 @@ namespace boost
 <li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array();</span></tt></p>
 <blockquote>
 <ul class="simple">
-<li>Effects: construct array where each element is null</li>
+<li>Effects: constructs array where each element is null</li>
 </ul>
 </blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">ptr_array(</span> <span class="pre">const</span> <span class="pre">ptr_array&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span>
+<span class="pre">explicit</span> <span class="pre">ptr_array(</span> <span class="pre">const</span> <span class="pre">ptr_array&lt;U,N&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<ul class="simple">
+<li>Effects: Constructs array by cloning <tt class="docutils literal"><span class="pre">r</span></tt></li>
+</ul>
 </li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array(</span> <span class="pre">std::auto_ptr&lt;ptr_array&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: take ownership of the supplied pointers</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array&amp;</span> <span class="pre">operator=(</span> <span class="pre">const</span> <span class="pre">ptr_array&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">ptr_array&amp;</span> <span class="pre">operator=(</span> <span class="pre">const</span> <span class="pre">ptr_array&lt;U,N&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: Assigns a clone of <tt class="docutils literal"><span class="pre">r</span></tt></li>
+<li>Exception safety: Strong guarantee</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array&amp;</span> <span class="pre">operator=(</span> <span class="pre">std::auto_ptr&lt;this_type&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<blockquote>
+<ul class="simple">
+<li>Effects: take ownership of the supplied pointers</li>
+<li>Throws: Nothing</li>
 </ul>
 </blockquote>
 </li>

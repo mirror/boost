@@ -1,0 +1,27 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section:rationale Appendix B: Rationale]
+
+[section:static_initialization Static Initialization]
+
+Proto expression types are PODs (Plain Old Data), and do not have constructors.
+They are brace-initialized, as follows:
+
+    terminal<int>::type const _i = {1};
+
+The reason is so that expression objects like `_i` above can be ['statically
+initialized]. Why is static initialization important? The terminals of many
+domain-specific embedded languages are likely to be global const objects, like
+`_1` and `_2` from the Boost.Lambda library. Were these object to require
+run-time initialization, it might be possible to use these objects before they
+are initialized. That would be bad. Statically initialized objects cannot be
+misused that way.
+
+[endsect]
+
+[endsect]

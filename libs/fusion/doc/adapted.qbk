@@ -1,0 +1,168 @@
+[/==============================================================================
+    Copyright (C) 2001-2007 Joel de Guzman, Dan Marsden, Tobias Schwinger
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+===============================================================================/]
+[section Adapted]
+
+Fusion provides a couple of adapters for other sequences such as
+`std::pair`, __mpl__ sequences, and `boost::array`. These adapters are
+written using Fusion's non-intrusive __extension__ mechanism. If you wish
+to use these sequences with fusion, simply include the necessary files and
+they will be regarded as first-class, fully conforming fusion sequences
+[footnote Fusion sequences may also be adapted as fully conforming __mpl__
+sequences (see __intrinsics__). That way, we can have 2-way adaptation to
+and from __mpl__ and Fusion].
+
+[heading Header]
+
+    #include <boost/fusion/adapted.hpp>
+    #include <boost/fusion/include/adapted.hpp>
+
+[section std::pair]
+
+This module provides adapters for `std::pair`. Including the module header
+makes `std::pair` a fully conforming __random_access_sequence__.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/std_pair.hpp>
+    #include <boost/fusion/include/std_pair.hpp>
+
+[heading Model of]
+
+* __random_access_sequence__
+
+[heading Example]
+
+    std::pair<int, std::string> p(123, "Hola!!!");
+    std::cout << __at_c__<0>(p) << std::endl;
+    std::cout << __at_c__<1>(p) << std::endl;
+    std::cout << p << std::endl;
+
+[heading See also]
+
+__std_pair_doc__, __tr1_tuple_pair__
+
+[endsect]
+
+[section mpl sequence]
+
+This module provides adapters for __mpl__ sequences. Including the module
+header makes all __mpl__ sequences fully conforming fusion sequences.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/mpl.hpp>
+    #include <boost/fusion/include/mpl.hpp>
+
+[heading Model of]
+
+* __forward_sequence__ (If the __mpl__ sequence is a forward sequence.)
+* __bidirectional_sequence__ (If the __mpl__ sequence is a bidirectional sequence.)
+* __random_access_sequence__ (If the __mpl__ sequence is a random access sequence.)
+
+[heading Example]
+
+    mpl::vector_c<int, 123, 456> vec_c;
+    fusion::vector2<int, long> v(vec_c);
+    std::cout << __at_c__<0>(v) << std::endl;
+    std::cout << __at_c__<1>(v) << std::endl;
+
+    v = mpl::vector_c<int, 456, 789>();
+    std::cout << __at_c__<0>(v) << std::endl;
+    std::cout << __at_c__<1>(v) << std::endl;
+
+[heading See also]
+
+__mpl__
+
+[endsect]
+
+[section boost::array]
+
+This module provides adapters for `boost::array`. Including the module
+header makes `boost::array` a fully conforming __random_access_sequence__.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/array.hpp>
+    #include <boost/fusion/include/array.hpp>
+
+[heading Model of]
+
+* __random_access_sequence__
+
+[heading Example]
+
+    boost::array<int,3> arr = {{1,2,3}};
+
+    std::cout << *__begin__(arr) << std::endl;
+    std::cout << *__next__(__begin__(arr)) << std::endl;
+    std::cout << *__advance_c__<2>(__begin__(arr)) << std::endl;
+    std::cout << *__prior__(__end__(arr)) << std::endl;
+    std::cout << __at_c__<2>(arr) << std::endl;
+
+[heading See also]
+
+__boost_array_library__
+
+[endsect]
+
+[section boost::tuple]
+This module provides adapters for `boost::tuple`. Including the module
+header makes `boost::tuple` a fully conforming __forward_sequence__.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/boost_tuple.hpp>
+    #include <boost/fusion/include/boost_tuple.hpp>
+
+[heading Model of]
+
+* __forward_sequence__
+
+[heading Example]
+
+    boost::tuple<int,std::string> example_tuple(101, "hello");
+    std::cout << *boost::fusion::begin(example_tuple) << '\n';
+    std::cout << *boost::fusion::next(boost::fusion::begin(example_tuple)) << '\n';
+
+[heading See also]
+
+__boost_tuple_library__
+
+[endsect]
+
+[section boost::variant]
+This module provides adapters for `boost::variant`. Including the module
+header makes `boost::variant` a fully conforming __forward_sequence__.
+The variant acts as a sequence of the types that can be contained in the variant.
+Accessing types not currently stored int the variant will lead to the variant
+being populated with a default constructed value of that type.
+
+[heading Header]
+
+    #include <boost/fusion/adapted/variant.hpp>
+    #include <boost/fusion/include/variant.hpp>
+
+[heading Model of]
+
+* __forward_sequence__
+
+[heading Example]
+
+    boost::variant<int,std::string> example_variant = 101;
+    std::cout << example_variant << '\n';
+    *boost::fusion::find<std::string>(example_variant) = "hello";
+    std::cout << example_variant << '\n';
+
+[heading See also]
+
+__boost_variant_library__
+
+[endsect]
+
+[endsect]

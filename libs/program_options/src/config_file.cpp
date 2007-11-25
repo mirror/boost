@@ -21,8 +21,10 @@ namespace boost { namespace program_options { namespace detail {
     using namespace std;
 
     common_config_file_iterator::common_config_file_iterator(
-        const std::set<std::string>& allowed_options)
-    : allowed_options(allowed_options)
+        const std::set<std::string>& allowed_options,
+        bool allow_unregistered)
+    : allowed_options(allowed_options),
+      m_allow_unregistered(allow_unregistered)
     {
         for(std::set<std::string>::const_iterator i = allowed_options.begin();
             i != allowed_options.end(); 
@@ -100,7 +102,8 @@ namespace boost { namespace program_options { namespace detail {
                     string name = m_prefix + trim_ws(s.substr(0, n));
                     string value = trim_ws(s.substr(n+1));
 
-                    if (!allowed_option(name))
+                    bool registered = allowed_option(name);
+                    if (!registered && !m_allow_unregistered)
                         boost::throw_exception(unknown_option(name));
                                         
                     if (value.empty())
@@ -110,6 +113,7 @@ namespace boost { namespace program_options { namespace detail {
                     this->value().string_key = name;
                     this->value().value.clear();
                     this->value().value.push_back(value);
+                    this->value().unregistered = !registered;
                     break;
 
                 } else {

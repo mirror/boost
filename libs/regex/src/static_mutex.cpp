@@ -155,7 +155,7 @@ void scoped_static_mutex_lock::lock()
 {
    if(0 == m_have_lock)
    {
-      boost::call_once(&static_mutex::init, static_mutex::m_once);
+       boost::call_once(static_mutex::m_once,&static_mutex::init);
       if(0 == m_plock)
          m_plock = new boost::recursive_mutex::scoped_lock(*static_mutex::m_pmutex, false);
       m_plock->lock();

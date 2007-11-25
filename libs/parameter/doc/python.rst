@@ -132,7 +132,8 @@ Python we use the binding utility ``boost::parameter::python::function``.
 and pass to ``boost::python::class_::def()``.
 
 To use ``boost::parameter::python::function`` we first need to define
-a class with forwarding overloads.
+a class with forwarding overloads. This is needed because ``window::open()``
+is a function template, so we can't refer to it in any other way. 
 
 ::
 
@@ -204,7 +205,9 @@ forwarding overloads that we defined earlier. The second one is an `MPL
 Sequence`_ with the keyword tag types and argument types for the function
 specified as function types. The pointer syntax used in ``tag::width*`` and
 ``tag::height*`` means that the parameter is optional. The first element of
-the `MPL Sequence`_ is the return type of the function, in this case ``void``.
+the `MPL Sequence`_ is the return type of the function, in this case ``void``,
+which is passed as the first argument to ``operator()`` in the forwarding
+class.
 
 ..  The
     pointer syntax means that the parameter is optional, so in this case
@@ -295,8 +298,10 @@ the **arity range** of ``mpl::vector2<x(int),y*(int)>`` is ``[2,2]`` and the
 
 Sometimes it is desirable to have a default value for a parameter that differ
 in type from the parameter. This technique is useful for doing simple tag-dispatching
-based on the presence of a parameter. An example_ of this is given in the Boost.Parameter
-docs. The example uses a different technique, but could also have been written like this:
+based on the presence of a parameter. For example:
+
+.. An example_ of this is given in the Boost.Parameter
+   docs. The example uses a different technique, but could also have been written like this:
 
 .. parsed-literal::
 
@@ -351,18 +356,20 @@ docs. The example uses a different technique, but could also have been written l
 
 .. @build()
 
-.. _example: index.html#dispatching-based-on-the-presence-of-a-default
+.. .. _example: index.html#dispatching-based-on-the-presence-of-a-default
 
 In the above example the type of the default for ``color`` is ``mpl::false_``, a
 type that is distinct from any color map that the user might supply.
 
 When binding the case outlined above, the default type for ``color`` will not
 be convertible to the parameter type. Therefore we need to tag the ``color``
-keyword as a *special* keyword. By doing this we tell the binding functions
-that it needs to generate two overloads, one with the ``color`` parameter
-present and one without. Had there been two *special* keywords, four
-overloads would need to be generated. The number of generated overloads is
-equal to 2\ :sup:`N`, where ``N`` is the number of *special* keywords.
+keyword as a *special* keyword. This is done by specifying the tag as
+``tag::color**`` when binding the function (see `concept ParameterSpec`_ for
+more details on the tagging). By doing this we tell the binding functions that
+it needs to generate two overloads, one with the ``color`` parameter present
+and one without. Had there been two *special* keywords, four overloads would
+need to be generated. The number of generated overloads is equal to 2\
+:sup:`N`, where ``N`` is the number of *special* keywords.
 
 ------------------------------------------------------------------------------
 

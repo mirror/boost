@@ -35,27 +35,25 @@ void check_std_container()
 
     BOOST_STATIC_ASSERT(( is_same< range_value<vec_t>::type, vec_t::value_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_iterator<vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<vec_t>::type, vec_t::const_iterator >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_difference<vec_t>::type, vec_t::difference_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<vec_t>::type, vec_t::size_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<vec_t>::type, vec_t::iterator >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
     
     BOOST_STATIC_ASSERT(( is_same< range_value<const vec_t>::type, vec_t::value_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_difference<const vec_t>::type, vec_t::difference_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<const vec_t>::type, vec_t::size_type >::value ));
 
     BOOST_CHECK( begin( vec ) == vec.begin() );
     BOOST_CHECK( end( vec )   == vec.end() );
     BOOST_CHECK( empty( vec ) == vec.empty() );
-    BOOST_CHECK( size( vec ) == vec.size() );
+    BOOST_CHECK( (std::size_t)size( vec ) == vec.size() );
     
     BOOST_CHECK( begin( cvec ) == cvec.begin() );
     BOOST_CHECK( end( cvec )   == cvec.end() );
     BOOST_CHECK( empty( cvec ) == cvec.empty() );
-    BOOST_CHECK( size( cvec ) == cvec.size() );
+    BOOST_CHECK( (std::size_t)size( cvec ) == cvec.size() );
 
 }
 

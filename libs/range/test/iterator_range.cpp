@@ -8,6 +8,7 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
+//#include <boost/range/as_array.hpp>
 
 #include <boost/detail/workaround.hpp>
 
@@ -16,9 +17,9 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
-
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/functions.hpp>
+#include <boost/range/as_literal.hpp> 
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include <iostream>
@@ -65,6 +66,12 @@ void check_iterator_range()
     BOOST_CHECK_EQUAL( distance( r.begin(), r.end() ), 
                        distance( begin( r2 ), end( r2 ) ) );
     cout << r << r2;
+
+        
+#ifndef BOOST_NO_STD_WSTRING
+    wcout << make_iterator_range( wstring( L"a wide string" ) ) 
+          << make_iterator_range( L"another wide string" );
+#endif    
     
     string res  = copy_range<string>( r );
     BOOST_CHECK( equal( res.begin(), res.end(), r.begin() ) );
@@ -73,12 +80,12 @@ void check_iterator_range()
     BOOST_CHECK( rr.equal( r ) );
 
     rr  = make_iterator_range( str.begin(), str.begin() + 5 );
-    BOOST_CHECK( rr == "hello" );
-    BOOST_CHECK( rr != "hell" );
-    BOOST_CHECK( rr < "hello dude" );
-    BOOST_CHECK( "hello" == rr );
-    BOOST_CHECK( "hell"  != rr );
-    BOOST_CHECK( ! ("hello dude" < rr ) );
+    BOOST_CHECK( rr == as_literal("hello") );
+    BOOST_CHECK( rr != as_literal("hell") );
+    BOOST_CHECK( rr < as_literal("hello dude") );
+    BOOST_CHECK( as_literal("hello") == rr );
+    BOOST_CHECK( as_literal("hell")  != rr );
+    BOOST_CHECK( ! (as_literal("hello dude") < rr ) );
     irange rrr = rr;
     BOOST_CHECK( rrr == rr );
     BOOST_CHECK( !( rrr != rr ) );
@@ -88,9 +95,10 @@ void check_iterator_range()
     BOOST_CHECK_EQUAL( cr.front(), 'h' );
     BOOST_CHECK_EQUAL( cr.back(), 'd' );
     BOOST_CHECK_EQUAL( cr[1], 'e' );
+    BOOST_CHECK_EQUAL( cr(1), 'e' );
 
     rrr = make_iterator_range( str, 1, -1 );
-    BOOST_CHECK( rrr == "ello worl" );
+    BOOST_CHECK( rrr == as_literal("ello worl") );
     rrr = make_iterator_range( rrr, -1, 1 );
     BOOST_CHECK( rrr == str );
 
@@ -121,7 +129,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 template< class Container >
 int test_iter_range( Container& a_cont )
 {
-    typedef BOOST_DEDUCED_TYPENAME range_result_iterator<Container>::type citer_type;
+    typedef BOOST_DEDUCED_TYPENAME range_iterator<Container>::type citer_type;
     typedef iterator_range<citer_type> riter_type;
     riter_type a_riter( make_iterator_range( a_cont ) );
     a_riter.front();

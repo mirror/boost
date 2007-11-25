@@ -163,19 +163,44 @@ int main()
 {
    BOOST_TEST(0 != &up1);
    
-   boost::thread thrd1(&thread1_proc);
-   boost::thread thrd2(&thread1_proc);
-   boost::thread thrd3(&thread2_proc);
-   boost::thread thrd4(&thread2_proc);
-   boost::thread thrd5(&thread3_proc);
-   boost::thread thrd6(&thread3_proc);
+   std::list<boost::shared_ptr<boost::thread> > threads;
+   for(int i = 0; i < 2; ++i)
+   {
+      try{
+         threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(&thread1_proc)));
+      }
+      catch(const std::exception& e)
+      {
+         std::cerr << "<note>Thread creation failed with message: " << e.what() << "</note>" << std::endl;
+      }
+   }
+   for(int i = 0; i < 2; ++i)
+   {
+      try{
+         threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(&thread2_proc)));
+      }
+      catch(const std::exception& e)
+      {
+         std::cerr << "<note>Thread creation failed with message: " << e.what() << "</note>" << std::endl;
+      }
+   }
+   for(int i = 0; i < 2; ++i)
+   {
+      try{
+         threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(&thread3_proc)));
+      }
+      catch(const std::exception& e)
+      {
+         std::cerr << "<note>Thread creation failed with message: " << e.what() << "</note>" << std::endl;
+      }
+   }
 
-   thrd1.join();
-   thrd2.join();
-   thrd3.join();
-   thrd4.join();
-   thrd5.join();
-   thrd6.join();
+   std::list<boost::shared_ptr<boost::thread> >::const_iterator a(threads.begin()), b(threads.end());
+   while(a != b)
+   {
+      (*a)->join();
+      ++a;
+   }
 
    return total_failures;
 }

@@ -51,17 +51,9 @@ For example, in ``ptr_set<T>`` the ordering is by default done by
 Similarly, ``operator==()`` for ``container<Foo>`` compares all objects
 with ``operator==(const Foo&, const Foo&)``. 
 
-The containers are neither Copy Constructible nor Assignable
------------------------------------------------------------- 
 
-This is 
-because cloning a lot of pointers can be a very expensive operation; 
-instead functions are provided to transfer ownership.  If a deep-copy is 
-needed anyway, every container has a ``clone()`` member function 
-(see `Example 3 <examples.html>`_).  
-
-Stored elements are required to be `Clonable <reference.html#the-clonable-concept>`_ for a subset of the operations
--------------------------------------------------------------------------------------------------------------------
+Stored elements are required to be `Cloneable <reference.html#the-Cloneable-concept>`_ for a subset of the operations
+---------------------------------------------------------------------------------------------------------------------
 
 This is because most polymorphic objects cannot be copied directly, but 
 they can often be so by a use of a member function (see `Example 4 <examples.html>`_).  Often 

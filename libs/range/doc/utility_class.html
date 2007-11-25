@@ -59,19 +59,16 @@ corresponding <code>const_iterator</code> is. </p>
     <p>
     If the template argument is not a model of Forward Traversal Iterator, one can 
     still use a subset of the interface. In particular, <code>size()</code> requires 
-    Forward Traversal Iterators whereas <code>empty()</code> only requires Single 
+    Random Access Iterators whereas <code>empty()</code> only requires Single 
     Pass Iterators.
     </p>
 
     <p>
     Recall that many default constructed iterators 
     are <i>singular</i> and hence can only be assigned, but not compared or 
-    incremented or anything. However, if one creates a default constructed 
-    <code>iterator_range</code>, then one
-    can still call all its member functions. This means that the 
-    <code>iterator_range</code> will still be usable in many contexts even 
-    though the iterators underneath are not. 
-    </p>
+    incremented or anything. Likewise, if one creates a default constructed 
+    <code>iterator_range</code>, then one have to be careful about not doing
+    anything besides copying.    </p>
     
     <h3>Synopsis</h3>
 
@@ -82,12 +79,10 @@ corresponding <code>const_iterator</code> is. </p>
     </span><span class=keyword>class </span><span class=identifier>iterator_range
     </span><span class=special>{
     </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// Forward Range types
-        </span><span class=keyword>typedef </span><span class=special>...                        </span><span class=identifier>value_type</span><span class=special>;
-        </span><span class=keyword>typedef </span><span class=special>...                        </span><span class=identifier>difference_type</span><span class=special>;
-        </span><span class=keyword>typedef </span><span class=special>...                        </span><span class=identifier>size_type</span><span class=special>;
-        </span><span class=keyword>typedef </span><span class=identifier>ForwardTraversalIterator   </span><span class=identifier>iterator</span><span class=special>;
-        </span><span class=keyword>typedef </span><span class=identifier>ForwardTraversalIterator   </span><span class=identifier>const_iterator</span><span class=special>;
-
+        </span><span class=keyword>typedef </span><span class=identifier>ForwardTraversalIterator             </span><span class=identifier>iterator</span><span class=special>;
+        </span><span class=keyword>typedef </span><span class=identifier>ForwardTraversalIterator             </span><span class=identifier>const_iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=identifier>iterator_difference</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>&gt;::</span><span class=identifier>type  </span><span class=identifier>difference_type</span><span class=special>;</span>
+ 
     </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// construction, assignment
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator2 </span><span class=special>&gt;
         </span><span class=identifier>iterator_range</span><span class=special>( </span><span class=identifier>ForwardTraversalIterator2 </span><span class=identifier>Begin</span><span class=special>, </span><span class=identifier>ForwardTraversalIterator2 </span><span class=identifier>End </span><span class=special>);
@@ -105,22 +100,24 @@ corresponding <code>const_iterator</code> is. </p>
         </span><span class=identifier>iterator_range</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>=( </span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
     
     </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// Forward Range functions
-        </span><span class=identifier>iterator  </span><span class=identifier>begin</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
-        </span><span class=identifier>iterator  </span><span class=identifier>end</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
-        </span><span class=identifier>size_type </span><span class=identifier>size</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
-        </span><span class=keyword>bool      </span><span class=identifier>empty</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=identifier>iterator        </span><span class=identifier>begin</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=identifier>iterator        </span><span class=identifier>end</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=identifier>difference_type </span><span class=identifier>size</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
+        </span><span class=keyword>bool            </span><span class=identifier>empty</span><span class=special>() </span><span class=keyword>const</span><span class=special>;
         
     </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// convenience
-        </span><span class=keyword>operator    </span><a href="#unspecified_bool"><span class=identifier>unspecified_bool_type</span></a><span class=special>() </span><span class=keyword>const</span><span class=special>;
-    </span>    <span class=keyword>bool</span>        <span 
+        </span><span class=keyword>operator        </span><a href="#unspecified_bool"><span class=identifier>unspecified_bool_type</span></a><span class=special>() </span><span class=keyword>const</span><span class=special>;
+    </span>    <span class=keyword>bool</span>            <span 
 class=identifier><a href="#equal">equal</a></span><span
-class=special>( </span><span class=keyword>const <span 
-class=identifier>iterator_range</span><span class=special>& ) </span><span 
+class=special>( </span><span class=keyword>const</span> <span class=identifier>iterator_range</span><span class=special>& ) </span><span 
 class=keyword>const;</span>
-        <span class=identifier>value_type</span><span class=special>&amp; </span><span class=identifier>front</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>
-        <span class=identifier>value_type</span><span class=special>&amp; </span><span class=identifier>back</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>
+        <span class=identifier>reference       </span><span class=identifier>front</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>
+        <span class=identifier>reference       </span><span class=identifier>back</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>
+        <span class=identifier>iterator_range</span><span class=special>&amp;</span> <span class=identifier>advance_begin</span><span class=special>(</span> <span class=identifier>difference_type</span> <span class=identifier>n</span> <span class=special>);</span>
+        <span class=identifier>iterator_range</span><span class=special>&amp;</span> <span class=identifier>advance_end</span><span class=special>(</span> <span class=identifier>difference_type</span> <span class=identifier>n</span> <span class=special>);</span>
         <span class=comment>// for Random Access Range only: </span>
-        <span class=identifier>value_type</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>[]( </span><span class=identifier>size_type </span><span class=identifier>at </span><span class=special>) </span><span class=keyword>const</span><span class=special>;</span>
+        <span class=identifier>reference       </span><span class=keyword>operator</span><span class=special>[]( </span><span class=identifier>difference_type </span><span class=identifier>at </span><span class=special>) </span><span class=keyword>const</span><span class=special>;</span>
+        <span class=identifier>value_type</span>      <span class=keyword>operator</span><span class=special>()( </span><span class=identifier>difference_type </span><span class=identifier>at </span><span class=special>) </span><span class=keyword>const</span><span class=special>;</span>
     </span><span class=special>};
     
     </span><span class=comment>// stream output
@@ -173,11 +170,11 @@ class=keyword>const;</span>
                          </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>End </span><span class=special>);
        
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
-    </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
+    </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
     </span><span class=identifier>make_iterator_range</span><span class=special>( </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
 
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
-    </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>const_iterator_of</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
+    </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
     </span><span class=identifier>make_iterator_range</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
     </span>
     <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Range </span><span class=special>&gt;</span>
@@ -187,7 +184,7 @@ class=keyword>const;</span>
                          </span><span class=keyword>typename </span><span class=identifier>range_difference</span><span class=special>&lt;</span><span class=identifier>Range</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>advance_end </span><span class=special>);
     </span>
     <span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Range </span><span class=special>&gt;</span>
-    <span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_const_iterator</span><span class=special>&lt;</span><span class=identifier>Range</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;</span>
+    <span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=keyword>const </span><span class=identifier>Range</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;</span>
     <span class=identifier>make_iterator_range</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>Range</span><span class=special>&amp; </span><span class=identifier>r</span><span class=special>, 
                          </span><span class=keyword>typename </span><span class=identifier>range_difference</span><span class=special>&lt;</span><span class=identifier>Range</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>advance_begin</span><span class=special>,
                          </span><span class=keyword>typename </span><span class=identifier>range_difference</span><span class=special>&lt;</span><span class=identifier>Range</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>advance_end </span><span class=special>);</span>
@@ -291,12 +288,14 @@ class can propagate constness since it knows what a corresponding
 <span class=keyword>namespace </span><span class=identifier>boost</span>
 <span class=special>{
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
-    </span><span class=keyword>class </span><span class=identifier>sub_range </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_result_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
+    </span><span class=keyword>class </span><span class=identifier>sub_range </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
     </span><span class=special>{
     </span><span class=keyword>public</span><span class=special>: </span>
-        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_result_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><spanclass=special>&gt;::</span><span class=identifier>type </span><span class=identifier>iterator</span><span class=special>;</span>
-        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_const_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type  </span><span class=identifier>const_iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><spanclass=special>&gt;::</span><span class=identifier>type </span><span class=identifier>iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type  </span><span class=identifier>const_iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>iterator_difference</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>&gt;::</span><span class=identifier>type       </span><span class=identifier>difference_type</span><span class=special>;</span>
     
+
     <span class=keyword>public</span><span class=special>: </span><span class=comment>// construction, assignment
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;
         </span><span class=identifier>sub_range</span><span class=special>( </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>Begin</span><span class=special>, </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>End </span><span class=special>);
@@ -305,7 +304,7 @@ class can propagate constness since it knows what a corresponding
         </span><span class=identifier>sub_range</span><span class=special>( </span><span class=identifier>ForwardRange2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
          
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange2 </span><span class=special>&gt;
-        </span><span class=identifier>sub_range</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>Range2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
+        </span><span class=identifier>sub_range</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>ForwardRange2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
          
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardRange2 </span><span class=special>&gt;
         </span><span class=identifier>sub_range</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>=( </span><span class=identifier>ForwardRange2</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>);
@@ -325,8 +324,8 @@ class can propagate constness since it knows what a corresponding
         <span class=identifier>value_type</span><span class=special>&amp;       </span><span class=identifier>back</span><span class=special>();</span>
         <span class=keyword>const </span><span class=identifier>value_type</span><span class=special>&amp; </span><span class=identifier>back</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>
         <span class=comment>// for Random Access Range only: </span>
-        <span class=identifier>value_type</span><span class=special>&amp;       </span><span class=keyword>operator</span><span class=special>[]( </span><span class=identifier>size_type </span><span class=identifier>at </span><span class=special>);</span>
-        <span class=keyword>const </span><span class=identifier>value_type</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>[]( </span><span class=identifier>size_type </span><span class=identifier>at </span><span class=special>) </span><span class=keyword>const</span><span class=special>;</span>
+        <span class=identifier>value_type</span><span class=special>&amp;       </span><span class=keyword>operator</span><span class=special>[]( </span><span class=identifier>difference_type </span><span class=identifier>at </span><span class=special>);</span>
+        <span class=keyword>const </span><span class=identifier>value_type</span><span class=special>&amp; </span><span class=keyword>operator</span><span class=special>[]( </span><span class=identifier>difference_type </span><span class=identifier>at </span><span class=special>) </span><span class=keyword>const</span><span class=special>;</span>
     
     <span class=keyword>public</span><span class=special>:
         </span><span class=comment>// rest of interface inherited from <a href=#iter_range><code>iterator_range</code></a>
@@ -344,15 +343,15 @@ store the result
     from this algorithm. Here is an example of how we can do it with and without
 <code>sub_range</code>
     <pre>
-    <span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>str</span><span class=special>(</span><span class=string>&quot;hello&quot;</span><span class=special>);
-    </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>&gt; </span><span class=identifier>ir </span><span class=special>= </span><span class=identifier>find_first</span><span class=special>( </span><span class=identifier>str</span><span class=special>, </span><span class=string>&quot;ll&quot; </span><span class=special>);
-    </span><span class=identifier>sub_range</span><span class=special>&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&gt;               </span><span class=identifier>sub </span><span class=special>= </span><span class=identifier>find_first</span><span class=special>( </span><span class=identifier>str</span><span class=special>, </span><span class=string>&quot;ll&quot; </span><span class=special>);</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span> <span class=identifier>str</span><span class=special>(</span><span class=string>&quot;hello&quot;</span><span class=special>);</span>
+    <span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>&gt;</span> <span class=identifier>ir</span> <span class=special>=</span> <span class=identifier>find_first</span><span class=special>(</span> <span class=identifier>str</span><span class=special>,</span> <span class=identifier>as_literal</span><span class=special>(</span><span class=string>&quot;ll&quot;</span><span class=special>)</span> <span class=special>);</span>
+    <span class=identifier>sub_range</span><span class=special>&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&gt;</span>               <span class=identifier>sub</span> <span class=special>=</span> <span class=identifier>find_first</span><span class=special>(</span> <span class=identifier>str</span><span class=special>,</span> <span class=identifier>as_literal</span><span class=special>(</span><span class=string>&quot;ll&quot;</span><span class=special>)</span> <span class=special>);</span>
 </pre>
  </p>
 
 <hr>
   <p>
-    (C) Copyright Thorsten Ottosen 2003-2004. Use, modification and distribution is subject to the Boost Software License, Version 1.0.
+    (C) Copyright Thorsten Ottosen 2003-2007
   </p>
 
   <br>

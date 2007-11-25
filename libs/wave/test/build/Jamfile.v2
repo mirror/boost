@@ -4,7 +4,7 @@
 #
 # http://www.boost.org/
 #
-# Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost 
+# Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost 
 # Software License, Version 1.0. (See accompanying file 
 # LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -12,10 +12,17 @@
 #
 # These are the sources to compile for the testwave application
 #
-SOURCES = testwave testwave_app
+SOURCES_STATIC = testwave testwave_app
     ;
     
-path-constant TESTWAVE_DIR : ../testwave/testfiles ;    
+SOURCES_DYNAMIC = testwave_dll testwave_app_dll
+    ;
+
+SOURCES = $(SOURCE_STATIC) $(SOURCES_DYNAMIC)
+    ;
+    
+path-constant TESTWAVE_DIR : ../testwave/testfiles 
+    ;
 
 #
 # This are the arguments for the testwave executable
@@ -32,18 +39,16 @@ TESTWAVE_ARGUMENTS =
 TESTWAVE_FILES = test.cfg
     ;
 
-
 project wave/test
-    : requirements
-        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
-        <toolset-msvc:version>7.1_stlport4:<rtti>off 
-#        <os>NT:<runtime-link>static
-        <threading>single
-        <variant>debug
-        <define>BOOST_LIB_DIAGNOSTIC=1
-	<define>BOOST_ALL_NO_LIB=1
-	<link>shared:<define>BOOST_ALL_DYN_LINK=1
     ;
+
+for local source in $(SOURCES)
+{
+    local requirements ;
+    requirements += <toolset-msvc:version>7.1:<rtti>off ; # workaround for compiler bug
+    requirements += <toolset-msvc:version>7.1_stlport4:<rtti>off ; 
+    obj $(source) : ../testwave/$(source).cpp : $(requirements) ;
+}
 
 #
 # Wave test suite
@@ -53,10 +58,13 @@ test-suite wave
         [   
             run
             # sources
-                ../testwave/$(SOURCES).cpp
+                ../testwave/$(SOURCES_DYNAMIC).cpp
                 /boost/wave//boost_wave 
                 /boost/program_options//boost_program_options
                 /boost/filesystem//boost_filesystem    
+                /boost/system//boost_system    
+                /boost/thread//boost_thread
+                /boost/date_time//boost_date_time
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -65,7 +73,13 @@ test-suite wave
             # input files
             :
             # requirements
-            :
+                <threading>multi
+                <variant>debug
+                <link>shared:<define>BOOST_ALL_DYN_LINK=1
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
+#                <define>BOOST_LIB_DIAGNOSTIC=1
+            :    
             # name
                 testwave_dll
         ]
@@ -73,10 +87,13 @@ test-suite wave
         [   
             run
             # sources
-                ../testwave/$(SOURCES).cpp
+                ../testwave/$(SOURCES_STATIC).cpp
                 /boost/wave//boost_wave/<link>static
                 /boost/program_options//boost_program_options/<link>static
                 /boost/filesystem//boost_filesystem/<link>static
+                /boost/system//boost_system/<link>static
+                /boost/thread//boost_thread/<link>static
+                /boost/date_time//boost_date_time/<link>static
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -85,7 +102,12 @@ test-suite wave
             # input files
             : 
             # requirements
-	    <link>static     # Linking to DLL tested by testwave_dll
+                <threading>multi
+                <variant>debug
+	        <link>static     # Linking to DLL tested by testwave_dll
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
+#                <define>BOOST_LIB_DIAGNOSTIC=1
             : 
             # name
                 testwave
@@ -97,12 +119,21 @@ test-suite wave
             # sources
                 ../testlexers/test_slex_lexer.cpp
                 /boost/wave//boost_wave
+                /boost/program_options//boost_program_options
+                /boost/filesystem//boost_filesystem
+                /boost/thread//boost_thread
+                /boost/system//boost_system
+                /boost/date_time//boost_date_time
             :
             # arguments
             :
             # input files
             :
             # requirements
+                <threading>multi
+                <variant>debug
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
             :
             # name
                 test_slex_lexer
@@ -113,12 +144,21 @@ test-suite wave
             # sources
                 ../testlexers/test_re2c_lexer.cpp
                 /boost/wave//boost_wave
+                /boost/program_options//boost_program_options
+                /boost/filesystem//boost_filesystem
+                /boost/thread//boost_thread
+                /boost/system//boost_system
+                /boost/date_time//boost_date_time
             :
             # arguments
             :
             # input files
             :
             # requirements
+                <threading>multi
+                <variant>debug
+                <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
+                <toolset>msvc-8.0:<define>_CRT_SECURE_NO_DEPRECATE
             :
             # name
                 test_re2c_lexer

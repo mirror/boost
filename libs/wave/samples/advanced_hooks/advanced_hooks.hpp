@@ -56,7 +56,7 @@ public:
     found_directive(TokenT const& directive)
 #else
     template <typename ContextT, typename TokenT>
-    void
+    bool
     found_directive(ContextT const& ctx, TokenT const& directive)
 #endif
     {
@@ -81,6 +81,10 @@ public:
         default:
             break;
         }
+
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
+        return false;
+#endif
     }
 
     ///////////////////////////////////////////////////////////////////////////

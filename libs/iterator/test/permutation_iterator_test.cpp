@@ -10,7 +10,7 @@
 #include <boost/iterator/permutation_iterator.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/iterator/iterator_concepts.hpp>
-#include <boost/concept_check.hpp>
+#include <boost/concept/assert.hpp>
 
 #include <vector>
 #include <list>
@@ -28,11 +28,11 @@ void iterop_test()
     typedef boost::permutation_iterator< double*, int const* > permutation_type;
     typedef boost::permutation_iterator< double const*, int const* > permutation_const_type;
   
-  boost::function_requires<
+    BOOST_CONCEPT_ASSERT((
       boost_concepts::InteroperableIteratorConcept<
            permutation_type
          , permutation_const_type
-               > >();
+      >));
 }
 
 void permutation_test()

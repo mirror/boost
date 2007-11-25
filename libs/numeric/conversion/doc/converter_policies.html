@@ -58,12 +58,23 @@ HREF="../../../../boost/numeric/conversion/converter_policies.hpp">boost/numeric
 <PRE>namespace boost { namespace numeric {
 
 
+
+
+
   enum range_check_result
+
   {
+
     cInRange     ,
+
     cNegOverflow ,
+
     cPosOverflow
+
   } ;
+
+
+
 
 
 } }</PRE>
@@ -79,9 +90,13 @@ HREF="../../../../boost/numeric/conversion/converter_policies.hpp">boost/numeric
   or derived.</P>
 <P>It must have the following interface (it does not has to be a template class):</P>
 <PRE>  struct YourOverflowHandlerPolicy
+
   {
+
     void operator() ( boost::range_check_result ) ; // throw bad_cast or derived
+
   } ;
+
 </PRE>
 <P>It is called with the result of the converter's <CODE>out_of_range()</CODE>
   inside <CODE>validate_range()</CODE>.</P>
@@ -90,24 +105,45 @@ library:</P>
 <PRE>namespace boost { namespace numeric {
 
 
+
+
+
   struct <A NAME="oh_def">def_overflow_handler</a>
+
   {
+
     void operator() ( range_check_result r ) // throw bad_numeric_conversion derived
+
     {
+
       if ( r == cNegOverflow )
+
         throw negative_overflow() ;
+
       else if ( r == cPosOverflow )
+
              throw positive_overflow() ;
+
     }
+
   } ;
+
+
 
   struct <A NAME="oh_silent">silent_overflow_handler</a>
+
   {
+
     void operator() ( range_check_result ) // no-throw
+
       {}
+
   } ;
 
+
+
 } }
+
 </PRE>
 
 <P>And these are the Exception Classes thrown by the default
@@ -115,29 +151,53 @@ overflow handler <a href="#x-note">(see IMPORTANT note)</a></P>
 <PRE>namespace boost { namespace numeric {
 
 
+
+
+
   class <a name="bad_numc">bad_numeric_cast</a> : public std::bad_cast
+
   {
+
     public:
 
+
+
       virtual const char *what() const // throw()
+
         {  return &quot;bad numeric conversion: overflow&quot;; }
+
   };
 
-  class <a name="negovr">negative_overflow</a> : public bad_numeric_conversion
+
+
+  class <a name="negovr">negative_overflow</a> : public bad_numeric_cast
   {
+
     public:
 
+
+
       virtual const char *what() const // throw()
+
         {  return &quot;bad numeric conversion: negative overflow&quot;; }
+
   };
-  class <a name="posovr">positive_overflow</a> : public bad_numeric_conversion
+
+  class <a name="posovr">positive_overflow</a> : public bad_numeric_cast
   {
+
     public:
 
+
+
       virtual const char *what() const // throw()
+
         { return &quot;bad numeric conversion: positive overflow&quot;; }
+
   };
+
 } }
+
 </PRE>
 
 <a name="x-note"><p><b>IMPORTANT RELEASE NOTE for 1.33</b></p></a>
@@ -160,15 +220,25 @@ overflow handler <a href="#x-note">(see IMPORTANT note)</a></P>
   inherits from this policy.</U></P>
 <P>The policy must have the following interface:</P>
 <PRE>  template&lt;class S&gt;
+
   struct YourFloat2IntRounderPolicy
+
   {
+
     typedef S               source_type ;
+
     typedef <I>{S or S const&amp;}</I> argument_type ;
+
+
 
     static source_type nearbyint ( argument_type s ) { ... }
 
+
+
     typedef mpl::integral_c&lt;std::float_round_style,std::<i>round_...</i>&gt; round_style ;
+
   } ;
+
 </PRE>
 
 <P>These are the rounder classes provided by the library:</P>
@@ -180,47 +250,88 @@ overflow handler <a href="#x-note">(see IMPORTANT note)</a></P>
   <P>(only the specific parts are shown, see the general policy form above)</P>
   <PRE>namespace boost { namespace numeric {
 
+
+
   <A NAME="trunc"></A>template&lt;class S&gt;
+
   struct Trunc
+
   {
+
     static source_type nearbyint ( argument_type s )
+
       {
+
         using std::floor ;
+
         using std::ceil  ;
+
         return s >= static_cast&lt;S&gt;(0) ? floor(s) : ceil(s) ;
+
       }
+
+
 
     typedef mpl::integral_c&lt;std::float_round_style,std::round_toward_zero&gt; round_style ;
+
   } ;
+
   </PRE>
   <PRE>  <A NAME="round"></A>template&lt;class S&gt;
+
   struct RoundEven
+
   {
+
     static source_type nearbyint ( argument_type s )
+
       {
+
         return <i>impl-defined-value</i> ;
+
       }
 
+
+
       typedef mpl::integral_c&lt;std::float_round_style,std::round_to_nearest&gt; round_style ;
+
   } ;
+
 </PRE>
 <PRE>  <A NAME="ceil"></A>template&lt;class S&gt;
+
   struct Ceil
+
   {
+
     static source_type nearbyint ( argument_type s )
+
     {<br>      using std::ceil ;<br>      return ceil(s) ;<br>    }
 
+
+
     typedef mpl::integral_c&lt;std::float_round_style,std::round_toward_infinity&gt; round_style ;
+
   } ;
+
 </PRE>
 <PRE>  <A NAME="floor"></A>template&lt;class S&gt;
+
   struct Floor
+
   {
+
     static source_type nearbyint ( argument_type s )
+
     {<br>      using std::floor ;<br>      return floor(s) ;<br>    }
 
+
+
     typedef mpl::integral_c&lt;std::float_round_style,std::round_toward_neg_infinity&gt; round_style ;
+
   } ;
+
+
 
 } } // namespace numeric, namespace boost</PRE>
 
@@ -245,13 +356,21 @@ overflow handler <a href="#x-note">(see IMPORTANT note)</a></P>
   inherits from this policy.</U></P>
 <P>The policy must have the following interface:</P>
 <PRE>  template&lt;class Traits&gt;
+
   struct YourRawConverterPolicy
+
   {
+
     typedef typename Traits::result_type   result_type   ;
+
     typedef typename Traits::argument_type argument_type ;
 
+
+
     static result_type low_level_convert ( argument_type s ) { return <I>&lt;impl defined&gt;</I> ; }
+
   } ;
+
 </PRE>
 
 <P>This policy is mostly provided as a hook for user defined types which don't
@@ -262,17 +381,31 @@ by the library:</P>
 <PRE>namespace boost { namespace numeric {
 
 
+
+
+
   template&lt;class Traits&gt;
+
   struct <A NAME="rawnumc">raw_numeric_converter</A>
+
   {
+
     typedef typename Traits::result_type   result_type   ;
+
     typedef typename Traits::argument_type argument_type ;
 
+
+
     static result_type low_level_convert ( argument_type s )
+
       { return static_cast&lt;result_type&gt;(s) ; }
+
   } ;
 
+
+
 }
+
 </PRE>
 
 <HR>
@@ -284,20 +417,35 @@ by the library:</P>
   policy.</U></P>
 <P>The policy must have the following interface:</P>
 <PRE>  template&lt;class Traits&gt;
+
   struct YourRangeCheckerPolicy
+
   {
+
      typedef typename Traits::argument_type argument_type ;
 
+
+
      // Determines if the value 's' fits in the range of the Target type.
+
      static range_check_result out_of_range ( argument_type s ) ;
 
+
+
      // Checks whether the value 's' is out_of_range()
+
      // and passes the result of the check to the OverflowHandler policy.
+
      static void validate_range ( argument_type s )
+
        {
+
          OverflowHandler()( out_of_range(s) ) ;
+
        }
+
   } ;
+
 </PRE>
 <P>This policy is <b>only</b> provided as a hook for user defined types which
   require range checking (which is disabled by default when a UDT is involved).<br>
@@ -309,7 +457,7 @@ by the library:</P>
 <P>Back to <A HREF="index.html">Numeric Conversion library index</A></P>
 <HR>
 <P>Revised 23 June 2004</P>
-<p>Â© Copyright Fernando Luis Cacciola Carballal, 2004</p>
+<p>© Copyright Fernando Luis Cacciola Carballal, 2004</p>
 <p> Use, modification, and distribution are subject to the Boost Software
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

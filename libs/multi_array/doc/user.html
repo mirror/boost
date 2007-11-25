@@ -255,7 +255,9 @@ useful for writing dimension-independent code.
 </blockquote>
 
 <p>The second method involves passing the constructor an <tt>extent_gen</tt>
-object, specifying the matrix dimensions. By default, the library constructs a
+object, specifying the matrix dimensions. The <tt>extent_gen</tt> type
+  is defined in the <tt>multi_array_types</tt> namespace and as a
+  member of every array type, but by default, the library constructs a
 global <tt>extent_gen</tt> object <tt>boost::extents</tt>.  In case of
 concern about memory used by these objects, defining 
 <tt>BOOST_MULTI_ARRAY_NO_GENERATORS</tt> before including the library
@@ -316,13 +318,17 @@ already existing array component.  It allows you to create a sub-view that
 retains the same number of dimensions as the original array or one
 that has less dimensions than the original as well.
 
-<p>Sub-view creation occurs by placing a call to operator[], passing it 
-an <tt>index_gen</tt> type.  The <tt>index_gen</tt> is populated by
-passing <tt>index_range</tt> objects to its <tt>operator[]</tt>. 
-Similar to <tt>boost::extents</tt>, the library by default constructs
-the object <tt>boost::indices</tt>.  You can suppress this object 
-by defining <tt>BOOST_MULTI_ARRAY_NO_GENERATORS</tt> before 
-including the library header. A simple sub-view creation example follows.
+<p>Sub-view creation occurs by placing a call to operator[], passing
+it an <tt>index_gen</tt> type.  The <tt>index_gen</tt> is populated by
+passing <tt>index_range</tt> objects to its <tt>operator[]</tt>.
+The <tt>index_range</tt> and <tt>index_gen</tt> types are defined in
+the <tt>multi_array_types</tt> namespace and as nested members of
+every array type.  Similar to <tt>boost::extents</tt>, the library by
+default constructs the object <tt>boost::indices</tt>.  You can
+suppress this object by
+defining <tt>BOOST_MULTI_ARRAY_NO_GENERATORS</tt> before including the
+library header. A simple sub-view creation example follows.
+
 <h3>Example</h3>
 <blockquote>
 <pre>
@@ -335,7 +341,8 @@ including the library header. A simple sub-view creation example follows.
   // dim 2: [0,4) (strided by 2), 
   // 
 
-  typedef array_type::index_range range;
+  typedef boost::multi_array_types::index_range range;
+  // OR typedef array_type::index_range range;
   array_type::array_view&lt;3&gt;::type myview =
     myarray[ boost::indices[range(0,2)][range(1,3)][range(0,4,2)] ];
 
@@ -361,7 +368,7 @@ called slicing).
   // [0,1,2), 1, [0,2,4) 
   // 
 
-  typedef array_type::index_range range;
+  typedef boost::multi_array_types::index_range range;
   array_type::index_gen indices;
   array_type::array_view&lt;2&gt;::type myview =
     myarray[ indices[range(0,2)][1][range(0,4,2)] ];
@@ -382,7 +389,7 @@ that specify the same range.
   // [base,stride,bound)
   // [0,2,4) 
 
-  typedef array_type::index_range range;
+  typedef boost::multi_array_types::index_range range;
   range a_range;
   a_range = range(0,4,2);
   a_range = range().start(0).finish(4).stride(2);
@@ -402,7 +409,7 @@ dimension it is used to specify.
 <h3>Example</h3>
 <blockquote>
 <pre>
-  typedef array_type::index_range range;
+  typedef boost::multi_array_types::index_range range;
   range a_range;
 
   // All elements in this dimension
@@ -482,13 +489,16 @@ stored in ascending or descending order.
 In some situations, it may be inconvenient or awkward to use an 
 array that is zero-based.
 the Boost.MultiArray components provide two facilities for changing the
-bases of an array.  One may specify a pair of range values to
-the extent_gen constructor in order to set the base value. 
+bases of an array.  One may specify a pair of range values, with
+the <tt>extent_range</tt> type, to
+the <tt>extent_gen</tt> constructor in order to set the base value. 
+
 <h3>Example</h3>
 <blockquote>
 <pre>
   typedef boost::multi_array&lt;double, 3&gt; array_type;
-  typedef array_type::extent_range range;
+  typedef boost::multi_array_types::extent_range range;
+  // OR typedef array_type::extent_range range;
 
   array_type::extent_gen extents;
  
@@ -507,7 +517,6 @@ reset the bases.  To set all bases to the same value, use the
 <blockquote>
 <pre>
   typedef boost::multi_array&lt;double, 3&gt; array_type;
-  typedef array_type::extent_range range;
 
   array_type::extent_gen extents;
  
@@ -524,7 +533,6 @@ An alternative is to set each base separately using the
 <blockquote>
 <pre>
   typedef boost::multi_array&lt;double, 3&gt; array_type;
-  typedef array_type::extent_range range;
 
   array_type::extent_gen extents;
  
@@ -548,7 +556,6 @@ elements contained remains the same.
 <blockquote>
 <pre>
   typedef boost::multi_array&lt;double, 3&gt; array_type;
-  typedef array_type::extent_range range;
 
   array_type::extent_gen extents;
   array_type A(extents[2][3][4]);
@@ -577,7 +584,6 @@ no longer be available.
 <blockquote>
 <pre>
   typedef boost::multi_array&lt;int, 3&gt; array_type;
-  typedef array_type::extent_range range;
 
   array_type::extent_gen extents;
   array_type A(extents[3][3][3]);

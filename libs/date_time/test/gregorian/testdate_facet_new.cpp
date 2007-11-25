@@ -116,6 +116,7 @@ int main() {
       teststreaming("default classic date", d, std::string("10/13/04"),
                     std::locale(std::locale::classic(), datefacet));
       std::cout << "default classic date output: " << d << std::endl;
+
     }
     {
       date_facet* datefacet = new date_facet();

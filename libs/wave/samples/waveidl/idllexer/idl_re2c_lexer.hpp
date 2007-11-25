@@ -62,7 +62,7 @@ public:
     typedef char                                        char_t;
     typedef boost::wave::cpplexer::re2clex::Scanner     base_t;
     typedef boost::wave::cpplexer::lex_token<PositionT> token_type;
-    typedef typename token_type::string_type                  string_type;
+    typedef typename token_type::string_type            string_type;
     
     lexer(IteratorT const &first, IteratorT const &last, 
         PositionT const &pos, boost::wave::language_support language);
@@ -78,7 +78,7 @@ public:
     }
 
 // error reporting from the re2c generated lexer
-    static int report_error(scanner_t const *s, char const *, ...);
+    static int report_error(scanner_t const *s, int code, char const *, ...);
 
 private:
     static char const *tok_names[];
@@ -102,7 +102,6 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
     using namespace boost::wave::cpplexer::re2clex;
     
     memset(&scanner, '\0', sizeof(scanner_t));
-    scanner.fd = -1;
     scanner.eol_offsets = aq_create();
     scanner.first = scanner.act = (uchar *)&(*first);
     scanner.last = scanner.first + std::distance(first, last);
@@ -141,14 +140,14 @@ lexer<IteratorT, PositionT>::get()
     
     if (T_IDENTIFIER == id) {
     // test identifier characters for validity (throws if invalid chars found)
-        if (!(language & support_option_no_character_validation)) {
+        if (!boost::wave::need_no_character_validation(language)) {
             boost::wave::cpplexer::impl::validate_identifier_name(value, 
                 scanner.line, -1, filename); 
         }
     }
     else if (T_STRINGLIT == id || T_CHARLIT == id) {
     // test literal characters for validity (throws if invalid chars found)
-        if (!(language & support_option_no_character_validation)) {
+        if (!boost::wave::need_no_character_validation(language)) {
             boost::wave::cpplexer::impl::validate_literal(value, scanner.line, 
                 -1, filename); 
         }
@@ -165,7 +164,8 @@ lexer<IteratorT, PositionT>::get()
 
 template <typename IteratorT, typename PositionT>
 inline int 
-lexer<IteratorT, PositionT>::report_error(scanner_t const *s, char const* msg, ...)
+lexer<IteratorT, PositionT>::report_error(scanner_t const *s, int errcode,
+    char const* msg, ...)
 {
     BOOST_ASSERT(0 != s);
     BOOST_ASSERT(0 != msg);
@@ -178,8 +178,8 @@ lexer<IteratorT, PositionT>::report_error(scanner_t const *s, char const* msg, .
     vsprintf(buffer, msg, params);
     va_end(params);
     
-    BOOST_WAVE_LEXER_THROW(boost::wave::cpplexer::lexing_exception, 
-        generic_lexing_error, buffer, s->line, -1, s->file_name);
+    BOOST_WAVE_LEXER_THROW_VAR(boost::wave::cpplexer::lexing_exception, 
+        errcode, buffer, s->line, -1, s->file_name);
     return 0;
 }
 
@@ -194,7 +194,9 @@ template <
     typename PositionT = boost::wave::util::file_position_type
 >
 class lex_functor 
-:   public lex_input_interface<typename lexer<IteratorT, PositionT>::token_type>
+:   public lex_input_interface_generator<
+        typename lexer<IteratorT, PositionT>::token_type
+    >
 {    
 public:
 
@@ -255,7 +257,7 @@ private:
 
 template <typename IteratorT, typename PositionT>
 BOOST_WAVE_RE2C_NEW_LEXER_INLINE
-lex_input_interface<boost::wave::cpplexer::lex_token<PositionT> > *
+cpplexer::lex_input_interface<cpplexer::lex_token<PositionT> > *
 new_lexer_gen<IteratorT, PositionT>::new_lexer(IteratorT const &first,
     IteratorT const &last, PositionT const &pos, 
     wave::language_support language)

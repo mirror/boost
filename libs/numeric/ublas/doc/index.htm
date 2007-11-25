@@ -153,7 +153,6 @@ Matrix Operations</a></li>
 <ul>
 <li><a href="unbounded_array.htm">Unbounded Array</a></li>
 <li><a href="bounded_array.htm">Bounded Array</a></li>
-<li><a href="array_adaptor.htm">Array Adaptor</a></li>
 <li><a href="range.htm#range">Range</a></li>
 <li><a href="range.htm#slice">Slice</a></li>
 </ul>
@@ -274,7 +273,9 @@ enabled, expression templates disabled) and release mode (size and
 type conformance checks disabled, expression templates enabled).
 Please check, if the preprocessor symbol <code>NDEBUG</code> of
 <code>cassert</code> is defined. <code>NDEBUG</code> enables
-release mode, which in turn uses expression templates.</p>
+release mode, which in turn uses expression templates. You can 
+optionally define <code>BOOST_UBLAS_NDEBUG</code> to disable all
+bounds, structure and similar checks of uBLAS.</p>
 <p>Q: I've written some uBLAS tests, which try to incorrectly
 assign different matrix types or overrun vector and matrix
 dimensions. Why don't I get a compile time or runtime

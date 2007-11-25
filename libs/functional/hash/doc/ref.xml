@@ -1,5 +1,6 @@
+
 <!--
-Copyright 2005-2006 Daniel James.
+Copyright Daniel James 2005-2007
 Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -->
@@ -263,6 +264,42 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       <struct-specialization name="hash">
         <template></template>
         <specialization>
+          <template-arg>long long</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>long long</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>unsigned long long</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>unsigned long long</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
           <template-arg>float</template-arg>
         </specialization>
         <method name="operator()" cv="const">
@@ -474,6 +511,41 @@ for(; first != last; ++first)
 
         <signature>
           <type>std::size_t</type>
+          <parameter name="val"><paramtype>bool</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>char</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>signed char</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned char</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>wchar_t</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>short</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned short</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
           <parameter name="val"><paramtype>int</paramtype></parameter>
         </signature>
 
@@ -490,6 +562,16 @@ for(; first != last; ++first)
         <signature>
           <type>std::size_t</type>
           <parameter name="val"><paramtype>unsigned long</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>long long</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned long long</paramtype></parameter>
         </signature>
 
         <signature>
@@ -620,6 +702,14 @@ for(; first != last; ++first)
           <parameter name="val"><paramtype>std::multimap&lt;K, T, C, A&gt; const&amp;</paramtype></parameter>
         </signature>
 
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::complex&lt;T&gt; const&amp;</paramtype></parameter>
+        </signature>
+
         <description><para>
           Generally shouldn't be called directly by users, instead they should use
           <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
@@ -650,8 +740,16 @@ for(; first != last; ++first)
               </thead>
               <tbody>
                 <row>
-                  <entry><code>int</code>, <code>unsigned int</code>, <code>long</code>, <code>unsigned long</code></entry>
+                  <entry><code>bool</code>,
+                    <code>char</code>, <code>signed char</code>, <code>unsigned char</code>, <code>wchar_t</code>,
+                    <code>short</code>, <code>unsigned short</code>,
+                    <code>int</code>, <code>unsigned int</code>, <code>long</code>, <code>unsigned long</code>
+                  </entry>
                   <entry><code>val</code></entry>
+                </row>
+                <row>
+                  <entry><code>long long</code>, <code>unsigned long long</code></entry>
+                  <entry><code>val</code> when <code>abs(val) &lt;= std::numeric_limits&lt;std::size_t&gt;::max()</code>.</entry>
                 </row>
                 <row>
                   <entry><code>float</code>, <code>double</code>, <code>long double</code></entry>
@@ -687,6 +785,12 @@ for(; first != last; ++first)
 <functionname>hash_combine</functionname>(seed, val.first);
 <functionname>hash_combine</functionname>(seed, val.second);
 return seed;</programlisting></entry>
+                </row>
+                <row>
+                  <entry>
+                    <code>std::complex&lt;T&gt;</code>
+                  </entry>
+                  <entry>When <code>T</code> is a built in type and <code>val.imag() == 0</code>, the result is equal to <code>hash_value(val.real())</code>. Otherwise an unspecified value, except that equal arguments shall yield the same result.</entry>
                 </row>
               </tbody>
             </tgroup>

@@ -42,7 +42,16 @@ void reversible_container_test()
         
     c.assign( c3 );
     BOOST_MESSAGE( "finished construction test" ); 
-                      
+
+    C a_copy( c );
+    BOOST_CHECK_EQUAL( a_copy.size(), c.size() );
+    a_copy = a_copy;
+    BOOST_CHECK_EQUAL( a_copy.size(), c.size() );
+    a_copy.clear();
+    a_copy = a_copy;
+    BOOST_CHECK( a_copy.empty() );
+    BOOST_MESSAGE( "finished copying test" ); 
+
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
         hide_warning(alloc);
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();
@@ -95,6 +104,7 @@ void reversible_container_test()
     c3.insert( c3.end(), c.begin(), c.end() ); 
     c.erase( c.begin() );
     c3.erase( c3.begin(), c3.end() );
+    c3.erase( boost::make_iterator_range(c3) );
     BOOST_CHECK( c3.empty() );
     c.swap( c3 );
     BOOST_CHECK( !c3.empty() );
@@ -136,8 +146,16 @@ void reversible_container_test()
     c3. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
-
     BOOST_MESSAGE( "finished transfer test" );  
+
+    c3.resize( 0u );
+    BOOST_CHECK( c3.empty() );
+    c3.resize( 10u );
+    BOOST_CHECK_EQUAL( c3.size(), 10u );
+    c3.resize( 12u, &*c3.begin() );
+    BOOST_CHECK_EQUAL( c3.size(), 12u );
+    BOOST_MESSAGE( "finished resize test" );  
+    
 }
 
 

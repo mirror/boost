@@ -37,7 +37,7 @@
             <li>Function <a href="#list_of"><code>list_of()</code></a>    
             <li>Function <a href="#map_list_of"><code>map_list_of()</code></a> 
             <li>Function <a href="#tuple_list_of"><code>tuple_list_of()</code></a>
-            <li>Functions <a href="#repeat"><code>repeat()</code>, <code>repeat_fun()</code> and <code>range()</code> </a> 
+			<li>Functions <a href="#repeat"><code>repeat()</code>, <code>repeat_fun()</code> and <code>range()</code> </a>
             <li>Functions <a href="#ref_list_of"><code>ref_list_of()</code> and <code>cref_list_of()</code></a>    
             <li>A <a href="#complicated">"complicated"</a> example    
             <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code>, 
@@ -50,7 +50,8 @@
         <li><a href="#headers">Headers</a> </li>
         <li><a href="#std">Standard containers</a> </li>
         <li>Functions <a href="#list_of_ref"><code>list_of()</code> and <code>map_list_of()</code></a></li>
-        <li>Functions <a href="#repeat_ref"><code>repeat()</code>, <code>repeat_fun()</code> and <code>range()</code> </a>  
+        <li>Functions <a href="#repeat_ref"><code>repeat()</code>, 
+			<code>repeat_fun()</code> and <code>range()</code> </a> </li> 
         <li>Class <a href="#list_inserter"><code>list_inserter</code></a></li>
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
         <li><a href="#limit"> Customizing</a> argument list sizes</li>   
@@ -118,7 +119,7 @@ components are explained in these sections:
         <li>Function <a href="#list_of"><code>list_of()</code></a>    
         <li>Function <a href="#map_list_of"><code>map_list_of()</code></a> 
         <li>Function <a href="#tuple_list_of"><code>tuple_list_of()</code></a>   
-        <li>Functions <a href="#repeat"><code>repeat()</code>, <code>repeat_fun()</code> and <code>range()</code> </a> 
+        <li>Functions <a href="#repeat"><code>repeat()</code>, <code>repeat_fun()</code> and <code>range()</code> </a>
         <li>Functions <a href="#ref_list_of"><code>ref_list_of()</code> and <code>cref_list_of()</code></a>
         <li>A <a href="#complicated">"complicated"</a> example    
         <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code>, <code>ptr_insert()</code> and <code>ptr_map_insert()</code></a>
@@ -249,10 +250,10 @@ the standard containers. </p>
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>; </span><span class=comment>// bring 'list_of()' into scope
 </span><span class=special> 
 </span><span class=special>{
-    </span><span class=keyword>const </span><span class=identifier>list</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>primes </span><span class=special>= </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>1</span><span class=special>)(</span><span class=number>2</span><span class=special>)(</span><span class=number>3</span><span class=special>)(</span><span class=number>5</span><span class=special>)(</span><span class=number>7</span><span class=special>)(</span><span class=number>11</span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>primes</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>6 </span><span class=special>);
+    </span><span class=keyword>const </span><span class=identifier>list</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt; </span><span class=identifier>primes </span><span class=special>= </span><span class=identifier>list_of</span><span class=special>(</span><span class=number>2</span><span class=special>)(</span><span class=number>3</span><span class=special>)(</span><span class=number>5</span><span class=special>)(</span><span class=number>7</span><span class=special>)(</span><span class=number>11</span><span class=special>);
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>primes</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>5 </span><span class=special>);
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>primes</span><span class=special>.</span><span class=identifier>back</span><span class=special>() </span><span class=special>== </span><span class=number>11 </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>primes</span><span class=special>.</span><span class=identifier>front</span><span class=special>() </span><span class=special>== </span><span class=number>1 </span><span class=special>);
+    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>primes</span><span class=special>.</span><span class=identifier>front</span><span class=special>() </span><span class=special>== </span><span class=number>2 </span><span class=special>);
    
     </span><span class=keyword>const </span><span 
 class=identifier>stack</span><span class=special>&lt;</span><span 
@@ -406,6 +407,7 @@ A more general list can be constructed with <code>repeat_fun()</code>:
 The only requirement of the second argument to <code>repeat_fun()</code> is that 
 it is a nullary function. </p>
 
+
 <p>
 If you just need to insert an iterator-range somewhere in the list, the member function <code>range()</code> provides just what you want.
 It is based on <a href="../../range/index.html">Boost.Range</a>, so you can pass all the ranges supported by that library. For example
@@ -438,6 +440,7 @@ It is based on <a href="../../range/index.html">Boost.Range</a>, so you can pass
 As you can see, one can also pass two iterators if that is more appropriate.
 The last example also introduces list of references. More about that below.
 </p>
+
 <h3>Functions <code>ref_list_of()</code> and <code>cref_list_of()</code> <a name="ref_list_of"></h3>
 
 When you need to create an anonymous range of values and speed is essential, 
@@ -647,13 +650,13 @@ Here is a small example:
 </span>
 <span class=special>{
     </span><span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt; </span><span class=identifier>deq</span><span class=special>;
-    </span><span class=identifier>deq </span><span class=special>= </span><span class=identifier>ptr_list_of</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt;( </span><span class=number>42 </span><span class=special>)()()( </span><span class=number>3</span><span class=special>, </span><span class=number>3 </span><span class=special>)( </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>2</span><span class=special>, </span><span class=number>1 </span><span class=special>).</span><span class=identifier>to_container</span><span class=special>( </span><span class=identifier>deq </span><span class=special>);
+    </span><span class=identifier>deq </span><span class=special>= </span><span class=identifier>ptr_list_of</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt;( </span><span class=number>42 </span><span class=special>)()()( </span><span class=number>3</span><span class=special>, </span><span class=number>3 </span><span class=special>)( </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>2</span><span class=special>, </span><span class=number>1 </span><span class=special>);
     </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>5 </span><span class=special>);</span>
 <span class=special>}</span>    
     </pre>
 </blockquote>
 
-Notice the trailing <code>.to_container(deq)</code> which helps many poor 
+Notice that a trailing <code>.to_container(deq)</code> may be added to help many poor 
 compilers to figure out the conversion (a few get it right). 
 Notice also that pointer maps are 
 not supported.
@@ -716,7 +719,9 @@ Originally arguments were passed by value (and still is in
         <li><a href="#headers">Headers</a> </li>
         <li><a href="#std">Standard containers</a> </li>
         <li>Functions <a href="#list_of_ref"><code>list_of()</code> and <code>map_list_of()</code></a></li>
-        <li>Functions <a href="#repeat_ref"><code>repeat()</code> and <code>repeat_fun()</code></a></li>
+        <li>Functions <a href="#repeat_ref"><code>repeat()</code>,<code>repeat_fun()</code> and 
+																	  <code>range()</code>
+																	  </a></li>
         <li>Class <a href="#list_inserter"><code>list_inserter</code></a></li>
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
         <li><a href="#limit">Customizing</a> argument list sizes </li>
@@ -949,10 +954,11 @@ The object returned by the two
 <span class=special>} </span><span class=comment>// namespace 'assign'</span>
 <span class=special>} </span><span class=comment>// namespace 'boost'</span>  </pre></blockquote>
 
+
   <h3>Functions <code>repeat()</code>, 
      <code>repeat_fun()</code> and <code>range()</code> <a name="repeat_ref"> </h3>
   <p>
-      These first two function exist both as free-standing functions and as member functions of the object returned by 
+            These first two function exist both as free-standing functions and as member functions of the object returned by 
       <code>list_of()</code> and of <code>list_inserter</code>. 
       The free-standing versions are used to create a
       hook for <code>operator,()</code> so we can call the functions in the middle of a comma-list. The member functions
@@ -963,7 +969,7 @@ The object returned by the two
           <li> the argument list of <code>repeat_fun()</code> is <code>(std::size_t,Nullary_function)</code>    
       </ul>
       
-  </p>
+	    </p>
   <p>
   The function <code>range()</code> only exists as a member function. The following two overloads are provided:
   <blockquote>
@@ -973,6 +979,7 @@ The object returned by the two
 <span class=keyword>template</span><span class=special>&lt;</span> <span class=keyword>class</span> <span class=identifier>SinglePassRange</span> <span class=special>&gt;</span>
 <span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span> <span class=identifier>range</span><span class=special>(</span> <span class=keyword>const</span> <span class=identifier>SinglePassRange</span><span class=special>&amp;</span> <span class=identifier>rng</span> <span class=special>);</span></pre>
   </blockquote>
+
   </p>
       
   <h3><a name="list_inserter">Class <code>list_inserter</code></a></h3> 

@@ -46,9 +46,6 @@ Rational Numbers</h1>
 
 namespace boost {
 
-template &lt;typename I&gt; I gcd(I n, I m);
-template &lt;typename I&gt; I lcm(I n, I m);
-
 class bad_rational;
 
 template&lt;typename I&gt; class rational {
@@ -239,13 +236,21 @@ The input and output operators rely on the existence of corresponding input
 and output operators for type I.
 </ul>
 
+<p>
+The <code>std::numeric_limits&lt;I&gt;</code> specialization must exist (and be
+visible before <code>boost::rational&lt;I&gt;</code> needs to be specified).
+The value of its <code>is_specialized</code> static data member must be
+<var>true</var> and the value of its <code>is_signed</code> static data member
+must be accurate.
+
 <h2><a name="Interface">Interface</a></h2>
 
 <h3><a name="Utility functions">Utility functions</a></h3>
-Two utility functions are provided, which work on any type I for which the
-following operations are defined: <tt>=, +=, *=, /=, %, &lt;</tt>, and a zero
-value accessible as I(0)
-<br><br>
+
+<p>Two utility function templates may be provided, that should work with <a
+href="#Integer%20Type%20Requirements">any type that can be used</a> with the
+<code>boost::rational&lt;&gt;</code> class template.</p>
+
 <table summary="Common-factor utility functions">
 <tr>
 <td width=5%></td>
@@ -261,8 +266,10 @@ value accessible as I(0)
 </tr>
 </table>
 
-<p><em>Note:</em> In the future, these functions may be moved into a separate
-boost utility library.
+<p>These function templates now forward calls to their equivalents in the <a
+href="../math/">Boost.Math library</a>.  Their presence can be controlled at
+compile time with the <code>BOOST_CONTROL_RATIONAL_HAS_GCD</code> preprocessor
+constant.
 
 <h3><a name="Constructors">Constructors</a></h3>
 <p>Rationals can be constructed from zero, one, or two integer arguments;
@@ -351,7 +358,7 @@ separate user-defined conversion will be more appropriate.
 
 <p><em>Implementation note:</em>
 
-<p>The actual implementation of the rational_cast function is
+<p>The implementation of the rational_cast function was
 
 <pre>
     template &lt;typename Float, typename Int&gt;
@@ -361,7 +368,10 @@ separate user-defined conversion will be more appropriate.
     }
 </pre>
 
-Programs should not be written to depend upon this implementation, however.
+Programs should not be written to depend upon this implementation, however,
+especially since this implementation is now obsolete.  (It required a mixed-mode
+division between types <var>Float</var> and <var>Int</var>, contrary to the <a
+href="#Integer%20Type%20Requirements">Integer Type Requirements</a>.)
 
 <h3><a name="Numerator and Denominator">Numerator and Denominator</a></h3>
 Finally, access to the internal representation of rationals is provided by
@@ -403,19 +413,19 @@ underlying integer type, plus a normalization.
 <li>Increment and decrement operations are essentially as cheap as addition and
 subtraction on the underlying integer type.
 
-<li>(In)equality comparison is essentially as cheap as the same operation on
-the underlying integer type.
+<li>(In)equality comparison is essentially as cheap as two equality operations
+on the underlying integer type.
 
 <li>I/O operations are not cheap, but their performance is essentially
 dominated by the I/O time itself.
 
-<li>The gcd operation is essentially a repeated modulus operation. The only
-other significant operations are construction, assignment, and comparison
+<li>An (implicit) GCD routine call is essentially a repeated modulus operation.
+Its other significant operations are construction, assignment, and comparison
 against zero of IntType values. These latter operations are assumed to be
 trivial in comparison with the modulus operation.
 
-<li>The lcm operation is essentially a gcd, plus a couple of multiplications
-and divisions.
+<li>The (implicit) LCM operation is essentially a GCD plus a multiplication,
+division, and comparison.
 
 <li>The addition and subtraction operations are complex. They will require
 approximately two gcd operations, 3 divisions, 3 multiplications and an
@@ -424,13 +434,15 @@ addition on the underlying integer type.
 <li>The multiplication and division operations require two gcd operations, two
 multiplications, and four divisions.
 
-<li>The comparison operations require two gcd operations, two multiplications,
-four divisions and a comparison in the worst case. On the assumption that
-IntType comparisons are the cheapest of these operations (and that comparisons
-agains zero may be cheaper still), these operations have a number of special
-case optimisations to reduce the overhead where possible. In particular,
-equality and inequality tests are only as expensive as two of the equivalent
-tests on the underlying integer type.
+<li>The compare-with-integer operation does a single integer division &amp;
+modulus pair, at most one extra integer addition and decrement, and at most
+three integer comparisons.
+
+<li>The compare-with-rational operation does two double-sized GCD operations,
+two extra additions and decrements, and three comparisons in the worst case.
+(The GCD operations are double-sized because they are done in piecemeal and the
+interim quotients are retained and compared, whereas a direct GCD function only
+retains and compares the remainders.)
 
 <li>The final fundamental operation is normalizing a rational. This operation
 is performed whenever a rational is constructed (and assigned in place). All
@@ -657,7 +669,7 @@ on the boost list in January 2001.
 be used in the same Boolean contexts as the built-in numeric types, in December
 2005.
 
-<p>Revised December 27, 2005</p>
+<p>Revised November 5, 2006</p>
 
 <p>© Copyright Paul Moore 1999-2001; &copy; Daryle Walker 2005. Permission to
 copy, use, modify, sell and distribute this document is granted provided this

@@ -71,6 +71,7 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "friend"        { BOOST_WAVE_RET(T_FRIEND); }
     "goto"          { BOOST_WAVE_RET(T_GOTO); }
     "if"            { BOOST_WAVE_RET(T_IF); }
+    "import"        { BOOST_WAVE_RET(s->enable_import_keyword ? T_IMPORT : T_IDENTIFIER); }
     "inline"        { BOOST_WAVE_RET(T_INLINE); }
     "int"           { BOOST_WAVE_RET(T_INT); }
     "long"          { BOOST_WAVE_RET(T_LONG); }
@@ -286,10 +287,11 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
 
     "\000"
     {
-        if(cursor != s->eof) 
+        if (s->eof && cursor != s->eof) 
         {
             BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
-            (*s->error_proc)(s, "invalid character '\\000' in input stream");
+            (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                "invalid character '\\000' in input stream");
         }
         BOOST_WAVE_RET(T_EOF);
     }
@@ -300,8 +302,8 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     {
         // flag the error
         BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
-        (*s->error_proc)(s, "invalid character '\\%03o' in input stream", 
-            *--YYCURSOR);
+        (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+            "invalid character '\\%03o' in input stream", *--YYCURSOR);
     }
 */
 
@@ -325,13 +327,15 @@ ccomment:
         if(cursor == s->eof) 
         {
             BOOST_WAVE_UPDATE_CURSOR();   // adjust the input cursor
-            (*s->error_proc)(s, "unterminated 'C' style comment");
+            (*s->error_proc)(s, lexing_exception::generic_lexing_warning,
+                "unterminated 'C' style comment");
         }
         else
         {
             --YYCURSOR;                   // next call returns T_EOF
             BOOST_WAVE_UPDATE_CURSOR();   // adjust the input cursor
-            (*s->error_proc)(s, "invalid character: '\\000' in input stream");
+            (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                "invalid character: '\\000' in input stream");
         }
     }
 
@@ -339,8 +343,8 @@ ccomment:
     {
         // flag the error
         BOOST_WAVE_UPDATE_CURSOR();   // adjust the input cursor
-        (*s->error_proc)(s, "invalid character '\\%03o' in input stream", 
-            *--YYCURSOR);
+        (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+            "invalid character '\\%03o' in input stream", *--YYCURSOR);
     }
 */
 
@@ -359,18 +363,20 @@ cppcomment:
 
     "\000"
     {
-        if (cursor != s->eof) 
+        if (s->eof && cursor != s->eof) 
         {
             --YYCURSOR;                     // next call returns T_EOF
             BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
-            (*s->error_proc)(s, "invalid character '\\000' in input stream");
+            (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+                "invalid character '\\000' in input stream");
         }
         
         --YYCURSOR;                         // next call returns T_EOF
         if (!s->single_line_only)
         {
             BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
-            (*s->error_proc)(s, "Unterminated 'C++' style comment");
+            (*s->error_proc)(s, lexing_exception::generic_lexing_warning,
+                "Unterminated 'C++' style comment");
         }
         BOOST_WAVE_RET(T_CPPCOMMENT);
     }
@@ -379,8 +385,8 @@ cppcomment:
     {
         // flag the error
         BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
-        (*s->error_proc)(s, "invalid character '\\%03o' in input stream",
-            *--YYCURSOR);
+        (*s->error_proc)(s, lexing_exception::generic_lexing_error,
+            "invalid character '\\%03o' in input stream", *--YYCURSOR);
     }
 */
 

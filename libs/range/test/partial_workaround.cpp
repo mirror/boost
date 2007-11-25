@@ -17,18 +17,15 @@
 #endif
 
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+//#define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION 1
 
 #include <boost/range/iterator.hpp>
 #include <boost/range/const_iterator.hpp>
 #include <boost/range/size_type.hpp>
 #include <boost/range/value_type.hpp>
 #include <boost/range/difference_type.hpp>
-#include <boost/range/result_iterator.hpp>
 
-#include <boost/range/begin.hpp>
-#include <boost/range/end.hpp>
-#include <boost/range/size.hpp>
-#include <boost/range/empty.hpp>
+#include <boost/range/functions.hpp>
 #include <boost/range/detail/sfinae.hpp>
 
 #include <boost/static_assert.hpp>

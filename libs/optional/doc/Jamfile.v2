@@ -1,0 +1,28 @@
+# Boost.Optional
+#
+# Copyright (c) 2003-2007 Fernando Luis Cacciola Carballal
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+
+# Quickbook
+# -----------------------------------------------------------------------------
+
+import quickbook ;
+
+xml optional
+    :
+        optional.qbk
+    ;
+
+boostbook standalone
+    :
+        optional
+    :
+        <xsl:param>toc.max.depth=1
+        <xsl:param>toc.section.depth=1
+        <xsl:param>chunk.section.depth=1
+    ;
+

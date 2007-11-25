@@ -1,4 +1,4 @@
-// (C) Copyright Jeremy Siek 2000.
+// (C) Copyright Jeremy Siek, David Abrahams 2000-2006.
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -11,8 +11,8 @@
 
 /*
 
-  This file verifies that function_requires() of the Boost Concept
-  Checking Library catches errors when it is suppose to.
+  This file verifies that BOOST_CONCEPT_ASSERT catches errors in
+  function context.
 
 */
 
@@ -21,6 +21,6 @@ struct foo { };
 int
 main()
 {
-  boost::function_requires< boost::EqualityComparableConcept<foo> >();
-  return 0;
+    BOOST_CONCEPT_ASSERT((boost::EqualityComparable<foo>));
+    return 0;
 }

@@ -207,8 +207,40 @@ in preference to <code>iterator</code>'s for the same reason. For the more darin
 can be completely turned off in uBLAS by defining the configuration macro <code>BOOST_UBLAS_NO_ELEMENT_PROXIES</code>.
 </p>
 
+
+<h3>Controlling the complexity of nested products</h3>
+
+<p>What is the  complexity (the number of add and multiply operations) required to compute the following?
+</p>
+<pre>
+ R = prod(A, prod(B,C)); 
+</pre>
+<p>Firstly the complexity depends on matrix size. Also since prod is transitive (not commutative)
+the bracket order affects the complexity.
+</p>
+<p>uBLAS evaluates expressions without matrix or vector temporaries and honours
+the bracketing structure. However avoiding temporaries for nested product unnecessarly increases the complexity.
+Conversly by explictly using temporary matrices the complexity of a nested product can be reduced.
+</p>
+<p>uBLAS provides 3 alternative syntaxes for this purpose:
+</p>
+<pre>
+ temp_type T = prod(B,C); R = prod(A,T);   // Preferable if T is preallocated
+</pre>
+<pre>
+ prod(A, temp_type(prod(B,C));
+</pre>
+<pre>
+ prod(A, prod&lt;temp_type&gt;(B,C));
+</pre>
+<p>The 'temp_type' is important. Given A,B,C are all of the same type. Say
+matrix&lt;float&gt;, the choice is easy. However if the value_type is mixed (int with float or double)
+or the matrix type is mixed (sparse with symmetric) the best solution is not so obvious. It is up to you! It
+depends on numerical properties of A and the result of the prod(B,C).
+</p>
+
 <hr />
-<p>Copyright (&copy;) 2000-2004 Joerg Walter, Mathias Koch, Gunter
+<p>Copyright (&copy;) 2000-2007 Joerg Walter, Mathias Koch, Gunter
 Winkler, Michael Stevens<br />
 Permission to copy, use, modify, sell and distribute this document
 is granted provided this copyright notice appears in all copies.

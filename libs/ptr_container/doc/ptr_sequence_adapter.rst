@@ -64,12 +64,12 @@ containers from.
 
             public: // `modifiers`_
                 void      push_back( T* x );
-		template< class U >
-		void      push_back( std::auto_ptr<U> x );
+                template< class U >
+                void      push_back( std::auto_ptr<U> x );
                 auto_type pop_back();
                 iterator  insert( iterator position, T* x );
-		template< class U >
-		iterator  insert( iterator position, std::auto_ptr<U> x );
+                template< class U >
+                iterator  insert( iterator position, std::auto_ptr<U> x );
                 template< class InputIterator >
                 void      insert( iterator position, InputIterator first, InputIterator last );
                 template< class InputRange >
@@ -78,17 +78,19 @@ containers from.
                 iterator  erase( iterator first, iterator last );
                 template< class Range >
                 iterator  erase( const Range& r );
+                void      resize( size_type size );
+                void      resize( size_type size, T* to_clone );
 
             public: // `pointer container requirements`_
-		template< class PtrSequence >
+                template< class PtrSequence >
                 void transfer( iterator before, typename PtrSequence::iterator object,
-                               PtrSequence& from );				
-		template< class PtrSequence >
+                               PtrSequence& from );                             
+                template< class PtrSequence >
                 void transfer( iterator before, typename PtrSequence::iterator first, typename PtrSequence::iterator last,
                                PtrSequence& from );
                 void template< class PtrSequence, class Range >
                 void transfer( iterator before, const Range& r, PtrSequence& from );
-		template< class PtrSequence >
+                template< class PtrSequence >
                 void transfer( iterator before, PtrSequence& from );
 
             public: // `algorithms`_
@@ -327,6 +329,26 @@ Semantics: modifiers
   void erase( const Range& r );``
 
     - Effects: ``erase( boost::begin(r), boost::end(r) );``
+
+- ``void resize( size_type size );``
+
+    - Effects: Resizes the container. If elements are erased, it happens from the back. If elements are inserted, it happens at the back.
+    
+    - Requirements: ``T`` is default constructible
+    
+    - Postcondition: ``size() == size;``
+    
+    - Exception safety: Basic guarantee under expansion; nothrow guarantee otherwise
+    
+- ``void resize( size_type size, T* to_clone );``
+
+    - Effects: Resizes the container. If elements are erased, it happens from the back. If elements are inserted, clones of ``*to_clone`` are inserted at the back.
+    
+    - Postcondition: ``size() == size;``
+    
+    - Exception safety: Basic guarantee under expansion; nothrow guarantee otherwise
+
+    - Remarks: ``to_clone == 0`` is valid if the container supports nulls. The container does not take ownership of ``to_clone``.
 
 .. _`pointer container requirements`:
 

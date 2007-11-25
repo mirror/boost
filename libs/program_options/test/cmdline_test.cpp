@@ -9,14 +9,13 @@
 using namespace boost::program_options;
 using boost::program_options::detail::cmdline;
 
-
-#include <boost/test/test_tools.hpp>
-
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <cassert>
 using namespace std;
+
+#include "minitest.hpp"
 
 /* To facilitate testing, declare a number of error codes. Otherwise,
    we'd have to specify the type of exception that should be thrown.
@@ -600,7 +599,7 @@ void test_unregistered()
     // It's not clear yet, so I'm leaving the decision till later.
 }
 
-int test_main(int ac, char* av[])
+int main(int ac, char* av[])
 {
     test_long_options();
     test_short_options();

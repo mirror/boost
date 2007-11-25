@@ -57,6 +57,8 @@
     --variadics:                 enable variadics and placemarkers in C++ mode
     --c99:                       enable C99 mode (implies variadics and placemarkers)
     -l [ --listincludes ] arg:   list included file to a file [arg] or to stdout [-]
+    -m [ --macronames ] arg:     list names of all defined macros to a file [arg] or 
+                                 to stdout [-]
     -p [ --preserve ] arg (=0):  preserve whitespace
                                  0: no whitespace is preserved (default),
                                  1: comments are preserved,
@@ -78,7 +80,7 @@
 <P dir="ltr">-o [--output] path</P>
 <blockquote> 
   <p dir="ltr">Specify a filename to be used for the generated preprocessed output 
-    stream. If this option is not given, then the standard output is used (stdout). If the filename given equals to <tt>'-'</tt> (without the quotes), no output is generated initially. This is especially useful for syntax checks only or in conjunction with the <span class="preprocessor">#pragma&nbsp;wave&nbsp;option(output:&nbsp;...) </span>directive restricting the generated out to specific parts only.  </p>
+    stream. If this option is not given, then the standard output is used (stdout). If the filename given equals to <tt>'-'</tt> (without the quotes), no output is generated initially. This is especially useful for syntax checks only or in conjunction with the <span class="preprocessor">#pragma&nbsp;wave&nbsp;option(output:&nbsp;...) </span>directive restricting the generated out to specific parts only (for a description see the section <a href="supported_pragmas.html">Supported Pragma Directives</a>).  </p>
 </blockquote>
 <P dir="ltr">-E [--autooutput]</P>
 <blockquote>
@@ -188,6 +190,10 @@
 <blockquote>
   <p dir="ltr">Enable the output of the names of all opened include files. The path specifies the filename to use for the output of the generated include log. If the filename given equals to <tt>'-'</tt> (without the quotes), the include log is put into the standard output stream (stdout).</p>
 </blockquote>
+<p dir="ltr">-m [--macronames] path</p>
+<blockquote>
+  <p dir="ltr">Enable the output of all defined macros. This includes the macro names, its parameter names (if the macro is a function like macro) and its definition. The path specifies the filename to use for the output of the generated macro list. If the filename given equals to <tt>'-'</tt> (without the quotes), the macro  list is put into the standard output stream (stdout).</p>
+</blockquote>
 <p dir="ltr">-p [--preserve] arg </p>
 <blockquote>
   <p dir="ltr">Preserve the whitespace from the input stream not located inside of macro definitions. The argument defines the amount of whitespace to be preserved. A value of '0' (zero) skips all whitespace, a value of '1' preserves all the comments and a value of '2' will preserve all whitespace in the output.</p>
@@ -247,8 +253,9 @@ is now disabled by default because it may cause a potential security threat. The
     line.</p>
 </blockquote>
 <p dir="ltr">The <tt>Wave</tt> driver program at startup looks for a configuration 
-  file named 'wave.cfg' in the same directory where it was started from (where the driver executable 
-  is located). If this file exists, it is treated as a normal 
+  file named 'wave.cfg' in every directory up the file system hierarchy starting 
+  from the directory where the input file is located. The first file found stops 
+  the search. If a file exists, it is treated as a normal 
   configuration file and the specified herein options are interpreted as if they 
   were given as the first options on the command line. This feature is very useful 
   for defining a global environment for the <tt>Wave</tt> preprocessor driver.</p>
@@ -266,7 +273,7 @@ is now disabled by default because it may cause a potential security threat. The
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Monday, March 13, 2006  19:18<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, June 26, 2007  20:19<!-- #EndDate -->
 </span></p>
 </body>
 </html>

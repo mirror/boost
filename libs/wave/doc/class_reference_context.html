@@ -3,7 +3,8 @@
     <head>
         <title>The Context Object</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <link rel="stylesheet" href="theme/style.css" type="text/css"></head>
+        <link rel="stylesheet" href="theme/style.css" type="text/css">
+    </head>
     <body text="#000000" background="theme/bkd.gif">
 <table width="100%" border="0" cellspacing="2" background="theme/bkd2.gif">
   <tr> 
@@ -81,7 +82,8 @@
     <span class="comment">// maintain defined macros</span>
         <span class="keyword">bool</span> <a href="class_reference_context.html#add_macro_definition">add_macro_definition</a>(<span class="keyword">std::string</span> macrostring, 
             <span class="keyword">bool</span> is_predefined = <span class="keyword">false</span>);
-        <span class="keyword">bool</span> <a href="class_reference_context.html#is_defined_macro">is_defined_macro</a>(<span class="keyword">std::string const</span> &amp;name) <span class="keyword">const</span>;
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;
+        <span class="keyword">bool</span> <a href="class_reference_context.html#is_defined_macro">is_defined_macro</a>(<span class="keyword">String const</span> &amp;name) <span class="keyword">const</span>;
         <span class="keyword">bool</span> <a href="class_reference_context.html#remove_macro_definition">remove_macro_definition</a>(<span class="keyword">std::string const</span> &amp;name, 
             <span class="keyword">bool</span> even_predefined = <span class="keyword">false</span>);
         <span class="keyword">void</span> <a href="class_reference_context.html#reset_macro_definitions">reset_macro_definitions</a>();
@@ -90,6 +92,10 @@
             bool</span> &amp;is_predefined, position_type &amp;pos, 
             std::vector&lt;token_type&gt; &amp;parameters, 
             token_sequence_type &amp;definition) <span class="keyword">const</span>; 
+        name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_begin</a>();
+        name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_end</a>();
+        const_name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_begin</a>() <span class="keyword">const</span>;
+        const_name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_end</a>() <span class="keyword">const</span>;
 
     <span class="comment">// other options</span>
         <span class="keyword">void</span> <a href="class_reference_context.html#language_support">set_language</a>(language_support enable);
@@ -333,7 +339,8 @@
     C++ Standard), the function throws a corresponding <tt>preprocess_exception</tt>.</p>
 </blockquote>
 <p><a name="is_defined_macro"></a><b>is_defined_macro</b></p>
-<pre><span class="keyword">    bool</span> is_defined_macro(<span class="keyword">std::string const</span> &amp;name) <span class="keyword">const</span>; </pre>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;
+    <span class="keyword">bool</span></span> is_defined_macro(String <span class="keyword">const</span> &amp;name) <span class="keyword">const</span>; </pre>
 <blockquote>
   <p>Returns, if a macro with the given <tt>name</tt> is defined, i.e. if it is 
     contained in the macro symbol table.</p>
@@ -373,6 +380,15 @@
 <pre><span class="keyword">    void</span> reset_macro_definitions(); </pre>
 <blockquote>
   <p>Resets the macro symbol table to it's initial state, i.e. undefines all user defined macros and inserts the internal predefined macros as described <a href="predefined_macros.html">here</a>.</p>
+</blockquote>
+<p><a name="macro_names_iterators"></a><b>macro_names_begin, macro_names_end </b></p>
+<pre>    name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_begin</a>();
+    name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_end</a>();
+    const_name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_begin</a>() <span class="keyword">const</span>;
+    const_name_iterator <a href="class_reference_context.html#macro_names_iterators">macro_names_end</a>() <span class="keyword">const</span>;
+</pre>
+<blockquote>
+  <p>The <tt>macro_names_begin</tt> and <tt>macro_names_end</tt> functions return iterators allowing to iterate on the names of all defined macros.</p>
 </blockquote>
 <h3><a name="get_version"></a>Get Version information</h3>
 <p><b>get_version</b></p>
@@ -429,7 +445,8 @@
         support_option_single_line = 0x0800,
         support_option_prefer_pp_numbers = 0x1000,
         support_option_emit_line_directives = 0x2000,
-        support_option_include_guard_detection = 0x4000
+        support_option_include_guard_detection = 0x4000,
+        support_option_emit_pragma_directives = 0x8000
     };</pre>
   <p>When used with <tt>support_option_variadics</tt> the support for variadics, placemarkers 
     and the <tt>operator&nbsp;_Pragma()</tt> is enabled in normal C++ mode. When used with the <tt>support_option_long_long</tt> the support for long long suffixes is enabled in C++ mode. </p>
@@ -461,6 +478,9 @@
       '#' tokens before the <span class="preprocessor">#if</span>/<span class="preprocessor">#ifndef</span> and after the final <span class="preprocessor">#endif</span> for the include guard to be recognized.</p>
     <p>This flag is on by default, so if you do not want the library to automatically reconize include guards you will need to reset this explicitely. </p>
   </blockquote>
+  <ul>
+    <li>If the <tt>support_option_emit_pragma_directives</tt> flag is set, the <tt>Wave</tt> library will emit all unknown <span class="preprocessor">#pragma</span> directives to the output. This suport option will be recognized only if the <tt>BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES</tt> is defined during compilation to a value not equal to zero (see <a href="compiletime_config.html">here</a> for more information). </li>
+  </ul>
   <p><strong> </strong>If the parameter <tt>reset_macros</tt> is true the <tt>set_language</tt> function internally resets the list of defined macros, so please be careful not to call it after you have defined your own macros already. </p>
 </blockquote>
 <p><a name="set_max_include_nesting_depth" id="set_max_include_nesting_depth"></a>set_max_include_nesting_depth<br>
@@ -487,7 +507,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, March 20, 2007  14:04<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, June 26, 2007  20:21<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

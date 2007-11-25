@@ -10,13 +10,12 @@ using namespace boost::program_options;
 #include <boost/function.hpp>
 using namespace boost;
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
-
 #include <utility>
 #include <string>
 #include <sstream>
 using namespace std;
+
+#include "minitest.hpp"
 
 void test_type()
 {
@@ -44,9 +43,9 @@ void test_approximation()
         ("foo", new untyped_value())
         ("fee", new untyped_value())
         ("baz", new untyped_value())
-        ("all", new untyped_value())
         ("all-chroots", new untyped_value())
         ("all-sessions", new untyped_value())
+        ("all", new untyped_value())
         ;
 
     BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "foo");
@@ -77,7 +76,7 @@ void test_formatting()
     ss << desc;
 }
 
-int test_main(int, char* [])
+int main(int, char* [])
 {
     test_type();
     test_approximation();

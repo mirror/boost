@@ -1,4 +1,11 @@
-[section Appendix 2: Differences from Boost.Regex]
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Appendix 3: Differences from Boost.Regex]
 
 Since many of xpressive's users are likely to be familiar with the _regexpp_ library,
 I would be remiss if I failed to point out some important differences between xpressive
@@ -28,7 +35,6 @@ and _regexpp_. In particular:\n
   `awk`, `grep` ,`egrep`, `sed`, `JavaScript`, `JScript`.
 * The following `match_flag_type` enumeration values are not supported: `match_not_bob`,
   `match_not_eob`, `match_perl`, `match_posix`, and `match_extra`.
-
 
 Also, in the current implementation, the regex algorithms in xpressive will not detect
 pathological behavior and abort by throwing an exception. It is up to you to write efficient

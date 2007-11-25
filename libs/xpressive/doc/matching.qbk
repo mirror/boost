@@ -1,3 +1,10 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section Matching and Searching]
 
 [h2 Overview]
@@ -27,14 +34,14 @@ find the correct regex type for your iterator.)
         { /*...*/ }
 
     if( regex_match( std::string("hello"), sre ) ) // OK
-        { /*...*/ } 
+        { /*...*/ }
 
     if( regex_match( "hello", sre ) )              // ERROR! iterator mis-match!
         { /*...*/ }
 
 The _regex_match_ algorithm optionally accepts a _match_results_ struct as an out parameter. If given, the _regex_match_
 algorithm fills in the _match_results_ struct with information about which parts of the regex matched which
-parts of the input. 
+parts of the input.
 
     cmatch what;
     cregex cre = +(s1= _w);
@@ -71,7 +78,7 @@ sequence until it either finds a match or exhausts the sequence.
 In all other regards, _regex_search_ behaves like _regex_match_ ['(see above)]. In particular, it can operate on `std::string`,
 C-style null-terminated strings or iterator ranges. The same care must be taken to ensure that the iterator
 type of your regex matches the iterator type of your input sequence. As with _regex_match_, you can optionally
-provide a _match_results_ struct to receive the results of the search, and a _match_flag_type_ bitmask to 
+provide a _match_results_ struct to receive the results of the search, and a _match_flag_type_ bitmask to
 control how the match is evaluated.
 
 Click [link boost_xpressive.user_s_guide.examples.see_if_a_string_contains_a_sub_string_that_matches_a_regex here] to see a complete

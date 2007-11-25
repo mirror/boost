@@ -48,14 +48,14 @@ namespace impl {
 template <typename TokenT> 
 class lex_iterator_functor_shim 
 {
-    typedef lex_input_interface<TokenT> lex_input_interface_t;
+    typedef lex_input_interface_generator<TokenT> lex_input_interface_type;
         
 public:
     template <typename IteratorT>
     lex_iterator_functor_shim(IteratorT const &first, IteratorT const &last, 
             typename TokenT::position_type const &pos, 
             boost::wave::language_support language)
-    :   functor_ptr(lex_input_interface_t::new_lexer(first, last, pos, language)) 
+    :   functor_ptr(lex_input_interface_type::new_lexer(first, last, pos, language)) 
     {}
 
 // interface to the boost::spirit::multi_pass_policies::functor_input policy
@@ -75,7 +75,7 @@ public:
     }
     
 private:
-    boost::shared_ptr<lex_input_interface_t> functor_ptr;
+    boost::shared_ptr<cpplexer::lex_input_interface<TokenT> > functor_ptr;
 };
 
 #if 0 != __COMO_VERSION__

@@ -24,6 +24,7 @@ rule check-icu-config ( )
          gHAS_ICU = true ;
          gICU_CORE_LIB = icuuc ;
          gICU_IN_LIB = icui18n ;
+         gICU_DATA_LIB = icudata ;
          gICU_CONFIG_CHECKED = true ;
       }
       else if $(ICU_PATH)
@@ -53,17 +54,10 @@ rule check-icu-config ( )
             {
                gICU_CORE_LIB = icuuc ;
             }
-            else if [ GLOB $(dir)/lib : libicuuc.* ]
-            {
-               gICU_CORE_LIB = icuuc ;
-            }
-            else if [ GLOB $(ICU_PATH)/lib : cygicuuc.dll ]
+            else if [ GLOB $(ICU_PATH)/lib : cygicuuc*.dll ]
             {
                gICU_CORE_LIB = cygicuuc.dll ;
-            }
-            else if [ GLOB $(ICU_PATH)/lib : cygicuuc32.dll ]
-            {
-               gICU_CORE_LIB = cygicuuc32.dll ;
+               gICU_CYGWIN = true ;
             }
             else
             {
@@ -92,13 +86,10 @@ rule check-icu-config ( )
             {
                gICU_IN_LIB = icui18n ;
             }
-            else if [ GLOB $(ICU_PATH)/lib : cygicuin.dll ]
+            else if [ GLOB $(ICU_PATH)/lib : cygicuin*.dll ]
             {
                gICU_IN_LIB = cygicuin.dll ;
-            }
-            else if [ GLOB $(ICU_PATH)/lib : cygicuin32.dll ]
-            {
-               gICU_IN_LIB = cygicuin32.dll ;
+               gICU_CYGWIN = true ;
             }
             else
             {
@@ -109,8 +100,54 @@ rule check-icu-config ( )
                ECHO          Defaulting to look for libicui18n ... ;
                gICU_IN_LIB = icui18n ;
             }
+#Added by Tommy Nordgren - libicudata muct be linked against on Mac OS X            
+            if $(ICU_LINK)
+            {
+               # nothing to do, it's already been done!
+               # gICU_LIBS += <linkflags>$(ICU_LINK) ;
+            }
+            else if [ GLOB $(dir)/lib64 : icudt.* ]
+            {
+               gICU_DATA_LIB = icudt ;
+            }
+            else if [ GLOB $(dir)/lib : icudt.* ]
+            {
+               gICU_DATA_LIB = icudt ;
+            }
+            else if [ GLOB $(dir)/lib : libicudata.* ]
+            {
+               gICU_DATA_LIB = icudata ;
+            }
+            else if [ GLOB $(ICU_PATH)/lib : cygicudt*.dll ]
+            {
+               gICU_DATA_LIB = cygicudt.dll ;
+               gICU_CYGWIN = true ;
+            }
+            else
+            {
+               local os = [ modules.peek : OS ] ;
+               echo $(os) ;
+               if $(os) != "DARWIN"
+               {
+                  ECHO WARNING: ICU shared data library not found in path. ;
+                  ECHO HINT:    If the regex library fails to link then try again ;
+                  ECHO          with the environment variable ICU_LINK set to contain ;
+                  ECHO          the linker options required to link to ICU. ;
+               }
+               else
+               {
+                  ECHO WARNING: ICU shared data library not found in path. ;
+                  ECHO HINT:    If the regex library fails to link then try again ;
+                  ECHO          with the environment variable ICU_LINK set to contain ;
+                  ECHO          the linker options required to link to ICU. ;
+                  ECHO          Defaulting to look for libicudata ... ;
+                  gICU_DATA_LIB = icudata ;
+               }
+            }
+#End of addition by Tommy Nordgren
          }
       }
+
       gICU_CONFIG_CHECKED = true ;
    }
    
@@ -143,15 +180,36 @@ if [ check-icu-config ]
       }
    }
    
-   if $(gICU_CORE_LIB)
+   if $(gICU_CYGWIN)
    {
-      lib icucore : : <name>$(gICU_CORE_LIB) $(ICU_SEARCH_OPTS) ;
-      ICU_EXTRA_SOURCE = icucore ;
+      if $(gICU_CORE_LIB)
+      {
+         BOOST_REGEX_ICU_OPTS  += "<linkflags>$(gICU_CORE_LIB) ;
+      }
+      if $(gICU_IN_LIB)
+      {
+         BOOST_REGEX_ICU_OPTS  += "<linkflags>$(gICU_IN_LIB) ;
+      }
    }
-   if $(gICU_IN_LIB)
+   else
    {
-      lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) ;
-      ICU_EXTRA_SOURCE += icuin ;
+      if $(gICU_CORE_LIB)
+      {
+         lib icucore : : <name>$(gICU_CORE_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
+         ICU_EXTRA_SOURCE = icucore ;
+      }
+      if $(gICU_IN_LIB)
+      {
+         lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
+         ICU_EXTRA_SOURCE += icuin ;
+      }
+#Added by Tommy Nordgren libicudata must be linked against on Mac OS X
+      if $(gICU_DATA_LIB)
+      {
+         lib icudata : : <name>$(gICU_DATA_LIB) $(ICU_SEARCH_OPTS) <link>shared ;
+         ICU_EXTRA_SOURCE += icudata ;
+      }
+#End of addition by Tommy Nordgren
    }
 }
 
@@ -185,6 +243,14 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 	     <toolset>gcc-cygwin:<link>static
 	     $(BOOST_REGEX_ICU_OPTS)
     ;
+
+alias icu_options : $(ICU_EXTRA_SOURCE) : : : $(BOOST_REGEX_ICU_OPTS) ;
+
+boost-install boost_regex ;
+
+
+
+
 
 
 

@@ -1,16 +1,17 @@
 // --------------------------------------------------------
 //        (C) Copyright Jeremy Siek   2001.
-//        (C) Copyright Gennaro Prota 2003 - 2004.
+//        (C) Copyright Gennaro Prota 2003 - 2006.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-
+//
+// $Id$
 
 #include "bitset_test.hpp"
-#include "boost/dynamic_bitset.hpp"
+#include "boost/dynamic_bitset/dynamic_bitset.hpp"
 #include "boost/config.hpp"
 
 

@@ -24,6 +24,18 @@ void test_list()
     reversible_container_test< ptr_list< nullable<Base> >, Base, Derived_class >();
     reversible_container_test< ptr_list< nullable<Value> >, Value, Value >();
 
+    container_assignment_test< ptr_list<Base>, ptr_list<Derived_class>, 
+                               Derived_class>();
+    container_assignment_test< ptr_list< nullable<Base> >, 
+                               ptr_list< nullable<Derived_class> >, 
+                               Derived_class>();
+    container_assignment_test< ptr_list< nullable<Base> >, 
+                               ptr_list<Derived_class>, 
+                               Derived_class>();
+    container_assignment_test< ptr_list<Base>, 
+                               ptr_list< nullable<Derived_class> >, 
+                               Derived_class>();                           
+
     test_transfer< ptr_list<Derived_class>, ptr_list<Base>, Derived_class>();
       
     random_access_algorithms_test< ptr_list<int> >();

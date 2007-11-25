@@ -290,8 +290,8 @@ namespace boost { namespace program_options { namespace detail {
 
         // First check that the option is valid, and get its description.
         // TODO: case-sensitivity.
-        const option_description* xd = 
-            m_desc->find_nothrow(opt.string_key, (m_style & allow_guessing));
+        const option_description* xd = m_desc->find_nothrow(opt.string_key, 
+                (m_style & allow_guessing) ? true : false);
 
         if (!xd)
         {
@@ -328,6 +328,14 @@ namespace boost { namespace program_options { namespace detail {
             }
             
             max_tokens -= opt.value.size();
+
+            // A value is optional if min_tokens == 0, but max_tokens > 0.
+            // If a value is optional, it must appear in opt.value (because
+            // it was 'adjacent'.  Otherwise, remove the expectation of a
+            // non-adjacent value.  (For now, we just check max_tokens == 1,
+            // as there is no current support for max_tokens>1)
+            if (min_tokens == 0 && max_tokens == 1 && opt.value.empty())
+                --max_tokens;
 
             // Everything's OK, move the values to the result.            
             for(;!other_tokens.empty() && max_tokens--; ) {
@@ -462,7 +470,8 @@ namespace boost { namespace program_options { namespace detail {
              ((m_style & allow_slash_for_short) && tok[0] == '/')))            
         {
             if (m_desc->find_nothrow(tok.substr(1, tok.find('=')-1), 
-                                     m_style & allow_guessing)) {
+                                     (m_style & allow_guessing) ? true : false)) 
+            {
                 args[0].insert(0, "-");
                 if (args[0][1] == '/')
                     args[0][1] = '-';

@@ -68,7 +68,7 @@ to store the pointers.
 
 **Remarks:**
 
-- Using ``nullable<T>`` as ``Key`` is meaningless and not allowed
+- Using ``nullable<T>`` as ``Key`` is meaningless and is not allowed
 
 .. raw:: html 
 

@@ -1,4 +1,5 @@
 [library Boost.TR1
+    [quickbook 1.4]
     [copyright 2005 John Maddock]
     [purpose An implementation of the C++ Technical Report on Standard Library Extensions]
     [license
@@ -12,11 +13,6 @@
 ]
 
 [section:intro Introduction]
-
-This documentation is 
-[@http://boost-consulting.com/vault/index.php?action=downloadfile&filename=boost_tr1-1.34.pdf&directory=PDF%20Documentation& 
-also available in printer-friendly PDF format].
-
 The TR1 library provides an implementation of the C++ Technical Report on Standard Library Extensions.
 This library does not itself implement the TR1 components, rather it's a thin wrapper that will 
 include your standard library's TR1 implementation (if it has one), otherwise it will include the Boost
@@ -71,29 +67,72 @@ correct order is:\n\n
 3) Any other standard library replacements (STLport for example).\n
 4) Your regular standard library.]
 
-[blurb [*Important Note #2: Borland C++ Users]\n\n
+[blurb [*Important Note #2: GNU C++ Users]
+
+Normally this library should "just work" with the GNU C++ compiler.
+
+However, if Boost is installed in `/usr/include` then you may get an error
+message of the form:
+
+``In file included from /usr/include/boost/tr1/tuple.hpp:5,
+                 from boost-failure.cxx:1:
+/usr/include/boost/tr1/detail/config.hpp:60:26: error: no include path in which to search for utility``
+
+In this case try defining the macro `BOOST_TR1_DISABLE_INCLUDE_NEXT` when building,
+and if that doesn't work, define the macro `BOOST_TR1_GCC_INCLUDE_PATH` to the 
+name of the directory containing gcc's include files: this is likely to be 
+something like "g++-v4" but unfortunately varies from distribution 
+to distribution.
+]
+
+[blurb [*Important Note #3: Borland C++ Users]
+
 Borland's compiler has a particularly broken form of `#include`, that
 will actually look for a file named `array.h` if you `#include <array>`.
 In order to make this library work with Borland's compiler you will need to
-set up the include paths as follows:\n\n
+set up the include paths as follows:
+
 1) boost-root/boost/tr1/tr1/bcc32\n
 2) boost-root/boost/tr1/tr1\n
 3) boost-root\n
 4) Any other standard library replacements (STLport for example).\n
-5) Your regular standard library.]
+5) Your regular standard library.\n
+]
 
-[blurb [*Important Note #3: Sun C++ Users]\n\n
+[blurb [*Important Note #4: Sun C++ Users]
+
 Sun's compiler has a particularly interesting form of `#include`, that
 will actually look for a file named `array.SUNWCCh` if you `#include <array>`.
 In order to make this library work with Sun's compiler you will need to
-set up the include paths as follows:\n\n
+set up the include paths as follows:
+
 1) boost-root/boost/tr1/tr1/sun\n
 2) boost-root/boost/tr1/tr1\n
 3) boost-root\n
 4) Any other standard library replacements (STLport for example).\n
-5) Your regular standard library.]
+5) Your regular standard library.\n
+]
 
 [endsect]
+
+[section:writing_code Writing Code]
+
+Regardless of how the includes are setup, user code written to work 
+with Boost.TR1 is exactly the same as code written to use a native 
+tr1 implementation.  That is, references to classes and functions
+need to explicitly use the `std::tr1` namespace or a `using std::tr1`
+statement.  For example, 
+
+   std::tr1::tuple<int, std::string> t = std::tr1::make_tuple(10, "hello");
+
+or
+
+  using std::tr1;
+  tuple<int, std::string> t = make_tuple(10, "hello");
+
+
+[endsect]
+
 
 [endsect]
 
@@ -106,7 +145,7 @@ it is more than usually sensitive to an incorrect configuration.
 
 The intention is that 
 [@../../libs/config/index.html Boost.Config] 
-will automaticaly define the configuration
+will automatically define the configuration
 macros used by this library, so that if your standard library is set up to
 support TR1 (note that few are at present) then this will be detected and Boost.TR1
 will use your standard library versions of these components rather than the 
@@ -409,7 +448,7 @@ arguments and returning a floating-point value) through which some
 arbitrary code may be called. However a polymorphic function wrapper can call
 any callable object with a compatible call signature, this could be a function 
 pointer, or it could be a function object produced by std::tr1::bind, or some
-other mechanism.  For more information see the [@../../doc/html/function.html
+other mechanism.  For more information see the [@../../doc/html/function.html"
 Boost.Function documentation].
 
    
@@ -568,7 +607,7 @@ or
 
    #include <random>
 
-The random number library is devided into three parts: 
+The random number library is divided into three parts: 
 [@../../libs/random/random-generators.html generators], which
 are nullary functors producing uniform random number distributions.  
 [@../../libs/random/random-distributions.html Distributions], which are unary 
@@ -1695,7 +1734,6 @@ as the Boost-specific ones. This will allow these tests to be used against the s
 library's own TR1 implementation as well as the Boost one.
 
 [endsect]
-
 
 
 

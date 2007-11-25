@@ -31,27 +31,26 @@ not described in the <literal>multi_array</literal> reference.
 namespace boost {
 
 template <typename ValueType, 
-          std::size_t NumDims, 
-          typename Allocator = std::allocator<ValueType> >
+          std::size_t NumDims>
 class multi_array_ref {
 public:
 // types:
   typedef ValueType                             element;
-  typedef *implementation-defined*              value_type;
-  typedef *implementation-defined*              reference;
-  typedef *implementation-defined*              const_reference;
-  typedef *implementation-defined*              difference_type;
-  typedef *implementation-defined*              iterator;
-  typedef *implementation-defined*              const_iterator;
-  typedef *implementation-defined*              reverse_iterator;
-  typedef *implementation-defined*              const_reverse_iterator;
+  typedef *unspecified*                         value_type;
+  typedef *unspecified*                         reference;
+  typedef *unspecified*                         const_reference;
+  typedef *unspecified*                         difference_type;
+  typedef *unspecified*                         iterator;
+  typedef *unspecified*                         const_iterator;
+  typedef *unspecified*                         reverse_iterator;
+  typedef *unspecified*                         const_reverse_iterator;
   typedef multi_array_types::size_type          size_type;
   typedef multi_array_types::index              index;
   typedef multi_array_types::index_gen          index_gen;
   typedef multi_array_types::index_range        index_range;
   typedef multi_array_types::extent_gen         extent_gen;
   typedef multi_array_types::extent_range       extent_range;
-  typedef *implementation-defined*              storage_order_type;
+  typedef *unspecified*                         storage_order_type;
   
   // template typedefs
   template <std::size_t Dims> struct            subarray;

@@ -15,11 +15,10 @@ namespace po = boost::program_options;
 #include <boost/function.hpp>
 using namespace boost;
 
-#define BOOST_INCLUDE_MAIN  // for testing, include rather than link
-#include <boost/test/test_tools.hpp>
-
 #include <sstream>
 using namespace std;
+
+#include "minitest.hpp"
 
 // Test that unicode input is forwarded to unicode option without
 // problems.
@@ -149,7 +148,7 @@ void test_config_file()
     BOOST_CHECK(vm["foo"].as<string>() == "\xD1\x8F");    
 }
 
-int test_main(int, char* [])
+int main(int, char* [])
 {
     test_unicode_to_unicode();
     test_unicode_to_native();

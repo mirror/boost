@@ -9,7 +9,7 @@
 #include <string>
 #include <boost/type_traits/is_convertible.hpp>
 
-#ifndef BOOST_NO_SFINAE
+#if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 # include <boost/utility/enable_if.hpp>
 # include <boost/type_traits/is_same.hpp>
 #endif 
@@ -70,7 +70,7 @@ namespace test
       f_impl(args(a0, a1));
   }
 
-#ifndef BOOST_NO_SFINAE
+#if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
   // On compilers that actually support SFINAE, add another overload
   // that is an equally good match and can only be in the overload set
   // when the others are not.  This tests that the SFINAE is actually
@@ -96,7 +96,7 @@ int main()
     f("foo", 3.f);
     f(value = 3.f, name = "foo");
 
-#ifndef BOOST_NO_SFINAE
+#if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
     BOOST_TEST(f(3, 4) == 0);
 #endif
     return boost::report_errors();

@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
     http://www.boost.org/
 
-    Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -435,7 +435,7 @@ testwave_app::print_copyright()
         "Testwave: A test driver for the Boost.Wave C++ preprocessor library",
         "http://www.boost.org/",
         "",
-        "Copyright (c) 2001-2006 Hartmut Kaiser, Distributed under the Boost",
+        "Copyright (c) 2001-2007 Hartmut Kaiser, Distributed under the Boost",
         "Software License, Version 1.0. (See accompanying file",
         "LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)",
         0
@@ -528,7 +528,8 @@ testwave_app::extract_special_information(std::string const& filename,
             boost::wave::support_option_variadics | 
             boost::wave::support_option_long_long |
             boost::wave::support_option_no_character_validation |
-            boost::wave::support_option_convert_trigraphs);
+            boost::wave::support_option_convert_trigraphs |
+            boost::wave::support_option_insert_whitespace);
     
     position_type pos(filename.c_str());
     lexer_type it = lexer_type(instr.begin(), instr.end(), pos, lang_opts);
@@ -751,6 +752,10 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
               | boost::wave::support_option_include_guard_detection
 #endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+              | boost::wave::support_option_emit_pragma_directives
+#endif
+              | boost::wave::support_option_insert_whitespace
             ));
     }
     else if (vm.count("variadics")) {

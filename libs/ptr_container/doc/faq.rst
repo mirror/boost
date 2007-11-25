@@ -9,11 +9,6 @@ FAQ
 ===
 
 .. contents:: :local:
-
-Since a pointer container is not Copy Constructible and Assignable, I cannot put them into standard containers; what do I do?
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Since they are `Clonable <ptr_container.html#the-clonable-concept>`_, you simply put them in a pointer container.  
  
 Calling ``assign()`` is very costly and I do not really need to store cloned objects; I merely need to overwrite the existing ones; what do I do?
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

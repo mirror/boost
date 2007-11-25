@@ -1,3 +1,10 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section Concepts]
 
 [h2 CharT requirements]
@@ -73,12 +80,12 @@ type `CharT const`, and `i` of type `int`:
 ]
 
 [h2 Traits Requirements]
-In the following table `X` denotes a traits class defining types and functions 
-for the character container type `CharT`; `u` is an object of type `X`; `v` is an 
-object of type `const X`; `p` is a value of type `const CharT*`; `I1` and `I2` are 
-`Input Iterators`; `c` is a value of type `const CharT`; `s` is an object of type 
-`X::string_type`; `cs` is an object of type `const X::string_type`; `b` is a value of 
-type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `const CharT*`; 
+In the following table `X` denotes a traits class defining types and functions
+for the character container type `CharT`; `u` is an object of type `X`; `v` is an
+object of type `const X`; `p` is a value of type `const CharT*`; `I1` and `I2` are
+`Input Iterators`; `c` is a value of type `const CharT`; `s` is an object of type
+`X::string_type`; `cs` is an object of type `const X::string_type`; `b` is a value of
+type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `const CharT*`;
 `loc` is an object of type `X::locale_type`; and `ch` is an object of `const char`.
 
 [table Traits Requirements
@@ -113,7 +120,7 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `std::basic_string<CharT>` or `std::vector<CharT>`
         ]
         [
-            
+
         ]
     ]
     [
@@ -135,7 +142,7 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             ['Implementation defined]
         ]
         [
-            A bitmask type representing a particular character classification. Multiple 
+            A bitmask type representing a particular character classification. Multiple
                 values of this type can be bitwise-or'ed together to obtain a new valid value.
         ]
     ]
@@ -194,7 +201,7 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::char_type`
         ]
         [
-            Returns a character such that for any character `d` that is to be considered 
+            Returns a character such that for any character `d` that is to be considered
                 equivalent to `c` then `v.translate(c) == v.translate(d)`.
         ]
     ]
@@ -206,8 +213,8 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::char_type`
         ]
         [
-            For all characters `C` that are to be considered 
-            equivalent to `c` when comparisons are to be performed without regard to case, 
+            For all characters `C` that are to be considered
+            equivalent to `c` when comparisons are to be performed without regard to case,
             then `v.translate_nocase(c) == v.translate_nocase(C)`.
         ]
     ]
@@ -219,9 +226,9 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::string_type`
         ]
         [
-            Returns a sort key for the character sequence designated by the iterator range 
-                `[F1, F2)` such that if the character sequence `[G1, G2)` sorts before the 
-                character sequence `[H1, H2)` then `v.transform(G1, G2) < v.transform(H1, H2)`. 
+            Returns a sort key for the character sequence designated by the iterator range
+                `[F1, F2)` such that if the character sequence `[G1, G2)` sorts before the
+                character sequence `[H1, H2)` then `v.transform(G1, G2) < v.transform(H1, H2)`.
         ]
     ]
     [
@@ -232,9 +239,9 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::string_type`
         ]
         [
-            Returns a sort key for the character sequence designated by the iterator range 
-                `[F1, F2)` such that if the character sequence `[G1, G2)` sorts before the 
-                character sequence `[H1, H2)` when character case is not considered then 
+            Returns a sort key for the character sequence designated by the iterator range
+                `[F1, F2)` such that if the character sequence `[G1, G2)` sorts before the
+                character sequence `[H1, H2)` when character case is not considered then
                 `v.transform_primary(G1, G2) < v.transform_primary(H1, H2)`.
         ]
     ]
@@ -246,11 +253,11 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::char_class_type`
         ]
         [
-            Converts the character sequence designated by the iterator range `[F1,F2)` into a 
-                bitmask type that can subsequently be passed to `isctype`. Values returned from 
-                `lookup_classname` can be safely bitwise or'ed together. Returns `0` if the 
-                character sequence is not the name of a character class recognized by `X`. The 
-                value returned shall be independent of the case of the characters in the 
+            Converts the character sequence designated by the iterator range `[F1,F2)` into a
+                bitmask type that can subsequently be passed to `isctype`. Values returned from
+                `lookup_classname` can be safely bitwise or'ed together. Returns `0` if the
+                character sequence is not the name of a character class recognized by `X`. The
+                value returned shall be independent of the case of the characters in the
                 sequence.
         ]
     ]
@@ -262,9 +269,9 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::string_type`
         ]
         [
-            Returns a sequence of characters that represents the collating element 
-                consisting of the character sequence designated by the iterator range `[F1, F2)`. 
-                Returns an empty string if the character sequence is not a valid collating 
+            Returns a sequence of characters that represents the collating element
+                consisting of the character sequence designated by the iterator range `[F1, F2)`.
+                Returns an empty string if the character sequence is not a valid collating
                 element.
         ]
     ]
@@ -276,7 +283,7 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `bool`
         ]
         [
-            Returns `true` if character `c` is a member of the character class designated by 
+            Returns `true` if character `c` is a member of the character class designated by
                 the iterator range `[F1, F2)`, `false` otherwise.
         ]
     ]
@@ -288,7 +295,7 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `int`
         ]
         [
-            Returns the value represented by the digit `c` in base `i` if the character `c` is a 
+            Returns the value represented by the digit `c` in base `i` if the character `c` is a
                 valid digit in base `i`; otherwise returns `-1`.\n
                 \[Note: the value of `i` will only be `8`, `10`, or `16`. -end note\]
         ]
@@ -301,8 +308,8 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::locale_type`
         ]
         [
-            Imbues `u` with the locale `loc`, returns the previous 
-                locale used by `u`. 
+            Imbues `u` with the locale `loc`, returns the previous
+                locale used by `u`.
         ]
     ]
     [
@@ -313,7 +320,7 @@ type `bool`; `i` is a value of type `int`; `F1` and `F2` are values of type `con
             `X::locale_type`
         ]
         [
-            Returns the current locale used by `v`. 
+            Returns the current locale used by `v`.
         ]
     ]
 ]

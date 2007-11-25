@@ -1,0 +1,7 @@
+add includes needed for the snippets
+add section explaining splice(...,n)
+Faltaría, en mi opinión, una guía de qué headers incluyen a cuáles. P.ej.,
+los *_hook.hpp típicamente están incluidos por el header del contenedor asociado, etc.
+Add resize() to list
+Optimize rehash for when shrinking: there is no need to hash the values.
+Optimize store_hash<true> to work with the same node and type traits as store_hash<false>

@@ -16,8 +16,8 @@
     for more details.
 
     <programlisting><emphasis role="keyword">using namespace</emphasis> boost::gregorian;
-    date week_start(<emphasis role="number">2002</emphasis>,Feb,<emphasis role="number">1</emphasis>);
-    date week_finish  = week_start + week(<emphasis role="number">1</emphasis>);
+    date weekstart(<emphasis role="number">2002</emphasis>,Feb,<emphasis role="number">1</emphasis>);
+    date weekend  = weekstart + week(<emphasis role="number">1</emphasis>);
     date d2 = d1 + days(<emphasis role="number">5</emphasis>);
     date today = day_clock::local_day();
     if (d2 &gt;= today) {} <emphasis role="comment">//date comparison operators</emphasis> 
@@ -26,8 +26,8 @@
     <emphasis role="keyword">if</emphasis> (thisWeek.contains(today)) {}<emphasis role="comment">//do something 
 
     //iterate and print the week</emphasis>
-    day_iterator itr(week_start);
-    <emphasis role="keyword">while</emphasis> (itr &lt;= week_finish) {
+    day_iterator itr(weekstart);
+    <emphasis role="keyword">while</emphasis> (itr &lt;= weekend) {
      std::cout &lt;&lt; (*itr) &lt;&lt; std::endl;
      ++itr;
     }  

@@ -17,10 +17,6 @@
 
 [section:intro Overview and Tutorial]
 
-This documentation is 
-[@http://boost-consulting.com/vault/index.php?action=downloadfile&filename=boost_static_assert-1.34.pdf&directory=PDF%20Documentation& 
-also available in printer-friendly PDF format].
-
 The header `<boost/static_assert.hpp>` supplies a single macro `BOOST_STATIC_ASSERT(x)`, 
 which generates a compile time error message if the integral-constant-expression `x`
 is not true. In other words it is the compile time equivalent of the assert macro; 
@@ -221,6 +217,5 @@ working at namespace, function, and class scope outweighed the ugliness of a mac
 ]
 
 [endsect]
-
 
 

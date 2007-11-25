@@ -19,6 +19,9 @@
 #ifndef BOOST_REGEX_REGRESS_REGEX_SEARCH_HPP
 #define BOOST_REGEX_REGRESS_REGEX_SEARCH_HPP
 #include "info.hpp"
+#ifdef TEST_ROPE
+#include <rope>
+#endif
 //
 // this file implements a test for a regular expression that should compile,
 // followed by a search for that expression:
@@ -119,6 +122,40 @@ void test_simple_search(boost::basic_regex<charT, traits>& r)
          BOOST_REGEX_TEST_ERROR("Unexpected match was found when using the match_any flag.", charT);
       }
    }
+#ifdef TEST_ROPE
+   std::rope<charT> rsearch_text;
+   for(unsigned i = 0; i < search_text.size(); ++i)
+   {
+      std::rope<charT> c(search_text[i]);
+      if(++i != search_text.size())
+      {
+         c.append(search_text[i]);
+         if(++i != search_text.size())
+         {
+            c.append(search_text[i]);
+         }
+      }
+      rsearch_text.append(c);
+   }
+   boost::match_results<std::rope<charT>::const_iterator> rwhat;
+   if(boost::regex_search(
+      rsearch_text.begin(),
+      rsearch_text.end(),
+      rwhat,
+      r,
+      opts))
+   {
+      test_result(rwhat, rsearch_text.begin(), answer_table);
+   }
+   else
+   {
+      if(answer_table[0] >= 0)
+      {
+         // we should have had a match but didn't:
+         BOOST_REGEX_TEST_ERROR("Expected match was not found.", charT);
+      }
+   }
+#endif
 }
 
 template<class charT, class traits>

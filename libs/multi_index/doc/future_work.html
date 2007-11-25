@@ -41,7 +41,6 @@ principle driving the current internal design of <code>multi_index_container</co
   <li><a href="#notifying">Notifying indices</a></li>
   <li><a href="#constraints">Constraints</a></li>
   <li><a href="#user_defined_indices">User-defined indices</a></li>
-  <li><a href="#bimap">Bidirectional map</a></li>
   <li><a href="#indexed_maps">Indexed maps</a></li>
   <li><a href="#move_semantics">Move semantics</a></li>
 </ul>
@@ -150,19 +149,6 @@ simple enough to make them worth documenting so that the (bold)
 user can write implementations for her own indices.
 </p>
 
-<h2><a name="bimap">Bidirectional map</a></h2>
-
-<p>
-<a href="examples.html#example4">Example 4</a> in the examples section
-features a <i>bidirectional map</i>, implemented as a
-<code>multi_index_container</code> with two unique ordered indices. This particular
-structure is deemed important enough as to provide it as a separate
-class template, relying internally in <code>multi_index_container</code>. As
-feedback is collected from the users of Boost.MultiIndex, other singular
-instantiations of <code>multi_index_container</code> might be encapsulated
-to form a component library of ready to use containers.
-</p>
-
 <h2><a name="indexed_maps">Indexed maps</a></h2>
 
 <p>
@@ -240,9 +226,9 @@ Release notes
 
 <br>
 
-<p>Revised February 6th 2006</p>
+<p>Revised July 5th 2007</p>
 
-<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

@@ -4,7 +4,12 @@
 # http://www.boost.org/LICENSE_1_0.txt.
 
 project
-    : requirements <threading>multi <link>shared:<define>BOOST_REGEX_DYN_LINK=1
+    : requirements 
+      <threading>multi 
+      <link>shared:<define>BOOST_REGEX_DYN_LINK=1
+      # There are unidentified linker problems on these platforms:
+      <toolset>mipspro-7.4:<link>static
+      <toolset>sun-5.9:<link>static
     ;
 
 
@@ -20,6 +25,7 @@ rule regex-test-run ( sources + : input * : name * )
             $(input)
          :  # test-files
          :  # requirements
+            <toolset>msvc-7.1:<define>TEST_MFC=1 <toolset>msvc-7.0:<define>TEST_MFC=1
          :  # test name
             $(name)
         ] ;
@@ -33,6 +39,7 @@ test-suite regex-examples :
 [ regex-test-run snippets/mfc_example.cpp ]
 [ regex-test-run snippets/icu_example.cpp ]
 [ regex-test-run snippets/partial_regex_grep.cpp : $(BOOST_ROOT)/libs/regex/index.htm ]
+[ regex-test-run snippets/partial_regex_iterate.cpp : $(BOOST_ROOT)/libs/regex/index.htm ]
 [ regex-test-run snippets/partial_regex_match.cpp : 1234-5678-8765-4 ]
 [ regex-test-run snippets/regex_grep_example_1.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_grep_example_2.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
@@ -43,15 +50,19 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_replace_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_search_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_split_example_1.cpp : -auto ]
-[ regex-test-run snippets/regex_split_example_2.cpp : $(BOOST_ROOT)/libs/regex/doc/index.html ]
+[ regex-test-run snippets/regex_split_example_2.cpp : $(BOOST_ROOT)/libs/regex/doc/html/index.html ]
 [ regex-test-run snippets/regex_token_iterator_eg_1.cpp : -auto ]
-[ regex-test-run snippets/regex_token_iterator_eg_2.cpp : $(BOOST_ROOT)/libs/regex/doc/index.html ]
+[ regex-test-run snippets/regex_token_iterator_eg_2.cpp : $(BOOST_ROOT)/libs/regex/doc/html/index.html ]
 [ regex-test-run snippets/regex_iterator_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ run snippets/captures_example.cpp
   ../test/captures//boost_regex_extra
   : : :  <threading>multi <define>BOOST_REGEX_MATCH_EXTRA=1 ]
 
 ;
+
+
+
+
 
 
 

@@ -1,3 +1,10 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section:tips_n_tricks Tips 'N Tricks]
 
 Squeeze the most performance out of xpressive with these tips and tricks.
@@ -39,8 +46,8 @@ pair.
 
 [h2 Compile Patterns Once And Reuse Them]
 
-Compiling a regex (dynamic or static) is more expensive than executing a 
-match or search. If you have the option, prefer to compile a pattern into 
+Compiling a regex (dynamic or static) is more expensive than executing a
+match or search. If you have the option, prefer to compile a pattern into
 a _basic_regex_ object once and reuse it rather than recreating it over
 and over.
 

@@ -25,6 +25,8 @@ test-suite "bind"
       [ compile bind_unary_addr.cpp ]
       [ run bind_dm3_test.cpp ]
       [ run bind_visit_test.cpp ]
+      [ run bind_placeholder_test.cpp ]
+      [ run bind_rvalue_test.cpp ]
       [ run mem_fn_test.cpp ]
       [ run mem_fn_void_test.cpp ]
       [ run mem_fn_derived_test.cpp ]

@@ -107,6 +107,6 @@ int main()
    
    //f(index = 56, name = 55); // won't compile
 
-   return 0;
+   return boost::report_errors();
 }
 

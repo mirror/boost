@@ -16,8 +16,8 @@
   *   DESCRIPTION: Declares tests for regex search and iteration.
   */
 
-#ifndef BOOST_REGEX_REGRESS_REGEX_SEARCH_HPP
-#define BOOST_REGEX_REGRESS_REGEX_SEARCH_HPP
+#ifndef BOOST_REGEX_REGRESS_REGEX_PARTIAL_MATCH_HPP
+#define BOOST_REGEX_REGRESS_REGEX_PARTIAL_MATCH_HPP
 #include "info.hpp"
 //
 // this file implements a test for a regular expression that should compile,
@@ -386,3 +386,4 @@ void test(boost::basic_regex<charT, traits>& r, const test_regex_search_tag&)
 
 
 #endif
+

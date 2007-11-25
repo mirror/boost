@@ -1,3 +1,10 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section Localization and Regex Traits]
 
 [h2 Overview]
@@ -46,7 +53,7 @@ pattern modifier. For instance:
   cpp_regex_traits<char> cpptraits(loc);
   sregex cpprx1 = imbue(cpptraits)( +_w );
 
-  // A sharthand for above
+  // A shorthand for above
   sregex cpprx2 = imbue(loc)( +_w );
 
 The `imbue()` pattern modifier must wrap the entire pattern. It is an error to `imbue` only
@@ -61,7 +68,7 @@ With xpressive static regexes, you are not limitted to searching for patterns in
 You can search for patterns in raw bytes, integers, or anything that conforms to the
 [link boost_xpressive.user_s_guide.concepts.chart_requirements Char Concept]. The `null_regex_traits<>` makes it simple. It is a
 stub implementation of the [link boost_xpressive.user_s_guide.concepts.traits_requirements Regex Traits Concept]. It recognizes
-no character classes and does no case-sensitive mappings. 
+no character classes and does no case-sensitive mappings.
 
 For example, with `null_regex_traits<>`, you can write a static regex to find a pattern in a
 sequence of integers as follows:

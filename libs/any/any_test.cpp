@@ -46,7 +46,8 @@ namespace any_tests // test suite
         { "converting assignment operator", test_converting_assign },
         { "failed custom keyword cast",     test_bad_cast          },
         { "swap member function",           test_swap              },
-        { "copying operations on a null",   test_null_copying      }
+        { "copying operations on a null",   test_null_copying      },
+        { "cast to reference types",        test_cast_to_reference }
     };
 
     const test_case_iterator begin = test_cases;
@@ -186,6 +187,42 @@ namespace any_tests // test definitions
         check_true(copied.empty(), "empty on copied");
         check_true(assigned.empty(), "empty on copied");
     }
+
+    void test_cast_to_reference()
+    {
+        any a(137);
+        const any b(a);
+
+        int &                ra    = any_cast<int &>(a);
+        int const &          ra_c  = any_cast<int const &>(a);
+        int volatile &       ra_v  = any_cast<int volatile &>(a);
+        int const volatile & ra_cv = any_cast<int const volatile&>(a);
+
+        check_true(
+            &ra == &ra_c && &ra == &ra_v && &ra == &ra_cv,
+            "cv references to same obj");
+
+        int const &          rb_c  = any_cast<int const &>(b);
+        int const volatile & rb_cv = any_cast<int const volatile &>(b);
+
+        check_true(&rb_c == &rb_cv, "cv references to copied const obj");
+        check_true(&ra != &rb_c, "copies hold different objects");
+
+        ++ra;
+        int incremented = any_cast<int>(a);
+        check_true(incremented == 138, "increment by reference changes value");
+
+        TEST_CHECK_THROW(
+            any_cast<char &>(a),
+            bad_any_cast,
+            "any_cast to incorrect reference type");
+
+        TEST_CHECK_THROW(
+            any_cast<const char &>(b),
+            bad_any_cast,
+            "any_cast to incorrect const reference type");
+    }
+
 }
 
 // Copyright Kevlin Henney, 2000, 2001. All rights reserved.

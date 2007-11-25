@@ -25,7 +25,7 @@
 // Generic range algorithm
 //
 template< class Rng >
-typename boost::range_result_iterator<Rng>::type foo_algo( Rng& r )
+typename boost::range_iterator<Rng>::type foo_algo( Rng& r )
 {
         //
         // This will only compile for Rng = UDT if the qualified calls
@@ -44,7 +44,6 @@ namespace Foo
                 typedef std::vector<int>       data_t;
                 typedef data_t::iterator       iterator;
                 typedef data_t::const_iterator const_iterator;
-                typedef data_t::size_type      size_type;
 
                 data_t vec;
 
@@ -57,32 +56,28 @@ namespace Foo
         // to be defined because X defines the proper set of
         // nested types.
         //
-        inline X::iterator boost_range_begin( X& x )
+        inline X::iterator range_begin( X& x )
         {
                 return x.vec.begin();
         }
 
 
-        inline X::const_iterator boost_range_begin( const X& x )
+        inline X::const_iterator range_begin( const X& x )
         {
                 return x.vec.begin();
         }
 
 
-        inline X::iterator boost_range_end( X& x )
+        inline X::iterator range_end( X& x )
         {
                 return x.vec.end();
         }
 
-        inline X::const_iterator boost_range_end( const X& x )
+        inline X::const_iterator range_end( const X& x )
         {
                 return x.vec.end();
         }
 
-        inline X::size_type boost_range_size( const X& x )
-        {
-                return x.vec.size();
-        }
 }
 
 void check_extension()

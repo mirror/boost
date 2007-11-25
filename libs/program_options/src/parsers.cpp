@@ -88,7 +88,8 @@ namespace boost { namespace program_options {
     template<class charT>
     basic_parsed_options<charT>
     parse_config_file(std::basic_istream<charT>& is, 
-                      const options_description& desc)
+                      const options_description& desc,
+                      bool allow_unregistered)
     {    
         set<string> allowed_options;
 
@@ -106,7 +107,8 @@ namespace boost { namespace program_options {
 
         // Parser return char strings
         parsed_options result(&desc);        
-        copy(detail::basic_config_file_iterator<charT>(is, allowed_options), 
+        copy(detail::basic_config_file_iterator<charT>(
+                 is, allowed_options, allow_unregistered), 
              detail::basic_config_file_iterator<charT>(), 
              back_inserter(result.options));
         // Convert char strings into desired type.
@@ -116,13 +118,15 @@ namespace boost { namespace program_options {
     template
     BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<char>
     parse_config_file(std::basic_istream<char>& is, 
-                      const options_description& desc);
+                      const options_description& desc,
+                      bool allow_unregistered);
 
 #ifndef BOOST_NO_STD_WSTRING
     template
     BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t>
     parse_config_file(std::basic_istream<wchar_t>& is, 
-                      const options_description& desc);
+                      const options_description& desc,
+                      bool allow_unregistered);
 #endif
     
 // This versio, which accepts any options without validation, is disabled,

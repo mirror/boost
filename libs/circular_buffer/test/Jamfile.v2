@@ -1,0 +1,17 @@
+# Boost circular_buffer test Jamfile.
+#
+# Copyright (c) 2003-2007 Jan Gaspar
+#
+# Distributed under the Boost Software License, Version 1.0. (See
+# accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+# Bring in rules for testing.
+import testing ;
+
+test-suite "circular_buffer"
+  : [ run base_test.cpp : <threading>single : ]
+    [ run space_optimized_test.cpp : <threading>single : ]
+    [ run soft_iterator_invalidation.cpp : <threading>single : ]
+    [ compile bounded_buffer_comparison.cpp : <threading>multi : ]
+  ;

@@ -57,13 +57,13 @@
     <td> <p class="toc_title" width="36%">description</p></td>
   </tr>
   <tr> 
-    <td class="table_cells" width="19%"> <p>trace</p></td>
-    <td class="table_cells"  width="18%"> <p>enable/on/1<br>
-        disable/off/0</p></td>
-    <td class="table_cells"  width="43%"><p>Enable or disable the tracing of the 
+    <td class="table_cells" width="15%"> <p>trace</p></td>
+    <td class="table_cells"  width="31%"> <p>enable/on/1<br>
+    disable/off/0</p></td>
+    <td class="table_cells"  width="54%"><p>Enable or disable the tracing of the 
         macro expansion process. This is needed, even if there is given the --trace 
         command line option, because the trace output is generated only, if there 
-        is at least one trace(enable) pragma found.</p></td>
+    is at least one trace(enable) pragma found.</p></td>
   </tr>
   <tr> 
     <td class="table_cells"><p>stop</p></td>
@@ -99,14 +99,15 @@
   </tr>
   <tr>
     <td class="table_cells"><p>option</p></td>
-    <td class="table_cells"><p>line: [0|1]<br> 
-      preserve: [0|1|2]<br>
-      output: [&quot;filename&quot; | null]
+    <td class="table_cells"><p>line: [0 | 1 | push | pop]<br> 
+      preserve: [0 | 1 | 2 | push | pop]<br>
+      output: [&quot;filename&quot; | null | default | push | pop]
 </p>
     </td>
     <td class="table_cells"><p>The <tt>option(line: ...)</tt> directive allows to control, whether <span class="preprocessor">#line</span> directives will be generated in the output stream. Specify either '0' or '1' as the option parameter. All other values will be flaged as illegal. </p>
       <p>The <tt>option(preserve: ...)</tt> directive allows to control the amount of whitespace generated in the output stream. The value '0' removes any not needed whitespace, the value '1' keeps comments only and the value '2' does not remove any whitespace.</p>
-    <p>The <tt>option(output: ...)</tt> directive allows to specify the name of the file, where the output is generated to.  Specify either a valid filename (which will be interpreted relative to directory of the processed file) or the value <tt>null</tt> (without quotes) to disable the output at all. </p></td>
+    <p>The <tt>option(output: ...)</tt> directive allows to specify the name of the file, where the output is generated to.  Specify either a valid filename (which will be interpreted relative to directory of the processed file), the value <tt>null</tt> to disable the output at all, or the value <tt>default</tt> to use the output as specified on the command line using the --output/-o option. </p>
+    <p>The pragma values <tt>push</tt> and <tt>pop</tt> may be used for all of the options (<tt>line</tt>, <tt>preserve</tt> and <tt>output</tt>) to store and restore the current value of the corresponding option. </p></td>
   </tr>
 </table>
 <p>All pragma's not listed here but flagged as <tt>'wave'</tt> are currently reported as 
@@ -133,7 +134,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, May 2, 2006  17:28<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, January 11, 2007  20:14<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

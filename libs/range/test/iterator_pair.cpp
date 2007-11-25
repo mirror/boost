@@ -15,6 +15,7 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
+#include <boost/range/concepts.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
 #include <boost/static_assert.hpp>
@@ -46,33 +47,35 @@ void check_iterator_pair()
     BOOST_STATIC_ASSERT(( is_same< range_difference<pair_t>::type,                           
                           detail::iterator_traits<pair_t::first_type>::difference_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<pair_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<pair_t>::type, pair_t::first_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const_pair_t>::type, const_pair_t::first_type >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<pair_t>::type, pair_t::first_type >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<const_pair_t>::type, const_pair_t::first_type >::value ));
     
     BOOST_STATIC_ASSERT(( is_same< range_value<const_pair_tt>::type, 
                           detail::iterator_traits<const_pair_t::first_type>::value_type>::value ));
     BOOST_STATIC_ASSERT(( is_same< range_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
+    //
+    // This behavior is not supported with v2.
+    //BOOST_STATIC_ASSERT(( is_same< range_const_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_difference<const_pair_tt>::type,                           
                           detail::iterator_traits<const_pair_tt::first_type>::difference_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<const_pair_tt>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
 
     BOOST_CHECK( begin( pair ) == pair.first );
     BOOST_CHECK( end( pair )   == pair.second );
     BOOST_CHECK( empty( pair ) == (pair.first == pair.second) );
-    BOOST_CHECK( size( pair )  == std::size_t( std::distance( pair.first, pair.second ) ) );
+    BOOST_CHECK( size( pair )  == std::distance( pair.first, pair.second ) );
     
     BOOST_CHECK( begin( const_pair ) == const_pair.first );
     BOOST_CHECK( end( const_pair )   == const_pair.second );
     BOOST_CHECK( empty( const_pair ) == (const_pair.first == const_pair.second) );
-    BOOST_CHECK( size( const_pair )  == std::size_t( std::distance( const_pair.first, const_pair.second ) ) );
+    BOOST_CHECK( size( const_pair )  == std::distance( const_pair.first, const_pair.second ) );
 
     BOOST_CHECK( begin( constness_pair ) == constness_pair.first );
     BOOST_CHECK( end( constness_pair )   == constness_pair.second );
     BOOST_CHECK( empty( constness_pair ) == (constness_pair.first == const_pair.second) );
-    BOOST_CHECK( size( constness_pair )  == std::size_t( std::distance( constness_pair.first, constness_pair.second ) ) );
+    BOOST_CHECK( size( constness_pair )  == std::distance( constness_pair.first, constness_pair.second ) );
 
 }
 

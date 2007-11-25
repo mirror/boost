@@ -13,12 +13,12 @@
 #include "verify_return.hpp"
 
 template <class T>
-void check_placeholder(const T&)
+void check_placeholder( T )
 {
    T t; 
    T t2(t);
    (void)t2;
-   BOOST_STATIC_ASSERT(::std::tr1::is_placeholder<T>::value);
+   BOOST_STATIC_ASSERT( ::std::tr1::is_placeholder<T>::value > 0 );
 }
 
 template <class Binder, class R>

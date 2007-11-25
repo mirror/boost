@@ -1,0 +1,44 @@
+[/
+ / Copyright (c) 2007 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section:expression_evaluation Expression Evaluation: Imparting Behaviors Within A Context]
+
+[section:proto_eval Evaluating An Expression with [^proto::eval()]]
+
+TODO
+
+[endsect]
+
+[section:contexts Defining an Evaluation Context]
+
+TODO
+
+[endsect]
+
+[section:canned_contexts Canned Contexts]
+
+[section:default_context [^default_context]]
+
+TODO
+
+[endsect]
+
+[section:null_context [^null_context]]
+
+TODO
+
+[endsect]
+
+[section:callable_context [^callable_context<>]]
+
+TODO
+
+[endsect]
+
+[endsect]
+
+[endsect]

@@ -90,6 +90,28 @@ void test_views(Array& A, const ViewTraits&) {
         BOOST_CHECK(B(elmts) == A[idx0+i][idx1+1][idx2+j*2]);
       }
   }
+
+  // Flip the third dimension
+  {
+    typename ViewTraits::array_view3 B = A[
+      indices[range(idx0+0,idx0+2)]
+             [range(idx1+0,idx1+2)]
+             [range(idx2+2,idx2+0,-1)]
+    ];
+
+    //    typename ViewTraits::array_view3 B =
+    //      A[indices[range(idx0+0,idx0+2)][idx1+1][range(idx2+0,idx2+4,2)]];
+    
+    for (index i = 0; i != 2; ++i)
+      for (index j = 0; j != 2; ++j) 
+        for (index k = 0; k != 2; ++k) {
+        BOOST_CHECK(B[i][j][k] == A[idx0+i][idx1+j][idx2+2-k]);
+        boost::array<index,3> elmts;
+        elmts[0]=i; elmts[1]=j; elmts[2]=k;
+        BOOST_CHECK(B(elmts) == A[idx0+i][idx1+j][idx2+2-k]);
+      }
+  }
+
   ++tests_run;
 }
 

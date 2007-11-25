@@ -53,6 +53,9 @@
     <dt><a href="#CompilerError">My compiler reports an error in the library
     code. Is this a bug in Boost.Statechart?</a></dt>
 
+    <dt><a href="#DisableHistory">Is it possible to disable history for a
+    state at runtime?</a></dt>
+
     <dt><a href="#Dll">How can I compile a state machine into a dynamic link
     library (DLL)?</a></dt>
 
@@ -505,6 +508,23 @@ the culprit close to the bottom in file InconsistentHistoryTest1.cpp on line
     problem. Thank you!</li>
   </ol>
 
+  <h2><a name="DisableHistory" id="DisableHistory">Is it possible to disable
+  history for a state at runtime?</a></h2>
+
+  <p>Yes, see <a href=
+  "reference.html#clear_shallow_history">simple_state::clear_shallow_history()</a>
+  and <a href=
+  "reference.html#clear_deep_history">simple_state::clear_deep_history()</a>.
+  Calling these functions is often preferable to introducting additional
+  normal transitions when ...
+  <ul>
+    <li>a state with history is the target of many transitions,
+    <b>and/or</b></li>
+    <li>the decision to ignore history is made in a different place than
+    the transition to a state with history</li>
+  </ul>
+  </p>
+
   <h2><a name="Dll" id="Dll">How can I compile a state machine into a dynamic
   link library (DLL)?</a></h2>
 
@@ -713,9 +733,9 @@ Inner::~Inner()
   height="31" width="88"></a></p>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->15 November, 2007<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
 
-  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->
+  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2007<!--webbot bot="Timestamp" endspan i-checksum="770" -->
   <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See

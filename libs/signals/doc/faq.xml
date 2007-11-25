@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-   Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
-  
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file LICENSE_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt)
-  -->
 <!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <section last-revision="$Date$">
@@ -32,10 +25,8 @@
       <answer>
         <para>No. Using Boost.Signals in a multithreaded concept is
         very dangerous, and it is very likely that the results will be
-        less than satisfying. Even trying to invoke the same signal from
-        two different threads is dangerous. Although we would like to
-        make Signals thread-safe, it is unlikely to happen without
-        help from other developers.</para>
+        less than satisfying. Boost.Signals will support thread safety
+        in the future.</para>
       </answer>
     </qandaentry>
     <qandaentry>

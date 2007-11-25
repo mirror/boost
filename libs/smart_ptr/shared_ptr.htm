@@ -111,6 +111,7 @@ void bad()
 
       <A href="#constructors" >shared_ptr</A>(shared_ptr const &amp; r); // never throws
       template&lt;class Y&gt; <A href="#constructors" >shared_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
+      template&lt;class Y&gt; <A href="#constructors" >shared_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r, T * p); // never throws
       template&lt;class Y&gt; explicit <A href="#constructors" >shared_ptr</A>(<A href="weak_ptr.htm" >weak_ptr</A>&lt;Y&gt; const &amp; r);
       template&lt;class Y&gt; explicit <A href="#constructors" >shared_ptr</A>(std::auto_ptr&lt;Y&gt; &amp; r);
 
@@ -122,6 +123,7 @@ void bad()
       template&lt;class Y&gt; void <A href="#reset" >reset</A>(Y * p);
       template&lt;class Y, class D&gt; void <A href="#reset" >reset</A>(Y * p, D d);
       template&lt;class Y, class D, class A&gt; void <A href="#reset" >reset</A>(Y * p, D d, A a);
+      template&lt;class Y&gt; void <A href="#reset" >reset</A>(shared_ptr&lt;Y&gt; const &amp; r, T * p); // never throws
 
       T &amp; <A href="#indirection" >operator*</A>() const; // never throws
       T * <A href="#indirection" >operator-&gt;</A>() const; // never throws
@@ -253,6 +255,13 @@ template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never 
 					r.use_count()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
+		<pre>template&lt;class Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r, T * p); // never throws</pre>
+		<blockquote>
+			<p><b>Effects:</b> constructs a <b>shared_ptr</b> that <EM>shares ownership</EM> with
+				<b>r</b> and stores <b>p</b>.</p>
+			<p><b>Postconditions:</b> <code>get() == p &amp;&amp; use_count() == r.use_count()</code>.</p>
+			<p><b>Throws:</b> nothing.</p>
+		</blockquote>
 		<pre>template&lt;class Y&gt; explicit shared_ptr(<A href="weak_ptr.htm" >weak_ptr</A>&lt;Y&gt; const &amp; r);</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b> that <EM>shares ownership</EM> with
@@ -327,6 +336,10 @@ q = p;
 		<pre>template&lt;class Y, class D, class A&gt; void reset(Y * p, D d, A a);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr(p, d, a).swap(*this)</code>.</P>
+		</BLOCKQUOTE>
+		<pre>template&lt;class Y&gt; void reset(shared_ptr&lt;Y&gt; const &amp; r, T * p); // never throws</pre>
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Equivalent to <code>shared_ptr(r, p).swap(*this)</code>.</P>
 		</BLOCKQUOTE>
 		<h3><a name="indirection">indirection</a></h3>
 		<pre>T &amp; operator*() const; // never throws</pre>
@@ -696,9 +709,8 @@ int * p = a.release();
 		<p>
 			$Date$</p>
 		<p><small>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
-				Copyright 2002-2005 Peter Dimov. Permission to copy, use, modify, sell and 
-				distribute this document is granted provided this copyright notice appears in 
-				all copies. This document is provided "as is" without express or implied 
-				warranty, and with no claim as to its suitability for any purpose.</small></p>
+			Copyright 2002-2005 Peter Dimov. Distributed under the Boost Software License, Version 
+			1.0. See accompanying file <A href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or 
+			copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>.</small></p>
 	</body>
 </html>

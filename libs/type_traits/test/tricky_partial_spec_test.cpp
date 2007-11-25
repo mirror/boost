@@ -18,6 +18,10 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
+#include <boost/type_traits/is_member_pointer.hpp>
+#include <boost/type_traits/is_member_object_pointer.hpp>
+#include <boost/type_traits/is_member_function_pointer.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 #endif
 #include <stdexcept>
 #include <new>
@@ -79,6 +83,34 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::bad_alloc>::value,
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::runtime_error>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::out_of_range>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::range_error>::value, true);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<const f1>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<volatile f1>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pointer<const volatile f1>::value, true);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<const f1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<const mp>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<volatile mp>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<const volatile mp>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<const mf3>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<volatile mf3>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_pointer<const volatile mf3>::value, true);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<const f1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<const mp>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<volatile mp>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<const volatile mp>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<const mf3>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<volatile mf3>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_object_pointer<const volatile mf3>::value, false);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const f1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const mp>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<volatile mp>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const volatile mp>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const mf3>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<volatile mf3>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_member_function_pointer<const volatile mf3>::value, true);
 
 TT_TEST_END
 

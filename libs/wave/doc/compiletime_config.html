@@ -51,7 +51,7 @@
         directives.</p></td>
   </tr>
   <tr> 
-    <td class="table_cells"><code>BOOST_WAVE_RETURN_PRAGMA_DIRECTIVES</code></td>
+    <td class="table_cells"><code>BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES</code></td>
     <td class="table_cells"><p>If defined, then the <span class="preprocessor">#pragma</span> 
         directives are returned as a token sequence to the caller, if not defined, 
         the whole <span class="preprocessor">#pragma</span> directive is skipped. </p></td>
@@ -112,6 +112,24 @@
     <td class="table_cells"><code>BOOST_WAVE_PRAGMA_KEYWORD</code></td>
     <td class="table_cells"><p>If this is defined to a string literal it will be used as the pragma keyword recogniyed by the library as specific Wave pragma's. This constant defaults to <span class="literal">&quot;wave&quot;</span>, i.e. the library recognizes all      <span class="preprocessor">#pragma wave option [(argument)]</span>  directives and dispatches the handling to the interpret_pragma() preprocessing hook function (see: <a href="class_reference_ctxpolicy.html">Preprocessing Hooks</a>). The arguments part of the  pragma is optional.<br>
       </p>    </td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS</code></td>
+    <td class="table_cells"><p>If defined to something not equal to zero (<span class="literal">'0'</span>) Wave will be compiled to use the depreciated preprocessing hooks. The interface of the preprocessing hooks has been changed after the Boost V1.34.x releases. This constant allows to compile applications using the older interface. </p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS</code></td>
+    <td class="table_cells"><p>The C++ standard requires the preprocessor to use one of the following 
+      types for integer literals: <code>long</code> or <code>unsigned long</code> depending on a optional 
+      suffix (<span class="literal">'u'</span>, <span class="literal">'l'</span>, <span class="literal">'ul'</span>, or <span class="literal">'lu'</span>). Sometimes it is required to preprocess integer literals larger than that
+        (i.e. <code>long long</code> or <code>unsigned long long</code>). Defining this pp constant enables the recognition of long long integers
+even if these do not have the <span class="literal">'ll'</span> suffix.</p>
+      <p>This preprocessor constant is effective only, if your target platform supports 
+        long long integers (<code>BOOST_HAS_LONG_LONG</code> is defined). Please note, that this setting doesn't relate to the Wave support option
+        <code>support_option_long_long</code>, which enables the recognition of <span class="literal">'ll'</span> suffixes 
+        only.
+    </p>
+      </td>
   </tr>
 </table>
 <P dir="ltr"><b><a name="using_custom_lexer"></a>Using a different token type or lexer type in conjunction with Wave </b></P>
@@ -211,7 +229,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, May 2, 2006  17:10<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, July 4, 2007  13:21<!-- #EndDate -->
 </span></p>
 </body>
 </html>

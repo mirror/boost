@@ -2,7 +2,10 @@
 import toolset ;
 toolset.using doxygen ;
 
-boostbook program_option : program_options.xml ;
+boostbook program_option 
+    : program_options.xml 
+    : <implicit-dependency>autodoc 
+    ;
 
 doxygen autodoc 
     : [ glob ../../../boost/program_options/*.hpp ] ;

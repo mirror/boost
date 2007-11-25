@@ -12,6 +12,7 @@
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <cstring>
+#include <boost/detail/lightweight_test.hpp>
 
 namespace test {
 
@@ -79,9 +80,9 @@ struct values_t
         BOOST_MPL_ASSERT((boost::is_same<Value,Value_>));
         BOOST_MPL_ASSERT((boost::is_same<Name,Name_>));
 #endif
-        BOOST_ASSERT(equal(n, n_));
-        BOOST_ASSERT(equal(v, v_));
-        BOOST_ASSERT(equal(i, i_));
+        BOOST_TEST(equal(n, n_));
+        BOOST_TEST(equal(v, v_));
+        BOOST_TEST(equal(i, i_));
     }
 
     Name const& n;

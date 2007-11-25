@@ -125,5 +125,12 @@ int test_main(int,char**) {
     BOOST_CHECK(get("nada",props,std::string("3.14"))  == "pi");
   }
 
+  // Use the ignore_other_properties generator
+  {
+    boost::dynamic_properties props(&boost::ignore_other_properties);
+    bool value = put("nada",props,std::string("3.14"),std::string("pi"));
+    BOOST_CHECK(value == false);
+  }
+ 
   return boost::exit_success;
 }
