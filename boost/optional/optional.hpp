@@ -516,7 +516,7 @@ class optional : public optional_detail::optional_base<T>
 
     // Creates a deep copy of another optional<T>
     // Can throw if T::T(T const&) does
-    optional ( optional const& rhs ) : base(rhs) {}
+    optional ( optional const& rhs ) : base( static_cast<base const&>(rhs) ) {}
 
    // No-throw (assuming T::~T() doesn't)
     ~optional() {}
@@ -550,7 +550,7 @@ class optional : public optional_detail::optional_base<T>
     //  (NOTE: On BCB, this operator is not actually called and left is left UNMODIFIED in case of a throw)
     optional& operator= ( optional const& rhs )
       {
-        this->assign( rhs ) ;
+        this->assign( static_cast<base const&>(rhs) ) ;
         return *this ;
       }
 
