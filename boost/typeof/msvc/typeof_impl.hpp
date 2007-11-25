@@ -153,7 +153,7 @@ namespace boost
             };
         };
 # endif
-# if BOOST_WORKAROUND(BOOST_MSVC,>=1310)
+# if BOOST_WORKAROUND(BOOST_MSVC,==1310)
         template<const std::type_info& ref_type_info>
         struct msvc_typeid_wrapper {
             typedef typename msvc_extract_type<msvc_typeid_wrapper>::id2type id2type;
@@ -183,6 +183,7 @@ namespace boost
 
         template<typename Organizer, typename T>
         msvc_register_type<T,Organizer> typeof_register_type(const T&);
+
 
 # define BOOST_TYPEOF(expr) \
     boost::type_of::msvc_typeid_wrapper<typeid(boost::type_of::encode_start(expr))>::type
@@ -239,10 +240,18 @@ struct name {\
         {
             typedef char(*type)[encode_type<T>::value];
         };
+# if BOOST_WORKAROUND(BOOST_MSVC,>=1310)
+        template<typename T> typename disable_if<
+            typename is_function<T>::type,
+            typename sizer<T>::type>::type encode_start(T const&);
 
+        template<typename T> typename enable_if<
+            typename is_function<T>::type,
+            typename sizer<T>::type>::type encode_start(T&);
+# else
         template<typename T>
             typename sizer<T>::type encode_start(T const&);
-
+# endif
         template<typename Organizer, typename T>
         msvc_register_type<T,Organizer> typeof_register_type(const T&,Organizer* =0);
 
