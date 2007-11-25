@@ -3,7 +3,7 @@
 /// Contains the definition of the regex_iterator type, an STL-compatible iterator
 /// for stepping through all the matches in a sequence.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -16,9 +16,11 @@
 #endif
 
 #include <boost/noncopyable.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/access.hpp>
+#include <boost/xpressive/detail/utility/counted_base.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -28,7 +30,7 @@ namespace boost { namespace xpressive { namespace detail
 //
 template<typename BidiIter>
 struct regex_iterator_impl
-  : private noncopyable
+  : counted_base<regex_iterator_impl<BidiIter> >
 {
     typedef detail::core_access<BidiIter> access;
 
@@ -78,7 +80,7 @@ struct regex_iterator_impl
     }
 
     match_results<BidiIter> what_;
-    state_type<BidiIter> state_;
+    match_state<BidiIter> state_;
     basic_regex<BidiIter> const *const rex_;
     regex_constants::match_flag_type const flags_;
     bool not_null_;
@@ -116,6 +118,21 @@ struct regex_iterator
     )
       : impl_(new impl_type_(begin, begin, end, &rex, flags))
     {
+        this->next_();
+    }
+
+    template<typename LetExpr>
+    regex_iterator
+    (
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
+      , detail::let_<LetExpr> const &args
+      , regex_constants::match_flag_type flags = regex_constants::match_default
+    )
+      : impl_(new impl_type_(begin, begin, end, &rex, flags))
+    {
+        detail::bind_args(args, this->impl_->what_);
         this->next_();
     }
 
@@ -162,7 +179,7 @@ struct regex_iterator
     /// only if that fails and provided what[0].second != suffix().second does it look for a (possibly
     /// zero length) match starting from what[0].second + 1.  If no further match is found then sets
     /// *this equal to the end of sequence iterator.
-    /// \post (*this)-\>size() == pre-\>mark_count()
+    /// \post (*this)-\>size() == pre-\>mark_count() + 1
     /// \post (*this)-\>empty() == false
     /// \post (*this)-\>prefix().first == An iterator denoting the end point of the previous match found
     /// \post (*this)-\>prefix().last == (**this)[0].first
@@ -196,34 +213,35 @@ private:
     /// INTERNAL ONLY
     void fork_()
     {
-        if(!this->impl_.unique())
+        if(1 != this->impl_->use_count())
         {
-            this->impl_.reset
+            // This is OK, the use_count is > 1
+            impl_type_ *that = this->impl_.get();
+            this->impl_ = new impl_type_
             (
-                new impl_type_
-                (
-                    this->impl_->state_.begin_
-                  , this->impl_->state_.cur_
-                  , this->impl_->state_.end_
-                  , this->impl_->rex_
-                  , this->impl_->flags_
-                  , this->impl_->not_null_
-                )
+                that->state_.begin_
+              , that->state_.cur_
+              , that->state_.end_
+              , that->rex_
+              , that->flags_
+              , that->not_null_
             );
+            detail::core_access<BidiIter>::get_action_args(this->impl_->what_)
+                = detail::core_access<BidiIter>::get_action_args(that->what_);
         }
     }
 
     /// INTERNAL ONLY
     void next_()
     {
-        BOOST_ASSERT(this->impl_ && this->impl_.unique());
+        BOOST_ASSERT(this->impl_ && 1 == this->impl_->use_count());
         if(!this->impl_->next())
         {
-            this->impl_.reset();
+            this->impl_ = 0;
         }
     }
 
-    shared_ptr<impl_type_> impl_;
+    intrusive_ptr<impl_type_> impl_;
 };
 
 }} // namespace boost::xpressive

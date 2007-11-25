@@ -32,11 +32,11 @@ public:
   typedef int input_type;
   typedef bool result_type;
 
-  explicit bernoulli_distribution(const RealType& p = RealType(0.5)) 
-    : _p(p)
+  explicit bernoulli_distribution(const RealType& p_arg = RealType(0.5)) 
+    : _p(p_arg)
   {
-    assert(p >= 0);
-    assert(p <= 1);
+    assert(_p >= 0);
+    assert(_p <= 1);
   }
 
   // compiler-generated copy ctor and assignment operator are fine

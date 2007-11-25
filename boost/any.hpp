@@ -168,13 +168,13 @@ namespace boost
     }
 
     template<typename ValueType>
-    const ValueType * any_cast(const any * operand)
+    inline const ValueType * any_cast(const any * operand)
     {
         return any_cast<ValueType>(const_cast<any *>(operand));
     }
 
     template<typename ValueType>
-    ValueType any_cast(const any & operand)
+    ValueType any_cast(any & operand)
     {
         typedef BOOST_DEDUCED_TYPENAME remove_reference<ValueType>::type nonref;
 
@@ -188,14 +188,14 @@ namespace boost
         BOOST_STATIC_ASSERT(!is_reference<nonref>::value);
 #endif
 
-        const nonref * result = any_cast<nonref>(&operand);
+        nonref * result = any_cast<nonref>(&operand);
         if(!result)
             boost::throw_exception(bad_any_cast());
         return *result;
     }
 
     template<typename ValueType>
-    ValueType any_cast(any & operand)
+    inline ValueType any_cast(const any & operand)
     {
         typedef BOOST_DEDUCED_TYPENAME remove_reference<ValueType>::type nonref;
 
@@ -205,10 +205,7 @@ namespace boost
         BOOST_STATIC_ASSERT(!is_reference<nonref>::value);
 #endif
 
-        nonref * result = any_cast<nonref>(&operand);
-        if(!result)
-            boost::throw_exception(bad_any_cast());
-        return *result;
+        return any_cast<const nonref &>(const_cast<any &>(operand));
     }
 
     // Note: The "unsafe" versions of any_cast are not part of the

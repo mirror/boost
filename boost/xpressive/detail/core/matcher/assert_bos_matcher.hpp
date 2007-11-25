@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // assert_bos_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -24,10 +24,11 @@ namespace boost { namespace xpressive { namespace detail
     // assert_bos_matcher
     //   match the beginning of the sequence (\A)
     struct assert_bos_matcher
-      : quant_style_assertion
     {
+        BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+
         template<typename BidiIter, typename Next>
-        static bool match(state_type<BidiIter> &state, Next const &next)
+        static bool match(match_state<BidiIter> &state, Next const &next)
         {
             return state.bos() && next.match(state);
         }

@@ -153,6 +153,7 @@ class pool: protected simple_segregated_storage<
     const simple_segregated_storage<size_type> & store() const { return *this; }
     const size_type requested_size;
     size_type next_size;
+    size_type start_size;
 
     // finds which POD in the list 'chunk' was allocated from
     details::PODptr<size_type> find_POD(void * const chunk) const;
@@ -192,7 +193,7 @@ class pool: protected simple_segregated_storage<
     // pre: npartition_size != 0 && nnext_size != 0
     explicit pool(const size_type nrequested_size,
         const size_type nnext_size = 32)
-    :list(0, 0), requested_size(nrequested_size), next_size(nnext_size)
+    :list(0, 0), requested_size(nrequested_size), next_size(nnext_size), start_size(nnext_size)
     { }
 
     ~pool() { purge_memory(); }
@@ -208,7 +209,8 @@ class pool: protected simple_segregated_storage<
 
     // These functions are extensions!
     size_type get_next_size() const { return next_size; }
-    void set_next_size(const size_type nnext_size) { next_size = nnext_size; }
+    void set_next_size(const size_type nnext_size) { next_size = start_size = nnext_size; }
+    size_type get_requested_size() const { return requested_size; }
 
     // Both malloc and ordered_malloc do a quick inlined check first for any
     //  free chunks.  Only if we need to get another memory block do we call
@@ -290,8 +292,8 @@ bool pool<UserAllocator>::release_memory()
   //  Note that "prev_free" in this case does NOT point to the previous memory
   //  chunk in the free list, but rather the last free memory chunk before the
   //  current block.
-  void * free = this->first;
-  void * prev_free = 0;
+  void * free_p = this->first;
+  void * prev_free_p = 0;
 
   const size_type partition_size = alloc_size();
 
@@ -300,10 +302,10 @@ bool pool<UserAllocator>::release_memory()
   {
     // At this point:
     //  ptr points to a valid memory block
-    //  free points to either:
+    //  free_p points to either:
     //    0 if there are no more free chunks
     //    the first free chunk in this or some next memory block
-    //  prev_free points to either:
+    //  prev_free_p points to either:
     //    the last free chunk in some previous memory block
     //    0 if there is no such free chunk
     //  prev is either:
@@ -313,8 +315,8 @@ bool pool<UserAllocator>::release_memory()
     // If there are no more free memory chunks, then every remaining
     //  block is allocated out to its fullest capacity, and we can't
     //  release any more memory
-    if (free == 0)
-      return ret;
+    if (free_p == 0)
+      break;
 
     // We have to check all the chunks.  If they are *all* free (i.e., present
     //  in the free list), then we can free the block.
@@ -322,47 +324,47 @@ bool pool<UserAllocator>::release_memory()
 
     // Iterate 'i' through all chunks in the memory block
     // if free starts in the memory block, be careful to keep it there
-    void * saved_free = free;
+    void * saved_free = free_p;
     for (char * i = ptr.begin(); i != ptr.end(); i += partition_size)
     {
       // If this chunk is not free
-      if (i != free)
+      if (i != free_p)
       {
         // We won't be able to free this block
         all_chunks_free = false;
 
-        // free might have travelled outside ptr
-        free = saved_free;
+        // free_p might have travelled outside ptr
+        free_p = saved_free;
         // Abort searching the chunks; we won't be able to free this
         //  block because a chunk is not free.
         break;
       }
 
-      // We do not increment prev_free because we are in the same block
-      free = nextof(free);
+      // We do not increment prev_free_p because we are in the same block
+      free_p = nextof(free_p);
     }
 
-    // post: if the memory block has any chunks, free points to one of them
+    // post: if the memory block has any chunks, free_p points to one of them
     // otherwise, our assertions above are still valid
 
     const details::PODptr<size_type> next = ptr.next();
 
     if (!all_chunks_free)
     {
-      if (is_from(free, ptr.begin(), ptr.element_size()))
+      if (is_from(free_p, ptr.begin(), ptr.element_size()))
       {
         std::less<void *> lt;
         void * const end = ptr.end();
         do
         {
-          prev_free = free;
-          free = nextof(free);
-        } while (free && lt(free, end));
+          prev_free_p = free_p;
+          free_p = nextof(free_p);
+        } while (free_p && lt(free_p, end));
       }
       // This invariant is now restored:
-      //     free points to the first free chunk in some next memory block, or
+      //     free_p points to the first free chunk in some next memory block, or
       //       0 if there is no such chunk.
-      //     prev_free points to the last free chunk in this memory block.
+      //     prev_free_p points to the last free chunk in this memory block.
       
       // We are just about to advance ptr.  Maintain the invariant:
       // prev is the PODptr whose next() is ptr, or !valid()
@@ -380,10 +382,10 @@ bool pool<UserAllocator>::release_memory()
         list = next;
 
       // Remove all entries in the free list from this block
-      if (prev_free != 0)
-        nextof(prev_free) = free;
+      if (prev_free_p != 0)
+        nextof(prev_free_p) = free_p;
       else
-        this->first = free;
+        this->first = free_p;
 
       // And release memory
       UserAllocator::free(ptr.begin());
@@ -394,6 +396,7 @@ bool pool<UserAllocator>::release_memory()
     ptr = next;
   }
 
+  next_size = start_size;
   return ret;
 }
 
@@ -419,6 +422,7 @@ bool pool<UserAllocator>::purge_memory()
 
   list.invalidate();
   this->first = 0;
+  next_size = start_size;
 
   return true;
 }

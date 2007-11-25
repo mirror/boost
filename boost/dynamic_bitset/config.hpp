@@ -1,7 +1,7 @@
 // --------------------------------------------------
 //
 // (C) Copyright Chuck Allison and Jeremy Siek 2001 - 2002.
-// (C) Copyright Gennaro Prota                 2003 - 2004.
+// (C) Copyright Gennaro Prota                 2003 - 2006.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,8 +9,9 @@
 //
 // -----------------------------------------------------------
 
-//  See http://www.boost.org/libs/dynamic_bitset for documentation.
-
+//  See http://www.boost.org/libs/dynamic_bitset/ for documentation.
+//
+//  $Revision$ $Date$ - $Name$
 
 #ifndef BOOST_DYNAMIC_BITSET_CONFIG_HPP_GP_20040424
 #define BOOST_DYNAMIC_BITSET_CONFIG_HPP_GP_20040424
@@ -28,8 +29,8 @@
 #define BOOST_DYNAMIC_BITSET_GNUC_VERSION  (  __GNUC__       * 100 * 100     \
                                             + __GNUC_MINOR__ * 100)
 
-// workaround for gcc bug c++/8419 - gps
-
+// no-op function to workaround gcc bug c++/8419
+//
 namespace boost { namespace detail {
     template <typename T> T make_non_const(T t) { return t; }
 }}
@@ -48,7 +49,7 @@ namespace boost { namespace detail {
 #define BOOST_DYNAMIC_BITSET_DONT_USE_FRIENDS
 #endif
 
-// if we can't use friends then private members are exposed
+// if we can't use friends then we simply expose private members
 //
 #if defined(BOOST_DYNAMIC_BITSET_DONT_USE_FRIENDS)
 #define BOOST_DYNAMIC_BITSET_PRIVATE public

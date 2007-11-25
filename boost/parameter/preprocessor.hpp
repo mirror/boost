@@ -38,7 +38,7 @@
 
 namespace boost { namespace parameter { namespace aux {
 
-#  ifndef BOOST_NO_SFINAE
+#  if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 
 // Given Match, which is "void x" where x is an argument matching
 // criterion, extract a corresponding MPL predicate.
@@ -353,7 +353,7 @@ struct funptr_predicate<void**>
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, class ParameterArgumentType)>
 /**/
 
-# ifndef BOOST_NO_SFINAE
+# if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 #  define BOOST_PARAMETER_FUNCTION_FWD_MATCH_Z(z, name, parameters, n) \
     , typename boost::parameter::aux::match< \
           parameters, BOOST_PP_ENUM_PARAMS(n, ParameterArgumentType) \
@@ -685,7 +685,7 @@ struct funptr_predicate<void**>
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT(arg, tag_namespace) \
     boost::parameter::keyword< \
         tag_namespace::BOOST_PARAMETER_FN_ARG_KEYWORD(arg) \
-    >::get() | boost::parameter::aux::use_default_tag()
+    >::instance | boost::parameter::aux::use_default_tag()
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_GET_ARG(arg, tag_ns) \
     BOOST_PARAMETER_FUNCTION_CAST( \
@@ -834,7 +834,7 @@ struct funptr_predicate<void**>
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_GET_ARG(r, tag_ns, arg) \
     , BOOST_PARAMETER_FUNCTION_CAST( \
           args[ \
-              boost::parameter::keyword<tag_ns::BOOST_PARAMETER_FN_ARG_KEYWORD(arg)>::get() \
+              boost::parameter::keyword<tag_ns::BOOST_PARAMETER_FN_ARG_KEYWORD(arg)>::instance \
           ] \
         , BOOST_PARAMETER_FN_ARG_PRED(arg) \
       )

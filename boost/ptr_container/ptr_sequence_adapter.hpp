@@ -22,19 +22,12 @@
 #include <boost/ptr_container/detail/void_ptr_iterator.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/iterator/iterator_categories.hpp>
 
 
 namespace boost
 {   
 namespace ptr_container_detail
-{
-
-
-    
-    
+{    
     template
     < 
         class T, 
@@ -60,7 +53,7 @@ namespace ptr_container_detail
                         BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_iterator, const U >
                     const_iterator;
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
         template< class Iter >
         static U* get_pointer( Iter i )
@@ -153,16 +146,29 @@ namespace ptr_container_detail
          
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
                                                  base_type )
-    
+
+        template< class U >
+        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq>& r )
+          : base_type( r )
+        { }
+        
         template< class PtrContainer >
-        ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
+        explicit ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
           : base_type( clone )
         { }
 
+        template< class U >
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter<U,VoidPtrSeq>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
+        
         template< class PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_sequence_adapter& operator=( std::auto_ptr<PtrContainer> clone )    
         {
             base_type::operator=( clone );
+            return *this;
         }
 
         /////////////////////////////////////////////////////////////
@@ -173,9 +179,9 @@ namespace ptr_container_detail
         {
             this->enforce_null_policy( x, "Null pointer in 'push_back()'" );
 
-            auto_type ptr( x );                // notrow
-            this->c_private().push_back( x );  // strong, commit
-            ptr.release();                     // nothrow
+            auto_type ptr( x );           // notrow
+            this->base().push_back( x );  // strong, commit
+            ptr.release();                // nothrow
         }
 
         template< class U >
@@ -188,9 +194,9 @@ namespace ptr_container_detail
         {
             this->enforce_null_policy( x, "Null pointer in 'push_front()'" );
 
-            auto_type ptr( x );                // nothrow
-            this->c_private().push_front( x ); // strong, commit
-            ptr.release();                     // nothrow
+            auto_type ptr( x );           // nothrow
+            this->base().push_front( x ); // strong, commit
+            ptr.release();                // nothrow
         }
 
         template< class U >
@@ -204,9 +210,9 @@ namespace ptr_container_detail
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
                                                  bad_ptr_container_operation,
                                           "'pop_back()' on empty container" );
-            auto_type ptr( static_cast<value_type>( 
-                         this->c_private().back() ) ); // nothrow
-            this->c_private().pop_back();              // nothrow
+            auto_type ptr( static_cast<value_type>( this->base().back() ) );      
+                                                       // nothrow
+            this->base().pop_back();                   // nothrow
             return ptr_container_detail::move( ptr );  // nothrow
         }
 
@@ -215,9 +221,9 @@ namespace ptr_container_detail
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
                                                  bad_ptr_container_operation,
                                          "'pop_front()' on empty container" ); 
-            auto_type ptr( static_cast<value_type>(
-                        this->c_private().front() ) ); // nothrow 
-            this->c_private().pop_front();             // nothrow
+            auto_type ptr( static_cast<value_type>( this->base().front() ) ); 
+                                         // nothrow 
+            this->base().pop_front();    // nothrow
             return ptr_container_detail::move( ptr ); 
         }
         
@@ -263,14 +269,14 @@ namespace ptr_container_detail
         {
             BOOST_ASSERT( n < this->size() );
             BOOST_ASSERT( !this->is_null( n ) );
-            return *static_cast<value_type>( this->c_private()[n] ); 
+            return *static_cast<value_type>( this->base()[n] ); 
         }
         
         const_reference operator[]( size_type n ) const // nothrow  
         { 
             BOOST_ASSERT( n < this->size() ); 
             BOOST_ASSERT( !this->is_null( n ) );
-            return *static_cast<value_type>( this->c_private()[n] );
+            return *static_cast<value_type>( this->base()[n] );
         }
         
         reference at( size_type n )
@@ -293,17 +299,17 @@ namespace ptr_container_detail
         
         size_type capacity() const
         {
-            return this->c_private().capacity();
+            return this->base().capacity();
         }
         
         void reserve( size_type n )
         {
-            this->c_private().reserve( n ); 
+            this->base().reserve( n ); 
         }
 
         void reverse()
         {
-            this->c_private().reverse(); 
+            this->base().reverse(); 
         }
 
     public: // assign, insert, transfer
@@ -350,7 +356,7 @@ namespace ptr_container_detail
                          iterator_category<InputIterator>::type() );
         } 
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else
         template< class Range >
         BOOST_DEDUCED_TYPENAME
@@ -371,11 +377,9 @@ namespace ptr_container_detail
             BOOST_ASSERT( (void*)&from != (void*)this );
             if( from.empty() )
                 return;
-            this->c_private().
-                insert( before.base(), 
-                        first.base(), last.base() ); // strong
-            from.c_private().erase( first.base(),
-                                    last.base() );   // nothrow
+            this->base().
+                insert( before.base(), first.base(), last.base() ); // strong
+            from.base().erase( first.base(), last.base() );         // nothrow
         }
 
         template< class PtrSeqAdapter >
@@ -386,13 +390,11 @@ namespace ptr_container_detail
             BOOST_ASSERT( (void*)&from != (void*)this );
             if( from.empty() )
                 return;
-            this->c_private().
-                insert( before.base(),
-                        *object.base() );                 // strong
-            from.c_private().erase( object.base() );      // nothrow
+            this->base().insert( before.base(), *object.base() ); // strong 
+            from.base().erase( object.base() );                  // nothrow 
         }
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else
         
         template< class PtrSeqAdapter, class Range >
@@ -410,10 +412,37 @@ namespace ptr_container_detail
             BOOST_ASSERT( (void*)&from != (void*)this );
             if( from.empty() )
                 return;
-            this->c_private().
+            this->base().
                 insert( before.base(),
                         from.begin().base(), from.end().base() ); // strong
-            from.c_private().clear();                             // nothrow
+            from.base().clear();                                  // nothrow
+        }
+
+    public: // C-array support
+    
+        void transfer( iterator before, value_type* from, 
+                       size_type size, bool delete_from = true ) // strong 
+        {
+            BOOST_ASSERT( from != 0 );
+            if( delete_from )
+            {
+                BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
+                    deleter( from, size );                                // nothrow
+                this->base().insert( before.base(), from, from + size );  // strong
+                deleter.release();                                        // nothrow
+            }
+            else
+            {
+                this->base().insert( before.base(), from, from + size ); // strong
+            }
+        }
+
+        value_type* c_array() // nothrow
+        {
+            if( this->empty() )
+                return 0;
+            T** res = reinterpret_cast<T**>( &this->begin().base()[0] );
+            return res;
         }
 
     public: // null functions
@@ -421,9 +450,44 @@ namespace ptr_container_detail
         bool is_null( size_type idx ) const
         {
             BOOST_ASSERT( idx < this->size() );
-            return this->c_private()[idx] == 0;
+            return this->base()[idx] == 0;
         }
 
+    public: // resize
+
+        void resize( size_type size )
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( boost::next( this->begin(), size ), this->end() );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_back( new BOOST_DEDUCED_TYPENAME 
+                                     boost::remove_pointer<value_type>::type ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }
+
+        void resize( size_type size, value_type to_clone )
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( boost::next( this->begin(), size ), this->end() );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_back( this->null_policy_allocate_clone( to_clone ) ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );        
+        }
+          
     public: // algorithms
 
         void sort( iterator first, iterator last )
@@ -480,7 +544,7 @@ namespace ptr_container_detail
                                                     first.base(), 
                                                     last.base(), 
                                                     is_not_zero_ptr() );
-            this->c_private().erase( p, this->end().base() );
+            this->base().erase( p, this->end().base() );
             
         }
 

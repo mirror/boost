@@ -2,11 +2,9 @@
 #define _DATE_TIME_DATE_PARSING_HPP___
 
 /* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
- *
- * Distributed under the Boost Software License, Version 1.0.
- *     (See accompanying file LICENSE_1_0.txt or copy at
- *           http://www.boost.org/LICENSE_1_0.txt)
- *
+ * Use, modification and distribution is subject to the 
+ * Boost Software License, Version 1.0. (See accompanying
+ * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Jeff Garland, Bart Garst
  * $Date$
  */
@@ -79,8 +77,8 @@ namespace date_time {
     /*! find_match searches both arrays for a match to 's'. Indexing of the 
      * arrays is from 0 to 'limit'. The index of the match is returned.
      * Ex. "Jan" returns 0, "Dec" returns 11, "Tue" returns 2.
-     * 'limit' can be sent in with: (greg_month::max)(), 
-     * (greg_weekday::max)() or date_time::NumSpecialValues */
+     * 'limit' can be sent in with: greg_month::max(), 
+     * greg_weekday::max() or date_time::NumSpecialValues */
     template<class charT>
     short find_match(const charT* const* short_names, 
                      const charT* const* long_names, 

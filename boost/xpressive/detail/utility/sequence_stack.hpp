@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // sequence_stack.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -74,11 +74,11 @@ private:
     {
         if(this->current_chunk_)
         {
-            // write the cached value of current into the node.
+            // write the cached value of current into the expr.
             // OK to do this even if later statements throw.
             this->current_chunk_->curr_ = this->curr_;
 
-            // Do we have a node with enough available memory already?
+            // Do we have a expr with enough available memory already?
             if(this->current_chunk_->next_ && count <= this->current_chunk_->next_->size())
             {
                 this->current_chunk_ = this->current_chunk_->next_;
@@ -92,7 +92,7 @@ private:
             // grow exponentially
             std::size_t new_size = (std::max)(count, static_cast<std::size_t>(this->current_chunk_->size() * 1.5));
 
-            // Create a new node and insert it into the list
+            // Create a new expr and insert it into the list
             this->current_chunk_ = new chunk(new_size, count, this->current_chunk_, this->current_chunk_->next_);
         }
         else
@@ -100,7 +100,7 @@ private:
             // first chunk is 256
             std::size_t new_size = (std::max)(count, static_cast<std::size_t>(256U));
 
-            // Create a new node and insert it into the list
+            // Create a new expr and insert it into the list
             this->current_chunk_ = new chunk(new_size, count, 0, 0);
         }
 

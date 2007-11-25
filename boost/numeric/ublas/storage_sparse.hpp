@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -18,6 +14,11 @@
 #define _BOOST_UBLAS_STORAGE_SPARSE_
 
 #include <map>
+#include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/array.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/base_object.hpp>
 
 #include <boost/numeric/ublas/storage.hpp>
 
@@ -197,7 +198,15 @@ namespace boost { namespace numeric { namespace ublas {
     // FIXME should use ALLOC for map but std::allocator of std::pair<const I, T> and std::pair<I,T> fail to compile
     template<class I, class T, class ALLOC>
     class map_std : public std::map<I, T /*, ALLOC */> {
+    public:
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            ar & serialization::make_nvp("base", boost::serialization::base_object< std::map<I, T /*, ALLOC */> >(*this));
+        }
     };
+
+    
 
 
     // Map array
@@ -476,6 +485,17 @@ namespace boost { namespace numeric { namespace ublas {
         // Allocator
         allocator_type get_allocator () {
             return alloc_;
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                resize(s);
+            }
+            ar & serialization::make_array(data_, s);
         }
 
     private:

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // action.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,57 +13,26 @@
 # pragma once
 #endif
 
-#include <typeinfo>
-#include <stdexcept>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/core/quant_style.hpp>
-#include <boost/xpressive/detail/core/action_state.hpp>
-#include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 
-namespace boost { namespace xpressive
+namespace boost { namespace xpressive { namespace detail
 {
 
-///////////////////////////////////////////////////////////////////////////////
-// action
-//
-template<typename Action, typename Saved>
-struct action
-  : detail::action_matcher<Action>
-{
-    typedef Action action_type;
-    typedef Saved saved_type;
-
-    Saved &save()
+    ///////////////////////////////////////////////////////////////////////////////
+    // actionable
+    //
+    struct actionable
     {
-        return *static_cast<Saved *>(this);
-    }
+        virtual ~actionable() {}
+        virtual void execute(action_args_type *) const {}
 
-    template<typename BidiIter>
-    bool operator ()(match_results<BidiIter> const &match, BidiIter cur)
-    {
-        return true;
-    }
+        actionable()
+          : next(0)
+        {}
 
-    void restore(Saved const &saved)
-    {
-        this->action_() = saved;
-    }
-};
+        actionable const *next;
+    };
 
-template<typename Action>
-struct action<Action, void>
-  : action<Action, int>
-{
-    int save()
-    {
-        return 0;
-    }
-
-    void restore(int)
-    {
-    }
-};
-
-}} // namespace boost::xpressive
+}}} // namespace boost::xpressive::detail
 
 #endif

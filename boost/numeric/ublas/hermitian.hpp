@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -18,6 +14,7 @@
 #define BOOST_UBLAS_HERMITIAN_H
 
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/triangular.hpp>  // for resize_preserve
 #include <boost/numeric/ublas/detail/temporary.hpp>
 
 // Iterators based on ideas of Jeremy Siek
@@ -58,9 +55,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         hermitian_matrix_element (matrix_type &m, size_type i, size_type j, value_type d):
             container_reference<matrix_type> (m), i_ (i), j_ (j), d_ (d), dirty_ (false) {}
-        BOOST_UBLAS_INLINE
-        hermitian_matrix_element (const hermitian_matrix_element &p):
-            container_reference<matrix_type> (p), i_ (p.i_), d_ (p.d_), dirty_ (p.dirty_) {}
         BOOST_UBLAS_INLINE
         ~hermitian_matrix_element () {
             if (dirty_)
@@ -320,7 +314,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, bool preserve = true) {
             if (preserve) {
                 self_type temporary (size, size);
-                detail::matrix_resize_preserve<layout_type> (*this, temporary);
+                detail::matrix_resize_preserve<layout_type, triangular_type> (*this, temporary);
             }
             else {
                 data ().resize (triangular_type::packed_size (layout_type (), size, size));
@@ -360,13 +354,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
 #ifndef BOOST_UBLAS_STRICT_HERMITIAN
-            if (triangular_type::other (i, j))
-                return at_element (i, j);
-            else {
-                external_logic ().raise ();
-                // arbitary return value
-                return data () [triangular_type::element (layout_type (), j, size_, i, size_)];
+            if (!triangular_type::other (i, j)) {
+                bad_index ().raise ();
+                // NEVER reached
             }
+            return at_element (i, j);
 #else
         if (triangular_type::other (i, j))
             return reference (*this, i, j, data () [triangular_type::element (layout_type (), i, size_, j, size_)]);

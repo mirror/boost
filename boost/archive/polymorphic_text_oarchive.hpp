@@ -18,21 +18,20 @@
 
 #include <boost/config.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/detail/polymorphic_oarchive_impl.hpp>
+#include <boost/archive/detail/polymorphic_oarchive_dispatch.hpp>
 
 namespace boost { 
 namespace archive {
 
-typedef detail::polymorphic_oarchive_impl<
-    text_oarchive_impl<text_oarchive> 
+typedef detail::polymorphic_oarchive_dispatch<
+    text_oarchive_impl<naked_text_oarchive> 
 > polymorphic_text_oarchive;
 
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
-// partial template specialization
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(
+// required by export
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(
     boost::archive::polymorphic_text_oarchive
 )
 

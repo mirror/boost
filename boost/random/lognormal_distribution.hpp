@@ -50,18 +50,18 @@ public:
     BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  explicit lognormal_distribution(result_type mean = result_type(1),
-                                  result_type sigma = result_type(1))
-    : _mean(mean), _sigma(sigma)
+  explicit lognormal_distribution(result_type mean_arg = result_type(1),
+                                  result_type sigma_arg = result_type(1))
+    : _mean(mean_arg), _sigma(sigma_arg)
   { 
-    assert(mean > result_type(0));
+    assert(_mean > result_type(0));
     init();
   }
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  RealType& mean() const { return _mean; }
-  RealType& sigma() const { return _sigma; }
+  RealType mean() const { return _mean; }
+  RealType sigma() const { return _sigma; }
   void reset() { _normal.reset(); }
 
   template<class Engine>

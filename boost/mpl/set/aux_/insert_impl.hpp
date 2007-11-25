@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_SET_AUX_INSERT_IMPL_HPP_INCLUDED
 #define BOOST_MPL_SET_AUX_INSERT_IMPL_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2003-2004
+// Copyright Aleksey Gurtovoy 2003-2007
 // Copyright David Abrahams 2003-2004
 //
 // Distributed under the Boost Software License, Version 1.0. 
@@ -36,7 +36,7 @@ template<  typename Set, typename T > struct set_insert_impl
         , eval_if< 
               is_same< T,typename Set::last_masked_ > 
             , base<Set>
-            , identity< s_item<T,Set> >
+            , identity< s_item<T,typename Set::item_> >
             >
         >
 {

@@ -76,7 +76,7 @@ struct basic_chset_8bit
     basic_chset_8bit(basic_chset_8bit const &arg);
 
     bool empty() const;
-    
+
     void set(Char from, Char to);
     template<typename Traits>
     void set(Char from, Char to, Traits const &traits);
@@ -133,6 +133,28 @@ struct basic_chset<unsigned char>
 };
 
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
+// is_narrow_char
+template<typename Char>
+struct is_narrow_char
+  : mpl::false_
+{};
+
+template<>
+struct is_narrow_char<char>
+  : mpl::true_
+{};
+
+template<>
+struct is_narrow_char<signed char>
+  : mpl::true_
+{};
+
+template<>
+struct is_narrow_char<unsigned char>
+  : mpl::true_
+{};
 
 ///////////////////////////////////////////////////////////////////////////////
 // helpers

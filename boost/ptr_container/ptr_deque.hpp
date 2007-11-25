@@ -42,9 +42,9 @@ namespace boost
          
     public:
 
-      BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_deque,
-                                                        base_class,
-                                                        this_type );
+      BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_deque,
+                                                    base_class,
+                                                    this_type );
     };
 
     //////////////////////////////////////////////////////////////////////////////
@@ -65,8 +65,5 @@ namespace boost
         l.swap(r);
     }
 }
-
-//#undef BOOST_FORWARD_TYPEDEF
-//#undef BOOST_PTR_CONTAINER_RELEASE_AND_CLONE
 
 #endif

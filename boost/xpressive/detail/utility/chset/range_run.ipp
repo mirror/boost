@@ -56,10 +56,8 @@ inline bool range<Char>::includes(Char v) const
 template<typename Char>
 inline bool range<Char>::overlaps(range<Char> const &r) const
 {
-    Char decr_first =
-        this->first_ == (std::numeric_limits<Char>::min)() ? this->first_ : this->first_-1;
-    Char incr_last =
-        this->last_ == (std::numeric_limits<Char>::max)() ? this->last_ : this->last_+1;
+    Char decr_first = (std::min)(this->first_, Char(this->first_-1));
+    Char incr_last = (std::max)(this->last_, Char(this->last_+1));
 
     return (decr_first <= r.last_) && (incr_last >= r.first_);
 }

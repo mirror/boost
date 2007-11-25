@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -4111,7 +4107,7 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     matrix_slice<const M> subslice (const M &data, typename M::size_type start1, typename M::difference_type stride1, typename M::size_type size1, typename M::size_type start2, typename M::difference_type stride2, typename M::size_type size2) {
         typedef basic_slice<typename M::size_type, typename M::difference_type> slice_type;
-        return matrix_slice<const M> (data (), slice_type (start1, stride1, size1), slice_type (start2, stride2, size2));
+        return matrix_slice<const M> (data, slice_type (start1, stride1, size1), slice_type (start2, stride2, size2));
     }
 
     // Generic Projections

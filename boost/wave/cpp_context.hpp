@@ -53,7 +53,7 @@ namespace wave {
 //  The C preprocessor context template class
 //
 //      The boost::wave::context template is the main interface class to 
-//      control the behaviour of the preprocessing engine.
+//      control the behavior of the preprocessing engine.
 //
 //      The following template parameters has to be supplied:
 //
@@ -83,7 +83,7 @@ class context : private boost::noncopyable
 public:
 
 // concept checks
-// the given iterator shall be at least a forward iterator type
+// the given iterator should be at least a forward iterator type
     BOOST_CLASS_REQUIRE(IteratorT, boost, ForwardIteratorConcept);
     
 // public typedefs
@@ -107,7 +107,7 @@ public:
     
 private:
 // stack of shared_ptr's to the pending iteration contexts 
-    typedef boost::shared_ptr<base_iteration_context<lexer_type> > 
+    typedef boost::shared_ptr<base_iteration_context<context, lexer_type> > 
         iteration_ptr_type;
     typedef boost::wave::util::iteration_context_stack<iteration_ptr_type> 
             iteration_context_stack_type;
@@ -119,22 +119,26 @@ public:
     context(target_iterator_type const &first_, target_iterator_type const &last_, 
             char const *fname = "<Unknown>", HooksT const &hooks_ = HooksT())
     :   first(first_), last(last_), filename(fname)
+      , has_been_initialized(false)
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-        , current_filename(fname)
+      , current_filename(fname)
 #endif 
-        , macros(*this_())
-        , language(language_support(
+      , macros(*this_())
+      , language(language_support(
                       support_cpp 
                     | support_option_convert_trigraphs 
                     | support_option_emit_line_directives 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
                     | support_option_include_guard_detection
 #endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+                    | support_option_emit_pragma_directives
+#endif
+                    | support_option_insert_whitespace
                    ))
-        , hooks(hooks_)
+      , hooks(hooks_)
     {
         macros.init_predefined_macros(fname);
-        includes.init_initial_path();
     }
     
 // default copy constructor
@@ -149,7 +153,6 @@ public:
             using namespace boost::filesystem;
             path fpath(complete(path(filename)));
             fname = fpath.string();
-            includes.set_current_directory(fname.c_str());
         }
         return iterator_type(*this, first, last, position_type(fname.c_str())); 
     }
@@ -162,7 +165,6 @@ public:
             using namespace boost::filesystem;
             path fpath(complete(path(filename)));
             fname = fpath.string();
-            includes.set_current_directory(fname.c_str());
         }
         return iterator_type(*this, first_, last_, position_type(fname.c_str())); 
     }
@@ -190,12 +192,13 @@ public:
             bool is_predefined = false)
         { return macros.add_macro(name, has_params, parameters, definition, 
             is_predefined); }
-    template <typename IteratorT2>
-    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
-        { return macros.is_defined(begin, end); }
+    template <typename StringT>
+    bool is_defined_macro(StringT const &str) const
+        { return macros.is_defined(str); }
     bool get_macro_definition(typename token_type::string_type const &name, 
             bool &has_params, bool &is_predefined, position_type &pos,
-            std::vector<token_type> &parameters, token_sequence_type &definition)
+            std::vector<token_type> &parameters, 
+            token_sequence_type &definition) const
         { 
             return macros.get_macro(name, has_params, is_predefined, pos,
                 parameters, definition); 
@@ -204,7 +207,7 @@ public:
             bool even_predefined = false)
         { 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-            // ensure this gets remove from the list of include guards as well
+            // ensure this gets removed from the list of include guards as well
             includes.remove_pragma_once_header(std::string(name.c_str()));
 #endif
             return macros.remove_macro(
@@ -214,11 +217,26 @@ public:
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
+    typedef boost::wave::util::macromap<self_type> macromap_type;
+    typedef typename macromap_type::name_iterator name_iterator;
+    typedef typename macromap_type::const_name_iterator const_name_iterator;
+    
+    name_iterator macro_names_begin() { return macros.begin(); }
+    name_iterator macro_names_end() { return macros.end(); }
+    const_name_iterator macro_names_begin() const { return macros.begin(); }
+    const_name_iterator macro_names_end() const { return macros.end(); }
+
 // get the Wave version information 
     static std::string get_version()  
-        { return boost::wave::util::predefined_macros::get_fullversion(false); }
+    { 
+        boost::wave::util::predefined_macros p; 
+        return p.get_fullversion().c_str(); 
+    }
     static std::string get_version_string()  
-        { return boost::wave::util::predefined_macros::get_versionstr(false); }
+    {   
+        boost::wave::util::predefined_macros p;
+        return p.get_versionstr().c_str(); 
+    }
 
 // access current language options
     void set_language(boost::wave::language_support language_,
@@ -242,7 +260,7 @@ public:
 // return the directory of the currently preprocessed file
     boost::filesystem::path get_current_directory() const
         { return includes.get_current_directory(); }
-        
+
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
     friend class boost::wave::pp_iterator<
@@ -250,7 +268,26 @@ protected:
     friend class boost::wave::impl::pp_iterator_functor<
         boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
 #endif
+
+// make sure the context has been initialized    
+    void init_context()
+    {
+        if (!has_been_initialized) {
+            std::string fname(filename);
+            if (filename != "<Unknown>" && filename != "<stdin>") {
+                using namespace boost::filesystem;
+                path fpath(complete(path(filename)));
+                fname = fpath.string();
+                includes.set_current_directory(fname.c_str());
+            }
+            has_been_initialized = true;  // execute once
+        }
+    }
     
+    template <typename IteratorT2>
+    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) const
+        { return macros.is_defined(begin, end); }
+
 // maintain include paths (helper functions)
     bool find_include_file (std::string &s, std::string &d, bool is_system, 
         char const *current_file) const
@@ -277,7 +314,7 @@ protected:
     iteration_ptr_type pop_iteration_context()
         { iteration_ptr_type top = iter_ctxs.top(); iter_ctxs.pop(); return top; }
     void push_iteration_context(position_type const &act_pos, iteration_ptr_type iter_ctx)
-        { iter_ctxs.push(act_pos, iter_ctx); }
+        { iter_ctxs.push(*this, act_pos, iter_ctx); }
 
     position_type &get_main_pos() { return macros.get_main_pos(); }
     
@@ -329,14 +366,6 @@ public:
         { return includes.add_pragma_once_header(filename_, guard_name); }
 #endif 
 
-// forwarding functions for the context policy hooks    
-    template <typename ContainerT>
-    bool interpret_pragma(ContainerT &pending, token_type const &option, 
-        ContainerT const &values, token_type const &act_token)
-    {
-        return hooks.interpret_pragma(*this, pending, option, values, act_token);
-    }
-    
 #if BOOST_WAVE_SERIALIZATION != 0
 public:
     BOOST_STATIC_CONSTANT(unsigned int, version = 0x10);
@@ -347,53 +376,70 @@ private:
     template<class Archive>
     void save(Archive & ar, const unsigned int version) const
     {
+        using namespace boost::serialization;
         typedef typename token_type::string_type string_type;
         
         string_type cfg(BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG));
         string_type kwd(BOOST_WAVE_PRAGMA_KEYWORD);
         string_type strtype(BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE)));
-        ar & cfg;
-        ar & kwd;
-        ar & strtype;
+        ar & make_nvp("config", cfg);
+        ar & make_nvp("pragma_keyword", kwd);
+        ar & make_nvp("string_type", strtype);
         
-        ar & language;
-        ar & macros;
-        ar & includes;
+        ar & make_nvp("language_options", language);
+        ar & make_nvp("macro_definitions", macros);
+        ar & make_nvp("include_settings", includes);
     }
     template<class Archive>
     void load(Archive & ar, const unsigned int loaded_version)
     {
+        using namespace boost::serialization;
         if (version != (loaded_version & ~version_mask)) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "cpp_context state version", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "cpp_context state version", 
+                get_main_pos());
+            return;
         }
         
         // check compatibility of the stored information
         typedef typename token_type::string_type string_type;
         string_type config, pragma_keyword, string_type_str;
         
-        ar & config;          // BOOST_WAVE_CONFIG
+        // BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG)
+        ar & make_nvp("config", config);
         if (config != BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG)) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "BOOST_WAVE_CONFIG", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "BOOST_WAVE_CONFIG", get_main_pos());
+            return;
         }
         
-        ar & pragma_keyword;  // BOOST_WAVE_PRAGMA_KEYWORD
+        // BOOST_WAVE_PRAGMA_KEYWORD
+        ar & make_nvp("pragma_keyword", pragma_keyword);
         if (pragma_keyword != BOOST_WAVE_PRAGMA_KEYWORD) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "BOOST_WAVE_PRAGMA_KEYWORD", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "BOOST_WAVE_PRAGMA_KEYWORD", 
+                get_main_pos());
+            return;
         }
 
-        ar & string_type_str; // BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))
+        // BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))
+        ar & make_nvp("string_type", string_type_str);
         if (string_type_str != BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "BOOST_WAVE_STRINGTYPE", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "BOOST_WAVE_STRINGTYPE", get_main_pos());
+            return;
         }
         
-        // read in the useful bits
-        ar & language;
-        ar & macros;
-        ar & includes;
+        try {
+            // read in the useful bits
+            ar & make_nvp("language_options", language);
+            ar & make_nvp("macro_definitions", macros);
+            ar & make_nvp("include_settings", includes);
+        }
+        catch (boost::wave::preprocess_exception const& e) {
+        // catch version mismatch exceptions and call error handler
+            get_hooks().throw_exception(*this, e); 
+        }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 #endif
@@ -403,6 +449,7 @@ private:
     target_iterator_type first;         // underlying input stream
     target_iterator_type last;
     std::string filename;               // associated main filename
+    bool has_been_initialized;          // set cwd once
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     std::string current_filename;       // real name of current preprocessed file
 #endif 
@@ -410,7 +457,7 @@ private:
     boost::wave::util::if_block_stack ifblocks;   // conditional compilation contexts
     boost::wave::util::include_paths includes;    // lists of include directories to search
     iteration_context_stack_type iter_ctxs;       // iteration contexts
-    boost::wave::util::macromap<self_type> macros;  // map of defined macros
+    macromap_type macros;                         // map of defined macros
     boost::wave::language_support language;       // supported language/extensions
     hook_policy_type hooks;                       // hook policy instance
 };

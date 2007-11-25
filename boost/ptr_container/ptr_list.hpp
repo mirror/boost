@@ -41,9 +41,9 @@ namespace boost
         typedef ptr_list<T,CloneAllocator,Allocator> this_type;
         
     public:
-        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_list, 
-                                                          base_class,
-                                                          this_type );
+        BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_list, 
+                                                      base_class,
+                                                      this_type );
         
     public:
         using base_class::merge;
@@ -56,8 +56,7 @@ namespace boost
         template< typename Compare > 
         void merge( ptr_list& x, Compare comp )                   
         {
-            this->c_private().merge( x.c_private(), void_ptr_indirect_fun<Compare,T>( comp ) );
-        }
+            this->base().merge( x.base(), void_ptr_indirect_fun<Compare,T>( comp ) ); }
 
         void sort()                                                    
         { 
@@ -67,7 +66,7 @@ namespace boost
         template< typename Compare > 
         void sort( Compare comp )                             
         {
-            this->c_private().sort( void_ptr_indirect_fun<Compare,T>( comp ) );
+            this->base().sort( void_ptr_indirect_fun<Compare,T>( comp ) );
         }
 
     }; // class 'ptr_list'

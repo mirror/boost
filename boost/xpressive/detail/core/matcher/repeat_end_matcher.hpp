@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // repeat_end_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -26,12 +26,12 @@ namespace boost { namespace xpressive { namespace detail
     //
     template<bool Greedy>
     struct repeat_end_matcher
-      : quant_style<quant_none, mpl::size_t<0>, mpl::false_>
+      : quant_style<quant_none, 0, false>
     {
         typedef mpl::bool_<Greedy> greedy_type;
         int mark_number_;
         unsigned int min_, max_;
-        mutable xpression_base const *back_;
+        mutable void const *back_;
 
         repeat_end_matcher(int mark_number, unsigned int min, unsigned int max)
           : mark_number_(mark_number)
@@ -42,7 +42,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             // prevent repeated zero-width sub-matches from causing infinite recursion
             sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
@@ -66,7 +66,7 @@ namespace boost { namespace xpressive { namespace detail
 
         // greedy, variable-width quantifier
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const
         {
             sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 
@@ -90,7 +90,7 @@ namespace boost { namespace xpressive { namespace detail
 
         // non-greedy, variable-width quantifier
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const
         {
             sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 

@@ -16,6 +16,7 @@
 
 #include <boost/detail/workaround.hpp>
 #include "boost/date_time/c_time.hpp"
+#include "boost/date_time/time_clock.hpp"
 #include "boost/cstdint.hpp"
 #include "boost/shared_ptr.hpp"
 
@@ -119,6 +120,10 @@ namespace date_time {
       FILETIME ft_utc;
       GetSystemTimeAsFileTime(&ft_utc);
       FileTimeToLocalFileTime(&ft_utc,&ft);
+      #elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
+      SYSTEMTIME st;
+      GetSystemTime( &st );
+      SystemTimeToFileTime( &st, &ft );
       #else
       GetSystemTimeAsFileTime(&ft);
       #endif
@@ -133,6 +138,10 @@ namespace date_time {
       FILETIME ft_utc;
       GetSystemTimeAsFileTime(&ft_utc);
       FileTimeToLocalFileTime(&ft_utc,&ft);
+      #elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
+      SYSTEMTIME st;
+      GetSystemTime( &st );
+      SystemTimeToFileTime( &st, &ft );
       #else
       GetSystemTimeAsFileTime(&ft);
       #endif

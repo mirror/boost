@@ -3,24 +3,31 @@
 
 // Boost lexical_cast.hpp header  -------------------------------------------//
 //
-// See http://www.boost.org for most recent version including documentation.
+// See http://www.boost.org/libs/converston for documentation.
 // See end of this header for rights and permissions.
 //
 // what:  lexical_cast custom keyword cast
 // who:   contributed by Kevlin Henney,
-//        enhanced with contributions from Terje Slettebø,
+//        enhanced with contributions from Terje Slettebo,
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
-//        and other Boosters
-// when:  November 2000, March 2003, June 2005
+//        Alexander Nasonov and other Boosters
+// when:  November 2000, March 2003, June 2005, June 2006
 
+#include <climits>
 #include <cstddef>
+#include <istream>
+#include <locale>
 #include <string>
 #include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_pointer.hpp>
+#include <boost/call_traits.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/detail/lcast_precision.hpp>
 
 #ifdef BOOST_NO_STRINGSTREAM
 #include <strstream>
@@ -45,9 +52,9 @@ namespace boost
         {
         }
         bad_lexical_cast(
-            const std::type_info &source_type,
-            const std::type_info &target_type) :
-            source(&source_type), target(&target_type)
+            const std::type_info &source_type_arg,
+            const std::type_info &target_type_arg) :
+            source(&source_type_arg), target(&target_type_arg)
         {
         }
         const std::type_info &source_type() const
@@ -79,8 +86,8 @@ namespace boost
             typedef char type;
         };
 
-        #ifndef DISABLE_WIDE_CHAR_SUPPORT
-#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
         template<>
         struct stream_char<wchar_t>
         {
@@ -105,7 +112,7 @@ namespace boost
         {
             typedef wchar_t type;
         };
-        #endif
+#endif
 
         template<typename TargetChar, typename SourceChar>
         struct widest_char
@@ -119,7 +126,393 @@ namespace boost
             typedef wchar_t type;
         };
     }
-    
+
+    namespace detail // lcast_src_length
+    {
+        // Return max. length of string representation of Source;
+        // 0 if unlimited (with exceptions for some types, see below).
+        // Values with limited string representation are placed to
+        // the buffer locally defined in lexical_cast function.
+        // 1 is returned for few types such as CharT const* or
+        // std::basic_string<CharT> that already have an internal
+        // buffer ready to be reused by lexical_stream_limited_src.
+        // Each specialization should have a correspondent operator<<
+        // defined in lexical_stream_limited_src.
+        template< class CharT  // A result of widest_char transformation.
+                , class Source // Source type of lexical_cast.
+                >
+        struct lcast_src_length
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 0);
+            // To check coverage, build the test with
+            // bjam --v2 profile optimization=off
+            static void check_coverage() {}
+        };
+
+        template<>
+        struct lcast_src_length<char, bool>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+        template<>
+        struct lcast_src_length<char, char>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+        // No specializations for:
+        // lcast_src_length<char, signed char>
+        // lcast_src_length<char, unsigned char>
+        // lcast_src_length<char, signed char*>
+        // lcast_src_length<char, unsigned char*>
+        // lcast_src_length<char, signed char const*>
+        // lcast_src_length<char, unsigned char const*>
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+        template<>
+        struct lcast_src_length<wchar_t, bool>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+        template<>
+        struct lcast_src_length<wchar_t, char>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+        template<>
+        struct lcast_src_length<wchar_t, wchar_t>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+#endif
+#endif
+
+        template<>
+        struct lcast_src_length<char, char const*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+        template<>
+        struct lcast_src_length<char, char*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+        template<>
+        struct lcast_src_length<wchar_t, wchar_t const*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+        template<>
+        struct lcast_src_length<wchar_t, wchar_t*>
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+#endif
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        template<class CharT, class Traits, class Alloc>
+        struct lcast_src_length< CharT, std::basic_string<CharT,Traits,Alloc> >
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+#else
+        template<>
+        struct lcast_src_length< char, std::basic_string<char> >
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+        template<>
+        struct lcast_src_length< wchar_t, std::basic_string<wchar_t> >
+        {
+            BOOST_STATIC_CONSTANT(std::size_t, value = 1);
+            static void check_coverage() {}
+        };
+#endif
+#endif
+
+        // Helper for integral types.
+        // Notes on length calculation:
+        // Max length for 32bit int with grouping "\1" and thousands_sep ',':
+        // "-2,1,4,7,4,8,3,6,4,7"
+        //  ^                    - is_signed
+        //   ^                   - 1 digit not counted by digits10
+        //    ^^^^^^^^^^^^^^^^^^ - digits10 * 2
+        //
+        // Constant is_specialized is used instead of constant 1
+        // to prevent buffer overflow in a rare case when
+        // <boost/limits.hpp> doesn't add missing specialization for
+        // numeric_limits<T> for some integral type T.
+        // When is_specialized is false, the whole expression is 0.
+        template<class Source>
+        struct lcast_src_length_integral
+        {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+            BOOST_STATIC_CONSTANT(std::size_t, value =
+                  std::numeric_limits<Source>::is_signed +
+                  std::numeric_limits<Source>::is_specialized + // == 1
+                  std::numeric_limits<Source>::digits10 * 2
+              );
+#else
+            BOOST_STATIC_CONSTANT(std::size_t, value = 156);
+            BOOST_STATIC_ASSERT(sizeof(Source) * CHAR_BIT <= 256);
+#endif
+        };
+
+#define BOOST_AUX_LEXICAL_CAST_DEF1(CharT, T) template<>             \
+    struct lcast_src_length<CharT, T> : lcast_src_length_integral<T> \
+    { static void check_coverage() {} };
+
+#ifdef DISABLE_WIDE_CHAR_SUPPORT
+#define BOOST_AUX_LEXICAL_CAST_DEF(T) BOOST_AUX_LEXICAL_CAST_DEF1(char, T)
+#else
+#define BOOST_AUX_LEXICAL_CAST_DEF(T)          \
+        BOOST_AUX_LEXICAL_CAST_DEF1(char, T)   \
+        BOOST_AUX_LEXICAL_CAST_DEF1(wchar_t, T)
+#endif
+
+        BOOST_AUX_LEXICAL_CAST_DEF(short)
+        BOOST_AUX_LEXICAL_CAST_DEF(unsigned short)
+        BOOST_AUX_LEXICAL_CAST_DEF(int)
+        BOOST_AUX_LEXICAL_CAST_DEF(unsigned int)
+        BOOST_AUX_LEXICAL_CAST_DEF(long)
+        BOOST_AUX_LEXICAL_CAST_DEF(unsigned long)
+#if defined(BOOST_HAS_LONG_LONG)
+        BOOST_AUX_LEXICAL_CAST_DEF(boost::ulong_long_type)
+        BOOST_AUX_LEXICAL_CAST_DEF(boost::long_long_type )
+#elif defined(BOOST_HAS_MS_INT64)
+        BOOST_AUX_LEXICAL_CAST_DEF(unsigned __int64)
+        BOOST_AUX_LEXICAL_CAST_DEF(         __int64)
+#endif
+
+#undef BOOST_AUX_LEXICAL_CAST_DEF
+#undef BOOST_AUX_LEXICAL_CAST_DEF1
+
+#ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
+// This #if is in sync with lcast_precision
+
+        // Helper for floating point types.
+        // -1.23456789e-123456
+        // ^                   sign
+        //  ^                  leading digit
+        //   ^                 decimal point 
+        //    ^^^^^^^^         lcast_precision<Source>::value
+        //            ^        "e"
+        //             ^       exponent sign
+        //              ^^^^^^ exponent (assumed 6 or less digits)
+        // sign + leading digit + decimal point + "e" + exponent sign == 5
+        template<class Source>
+        struct lcast_src_length_floating
+        {
+            BOOST_STATIC_ASSERT(
+                    std::numeric_limits<Source>::max_exponent10 <=  999999L &&
+                    std::numeric_limits<Source>::min_exponent10 >= -999999L
+                );
+            BOOST_STATIC_CONSTANT(std::size_t, value =
+                    5 + lcast_precision<Source>::value + 6
+                );
+        };
+
+        template<>
+        struct lcast_src_length<char,float>
+          : lcast_src_length_floating<float>
+        {
+            static void check_coverage() {}
+        };
+
+        template<>
+        struct lcast_src_length<char,double>
+          : lcast_src_length_floating<double>
+        {
+            static void check_coverage() {}
+        };
+
+        template<>
+        struct lcast_src_length<char,long double>
+          : lcast_src_length_floating<long double>
+        {
+            static void check_coverage() {}
+        };
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+    template<>
+    struct lcast_src_length<wchar_t,float>
+      : lcast_src_length_floating<float>
+    {
+        static void check_coverage() {}
+    };
+
+    template<>
+    struct lcast_src_length<wchar_t,double>
+      : lcast_src_length_floating<double>
+    {
+        static void check_coverage() {}
+    };
+
+    template<>
+    struct lcast_src_length<wchar_t,long double>
+      : lcast_src_length_floating<long double>
+    {
+        static void check_coverage() {}
+    };
+
+#endif // #ifndef DISABLE_WIDE_CHAR_SUPPORT
+#endif // #ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
+    }
+
+    namespace detail // '0' and '-' constants
+    {
+        template<typename CharT> struct lcast_char_constants;
+
+        template<>
+        struct lcast_char_constants<char>
+        {
+            BOOST_STATIC_CONSTANT(char, zero  = '0');
+            BOOST_STATIC_CONSTANT(char, minus = '-');
+        };
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+        template<>
+        struct lcast_char_constants<wchar_t>
+        {
+            BOOST_STATIC_CONSTANT(wchar_t, zero  = L'0');
+            BOOST_STATIC_CONSTANT(wchar_t, minus = L'-');
+        };
+#endif
+    }
+
+    namespace detail // lexical_streambuf_fake
+    {
+        struct lexical_streambuf_fake
+        {
+        };
+    }
+
+    namespace detail // lcast_to_unsigned
+    {
+#if (defined _MSC_VER)
+# pragma warning( push )
+// C4146: unary minus operator applied to unsigned type, result still unsigned
+# pragma warning( disable : 4146 )
+#endif
+
+        inline unsigned int lcast_to_unsigned(int value)
+        {
+            unsigned int uval = value;
+            return value < 0 ? -uval : uval;
+        }
+
+        inline unsigned long lcast_to_unsigned(long value)
+        {
+            unsigned long uval = value;
+            return value < 0 ? -uval : uval;
+        }
+
+#if defined(BOOST_HAS_LONG_LONG)
+        inline boost::ulong_long_type lcast_to_unsigned(boost::long_long_type v)
+        {
+            boost::ulong_long_type uval = v;
+            return v < 0 ? -uval : uval;
+        }
+#elif defined(BOOST_HAS_MS_INT64)
+        inline unsigned __int64 lcast_to_unsigned(__int64 value)
+        {
+            unsigned __int64 uval = value;
+            return value < 0 ? -uval : uval;
+        }
+#endif
+
+#if (defined _MSC_VER)
+# pragma warning( pop ) // C4146: unary minus operator applied to unsigned type,
+                        // result still unsigned
+#endif
+    }
+
+    namespace detail // lcast_put_unsigned
+    {
+        // I'd personally put lcast_put_unsigned in .cpp file if not
+        // boost practice for header-only libraries (Alexander Nasonov).
+        template<typename T, typename CharT>
+        CharT* lcast_put_unsigned(T n, CharT* finish)
+        {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+            BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+#endif
+            CharT thousands_sep = 0;
+
+#ifdef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+            char const* grouping = "";
+            std::size_t const grouping_size = 0;
+#else
+            std::locale loc;
+            typedef std::numpunct<CharT> numpunct;
+            numpunct const& np = BOOST_USE_FACET(numpunct, loc);
+            std::string const& grouping = np.grouping();
+            std::string::size_type const grouping_size = grouping.size();
+
+            if(grouping_size)
+                thousands_sep = np.thousands_sep();
+#endif
+
+            std::string::size_type group = 0; // current group number
+            char last_grp_size = grouping[0] <= 0 ? CHAR_MAX : grouping[0];
+            // a) Since grouping is const, grouping[grouping.size()] returns 0.
+            // b) It's safe to assume here and below that CHAR_MAX
+            //    is equivalent to unlimited grouping:
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+            BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
+#endif
+
+            char left = last_grp_size;
+
+            do
+            {
+                if(left == 0)
+                {
+                    ++group;
+                    if(group < grouping_size)
+                    {
+                        char const grp_size = grouping[group];
+                        last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                    }
+
+                    left = last_grp_size;
+                    --finish;
+                    *finish = thousands_sep;
+                }
+
+                --left;
+                --finish;
+                int const digit = static_cast<int>(n % 10);
+                int const cdigit = digit + lcast_char_constants<CharT>::zero;
+                *finish = static_cast<char>(cdigit);
+                n /= 10;
+            } while(n);
+
+            return finish;
+        }
+    }
+
     namespace detail // stream wrapper for handling lexical conversions
     {
         template<typename Target, typename Source>
@@ -131,14 +524,10 @@ namespace boost
                 typename stream_char<Source>::type>::type char_type;
 
         public:
-            lexical_stream()
+            lexical_stream(char_type* = 0, char_type* = 0)
             {
                 stream.unsetf(std::ios::skipws);
-
-                if(std::numeric_limits<Target>::is_specialized)
-                    stream.precision(std::numeric_limits<Target>::digits10 + 1);
-                else if(std::numeric_limits<Source>::is_specialized)
-                    stream.precision(std::numeric_limits<Source>::digits10 + 1);
+                lcast_set_precision(stream, (Source*)0, (Target*)0);
             }
             ~lexical_stream()
             {
@@ -171,13 +560,13 @@ namespace boost
                 #if defined(BOOST_NO_STRINGSTREAM)
                 stream << '\0';
                 #endif
-                output = stream.str();
+                stream.str().swap(output);
                 return true;
             }
             #ifndef DISABLE_WIDE_CHAR_SUPPORT
             bool operator>>(std::wstring &output)
             {
-                output = stream.str();
+                stream.str().swap(output);
                 return true;
             }
             #endif
@@ -190,6 +579,419 @@ namespace boost
             std::basic_stringstream<char_type> stream;
             #endif
         };
+    }
+
+    namespace detail // optimized stream wrapper
+    {
+        // String representation of Source has an upper limit.
+        template< class CharT // a result of widest_char transformation
+                , class Base // lexical_streambuf_fake or basic_streambuf<CharT>
+                >
+        class lexical_stream_limited_src : public Base
+        {
+            // A string representation of Source is written to [start, finish).
+            // Currently, it is assumed that [start, finish) is big enough
+            // to hold a string representation of any Source value.
+            CharT* start;
+            CharT* finish;
+
+        private:
+
+            static void widen_and_assign(char*p, char ch)
+            {
+                *p = ch;
+            }
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+            static void widen_and_assign(wchar_t* p, char ch)
+            {
+                std::locale loc;
+                *p = BOOST_USE_FACET(std::ctype<wchar_t>, loc).widen(ch);
+            }
+
+            static void widen_and_assign(wchar_t* p, wchar_t ch)
+            {
+                *p = ch;
+            }
+
+            static void widen_and_assign(char*, wchar_t ch); // undefined
+#endif
+
+            template<class OutputStreamable>
+            bool lcast_put(const OutputStreamable& input)
+            {
+                this->setp(start, finish);
+                std::basic_ostream<CharT> stream(static_cast<Base*>(this));
+                lcast_set_precision(stream, (OutputStreamable*)0);
+                bool const result = !(stream << input).fail();
+                finish = this->pptr();
+                return result;
+            }
+
+            // Undefined:
+            lexical_stream_limited_src(lexical_stream_limited_src const&);
+            void operator=(lexical_stream_limited_src const&);
+
+        public:
+
+            lexical_stream_limited_src(CharT* start, CharT* finish)
+              : start(start)
+              , finish(finish)
+            {}
+
+        public: // output
+
+            template<class Traits, class Alloc>
+            bool operator<<(std::basic_string<CharT, Traits, Alloc> const& str)
+            {
+                start = const_cast<CharT*>(str.data());
+                finish = start + str.length();
+                return true;
+            }
+
+            bool operator<<(bool);
+            bool operator<<(char);
+#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+            bool operator<<(wchar_t);
+#endif
+            bool operator<<(CharT const*);
+            bool operator<<(short);
+            bool operator<<(int);
+            bool operator<<(long);
+            bool operator<<(unsigned short);
+            bool operator<<(unsigned int);
+            bool operator<<(unsigned long);
+#if defined(BOOST_HAS_LONG_LONG)
+            bool operator<<(boost::ulong_long_type);
+            bool operator<<(boost::long_long_type );
+#elif defined(BOOST_HAS_MS_INT64)
+            bool operator<<(unsigned __int64);
+            bool operator<<(         __int64);
+#endif
+            // These three operators use ostream and streambuf.
+            // lcast_streambuf_for_source<T>::value is true.
+            bool operator<<(float);
+            bool operator<<(double);
+            bool operator<<(long double);
+
+        public: // input
+
+            // Generic istream-based algorithm.
+            // lcast_streambuf_for_target<InputStreamable>::value is true.
+            template<typename InputStreamable>
+            bool operator>>(InputStreamable& output)
+            {
+#if (defined _MSC_VER)
+# pragma warning( push )
+  // conditional expression is constant
+# pragma warning( disable : 4127 )
+#endif
+                if(is_pointer<InputStreamable>::value)
+                    return false;
+
+                this->setg(start, start, finish);
+                std::basic_istream<CharT> stream(static_cast<Base*>(this));
+                stream.unsetf(std::ios::skipws);
+                lcast_set_precision(stream, (InputStreamable*)0);
+#if (defined _MSC_VER)
+# pragma warning( pop )
+#endif
+                return stream >> output &&
+                    stream.get() ==
+#if defined(__GNUC__) && (__GNUC__<3) && defined(BOOST_NO_STD_WSTRING)
+        // GCC 2.9x lacks std::char_traits<>::eof().
+        // We use BOOST_NO_STD_WSTRING to filter out STLport and libstdc++-v3
+        // configurations, which do provide std::char_traits<>::eof().
+
+                    EOF;
+#else
+                std::char_traits<CharT>::eof();
+#endif
+            }
+
+            bool operator>>(CharT&);
+
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+// This #if is in sync with lcast_streambuf_for_target
+
+            bool operator>>(std::string&);
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+            bool operator>>(std::wstring&);
+#endif
+
+#else
+            template<class Traits, class Alloc>
+            bool operator>>(std::basic_string<CharT,Traits,Alloc>& str)
+            {
+                str.assign(start, finish);
+                return true;
+            }
+#endif
+        };
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                bool value)
+        {
+            *start = value + lcast_char_constants<CharT>::zero;
+            finish = start + 1;
+            return true;
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(char ch)
+        {
+            widen_and_assign(start, ch);
+            finish = start + 1;
+            return true;
+        }
+
+#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                wchar_t ch)
+        {
+            widen_and_assign(start, ch);
+            finish = start + 1;
+            return true;
+        }
+#endif
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(short n)
+        {
+            start = lcast_put_unsigned(lcast_to_unsigned(n), finish);
+            if(n < 0)
+                *--start = lcast_char_constants<CharT>::minus;
+            return true;
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(int n)
+        {
+            start = lcast_put_unsigned(lcast_to_unsigned(n), finish);
+            if(n < 0)
+                *--start = lcast_char_constants<CharT>::minus;
+            return true;
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(long n)
+        {
+            start = lcast_put_unsigned(lcast_to_unsigned(n), finish);
+            if(n < 0)
+                *--start = lcast_char_constants<CharT>::minus;
+            return true;
+        }
+
+#if defined(BOOST_HAS_LONG_LONG)
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                boost::long_long_type n)
+        {
+            start = lcast_put_unsigned(lcast_to_unsigned(n), finish);
+            if(n < 0)
+                *--start = lcast_char_constants<CharT>::minus;
+            return true;
+        }
+#elif defined(BOOST_HAS_MS_INT64)
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                __int64 n)
+        {
+            start = lcast_put_unsigned(lcast_to_unsigned(n), finish);
+            if(n < 0)
+                *--start = lcast_char_constants<CharT>::minus;
+            return true;
+        }
+#endif
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                unsigned short n)
+        {
+            start = lcast_put_unsigned(+n, finish);
+            return true;
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                unsigned int n)
+        {
+            start = lcast_put_unsigned(n, finish);
+            return true;
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                unsigned long n)
+        {
+            start = lcast_put_unsigned(n, finish);
+            return true;
+        }
+
+#if defined(BOOST_HAS_LONG_LONG)
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                boost::ulong_long_type n)
+        {
+            start = lcast_put_unsigned(n, finish);
+            return true;
+        }
+#elif defined(BOOST_HAS_MS_INT64)
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                unsigned __int64 n)
+        {
+            start = lcast_put_unsigned(n, finish);
+            return true;
+        }
+#endif
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                float val)
+        {
+            return this->lcast_put(val);
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                double val)
+        {
+            return this->lcast_put(val);
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                long double val)
+        {
+            return this->lcast_put(val);
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
+                CharT const* str)
+        {
+            start = const_cast<CharT*>(str);
+            finish = start + std::char_traits<CharT>::length(str);
+            return true;
+        }
+
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator>>(
+                CharT& output)
+        {
+            bool const ok = (finish - start == 1);
+            if(ok)
+                output = *start;
+            return ok;
+        }
+
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator>>(
+                std::string& str)
+        {
+            str.assign(start, finish);
+            return true;
+        }
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+        template<typename CharT, class Base>
+        inline bool lexical_stream_limited_src<CharT,Base>::operator>>(
+                std::wstring& str)
+        {
+            str.assign(start, finish);
+            return true;
+        }
+#endif
+#endif
+    }
+
+    namespace detail // lcast_streambuf_for_source
+    {
+        // Returns true if optimized stream wrapper needs ostream for writing.
+        template<class Source>
+        struct lcast_streambuf_for_source
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+
+        template<>
+        struct lcast_streambuf_for_source<float>
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true);
+        };
+ 
+        template<>
+        struct lcast_streambuf_for_source<double>
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true);
+        };
+  
+        template<>
+        struct lcast_streambuf_for_source<long double>
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true);
+        };
+    }
+
+    namespace detail // lcast_streambuf_for_target
+    {
+        // Returns true if optimized stream wrapper needs istream for reading.
+        template<class Target>
+        struct lcast_streambuf_for_target
+        {
+            BOOST_STATIC_CONSTANT(bool, value = true);
+        };
+
+        template<>
+        struct lcast_streambuf_for_target<char>
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+
+#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+        template<>
+        struct lcast_streambuf_for_target<wchar_t>
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+#endif
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        template<class Traits, class Alloc>
+        struct lcast_streambuf_for_target<
+                    std::basic_string<char,Traits,Alloc> >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+        template<class Traits, class Alloc>
+        struct lcast_streambuf_for_target<
+                    std::basic_string<wchar_t,Traits,Alloc> >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+#endif
+#else
+        template<>
+        struct lcast_streambuf_for_target<std::string>
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+        template<>
+        struct lcast_streambuf_for_target<std::wstring>
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+#endif
+#endif
     }
 
     #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -209,19 +1011,64 @@ namespace boost
         {
             typedef const T * type;
         };
+
+        template< typename Target
+                , typename Source
+                , bool Unlimited // string representation of Source is unlimited
+                , typename CharT
+                >
+        Target lexical_cast(
+            BOOST_DEDUCED_TYPENAME boost::call_traits<Source>::param_type arg,
+            CharT* buf, std::size_t src_len)
+        {
+            typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
+                lcast_streambuf_for_target<Target>::value ||
+                lcast_streambuf_for_source<Source>::value
+              , std::basic_streambuf<CharT>
+              , lexical_streambuf_fake
+              >::type base;
+
+            BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
+                Unlimited
+              , detail::lexical_stream<Target, Source>
+              , detail::lexical_stream_limited_src<CharT,base>
+              >::type interpreter(buf, buf + src_len);
+
+            // The original form, reproduced below, is more elegant
+            // but yields a spurious C4701 warning ("possible use of
+            // "result" before initialization") with VC7.1 (/W4).
+//
+//            Target result;
+//
+//            if(!(interpreter << arg && interpreter >> result))
+//                throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
+//            return result;
+
+            if(interpreter << arg) {
+                Target result;
+                if (interpreter >> result)
+                    return result;
+            }
+            throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
+            return Target(); // normally never reached (throw_exception)
+        }
     }
 
     template<typename Target, typename Source>
-    Target lexical_cast(const Source &arg)
+    inline Target lexical_cast(const Source &arg)
     {
-        typedef typename detail::array_to_pointer_decay<Source>::type NewSource;
+        typedef typename detail::array_to_pointer_decay<Source>::type src;
 
-        detail::lexical_stream<Target, NewSource> interpreter;
-        Target result;
+        typedef typename detail::widest_char<
+            typename detail::stream_char<Target>::type
+          , typename detail::stream_char<src>::type
+          >::type char_type;
 
-        if(!(interpreter << arg && interpreter >> result))
-            throw_exception(bad_lexical_cast(typeid(NewSource), typeid(Target)));
-        return result;
+        typedef detail::lcast_src_length<char_type, src> lcast_src_length;
+        std::size_t const src_len = lcast_src_length::value;
+        char_type buf[src_len + 1];
+        lcast_src_length::check_coverage();
+        return detail::lexical_cast<Target, src, !src_len>(arg, buf, src_len);
     }
 
     #else
@@ -242,7 +1089,8 @@ namespace boost
     #endif
 }
 
-// Copyright Kevlin Henney, 2000-2005. All rights reserved.
+// Copyright Kevlin Henney, 2000-2005.
+// Copyright Alexander Nasonov, 2006-2007.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at

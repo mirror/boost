@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -20,6 +16,8 @@
 #include <boost/numeric/ublas/storage.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/detail/vector_assign.hpp>
+#include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/nvp.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
@@ -62,6 +60,10 @@ namespace boost { namespace numeric { namespace ublas {
         vector (size_type size, const array_type &data):
             vector_container<self_type> (),
             data_ (data) {}
+        BOOST_UBLAS_INLINE
+        vector (size_type size, const value_type &init):
+            vector_container<self_type> (),
+            data_ (size, init) {}
         BOOST_UBLAS_INLINE
         vector (const vector &v):
             vector_container<self_type> (),
@@ -299,7 +301,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator (const self_type &v, const const_subiterator_type &it):
                 container_const_reference<self_type> (v), it_ (it) {}
             BOOST_UBLAS_INLINE
-            const_iterator (const typename vector::iterator &it):  // ISSUE vector:: stops VC8 using std::iterator here
+            const_iterator (const typename self_type::iterator &it):  // ISSUE vector:: stops VC8 using std::iterator here
                 container_const_reference<self_type> (it ()), it_ (it.it_) {}
 
             // Arithmetic
@@ -505,6 +507,12 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            ar & serialization::make_nvp("data",data_);
+        }
+
     private:
         array_type data_;
     };
@@ -569,18 +577,18 @@ namespace boost { namespace numeric { namespace ublas {
 
 
     // Zero vector class
-    template<class T>
+    template<class T, class ALLOC>
     class zero_vector:
-        public vector_container<zero_vector<T> > {
+        public vector_container<zero_vector<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef zero_vector<T> self_type;
+        typedef zero_vector<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -748,29 +756,39 @@ namespace boost { namespace numeric { namespace ublas {
             return const_reverse_iterator (begin ());
         }
 
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+        }
+
     private:
         size_type size_;
         typedef const value_type const_value_type;
         static const_value_type zero_;
     };
 
-    template<class T>
-    typename zero_vector<T>::const_value_type zero_vector<T>::zero_ (0);
+    template<class T, class ALLOC>
+    typename zero_vector<T, ALLOC>::const_value_type zero_vector<T, ALLOC>::zero_ = T(/*zero*/);
 
 
     // Unit vector class
-    template<class T>
+    template<class T, class ALLOC>
     class unit_vector:
-        public vector_container<unit_vector<T> > {
+        public vector_container<unit_vector<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef unit_vector<T> self_type;
+        typedef unit_vector<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -867,7 +885,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
-            return const_iterator (*this, i == index_);
+            return const_iterator (*this, i <= index_);
         }
 
         class const_iterator:
@@ -958,6 +976,17 @@ namespace boost { namespace numeric { namespace ublas {
             return const_reverse_iterator (begin ());
         }
 
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+            ar & serialization::make_nvp("index", index_);
+        }
+
     private:
         size_type size_;
         size_type index_;
@@ -966,29 +995,30 @@ namespace boost { namespace numeric { namespace ublas {
         static const_value_type one_;
     };
 
-    template<class T>
-    typename unit_vector<T>::const_value_type unit_vector<T>::zero_ (0);
-    template<class T>
-    typename unit_vector<T>::const_value_type unit_vector<T>::one_ (1);
+    template<class T, class ALLOC>
+    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::zero_ = T(/*zero*/);
+    template<class T, class ALLOC>
+    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::one_ (1);  // ISSUE: need 'one'-traits here
 
 
     // Scalar vector class
-    template<class T>
+    template<class T, class ALLOC>
     class scalar_vector:
-        public vector_container<scalar_vector<T> > {
+        public vector_container<scalar_vector<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef scalar_vector<T> self_type;
+        typedef scalar_vector<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
         typedef const vector_reference<const self_type> const_closure_type;
+        typedef vector_reference<self_type> closure_type;
         typedef dense_tag storage_category;
 
         // Construction and destruction
@@ -1189,6 +1219,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         const_reverse_iterator rend () const {
             return const_reverse_iterator (begin ());
+        }
+
+         // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            if (Archive::is_loading::value) {
+                size_ = s;
+            }
+            ar & serialization::make_nvp("value", value_);
         }
 
     private:
@@ -1671,6 +1712,21 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator rend () {
             return reverse_iterator (begin ());
+        }
+
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /* file_version */){
+            serialization::collection_size_type s (size_);
+            ar & serialization::make_nvp("size",s);
+            
+            // copy the value back if loading
+            if (Archive::is_loading::value) {
+              if (s > N) bad_size("too large size in bounded_vector::load()\n").raise();
+              size_ = s;
+            }
+            // ISSUE: this writes the full array
+            ar & serialization::make_nvp("data",data_);
         }
 
     private:

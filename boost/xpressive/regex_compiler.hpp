@@ -3,7 +3,7 @@
 /// Contains the definition of regex_compiler, a factory for building regex objects
 /// from strings.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -15,6 +15,15 @@
 # pragma once
 #endif
 
+#include <map>
+#include <boost/assert.hpp>
+#include <boost/next_prior.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/iterator/iterator_traits.hpp>
 #include <boost/xpressive/basic_regex.hpp>
 #include <boost/xpressive/detail/dynamic/parser.hpp>
 #include <boost/xpressive/detail/dynamic/parse_charset.hpp>
@@ -43,20 +52,21 @@ struct regex_compiler
 {
     typedef BidiIter iterator_type;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef std::basic_string<char_type> string_type;
     typedef regex_constants::syntax_option_type flag_type;
     typedef RegexTraits traits_type;
-    typedef typename traits_type::char_class_type char_class_type;
+    typedef typename traits_type::string_type string_type;
     typedef typename traits_type::locale_type locale_type;
+    typedef typename traits_type::char_class_type char_class_type;
 
     explicit regex_compiler(RegexTraits const &traits = RegexTraits())
       : mark_count_(0)
       , hidden_mark_count_(0)
       , traits_(traits)
       , upper_(0)
+      , self_()
+      , rules_()
     {
         this->upper_ = lookup_classname(this->rxtraits(), "upper");
-        BOOST_ASSERT(0 != this->upper_);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -69,7 +79,6 @@ struct regex_compiler
     {
         locale_type oldloc = this->traits_.imbue(loc);
         this->upper_ = lookup_classname(this->rxtraits(), "upper");
-        BOOST_ASSERT(0 != this->upper_);
         return oldloc;
     }
 
@@ -77,7 +86,7 @@ struct regex_compiler
     // getloc
     /// Get the locale used by a regex_compiler.
     ///
-    /// \param loc The locale that this regex_compiler uses.
+    /// \return The locale used by this regex_compiler.
     locale_type getloc() const
     {
         return this->traits_.getloc();
@@ -85,52 +94,144 @@ struct regex_compiler
 
     ///////////////////////////////////////////////////////////////////////////
     // compile
-    /// Builds a basic_regex object from a std::string.
+    /// Builds a basic_regex object from a range of characters.
     ///
-    /// \param  pat A std::string containing the regular expression pattern.
-    /// \param  flags Optional bitmask that determines how the pat string is interpreted. (See syntax_option_type.)
-    /// \return A basic_regex object corresponding to the regular expression represented by the string.
-    /// \pre    The std::string pat contains a valid string-based representation of a regular expression.
-    /// \throw  regex_error when the string has invalid regular expression syntax.
-    basic_regex<BidiIter> compile(string_type pat, flag_type flags = regex_constants::ECMAScript)
+    /// \param  begin The beginning of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  end The end of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  flags Optional bitmask that determines how the pat string is
+    ///         interpreted. (See syntax_option_type.)
+    /// \return A basic_regex object corresponding to the regular expression
+    ///         represented by the character range.
+    /// \pre    InputIter is a model of the InputIterator concept.
+    /// \pre    [begin,end) is a valid range.
+    /// \pre    The range of characters specified by [begin,end) contains a 
+    ///         valid string-based representation of a regular expression.
+    /// \throw  regex_error when the range of characters has invalid regular
+    ///         expression syntax.
+    template<typename InputIter>
+    basic_regex<BidiIter> compile(InputIter begin, InputIter end, flag_type flags = regex_constants::ECMAScript)
     {
-        this->reset();
-        this->traits_.flags(flags);
+        typedef typename iterator_category<InputIter>::type category;
+        return this->compile_(begin, end, flags, category());
+    }
 
-        string_iterator begin = pat.begin(), end = pat.end();
+    /// \overload
+    ///
+    template<typename InputRange>
+    basic_regex<BidiIter> compile(InputRange const &pat, flag_type flags = regex_constants::ECMAScript)
+    {
+        return this->compile(boost::begin(pat), boost::end(pat), flags);
+    }
 
-        // at the top level, a regex is a sequence of alternates
-        alternates_list alternates;
-        this->parse_alternates(begin, end, alternates);
-        detail::ensure(begin == end, regex_constants::error_paren, "mismatched parenthesis");
+    /// \overload
+    ///
+    basic_regex<BidiIter> compile(char_type const *begin, flag_type flags = regex_constants::ECMAScript)
+    {
+        BOOST_ASSERT(0 != begin);
+        char_type const *end = begin + std::char_traits<char_type>::length(begin);
+        return this->compile(begin, end, flags);
+    }
 
-        // convert the alternates list to the appropriate matcher and terminate the sequence
-        detail::sequence<BidiIter> seq = detail::alternates_to_matchable(alternates, alternates_factory());
-        seq += detail::make_dynamic_xpression<BidiIter>(detail::end_matcher());
+    /// \overload
+    ///
+    basic_regex<BidiIter> compile(char_type const *begin, std::size_t size, flag_type flags)
+    {
+        BOOST_ASSERT(0 != begin);
+        char_type const *end = begin + size;
+        return this->compile(begin, end, flags);
+    }
 
-        // fill in the back-pointers by visiting the regex parse tree
-        detail::xpression_linker<char_type> linker(this->rxtraits());
-        seq.first->link(linker);
+    ///////////////////////////////////////////////////////////////////////////
+    // operator[]
+    /// Return a reference to the named regular expression. If no such named
+    /// regular expression exists, create a new regular expression and return
+    /// a reference to it.
+    ///
+    /// \param  name A std::string containing the name of the regular expression.
+    /// \pre    The string is not empty.
+    /// \throw  bad_alloc on allocation failure.
+    basic_regex<BidiIter> &operator [](string_type const &name)
+    {
+        BOOST_ASSERT(!name.empty());
+        return this->rules_[name];
+    }
 
-        // bundle the regex information into a regex_impl object
-        detail::regex_impl<BidiIter> impl;
-        impl.xpr_ = seq.first;
-        impl.traits_.reset(new RegexTraits(this->rxtraits()));
-        impl.mark_count_ = this->mark_count_;
-        impl.hidden_mark_count_ = this->hidden_mark_count_;
-
-        // optimization: get the peek chars OR the boyer-moore search string
-        detail::optimize_regex(impl, this->rxtraits(), detail::is_random<BidiIter>());
-
-        return detail::core_access<BidiIter>::make_regex(impl);
+    /// \overload
+    ///
+    basic_regex<BidiIter> const &operator [](string_type const &name) const
+    {
+        BOOST_ASSERT(!name.empty());
+        return this->rules_[name];
     }
 
 private:
 
-    typedef typename string_type::const_iterator string_iterator;
-    typedef std::list<detail::sequence<BidiIter> > alternates_list;
     typedef detail::escape_value<char_type, char_class_type> escape_value;
-    typedef detail::alternates_factory_impl<BidiIter, traits_type> alternates_factory;
+    typedef detail::alternate_matcher<detail::alternates_vector<BidiIter>, RegexTraits> alternate_matcher;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // compile_
+    /// INTERNAL ONLY
+    template<typename FwdIter>
+    basic_regex<BidiIter> compile_(FwdIter begin, FwdIter end, flag_type flags, std::forward_iterator_tag)
+    {
+        BOOST_MPL_ASSERT((is_same<char_type, typename iterator_value<FwdIter>::type>));
+        using namespace regex_constants;
+        this->reset();
+        this->traits_.flags(flags);
+
+        basic_regex<BidiIter> rextmp, *prex = &rextmp;
+        FwdIter tmp = begin;
+
+        // Check if this regex is a named rule:
+        string_type name;
+        if(token_group_begin == this->traits_.get_token(tmp, end) &&
+           detail::ensure(tmp != end, error_paren, "mismatched parenthesis") &&
+           token_rule_assign == this->traits_.get_group_type(tmp, end, name))
+        {
+            begin = tmp;
+            detail::ensure
+            (
+                begin != end && token_group_end == this->traits_.get_token(begin, end)
+              , error_paren
+              , "mismatched parenthesis"
+            );
+            prex = &this->rules_[name];
+        }
+
+        this->self_ = detail::core_access<BidiIter>::get_regex_impl(*prex);
+
+        // at the top level, a regex is a sequence of alternates
+        detail::sequence<BidiIter> seq = this->parse_alternates(begin, end);
+        detail::ensure(begin == end, error_paren, "mismatched parenthesis");
+
+        // terminate the sequence
+        seq += detail::make_dynamic<BidiIter>(detail::end_matcher());
+
+        // bundle the regex information into a regex_impl object
+        detail::common_compile(seq.xpr().matchable(), *this->self_, this->rxtraits());
+
+        this->self_->traits_ = new detail::traits_holder<RegexTraits>(this->rxtraits());
+        this->self_->mark_count_ = this->mark_count_;
+        this->self_->hidden_mark_count_ = this->hidden_mark_count_;
+
+        // References changed, update dependencies.
+        this->self_->tracking_update();
+        this->self_.reset();
+        return *prex;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // compile_
+    /// INTERNAL ONLY
+    template<typename InputIter>
+    basic_regex<BidiIter> compile_(InputIter begin, InputIter end, flag_type flags, std::input_iterator_tag)
+    {
+        string_type pat(begin, end);
+        return this->compile_(boost::begin(pat), boost::end(pat), flags, std::forward_iterator_tag());
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // reset
@@ -161,25 +262,35 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_alternates
     /// INTERNAL ONLY
-    void parse_alternates(string_iterator &begin, string_iterator end, alternates_list &alternates)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_alternates(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
-        string_iterator old_begin;
+        int count = 0;
+        FwdIter tmp = begin;
+        detail::sequence<BidiIter> seq;
 
-        do
+        do switch(++count)
         {
-            alternates.push_back(this->parse_sequence(begin, end));
-            old_begin = begin;
+        case 1:
+            seq = this->parse_sequence(tmp, end);
+            break;
+        case 2:
+            seq = detail::make_dynamic<BidiIter>(alternate_matcher()) | seq;
+            // fall-through
+        default:
+            seq |= this->parse_sequence(tmp, end);
         }
-        while(begin != end && token_alternate == this->traits_.get_token(begin, end));
+        while((begin = tmp) != end && token_alternate == this->traits_.get_token(tmp, end));
 
-        begin = old_begin;
+        return seq;
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // parse_group
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_group(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_group(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         int mark_nbr = 0;
@@ -187,14 +298,14 @@ private:
         bool lookahead = false;
         bool lookbehind = false;
         bool negative = false;
-        std::size_t old_mark_count = this->mark_count_;
+        string_type name;
 
         detail::sequence<BidiIter> seq, seq_end;
-        string_iterator tmp = string_iterator();
+        FwdIter tmp = FwdIter();
 
         syntax_option_type old_flags = this->traits_.flags();
 
-        switch(this->traits_.get_group_type(begin, end))
+        switch(this->traits_.get_group_type(begin, end, name))
         {
         case token_no_mark:
             // Don't process empty groups like (?:) or (?i)
@@ -209,19 +320,19 @@ private:
             negative = true; // fall-through
         case token_positive_lookahead:
             lookahead = true;
-            seq_end = detail::make_dynamic_xpression<BidiIter>(detail::true_matcher());
+            seq_end = detail::make_dynamic<BidiIter>(detail::true_matcher());
             break;
 
         case token_negative_lookbehind:
             negative = true; // fall-through
         case token_positive_lookbehind:
             lookbehind = true;
-            seq_end = detail::make_dynamic_xpression<BidiIter>(detail::true_matcher());
+            seq_end = detail::make_dynamic<BidiIter>(detail::true_matcher());
             break;
 
         case token_independent_sub_expression:
             keeper = true;
-            seq_end = detail::make_dynamic_xpression<BidiIter>(detail::true_matcher());
+            seq_end = detail::make_dynamic<BidiIter>(detail::true_matcher());
             break;
 
         case token_comment:
@@ -237,16 +348,78 @@ private:
             }
             break;
 
+        case token_recurse:
+            detail::ensure
+            (
+                begin != end && token_group_end == this->traits_.get_token(begin, end)
+              , error_paren
+              , "mismatched parenthesis"
+            );
+            return detail::make_dynamic<BidiIter>(detail::regex_byref_matcher<BidiIter>(this->self_));
+
+        case token_rule_assign:
+            boost::throw_exception(
+                regex_error(error_badrule, "rule assignments must be at the front of the regex")
+            );
+            break;
+
+        case token_rule_ref:
+            {
+                typedef detail::core_access<BidiIter> access;
+                detail::ensure
+                (
+                    begin != end && token_group_end == this->traits_.get_token(begin, end)
+                  , error_paren
+                  , "mismatched parenthesis"
+                );
+                basic_regex<BidiIter> &rex = this->rules_[name];
+                shared_ptr<detail::regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
+                this->self_->track_reference(*impl);
+                return detail::make_dynamic<BidiIter>(detail::regex_byref_matcher<BidiIter>(impl));
+            }
+
+        case token_named_mark:
+            mark_nbr = static_cast<int>(++this->mark_count_);
+            for(std::size_t i = 0; i < this->self_->named_marks_.size(); ++i)
+            {
+                detail::ensure(this->self_->named_marks_[i].name_ != name, error_badmark, "named mark already exists");
+            }
+            this->self_->named_marks_.push_back(detail::named_mark<char_type>(name, this->mark_count_));
+            seq = detail::make_dynamic<BidiIter>(detail::mark_begin_matcher(mark_nbr));
+            seq_end = detail::make_dynamic<BidiIter>(detail::mark_end_matcher(mark_nbr));
+            break;
+
+        case token_named_mark_ref:
+            detail::ensure
+            (
+                begin != end && token_group_end == this->traits_.get_token(begin, end)
+              , error_paren
+              , "mismatched parenthesis"
+            );
+            for(std::size_t i = 0; i < this->self_->named_marks_.size(); ++i)
+            {
+                if(this->self_->named_marks_[i].name_ == name)
+                {
+                    mark_nbr = static_cast<int>(this->self_->named_marks_[i].mark_nbr_);
+                    return detail::make_backref_xpression<BidiIter>
+                    (
+                        mark_nbr, this->traits_.flags(), this->rxtraits()
+                    );
+                }
+            }
+            boost::throw_exception(regex_error(error_badmark, "invalid named back-reference"));
+            break;
+
         default:
             mark_nbr = static_cast<int>(++this->mark_count_);
-            seq = detail::make_dynamic_xpression<BidiIter>(detail::mark_begin_matcher(mark_nbr));
-            seq_end = detail::make_dynamic_xpression<BidiIter>(detail::mark_end_matcher(mark_nbr));
+            seq = detail::make_dynamic<BidiIter>(detail::mark_begin_matcher(mark_nbr));
+            seq_end = detail::make_dynamic<BidiIter>(detail::mark_end_matcher(mark_nbr));
             break;
         }
 
         // alternates
-        alternates_list alternates;
-        this->parse_alternates(begin, end, alternates);
+        seq += this->parse_alternates(begin, end);
+        seq += seq_end;
         detail::ensure
         (
             begin != end && token_group_end == this->traits_.get_token(begin, end)
@@ -254,26 +427,21 @@ private:
           , "mismatched parenthesis"
         );
 
-        seq += detail::alternates_to_matchable(alternates, alternates_factory());
-        seq += seq_end;
-
-        typedef shared_ptr<detail::matchable<BidiIter> const> xpr_type;
-        bool do_save = (this->mark_count_ != old_mark_count);
-
+        typedef detail::shared_matchable<BidiIter> xpr_type;
         if(lookahead)
         {
-            detail::lookahead_matcher<xpr_type> lookahead(seq.first, negative, do_save);
-            seq = detail::make_dynamic_xpression<BidiIter>(lookahead);
+            detail::lookahead_matcher<xpr_type> lookahead(seq.xpr(), negative, seq.pure());
+            seq = detail::make_dynamic<BidiIter>(lookahead);
         }
         else if(lookbehind)
         {
-            detail::lookbehind_matcher<xpr_type> lookbehind(seq.first, negative, do_save);
-            seq = detail::make_dynamic_xpression<BidiIter>(lookbehind);
+            detail::lookbehind_matcher<xpr_type> lookbehind(seq.xpr(), seq.width().value(), negative, seq.pure());
+            seq = detail::make_dynamic<BidiIter>(lookbehind);
         }
         else if(keeper) // independent sub-expression
         {
-            detail::keeper_matcher<xpr_type> keeper(seq.first, do_save);
-            seq = detail::make_dynamic_xpression<BidiIter>(keeper);
+            detail::keeper_matcher<xpr_type> keeper(seq.xpr(), seq.pure());
+            seq = detail::make_dynamic<BidiIter>(keeper);
         }
 
         // restore the modifiers
@@ -284,7 +452,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_charset
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_charset(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_charset(FwdIter &begin, FwdIter end)
     {
         detail::compound_charset<traits_type> chset;
 
@@ -302,11 +471,12 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_atom
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_atom(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_atom(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         escape_value esc = { 0, 0, 0, detail::escape_char };
-        string_iterator old_begin = begin;
+        FwdIter old_begin = begin;
 
         switch(this->traits_.get_token(begin, end))
         {
@@ -320,10 +490,10 @@ private:
             return detail::make_any_xpression<BidiIter>(this->traits_.flags(), this->rxtraits());
 
         case token_assert_begin_sequence:
-            return detail::make_dynamic_xpression<BidiIter>(detail::assert_bos_matcher());
+            return detail::make_dynamic<BidiIter>(detail::assert_bos_matcher());
 
         case token_assert_end_sequence:
-            return detail::make_dynamic_xpression<BidiIter>(detail::assert_eos_matcher());
+            return detail::make_dynamic<BidiIter>(detail::assert_eos_matcher());
 
         case token_assert_begin_line:
             return detail::make_assert_begin_line<BidiIter>(this->traits_.flags(), this->rxtraits());
@@ -361,7 +531,7 @@ private:
                 return detail::make_posix_charset_xpression<BidiIter>
                 (
                     esc.class_
-                  , this->rxtraits().isctype(*begin++, this->upper_)
+                  , this->is_upper_(*begin++)
                   , this->traits_.flags()
                   , this->rxtraits()
                 );
@@ -374,7 +544,8 @@ private:
             return this->parse_charset(begin, end);
 
         case token_invalid_quantifier:
-            throw regex_error(error_badrepeat, "quantifier not expected");
+            boost::throw_exception(regex_error(error_badrepeat, "quantifier not expected"));
+            break;
 
         case token_quote_meta_begin:
             return detail::make_literal_xpression<BidiIter>
@@ -383,11 +554,13 @@ private:
             );
 
         case token_quote_meta_end:
-            throw regex_error
-            (
-                error_escape
-              , "found quote-meta end without corresponding quote-meta begin"
+            boost::throw_exception(
+                regex_error(
+                    error_escape
+                  , "found quote-meta end without corresponding quote-meta begin"
+                )
             );
+            break;
 
         case token_end_of_pattern:
             break;
@@ -403,14 +576,15 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_quant
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_quant(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_quant(FwdIter &begin, FwdIter end)
     {
         BOOST_ASSERT(begin != end);
-        detail::quant_spec spec = { 0, 0, false };
+        detail::quant_spec spec = { 0, 0, false, &this->hidden_mark_count_ };
         detail::sequence<BidiIter> seq = this->parse_atom(begin, end);
 
         // BUGBUG this doesn't handle the degenerate (?:)+ correctly
-        if(!seq.is_empty() && begin != end && seq.first->is_quantifiable())
+        if(!seq.empty() && begin != end && detail::quant_none != seq.quant())
         {
             if(this->traits_.get_quant_spec(begin, end, spec))
             {
@@ -422,7 +596,7 @@ private:
                 }
                 else
                 {
-                    seq = seq.first->quantify(spec, this->hidden_mark_count_, seq, alternates_factory());
+                    seq.repeat(spec);
                 }
             }
         }
@@ -433,7 +607,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_sequence
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_sequence(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_sequence(FwdIter &begin, FwdIter end)
     {
         detail::sequence<BidiIter> seq;
 
@@ -442,7 +617,7 @@ private:
             detail::sequence<BidiIter> seq_quant = this->parse_quant(begin, end);
 
             // did we find a quantified atom?
-            if(seq_quant.is_empty())
+            if(seq_quant.empty())
                 break;
 
             // chain it to the end of the xpression sequence
@@ -456,7 +631,8 @@ private:
     // parse_literal
     //  scan ahead looking for char literals to be globbed together into a string literal
     /// INTERNAL ONLY
-    string_type parse_literal(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    string_type parse_literal(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         BOOST_ASSERT(begin != end);
@@ -464,15 +640,15 @@ private:
         escape_value esc = { 0, 0, 0, detail::escape_char };
         string_type literal(1, *begin);
 
-        for(string_iterator prev = begin, tmp = ++begin; begin != end; prev = begin, begin = tmp)
+        for(FwdIter prev = begin, tmp = ++begin; begin != end; prev = begin, begin = tmp)
         {
-            detail::quant_spec spec;
+            detail::quant_spec spec = { 0, 0, false, &this->hidden_mark_count_ };
             if(this->traits_.get_quant_spec(tmp, end, spec))
             {
                 if(literal.size() != 1)
                 {
                     begin = prev;
-                    literal.erase(literal.size() - 1);
+                    literal.erase(boost::prior(literal.end()));
                 }
                 return literal;
             }
@@ -481,10 +657,10 @@ private:
             case token_escape:
                 esc = this->parse_escape(tmp, end);
                 if(detail::escape_char != esc.type_) return literal;
-                literal += esc.ch_;
+                literal.insert(literal.end(), esc.ch_);
                 break;
             case token_literal:
-                literal += *tmp++;
+                literal.insert(literal.end(), *tmp++);
                 break;
             default:
                 return literal;
@@ -498,10 +674,11 @@ private:
     // parse_quote_meta
     //  scan ahead looking for char literals to be globbed together into a string literal
     /// INTERNAL ONLY
-    string_type parse_quote_meta(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    string_type parse_quote_meta(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
-        string_iterator old_begin = begin, old_end;
+        FwdIter old_begin = begin, old_end;
         while(end != (old_end = begin))
         {
             switch(this->traits_.get_token(begin, end))
@@ -518,7 +695,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////////
     // parse_escape
     /// INTERNAL ONLY
-    escape_value parse_escape(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    escape_value parse_escape(FwdIter &begin, FwdIter end)
     {
         detail::ensure(begin != end, regex_constants::error_escape, "incomplete escape sequence");
 
@@ -526,7 +704,7 @@ private:
         if(0 < this->rxtraits().value(*begin, 10))
         {
             // Parse at most 3 decimal digits.
-            string_iterator tmp = begin;
+            FwdIter tmp = begin;
             int mark_nbr = detail::toi(tmp, end, this->rxtraits(), 10, 999);
 
             // If the resulting number could conceivably be a backref, then it is.
@@ -542,10 +720,17 @@ private:
         return detail::parse_escape(begin, end, this->traits_);
     }
 
+    bool is_upper_(char_type ch) const
+    {
+        return 0 != this->upper_ && this->rxtraits().isctype(ch, this->upper_);
+    }
+
     std::size_t mark_count_;
     std::size_t hidden_mark_count_;
     CompilerTraits traits_;
     typename RegexTraits::char_class_type upper_;
+    shared_ptr<detail::regex_impl<BidiIter> > self_;
+    std::map<string_type, basic_regex<BidiIter> > rules_;
 };
 
 }} // namespace boost::xpressive

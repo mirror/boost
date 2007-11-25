@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // modifier.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -17,8 +17,8 @@
 #endif
 
 #include <boost/xpressive/detail/detail_fwd.hpp>
+#include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/regex_constants.hpp>
-#include <boost/xpressive/detail/static/as_xpr.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -30,17 +30,22 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef regex_constants::syntax_option_type opt_type;
 
-        template<typename Xpr>
+        template<typename Expr>
         struct apply
         {
-            typedef proto::binary_op<Modifier, typename as_xpr_type<Xpr>::type, modifier_tag> type;
+            typedef typename proto::binary_expr<
+                modifier_tag
+              , typename proto::terminal<Modifier>::type
+              , typename proto::result_of::as_arg<Expr const>::type
+            >::type type;
         };
 
-        template<typename Xpr>
-        typename apply<Xpr>::type    
-        operator ()(Xpr const &xpr) const
+        template<typename Expr>
+        typename apply<Expr>::type const
+        operator ()(Expr const &expr) const
         {
-            return proto::make_op<modifier_tag>(this->mod_, as_xpr(xpr));
+            typename apply<Expr>::type that = {{this->mod_}, proto::as_arg(expr)};
+            return that;
         }
 
         operator opt_type() const

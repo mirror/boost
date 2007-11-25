@@ -23,8 +23,13 @@
 #include <boost/typeof/integral_template_param.hpp>
 #include <boost/typeof/template_template_param.hpp>
 
+#ifdef __BORLANDC__
+#define BOOST_TYPEOF_QUALIFY(P) self_t::P
+#else
+#define BOOST_TYPEOF_QUALIFY(P) P
+#endif
 // The template parameter description, entered by the user,
-// is converted into a polymorphic "object" 
+// is converted into a polymorphic "object"
 // that is used to generate the code responsible for
 // encoding/decoding the parameter, etc.
 
@@ -34,7 +39,7 @@
     BOOST_PP_SEQ_CAT((_) BOOST_TYPEOF_TO_SEQ(elem))\
     )
 
-#define BOOST_TYPEOF_TO_SEQ(tokens) BOOST_TYPEOF_ ## tokens ## _BOOST_TYPEOF 
+#define BOOST_TYPEOF_TO_SEQ(tokens) BOOST_TYPEOF_ ## tokens ## _BOOST_TYPEOF
 
 // BOOST_TYPEOF_REGISTER_TEMPLATE
 
@@ -118,8 +123,9 @@
     BOOST_TYPEOF_VIRTUAL(EXPANDTYPE, elem)(elem) BOOST_PP_CAT(T, n)
 
 //Default template param decoding
+
 #define BOOST_TYPEOF_TYPEDEF_DECODED_TEMPLATE_TYPE(Name,Params)\
-    typedef Name<BOOST_PP_ENUM_PARAMS(BOOST_PP_SEQ_SIZE(Params),P)> type;        
+    typedef Name<BOOST_PP_ENUM_PARAMS(BOOST_PP_SEQ_SIZE(Params),BOOST_TYPEOF_QUALIFY(P))> type;
 
 //Branch the decoding
 #define BOOST_TYPEOF_TYPEDEF_DECODED_TYPE(Name,Params)\
@@ -142,6 +148,8 @@
     template<class Iter>\
     struct decode_type_impl<boost::mpl::size_t<ID>, Iter>\
     {\
+        typedef decode_type_impl<boost::mpl::size_t<ID>, Iter> self_t;\
+        typedef boost::mpl::size_t<ID> self_id;\
         typedef Iter iter0;\
         BOOST_PP_SEQ_FOR_EACH_I(BOOST_TYPEOF_REGISTER_TEMPLATE_DECODE_PARAM, ~, Params)\
         BOOST_TYPEOF_TYPEDEF_DECODED_TYPE(Name, Params)\

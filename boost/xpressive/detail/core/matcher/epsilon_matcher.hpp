@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // epsilon_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -24,43 +24,13 @@ namespace boost { namespace xpressive { namespace detail
     // epsilon_matcher
     //
     struct epsilon_matcher
-      : quant_style_assertion
     {
+        BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+
         template<typename BidiIter, typename Next>
-        static bool match(state_type<BidiIter> &state, Next const &next)
+        static bool match(match_state<BidiIter> &state, Next const &next)
         {
             return next.match(state);
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // epsilon_mark_matcher
-    //
-    struct epsilon_mark_matcher
-      : quant_style<quant_none, mpl::size_t<0>, mpl::false_>
-    {
-        int mark_number_; // signed because it could be negative
-
-        epsilon_mark_matcher(int mark_number)
-          : mark_number_(mark_number)
-        {
-        }
-
-        template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
-        {
-            sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
-
-            bool old_matched = br.matched;
-            br.matched = false;
-
-            if(next.match(state))
-            {
-                return true;
-            }
-
-            br.matched = old_matched;
-            return false;
         }
     };
 

@@ -26,6 +26,10 @@
 
 #include <boost/preprocessor/cat.hpp>
 
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x590) )
+# include <boost/type_traits/is_class.hpp>
+#endif
+
 #if !defined(BOOST_MPL_CFG_NO_HAS_XXX)
 
 #   if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
@@ -180,6 +184,41 @@ struct trait \
     : BOOST_PP_CAT(trait,_impl_)<T> \
 { \
 }; \
+/**/
+
+#   elif BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x590) )
+
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_BCB_DEF(trait, trait_tester, name, default_) \
+template< typename T, bool IS_CLASS > \
+struct trait_tester \
+{ \
+    BOOST_STATIC_CONSTANT( bool,  value = false ); \
+}; \
+template< typename T > \
+struct trait_tester< T, true > \
+{ \
+    struct trait_tester_impl \
+    { \
+        template < class U > \
+        static int  resolve( boost::mpl::aux::type_wrapper<U> const volatile * \
+                           , boost::mpl::aux::type_wrapper<typename U::name >* = 0 ); \
+        static char resolve( ... ); \
+    }; \
+    typedef boost::mpl::aux::type_wrapper<T> t_; \
+    BOOST_STATIC_CONSTANT( bool, value = ( sizeof( trait_tester_impl::resolve( static_cast< t_ * >(0) ) ) == sizeof(int) ) ); \
+}; \
+template< typename T, typename fallback_ = boost::mpl::bool_<default_> > \
+struct trait           \
+{                      \
+    BOOST_STATIC_CONSTANT( bool, value = (trait_tester< T, boost::is_class< T >::value >::value) );     \
+    typedef boost::mpl::bool_< trait< T, fallback_ >::value > type; \
+};
+
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, default_) \
+    BOOST_MPL_HAS_XXX_TRAIT_NAMED_BCB_DEF( trait \
+                                         , BOOST_PP_CAT(trait,_tester)      \
+                                         , name       \
+                                         , default_ ) \
 /**/
 
 #   else // other SFINAE-capable compilers

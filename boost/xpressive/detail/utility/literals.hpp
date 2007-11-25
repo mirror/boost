@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // literals.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -14,6 +14,7 @@
 #endif
 
 #include <boost/config.hpp> // for BOOST_STATIC_CONSTANT
+#include <boost/cstdint.hpp> // for BOOST_STATIC_CONSTANT
 #include <boost/detail/workaround.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -22,27 +23,18 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // char_literal
 //
-template<typename Char, char Ch, wchar_t Wch>
+template<typename Char, boost::intmax_t Ch, boost::intmax_t Wch>
 struct char_literal;
 
-template<char Ch, wchar_t Wch>
-struct char_literal<char, Ch, Wch>
+template<typename Char, boost::intmax_t Ch>
+struct char_literal<Char, Ch, Ch>
 {
-    BOOST_STATIC_CONSTANT(char, value = Ch);
-};
-
-template<char Ch, wchar_t Wch>
-struct char_literal<wchar_t, Ch, Wch>
-{
-    BOOST_STATIC_CONSTANT(wchar_t, value = Wch);
+    BOOST_STATIC_CONSTANT(boost::intmax_t, value = Ch);
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-template<char Ch, wchar_t Wch>
-char const char_literal<char, Ch, Wch>::value;
-
-template<char Ch, wchar_t Wch>
-wchar_t const char_literal<wchar_t, Ch, Wch>::value;
+template<typename Char, boost::intmax_t Ch>
+boost::intmax_t const char_literal<Char, Ch, Ch>::value;
 #endif
 
 template<typename Ch>

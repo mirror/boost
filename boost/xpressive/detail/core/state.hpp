@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // state.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,11 +13,10 @@
 # pragma once
 #endif
 
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/access.hpp>
-#include <boost/xpressive/detail/core/action_state.hpp>
+#include <boost/xpressive/detail/core/action.hpp>
 #include <boost/xpressive/detail/core/sub_match_vector.hpp>
 #include <boost/xpressive/detail/utility/sequence_stack.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
@@ -32,6 +31,8 @@ namespace boost { namespace xpressive { namespace detail
 template<typename BidiIter>
 struct match_context
 {
+    typedef typename iterator_value<BidiIter>::type char_type;
+
     match_context()
       : results_ptr_(0)
       , prev_context_(0)
@@ -50,7 +51,19 @@ struct match_context
     matchable<BidiIter> const *next_ptr_;
 
     // A pointer to the current traits object
-    void const *traits_;
+    detail::traits<char_type> const *traits_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// attr_context
+//
+struct attr_context
+{
+    // Slots for holding type-erased pointers to attributes
+    void const **attr_slots_;
+
+    // The previous attr context, if one exists
+    attr_context *prev_attr_context_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,19 +96,21 @@ struct match_flags
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// state_type
+// match_state
 //
 template<typename BidiIter>
-struct state_type
+struct match_state
   : noncopyable
 {
+    typedef BidiIter iterator;
     typedef core_access<BidiIter> access;
-    typedef match_context<BidiIter> match_context;
-    typedef results_extras<BidiIter> results_extras;
-    typedef regex_impl<BidiIter> regex_impl;
-    typedef matchable<BidiIter> matchable;
-    typedef match_results<BidiIter> match_results;
-    typedef sub_match_impl<BidiIter> sub_match_impl;
+    typedef detail::match_context<BidiIter> match_context;
+    typedef detail::results_extras<BidiIter> results_extras;
+    typedef detail::regex_impl<BidiIter> regex_impl;
+    typedef detail::matchable<BidiIter> matchable;
+    typedef xpressive::match_results<BidiIter> match_results;
+    typedef detail::sub_match_impl<BidiIter> sub_match_impl;
+    typedef detail::actionable actionable;
 
     BidiIter cur_;
     sub_match_impl *sub_matches_;
@@ -108,11 +123,14 @@ struct state_type
 
     match_context context_;
     results_extras *extras_;
-    action_state action_state_;
+    actionable action_list_;
+    actionable const **action_list_tail_;
+    action_args_type *action_args_;
+    attr_context attr_context_;
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    state_type
+    match_state
     (
         BidiIter begin
       , BidiIter end
@@ -129,7 +147,10 @@ struct state_type
       , found_partial_match_(false)
       , context_() // zero-initializes the fields of context_
       , extras_(&core_access<BidiIter>::get_extras(what))
-      , action_state_(core_access<BidiIter>::get_action_state(what))
+      , action_list_()
+      , action_list_tail_(&action_list_.next)
+      , action_args_(&core_access<BidiIter>::get_action_args(what))
+      , attr_context_() // zero-initializes the fields of attr_context_
     {
         // reclaim any cached memory in the match_results struct
         this->extras_->sub_match_stack_.unwind();
@@ -143,10 +164,13 @@ struct state_type
 
     ///////////////////////////////////////////////////////////////////////////////
     // reset
-    //void reset(match_results &what, basic_regex const &rex)
     void reset(match_results &what, regex_impl const &impl)
     {
         this->extras_ = &core_access<BidiIter>::get_extras(what);
+        this->action_list_.next = 0;
+        this->action_list_tail_ = &action_list_.next;
+        this->action_args_ = &core_access<BidiIter>::get_action_args(what);
+        this->attr_context_ = attr_context();
         this->context_.prev_context_ = 0;
         this->found_partial_match_ = false;
         this->extras_->sub_match_stack_.unwind();
@@ -182,7 +206,7 @@ struct state_type
     ///////////////////////////////////////////////////////////////////////////////
     // pop_context
     //  called after a nested match failed to restore the context
-    void pop_context(regex_impl const &impl, bool success)
+    bool pop_context(regex_impl const &impl, bool success)
     {
         match_context &context = *this->context_.prev_context_;
         if(!success)
@@ -200,6 +224,7 @@ struct state_type
         match_results &results = *this->context_.results_ptr_;
         this->sub_matches_ = access::get_sub_matches(access::get_sub_match_vector(results));
         this->mark_count_ = results.size();
+        return success;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -224,6 +249,12 @@ struct state_type
         return this->cur_ == this->end_ && this->found_partial_match();
     }
 
+    // is this the regex that is currently executing?
+    bool is_active_regex(regex_impl const &impl) const
+    {
+        return impl.xpr_.get() == this->context_.results_ptr_->regex_id();
+    }
+
     // fetch the n-th sub_match
     sub_match_impl &sub_match(int n)
     {
@@ -242,7 +273,7 @@ struct state_type
     template<typename Traits>
     Traits const &get_traits() const
     {
-        return *static_cast<Traits const *>(this->context_.traits_);
+        return static_cast<traits_holder<Traits> const *>(this->context_.traits_)->traits();
     }
 
 private:
@@ -260,7 +291,7 @@ private:
         this->sub_matches_ += impl.hidden_mark_count_;
 
         // initialize the match_results struct
-        access::init_match_results(what, id, this->sub_matches_, this->mark_count_);
+        access::init_match_results(what, id, impl.traits_, this->sub_matches_, this->mark_count_, impl.named_marks_);
     }
 
     void uninit_(regex_impl const &impl, match_results &)
@@ -283,18 +314,22 @@ struct memento
 {
     sub_match_impl<BidiIter> *old_sub_matches_;
     std::size_t nested_results_count_;
+    actionable const **action_list_tail_;
+    attr_context attr_context_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // save_sub_matches
 //
 template<typename BidiIter>
-inline memento<BidiIter> save_sub_matches(state_type<BidiIter> &state)
+inline memento<BidiIter> save_sub_matches(match_state<BidiIter> &state)
 {
     memento<BidiIter> mem =
     {
         state.extras_->sub_match_stack_.push_sequence(state.mark_count_, no_fill)
       , state.context_.results_ptr_->nested_results().size()
+      , state.action_list_tail_
+      , state.attr_context_
     };
     std::copy(state.sub_matches_, state.sub_matches_ + state.mark_count_, mem.old_sub_matches_);
     return mem;
@@ -304,21 +339,24 @@ inline memento<BidiIter> save_sub_matches(state_type<BidiIter> &state)
 // restore_sub_matches
 //
 template<typename BidiIter>
-inline void restore_sub_matches(memento<BidiIter> const &mem, state_type<BidiIter> &state)
+inline void restore_sub_matches(memento<BidiIter> const &mem, match_state<BidiIter> &state)
 {
     typedef core_access<BidiIter> access;
     nested_results<BidiIter> &nested = access::get_nested_results(*state.context_.results_ptr_);
-    std::size_t count = state.context_.results_ptr_->nested_results().size() - mem.nested_results_count_;
+    std::size_t count = nested.size() - mem.nested_results_count_;
     state.extras_->results_cache_.reclaim_last_n(nested, count);
     std::copy(mem.old_sub_matches_, mem.old_sub_matches_ + state.mark_count_, state.sub_matches_);
     state.extras_->sub_match_stack_.unwind_to(mem.old_sub_matches_);
+    state.attr_context_ = mem.attr_context_;
+    state.action_list_tail_ = mem.action_list_tail_;
+    *state.action_list_tail_ = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // reclaim_sub_matches
 //
 template<typename BidiIter>
-inline void reclaim_sub_matches(memento<BidiIter> const &mem, state_type<BidiIter> &state)
+inline void reclaim_sub_matches(memento<BidiIter> const &mem, match_state<BidiIter> &state, bool success)
 {
     std::size_t count = state.context_.results_ptr_->nested_results().size() - mem.nested_results_count_;
     if(count == 0)
@@ -327,13 +365,20 @@ inline void reclaim_sub_matches(memento<BidiIter> const &mem, state_type<BidiIte
     }
     // else we have we must orphan this block of backrefs because we are using the stack
     // space above it.
+
+    if(!success)
+    {
+        state.attr_context_ = mem.attr_context_;
+        state.action_list_tail_ = mem.action_list_tail_;
+        *state.action_list_tail_ = 0;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // traits_cast
 //
 template<typename Traits, typename BidiIter>
-inline Traits const &traits_cast(state_type<BidiIter> const &state)
+inline Traits const &traits_cast(match_state<BidiIter> const &state)
 {
     return state.template get_traits<Traits>();
 }

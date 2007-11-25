@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_SET_AUX_ERASE_KEY_IMPL_HPP_INCLUDED
 #define BOOST_MPL_SET_AUX_ERASE_KEY_IMPL_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2003-2004
+// Copyright Aleksey Gurtovoy 2003-2007
 // Copyright David Abrahams 2003-2004
 //
 // Distributed under the Boost Software License, Version 1.0. 
@@ -40,7 +40,7 @@ struct erase_key_impl< aux::set_tag >
             , eval_if< 
                   is_same< T,typename Set::item_type_ > 
                 , base<Set>
-                , identity< s_mask<T,Set> >
+                , identity< s_mask<T,typename Set::item_> >
                 >
             , identity<Set>
             >

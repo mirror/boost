@@ -51,9 +51,9 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  uniform_smallint_integer(base_type & rng, IntType min, IntType max)
+  uniform_smallint_integer(base_type & rng, IntType min_arg, IntType max_arg)
     : _rng(&rng)
-  { set(min, max); }
+  { set(min_arg, max_arg); }
 
   void set(result_type min, result_type max);
   
@@ -72,19 +72,19 @@ private:
   base_type * _rng;
   IntType _min, _max;
   base_result _range;
-  int _factor;
+  base_result _factor;
 };
 
 template<class UniformRandomNumberGenerator, class IntType>
 void uniform_smallint_integer<UniformRandomNumberGenerator, IntType>::
-set(result_type min, result_type max) 
+set(result_type min_arg, result_type max_arg) 
 {
-  _min = min;
-  _max = max;
-  assert(min < max);
+  _min = min_arg;
+  _max = max_arg;
+  assert(min_arg < max_arg);
 
   _range = static_cast<base_result>(_max-_min)+1;
-  base_result _factor = 1;
+  _factor = 1;
   
   // LCGs get bad when only taking the low bits.
   // (probably put this logic into a partial template specialization)
@@ -113,7 +113,7 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  uniform_smallint_float(base_type & rng, IntType min, IntType max)
+  uniform_smallint_float(base_type & rng, IntType min_arg, IntType max_arg)
     : _rng(rng)
   {
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
@@ -122,14 +122,14 @@ public:
     BOOST_STATIC_ASSERT(!std::numeric_limits<typename base_type::result_type>::is_integer);
 #endif
 
-    assert(min < max);
-    set(min, max);
+    assert(min_arg < max_arg);
+    set(min_arg, max_arg);
   }
 
-  void set(result_type min, result_type max)
+  void set(result_type min_arg, result_type max_arg)
   {
-    _min = min;
-    _max = max;
+    _min = min_arg;
+    _max = max_arg;
     _range = static_cast<base_result>(_max-_min)+1;
   }
 
@@ -162,8 +162,8 @@ public:
   typedef IntType input_type;
   typedef IntType result_type;
 
-  explicit uniform_smallint(IntType min = 0, IntType max = 9)
-    : _min(min), _max(max)
+  explicit uniform_smallint(IntType min_arg = 0, IntType max_arg = 9)
+    : _min(min_arg), _max(max_arg)
   {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope

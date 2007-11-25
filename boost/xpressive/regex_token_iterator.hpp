@@ -3,7 +3,7 @@
 /// Contains the definition of regex_token_iterator, and STL-compatible iterator
 /// for tokenizing a string using a regular expression.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -16,6 +16,7 @@
 #endif
 
 #include <vector>
+#include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -29,9 +30,9 @@ namespace boost { namespace xpressive { namespace detail
 //
 template<typename BidiIter>
 struct regex_token_iterator_impl
-  : private noncopyable
+  : counted_base<regex_token_iterator_impl<BidiIter> >
 {
-    typedef typename iterator_value<BidiIter>::type  char_type;
+    typedef sub_match<BidiIter> value_type;
 
     regex_token_iterator_impl
     (
@@ -46,9 +47,10 @@ struct regex_token_iterator_impl
     )
       : iter_(begin, cur, end, rex, flags, not_null)
       , result_()
-      , n_((-2 == n) ? static_cast<int>(subs.size()) - 1 : n)
+      , n_((-2 == n) ? (int)subs.size() - 1 : n)
       , subs_()
     {
+        BOOST_ASSERT(0 != subs.size());
         this->subs_.swap(subs);
     }
 
@@ -57,30 +59,20 @@ struct regex_token_iterator_impl
         if(-1 != this->n_)
         {
             BidiIter cur = this->iter_.state_.cur_;
-            if(++this->n_ != static_cast<int>(this->subs_.size()))
+            if(0 != (++this->n_ %= (int)this->subs_.size()) || this->iter_.next())
             {
                 this->result_ = (-1 == this->subs_[ this->n_ ])
-                    ? this->iter_.what_.prefix().str()
-                    : this->iter_.what_[ this->subs_[ this->n_ ] ].str();
+                    ? this->iter_.what_.prefix()
+                    : this->iter_.what_[ this->subs_[ this->n_ ] ];
                 return true;
             }
-            else if(this->iter_.next())
+            else if(-1 == this->subs_[ this->n_-- ] && cur != this->iter_.state_.end_)
             {
-                this->n_ = 0;
-                this->result_ = (-1 == this->subs_[ this->n_ ])
-                    ? this->iter_.what_.prefix().str()
-                    : this->iter_.what_[ this->subs_[ this->n_ ] ].str();
-                return true;
-            }
-            else if(cur != this->iter_.state_.end_ && -1 == this->subs_[ 0 ])
-            {
-                this->n_ = -1;
-                this->result_.assign(cur, this->iter_.state_.end_);
+                this->result_ = value_type(cur, this->iter_.state_.end_, true);
                 return true;
             }
         }
 
-        this->n_ = -1;
         return false;
     }
 
@@ -90,7 +82,7 @@ struct regex_token_iterator_impl
     }
 
     regex_iterator_impl<BidiIter> iter_;
-    std::basic_string<char_type> result_;
+    value_type result_;
     int n_;
     std::vector<int> subs_;
 };
@@ -141,8 +133,8 @@ struct regex_token_iterator
 {
     typedef basic_regex<BidiIter> regex_type;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef std::basic_string<char_type> value_type;
-    typedef typename iterator_difference<BidiIter>::type difference_type;
+    typedef sub_match<BidiIter> value_type;
+    typedef std::ptrdiff_t difference_type;
     typedef value_type const *pointer;
     typedef value_type const &reference;
     typedef std::forward_iterator_tag iterator_category;
@@ -150,11 +142,16 @@ struct regex_token_iterator
     /// INTERNAL ONLY
     typedef detail::regex_token_iterator_impl<BidiIter> impl_type_;
 
+    /// \post \c *this is the end of sequence iterator.
     regex_token_iterator()
       : impl_()
     {
     }
 
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \pre \c [begin,end) is a valid range.
     regex_token_iterator
     (
         BidiIter begin
@@ -166,25 +163,77 @@ struct regex_token_iterator
         this->next_();
     }
 
-    template<typename SubMatches>
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \param args A let() expression with argument bindings for semantic actions.
+    /// \pre \c [begin,end) is a valid range.
+    template<typename LetExpr>
     regex_token_iterator
     (
         BidiIter begin
       , BidiIter end
       , basic_regex<BidiIter> const &rex
-      , SubMatches const &sub_matches
+      , detail::let_<LetExpr> const &args
+    )
+      : impl_(new impl_type_(begin, begin, end, &rex))
+    {
+        detail::bind_args(args, this->impl_->iter_.what_);
+        this->next_();
+    }
+
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
+    /// \pre \c [begin,end) is a valid range.
+    /// \pre \c subs is either an integer greater or equal to -1,
+    ///     or else an array or non-empty \c std::vector\<\> of such integers.
+    template<typename Subs>
+    regex_token_iterator
+    (
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
+      , Subs const &subs
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(sub_matches)))
+      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(subs)))
     {
         this->next_();
     }
 
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \param args A let() expression with argument bindings for semantic actions.
+    /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
+    /// \pre \c [begin,end) is a valid range.
+    /// \pre \c subs is either an integer greater or equal to -1,
+    ///     or else an array or non-empty \c std::vector\<\> of such integers.
+    template<typename Subs, typename LetExpr>
+    regex_token_iterator
+    (
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
+      , Subs const &subs
+      , detail::let_<LetExpr> const &args
+      , regex_constants::match_flag_type flags = regex_constants::match_default
+    )
+      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(subs)))
+    {
+        detail::bind_args(args, this->impl_->iter_.what_);
+        this->next_();
+    }
+
+    /// \post <tt>*this == that</tt>
     regex_token_iterator(regex_token_iterator<BidiIter> const &that)
       : impl_(that.impl_) // COW
     {
     }
 
+    /// \post <tt>*this == that</tt>
     regex_token_iterator<BidiIter> &operator =(regex_token_iterator<BidiIter> const &that)
     {
         this->impl_ = that.impl_; // COW
@@ -251,21 +300,18 @@ private:
     /// INTERNAL ONLY
     void fork_()
     {
-        if(!this->impl_.unique())
+        if(1 != this->impl_->use_count())
         {
-            shared_ptr<impl_type_> clone
+            intrusive_ptr<impl_type_> clone = new impl_type_
             (
-                new impl_type_
-                (
-                    this->impl_->iter_.state_.begin_
-                  , this->impl_->iter_.state_.cur_
-                  , this->impl_->iter_.state_.end_
-                  , this->impl_->iter_.rex_
-                  , this->impl_->iter_.flags_
-                  , this->impl_->subs_
-                  , this->impl_->n_
-                  , this->impl_->iter_.not_null_
-                )
+                this->impl_->iter_.state_.begin_
+              , this->impl_->iter_.state_.cur_
+              , this->impl_->iter_.state_.end_
+              , this->impl_->iter_.rex_
+              , this->impl_->iter_.flags_
+              , this->impl_->subs_
+              , this->impl_->n_
+              , this->impl_->iter_.not_null_
             );
 
             // only copy the match_results struct if we have to. Note: if the next call
@@ -273,7 +319,15 @@ private:
             // copy the match_results struct.
             if(-1 != this->impl_->n_ && this->impl_->n_ + 1 != static_cast<int>(this->impl_->subs_.size()))
             {
+                // BUGBUG This is expensive -- it causes the sequence_stack to be cleared.
+                // Find a better way
                 clone->iter_.what_ = this->impl_->iter_.what_;
+            }
+            else
+            {
+                // At the very least, copy the action args
+                detail::core_access<BidiIter>::get_action_args(clone->iter_.what_)
+                    = detail::core_access<BidiIter>::get_action_args(this->impl_->iter_.what_);
             }
 
             this->impl_.swap(clone);
@@ -283,14 +337,14 @@ private:
     /// INTERNAL ONLY
     void next_()
     {
-        BOOST_ASSERT(this->impl_ && this->impl_.unique());
+        BOOST_ASSERT(this->impl_ && 1 == this->impl_->use_count());
         if(!this->impl_->next())
         {
-            this->impl_.reset();
+            this->impl_ = 0;
         }
     }
 
-    shared_ptr<impl_type_> impl_;
+    intrusive_ptr<impl_type_> impl_;
 };
 
 }} // namespace boost::xpressive

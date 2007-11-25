@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // is_pure.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,235 +13,190 @@
 # pragma once
 #endif
 
-#include <vector>
 #include <boost/ref.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
-#include <boost/mpl/fold.hpp>
-#include <boost/mpl/lambda.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/not_equal_to.hpp>
-#include <boost/mpl/transform_view.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/static/as_xpr.hpp>
 #include <boost/xpressive/detail/static/width_of.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
     ///////////////////////////////////////////////////////////////////////////////
-    // use_simple_repeat
+    // use_simple_repeat_terminal
     //
-    template<typename Xpr>
-    struct use_simple_repeat;
+    template<typename Expr, typename Char, bool IsXpr = is_xpr<Expr>::value>
+    struct use_simple_repeat_terminal
+      : mpl::bool_<
+            Expr::quant == quant_fixed_width
+        || (Expr::width != unknown_width::value && Expr::pure)
+        >
+    {};
+
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_terminal<Expr, Char, false>
+      : mpl::true_              // char literals, string literals, etc.
+    {};
+
+    template<typename BidiIter, typename Char>
+    struct use_simple_repeat_terminal<tracking_ptr<regex_impl<BidiIter> >, Char, false>
+      : mpl::false_             // basic_regex
+    {};
+
+    template<typename BidiIter, typename Char>
+    struct use_simple_repeat_terminal<reference_wrapper<basic_regex<BidiIter> >, Char, false>
+      : mpl::false_             // basic_regex
+    {};
+
+    template<typename BidiIter, typename Char>
+    struct use_simple_repeat_terminal<reference_wrapper<basic_regex<BidiIter> const>, Char, false>
+      : mpl::false_             // basic_regex
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
-    // is_pure
+    // use_simple_repeat_
     //
-    template<typename Xpr>
-    struct is_pure;
+    template<typename Expr, typename Char, typename Tag = typename Expr::proto_tag>
+    struct use_simple_repeat_
+    {};
+
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::terminal>
+      : use_simple_repeat_terminal<typename proto::result_of::arg<Expr>::type, Char>
+    {};
+
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::shift_right>
+      : mpl::and_<
+            use_simple_repeat_<typename Expr::proto_arg0::proto_base_expr, Char>
+          , use_simple_repeat_<typename Expr::proto_arg1::proto_base_expr, Char>
+        >
+    {};
+
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::bitwise_or>
+      : mpl::and_<
+            mpl::not_equal_to<unknown_width, width_of<Expr, Char> >
+          , use_simple_repeat_<typename Expr::proto_arg0::proto_base_expr, Char>
+          , use_simple_repeat_<typename Expr::proto_arg1::proto_base_expr, Char>
+        >
+    {};
+
+    template<typename Left>
+    struct use_simple_repeat_assign
+    {};
 
     template<>
-    struct is_pure<no_next>
+    struct use_simple_repeat_assign<mark_placeholder>
+      : mpl::false_
+    {};
+
+    template<>
+    struct use_simple_repeat_assign<set_initializer>
       : mpl::true_
-    {
-    };
+    {};
 
-    template<typename Matcher>
-    struct is_pure<proto::unary_op<Matcher, proto::noop_tag> >
-      : as_matcher_type<Matcher>::type::pure
-    {
-    };
-
-    template<typename Left, typename Right>
-    struct is_pure<proto::binary_op<Left, Right, proto::right_shift_tag> >
-      : mpl::and_<is_pure<Left>, is_pure<Right> >
-    {
-    };
-
-    template<typename Left, typename Right>
-    struct is_pure<proto::binary_op<Left, Right, proto::bitor_tag> >
-      : mpl::and_<is_pure<Left>, is_pure<Right> >
-    {
-    };
-
-    template<typename Right>
-    struct is_pure<proto::binary_op<mark_tag, Right, proto::assign_tag> >
+    template<typename Nbr>
+    struct use_simple_repeat_assign<attribute_placeholder<Nbr> >
       : mpl::false_
-    {
-    };
+    {};
 
-    template<typename Right>
-    struct is_pure<proto::binary_op<set_initializer_type, Right, proto::assign_tag> >
-      : mpl::true_
-    {
-    };
+    // either (s1 = ...) or (a1 = ...) or (set = ...)
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::assign>
+      : use_simple_repeat_assign<typename proto::result_of::arg<typename Expr::proto_arg0>::type>
+    {};
 
-    template<typename Modifier, typename Xpr>
-    struct is_pure<proto::binary_op<Modifier, Xpr, modifier_tag> >
-      : is_pure<Xpr>
-    {
-    };
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, modifier_tag>
+      : use_simple_repeat_<typename Expr::proto_arg0::proto_base_expr, Char>
+    {};
 
-    template<typename Xpr, bool Positive>
-    struct is_pure<proto::unary_op<Xpr, lookahead_tag<Positive> > >
-      : is_pure<Xpr>
-    {
-    };
-
-    template<typename Xpr, bool Positive>
-    struct is_pure<proto::unary_op<Xpr, lookbehind_tag<Positive> > >
-      : is_pure<Xpr>
-    {
-    };
-
-    template<typename Xpr>
-    struct is_pure<proto::unary_op<Xpr, keeper_tag> >
-      : is_pure<Xpr>
-    {
-    };
-
-    template<typename Matcher, typename Next>
-    struct is_pure<static_xpression<Matcher, Next> >
-      : mpl::and_<typename Matcher::pure, is_pure<Next> >::type
-    {
-    };
-
-    template<typename BidiIter>
-    struct is_pure<shared_ptr<matchable<BidiIter> const> >
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, lookahead_tag>
       : mpl::false_
-    {
-    };
+    {};
 
-    template<typename BidiIter>
-    struct is_pure<std::vector<shared_ptr<matchable<BidiIter> const> > >
-        : mpl::false_
-    {
-    };
-
-    //template<typename BidiIter>
-    //struct is_pure<basic_regex<BidiIter> >
-    //    : mpl::false_
-    //{
-    //};
-
-    template<typename BidiIter>
-    struct is_pure<proto::unary_op<basic_regex<BidiIter>, proto::noop_tag> >
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, lookbehind_tag>
       : mpl::false_
-    {
-    };
+    {};
 
-    template<typename BidiIter>
-    struct is_pure<proto::unary_op<reference_wrapper<basic_regex<BidiIter> const>, proto::noop_tag> >
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, keeper_tag>
       : mpl::false_
-    {
-    };
+    {};
 
     // when complementing a set or an assertion, the purity is that of the set (true) or the assertion
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::complement_tag> >
-      : is_pure<Op>
-    {
-    };
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::complement>
+      : use_simple_repeat_<typename Expr::proto_arg0::proto_base_expr, Char>
+    {};
 
     // The comma is used in list-initialized sets, which are pure
-    template<typename Left, typename Right>
-    struct is_pure<proto::binary_op<Left, Right, proto::comma_tag> >
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::comma>
       : mpl::true_
-    {
-    };
+    {};
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')]
     // It is also used for actions, which by definition have side-effects and thus are impure
-    template<typename Left, typename Right>
-    struct is_pure<proto::binary_op<Left, Right, proto::subscript_tag> >
-      : is_same<Left, set_initializer_type>
-    {
-        // If Left is "set" then make sure that Right is pure
-        BOOST_MPL_ASSERT
-        ((
-            mpl::or_
-            <
-                mpl::not_<is_same<Left, set_initializer_type> >
-              , is_pure<Right>
-            >
-        ));
-    };
+    template<typename Expr, typename Char, typename Left>
+    struct use_simple_repeat_subscript
+      : mpl::false_
+    {};
 
-    // Quantified expressions are pure IFF they use the simple_repeat_matcher
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_subscript<Expr, Char, set_initializer_type>
+      : mpl::true_
+    {};
 
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::unary_plus_tag> >
-      : use_simple_repeat<Op>
-    {
-    };
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::subscript>
+      : use_simple_repeat_subscript<Expr, Char, typename Expr::proto_arg0::proto_base_expr>
+    {};
 
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::unary_star_tag> >
-      : use_simple_repeat<Op>
-    {
-    };
+    // Quantified expressions are variable-width and cannot use the simple quantifier
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::posit>
+      : mpl::false_
+    {};
 
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::logical_not_tag> >
-      : use_simple_repeat<Op>
-    {
-    };
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::dereference>
+      : mpl::false_
+    {};
 
-    template<typename Op, uint_t Min, uint_t Max>
-    struct is_pure<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
-      : use_simple_repeat<Op>
-    {
-    };
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::logical_not>
+      : mpl::false_
+    {};
 
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::unary_minus_tag> >
-      : is_pure<Op>
-    {
-    };
+    template<typename Expr, typename Char, uint_t Min, uint_t Max>
+    struct use_simple_repeat_<Expr, Char, generic_quant_tag<Min, Max> >
+      : mpl::false_
+    {};
 
-    template<typename Alternates>
-    struct is_pure<alternates_list<Alternates> >
-      : mpl::fold
-        <
-            mpl::transform_view<Alternates, is_pure<mpl::_1> >
-          , mpl::true_
-          , mpl::and_<mpl::_1, mpl::_2>
-        >::type
-    {
-    };
+    template<typename Expr, typename Char, uint_t Count>
+    struct use_simple_repeat_<Expr, Char, generic_quant_tag<Count, Count> >
+      : use_simple_repeat_<typename Expr::proto_arg0::proto_base_expr, Char>
+    {};
 
+    template<typename Expr, typename Char>
+    struct use_simple_repeat_<Expr, Char, proto::tag::negate>
+      : use_simple_repeat_<typename Expr::proto_arg0::proto_base_expr, Char>
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
-    // BUGBUG this doesn't handle +(_ >> s1) correctly, right?
-    template<typename Xpr>
+    //
+    template<typename Expr, typename Char>
     struct use_simple_repeat
-      : mpl::and_<mpl::not_equal_to<width_of<Xpr>, unknown_width>, is_pure<Xpr> >
+      : use_simple_repeat_<Expr, Char>
     {
-        // should never try to quantify something of 0-width
-        BOOST_MPL_ASSERT((mpl::not_equal_to<width_of<Xpr>, mpl::size_t<0> >));
-    };
-
-    template<typename Matcher>
-    struct use_simple_repeat<proto::unary_op<Matcher, proto::noop_tag> >
-      : mpl::and_
-        <
-            mpl::equal_to
-            <
-                quant_type<typename as_matcher_type<Matcher>::type>
-              , mpl::int_<quant_fixed_width>
-            >
-          , typename as_matcher_type<Matcher>::type::pure
-        >
-    {
-        BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher_type<Matcher>::type::width::value);
-    };
-
-    template<typename Op, typename Arg>
-    struct is_pure<proto::op_proxy<Op, Arg> >
-      : is_pure<Op>
-    {
+        // should never try to repeat something of 0-width
+        BOOST_MPL_ASSERT_RELATION(0, !=, (width_of<Expr, Char>::value));
     };
 
 }}} // namespace boost::xpressive::detail

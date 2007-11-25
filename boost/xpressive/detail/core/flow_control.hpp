@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // flow_control.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -28,27 +28,32 @@ template<typename BidiIter>
 inline bool push_context_match
 (
     regex_impl<BidiIter> const &impl
-  , state_type<BidiIter> &state
+  , match_state<BidiIter> &state
   , matchable<BidiIter> const &next
 )
 {
+    // avoid infinite recursion
+    // BUGBUG this only catches direct infinite recursion, like sregex::compile("(?R)"), but
+    // not indirect infinite recursion where two rules invoke each other recursively.
+    if(state.is_active_regex(impl) && state.cur_ == state.sub_match(0).begin_)
+    {
+        return next.match(state);
+    }
+
     // save state
     match_context<BidiIter> context = state.push_context(impl, next, context);
-    detail::ignore_unused(&context);
+    detail::ignore_unused(context);
 
-    // match the nested regex
-    bool success = impl.xpr_->match(state);
-
-    // uninitialize the match context (reclaims the sub_match objects if necessary)
-    state.pop_context(impl, success);
-    return success;
+    // match the nested regex and uninitialize the match context
+    // (reclaims the sub_match objects if necessary)
+    return state.pop_context(impl, impl.xpr_->match(state));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // pop_context_match
 //
 template<typename BidiIter>
-inline bool pop_context_match(state_type<BidiIter> &state)
+inline bool pop_context_match(match_state<BidiIter> &state)
 {
     // save state
     // BUGBUG nested regex could have changed state.traits_

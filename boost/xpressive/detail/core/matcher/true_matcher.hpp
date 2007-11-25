@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // true_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -27,7 +27,7 @@ namespace boost { namespace xpressive { namespace detail
       : quant_style_assertion
     {
         template<typename BidiIter, typename Next>
-        static bool match(state_type<BidiIter> &, Next const &)
+        static bool match(match_state<BidiIter> &, Next const &)
         {
             return true;
         }

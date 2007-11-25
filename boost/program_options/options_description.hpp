@@ -155,7 +155,7 @@ namespace program_options {
     */
     class BOOST_PROGRAM_OPTIONS_DECL options_description {
     public:
-        static const unsigned m_default_line_length = 80;
+        static const unsigned m_default_line_length;
         
         /** Creates the instance. */
         options_description(unsigned line_length = m_default_line_length);

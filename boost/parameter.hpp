@@ -3,6 +3,8 @@
 // (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 
+//  See www.boost.org/libs/parameter for documentation.
+
 #ifndef BOOST_PARAMETER_050401_HPP
 #define BOOST_PARAMETER_050401_HPP
 

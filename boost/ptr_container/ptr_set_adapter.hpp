@@ -103,68 +103,94 @@ namespace ptr_container_detail
 
     public:
         
-       template< class Compare, class Allocator >
-       ptr_set_adapter_base( const Compare& comp,
-                             const Allocator& a ) 
+        template< class Compare, class Allocator >
+        ptr_set_adapter_base( const Compare& comp,
+                              const Allocator& a ) 
          : base_type( comp, a ) 
-       { }
-
-       template< class InputIterator, class Compare, class Allocator >
-       ptr_set_adapter_base( InputIterator first, InputIterator last,
-                             const Compare& comp,
-                             const Allocator& a ) 
-         : base_type( first, last, comp, a ) 
-       { }
-
-        template< class PtrContainer >
-        ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
-         : base_type( clone )
         { }
         
+        template< class InputIterator, class Compare, class Allocator >
+        ptr_set_adapter_base( InputIterator first, InputIterator last,
+                              const Compare& comp,
+                              const Allocator& a ) 
+         : base_type( first, last, comp, a ) 
+        { }
+        
+        template< class U, class Set >
+        explicit ptr_set_adapter_base( const ptr_set_adapter_base<U,Set>& r )
+          : base_type( r )
+        { }
+        
+        template< class PtrContainer >
+        explicit ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
+         : base_type( clone )
+        { }
+
+        template< class U, class Set >
+        ptr_set_adapter_base& operator=( const ptr_set_adapter_base<U,Set>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
+        
         template< typename PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_set_adapter_base& operator=( std::auto_ptr<PtrContainer> clone )    
         {
             base_type::operator=( clone );
+            return *this;
         }
-                 
+
+        using base_type::erase;
+        
+        size_type erase( const key_type& x ) // nothrow
+        {
+            iterator i( this->base().find( const_cast<key_type*>(&x) ) );       
+                                                                    // nothrow
+            if( i == this->end() )                                  // nothrow
+                return 0u;                                          // nothrow
+            this->remove( i );                                      // nothrow
+            return this->base().erase( const_cast<key_type*>(&x) ); // nothrow 
+        }
+
+
         iterator find( const key_type& x )                                                
         {                                                                            
-            return iterator( this->c_private().
+            return iterator( this->base().
                              find( const_cast<key_type*>(&x) ) );            
         }                                                                            
 
         const_iterator find( const key_type& x ) const                                    
         {                                                                            
-            return const_iterator( this->c_private().
+            return const_iterator( this->base().
                                    find( const_cast<key_type*>(&x) ) );                  
         }                                                                            
 
         size_type count( const key_type& x ) const                                        
         {                                                                            
-            return this->c_private().count( const_cast<key_type*>(&x) );                      
+            return this->base().count( const_cast<key_type*>(&x) );                      
         }                                                                            
                                                                                      
         iterator lower_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().
+            return iterator( this->base().
                              lower_bound( const_cast<key_type*>(&x) ) );                   
         }                                                                            
                                                                                      
         const_iterator lower_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().
+            return const_iterator( this->base().
                                    lower_bound( const_cast<key_type*>(&x) ) );       
         }                                                                            
                                                                                      
         iterator upper_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().
+            return iterator( this->base().
                              upper_bound( const_cast<key_type*>(&x) ) );           
         }                                                                            
                                                                                      
         const_iterator upper_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().
+            return const_iterator( this->base().
                                    upper_bound( const_cast<key_type*>(&x) ) );             
         }                                                                            
                                                                                      
@@ -172,7 +198,7 @@ namespace ptr_container_detail
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_iterator> 
-                p = this->c_private().
+                p = this->base().
                 equal_range( const_cast<key_type*>(&x) );   
             return make_iterator_range( iterator( p.first ), 
                                         iterator( p.second ) );      
@@ -182,7 +208,7 @@ namespace ptr_container_detail
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator> 
-                p = this->c_private().
+                p = this->base().
                 equal_range( const_cast<key_type*>(&x) ); 
             return make_iterator_range( const_iterator( p.first ), 
                                         const_iterator( p.second ) );    
@@ -238,13 +264,13 @@ namespace ptr_container_detail
 
     public:
         
-        explicit ptr_set_adapter( const key_compare& comp = key_compare(),
-                                  const allocator_type& a = allocator_type() ) 
+        explicit  ptr_set_adapter( const key_compare& comp = key_compare(),
+                                   const allocator_type& a = allocator_type() ) 
           : base_type( comp, a ) 
         {
             BOOST_ASSERT( this->empty() ); 
         }
-        
+
         template< class InputIterator, class Compare, class Allocator >
         ptr_set_adapter( InputIterator first, InputIterator last, 
                          const Compare& comp = Compare(),
@@ -255,9 +281,22 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-        template< class T >
-        ptr_set_adapter( std::auto_ptr<T> r ) : base_type( r )
+        template< class U, class Set >
+        explicit ptr_set_adapter( const ptr_set_adapter<U,Set>& r )
+          : base_type( r )
         { }
+        
+        template< class PtrContainer >
+        explicit ptr_set_adapter( std::auto_ptr<PtrContainer> clone )
+         : base_type( clone )
+        { }
+
+        template< class U, class Set >
+        ptr_set_adapter& operator=( const ptr_set_adapter<U,Set>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
 
         template< class T >
         void operator=( std::auto_ptr<T> r ) 
@@ -271,7 +310,7 @@ namespace ptr_container_detail
             
             auto_type ptr( x );                                
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
-                 res = this->c_private().insert( x );       
+                 res = this->base().insert( x );       
             if( res.second )                                                 
                 ptr.release();                                                  
             return std::make_pair( iterator( res.first ), res.second );     
@@ -290,7 +329,7 @@ namespace ptr_container_detail
 
             auto_type ptr( x );                                
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator 
-                res = this->c_private().insert( where.base(), x );
+                res = this->base().insert( where.base(), x );
             if( *res == x )                                                 
                 ptr.release();                                                  
             return iterator( res);
@@ -308,7 +347,7 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
         
         template< class Range >
@@ -337,7 +376,7 @@ namespace ptr_container_detail
             return this->single_transfer( first, last, from );
         }
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
 
         template< class PtrSetAdapter, class Range >
@@ -400,8 +439,8 @@ namespace ptr_container_detail
     
     public:
 
-        explicit ptr_multiset_adapter( const key_compare& comp = key_compare(),
-                                       const allocator_type& a = allocator_type() )
+        ptr_multiset_adapter( const key_compare& comp = key_compare(),
+                              const allocator_type& a = allocator_type() )
         : base_type( comp, a ) 
         { }
     
@@ -414,10 +453,23 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-        template< class T >
-        ptr_multiset_adapter( std::auto_ptr<T> r ) : base_type( r )
+        template< class U, class Set >
+        explicit ptr_multiset_adapter( const ptr_multiset_adapter<U,Set>& r )
+          : base_type( r )
+        { }
+        
+        template< class PtrContainer >
+        explicit ptr_multiset_adapter( std::auto_ptr<PtrContainer> clone )
+         : base_type( clone )
         { }
 
+        template< class U, class Set >
+        ptr_multiset_adapter& operator=( const ptr_multiset_adapter<U,Set>& r ) 
+        {
+            base_type::operator=( r );
+            return *this;
+        }
+        
         template< class T >
         void operator=( std::auto_ptr<T> r ) 
         {
@@ -441,7 +493,7 @@ namespace ptr_container_detail
     
             auto_type ptr( x );                                
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                 res = this->c_private().insert( x );                         
+                 res = this->base().insert( x );                         
             ptr.release();                                                      
             return iterator( res );                                             
         }
@@ -458,7 +510,7 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
         
         template< class Range >
@@ -486,7 +538,7 @@ namespace ptr_container_detail
             return this->multi_transfer( first, last, from );
         }
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
         
         template< class PtrSetAdapter, class Range >

@@ -3,7 +3,7 @@
 /// Includes the C regex traits or the CPP regex traits header file depending on the
 /// BOOST_XPRESSIVE_USE_C_TRAITS macro.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -15,6 +15,7 @@
 # pragma once
 #endif
 
+#include <boost/type_traits/is_convertible.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
 #ifdef BOOST_XPRESSIVE_USE_C_TRAITS
@@ -35,10 +36,32 @@ struct regex_traits_version_1_tag
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// regex_traits_version_1_case_fold_tag
-/// Tag used to denote that a traits class has the fold_case member function.
+// regex_traits_version_2_tag
+/// Tag used to denote that a traits class conforms to the version 2 traits
+/// interface.
+struct regex_traits_version_2_tag
+  : regex_traits_version_1_tag
+{
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// regex_traits_version_1_case_fold_tag DEPRECATED use has_fold_case trait
+/// INTERNAL ONLY
+///
 struct regex_traits_version_1_case_fold_tag
   : regex_traits_version_1_tag
+{
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// has_fold_case
+/// Trait used to denote that a traits class has the fold_case member function.
+template<typename Traits>
+struct has_fold_case
+  : is_convertible<
+        typename Traits::version_tag *
+      , regex_traits_version_1_case_fold_tag *
+    >
 {
 };
 

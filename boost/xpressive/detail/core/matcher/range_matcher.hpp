@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // range_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -43,6 +43,11 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
+        void inverse()
+        {
+            this->not_ = !this->not_;
+        }
+
         bool in_range(Traits const &traits, char_type ch, mpl::false_) const // case-sensitive
         {
             return traits.in_range(this->ch_min_, this->ch_max_, ch);
@@ -54,7 +59,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             if(state.eos() || this->not_ ==
                 this->in_range(traits_cast<Traits>(state), *state.cur_, icase_type()))

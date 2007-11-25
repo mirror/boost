@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // mark_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -22,12 +22,15 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
+    // TODO: the mark matcher is acually a fixed-width matcher, but the width is
+    // not known until pattern match time.
+
     ///////////////////////////////////////////////////////////////////////////////
     // mark_matcher
     //
     template<typename Traits, bool ICase>
     struct mark_matcher
-      : quant_style_fixed_unknown_width
+      : quant_style_variable_width
     {
         typedef mpl::bool_<ICase> icase_type;
         int mark_number_;
@@ -38,7 +41,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-            bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             BOOST_ASSERT(this->mark_number_ < static_cast<int>(state.mark_count_));
             sub_match_impl<BidiIter> const &br = state.sub_match(this->mark_number_);
@@ -67,17 +70,6 @@ namespace boost { namespace xpressive { namespace detail
 
             state.cur_ = tmp;
             return false;
-        }
-
-        template<typename BidiIter>
-        std::size_t get_width(state_type<BidiIter> *state) const
-        {
-            if(0 == state)
-            {
-                return unknown_width();
-            }
-            sub_match_impl<BidiIter> &br = state->sub_match(this->mark_number_);
-            return br.matched ? static_cast<std::size_t>(std::distance(br.first, br.second)) : 1U;
         }
     };
 

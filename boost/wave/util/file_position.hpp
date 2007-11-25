@@ -108,9 +108,10 @@ private:
     template<typename Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-        ar & file;
-        ar & line;
-        ar & column;
+        using namespace boost::serialization;
+        ar & make_nvp("filename", file);
+        ar & make_nvp("line", line);
+        ar & make_nvp("column", column);
     }
 #endif
 

@@ -62,6 +62,7 @@ namespace std{ namespace tr1{
 #  ifdef BOOST_HAS_INCLUDE_NEXT
 #     include_next BOOST_TR1_HEADER(memory)
 #  else
+#     include <boost/tr1/detail/config_all.hpp>
 #     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(memory))
 #  endif
 

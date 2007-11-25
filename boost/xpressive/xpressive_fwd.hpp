@@ -2,7 +2,7 @@
 /// \file xpressive_fwd.hpp
 /// Forward declarations for all of xpressive's public data types.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -16,7 +16,12 @@
 
 #include <string>
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+
+#if BOOST_VERSION >= 103500
+# define BOOST_PROTO_FUSION_V2
+#endif
 
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 # error Sorry, xpressive requires a compiler that supports partial template specialization.
@@ -32,12 +37,24 @@
 # endif
 #endif
 
+// Stack protection under MS Windows
+// Config logic taken from boost/regex/config.hpp
+#ifndef BOOST_XPRESSIVE_HAS_MS_STACK_GUARD
+# if (defined(_WIN32) || defined(_WIN64) || defined(_WINCE))                    \
+     && !defined(__GNUC__)                                                      \
+     && !(defined(__BORLANDC__) && (__BORLANDC__ >= 0x600))                     \
+     && !(defined(__MWERKS__) && (__MWERKS__ <= 0x3003))
+#  define BOOST_XPRESSIVE_HAS_MS_STACK_GUARD 1
+# else
+#  define BOOST_XPRESSIVE_HAS_MS_STACK_GUARD 0
+# endif
+#endif
+
 #include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/proto/traits.hpp>
 
 namespace boost { namespace xpressive
 {
-    template<typename Char, typename Impl>
-    struct regex_traits;
 
     template<typename Char>
     struct cpp_regex_traits;
@@ -61,8 +78,8 @@ namespace boost { namespace xpressive
         };
 
         struct mark_placeholder;
-
-        typedef proto::unary_op<detail::mark_placeholder, proto::noop_tag> mark_tag;
+        typedef proto::terminal<mark_placeholder>::type basic_mark_tag;
+        struct mark_tag;
 
     } // namespace detail
 
@@ -74,7 +91,15 @@ namespace boost { namespace xpressive
 
     struct regex_traits_version_1_tag;
 
+    struct regex_traits_version_2_tag;
+
+    // DEPRECATED
+    /// INTERNAL ONLY
+    ///
     struct regex_traits_version_1_case_fold_tag;
+
+    template<typename Trait>
+    struct has_fold_case;
 
     template<typename BidiIter>
     struct basic_regex;
@@ -94,9 +119,6 @@ namespace boost { namespace xpressive
     template<typename BidiIter>
     struct sub_match;
 
-    template<typename Action, typename Saved = Action>
-    struct action;
-
     template<typename RegexTraits>
     struct compiler_traits;
 
@@ -111,6 +133,18 @@ namespace boost { namespace xpressive
     >
     struct regex_compiler;
 
+    template<typename T>
+    struct value;
+
+    template<typename T>
+    struct reference;
+
+    template<typename T>
+    struct local;
+
+    template<typename T, int I = 0, typename Dummy = proto::is_proto_expr>
+    struct placeholder;
+
     ///////////////////////////////////////////////////////////////////////////////
     // Common typedefs
     //
@@ -120,6 +154,14 @@ namespace boost { namespace xpressive
     #ifndef BOOST_XPRESSIVE_NO_WREGEX
     typedef basic_regex<std::wstring::const_iterator>               wsregex;
     typedef basic_regex<wchar_t const *>                            wcregex;
+    #endif
+
+    typedef sub_match<std::string::const_iterator>                  ssub_match;
+    typedef sub_match<char const *>                                 csub_match;
+
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    typedef sub_match<std::wstring::const_iterator>                 wssub_match;
+    typedef sub_match<wchar_t const *>                              wcsub_match;
     #endif
 
     typedef regex_compiler<std::string::const_iterator>             sregex_compiler;

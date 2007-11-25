@@ -70,6 +70,11 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
+#if defined(UNDER_CE)
+// Windows CE does not have a conforming signature for swprintf
+#  define BOOST_NO_SWPRINTF
+#endif
+
 #if _MSC_VER <= 1400  // 1400 == VC++ 8.0
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #endif
@@ -82,9 +87,10 @@
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
-#ifdef _WIN32_WCE
+#if defined(_WIN32_WCE) || defined(UNDER_CE)
 #  define BOOST_NO_THREADEX
 #  define BOOST_NO_GETSYSTEMTIMEASFILETIME
+#  define BOOST_NO_SWPRINTF
 #endif
 
 //   

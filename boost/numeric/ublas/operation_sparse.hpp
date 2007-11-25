@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -41,12 +37,6 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE why is there a dense vector here?
         vector<value_type> temporary (e2 ().size2 ());
         temporary.clear ();
-#if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        typedef typename type_traits<value_type>::real_type real_type;
-        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign<scalar_assign> (cm, prod (e1, e2), row_major_tag ());
-#endif
         typename expression1_type::const_iterator1 it1 (e1 ().begin1 ());
         typename expression1_type::const_iterator1 it1_end (e1 ().end1 ());
         while (it1 != it1_end) {
@@ -86,9 +76,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             ++ it1;
         }
-#if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
-#endif
         return m;
     }
 
@@ -109,12 +96,6 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE why is there a dense vector here?
         vector<value_type> temporary (e1 ().size1 ());
         temporary.clear ();
-#if BOOST_UBLAS_TYPE_CHECK
-        matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        typedef typename type_traits<value_type>::real_type real_type;
-        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
-        indexing_matrix_assign<scalar_assign> (cm, prod (e1, e2), column_major_tag ());
-#endif
         typename expression2_type::const_iterator2 it2 (e2 ().begin2 ());
         typename expression2_type::const_iterator2 it2_end (e2 ().end2 ());
         while (it2 != it2_end) {
@@ -154,9 +135,6 @@ namespace boost { namespace numeric { namespace ublas {
             }
             ++ it2;
         }
-#if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
-#endif
         return m;
     }
 

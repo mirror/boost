@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // hash_peek_bitset.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -143,7 +143,7 @@ struct hash_peek_bitset
 
 private:
 
-    // Make sure all sub-expressions being merged have the same case-sensitivity    
+    // Make sure all sub-expressions being merged have the same case-sensitivity
     bool test_icase_(bool icase)
     {
         std::size_t count = this->bset_.count();

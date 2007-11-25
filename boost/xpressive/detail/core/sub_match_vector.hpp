@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // sub_match_vector.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -70,7 +70,7 @@ public:
     typedef const_reference reference;
     typedef typename iterator_difference<BidiIter>::type difference_type;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef std::basic_string<char_type> string_type;
+    typedef typename sub_match<BidiIter>::string_type string_type;
 
 #if BOOST_ITERATOR_ADAPTORS_VERSION >= 0x0200
 

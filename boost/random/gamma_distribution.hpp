@@ -34,10 +34,10 @@ public:
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  explicit gamma_distribution(const result_type& alpha = result_type(1))
-    : _exp(result_type(1)), _alpha(alpha)
+  explicit gamma_distribution(const result_type& alpha_arg = result_type(1))
+    : _exp(result_type(1)), _alpha(alpha_arg)
   {
-    assert(alpha > result_type(0));
+    assert(_alpha > result_type(0));
     init();
   }
 

@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file cpp_regex_traits.hpp
-/// Contains the definition of the cpp_regex_traits\<\> template, which is a 
+/// Contains the definition of the cpp_regex_traits\<\> template, which is a
 /// wrapper for std::locale that can be used to customize the behavior of
 /// static and dynamic regexes.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -115,7 +115,7 @@ namespace detail
     umaskex_t const std_ctype_xdigit = mask_cast<std::ctype_base::xdigit>::value;
 
     // Reserve some bits for the implementation
-    #if defined(__GLIBCXX__) && __GLIBCXX__ >= 20050209
+    #if defined(__GLIBCXX__)
     umaskex_t const std_ctype_reserved = 0x8000;
     #else
     umaskex_t const std_ctype_reserved = 0;
@@ -154,7 +154,7 @@ namespace detail
     umaskex_t const non_std_ctype_blank = 1 << 12;
     umaskex_t const non_std_ctype_newline = 1 << 13;
 
-    static umaskex_t const std_masks[] = 
+    static umaskex_t const std_masks[] =
     {
         mask_cast<std::ctype_base::alnum>::value
       , mask_cast<std::ctype_base::alpha>::value
@@ -224,7 +224,8 @@ namespace detail
         static bool is_blank(Char ch)
         {
             BOOST_MPL_ASSERT_RELATION('\t', ==, L'\t');
-            return L'\t' == ch;
+            BOOST_MPL_ASSERT_RELATION(' ', ==, L' ');
+            return L' ' == ch || L'\t' == ch;
         }
 
         static bool is_underscore(Char ch)
@@ -274,7 +275,7 @@ namespace detail
             this->masks_[static_cast<unsigned char>('\r')] |= non_std_ctype_newline;
             this->masks_[static_cast<unsigned char>('\f')] |= non_std_ctype_newline;
         }
- 
+
         bool is(std::ctype<Char> const &, Char ch, umaskex_t mask) const
         {
             return 0 != (this->masks_[static_cast<unsigned char>(ch)] & mask);
@@ -286,24 +287,13 @@ namespace detail
 
     #endif
 
-    template<typename Char>
-    struct version_tag
-    {
-        typedef regex_traits_version_1_tag type;
-    };
-
-    template<>
-    struct version_tag<char>
-    {
-        typedef regex_traits_version_1_case_fold_tag type;
-    };
-
 } // namespace detail
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // cpp_regex_traits
 //
-/// \brief Encapsaulates a std::locale for use by the 
+/// \brief Encapsaulates a std::locale for use by the
 /// basic_regex\<\> class template.
 template<typename Char>
 struct cpp_regex_traits
@@ -313,7 +303,7 @@ struct cpp_regex_traits
     typedef std::basic_string<char_type> string_type;
     typedef std::locale locale_type;
     typedef detail::umaskex_t char_class_type;
-    typedef typename detail::version_tag<Char>::type version_tag;
+    typedef regex_traits_version_2_tag version_tag;
     typedef detail::cpp_regex_traits_base<Char> base_type;
 
     /// Initialize a cpp_regex_traits object to use the specified std::locale,
@@ -345,7 +335,7 @@ struct cpp_regex_traits
     /// Convert a char to a Char
     ///
     /// \param ch The source character.
-    /// \return std::use_facet<std::ctype<char_type> >(this->getloc()).widen(ch).
+    /// \return std::use_facet\<std::ctype\<char_type\> \>(this->getloc()).widen(ch).
     char_type widen(char ch) const
     {
         return this->ctype_->widen(ch);
@@ -378,15 +368,31 @@ struct cpp_regex_traits
         return this->ctype_->tolower(ch);
     }
 
+    /// Converts a character to lower-case using the internally-stored std::locale.
+    ///
+    /// \param ch The source character.
+    /// \return std::tolower(ch, this->getloc()).
+    char_type tolower(char_type ch) const
+    {
+        return this->ctype_->tolower(ch);
+    }
+
+    /// Converts a character to upper-case using the internally-stored std::locale.
+    ///
+    /// \param ch The source character.
+    /// \return std::toupper(ch, this->getloc()).
+    char_type toupper(char_type ch) const
+    {
+        return this->ctype_->toupper(ch);
+    }
+
     /// Returns a string_type containing all the characters that compare equal
     /// disregrarding case to the one passed in. This function can only be called
-    /// if is_convertible<version_tag*, regex_traits_version_1_case_fold_tag*>::value
-    /// is true.
+    /// if has_fold_case\<cpp_regex_traits\<Char\> \>::value is true.
     ///
     /// \param ch The source character.
     /// \return string_type containing all chars which are equal to ch when disregarding
     ///     case
-    //typedef array<char_type, 2> fold_case_type;
     string_type fold_case(char_type ch) const
     {
         BOOST_MPL_ASSERT((is_same<char_type, char>));
@@ -439,7 +445,7 @@ struct cpp_regex_traits
 
     /// Returns a sort key for the character sequence designated by the iterator range [F1, F2)
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
-    /// then v.transform(G1, G2) < v.transform(H1, H2).
+    /// then v.transform(G1, G2) \< v.transform(H1, H2).
     ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
@@ -455,8 +461,8 @@ struct cpp_regex_traits
     /// Returns a sort key for the character sequence designated by the iterator range [F1, F2)
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
     /// when character case is not considered then
-    /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
-    /// 
+    /// v.transform_primary(G1, G2) \< v.transform_primary(H1, H2).
+    ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
     string_type transform_primary(FwdIter begin, FwdIter end) const
@@ -530,8 +536,8 @@ struct cpp_regex_traits
     /// \param ch The digit character.
     /// \param radix The radix to use for the conversion.
     /// \pre radix is one of 8, 10, or 16.
-    /// \return -1 if ch is not a digit character, the integer value of the character otherwise. 
-    ///     The conversion is performed by imbueing a std::stringstream with this->getloc();
+    /// \return -1 if ch is not a digit character, the integer value of the character otherwise.
+    ///     The conversion is performed by imbueing a std::stringstream with this-\>getloc();
     ///     setting the radix to one of oct, hex or dec; inserting ch into the stream; and
     ///     extracting an int.
     int value(char_type ch, int radix) const
@@ -670,6 +676,14 @@ inline unsigned char cpp_regex_traits<wchar_t>::hash(wchar_t ch)
     return static_cast<unsigned char>(ch);
 }
 #endif
+
+// Narrow C++ traits has fold_case() member function.
+template<>
+struct has_fold_case<cpp_regex_traits<char> >
+  : mpl::true_
+{
+};
+
 
 }}
 

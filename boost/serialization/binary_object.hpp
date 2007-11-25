@@ -31,6 +31,7 @@ namespace std{
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/wrapper.hpp>
 
 namespace boost {
 namespace serialization {
@@ -67,6 +68,15 @@ binary_object
 make_binary_object(/* const */ void * t, std::size_t size){
     return binary_object(t, size);
 }
+
+// this is a wrapper
+
+template <>
+struct is_wrapper<binary_object>
+ : public mpl::true_
+{};
+
+
 
 } // namespace serialization
 } // boost

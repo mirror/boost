@@ -30,8 +30,8 @@ public:
   typedef RealType input_type;
   typedef IntType result_type;
 
-  explicit poisson_distribution(const RealType& mean = RealType(1))
-    : _mean(mean)
+  explicit poisson_distribution(const RealType& mean_arg = RealType(1))
+    : _mean(mean_arg)
   {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
@@ -39,7 +39,7 @@ public:
     BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-    assert(mean > RealType(0));
+    assert(_mean > RealType(0));
     init();
   }
 

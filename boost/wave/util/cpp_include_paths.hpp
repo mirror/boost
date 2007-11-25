@@ -164,8 +164,6 @@ public:
     boost::filesystem::path get_current_directory() const 
         { return current_dir; }
 
-    void init_initial_path() { boost::filesystem::initial_path(); }
-    
 protected:
     bool find_include_file (std::string &s, std::string &dir, 
         include_list_type const &pathes, char const *) const;
@@ -219,41 +217,46 @@ private:
     template<typename Archive>
     void save(Archive & ar, const unsigned int version) const
     {
+        using namespace boost::serialization;
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-        ar & pragma_once_files;
+        ar & make_nvp("pragma_once_files", pragma_once_files);
 #endif
-        ar & user_include_paths;
-        ar & system_include_paths;
-        ar & was_sys_include_path;
+        ar & make_nvp("user_include_paths", user_include_paths);
+        ar & make_nvp("system_include_paths", system_include_paths);
+        ar & make_nvp("was_sys_include_path", was_sys_include_path);
     }
     template<typename Archive>
     void load(Archive & ar, const unsigned int loaded_version)
     {
+        using namespace boost::serialization;
         if (version != (loaded_version & ~version_mask)) {
             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
                 "cpp_include_path state version", load_filepos());
+            return;
         }
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-        ar & pragma_once_files;
+        ar & make_nvp("pragma_once_files", pragma_once_files);
 #endif
         // verify that the old include paths match the current ones
         include_list_type user_paths, system_paths;
-        ar & user_paths;
-        ar & system_paths;
+        ar & make_nvp("user_include_paths", user_paths);
+        ar & make_nvp("system_include_paths", system_paths);
 
         if (user_paths != user_include_paths)
         {
             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
                 "user include paths", load_filepos());
+            return;
         }
         if (system_paths != system_include_paths)
         {
             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
                 "system include paths", load_filepos());
+            return;
         }
 
-        ar & was_sys_include_path;
+        ar & make_nvp("was_sys_include_path", was_sys_include_path);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 #endif
@@ -424,16 +427,18 @@ template<class Archive>
 inline void save (Archive & ar, boost::filesystem::path const& p, 
     const unsigned int /* file_version */)
 {
+    using namespace boost::serialization;
     std::string path_str(p.native_file_string());
-    ar & path_str;
+    ar & make_nvp("filepath", path_str);
 }
 
 template<class Archive>
 inline void load (Archive & ar, boost::filesystem::path &p,
     const unsigned int /* file_version */)
 {
+    using namespace boost::serialization;
     std::string path_str;
-    ar & path_str;
+    ar & make_nvp("filepath", path_str);
     p = boost::filesystem::path(path_str, boost::filesystem::native);
 }
 

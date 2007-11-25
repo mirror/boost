@@ -3,7 +3,7 @@
 /// Contains definitions for the syntax_option_type, match_flag_type and
 /// error_type enumerations.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -133,7 +133,7 @@ enum match_flag_type
                                         ///<
     match_partial           = 1 << 11,  ///< Specifies that if no match can be found, then it is
                                         ///< acceptable to return a match [from, last) where
-                                        ///< from!=last, if there exists some sequence of characters
+                                        ///< from != last, if there exists some sequence of characters
                                         ///< [from,to) of which [from,last) is a prefix, and which
                                         ///< would result in a full match.
                                         ///<
@@ -154,19 +154,19 @@ enum match_flag_type
                                         ///< the expression, are copied unchanged to the output
                                         ///< string.
                                         ///<
-    //format_sed              = 1 << 13,  ///< Specifies that when a regular expression match is to be
-    //                                    ///< replaced by a new string, that the new string is
-    //                                    ///< constructed using the rules used by the Unix sed
-    //                                    ///< utility in IEEE Std 1003.1-2001, Portable Operating
-    //                                    ///< SystemInterface (POSIX), Shells and Utilities.
-    //                                    ///<
-    //format_perl             = 1 << 14,  ///< Specifies that when a regular expression match is to be
-    //                                    ///< replaced by a new string, that the new string is
-    //                                    ///< constructed using an implementation defined superset
-    //                                    ///< of the rules used by the ECMAScript replace function in
-    //                                    ///< ECMA-262, ECMAScript Language Specification, Chapter 15
-    //                                    ///< part 5.4.11 String.prototype.replace (FWD.1).
-    //                                    ///<
+    format_sed              = 1 << 13,  ///< Specifies that when a regular expression match is to be
+                                        ///< replaced by a new string, that the new string is
+                                        ///< constructed using the rules used by the Unix sed
+                                        ///< utility in IEEE Std 1003.1-2001, Portable Operating
+                                        ///< SystemInterface (POSIX), Shells and Utilities.
+                                        ///<
+    format_perl             = 1 << 14,  ///< Specifies that when a regular expression match is to be
+                                        ///< replaced by a new string, that the new string is
+                                        ///< constructed using an implementation defined superset
+                                        ///< of the rules used by the ECMAScript replace function in
+                                        ///< ECMA-262, ECMAScript Language Specification, Chapter 15
+                                        ///< part 5.4.11 String.prototype.replace (FWD.1).
+                                        ///<
     format_no_copy          = 1 << 15,  ///< When specified during a search and replace operation,
                                         ///< then sections of the character container sequence being
                                         ///< searched that do match the regular expression, are not
@@ -176,7 +176,11 @@ enum match_flag_type
                                         ///< then only the first occurrence of the regular
                                         ///< expression is replaced.
                                         ///<
-    format_literal          = 1 << 17   ///< Treat the format string as a literal.
+    format_literal          = 1 << 17,  ///< Treat the format string as a literal.
+                                        ///<
+    format_all              = 1 << 18   ///< Specifies that all syntax extensions are enabled,
+                                        ///< including conditional (?ddexpression1:expression2)
+                                        ///< replacements.
                                         ///<
 };
 
@@ -195,9 +199,9 @@ enum error_type
                                 ///<
     error_brack,                ///< The expression contained mismatched [ and ].
                                 ///<
-    error_paren,                ///< The expression contained mismatched (and).
+    error_paren,                ///< The expression contained mismatched ( and ).
                                 ///<
-    error_brace,                ///< The expression contained mismatched { and }
+    error_brace,                ///< The expression contained mismatched { and }.
                                 ///<
     error_badbrace,             ///< The expression contained an invalid range in a {} expression.
                                 ///<
@@ -217,8 +221,16 @@ enum error_type
                                 ///<
     error_badref,               ///< An nested regex is uninitialized.
                                 ///<
+    error_badmark,              ///< An invalid use of a named capture.
+                                ///<
     error_badlookbehind,        ///< An attempt to create a variable-width look-behind assertion
                                 ///< was detected.
+                                ///<
+    error_badrule,              ///< An invalid use of a rule was detected.
+                                ///<
+    error_badarg,               ///< An argument to an action was unbound.
+                                ///<
+    error_badattr,              ///< Tried to read from an uninitialized attribute.
                                 ///<
     error_internal              ///< An internal error has occured.
                                 ///<

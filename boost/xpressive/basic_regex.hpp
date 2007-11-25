@@ -3,7 +3,7 @@
 /// Contains the definition of the basic_regex\<\> class template and its
 /// associated helper functions.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -15,14 +15,22 @@
 # pragma once
 #endif
 
-#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
-# include <iostream>
-#endif
 #include <boost/mpl/bool.hpp>
-#include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/xpressive_fwd.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
+
+// Doxygen can't handle proto :-(
+#ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+# include <boost/xpressive/detail/static/grammar.hpp>
+# include <boost/xpressive/proto/extends.hpp>
+#endif
+
+#if BOOST_XPRESSIVE_HAS_MS_STACK_GUARD
+# include <excpt.h>     // for _exception_code()
+# include <malloc.h>    // for _resetstkoflw()
+#endif
 
 namespace boost { namespace xpressive
 {
@@ -33,16 +41,25 @@ namespace boost { namespace xpressive
 /// \brief Class template basic_regex\<\> is a class for holding a compiled regular expression.
 template<typename BidiIter>
 struct basic_regex
+  : proto::extends<
+        typename proto::terminal<detail::tracking_ptr<detail::regex_impl<BidiIter> > >::type
+      , basic_regex<BidiIter>
+    >
 {
+private:
+    typedef typename proto::terminal<detail::tracking_ptr<detail::regex_impl<BidiIter> > >::type pimpl_type;
+    typedef proto::extends<pimpl_type, basic_regex<BidiIter> > base_type;
+
+public:
     typedef BidiIter iterator_type;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef std::basic_string<char_type> string_type;
+    typedef typename detail::string_type<char_type>::type string_type;
     typedef regex_constants::syntax_option_type flag_type;
 
     /// \post regex_id()    == 0
     /// \post mark_count()  == 0
     basic_regex()
-      : impl_()
+      : base_type()
     {
     }
 
@@ -50,7 +67,7 @@ struct basic_regex
     /// \post regex_id()    == that.regex_id()
     /// \post mark_count()  == that.mark_count()
     basic_regex(basic_regex<BidiIter> const &that)
-      : impl_(that.impl_)
+      : base_type(that)
     {
     }
 
@@ -60,35 +77,37 @@ struct basic_regex
     /// \return *this
     basic_regex<BidiIter> &operator =(basic_regex<BidiIter> const &that)
     {
-        this->impl_ = that.impl_;
+        proto::arg(*this) = proto::arg(that);
         return *this;
     }
 
     /// Construct from a static regular expression.
     ///
-    /// \param  xpr The static regular expression
-    /// \pre    Xpr is the type of a static regular expression.
+    /// \param  expr The static regular expression
+    /// \pre    Expr is the type of a static regular expression.
     /// \post   regex_id()   != 0
     /// \post   mark_count() \>= 0
-    template<typename Xpr>
-    basic_regex(Xpr const &xpr)
-      : impl_()
+    template<typename Expr>
+    basic_regex(Expr const &expr)
+      : base_type()
     {
-        this->operator =(xpr);
+        BOOST_XPRESSIVE_CHECK_REGEX(Expr, char_type);
+        this->compile_(expr, is_valid_regex<Expr, char_type>());
     }
 
     /// Construct from a static regular expression.
     ///
-    /// \param  xpr The static regular expression.
-    /// \pre    Xpr is the type of a static regular expression.
+    /// \param  expr The static regular expression.
+    /// \pre    Expr is the type of a static regular expression.
     /// \post   regex_id()   != 0
     /// \post   mark_count() \>= 0
     /// \throw  std::bad_alloc on out of memory
     /// \return *this
-    template<typename Xpr>
-    basic_regex<BidiIter> &operator =(Xpr const &xpr)
+    template<typename Expr>
+    basic_regex<BidiIter> &operator =(Expr const &expr)
     {
-        detail::static_compile(xpr, *this->impl_.get());
+        BOOST_XPRESSIVE_CHECK_REGEX(Expr, char_type);
+        this->compile_(expr, is_valid_regex<Expr, char_type>());
         return *this;
     }
 
@@ -96,126 +115,137 @@ struct basic_regex
     ///
     std::size_t mark_count() const
     {
-        return this->impl_ ? this->impl_->mark_count_ : 0;
+        return proto::arg(*this) ? proto::arg(*this)->mark_count_ : 0;
     }
 
     /// Returns a token which uniquely identifies this regular expression.
     ///
     regex_id_type regex_id() const
     {
-        return this->impl_ ? this->impl_->xpr_.get() : 0;
+        return proto::arg(*this) ? proto::arg(*this)->xpr_.get() : 0;
     }
 
     /// Swaps the contents of this basic_regex object with another.
     ///
     /// \param      that The other basic_regex object.
-    /// \attention  This is a shallow swap that does not do reference tracking. If you embed
-    /// a basic_regex object by reference in another regular expression and then swap its
-    /// contents with another basic_regex object, the change will not be visible to the enclosing
-    /// regular expression. It is done this way to ensure that swap() cannot throw.
-    /// \throw nothrow
+    /// \attention  This is a shallow swap that does not do reference tracking.
+    ///             If you embed a basic_regex object by reference in another
+    ///             regular expression and then swap its contents with another
+    ///             basic_regex object, the change will not be visible to the
+    ///             enclosing regular expression. It is done this way to ensure
+    ///             that swap() cannot throw.
+    /// \throw      nothrow
     void swap(basic_regex<BidiIter> &that) // throw()
     {
-        this->impl_.swap(that.impl_);
+        proto::arg(*this).swap(proto::arg(that));
     }
 
-    /// Factory method for building a regex object from a string.
-    /// Equivalent to regex_compiler\< BidiIter \>().compile(str, flags);
+    /// Factory method for building a regex object from a range of characters.
+    /// Equivalent to regex_compiler\< BidiIter \>().compile(begin, end, flags);
     ///
-    /// \param str The std::basic_string containing the regular expression.
-    /// \param flags Optional bitmask of type syntax_option_type to control how str is interpreted.
-    static basic_regex<BidiIter> compile(string_type const &str, flag_type flags = regex_constants::ECMAScript)
+    /// \param  begin The beginning of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  end The end of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  flags Optional bitmask that determines how the pat string is
+    ///         interpreted. (See syntax_option_type.)
+    /// \return A basic_regex object corresponding to the regular expression
+    ///         represented by the character range.
+    /// \pre    [begin,end) is a valid range.
+    /// \pre    The range of characters specified by [begin,end) contains a 
+    ///         valid string-based representation of a regular expression.
+    /// \throw  regex_error when the range of characters has invalid regular
+    ///         expression syntax.
+    template<typename InputIter>
+    static basic_regex<BidiIter> compile(InputIter begin, InputIter end, flag_type flags = regex_constants::ECMAScript)
     {
-        return regex_compiler<BidiIter>().compile(str, flags);
+        return regex_compiler<BidiIter>().compile(begin, end, flags);
     }
 
-    // for binding actions to this regex when it is nested statically in another regex
-    /// INTERNAL ONLY
-    template<typename Action>
-    proto::binary_op
-    <
-        proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
-      , proto::unary_op<Action, proto::noop_tag>
-      , proto::right_shift_tag
-    > const
-    operator [](detail::action_matcher<Action> const &action) const
+    /// \overload
+    ///
+    template<typename InputRange>
+    static basic_regex<BidiIter> compile(InputRange const &pat, flag_type flags = regex_constants::ECMAScript)
     {
-        return proto::noop(*this) >> proto::noop(*static_cast<Action const *>(&action));
+        return regex_compiler<BidiIter>().compile(pat, flags);
     }
 
-    //{{AFX_DEBUG
-    #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
-    // BUGBUG debug only
-    /// INTERNAL ONLY
-    friend std::ostream &operator <<(std::ostream &sout, basic_regex<BidiIter> const &rex)
+    /// \overload
+    ///
+    static basic_regex<BidiIter> compile(char_type const *begin, flag_type flags = regex_constants::ECMAScript)
     {
-        rex.dump_(sout);
-        return sout;
+        return regex_compiler<BidiIter>().compile(begin, flags);
     }
-    #endif
-    //}}AFX_DEBUG
+
+    /// \overload
+    ///
+    static basic_regex<BidiIter> compile(char_type const *begin, std::size_t len, flag_type flags)
+    {
+        return regex_compiler<BidiIter>().compile(begin, len, flags);
+    }
 
 private:
     friend struct detail::core_access<BidiIter>;
 
-    // Avoid a common programming mistake. Construction from a string is ambiguous. It could mean
+    // Avoid a common programming mistake. Construction from a string is
+    // ambiguous. It could mean:
     //   sregex rx = sregex::compile(str); // compile the string into a regex
     // or
     //   sregex rx = as_xpr(str);          // treat the string as a literal
-    // Since there is no easy way to disambiguate, disallow it and force users to say what they mean
+    // Since there is no easy way to disambiguate, it is disallowed. You must
+    // say what you mean.
+
     /// INTERNAL ONLY
     basic_regex(char_type const *);
     /// INTERNAL ONLY
     basic_regex(string_type const &);
 
-    // used from parser, via core_access
     /// INTERNAL ONLY
-    explicit basic_regex(detail::regex_impl<BidiIter> const &that)
-      : impl_()
+    bool match_(detail::match_state<BidiIter> &state) const
     {
-        this->impl_.tracking_copy(that);
-    }
-
-    /// INTERNAL ONLY
-    bool match_(detail::state_type<BidiIter> &state) const
-    {
-        return this->impl_->xpr_->match(state);
+        #if BOOST_XPRESSIVE_HAS_MS_STACK_GUARD
+        bool success = false, stack_error = false;
+        __try
+        {
+            success = proto::arg(*this)->xpr_->match(state);
+        }
+        __except(_exception_code() == 0xC00000FDUL)
+        {
+            stack_error = true;
+            _resetstkoflw();
+        }
+        detail::ensure(!stack_error, regex_constants::error_stack, "Regex stack space exhausted");
+        return success;
+        #else
+        return proto::arg(*this)->xpr_->match(state);
+        #endif
     }
 
     // Returns true if this basic_regex object does not contain a valid regular expression.
     /// INTERNAL ONLY
     bool invalid_() const
     {
-        return !this->impl_ || !this->impl_->xpr_;
+        return !proto::arg(*this) || !proto::arg(*this)->xpr_;
+    }
+
+    // Compiles valid static regexes into a state machine.
+    /// INTERNAL ONLY
+    template<typename Expr>
+    void compile_(Expr const &expr, mpl::true_)
+    {
+        detail::static_compile(expr, proto::arg(*this).get());
+    }
+
+    // No-op for invalid static regexes.
+    /// INTERNAL ONLY
+    template<typename Expr>
+    void compile_(Expr const &expr, mpl::false_)
+    {
     }
 
     /// INTERNAL ONLY
     void dump_(std::ostream &sout) const;
-
-    // the tracking_ptr manages lazy-init, COW, cycle-breaking, and
-    // reference/dependency tracking.
-    detail::tracking_ptr<detail::regex_impl<BidiIter> > impl_;
 };
-
-//{{AFX_DEBUG
-#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
-///////////////////////////////////////////////////////////////////////////////
-// dump_
-/// INTERNAL ONLY
-template<typename BidiIter>
-inline void basic_regex<BidiIter>::dump_(std::ostream &sout) const
-{
-    if(!this->impl_)
-    {
-        sout << "<null> refs={} deps={}";
-    }
-    else
-    {
-        sout << *this->impl_;
-    }
-}
-#endif
-//}}AFX_DEBUG
 
 ///////////////////////////////////////////////////////////////////////////////
 // swap
@@ -223,11 +253,12 @@ inline void basic_regex<BidiIter>::dump_(std::ostream &sout) const
 /// \param      left The first basic_regex object.
 /// \param      right The second basic_regex object.
 /// \attention  This is a shallow swap that does not do reference tracking.
-/// If you embed a basic_regex object by reference in another regular expression
-/// and then swap its contents with another basic_regex object, the change will
-/// not be visible to the enclosing regular expression. It is done this way to
-/// ensure that swap() cannot throw.
-/// \throw nothrow
+///             If you embed a basic_regex object by reference in another
+///             regular expression and then swap its contents with another
+///             basic_regex object, the change will not be visible to the
+///             enclosing regular expression. It is done this way to ensure
+///             that swap() cannot throw.
+/// \throw      nothrow
 template<typename BidiIter>
 inline void swap(basic_regex<BidiIter> &left, basic_regex<BidiIter> &right) // throw()
 {
@@ -236,4 +267,4 @@ inline void swap(basic_regex<BidiIter> &left, basic_regex<BidiIter> &right) // t
 
 }} // namespace boost::xpressive
 
-#endif // BOOST_XPRESSIVE_REGEX_HPP_EAN_10_04_2005
+#endif // BOOST_XPRESSIVE_BASIC_REGEX_HPP_EAN_10_04_2005

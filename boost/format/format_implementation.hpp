@@ -25,21 +25,21 @@ namespace boost {
 // ---  basic_format implementation -----------------------------------------//
 
     template< class Ch, class Tr, class Alloc>
-    basic_format<Ch, Tr, Alloc>:: basic_format(const Ch* str)
+    basic_format<Ch, Tr, Alloc>:: basic_format(const Ch* s)
         : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
           exceptions_(io::all_error_bits)
     {
-        if( str)
-            parse( str );
+        if( s)
+            parse( s );
     }
 
 #if !defined(BOOST_NO_STD_LOCALE)
     template< class Ch, class Tr, class Alloc>
-    basic_format<Ch, Tr, Alloc>:: basic_format(const Ch* str, const std::locale & loc)
+    basic_format<Ch, Tr, Alloc>:: basic_format(const Ch* s, const std::locale & loc)
         : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
           loc_(loc), exceptions_(io::all_error_bits)
     {
-        if(str) parse( str );
+        if(s) parse( s );
     }
 
     template< class Ch, class Tr, class Alloc>
@@ -123,6 +123,7 @@ namespace boost {
             for(std::size_t i=0; i < nbitems; ++i)
                 items_[i].reset(fill); //  strings are resized, instead of reallocated
         }
+        prefix_.resize(0);
     }
 
     template< class Ch, class Tr, class Alloc>

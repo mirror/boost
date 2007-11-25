@@ -23,7 +23,7 @@
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/util/functor_input.hpp>
-#include <boost/wave/cpplexer/cpp_lex_interface.hpp>
+#include <boost/wave/cpplexer/cpp_lex_interface_generator.hpp>
 
 #include <boost/wave/language_support.hpp>
 
@@ -59,9 +59,9 @@ public:
     template <typename IteratorT>
     lex_iterator_functor_shim(IteratorT const &first, IteratorT const &last, 
             position_type const &pos, boost::wave::language_support language)
-    :   functor_ptr(lex_input_interface<TokenT>
+    :   functor_ptr(lex_input_interface_generator<TokenT>
             ::new_lexer(first, last, pos, language)) 
-#if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION >= 900
+#if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION > 900
       , eof()
 #endif // 0 != __DECCXX_VER
     {}

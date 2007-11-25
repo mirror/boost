@@ -157,14 +157,14 @@ namespace ptr_container_detail
 
         mapped_reference insert_lookup( const key_type& key )
         {
-            void*& ref = this->c_private()[key];
+            void*& ref = this->base()[key];
             if( ref )
             {
                 return *static_cast<mapped_type>(ref);
             }
             else
             {
-                eraser e(&this->c_private(),key); // nothrow
+                eraser e(&this->base(),key);      // nothrow
                 mapped_type res = new T();        // strong 
                 ref = res;                        // nothrow
                 e.release();                      // nothrow
@@ -174,10 +174,6 @@ namespace ptr_container_detail
         
     public:
 
-        ptr_map_adapter_base( const allocator_type& a = allocator_type() )
-        : base_type(a)
-        { }
-
         template< class InputIterator >
         ptr_map_adapter_base( InputIterator first, InputIterator last,
                               const allocator_type& a = allocator_type() )
@@ -185,62 +181,63 @@ namespace ptr_container_detail
         { }
  
         template< class Compare, class Allocator >
-        explicit ptr_map_adapter_base( const Compare& comp,
-                                       const Allocator& a ) 
+        ptr_map_adapter_base( const Compare& comp,
+                              const Allocator& a ) 
         : base_type( comp, a ) 
         { }
-
+              
         template< class PtrContainer >
-        ptr_map_adapter_base( std::auto_ptr<PtrContainer> clone ) 
+        explicit ptr_map_adapter_base( std::auto_ptr<PtrContainer> clone ) 
         : base_type( clone )
         { }
         
         template< typename PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_map_adapter_base& operator=( std::auto_ptr<PtrContainer> clone )    
         {
             base_type::operator=( clone );
+            return *this;
         }        
 
         iterator find( const key_type& x )                                                
         {                                                                            
-            return iterator( this->c_private().find( x ) );                                
+            return iterator( this->base().find( x ) );                                
         }                                                                            
 
         const_iterator find( const key_type& x ) const                                    
         {                                                                            
-            return const_iterator( this->c_private().find( x ) );                          
+            return const_iterator( this->base().find( x ) );                          
         }                                                                            
 
         size_type count( const key_type& x ) const                                        
         {                                                                            
-            return this->c_private().count( x );                                           
+            return this->base().count( x );                                           
         }                                                                            
                                                                                      
         iterator lower_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().lower_bound( x ) );                         
+            return iterator( this->base().lower_bound( x ) );                         
         }                                                                            
                                                                                      
         const_iterator lower_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().lower_bound( x ) );                   
+            return const_iterator( this->base().lower_bound( x ) );                   
         }                                                                            
                                                                                      
         iterator upper_bound( const key_type& x )                                         
         {                                                                            
-            return iterator( this->c_private().upper_bound( x ) );                         
+            return iterator( this->base().upper_bound( x ) );                         
         }                                                                            
                                                                                      
         const_iterator upper_bound( const key_type& x ) const                             
         {                                                                            
-            return const_iterator( this->c_private().upper_bound( x ) );                   
+            return const_iterator( this->base().upper_bound( x ) );                   
         }                                                                            
                                                                                      
         iterator_range<iterator> equal_range( const key_type& x )                    
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_iterator>
-                 p = this->c_private().equal_range( x );   
+                 p = this->base().equal_range( x );   
             return make_iterator_range( iterator( p.first ), iterator( p.second ) );      
         }                                                                            
                                                                                      
@@ -248,7 +245,7 @@ namespace ptr_container_detail
         {                                                                            
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator> 
-                p = this->c_private().equal_range( x ); 
+                p = this->base().equal_range( x ); 
             return make_iterator_range( const_iterator( p.first ), 
                                         const_iterator( p.second ) );    
         }                                                                            
@@ -282,28 +279,13 @@ namespace ptr_container_detail
 
             auto_type old( where->second );       // nothrow
             where.base()->second = ptr.release(); // nothrow, commit
-            return move( old );
+            return boost::ptr_container::move( old );
         }
 
         template< class U >
         auto_type replace( iterator where, std::auto_ptr<U> x )
         {
             return replace( where, x.release() );
-        }
-
-    public: // serialization
-
-        template< class Archive >
-        void save( Archive& ar, const unsigned ) const
-        {
-            ar & ptr_container_detail::serialize_as_const( this->size() );
-
-            const_iterator i = this->begin(), e = this->end();
-            for( ; i != e; ++i )
-            {
-                ar & i->first;
-                ar & ptr_container_detail::serialize_as_const( i->second );
-            }
         }
     };
     
@@ -350,11 +332,11 @@ namespace ptr_container_detail
         {
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
                 res = 
-                this->c_private().insert( std::make_pair( key, ptr.get() ) ); // strong, commit      
-            if( res.second )                                                  // nothrow     
-                ptr.release();                                                // nothrow
+                this->base().insert( std::make_pair( key, ptr.get() ) ); // strong, commit      
+            if( res.second )                                             // nothrow     
+                ptr.release();                                           // nothrow
         }
-    
+
         template< class II >                                               
         void map_basic_clone_and_insert( II first, II last )                  
         {       
@@ -364,9 +346,10 @@ namespace ptr_container_detail
                 {
                     const_reference p = *first.base();     // nothrow                    
                     auto_type ptr( this->null_policy_allocate_clone( p.second ) ); 
-                                                              // strong 
-                    this->safe_insert( p.first, ptr_container_detail::
-                                                move( ptr ) );// strong, commit
+                                                           // strong 
+                    this->safe_insert( p.first, 
+                                       boost::ptr_container::move( ptr ) );
+                                                           // strong, commit 
                 }
                 ++first;                                                      
             }                                                                 
@@ -375,7 +358,7 @@ namespace ptr_container_detail
     public:
 
         explicit ptr_map_adapter( const key_compare& comp = key_compare(),
-                                  const allocator_type& a = allocator_type()  ) 
+                                  const allocator_type& a = allocator_type() ) 
           : base_type( comp, a ) { }
     
         template< class InputIterator >
@@ -387,14 +370,43 @@ namespace ptr_container_detail
             map_basic_clone_and_insert( first, last );
         }
 
+        explicit ptr_map_adapter( const ptr_map_adapter& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
+        template< class Key, class U >
+        explicit ptr_map_adapter( const ptr_map_adapter<Key,U>& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
         template< class U >
         ptr_map_adapter( std::auto_ptr<U> r ) : base_type( r )
         { }
 
+        ptr_map_adapter& operator=( const ptr_map_adapter& r )
+        {
+            ptr_map_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
+
+        template< class Key, class U >
+        ptr_map_adapter& operator=( const ptr_map_adapter<Key,U>& r ) 
+         {
+            ptr_map_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
+
         template< class U >
-        void operator=( std::auto_ptr<U> r )
+        ptr_map_adapter& operator=( std::auto_ptr<U> r )
         {  
             base_type::operator=( r );
+            return *this;
         }
 
         using base_type::release;
@@ -415,13 +427,13 @@ namespace ptr_container_detail
         std::pair<iterator,bool> insert_impl( const key_type& key, mapped_type x ) // strong
         {
             this->enforce_null_policy( x, "Null pointer in ptr_map_adapter::insert()" );
-            auto_type ptr( x );                                              // nothrow
+            auto_type ptr( x );                                         // nothrow
 
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
-                 res = this->c_private().insert( std::make_pair( key, x ) ); // strong, commit      
-            if( res.second )                                             // nothrow     
-                ptr.release();                                           // nothrow
-            return std::make_pair( iterator( res.first ), res.second );  // nothrow        
+                 res = this->base().insert( std::make_pair( key, x ) ); // strong, commit      
+            if( res.second )                                            // nothrow     
+                ptr.release();                                          // nothrow
+            return std::make_pair( iterator( res.first ), res.second ); // nothrow        
         }
         
     public:
@@ -452,7 +464,7 @@ namespace ptr_container_detail
             return this->single_transfer( first, last, from );
         }
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
 
         template< class PtrMapAdapter, class Range >
@@ -471,29 +483,6 @@ namespace ptr_container_detail
         {
             return transfer( from.begin(), from.end(), from );
         }
-
-    public: // serialization
-
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) // strong
-        {
-            this->clear();
-            size_type n;
-            ar & n;
-
-            for( size_type i = 0u; i != n; ++i )
-            {
-                key_type  key;
-                T*        value;
-                ar & key;
-                ar & value;
-                std::pair<iterator,bool> p = this->insert( key, value );
-                ar.reset_object_address( &p.first->first, &key ); 
-            }
-        }
-
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
-        
   };
   
   /////////////////////////////////////////////////////////////////////////
@@ -535,7 +524,7 @@ namespace ptr_container_detail
 
         void safe_insert( const key_type& key, auto_type ptr ) // strong
         {
-            this->c_private().insert( 
+            this->base().insert( 
                            std::make_pair( key, ptr.get() ) ); // strong, commit      
             ptr.release();                                     // nothrow
         }
@@ -548,8 +537,9 @@ namespace ptr_container_detail
                 const_reference pair = *first.base();     // nothrow                     
                 auto_type ptr( this->null_policy_allocate_clone( pair.second ) );    
                                                           // strong
-                safe_insert( pair.first, ptr_container_detail::
-                                         move( ptr ) );   // strong, commit
+                safe_insert( pair.first, 
+                             boost::ptr_container::move( ptr ) );
+                                                          // strong, commit 
                 ++first;                                                      
             }                                                                 
         }
@@ -569,14 +559,43 @@ namespace ptr_container_detail
             map_basic_clone_and_insert( first, last );
         }
 
+        explicit ptr_multimap_adapter( const ptr_multimap_adapter& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
+        template< class Key, class U >
+        explicit ptr_multimap_adapter( const ptr_multimap_adapter<Key,U>& r )
+          : base_type( key_compare(), allocator_type() )
+        {
+            map_basic_clone_and_insert( r.begin(), r.end() );      
+        }
+        
         template< class U >
-        ptr_multimap_adapter( std::auto_ptr<U> r ) : base_type( r )
+        explicit ptr_multimap_adapter( std::auto_ptr<U> r ) : base_type( r )
         { }
 
+        ptr_multimap_adapter& operator=( const ptr_multimap_adapter& r )
+        {
+            ptr_multimap_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
+
+        template< class Key, class U >
+        ptr_multimap_adapter& operator=( const ptr_multimap_adapter<Key,U>& r ) 
+         {
+            ptr_multimap_adapter clone( r );
+            this->swap( clone );
+            return *this;
+        }
+        
         template< class U >
-        void operator=( std::auto_ptr<U> r )
+        ptr_multimap_adapter& operator=( std::auto_ptr<U> r )
         {  
             base_type::operator=( r );
+            return *this;
         }
 
         using base_type::release;
@@ -600,7 +619,7 @@ namespace ptr_container_detail
 
             auto_type ptr( x );         // nothrow
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                res = this->c_private().insert( std::make_pair( key, x ) );
+                res = this->base().insert( std::make_pair( key, x ) );
                                         // strong, commit        
             ptr.release();              // notrow
             return iterator( res );           
@@ -627,7 +646,7 @@ namespace ptr_container_detail
             return this->multi_transfer( first, last, from );
         }
 
-#if defined(BOOST_NO_SFINAE) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)        
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
 
         template<  class PtrMapAdapter, class Range >
@@ -646,28 +665,6 @@ namespace ptr_container_detail
             transfer( from.begin(), from.end(), from );
             BOOST_ASSERT( from.empty() );
         }
-
-    public: // serialization
-
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) // basic
-        {
-            this->clear();
-            size_type n;
-            ar & n;
-
-            for( size_type i = 0u; i != n; ++i )
-            {
-                key_type  key;
-                T*        value;
-                ar & key;
-                ar & value;
-                iterator p = this->insert( key, value );
-                ar.reset_object_address( &p->first, &key );
-            }
-        }
-
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     };
 

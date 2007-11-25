@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // parse_charset.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,8 +13,9 @@
 # pragma once
 #endif
 
-#include <boost/mpl/bool.hpp>
 #include <boost/integer.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/numeric/conversion/converter.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/dynamic/parser_enum.hpp>
@@ -53,8 +54,12 @@ struct char_overflow_handler
     {
         if(numeric::cInRange != result)
         {
-            throw regex_error(regex_constants::error_escape,
-                "character escape too large to fit in target character type");
+            boost::throw_exception(
+                regex_error(
+                    regex_constants::error_escape
+                  , "character escape too large to fit in target character type"
+                )
+            );
         }
     }
 };

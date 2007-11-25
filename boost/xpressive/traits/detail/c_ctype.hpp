@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // c_ctype.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -64,7 +64,7 @@ inline std::string classname_a(FwdIter begin, FwdIter end)
     for(std::size_t i = 0; i < name.size(); ++i)
     {
         using namespace std;
-        name[i] = tolower(static_cast<unsigned char>(name[i]));
+        name[i] = static_cast<char>(tolower(static_cast<unsigned char>(name[i])));
     }
     return name;
 }

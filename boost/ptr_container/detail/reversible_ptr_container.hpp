@@ -35,24 +35,14 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
-#include <boost/serialization/split_member.hpp>
-#include <algorithm>
-#include <exception>
-#include <memory>
 #include <typeinfo>
+#include <memory>
 
 namespace boost
 {
     
 namespace ptr_container_detail
 {
-
-    template< class T >
-    inline T const& serialize_as_const( T const& r )
-    {
-        return r;
-    }
-
     template< class CloneAllocator >
     struct clone_deleter
     {
@@ -82,11 +72,7 @@ namespace ptr_container_detail
     class reversible_ptr_container 
     {
     private:
-#ifdef  __MWERKS__
-        enum { allow_null = Config::allow_null };
-#else
         BOOST_STATIC_CONSTANT( bool, allow_null = Config::allow_null );
-#endif        
         
         typedef BOOST_DEDUCED_TYPENAME Config::value_type Ty_;
 
@@ -143,9 +129,9 @@ namespace ptr_container_detail
         Cont      c_;
 
     public:
-        Cont& c_private()                { return c_; }
-        const Cont& c_private() const    { return c_; }
-
+        Cont&       base()               { return c_; }
+        const Cont& base() const         { return c_; }        
+        
     public: // typedefs
         typedef  Ty_*          value_type;
         typedef  Ty_*          pointer;
@@ -198,12 +184,6 @@ namespace ptr_container_detail
             sd.release(); 
         }
         
-        void insert_clones_and_release( scoped_deleter& sd ) // strong
-        {
-            c_.insert( sd.begin(), sd.end() );
-            sd.release();
-        }
-
         template< class ForwardIterator >
         void clone_assign( ForwardIterator first, 
                            ForwardIterator last ) // strong 
@@ -241,6 +221,12 @@ namespace ptr_container_detail
             sd.release();
         }
 
+        void insert_clones_and_release( scoped_deleter& sd ) // strong
+        {
+            c_.insert( sd.begin(), sd.end() );
+            sd.release();
+        }
+
         template< class I >
         void remove( I i )
         { 
@@ -254,7 +240,7 @@ namespace ptr_container_detail
                 remove( first );
         }
 
-        static void enforce_null_policy( Ty_* x, const char* msg )
+        static void enforce_null_policy( const Ty_* x, const char* msg )
         {
             if( !allow_null )
             {
@@ -280,25 +266,8 @@ namespace ptr_container_detail
             ForwardIterator iter = begin;
             std::advance( iter, n );
             return iter;
-        }
-        
-    private:
-        reversible_ptr_container( const reversible_ptr_container& );
-        void operator=( const reversible_ptr_container& );
-        
-    public: // foundation! should be protected!
-        explicit reversible_ptr_container( const allocator_type& a = allocator_type() ) 
-         : c_( a )
-        {}
-        
-        template< class PtrContainer >
-        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )
-          : c_( allocator_type() )                
-        { 
-            swap( *clone ); 
-        }
+        }        
 
-    private:
         template< class I >
         void constructor_impl( I first, I last, std::input_iterator_tag ) // basic
         {
@@ -317,8 +286,51 @@ namespace ptr_container_detail
             clone_back_insert( first, last );
         }
 
+    public: // foundation! should be protected!
+        reversible_ptr_container( const allocator_type& a = allocator_type() ) 
+         : c_( a )
+        {}
+        
+        template< class PtrContainer >
+        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )
+          : c_( allocator_type() )                
+        { 
+            swap( *clone ); 
+        }
 
-    public:
+        explicit reversible_ptr_container( const reversible_ptr_container& r ) 
+        {
+            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+        }
+
+        template< class C, class V >
+        explicit reversible_ptr_container( const reversible_ptr_container<C,V>& r ) 
+        {
+            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+        }
+
+
+        template< class PtrContainer >
+        reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
+        {
+            swap( *clone );
+            return *this;
+        }
+
+        reversible_ptr_container& operator=( const reversible_ptr_container& r ) // strong 
+        {
+            reversible_ptr_container clone( r );
+            swap( clone );
+            return *this;
+        }
+
+        template< class C, class V >
+        reversible_ptr_container& operator=( const reversible_ptr_container<C,V>& r ) // strong 
+        {
+            reversible_ptr_container clone( r );
+            swap( clone );
+            return *this;
+        }
         // overhead: null-initilization of container pointer (very cheap compared to cloning)
         // overhead: 1 heap allocation (very cheap compared to cloning)
         template< class InputIterator >
@@ -340,6 +352,20 @@ namespace ptr_container_detail
                                   const allocator_type& a )
         : c_( comp, a ) {}
 
+        template< class InputIterator, class Compare >
+        reversible_ptr_container( InputIterator first,
+                                  InputIterator last,
+                                  const Compare& comp,
+                                  const allocator_type& a )
+        : c_( comp, a ) 
+        {
+            if( first == last )
+                return;
+
+            scoped_deleter sd( first, last );
+            insert_clones_and_release( sd );    
+        }
+
         template< class PtrContainer, class Compare >
         reversible_ptr_container( std::auto_ptr<PtrContainer> clone, 
                                   Compare comp )
@@ -354,12 +380,6 @@ namespace ptr_container_detail
             remove_all();
         }
         
-        template< class PtrContainer >
-        void operator=( std::auto_ptr<PtrContainer> clone )     
-        {
-            swap( *clone );
-        }
-
     public:
         
         allocator_type get_allocator() const                   
@@ -470,7 +490,6 @@ namespace ptr_container_detail
 
         iterator erase( iterator first, iterator last ) // nothrow
         {
-            //BOOST_ASSERT( !empty() );
             remove( first, last );
             return iterator( c_.erase( first.base(),
                                        last.base() ) );
@@ -513,13 +532,8 @@ namespace ptr_container_detail
             BOOST_PTR_CONTAINER_THROW_EXCEPTION( empty(), bad_ptr_container_operation,
                                                  "'replace()' on empty container" );
 
-            auto_type old( Config::get_pointer( where ) );  // nothrow
-            
-//#if defined( __GNUC__ ) || defined( __MWERKS__ ) || defined( __COMO__ )
+            auto_type old( Config::get_pointer( where ) );  // nothrow            
             const_cast<void*&>(*where.base()) = ptr.release();                
-//#else
-//            *where.base() = ptr.release(); // nothrow, commit
-//#endif            
             return boost::ptr_container_detail::move( old );
         }
 
@@ -548,65 +562,7 @@ namespace ptr_container_detail
         {
             return replace( idx, x.release() );
         }
-
-    //
-    // serialization
-    //
-    
-    protected:
-
-        template< class Archive >
-        void save_helper( Archive& ar ) const
-        {
-            const_iterator i = this->begin(), e = this->end();
-            for( ; i != e; ++i )
-                ar & ptr_container_detail::serialize_as_const( 
-                                 static_cast<value_type>( *i.base() ) );
-        }
-
-    public: 
-
-        template< class Archive >
-        void save( Archive& ar, const unsigned ) const
-        {
-            ar & ptr_container_detail::serialize_as_const( this->size() );
-            this->save_helper( ar );
-        }
-
-    protected:
-
-        template< class Archive >
-        void load_helper( Archive& ar, size_type n )
-        {   
-            //
-            // Called after an appropriate reserve on c.
-            //
-
-            this->clear();            
-            for( size_type i = 0u; i != n; ++i )
-            {
-                //
-                // Remark: pointers are not tracked,
-                // so we need not call ar.reset_object_address(v, u)
-                //
-                value_type ptr;
-                ar & ptr;
-                this->insert( this->end(), ptr );
-            }
-        }
-
-    public:
-        
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) 
-        {
-            size_type n;
-            ar & n;
-            this->load_helper( ar, n ); 
-        }
-        
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
-        
+                
     }; // 'reversible_ptr_container'
 
 
@@ -627,13 +583,13 @@ namespace ptr_container_detail
     // is buggy on most compilers, so we use a macro instead
     //
 #define BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type ) \
-                                                    \
-    PC( std::auto_ptr<this_type> r )                \
+    explicit PC( std::auto_ptr<this_type> r )       \
     : base_type ( r ) { }                           \
                                                     \
-    void operator=( std::auto_ptr<this_type> r )    \
+    PC& operator=( std::auto_ptr<this_type> r )     \
     {                                               \
         base_type::operator=( r );                  \
+        return *this;                               \
     }                                               \
                                                     \
     std::auto_ptr<this_type> release()              \
@@ -649,23 +605,46 @@ namespace ptr_container_detail
        return std::auto_ptr<this_type>( new this_type( this->begin(), this->end() ) ); \
     }
 
+#define BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type ) \
+                                                                      \
+    template< class U >                                               \
+    explicit PC( const PC<U>& r ) : base_type( r ) { }                \
+                                                                      \
+    template< class U >                                               \
+    PC& operator=( const PC<U>& r )                                   \
+    {                                                                 \
+        base_type::operator=( r );                                    \
+        return *this;                                                 \
+    }                                               
+     
+
 #define BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                       \
     typedef BOOST_DEDUCED_TYPENAME base_type::iterator        iterator;                \
     typedef BOOST_DEDUCED_TYPENAME base_type::size_type       size_type;               \
     typedef BOOST_DEDUCED_TYPENAME base_type::const_reference const_reference;         \
     typedef BOOST_DEDUCED_TYPENAME base_type::allocator_type  allocator_type;          \
-    PC( const allocator_type& a = allocator_type() ) : base_type(a) {}                 \
+    explicit PC( const allocator_type& a = allocator_type() ) : base_type(a) {}                 \
     template< class InputIterator >                                                    \
     PC( InputIterator first, InputIterator last,                                       \
-    const allocator_type& a = allocator_type() ) : base_type( first, last, a ) {}      
-    
-
+        const allocator_type& a = allocator_type() ) : base_type( first, last, a ) {}  
                  
 #define BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )           \
    BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                                    \
    BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type )
-    
-    } // namespace 'ptr_container_detail'
+
+#define BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( PC, base_type, this_type )  \
+    BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )  \
+    BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type )
+
+} // namespace 'ptr_container_detail'
+
+    //
+    // @remark: expose movability of internal move-pointer
+    //
+    namespace ptr_container
+    {        
+        using ptr_container_detail::move;
+    }
 
 } // namespace 'boost'  
 

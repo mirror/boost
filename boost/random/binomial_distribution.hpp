@@ -28,12 +28,12 @@ public:
   typedef typename bernoulli_distribution<RealType>::input_type input_type;
   typedef IntType result_type;
 
-  explicit binomial_distribution(IntType t = 1,
-                                 const RealType& p = RealType(0.5))
-    : _bernoulli(p), _t(t)
+  explicit binomial_distribution(IntType t_arg = 1,
+                                 const RealType& p_arg = RealType(0.5))
+    : _bernoulli(p_arg), _t(t_arg)
   {
-    assert(t >= 0);
-    assert(RealType(0) <= 0 && p <= RealType(1));
+    assert(_t >= 0);
+    assert(RealType(0) <= p_arg && p_arg <= RealType(1));
   }
 
   // compiler-generated copy ctor and assignment operator are fine

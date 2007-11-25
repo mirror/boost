@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // traits_utils.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -20,6 +20,8 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/iterator/transform_iterator.hpp>
+#include <boost/xpressive/detail/utility/algorithm.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -43,27 +45,80 @@ namespace boost { namespace xpressive { namespace detail
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // string_cast
+    // widen_fun
     //
-    template<typename ToChar, typename FromChar, typename Traits>
-    inline std::basic_string<ToChar> const &
-    string_cast(std::basic_string<FromChar> const &from, Traits const &, typename enable_if<is_same<ToChar, FromChar> >::type * = 0)
+    template<typename Traits>
+    struct widen_fun
     {
-        return from;
-    }
+        typedef typename Traits::char_type result_type;
+        explicit widen_fun(Traits const &traits)
+          : traits_(traits)
+        {}
 
-    template<typename ToChar, typename FromChar, typename Traits>
-    inline std::basic_string<ToChar> const
-    string_cast(std::basic_string<FromChar> const &from, Traits const &traits, typename disable_if<is_same<ToChar, FromChar> >::type * = 0)
+        result_type operator()(char ch) const
+        {
+            return this->traits_.widen(ch);
+        }
+
+        Traits const &traits_;
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // string_cast_
+    //
+    template<
+        typename To
+      , typename From
+      , typename ToChar = typename detail::range_data<To>::type
+      , typename FromChar = typename detail::range_data<From>::type
+    >
+    struct string_cast_
     {
         BOOST_MPL_ASSERT((is_same<FromChar, char>));
-        std::basic_string<ToChar> to;
-        to.reserve(from.size());
-        for(typename std::basic_string<FromChar>::size_type i = 0; i < from.size(); ++i)
+        typedef To const result_type;
+        template<typename Traits>
+        result_type operator()(From const &from, Traits const &traits) const
         {
-            to.push_back(traits.widen(from[i]));
+            widen_fun<Traits> widen(traits);
+            To to(
+                boost::make_transform_iterator(detail::data_begin(from), widen)
+              , boost::make_transform_iterator(detail::data_end(from), widen)
+            );
+            return to;
         }
-        return to;
+    };
+
+    template<typename To, typename From, typename Char>
+    struct string_cast_<To, From, Char, Char>
+    {
+        typedef To const result_type;
+        template<typename Traits>
+        result_type operator()(From const &from, Traits const &) const
+        {
+            To to(detail::data_begin(from), detail::data_end(from));
+            return to;
+        }
+    };
+
+    template<typename From, typename Char>
+    struct string_cast_<From, From, Char, Char>
+    {
+        typedef From const &result_type;
+        template<typename Traits>
+        result_type operator()(From const &from, Traits const &) const
+        {
+            return from;
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // string_cast
+    //
+    template<typename To, typename From, typename Traits>
+    typename string_cast_<To, From>::result_type
+    string_cast(From const &from, Traits const &traits)
+    {
+        return string_cast_<To, From>()(from, traits);
     }
 
     ///////////////////////////////////////////////////////////////////////////////

@@ -134,7 +134,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Allow to define macros with the command line syntax (-DMACRO(x)=definition)
 //
-//  To disable the the possibility to define macros based on the command line 
+//  To disable the possibility to define macros based on the command line 
 //  syntax, define the following constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_ENABLE_COMMANDLINE_MACROS)
@@ -202,13 +202,11 @@
 
 //  This include is needed for the boost::fast_allocator class used in the 
 //  BOOST_WAVE_STRINGTYPE above.
-//  Configure Boost.Pool thread support (for now: no thread support at all)
-//#define BOOST_NO_MT
-//#include <boost/pool/pool_alloc.hpp>
+// #include <boost/pool/pool_alloc.hpp>
 
 // Use the following, if you want to incorporate Maxim Yegorushkin's
 // const_string library (http://sourceforge.net/projects/conststring/), which
-// may be even faster, than using the flex_string class from above
+// may be even faster than using the flex_string class from above
 //#define BOOST_WAVE_STRINGTYPE boost::const_string<char>
 //
 //#include <boost/const_string/const_string.hpp>
@@ -225,7 +223,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  The following definition forces the Spirit tree code to use boost pool 
-//  allocators in stead of the std::allocator for the vector/list's.
+//  allocators instead of the std::allocator for the vector/list's.
 // #define BOOST_SPIRIT_USE_BOOST_ALLOCATOR_FOR_TREES
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -343,14 +341,62 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  configure Boost.Pool thread support (for now: no thread support at all)
-#if !defined(BOOST_NO_MT)
-#define BOOST_NO_MT
-#endif // !defined(BOOST_NO_MT)
+//  Decide, whether the import keyword is recognized as such
+//
+//  If this is defined to something not equal to zero the Wave will recognize
+//  import as a keyword (T_IMPORT token id)
+//
+#if !defined(BOOST_WAVE_SUPPORT_IMPORT_KEYWORD)
+#define BOOST_WAVE_SUPPORT_IMPORT_KEYWORD  0
+#endif
 
-//#if !defined(BOOST_DISABLE_THREADS)
-//#define BOOST_DISABLE_THREADS
-//#endif // !defined(BOOST_DISABLE_THREADS)
+///////////////////////////////////////////////////////////////////////////////
+//  Decide, whether to support long long integers in the preprocessor.
+//
+//  The C++ standard requires the preprocessor to use one of the following 
+//  types for integer literals: long or unsigned long depending on a optional 
+//  suffix ('u', 'l', 'ul', or 'lu')
+//
+//  Sometimes it's required to preprocess integer literals bigger than that
+//  (i.e. long long or unsigned long long). In this case you need to define the 
+//  BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS to something not equal to zero.
+//
+//  This pp constant is effective only, if your target platform supports 
+//  long long integers (BOOST_HAS_LONG_LONG is defined).
+//
+//  Please note, that this setting doesn't relate to the Wave support option
+//  support_option_long_long, which enables the recognition of 'll' suffixes 
+//  only.
+//
+//  Defining this pp constant enables the recognition of long long integers
+//  even if these do not have the 'll' suffix.
+//
+#if !defined(BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS)
+#define BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS 0
+#endif
+
+namespace boost { namespace wave 
+{
+#if defined(BOOST_HAS_LONG_LONG) && \
+    BOOST_WAVE_SUPPORT_LONGLONG_INTEGER_LITERALS != 0
+    typedef boost::long_long_type int_literal_type;
+    typedef boost::ulong_long_type uint_literal_type;
+#else
+    typedef long int_literal_type;
+    typedef unsigned long uint_literal_type;
+#endif
+}}
+
+///////////////////////////////////////////////////////////////////////////////
+//  configure Boost.Spirit thread support, Boost.Pool is configured
+//  automatically 
+#if defined(BOOST_HAS_THREADS)
+#define BOOST_SPIRIT_THREADSAFE 1
+#define PHOENIX_THREADSAFE 1
+#else
+// disable thread support in Boost.Pool
+#define BOOST_NO_MT 1
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Wave needs at least 4 parameters for phoenix actors
@@ -399,5 +445,27 @@
 
 #endif  // auto-linking disabled
 #endif  // BOOST_VERSION
+
+///////////////////////////////////////////////////////////////////////////////
+//  Compatibility macros 
+//  (ensure interface compatibility to older Wave versions)
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//  The preprocessing hook signatures changed after the Boost V1.34.0 release
+//
+//  To use the preprocessing hook signatures as released with Boost V1.34.0 
+//  you need to define the BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 
+//  constant to something not equal zero.
+//
+//  To force using the new interface define this constant to zero.
+//
+#if !defined(BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS)
+#if BOOST_VERSION < 103500  // before Boost V1.35.0
+#define BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 1
+#else
+#define BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 0
+#endif
+#endif
 
 #endif // !defined(WAVE_CONFIG_HPP_F143F90A_A63F_4B27_AC41_9CA4F14F538D_INCLUDED)

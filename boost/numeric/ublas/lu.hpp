@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -101,7 +97,8 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_column<M> mci (column (m, i));
             matrix_row<M> mri (row (m, i));
             if (m (i, i) != value_type/*zero*/()) {
-                project (mci, range (i + 1, size1)) *= value_type (1) / m (i, i);
+                value_type m_inv = value_type (1) / m (i, i);
+                project (mci, range (i + 1, size1)) *= m_inv;
             } else if (singular == 0) {
                 singular = i + 1;
             }
@@ -144,7 +141,8 @@ namespace boost { namespace numeric { namespace ublas {
                 } else {
                     BOOST_UBLAS_CHECK (pm (i) == i_norm_inf, external_logic ());
                 }
-                project (mci, range (i + 1, size1)) *= value_type (1) / m (i, i);
+                value_type m_inv = value_type (1) / m (i, i);
+                project (mci, range (i + 1, size1)) *= m_inv;
             } else if (singular == 0) {
                 singular = i + 1;
             }

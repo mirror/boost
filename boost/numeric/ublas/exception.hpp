@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -175,7 +171,6 @@ namespace boost { namespace numeric { namespace ublas {
         explicit singular (const char *)
             {}
         void raise () {
-            throw *this;
             std::abort ();
         }
 #endif
@@ -267,11 +262,19 @@ namespace boost { namespace numeric { namespace ublas {
 //        return (std::min) (size1, size2);
 //    }
 // #define BOOST_UBLAS_SAME(size1, size2) same_impl ((size1), (size2))
-    template<class T>
+     // need two types here because different containers can have
+     // different size_types (especially sparse types)
+    template<class T1, class T2>
     BOOST_UBLAS_INLINE
     // Kresimir Fresl and Dan Muller reported problems with COMO.
     // We better change the signature instead of libcomo ;-)
     // const T &same_impl_ex (const T &size1, const T &size2, const char *file, int line) {
+    T1 same_impl_ex (const T1 &size1, const T2 &size2, const char *file, int line) {
+        BOOST_UBLAS_CHECK_EX (size1 == size2, file, line, bad_argument ());
+        return (size1 < size2)?(size1):(size2);
+    }
+    template<class T>
+    BOOST_UBLAS_INLINE
     T same_impl_ex (const T &size1, const T &size2, const char *file, int line) {
         BOOST_UBLAS_CHECK_EX (size1 == size2, file, line, bad_argument ());
         return (std::min) (size1, size2);

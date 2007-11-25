@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -18,6 +14,8 @@
 #define _BOOST_UBLAS_OPERATION_BLOCKED_
 
 #include <boost/numeric/ublas/traits.hpp>
+#include <boost/numeric/ublas/detail/vector_assign.hpp> // indexing_vector_assign
+#include <boost/numeric/ublas/detail/matrix_assign.hpp> // indexing_matrix_assign
 
 
 namespace boost { namespace numeric { namespace ublas {

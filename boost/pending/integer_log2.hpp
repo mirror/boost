@@ -12,14 +12,17 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // ------------------------------------------------------
-
+//
+// $Id$
 
 
 #ifndef BOOST_INTEGER_LOG2_HPP_GP_20030301
 #define BOOST_INTEGER_LOG2_HPP_GP_20030301
 
-#include <cassert>
-#include <climits> // actually used for Borland only
+#include <assert.h>
+#ifdef __BORLANDC__
+#include <climits>
+#endif
 #include "boost/limits.hpp"
 #include "boost/config.hpp"
 

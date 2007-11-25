@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // simple_repeat_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -64,19 +64,23 @@ namespace boost { namespace xpressive { namespace detail
 
         Xpr xpr_;
         unsigned int min_, max_;
+        std::size_t width_;
 
-        simple_repeat_matcher(Xpr const &xpr, unsigned int min, unsigned int max)
+        simple_repeat_matcher(Xpr const &xpr, unsigned int min, unsigned int max, std::size_t width)
           : xpr_(xpr)
           , min_(min)
           , max_(max)
+          , width_(width)
         {
             // it is the job of the parser to make sure this never happens
             BOOST_ASSERT(min <= max);
             BOOST_ASSERT(0 != max);
+            BOOST_ASSERT(0 != width && unknown_width() != width);
+            BOOST_ASSERT(Xpr::width == unknown_width() || Xpr::width == width);
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             typedef mpl::bool_<is_random<BidiIter>::value> is_rand;
             typedef typename simple_repeat_traits<Xpr, greedy_type, is_rand>::tag_type tag_type;
@@ -85,17 +89,11 @@ namespace boost { namespace xpressive { namespace detail
 
         // greedy, fixed-width quantifier
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, greedy_slow_tag) const
+        bool match_(match_state<BidiIter> &state, Next const &next, greedy_slow_tag) const
         {
-            int const diff = -static_cast<int>(this->xpr_.get_width(&state));
-            BOOST_ASSERT(diff != -static_cast<int>(unknown_width()));
+            int const diff = -static_cast<int>(Xpr::width == unknown_width::value ? this->width_ : Xpr::width);
             unsigned int matches = 0;
             BidiIter const tmp = state.cur_;
-
-            if(0 == diff)
-            {
-                return this->xpr_.match(state) && next.match(state);
-            }
 
             // greedily match as much as we can
             while(matches < this->max_ && this->xpr_.match(state))
@@ -126,15 +124,10 @@ namespace boost { namespace xpressive { namespace detail
 
         // non-greedy fixed-width quantification
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, non_greedy_tag) const
+        bool match_(match_state<BidiIter> &state, Next const &next, non_greedy_tag) const
         {
             BidiIter const tmp = state.cur_;
             unsigned int matches = 0;
-
-            if(0 == this->xpr_.get_width(&state))
-            {
-                return this->xpr_.match(state) && next.match(state);
-            }
 
             for(; matches < this->min_; ++matches)
             {
@@ -160,7 +153,7 @@ namespace boost { namespace xpressive { namespace detail
 
         // when greedily matching any character, skip to the end instead of iterating there.
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, greedy_fast_tag) const
+        bool match_(match_state<BidiIter> &state, Next const &next, greedy_fast_tag) const
         {
             BidiIter const tmp = state.cur_;
             std::size_t const diff_to_end = static_cast<std::size_t>(state.end_ - tmp);
@@ -188,14 +181,13 @@ namespace boost { namespace xpressive { namespace detail
             }
         }
 
-        template<typename BidiIter>
-        std::size_t get_width(state_type<BidiIter> *state) const
+        detail::width get_width() const
         {
             if(this->min_ != this->max_)
             {
-                return unknown_width();
+                return unknown_width::value;
             }
-            return this->min_ * this->xpr_.get_width(state);
+            return this->min_ * this->width_;
         }
 
     private:

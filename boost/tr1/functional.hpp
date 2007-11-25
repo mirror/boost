@@ -17,6 +17,7 @@
 #  ifdef BOOST_HAS_INCLUDE_NEXT
 #     include_next BOOST_TR1_HEADER(functional)
 #  else
+#     include <boost/tr1/detail/config_all.hpp>
 #     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(functional))
 #  endif
 #endif
@@ -72,9 +73,8 @@ using boost::mem_fn;
 
 namespace std{ namespace tr1{
 
-   // These aren't supported in this release but are in mainline cvs:
-   // using ::boost::is_bind_expression;
-   // using ::boost::is_placeholder;
+   using ::boost::is_bind_expression;
+   using ::boost::is_placeholder;
    using ::boost::bind;
    namespace placeholders {
 #ifndef BOOST_BIND_NO_PLACEHOLDERS

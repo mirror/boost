@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // icase.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -12,6 +12,7 @@
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/static/modifier.hpp>
 #include <boost/xpressive/detail/core/linker.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 
 namespace boost { namespace xpressive { namespace regex_constants
 {
@@ -27,6 +28,14 @@ detail::modifier_op<detail::icase_modifier> const icase = {{}, regex_constants::
 } // namespace regex_constants
 
 using regex_constants::icase;
+
+namespace detail
+{
+    inline void ignore_unused_icase()
+    {
+        ignore_unused(icase);
+    }
+}
 
 }} // namespace boost::xpressive
 

@@ -2,7 +2,7 @@
 /// \file xpressive_typeof.hpp
 /// Type registrations so that xpressive can be used with the Boost.Typeof library.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -20,7 +20,7 @@
 # include <boost/typeof/std/locale.hpp>
 #endif
 #include <boost/xpressive/proto/proto_typeof.hpp>
-#include <boost/xpressive/xpressive_fwd.hpp>
+#include <boost/xpressive/detail/detail_fwd.hpp>
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
@@ -30,10 +30,26 @@
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::set_initializer)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::keeper_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::modifier_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::lookahead_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::lookbehind_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::check_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::mark_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::word_begin)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::word_end)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::generic_quant_tag, (unsigned int)(unsigned int))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::lookahead_tag, (bool))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::lookbehind_tag, (bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::basic_regex, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::word_boundary, (bool))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::value, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::reference, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::local, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::placeholder, (typename)(int)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::tracking_ptr, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::regex_impl, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::let_, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::action_arg, (typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::named_mark, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::sub_match, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::nested_results, (typename))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Placeholders
@@ -44,11 +60,9 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::assert_bol_placeholder)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::assert_eol_placeholder)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::logical_newline_placeholder)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::self_placeholder)
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::string_placeholder, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::assert_word_placeholder, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::range_placeholder, (typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::regex_placeholder, (typename)(bool))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::literal_placeholder, (typename)(bool))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::attribute_placeholder, (typename))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Matchers
@@ -63,6 +77,7 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::mark_begin_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::mark_end_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::repeat_begin_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::alternate_end_matcher)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::attr_end_matcher)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::assert_bol_matcher, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::assert_eol_matcher, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::literal_matcher, (typename)(bool)(bool))
@@ -72,6 +87,8 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::logical_newline_matcher
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::mark_matcher, (typename)(bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::repeat_end_matcher, (bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::alternate_matcher, (typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::optional_matcher, (typename)(bool))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::optional_mark_matcher, (typename)(bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::simple_repeat_matcher, (typename)(bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::regex_byref_matcher, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::regex_matcher, (typename))
@@ -82,6 +99,36 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::keeper_matcher, (typena
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::lookahead_matcher, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::lookbehind_matcher, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::set_matcher, (typename)(int))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::predicate_matcher, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::action_matcher, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::attr_matcher, (typename)(typename)(bool))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::attr_begin_matcher, (typename))
+
+///////////////////////////////////////////////////////////////////////////////
+// Ops
+//
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::push)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::push_back)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::pop)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::push_front)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::pop_back)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::pop_front)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::back)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::front)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::top)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::first)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::second)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::matched)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::length)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::str)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::insert)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::op::make_pair)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::op::as, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::op::static_cast_, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::op::dynamic_cast_, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::op::const_cast_, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::op::construct, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::op::throw_, (typename))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Modifiers

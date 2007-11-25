@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -179,21 +175,24 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_OWN_BANDED
             const size_type k = (std::max) (i, j);
             const size_type l = lower_ + j - i;
-            if (k < (std::max) (size1_, size2_) &&
-                l < lower_ + 1 + upper_)
-                return data () [layout_type::element (k, (std::max) (size1_, size2_),
+            if (! (k < (std::max) (size1_, size2_) &&
+                  l < lower_ + 1 + upper_) ) {
+                bad_index ().raise ();
+                // NEVER reached
+            }
+            return data () [layout_type::element (k, (std::max) (size1_, size2_),
                                                        l, lower_ + 1 + upper_)];
 #else
             const size_type k = j;
             const size_type l = upper_ + i - j;
-            if (k < size2_ &&
-                l < lower_ + 1 + upper_)
-                return data () [layout_type::element (k, size2_,
+            if (! (k < size2_ &&
+                   l < lower_ + 1 + upper_) ) {
+                bad_index ().raise ();
+                // NEVER reached
+            }
+            return data () [layout_type::element (k, size2_,
                                                        l, lower_ + 1 + upper_)];
 #endif
-            bad_index ().raise ();
-                // arbitary return value
-            return const_cast<reference>(zero_);
         }
 
         // Element assignment

@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file null_regex_traits.hpp
-/// Contains the definition of the null_regex_traits\<\> template, which is a 
+/// Contains the definition of the null_regex_traits\<\> template, which is a
 /// stub regex traits implementation that can be used by static and dynamic
 /// regexes for searching non-character data.
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -58,7 +58,7 @@ struct null_regex_traits
     /// \return true.
     bool operator ==(null_regex_traits<char_type> const &that) const
     {
-        detail::ignore_unused(&that);
+        detail::ignore_unused(that);
         return true;
     }
 
@@ -67,7 +67,7 @@ struct null_regex_traits
     /// \return false.
     bool operator !=(null_regex_traits<char_type> const &that) const
     {
-        detail::ignore_unused(&that);
+        detail::ignore_unused(that);
         return false;
     }
 
@@ -77,8 +77,6 @@ struct null_regex_traits
     /// \return Elem(ch).
     char_type widen(char ch) const
     {
-        //BOOST_MPL_ASSERT((detail::never_true<char_type>));
-        BOOST_ASSERT(false);
         return char_type(ch);
     }
 
@@ -126,7 +124,7 @@ struct null_regex_traits
     /// \param last The top of the range, inclusive.
     /// \param ch The source character.
     /// \return first <= ch && ch <= last.
-    /// \attention Since the null_regex_traits does not do case-folding, 
+    /// \attention Since the null_regex_traits does not do case-folding,
     /// this function is equivalent to in_range().
     static bool in_range_nocase(char_type first, char_type last, char_type ch)
     {
@@ -148,7 +146,7 @@ struct null_regex_traits
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
     /// when character case is not considered then
     /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
-    /// 
+    ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
     static string_type transform_primary(FwdIter begin, FwdIter end)
@@ -164,8 +162,8 @@ struct null_regex_traits
     template<typename FwdIter>
     static string_type lookup_collatename(FwdIter begin, FwdIter end)
     {
-        detail::ignore_unused(&begin);
-        detail::ignore_unused(&end);
+        detail::ignore_unused(begin);
+        detail::ignore_unused(end);
         return string_type();
     }
 
@@ -179,9 +177,9 @@ struct null_regex_traits
     template<typename FwdIter>
     static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
-        detail::ignore_unused(&begin);
-        detail::ignore_unused(&end);
-        detail::ignore_unused(&icase);
+        detail::ignore_unused(begin);
+        detail::ignore_unused(end);
+        detail::ignore_unused(icase);
         return 0;
     }
 
@@ -193,8 +191,8 @@ struct null_regex_traits
     /// \return false
     static bool isctype(char_type ch, char_class_type mask)
     {
-        detail::ignore_unused(&ch);
-        detail::ignore_unused(&mask);
+        detail::ignore_unused(ch);
+        detail::ignore_unused(mask);
         return false;
     }
 
@@ -205,8 +203,8 @@ struct null_regex_traits
     /// \return -1
     static int value(char_type ch, int radix)
     {
-        detail::ignore_unused(&ch);
-        detail::ignore_unused(&radix);
+        detail::ignore_unused(ch);
+        detail::ignore_unused(radix);
         return -1;
     }
 

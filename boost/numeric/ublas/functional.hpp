@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -222,7 +218,7 @@ namespace boost { namespace numeric { namespace ublas {
 #if BOOST_WORKAROUND( __IBMCPP__, <=600 )
         static const bool computed ;
 #else
-      static const bool computed = true ;
+        static const bool computed = true ;
 #endif
 
         static BOOST_UBLAS_INLINE
@@ -331,35 +327,32 @@ namespace boost { namespace numeric { namespace ublas {
     // Vector functors
 
     // Unary returning scalar
-    template<class T>
+    template<class V>
     struct vector_scalar_unary_functor {
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef T value_type;
-        typedef T result_type;
+        typedef typename V::value_type value_type;
+        typedef typename V::value_type result_type;
     };
 
-    template<class T>
+    template<class V>
     struct vector_sum: 
-        public vector_scalar_unary_functor<T> {
-        typedef typename vector_scalar_unary_functor<T>::size_type size_type;
-        typedef typename vector_scalar_unary_functor<T>::difference_type difference_type;
-        typedef typename vector_scalar_unary_functor<T>::value_type value_type;
-        typedef typename vector_scalar_unary_functor<T>::result_type result_type;
+        public vector_scalar_unary_functor<V> {
+        typedef typename vector_scalar_unary_functor<V>::value_type value_type;
+        typedef typename vector_scalar_unary_functor<V>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
         result_type apply (const vector_expression<E> &e) { 
             result_type t = result_type (0);
-            size_type size (e ().size ());
-            for (size_type i = 0; i < size; ++ i)
+            typedef typename E::size_type vector_size_type;
+            vector_size_type size (e ().size ());
+            for (vector_size_type i = 0; i < size; ++ i)
                 t += e () (i);
             return t;
         }
         // Dense case
-        template<class I>
+        template<class D, class I>
         static BOOST_UBLAS_INLINE
-        result_type apply (difference_type size, I it) { 
+        result_type apply (D size, I it) { 
             result_type t = result_type (0);
             while (-- size >= 0)
                 t += *it, ++ it;
@@ -377,39 +370,36 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // Unary returning real scalar 
-    template<class T>
+    template<class V>
     struct vector_scalar_real_unary_functor {
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef T value_type;
-        typedef typename type_traits<T>::real_type real_type;
+        typedef typename V::value_type value_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         typedef real_type result_type;
     };
 
-    template<class T>
+    template<class V>
     struct vector_norm_1:
-        public vector_scalar_real_unary_functor<T> {
-        typedef typename vector_scalar_real_unary_functor<T>::size_type size_type;
-        typedef typename vector_scalar_real_unary_functor<T>::difference_type difference_type;
-        typedef typename vector_scalar_real_unary_functor<T>::value_type value_type;
-        typedef typename vector_scalar_real_unary_functor<T>::real_type real_type;
-        typedef typename vector_scalar_real_unary_functor<T>::result_type result_type;
+        public vector_scalar_real_unary_functor<V> {
+        typedef typename vector_scalar_real_unary_functor<V>::value_type value_type;
+        typedef typename vector_scalar_real_unary_functor<V>::real_type real_type;
+        typedef typename vector_scalar_real_unary_functor<V>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
         result_type apply (const vector_expression<E> &e) {
             real_type t = real_type ();
-            size_type size (e ().size ());
-            for (size_type i = 0; i < size; ++ i) {
+            typedef typename E::size_type vector_size_type;
+            vector_size_type size (e ().size ());
+            for (vector_size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::type_abs (e () (i)));
                 t += u;
             }
             return t;
         }
         // Dense case
-        template<class I>
+        template<class D, class I>
         static BOOST_UBLAS_INLINE
-        result_type apply (difference_type size, I it) {
+        result_type apply (D size, I it) {
             real_type t = real_type ();
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_1 (*it));
@@ -431,22 +421,21 @@ namespace boost { namespace numeric { namespace ublas {
             return t;
         }
     };
-    template<class T>
+    template<class V>
     struct vector_norm_2:
-        public vector_scalar_real_unary_functor<T> {
-        typedef typename vector_scalar_real_unary_functor<T>::size_type size_type;
-        typedef typename vector_scalar_real_unary_functor<T>::difference_type difference_type;
-        typedef typename vector_scalar_real_unary_functor<T>::value_type value_type;
-        typedef typename vector_scalar_real_unary_functor<T>::real_type real_type;
-        typedef typename vector_scalar_real_unary_functor<T>::result_type result_type;
+        public vector_scalar_real_unary_functor<V> {
+        typedef typename vector_scalar_real_unary_functor<V>::value_type value_type;
+        typedef typename vector_scalar_real_unary_functor<V>::real_type real_type;
+        typedef typename vector_scalar_real_unary_functor<V>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
         result_type apply (const vector_expression<E> &e) {
 #ifndef BOOST_UBLAS_SCALED_NORM
             real_type t = real_type ();
-            size_type size (e ().size ());
-            for (size_type i = 0; i < size; ++ i) {
+            typedef typename E::size_type vector_size_type;
+            vector_size_type size (e ().size ());
+            for (vector_size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_2 (e () (i)));
                 t +=  u * u;
             }
@@ -470,9 +459,9 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         // Dense case
-        template<class I>
+        template<class D, class I>
         static BOOST_UBLAS_INLINE
-        result_type apply (difference_type size, I it) {
+        result_type apply (D size, I it) {
 #ifndef BOOST_UBLAS_SCALED_NORM
             real_type t = real_type ();
             while (-- size >= 0) {
@@ -530,21 +519,20 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
     };
-    template<class T>
+    template<class V>
     struct vector_norm_inf:
-        public vector_scalar_real_unary_functor<T> {
-        typedef typename vector_scalar_real_unary_functor<T>::size_type size_type;
-        typedef typename vector_scalar_real_unary_functor<T>::difference_type difference_type;
-        typedef typename vector_scalar_real_unary_functor<T>::value_type value_type;
-        typedef typename vector_scalar_real_unary_functor<T>::real_type real_type;
-        typedef typename vector_scalar_real_unary_functor<T>::result_type result_type;
+        public vector_scalar_real_unary_functor<V> {
+        typedef typename vector_scalar_real_unary_functor<V>::value_type value_type;
+        typedef typename vector_scalar_real_unary_functor<V>::real_type real_type;
+        typedef typename vector_scalar_real_unary_functor<V>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
         result_type apply (const vector_expression<E> &e) {
             real_type t = real_type ();
-            size_type size (e ().size ());
-            for (size_type i = 0; i < size; ++ i) {
+            typedef typename E::size_type vector_size_type;
+            vector_size_type size (e ().size ());
+            for (vector_size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_inf (e () (i)));
                 if (u > t)
                     t = u;
@@ -552,9 +540,9 @@ namespace boost { namespace numeric { namespace ublas {
             return t;
         }
         // Dense case
-        template<class I>
+        template<class D, class I>
         static BOOST_UBLAS_INLINE
-        result_type apply (difference_type size, I it) {
+        result_type apply (D size, I it) {
             real_type t = real_type ();
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
@@ -580,23 +568,19 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // Unary returning index
-    template<class T>
+    template<class V>
     struct vector_scalar_index_unary_functor {
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef T value_type;
-        typedef typename type_traits<T>::real_type real_type;
-        typedef size_type result_type;
+        typedef typename V::value_type value_type;
+        typedef typename type_traits<value_type>::real_type real_type;
+        typedef typename V::size_type result_type;
     };
 
-    template<class T>
+    template<class V>
     struct vector_index_norm_inf:
-        public vector_scalar_index_unary_functor<T> {
-        typedef typename vector_scalar_index_unary_functor<T>::size_type size_type;
-        typedef typename vector_scalar_index_unary_functor<T>::difference_type difference_type;
-        typedef typename vector_scalar_index_unary_functor<T>::value_type value_type;
-        typedef typename vector_scalar_index_unary_functor<T>::real_type real_type;
-        typedef typename vector_scalar_index_unary_functor<T>::result_type result_type;
+        public vector_scalar_index_unary_functor<V> {
+        typedef typename vector_scalar_index_unary_functor<V>::value_type value_type;
+        typedef typename vector_scalar_index_unary_functor<V>::real_type real_type;
+        typedef typename vector_scalar_index_unary_functor<V>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
@@ -604,8 +588,9 @@ namespace boost { namespace numeric { namespace ublas {
             // ISSUE For CBLAS compatibility return 0 index in empty case
             result_type i_norm_inf (0);
             real_type t = real_type ();
-            size_type size (e ().size ());
-            for (size_type i = 0; i < size; ++ i) {
+            typedef typename E::size_type vector_size_type;
+            vector_size_type size (e ().size ());
+            for (vector_size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_inf (e () (i)));
                 if (u > t) {
                     i_norm_inf = i;
@@ -615,9 +600,9 @@ namespace boost { namespace numeric { namespace ublas {
             return i_norm_inf;
         }
         // Dense case
-        template<class I>
+        template<class D, class I>
         static BOOST_UBLAS_INLINE
-        result_type apply (difference_type size, I it) {
+        result_type apply (D size, I it) {
             // ISSUE For CBLAS compatibility return 0 index in empty case
             result_type i_norm_inf (0);
             real_type t = real_type ();
@@ -651,21 +636,17 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // Binary returning scalar
-    template<class T1, class T2, class TR>
+    template<class V1, class V2, class TV>
     struct vector_scalar_binary_functor {
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef TR value_type;
-        typedef TR result_type;
+        typedef TV value_type;
+        typedef TV result_type;
     };
 
-    template<class T1, class T2, class TR>
+    template<class V1, class V2, class TV>
     struct vector_inner_prod:
-        public vector_scalar_binary_functor<T1, T2, TR> {
-        typedef typename vector_scalar_binary_functor<T1, T2, TR>::size_type size_type ;
-        typedef typename vector_scalar_binary_functor<T1, T2, TR>::difference_type difference_type;
-        typedef typename vector_scalar_binary_functor<T1, T2, TR>::value_type value_type;
-        typedef typename vector_scalar_binary_functor<T1, T2, TR>::result_type result_type;
+        public vector_scalar_binary_functor<V1, V2, TV> {
+        typedef typename vector_scalar_binary_functor<V1, V2, TV>::value_type value_type;
+        typedef typename vector_scalar_binary_functor<V1, V2, TV>::result_type result_type;
 
         template<class C1, class C2>
         static BOOST_UBLAS_INLINE
@@ -673,23 +654,24 @@ namespace boost { namespace numeric { namespace ublas {
                            const vector_container<C2> &c2) {
 #ifdef BOOST_UBLAS_USE_SIMD
             using namespace raw;
-            size_type size (BOOST_UBLAS_SAME (c1 ().size (), c2 ().size ()));
-            const T1 *data1 = data_const (c1 ());
-            const T2 *data2 = data_const (c2 ());
-            size_type s1 = stride (c1 ());
-            size_type s2 = stride (c2 ());
+            typedef typename C1::size_type vector_size_type;
+            vector_size_type size (BOOST_UBLAS_SAME (c1 ().size (), c2 ().size ()));
+            const typename V1::value_type *data1 = data_const (c1 ());
+            const typename V1::value_type *data2 = data_const (c2 ());
+            vector_size_type s1 = stride (c1 ());
+            vector_size_type s2 = stride (c2 ());
             result_type t = result_type (0);
             if (s1 == 1 && s2 == 1) {
-                for (size_type i = 0; i < size; ++ i)
+                for (vector_size_type i = 0; i < size; ++ i)
                     t += data1 [i] * data2 [i];
             } else if (s2 == 1) {
-                for (size_type i = 0, i1 = 0; i < size; ++ i, i1 += s1)
+                for (vector_size_type i = 0, i1 = 0; i < size; ++ i, i1 += s1)
                     t += data1 [i1] * data2 [i];
             } else if (s1 == 1) {
-                for (size_type i = 0, i2 = 0; i < size; ++ i, i2 += s2)
+                for (vector_size_type i = 0, i2 = 0; i < size; ++ i, i2 += s2)
                     t += data1 [i] * data2 [i2];
             } else {
-                for (size_type i = 0, i1 = 0, i2 = 0; i < size; ++ i, i1 += s1, i2 += s2)
+                for (vector_size_type i = 0, i1 = 0, i2 = 0; i < size; ++ i, i1 += s1, i2 += s2)
                     t += data1 [i1] * data2 [i2];
             }
             return t;
@@ -703,21 +685,22 @@ namespace boost { namespace numeric { namespace ublas {
         static BOOST_UBLAS_INLINE
         result_type apply (const vector_expression<E1> &e1,
                            const vector_expression<E2> &e2) {
-            size_type size (BOOST_UBLAS_SAME (e1 ().size (), e2 ().size ()));
+            typedef typename E1::size_type vector_size_type;
+            vector_size_type size (BOOST_UBLAS_SAME (e1 ().size (), e2 ().size ()));
             result_type t = result_type (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
-            for (size_type i = 0; i < size; ++ i)
+            for (vector_size_type i = 0; i < size; ++ i)
                 t += e1 () (i) * e2 () (i);
 #else
-            size_type i (0);
+            vector_size_type i (0);
             DD (size, 4, r, (t += e1 () (i) * e2 () (i), ++ i));
 #endif
             return t;
         }
         // Dense case
-        template<class I1, class I2>
+        template<class D, class I1, class I2>
         static BOOST_UBLAS_INLINE
-        result_type apply (difference_type size, I1 it1, I2 it2) {
+        result_type apply (D size, I1 it1, I2 it2) {
             result_type t = result_type (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
@@ -732,13 +715,14 @@ namespace boost { namespace numeric { namespace ublas {
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) {
             result_type t = result_type (0);
-            difference_type it1_size (it1_end - it1);
-            difference_type it2_size (it2_end - it2);
-            difference_type diff (0);
+            typedef typename I1::difference_type vector_difference_type;
+            vector_difference_type it1_size (it1_end - it1);
+            vector_difference_type it2_size (it2_end - it2);
+            vector_difference_type diff (0);
             if (it1_size > 0 && it2_size > 0)
                 diff = it2.index () - it1.index ();
             if (diff != 0) {
-                difference_type size = (std::min) (diff, it1_size);
+                vector_difference_type size = (std::min) (diff, it1_size);
                 if (size > 0) {
                     it1 += size;
                     it1_size -= size;
@@ -751,7 +735,7 @@ namespace boost { namespace numeric { namespace ublas {
                     diff += size;
                 }
             }
-            difference_type size ((std::min) (it1_size, it2_size));
+            vector_difference_type size ((std::min) (it1_size, it2_size));
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
             return t;
@@ -762,27 +746,18 @@ namespace boost { namespace numeric { namespace ublas {
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, sparse_bidirectional_iterator_tag) {
             result_type t = result_type (0);
             if (it1 != it1_end && it2 != it2_end) {
-                size_type it1_index = it1.index (), it2_index = it2.index ();
                 while (true) {
-                    difference_type compare = it1_index - it2_index;
-                    if (compare == 0) {
+                    if (it1.index () == it2.index ()) {
                         t += *it1 * *it2, ++ it1, ++ it2;
-                        if (it1 != it1_end && it2 != it2_end) {
-                            it1_index = it1.index ();
-                            it2_index = it2.index ();
-                        } else
+                        if (it1 == it1_end || it2 == it2_end)
                             break;
-                    } else if (compare < 0) {
-                        increment (it1, it1_end, - compare);
-                        if (it1 != it1_end)
-                            it1_index = it1.index ();
-                        else
+                    } else if (it1.index () < it2.index ()) {
+                        increment (it1, it1_end, it2.index () - it1.index ());
+                        if (it1 == it1_end)
                             break;
-                    } else if (compare > 0) {
-                        increment (it2, it2_end, compare);
-                        if (it2 != it2_end)
-                            it2_index = it2.index ();
-                        else
+                    } else if (it1.index () > it2.index ()) {
+                        increment (it2, it2_end, it1.index () - it2.index ());
+                        if (it2 == it2_end)
                             break;
                     }
                 }
@@ -794,21 +769,21 @@ namespace boost { namespace numeric { namespace ublas {
     // Matrix functors
 
     // Binary returning vector
-    template<class T1, class T2, class TR>
+    template<class M1, class M2, class TV>
     struct matrix_vector_binary_functor {
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef TR value_type;
-        typedef TR result_type;
+        typedef typename M1::size_type size_type;
+        typedef typename M1::difference_type difference_type;
+        typedef TV value_type;
+        typedef TV result_type;
     };
 
-    template<class T1, class T2, class TR>
+    template<class M1, class M2, class TV>
     struct matrix_vector_prod1:
-        public matrix_vector_binary_functor<T1, T2, TR> {
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::size_type size_type;
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::difference_type difference_type;
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::value_type value_type;
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::result_type result_type;
+        public matrix_vector_binary_functor<M1, M2, TV> {
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::size_type size_type;
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::difference_type difference_type;
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::value_type value_type;
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::result_type result_type;
 
         template<class C1, class C2>
         static BOOST_UBLAS_INLINE
@@ -818,8 +793,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_SIMD
             using namespace raw;
             size_type size = BOOST_UBLAS_SAME (c1 ().size2 (), c2 ().size ());
-            const T1 *data1 = data_const (c1 ()) + i * stride1 (c1 ());
-            const T2 *data2 = data_const (c2 ());
+            const typename M1::value_type *data1 = data_const (c1 ()) + i * stride1 (c1 ());
+            const typename M2::value_type *data2 = data_const (c2 ());
             size_type s1 = stride2 (c1 ());
             size_type s2 = stride (c2 ());
             result_type t = result_type (0);
@@ -846,7 +821,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E1, class E2>
         static BOOST_UBLAS_INLINE
         result_type apply (const matrix_expression<E1> &e1,
-                                 const vector_expression<E2> &e2,
+                           const vector_expression<E2> &e2,
                            size_type i) {
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
             result_type t = result_type (0);
@@ -905,7 +880,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
-                                 sparse_bidirectional_iterator_tag, sparse_bidirectional_iterator_tag) {
+                           sparse_bidirectional_iterator_tag, sparse_bidirectional_iterator_tag) {
             result_type t = result_type (0);
             if (it1 != it1_end && it2 != it2_end) {
                 size_type it1_index = it1.index2 (), it2_index = it2.index ();
@@ -939,7 +914,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &/* it2_end */,
-                                 sparse_bidirectional_iterator_tag, packed_random_access_iterator_tag) {
+                           sparse_bidirectional_iterator_tag, packed_random_access_iterator_tag) {
             result_type t = result_type (0);
             while (it1 != it1_end) {
                 t += *it1 * it2 () (it1.index2 ());
@@ -951,7 +926,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &/* it1_end */, I2 it2, const I2 &it2_end,
-                                 packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) {
+                           packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) {
             result_type t = result_type (0);
             while (it2 != it2_end) {
                 t += it1 () (it1.index1 (), it2.index ()) * *it2;
@@ -963,20 +938,20 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
-                                 sparse_bidirectional_iterator_tag) {
+                           sparse_bidirectional_iterator_tag) {
             typedef typename I1::iterator_category iterator1_category;
             typedef typename I2::iterator_category iterator2_category;
             return apply (it1, it1_end, it2, it2_end, iterator1_category (), iterator2_category ());
         }
     };
 
-    template<class T1, class T2, class TR>
+    template<class M1, class M2, class TV>
     struct matrix_vector_prod2:
-        public matrix_vector_binary_functor<T1, T2, TR> {
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::size_type size_type;
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::difference_type difference_type;
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::value_type value_type;
-        typedef typename matrix_vector_binary_functor<T1, T2, TR>::result_type result_type;
+        public matrix_vector_binary_functor<M1, M2, TV> {
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::size_type size_type;
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::difference_type difference_type;
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::value_type value_type;
+        typedef typename matrix_vector_binary_functor<M1, M2, TV>::result_type result_type;
 
         template<class C1, class C2>
         static BOOST_UBLAS_INLINE
@@ -986,8 +961,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_SIMD
             using namespace raw;
             size_type size = BOOST_UBLAS_SAME (c1 ().size (), c2 ().size1 ());
-            const T1 *data1 = data_const (c1 ());
-            const T2 *data2 = data_const (c2 ()) + i * stride2 (c2 ());
+            const typename M1::value_type *data1 = data_const (c1 ());
+            const typename M2::value_type *data2 = data_const (c2 ()) + i * stride2 (c2 ());
             size_type s1 = stride (c1 ());
             size_type s2 = stride1 (c2 ());
             result_type t = result_type (0);
@@ -1014,7 +989,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E1, class E2>
         static BOOST_UBLAS_INLINE
         result_type apply (const vector_expression<E1> &e1,
-                                 const matrix_expression<E2> &e2,
+                           const matrix_expression<E2> &e2,
                            size_type i) {
             size_type size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
             result_type t = result_type (0);
@@ -1073,7 +1048,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
-                                 sparse_bidirectional_iterator_tag, sparse_bidirectional_iterator_tag) {
+                           sparse_bidirectional_iterator_tag, sparse_bidirectional_iterator_tag) {
             result_type t = result_type (0);
             if (it1 != it1_end && it2 != it2_end) {
                 size_type it1_index = it1.index (), it2_index = it2.index1 ();
@@ -1107,7 +1082,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &/* it1_end */, I2 it2, const I2 &it2_end,
-                                 packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) {
+                           packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) {
             result_type t = result_type (0);
             while (it2 != it2_end) {
                 t += it1 () (it2.index1 ()) * *it2;
@@ -1119,7 +1094,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &/* it2_end */,
-                                 sparse_bidirectional_iterator_tag, packed_random_access_iterator_tag) {
+                           sparse_bidirectional_iterator_tag, packed_random_access_iterator_tag) {
             result_type t = result_type (0);
             while (it1 != it1_end) {
                 t += *it1 * it2 () (it1.index (), it2.index2 ());
@@ -1131,7 +1106,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         static BOOST_UBLAS_INLINE
         result_type apply (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
-                                 sparse_bidirectional_iterator_tag) {
+                           sparse_bidirectional_iterator_tag) {
             typedef typename I1::iterator_category iterator1_category;
             typedef typename I2::iterator_category iterator2_category;
             return apply (it1, it1_end, it2, it2_end, iterator1_category (), iterator2_category ());
@@ -1139,21 +1114,21 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // Binary returning matrix
-    template<class T1, class T2, class TR>
+    template<class M1, class M2, class TV>
     struct matrix_matrix_binary_functor {
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef TR value_type;
-        typedef TR result_type;
+        typedef typename M1::size_type size_type;
+        typedef typename M1::difference_type difference_type;
+        typedef TV value_type;
+        typedef TV result_type;
     };
 
-    template<class T1, class T2, class TR>
+    template<class M1, class M2, class TV>
     struct matrix_matrix_prod:
-        public matrix_matrix_binary_functor<T1, T2, TR> {
-        typedef typename matrix_matrix_binary_functor<T1, T2, TR>::size_type size_type;
-        typedef typename matrix_matrix_binary_functor<T1, T2, TR>::difference_type difference_type;
-        typedef typename matrix_matrix_binary_functor<T1, T2, TR>::value_type value_type;
-        typedef typename matrix_matrix_binary_functor<T1, T2, TR>::result_type result_type;
+        public matrix_matrix_binary_functor<M1, M2, TV> {
+        typedef typename matrix_matrix_binary_functor<M1, M2, TV>::size_type size_type;
+        typedef typename matrix_matrix_binary_functor<M1, M2, TV>::difference_type difference_type;
+        typedef typename matrix_matrix_binary_functor<M1, M2, TV>::value_type value_type;
+        typedef typename matrix_matrix_binary_functor<M1, M2, TV>::result_type result_type;
 
         template<class C1, class C2>
         static BOOST_UBLAS_INLINE
@@ -1163,8 +1138,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_SIMD
             using namespace raw;
             size_type size = BOOST_UBLAS_SAME (c1 ().size2 (), c2 ().sizc1 ());
-            const T1 *data1 = data_const (c1 ()) + i * stride1 (c1 ());
-            const T2 *data2 = data_const (c2 ()) + j * stride2 (c2 ());
+            const typename M1::value_type *data1 = data_const (c1 ()) + i * stride1 (c1 ());
+            const typename M2::value_type *data2 = data_const (c2 ()) + j * stride2 (c2 ());
             size_type s1 = stride2 (c1 ());
             size_type s2 = stride1 (c2 ());
             result_type t = result_type (0);
@@ -1191,7 +1166,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E1, class E2>
         static BOOST_UBLAS_INLINE
         result_type apply (const matrix_expression<E1> &e1,
-                                 const matrix_expression<E2> &e2,
+                           const matrix_expression<E2> &e2,
                            size_type i, size_type j) {
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
             result_type t = result_type (0);
@@ -1254,7 +1229,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (it1 != it1_end && it2 != it2_end) {
                 size_type it1_index = it1.index2 (), it2_index = it2.index1 ();
                 while (true) {
-                    difference_type compare = it1_index - it2_index;
+                    difference_type compare = difference_type (it1_index - it2_index);
                     if (compare == 0) {
                         t += *it1 * *it2, ++ it1, ++ it2;
                         if (it1 != it1_end && it2 != it2_end) {
@@ -1282,33 +1257,30 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // Unary returning scalar norm
-    template<class T>
+    template<class M>
     struct matrix_scalar_real_unary_functor {
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
-        typedef T value_type;
-        typedef typename type_traits<T>::real_type real_type;
+        typedef typename M::value_type value_type;
+        typedef typename type_traits<value_type>::real_type real_type;
         typedef real_type result_type;
     };
 
-    template<class T>
+    template<class M>
     struct matrix_norm_1:
-        public matrix_scalar_real_unary_functor<T> {
-        typedef typename matrix_scalar_real_unary_functor<T>::size_type size_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::difference_type difference_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::value_type value_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::real_type real_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::result_type result_type;
+        public matrix_scalar_real_unary_functor<M> {
+        typedef typename matrix_scalar_real_unary_functor<M>::value_type value_type;
+        typedef typename matrix_scalar_real_unary_functor<M>::real_type real_type;
+        typedef typename matrix_scalar_real_unary_functor<M>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
         result_type apply (const matrix_expression<E> &e) {
             real_type t = real_type ();
-            size_type size2 (e ().size2 ());
-            for (size_type j = 0; j < size2; ++ j) {
+            typedef typename E::size_type matrix_size_type;
+            matrix_size_type size2 (e ().size2 ());
+            for (matrix_size_type j = 0; j < size2; ++ j) {
                 real_type u = real_type ();
-                size_type size1 (e ().size1 ());
-                for (size_type i = 0; i < size1; ++ i) {
+                matrix_size_type size1 (e ().size1 ());
+                for (matrix_size_type i = 0; i < size1; ++ i) {
                     real_type v (type_traits<value_type>::norm_1 (e () (i, j)));
                     u += v;
                 }
@@ -1318,23 +1290,23 @@ namespace boost { namespace numeric { namespace ublas {
             return t; 
         }
     };
-    template<class T>
+
+    template<class M>
     struct matrix_norm_frobenius:
-        public matrix_scalar_real_unary_functor<T> {
-        typedef typename matrix_scalar_real_unary_functor<T>::size_type size_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::difference_type difference_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::value_type value_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::real_type real_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::result_type result_type;
+        public matrix_scalar_real_unary_functor<M> {
+        typedef typename matrix_scalar_real_unary_functor<M>::value_type value_type;
+        typedef typename matrix_scalar_real_unary_functor<M>::real_type real_type;
+        typedef typename matrix_scalar_real_unary_functor<M>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
         result_type apply (const matrix_expression<E> &e) { 
             real_type t = real_type ();
-            size_type size1 (e ().size1 ());
-            for (size_type i = 0; i < size1; ++ i) {
-                size_type size2 (e ().size2 ());
-                for (size_type j = 0; j < size2; ++ j) {
+            typedef typename E::size_type matrix_size_type;
+            matrix_size_type size1 (e ().size1 ());
+            for (matrix_size_type i = 0; i < size1; ++ i) {
+                matrix_size_type size2 (e ().size2 ());
+                for (matrix_size_type j = 0; j < size2; ++ j) {
                     real_type u (type_traits<value_type>::norm_2 (e () (i, j)));
                     t +=  u * u;
                 }
@@ -1342,24 +1314,24 @@ namespace boost { namespace numeric { namespace ublas {
             return type_traits<real_type>::type_sqrt (t); 
         }
     };
-    template<class T>
+
+    template<class M>
     struct matrix_norm_inf: 
-        public matrix_scalar_real_unary_functor<T> {
-        typedef typename matrix_scalar_real_unary_functor<T>::size_type size_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::difference_type difference_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::value_type value_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::real_type real_type;
-        typedef typename matrix_scalar_real_unary_functor<T>::result_type result_type;
+        public matrix_scalar_real_unary_functor<M> {
+        typedef typename matrix_scalar_real_unary_functor<M>::value_type value_type;
+        typedef typename matrix_scalar_real_unary_functor<M>::real_type real_type;
+        typedef typename matrix_scalar_real_unary_functor<M>::result_type result_type;
 
         template<class E>
         static BOOST_UBLAS_INLINE
         result_type apply (const matrix_expression<E> &e) {
             real_type t = real_type ();
-            size_type size1 (e ().size1 ());
-            for (size_type i = 0; i < size1; ++ i) {
+            typedef typename E::size_type matrix_size_type;
+            matrix_size_type size1 (e ().size1 ());
+            for (matrix_size_type i = 0; i < size1; ++ i) {
                 real_type u = real_type ();
-                size_type size2 (e ().size2 ());
-                for (size_type j = 0; j < size2; ++ j) {
+                matrix_size_type size2 (e ().size2 ());
+                for (matrix_size_type j = 0; j < size2; ++ j) {
                     real_type v (type_traits<value_type>::norm_inf (e () (i, j)));
                     u += v;
                 }
@@ -1370,8 +1342,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-    // This functor computes the address translation
-    // matrix [i] [j] -> storage [i * size2 + j]
+    // This functor defines storage layout and it's properties
+    // matrix (i,j) -> storage [i * size_i + j]
     template <class Z, class D>
     struct basic_row_major {
         typedef Z size_type;
@@ -1380,90 +1352,133 @@ namespace boost { namespace numeric { namespace ublas {
 
         static
         BOOST_UBLAS_INLINE
-        size_type storage_size (size_type size1, size_type size2) {
+        size_type storage_size (size_type size_i, size_type size_j) {
             // Guard against size_type overflow
-            BOOST_UBLAS_CHECK (size2 == 0 || size1 <= (std::numeric_limits<size_type>::max) () / size2, bad_size ());
-            return size1 * size2;
+            BOOST_UBLAS_CHECK (size_j == 0 || size_i <= (std::numeric_limits<size_type>::max) () / size_j, bad_size ());
+            return size_i * size_j;
         }
 
-        // Indexing
+        // Indexing conversion to storage element
         static
         BOOST_UBLAS_INLINE
-        size_type element (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
-            detail::ignore_unused_variable_warning(size1);
+        size_type element (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i < size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_j, bad_index ());
+            detail::ignore_unused_variable_warning(size_i);
             // Guard against size_type overflow
-            BOOST_UBLAS_CHECK (i <= ((std::numeric_limits<size_type>::max) () - j) / size2, bad_index ());
-            return i * size2 + j;
+            BOOST_UBLAS_CHECK (i <= ((std::numeric_limits<size_type>::max) () - j) / size_j, bad_index ());
+            return i * size_j + j;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type address (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i <= size1, bad_index ());
-            BOOST_UBLAS_CHECK (j <= size2, bad_index ());
-            // Guard against size_type overflow - address may be size2 past end of storage
-            BOOST_UBLAS_CHECK (size2 == 0 || i <= ((std::numeric_limits<size_type>::max) () - j) / size2, bad_index ());
-            detail::ignore_unused_variable_warning(size1);
-            return i * size2 + j;
+        size_type address (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i <= size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j <= size_j, bad_index ());
+            // Guard against size_type overflow - address may be size_j past end of storage
+            BOOST_UBLAS_CHECK (size_j == 0 || i <= ((std::numeric_limits<size_type>::max) () - j) / size_j, bad_index ());
+            detail::ignore_unused_variable_warning(size_i);
+            return i * size_j + j;
+        }
+
+        // Storage element to index conversion
+        static
+        BOOST_UBLAS_INLINE
+        difference_type distance_i (difference_type k, size_type /* size_i */, size_type size_j) {
+            return size_j != 0 ? k / size_j : 0;
         }
         static
         BOOST_UBLAS_INLINE
-        difference_type distance1 (difference_type k, size_type /* size1 */, size_type size2) {
-            return size2 != 0 ? k / size2 : 0;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        difference_type distance2 (difference_type k, size_type /* size1 */, size_type /* size2 */) {
+        difference_type distance_j (difference_type k, size_type /* size_i */, size_type /* size_j */) {
             return k;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type index1 (difference_type k, size_type /* size1 */, size_type size2) {
-            return size2 != 0 ? k / size2 : 0;
+        size_type index_i (difference_type k, size_type /* size_i */, size_type size_j) {
+            return size_j != 0 ? k / size_j : 0;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type index2 (difference_type k, size_type /* size1 */, size_type size2) {
-            return size2 != 0 ? k % size2 : 0;
+        size_type index_j (difference_type k, size_type /* size_i */, size_type size_j) {
+            return size_j != 0 ? k % size_j : 0;
         }
         static
         BOOST_UBLAS_INLINE
-        bool fast1 () {
+        bool fast_i () {
             return false;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type one1 (size_type /* size1 */, size_type size2) {
-            return size2;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        bool fast2 () {
+        bool fast_j () {
             return true;
         }
+
+        // Iterating storage elements
+        template<class I>
         static
         BOOST_UBLAS_INLINE
-        size_type one2 (size_type /* size1 */, size_type /* size2 */) {
-            return 1;
+        void increment_i (I &it, size_type /* size_i */, size_type size_j) {
+            it += size_j;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void increment_i (I &it, difference_type n, size_type /* size_i */, size_type size_j) {
+            it += n * size_j;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_i (I &it, size_type /* size_i */, size_type size_j) {
+            it -= size_j;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_i (I &it, difference_type n, size_type /* size_i */, size_type size_j) {
+            it -= n * size_j;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void increment_j (I &it, size_type /* size_i */, size_type /* size_j */) {
+            ++ it;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void increment_j (I &it, difference_type n, size_type /* size_i */, size_type /* size_j */) {
+            it += n;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_j (I &it, size_type /* size_i */, size_type /* size_j */) {
+            -- it;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_j (I &it, difference_type n, size_type /* size_i */, size_type /* size_j */) {
+            it -= n;
         }
 
+        // Triangular access
         static
         BOOST_UBLAS_INLINE
-        size_type triangular_size (size_type size1, size_type size2) {
-            size_type size = (std::max) (size1, size2);
+        size_type triangular_size (size_type size_i, size_type size_j) {
+            size_type size = (std::max) (size_i, size_j);
             // Guard against size_type overflow - simplified
             BOOST_UBLAS_CHECK (size == 0 || size / 2 < (std::numeric_limits<size_type>::max) () / size /* +1/2 */, bad_size ());
             return ((size + 1) * size) / 2;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type lower_element (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
+        size_type lower_element (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i < size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_j, bad_index ());
             BOOST_UBLAS_CHECK (i >= j, bad_index ());
-            detail::ignore_unused_variable_warning(size1);
-            detail::ignore_unused_variable_warning(size2);
+            detail::ignore_unused_variable_warning(size_i);
+            detail::ignore_unused_variable_warning(size_j);
             // FIXME size_type overflow
             // sigma_i (i + 1) = (i + 1) * i / 2
             // i = 0 1 2 3, sigma = 0 1 3 6
@@ -1471,94 +1486,41 @@ namespace boost { namespace numeric { namespace ublas {
         }
         static
         BOOST_UBLAS_INLINE
-        size_type upper_element (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
+        size_type upper_element (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i < size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_j, bad_index ());
             BOOST_UBLAS_CHECK (i <= j, bad_index ());
             // FIXME size_type overflow
             // sigma_i (size - i) = size * i - i * (i - 1) / 2
             // i = 0 1 2 3, sigma = 0 4 7 9
-            return (i * (2 * (std::max) (size1, size2) - i + 1)) / 2 + j - i;
+            return (i * (2 * (std::max) (size_i, size_j) - i + 1)) / 2 + j - i;
         }
 
+        // Major and minor indices
         static
         BOOST_UBLAS_INLINE
-        size_type element1 (size_type i, size_type size1, size_type /* j */, size_type /* size2 */) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            detail::ignore_unused_variable_warning(size1);
-            return i;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type element2 (size_type /* i */, size_type /* size1 */, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
-            detail::ignore_unused_variable_warning(size2);
-            return j;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type address1 (size_type i, size_type size1, size_type /* j */, size_type /* size2 */) {
-            BOOST_UBLAS_CHECK (i <= size1, bad_index ());
-            detail::ignore_unused_variable_warning(size1);
-            return i;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type address2 (size_type /* i */, size_type /* size1 */, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (j <= size2, bad_index ());
-            detail::ignore_unused_variable_warning(size2);
-            return j;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type index1 (size_type index1, size_type /* index2 */) {
+        size_type index_M (size_type index1, size_type /* index2 */) {
             return index1;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type index2 (size_type /* index1 */, size_type index2) {
+        size_type index_m (size_type /* index1 */, size_type index2) {
             return index2;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type size1 (size_type size1, size_type /* size2 */) {
-            return size1;
+        size_type size_M (size_type size_i, size_type /* size_j */) {
+            return size_i;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type size2 (size_type /* size1 */, size_type size2) {
-            return size2;
-        }
-
-        // Iterating
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void increment1 (I &it, size_type /* size1 */, size_type size2) {
-            it += size2;
-        }
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void decrement1 (I &it, size_type /* size1 */, size_type size2) {
-            it -= size2;
-        }
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void increment2 (I &it, size_type /* size1 */, size_type /* size2 */) {
-            ++ it;
-        }
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void decrement2 (I &it, size_type /* size1 */, size_type /* size2 */) {
-            -- it;
+        size_type size_m (size_type /* size_i */, size_type size_j) {
+            return size_j;
         }
     };
 
-    // This functor computes the address translation
-    // matrix [i] [j] -> storage [i + j * size1]
+    // This functor defines storage layout and it's properties
+    // matrix (i,j) -> storage [i + j * size_i]
     template <class Z, class D>
     struct basic_column_major {
         typedef Z size_type;
@@ -1567,98 +1529,141 @@ namespace boost { namespace numeric { namespace ublas {
 
         static
         BOOST_UBLAS_INLINE
-        size_type storage_size (size_type size1, size_type size2) {
+        size_type storage_size (size_type size_i, size_type size_j) {
             // Guard against size_type overflow
-            BOOST_UBLAS_CHECK (size1 == 0 || size2 <= (std::numeric_limits<size_type>::max) () / size1, bad_size ());
-            return size1 * size2;
+            BOOST_UBLAS_CHECK (size_i == 0 || size_j <= (std::numeric_limits<size_type>::max) () / size_i, bad_size ());
+            return size_i * size_j;
         }
 
-        // Indexing
+        // Indexing conversion to storage element
         static
         BOOST_UBLAS_INLINE
-        size_type element (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
-            detail::ignore_unused_variable_warning(size2);
+        size_type element (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i < size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_j, bad_index ());
+            detail::ignore_unused_variable_warning(size_j);
             // Guard against size_type overflow
-            BOOST_UBLAS_CHECK (j <= ((std::numeric_limits<size_type>::max) () - i) / size1, bad_index ());
-            return i + j * size1;
+            BOOST_UBLAS_CHECK (j <= ((std::numeric_limits<size_type>::max) () - i) / size_i, bad_index ());
+            return i + j * size_i;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type address (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i <= size1, bad_index ());
-            BOOST_UBLAS_CHECK (j <= size2, bad_index ());
-            detail::ignore_unused_variable_warning(size2);
-            // Guard against size_type overflow - address may be size1 past end of storage
-            BOOST_UBLAS_CHECK (size1 == 0 || j <= ((std::numeric_limits<size_type>::max) () - i) / size1, bad_index ());
-            return i + j * size1;
+        size_type address (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i <= size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j <= size_j, bad_index ());
+            detail::ignore_unused_variable_warning(size_j);
+            // Guard against size_type overflow - address may be size_i past end of storage
+            BOOST_UBLAS_CHECK (size_i == 0 || j <= ((std::numeric_limits<size_type>::max) () - i) / size_i, bad_index ());
+            return i + j * size_i;
         }
+
+        // Storage element to index conversion
         static
         BOOST_UBLAS_INLINE
-        difference_type distance1 (difference_type k, size_type /* size1 */, size_type /* size2 */) {
+        difference_type distance_i (difference_type k, size_type /* size_i */, size_type /* size_j */) {
             return k;
         }
         static
         BOOST_UBLAS_INLINE
-        difference_type distance2 (difference_type k, size_type size1, size_type /* size2 */) {
-            return size1 != 0 ? k / size1 : 0;
+        difference_type distance_j (difference_type k, size_type size_i, size_type /* size_j */) {
+            return size_i != 0 ? k / size_i : 0;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type index1 (difference_type k, size_type size1, size_type /* size2 */) {
-            return size1 != 0 ? k % size1 : 0;
+        size_type index_i (difference_type k, size_type size_i, size_type /* size_j */) {
+            return size_i != 0 ? k % size_i : 0;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type index2 (difference_type k, size_type size1, size_type /* size2 */) {
-            return size1 != 0 ? k / size1 : 0;
+        size_type index_j (difference_type k, size_type size_i, size_type /* size_j */) {
+            return size_i != 0 ? k / size_i : 0;
         }
         static
         BOOST_UBLAS_INLINE
-        bool fast1 () {
+        bool fast_i () {
             return true;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type one1 (size_type /* size1 */, size_type /* size2 */) {
-            return 1;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        bool fast2 () {
+        bool fast_j () {
             return false;
         }
+
+        // Iterating
+        template<class I>
         static
         BOOST_UBLAS_INLINE
-        size_type one2 (size_type size1, size_type /* size2 */) {
-            return size1;
+        void increment_i (I &it, size_type /* size_i */, size_type /* size_j */) {
+            ++ it;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void increment_i (I &it, difference_type n, size_type /* size_i */, size_type /* size_j */) {
+            it += n;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_i (I &it, size_type /* size_i */, size_type /* size_j */) {
+            -- it;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_i (I &it, difference_type n, size_type /* size_i */, size_type /* size_j */) {
+            it -= n;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void increment_j (I &it, size_type size_i, size_type /* size_j */) {
+            it += size_i;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void increment_j (I &it, difference_type n, size_type size_i, size_type /* size_j */) {
+            it += n * size_i;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_j (I &it, size_type size_i, size_type /* size_j */) {
+            it -= size_i;
+        }
+        template<class I>
+        static
+        BOOST_UBLAS_INLINE
+        void decrement_j (I &it, difference_type n, size_type size_i, size_type /* size_j */) {
+            it -= n* size_i;
         }
 
+        // Triangular access
         static
         BOOST_UBLAS_INLINE
-        size_type triangular_size (size_type size1, size_type size2) {
-            size_type size = (std::max) (size1, size2);
+        size_type triangular_size (size_type size_i, size_type size_j) {
+            size_type size = (std::max) (size_i, size_j);
             // Guard against size_type overflow - simplified
             BOOST_UBLAS_CHECK (size == 0 || size / 2 < (std::numeric_limits<size_type>::max) () / size /* +1/2 */, bad_size ());
             return ((size + 1) * size) / 2;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type lower_element (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
+        size_type lower_element (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i < size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_j, bad_index ());
             BOOST_UBLAS_CHECK (i >= j, bad_index ());
             // FIXME size_type overflow
             // sigma_j (size - j) = size * j - j * (j - 1) / 2
             // j = 0 1 2 3, sigma = 0 4 7 9
-            return i - j + (j * (2 * (std::max) (size1, size2) - j + 1)) / 2;
+            return i - j + (j * (2 * (std::max) (size_i, size_j) - j + 1)) / 2;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type upper_element (size_type i, size_type size1, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
+        size_type upper_element (size_type i, size_type size_i, size_type j, size_type size_j) {
+            BOOST_UBLAS_CHECK (i < size_i, bad_index ());
+            BOOST_UBLAS_CHECK (j < size_j, bad_index ());
             BOOST_UBLAS_CHECK (i <= j, bad_index ());
             // FIXME size_type overflow
             // sigma_j (j + 1) = (j + 1) * j / 2
@@ -1666,79 +1671,26 @@ namespace boost { namespace numeric { namespace ublas {
             return i + ((j + 1) * j) / 2;
         }
 
+        // Major and minor indices
         static
         BOOST_UBLAS_INLINE
-        size_type element1 (size_type /* i */, size_type /* size1 */, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (j < size2, bad_index ());
-            detail::ignore_unused_variable_warning(size2);
-            return j;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type element2 (size_type i, size_type size1, size_type /* j */, size_type /* size2 */) {
-            BOOST_UBLAS_CHECK (i < size1, bad_index ());
-            detail::ignore_unused_variable_warning(size1);
-            return i;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type address1 (size_type /* i */, size_type /* size1 */, size_type j, size_type size2) {
-            BOOST_UBLAS_CHECK (j <= size2, bad_index ());
-            detail::ignore_unused_variable_warning(size2);
-            return j;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type address2 (size_type i, size_type size1, size_type /* j */, size_type /* size2 */) {
-            BOOST_UBLAS_CHECK (i <= size1, bad_index ());
-            detail::ignore_unused_variable_warning(size1);
-            return i;
-        }
-        static
-        BOOST_UBLAS_INLINE
-        size_type index1 (size_type /* index1 */, size_type index2) {
+        size_type index_M (size_type /* index1 */, size_type index2) {
             return index2;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type index2 (size_type index1, size_type /* index2 */) {
+        size_type index_m (size_type index1, size_type /* index2 */) {
             return index1;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type size1 (size_type /* size1 */, size_type size2) {
-            return size2;
+        size_type size_M (size_type /* size_i */, size_type size_j) {
+            return size_j;
         }
         static
         BOOST_UBLAS_INLINE
-        size_type size2 (size_type size1, size_type /* size2 */) {
-            return size1;
-        }
-
-        // Iterating
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void increment1 (I &it, size_type /* size1 */, size_type /* size2 */) {
-            ++ it;
-        }
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void decrement1 (I &it, size_type /* size1 */, size_type /* size2 */) {
-            -- it;
-        }
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void increment2 (I &it, size_type size1, size_type /* size2 */) {
-            it += size1;
-        }
-        template<class I>
-        static
-        BOOST_UBLAS_INLINE
-        void decrement2 (I &it, size_type size1, size_type /* size2 */) {
-            it -= size1;
+        size_type size_m (size_type size_i, size_type /* size_j */) {
+            return size_i;
         }
     };
 
@@ -1750,8 +1702,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (size_type size1, size_type size2) {
-            return L::storage_size (size1, size2);
+        size_type packed_size (L, size_type size_i, size_type size_j) {
+            return L::storage_size (size_i, size_j);
         }
 
         static
@@ -1769,6 +1721,26 @@ namespace boost { namespace numeric { namespace ublas {
         bool other (size_type /* i */, size_type /* j */) {
             return true;
         }
+        static
+        BOOST_UBLAS_INLINE
+        size_type restrict1 (size_type i, size_type j) {
+            return i;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        size_type restrict2 (size_type i, size_type j) {
+            return j;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        size_type mutable_restrict1 (size_type i, size_type j) {
+            return i;
+        }
+        static
+        BOOST_UBLAS_INLINE
+        size_type mutable_restrict2 (size_type i, size_type j) {
+            return j;
+        }
     };
 
     template <class Z>
@@ -1778,8 +1750,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (L, size_type size1, size_type size2) {
-            return L::triangular_size (size1, size2);
+        size_type packed_size (L, size_type size_i, size_type size_j) {
+            return L::triangular_size (size_i, size_j);
         }
 
         static
@@ -1800,8 +1772,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type element (L, size_type i, size_type size1, size_type j, size_type size2) {
-            return L::lower_element (i, size1, j, size2);
+        size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
+            return L::lower_element (i, size_i, j, size_j);
         }
 
         static
@@ -1832,8 +1804,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (L, size_type size1, size_type size2) {
-            return L::triangular_size (size1, size2);
+        size_type packed_size (L, size_type size_i, size_type size_j) {
+            return L::triangular_size (size_i, size_j);
         }
 
         static
@@ -1854,8 +1826,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type element (L, size_type i, size_type size1, size_type j, size_type size2) {
-            return L::upper_element (i, size1, j, size2);
+        size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
+            return L::upper_element (i, size_i, j, size_j);
         }
 
         static
@@ -1886,10 +1858,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (L, size_type size1, size_type size2) {
+        size_type packed_size (L, size_type size_i, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::triangular_size (size1 - 1, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::triangular_size (size_i - 1, size_j - 1);
         }
 
         static
@@ -1905,10 +1877,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type element (L, size_type i, size_type size1, size_type j, size_type size2) {
+        size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::lower_element (i, size1 - 1, j, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::lower_element (i, size_i - 1, j, size_j - 1);
         }
 
         static
@@ -1929,10 +1901,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (L, size_type size1, size_type size2) {
+        size_type packed_size (L, size_type size_i, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::triangular_size (size1 - 1, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::triangular_size (size_i - 1, size_j - 1);
         }
 
         static
@@ -1948,10 +1920,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type element (L, size_type i, size_type size1, size_type j, size_type size2) {
+        size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::upper_element (i, size1 - 1, j, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::upper_element (i, size_i - 1, j, size_j - 1);
         }
 
         static
@@ -1972,10 +1944,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (L, size_type size1, size_type size2) {
+        size_type packed_size (L, size_type size_i, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::triangular_size (size1 - 1, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::triangular_size (size_i - 1, size_j - 1);
         }
 
         static
@@ -1996,10 +1968,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type element (L, size_type i, size_type size1, size_type j, size_type size2) {
+        size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::lower_element (i, size1 - 1, j, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::lower_element (i, size_i - 1, j, size_j - 1);
         }
 
         static
@@ -2030,10 +2002,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (L, size_type size1, size_type size2) {
+        size_type packed_size (L, size_type size_i, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::triangular_size (size1 - 1, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::triangular_size (size_i - 1, size_j - 1);
         }
 
         static
@@ -2054,10 +2026,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type element (L, size_type i, size_type size1, size_type j, size_type size2) {
+        size_type element (L, size_type i, size_type size_i, size_type j, size_type size_j) {
             // Zero size strict triangles are bad at this point
-            BOOST_UBLAS_CHECK (size1 != 0 && size2 != 0, bad_index ());
-            return L::upper_element (i, size1 - 1, j, size2 - 1);
+            BOOST_UBLAS_CHECK (size_i != 0 && size_j != 0, bad_index ());
+            return L::upper_element (i, size_i - 1, j, size_j - 1);
         }
 
         static

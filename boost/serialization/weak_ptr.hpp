@@ -28,7 +28,7 @@ inline void save(
     const boost::weak_ptr<T> &t,
     const unsigned int /* file_version */
 ){
-    const boost::shared_ptr<T> sp(t);
+    const boost::shared_ptr<T> sp = t.lock();
         ar << boost::serialization::make_nvp(NULL, sp);
 }
 

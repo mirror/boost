@@ -2,13 +2,9 @@
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
-//  Permission to use, copy, modify, distribute and sell this software
-//  and its documentation for any purpose is hereby granted without fee,
-//  provided that the above copyright notice appear in all copies and
-//  that both that copyright notice and this permission notice appear
-//  in supporting documentation.  The authors make no representations
-//  about the suitability of this software for any purpose.
-//  It is provided "as is" without express or implied warranty.
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  The authors gratefully acknowledge the support of
 //  GeNeSys mbH & Co. KG in producing this work.
@@ -24,6 +20,42 @@
 // Iterators based on ideas of Jeremy Siek
 
 namespace boost { namespace numeric { namespace ublas {
+
+    namespace detail {
+        using namespace boost::numeric::ublas;
+
+        // Matrix resizing algorithm
+        template <class L, class T, class M>
+        BOOST_UBLAS_INLINE
+        void matrix_resize_preserve (M& m, M& temporary) {
+            typedef L layout_type;
+            typedef T triangular_type;
+            typedef typename M::size_type size_type;
+            const size_type msize1 (m.size1 ());        // original size
+            const size_type msize2 (m.size2 ());
+            const size_type size1 (temporary.size1 ());    // new size is specified by temporary
+            const size_type size2 (temporary.size2 ());
+            // Common elements to preserve
+            const size_type size1_min = (std::min) (size1, msize1);
+            const size_type size2_min = (std::min) (size2, msize2);
+            // Order for major and minor sizes
+            const size_type major_size = layout_type::size_M (size1_min, size2_min);
+            const size_type minor_size = layout_type::size_m (size1_min, size2_min);
+            // Indexing copy over major
+            for (size_type major = 0; major != major_size; ++major) {
+                for (size_type minor = 0; minor != minor_size; ++minor) {
+                        // find indexes - use invertability of element_ functions
+                    const size_type i1 = layout_type::index_M(major, minor);
+                    const size_type i2 = layout_type::index_m(major, minor);
+                    if ( triangular_type::other(i1,i2) ) {
+                        temporary.data () [triangular_type::element (layout_type (), i1, size1, i2, size2)] =
+                            m.data() [triangular_type::element (layout_type (), i1, msize1, i2, msize2)];
+                    }
+                }
+            }
+            m.assign_temporary (temporary);
+        }
+    }
 
     // Array based triangular matrix class
     template<class T, class TRI, class L, class A>
@@ -104,7 +136,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size1, size_type size2, bool preserve = true) {
             if (preserve) {
                 self_type temporary (size1, size2);
-                detail::matrix_resize_preserve<layout_type> (*this, temporary);
+                detail::matrix_resize_preserve<layout_type, triangular_type> (*this, temporary);
             }
             else {
                 data ().resize (triangular_type::packed_size (layout_type (), size1, size2));
@@ -141,13 +173,11 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator () (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (i < size1_, bad_index ());
             BOOST_UBLAS_CHECK (j < size2_, bad_index ());
-            if (triangular_type::other (i, j))
-                return data () [triangular_type::element (layout_type (), i, size1_, j, size2_)];
-            else {
+            if (!triangular_type::other (i, j)) {
                 bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(zero_);
+                // NEVER reached
             }
+            return data () [triangular_type::element (layout_type (), i, size1_, j, size2_)];
         }
         
         // Element assignment
@@ -987,34 +1017,22 @@ namespace boost { namespace numeric { namespace ublas {
         reference operator () (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
-            if (triangular_type::other (i, j))
-                return data () (i, j);
-            else if (triangular_type::one (i, j)) {
+            if (!triangular_type::other (i, j)) {
                 bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(one_);
-            } else {
-                bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(zero_);
+                // NEVER reached
             }
+            return data () (i, j);
         }
 #else
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) const {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
-            if (triangular_type::other (i, j))
-                return data () (i, j);
-            else if (triangular_type::one (i, j)) {
+            if (!triangular_type::other (i, j)) {
                 bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(one_);
-            } else {
-                bad_index ().raise ();
-                // arbitary return value
-                return const_cast<reference>(zero_);
+                // NEVER reached
             }
+            return data () (i, j);
         }
 #endif
 

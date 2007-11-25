@@ -51,7 +51,7 @@ namespace detail {
         else { 
             std::streamsize n=static_cast<std::streamsize>(w-size-!!prefix_space);
             std::streamsize n_after = 0, n_before = 0; 
-            res.reserve(w); // allocate once for the 2 inserts
+            res.reserve(static_cast<size_type>(w)); // allocate once for the 2 inserts
             if(center) 
                 n_after = n/2, n_before = n - n_after; 
             else 
@@ -60,12 +60,12 @@ namespace detail {
                 else
                     n_before = n;
             // now make the res string :
-            if(n_before) res.append(n_before, fill_char);
+            if(n_before) res.append(static_cast<size_type>(n_before), fill_char);
             if(prefix_space) 
               res.append(1, prefix_space);
             if (size)  
               res.append(beg, size);
-            if(n_after) res.append(n_after, fill_char);
+            if(n_after) res.append(static_cast<size_type>(n_after), fill_char);
         }
     } // -mk_str(..) 
 

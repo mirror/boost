@@ -235,9 +235,9 @@ public:
         ConstMultiArray, NumDims> >();
 
     // make sure the dimensions agree
-    assert(other.num_dimensions() == this->num_dimensions());
-    assert(std::equal(other.shape(),other.shape()+this->num_dimensions(),
-                      this->shape()));
+    BOOST_ASSERT(other.num_dimensions() == this->num_dimensions());
+    BOOST_ASSERT(std::equal(other.shape(),other.shape()+this->num_dimensions(),
+                            this->shape()));
     // iterator-based copy
     std::copy(other.begin(),other.end(),begin());
     return *this;
@@ -247,9 +247,10 @@ public:
   sub_array& operator=(const sub_array& other) {
     if (&other != this) {
       // make sure the dimensions agree
-      assert(other.num_dimensions() == this->num_dimensions());
-      assert(std::equal(other.shape(),other.shape()+this->num_dimensions(),
-                        this->shape()));
+      BOOST_ASSERT(other.num_dimensions() == this->num_dimensions());
+      BOOST_ASSERT(std::equal(other.shape(),
+                              other.shape()+this->num_dimensions(),
+                              this->shape()));
       // iterator-based copy
       std::copy(other.begin(),other.end(),begin());
     }

@@ -103,9 +103,10 @@ public:
     template<typename Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-        ar & id;
-        ar & value;
-        ar & pos;
+        using namespace boost::serialization;
+        ar & make_nvp("id", id);
+        ar & make_nvp("value", value);
+        ar & make_nvp("position", pos);
     }
 #endif
 
@@ -204,7 +205,8 @@ public:
     operator token_id() const { return token_id(*data); }
     string_type const &get_value() const { return data->get_value(); }
     position_type const &get_position() const { return data->get_position(); }
-
+    bool is_eoi() const { return token_id(*data) == T_EOI; }
+    
     void set_token_id (token_id id_) { make_unique(); data->set_token_id(id_); }
     void set_value (string_type const &value_) { make_unique(); data->set_value(value_); }
     void set_position (position_type const &pos_) { make_unique(); data->set_position(pos_); }

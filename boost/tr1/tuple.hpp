@@ -1,3 +1,6 @@
+//  (C) Copyright John Maddock 2005.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TR1_TUPLE_HPP_INCLUDED
@@ -47,18 +50,8 @@ using ::boost::get;
 
 #else
 
-#include <boost/spirit/fusion/sequence/tuple.hpp>
-#include <boost/spirit/fusion/sequence/tuple_element.hpp>
-#include <boost/spirit/fusion/sequence/tuple_size.hpp>
-#include <boost/spirit/fusion/sequence/make_tuple.hpp>
-#include <boost/spirit/fusion/sequence/tie.hpp>
-#include <boost/spirit/fusion/sequence/get.hpp>
-#include <boost/spirit/fusion/sequence/equal_to.hpp>
-#include <boost/spirit/fusion/sequence/not_equal_to.hpp>
-#include <boost/spirit/fusion/sequence/less.hpp>
-#include <boost/spirit/fusion/sequence/less_equal.hpp>
-#include <boost/spirit/fusion/sequence/greater.hpp>
-#include <boost/spirit/fusion/sequence/greater_equal.hpp>
+#include <boost/fusion/include/tuple.hpp>
+#include <boost/fusion/include/std_pair.hpp>
 
 namespace std{ namespace tr1{
 
@@ -81,3 +74,4 @@ using ::boost::fusion::tuple_element;
 #endif
 
 #endif
+

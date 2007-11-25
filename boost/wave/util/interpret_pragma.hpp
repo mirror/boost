@@ -113,9 +113,11 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                             ),
                     pattern_p(WhiteSpaceTokenType, TokenTypeMask)).hit)
             {
-                BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                    ill_formed_pragma_option,
                     impl::as_string<string_type>(it, end).c_str(), 
                     act_token.get_position());
+                return false;
             }
         
         // remove the falsely matched closing parenthesis
@@ -126,7 +128,9 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
             }
             
         // decode the option (call the context_policy hook)
-            if (!ctx.interpret_pragma(pending, option, values, act_token)) {
+            if (!ctx.get_hooks().interpret_pragma(
+                  ctx, pending, option, values, act_token)) 
+            {
             // unknown #pragma option 
             string_type option_str ((*it).get_value());
 
@@ -136,8 +140,10 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                     option_str += impl::as_string(values);
                     option_str += ")";
                 }
-                BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                    ill_formed_pragma_option,
                     option_str.c_str(), act_token.get_position());
+                return false;
             }
             return true;
         }
@@ -168,9 +174,11 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                        ).hit
                )
             {
-                BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_message,
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                    ill_formed_pragma_message,
                     impl::as_string<string_type>(it, end).c_str(), 
                     act_token.get_position());
+                return false;
             }
         
         // remove the falsely matched closing parenthesis/newline
@@ -181,8 +189,10 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
             }
 
         // output the message itself
-            BOOST_WAVE_THROW(preprocess_exception, pragma_message_directive, 
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                pragma_message_directive, 
                 impl::as_string(values).c_str(), act_token.get_position());
+            return false;
         }
 #endif
     }

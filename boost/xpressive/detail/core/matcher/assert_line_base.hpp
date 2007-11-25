@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // assert_line_base.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -39,7 +39,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter>
-            bool is_line_break(state_type<BidiIter> &state) const
+            bool is_line_break(match_state<BidiIter> &state) const
         {
             BOOST_ASSERT(!state.bos() || state.flags_.match_prev_avail_);
             BidiIter tmp = state.cur_;

@@ -16,7 +16,8 @@
 # include <boost/mpl/placeholders.hpp>
 
 # if !defined(BOOST_NO_SFINAE) \
-  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+  && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 
 #  include <boost/utility/enable_if.hpp>
 #  include <boost/mpl/lambda.hpp>
@@ -76,14 +77,14 @@ struct lambda<
 
 # if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #  define BOOST_PARAMETER_NAME_OBJECT(tag, name)                    \
-    static ::boost::parameter::keyword<tag>& name                   \
-       = ::boost::parameter::keyword<tag>::get();
+    static ::boost::parameter::keyword<tag> const& name             \
+       = ::boost::parameter::keyword<tag>::instance;
 # else
 #  define BOOST_PARAMETER_NAME_OBJECT(tag, name)                    \
     namespace                                                       \
     {                                                               \
-       ::boost::parameter::keyword<tag>& name                       \
-       = ::boost::parameter::keyword<tag>::get();                   \
+       ::boost::parameter::keyword<tag> const& name                 \
+       = ::boost::parameter::keyword<tag>::instance;                \
     }
 # endif
 

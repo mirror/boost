@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // matchers.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,7 +13,7 @@
 # pragma once
 #endif
 
-#include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
+//#include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/alternate_end_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/alternate_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/any_matcher.hpp>
@@ -22,6 +22,7 @@
 #include <boost/xpressive/detail/core/matcher/assert_eol_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/assert_eos_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/assert_word_matcher.hpp>
+#include <boost/xpressive/detail/core/matcher/attr_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/charset_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/end_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/epsilon_matcher.hpp>
@@ -33,7 +34,9 @@
 #include <boost/xpressive/detail/core/matcher/mark_begin_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/mark_end_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/mark_matcher.hpp>
+#include <boost/xpressive/detail/core/matcher/optional_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/posix_charset_matcher.hpp>
+//#include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/range_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/regex_byref_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/regex_matcher.hpp>

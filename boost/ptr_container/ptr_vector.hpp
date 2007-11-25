@@ -42,31 +42,16 @@ namespace boost
         
     public:
 
-        BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_vector, 
-                                                          base_class,
-                                                          this_type );
-
-        ptr_vector( size_type n,
-                    const allocator_type& alloc = allocator_type() )
+        BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_vector, 
+                                                      base_class,
+                                                      this_type );
+        
+        explicit ptr_vector( size_type n,
+                             const allocator_type& alloc = allocator_type() )
           : base_class(alloc)
         {
-            this->c_private().reserve( n );
-        }
-
-    public: // serialization
-
-        template< class Archive >
-        void load( Archive& ar, unsigned )
-        {
-            size_type n;
-            ar & n;
-            
-            this->reserve( n );
-            this->load_helper( ar, n );
-        }
-  
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
-        
+            this->base().reserve( n );
+        }        
     };
 
     //////////////////////////////////////////////////////////////////////////////

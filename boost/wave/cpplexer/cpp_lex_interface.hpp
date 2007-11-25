@@ -33,35 +33,6 @@ namespace boost {
 namespace wave {
 namespace cpplexer {
 
-#if BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION != 0
-#define BOOST_WAVE_NEW_LEXER_DECL BOOST_WAVE_DECL
-#else
-#define BOOST_WAVE_NEW_LEXER_DECL
-#endif 
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  new_lexer_gen: generates a new instance of the required C++ lexer
-//
-///////////////////////////////////////////////////////////////////////////////
-template <typename TokenT> struct lex_input_interface; 
-
-template <
-    typename IteratorT, 
-    typename PositionT = boost::wave::util::file_position_type
->
-struct BOOST_WAVE_NEW_LEXER_DECL new_lexer_gen
-{
-//  The NewLexer function allows the opaque generation of a new lexer object.
-//  It is coupled to the token type to allow to decouple the lexer/token 
-//  configurations at compile time.
-    static lex_input_interface<lex_token<PositionT> > *
-    new_lexer(IteratorT const &first, IteratorT const &last, 
-        PositionT const &pos, boost::wave::language_support language);
-};
-
-#undef BOOST_WAVE_NEW_LEXER_DECL
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  The lex_input_interface decouples the lex_iterator_shim from the actual 
@@ -75,25 +46,13 @@ struct lex_input_interface
 {
     typedef typename TokenT::position_type position_type;
     
-    virtual TokenT get() = 0;
-    virtual void set_position(position_type const &pos) = 0;
     virtual ~lex_input_interface() {}
     
+    virtual TokenT get() = 0;
+    virtual void set_position(position_type const &pos) = 0;
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     virtual bool has_include_guards(std::string& guard_name) const = 0;
 #endif    
-
-//  The new_lexer function allows the opaque generation of a new lexer object.
-//  It is coupled to the token type to allow to distinguish different 
-//  lexer/token configurations at compile time.
-    template <typename IteratorT>
-    static lex_input_interface *
-    new_lexer(IteratorT const &first, IteratorT const &last, 
-        position_type const &pos, boost::wave::language_support language)
-    { 
-        return new_lexer_gen<IteratorT, position_type>::new_lexer (first, last, 
-            pos, language); 
-    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

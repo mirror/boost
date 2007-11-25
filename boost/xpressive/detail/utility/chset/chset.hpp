@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // chset.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -14,6 +14,7 @@
 #endif
 
 #include <vector>
+#include <boost/call_traits.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/chset/basic_chset.ipp>
@@ -44,7 +45,7 @@ struct compound_charset
 
     ///////////////////////////////////////////////////////////////////////////////
     // accessors
-    basic_chset<char_type> const &basic_chset() const
+    basic_chset<char_type> const &base() const
     {
         return *this;
     }

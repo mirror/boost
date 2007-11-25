@@ -58,13 +58,13 @@ template<class T, class Iter> struct decode_template_impl;
 
 BOOST_TYPEOF_END_ENCODE_NS
 
-namespace boost { namespace type_of { 
+namespace boost { namespace type_of {
 
     template<class V, class T> struct encode_template
         : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::encode_template_impl<V, T>
     {};
 
-    template<class Iter> struct decode_template 
+    template<class Iter> struct decode_template
         : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::decode_template_impl<typename Iter::type, typename Iter::next>
     {};
 }}
@@ -93,7 +93,31 @@ namespace boost { namespace type_of {
 
 #define BOOST_TYPEOF_TYPEDEF_INT_PN(z,n,Params) typedef int BOOST_PP_CAT(P,n);
 
-#define BOOST_TYPEOF_REGISTER_NOTHING(Name,Params,ID)
+#ifdef __BORLANDC__
+#define BOOST_TYPEOF_DECODE_NESTED_TEMPLATE_HELPER_NAME BOOST_PP_CAT(\
+        BOOST_PP_CAT(\
+            BOOST_PP_CAT(\
+                decode_nested_template_helper,\
+                BOOST_TYPEOF_REGISTRATION_GROUP\
+            ),0x10000\
+        ),__LINE__\
+    )
+#define BOOST_TYPEOF_REGISTER_DECODE_NESTED_TEMPLATE_HELPER_IMPL(Name,Params,ID)\
+    struct BOOST_TYPEOF_DECODE_NESTED_TEMPLATE_HELPER_NAME {\
+        template<BOOST_TYPEOF_SEQ_ENUM(Params,BOOST_TYPEOF_REGISTER_DECLARE_DECODER_TYPE_PARAM_PAIR) >\
+        struct decode_params;\
+        template<BOOST_TYPEOF_SEQ_ENUM(Params,BOOST_TYPEOF_REGISTER_DECODER_TYPE_PARAM_PAIR) >\
+        struct decode_params<BOOST_TYPEOF_SEQ_ENUM(Params,BOOST_TYPEOF_PLACEHOLDER_TYPES) >\
+        {\
+            typedef Name<BOOST_PP_ENUM_PARAMS(BOOST_PP_SEQ_SIZE(Params),T)> type;\
+        };\
+    };
+//Template template param decoding
+#define BOOST_TYPEOF_TYPEDEF_DECODED_TEMPLATE_TEMPLATE_TYPE(Name,Params)\
+    typedef typename BOOST_TYPEOF_DECODE_NESTED_TEMPLATE_HELPER_NAME::decode_params<BOOST_PP_ENUM_PARAMS(BOOST_PP_SEQ_SIZE(Params),P)>::type type;
+
+#else
+#define BOOST_TYPEOF_REGISTER_DECODE_NESTED_TEMPLATE_HELPER_IMPL(Name,Params,ID)
 
 //Template template param decoding
 #define BOOST_TYPEOF_TYPEDEF_DECODED_TEMPLATE_TEMPLATE_TYPE(Name,Params)\
@@ -105,7 +129,7 @@ namespace boost { namespace type_of {
         typedef Name<BOOST_PP_ENUM_PARAMS(BOOST_PP_SEQ_SIZE(Params),T)> type;\
     };\
     typedef typename decode_params<BOOST_PP_ENUM_PARAMS(BOOST_PP_SEQ_SIZE(Params),P)>::type type;
-
+#endif
 #define BOOST_TYPEOF_REGISTER_DECLARE_DECODER_TYPE_PARAM_PAIR(z,n,elem) \
     BOOST_TYPEOF_VIRTUAL(DECLARATION_TYPE, elem)(elem) BOOST_PP_CAT(T, n)
 
@@ -119,7 +143,7 @@ namespace boost { namespace type_of {
 //Define template template arguments
 #define BOOST_TYPEOF_REGISTER_TEMPLATE_TEMPLATE_IMPL(Name,Params,ID)\
     BOOST_PP_IF(BOOST_TYPEOF_HAS_TEMPLATES(Params),\
-        BOOST_TYPEOF_REGISTER_NOTHING,\
+        BOOST_TYPEOF_REGISTER_DECODE_NESTED_TEMPLATE_HELPER_IMPL,\
         BOOST_TYPEOF_REGISTER_TYPE_FOR_TEMPLATE_TEMPLATE)(Name,Params,ID)
 
 #endif //BOOST_TYPEOF_TEMPLATE_TEMPLATE_PARAM_HPP_INCLUDED

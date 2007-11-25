@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // keeper_matcher.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -17,41 +17,38 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
-#include <boost/xpressive/detail/static/is_pure.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
 
     ///////////////////////////////////////////////////////////////////////////////
     // keeper_matcher
-    //       Xpr can be either a static_xpression, or a shared_ptr<matchable>
+    //  Xpr can be either a static_xpression, or a shared_matchable
     template<typename Xpr>
     struct keeper_matcher
-      : quant_style_auto<width_of<Xpr>, is_pure<Xpr> >
+      : quant_style<quant_variable_width, unknown_width::value, Xpr::pure>
     {
-        keeper_matcher(Xpr const &xpr, bool do_save = !is_pure<Xpr>::value)
+        keeper_matcher(Xpr const &xpr, bool pure = Xpr::pure)
           : xpr_(xpr)
-          , do_save_(do_save)
+          , pure_(pure)
         {
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
-            // Note that if is_pure<Xpr>::value is true, the compiler can tell which
-            // branch to take.
-            return is_pure<Xpr>::value || !this->do_save_
-                ? this->match_(state, next, mpl::true_())
-                : this->match_(state, next, mpl::false_());
+            return Xpr::pure || this->pure_
+              ? this->match_(state, next, mpl::true_())
+              : this->match_(state, next, mpl::false_());
         }
 
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const
         {
             BidiIter const tmp = state.cur_;
 
             // matching xpr is guaranteed to not produce side-effects, don't bother saving state
-            if(!get_pointer(this->xpr_)->match(state))
+            if(!this->xpr_.match(state))
             {
                 return false;
             }
@@ -65,21 +62,21 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const
         {
             BidiIter const tmp = state.cur_;
 
             // matching xpr could produce side-effects, save state
             memento<BidiIter> mem = save_sub_matches(state);
 
-            if(!get_pointer(this->xpr_)->match(state))
+            if(!this->xpr_.match(state))
             {
-                reclaim_sub_matches(mem, state);
+                reclaim_sub_matches(mem, state, false);
                 return false;
             }
             else if(next.match(state))
             {
-                reclaim_sub_matches(mem, state);
+                reclaim_sub_matches(mem, state, true);
                 return true;
             }
 
@@ -89,7 +86,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         Xpr xpr_;
-        bool do_save_; // true if matching xpr_ could modify the sub-matches
+        bool pure_; // false if matching xpr_ could modify the sub-matches
     };
 
 }}}

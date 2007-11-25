@@ -12,6 +12,7 @@
 #  ifdef BOOST_HAS_INCLUDE_NEXT
 #     include_next BOOST_TR1_HEADER(utility)
 #  else
+#     include <boost/tr1/detail/config_all.hpp>
 #     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(utility))
 #  endif
 
@@ -31,19 +32,19 @@ template <class T> struct tuple_size; // forward declaration
 template < int I, class T> struct tuple_element; // forward declaration
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-template <class T1, class T2>
+template <class T1, class T2> 
 struct tuple_size< ::std::pair<T1, T2> >
    : public ::boost::integral_constant< ::std::size_t, 2>
 {
 };
 
-template <class T1, class T2>
+template <class T1, class T2> 
 struct tuple_element<0, ::std::pair<T1, T2> >
 {
    typedef typename std::pair<T1, T2>::first_type type;
 };
 
-template <class T1, class T2>
+template <class T1, class T2> 
 struct tuple_element<1, std::pair<T1, T2> >
 {
    typedef typename std::pair<T1, T2>::second_type type;
@@ -71,25 +72,25 @@ namespace tuple_detail{
 # endif
    };
 
-template<int I, class T1, class T2>
+template<int I, class T1, class T2> 
 inline typename tuple_detail::tuple_get_result<I,T1,T2>::type get(std::pair<T1, T2>& p, const ::boost::true_type&)
 {
    return p.first;
 }
 
-template<int I, class T1, class T2>
+template<int I, class T1, class T2> 
 inline typename tuple_detail::const_tuple_get_result<I,T1,T2>::type get(const std::pair<T1, T2>& p, const ::boost::true_type&)
 {
    return p.first;
 }
 
-template<int I, class T1, class T2>
+template<int I, class T1, class T2> 
 inline typename tuple_detail::tuple_get_result<I,T1,T2>::type get(std::pair<T1, T2>& p, const ::boost::false_type&)
 {
    return p.second;
 }
 
-template<int I, class T1, class T2>
+template<int I, class T1, class T2> 
 inline typename tuple_detail::const_tuple_get_result<I,T1,T2>::type get(const std::pair<T1, T2>& p, const ::boost::false_type&)
 {
    return p.second;

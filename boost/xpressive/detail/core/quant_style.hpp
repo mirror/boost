@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,46 +13,23 @@
 # pragma once
 #endif
 
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/mpl/assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not_equal_to.hpp>
+#include <boost/config.hpp>
+#include <boost/mpl/has_xxx.hpp>
+#include <boost/xpressive/detail/utility/width.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-
-#if defined(NDEBUG) & defined(BOOST_XPR_DEBUG_STACK)
-# undef BOOST_XPR_DEBUG_STACK
-#endif
-
-#ifdef BOOST_XPR_DEBUG_STACK
-# define BOOST_XPR_DEBUG_STACK_ASSERT BOOST_ASSERT
-#else
-# define BOOST_XPR_DEBUG_STACK_ASSERT(x) static_cast<void>(0)
-#endif
 
 namespace boost { namespace xpressive { namespace detail
 {
 
-//////////////////////////////////////////////////////////////////////////
-// xpression_base
-//
-struct xpression_base
-{
-#ifdef BOOST_XPR_DEBUG_STACK
-    virtual ~xpression_base()
-    {
-    }
-#endif
-};
+BOOST_MPL_HAS_XXX_TRAIT_DEF(is_boost_xpressive_xpression_)
 
 ///////////////////////////////////////////////////////////////////////////////
 // is_xpr
 //
-template<typename T>
+template<typename Xpr>
 struct is_xpr
-  : is_base_and_derived<xpression_base, T>
-{
-};
+  : has_is_boost_xpressive_xpression_<Xpr>
+{};
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_enum
@@ -60,7 +37,6 @@ struct is_xpr
 enum quant_enum
 {
     quant_none,
-    quant_auto,
     quant_fixed_width,
     quant_variable_width
 };
@@ -68,20 +44,42 @@ enum quant_enum
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style
 //
-template<quant_enum QuantStyle, typename Width = unknown_width, typename Pure = mpl::true_>
+template<quant_enum QuantStyle, std::size_t Width = unknown_width::value, bool Pure = true>
 struct quant_style
-  : xpression_base
 {
-    typedef mpl::int_<QuantStyle> quant;   // Which quantification strategy to use?
-    typedef Width width;                   // how many characters this matcher consumes
-    typedef Pure pure;                     // whether this matcher has observable side-effects
+    typedef void is_boost_xpressive_xpression_;
 
-    template<typename BidiIter>
-    static std::size_t get_width(state_type<BidiIter> *)
+    // Which quantification strategy to use?
+    BOOST_STATIC_CONSTANT(int, quant = QuantStyle);
+
+    // how many characters this matcher consumes
+    BOOST_STATIC_CONSTANT(std::size_t, width = Width);
+
+    // whether this matcher has observable side-effects
+    BOOST_STATIC_CONSTANT(bool, pure = Pure);
+
+    static detail::width get_width()
     {
-        return Width::value;
+        return width;
     }
 };
+
+#define BOOST_XPR_QUANT_STYLE(Style, Width, Pure)                               \
+    typedef void is_boost_xpressive_xpression_;                                 \
+    BOOST_STATIC_CONSTANT(int, quant = Style);                                  \
+    BOOST_STATIC_CONSTANT(std::size_t, width = Width);                          \
+    BOOST_STATIC_CONSTANT(bool, pure = Pure);                                   \
+    static detail::width get_width() { return width; }                          \
+    /**/
+
+//    // Replace transmogrify stupidity with rebindable matchers/placeholders
+//#define BOOST_XPR_IDENTITY_REBIND(TYPE)                                         \/
+//    template<typename BidiIter, typename ICase, typename Traits>                \/
+//    struct rebind                                                               \/
+//    {                                                                           \/
+//        typedef TYPE type;                                                      \/
+//    };                                                                          \/
+//    /**/
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style_none
@@ -105,7 +103,7 @@ typedef quant_style<quant_variable_width> quant_style_variable_width;
 //  for when the sub-expression has a fixed width that is known at compile time
 template<std::size_t Width>
 struct quant_style_fixed_width
-  : quant_style<quant_fixed_width, mpl::size_t<Width> >
+  : quant_style<quant_fixed_width, Width>
 {
 };
 
@@ -113,42 +111,16 @@ struct quant_style_fixed_width
 // quant_style_assertion
 //  a zero-width assertion.
 struct quant_style_assertion
-  : quant_style<quant_none, mpl::size_t<0> >
-{
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// quant_style_auto
-//  automatically pick the quantification style based on width and purity
-template<typename Width, typename Pure>
-struct quant_style_auto
-  : quant_style<quant_auto, Width, Pure>
+  : quant_style<quant_none, 0>
 {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_type
 //
-template<typename Matcher, typename QuantStyle = typename Matcher::quant>
-struct quant_type
-  : QuantStyle
-{
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// when the quant_type is auto, determine the quant type from the width and purity
 template<typename Matcher>
-struct quant_type<Matcher, mpl::int_<quant_auto> >
-  : mpl::if_
-    <
-        mpl::and_
-        <
-            mpl::not_equal_to<typename Matcher::width, unknown_width>
-          , typename Matcher::pure
-        >
-      , mpl::int_<quant_fixed_width>
-      , mpl::int_<quant_variable_width>
-    >::type
+struct quant_type
+  : mpl::int_<Matcher::quant>
 {
 };
 

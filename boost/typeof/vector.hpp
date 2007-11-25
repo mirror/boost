@@ -1,7 +1,7 @@
 // Copyright (C) 2005 Arkadiy Vertleyb
 // Copyright (C) 2005 Peder Holt
 //
-// Copyright (C) 2006 Tobias Schwinger 
+// Copyright (C) 2006 Tobias Schwinger
 //
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (http://www.boost.org/LICENSE_1_0.txt)
@@ -89,7 +89,7 @@ namespace boost { namespace type_of {
 #     define  BOOST_PP_LOCAL_LIMITS \
         (BOOST_PP_DEC(BOOST_TYPEOF_PP_START_SIZE), \
          BOOST_PP_DEC(BOOST_TYPEOF_LIMIT_SIZE))
-#     include BOOST_PP_LOCAL_ITERATE() 
+#     include BOOST_PP_LOCAL_ITERATE()
 
 }}
 
@@ -107,7 +107,7 @@ namespace boost { namespace type_of {
         template<BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IIF(BOOST_PP_NOT(n), class T = void)>\
         struct vector ## n\
         {\
-            typedef v_iter<vector ## n, boost::mpl::int_<0> > begin;\
+            typedef v_iter<vector ## n<BOOST_PP_ENUM_PARAMS(n,P)>, boost::mpl::int_<0> > begin;\
             BOOST_PP_REPEAT(n, BOOST_TYPEOF_typedef_item, ~)\
             BOOST_PP_REPEAT_FROM_TO(n, BOOST_TYPEOF_PP_NEXT_SIZE, BOOST_TYPEOF_typedef_fake_item, ~)\
         };
@@ -117,7 +117,7 @@ namespace boost { namespace type_of {
 #     define  BOOST_PP_LOCAL_MACRO  BOOST_TYPEOF_define_vector
 #     define  BOOST_PP_LOCAL_LIMITS \
         (BOOST_TYPEOF_PP_START_SIZE,BOOST_TYPEOF_LIMIT_SIZE)
-#     include BOOST_PP_LOCAL_ITERATE() 
+#     include BOOST_PP_LOCAL_ITERATE()
 
 }}
 
@@ -138,23 +138,26 @@ namespace boost { namespace type_of {
 
 namespace boost { namespace type_of {
 
+#   if   BOOST_TYPEOF_LIMIT_SIZE < 50
     template<class V, class T> struct push_back {
         typedef V type;
-    }; //default behaviour is to let push_back ignore T, and return the input vector. 
+    };
+#   endif
+    //default behaviour is to let push_back ignore T, and return the input vector.
     //This is to let BOOST_TYPEOF_NESTED_TYPEDEF work properly with the default vector.
 #     define  BOOST_PP_LOCAL_MACRO  BOOST_TYPEOF_spec_push_back
 #     define  BOOST_PP_LOCAL_LIMITS \
         (BOOST_PP_DEC(BOOST_TYPEOF_PP_START_SIZE), \
          BOOST_PP_DEC(BOOST_TYPEOF_LIMIT_SIZE))
-#     include BOOST_PP_LOCAL_ITERATE() 
+#     include BOOST_PP_LOCAL_ITERATE()
 
 }}
 
 #     undef BOOST_TYPEOF_spec_push_back
 
 #   endif//BOOST_TYPEOF_PP_START_SIZE<=BOOST_TYPEOF_LIMIT_SIZE
-#   undef  BOOST_TYPEOF_PP_START_SIZE 
-#   undef  BOOST_TYPEOF_PP_NEXT_SIZE 
+#   undef  BOOST_TYPEOF_PP_START_SIZE
+#   undef  BOOST_TYPEOF_PP_NEXT_SIZE
 
 #endif//BOOST_TYPEOF_PREPROCESSING_MODE || BOOST_PP_IS_SELFISH
 

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // sub_match_impl.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -17,6 +17,10 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
+
+// TODO: sub_match_impl is a POD IFF BidiIter is POD. Pool allocation
+// of them can be made more efficient if they are. Or maybe all they
+// need is trivial constructor/destructor. (???)
 
 ///////////////////////////////////////////////////////////////////////////////
 // sub_match_impl

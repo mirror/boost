@@ -30,10 +30,12 @@
 // has to be checked in a separate condition, otherwise GCC complains 
 // about 'or' being an alternative token
 #if defined(_MSC_VER)
+#ifndef __GCCXML__
 #if defined(or)
 #   pragma push_macro("or")
 #   undef or
 #   define or(x)
+#endif
 #endif
 #endif
 
@@ -41,8 +43,10 @@
 #   include <boost/mpl/aux_/include_preprocessed.hpp>
 
 #if defined(_MSC_VER) 
+#ifndef __GCCXML__
 #if defined(or)
 #   pragma pop_macro("or")
+#endif
 #endif
 #endif
 
