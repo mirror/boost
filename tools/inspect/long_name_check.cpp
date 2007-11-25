@@ -17,28 +17,18 @@
 
 namespace { namespace aux {
 
-bool starts_with_nonalpha( path const & p )
+bool starts_with_nonalnum( path const & p )
 {
   const string & x = p.string();
   assert(!x.empty());
 
   const string::value_type first = x[0];
 
-  return !std::isalpha( first, std::locale::classic() )
+  return !std::isalnum( first, std::locale::classic() )
       && first != '_'
       && x != ".cvsignore"
+      && x != ".svn"
       ;
-}
-
-bool contains_dot( path const & p)
-{
-    return p.string().find( '.' ) != std::string::npos;
-}
-
-// ISO 9660
-path::iterator::difference_type depth( path const & p)
-{
-    return std::distance( p.begin(), p.end() );
 }
 
 }}
@@ -48,7 +38,7 @@ namespace boost
 {
   namespace inspect
   {
-    const char file_name_check::limits::name[] = "ISO 9660 Level 3";
+    const char file_name_check::limits::name[] = "ISO 9660:1999 Level 3";
 
     file_name_check::file_name_check() : m_name_errors(0) {}
 
@@ -57,29 +47,6 @@ namespace boost
       const path & full_path )
     {
       std::string const leaf( full_path.leaf() );
-
-      // checks on the leaf name ----------------------------------//
-      {
-          const unsigned m = filesystem::is_directory(full_path)
-              ? limits::max_dirname_length
-              : limits::max_filename_length;
-
-          if ( leaf.size() > m )
-          {
-              ++m_name_errors;
-              error( library_name, full_path, string(name())
-                  + " name exceeds "
-                  + boost::lexical_cast<string>(m)
-                  + " characters" );
-          }
-      }
-
-      if ( std::count( leaf.begin(), leaf.end(), '.' ) > 1 )
-      {
-        ++m_name_errors;
-        error( library_name, full_path, string(name())
-            + " name contains more than one dot character ('.')" );
-      }
 
       if ( *leaf.rbegin() == '.' )
       {
@@ -95,37 +62,16 @@ namespace boost
 
       // checks on the directory name --------------------------- //
 
-      if( aux::starts_with_nonalpha( path(leaf)) )
+      if( aux::starts_with_nonalnum( path(leaf)) )
       {
         ++m_name_errors;
         error( library_name, full_path, string(name())
             + " leading character of \""
             + leaf + "\""
-            + " is not alphabetic" );
+            + " is not alphanumeric" );
       }
 
-      if ( filesystem::is_directory( full_path )
-          && aux::contains_dot( relative_path ) )
-      {
-        ++m_name_errors;
-        error( library_name, full_path, string(name())
-            + " directory name contains the dot character ('.')" );
-      }
-
-      {
-          const int m = limits::max_directory_depth;
-          if ( filesystem::is_directory( full_path ) 
-              && aux::depth( relative_path) > m )
-          {
-              ++m_name_errors;
-              error( library_name, full_path, string(name())
-                  + " directory depth exceeds "
-                  + boost::lexical_cast<string>(m)
-                  + " (maximum for " + limits::name + " (CD-ROMs))" );
-          }
-      }
-
-      const unsigned max_relative_path = 100; // [gps] Explain this
+      const unsigned max_relative_path = 207; // ISO 9660:1999 sets this limit
       const string generic_root( "boost_X_XX_X/" );
       if ( relative_path.string().size() >
           ( max_relative_path - generic_root.size() ) )
@@ -136,11 +82,11 @@ namespace boost
             + " file path will exceed "
             + boost::lexical_cast<string>(max_relative_path)
             + " characters in a directory tree with a root of the form "
-            + generic_root )
+            + generic_root + ", and this exceeds ISO 9660:1999 limit of 207"  )
             ;
       }
 
-      if (relative_path.leaf() != ".cvsignore")
+      if (relative_path.leaf() != ".cvsignore" && relative_path.leaf() != ".svn")
       {
         try
         {

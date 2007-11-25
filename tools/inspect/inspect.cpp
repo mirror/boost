@@ -628,6 +628,8 @@ int cpp_main( int argc_param, char * argv_param[] )
       link_ck = true;
     else if ( std::strcmp( argv[1], "-long_name" ) == 0 )
       long_name_ck = true;
+    else if ( std::strcmp( argv[1], "-long-name" ) == 0 )
+      long_name_ck = true;
     else if ( std::strcmp( argv[1], "-tab" ) == 0 )
       tab_ck = true;
     else if ( std::strcmp( argv[1], "-minmax" ) == 0 )
