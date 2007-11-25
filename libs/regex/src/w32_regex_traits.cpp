@@ -182,9 +182,27 @@ BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(char c, lcid_type id)
 
 BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(wchar_t c, lcid_type id)
 {
-#ifndef BOOST_NO_ANSI_APIS
    WORD mask;
    if(::GetStringTypeExW(id, CT_CTYPE1, &c, 1, &mask) && (mask & C1_LOWER))
+      return true;
+   return false;
+}
+#ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(unsigned short ca, lcid_type id)
+{
+   WORD mask;
+   wchar_t c = ca;
+   if(::GetStringTypeExW(id, CT_CTYPE1, &c, 1, &mask) && (mask & C1_LOWER))
+      return true;
+   return false;
+}
+#endif
+
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_upper(char c, lcid_type id)
+{
+#ifndef BOOST_NO_ANSI_APIS
+   WORD mask;
+   if(::GetStringTypeExA(id, CT_CTYPE1, &c, 1, &mask) && (mask & C1_UPPER))
       return true;
    return false;
 #else
@@ -201,24 +219,6 @@ BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(wchar_t c, lcid_type id)
       return true;
    return false;
 #endif
-}
-#ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
-BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_lower(unsigned short ca, lcid_type id)
-{
-   WORD mask;
-   wchar_t c = ca;
-   if(::GetStringTypeExW(id, CT_CTYPE1, &c, 1, &mask) && (mask & C1_LOWER))
-      return true;
-   return false;
-}
-#endif
-
-BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_upper(char c, lcid_type id)
-{
-   WORD mask;
-   if(::GetStringTypeExA(id, CT_CTYPE1, &c, 1, &mask) && (mask & C1_UPPER))
-      return true;
-   return false;
 }
 
 BOOST_REGEX_DECL bool BOOST_REGEX_CALL w32_is_upper(wchar_t c, lcid_type id)
@@ -255,6 +255,7 @@ BOOST_REGEX_DECL cat_type BOOST_REGEX_CALL w32_cat_open(const std::string& name)
        return cat_type();
 
    cat_type result(::LoadLibraryW(wide_name), &free_module);
+   return result;
 #endif
 }
 
