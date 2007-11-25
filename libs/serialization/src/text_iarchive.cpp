@@ -19,6 +19,10 @@
 namespace boost {
 namespace archive {
 
+template class basic_text_iarchive<naked_text_iarchive> ;
+template class text_iarchive_impl<naked_text_iarchive> ;
+template class detail::archive_pointer_iserializer<naked_text_iarchive> ;
+
 template class basic_text_iarchive<text_iarchive> ;
 template class text_iarchive_impl<text_iarchive> ;
 template class detail::archive_pointer_iserializer<text_iarchive> ;

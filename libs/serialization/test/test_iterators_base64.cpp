@@ -32,7 +32,7 @@ namespace std{
 #include <boost/archive/iterators/remove_whitespace.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
 
-#include <boost/test/test_tools.hpp>
+#include "test_tools.hpp"
 
 #include <iostream>
 

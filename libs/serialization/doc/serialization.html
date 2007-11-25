@@ -437,6 +437,9 @@ function guarantees that this is always the case and will minimize the
 occurence of hard to find errors related to synchronization of 
 <code style="white-space: normal">save</code> and <code style="white-space: normal">load</code> 
 functions.
+<p>
+Also note that <code style="white-space: normal">BOOST_SERIALIZATION_SPLIT_FREE</code>
+must be used outside of any namespace.
 
 <h2><a name="pointeroperators">Pointers</a></h2>
 A pointer to any class instance can be serialized with any of the archive 
@@ -533,14 +536,18 @@ will have to be overridden.  Here is a simple example:
 class my_class {
 private:
     friend class boost::serialization::access;
-    int member;
+    const int m_attribute;  // some immutable aspect of the instance
+    int m_state;            // mutable state of this instance
     template&lt;class Archive&gt;
     void serialize(Archive &amp;ar, const unsigned int file_version){
-        ar &amp; member;
+        ar &amp; m_state;
     }
 public:
-    my_class(int m) :
-        member(m)
+    // no default construct guarentees that no invalid object
+    // ever exists
+    my_class(int attribute) :
+        m_attribute(attribute),
+        m_state(0)
     {}
 };
 </code></pre>
@@ -552,7 +559,7 @@ inline void save_construct_data(
     Archive &amp; ar, const my_class * t, const unsigned int file_version
 ){
     // save data required to construct instance
-    ar &lt;&lt; t-&gt;member;
+    ar &lt;&lt; t-&gt;m_attribute;
 }
 
 template&lt;class Archive&gt;
@@ -560,10 +567,10 @@ inline void load_construct_data(
     Archive &amp; ar, my_class * t, const unsigned int file_version
 ){
     // retrieve data from archive required to construct new instance
-    int m;
-    ar &gt;&gt; m;
+    int attribute;
+    ar &gt;&gt; attribute;
     // invoke inplace constructor to initialize instance of my_class
-    ::new(t)my_class(m);
+    ::new(t)my_class(attribute);
 }
 }} // namespace ...
 </code></pre>
@@ -716,22 +723,6 @@ would never be instantiated.  So in addition to including export key
 strings in an archive, <code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> explicitly
 instantiates the class serialization code for all archive classes used 
 by the program.  
-<p>
-In order to do this, 
-<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
-includes meta programming code to build a <code style="white-space: normal">mpl::list</code>  
-of all the file types used by the module by checking for definition of the header 
-inclusion guards.
-
-Using this list,  
-<code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> will explicitly instantiate serialization
-code for all exported classes.
-For this implementaton to function, the header file 
-<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
-has to come after all the archive header files.  This is enforced
-by code at the end of the header file:
-<a href="../../../boost/archive/basic_archive.hpp" target="basic_archive_hpp">basic_archive.hpp</a>
-which will trip a STATIC_ASSERT if this requirement is violated.
 
 <h4><a name="selectivetracking">Selective Tracking</a></h4>
 Whether or not an object is tracked is determined by its
@@ -799,7 +790,10 @@ class derived : public base {
         // method 1 : invoke base class serialization
         boost::serialization::base_object&lt;base&gt;(*this);
         // method 2 : explicitly register base/derived relationship
-        boost::serialization::void_cast_register&lt;derived, base&gt;();
+        boost::serialization::void_cast_register&lt;derived, base&gt;(
+            static_cast&lt;base *&gt;(NULL),
+            static_cast&lt;derived *&gt;(NULL)
+        )
     }
 };
 

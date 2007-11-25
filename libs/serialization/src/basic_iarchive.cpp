@@ -33,7 +33,6 @@ namespace std{
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
 #include <boost/archive/detail/basic_iarchive.hpp>
-#include <boost/archive/detail/basic_archive_impl.hpp>
 #include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/tracking.hpp>
@@ -48,11 +47,8 @@ namespace detail {
 class basic_iserializer;
 class basic_pointer_iserializer;
 
-class basic_iarchive_impl :
-    public basic_archive_impl
-{
+class basic_iarchive_impl {
     friend class basic_iarchive;
-
     version_type m_archive_library_version;
     unsigned int m_flags;
 
@@ -62,24 +58,27 @@ class basic_iarchive_impl :
     struct aobject
     {
         void * address;
+        bool loaded_as_pointer;
         class_id_type class_id;
         aobject(
             void *a,
             class_id_type class_id_
         ) :
             address(a),
+            loaded_as_pointer(false),
             class_id(class_id_)
         {}
-        aobject() : address(NULL), class_id(-2) {}
+        aobject() : 
+            address(NULL),
+            loaded_as_pointer(false),
+            class_id(-2) 
+        {}
     };
     typedef std::vector<aobject> object_id_vector_type;
     object_id_vector_type object_id_vector;
 
     //////////////////////////////////////////////////////////////////////
     // used to implement the reset_object_address operation.
-    // list of objects which might be moved. We use a vector for implemenation
-    // in the hope the the truncation operation will be faster than either
-    // with a list or stack adaptor
     object_id_type moveable_objects_start;
     object_id_type moveable_objects_end;
     object_id_type moveable_objects_recent;
@@ -154,38 +153,6 @@ class basic_iarchive_impl :
     };
     typedef std::vector<cobject_id> cobject_id_vector_type;
     cobject_id_vector_type cobject_id_vector;
-
-    //////////////////////////////////////////////////////////////////////
-    // list of objects created by de-serialization.  Used to implement
-    // clean up after exceptions.
-    class created_pointer_type
-    {
-    public:
-        created_pointer_type(
-            class_id_type class_id_,
-            void * address_
-        ) :
-            class_id(class_id_),
-            address(address_)
-        {}
-        created_pointer_type(const created_pointer_type &rhs) :
-            class_id(rhs.class_id),
-            address(rhs.address)
-        {}
-        created_pointer_type & operator=(const created_pointer_type &){
-            assert(false);
-            return *this;
-        }
-        void * get_address() const {
-            return address;
-        }
-        // object to which this item refers
-        const class_id_type class_id;
-    private:
-        void * address;
-    };
-
-    std::list<created_pointer_type> created_pointers;
 
     //////////////////////////////////////////////////////////////////////
     // address of the most recent object serialized as a poiner
@@ -294,24 +261,25 @@ basic_iarchive_impl::reset_object_address(
                 reinterpret_cast<std::size_t>(new_address) - member_displacement
             );
        }
-        ++i;
     }
 }
 
 inline void 
 basic_iarchive_impl::delete_created_pointers()
 {
-    while(! created_pointers.empty()){
-        const created_pointer_type & cp = created_pointers.front();
-
-        // figure out the class of the object to be deleted
-        // note: extra line used to evade borland issue
-        const int id = cp.class_id;
-        const cobject_id & co = cobject_id_vector[id];
-        // with the appropriate input serializer, 
-        // delete the indicated object
-        co.bis_ptr->destroy(cp.get_address());
-        created_pointers.pop_front();
+    object_id_vector_type::iterator i;
+    for(
+        i = object_id_vector.begin();
+        i != object_id_vector.end(); 
+        ++i
+    ){
+        if(i->loaded_as_pointer){
+            const unsigned int j = i->class_id;
+            const cobject_id & co = cobject_id_vector[j];
+            // with the appropriate input serializer, 
+            // delete the indicated object
+            co.bis_ptr->destroy(i->address);
+        }
     }
 }
 
@@ -390,9 +358,7 @@ basic_iarchive_impl::load_object(
     }
 
     const class_id_type cid = register_type(bis);
-    // note: extra line used to evade borland issue
-    const int id = cid;
-    cobject_id & co = cobject_id_vector[id];
+    cobject_id & co = cobject_id_vector[cid];
 
     load_preamble(ar, co);
 
@@ -509,10 +475,8 @@ basic_iarchive_impl::load_pointer(
             co.file_version
         );
         t = object_id_vector[ui].address;
+        object_id_vector[ui].loaded_as_pointer = true;
         assert(NULL != t);
-
-        // and add to list of created pointers
-        created_pointers.push_back(created_pointer_type(cid, t));
     }
 
     return bpis_ptr;
@@ -573,22 +537,6 @@ basic_iarchive::load_pointer(
 BOOST_ARCHIVE_DECL(void)
 basic_iarchive::register_basic_serializer(const basic_iserializer & bis){
     pimpl->register_type(bis);
-}
-
-BOOST_ARCHIVE_DECL(void)
-basic_iarchive::lookup_basic_helper(
-    const boost::serialization::extended_type_info * const eti,
-    shared_ptr<void> & sph
-){
-    pimpl->lookup_helper(eti, sph);
-}
-
-BOOST_ARCHIVE_DECL(void)
-basic_iarchive::insert_basic_helper(
-    const boost::serialization::extended_type_info * const eti,
-    shared_ptr<void> & sph
-){
-    pimpl->insert_helper(eti, sph);
 }
 
 BOOST_ARCHIVE_DECL(void)

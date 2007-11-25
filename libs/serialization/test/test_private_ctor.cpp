@@ -8,12 +8,12 @@
 
 #include <sstream>
 
-#include <boost/test/test_tools.hpp>
+#include "test_tools.hpp"
+
+#include <boost/serialization/vector.hpp>
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-
-#include <boost/serialization/vector.hpp>
 
 class V {
     int m_i;    

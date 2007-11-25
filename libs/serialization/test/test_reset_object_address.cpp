@@ -19,7 +19,7 @@ namespace std{
 }
 #endif
 
-#include <boost/test/test_tools.hpp>
+#include "test_tools.hpp"
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -384,14 +384,14 @@ void test8(){
         std::list<const B *> l;
         l.push_back(b_ptr);
         boost::archive::polymorphic_text_oarchive oa(ss);
-        boost::archive::polymorphic_oarchive & poa(oa);
+        boost::archive::polymorphic_oarchive & poa = oa;
         poa << const_cast<const std::list<const B *> &>(l);
     }
     B b1;
     {
         std::list<B *> l;
         boost::archive::polymorphic_text_iarchive ia(ss);
-        boost::archive::polymorphic_iarchive & pia(ia);
+        boost::archive::polymorphic_iarchive & pia = ia;
         pia >> l;
         delete l.front(); // prevent memory leak
     }

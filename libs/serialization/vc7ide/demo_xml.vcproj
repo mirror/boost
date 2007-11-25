@@ -391,10 +391,10 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\example\demo_xml.cpp">
+			RelativePath="..\example\demo_gps.hpp">
 		</File>
 		<File
-			RelativePath="..\example\demo_xml.hpp">
+			RelativePath="..\example\demo_xml.cpp">
 		</File>
 	</Files>
 	<Globals>

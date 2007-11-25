@@ -7,7 +7,7 @@
 
 // note: this is a compile only test.
 
-#include <boost/test/test_tools.hpp>
+#include "test_tools.hpp"
 #include <boost/static_warning.hpp>
 
 #pragma warning(disable:4094)

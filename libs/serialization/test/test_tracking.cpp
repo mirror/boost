@@ -39,12 +39,12 @@ unsigned int N::count = 0;\
 BOOST_CLASS_TRACKING(N, TRACKING)
 
 TEST_CLASS(AN, ::boost::serialization::track_never)
-TEST_CLASS(AS, ::boost::serialization::track_selectivly)
+TEST_CLASS(AS, ::boost::serialization::track_selectively)
 TEST_CLASS(AA, ::boost::serialization::track_always)
 
 // test pointers
 TEST_CLASS(PAN, ::boost::serialization::track_never)
-TEST_CLASS(PAS, ::boost::serialization::track_selectivly)
+TEST_CLASS(PAS, ::boost::serialization::track_selectively)
 TEST_CLASS(PAA, ::boost::serialization::track_always)
 
 void out(const char *testfile)

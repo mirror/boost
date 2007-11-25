@@ -13,7 +13,8 @@
 // b) usage of a non-default constructor
 
 #include <fstream>
-#include <cstdlib> // for rand(), remove()
+#include <cstdlib> // for rand()
+#include <cstdio>  // remove()
 #include <cmath> // for fabs()
 
 #include <boost/config.hpp>

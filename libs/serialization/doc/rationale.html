@@ -235,9 +235,9 @@ BOOST_SERIALIZATION_TRACKING(construct_from, track_never)
   <li><code style="white-space: normal">shared_ptr&lt;construct_from&gt;</code>
 is not going to have a single raw pointer shared amongst the instances. Each loaded 
 <code style="white-space: normal">shared_ptr&lt;construct_from&gt;</code> is going to 
-have its own distince raw pointer. This will break 
+have its own distinct raw pointer. This will break 
 <code style="white-space: normal">shared_ptr</code> and cause a memory leak.  Again,
-The cause of this problem is very far removed from the point of discovery.  It would 
+The cause of this problem is very far removed from the point of discovery.  It could 
 well be that the problem is not even discovered until after the archives are loaded.
 Now we not only have difficult to find and fix program bug, but we have a bunch of
 invalid archives and lost data.
@@ -295,7 +295,7 @@ ar &lt;&lt; x
       <li>Oh, this trap is suggesting that the default serialization isn't really 
       what I want. Of course in this particular program it doesn't matter. But 
       then the code in the trap can't really evaluate code in other modules (which 
-      might not even be written yet). OK, I'll at the following to my 
+      might not even be written yet). OK, I'll add the following to my 
       construct_from.hpp to solve the problem. 
 <code style="white-space: normal"><pre>
 BOOST_SERIALIZATION_TRACKING(construct_from, track_never) 

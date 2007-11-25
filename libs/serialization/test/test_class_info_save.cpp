@@ -74,13 +74,11 @@ void out(const char *testfile, const A & a, const B & b)
     oa << BOOST_SERIALIZATION_NVP(a);
     oa << BOOST_SERIALIZATION_NVP(a);
     BOOST_CHECK(a.count == 2);  // no tracking => redundant saves
-    BOOST_MESSAGE( "a.count=" << a.count );
     std::cout << "a.count=" << a.count << '\n' ;
     oa << BOOST_SERIALIZATION_NVP(b);
     oa << BOOST_SERIALIZATION_NVP(b);
     BOOST_CHECK(b.count == 1);  // tracking => no redundant saves
     std::cout << "b.count=" << b.count << '\n' ;
-    BOOST_MESSAGE( "b.count=" << b.count );
 }
 
 

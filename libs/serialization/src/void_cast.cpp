@@ -173,12 +173,12 @@ public:
 class void_caster_argument : public void_caster
 {
     virtual void const*
-    upcast( void const* /* t */ ) const {
+    upcast( void const* t ) const {
         assert(false);
         return NULL;
     }
     virtual void const*
-    downcast( void const* /* t */ ) const {
+    downcast( void const* t ) const {
         assert(false);
         return NULL;
     }

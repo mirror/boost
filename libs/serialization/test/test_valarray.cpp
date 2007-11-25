@@ -1,7 +1,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// test_vector.cpp
+// test_valarrray.cpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2005 Matthias Troyer . 
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -22,46 +22,36 @@ namespace std{
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
-#include <boost/serialization/vector.hpp>
+#include <boost/serialization/valarray.hpp>
 
-#include "A.hpp"
-
-template <class T>
-int test_vector(T)
+int test_main( int /* argc */, char* /* argv */[] )
 {
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     // test array of objects
-    std::vector<T> avector;
-    avector.push_back(T());
-    avector.push_back(T());
+    std::valarray<int> avalarray(2);
+    avalarray[0] = 42;
+    avalarray[1] = -42;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
-        oa << boost::serialization::make_nvp("avector", avector);
+        oa << boost::serialization::make_nvp("avalarray", avalarray);
     }
-    std::vector<T> avector1;
+    std::valarray<int> avalarray1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
-        ia >> boost::serialization::make_nvp("avector", avector1);
+        ia >> boost::serialization::make_nvp("avalarray", avalarray1);
     }
-    BOOST_CHECK(avector == avector1);
+    bool equal = (    avalarray.size() == avalarray1.size() 
+                   && avalarray[0] == avalarray1[0]
+                   && avalarray[1] == avalarray1[1]
+                 );
+                  
+    BOOST_CHECK(equal);
     std::remove(testfile);
     return EXIT_SUCCESS;
-}
-
-int test_main( int /* argc */, char* /* argv */[] )
-{
-   int res = test_vector(A());
-    // test an int vector for which optimized versions should be available
-   if (res == EXIT_SUCCESS)
-     res = test_vector(0);  
-    // test a bool vector
-   if (res == EXIT_SUCCESS)
-     res = test_vector(false);  
-   return res;
 }
 
 // EOF

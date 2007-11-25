@@ -22,7 +22,7 @@
 #include <boost/spirit/core/primitives/numerics.hpp>
 
 // for head_iterator test
-#include <boost/bind.hpp> 
+//#include <boost/bind.hpp> 
 #include <boost/function.hpp>
 #include <boost/pfto.hpp>
 
@@ -40,7 +40,7 @@ namespace archive {
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // template code for basic_xml_grammar of both wchar_t and char types
 
-namespace { // anonymous
+namespace xml { // anonymous
 
 template<class T>
 struct assign_impl {
@@ -254,7 +254,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     STag =
         !S
         >> '<'
-        >> Name  [assign_object(rv.object_name)]
+        >> Name  [xml::assign_object(rv.object_name)]
         >> AttributeList
         >> !S
         >> '>'
@@ -263,7 +263,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ETag =
         !S
         >> "</"
-        >> Name [assign_object(rv.object_name)]
+        >> Name [xml::assign_object(rv.object_name)]
         >> !S 
         >> '>'
     ;
@@ -272,7 +272,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     CharDataChars = *(anychar_p - chset_p(L"&<"));
     CharData =  
         CharDataChars [
-            append_string<
+            xml::append_string<
                 StringType, 
                 BOOST_DEDUCED_TYPENAME std::basic_string<CharType>::const_iterator
             >(rv.contents)
@@ -281,18 +281,18 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 
     // slight factoring works around ICE in msvc 6.0
     CharRef1 = 
-        str_p(L"&#") >> uint_p [append_char<StringType>(rv.contents)] >> L';'
+        str_p(L"&#") >> uint_p [xml::append_char<StringType>(rv.contents)] >> L';'
     ;
     CharRef2 =
-        str_p(L"&#x") >> hex_p [append_char<StringType>(rv.contents)] >> L';'
+        str_p(L"&#x") >> hex_p [xml::append_char<StringType>(rv.contents)] >> L';'
     ;
     CharRef = CharRef1 | CharRef2 ;
 
-    AmpRef = str_p(L"&amp;")[append_lit<StringType, L'&'>(rv.contents)];
-    LTRef = str_p(L"&lt;")[append_lit<StringType, L'<'>(rv.contents)];
-    GTRef = str_p(L"&gt;")[append_lit<StringType, L'>'>(rv.contents)];
-    AposRef = str_p(L"&apos;")[append_lit<StringType, L'\''>(rv.contents)];
-    QuoteRef = str_p(L"&quot;")[append_lit<StringType, L'"'>(rv.contents)];
+    AmpRef = str_p(L"&amp;")[xml::append_lit<StringType, L'&'>(rv.contents)];
+    LTRef = str_p(L"&lt;")[xml::append_lit<StringType, L'<'>(rv.contents)];
+    GTRef = str_p(L"&gt;")[xml::append_lit<StringType, L'>'>(rv.contents)];
+    AposRef = str_p(L"&apos;")[xml::append_lit<StringType, L'\''>(rv.contents)];
+    QuoteRef = str_p(L"&quot;")[xml::append_lit<StringType, L'"'>(rv.contents)];
 
     Reference =
         AmpRef
@@ -312,7 +312,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         str_p(CLASS_ID()) >> NameTail
         >> Eq 
         >> L'"'
-        >> int_p [assign_object(rv.class_id.t)]
+        >> int_p [xml::assign_object(rv.class_id.t)]
         >> L'"'
       ;
 
@@ -322,18 +322,18 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         >> Eq 
         >> L'"'
         >> L'_'
-        >> uint_p [assign_object(rv.object_id.t)]
+        >> uint_p [xml::assign_object(rv.object_id.t)]
         >> L'"'
     ;
         
-    AmpName = str_p(L"&amp;")[append_lit<StringType, L'&'>(rv.class_name)];
-    LTName = str_p(L"&lt;")[append_lit<StringType, L'<'>(rv.class_name)];
-    GTName = str_p(L"&gt;")[append_lit<StringType, L'>'>(rv.class_name)];
+    AmpName = str_p(L"&amp;")[xml::append_lit<StringType, L'&'>(rv.class_name)];
+    LTName = str_p(L"&lt;")[xml::append_lit<StringType, L'<'>(rv.class_name)];
+    GTName = str_p(L"&gt;")[xml::append_lit<StringType, L'>'>(rv.class_name)];
     ClassNameChar = 
         AmpName
         | LTName
         | GTName
-        | (anychar_p - chset_p(L"\"")) [append_char<StringType>(rv.class_name)]
+        | (anychar_p - chset_p(L"\"")) [xml::append_char<StringType>(rv.class_name)]
     ;
     
     ClassName =
@@ -352,7 +352,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         str_p(TRACKING())
         >> Eq
         >> L'"'
-        >> uint_p [assign_level(rv.tracking_level)]
+        >> uint_p [xml::assign_level(rv.tracking_level)]
         >> L'"'
     ;
 
@@ -360,7 +360,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         str_p(VERSION())
         >> Eq
         >> L'"'
-        >> uint_p [assign_object(rv.version.t)]
+        >> uint_p [xml::assign_object(rv.version.t)]
         >> L'"'
     ;
 
@@ -406,7 +406,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         str_p(L"signature") 
         >> Eq 
         >> L'"'
-        >> Name [assign_object(rv.class_name)]
+        >> Name [xml::assign_object(rv.class_name)]
         >> L'"'
     ;
     

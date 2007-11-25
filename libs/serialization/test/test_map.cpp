@@ -65,7 +65,7 @@ test_map(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    BOOST_CHECKPOINT("map");
+    BOOST_MESSAGE("map");
     // test map of objects
     std::map<random_key, A> amap;
     amap.insert(std::make_pair(random_key(), A()));
@@ -90,7 +90,7 @@ test_map_2(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    BOOST_CHECKPOINT("map_2");
+    BOOST_MESSAGE("map_2");
     std::pair<int, int> a(11, 22);
     std::map<int, int> b;
     b[0] = 0;
@@ -122,7 +122,7 @@ test_multimap(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    BOOST_CHECKPOINT("multimap");
+    BOOST_MESSAGE("multimap");
     std::multimap<random_key, A> amultimap;
     amultimap.insert(std::make_pair(random_key(), A()));
     amultimap.insert(std::make_pair(random_key(), A()));
@@ -144,13 +144,6 @@ test_multimap(){
 #ifdef BOOST_HAS_HASH
 #include <boost/serialization/hash_map.hpp>
 
-/*
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#define STD _STLP_STD
-#else
-#define STD BOOST_STD_EXTENSION_NAMESPACE
-#endif
-*/
 namespace BOOST_STD_EXTENSION_NAMESPACE {
     template<>
     struct hash<random_key>{
@@ -181,7 +174,22 @@ test_hash_map(){
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("ahashmap",ahash_map1);
     }
+
+    // at least one library - MSL notes: it doesn't make much sense
+    // to implement the == operator for hash collections - but goes ahead
+    // does it anyway even though it doesn't seem to work.  So sort into
+    // vectors and then compare. Currently, it seems that STLPort versions
+    // greater than 5.0 don't support the == operator on hashed sets
+    #if ! defined(__SGI_STL_PORT) || (__SGI_STL_PORT < 0x500)
     BOOST_CHECK(ahash_map == ahash_map1);
+    #else
+        std::vector< std::pair<random_key, A> > tvec, tvec1;
+        std::copy(ahash_map.begin(), ahash_map.end(), std::back_inserter(tvec));
+        std::sort(tvec.begin(), tvec.end());
+        std::copy(ahash_map1.begin(), ahash_map1.end(), std::back_inserter(tvec1));
+        std::sort(tvec1.begin(), tvec1.end());
+        BOOST_CHECK(tvec == tvec1);
+    #endif
     std::remove(testfile);
 }
 
@@ -205,7 +213,18 @@ test_hash_multimap(){
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("ahash_multimap", ahash_multimap1);
     }
+    #if ! defined(__SGI_STL_PORT) || (__SGI_STL_PORT < 0x500)
     BOOST_CHECK(ahash_multimap == ahash_multimap1);
+    #else
+        std::vector< std::pair<random_key, A> > tvec, tvec1;
+        tvec.clear();
+        tvec1.clear();
+        std::copy(ahash_multimap.begin(), ahash_multimap.end(), std::back_inserter(tvec));
+        std::sort(tvec.begin(), tvec.end());
+        std::copy(ahash_multimap1.begin(), ahash_multimap1.end(), std::back_inserter(tvec1));
+        std::sort(tvec1.begin(), tvec1.end());
+        BOOST_CHECK(tvec == tvec1);
+    #endif
     std::remove(testfile);
 }
 #endif

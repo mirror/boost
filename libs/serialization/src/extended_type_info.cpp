@@ -51,8 +51,8 @@ class tkmap {
             return *lhs < *rhs;
         }
     };
-//    typedef std::multiset<const extended_type_info *, type_info_compare> type;
-    typedef std::set<const extended_type_info *, type_info_compare> type;
+    typedef std::multiset<const extended_type_info *, type_info_compare> type;
+    //typedef std::set<const extended_type_info *, type_info_compare> type;
     type m_map;
     static tkmap * m_self;
     tkmap(){}
@@ -131,8 +131,8 @@ class ktmap {
             return std::strcmp(lhs->get_key(), rhs->get_key()) < 0; 
         }
     };
-//    typedef std::multiset<const extended_type_info *, key_compare> type;
-    typedef std::set<const extended_type_info *, key_compare> type;
+    typedef std::multiset<const extended_type_info *, key_compare> type;
+    //typedef std::set<const extended_type_info *, key_compare> type;
     type m_map;
     static ktmap * m_self;
     ktmap(){}
@@ -145,7 +145,7 @@ class ktmap {
             m_key = key;
         }
         virtual bool
-        less_than(const extended_type_info & /* rhs */) const
+        less_than(const extended_type_info &rhs) const
         {
             assert(false);
             return false;   // to prevent a syntax error

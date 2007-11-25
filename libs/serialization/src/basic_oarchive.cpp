@@ -25,7 +25,6 @@
 #include <boost/archive/detail/basic_oserializer.hpp>
 #include <boost/archive/detail/basic_pointer_oserializer.hpp>
 #include <boost/archive/detail/basic_oarchive.hpp>
-#include <boost/archive/detail/basic_archive_impl.hpp>
 #include <boost/archive/archive_exception.hpp>
 
 #ifdef BOOST_MSVC
@@ -45,11 +44,8 @@ namespace detail {
 class basic_oserializer;
 class basic_pointer_oserializer;
 
-class basic_oarchive_impl :
-    public basic_archive_impl
-{
+class basic_oarchive_impl {
     friend class basic_oarchive;
-
     unsigned int m_flags;
 
     //////////////////////////////////////////////////////////////////////
@@ -196,7 +192,7 @@ basic_oarchive_impl::find(const serialization::extended_type_info & ti) const {
             return false;
         }
         void save_object_data(      
-            basic_oarchive & /* ar */, const void * /* x */
+            basic_oarchive & ar, const void * x
         ) const {
             assert(false);
         }
@@ -422,22 +418,6 @@ basic_oarchive::save_pointer(
 BOOST_ARCHIVE_DECL(void) 
 basic_oarchive::register_basic_serializer(const basic_oserializer & bos){
     pimpl->register_type(bos);
-}
-
-BOOST_ARCHIVE_DECL(void) 
-basic_oarchive::lookup_basic_helper(
-    const boost::serialization::extended_type_info * const eti,
-    shared_ptr<void> & sph
-){
-    pimpl->lookup_helper(eti, sph);
-}
-
-BOOST_ARCHIVE_DECL(void) 
-basic_oarchive::insert_basic_helper(
-    const boost::serialization::extended_type_info * const eti,
-    shared_ptr<void> & sph
-){
-    pimpl->insert_helper(eti, sph);
 }
 
 BOOST_ARCHIVE_DECL(unsigned int)

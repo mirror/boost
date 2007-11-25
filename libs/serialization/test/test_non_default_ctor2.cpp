@@ -12,14 +12,8 @@
 // the case where a constructor serializes a pointer member.
 
 #include <fstream>
-#include <cstdio> // for remove()
 
 #include <boost/config.hpp>
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{
-    using ::remove;
-}
-#endif
 
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>

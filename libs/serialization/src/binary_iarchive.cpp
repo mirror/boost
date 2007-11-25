@@ -22,6 +22,20 @@ namespace archive {
 
 // explicitly instantiate for this type of stream
 template class basic_binary_iprimitive<
+    naked_binary_iarchive,
+    char, 
+    std::char_traits<char> 
+>;
+template class basic_binary_iarchive<naked_binary_iarchive> ;
+template class binary_iarchive_impl<
+    naked_binary_iarchive, 
+    char, 
+    std::char_traits<char> 
+>;
+template class detail::archive_pointer_iserializer<naked_binary_iarchive> ;
+
+// explicitly instantiate for this type of stream
+template class basic_binary_iprimitive<
     binary_iarchive,
     char, 
     std::char_traits<char> 

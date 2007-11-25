@@ -30,6 +30,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#runtime">Runtime Interface</a>
   <dt><a href="#requirements">Requirements</a>
   <dt><a href="#models">Models</a>
+  <dt><a href="#example">Example</a>
 </dl>
 
 
@@ -93,7 +94,7 @@ following features:
 </ul>
 The serialization system maintains two global tables.
 <ul>
-  <li>The first is a global type table. it and has with an entry for each type used.
+  <li>The first is a global type table. it has an entry for each type used.
   Each entry is an instance of a class derived from 
   <code style="white-space: normal"><a target="extended_type_info.hpp" href = "../../../boost/serialization/extended_type_info.hpp">extended_type_info</a></code>. This table is used
   to retrieve the unique <code style="white-space: normal"><a target="extended_type_info.hpp" href = "../../../boost/serialization/extended_type_info.hpp">extended_type_info</a></code>
@@ -310,7 +311,9 @@ virtual const char * get_key();
 which returns a unique string the most derived object this class.  
 This function must be virtual in order to implement the functionality required by
 <code style="white-space: normal">ETI::get_derived_extended_type_info</code>
-as described above.  The test program <code style="white-space: normal"><a target="test_no_rtti" href="../test/test_no_rtti.cpp">test_no_rtti</a></code>
+as described above.  
+<h3><a name="example">Example</a></h3>
+The test program <code style="white-space: normal"><a target="test_no_rtti" href="../test/test_no_rtti.cpp">test_no_rtti</a></code>
 implements this function in terms of the <code style="white-space: normal"><a target="extended_type_info_no_rtti.hpp" href="../../../boost/serialization/extended_type_info_no_rtti.hpp">
 extended_type_info</a></code> API above to return the export key associated with the class.  
 This requires that non-abstract types be exported.

@@ -27,7 +27,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 <hr>
 <dl class="index">
   <dt><a href="#requirements">Requirements</a></dt>
-  <dt><a href="#recent_improvements">Differences from version 1.32</a></dt>
+  <dt><a href="#differences_1_32">Differences from version 1.32</a></dt>
+  <dt><a href="#differences_1_33">Differences from version 1.33</a></dt>
+  <dt><a href="#differences_1_34">Differences from version 1.34</a></dt>
   <dt><a href="#todo">Pending Issues</a></dt>
 </dl>
 This is the Boost 1.33 Serialization Library.
@@ -41,23 +43,17 @@ We have found that all tests pass using spirit 1.6x. Spirit 1.8 and higher does 
 older compilers - specificallly MSVC 6, Borland and GCC < 3.0.
 If you are using one of these compilers, you may download a version
 of spirit 1.6 <a href="http://spirit.sourceforge.net/index.php?doc=download/index.html">here</a>.
-Choose the latest 1.6.x Spirit only version available.
 To use this downloaded version rather than the one included with boost,
-you have two options: either replace the <code style="white-space: normal">boost/spirit</code> and
-<code style="white-space: normal">libs/spirit</code> directories, as well as the
-<code style="white-space: normal">boost/spirit.hpp</code> header, with those in the downloaded version,
-or extract Spirit 1.6 to a different directory and add the corresponding include directive to your
-<code style="white-space: normal">tools/build/v2/user-config.jam</code> file for all the
-compilers that need it, as in the following example:
+set an environmental variable SPIRIT_ROOT to be equal to the root 
+directory where the downloaded copy of spirit has been placed. E. G.
 <pre><code>
-using borland : 5.6.4 : "C:/Program Files/Borland/CBuilder6/Bin/bcc32" : 
-        &lt;cxxflags&gt;-IC:/spirit1.6 ;
+set SPIRIT_ROOT=c:/spirit16
 </code></pre>
 If you're not using bjam and the Jamfile to build the library, be sure that
 the directory which contains the version of spirit you plan to use is placed
 at the front of the list of include paths.
 
-<h2><a name="recent_improvements"></a>Differences from Boost 1.32</h2>
+<h2><a name="differences_1_32"></a>Differences from Boost 1.32</h2>
 <ul>
     <li>Dynamic Linking Library (DLLs and shared libraries) for platforms which support them. See
     <a href="../../../more/getting_started.html#auto-link">Automatic Linking on Windows</a>.
@@ -84,10 +80,19 @@ at the front of the list of include paths.
     <li>More compilers tested and supported.
     <li>Miscelleanous bug fixes.
 </ul>
-<h2><a name="recent_improvements"></a>Differences from Boost 1.33</h2>
+<h2><a name="differences_1_33"></a>Differences from Boost 1.33</h2>
 <ul>
     <li>Native Binary archives use the <code style="white-space: normal">std::streambuf</code> interface.
-    This should result in noticible faster execution in some cases.
+    This should result in noticibly faster execution in many cases.
+</ul>
+
+<h2><a name="differences_1_34"></a>Differences from Boost 1.34</h2>
+<ul>
+    <li>Ehanced support for fast serialiation for native binary archives. By Mattias Troyer.
+    <li>Improved implementation of "export" functionality.  Removes header ordering
+        requirement and eliminates the maintainence of a pre-determined list of "known archives"
+        By David Abrahams.
+    <li>Improved support for STLPort.
 </ul>
 
 <h2><a name="todo"></a>Pending issues</h2>
@@ -111,9 +116,8 @@ at the front of the list of include paths.
 Aside from the above, there are a number of issus related to specific platforms.  
 These are listed in <a href="implementation.html#othercompilerissues">Specific Compiler/Library Issues</a>.
 
-
 <hr>
-<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004. 
+<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2007. 
 Distributed under the Boost Software License, Version 1.0. (See
 accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 </i></p>

@@ -26,10 +26,10 @@ namespace std{
 #include <boost/serialization/nvp.hpp>
 #include "A.hpp"
 
-template<class T>
-struct array_equal_to : public std::binary_function<T, T, bool>
+struct array_equal_to //: public std::binary_function<T, T, bool>
 {
-    bool operator()(const T & _Left, const T & _Right) const
+template<class T, class U>
+    bool operator()(const T & _Left, const U & _Right) const
     {
         // consider alignment
         int count_left = sizeof(_Left) /    (
@@ -51,29 +51,30 @@ struct array_equal_to : public std::binary_function<T, T, bool>
     }
 };
 
-int test_main( int /* argc */, char* /* argv */[] )
+template <class T>
+int test_array(T)
 {
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
     // test array of objects
-    const A a_array[10];
+    const T a_array[10]={T(),T(),T(),T(),T(),T(),T(),T(),T(),T()};
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("a_array", a_array);
     }
     {
-        A a_array1[10];
+        T a_array1[10];
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("a_array", a_array1);
 
-        array_equal_to<A[10]> Compare;
+        array_equal_to/*<A[10]>*/ Compare;
         BOOST_CHECK(Compare(a_array, a_array1));
     }
     {
-        A a_array1[9];
+        T a_array1[9];
         test_istream is(testfile, TEST_STREAM_FLAGS);
         BOOST_TRY {
             test_iarchive ia(is);
@@ -96,6 +97,16 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     std::remove(testfile);
     return EXIT_SUCCESS;
+}
+
+
+int test_main( int /* argc */, char* /* argv */[] )
+{
+   int res = test_array(A());
+    // test an int array for which optimized versions should be available
+   if (res == EXIT_SUCCESS)
+     res = test_array(0);  
+   return res;
 }
 
 // EOF

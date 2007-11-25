@@ -32,6 +32,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#export">Export Key</a>
   <dt><a href="#abstract">Abstract</a>
   <dt><a href="#typeinfo">Type Information Implementation</a>
+  <dt><a href="#wrappers">Wrappers</a>
   <dt><a href="#templates">Template Serialization Traits</a>
 </dl>
 Serialization of data depends on the type of the data.  For example, for
@@ -255,6 +256,8 @@ addressable in one over several ways:
   <li>use the macro <code style="white-space: normal">BOOST_IS_ABSTRACT(my_class)</code> to indicate
   that the class is an abstract base class.  This will cause the compiler
   to avoid generating code that causes this error.
+  This macro must be used in the global namespace, with full namespace 
+  qualification of the argument class. 
 </ul>
 <h3><a name="typeinfo">Type Information Implementation</a></h3>
 This last trait is also related to the serialization of objects
@@ -310,6 +313,50 @@ This is illustrated by the test program
 <a href="../test/test_no_rtti.cpp" target="test_no_rtti_cpp">test_no_rtti.cpp</a>.
 Other implementations are possible and might be necessary for
 certain special cases.
+
+version.hpp</a>.  
+<h3><a name="wrappers">Wrappers</a></h3>
+Archives need to treat wrappers diffently from other types since, for example,
+they usually are non-const object while output archives require that any
+serialized object (with the exception of a wrapper) be const. 
+
+This header file <a href="../../../boost/serialization/wrapper.hpp">wrapper.hpp</a>
+includes the following code:
+
+<pre><code>
+namespace boost { 
+namespace serialization {
+template&lt;class T&gt;
+struct is_wrapper
+ : public mpl::false_
+{};
+} // namespace serialization
+} // namespace boost
+</code></pre>
+
+For any class <code style="white-space: normal">T</code>, The default definition 
+of <code style="white-space: normal">boost::serialization::is_wrapper&lt;T&gt;::value</code> is thus false.
+ 
+If we want to declare that a class <code style="white-space: normal">my_class</code>
+is a wrapper we specialize the version template:
+<pre><code>
+namespace boost { 
+namespace serialization {
+struct is_wrapper&lt;my_class&gt;
+ : mpl::true_
+{};
+} // namespace serialization
+} // namespace boost
+</code></pre>
+<p>
+To diminish typing and enhance readability, a macro is defined
+so that instead of the above, we could write:
+<pre><code>
+BOOST_CLASS_IS_WRAPPER(my_class)
+</code></pre>
+which expands to the code above.
+
+
 
 <h3><a name="templates">Template Serialization Traits</a></h3>
 In some instances it might be convenient to assign serialization traits
@@ -407,7 +454,8 @@ template&lt;
     int Level, 
     int Tracking,
     unsigned int Version = 0,
-    class ETII = BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
+    class ETII = BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T),
+    class IsWrapper = mpl::false_
 &gt;
 struct traits
 </code></pre>
@@ -420,10 +468,37 @@ and template parameters should be assigned according to the following table:
 <tr><td><code>Tracking</code></td><td>tracking level</td><td><code>track_never<br>track_selectivly<br>track_always</code></td><td>none</td></tr>
 <tr><td><code>Version</code></td><td><code>class version</td><td>unsigned integer</td><td><code>0</code></td></tr>
 <tr><td><code>ETTI</code></td><td><code>type_info</code> implementation</td><td><code>extended_type_info_typeid<br>extended_type_info_no_rtti</code></td><td>default <code>type_info implementation</code></td></tr>
+<tr><td><code>IsWrapper</code></td><td><code></code>is the type a wrapper?</td><td><code>mpl::false_<br>mpl::true_</code></td><td><code>mpl::false_</code></td></tr>
 </table>
 
+
+<h3><a name="tracking">Bitwise serialization</a></h3>
+Some simple classes could be serialized just by directly copying all bits
+of the class. This is, in particular, the case for POD data types containing
+no pointer members, and which are neither versioned nor tracked. Some archives, 
+such as non-portable binary archives can make us of this information to 
+substantially speed up Serialization.
+
+To indicate the possibility of bitwise serialization the type trait defined 
+in the header
+file <a href="../../../boost/serialization/is_bitwise_serializable.hpp" target="is_bitwise_serializable">is_bitwise_serializable.hpp</a>
+is used:
+<pre><code>
+namespace boost { namespace serialization {
+    template<class T>
+    struct is_bitwise_serializable
+     : public is_arithmetic<T>
+    {};
+} }
+</code></pre>
+is used, and can be specialized for other classes. The specialization
+is made easy by the corresponding macro:
+<pre><code>
+BOOST_IS_BITWISE_SERIALIZABLE(my_class)
+</code></pre>
+
 <hr>
-<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004. 
+<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004 and Matthias Troyer 2006. 
 Distributed under the Boost Software License, Version 1.0. (See
 accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 </i></p>

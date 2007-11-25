@@ -27,7 +27,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 <hr>
 <dl class="page-index">
   <dt><a href="#binaryobjects">Binary Objects</a>
+  <dt><a href="#arrays">Arrays</a>
   <dt><a href="#strong_type"><code style="white-space: normal">BOOST_STRONG_TYPEDEF</code></a>
+  <dt><a href="#collection_size_type">Collection Sizes</a>
   <dt><a href="#nvp">Name-Value Pairs</a>
   <dt><a href="#composition">Composition</a>
 </dl>
@@ -36,6 +38,9 @@ of some underlying data. This permits an archive class to define special
 handling of this type.  The library includes several such types for varying 
 purposes.
 <p>
+Wrappers need to be treated in a special way by some archives, and hence
+the <A href="traits.html#wrappers"><code>is_wrapper</code></a> trait for 
+these wrapper classes is set to true.
 
 <h3><a name="binaryobjects">Binary Objects</a></h3>
 A binary object is just an sequence of bytes stored as raw
@@ -56,6 +61,45 @@ Its default serialization is to use archive class primitives
 Note that it doesn't allocated any storage or create any objects.
 Its sole purpose is to pass the data size and address as pair to the archive class.  
 
+
+<h3><a name="arrays">Arrays</a></h3>
+An array is a contiguous sequence of homogeneous data types, such as a builtin
+C-array, a <code>boost::array&lt;T></code> or a <code>std::vector&lt;T></code>. 
+The purpose of this wrapper is to support archive types (such as binary
+archives) that provide optimized serialization for contiguous sequences of 
+objects of the same type. 
+
+The header file 
+<a href="../../../boost/serialization/array.hpp" target="array_hpp">
+array.hpp
+</a>
+includes the function
+<pre><code>
+template &lt;T>
+boost::serialization::make_array(T* t, std::size_t size);
+</code></pre>
+which will construct a temporary <code>array</code> object
+<pre><code>
+template<class T>
+class array
+{
+public:    
+    typedef T value_type;
+    array(value_type* t, std::size_t s);
+    value_type* address() const;
+    std::size_t count() const;
+};
+</code></pre>
+that can be serialized just like any other object.
+Its default serialization is to use serialize each array element.  
+Note that it doesn't allocated any storage or create any objects.
+Its sole purpose is to pass the data type, size and address to the archive class.
+
+Archive types that can provide optimized implementations for contiguous
+arrays of homogeneous data types should overload the serialization of
+<code>array</code>.
+
+ 
 <h3><a name="strong_type"><code style="white-space: normal">BOOST_STRONG_TYPEDEF</code></h3>
 Another example of a serialization wrapper is the 
 <a href="strong_typedef.html"><code style="white-space: normal">BOOST_STRONG_TYPEDEF</code></a> template.
@@ -66,6 +110,26 @@ special handling to these types.  For example, a version number is rendered
 as an XML attribute in the form "version=12".  In the absence of any specific override,
 these types are automatically converted to the underlying integer type so the
 special overrides used for XML archives aren't needed for other archives.
+
+
+
+<h3><a name="collection_size_type">Collection Sizes</h3>
+An example of a strong typedef is the <code>collection_size_type</code> in the
+header file
+<a href="../../../boost/serialization/collection_size_type.hpp" target="collection_size_type_hpp">
+collection_size_type.hpp
+</a>. This type should be used for serializaing the size of a C++ collection, so
+that the archive can pick the best integral representation for the serialization
+of collection sizes. This is necessary since, although <code>std::size_t</code>
+is guaranteed to be an integral type large enough to represent the size of
+a collection on a specific platform, the archive might want to serialize
+the size differently than this type. For example, the <code>collection_size_type</code>
+might be serialized as a variable length integer in a portable binary archive.
+
+
+
+
+
 
 <h3><a name="nvp">Name-Value Pairs</h3>
 XML archives present a somewhat special case. XML format has a nested
@@ -120,12 +184,15 @@ Similarly there exists a macro definition that permits us to write:
 <pre><code>
 BOOST_SERIALIZATION_BASE_OBJECT_NVP(my_base_class)
 </code></pre>
+
+Note that these macros must be used in the namespace of the class, 
+and without qualifying the namespace in the argument. 
+
 <p>
-Included is 
-<a href="../example/demo_xml.hpp" target="demo_xml_hpp">demo_xml.hpp<a>
-which renders it's data members as <strong>name-value-pair</strong>s and
+<a href="../example/demo_gps.hpp" target="demo_gps_hpp">demo_gps.hpp<a>
+includes NVP wrappers or all data members.
 <a href="../example/demo_xml.cpp" target="demo_xml_cpp">demo_xml.cpp<a>
-which saves and loads data to an XML archive.
+saves and loads data to an XML archive.
 <a href="../example/demo_save.xml" target="demo_save_xml">Here</a>
 is example of the XML Archive corresponding to our tutorial example.
 

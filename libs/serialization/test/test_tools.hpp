@@ -107,7 +107,47 @@ namespace archive {
 #define BOOST_ARCHIVE_TEST text_archive.hpp
 #endif
 
-#include <boost/test/test_tools.hpp>
+//#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
+
+#define BOOST_CHECK( P ) \
+    BOOST_TEST( (P) )
+#define BOOST_REQUIRE( P )  \
+    BOOST_TEST( (P) )
+#define BOOST_CHECK_MESSAGE( P, M )  \
+    ((P)? (void)0 : ::boost::detail::error_impl( (M) , __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
+#define BOOST_REQUIRE_MESSAGE( P, M ) \
+    BOOST_CHECK_MESSAGE( (P), (M) )
+#define BOOST_CHECK_EQUAL( A , B ) \
+    BOOST_TEST( (A) == (B) )
+
+namespace boost { namespace detail {
+inline void msg_impl(char const * msg, char const * file, int line, char const * function)
+{
+    std::cerr << file << "(" << line << "): " << msg << " in function '" << function << "'" << std::endl;
+}
+} } // boost::detail
+
+#define BOOST_WARN_MESSAGE( P, M )  \
+    ((P)? (void)0 : ::boost::detail::msg_impl( (M) , __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
+#define BOOST_MESSAGE( M ) \
+    BOOST_WARN_MESSAGE( true , (M) )
+
+#define BOOST_CHECKPOINT( M ) \
+    BOOST_WARN_MESSAGE( true , (M) )
+
+#define BOOST_TEST_DONT_PRINT_LOG_VALUE( T ) 
+
+#define BOOST_FAIL( M ) BOOST_REQUIRE_MESSAGE( false, (M) )
+#define EXIT_SUCCESS 0
+
+int test_main(int argc, char * argv[]);
+
+int
+main(int argc, char * argv[]){
+    test_main(argc, argv);
+    return boost::report_errors();
+}
 
 // the following is to ensure that when one of the libraries changes
 // BJAM rebuilds and relinks the test.
