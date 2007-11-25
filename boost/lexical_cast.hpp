@@ -811,7 +811,7 @@ namespace boost
         inline bool lexical_stream_limited_src<CharT,Base>::operator<<(
                 unsigned short n)
         {
-            start = lcast_put_unsigned(+n, finish);
+            start = lcast_put_unsigned(lcast_to_unsigned(n), finish);
             return true;
         }
 
