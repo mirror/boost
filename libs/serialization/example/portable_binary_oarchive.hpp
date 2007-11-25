@@ -52,13 +52,25 @@ public:
     friend class boost::archive::basic_binary_oarchive<portable_binary_oarchive>;
     friend class boost::archive::save_access;
 #endif
-    void save_impl(long l){
+    void save_impl(const long l){
         long ll = l;
-        char size = 0;;
-        do{
-            ll >>= 8;
-            ++size;
-        }while(ll != -1 && ll != 0);
+        char size = 0;
+        if(l < 0){
+            // make sure that enough of data is output
+            // to include a high order bit indicating the sign
+            char x;
+            do{
+                x = ll;
+                ll >>= 8;
+                ++size;
+            }while(ll != -1 && x < 0);
+        }
+        else{
+            do{
+                ll >>= 8;
+                ++size;
+            }while(ll != 0);
+        }
 
         this->archive_base_t::save(size);
 
@@ -83,6 +95,12 @@ public:
     template<class T>
     void save(const T & t){
         this->primitive_base_t::save(t);
+    }
+    void save(const short  t){
+        save_impl(t);
+    }
+    void save(const unsigned short t){
+        save_impl(t);
     }
     void save(const unsigned int t){
         save_impl(t);

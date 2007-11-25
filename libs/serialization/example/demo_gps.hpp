@@ -1,9 +1,9 @@
-#ifndef BOOST_SERIALIZATION_EXAMPLE_DEMO_XML_HPP
-#define BOOST_SERIALIZATION_EXAMPLE_DEMO_XML_HPP
+#ifndef BOOST_SERIALIZATION_EXAMPLE_DEMO_GPS_HPP
+#define BOOST_SERIALIZATION_EXAMPLE_DEMO_GPS_HPP
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 //
-// demo_xml.hpp
+// demo_gps.hpp
 //
 // (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
@@ -281,4 +281,4 @@ std::ostream & operator<<(std::ostream &os, const bus_schedule &bs)
     return os;
 }
 
-#endif // BOOST_SERIALIZATION_EXAMPLE_DEMO_XML_HPP
+#endif // BOOST_SERIALIZATION_EXAMPLE_DEMO_GPS_HPP
