@@ -16,6 +16,7 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
 #include <boost/detail/allocator_utilities.hpp>
+#include <boost/multi_index/detail/adl_swap.hpp>
 #include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
@@ -65,30 +66,14 @@ struct auto_space:private noncopyable
 
   pointer data()const{return data_;}
 
-  void swap(auto_space& x){swap_(x);}
-    
-private:
-  void swap_(auto_space& x)
+  void swap(auto_space& x)
   {
-    /* Swapping is done inside swap_() rather than swap() so as to avoid
-     * name hiding when ADLing swap below. Not sure if this is legally
-     * required, though.
-     */
-
-    if(al_!=x.al_){
-
-#if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
-      std::swap(al_,x.al_);
-#else
-      using std::swap;
-      swap(al_,x.al_);
-#endif
-
-    }
+    if(al_!=x.al_)adl_swap(al_,x.al_);
     std::swap(n_,x.n_);
     std::swap(data_,x.data_);
   }
-
+    
+private:
   typename boost::detail::allocator::rebind_to<
     Allocator,T>::type                          al_;
   std::size_t                                   n_;
