@@ -1180,7 +1180,13 @@ namespace boost
     template<typename Target, typename Source>
     Target lexical_cast(Source arg)
     {
-        detail::lexical_stream<Target, Source> interpreter;
+        typedef typename detail::widest_char< 
+            BOOST_DEDUCED_TYPENAME detail::stream_char<Target>::type 
+          , BOOST_DEDUCED_TYPENAME detail::stream_char<Source>::type 
+        >::type char_type; 
+
+        typedef std::char_traits<char_type> traits;
+        detail::lexical_stream<Target, Source, traits> interpreter;
         Target result;
 
         if(!(interpreter << arg && interpreter >> result))
