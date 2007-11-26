@@ -1117,12 +1117,9 @@ namespace boost
             BOOST_DEDUCED_TYPENAME boost::call_traits<Source>::param_type arg,
             CharT* buf, std::size_t src_len)
         {
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
             typedef BOOST_DEDUCED_TYPENAME
                 deduce_char_traits<CharT,Target,Source>::type traits;
-#else
-            typedef std::char_traits<CharT> traits;
-#endif
+
             typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                 lcast_streambuf_for_target<Target>::value ||
                 lcast_streambuf_for_source<Source>::value
