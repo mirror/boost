@@ -84,14 +84,6 @@ unsigned int test_count = 0;
 // The global object that contains the current test case
 xpr_test_case<char> test;
 
-sregex const rx_sec = '[' >> (s1= +_) >> ']';
-sregex const rx_str = "str=" >> (s1= *_);
-sregex const rx_pat = "pat=" >> (s1= *_);
-sregex const rx_flg = "flg=" >> (s1= *_);
-sregex const rx_sub = "sub=" >> (s1= *_);
-sregex const rx_res = "res=" >> (s1= *_);
-sregex const rx_br = "br" >> (s1= +digit) >> '=' >> (s2= *_);
-
 struct test_case_formatter
 {
     friend std::ostream &operator <<(std::ostream &sout, test_case_formatter)
@@ -168,6 +160,14 @@ bool get_test()
     bool first = true;
     std::string line;
     smatch what;
+
+    sregex const rx_sec = '[' >> (s1= +_) >> ']';
+    sregex const rx_str = "str=" >> (s1= *_);
+    sregex const rx_pat = "pat=" >> (s1= *_);
+    sregex const rx_flg = "flg=" >> (s1= *_);
+    sregex const rx_sub = "sub=" >> (s1= *_);
+    sregex const rx_res = "res=" >> (s1= *_);
+    sregex const rx_br = "br" >> (s1= +digit) >> '=' >> (s2= *_);
 
     while(in.good())
     {
