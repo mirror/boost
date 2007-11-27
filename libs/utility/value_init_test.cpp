@@ -73,6 +73,22 @@ struct AggregatePODStruct
 bool operator == ( AggregatePODStruct const& lhs, AggregatePODStruct const& rhs )
 { return lhs.f == rhs.f && lhs.c == rhs.c && lhs.i == rhs.i ; }
 
+//
+// An aggregate struct that contains an std::string and an int.
+// Pavel Kuznetsov (MetaCommunications Engineering) used a struct like
+// this to reproduce the Microsoft Visual C++ compiler bug, reported as
+// Feedback ID 100744, "Value-initialization in new-expression"
+// https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=100744
+//
+struct StringAndInt
+{
+  std::string s;
+  int i;
+};
+
+bool operator == ( StringAndInt const& lhs, StringAndInt const& rhs )
+{ return lhs.s == rhs.s && lhs.i == rhs.i ; }
+
 
 //
 // This test function tests boost::value_initialized<T> for a specific type T.
@@ -123,13 +139,15 @@ int test_main(int, char **)
   AggregatePODStruct nonZeroInitializedAggregatePODStruct = { 1.25f, 'a', -1 };
   BOOST_CHECK ( test(zeroInitializedAggregatePODStruct, nonZeroInitializedAggregatePODStruct) );
 
+  StringAndInt stringAndInt0;
+  StringAndInt stringAndInt1;
+  stringAndInt0.i = 0;
+  stringAndInt1.i = 1;
+  stringAndInt1.s = std::string("1");
+  BOOST_CHECK ( test(stringAndInt0, stringAndInt1) );
+
   return 0;
 }
 
 
 unsigned int expected_failures = 0;
-
-
-
-
-
