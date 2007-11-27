@@ -21,6 +21,7 @@
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
+#include <boost/xpressive/detail/dynamic/sequence.hpp>
 #include <boost/xpressive/regex_error.hpp>
 
 namespace boost { namespace xpressive { namespace detail

@@ -17,6 +17,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/dynamic/matchable.hpp>
+#include <boost/xpressive/match_results.hpp> // for type_info_less
 
 namespace boost { namespace xpressive { namespace detail
 {
