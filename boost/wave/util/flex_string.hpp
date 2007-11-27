@@ -24,7 +24,7 @@
 //      - Incorporated the changes from Andrei's latest version of this class
 //
 // #HK070307:
-//      - One again incorporated the changes from Andrei's latest version of 
+//      - Once again incorporated the changes from Andrei's latest version of 
 //        this class
 
 #ifndef FLEX_STRING_INC_
@@ -705,8 +705,8 @@ public:
 
         if (capacity() < neededCapacity)
         {
-            static std::less_equal<const E*> le;
-            BOOST_ASSERT(!(le(begin(), &*b) && le(&*b, end())));
+            typedef std::less_equal<const E*> le_type;
+            BOOST_ASSERT(!(le_type()(begin(), &*b) && le_type()(&*b, end())));
             reserve(neededCapacity);
         }
         std::copy(b, e, end());
