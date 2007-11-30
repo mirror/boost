@@ -29,6 +29,7 @@
 #include <boost/mpl/deref.hpp>
 #include <boost/multi_index_container_fwd.hpp>
 #include <boost/multi_index/detail/access_specifier.hpp>
+#include <boost/multi_index/detail/adl_swap.hpp>
 #include <boost/multi_index/detail/base_type.hpp>
 #include <boost/multi_index/detail/converter.hpp>
 #include <boost/multi_index/detail/header_holder.hpp>
@@ -540,14 +541,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   void swap_(multi_index_container<Value,IndexSpecifierList,Allocator>& x)
   {
     if(bfm_allocator::member!=x.bfm_allocator::member){
-
-#if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
-      std::swap(bfm_allocator::member,x.bfm_allocator::member);
-#else
-      using std::swap;
-      swap(bfm_allocator::member,x.bfm_allocator::member);
-#endif
-
+      detail::adl_swap(bfm_allocator::member,x.bfm_allocator::member);
     }
     std::swap(bfm_header::member,x.bfm_header::member);
     super::swap_(x);
