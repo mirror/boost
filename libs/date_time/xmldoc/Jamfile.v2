@@ -38,7 +38,7 @@ local gregorian_files = [ set.difference
 doxygen date_time_autodoc : 
 	$(date_time_files) : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
-        <xsl:param>"boost.doxygen.reftitle=\"Date Time Reference\""
+        <xsl:param>boost.doxygen.reftitle="Date Time Reference"
         <doxygen.doxproc.title>"Date Time Reference"
         <doxygen.doxproc.id>"date_time_reference"
 	;
@@ -46,7 +46,7 @@ doxygen date_time_autodoc :
 doxygen gregorian_autodoc :
 	$(gregorian_files) : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
-        <xsl:param>"boost.doxygen.reftitle=\"Gregorian Reference\""
+        <xsl:param>boost.doxygen.reftitle="Gregorian Reference"
         <doxygen.doxproc.title>"Gregorian Reference"
         <doxygen.doxproc.id>"gregorian_reference"
 	;
@@ -54,7 +54,7 @@ doxygen gregorian_autodoc :
 doxygen posix_time_autodoc :
 	[ glob ../../../boost/date_time/posix_time/*.hpp ] : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
-        <xsl:param>"boost.doxygen.reftitle=\"Posix Time Reference\""
+        <xsl:param>boost.doxygen.reftitle="Posix Time Reference"
         <doxygen.doxproc.title>"Posix Time Reference"
         <doxygen.doxproc.id>"posix_time_reference"
 	;
@@ -62,7 +62,7 @@ doxygen posix_time_autodoc :
 doxygen local_time_autodoc :
         [ glob ../../../boost/date_time/local_time/*.hpp ] : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
-        <xsl:param>"boost.doxygen.reftitle=\"Local Time Reference\""
+        <xsl:param>boost.doxygen.reftitle="Local Time Reference"
         <doxygen.doxproc.title>"Local Time Reference"
         <doxygen.doxproc.id>"local_time_reference"
         ;
