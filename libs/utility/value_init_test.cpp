@@ -62,6 +62,9 @@ struct NonPOD : NonPODBase
 
 //
 // Sample aggregate POD struct type
+// Some compilers do not correctly value-initialize such a struct, for example:
+// Borland C++ Report #51854, "Value-initialization: POD struct should be zero-initialized "
+// http://qc.codegear.com/wc/qcmain.aspx?d=51854
 //
 struct AggregatePODStruct
 {
@@ -125,6 +128,29 @@ void StructWithVirtualFunction::VirtualFunction()
 bool operator == ( StructWithVirtualFunction const& lhs, StructWithVirtualFunction const& rhs )
 { return lhs.i == rhs.i ; }
 
+
+//
+// A struct that is derived from an aggregate POD struct.
+// Some compilers do not correctly value-initialize such a struct, for example:
+// GCC Bugzilla Bug 30111,  "Value-initialization of POD base class doesn't initialize members",
+// reported by Jonathan Wakely, http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111
+//
+struct DerivedFromAggregatePODStruct : AggregatePODStruct
+{
+  DerivedFromAggregatePODStruct() : AggregatePODStruct() {}
+};
+
+//
+// A struct that wraps an aggregate POD struct as data member.
+//
+struct AggregatePODStructWrapper
+{
+  AggregatePODStructWrapper() : dataMember() {}
+  AggregatePODStruct dataMember;
+};
+
+bool operator == ( AggregatePODStructWrapper const& lhs, AggregatePODStructWrapper const& rhs )
+{ return lhs.dataMember == rhs.dataMember ; }
 
 //
 // This test function tests boost::value_initialized<T> for a specific type T.
@@ -193,6 +219,18 @@ int test_main(int, char **)
   structWithVirtualFunction0.i = 0;
   structWithVirtualFunction1.i = 1;
   BOOST_CHECK ( test(structWithVirtualFunction0, structWithVirtualFunction1) );
+
+  DerivedFromAggregatePODStruct derivedFromAggregatePODStruct0;
+  DerivedFromAggregatePODStruct derivedFromAggregatePODStruct1;
+  static_cast<AggregatePODStruct &>(derivedFromAggregatePODStruct0) = zeroInitializedAggregatePODStruct;
+  static_cast<AggregatePODStruct &>(derivedFromAggregatePODStruct1) = nonZeroInitializedAggregatePODStruct;
+  BOOST_CHECK ( test(derivedFromAggregatePODStruct0, derivedFromAggregatePODStruct1) );
+
+  AggregatePODStructWrapper aggregatePODStructWrapper0;
+  AggregatePODStructWrapper aggregatePODStructWrapper1;
+  aggregatePODStructWrapper0.dataMember = zeroInitializedAggregatePODStruct;
+  aggregatePODStructWrapper1.dataMember = nonZeroInitializedAggregatePODStruct;
+  BOOST_CHECK ( test(aggregatePODStructWrapper0, aggregatePODStructWrapper1) );
 
   return 0;
 }
