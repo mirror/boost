@@ -75,5 +75,4 @@ int main()
    algo::erase(&header, &three);
    return 0;
 }
-
 //]
