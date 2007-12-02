@@ -14,6 +14,8 @@
 #include <limits>     // std::numeric_limits
 #include <climits>    // CHAR_BIT
 
+#include <boost/wave/wave_config.hpp>   
+
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>
 
@@ -26,7 +28,6 @@
 #include <boost/spirit/phoenix/statements.hpp>
 #include <boost/spirit/phoenix/functions.hpp>
 
-#include <boost/wave/wave_config.hpp>   
 #include <boost/wave/cpp_exceptions.hpp>   
 #include <boost/wave/grammars/cpp_literal_grammar_gen.hpp>
 
@@ -63,9 +64,9 @@ namespace impl {
 ///////////////////////////////////////////////////////////////////////////////
     struct compose_character_literal {
 
-        template <typename ResultT, typename A1, typename A2, typename A3>
-        struct result { 
-        
+        template <typename A1, typename A2, typename A3, typename A4>
+        struct result 
+        { 
             typedef void type; 
         };
 

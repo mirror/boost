@@ -11,6 +11,8 @@
 #if !defined(CPP_EXPRESSION_GRAMMAR_HPP_099CD1A4_A6C0_44BE_8F24_0B00F5BE5674_INCLUDED)
 #define CPP_EXPRESSION_GRAMMAR_HPP_099CD1A4_A6C0_44BE_8F24_0B00F5BE5674_INCLUDED
 
+#include <boost/wave/wave_config.hpp>
+
 #include <boost/assert.hpp>
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/attribute/closure.hpp>
@@ -26,7 +28,6 @@
 #include <boost/spirit/phoenix/statements.hpp>
 #include <boost/spirit/phoenix/casts.hpp>
 
-#include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
 
 #include <boost/wave/cpp_exceptions.hpp>

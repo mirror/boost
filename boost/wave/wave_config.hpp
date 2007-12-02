@@ -405,8 +405,8 @@ namespace boost { namespace wave
 #endif
 #if PHOENIX_LIMIT < 6
 // boost/spirit/attribute.hpp sets PHOENIX_LIMIT to 3! 
-#error "Boost.Wave: the constant PHOENIX_LIMIT must be at least defined to 4" \
-       " to compile the library."
+#error "Boost.Wave: the constant PHOENIX_LIMIT must be at least defined to 6" \
+" to compile the library."
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
