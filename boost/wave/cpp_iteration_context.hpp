@@ -22,6 +22,7 @@
 #include <boost/wave/cpp_exceptions.hpp>
 #include <boost/wave/language_support.hpp>
 #include <boost/wave/util/file_position.hpp>
+#include <boost/spirit/iterator/multi_pass.hpp> // make_multi_pass 
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS

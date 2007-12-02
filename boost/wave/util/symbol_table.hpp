@@ -14,6 +14,8 @@
 #include <map>
 
 #include <boost/wave/wave_config.hpp>
+#include <boost/shared_ptr.hpp> 
+
 #if BOOST_WAVE_SERIALIZATION != 0
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/map.hpp>

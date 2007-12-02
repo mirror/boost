@@ -347,7 +347,7 @@
 //  import as a keyword (T_IMPORT token id)
 //
 #if !defined(BOOST_WAVE_SUPPORT_IMPORT_KEYWORD)
-#define BOOST_WAVE_SUPPORT_IMPORT_KEYWORD  0
+#define BOOST_WAVE_SUPPORT_IMPORT_KEYWORD 0
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -404,6 +404,7 @@ namespace boost { namespace wave
 #define PHOENIX_LIMIT 6
 #endif
 #if PHOENIX_LIMIT < 6
+// boost/spirit/attribute.hpp sets PHOENIX_LIMIT to 3! 
 #error "Boost.Wave: the constant PHOENIX_LIMIT must be at least defined to 4" \
        " to compile the library."
 #endif
