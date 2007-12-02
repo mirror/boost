@@ -37,6 +37,7 @@
    <!-- location of the various Boost elements -->
 
    <xsl:param name = "boost.root"      select = "'../..'"/>
+   <xsl:param name = "boost.website"   select = "'http://beta.boost.org'"/>
    <xsl:param name = "boost.image.src" 
               select = "concat($boost.root, '/boost.png')"/>
    <xsl:param name = "boost.image.alt" select = "'Boost C++ Libraries'"/>
@@ -116,12 +117,12 @@
       </xsl:variable>
       <xsl:variable name="people_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.root, '/people/people.htm' )"/>
+            <xsl:with-param name="target" select="concat( $boost.website, '/users/people.html' )"/>
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="faq_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.root, '/more/faq.htm' )"/>
+            <xsl:with-param name="target" select="concat( $boost.website, '/users/faq.html' )"/>
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="more_link">
