@@ -45,8 +45,18 @@ namespace boost
     private:
             BOOST_STATIC_CONSTANT( T*, var );
     public:
+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
+#pragma warning(push)  
+#pragma warning(disable:6334)  
+#endif  
+
             BOOST_STATIC_CONSTANT(bool, value = sizeof( ptr_container_detail::is_nullable( var ) ) 
                                                 == sizeof( type_traits::yes_type ) );
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
+#pragma warning(pop)  
+#endif  
+            
     };
     
     template< class T >
