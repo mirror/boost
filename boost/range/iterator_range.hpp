@@ -77,8 +77,8 @@ namespace boost
         {
             typedef BOOST_DEDUCED_TYPENAME boost::range_difference<Left>::type sz_type;
 
-            sz_type l_size = boost::size( l ),
-                    r_size = boost::size( r );
+            sz_type l_size = boost::distance( l ),
+                    r_size = boost::distance( r );
 
             if( l_size != r_size )
                 return false;
