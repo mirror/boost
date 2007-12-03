@@ -11,6 +11,8 @@
 #ifndef BOOST_RANGE_SUB_RANGE_HPP
 #define BOOST_RANGE_SUB_RANGE_HPP
 
+#include <boost/detail/workaround.hpp>
+
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || BOOST_WORKAROUND(BOOST_MSVC, == 1400) 
     #pragma warning( disable : 4996 )
 #endif
