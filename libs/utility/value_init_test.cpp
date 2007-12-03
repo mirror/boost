@@ -8,6 +8,7 @@
 //
 // Initial: 21 Agu 2002
 
+#include <cstring>  // For memcmp.
 #include <iostream>
 #include <string>
 
