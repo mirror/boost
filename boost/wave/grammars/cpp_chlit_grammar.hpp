@@ -22,6 +22,10 @@
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/attribute/closure.hpp>
 #include <boost/spirit/dynamic/if.hpp>
+#if SPIRIT_VERSION >= 0x1700
+#include <boost/spirit/actor/assign_actor.hpp>
+#include <boost/spirit/actor/push_back_actor.hpp>
+#endif // SPIRIT_VERSION >= 0x1700
 
 #include <boost/spirit/phoenix/operators.hpp>
 #include <boost/spirit/phoenix/primitives.hpp>
@@ -30,6 +34,16 @@
 
 #include <boost/wave/cpp_exceptions.hpp>   
 #include <boost/wave/grammars/cpp_literal_grammar_gen.hpp>
+
+#if !defined(spirit_append_actor)
+#if SPIRIT_VERSION >= 0x1700
+#define spirit_append_actor(actor) boost::spirit::push_back_a(actor)
+#define spirit_assign_actor(actor) boost::spirit::assign_a(actor)
+#else
+#define spirit_append_actor(actor) boost::spirit::append(actor)
+#define spirit_assign_actor(actor) boost::spirit::assign(actor)
+#endif // SPIRIT_VERSION >= 0x1700
+#endif // !defined(spirit_append_actor)
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
