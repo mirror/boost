@@ -25,6 +25,24 @@ namespace boost { namespace fusion { namespace traits
         typedef T type; 
     };
 
+    template <typename T>
+    struct deduce<T const>
+    {
+        typedef T type;
+    };
+
+    template <typename T>
+    struct deduce<T volatile>
+    {
+        typedef T type;
+    };
+
+    template <typename T>
+    struct deduce<T const volatile>
+    {
+        typedef T type;
+    };
+
     // Keep references on mutable LValues
 
     template <typename T>
