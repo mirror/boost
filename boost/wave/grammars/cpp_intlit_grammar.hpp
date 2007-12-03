@@ -11,6 +11,8 @@
 #if !defined(CPP_INTLIT_GRAMMAR_HPP_2E1E70B1_F15C_4132_8554_10A231B0D91C_INCLUDED)
 #define CPP_INTLIT_GRAMMAR_HPP_2E1E70B1_F15C_4132_8554_10A231B0D91C_INCLUDED
 
+#include <boost/wave/wave_config.hpp>
+
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/attribute/closure.hpp>
 #if SPIRIT_VERSION >= 0x1700
@@ -22,7 +24,6 @@
 #include <boost/spirit/phoenix/primitives.hpp>
 #include <boost/spirit/phoenix/statements.hpp>
 
-#include <boost/wave/wave_config.hpp>
 #include <boost/wave/cpp_exceptions.hpp>
 #include <boost/wave/grammars/cpp_literal_grammar_gen.hpp>
 

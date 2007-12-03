@@ -17,6 +17,7 @@
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
+#include <boost/wave/util/unput_queue_iterator.hpp> 
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -420,8 +421,6 @@ template <typename ContainerT>
 inline bool
 is_whitespace_only (ContainerT const &argument)
 {
-    using namespace cpplexer;
-    
     typename ContainerT::const_iterator end = argument.end();
     for (typename ContainerT::const_iterator it = argument.begin();
           it != end; ++it)

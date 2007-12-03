@@ -17,6 +17,7 @@
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/language_support.hpp>
 #include <boost/wave/cpplexer/cpp_lex_interface.hpp>
+#include <boost/wave/cpplexer/cpp_lex_token.hpp>      // lex_token 
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS

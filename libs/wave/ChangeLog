@@ -24,6 +24,9 @@ TODO (known issues):
 
 CHANGELOG
 
+- Wave Version 1.4
+
+Boost V1.35.0
 - Wave Version 1.3
 - Changed the return value of the 'evaluated_conditional_expression()' pp hook
   to 'bool' allowing to force Wave to re-evaluate the current conditional
@@ -151,7 +154,10 @@ CHANGELOG
   spotting the problem.
 - Unterminated C++/C comment diagnostics are now a warning and not an error 
   anymore.
-  
+- Applied patch provided by Jens Seidel making sure every header compiles on 
+  its own.
+- Updates to the documentation.
+
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 

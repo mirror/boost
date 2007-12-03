@@ -84,7 +84,7 @@ namespace impl {
     }
 // T_INTLIT
     inline bool 
-    handle_intlit(boost::wave::token_id prev, boost::wave::token_id before)
+    handle_intlit(boost::wave::token_id prev, boost::wave::token_id /*before*/)
     {
         using namespace boost::wave;
         switch (static_cast<unsigned int>(prev)) {
@@ -101,7 +101,7 @@ namespace impl {
 // T_FLOATLIT
     inline bool 
     handle_floatlit(boost::wave::token_id prev, 
-        boost::wave::token_id before)
+        boost::wave::token_id /*before*/)
     {
         using namespace boost::wave;
         switch (static_cast<unsigned int>(prev)) {
@@ -118,7 +118,7 @@ namespace impl {
 // <% T_LEFTBRACE
     inline bool 
     handle_alt_leftbrace(boost::wave::token_id prev, 
-        boost::wave::token_id before)
+        boost::wave::token_id /*before*/)
     {
         using namespace boost::wave;
         switch (static_cast<unsigned int>(prev)) {
@@ -131,7 +131,7 @@ namespace impl {
 // <: T_LEFTBRACKET
     inline bool 
     handle_alt_leftbracket(boost::wave::token_id prev, 
-        boost::wave::token_id before)
+        boost::wave::token_id /*before*/)
     {
         using namespace boost::wave;
         switch (static_cast<unsigned int>(prev)) {
@@ -144,7 +144,7 @@ namespace impl {
 // T_FIXEDPOINTLIT
     inline bool 
     handle_fixedpointlit(boost::wave::token_id prev, 
-        boost::wave::token_id before)
+        boost::wave::token_id /*before*/)
     {
         using namespace boost::wave;
         switch (static_cast<unsigned int>(prev)) {
@@ -174,7 +174,7 @@ namespace impl {
 // T_QUESTION_MARK
     inline bool 
     handle_questionmark(boost::wave::token_id prev, 
-        boost::wave::token_id before)
+        boost::wave::token_id /*before*/)
     {
         using namespace boost::wave;
         switch(static_cast<unsigned int>(prev)) {
