@@ -52,7 +52,7 @@
     
     <span class="keyword">template</span> &lt;
         <span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> LexIterator, 
-        <span class="keyword">typename</span> InputPolicy, <span class="keyword">typename</span> TracePolicy 
+        <span class="keyword">typename</span> InputPolicy, <span class="keyword">typename</span> ContextPolicy 
     &gt; 
     <span class="keyword">class</span> context <span class="special">:</span> <span class="keyword">public</span> InputPolicy 
     {
@@ -66,7 +66,7 @@
         <a href="class_reference_context.html#constructor">context</a>(Iterator<span class="keyword"> const</span> &amp;first_, 
             Iterator <span class="keyword">const</span> &amp;last_, 
             <span class="keyword">char const</span> *fname = <span class="string">"&lt;Unknown&gt;"</span>,
-            TracePolicy <span class="keyword">const</span>&amp; trace = TracePolicy())
+            ContextPolicy <span class="keyword">const</span>&amp; ctx_policy = ContextPolicy())
 
     <span class="comment">// iterator interface</span>
         iterator_type <a href="class_reference_context.html#iterator_interface_begin">begin</a>() <span class="keyword">const</span>;
@@ -135,9 +135,9 @@
         to use, when it comes to including and opening an included file.</p></td>
   </tr>
   <tr>
-    <td class="table_cells"><code>TracePolicy</code></td>
-    <td class="table_cells"><p>The type of the trace policy class, which allows 
-        to customize the trace output generated while expanding macros. The requirements for this policy are described <a href="class_reference_ctxpolicy.html">here</a>.</p></td>
+    <td class="table_cells"><code>ContextPolicy</code></td>
+    <td class="table_cells"><p>The type of the context policy class, which allows 
+        to customize different aspects of the behaviour of the preprocessing. The requirements of this policy and the available customization points provided by this policy are described <a href="class_reference_ctxpolicy.html">here</a>.</p></td>
   </tr>
 </table>
 <p>For further information about the lexer type to use, please refer to the <a href="class_reference_lexer.html">The 
@@ -145,9 +145,9 @@
 <p>If the template parameter <tt>InputPolicy</tt> is omitted, the template <tt>boost::wave::iteration_context_policies::load_file_to_string</tt> 
   is used. For further information about the input policy, please refer to the 
   topic <a href="class_reference_inptpolcy.html">The Input Policy</a>.</p>
-<p>If the template parameter TracePolicyT is omitted, the <tt>boost::wave::macro_trace_policies::no_tracing</tt> 
-  policy type is used, i.e. by default there is no tracing performed. For further 
-  information about the hooking policy, please refer to the topic <a href="class_reference_ctxpolicy.html">The 
+<p>If the template parameter ContextPolicy is omitted, the <tt>boost::wave::context_policies::eat_whitespace</tt> 
+  policy type is used, implementing certain basic preprocessing hooks needed for normal (default) execution. For further 
+  information about the context policy, please refer to the topic <a href="class_reference_ctxpolicy.html">The 
   Context Policy</a>. </p>
 <h2><a name="public_typedefs"></a>Public Typedefs</h2>
 <p>The <tt>boost::wave::context</tt> template defines the following public typedefs, which may be useful while using this class:</p>
@@ -172,8 +172,8 @@
     <td class="table_cells"><p>The <tt>InputPolicy</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
   </tr>
   <tr>
-    <td class="table_cells"><code>trace_policy_type</code></td>
-    <td class="table_cells"><p>The <tt>TracePolicy</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+    <td class="table_cells"><code>context_policy_type</code></td>
+    <td class="table_cells"><p>The <tt>ContextPolicy</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
   </tr>
   <tr>
     <td class="table_cells"><code>position_type</code></td>
@@ -184,15 +184,15 @@
 <p><b><a name="constructor" id="constructor"></a>Constructor</b></p>
 <pre>    context(Iterator <span class="keyword">const</span> &amp;first, 
         Iterator <span class="keyword">const</span> &amp;last, <span class="keyword">char</span> <span class="keyword">const</span> *filename, 
-        TracePolicy <span class="keyword">const</span>&amp; trace);</pre> 
+        ContextPolicy <span class="keyword">const</span>&amp; ctx_policy);</pre> 
     <p>Constructs a context object on top of the input stream given by the pair 
     of auxilliary iterators <tt>[first,&nbsp;last)</tt>. The iterators should 
     be at least <tt>forward_iterator</tt> type iterators. The filename parameter 
     is to be supplied for informational purposes only. This string is used for 
     indicating the token positions inside the input stream, it is not validated 
     against the file system. If the filename parameter is not given it defaults 
-    to <span class="copyright">&quot;&lt;Unknown&gt;&quot;</span>. If the trace 
-    parameter isn't supplied it defaults to a default constructed <tt>TracePolicy</tt> 
+    to <span class="copyright">&quot;&lt;Unknown&gt;&quot;</span>. If the ctx_policy 
+    parameter isn't supplied it defaults to a default constructed <tt>ContextPolicy</tt> 
     object. </p>
     <p>Additionally the macro symbol table is filled with the predefined macros 
     and the current reference directory is set to the path of the given filename. 
@@ -507,7 +507,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, June 26, 2007  20:21<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Sunday, December 2, 2007  19:12<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

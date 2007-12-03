@@ -24,7 +24,7 @@
     <td width="30"><a href="class_reference_context.html"><img src="theme/r_arr.gif" border="0"></a></td>
   </tr>
 </table>
-<p>Preprocessing with Wave is highly configurable. You must
+<p>Preprocessing with <tt>Wave</tt> is highly configurable. You must
 define a few options to control it. Here are a few of the
 options you can define:</p>
 <BLOCKQUOTE dir="ltr" style="MARGIN-RIGHT: 0px"> 
@@ -38,13 +38,13 @@ Standard (such as for variadics and placemarkers)
   </P>
 </BLOCKQUOTE>
 <p>You can access all these processing parameters through the <tt>boost::wave::context</tt> 
-  object. So you must instantiate one object of this type to use the <tt>Wave</tt> 
+  object. So you must instantiate one object instance of this type to use the <tt>Wave</tt> 
   library. (For more information about the context template class, please refer 
   to the class reference <a href="class_reference_context.html">here</a>.) To instantiate 
   the <tt>boost::wave::context</tt> object you have to supply at least two template parameters: 
   the iterator type of the underlying input stream to use and the type of the lexer iterator to be used as the token source for the preprocessing engine.</p>
 <P dir="ltr">Do not instantiate the main preprocessing iterators yourself.
-Get them from the wave::context object instead.
+Get them from the <tt>boost::wave::context</tt> object instead.
 The following code snippet is taken from the <tt>quick_start</tt> sample, which shows a minimal usage scenario for <tt>Wave</tt>. </P>
 <pre><span class="comment">    // The following preprocesses a given input file.
     // Open the file and read it into a string variable</span>
@@ -115,7 +115,7 @@ Note though, that this filename is used
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, July 26, 2006  19:28<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Sunday, December 2, 2007  19:06<!-- #EndDate -->
 </span></p>
 </body>
 </html>
