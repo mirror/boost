@@ -152,6 +152,8 @@ struct AggregatePODStructWrapper
 bool operator == ( AggregatePODStructWrapper const& lhs, AggregatePODStructWrapper const& rhs )
 { return lhs.dataMember == rhs.dataMember ; }
 
+typedef unsigned char ArrayOfBytes[256];
+
 //
 // This test function tests boost::value_initialized<T> for a specific type T.
 // The first argument (y) is assumed have the value of a value-initialized object.
@@ -231,6 +233,10 @@ int test_main(int, char **)
   aggregatePODStructWrapper0.dataMember = zeroInitializedAggregatePODStruct;
   aggregatePODStructWrapper1.dataMember = nonZeroInitializedAggregatePODStruct;
   BOOST_CHECK ( test(aggregatePODStructWrapper0, aggregatePODStructWrapper1) );
+
+  ArrayOfBytes zeroInitializedArrayOfBytes = { 0 };
+  boost::value_initialized<ArrayOfBytes> valueInitializedArrayOfBytes;
+  BOOST_CHECK (std::memcmp(get(valueInitializedArrayOfBytes), zeroInitializedArrayOfBytes, sizeof(ArrayOfBytes)) == 0);
 
   return 0;
 }
