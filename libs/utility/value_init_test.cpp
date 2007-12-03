@@ -13,6 +13,7 @@
 #include <string>
 
 #include "boost/utility/value_init.hpp"
+#include <boost/shared_ptr.hpp>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -178,6 +179,9 @@ bool test ( T const& y, T const& z )
   x_c_ref = z ;
   BOOST_CHECK ( x_c == z ) ;
 
+  boost::shared_ptr<boost::value_initialized<T> > ptr( new boost::value_initialized<T> );
+  BOOST_CHECK ( y == *ptr ) ;
+
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
   boost::value_initialized<T const> cx ;
   BOOST_CHECK ( y == cx ) ;
@@ -187,6 +191,7 @@ bool test ( T const& y, T const& z )
   BOOST_CHECK ( y == cx_c ) ;
   BOOST_CHECK ( y == boost::get(cx_c) ) ;
 #endif
+
   return boost::minimal_test::errors_counter() == counter_before_test ;
 }
 
