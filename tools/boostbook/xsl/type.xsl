@@ -33,6 +33,13 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="class-specialization|struct-specialization|union-specialization" mode="generate.id">
+    <xsl:call-template name="fully-qualified-name">
+      <xsl:with-param name="node" select="."/>
+      <xsl:with-param name="separator" select="'.'"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="typedef" mode="generate.id">
     <xsl:call-template name="fully-qualified-name">
       <xsl:with-param name="node" select="."/>
@@ -54,6 +61,15 @@
     </xsl:call-template>
     <xsl:text>.</xsl:text>
     <xsl:value-of select="@name"/>
+  </xsl:template>
+
+  <xsl:template match="function | overloaded-function" mode="generate.id">
+    <xsl:call-template name="fully-qualified-name">
+      <xsl:with-param name="node" select="."/>
+      <xsl:with-param name="separator" select="'.'"/>
+    </xsl:call-template>
+    <xsl:text>_</xsl:text>
+    <xsl:value-of select="generate-id(.)"/>
   </xsl:template>
 
   <!-- Display the full name of the current node, e.g., "Class
@@ -518,6 +534,10 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:apply-templates select="type/*|type/text()" mode="annotation"/>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>Warning: missing 'type' element inside 'inherit'</xsl:text>
+          </xsl:message>
+          <xsl:call-template name="print.warning.context"/>
           <xsl:apply-templates mode="annotation"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -540,8 +560,8 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:call-template name="highlight-comment">
           <xsl:with-param name="text">
             <xsl:text>// </xsl:text>
-            <xsl:apply-templates select="purpose/*|purpose/text()"
-              mode="annotation"/>
+            <xsl:apply-templates select="purpose"
+              mode="comment"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
@@ -855,7 +875,6 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:apply-templates select="purpose" mode="comment"/>
           </xsl:with-param>
         </xsl:call-template>
-        <xsl:text>&#10;</xsl:text>
       </xsl:if>
     </xsl:if>
 
@@ -878,7 +897,19 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:with-param name="keyword" select="$class-key"/>
     </xsl:call-template>
     <xsl:text> </xsl:text>
-    <xsl:value-of select="@name"/>
+
+    <!--  Make the class name a link to the class reference page (useful for nested classes) -->
+    <xsl:call-template name="internal-link">
+      <xsl:with-param name="to">
+        <xsl:call-template name="generate.id">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+      </xsl:with-param>
+      <xsl:with-param name="text">
+        <xsl:value-of select="@name"/>
+      </xsl:with-param>
+    </xsl:call-template>
+
     <xsl:apply-templates select="specialization"/>
 
     <xsl:choose>
@@ -1190,7 +1221,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:call-template name="highlight-comment">
             <xsl:with-param name="text">
               <xsl:text>// </xsl:text>
-              <xsl:apply-templates select="purpose/*|purpose/text()" mode="annotation"/>
+              <xsl:apply-templates select="purpose" mode="comment"/>
             </xsl:with-param>
           </xsl:call-template>
 
@@ -1415,10 +1446,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           </xsl:call-template>
         </term>
         <listitem>
-          <xsl:apply-templates
-            select="purpose/*|purpose/text()|
-                    description/*|description/text()"
-            mode="annotation"/>
+          <xsl:apply-templates select="purpose|description" mode="comment"/>
         </listitem>
       </varlistentry>
     </xsl:if>
