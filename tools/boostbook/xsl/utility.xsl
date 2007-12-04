@@ -21,12 +21,13 @@
 
   <!--   get name of first ancestor-or-self which is a class, struct or union -->
   <xsl:template name="object-name">
-    <xsl:value-of select="(ancestor-or-self::class |
+    <xsl:variable name="ancestors" select="ancestor-or-self::class |
       ancestor-or-self::class-specialization |
       ancestor-or-self::struct |
       ancestor-or-self::struct-specialization |
       ancestor-or-self::union |
-      ancestor-or-self::union-specialization)/@name[last()]"/>
+      ancestor-or-self::union-specialization"/>
+    <xsl:value-of select="$ancestors[last()]/@name"/>
   </xsl:template>
 
   <!--   get name of access specification that we are inside -->
