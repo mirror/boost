@@ -194,7 +194,18 @@ public:
 </pre>
 			</blockquote>Exception used to indicate runtime <a href="#lexical_cast"><code>lexical_cast</code></a>
 		failure.
-			<hr>
+		
+<hr>
+  <h2><a name="BOOST_LEXICAL_CAST_ASSUME_C_LOCALE"><code>BOOST_LEXICAL_CAST_ASSUME_C_LOCALE</code></a></h2>
+  <blockquote><pre>#define BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+
+or,
+
+g++ -DBOOST_LEXICAL_CAST_ASSUME_C_LOCALE ...  (gcc on Linux/Unix)
+cl.exe /DBOOST_LEXICAL_CAST_ASSUME_C_LOCALE ... (Visual C++ on Windows)
+</pre>
+Eliminate an overhead of <code>std::locale</code> if your program runs in the "C" locale. If the option is set but a program runs in other locale, <code>lexical_cast</code> result is unspecified.
+<hr>
 		
 <h2><a name="faq">Frequently Asked Questions</h2>
     <p> Q: Why does <code>lexical_cast&lt;int8_t&gt;("127")</code> throw <code>bad_lexical_cast</code>?
@@ -219,7 +230,7 @@ public:
     <a name="n1973"></a><li> [N1973] Kevlin Henney, Beman Dawes, Lexical Conversion Library Proposal for TR2,
       <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1973.html">N1973</a>.
       <a name="tuning"></a><li> [Tuning] Alexander Nasonov, Fine Tuning for lexical_cast,
-      <a href="http://www.accu.org/var/uploads/journals/overload74.pdf">Overload #74</a>,
+      <a href="http://accu.org/index.php/journals/1375">Overload #74</a> (<a href="http://www.accu.org/var/uploads/journals/overload74.pdf">PDF</a>),
       August 2006.</li>
 </ul>
 <h2><a name="changes">Changes</a></h2>
