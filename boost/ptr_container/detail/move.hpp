@@ -12,6 +12,11 @@ namespace boost { namespace ptr_container_detail {
 
 namespace move_ptrs {
 
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)    
+#pragma warning(push)    
+#pragma warning(disable:4512)  
+#endif  
+    
 template<typename Ptr>
 class move_source {
 public:
@@ -21,6 +26,10 @@ private:
     Ptr& ptr_;
     move_source(const Ptr&);
 };
+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)    
+#pragma warning(pop)    
+#endif  
 
 } // End namespace move_ptrs.
 
