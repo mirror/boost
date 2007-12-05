@@ -133,8 +133,9 @@ namespace example
     void apply(Function func, token_parser & parser, Args const & args)
     {
       typedef typename mpl::deref<From>::type arg_type;
+      typedef typename mpl::next<From>::type next_iter_type;
 
-      invoker<Function, typename mpl::next<From>::type, To>::apply
+      invoker<Function, next_iter_type, To>::apply
           ( func, parser, fusion::push_back(args, parser.get<arg_type>()) );
     }
   };
