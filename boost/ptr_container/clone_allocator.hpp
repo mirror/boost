@@ -25,6 +25,12 @@ namespace boost
     template< class T >
     inline T* new_clone( const T& r )
     {
+        //
+        // @remark: if you get a compile-error here,
+        //          it is most likely because you did not
+        //          define new_clone( const T& ) in the namespace
+        //          of T.
+        //
         T* res = new T( r );
         BOOST_ASSERT( typeid(r) == typeid(*res) &&
                       "Default new_clone() sliced object!" );

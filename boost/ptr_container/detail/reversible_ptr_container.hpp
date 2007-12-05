@@ -38,9 +38,14 @@
 #include <typeinfo>
 #include <memory>
 
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
+#pragma warning(push)  
+#pragma warning(disable:4127)
+#endif  
+
 namespace boost
 {
-    
+
 namespace ptr_container_detail
 {
     template< class CloneAllocator >
@@ -647,5 +652,9 @@ namespace ptr_container_detail
     }
 
 } // namespace 'boost'  
+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
+#pragma warning(pop)  
+#endif  
 
 #endif
