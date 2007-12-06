@@ -13,7 +13,10 @@
 #include <boost/foreach.hpp>
 
 #ifdef BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
+// ignore error during Microsoft Code Analysis
+#if !defined(_PREFAST_)
 # error Expected failure : const rvalues disallowed
+#endif
 #else
 
 std::vector<int> const get_vector()
