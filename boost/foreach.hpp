@@ -14,6 +14,7 @@
 //  Russell Hind      - For help porting to Borland
 //  Alisdair Meredith - For help porting to Borland
 //  Stefan Slapeta    - For help porting to Intel
+//  David Jenkins     - For help finding a Microsoft Code Analysis bug
 
 #ifndef BOOST_FOREACH
 
@@ -29,7 +30,7 @@
 #include <boost/detail/workaround.hpp>
 
 // Some compilers let us detect even const-qualified rvalues at compile-time
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1310)                                                       \
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1310) && !defined(_PREFAST_)                                 \
  || (BOOST_WORKAROUND(__GNUC__, >= 4) && !defined(BOOST_INTEL))                                 \
  || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ >= 4) && !defined(BOOST_INTEL))
 # define BOOST_FOREACH_COMPILE_TIME_CONST_RVALUE_DETECTION
