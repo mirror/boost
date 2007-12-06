@@ -13,6 +13,10 @@
 #ifndef BOOST_MPI_CONFIG_HPP
 #define BOOST_MPI_CONFIG_HPP
 
+/* Force MPICH not to define SEEK_SET, SEEK_CUR, and SEEK_END, which
+   conflict with the versions in <stdio.h> and <cstdio>. */
+#define MPICH_IGNORE_CXX_SEEK 1
+
 #include <mpi.h>
 #include <boost/config.hpp>
 
