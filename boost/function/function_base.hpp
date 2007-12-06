@@ -33,6 +33,7 @@
 #if defined(BOOST_MSVC)
 #   pragma warning( push )
 #   pragma warning( disable : 4793 ) // complaint about native code generation
+#   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif       
 
 // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.

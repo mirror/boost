@@ -11,6 +11,11 @@
 // protection.
 #include <boost/function/detail/prologue.hpp>
 
+#if defined(BOOST_MSVC)
+#   pragma warning( push )
+#   pragma warning( disable : 4127 ) // "conditional expression is constant"
+#endif       
+
 #define BOOST_FUNCTION_TEMPLATE_PARMS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, typename T)
 
 #define BOOST_FUNCTION_TEMPLATE_ARGS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, T)
@@ -958,3 +963,7 @@ public:
 #undef BOOST_FUNCTION_ARG_TYPES
 #undef BOOST_FUNCTION_VOID_RETURN_TYPE
 #undef BOOST_FUNCTION_RETURN
+
+#if defined(BOOST_MSVC)
+#   pragma warning( pop )
+#endif       
