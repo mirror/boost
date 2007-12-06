@@ -95,7 +95,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load(std::string & s)
     #endif
         s.resize(l);
     // note breaking a rule here - could be a problem on some platform
-    load_binary(const_cast<char *>(s.data()), l);
+    load_binary(&(*s.begin()), l);
 }
 
 #ifndef BOOST_NO_CWCHAR

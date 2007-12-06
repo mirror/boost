@@ -53,7 +53,7 @@ text_iarchive_impl<Archive>::load(std::string &s)
     if(NULL != s.data())
     #endif
         s.resize(size);
-    is.read(const_cast<char *>(s.data()), size);
+    is.read(&(*s.begin()), size);
 }
 
 #ifndef BOOST_NO_CWCHAR
