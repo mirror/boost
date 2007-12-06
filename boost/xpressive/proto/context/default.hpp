@@ -40,9 +40,10 @@
     #ifndef BOOST_PROTO_DOXYGEN_INVOKED
         #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_(Nested, Expr)\
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(BOOST_PP_CAT(nested_and_hidden_, Nested), Expr)\
+            static int const sz = sizeof(detail::check_reference(Expr));  \
             struct Nested\
               : mpl::if_c<\
-                    1==sizeof(detail::check_reference(Expr))\
+                    1==sz\
                   , typename BOOST_PP_CAT(nested_and_hidden_, Nested)::type &\
                   , typename BOOST_PP_CAT(nested_and_hidden_, Nested)::type\
                 >\

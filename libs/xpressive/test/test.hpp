@@ -35,6 +35,9 @@ using namespace boost::xpressive;
 ///////////////////////////////////////////////////////////////////////////////
 // backrefs
 //
+#if defined(__cplusplus_cli)
+#pragma managed(push, off)
+#endif
 template<typename Char>
 inline std::vector<std::basic_string<Char> > backrefs(Char const *br0, ...)
 {
@@ -54,6 +57,9 @@ inline std::vector<std::basic_string<Char> > backrefs(Char const *br0, ...)
     }
     return backrefs;
 }
+#if defined(__cplusplus_cli)
+#pragma managed(pop)
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //
