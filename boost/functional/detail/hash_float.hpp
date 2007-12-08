@@ -16,8 +16,10 @@
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
+#if BOOST_MSVC >= 1400
 #pragma warning(disable:6294) // Ill-defined for-loop: initial condition does
                               // not satisfy test. Loop body not executed 
+#endif
 #endif
 
 #include <boost/functional/detail/float_functions.hpp>
