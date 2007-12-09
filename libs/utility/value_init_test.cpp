@@ -156,6 +156,29 @@ bool operator == ( AggregatePODStructWrapper const& lhs, AggregatePODStructWrapp
 
 typedef unsigned char ArrayOfBytes[256];
 
+
+//
+// A struct that allows testing whether the appropriate copy functions are called.
+//
+struct CopyFunctionCallTester
+{
+  bool is_copy_constructed;
+  bool is_assignment_called;
+
+  CopyFunctionCallTester()
+  : is_copy_constructed(false), is_assignment_called(false) {}
+
+  CopyFunctionCallTester(const CopyFunctionCallTester & )
+  : is_copy_constructed(true), is_assignment_called(false) {}
+
+  CopyFunctionCallTester & operator=(const CopyFunctionCallTester & )
+  {
+    is_assignment_called = true ;
+    return *this ;
+  }
+};
+
+
 //
 // This test function tests boost::value_initialized<T> for a specific type T.
 // The first argument (y) is assumed have the value of a value-initialized object.
@@ -244,8 +267,22 @@ int test_main(int, char **)
   boost::value_initialized<ArrayOfBytes> valueInitializedArrayOfBytes;
   BOOST_CHECK (std::memcmp(get(valueInitializedArrayOfBytes), zeroInitializedArrayOfBytes, sizeof(ArrayOfBytes)) == 0);
 
+  boost::value_initialized<CopyFunctionCallTester> copyFunctionCallTester1;
+  BOOST_CHECK ( ! get(copyFunctionCallTester1).is_copy_constructed);
+  BOOST_CHECK ( ! get(copyFunctionCallTester1).is_assignment_called);
+
+  boost::value_initialized<CopyFunctionCallTester> copyFunctionCallTester2 = boost::value_initialized<CopyFunctionCallTester>(copyFunctionCallTester1);
+  BOOST_CHECK ( get(copyFunctionCallTester2).is_copy_constructed);
+  BOOST_CHECK ( ! get(copyFunctionCallTester2).is_assignment_called);
+
+  boost::value_initialized<CopyFunctionCallTester> copyFunctionCallTester3;
+  copyFunctionCallTester3 = boost::value_initialized<CopyFunctionCallTester>(copyFunctionCallTester1);
+  BOOST_CHECK ( ! get(copyFunctionCallTester3).is_copy_constructed);
+  BOOST_CHECK ( get(copyFunctionCallTester3).is_assignment_called);
+
   return 0;
 }
 
 
 unsigned int expected_failures = 0;
+
