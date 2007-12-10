@@ -1087,7 +1087,8 @@ to_ulong() const
 
     assert((size_type)bits_per_block * i < (size_type)ulong_width);
 
-    result |= (m_bits[i] << (bits_per_block * i));
+    unsigned long piece = m_bits[i];
+    result |= (piece << (bits_per_block * i));
   }
 
   return result;
