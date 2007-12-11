@@ -150,13 +150,16 @@ namespace boost{ namespace re_detail{
       return stdext::unchecked_equal(first, last, with);
    }
 
+#else 
+   using std::copy; 
+   using std::equal; 
+#endif 
+#if BOOST_WORKAROUND(BOOST_MSVC,>=1400) && defined(__STDC_WANT_SECURE_LIB__) && __STDC_WANT_SECURE_LIB__ 
+
    // use safe versions of strcpy etc:
    using ::strcpy_s;
    using ::strcat_s;
 #else
-   using std::copy;
-   using std::equal;
-
    inline std::size_t strcpy_s(
       char *strDestination,
       std::size_t sizeInBytes,

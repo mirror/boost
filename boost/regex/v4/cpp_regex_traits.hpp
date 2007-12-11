@@ -128,7 +128,7 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
       break;
    case ::std::ios_base::cur:
    {
-      std::ptrdiff_t newpos = pos + off;
+      std::ptrdiff_t newpos = static_cast<std::ptrdiff_t>(pos + off);
       if((newpos < 0) || (newpos > size))
          return pos_type(off_type(-1));
       else
