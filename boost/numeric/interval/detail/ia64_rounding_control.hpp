@@ -1,6 +1,6 @@
 /* Boost interval/detail/ia64_rounding_control.hpp file
  *
- * Copyright 2006 Boris Gubenko
+ * Copyright 2006-2007 Boris Gubenko
  *
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or
@@ -14,7 +14,7 @@
 #error This header only works on ia64 CPUs.
 #endif
 
-#if defined(__HP_aCC)
+#if defined(__hpux)
 
 #   include <fenv.h>
 
@@ -77,7 +77,7 @@ struct rounding_control<long double>:
 
 #undef BOOST_NUMERIC_INTERVAL_NO_HARDWARE
 
-#endif /* __HP_aCC */
+#endif /* __hpux */
 
 #endif /* BOOST_NUMERIC_INTERVAL_DETAIL_IA64_ROUNDING_CONTROL_HPP */
 
