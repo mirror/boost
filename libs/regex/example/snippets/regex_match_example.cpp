@@ -65,7 +65,7 @@ istream& getline(istream& is, std::string& s)
 }
 #endif
 
-int main(int argc)
+int main(int argc, const char*[])
 {
    std::string in, out;
    do
