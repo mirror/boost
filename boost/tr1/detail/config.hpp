@@ -109,6 +109,18 @@
 
 #endif
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1500) \
+   && defined(_MSC_FULL_VER) && \
+   !defined(__SGI_STL_PORT) && \
+   !defined(_STLPORT_VERSION)
+//
+// MSVC-9.0 defines a not-quite TR1 conforming hash
+// function object in <functional>, so we must define
+// this here:
+//
+#  define BOOST_HAS_TR1_HASH
+#endif
+
 #include <boost/config.hpp>
 
 #endif
