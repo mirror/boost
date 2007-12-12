@@ -1230,7 +1230,7 @@ private:
         if (new_size > new_capacity) {
             if (new_capacity == 0)
                 new_capacity = 1;
-            for (; new_size > new_capacity; new_capacity *= 2);
+            for (; new_size > new_capacity; new_capacity *= 2) {}
             circular_buffer<T, Alloc>::set_capacity(
                 ensure_reserve(new_capacity, new_size));
         }

@@ -121,7 +121,7 @@ public:
     */
     void unregister_iterator(const debug_iterator_base* it) const {
         const debug_iterator_base* previous = 0;
-        for (const debug_iterator_base* p = m_iterators; p != it; previous = p, p = p->next());
+        for (const debug_iterator_base* p = m_iterators; p != it; previous = p, p = p->next()) {}
         remove(it, previous);
     }
 
