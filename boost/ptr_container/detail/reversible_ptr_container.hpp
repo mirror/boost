@@ -157,7 +157,7 @@ namespace ptr_container_detail
                                    size_type;
         typedef  BOOST_DEDUCED_TYPENAME Config::allocator_type
                                    allocator_type;
-
+        typedef CloneAllocator     clone_allocator_type;
         typedef ptr_container_detail::static_move_ptr<Ty_,Deleter> 
                                    auto_type;
             
