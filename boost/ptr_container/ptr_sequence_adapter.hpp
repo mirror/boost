@@ -143,6 +143,8 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type; 
         typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference; 
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::clone_allocator_type
+                                                              clone_allocator_type;
          
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
                                                  base_type )
@@ -537,6 +539,31 @@ namespace ptr_container_detail
             }
         };
 
+        template< class Fun, class Arg1 >
+        class void_ptr_delete_if 
+        {
+            Fun fun;
+        public:
+        
+            void_ptr_delete_if() : fun(Fun())
+            { }
+        
+            void_ptr_delete_if( Fun f ) : fun(f)
+            { }
+        
+            bool operator()( void* r ) const
+            {
+               BOOST_ASSERT( r != 0 );
+               Arg1 arg1 = static_cast<Arg1>(r);
+               if( fun( *arg1 ) )
+               { 
+                   clone_allocator_type::deallocate_clone( arg1 );
+                   return true;
+               }
+               return false;
+            }
+        };
+
         void compact_and_erase_nulls( iterator first, iterator last ) // nothrow
         {
             
@@ -605,19 +632,9 @@ namespace ptr_container_detail
         void erase_if( iterator first, iterator last, Pred pred )
         {
             range_check(first,last);
-
-            iterator next = first; 
-            for( ; next != last; ++next )
-            {
-                BOOST_ASSERT( !::boost::is_null(next) );
-                if( pred( *next ) )
-                {
-                    this->remove( next ); // delete object
-                    *next.base() = 0;     // mark pointer as deleted
-                }
-            }
-
-            compact_and_erase_nulls( first, last );
+            this->base().erase( std::remove_if( first.base(), last.base(), 
+                                                void_ptr_delete_if<Pred,value_type>(pred) ),
+                                this->base().end() );  
         }
         
         template< class Pred >

@@ -246,9 +246,9 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                      auto_type;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrSet::key_compare
-                      key_compare;
+                     key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrSet::allocator_type
-                      allocator_type;        
+                     allocator_type;        
     private:
         
         template< typename II >                                               
