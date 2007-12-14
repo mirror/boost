@@ -352,7 +352,16 @@ bool bzip2_decompressor_impl<Alloc>::filter
 }
 
 template<typename Alloc>
-void bzip2_decompressor_impl<Alloc>::close() { end(false); eof_ = false; }
+void bzip2_decompressor_impl<Alloc>::close() 
+{ 
+    try {
+        end(false);
+    } catch (...) { 
+        eof_ = false; 
+        throw;
+    }
+    eof_ = false;
+}
 
 template<typename Alloc>
 inline void bzip2_decompressor_impl<Alloc>::init()

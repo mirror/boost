@@ -17,7 +17,6 @@
 #include <vector>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
-#include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/ios.hpp>     // openmode, streamsize.
 #include <boost/iostreams/pipeline.hpp>
 #include <boost/mpl/bool.hpp>
@@ -76,25 +75,25 @@ public:
         data_.insert(data_.end(), s, s + n);
         return n;
     }
-    
-    // Give detail::closer permission to call close().
-    typedef aggregate_filter<Ch, Alloc> self;
-    friend struct detail::closer<self>;
 
     template<typename Sink>
     void close(Sink& sink, BOOST_IOS::openmode which)
     {
-        if ((state_ & f_read) && (which & BOOST_IOS::in)) 
-            close();
-
-        if ((state_ & f_write) && (which & BOOST_IOS::out)) {
-            detail::closer<self> closer(*this);
-            vector_type filtered;
-            do_filter(data_, filtered);
-            do_write( 
-                sink, &filtered[0],
-                static_cast<std::streamsize>(filtered.size())
-            );
+        if ((state_ & f_read) != 0 && which == BOOST_IOS::in)
+            close_impl();
+        if ((state_ & f_write) != 0 && which == BOOST_IOS::out) {
+            try {
+                vector_type filtered;
+                do_filter(data_, filtered);
+                do_write( 
+                    sink, &filtered[0],
+                    static_cast<std::streamsize>(filtered.size())
+                );
+            } catch (...) {
+                close_impl();
+                throw;
+            }
+            close_impl();
         }
     }
 
@@ -137,7 +136,7 @@ private:
     template<typename Sink>
     void do_write(Sink&, const char*, std::streamsize, mpl::false_) { }
 
-    void close()
+    void close_impl()
     {
         data_.clear();
         ptr_ = 0;

@@ -255,7 +255,7 @@ template<typename Direct>
 void direct_adapter<Direct>::close() 
 { 
     BOOST_STATIC_ASSERT((!is_convertible<category, two_sequence>::value));
-    boost::iostreams::close(d_, BOOST_IOS::in | BOOST_IOS::out);
+    detail::close_all(d_);
 }
 
 template<typename Direct>

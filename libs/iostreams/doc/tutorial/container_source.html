@@ -132,8 +132,8 @@
     <SPAN CLASS='keyword'>using</SPAN> <SPAN CLASS='keyword'>namespace</SPAN> std;
     <SPAN CLASS='keyword'>typedef</SPAN> ex::container_source&lt;string&gt; string_source;
 
-    string                            input = <SPAN CLASS='literal'>"Hello World!"</SPAN>;
-    string                            output;
+    string                     input = <SPAN CLASS='literal'>"Hello World!"</SPAN>;
+    string                     output;
     io::stream&lt;string_source&gt;  in(input);
     getline(in, output);
     assert(input == output);

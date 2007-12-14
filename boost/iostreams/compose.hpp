@@ -19,8 +19,9 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
-#include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
+#include <boost/iostreams/detail/execute.hpp>
+#include <boost/iostreams/detail/functional.hpp>
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/traits.hpp>      // mode_of, is_direct.
 #include <boost/mpl/if.hpp>
@@ -32,18 +33,20 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
-template<typename Filter, typename Device>
-struct composite_mode {
-    typedef typename mode_of<Filter>::type           filter_mode;
-    typedef typename mode_of<Device>::type           device_mode;
-    typedef is_convertible<filter_mode, dual_use>    is_dual_use;
-    typedef typename
-            mpl::if_<
-                is_convertible<device_mode, input>,
-                input,
-                output
-            >::type                                  type;
-};
+template< typename First, 
+          typename Second,
+          typename FirstMode = 
+              BOOST_DEDUCED_TYPENAME mode_of<First>::type,
+          typename SecondMode = 
+              BOOST_DEDUCED_TYPENAME mode_of<Second>::type >
+struct composite_mode
+    : select<
+          is_convertible<SecondMode, FirstMode>, FirstMode,
+          is_convertible<FirstMode, SecondMode>, SecondMode,
+          is_convertible<SecondMode, input>,     input,
+          else_,                                 output
+      >
+    { };
 
 //
 // Template name: composite_device.
@@ -108,14 +111,17 @@ private:
 //      Filter - A model of Filter.
 //      Device - An indirect model of Device.
 //
-template<typename Filter1, typename Filter2>
+template< typename Filter1, 
+          typename Filter2,
+          typename Mode =
+              BOOST_DEDUCED_TYPENAME composite_mode<Filter1, Filter2>::type >
 class composite_filter {
 private:
      typedef reference_wrapper<Filter2>           filter_ref;
 public:
     typedef typename char_type_of<Filter1>::type  char_type;
     struct category
-        : mode_of<Filter1>::type,
+        : Mode,
           filter_tag,
           multichar_tag,
           closable_tag,
@@ -151,12 +157,48 @@ public:
     }
 
     template<typename Device>
-    void close( Device& dev,
-                BOOST_IOS::openmode which =
-                    BOOST_IOS::in | BOOST_IOS::out )
+    void close(Device& dev)
     {
+        BOOST_STATIC_ASSERT((!is_convertible<category, two_sequence>::value));
+        BOOST_STATIC_ASSERT((!is_convertible<category, dual_use>::value));
+
+        // Create a new device by composing the second filter2_ with dev.
         composite_device<filter_ref, Device> cmp(boost::ref(filter2_), dev);
-        iostreams::close(filter1_, cmp, which);
+
+        // Close input sequences in reverse order and output sequences in 
+        // forward order
+        detail::execute_all(
+            detail::call_close(filter2_, dev, BOOST_IOS::in),
+            detail::call_close(filter1_, cmp, BOOST_IOS::in),
+            detail::call_close(filter1_, cmp, BOOST_IOS::out),
+            detail::call_close(filter2_, dev, BOOST_IOS::out)
+        );
+    }
+
+    template<typename Device>
+    void close(Device& dev, BOOST_IOS::openmode which)
+    {
+        BOOST_STATIC_ASSERT(
+            (is_convertible<category, two_sequence>::value) ||
+            (is_convertible<category, dual_use>::value)
+        );
+
+        // Create a new device by composing the second filter2_ with dev.
+        composite_device<filter_ref, Device> cmp(boost::ref(filter2_), dev);
+
+        // Close input sequences in reverse order
+        if (which == BOOST_IOS::in)
+            detail::execute_all(
+                detail::call_close(filter2_, dev, BOOST_IOS::in),
+                detail::call_close(filter1_, cmp, BOOST_IOS::in)
+            );
+
+        // Close output sequences in forward order
+        if (which == BOOST_IOS::out)
+            detail::execute_all(
+                detail::call_close(filter1_, cmp, BOOST_IOS::out),
+                detail::call_close(filter2_, dev, BOOST_IOS::out)
+            );
     }
 
     template<typename Device>
@@ -332,25 +374,39 @@ std::streampos composite_device<Filter, Device, Mode>::seek
 template<typename Filter, typename Device, typename Mode>
 void composite_device<Filter, Device, Mode>::close()
 {
-    typedef typename mode_of<Device>::type device_mode;
-    BOOST_IOS::openmode which =
-        is_convertible<device_mode, input>() ?
-            BOOST_IOS::in :
-            BOOST_IOS::out;
-    close(which);
+    BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
+
+    // Close input sequences in reverse order and output sequences 
+    // in forward order
+    detail::execute_all( detail::call_close(device_, BOOST_IOS::in),
+                         detail::call_close(filter_, device_, BOOST_IOS::in),
+                         detail::call_close(filter_, device_, BOOST_IOS::out),
+                         detail::call_close(device_, BOOST_IOS::out) );
 }
 
 template<typename Filter, typename Device, typename Mode>
 void composite_device<Filter, Device, Mode>::close(BOOST_IOS::openmode which)
 {
-    bool                                 nothrow = false;
-    external_closer<value_type>          close_device(device_, which, nothrow);
-    external_closer<Filter, value_type>  close_filter(filter_, device_, which, nothrow);
+    BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
+
+    // Close input sequences in reverse order
+    if (which == BOOST_IOS::in)
+        detail::execute_all(
+            detail::call_close(device_, BOOST_IOS::in),
+            detail::call_close(filter_, device_, BOOST_IOS::in) 
+        );
+
+    // Close output sequences in forward order
+    if (which == BOOST_IOS::out)
+        detail::execute_all(
+            detail::call_close(filter_, device_, BOOST_IOS::out),
+            detail::call_close(device_, BOOST_IOS::out)
+        );
 }
 
 template<typename Filter, typename Device, typename Mode>
 bool composite_device<Filter, Device, Mode>::flush()
-{   // To do: consider using RAII.
+{
     bool r1 = iostreams::flush(filter_, device_);
     bool r2 = iostreams::flush(device_);
     return r1 && r2;

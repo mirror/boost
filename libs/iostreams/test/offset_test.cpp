@@ -15,7 +15,6 @@
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/offset.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/constants.hpp"

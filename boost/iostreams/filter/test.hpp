@@ -34,7 +34,6 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/compose.hpp>
 #include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/detail/adapter/basic_adapter.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp>
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/device/array.hpp>

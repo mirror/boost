@@ -34,6 +34,7 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams array_test.cpp ]
           [ test-iostreams auto_close_test.cpp ]
           [ test-iostreams buffer_size_test.cpp ]
+          [ test-iostreams close_test.cpp ]
           [ test-iostreams 
                 code_converter_test.cpp    
                 detail/utf8_codecvt_facet.cpp ]
@@ -46,6 +47,7 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams counter_test.cpp ]
           [ test-iostreams direct_adapter_test.cpp ]
           [ test-iostreams example_test.cpp ]
+          [ test-iostreams execute_test.cpp ]
           [ test-iostreams file_test.cpp ]
           [ test-iostreams 
                 file_descriptor_test.cpp 
@@ -66,6 +68,7 @@ rule test-iostreams ( sources * : requirements * ) {
                 ../build//boost_iostreams : <link>static ]
           [ test-iostreams newline_test.cpp ]
           [ test-iostreams null_test.cpp ]
+          [ test-iostreams operation_sequence_test.cpp ]
           [ test-iostreams pipeline_test.cpp ]
           [ test-iostreams positioning_test.cpp ]
           [ test-iostreams 
@@ -74,6 +77,7 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams restrict_test.cpp ]
           [ test-iostreams seekable_file_test.cpp ]
           [ test-iostreams seekable_filter_test.cpp ]
+          [ test-iostreams sequence_test.cpp ]
           [ test-iostreams stdio_filter_test.cpp ]
           [ test-iostreams symmetric_filter_test.cpp ]
           [ test-iostreams tee_test.cpp ]

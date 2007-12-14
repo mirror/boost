@@ -17,7 +17,8 @@
 #include <boost/config.hpp>   // DEDUCED_TYPENAME.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/char_traits.hpp>
-#include <boost/iostreams/detail/adapter/basic_adapter.hpp>
+#include <boost/iostreams/detail/adapter/device_adapter.hpp>
+#include <boost/iostreams/detail/adapter/filter_adapter.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
 #include <boost/iostreams/detail/error.hpp>
@@ -44,7 +45,7 @@ namespace detail {
 //          SeekableDevice.
 //
 template<typename Device>
-class restricted_indirect_device : public basic_adapter<Device> {
+class restricted_indirect_device : public device_adapter<Device> {
 private:
     typedef typename detail::param_type<Device>::type  param_type;
 public:
@@ -73,7 +74,7 @@ private:
 //      Device - A model of Direct and Device.
 //
 template<typename Device>
-class restricted_direct_device : public basic_adapter<Device> {
+class restricted_direct_device : public device_adapter<Device> {
 public:
     typedef typename char_type_of<Device>::type  char_type;
     typedef std::pair<char_type*, char_type*>    pair_type;
@@ -101,7 +102,7 @@ private:
 //      Filter - An indirect model of Filter.
 //
 template<typename Filter>
-class restricted_filter : public basic_adapter<Filter> {
+class restricted_filter : public filter_adapter<Filter> {
 public:
     typedef typename char_type_of<Filter>::type char_type;
     struct category
@@ -294,7 +295,7 @@ namespace detail {
 template<typename Device>
 restricted_indirect_device<Device>::restricted_indirect_device
     (param_type dev, stream_offset off, stream_offset len)
-    : basic_adapter<Device>(dev), beg_(off), pos_(off), 
+    : device_adapter<Device>(dev), beg_(off), pos_(off), 
       end_(len != -1 ? off + len : -1)
 {
     if (len < -1 || off < 0)
@@ -357,7 +358,7 @@ std::streampos restricted_indirect_device<Device>::seek
 template<typename Device>
 restricted_direct_device<Device>::restricted_direct_device
     (const Device& dev, stream_offset off, stream_offset len)
-    : basic_adapter<Device>(dev), beg_(0), end_(0)
+    : device_adapter<Device>(dev), beg_(0), end_(0)
 {
     std::pair<char_type*, char_type*> seq =
         sequence(is_convertible<category, input>());
@@ -403,7 +404,7 @@ restricted_direct_device<Device>::sequence(mpl::false_)
 template<typename Filter>
 restricted_filter<Filter>::restricted_filter
     (const Filter& flt, stream_offset off, stream_offset len)
-    : basic_adapter<Filter>(flt), beg_(off),
+    : filter_adapter<Filter>(flt), beg_(off),
       pos_(off), end_(len != -1 ? off + len : -1), open_(false)
 {
     if (len < -1 || off < 0)

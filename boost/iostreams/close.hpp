@@ -16,12 +16,16 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/flush.hpp>
 #include <boost/iostreams/detail/adapter/non_blocking_adapter.hpp>
+#include <boost/iostreams/detail/ios.hpp> // BOOST_IOS
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/operations_fwd.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
@@ -40,12 +44,31 @@ struct close_impl;
 } // End namespace detail.
 
 template<typename T>
+void close(T& t);
+
+template<typename T>
 void close(T& t, BOOST_IOS::openmode which)
-{ detail::close_impl<T>::close(detail::unwrap(t), which); }
+{ 
+    assert(which == BOOST_IOS::in || which == BOOST_IOS::out);
+    detail::close_impl<T>::close(detail::unwrap(t), which); 
+}
+
+//template<typename T, typename Sink>
+//void close( T& t, Sink& snk, 
+//            typename 
+//            boost::disable_if< 
+//                boost::is_convertible<Sink, BOOST_IOS::openmode> 
+//            >::type* = 0 )
+//{ 
+//    detail::close_all(t, snk);
+//}
 
 template<typename T, typename Sink>
 void close(T& t, Sink& snk, BOOST_IOS::openmode which)
-{ detail::close_impl<T>::close(detail::unwrap(t), snk, which); }
+{ 
+    assert(which == BOOST_IOS::in || which == BOOST_IOS::out);
+    detail::close_impl<T>::close(detail::unwrap(t), snk, which); 
+}
 
 namespace detail {
 
@@ -83,14 +106,14 @@ struct close_impl<any_tag> {
     template<typename T>
     static void close(T& t, BOOST_IOS::openmode which)
     {
-        if ((which & BOOST_IOS::out) != 0)
+        if (which == BOOST_IOS::out)
             iostreams::flush(t);
     }
 
     template<typename T, typename Sink>
     static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
     {
-        if ((which & BOOST_IOS::out) != 0) {
+        if (which == BOOST_IOS::out) {
             non_blocking_adapter<Sink> nb(snk);
             iostreams::flush(t, nb);
         }
@@ -106,7 +129,7 @@ struct close_impl<closable_tag> {
         typedef typename category_of<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
-        if (in == ((which & BOOST_IOS::in) != 0))
+        if (in == (which == BOOST_IOS::in))
             t.close();
     }
     template<typename T, typename Sink>
@@ -115,7 +138,7 @@ struct close_impl<closable_tag> {
         typedef typename category_of<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
-        if (in == ((which & BOOST_IOS::in) != 0)) {
+        if (in == (which == BOOST_IOS::in)) {
             non_blocking_adapter<Sink> nb(snk);
             t.close(nb);
         }
@@ -139,6 +162,45 @@ struct close_impl<two_sequence> {
 } } // End namespaces iostreams, boost.
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-------------------------//
+
+namespace boost { namespace iostreams { 
+    
+namespace detail {
+
+template<typename T>
+void close_all(T& t)
+{ 
+    try {
+        boost::iostreams::close(t, BOOST_IOS::in);
+    } catch (...) {
+        try {
+            boost::iostreams::close(t, BOOST_IOS::out);
+        } catch (...) { }
+        throw;
+    }
+    boost::iostreams::close(t, BOOST_IOS::out);
+}
+
+template<typename T, typename Sink>
+void close_all(T& t, Sink& snk)
+{ 
+    try {
+        boost::iostreams::close(t, snk, BOOST_IOS::in);
+    } catch (...) {
+        try {
+            boost::iostreams::close(t, snk, BOOST_IOS::out);
+        } catch (...) { }
+        throw;
+    }
+    boost::iostreams::close(t, snk, BOOST_IOS::out);
+}
+
+} // End namespaces detail. 
+
+template<typename T>
+void close(T& t) { detail::close_all(t); }
+
+} } // End iostreams, boost.
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp>
 

@@ -39,7 +39,7 @@ namespace detail {
 
 struct mapped_file_impl {
     mapped_file_impl() { clear(false); }
-    ~mapped_file_impl() { try { close(); } catch (std::exception&) { } }
+    ~mapped_file_impl() { try { close(); } catch (...) { } }
     void clear(bool error)
     {
         data_ = 0;

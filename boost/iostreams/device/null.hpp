@@ -34,7 +34,8 @@ public:
                          BOOST_IOS::openmode = 
                              BOOST_IOS::in | BOOST_IOS::out ) 
     { return -1; }
-    void close(BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out) { }
+    void close() { }
+    void close(BOOST_IOS::openmode) { }
 };
 
 template<typename Ch>

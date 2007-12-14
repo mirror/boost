@@ -20,6 +20,7 @@
 #include <boost/iostreams/stream_buffer.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#include <boost/utility/base_from_member.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 

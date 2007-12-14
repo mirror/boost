@@ -29,6 +29,8 @@
 #include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
+#include "detail/closable.hpp"
+#include "detail/operation_sequence.hpp"
 #include "detail/temp_file.hpp"
 
     // Include codevct facets
@@ -200,14 +202,14 @@ bool codecvt_test1()
     typedef code_converter<classic_file_sink, Codecvt>    wide_file_sink;
 
     BOOST_CHECK(Codecvt().max_length() <= max_length);
-    temp_file                        temp;
-    string_type                      test = test_string<Codecvt>();
+    temp_file                 temp;
+    string_type               test = test_string<Codecvt>();
     stream<wide_file_sink>    out(temp.name());
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
     stream<wide_file_source>  in(temp.name());
-    string_type                      test2;
+    string_type               test2;
     io::copy(in, io::back_inserter(test2));
 
     return test == test2;
@@ -227,14 +229,14 @@ bool codecvt_test2()
     locale loc = add_facet(locale(), new Codecvt);
     locale::global(loc);
 
-    temp_file                        temp;
-    string_type                      test = test_string<Codecvt>();
+    temp_file                 temp;
+    string_type               test = test_string<Codecvt>();
     stream<wide_file_sink>    out(temp.name());
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
     stream<wide_file_source>  in(temp.name());
-    string_type                      test2;
+    string_type               test2;
     io::copy(in, io::back_inserter(test2));
 
     return test == test2;
@@ -329,9 +331,56 @@ void code_converter_test()
 #endif
 }
 
+/* Defer pending further testing
+void close_test()  
+{
+    typedef utf8_codecvt_facet<wchar_t, char> codecvt_type;
+
+    // Test code converter based on a source
+    {
+        operation_sequence  seq;
+        io::wchain<input>   ch;
+        ch.push(
+            code_converter<closable_device<input>, codecvt_type>(
+                seq.new_operation(1)
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Test code converter based on a sink
+    {
+        operation_sequence   seq;
+        io::wchain<output>    ch;
+        ch.push(
+            code_converter<closable_device<output>, codecvt_type>(
+                seq.new_operation(1)
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Test code converter based on a bidirectional device
+    {
+        operation_sequence         seq;
+        io::wchain<bidirectional>  ch;
+        ch.push(
+            code_converter<closable_device<bidirectional>, codecvt_type>(
+                seq.new_operation(1), 
+                seq.new_operation(2)
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+}*/
+
 test_suite* init_unit_test_suite(int, char* []) 
 {
     test_suite* test = BOOST_TEST_SUITE("code_converter test");
     test->add(BOOST_TEST_CASE(&code_converter_test));
+    //test->add(BOOST_TEST_CASE(&close_test));
     return test;
 }

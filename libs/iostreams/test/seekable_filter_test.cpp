@@ -10,16 +10,18 @@
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-#include "detail/filters.hpp"
-#include "detail/temp_file.hpp"
-#include "detail/verification.hpp"
+#include "../example/container_device.hpp"  // We use container_device instead
+#include "detail/filters.hpp"               // of make_iterator_range to 
+#include "detail/temp_file.hpp"             // reduce dependence on Boost.Range
+#include "detail/verification.hpp"          
+                                            
 
 using namespace std;
 using namespace boost;
 using namespace boost::iostreams;
+using namespace boost::iostreams::example;
 using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;  
 
@@ -35,7 +37,7 @@ void seekable_filter_test()
         vector<char> test(data_reps * data_length(), '0');
         filtering_stream<seekable> io;
         io.push(identity_seekable_filter());
-        io.push(make_iterator_range(test));
+        io.push(container_device< vector<char> >(test));
         io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
@@ -47,7 +49,7 @@ void seekable_filter_test()
         vector<char> test(data_reps * data_length(), '0');
         filtering_stream<seekable> io;
         io.push(identity_seekable_filter());
-        io.push(make_iterator_range(test));
+        io.push(container_device< vector<char> >(test));
         io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),
@@ -59,7 +61,7 @@ void seekable_filter_test()
         vector<char> test(data_reps * data_length(), '0');
         filtering_stream<seekable> io;
         io.push(identity_seekable_multichar_filter());
-        io.push(make_iterator_range(test));
+        io.push(container_device< vector<char> >(test));
         io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
@@ -71,7 +73,7 @@ void seekable_filter_test()
         vector<char> test(data_reps * data_length(), '0');
         filtering_stream<seekable> io;
         io.push(identity_seekable_multichar_filter());
-        io.push(make_iterator_range(test));
+        io.push(container_device< vector<char> >(test));
         io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),

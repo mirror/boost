@@ -102,7 +102,7 @@ public:
         if (pos_ != container_.size()) {
             streamsize amt =
                 static_cast<streamsize>(container_.size() - pos_);
-            streamsize result = (min)(n, amt);
+            result = (min)(n, amt);
             std::copy(s, s + result, container_.begin() + pos_);
             pos_ += result;
         }

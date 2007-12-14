@@ -183,7 +183,6 @@ private:
     dictionary&             dictionary_;
     std::string             current_word_;
     std::string::size_type  off_;
-    bool                    initialized_;
 };
 
 //------------------Implementation of dictionary------------------------------//

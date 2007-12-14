@@ -27,6 +27,7 @@ void read_composite()
     test_file          src1, src2;
     filtering_istream  first, second;
 
+    // Test composite device
     first.push(toupper_filter());
     first.push(padding_filter('a'));
     first.push(file_source(src1.name(), in_mode));
@@ -38,6 +39,7 @@ void read_composite()
         "failed reading from a stdio_filter"
     );
 
+    // Test composite filter
     first.reset();
     second.reset();
     first.push(toupper_filter());
@@ -60,6 +62,7 @@ void write_composite()
     temp_file          dest1, dest2;
     filtering_ostream  out1, out2;
 
+    // Test composite device
     out1.push(tolower_filter());
     out1.push(padding_filter('a'));
     out1.push(file_sink(dest1.name(), in_mode));
@@ -80,6 +83,7 @@ void write_composite()
         );
     }
 
+    // Test composite filter
     out1.push(tolower_filter());
     out1.push(padding_filter('a'));
     out1.push(file_sink(dest1.name(), in_mode));

@@ -131,7 +131,7 @@
         <SPAN CLASS="keyword">if</SPAN> (pos_ != container_.size()) {
             streamsize amt = 
                 <SPAN CLASS="keyword">static_cast</SPAN>&lt;streamsize&gt;(container_.size() - pos_);
-            streamsize result = (min)(n, amt);
+            result = (min)(n, amt);
             std::copy(s, s + result, container_.begin() + pos_);
             pos_ += result;
         }
@@ -200,7 +200,7 @@
     <SPAN CLASS="keyword">using</SPAN> <SPAN CLASS="keyword">namespace</SPAN> std;
     <SPAN CLASS="keyword">typedef</SPAN> ex::container_device&lt;string&gt; string_device;
 
-    string                            one, two;
+    string                     one, two;
     io::stream&lt;string_device&gt;  io(one);
     io &lt;&lt; <SPAN CLASS='literal'>"Hello World!"</SPAN>;
     io.flush();

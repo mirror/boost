@@ -234,30 +234,25 @@ public:
     template<typename Sink>
     void close(Sink& snk, BOOST_IOS::openmode m)
     {
-        namespace io = boost::iostreams;
+        if (m == BOOST_IOS::out) {
+            try {
 
-        if (m & BOOST_IOS::out) {
+                // Close zlib compressor.
+                base_type::close(snk, BOOST_IOS::out);
 
-            // Close zlib compressor.
-            base_type::close(snk, BOOST_IOS::out);
+                if (flags_ & f_header_done) {
 
-            if (flags_ & f_header_done) {
+                    // Write final fields of gzip file format.
+                    write_long(this->crc(), snk);
+                    write_long(this->total_in(), snk);
+                }
 
-                // Write final fields of gzip file format.
-                write_long(this->crc(), snk);
-                write_long(this->total_in(), snk);
+            } catch (...) {
+                close_impl();
+                throw;
             }
-
+            close_impl();
         }
-        #if BOOST_WORKAROUND(__GNUC__, == 2) && defined(__STL_CONFIG_H) || \
-            BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) \
-            /**/
-            footer_.erase(0, std::string::npos);
-        #else
-            footer_.clear();
-        #endif
-        offset_ = 0;
-        flags_ = 0;
     }
 private:
     static gzip_params normalize_params(gzip_params p);
@@ -271,6 +266,19 @@ private:
         boost::iostreams::put(next, static_cast<char>(0xFF & (n >> 8)));
         boost::iostreams::put(next, static_cast<char>(0xFF & (n >> 16)));
         boost::iostreams::put(next, static_cast<char>(0xFF & (n >> 24)));
+    }
+
+    void close_impl()
+    {
+        #if BOOST_WORKAROUND(__GNUC__, == 2) && defined(__STL_CONFIG_H) || \
+            BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) \
+            /**/
+            footer_.erase(0, std::string::npos);
+        #else
+            footer_.clear();
+        #endif
+        offset_ = 0;
+        flags_ = 0;
     }
 
     enum flag_type {
@@ -342,10 +350,11 @@ public:
     {
         try {
             base_type::close(src, BOOST_IOS::in);
-            flags_ = 0;
         } catch (const zlib_error& e) {
+            flags_ = 0;
             throw gzip_error(e);
         }
+        flags_ = 0;
     }
 
     std::string file_name() const { return file_name_; }

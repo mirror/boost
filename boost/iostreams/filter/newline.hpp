@@ -129,15 +129,18 @@ public:
         using iostreams::newline::CR;
         using iostreams::newline::LF;
 
-        if (flags_ & (has_LF | has_EOF)) {
-            if (flags_ & has_LF)
+        assert((flags_ & f_write) == 0);
+        flags_ |= f_read;
+
+        if (flags_ & (f_has_LF | f_has_EOF)) {
+            if (flags_ & f_has_LF)
                 return newline();
             else
                 return EOF;
         }
 
         int c =
-            (flags_ & has_CR) == 0 ?
+            (flags_ & f_has_CR) == 0 ?
                 iostreams::get(src) :
                 CR;
 
@@ -145,24 +148,24 @@ public:
             return WOULD_BLOCK;
 
         if (c == CR) {
-            flags_ |= has_CR;
+            flags_ |= f_has_CR;
 
             int d;
             if ((d = iostreams::get(src)) == WOULD_BLOCK)
                 return WOULD_BLOCK;
 
             if (d == LF) {
-                flags_ &= ~has_CR;
+                flags_ &= ~f_has_CR;
                 return newline();
             }
 
             if (d == EOF) {
-                flags_ |= has_EOF;
+                flags_ |= f_has_EOF;
             } else {
                 iostreams::putback(src, d);
             }
 
-            flags_ &= ~has_CR;
+            flags_ &= ~f_has_CR;
             return newline();
         }
 
@@ -178,7 +181,10 @@ public:
         using iostreams::newline::CR;
         using iostreams::newline::LF;
 
-        if ((flags_ & has_LF) != 0)
+        assert((flags_ & f_read) == 0);
+        flags_ |= f_write;
+
+        if ((flags_ & f_has_LF) != 0)
             return c == LF ?
                 newline(dest) :
                 newline(dest) && this->put(dest, c);
@@ -186,13 +192,13 @@ public:
         if (c == LF)
            return newline(dest);
 
-        if ((flags_ & has_CR) != 0)
+        if ((flags_ & f_has_CR) != 0)
             return newline(dest) ?
                 this->put(dest, c) :
                 false;
 
         if (c == CR) {
-            flags_ |= has_CR;
+            flags_ |= f_has_CR;
             return true;
         }
 
@@ -203,17 +209,12 @@ public:
     void close(Sink& dest, BOOST_IOS::openmode which)
     {
         typedef typename iostreams::category_of<Sink>::type category;
-        bool unfinished = (flags_ & has_CR) != 0;
-        flags_ &= newline::platform_mask;
-        if (which == BOOST_IOS::out && unfinished)
-            close(dest, is_convertible<category, output>());
+        if ((flags_ & f_write) != 0 && (flags_ & f_has_CR) != 0)
+            newline_if_sink(dest);
+        if (which == BOOST_IOS::out)
+            flags_ &= newline::platform_mask;
     }
 private:
-    template<typename Sink>
-    void close(Sink& dest, mpl::true_) { newline(dest); }
-
-    template<typename Sink>
-    void close(Sink&, mpl::false_) { }
 
     // Returns the appropriate element of a newline sequence.
     int newline()
@@ -227,11 +228,11 @@ private:
         case newline::mac:
             return CR;
         case newline::dos:
-            if (flags_ & has_LF) {
-                flags_ &= ~has_LF;
+            if (flags_ & f_has_LF) {
+                flags_ &= ~f_has_LF;
                 return LF;
             } else {
-                flags_ |= has_LF;
+                flags_ |= f_has_LF;
                 return CR;
             }
         }
@@ -254,24 +255,41 @@ private:
             success = boost::iostreams::put(dest, CR);
             break;
         case newline::dos:
-            if ((flags_ & has_LF) != 0) {
+            if ((flags_ & f_has_LF) != 0) {
                 if ((success = boost::iostreams::put(dest, LF)))
-                    flags_ &= ~has_LF;
+                    flags_ &= ~f_has_LF;
             } else if (boost::iostreams::put(dest, CR)) {
                 if (!(success = boost::iostreams::put(dest, LF)))
-                    flags_ |= has_LF;
+                    flags_ |= f_has_LF;
             }
             break;
         }
         if (success)
-            flags_ &= ~has_CR;
+            flags_ &= ~f_has_CR;
         return success;
     }
+
+    // Writes a newline sequence if the given device is a Sink.
+    template<typename Device>
+    void newline_if_sink(Device& dest) 
+    { 
+        typedef typename iostreams::category_of<Device>::type category;
+        newline_if_sink(dest, is_convertible<category, output>()); 
+    }
+
+    template<typename Sink>
+    void newline_if_sink(Sink& dest, mpl::true_) { newline(dest); }
+
+    template<typename Source>
+    void newline_if_sink(Source&, mpl::false_) { }
+
     enum flags {
-        has_LF         = 32768,
-        has_CR         = has_LF << 1,
-        has_newline    = has_CR << 1,
-        has_EOF        = has_newline << 1
+        f_has_LF         = 32768,
+        f_has_CR         = f_has_LF << 1,
+        f_has_newline    = f_has_CR << 1,
+        f_has_EOF        = f_has_newline << 1,
+        f_read           = f_has_EOF << 1,
+        f_write          = f_read << 1
     };
     int       flags_;
 };
@@ -304,26 +322,26 @@ public:
 
         // Update source flags.
         if (c != EOF)
-            source() &= ~line_complete;
-        if ((source() & has_CR) != 0) {
+            source() &= ~f_line_complete;
+        if ((source() & f_has_CR) != 0) {
             if (c == LF) {
                 source() |= newline::dos;
-                source() |= line_complete;
+                source() |= f_line_complete;
             } else {
                 source() |= newline::mac;
                 if (c == EOF)
-                    source() |= line_complete;
+                    source() |= f_line_complete;
             }
         } else if (c == LF) {
             source() |= newline::posix;
-            source() |= line_complete;
+            source() |= f_line_complete;
         }
-        source() = (source() & ~has_CR) | (c == CR ? has_CR : 0);
+        source() = (source() & ~f_has_CR) | (c == CR ? f_has_CR : 0);
 
         // Check for errors.
         if ( c == EOF &&
             (target_ & newline::final_newline) != 0 &&
-            (source() & line_complete) == 0 )
+            (source() & f_line_complete) == 0 )
         {
             fail();
         }
@@ -351,19 +369,19 @@ public:
             return false;
 
          // Update source flags.
-        source() &= ~line_complete;
-        if ((source() & has_CR) != 0) {
+        source() &= ~f_line_complete;
+        if ((source() & f_has_CR) != 0) {
             if (c == LF) {
                 source() |= newline::dos;
-                source() |= line_complete;
+                source() |= f_line_complete;
             } else {
                 source() |= newline::mac;
             }
         } else if (c == LF) {
             source() |= newline::posix;
-            source() |= line_complete;
+            source() |= f_line_complete;
         }
-        source() = (source() & ~has_CR) | (c == CR ? has_CR : 0);
+        source() = (source() & ~f_has_CR) | (c == CR ? f_has_CR : 0);
 
         // Check for errors.
         if ( (target_ & newline::platform_mask) != 0 &&
@@ -380,22 +398,24 @@ public:
     {
         using iostreams::newline::final_newline;
 
-        // Update final_newline flag.
-        if ( (source() & has_CR) != 0 ||
-             (source() & line_complete) != 0 )
-        {
-            source() |= final_newline;
-        }
+        if (which == BOOST_IOS::out) {
 
-        // Clear non-sticky flags.
-        source() &= ~(has_CR | line_complete);
+            // Update final_newline flag.
+            if ( (source() & f_has_CR) != 0 ||
+                (source() & f_line_complete) != 0 )
+            {
+                source() |= final_newline;
+            }
 
-        // Check for errors.
-        if ( (which & BOOST_IOS::out) &&
-             (target_ & final_newline) != 0 &&
-             (source() & final_newline) == 0 )
-        {
-            fail();
+            // Clear non-sticky flags.
+            source() &= ~(f_has_CR | f_line_complete);
+
+            // Check for errors.
+            if ( (target_ & final_newline) != 0 &&
+                 (source() & final_newline) == 0 )
+            {
+                fail();
+            }
         }
     }
 private:
@@ -404,8 +424,8 @@ private:
     int source() const { return flags_; }
 
     enum flags {
-        has_CR = 32768,
-        line_complete = has_CR << 1
+        f_has_CR = 32768,
+        f_line_complete = f_has_CR << 1
     };
 
     int   target_;  // Represents expected input.

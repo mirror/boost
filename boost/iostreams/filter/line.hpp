@@ -17,7 +17,6 @@
 #include <string>
 #include <boost/config.hpp>                        // BOOST_STATIC_CONSTANT.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/detail/ios.hpp>          // openmode, streamsize.
 #include <boost/iostreams/pipeline.hpp>
 
@@ -117,19 +116,23 @@ public:
         }
     }
 
-    typedef basic_line_filter<Ch, Alloc> self;
-    friend struct detail::closer<self>;
-
     template<typename Sink>
     void close(Sink& snk, BOOST_IOS::openmode which)
     {
-        if ((state_ & f_read) && (which & BOOST_IOS::in))
-            close();
+        if ((state_ & f_read) && which == BOOST_IOS::in)
+            close_impl();
 
-        if ((state_ & f_write) && (which & BOOST_IOS::out)) {
-            detail::closer<self> closer(*this);
-            if (!cur_line_.empty())
-                write_line(snk);
+        if ((state_ & f_write) && which == BOOST_IOS::out) {
+            try {
+                if (!cur_line_.empty())
+                    write_line(snk);
+            } catch (...) {
+                try {
+                    close_impl();
+                } catch (...) { }
+                throw;
+            }
+            close_impl();
         }
     }
 private:
@@ -181,7 +184,7 @@ private:
         return result;
     }
 
-    void close()
+    void close_impl()
     {
         clear();
         state_ = 0;

@@ -40,13 +40,16 @@ template<typename Chain, typename Access, typename Mode> class chainbuf;
 template<typename Ch, typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch) >
 class linked_streambuf : public BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) {
 protected:
-    linked_streambuf() : true_eof_(false) { }
-    void set_true_eof(bool eof) { true_eof_ = eof; }
+    linked_streambuf() : flags_(0) { }
+    void set_true_eof(bool eof) 
+    { 
+        flags_ = (flags_ & ~f_true_eof) | (eof ? f_true_eof : 0); 
+    }
 public:
 
     // Should be called only after receiving an ordinary EOF indication,
     // to confirm that it represents EOF rather than WOULD_BLOCK.
-    bool true_eof() const { return true_eof_; }
+    bool true_eof() const { return (flags_ & f_true_eof) != 0; }
 protected:
 
     //----------grant friendship to chain_base and chainbuf-------------------//
@@ -57,20 +60,51 @@ protected:
     friend class chain_base;
     template<typename Chain, typename Mode, typename Access>
     friend class chainbuf;
+    template<typename U>
+    friend struct member_close_operation; 
 #else
-public:
-    typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) base;
-    BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base)
+    public:
+        typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) base;
+        BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base)
 #endif
+    void close(BOOST_IOS::openmode which)
+    {
+        if ( which == BOOST_IOS::in && 
+            (flags_ & f_input_closed) == 0 )
+        {
+            flags_ |= f_input_closed;
+            close_impl(which);
+        }
+        if ( which == BOOST_IOS::out && 
+            (flags_ & f_output_closed) == 0 )
+        {
+            flags_ |= f_output_closed;
+            close_impl(which);
+        }
+    }
+    void set_needs_close()
+    {
+        flags_ &= ~(f_input_closed | f_output_closed);
+    }
     virtual void set_next(linked_streambuf<Ch, Tr>* /* next */) { }
-    virtual void close(BOOST_IOS::openmode) = 0;
+    virtual void close_impl(BOOST_IOS::openmode) = 0;
     virtual bool auto_close() const = 0;
     virtual void set_auto_close(bool) = 0;
     virtual bool strict_sync() = 0;
     virtual const std::type_info& component_type() const = 0;
     virtual void* component_impl() = 0;
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+    private:
+#else
+    public:
+#endif
 private:
-    bool true_eof_;
+    enum flag_type {
+        f_true_eof       = 1,
+        f_input_closed   = f_true_eof << 1,
+        f_output_closed  = f_input_closed << 1
+    };
+    int flags_;
 };
 
 } } } // End namespaces detail, iostreams, boost.

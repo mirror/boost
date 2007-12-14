@@ -33,7 +33,9 @@
 #include <boost/iostreams/detail/codecvt_holder.hpp>
 #include <boost/iostreams/detail/codecvt_helper.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
+#include <boost/iostreams/detail/execute.hpp>
 #include <boost/iostreams/detail/forward.hpp>
+#include <boost/iostreams/detail/functional.hpp>
 #include <boost/iostreams/detail/ios.hpp> // failure, openmode, int types.
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -146,7 +148,7 @@ struct code_converter_impl {
     { 
         try { 
             if (flags_ & f_open) close(); 
-        } catch (std::exception&) { /* */ } 
+        } catch (...) { /* */ } 
     }
 
     void open(const Device& dev, int buffer_size)
@@ -166,28 +168,32 @@ struct code_converter_impl {
             buf_.second().set(0, 0);
         }
         dev_.reset(concept_adapter<policy_type>(dev));
-        flags_ |= f_open;
+        flags_ = f_open;
     }
 
-    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
+    void close()
     {
-        if (which & BOOST_IOS::in) {
-            iostreams::close(dev(), BOOST_IOS::in);
+        detail::execute_all(
+            detail::call_member_close(*this, BOOST_IOS::in),
+            detail::call_member_close(*this, BOOST_IOS::out)
+        );
+    }
+
+    void close(BOOST_IOS::openmode which)
+    {
+        if (which == BOOST_IOS::in && (flags_ & f_input_closed) == 0) {
             flags_ |= f_input_closed;
+            iostreams::close(dev(), BOOST_IOS::in);
         }
-        if (which & BOOST_IOS::out) {
-            buf_.second().flush(dev());
-            iostreams::close(dev(), BOOST_IOS::out);
+        if (which == BOOST_IOS::out && (flags_ & f_output_closed) == 0) {
             flags_ |= f_output_closed;
-        }
-        if ( !is_double::value || 
-             (flags_ & f_input_closed) != 0 && 
-             (flags_ & f_output_closed) != 0 )
-        {
-            dev_.reset();
-            buf_.first().reset();
-            buf_.second().reset();
-            flags_ = 0;
+            detail::execute_all(
+                detail::flush_buffer(buf_.second(), dev(), can_write::value),
+                detail::call_close(dev(), BOOST_IOS::out),
+                detail::call_reset(dev_),
+                detail::call_reset(buf_.first()),
+                detail::call_reset(buf_.second())
+            );
         }
     }
 

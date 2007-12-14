@@ -39,23 +39,23 @@ void container_device_test()
     typedef ex::container_device<vector_type>  vector_device;
 
     {
-        test_sequence<>                     seq;
-        test_file                           file;
+        test_sequence<>              seq;
+        test_file                    file;
         io::stream<vector_source>    first(seq);
         io::stream<io::file_source>  second(file.name(), in_mode);
         BOOST_CHECK(compare_streams_in_chunks(first, second));
     }
 
     {
-        std::vector<char>              first;
-        test_sequence<>                second;
-        io::stream<vector_sink> out(first);
+        std::vector<char>        first;
+        test_sequence<>          second;
+        io::stream<vector_sink>  out(first);
         write_data_in_chunks(out);
         BOOST_CHECK(first == second);
     }
 
     {
-        vector<char>                     v;
+        vector<char>              v;
         io::stream<vector_device> io(v);
         BOOST_CHECK(test_seekable_in_chunks(io));
     }
