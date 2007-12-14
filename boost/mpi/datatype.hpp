@@ -25,6 +25,7 @@
 #include <boost/mpl/or.hpp>
 #include <boost/mpi/detail/mpi_datatype_cache.hpp>
 #include <boost/mpl/assert.hpp>
+#include <utility> // for std::pair
 
 namespace boost { namespace mpi {
 
@@ -288,6 +289,11 @@ template<>
 struct is_mpi_datatype<bool>
   : boost::mpl::bool_<true>
 {};
+
+/// INTERNAL ONLY
+template<typename T, typename U>
+struct is_mpi_datatype<std::pair<T, U> >
+  : mpl::and_<is_mpi_datatype<T>, is_mpi_datatype<U> > { };
 
 } } // end namespace boost::mpi
 

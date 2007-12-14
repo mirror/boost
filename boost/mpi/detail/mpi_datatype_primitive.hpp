@@ -9,7 +9,7 @@
 #ifndef BOOST_MPI_DETAIL_MPI_DATATYPE_OPRIMITIVE_HPP
 #define BOOST_MPI_DETAIL_MPI_DATATYPE_OPRIMITIVE_HPP
 
-#include <mpi.h>
+#include <boost/mpi/config.hpp>
 #include <cstddef> // size_t
 
 #include <boost/config.hpp>
