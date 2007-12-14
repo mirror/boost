@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Understanding Marked Sub-Expressions
-    and Captures</title>
+<title>Understanding Marked Sub-Expressions and Captures</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../index.html" title="Boost.Regex">
 <link rel="up" href="../index.html" title="Boost.Regex">
-<link rel="prev" href="unicode.html" title=" Unicode and Boost.Regex">
-<link rel="next" href="partial_matches.html" title=" Partial Matches">
+<link rel="prev" href="unicode.html" title="Unicode and Boost.Regex">
+<link rel="next" href="partial_matches.html" title="Partial Matches">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_regex.captures"></a><a href="captures.html" title=" Understanding Marked Sub-Expressions
-    and Captures"> Understanding Marked Sub-Expressions
-    and Captures</a></h2></div></div></div>
+<a name="boost_regex.captures"></a><a href="captures.html" title="Understanding Marked Sub-Expressions and Captures"> Understanding Marked Sub-Expressions
+    and Captures</a>
+</h2></div></div></div>
 <p>
       Captures are the iterator ranges that are "captured" by marked sub-expressions
       as a regular expression gets matched. Each marked sub-expression can result
@@ -35,12 +34,12 @@
       how captures and marked sub-expressions in Boost.Regex are represented and
       accessed.
     </p>
-<a name="boost_regex.captures.marked_sub_expressions"></a><h4>
-<a name="id459027"></a>
+<a name="boost_regex.captures.marked_sub_expressions"></a><h5>
+<a name="id492844"></a>
       <a href="captures.html#boost_regex.captures.marked_sub_expressions">Marked sub-expressions</a>
-    </h4>
+    </h5>
 <p>
-      Every time a Perl regular expression contains a parenthesis group <tt class="computeroutput"><span class="special">()</span></tt>, it spits out an extra field, known as a
+      Every time a Perl regular expression contains a parenthesis group <code class="computeroutput"><span class="special">()</span></code>, it spits out an extra field, known as a
       marked sub-expression, for example the expression:
     </p>
 <pre class="programlisting">(\w+)\W+(\w+)</pre>
@@ -48,7 +47,7 @@
       Has two marked sub-expressions (known as $1 and $2 respectively), in addition
       the complete match is known as $&amp;, everything before the first match as
       $`, and everything after the match as $'. So if the above expression is searched
-      for within <tt class="computeroutput"><span class="string">"@abc def--"</span></tt>,
+      for within <code class="computeroutput"><span class="string">"@abc def--"</span></code>,
       then we obtain:
     </p>
 <div class="informaltable"><table class="table">
@@ -132,11 +131,10 @@
 </tbody>
 </table></div>
 <p>
-      In Boost.Regex all these are accessible via the <a href="ref/match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a> class that gets filled
-      in when calling one of the regular expression matching algorithms ( <a href="ref/regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a>, <a href="ref/regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>, or <a href="ref/regex_iterator.html" title=" regex_iterator"><tt class="computeroutput"><span class="identifier">regex_iterator</span></tt></a>). So given:
+      In Boost.Regex all these are accessible via the <a href="ref/match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> class that gets filled
+      in when calling one of the regular expression matching algorithms ( <a href="ref/regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>, <a href="ref/regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>, or <a href="ref/regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a>). So given:
     </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">IteratorType</span><span class="special">&gt;</span> <span class="identifier">m</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">IteratorType</span><span class="special">&gt;</span> <span class="identifier">m</span><span class="special">;</span>
 </pre>
 <p>
       The Perl and Boost.Regex equivalents are as follows:
@@ -167,7 +165,7 @@
             </td>
 <td>
             <p>
-              <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">()</span></tt>
+              <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">()</span></code>
             </p>
             </td>
 </tr>
@@ -179,7 +177,7 @@
             </td>
 <td>
             <p>
-              <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">]</span></tt>
+              <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="number">0</span><span class="special">]</span></code>
             </p>
             </td>
 </tr>
@@ -191,7 +189,7 @@
             </td>
 <td>
             <p>
-              <tt class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">]</span></tt>
+              <code class="computeroutput"><span class="identifier">m</span><span class="special">[</span><span class="identifier">n</span><span class="special">]</span></code>
             </p>
             </td>
 </tr>
@@ -203,26 +201,26 @@
             </td>
 <td>
             <p>
-              <tt class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">()</span></tt>
+              <code class="computeroutput"><span class="identifier">m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">()</span></code>
             </p>
             </td>
 </tr>
 </tbody>
 </table></div>
 <p>
-      In Boost.Regex each sub-expression match is represented by a <a href="ref/sub_match.html" title=" sub_match"><tt class="computeroutput"><span class="identifier">sub_match</span></tt></a> object, this is basically
+      In Boost.Regex each sub-expression match is represented by a <a href="ref/sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a> object, this is basically
       just a pair of iterators denoting the start and end position of the sub-expression
       match, but there are some additional operators provided so that objects of
-      type <a href="ref/sub_match.html" title=" sub_match"><tt class="computeroutput"><span class="identifier">sub_match</span></tt></a>
-      behave a lot like a <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></tt>: for example they are implicitly
-      convertible to a <tt class="computeroutput"><span class="identifier">basic_string</span></tt>,
+      type <a href="ref/sub_match.html" title="sub_match"><code class="computeroutput"><span class="identifier">sub_match</span></code></a>
+      behave a lot like a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span></code>: for example they are implicitly
+      convertible to a <code class="computeroutput"><span class="identifier">basic_string</span></code>,
       they can be compared to a string, added to a string, or streamed out to an
       output stream.
     </p>
-<a name="boost_regex.captures.unmatched_sub_expressions"></a><h4>
-<a name="id459648"></a>
+<a name="boost_regex.captures.unmatched_sub_expressions"></a><h5>
+<a name="id493467"></a>
       <a href="captures.html#boost_regex.captures.unmatched_sub_expressions">Unmatched Sub-Expressions</a>
-    </h4>
+    </h5>
 <p>
       When a regular expression match is found there is no need for all of the marked
       sub-expressions to have participated in the match, for example the expression:
@@ -230,12 +228,12 @@
 <pre class="programlisting">(abc)|(def)</pre>
 <p>
       can match either $1 or $2, but never both at the same time. In Boost.Regex
-      you can determine which sub-expressions matched by accessing the <tt class="computeroutput"><span class="identifier">sub_match</span><span class="special">::</span><span class="identifier">matched</span></tt> data member.
+      you can determine which sub-expressions matched by accessing the <code class="computeroutput"><span class="identifier">sub_match</span><span class="special">::</span><span class="identifier">matched</span></code> data member.
     </p>
-<a name="boost_regex.captures.repeated_captures"></a><h4>
-<a name="id459714"></a>
+<a name="boost_regex.captures.repeated_captures"></a><h5>
+<a name="id493529"></a>
       <a href="captures.html#boost_regex.captures.repeated_captures">Repeated Captures</a>
-    </h4>
+    </h5>
 <p>
       When a marked sub-expression is repeated, then the sub-expression gets "captured"
       multiple times, however normally only the final capture is available, for example
@@ -252,13 +250,12 @@
     </p>
 <p>
       However, Boost.Regex has an experimental feature that allows all the capture
-      information to be retained - this is accessed either via the <tt class="computeroutput"><span class="identifier">match_results</span><span class="special">::</span><span class="identifier">captures</span></tt> member function or the <tt class="computeroutput"><span class="identifier">sub_match</span><span class="special">::</span><span class="identifier">captures</span></tt> member function. These functions
+      information to be retained - this is accessed either via the <code class="computeroutput"><span class="identifier">match_results</span><span class="special">::</span><span class="identifier">captures</span></code> member function or the <code class="computeroutput"><span class="identifier">sub_match</span><span class="special">::</span><span class="identifier">captures</span></code> member function. These functions
       return a container that contains a sequence of all the captures obtained during
       the regular expression matching. The following example program shows how this
       information may be used:
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 
 <span class="keyword">void</span> <span class="identifier">print_captures</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">regx</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">text</span><span class="special">)</span>
@@ -372,10 +369,11 @@ Text:        "now is the time for all good men to come to the aid of the party"
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

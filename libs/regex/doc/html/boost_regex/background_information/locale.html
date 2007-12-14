@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Localization</title>
+<title>Localization</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Regex">
 <link rel="up" href="../background_information.html" title="Background Information">
-<link rel="prev" href="headers.html" title=" Headers">
-<link rel="next" href="thread_safety.html" title=" Thread
-      Safety">
+<link rel="prev" href="headers.html" title="Headers">
+<link rel="next" href="thread_safety.html" title="Thread Safety">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,7 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.background_information.locale"></a><a href="locale.html" title=" Localization"> Localization</a></h3></div></div></div>
+<a name="boost_regex.background_information.locale"></a><a href="locale.html" title="Localization"> Localization</a>
+</h3></div></div></div>
 <p>
         Boost.Regex provides extensive support for run-time localization, the localization
         model used can be split into two parts: front-end and back-end.
@@ -57,52 +57,50 @@
 <p>
         There are three separate localization mechanisms supported by Boost.Regex:
       </p>
-<a name="boost_regex.background_information.locale.win32_localization_model_"></a><h4>
-<a name="id610859"></a>
+<a name="boost_regex.background_information.locale.win32_localization_model_"></a><h5>
+<a name="id643689"></a>
         <a href="locale.html#boost_regex.background_information.locale.win32_localization_model_">Win32
         localization model.</a>
-      </h4>
+      </h5>
 <p>
         This is the default model when the library is compiled under Win32, and is
-        encapsulated by the traits class <tt class="computeroutput"><span class="identifier">w32_regex_traits</span></tt>.
-        When this model is in effect each <a href="../ref/basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a> object gets it's own
+        encapsulated by the traits class <code class="computeroutput"><span class="identifier">w32_regex_traits</span></code>.
+        When this model is in effect each <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> object gets it's own
         LCID, by default this is the users default setting as returned by GetUserDefaultLCID,
-        but you can call imbue on the <tt class="computeroutput"><span class="identifier">basic_regex</span></tt>
+        but you can call imbue on the <code class="computeroutput"><span class="identifier">basic_regex</span></code>
         object to set it's locale to some other LCID if you wish. All the settings
         used by Boost.Regex are acquired directly from the operating system bypassing
         the C run time library. Front-end localization requires a resource dll, containing
         a string table with the user-defined strings. The traits class exports the
         function:
       </p>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 </pre>
 <p>
         which needs to be called with a string identifying the name of the resource
         dll, before your code compiles any regular expressions (but not necessarily
-        before you construct any <tt class="computeroutput"><span class="identifier">basic_regex</span></tt>
+        before you construct any <code class="computeroutput"><span class="identifier">basic_regex</span></code>
         instances):
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">w32_regex_traits</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;::</span><span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="string">"mydll.dll"</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">w32_regex_traits</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;::</span><span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="string">"mydll.dll"</span><span class="special">);</span>
 </pre>
 <p>
         The library provides full Unicode support under NT, under Windows 9x the
         library degrades gracefully - characters 0 to 255 are supported, the remainder
         are treated as "unknown" graphic characters.
       </p>
-<a name="boost_regex.background_information.locale.c_localization_model_"></a><h4>
-<a name="id611109"></a>
+<a name="boost_regex.background_information.locale.c_localization_model_"></a><h5>
+<a name="id643933"></a>
         <a href="locale.html#boost_regex.background_information.locale.c_localization_model_">C
         localization model.</a>
-      </h4>
+      </h5>
 <p>
         This model has been deprecated in favor of the C++ locale for all non-Windows
         compilers that support it. This locale is encapsulated by the traits class
-        <tt class="computeroutput"><span class="identifier">c_regex_traits</span></tt>, Win32 users
+        <code class="computeroutput"><span class="identifier">c_regex_traits</span></code>, Win32 users
         can force this model to take effect by defining the pre-processor symbol
         BOOST_REGEX_USE_C_LOCALE. When this model is in effect there is a single
-        global locale, as set by <tt class="computeroutput"><span class="identifier">setlocale</span></tt>.
+        global locale, as set by <code class="computeroutput"><span class="identifier">setlocale</span></code>.
         All settings are acquired from your run time library, consequently Unicode
         support is dependent upon your run time library implementation.
       </p>
@@ -111,54 +109,52 @@
       </p>
 <p>
         Note that calling setlocale invalidates all compiled regular expressions,
-        calling <tt class="computeroutput"><span class="identifier">setlocale</span><span class="special">(</span><span class="identifier">LC_ALL</span><span class="special">,</span> <span class="string">"C"</span><span class="special">)</span></tt>
+        calling <code class="computeroutput"><span class="identifier">setlocale</span><span class="special">(</span><span class="identifier">LC_ALL</span><span class="special">,</span> <span class="string">"C"</span><span class="special">)</span></code>
         will make this library behave equivalent to most traditional regular expression
         libraries including version 1 of this library.
       </p>
-<a name="boost_regex.background_information.locale.c___localization_model_"></a><h4>
-<a name="id611224"></a>
+<a name="boost_regex.background_information.locale.c___localization_model_"></a><h5>
+<a name="id644045"></a>
         <a href="locale.html#boost_regex.background_information.locale.c___localization_model_">C++
         localization model.</a>
-      </h4>
+      </h5>
 <p>
         This model is the default for non-Windows compilers.
       </p>
 <p>
-        When this model is in effect each instance of <a href="../ref/basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a> has its own instance
-        of <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span></tt>, class <a href="../ref/basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a> also has a member function
-        <tt class="computeroutput"><span class="identifier">imbue</span></tt> which allows the locale
+        When this model is in effect each instance of <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> has its own instance
+        of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span></code>, class <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> also has a member function
+        <code class="computeroutput"><span class="identifier">imbue</span></code> which allows the locale
         for the expression to be set on a per-instance basis. Front end localization
-        requires a POSIX message catalogue, which will be loaded via the <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">messages</span></tt>
+        requires a POSIX message catalogue, which will be loaded via the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">messages</span></code>
         facet of the expression's locale, the traits class exports the symbol:
       </p>
-<pre class="programlisting">
-<span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">);</span>
 </pre>
 <p>
         which needs to be called with a string identifying the name of the message
         catalogue, before your code compiles any regular expressions (but not necessarily
         before you construct any basic_regex instances):
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">cpp_regex_traits</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;::</span><span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="string">"mycatalogue"</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">cpp_regex_traits</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;::</span><span class="identifier">set_message_catalogue</span><span class="special">(</span><span class="string">"mycatalogue"</span><span class="special">);</span>
 </pre>
 <p>
-        Note that calling <tt class="computeroutput"><span class="identifier">basic_regex</span><span class="special">&lt;&gt;::</span><span class="identifier">imbue</span></tt>
-        will invalidate any expression currently compiled in that instance of <a href="../ref/basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>.
+        Note that calling <code class="computeroutput"><span class="identifier">basic_regex</span><span class="special">&lt;&gt;::</span><span class="identifier">imbue</span></code>
+        will invalidate any expression currently compiled in that instance of <a href="../ref/basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>.
       </p>
 <p>
         Finally note that if you build the library with a non-default localization
         model, then the appropriate pre-processor symbol (BOOST_REGEX_USE_C_LOCALE
         or BOOST_REGEX_USE_CPP_LOCALE) must be defined both when you build the support
-        library, and when you include <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
-        or <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cregex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
-        in your code. The best way to ensure this is to add the #define to <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">user</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>.
+        library, and when you include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        or <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cregex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        in your code. The best way to ensure this is to add the #define to <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">user</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>.
       </p>
-<a name="boost_regex.background_information.locale.providing_a_message_catalogue"></a><h4>
-<a name="id611693"></a>
+<a name="boost_regex.background_information.locale.providing_a_message_catalogue"></a><h5>
+<a name="id644505"></a>
         <a href="locale.html#boost_regex.background_information.locale.providing_a_message_catalogue">Providing
         a message catalogue</a>
-      </h4>
+      </h5>
 <p>
         In order to localize the front end of the library, you need to provide the
         library with the appropriate message strings contained either in a resource
@@ -1272,7 +1268,7 @@
               </td>
 <td>
               <p>
-                "Unmatched [ or <tt class="literal">" </tt>
+                "Unmatched [ or <code class="literal">" </code>
               </p>
               </td>
 <td>
@@ -1779,10 +1775,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> POSIX Extended Regular
-      Expression Syntax</title>
+<title>POSIX Extended Regular Expression Syntax</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Regex">
-<link rel="up" href="../syntax.html" title=" Regular Expression Syntax">
-<link rel="prev" href="perl_syntax.html" title=" Perl Regular Expression
-      Syntax">
-<link rel="next" href="basic_syntax.html" title=" POSIX Basic Regular
-      Expression Syntax">
+<link rel="up" href="../syntax.html" title="Regular Expression Syntax">
+<link rel="prev" href="perl_syntax.html" title="Perl Regular Expression Syntax">
+<link rel="next" href="basic_syntax.html" title="POSIX Basic Regular Expression Syntax">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,60 +24,59 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.syntax.basic_extended"></a><a href="basic_extended.html" title=" POSIX Extended Regular
-      Expression Syntax"> POSIX Extended Regular
-      Expression Syntax</a></h3></div></div></div>
-<a name="boost_regex.syntax.basic_extended.synopsis"></a><h3>
-<a name="id470414"></a>
+<a name="boost_regex.syntax.basic_extended"></a><a href="basic_extended.html" title="POSIX Extended Regular Expression Syntax"> POSIX Extended Regular
+      Expression Syntax</a>
+</h3></div></div></div>
+<a name="boost_regex.syntax.basic_extended.synopsis"></a><h4>
+<a name="id504146"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.synopsis">Synopsis</a>
-      </h3>
+      </h4>
 <p>
         The POSIX-Extended regular expression syntax is supported by the POSIX C
-        regular expression API's, and variations are used by the utilities <tt class="computeroutput"><span class="identifier">egrep</span></tt> and <tt class="computeroutput"><span class="identifier">awk</span></tt>.
+        regular expression API's, and variations are used by the utilities <code class="computeroutput"><span class="identifier">egrep</span></code> and <code class="computeroutput"><span class="identifier">awk</span></code>.
         You can construct POSIX extended regular expressions in Boost.Regex by passing
-        the flag <tt class="computeroutput"><span class="identifier">extended</span></tt> to the
+        the flag <code class="computeroutput"><span class="identifier">extended</span></code> to the
         regex constructor, for example:
       </p>
-<pre class="programlisting">
-<span class="comment">// e1 is a case sensitive POSIX-Extended expression:
+<pre class="programlisting"><span class="comment">// e1 is a case sensitive POSIX-Extended expression:
 </span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e1</span><span class="special">(</span><span class="identifier">my_expression</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">extended</span><span class="special">);</span>
 <span class="comment">// e2 a case insensitive POSIX-Extended expression:
 </span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e2</span><span class="special">(</span><span class="identifier">my_expression</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">extended</span><span class="special">|</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">icase</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.posix_extended_syntax"></a><p>
       </p>
-<a name="boost_regex.syntax.basic_extended.posix_extended_syntax"></a><h3>
-<a name="id470682"></a>
+<a name="boost_regex.syntax.basic_extended.posix_extended_syntax"></a><h4>
+<a name="id504411"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.posix_extended_syntax">POSIX
         Extended Syntax</a>
-      </h3>
+      </h4>
 <p>
         In POSIX-Extended regular expressions, all characters match themselves except
         for the following special characters:
       </p>
 <pre class="programlisting">.[{()\*+?|^$</pre>
-<a name="boost_regex.syntax.basic_extended.wildcard_"></a><h4>
-<a name="id470723"></a>
+<a name="boost_regex.syntax.basic_extended.wildcard_"></a><h5>
+<a name="id504451"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.wildcard_">Wildcard:</a>
-      </h4>
+      </h5>
 <p>
         The single character '.' when used outside of a character set will match
         any single character except:
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-          The NULL character when the flag <tt class="computeroutput"><span class="identifier">match_no_dot_null</span></tt>
+          The NULL character when the flag <code class="computeroutput"><span class="identifier">match_no_dot_null</span></code>
           is passed to the matching algorithms.
         </li>
 <li>
-          The newline character when the flag <tt class="computeroutput"><span class="identifier">match_not_dot_newline</span></tt>
+          The newline character when the flag <code class="computeroutput"><span class="identifier">match_not_dot_newline</span></code>
           is passed to the matching algorithms.
         </li>
 </ul></div>
-<a name="boost_regex.syntax.basic_extended.anchors_"></a><h4>
-<a name="id470793"></a>
+<a name="boost_regex.syntax.basic_extended.anchors_"></a><h5>
+<a name="id504519"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.anchors_">Anchors:</a>
-      </h4>
+      </h5>
 <p>
         A '^' character shall match the start of a line when used as the first character
         of an expression, or the first character of a sub-expression.
@@ -89,39 +85,39 @@
         A '$' character shall match the end of a line when used as the last character
         of an expression, or the last character of a sub-expression.
       </p>
-<a name="boost_regex.syntax.basic_extended.marked_sub_expressions_"></a><h4>
-<a name="id470830"></a>
+<a name="boost_regex.syntax.basic_extended.marked_sub_expressions_"></a><h5>
+<a name="id504554"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.marked_sub_expressions_">Marked
         sub-expressions:</a>
-      </h4>
+      </h5>
 <p>
-        A section beginning <tt class="computeroutput"><span class="special">(</span></tt> and ending
-        <tt class="computeroutput"><span class="special">)</span></tt> acts as a marked sub-expression.
+        A section beginning <code class="computeroutput"><span class="special">(</span></code> and ending
+        <code class="computeroutput"><span class="special">)</span></code> acts as a marked sub-expression.
         Whatever matched the sub-expression is split out in a separate field by the
         matching algorithms. Marked sub-expressions can also repeated, or referred
         to by a back-reference.
       </p>
-<a name="boost_regex.syntax.basic_extended.repeats_"></a><h4>
-<a name="id470888"></a>
+<a name="boost_regex.syntax.basic_extended.repeats_"></a><h5>
+<a name="id504611"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.repeats_">Repeats:</a>
-      </h4>
+      </h5>
 <p>
         Any atom (a single character, a marked sub-expression, or a character class)
-        can be repeated with the <tt class="computeroutput"><span class="special">*</span></tt>,
-        <tt class="computeroutput"><span class="special">+</span></tt>, <tt class="computeroutput"><span class="special">?</span></tt>,
-        and <tt class="computeroutput"><span class="special">{}</span></tt> operators.
+        can be repeated with the <code class="computeroutput"><span class="special">*</span></code>,
+        <code class="computeroutput"><span class="special">+</span></code>, <code class="computeroutput"><span class="special">?</span></code>,
+        and <code class="computeroutput"><span class="special">{}</span></code> operators.
       </p>
 <p>
-        The <tt class="computeroutput"><span class="special">*</span></tt> operator will match the
+        The <code class="computeroutput"><span class="special">*</span></code> operator will match the
         preceding atom <span class="emphasis"><em>zero or more times</em></span>, for example the expression
-        <tt class="computeroutput"><span class="identifier">a</span><span class="special">*</span><span class="identifier">b</span></tt> will match any of the following:
+        <code class="computeroutput"><span class="identifier">a</span><span class="special">*</span><span class="identifier">b</span></code> will match any of the following:
       </p>
 <pre class="programlisting">b
 ab
 aaaaaaaab
 </pre>
 <p>
-        The <tt class="computeroutput"><span class="special">+</span></tt> operator will match the
+        The <code class="computeroutput"><span class="special">+</span></code> operator will match the
         preceding atom <span class="emphasis"><em>one or more times</em></span>, for example the expression
         a+b will match any of the following:
       </p>
@@ -134,9 +130,9 @@ aaaaaaaab
 <pre class="programlisting">b
 </pre>
 <p>
-        The <tt class="computeroutput"><span class="special">?</span></tt> operator will match the
+        The <code class="computeroutput"><span class="special">?</span></code> operator will match the
         preceding atom <span class="emphasis"><em>zero or one times</em></span>, for example the expression
-        <tt class="computeroutput"><span class="identifier">ca</span><span class="special">?</span><span class="identifier">b</span></tt> will match any of the following:
+        <code class="computeroutput"><span class="identifier">ca</span><span class="special">?</span><span class="identifier">b</span></code> will match any of the following:
       </p>
 <pre class="programlisting">cb
 cab
@@ -150,15 +146,15 @@ cab
         An atom can also be repeated with a bounded repeat:
       </p>
 <p>
-        <tt class="computeroutput"><span class="identifier">a</span><span class="special">{</span><span class="identifier">n</span><span class="special">}</span></tt> Matches
+        <code class="computeroutput"><span class="identifier">a</span><span class="special">{</span><span class="identifier">n</span><span class="special">}</span></code> Matches
         'a' repeated <span class="emphasis"><em>exactly n times</em></span>.
       </p>
 <p>
-        <tt class="computeroutput"><span class="identifier">a</span><span class="special">{</span><span class="identifier">n</span><span class="special">,}</span></tt> Matches
+        <code class="computeroutput"><span class="identifier">a</span><span class="special">{</span><span class="identifier">n</span><span class="special">,}</span></code> Matches
         'a' repeated <span class="emphasis"><em>n or more times</em></span>.
       </p>
 <p>
-        <tt class="computeroutput"><span class="identifier">a</span><span class="special">{</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">m</span><span class="special">}</span></tt> Matches 'a' repeated <span class="emphasis"><em>between n
+        <code class="computeroutput"><span class="identifier">a</span><span class="special">{</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">m</span><span class="special">}</span></code> Matches 'a' repeated <span class="emphasis"><em>between n
         and m times inclusive</em></span>.
       </p>
 <p>
@@ -168,32 +164,29 @@ cab
 <p>
         Will match either of:
       </p>
-<pre class="programlisting">
-<span class="identifier">aa</span>
+<pre class="programlisting"><span class="identifier">aa</span>
 <span class="identifier">aaa</span>
 </pre>
 <p>
         But neither of:
       </p>
-<pre class="programlisting">
-<span class="identifier">a</span>
+<pre class="programlisting"><span class="identifier">a</span>
 <span class="identifier">aaaa</span>
 </pre>
 <p>
         It is an error to use a repeat operator, if the preceding construct can not
         be repeated, for example:
       </p>
-<pre class="programlisting">
-<span class="identifier">a</span><span class="special">(*)</span>
+<pre class="programlisting"><span class="identifier">a</span><span class="special">(*)</span>
 </pre>
 <p>
-        Will raise an error, as there is nothing for the <tt class="computeroutput"><span class="special">*</span></tt>
+        Will raise an error, as there is nothing for the <code class="computeroutput"><span class="special">*</span></code>
         operator to be applied to.
       </p>
-<a name="boost_regex.syntax.basic_extended.back_references_"></a><h4>
-<a name="id471342"></a>
+<a name="boost_regex.syntax.basic_extended.back_references_"></a><h5>
+<a name="id505058"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.back_references_">Back references:</a>
-      </h4>
+      </h5>
 <p>
         An escape character followed by a digit <span class="emphasis"><em>n</em></span>, where <span class="emphasis"><em>n</em></span>
         is in the range 1-9, matches the same string that was matched by sub-expression
@@ -203,43 +196,41 @@ cab
 <p>
         Will match the string:
       </p>
-<pre class="programlisting">
-<span class="identifier">aaabbaaa</span>
+<pre class="programlisting"><span class="identifier">aaabbaaa</span>
 </pre>
 <p>
         But not the string:
       </p>
-<pre class="programlisting">
-<span class="identifier">aaabba</span>
+<pre class="programlisting"><span class="identifier">aaabba</span>
 </pre>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../doc/html/images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
           The POSIX standard does not support back-references for "extended"
           regular expressions, this is a compatible extension to that standard.
         </p></td></tr>
 </table></div>
-<a name="boost_regex.syntax.basic_extended.alternation"></a><h4>
-<a name="id471440"></a>
+<a name="boost_regex.syntax.basic_extended.alternation"></a><h5>
+<a name="id505152"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.alternation">Alternation</a>
-      </h4>
+      </h5>
 <p>
-        The <tt class="computeroutput"><span class="special">|</span></tt> operator will match either
-        of its arguments, so for example: <tt class="computeroutput"><span class="identifier">abc</span><span class="special">|</span><span class="identifier">def</span></tt> will
+        The <code class="computeroutput"><span class="special">|</span></code> operator will match either
+        of its arguments, so for example: <code class="computeroutput"><span class="identifier">abc</span><span class="special">|</span><span class="identifier">def</span></code> will
         match either "abc" or "def".
       </p>
 <p>
-        Parenthesis can be used to group alternations, for example: <tt class="computeroutput"><span class="identifier">ab</span><span class="special">(</span><span class="identifier">d</span><span class="special">|</span><span class="identifier">ef</span><span class="special">)</span></tt>
+        Parenthesis can be used to group alternations, for example: <code class="computeroutput"><span class="identifier">ab</span><span class="special">(</span><span class="identifier">d</span><span class="special">|</span><span class="identifier">ef</span><span class="special">)</span></code>
         will match either of "abd" or "abef".
       </p>
-<a name="boost_regex.syntax.basic_extended.character_sets_"></a><h4>
-<a name="id471545"></a>
+<a name="boost_regex.syntax.basic_extended.character_sets_"></a><h5>
+<a name="id505256"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.character_sets_">Character
         sets:</a>
-      </h4>
+      </h5>
 <p>
         A character set is a bracket-expression starting with [ and ending with ],
         it defines a set of characters, and matches any single character that is
@@ -248,109 +239,107 @@ cab
 <p>
         A bracket expression may contain any combination of the following:
       </p>
-<a name="boost_regex.syntax.basic_extended.single_characters_"></a><h5>
-<a name="id471583"></a>
+<a name="boost_regex.syntax.basic_extended.single_characters_"></a><h6>
+<a name="id505292"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.single_characters_">Single
         characters:</a>
-      </h5>
+      </h6>
 <p>
-        For example <tt class="computeroutput"><span class="special">[</span><span class="identifier">abc</span><span class="special">]</span></tt>, will match any of the characters 'a', 'b',
+        For example <code class="computeroutput"><span class="special">[</span><span class="identifier">abc</span><span class="special">]</span></code>, will match any of the characters 'a', 'b',
         or 'c'.
       </p>
-<a name="boost_regex.syntax.basic_extended.character_ranges_"></a><h5>
-<a name="id471636"></a>
+<a name="boost_regex.syntax.basic_extended.character_ranges_"></a><h6>
+<a name="id505342"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.character_ranges_">Character
         ranges:</a>
-      </h5>
+      </h6>
 <p>
-        For example <tt class="computeroutput"><span class="special">[</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">]</span></tt>
+        For example <code class="computeroutput"><span class="special">[</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">]</span></code>
         will match any single character in the range 'a' to 'c'. By default, for
         POSIX-Extended regular expressions, a character <span class="emphasis"><em>x</em></span> is
         within the range <span class="emphasis"><em>y</em></span> to <span class="emphasis"><em>z</em></span>, if it
         collates within that range; this results in locale specific behavior . This
-        behavior can be turned off by unsetting the <tt class="computeroutput"><span class="identifier">collate</span></tt>
-        <a href="../ref/syntax_option_type.html" title=" syntax_option_type">option flag</a> - in
+        behavior can be turned off by unsetting the <code class="computeroutput"><span class="identifier">collate</span></code>
+        <a href="../ref/syntax_option_type.html" title="syntax_option_type">option flag</a> - in
         which case whether a character appears within a range is determined by comparing
         the code points of the characters only.
       </p>
-<a name="boost_regex.syntax.basic_extended.negation_"></a><h5>
-<a name="id471737"></a>
+<a name="boost_regex.syntax.basic_extended.negation_"></a><h6>
+<a name="id505443"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.negation_">Negation:</a>
-      </h5>
+      </h6>
 <p>
         If the bracket-expression begins with the ^ character, then it matches the
-        complement of the characters it contains, for example <tt class="computeroutput"><span class="special">[^</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">]</span></tt> matches any character that is not in the
-        range <tt class="computeroutput"><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span></tt>.
+        complement of the characters it contains, for example <code class="computeroutput"><span class="special">[^</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">]</span></code> matches any character that is not in the
+        range <code class="computeroutput"><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span></code>.
       </p>
-<a name="boost_regex.syntax.basic_extended.character_classes_"></a><h5>
-<a name="id471821"></a>
+<a name="boost_regex.syntax.basic_extended.character_classes_"></a><h6>
+<a name="id505526"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.character_classes_">Character
         classes:</a>
-      </h5>
+      </h6>
 <p>
-        An expression of the form <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">name</span><span class="special">:]]</span></tt>
-        matches the named character class "name", for example <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">lower</span><span class="special">:]]</span></tt> matches any lower case character. See
-        <a href="character_classes.html" title=" Character Class
-      Names">character class names</a>.
+        An expression of the form <code class="computeroutput"><span class="special">[[:</span><span class="identifier">name</span><span class="special">:]]</span></code>
+        matches the named character class "name", for example <code class="computeroutput"><span class="special">[[:</span><span class="identifier">lower</span><span class="special">:]]</span></code> matches any lower case character. See
+        <a href="character_classes.html" title="Character Class Names">character class names</a>.
       </p>
-<a name="boost_regex.syntax.basic_extended.collating_elements_"></a><h5>
-<a name="id471905"></a>
+<a name="boost_regex.syntax.basic_extended.collating_elements_"></a><h6>
+<a name="id505608"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.collating_elements_">Collating
         Elements:</a>
-      </h5>
+      </h6>
 <p>
-        An expression of the form <tt class="computeroutput"><span class="special">[[.</span><span class="identifier">col</span><span class="special">.]</span></tt> matches
+        An expression of the form <code class="computeroutput"><span class="special">[[.</span><span class="identifier">col</span><span class="special">.]</span></code> matches
         the collating element <span class="emphasis"><em>col</em></span>. A collating element is any
         single character, or any sequence of characters that collates as a single
         unit. Collating elements may also be used as the end point of a range, for
-        example: <tt class="computeroutput"><span class="special">[[.</span><span class="identifier">ae</span><span class="special">.]-</span><span class="identifier">c</span><span class="special">]</span></tt>
+        example: <code class="computeroutput"><span class="special">[[.</span><span class="identifier">ae</span><span class="special">.]-</span><span class="identifier">c</span><span class="special">]</span></code>
         matches the character sequence "ae", plus any single character
         in the range "ae"-c, assuming that "ae" is treated as
         a single collating element in the current locale.
       </p>
 <p>
         Collating elements may be used in place of escapes (which are not normally
-        allowed inside character sets), for example <tt class="computeroutput"><span class="special">[[.^.]</span><span class="identifier">abc</span><span class="special">]</span></tt> would
+        allowed inside character sets), for example <code class="computeroutput"><span class="special">[[.^.]</span><span class="identifier">abc</span><span class="special">]</span></code> would
         match either one of the characters 'abc^'.
       </p>
 <p>
-        As an extension, a collating element may also be specified via its <a href="collating_names.html" title=" Collating Names">symbolic name</a>, for example:
+        As an extension, a collating element may also be specified via its <a href="collating_names.html" title="Collating Names">symbolic name</a>, for example:
       </p>
-<pre class="programlisting">
-<span class="special">[[.</span><span class="identifier">NUL</span><span class="special">.]]</span>
+<pre class="programlisting"><span class="special">[[.</span><span class="identifier">NUL</span><span class="special">.]]</span>
 </pre>
 <p>
         matches a NUL character.
       </p>
-<a name="boost_regex.syntax.basic_extended.equivalence_classes_"></a><h5>
-<a name="id472066"></a>
+<a name="boost_regex.syntax.basic_extended.equivalence_classes_"></a><h6>
+<a name="id505770"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.equivalence_classes_">Equivalence
         classes:</a>
-      </h5>
+      </h6>
 <p>
-        An expression of the form <tt class="computeroutput"><span class="special">[[=</span><span class="identifier">col</span><span class="special">=]]</span></tt>,
+        An expression of the form <code class="computeroutput"><span class="special">[[=</span><span class="identifier">col</span><span class="special">=]]</span></code>,
         matches any character or collating element whose primary sort key is the
         same as that for collating element <span class="emphasis"><em>col</em></span>, as with colating
-        elements the name <span class="emphasis"><em>col</em></span> may be a <a href="collating_names.html" title=" Collating Names">symbolic
+        elements the name <span class="emphasis"><em>col</em></span> may be a <a href="collating_names.html" title="Collating Names">symbolic
         name</a>. A primary sort key is one that ignores case, accentation, or
-        locale-specific tailorings; so for example <tt class="computeroutput"><span class="special">[[=</span><span class="identifier">a</span><span class="special">=]]</span></tt> matches
+        locale-specific tailorings; so for example <code class="computeroutput"><span class="special">[[=</span><span class="identifier">a</span><span class="special">=]]</span></code> matches
         any of the characters: a, À, Á, Â, Ã, Ä, Å, A, à, á, â, ã, ä and å. Unfortunately implementation
         of this is reliant on the platform's collation and localisation support;
         this feature can not be relied upon to work portably across all platforms,
         or even all locales on one platform.
       </p>
-<a name="boost_regex.syntax.basic_extended.combinations_"></a><h5>
-<a name="id472176"></a>
+<a name="boost_regex.syntax.basic_extended.combinations_"></a><h6>
+<a name="id505874"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.combinations_">Combinations:</a>
-      </h5>
+      </h6>
 <p>
         All of the above can be combined in one character set declaration, for example:
-        <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">digit</span><span class="special">:]</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">[.</span><span class="identifier">NUL</span><span class="special">.]]</span></tt>.
+        <code class="computeroutput"><span class="special">[[:</span><span class="identifier">digit</span><span class="special">:]</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span><span class="special">[.</span><span class="identifier">NUL</span><span class="special">.]]</span></code>.
       </p>
-<a name="boost_regex.syntax.basic_extended.escapes"></a><h4>
-<a name="id472256"></a>
+<a name="boost_regex.syntax.basic_extended.escapes"></a><h5>
+<a name="id505953"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.escapes">Escapes</a>
-      </h4>
+      </h5>
 <p>
         The POSIX standard defines no escape sequences for POSIX-Extended regular
         expressions, except that:
@@ -365,7 +354,7 @@ cab
 <li>
           An escape inside a character class declaration shall match itself: in other
           words the escape character is not "special" inside a character
-          class declaration; so <tt class="computeroutput"><span class="special">[\^]</span></tt>
+          class declaration; so <code class="computeroutput"><span class="special">[\^]</span></code>
           will match either a literal '\' or a '^'.
         </li>
 </ul></div>
@@ -373,11 +362,11 @@ cab
         However, that's rather restrictive, so the following standard-compatible
         extensions are also supported by Boost.Regex:
       </p>
-<a name="boost_regex.syntax.basic_extended.escapes_matching_a_specific_character"></a><h5>
-<a name="id472326"></a>
+<a name="boost_regex.syntax.basic_extended.escapes_matching_a_specific_character"></a><h6>
+<a name="id506024"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.escapes_matching_a_specific_character">Escapes
         matching a specific character</a>
-      </h5>
+      </h6>
 <p>
         The following escape sequences are all synonyms for single characters:
       </p>
@@ -556,17 +545,17 @@ cab
 <td>
               <p>
                 Matches the single character which has the symbolic name name. For
-                example <tt class="computeroutput"><span class="special">\\</span><span class="identifier">N</span><span class="special">{</span><span class="identifier">newline</span><span class="special">}</span></tt> matches the single character \n.
+                example <code class="computeroutput"><span class="special">\\</span><span class="identifier">N</span><span class="special">{</span><span class="identifier">newline</span><span class="special">}</span></code> matches the single character \n.
               </p>
               </td>
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.syntax.basic_extended._quot_single_character_quot__character_classes_"></a><h5>
-<a name="id472676"></a>
+<a name="boost_regex.syntax.basic_extended._quot_single_character_quot__character_classes_"></a><h6>
+<a name="id506371"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended._quot_single_character_quot__character_classes_">"Single
         character" character classes:</a>
-      </h5>
+      </h6>
 <p>
         Any escaped character <span class="emphasis"><em>x</em></span>, if <span class="emphasis"><em>x</em></span> is
         the name of a character class shall match any character that is a member
@@ -597,130 +586,130 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">d</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">d</span></code>
               </p>
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">digit</span><span class="special">:]]</span></tt>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">l</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">lower</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[[:</span><span class="identifier">digit</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">s</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">l</span></code>
               </p>
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">space</span><span class="special">:]]</span></tt>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">u</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">upper</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[[:</span><span class="identifier">lower</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">w</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">s</span></code>
               </p>
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">word</span><span class="special">:]]</span></tt>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">D</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">[^[:</span><span class="identifier">digit</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[[:</span><span class="identifier">space</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">L</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">u</span></code>
               </p>
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[^[:</span><span class="identifier">lower</span><span class="special">:]]</span></tt>
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">S</span></tt>
-              </p>
-              </td>
-<td>
-              <p>
-                <tt class="computeroutput"><span class="special">[^[:</span><span class="identifier">space</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[[:</span><span class="identifier">upper</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">U</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">w</span></code>
               </p>
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[^[:</span><span class="identifier">upper</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[[:</span><span class="identifier">word</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">W</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">D</span></code>
               </p>
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[^[:</span><span class="identifier">word</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[^[:</span><span class="identifier">digit</span><span class="special">:]]</span></code>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">L</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">[^[:</span><span class="identifier">lower</span><span class="special">:]]</span></code>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">S</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">[^[:</span><span class="identifier">space</span><span class="special">:]]</span></code>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">U</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">[^[:</span><span class="identifier">upper</span><span class="special">:]]</span></code>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">W</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                <code class="computeroutput"><span class="special">[^[:</span><span class="identifier">word</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.syntax.basic_extended.character_properties"></a><h5>
-<a name="id473310"></a>
+<a name="boost_regex.syntax.basic_extended.character_properties"></a><h6>
+<a name="id507003"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.character_properties">Character
         Properties</a>
-      </h5>
+      </h6>
 <p>
         The character property names in the following table are all equivalent to
         the names used in character classes.
@@ -752,7 +741,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">pX</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">pX</span></code>
               </p>
               </td>
 <td>
@@ -762,14 +751,14 @@ cab
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">X</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[[:</span><span class="identifier">X</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">p</span><span class="special">{</span><span class="identifier">Name</span><span class="special">}</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">p</span><span class="special">{</span><span class="identifier">Name</span><span class="special">}</span></code>
               </p>
               </td>
 <td>
@@ -779,14 +768,14 @@ cab
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">Name</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[[:</span><span class="identifier">Name</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">PX</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">PX</span></code>
               </p>
               </td>
 <td>
@@ -796,14 +785,14 @@ cab
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[^[:</span><span class="identifier">X</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[^[:</span><span class="identifier">X</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">P</span><span class="special">{</span><span class="identifier">Name</span><span class="special">}</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">P</span><span class="special">{</span><span class="identifier">Name</span><span class="special">}</span></code>
               </p>
               </td>
 <td>
@@ -813,20 +802,20 @@ cab
               </td>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">[^[:</span><span class="identifier">Name</span><span class="special">:]]</span></tt>
+                <code class="computeroutput"><span class="special">[^[:</span><span class="identifier">Name</span><span class="special">:]]</span></code>
               </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 <p>
-        For example <tt class="computeroutput"><span class="special">\</span><span class="identifier">pd</span></tt>
-        matches any "digit" character, as does <tt class="computeroutput"><span class="special">\</span><span class="identifier">p</span><span class="special">{</span><span class="identifier">digit</span><span class="special">}</span></tt>.
+        For example <code class="computeroutput"><span class="special">\</span><span class="identifier">pd</span></code>
+        matches any "digit" character, as does <code class="computeroutput"><span class="special">\</span><span class="identifier">p</span><span class="special">{</span><span class="identifier">digit</span><span class="special">}</span></code>.
       </p>
-<a name="boost_regex.syntax.basic_extended.word_boundaries"></a><h5>
-<a name="id473712"></a>
+<a name="boost_regex.syntax.basic_extended.word_boundaries"></a><h6>
+<a name="id507404"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.word_boundaries">Word Boundaries</a>
-      </h5>
+      </h6>
 <p>
         The following escape sequences match the boundaries of words:
       </p>
@@ -851,7 +840,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\&lt;</span></tt>
+                <code class="computeroutput"><span class="special">\&lt;</span></code>
               </p>
               </td>
 <td>
@@ -863,7 +852,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\&gt;</span></tt>
+                <code class="computeroutput"><span class="special">\&gt;</span></code>
               </p>
               </td>
 <td>
@@ -875,7 +864,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">b</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">b</span></code>
               </p>
               </td>
 <td>
@@ -887,7 +876,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">B</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">B</span></code>
               </p>
               </td>
 <td>
@@ -898,11 +887,11 @@ cab
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.syntax.basic_extended.buffer_boundaries"></a><h5>
-<a name="id473908"></a>
+<a name="boost_regex.syntax.basic_extended.buffer_boundaries"></a><h6>
+<a name="id507597"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.buffer_boundaries">Buffer
         boundaries</a>
-      </h5>
+      </h6>
 <p>
         The following match only at buffer boundaries: a "buffer" in this
         context is the whole of the input text that is being matched against (note
@@ -953,7 +942,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">A</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">A</span></code>
               </p>
               </td>
 <td>
@@ -965,7 +954,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">z</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">z</span></code>
               </p>
               </td>
 <td>
@@ -977,50 +966,49 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">Z</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">Z</span></code>
               </p>
               </td>
 <td>
               <p>
                 Matches an optional sequence of newlines at the end of a buffer:
-                equivalent to the regular expression <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span><span class="special">*\</span><span class="identifier">z</span></tt>
+                equivalent to the regular expression <code class="computeroutput"><span class="special">\</span><span class="identifier">n</span><span class="special">*\</span><span class="identifier">z</span></code>
               </p>
               </td>
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.syntax.basic_extended.continuation_escape"></a><h5>
-<a name="id474144"></a>
+<a name="boost_regex.syntax.basic_extended.continuation_escape"></a><h6>
+<a name="id507832"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.continuation_escape">Continuation
         Escape</a>
-      </h5>
+      </h6>
 <p>
-        The sequence <tt class="computeroutput"><span class="special">\</span><span class="identifier">G</span></tt>
+        The sequence <code class="computeroutput"><span class="special">\</span><span class="identifier">G</span></code>
         matches only at the end of the last match found, or at the start of the text
         being matched if no previous match was found. This escape useful if you're
         iterating over the matches contained within a text, and you want each subsequence
         match to start where the last one ended.
       </p>
-<a name="boost_regex.syntax.basic_extended.quoting_escape"></a><h5>
-<a name="id474196"></a>
+<a name="boost_regex.syntax.basic_extended.quoting_escape"></a><h6>
+<a name="id507882"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.quoting_escape">Quoting
         escape</a>
-      </h5>
+      </h6>
 <p>
-        The escape sequence <tt class="computeroutput"><span class="special">\</span><span class="identifier">Q</span></tt>
+        The escape sequence <code class="computeroutput"><span class="special">\</span><span class="identifier">Q</span></code>
         begins a "quoted sequence": all the subsequent characters are treated
-        as literals, until either the end of the regular expression or <tt class="computeroutput"><span class="special">\</span><span class="identifier">E</span></tt> is found.
-        For example the expression: <tt class="computeroutput"><span class="special">\</span><span class="identifier">Q</span><span class="special">\*+\</span><span class="identifier">Ea</span><span class="special">+</span></tt> would match either of:
+        as literals, until either the end of the regular expression or <code class="computeroutput"><span class="special">\</span><span class="identifier">E</span></code> is found.
+        For example the expression: <code class="computeroutput"><span class="special">\</span><span class="identifier">Q</span><span class="special">\*+\</span><span class="identifier">Ea</span><span class="special">+</span></code> would match either of:
       </p>
-<pre class="programlisting">
-<span class="special">\*+</span><span class="identifier">a</span>
+<pre class="programlisting"><span class="special">\*+</span><span class="identifier">a</span>
 <span class="special">\*+</span><span class="identifier">aaa</span>
 </pre>
-<a name="boost_regex.syntax.basic_extended.unicode_escapes"></a><h5>
-<a name="id474322"></a>
+<a name="boost_regex.syntax.basic_extended.unicode_escapes"></a><h6>
+<a name="id508005"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.unicode_escapes">Unicode
         escapes</a>
-      </h5>
+      </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -1042,7 +1030,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">C</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">C</span></code>
               </p>
               </td>
 <td>
@@ -1055,7 +1043,7 @@ cab
 <tr>
 <td>
               <p>
-                <tt class="computeroutput"><span class="special">\</span><span class="identifier">X</span></tt>
+                <code class="computeroutput"><span class="special">\</span><span class="identifier">X</span></code>
               </p>
               </td>
 <td>
@@ -1067,40 +1055,40 @@ cab
 </tr>
 </tbody>
 </table></div>
-<a name="boost_regex.syntax.basic_extended.any_other_escape"></a><h5>
-<a name="id474456"></a>
+<a name="boost_regex.syntax.basic_extended.any_other_escape"></a><h6>
+<a name="id508138"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.any_other_escape">Any other
         escape</a>
-      </h5>
+      </h6>
 <p>
         Any other escape sequence matches the character that is escaped, for example
         \@ matches a literal '@'.
       </p>
-<a name="boost_regex.syntax.basic_extended.operator_precedence"></a><h4>
-<a name="id474488"></a>
+<a name="boost_regex.syntax.basic_extended.operator_precedence"></a><h5>
+<a name="id508168"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.operator_precedence">Operator
         precedence</a>
-      </h4>
+      </h5>
 <p>
         The order of precedence for of operators is as follows:
       </p>
 <div class="orderedlist"><ol type="1">
 <li>
-          Collation-related bracket symbols <tt class="computeroutput"><span class="special">[==]</span>
-          <span class="special">[::]</span> <span class="special">[..]</span></tt>
+          Collation-related bracket symbols <code class="computeroutput"><span class="special">[==]</span>
+          <span class="special">[::]</span> <span class="special">[..]</span></code>
 </li>
 <li>
-          Escaped characters <tt class="computeroutput"><span class="special">\</span></tt>
+          Escaped characters <code class="computeroutput"><span class="special">\</span></code>
 </li>
 <li>
-          Character set (bracket expression) <tt class="computeroutput"><span class="special">[]</span></tt>
+          Character set (bracket expression) <code class="computeroutput"><span class="special">[]</span></code>
 </li>
 <li>
-          Grouping <tt class="computeroutput"><span class="special">()</span></tt>
+          Grouping <code class="computeroutput"><span class="special">()</span></code>
 </li>
 <li>
-          Single-character-ERE duplication <tt class="computeroutput"><span class="special">*</span>
-          <span class="special">+</span> <span class="special">?</span> <span class="special">{</span><span class="identifier">m</span><span class="special">,</span><span class="identifier">n</span><span class="special">}</span></tt>
+          Single-character-ERE duplication <code class="computeroutput"><span class="special">*</span>
+          <span class="special">+</span> <span class="special">?</span> <span class="special">{</span><span class="identifier">m</span><span class="special">,</span><span class="identifier">n</span><span class="special">}</span></code>
 </li>
 <li>
           Concatenation
@@ -1109,50 +1097,48 @@ cab
           Anchoring ^$
         </li>
 <li>
-          Alternation <tt class="computeroutput"><span class="special">|</span></tt>
+          Alternation <code class="computeroutput"><span class="special">|</span></code>
 </li>
 </ol></div>
-<a name="boost_regex.syntax.basic_extended.what_gets_matched"></a><h4>
-<a name="id474680"></a>
+<a name="boost_regex.syntax.basic_extended.what_gets_matched"></a><h5>
+<a name="id508357"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.what_gets_matched">What
         Gets Matched</a>
-      </h4>
+      </h5>
 <p>
         When there is more that one way to match a regular expression, the "best"
-        possible match is obtained using the <a href="leftmost_longest_rule.html" title=" The Leftmost
-      Longest Rule">leftmost-longest
+        possible match is obtained using the <a href="leftmost_longest_rule.html" title="The Leftmost Longest Rule">leftmost-longest
         rule</a>.
       </p>
-<a name="boost_regex.syntax.basic_extended.variations"></a><h3>
-<a name="id474721"></a>
+<a name="boost_regex.syntax.basic_extended.variations"></a><h4>
+<a name="id508397"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.variations">Variations</a>
-      </h3>
-<a name="boost_regex.syntax.basic_extended.egrep"></a><h4>
-<a name="id474744"></a>
-        <a href="basic_extended.html#boost_regex.syntax.basic_extended.egrep">Egrep</a>
       </h4>
+<a name="boost_regex.syntax.basic_extended.egrep"></a><h5>
+<a name="id508420"></a>
+        <a href="basic_extended.html#boost_regex.syntax.basic_extended.egrep">Egrep</a>
+      </h5>
 <p>
-        When an expression is compiled with the <a href="../ref/syntax_option_type.html" title=" syntax_option_type">flag
-        <tt class="computeroutput"><span class="identifier">egrep</span></tt></a> set, then the
+        When an expression is compiled with the <a href="../ref/syntax_option_type.html" title="syntax_option_type">flag
+        <code class="computeroutput"><span class="identifier">egrep</span></code></a> set, then the
         expression is treated as a newline separated list of <a href="basic_extended.html#boost_regex.posix_extended_syntax">POSIX-Extended
         expressions</a>, a match is found if any of the expressions in the list
         match, for example:
       </p>
-<pre class="programlisting">
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e</span><span class="special">(</span><span class="string">"abc\ndef"</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">egrep</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e</span><span class="special">(</span><span class="string">"abc\ndef"</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">egrep</span><span class="special">);</span>
 </pre>
 <p>
         will match either of the POSIX-Basic expressions "abc" or "def".
       </p>
 <p>
         As its name suggests, this behavior is consistent with the Unix utility
-        <tt class="computeroutput"><span class="identifier">egrep</span></tt>, and with grep when
+        <code class="computeroutput"><span class="identifier">egrep</span></code>, and with grep when
         used with the -E option.
       </p>
-<a name="boost_regex.syntax.basic_extended.awk"></a><h4>
-<a name="id474906"></a>
+<a name="boost_regex.syntax.basic_extended.awk"></a><h5>
+<a name="id508578"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.awk">awk</a>
-      </h4>
+      </h5>
 <p>
         In addition to the <a href="basic_extended.html#boost_regex.posix_extended_syntax">POSIX-Extended
         features</a> the escape character is special inside a character class
@@ -1163,26 +1149,23 @@ cab
         specification are required to be supported - however Boost.Regex supports
         these by default anyway.
       </p>
-<a name="boost_regex.syntax.basic_extended.options"></a><h3>
-<a name="id474953"></a>
+<a name="boost_regex.syntax.basic_extended.options"></a><h4>
+<a name="id508625"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.options">Options</a>
-      </h3>
+      </h4>
 <p>
-        There are a <a href="../ref/syntax_option_type/syntax_option_type_extended.html" title="
-        Options for POSIX Extended Regular Expressions">variety
-        of flags</a> that may be combined with the <tt class="computeroutput"><span class="identifier">extended</span></tt>
-        and <tt class="computeroutput"><span class="identifier">egrep</span></tt> options when constructing
-        the regular expression, in particular note that the <a href="../ref/syntax_option_type/syntax_option_type_extended.html" title="
-        Options for POSIX Extended Regular Expressions"><tt class="computeroutput"><span class="identifier">newline_alt</span></tt></a> option alters the syntax,
-        while the <a href="../ref/syntax_option_type/syntax_option_type_extended.html" title="
-        Options for POSIX Extended Regular Expressions"><tt class="computeroutput"><span class="identifier">collate</span></tt>, <tt class="computeroutput"><span class="identifier">nosubs</span></tt>
-        and <tt class="computeroutput"><span class="identifier">icase</span></tt> options</a>
+        There are a <a href="../ref/syntax_option_type/syntax_option_type_extended.html" title="Options for POSIX Extended Regular Expressions">variety
+        of flags</a> that may be combined with the <code class="computeroutput"><span class="identifier">extended</span></code>
+        and <code class="computeroutput"><span class="identifier">egrep</span></code> options when constructing
+        the regular expression, in particular note that the <a href="../ref/syntax_option_type/syntax_option_type_extended.html" title="Options for POSIX Extended Regular Expressions"><code class="computeroutput"><span class="identifier">newline_alt</span></code></a> option alters the syntax,
+        while the <a href="../ref/syntax_option_type/syntax_option_type_extended.html" title="Options for POSIX Extended Regular Expressions"><code class="computeroutput"><span class="identifier">collate</span></code>, <code class="computeroutput"><span class="identifier">nosubs</span></code>
+        and <code class="computeroutput"><span class="identifier">icase</span></code> options</a>
         modify how the case and locale sensitivity are to be applied.
       </p>
-<a name="boost_regex.syntax.basic_extended.references"></a><h3>
-<a name="id475084"></a>
+<a name="boost_regex.syntax.basic_extended.references"></a><h4>
+<a name="id508753"></a>
         <a href="basic_extended.html#boost_regex.syntax.basic_extended.references">References</a>
-      </h3>
+      </h4>
 <p>
         <a href="http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap09.html" target="_top">IEEE
         Std 1003.1-2001, Portable Operating System Interface (POSIX ), Base Definitions
@@ -1201,10 +1184,11 @@ cab
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

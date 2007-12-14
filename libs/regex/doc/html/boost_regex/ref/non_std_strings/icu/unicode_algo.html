@@ -1,17 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-          Unicode Regular Expression Algorithms</title>
+<title>Unicode Regular Expression Algorithms</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Boost.Regex">
-<link rel="up" href="../icu.html" title=" Working With
-        Unicode and ICU String Types">
-<link rel="prev" href="unicode_types.html" title="
-          Unicode regular expression types">
-<link rel="next" href="unicode_iter.html" title="
-          Unicode Aware Regex Iterators">
+<link rel="up" href="../icu.html" title="Working With Unicode and ICU String Types">
+<link rel="prev" href="unicode_types.html" title="Unicode regular expression types">
+<link rel="next" href="unicode_iter.html" title="Unicode Aware Regex Iterators">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,41 +24,40 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="boost_regex.ref.non_std_strings.icu.unicode_algo"></a><a href="unicode_algo.html" title="
-          Unicode Regular Expression Algorithms">
-          Unicode Regular Expression Algorithms</a></h5></div></div></div>
+<a name="boost_regex.ref.non_std_strings.icu.unicode_algo"></a><a href="unicode_algo.html" title="Unicode Regular Expression Algorithms">
+          Unicode Regular Expression Algorithms</a>
+</h5></div></div></div>
 <p>
-            The regular expression algorithms <a href="../../regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>, <a href="../../regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a> and <a href="../../regex_replace.html" title=" regex_replace"><tt class="computeroutput"><span class="identifier">regex_replace</span></tt></a> all expect that
+            The regular expression algorithms <a href="../../regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>, <a href="../../regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a> and <a href="../../regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a> all expect that
             the character sequence upon which they operate, is encoded in the same
             character encoding as the regular expression object with which they are
             used. For Unicode regular expressions that behavior is undesirable: while
             we may want to process the data in UTF-32 "chunks", the actual
             data is much more likely to encoded as either UTF-8 or UTF-16. Therefore
             the header &lt;boost/regex/icu.hpp&gt; provides a series of thin wrappers
-            around these algorithms, called <tt class="computeroutput"><span class="identifier">u32regex_match</span></tt>,
-            <tt class="computeroutput"><span class="identifier">u32regex_search</span></tt>, and
-            <tt class="computeroutput"><span class="identifier">u32regex_replace</span></tt>. These
+            around these algorithms, called <code class="computeroutput"><span class="identifier">u32regex_match</span></code>,
+            <code class="computeroutput"><span class="identifier">u32regex_search</span></code>, and
+            <code class="computeroutput"><span class="identifier">u32regex_replace</span></code>. These
             wrappers use iterator-adapters internally to make external UTF-8 or UTF-16
             data look as though it's really a UTF-32 sequence, that can then be passed
             on to the "real" algorithm.
           </p>
-<a name="boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_match"></a><h4>
-<a name="id572213"></a>
+<a name="boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_match"></a><h5>
+<a name="id605222"></a>
             <a href="unicode_algo.html#boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_match">u32regex_match</a>
-          </h4>
+          </h5>
 <p>
-            For each <a href="../../regex_match.html" title=" regex_match"><tt class="computeroutput"><span class="identifier">regex_match</span></tt></a>
-            algorithm defined by <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>,
-            then <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">icu</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt> defines an overloaded algorithm that
-            takes the same arguments, but which is called <tt class="computeroutput"><span class="identifier">u32regex_match</span></tt>,
+            For each <a href="../../regex_match.html" title="regex_match"><code class="computeroutput"><span class="identifier">regex_match</span></code></a>
+            algorithm defined by <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>,
+            then <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">icu</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> defines an overloaded algorithm that
+            takes the same arguments, but which is called <code class="computeroutput"><span class="identifier">u32regex_match</span></code>,
             and which will accept UTF-8, UTF-16 or UTF-32 encoded data, as well as
             an ICU UnicodeString as input.
           </p>
 <p>
             Example: match a password, encoded in a UTF-16 UnicodeString:
           </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// Find out if *password* meets our password requirements,
 </span><span class="comment">// as defined by the regular expression *requirements*.
 </span><span class="comment">//
@@ -74,8 +69,7 @@
 <p>
             Example: match a UTF-8 encoded filename:
           </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// Extract filename part of a path from a UTF-8 encoded std::string and return the result
 </span><span class="comment">// as another std::string:
 </span><span class="comment">//
@@ -94,23 +88,22 @@
    <span class="special">}</span>
 <span class="special">}</span>
 </pre>
-<a name="boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_search"></a><h4>
-<a name="id572936"></a>
+<a name="boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_search"></a><h5>
+<a name="id605941"></a>
             <a href="unicode_algo.html#boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_search">u32regex_search</a>
-          </h4>
+          </h5>
 <p>
-            For each <a href="../../regex_search.html" title=" regex_search"><tt class="computeroutput"><span class="identifier">regex_search</span></tt></a>
-            algorithm defined by <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>,
-            then <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">icu</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt> defines an overloaded algorithm that
-            takes the same arguments, but which is called <tt class="computeroutput"><span class="identifier">u32regex_search</span></tt>,
+            For each <a href="../../regex_search.html" title="regex_search"><code class="computeroutput"><span class="identifier">regex_search</span></code></a>
+            algorithm defined by <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>,
+            then <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">icu</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> defines an overloaded algorithm that
+            takes the same arguments, but which is called <code class="computeroutput"><span class="identifier">u32regex_search</span></code>,
             and which will accept UTF-8, UTF-16 or UTF-32 encoded data, as well as
             an ICU UnicodeString as input.
           </p>
 <p>
             Example: search for a character sequence in a specific language block:
           </p>
-<pre class="programlisting">
-<span class="identifier">UnicodeString</span> <span class="identifier">extract_greek</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">UnicodeString</span><span class="special">&amp;</span> <span class="identifier">text</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">UnicodeString</span> <span class="identifier">extract_greek</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">UnicodeString</span><span class="special">&amp;</span> <span class="identifier">text</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// searches through some UTF-16 encoded text for a block encoded in Greek,
 </span>   <span class="comment">// this expression is imperfect, but the best we can do for now - searching
@@ -134,15 +127,15 @@
    <span class="special">}</span>
 <span class="special">}</span>
 </pre>
-<a name="boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_replace"></a><h4>
-<a name="id573532"></a>
+<a name="boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_replace"></a><h5>
+<a name="id606534"></a>
             <a href="unicode_algo.html#boost_regex.ref.non_std_strings.icu.unicode_algo.u32regex_replace">u32regex_replace</a>
-          </h4>
+          </h5>
 <p>
-            For each <a href="../../regex_replace.html" title=" regex_replace"><tt class="computeroutput"><span class="identifier">regex_replace</span></tt></a> algorithm defined
-            by <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>, then <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">icu</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></tt>
+            For each <a href="../../regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a> algorithm defined
+            by <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>, then <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">/</span><span class="identifier">icu</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
             defines an overloaded algorithm that takes the same arguments, but which
-            is called <tt class="computeroutput"><span class="identifier">u32regex_replace</span></tt>,
+            is called <code class="computeroutput"><span class="identifier">u32regex_replace</span></code>,
             and which will accept UTF-8, UTF-16 or UTF-32 encoded data, as well as
             an ICU UnicodeString as input. The input sequence and the format string
             specifier passed to the algorithm, can be encoded independently (for
@@ -153,8 +146,7 @@
 <p>
             Example: Credit card number reformatting:
           </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// Take a credit card number as a string of digits, 
 </span><span class="comment">// and reformat it as a human readable string with "-"
 </span><span class="comment">// separating each group of four digit;, 
@@ -174,10 +166,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

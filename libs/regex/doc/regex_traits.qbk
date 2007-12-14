@@ -20,10 +20,10 @@
    struct c_regex_traits;
 
    template <class charT>
-   struct cpp_regex_traits;
+   class cpp_regex_traits;
 
    template <class charT>
-   struct w32_regex_traits;
+   class w32_regex_traits;
 
    } // namespace boost
 
