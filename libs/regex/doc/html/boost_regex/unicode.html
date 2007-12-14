@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Unicode and Boost.Regex</title>
+<title>Unicode and Boost.Regex</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../index.html" title="Boost.Regex">
 <link rel="up" href="../index.html" title="Boost.Regex">
-<link rel="prev" href="introduction_and_overview.html" title="Introduction and
-    Overview">
-<link rel="next" href="captures.html" title=" Understanding Marked Sub-Expressions
-    and Captures">
+<link rel="prev" href="introduction_and_overview.html" title="Introduction and Overview">
+<link rel="next" href="captures.html" title="Understanding Marked Sub-Expressions and Captures">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,57 +24,58 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_regex.unicode"></a><a href="unicode.html" title=" Unicode and Boost.Regex"> Unicode and Boost.Regex</a></h2></div></div></div>
+<a name="boost_regex.unicode"></a><a href="unicode.html" title="Unicode and Boost.Regex"> Unicode and Boost.Regex</a>
+</h2></div></div></div>
 <p>
       There are two ways to use Boost.Regex with Unicode strings:
     </p>
-<a name="boost_regex.unicode.rely_on_wchar_t"></a><h4>
-<a name="id458749"></a>
+<a name="boost_regex.unicode.rely_on_wchar_t"></a><h5>
+<a name="id492571"></a>
       <a href="unicode.html#boost_regex.unicode.rely_on_wchar_t">Rely on wchar_t</a>
-    </h4>
+    </h5>
 <p>
-      If your platform's <tt class="computeroutput"><span class="keyword">wchar_t</span></tt> type
+      If your platform's <code class="computeroutput"><span class="keyword">wchar_t</span></code> type
       can hold Unicode strings, and your platform's C/C++ runtime correctly handles
-      wide character constants (when passed to <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iswspace</span></tt>
-      <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iswlower</span></tt> etc), then you can use <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">wregex</span></tt>
+      wide character constants (when passed to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iswspace</span></code>
+      <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iswlower</span></code> etc), then you can use <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">wregex</span></code>
       to process Unicode. However, there are several disadvantages to this approach:
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-        It's not portable: there's no guarantee on the width of <tt class="computeroutput"><span class="keyword">wchar_t</span></tt>,
+        It's not portable: there's no guarantee on the width of <code class="computeroutput"><span class="keyword">wchar_t</span></code>,
         or even whether the runtime treats wide characters as Unicode at all, most
         Windows compilers do so, but many Unix systems do not.
       </li>
 <li>
-        There's no support for Unicode-specific character classes: <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">Nd</span><span class="special">:]]</span></tt>,
-        <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">Po</span><span class="special">:]]</span></tt> etc.
+        There's no support for Unicode-specific character classes: <code class="computeroutput"><span class="special">[[:</span><span class="identifier">Nd</span><span class="special">:]]</span></code>,
+        <code class="computeroutput"><span class="special">[[:</span><span class="identifier">Po</span><span class="special">:]]</span></code> etc.
       </li>
 <li>
         You can only search strings that are encoded as sequences of wide characters,
         it is not possible to search UTF-8, or even UTF-16 on many platforms.
       </li>
 </ul></div>
-<a name="boost_regex.unicode.use_a_unicode_aware_regular_expression_type_"></a><h4>
-<a name="id458932"></a>
+<a name="boost_regex.unicode.use_a_unicode_aware_regular_expression_type_"></a><h5>
+<a name="id492755"></a>
       <a href="unicode.html#boost_regex.unicode.use_a_unicode_aware_regular_expression_type_">Use
       a Unicode Aware Regular Expression Type.</a>
-    </h4>
+    </h5>
 <p>
       If you have the <a href="http://www.ibm.com/software/globalization/icu/" target="_top">ICU
       library</a>, then Boost.Regex can be <a href="install.html#boost_regex.install.building_with_unicode_and_icu_support">configured
       to make use of it</a>, and provide a distinct regular expression type (boost::u32regex),
       that supports both Unicode specific character properties, and the searching
-      of text that is encoded in either UTF-8, UTF-16, or UTF-32. See: <a href="ref/non_std_strings/icu.html" title=" Working With
-        Unicode and ICU String Types">ICU
+      of text that is encoded in either UTF-8, UTF-16, or UTF-32. See: <a href="ref/non_std_strings/icu.html" title="Working With Unicode and ICU String Types">ICU
       string class support</a>.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

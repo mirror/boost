@@ -67,10 +67,9 @@ an object of type `X::locale_type`.
 [[v.lookup_classname(F1, F2)][X::char_class_type][Converts the character sequence designated by the iterator range \[F1,F2) into a bitmask type that can subsequently be passed to isctype. Values returned from lookup_classname can be safely bitwise or'ed together. Returns 0 if the character sequence is not the name of a character class recognized by X. The value returned shall be independent of the case of the characters in the sequence.]]
 [[v.lookup_collatename(F1, F2)][X::string_type][Returns a sequence of characters that represents the collating element consisting of the character sequence designated by the iterator range \[F1, F2). Returns an empty string if the character sequence is not a valid collating element.]]
 [[v.isctype(c, v.lookup_classname (F1, F2))][bool][Returns true if character c is a member of the character class designated by the iterator range \[F1, F2), false otherwise.]]
-[[v.value(c, i)][int][Returns the value represented by the digit c in base I if the character c is a valid digit in base I; otherwise returns -1. \[Note: the value of I will only be 8, 10, or 16. -end note\]]]
+[[v.value(c, I)][int][Returns the value represented by the digit c in base I if the character c is a valid digit in base I; otherwise returns -1. \[Note: the value of I will only be 8, 10, or 16. -end note\]]]
 [[u.imbue(loc)][X::locale_type][Imbues u with the locale loc, returns the previous locale used by u if any. ]]
 [[v.getloc()][X::locale_type][Returns the current locale used by v if any. ]]
-[[v.error_string(i)][std::string][Returns a human readable error string for the error condition i, where i is one of the values enumerated by type regex_constants::error_type.  If the value i is not recognized then returns the string "Unknown error" or a localized equivalent.]]
 ]
 
 [h4 Additional Optional Requirements]
@@ -89,14 +88,14 @@ configure itself appropriately.
 [[v.escape_syntax_type(c)][regex_constants::escape_syntax_type][Returns a symbolic value of type regex_constants::escape_syntax_type, that signifies the meaning of character c within the regular expression grammar, when c has been preceded by an escape character. Precondition: if b is the character preceding c in the expression being parsed then: `v.syntax_type(b) == syntax_escape`]]
 [[v.translate(c, b)][X::char_type][Returns a character d such that: for any character d that is to be considered equivalent to c then `v.translate(c,false)==v.translate(d,false)`. Likewise for all characters C that are to be considered equivalent to c when comparisons are to be performed without regard to case, then `v.translate(c,true)==v.translate(C,true)`.]]
 [[v.toi(I1, I2, i)][An integer type capable of holding either a charT or an int.][Behaves as follows: if `p == q` or if `*p` is not a digit character then returns -1. Otherwise performs formatted numeric input on the sequence \[p,q) and returns the result as an int. Postcondition: either p == q or *p is a non-digit character.]]
-[[v.error_string(i)][std::string][Returns a human readable error string for the error condition i, where i is one of the values enumerated by type regex_constants::error_type.  If the value i is not recognized then returns the string "Unknown error" or a localized equivalent.]]
+[[v.error_string(I)][std::string][Returns a human readable error string for the error condition i, where i is one of the values enumerated by type regex_constants::error_type.  If the value /I/ is not recognized then returns the string "Unknown error" or a localized equivalent.]]
 [[v.tolower(c)][X::char_type][Converts c to lower case, used for Perl-style \l and \L formating operations.]]
 [[v.toupper(c)][X::char_type][Converts c to upper case, used for Perl-style \u and \U formating operations.]]
 ]
 
 [endsect]
 
-[section:iterator_concepts Iterator Rrequirements]
+[section:iterator_concepts Iterator Requirements]
 
 The regular expression algorithms (and iterators) take all require a 
 Bidirectional-Iterator.

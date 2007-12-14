@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> regex_replace</title>
+<title>regex_replace</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Regex">
-<link rel="up" href="../ref.html" title=" Reference">
-<link rel="prev" href="regex_search.html" title=" regex_search">
-<link rel="next" href="regex_iterator.html" title=" regex_iterator">
+<link rel="up" href="../ref.html" title="Reference">
+<link rel="prev" href="regex_search.html" title="regex_search">
+<link rel="next" href="regex_iterator.html" title="regex_iterator">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -24,22 +24,21 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.ref.regex_replace"></a><a href="regex_replace.html" title=" regex_replace"> regex_replace</a></h3></div></div></div>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
+<a name="boost_regex.ref.regex_replace"></a><a href="regex_replace.html" title="regex_replace"> regex_replace</a>
+</h3></div></div></div>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">regex</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> 
 </pre>
 <p>
-        The algorithm <a href="regex_replace.html" title=" regex_replace"><tt class="computeroutput"><span class="identifier">regex_replace</span></tt></a> searches through a
+        The algorithm <a href="regex_replace.html" title="regex_replace"><code class="computeroutput"><span class="identifier">regex_replace</span></code></a> searches through a
         string finding all the matches to the regular expression: for each match
-        it then calls <a href="match_results.html#boost_regex.match_results_format"><tt class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;&gt;::</span><span class="identifier">format</span></tt></a> to format the string and
+        it then calls <a href="match_results.html#boost_regex.match_results_format"><code class="computeroutput"><span class="identifier">match_results</span><span class="special">&lt;&gt;::</span><span class="identifier">format</span></code></a> to format the string and
         sends the result to the output iterator. Sections of text that do not match
         are copied to the output unchanged only if the <span class="emphasis"><em>flags</em></span>
-        parameter does not have the flag <tt class="computeroutput"><span class="identifier">format_no_copy</span></tt>
-        set. If the flag <tt class="computeroutput"><span class="identifier">format_first_only</span></tt>
+        parameter does not have the flag <code class="computeroutput"><span class="identifier">format_no_copy</span></code>
+        set. If the flag <code class="computeroutput"><span class="identifier">format_first_only</span></code>
         is set then only the first occurrence is replaced rather than all occurrences.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">first</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">last</span><span class="special">,</span>
@@ -53,12 +52,11 @@
                                   <span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
                                   <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
-<a name="boost_regex.ref.regex_replace.description"></a><h4>
-<a name="id541136"></a>
+<a name="boost_regex.ref.regex_replace.description"></a><h5>
+<a name="id574348"></a>
         <a href="regex_replace.html#boost_regex.ref.regex_replace.description">Description</a>
-      </h4>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+      </h5>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">OutputIterator</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">OutputIterator</span> <span class="identifier">out</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">first</span><span class="special">,</span>
                              <span class="identifier">BidirectionalIterator</span> <span class="identifier">last</span><span class="special">,</span>
@@ -73,84 +71,76 @@
         and copies the resulting string to <span class="emphasis"><em>out</em></span>.
       </p>
 <p>
-        If the flag <tt class="computeroutput"><span class="identifier">format_no_copy</span></tt>
+        If the flag <code class="computeroutput"><span class="identifier">format_no_copy</span></code>
         is set in <span class="emphasis"><em>flags</em></span> then unmatched sections of text are
         not copied to output.
       </p>
 <p>
-        If the flag <tt class="computeroutput"><span class="identifier">format_first_only</span></tt>
+        If the flag <code class="computeroutput"><span class="identifier">format_first_only</span></code>
         is set in flags then only the first occurence of <span class="emphasis"><em>e</em></span> is
         replaced.
       </p>
 <p>
         The manner in which the format string <span class="emphasis"><em>fmt</em></span> is interpretted,
         along with the rules used for finding matches, are determined by the flags
-        set in <span class="emphasis"><em>flags</em></span>: see <a href="match_flag_type.html" title=" match_flag_type"><tt class="computeroutput"><span class="identifier">match_flag_type</span></tt></a>.
+        set in <span class="emphasis"><em>flags</em></span>: see <a href="match_flag_type.html" title="match_flag_type"><code class="computeroutput"><span class="identifier">match_flag_type</span></code></a>.
       </p>
 <p>
-        <span class="bold"><b>Effects</b></span>: Constructs an <a href="regex_iterator.html" title=" regex_iterator"><tt class="computeroutput"><span class="identifier">regex_iterator</span></tt></a> object:
+        <span class="bold"><strong>Effects</strong></span>: Constructs an <a href="regex_iterator.html" title="regex_iterator"><code class="computeroutput"><span class="identifier">regex_iterator</span></code></a> object:
       </p>
-<pre class="programlisting">
-<span class="identifier">regex_iterator</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="identifier">regex_iterator</span><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">,</span> <span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">,</span> <span class="identifier">Allocator</span><span class="special">&gt;</span> 
                                           <span class="identifier">i</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">e</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">),</span> 
 </pre>
 <p>
         and uses <span class="emphasis"><em>i</em></span> to enumerate through all of the matches
-        <span class="emphasis"><em>m</em></span> of type <a href="match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a> <tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span></tt>
+        <span class="emphasis"><em>m</em></span> of type <a href="match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">BidirectionalIterator</span><span class="special">&gt;</span></code>
         that occur within the sequence [first, last).
       </p>
 <p>
         If no such matches are found and
       </p>
-<pre class="programlisting">
-<span class="special">!(</span><span class="identifier">flags</span> <span class="special">&amp;</span> <span class="identifier">format_no_copy</span><span class="special">)</span> 
+<pre class="programlisting"><span class="special">!(</span><span class="identifier">flags</span> <span class="special">&amp;</span> <span class="identifier">format_no_copy</span><span class="special">)</span> 
 </pre>
 <p>
         then calls
       </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">).</span> 
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">).</span> 
 </pre>
 <p>
         Otherwise, for each match found, if
       </p>
-<pre class="programlisting">
-<span class="special">!(</span><span class="identifier">flags</span> <span class="special">&amp;</span> <span class="identifier">format_no_copy</span><span class="special">)</span> 
+<pre class="programlisting"><span class="special">!(</span><span class="identifier">flags</span> <span class="special">&amp;</span> <span class="identifier">format_no_copy</span><span class="special">)</span> 
 </pre>
 <p>
         calls
       </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">),</span> 
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">prefix</span><span class="special">().</span><span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">),</span> 
 </pre>
 <p>
         and then calls
       </p>
-<pre class="programlisting">
-<span class="identifier">m</span><span class="special">.</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">fmt</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">).</span> 
+<pre class="programlisting"><span class="identifier">m</span><span class="special">.</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">out</span><span class="special">,</span> <span class="identifier">fmt</span><span class="special">,</span> <span class="identifier">flags</span><span class="special">).</span> 
 </pre>
 <p>
         Finally if
       </p>
-<pre class="programlisting">
-<span class="special">!(</span><span class="identifier">flags</span> <span class="special">&amp;</span> <span class="identifier">format_no_copy</span><span class="special">)</span> 
+<pre class="programlisting"><span class="special">!(</span><span class="identifier">flags</span> <span class="special">&amp;</span> <span class="identifier">format_no_copy</span><span class="special">)</span> 
 </pre>
 <p>
         calls
       </p>
-<pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">last_m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last_m</span><span class="special">,</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">)</span> 
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">last_m</span><span class="special">.</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">last_m</span><span class="special">,</span><span class="identifier">suffix</span><span class="special">().</span><span class="identifier">last</span><span class="special">,</span> <span class="identifier">out</span><span class="special">)</span> 
 </pre>
 <p>
         where <span class="emphasis"><em>last_m</em></span> is a copy of the last match found.
       </p>
 <p>
-        If <tt class="computeroutput"><span class="identifier">flags</span> <span class="special">&amp;</span>
-        <span class="identifier">format_first_only</span></tt> is non-zero then
+        If <code class="computeroutput"><span class="identifier">flags</span> <span class="special">&amp;</span>
+        <span class="identifier">format_first_only</span></code> is non-zero then
         only the first match found is replaced.
       </p>
 <p>
-        <span class="bold"><b>Throws</b></span>: <tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></tt>
+        <span class="bold"><strong>Throws</strong></span>: <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span></code>
         if the complexity of matching the expression against an N character string
         begins to exceed O(N<sup>2</sup>), or if the program runs out of stack space while matching
         the expression (if Boost.Regex is configured in recursive mode), or if the
@@ -158,31 +148,29 @@
         in non-recursive mode).
       </p>
 <p>
-        <span class="bold"><b>Returns</b></span>: out.
+        <span class="bold"><strong>Returns</strong></span>: out.
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">charT</span><span class="special">&gt;</span>
 <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">regex_replace</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">s</span><span class="special">,</span>
                                   <span class="keyword">const</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="identifier">e</span><span class="special">,</span>
                                   <span class="keyword">const</span> <span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;&amp;</span> <span class="identifier">fmt</span><span class="special">,</span>
                                   <span class="identifier">match_flag_type</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="identifier">match_default</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><b>Effects</b></span>: Constructs an object <tt class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">result</span></tt>, calls <tt class="computeroutput"><span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">back_inserter</span><span class="special">(</span><span class="identifier">result</span><span class="special">),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span>
+        <span class="bold"><strong>Effects</strong></span>: Constructs an object <code class="computeroutput"><span class="identifier">basic_string</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="identifier">result</span></code>, calls <code class="computeroutput"><span class="identifier">regex_replace</span><span class="special">(</span><span class="identifier">back_inserter</span><span class="special">(</span><span class="identifier">result</span><span class="special">),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">e</span><span class="special">,</span>
         <span class="identifier">fmt</span><span class="special">,</span>
-        <span class="identifier">flags</span><span class="special">)</span></tt>,
-        and then returns <tt class="computeroutput"><span class="identifier">result</span></tt>.
+        <span class="identifier">flags</span><span class="special">)</span></code>,
+        and then returns <code class="computeroutput"><span class="identifier">result</span></code>.
       </p>
-<a name="boost_regex.ref.regex_replace.examples"></a><h4>
-<a name="id542698"></a>
+<a name="boost_regex.ref.regex_replace.examples"></a><h5>
+<a name="id575897"></a>
         <a href="regex_replace.html#boost_regex.ref.regex_replace.examples">Examples</a>
-      </h4>
+      </h5>
 <p>
         The following example takes C/C++ source code as input, and outputs syntax
         highlighted HTML code.
       </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">fstream</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">fstream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">sstream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;</span>
@@ -294,10 +282,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

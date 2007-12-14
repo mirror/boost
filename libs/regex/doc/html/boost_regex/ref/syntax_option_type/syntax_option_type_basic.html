@@ -1,16 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-        Options for POSIX Basic Regular Expressions</title>
+<title>Options for POSIX Basic Regular Expressions</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
-<link rel="up" href="../syntax_option_type.html" title=" syntax_option_type">
-<link rel="prev" href="syntax_option_type_extended.html" title="
-        Options for POSIX Extended Regular Expressions">
-<link rel="next" href="syntax_option_type_literal.html" title="
-        Options for Literal Strings">
+<link rel="up" href="../syntax_option_type.html" title="syntax_option_type">
+<link rel="prev" href="syntax_option_type_extended.html" title="Options for POSIX Extended Regular Expressions">
+<link rel="next" href="syntax_option_type_literal.html" title="Options for Literal Strings">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -27,9 +24,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.syntax_option_type.syntax_option_type_basic"></a><a href="syntax_option_type_basic.html" title="
-        Options for POSIX Basic Regular Expressions">
-        Options for POSIX Basic Regular Expressions</a></h4></div></div></div>
+<a name="boost_regex.ref.syntax_option_type.syntax_option_type_basic"></a><a href="syntax_option_type_basic.html" title="Options for POSIX Basic Regular Expressions">
+        Options for POSIX Basic Regular Expressions</a>
+</h4></div></div></div>
 <p>
           Exactly one of the following must always be set for POSIX basic regular
           expressions:
@@ -72,8 +69,7 @@
 <td>
                 <p>
                   Specifies that the grammar recognized by the regular expression
-                  engine is the same as that used by <a href="../../syntax/basic_syntax.html" title=" POSIX Basic Regular
-      Expression Syntax">POSIX
+                  engine is the same as that used by <a href="../../syntax/basic_syntax.html" title="POSIX Basic Regular Expression Syntax">POSIX
                   basic regular expressions</a> in IEEE Std 1003.1-2001, Portable
                   Operating System Interface (POSIX ), Base Definitions and Headers,
                   Section 9, Regular Expressions (FWD.1).
@@ -111,13 +107,12 @@
 <td>
                 <p>
                   Specifies that the grammar recognized by the regular expression
-                  engine is the same as that used by POSIX utility <tt class="computeroutput"><span class="identifier">grep</span></tt> in IEEE Std 1003.1-2001,
+                  engine is the same as that used by POSIX utility <code class="computeroutput"><span class="identifier">grep</span></code> in IEEE Std 1003.1-2001,
                   Portable Operating System Interface (POSIX ), Shells and Utilities,
                   Section 4, Utilit\ies, grep (FWD.1).
                 </p>
                 <p>
-                  That is to say, the same as <a href="../../syntax/basic_syntax.html" title=" POSIX Basic Regular
-      Expression Syntax">POSIX
+                  That is to say, the same as <a href="../../syntax/basic_syntax.html" title="POSIX Basic Regular Expression Syntax">POSIX
                   basic syntax</a>, but with the newline character acting as an
                   alternation character; the expression is treated as a newline separated
                   list of alternatives.
@@ -137,8 +132,7 @@
                 </td>
 <td>
                 <p>
-                  Specifies that the grammar recognised is the superset of the <a href="../../syntax/basic_syntax.html" title=" POSIX Basic Regular
-      Expression Syntax">POSIX-Basic syntax</a>
+                  Specifies that the grammar recognised is the superset of the <a href="../../syntax/basic_syntax.html" title="POSIX Basic Regular Expression Syntax">POSIX-Basic syntax</a>
                   used by the emacs program.
                 </p>
                 </td>
@@ -205,7 +199,7 @@
                 <p>
                   Specifies that when a regular expression is matched against a character
                   container sequence, then no sub-expression matches are to be stored
-                  in the supplied <a href="../match_results.html" title=" match_results"><tt class="computeroutput"><span class="identifier">match_results</span></tt></a> structure.
+                  in the supplied <a href="../match_results.html" title="match_results"><code class="computeroutput"><span class="identifier">match_results</span></code></a> structure.
                 </p>
                 </td>
 </tr>
@@ -243,9 +237,8 @@
                 </td>
 <td>
                 <p>
-                  Specifies that character ranges of the form <tt class="computeroutput"><span class="special">[</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">b</span><span class="special">]</span></tt>
-                  should be locale sensitive. This bit is on by default for <a href="../../syntax/basic_syntax.html" title=" POSIX Basic Regular
-      Expression Syntax">POSIX-Basic regular expressions</a>,
+                  Specifies that character ranges of the form <code class="computeroutput"><span class="special">[</span><span class="identifier">a</span><span class="special">-</span><span class="identifier">b</span><span class="special">]</span></code>
+                  should be locale sensitive. This bit is on by default for <a href="../../syntax/basic_syntax.html" title="POSIX Basic Regular Expression Syntax">POSIX-Basic regular expressions</a>,
                   but can be unset to force ranges to be compared by code point only.
                 </p>
                 </td>
@@ -265,7 +258,7 @@
                 <p>
                   Specifies that the \n character has the same effect as the alternation
                   operator |. Allows newline separated lists to be used as a list
-                  of alternatives. This bit is already set, if you use the <tt class="computeroutput"><span class="identifier">grep</span></tt> option.
+                  of alternatives. This bit is already set, if you use the <code class="computeroutput"><span class="identifier">grep</span></code> option.
                 </p>
                 </td>
 </tr>
@@ -282,7 +275,7 @@
                 </td>
 <td>
                 <p>
-                  When set then character classes such as <tt class="computeroutput"><span class="special">[[:</span><span class="identifier">alnum</span><span class="special">:]]</span></tt>
+                  When set then character classes such as <code class="computeroutput"><span class="special">[[:</span><span class="identifier">alnum</span><span class="special">:]]</span></code>
                   are not allowed.
                 </p>
                 </td>
@@ -301,9 +294,8 @@
 <td>
                 <p>
                   When set this makes the escape character ordinary inside lists,
-                  so that <tt class="computeroutput"><span class="special">[\</span><span class="identifier">b</span><span class="special">]</span></tt> would match either '\' or 'b'.
-                  This bit is on by default for <a href="../../syntax/basic_syntax.html" title=" POSIX Basic Regular
-      Expression Syntax">POSIX-basic
+                  so that <code class="computeroutput"><span class="special">[\</span><span class="identifier">b</span><span class="special">]</span></code> would match either '\' or 'b'.
+                  This bit is on by default for <a href="../../syntax/basic_syntax.html" title="POSIX Basic Regular Expression Syntax">POSIX-basic
                   regular expressions</a>, but can be unset to force escapes to
                   be recognised inside lists.
                 </p>
@@ -339,8 +331,8 @@
                 </td>
 <td>
                 <p>
-                  When set then <tt class="computeroutput"><span class="special">\?</span></tt> acts
-                  as a zero-or-one repeat operator, and <tt class="computeroutput"><span class="special">\+</span></tt>
+                  When set then <code class="computeroutput"><span class="special">\?</span></code> acts
+                  as a zero-or-one repeat operator, and <code class="computeroutput"><span class="special">\+</span></code>
                   acts as a one-or-more repeat operator.
                 </p>
                 </td>
@@ -358,7 +350,7 @@
                 </td>
 <td>
                 <p>
-                  When set then <tt class="computeroutput"><span class="special">\|</span></tt> acts
+                  When set then <code class="computeroutput"><span class="special">\|</span></code> acts
                   as the alternation operator.
                 </p>
                 </td>
@@ -376,7 +368,7 @@
                 </td>
 <td>
                 <p>
-                  Prevents <a href="../basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a> from throwing
+                  Prevents <a href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> from throwing
                   an exception when an invalid expression is encountered.
                 </p>
                 </td>
@@ -386,10 +378,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

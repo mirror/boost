@@ -1,17 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>
-          Regex Types Used With MFC Strings</title>
+<title>Regex Types Used With MFC Strings</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../../index.html" title="Boost.Regex">
-<link rel="up" href="../mfc_strings.html" title=" Using
-        Boost Regex With MFC Strings">
-<link rel="prev" href="mfc_intro.html" title="
-          Introduction to Boost.Regex and MFC Strings">
-<link rel="next" href="mfc_regex_create.html" title="
-          Regular Expression Creation From an MFC String">
+<link rel="up" href="../mfc_strings.html" title="Using Boost Regex With MFC Strings">
+<link rel="prev" href="mfc_intro.html" title="Introduction to Boost.Regex and MFC Strings">
+<link rel="next" href="mfc_regex_create.html" title="Regular Expression Creation From an MFC String">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,31 +24,31 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_regex_types"></a><a href="mfc_regex_types.html" title="
-          Regex Types Used With MFC Strings">
-          Regex Types Used With MFC Strings</a></h5></div></div></div>
+<a name="boost_regex.ref.non_std_strings.mfc_strings.mfc_regex_types"></a><a href="mfc_regex_types.html" title="Regex Types Used With MFC Strings">
+          Regex Types Used With MFC Strings</a>
+</h5></div></div></div>
 <p>
             The following typedefs are provided for the convenience of those working
             with TCHAR's:
           </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">TCHAR</span><span class="special">&gt;</span>                  <span class="identifier">tregex</span><span class="special">;</span> 
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">basic_regex</span><span class="special">&lt;</span><span class="identifier">TCHAR</span><span class="special">&gt;</span>                  <span class="identifier">tregex</span><span class="special">;</span> 
 <span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">TCHAR</span> <span class="keyword">const</span><span class="special">*&gt;</span>         <span class="identifier">tmatch</span><span class="special">;</span> 
 <span class="keyword">typedef</span> <span class="identifier">regex_iterator</span><span class="special">&lt;</span><span class="identifier">TCHAR</span> <span class="keyword">const</span><span class="special">*&gt;</span>        <span class="identifier">tregex_iterator</span><span class="special">;</span> 
 <span class="keyword">typedef</span> <span class="identifier">regex_token_iterator</span><span class="special">&lt;</span><span class="identifier">TCHAR</span> <span class="keyword">const</span><span class="special">*&gt;</span>  <span class="identifier">tregex_token_iterator</span><span class="special">;</span> 
 </pre>
 <p>
             If you are working with explicitly narrow or wide characters rather than
-            TCHAR, then use the regular Boost.Regex types <tt class="computeroutput"><span class="identifier">regex</span></tt>
-            and <tt class="computeroutput"><span class="identifier">wregex</span></tt> instead.
+            TCHAR, then use the regular Boost.Regex types <code class="computeroutput"><span class="identifier">regex</span></code>
+            and <code class="computeroutput"><span class="identifier">wregex</span></code> instead.
           </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

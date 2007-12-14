@@ -1,15 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Traits Class
-        Requirements</title>
+<title>Traits Class Requirements</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../../index.html" title="Boost.Regex">
-<link rel="up" href="../concepts.html" title=" Concepts">
-<link rel="prev" href="charT_concept.html" title=" charT Requirements">
-<link rel="next" href="iterator_concepts.html" title=" Iterator
-        Rrequirements">
+<link rel="up" href="../concepts.html" title="Concepts">
+<link rel="prev" href="charT_concept.html" title="charT Requirements">
+<link rel="next" href="iterator_concepts.html" title="Iterator Requirements">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -26,37 +24,37 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_regex.ref.concepts.traits_concept"></a><a href="traits_concept.html" title=" Traits Class
-        Requirements"> Traits Class
-        Requirements</a></h4></div></div></div>
+<a name="boost_regex.ref.concepts.traits_concept"></a><a href="traits_concept.html" title="Traits Class Requirements"> Traits Class
+        Requirements</a>
+</h4></div></div></div>
 <p>
-          There are two sets of requirements for the <tt class="computeroutput"><span class="identifier">traits</span></tt>
-          template argument to <a href="../basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>: a mininal interface
+          There are two sets of requirements for the <code class="computeroutput"><span class="identifier">traits</span></code>
+          template argument to <a href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>: a mininal interface
           (which is part of the regex standardization proposal), and an optional
           Boost-specific enhanced interface.
         </p>
-<a name="boost_regex.ref.concepts.traits_concept.minimal_requirements_"></a><h4>
-<a name="id589905"></a>
+<a name="boost_regex.ref.concepts.traits_concept.minimal_requirements_"></a><h5>
+<a name="id622823"></a>
           <a href="traits_concept.html#boost_regex.ref.concepts.traits_concept.minimal_requirements_">Minimal
           requirements.</a>
-        </h4>
+        </h5>
 <p>
-          In the following table <tt class="computeroutput"><span class="identifier">X</span></tt>
+          In the following table <code class="computeroutput"><span class="identifier">X</span></code>
           denotes a traits class defining types and functions for the character container
-          type <tt class="computeroutput"><span class="identifier">charT</span></tt>; <span class="emphasis"><em>u</em></span>
-          is an object of type <tt class="computeroutput"><span class="identifier">X</span></tt>;
-          <span class="emphasis"><em>v</em></span> is an object of type <tt class="computeroutput"><span class="keyword">const</span>
-          <span class="identifier">X</span></tt>; <span class="emphasis"><em>p</em></span> is
-          a value of type <tt class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span></tt>; <span class="emphasis"><em>I1</em></span> and <span class="emphasis"><em>I2</em></span>
-          are Input Iterators; <span class="emphasis"><em>c</em></span> is a value of type <tt class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span></tt>;
-          <span class="emphasis"><em>s</em></span> is an object of type <tt class="computeroutput"><span class="identifier">X</span><span class="special">::</span><span class="identifier">string_type</span></tt>;
-          <span class="emphasis"><em>cs</em></span> is an object of type <tt class="computeroutput"><span class="keyword">const</span>
-          <span class="identifier">X</span><span class="special">::</span><span class="identifier">string_type</span></tt>; <span class="emphasis"><em>b</em></span> is
-          a value of type <tt class="computeroutput"><span class="keyword">bool</span></tt>; <span class="emphasis"><em>I</em></span>
-          is a value of type <tt class="computeroutput"><span class="keyword">int</span></tt>; <span class="emphasis"><em>F1</em></span>
-          and <span class="emphasis"><em>F2</em></span> are values of type <tt class="computeroutput"><span class="keyword">const</span>
-          <span class="identifier">charT</span><span class="special">*</span></tt>;
-          and <span class="emphasis"><em>loc</em></span> is an object of type <tt class="computeroutput"><span class="identifier">X</span><span class="special">::</span><span class="identifier">locale_type</span></tt>.
+          type <code class="computeroutput"><span class="identifier">charT</span></code>; <span class="emphasis"><em>u</em></span>
+          is an object of type <code class="computeroutput"><span class="identifier">X</span></code>;
+          <span class="emphasis"><em>v</em></span> is an object of type <code class="computeroutput"><span class="keyword">const</span>
+          <span class="identifier">X</span></code>; <span class="emphasis"><em>p</em></span> is
+          a value of type <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span><span class="special">*</span></code>; <span class="emphasis"><em>I1</em></span> and <span class="emphasis"><em>I2</em></span>
+          are Input Iterators; <span class="emphasis"><em>c</em></span> is a value of type <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">charT</span></code>;
+          <span class="emphasis"><em>s</em></span> is an object of type <code class="computeroutput"><span class="identifier">X</span><span class="special">::</span><span class="identifier">string_type</span></code>;
+          <span class="emphasis"><em>cs</em></span> is an object of type <code class="computeroutput"><span class="keyword">const</span>
+          <span class="identifier">X</span><span class="special">::</span><span class="identifier">string_type</span></code>; <span class="emphasis"><em>b</em></span> is
+          a value of type <code class="computeroutput"><span class="keyword">bool</span></code>; <span class="emphasis"><em>I</em></span>
+          is a value of type <code class="computeroutput"><span class="keyword">int</span></code>; <span class="emphasis"><em>F1</em></span>
+          and <span class="emphasis"><em>F2</em></span> are values of type <code class="computeroutput"><span class="keyword">const</span>
+          <span class="identifier">charT</span><span class="special">*</span></code>;
+          and <span class="emphasis"><em>loc</em></span> is an object of type <code class="computeroutput"><span class="identifier">X</span><span class="special">::</span><span class="identifier">locale_type</span></code>.
         </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -329,7 +327,7 @@
 <tr>
 <td>
                 <p>
-                  v.value(c, i)
+                  v.value(c, I)
                 </p>
                 </td>
 <td>
@@ -380,39 +378,19 @@
                 </p>
                 </td>
 </tr>
-<tr>
-<td>
-                <p>
-                  v.error_string(i)
-                </p>
-                </td>
-<td>
-                <p>
-                  std::string
-                </p>
-                </td>
-<td>
-                <p>
-                  Returns a human readable error string for the error condition i,
-                  where i is one of the values enumerated by type regex_constants::error_type.
-                  If the value i is not recognized then returns the string "Unknown
-                  error" or a localized equivalent.
-                </p>
-                </td>
-</tr>
 </tbody>
 </table></div>
-<a name="boost_regex.ref.concepts.traits_concept.additional_optional_requirements"></a><h4>
-<a name="id590748"></a>
+<a name="boost_regex.ref.concepts.traits_concept.additional_optional_requirements"></a><h5>
+<a name="id623626"></a>
           <a href="traits_concept.html#boost_regex.ref.concepts.traits_concept.additional_optional_requirements">Additional
           Optional Requirements</a>
-        </h4>
+        </h5>
 <p>
           The following additional requirements are strictly optional, however in
-          order for <a href="../basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a>
+          order for <a href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a>
           to take advantage of these additional interfaces, all of the following
-          requirements must be met; <a href="../basic_regex.html" title=" basic_regex"><tt class="computeroutput"><span class="identifier">basic_regex</span></tt></a> will detect the presence
-          or absense of the member <tt class="computeroutput"><span class="identifier">boost_extensions_tag</span></tt>
+          requirements must be met; <a href="../basic_regex.html" title="basic_regex"><code class="computeroutput"><span class="identifier">basic_regex</span></code></a> will detect the presence
+          or absense of the member <code class="computeroutput"><span class="identifier">boost_extensions_tag</span></code>
           and configure itself appropriately.
         </p>
 <div class="informaltable"><table class="table">
@@ -493,8 +471,8 @@
                   that signifies the meaning of character c within the regular expression
                   grammar, when c has been preceded by an escape character. Precondition:
                   if b is the character preceding c in the expression being parsed
-                  then: <tt class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">syntax_type</span><span class="special">(</span><span class="identifier">b</span><span class="special">)</span>
-                  <span class="special">==</span> <span class="identifier">syntax_escape</span></tt>
+                  then: <code class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">syntax_type</span><span class="special">(</span><span class="identifier">b</span><span class="special">)</span>
+                  <span class="special">==</span> <span class="identifier">syntax_escape</span></code>
                 </p>
                 </td>
 </tr>
@@ -512,9 +490,9 @@
 <td>
                 <p>
                   Returns a character d such that: for any character d that is to
-                  be considered equivalent to c then <tt class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">c</span><span class="special">,</span><span class="keyword">false</span><span class="special">)==</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">d</span><span class="special">,</span><span class="keyword">false</span><span class="special">)</span></tt>. Likewise for all characters C
+                  be considered equivalent to c then <code class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">c</span><span class="special">,</span><span class="keyword">false</span><span class="special">)==</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">d</span><span class="special">,</span><span class="keyword">false</span><span class="special">)</span></code>. Likewise for all characters C
                   that are to be considered equivalent to c when comparisons are
-                  to be performed without regard to case, then <tt class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">c</span><span class="special">,</span><span class="keyword">true</span><span class="special">)==</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">C</span><span class="special">,</span><span class="keyword">true</span><span class="special">)</span></tt>.
+                  to be performed without regard to case, then <code class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">c</span><span class="special">,</span><span class="keyword">true</span><span class="special">)==</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">translate</span><span class="special">(</span><span class="identifier">C</span><span class="special">,</span><span class="keyword">true</span><span class="special">)</span></code>.
                 </p>
                 </td>
 </tr>
@@ -531,9 +509,9 @@
                 </td>
 <td>
                 <p>
-                  Behaves as follows: if <tt class="computeroutput"><span class="identifier">p</span>
-                  <span class="special">==</span> <span class="identifier">q</span></tt>
-                  or if <tt class="computeroutput"><span class="special">*</span><span class="identifier">p</span></tt>
+                  Behaves as follows: if <code class="computeroutput"><span class="identifier">p</span>
+                  <span class="special">==</span> <span class="identifier">q</span></code>
+                  or if <code class="computeroutput"><span class="special">*</span><span class="identifier">p</span></code>
                   is not a digit character then returns -1. Otherwise performs formatted
                   numeric input on the sequence [p,q) and returns the result as an
                   int. Postcondition: either p == q or *p is a non-digit character.
@@ -543,7 +521,7 @@
 <tr>
 <td>
                 <p>
-                  v.error_string(i)
+                  v.error_string(I)
                 </p>
                 </td>
 <td>
@@ -555,8 +533,8 @@
                 <p>
                   Returns a human readable error string for the error condition i,
                   where i is one of the values enumerated by type regex_constants::error_type.
-                  If the value i is not recognized then returns the string "Unknown
-                  error" or a localized equivalent.
+                  If the value <span class="emphasis"><em>I</em></span> is not recognized then returns
+                  the string "Unknown error" or a localized equivalent.
                 </p>
                 </td>
 </tr>
@@ -601,10 +579,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

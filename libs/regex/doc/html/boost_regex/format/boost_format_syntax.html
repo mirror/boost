@@ -1,14 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Boost-Extended
-      Format String Syntax</title>
+<title>Boost-Extended Format String Syntax</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Boost.Regex">
-<link rel="up" href="../format.html" title=" Search and Replace Format String Syntax">
-<link rel="prev" href="perl_format.html" title=" Perl Format String Syntax">
-<link rel="next" href="../ref.html" title=" Reference">
+<link rel="up" href="../format.html" title="Search and Replace Format String Syntax">
+<link rel="prev" href="perl_format.html" title="Perl Format String Syntax">
+<link rel="next" href="../ref.html" title="Reference">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -25,25 +24,25 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_regex.format.boost_format_syntax"></a><a href="boost_format_syntax.html" title=" Boost-Extended
-      Format String Syntax"> Boost-Extended
-      Format String Syntax</a></h3></div></div></div>
+<a name="boost_regex.format.boost_format_syntax"></a><a href="boost_format_syntax.html" title="Boost-Extended Format String Syntax"> Boost-Extended
+      Format String Syntax</a>
+</h3></div></div></div>
 <p>
         Boost-Extended format strings treat all characters as literals except for
         '$', '\', '(', ')', '?', and ':'.
       </p>
-<a name="boost_regex.format.boost_format_syntax.grouping"></a><h4>
-<a name="id481845"></a>
+<a name="boost_regex.format.boost_format_syntax.grouping"></a><h5>
+<a name="id515430"></a>
         <a href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.grouping">Grouping</a>
-      </h4>
+      </h5>
 <p>
         The characters '(' and ')' perform lexical grouping, so use \( and \) if
         you want a to output literal parenthesis.
       </p>
-<a name="boost_regex.format.boost_format_syntax.conditionals"></a><h4>
-<a name="id481877"></a>
+<a name="boost_regex.format.boost_format_syntax.conditionals"></a><h5>
+<a name="id515461"></a>
         <a href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.conditionals">Conditionals</a>
-      </h4>
+      </h5>
 <p>
         The character '?' begins a conditional expression, the general form is:
       </p>
@@ -66,11 +65,11 @@
         match found with "foo" if the sub-expression $1 was matched, and
         with "bar" otherwise.
       </p>
-<a name="boost_regex.format.boost_format_syntax.placeholder_sequences"></a><h4>
-<a name="id481936"></a>
+<a name="boost_regex.format.boost_format_syntax.placeholder_sequences"></a><h5>
+<a name="id515518"></a>
         <a href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.placeholder_sequences">Placeholder
         Sequences</a>
-      </h4>
+      </h5>
 <p>
         Placeholder sequences specify that some part of what matched the regular
         expression should be sent to output as follows:
@@ -161,11 +160,11 @@
         Any $-placeholder sequence not listed above, results in '$' being treated
         as a literal.
       </p>
-<a name="boost_regex.format.boost_format_syntax.escape_sequences"></a><h4>
-<a name="id482109"></a>
+<a name="boost_regex.format.boost_format_syntax.escape_sequences"></a><h5>
+<a name="id515689"></a>
         <a href="boost_format_syntax.html#boost_regex.format.boost_format_syntax.escape_sequences">Escape
         Sequences</a>
-      </h4>
+      </h5>
 <p>
         An escape character followed by any character x, outputs that character unless
         x is one of the escape sequences shown below.
@@ -390,10 +389,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2007 John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 1998 -2007 John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
