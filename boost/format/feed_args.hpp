@@ -125,6 +125,13 @@ namespace detail {
               typename basic_format<Ch, Tr, Alloc>::internal_streambuf_t & buf,
               io::detail::locale_t *loc_p = NULL)
     {
+#ifdef BOOST_MSVC
+       // If std::min<unsigned> or std::max<unsigned> are already instantiated
+       // at this point then we get a blizzard of warning messages when we call
+       // those templates with std::size_t as arguments.  Weird and very annoyning...
+#pragma warning(push)
+#pragma warning(disable:4267)
+#endif
         // does the actual conversion of x, with given params, into a string
         // using the supplied stringbuf.
 
@@ -227,6 +234,9 @@ namespace detail {
             }
         }
         buf.clear_buffer();
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     } // end- put(..)
 
 
