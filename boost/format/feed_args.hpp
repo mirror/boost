@@ -218,7 +218,7 @@ namespace detail {
                 }
                 else { // hum..  we need to pad (multi_output, or spacepad present)
                     //find where we should pad
-                    size_type sz = (std::min)(res_size+prefix_space, tmp_size);
+                    size_type sz = (std::min)(res_size + (prefix_space ? 1 : 0), tmp_size);
                     size_type i = prefix_space;
                     for(; i<sz && tmp_beg[i] == res[i-prefix_space]; ++i) {}
                     if(i>=tmp_size) i=prefix_space;
