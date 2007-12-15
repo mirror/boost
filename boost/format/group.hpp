@@ -127,6 +127,8 @@ struct group4
     group4(T1 a1,T2 a2,T3 a3,T4 a4)
       : a1_(a1),a2_(a2),a3_(a3),a4_(a4)
       {}
+private:
+   group4& operator=(const group4&);
 };
 
 template <class Ch, class Tr, class T1,class T2,class T3,class T4>

@@ -272,7 +272,7 @@ namespace detail {
         // this is a permanent change, clear or reset won't cancel that.
         if(itemN<1 || itemN > static_cast<signed int>(self.items_.size() )) {
             if( self.exceptions() & io::out_of_range_bit ) 
-                boost::throw_exception(io::out_of_range(itemN, 1, self.items_.size() ));
+                boost::throw_exception(io::out_of_range(itemN, 1, static_cast<int>(self.items_.size()) ));
             else return self;
         }
         self.items_[itemN-1].fmtstate_. template apply_manip<T> ( manipulator );
