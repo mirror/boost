@@ -203,6 +203,13 @@ namespace boost {
     template< class Ch, class Tr, class Alloc>
     typename std::basic_string<Ch, Tr, Alloc>::size_type  basic_format<Ch,Tr, Alloc>:: 
     size () const {
+#ifdef BOOST_MSVC
+       // If std::min<unsigned> or std::max<unsigned> are already instantiated
+       // at this point then we get a blizzard of warning messages when we call
+       // those templates with std::size_t as arguments.  Weird and very annoyning...
+#pragma warning(push)
+#pragma warning(disable:4267)
+#endif
         BOOST_USING_STD_MAX();
         size_type sz = prefix_.size();
         unsigned long i;
@@ -215,6 +222,9 @@ namespace boost {
             sz += item.appendix_.size();
         }
         return sz;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     }
 
 namespace io {
