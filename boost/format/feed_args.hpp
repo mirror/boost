@@ -220,7 +220,7 @@ namespace detail {
                     //find where we should pad
                     size_type sz = (std::min)(res_size + (prefix_space ? 1 : 0), tmp_size);
                     size_type i = prefix_space;
-                    for(; i<sz && tmp_beg[i] == res[i-prefix_space]; ++i) {}
+                    for(; i<sz && tmp_beg[i] == res[i - (prefix_space ? 1 : 0)]; ++i) {}
                     if(i>=tmp_size) i=prefix_space;
                     res.assign(tmp_beg, i);
                                         std::streamsize d = w - static_cast<std::streamsize>(tmp_size);
