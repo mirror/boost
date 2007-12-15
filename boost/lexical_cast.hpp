@@ -3,7 +3,7 @@
 
 // Boost lexical_cast.hpp header  -------------------------------------------//
 //
-// See http://www.boost.org/libs/converston for documentation.
+// See http://www.boost.org/libs/conversion for documentation.
 // See end of this header for rights and permissions.
 //
 // what:  lexical_cast custom keyword cast
