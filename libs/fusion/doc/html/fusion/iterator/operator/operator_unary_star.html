@@ -30,14 +30,14 @@
         *"> Operator
         *</a></h4></div></div></div>
 <a name="fusion.iterator.operator.operator_unary_star.description"></a><h5>
-<a name="id478608"></a>
+<a name="id479910"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.description">Description</a>
         </h5>
 <p>
           Dereferences an iterator.
         </p>
 <a name="fusion.iterator.operator.operator_unary_star.synopsis"></a><h5>
-<a name="id478639"></a>
+<a name="id479942"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -47,7 +47,7 @@
 <span class="keyword">typename</span> <a href="../metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="keyword">operator</span><span class="special">*(</span><span class="emphasis"><em>unspecified</em></span><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id478798"></a><p class="title"><b>Table 1.8. Parameters</b></p>
+<a name="id480101"></a><p class="title"><b>Table 1.8. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -93,7 +93,7 @@
 </table>
 </div>
 <a name="fusion.iterator.operator.operator_unary_star.expression_semantics"></a><h5>
-<a name="id478900"></a>
+<a name="id480203"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -107,11 +107,16 @@
 <p>
           <span class="bold"><b>Semantics</b></span>: Equivalent to <tt class="computeroutput"><a href="../functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>.
         </p>
-<p>
-          /iterator/deref.hpp&gt;
-        </p>
+<a name="fusion.iterator.operator.operator_unary_star.header"></a><h5>
+<a name="id480344"></a>
+          <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.header">Header</a>
+        </h5>
+<pre class="programlisting">
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
 <a name="fusion.iterator.operator.operator_unary_star.example"></a><h5>
-<a name="id479046"></a>
+<a name="id480503"></a>
           <a href="operator_unary_star.html#fusion.iterator.operator.operator_unary_star.example">Example</a>
         </h5>
 <pre class="programlisting">

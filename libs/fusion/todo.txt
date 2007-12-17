@@ -6,6 +6,15 @@ License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt)
 ===============================================================================
 
+* Document rationale behind at and value_at and how to choose which
+  to use.
+
+* Reinstate the function object algorithms
+
+* Break all dependency cycles if there are some more
+
+* Break the view<-->algorithm dependency cycle
+
 * Improve extension docs
 
 * Document sequence/convert

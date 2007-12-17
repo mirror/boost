@@ -414,7 +414,8 @@ It is used as elements in __map__s, for example.
     [[`P()`]            [Default construction.]]
     [[`P(s)`]           [Construct a pair given value for the second type, `s`.]]
     [[`P(p2)`]          [Copy constructs a pair from another pair, `p2`.]]
-    [[`p = p2`]         [Assigns a pair, p1, from another pair, `p2`.]]
+    [[`p.second`]       [Get the data from `p1.]]
+    [[`p = p2`]         [Assigns a pair, `p1`, from another pair, `p2`.]]
     [[make_pair<F>(s)]  [Make a pair given the first type, `F`, and a value for
                         the second type, `s`. The second type assumes the type of `s`]]
     [[`o << p`]         [Output `p` to output stream, `o`.]]
