@@ -461,11 +461,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:with-param name="text" select="'static const '"/>
     </xsl:call-template>
 
-    <xsl:call-template name="source-highlight">
-      <xsl:with-param name="text">
-        <xsl:apply-templates select="type/*|type/text()"/>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:apply-templates select="type" mode="highlight"/>
 
     <xsl:if test="not(@name = '')">
       <xsl:text> </xsl:text>
