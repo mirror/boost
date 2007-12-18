@@ -134,7 +134,7 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, uniform_int& ud)
   {
-# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC == 1400
       return detail::extract_uniform_int(is, ud, ud.impl);
 # else
    is >> std::ws >> ud._min >> std::ws >> ud._max;
