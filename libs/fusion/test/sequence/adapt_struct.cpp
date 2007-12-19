@@ -42,6 +42,9 @@ BOOST_FUSION_ADAPT_STRUCT(
     (int, y)
 )
 
+struct s { int m; };
+BOOST_FUSION_ADAPT_STRUCT(s, (int, m))
+
 int
 main()
 {
@@ -99,6 +102,16 @@ main()
         ns::point p = {5, 3};
         fusion::list<int, short> l(p);
         l = p;
+    }
+
+    { // begin/end
+        using namespace boost::fusion;
+        using boost::is_same;
+
+        typedef result_of::begin<s>::type b;
+        typedef result_of::end<s>::type e;
+        // this fails
+        BOOST_MPL_ASSERT((is_same<result_of::next<b>::type, e>));
     }
 
     return boost::report_errors();
