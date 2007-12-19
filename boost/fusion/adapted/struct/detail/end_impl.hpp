@@ -9,7 +9,6 @@
 #define BOOST_FUSION_END_IMPL_24122005_1755
 
 #include <boost/fusion/adapted/struct/struct_iterator.hpp>
-#include <boost/fusion/adapted/struct/detail/size_impl.hpp>
 
 namespace boost { namespace fusion
 {
@@ -20,6 +19,9 @@ namespace boost { namespace fusion
         template <typename Tag>
         struct end_impl;
 
+        template <typename Struct>
+        struct struct_size;
+
         template <>
         struct end_impl<struct_tag>
         {
@@ -29,7 +31,7 @@ namespace boost { namespace fusion
                 typedef
                     struct_iterator<
                         Sequence
-                      , size_impl<struct_tag>::template apply<Sequence>::value
+                      , struct_size<Sequence>::value
                     >
                 type;
 
