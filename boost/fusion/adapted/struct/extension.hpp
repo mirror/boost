@@ -50,7 +50,7 @@ namespace boost { namespace fusion { namespace extension
     struct struct_assoc_member<Struct const, Key>
     {
         typedef typename
-        add_const<typename struct_assoc_member<Struct, Key>::type>::type
+            add_const<typename struct_assoc_member<Struct, Key>::type>::type
         type;
 
         static type&
