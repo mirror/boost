@@ -333,8 +333,16 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:value-of select="substring($type-padding, 1,
                                             $max-type-length - $type-length)"/>
             <xsl:text> </xsl:text>
-            <xsl:value-of select="substring(concat(@name, ';', $name-padding),
-                                            1, $max-name-length)"/>
+            <xsl:variable name="truncated-typedef-name" select="substring(@name,
+              1, $max-name-length)"/>
+            <xsl:call-template name="link-or-anchor">
+              <xsl:with-param name="to" select="$link-to"/>
+              <xsl:with-param name="text" select="$truncated-typedef-name"/>
+              <xsl:with-param name="link-type" select="$link-type"/>
+              <xsl:with-param name="highlight" select="true()"/>
+            </xsl:call-template>
+            <xsl:value-of select="substring(concat(';', $name-padding),
+              1, $max-name-length - string-length($truncated-typedef-name))"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text> </xsl:text>
@@ -365,6 +373,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:param name="indentation"/>
     <xsl:param name="max-type-length" select="0"/>
     <xsl:param name="max-name-length" select="0"/>
+    <xsl:param name="allow-anchor" select="true()"/>
 
     <!-- True if we should compact this typedef -->
     <xsl:variable name="compact"
@@ -380,7 +389,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:call-template name="type.typedef.display.aligned">
           <xsl:with-param name="compact" select="$compact"/>
           <xsl:with-param name="indentation" select="$indentation"/>
-          <xsl:with-param name="is-reference" select="true()"/>
+          <xsl:with-param name="is-reference" select="$allow-anchor"/>
           <xsl:with-param name="max-type-length" select="$max-type-length"/>
           <xsl:with-param name="max-name-length" select="$max-name-length"/>
         </xsl:call-template>
@@ -728,6 +737,8 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
   <xsl:template name="class-members-synopsis">
     <xsl:param name="indentation" select="0"/>
+    <!-- Used to suppress anchors in nested synopsis, so we don't get multiple anchors -->
+    <xsl:param name="allow-synopsis-anchors" select="false()"/>
 
     <!-- Typedefs -->
     <xsl:if test="typedef">
@@ -770,6 +781,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           select="$max-type-length"/>
         <xsl:with-param name="max-name-length"
           select="$max-name-length"/>
+        <xsl:with-param name="allow-anchor" select="$allow-synopsis-anchors"/>
       </xsl:apply-templates>
     </xsl:if>
 
@@ -836,17 +848,21 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
   <xsl:template match="access" mode="synopsis">
     <xsl:param name="indentation" select="0"/>
+    <xsl:param name="allow-synopsis-anchors" select="false()"/>
+
     <xsl:call-template name="print-access-specification">
       <xsl:with-param name="indentation" select="$indentation"/>
       <xsl:with-param name="specification" select="@name"/>
     </xsl:call-template>
     <xsl:call-template name="class-members-synopsis">
       <xsl:with-param name="indentation" select="$indentation"/>
+      <xsl:with-param name="allow-synopsis-anchors" select="$allow-synopsis-anchors"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="class-type-synopsis">
     <xsl:param name="indentation" select="0"/>
+    <xsl:param name="allow-synopsis-anchors" select="false()"/>
 
     <!-- The keyword used to declare this class type, e.g., class,
          struct, or union. -->
@@ -940,10 +956,12 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
     <xsl:call-template name="class-members-synopsis">
       <xsl:with-param name="indentation" select="$indentation"/>
+      <xsl:with-param name="allow-synopsis-anchors" select="$allow-synopsis-anchors"/>
     </xsl:call-template>
 
     <xsl:apply-templates select="access" mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation"/>
+      <xsl:with-param name="allow-synopsis-anchors" select="$allow-synopsis-anchors"/>
     </xsl:apply-templates>
 
     <!-- Closing brace -->
@@ -1049,6 +1067,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:with-param name="synopsis">
         <xsl:call-template name="class-type-synopsis">
           <xsl:with-param name="indentation" select="$indentation"/>
+          <xsl:with-param name="allow-synopsis-anchors" select="true()"/>
         </xsl:call-template>
         <!-- Associated free functions -->
         <xsl:apply-templates select="ancestor-or-self::*/free-function-group"
