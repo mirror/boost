@@ -10,9 +10,10 @@
 #define BOOST_RESULT_OF_HPP
 
 #include <boost/config.hpp>
-#include <boost/type_traits/ice.hpp>
-#include <boost/type.hpp>
-#include <boost/preprocessor.hpp>
+#include <boost/preprocessor/iteration/iterate.hpp> 
+#include <boost/preprocessor/punctuation/comma_if.hpp> 
+#include <boost/preprocessor/repetition/enum_params.hpp> 
+#include <boost/preprocessor/repetition/enum_shifted_params.hpp> 
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/mpl/if.hpp>
