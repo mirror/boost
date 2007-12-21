@@ -31,14 +31,29 @@
 <div class="itemizedlist"><ul type="disc">
 <li>
         Sep 27, 2006: Added <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tuple</span></tt>
-        support.
+        support. (Joel de Guzman)
       </li>
 <li>
         Nov 17, 2006: Added <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></tt>
-        support.
+        support. (Joel de Guzman)
       </li>
 <li>
-        Feb 15, 2007: Added functional module.
+        Feb 15, 2007: Added functional module. (Tobias Schwinger)
+      </li>
+<li>
+        APRIL 2, 2007: Added struct adapter. (Joel de Guzman)
+      </li>
+<li>
+        May 8, 2007: Added associative struct adapter. (Dan Marsden)
+      </li>
+<li>
+        Dec 20, 2007: Removed <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></tt>
+        support. After thorough investigation, I think now that the move to make
+        variant a fusion sequence is rather quirky. A variant will always have a
+        size==1 regardless of the number of types it can contain and there's no way
+        to know at compile time what it contains. Iterating over its types is simply
+        wrong. All these imply that the variant is <span class="bold"><b>not</b></span>
+        a fusion sequence. (Joel de Guzman)
       </li>
 </ul></div>
 </div>

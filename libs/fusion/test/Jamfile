@@ -81,7 +81,6 @@ import testing ;
     [ run sequence/single_view.cpp :  :  :  : ]
     [ run sequence/std_pair.cpp :  :  :  : ]
     [ run sequence/array.cpp :  :  :  : ]
-    [ run sequence/variant.cpp :  :  :  : ]
     [ run sequence/tuple_comparison.cpp :  :  :  : ]
     [ run sequence/tuple_construction.cpp :  :  :  : ]
     [ run sequence/tuple_copy.cpp :  :  :  : ]
