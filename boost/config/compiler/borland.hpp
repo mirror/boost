@@ -17,8 +17,8 @@
 #endif
 
 // last known and checked version is 0x600 (Builder X preview)
-// or 0x592 (CodeGear C++ Builder 2007 Update 3):
-#if (__BORLANDC__ > 0x592) && (__BORLANDC__ != 0x600)
+// or 0x593 (CodeGear C++ Builder 2007 December 2007 update):
+#if (__BORLANDC__ > 0x593) && (__BORLANDC__ != 0x600)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
@@ -106,8 +106,8 @@
 #  endif
 #endif
 
-// Borland C++ Builder 2007 Update 3 and below:
-#if (__BORLANDC__ <= 0x592)
+// Borland C++ Builder 2007 December 2007 Update and below:
+#if (__BORLANDC__ <= 0x593)
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_USING_TEMPLATE
 #  define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
