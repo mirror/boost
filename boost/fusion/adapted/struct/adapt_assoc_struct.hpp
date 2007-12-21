@@ -53,7 +53,7 @@ namespace boost { namespace fusion { namespace extension {
 // SEQ_FOR_EACH_I to generate the "linear" substructures.
 // Thanks to Paul Mensonides for the PP macro help
 
-#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_I(name, seq)                                  \
+#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_I(name, seq)                            \
     namespace boost { namespace fusion { namespace traits                       \
     {                                                                           \
         template <>                                                             \
@@ -66,11 +66,11 @@ namespace boost { namespace fusion { namespace extension {
     {                                                                           \
         template <>                                                             \
         struct struct_size<name> : mpl::int_<BOOST_PP_SEQ_SIZE(seq)> {};        \
-        BOOST_PP_SEQ_FOR_EACH_I(BOOST_FUSION_ADAPT_ASSOC_STRUCT_C, name, seq)         \
+        BOOST_PP_SEQ_FOR_EACH_I(BOOST_FUSION_ADAPT_ASSOC_STRUCT_C, name, seq)   \
     }}}                                                                         \
     /***/
 
-#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_C(r, name, i, xy)                             \
+#define BOOST_FUSION_ADAPT_ASSOC_STRUCT_C(r, name, i, xy)                       \
     template <>                                                                 \
     struct struct_member<name, i>                                               \
     {                                                                           \

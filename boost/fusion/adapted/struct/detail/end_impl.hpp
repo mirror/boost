@@ -19,13 +19,21 @@ namespace boost { namespace fusion
         template <typename Tag>
         struct end_impl;
 
+        template <typename Struct>
+        struct struct_size;
+
         template <>
         struct end_impl<struct_tag>
         {
             template <typename Sequence>
             struct apply
             {
-                typedef struct_iterator<Sequence, 2> type;
+                typedef
+                    struct_iterator<
+                        Sequence
+                      , struct_size<Sequence>::value
+                    >
+                type;
 
                 static type
                 call(Sequence& v)
