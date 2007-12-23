@@ -137,28 +137,6 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
     void *address, 
     std::size_t count
 ){
-#if 0
-    assert(
-        static_cast<std::size_t>((std::numeric_limits<std::streamsize>::max)()) >= count
-    );
-    //if(is.fail())
-    //    boost::throw_exception(archive_exception(archive_exception::stream_error));
-    // note: an optimizer should eliminate the following for char files
-    std::size_t s = count / sizeof(BOOST_DEDUCED_TYPENAME IStream::char_type);
-    is.read(
-        static_cast<BOOST_DEDUCED_TYPENAME IStream::char_type *>(address), 
-        s
-    );
-    // note: an optimizer should eliminate the following for char files
-    s = count % sizeof(BOOST_DEDUCED_TYPENAME IStream::char_type);
-    if(0 < s){
-        if(is.fail())
-            boost::throw_exception(archive_exception(archive_exception::stream_error));
-        BOOST_DEDUCED_TYPENAME IStream::char_type t;
-        is.read(& t, 1);
-        std::memcpy(address, &t, s);
-    }
-#endif
     // note: an optimizer should eliminate the following for char files
     std::streamsize s = count / sizeof(Elem);
     std::streamsize scount = m_sb.sgetn(
