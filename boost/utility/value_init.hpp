@@ -5,9 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
-// 07 Set 2007 (Worked around MSVC++ bug) Fernando Cacciola, Niels Dekker
-// 16 Nov 2007 (Refactoring: removed private base classes) Fernando Cacciola, Niels Dekker
-// 09 Dec 2007 (Worked around various compiler bugs) Fernando Cacciola, Niels Dekker
+// 24 Dec 2007 (Refactored and worked around various compiler bugs) Fernando Cacciola, Niels Dekker
 //
 #ifndef BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 #define BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
@@ -30,7 +28,6 @@
 // clearing the bytes of T, before constructing the T object it contains. 
 
 #include <boost/aligned_storage.hpp>
-#include <boost/detail/select_type.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/type_traits/cv_traits.hpp>
 #include <boost/type_traits/alignment_of.hpp>
@@ -51,17 +48,13 @@ class value_initialized
       remove_const<T>::type data;
     };
 
-    mutable
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
-      typename
-#endif
-      ::boost::aligned_storage<sizeof(wrapper), ::boost::alignment_of<wrapper>::value>::type x;
+    mutable aligned_storage<sizeof(wrapper), alignment_of<wrapper>::value> x;
 
   public :
 
     value_initialized()
     {
-      std::memset(&x, 0, sizeof(x));
+      std::memset(x.address(), 0, sizeof(x));
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #if _MSC_VER >= 1310
@@ -71,7 +64,7 @@ class value_initialized
 #pragma warning(disable: 4345)
 #endif
 #endif
-      new (&x) wrapper();
+      new (x.address()) wrapper();
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
@@ -79,8 +72,7 @@ class value_initialized
 
     value_initialized(value_initialized const & arg)
     {
-      void const * const ptr = &(arg.x);
-      new (&x) wrapper( *static_cast<wrapper const *>(ptr) );
+      new (x.address()) wrapper( *static_cast<wrapper const *>(arg.x.address()) );
     }
 
     value_initialized & operator=(value_initialized const & arg)
@@ -93,14 +85,12 @@ class value_initialized
 
     ~value_initialized()
     {
-      void * const ptr = &x; 
-      static_cast<wrapper *>(ptr)->wrapper::~wrapper();
+      static_cast<wrapper *>(x.address())->wrapper::~wrapper();
     }
 
     T& data() const
     {
-      void * const ptr = &x;
-      return static_cast<wrapper *>(ptr)->data;
+      return static_cast<wrapper *>(x.address())->data;
     }
 
     operator T&() const { return this->data(); }
