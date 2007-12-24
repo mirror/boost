@@ -202,6 +202,13 @@ bool test ( T const& y, T const& z )
   x_c_ref = z ;
   BOOST_CHECK ( x_c == z ) ;
 
+  boost::value_initialized<T> const copy1 = x;
+  BOOST_CHECK ( boost::get(copy1) == boost::get(x) ) ;
+
+  boost::value_initialized<T> copy2;
+  copy2 = x;
+  BOOST_CHECK ( boost::get(copy2) == boost::get(x) ) ;
+  
   boost::shared_ptr<boost::value_initialized<T> > ptr( new boost::value_initialized<T> );
   BOOST_CHECK ( y == *ptr ) ;
 
