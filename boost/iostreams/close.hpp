@@ -75,7 +75,7 @@ void close_all(T& t, Sink& snk)
 
 } } // End namespaces iostreams, boost.
 
-#if 1 //BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
 # include <boost/iostreams/detail/vc6/close.hpp>
 #else // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //--------------------------//
 
