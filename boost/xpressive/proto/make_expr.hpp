@@ -40,6 +40,9 @@
     #include <boost/preprocessor/seq/seq.hpp>
     #include <boost/preprocessor/seq/to_tuple.hpp>
     #include <boost/preprocessor/seq/for_each_i.hpp>
+    #include <boost/preprocessor/seq/pop_back.hpp>
+    #include <boost/preprocessor/seq/push_back.hpp>
+    #include <boost/preprocessor/seq/push_front.hpp>
     #include <boost/preprocessor/list/for_each_i.hpp>
     #include <boost/ref.hpp>
     #include <boost/mpl/apply_wrap.hpp>
