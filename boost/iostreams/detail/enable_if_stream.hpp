@@ -15,9 +15,10 @@
 #include <boost/utility/enable_if.hpp>                  
 #include <boost/iostreams/traits_fwd.hpp>  // is_std_io.
 
-#if ! defined(BOOST_NO_SFINAE) && ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
+#if !defined(BOOST_NO_SFINAE) && \
+    !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
 # define BOOST_IOSTREAMS_ENABLE_IF_STREAM(T) \
-    , typename boost::enable_if< boost::iostreams::is_std_io<T> >::type* = 0  \
+    , typename boost::enable_if< boost::iostreams::is_std_io<T> >::type* = 0 \
     /**/
 # define BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) \
     , typename boost::disable_if< boost::iostreams::is_std_io<T> >::type* = 0 \

@@ -14,6 +14,9 @@ struct close_impl;
 } // End namespace detail.
 
 template<typename T>
+void close(T& t) { detail::close_all(t); }
+
+template<typename T>
 void close(T& t, BOOST_IOS::openmode which)
 {
     typedef typename detail::unwrapped_type<T>::type unwrapped;

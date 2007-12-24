@@ -79,6 +79,7 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams seekable_filter_test.cpp ]
           [ test-iostreams sequence_test.cpp ]
           [ test-iostreams stdio_filter_test.cpp ]
+          [ test-iostreams stream_state_test.cpp ]
           [ test-iostreams symmetric_filter_test.cpp ]
           [ test-iostreams tee_test.cpp ]
           [ test-iostreams wide_stream_test.cpp ]

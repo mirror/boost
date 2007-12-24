@@ -30,7 +30,52 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
+namespace boost { namespace iostreams {
+
+template<typename T>
+void close(T& t);
+
+template<typename T>
+void close(T& t, BOOST_IOS::openmode which);
+
+template<typename T, typename Sink>
+void close(T& t, Sink& snk, BOOST_IOS::openmode which);
+    
+namespace detail {
+
+template<typename T>
+void close_all(T& t)
+{ 
+    try {
+        boost::iostreams::close(t, BOOST_IOS::in);
+    } catch (...) {
+        try {
+            boost::iostreams::close(t, BOOST_IOS::out);
+        } catch (...) { }
+        throw;
+    }
+    boost::iostreams::close(t, BOOST_IOS::out);
+}
+
+template<typename T, typename Sink>
+void close_all(T& t, Sink& snk)
+{ 
+    try {
+        boost::iostreams::close(t, snk, BOOST_IOS::in);
+    } catch (...) {
+        try {
+            boost::iostreams::close(t, snk, BOOST_IOS::out);
+        } catch (...) { }
+        throw;
+    }
+    boost::iostreams::close(t, snk, BOOST_IOS::out);
+}
+
+} // End namespaces detail. 
+
+} } // End namespaces iostreams, boost.
+
+#if 1 //BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
 # include <boost/iostreams/detail/vc6/close.hpp>
 #else // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //--------------------------//
 
@@ -44,29 +89,33 @@ struct close_impl;
 } // End namespace detail.
 
 template<typename T>
-void close(T& t);
+void close(T& t) { detail::close_all(t); }
 
 template<typename T>
 void close(T& t, BOOST_IOS::openmode which)
 { 
+#ifdef BOOST_IOSTREAMS_STRICT
     assert(which == BOOST_IOS::in || which == BOOST_IOS::out);
+#else
+	if (which == (BOOST_IOS::in | BOOST_IOS::out)) {
+		detail::close_all(t);
+		return;
+	}
+#endif
     detail::close_impl<T>::close(detail::unwrap(t), which); 
 }
-
-//template<typename T, typename Sink>
-//void close( T& t, Sink& snk, 
-//            typename 
-//            boost::disable_if< 
-//                boost::is_convertible<Sink, BOOST_IOS::openmode> 
-//            >::type* = 0 )
-//{ 
-//    detail::close_all(t, snk);
-//}
 
 template<typename T, typename Sink>
 void close(T& t, Sink& snk, BOOST_IOS::openmode which)
 { 
+#ifdef BOOST_IOSTREAMS_STRICT
     assert(which == BOOST_IOS::in || which == BOOST_IOS::out);
+#else
+	if (which == (BOOST_IOS::in | BOOST_IOS::out)) {
+		detail::close_all(t, snk);
+		return;
+	}
+#endif
     detail::close_impl<T>::close(detail::unwrap(t), snk, which); 
 }
 
@@ -162,45 +211,6 @@ struct close_impl<two_sequence> {
 } } // End namespaces iostreams, boost.
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-------------------------//
-
-namespace boost { namespace iostreams { 
-    
-namespace detail {
-
-template<typename T>
-void close_all(T& t)
-{ 
-    try {
-        boost::iostreams::close(t, BOOST_IOS::in);
-    } catch (...) {
-        try {
-            boost::iostreams::close(t, BOOST_IOS::out);
-        } catch (...) { }
-        throw;
-    }
-    boost::iostreams::close(t, BOOST_IOS::out);
-}
-
-template<typename T, typename Sink>
-void close_all(T& t, Sink& snk)
-{ 
-    try {
-        boost::iostreams::close(t, snk, BOOST_IOS::in);
-    } catch (...) {
-        try {
-            boost::iostreams::close(t, snk, BOOST_IOS::out);
-        } catch (...) { }
-        throw;
-    }
-    boost::iostreams::close(t, snk, BOOST_IOS::out);
-}
-
-} // End namespaces detail. 
-
-template<typename T>
-void close(T& t) { detail::close_all(t); }
-
-} } // End iostreams, boost.
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp>
 
