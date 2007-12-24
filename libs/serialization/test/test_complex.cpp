@@ -30,8 +30,12 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_REQUIRE(NULL != testfile);
 
     // test array of objects
-    std::complex<float> a(std::rand(),std::rand());
-    std::complex<double> b(std::rand(),std::rand());
+    std::complex<float> a(static_cast<float>(std::rand()),
+                          static_cast<float>(std::rand()));
+    
+    std::complex<double> b(static_cast<double>(std::rand()),
+                           static_cast<double>(std::rand()));    
+                           
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
