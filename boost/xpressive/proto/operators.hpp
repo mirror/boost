@@ -12,6 +12,7 @@
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
+#include <boost/preprocessor/seq/seq.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
