@@ -29,6 +29,9 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+// Must come last.
+#include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
+
 namespace boost { namespace iostreams {
 
 namespace detail {
@@ -420,5 +423,7 @@ composite_device<Filter, Device, Mode>::optimal_buffer_size() const
 } // End namespace detail.
 
 } } // End namespaces iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #ifndef BOOST_IOSTREAMS_COMPOSE_HPP_INCLUDED

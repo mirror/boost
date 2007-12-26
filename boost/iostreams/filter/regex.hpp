@@ -72,7 +72,7 @@ private:
         }
     struct simple_formatter {
         simple_formatter(const string_type& fmt, flag_type fmt_flags) 
-            : fmt_(fmt), fmt_flags_(fmt_flags_) { }
+            : fmt_(fmt), fmt_flags_(fmt_flags) { }
         string_type operator() (const match_type& match) const
         { return match.format(fmt_, fmt_flags_); }
         string_type  fmt_;

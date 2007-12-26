@@ -29,26 +29,32 @@ namespace boost { namespace iostreams { namespace detail {
     // boost::iostreams::close
 
 template<typename T>
-struct device_close_operation {
+class device_close_operation {
+public:
     typedef void result_type;
     device_close_operation(T& t, BOOST_IOS::openmode which) 
-        : t(t), which(which) 
+        : t_(t), which_(which) 
         { }
-    void operator()() const { boost::iostreams::close(t, which); }
-    T&                   t;
-    BOOST_IOS::openmode  which;
+    void operator()() const { boost::iostreams::close(t_, which_); }
+private:
+    device_close_operation& operator=(const device_close_operation&);
+    T&                   t_;
+    BOOST_IOS::openmode  which_;
 };
 
 template<typename T, typename Sink>
-struct filter_close_operation {
+class filter_close_operation {
+public:
     typedef void result_type;
     filter_close_operation(T& t, Sink& snk, BOOST_IOS::openmode which)
-        : t(t), snk(snk), which(which)
+        : t_(t), snk_(snk), which_(which)
         { }
-    void operator()() const { boost::iostreams::close(t, snk, which); }
-    T&                   t;
-    Sink&                snk;
-    BOOST_IOS::openmode  which;
+    void operator()() const { boost::iostreams::close(t_, snk_, which_); }
+private:
+    filter_close_operation& operator=(const filter_close_operation&);
+    T&                   t_;
+    Sink&                snk_;
+    BOOST_IOS::openmode  which_;
 };
 
 template<typename T>
@@ -65,20 +71,26 @@ call_close(T& t, Sink& snk, BOOST_IOS::openmode which)
     // boost::iostreams::detail::close_all
 
 template<typename T>
-struct device_close_all_operation {
+class device_close_all_operation {
+public:
     typedef void result_type;
-    device_close_all_operation(T& t) : t(t) { }
-    void operator()() const { detail::close_all(t); }
-    T& t;
+    device_close_all_operation(T& t) : t_(t) { }
+    void operator()() const { detail::close_all(t_); }
+private:
+    device_close_all_operation& operator=(const device_close_all_operation&);
+    T& t_;
 };
 
 template<typename T, typename Sink>
-struct filter_close_all_operation {
+class filter_close_all_operation {
+public:
     typedef void result_type;
-    filter_close_all_operation(T& t, Sink& snk) : t(t), snk(snk) { }
-    void operator()() const { detail::close_all(t, snk); }
-    T&     t;
-    Sink&  snk;
+    filter_close_all_operation(T& t, Sink& snk) : t_(t), snk_(snk) { }
+    void operator()() const { detail::close_all(t_, snk_); }
+private:
+    filter_close_all_operation& operator=(const filter_close_all_operation&);
+    T&     t_;
+    Sink&  snk_;
 };
 
 template<typename T>
@@ -94,14 +106,17 @@ call_close_all(T& t, Sink& snk)
     // member function void close(std::ios_base::openmode)
 
 template<typename T>
-struct member_close_operation {
+class member_close_operation {
+public:
     typedef void result_type;
     member_close_operation(T& t, BOOST_IOS::openmode which) 
-        : t(t), which(which) 
+        : t_(t), which_(which) 
         { }
-    void operator()() const { t.close(which); }
-    T&                   t;
-    BOOST_IOS::openmode  which;
+    void operator()() const { t_.close(which_); }
+private:
+    member_close_operation& operator=(const member_close_operation&);
+    T&                   t_;
+    BOOST_IOS::openmode  which_;
 };
 
 template<typename T>
@@ -112,10 +127,13 @@ member_close_operation<T> call_member_close(T& t, BOOST_IOS::openmode which)
     // member function void reset()
 
 template<typename T>
-struct reset_operation {
-    reset_operation(T& t) : t(t) { }
-    void operator()() const { t.reset(); }
-    T& t;
+class reset_operation {
+public:
+    reset_operation(T& t) : t_(t) { }
+    void operator()() const { t_.reset(); }
+private:
+    reset_operation& operator=(const reset_operation&);
+    T& t_;
 };
 
 template<typename T>
@@ -124,11 +142,14 @@ reset_operation<T> call_reset(T& t) { return reset_operation<T>(t); }
     // Function object and object generator for clearing a flag
 
 template<typename T>
-struct clear_flags_operation {
+class clear_flags_operation {
+public:
     typedef void result_type;
-    clear_flags_operation(T& t) : t(t) { }
-    void operator()() const { t = 0; }
-    T& t;
+    clear_flags_operation(T& t) : t_(t) { }
+    void operator()() const { t_ = 0; }
+private:
+    clear_flags_operation& operator=(const clear_flags_operation&);
+    T& t_;
 };
 
 template<typename T>
@@ -139,19 +160,22 @@ clear_flags_operation<T> clear_flags(T& t)
 
 // Function object for use with execute_all()
 template<typename Buffer, typename Device>
-struct flush_buffer_operation {
+class flush_buffer_operation {
+public:
     typedef void result_type;
     flush_buffer_operation(Buffer& buf, Device& dev, bool flush)
-        : buf(buf), dev(dev), flush(flush)
+        : buf_(buf), dev_(dev), flush_(flush)
         { }
     void operator()() const
     {
-        if (flush) 
-            buf.flush(dev);
+        if (flush_) 
+            buf_.flush(dev_);
     }
-    Buffer&  buf;
-    Device&  dev;
-    bool     flush;
+private:
+    flush_buffer_operation& operator=(const flush_buffer_operation&);
+    Buffer&  buf_;
+    Device&  dev_;
+    bool     flush_;
 };
 
 template<typename Buffer, typename Device>

@@ -12,6 +12,7 @@
 // than using it (possibly importing code).
 #define BOOST_IOSTREAMS_SOURCE
 
+#include <cassert>
 #include <boost/config.hpp> // BOOST_JOIN
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
@@ -67,14 +68,16 @@ void file_descriptor::open
              ==
          (BOOST_IOS::in | BOOST_IOS::out) )
     {
-        assert(!(m & BOOST_IOS::app));
+        if (m & BOOST_IOS::app)
+            throw BOOST_IOSTREAMS_FAILURE("bad open mode");
         dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
         dwCreationDisposition =
             (m & BOOST_IOS::trunc) ?
                 OPEN_ALWAYS :
                 OPEN_EXISTING;
     } else if (m & BOOST_IOS::in) {
-        assert(!(m & (BOOST_IOS::app |BOOST_IOS::trunc)));
+        if (m & (BOOST_IOS::app |BOOST_IOS::trunc))
+            throw BOOST_IOSTREAMS_FAILURE("bad open mode");
         dwDesiredAccess = GENERIC_READ;
         dwCreationDisposition = OPEN_EXISTING;
     } else if (m & BOOST_IOS::out) {
@@ -82,6 +85,8 @@ void file_descriptor::open
         dwCreationDisposition = OPEN_ALWAYS;
         if (m & BOOST_IOS::app)
             pimpl_->flags_ |= impl::append;
+    } else {
+        throw BOOST_IOSTREAMS_FAILURE("bad open mode");
     }
 
     HANDLE handle =

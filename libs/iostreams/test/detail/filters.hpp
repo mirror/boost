@@ -134,7 +134,7 @@ struct flushable_output_filter {
           flushable_tag
         { };
     template<typename Sink>
-    bool put(Sink& s, char c) 
+    bool put(Sink&, char c) 
     { 
         buf_.push_back(c); 
         return true; 

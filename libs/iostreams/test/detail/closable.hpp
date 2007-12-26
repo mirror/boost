@@ -45,7 +45,7 @@ template<>
 class closable_device<output> : public sink {
 public:
     closable_device(operation close) : close_(close) { }
-    std::streamsize write(const char*, std::streamsize n) { return 0; }
+    std::streamsize write(const char*, std::streamsize) { return 0; }
     void close() { close_.execute(); }
 private:
     operation close_;
@@ -58,7 +58,7 @@ template<>
 class closable_device<borland_output> : public sink {
 public:
     closable_device(operation close) : close_(close) { }
-    std::streamsize write(const char*, std::streamsize n) { return 0; }
+    std::streamsize write(const char*, std::streamsize) { return 0; }
     void close() { close_.execute(); }
 private:
     operation close_;
@@ -72,7 +72,7 @@ public:
         : close_input_(close_input), close_output_(close_output)
         { }
     std::streamsize read(char*, std::streamsize) { return -1; }
-    std::streamsize write(const char*, std::streamsize n) { return 0; }
+    std::streamsize write(const char*, std::streamsize) { return 0; }
     void close(BOOST_IOS::openmode which) 
     { 
         switch (which) {
@@ -97,7 +97,7 @@ class closable_device<seekable> : public device<seekable> {
 public:
     closable_device(operation close) : close_(close) { }
     std::streamsize read(char*, std::streamsize) { return -1; }
-    std::streamsize write(const char*, std::streamsize n) { return 0; }
+    std::streamsize write(const char*, std::streamsize) { return 0; }
     stream_offset seek(stream_offset, BOOST_IOS::seekdir) { return 0; }
     void close() { close_.execute(); }
 private:

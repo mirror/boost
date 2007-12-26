@@ -102,8 +102,13 @@ struct file_descriptor_source : private file_descriptor {
     typedef void*  handle_type;
 #endif
     typedef char   char_type;
-    struct category : public source_tag, closable_tag { };
+    struct category
+      : input_seekable,
+        device_tag,
+        closable_tag
+      { };
     using file_descriptor::read;
+    using file_descriptor::seek;
     using file_descriptor::open;
     using file_descriptor::is_open;
     using file_descriptor::close;
@@ -128,8 +133,13 @@ struct file_descriptor_sink : private file_descriptor {
     typedef void*  handle_type;
 #endif
     typedef char   char_type;
-    struct category : public sink_tag, closable_tag { };
+    struct category
+      : output_seekable,
+        device_tag,
+        closable_tag
+      { };
     using file_descriptor::write;
+    using file_descriptor::seek;
     using file_descriptor::open;
     using file_descriptor::is_open;
     using file_descriptor::close;

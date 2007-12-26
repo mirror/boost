@@ -62,6 +62,7 @@ private:
             : seq(seq), id(id), error_code(error_code)
             { }
         ~impl() { remove_operation(seq, id); }
+        impl& operator=(const impl&); // Supress VC warning 4512
         operation_sequence&  seq;
         int                  id;
         int                  error_code;

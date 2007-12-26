@@ -38,15 +38,15 @@ struct error_device {
     typedef char                 char_type;
     typedef seekable_device_tag  category;
     error_device(char const*) {}
-    std::streamsize read(char_type* s, std::streamsize n)
+    std::streamsize read(char_type*, std::streamsize)
     {
         throw detail::bad_read();
     }
-    std::streamsize write(const char_type* s, std::streamsize n)
+    std::streamsize write(const char_type*, std::streamsize)
     {
         throw detail::bad_write();
     }
-    std::streampos seek(stream_offset off, BOOST_IOS::seekdir way)
+    std::streampos seek(stream_offset, BOOST_IOS::seekdir)
     {
         throw detail::bad_seek();
     }

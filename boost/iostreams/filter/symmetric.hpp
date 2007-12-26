@@ -228,7 +228,7 @@ private:
     }
 
     template<typename Sink>
-    bool flush(Sink& snk, mpl::false_) { return true;}
+    bool flush(Sink&, mpl::false_) { return true;}
 
     void close_impl();
 

@@ -18,7 +18,9 @@
 # pragma once
 #endif              
 
-#include <algorithm>                        // copy.
+#include <boost/config.hpp>                 // Make sure ptrdiff_t is in std.
+#include <algorithm>                        // copy, min.
+#include <cstddef>                          // ptrdiff_t.
 #include <utility>                          // pair.
 #include <boost/bind.hpp>
 #include <boost/detail/workaround.hpp>
@@ -57,12 +59,12 @@ std::streamsize copy_impl( Source& src, Sink& snk,
     typedef pair<char_type*, char_type*>         pair_type;
     pair_type p1 = iostreams::input_sequence(src);
     pair_type p2 = iostreams::output_sequence(snk);
-    if (p1.second - p1.first < p2.second - p2.first) {
-        std::copy(p1.first, p1.second, p2.first);
-        return static_cast<streamsize>(p1.second - p1.first);
-    } else {
-        throw BOOST_IOSTREAMS_FAILURE("destination too small");
-    }
+    streamsize total = 
+        static_cast<streamsize>(
+            (std::min)(p1.second - p1.first, p2.second - p2.first)
+        );
+    std::copy(p1.first, p1.first + total, p2.first);
+    return total;
 }
 
 // Copy from a direct source to an indirect sink
@@ -83,7 +85,7 @@ std::streamsize copy_impl( Source& src, Sink& snk,
             iostreams::write(snk, p.first + total, size - total); 
         total += amt;
     }
-    return size;
+    return total;
 }
 
 // Copy from an indirect source to a direct sink
@@ -98,23 +100,28 @@ std::streamsize copy_impl( Source& src, Sink& snk,
     detail::basic_buffer<char_type>  buf(buffer_size);
     pair_type                        p = snk.output_sequence();
     streamsize                       total = 0;
-    bool                             done  = false;
-    while (!done) {
-        streamsize amt;
-        done = (amt = iostreams::read(src, buf.data(), buffer_size)) == -1;
+    ptrdiff_t                        capacity = p.second - p.first;
+    while (true) {
+        streamsize amt = 
+            iostreams::read(
+                src, 
+                buf.data(),
+                (std::min)(buffer_size, capacity - total)
+            );
+        if (amt == -1)
+            break;
         std::copy(buf.data(), buf.data() + amt, p.first + total);
-        if (amt != -1)
-            total += amt;
+        total += amt;
     }
     return total;
 }
 
-// Copy from an indirect source to a direct sink
+// Copy from an indirect source to an indirect sink
 template<typename Source, typename Sink>
 std::streamsize copy_impl( Source& src, Sink& snk, 
                            std::streamsize buffer_size,
                            mpl::false_, mpl::false_ )
-{   // This algorithm can be improved by eliminating the non_blocking_adapter.
+{ 
     typedef typename char_type_of<Source>::type char_type;
     detail::basic_buffer<char_type>  buf(buffer_size);
     non_blocking_adapter<Sink>       nb(snk);
@@ -138,19 +145,22 @@ std::streamsize copy_impl( Source& src, Sink& snk,
 // Function object that delegates to one of the above four 
 // overloads of compl_impl()
 template<typename Source, typename Sink>
-struct copy_operation {
+class copy_operation {
+public:
     typedef std::streamsize result_type;
     copy_operation(Source& src, Sink& snk, std::streamsize buffer_size)
-        : src(src), snk(snk), buffer_size(buffer_size)
+        : src_(src), snk_(snk), buffer_size_(buffer_size)
         { }
     std::streamsize operator()() 
     {
-        return copy_impl( src, snk, buffer_size, 
+        return copy_impl( src_, snk_, buffer_size_, 
                           is_direct<Source>(), is_direct<Sink>() );
     }
-    Source&          src;
-    Sink&            snk;
-    std::streamsize  buffer_size;
+private:
+    copy_operation& operator=(const copy_operation&);
+    Source&          src_;
+    Sink&            snk_;
+    std::streamsize  buffer_size_;
 };
 
 // Primary overload of copy_impl. Delegates to one of the above four 
@@ -218,7 +228,7 @@ copy( const Source& src, Sink& snk,
 { 
     typedef typename char_type_of<Source>::type char_type;
     return detail::copy_impl( detail::resolve<input, char_type>(src), 
-                              detail::wrap(snk), buffer_size);
+                              detail::wrap(snk), buffer_size );
 }
 
 // Overload of copy() for the case where neither the source nor the sink is

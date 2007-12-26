@@ -37,10 +37,10 @@
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/functional.hpp>
 #include <boost/iostreams/detail/ios.hpp> // failure, openmode, int types.
+#include <boost/iostreams/detail/optional.hpp>
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
-#include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>

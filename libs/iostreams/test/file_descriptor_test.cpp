@@ -142,6 +142,30 @@ void file_descriptor_test()
         BOOST_CHECK(!file.is_open());
     }
 
+    //--Test seeking with file_descriptor_source and file_descriptor_sink-----//
+
+    {
+        file_descriptor_sink  sink(test1.name());
+        fdostream             out(sink);
+        BOOST_CHECK(out->is_open());
+        BOOST_CHECK_MESSAGE(
+            test_output_seekable(out),
+            "failed seeking within a file_descriptor_sink"
+        );
+        out->close();
+        BOOST_CHECK(!out->is_open());
+
+        file_descriptor_source  source(test1.name());
+        fdistream               in(source);
+        BOOST_CHECK(in->is_open());
+        BOOST_CHECK_MESSAGE(
+            test_input_seekable(in),
+            "failed seeking within a file_descriptor_source"
+        );
+        in->close();
+        BOOST_CHECK(!in->is_open());
+    }
+
     //--------------Test file_descriptor--------------------------------------//
 
     {

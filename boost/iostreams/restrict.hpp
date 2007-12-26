@@ -31,7 +31,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-#include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 C4244.
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -49,9 +49,11 @@ class restricted_indirect_device : public device_adapter<Device> {
 private:
     typedef typename detail::param_type<Device>::type  param_type;
 public:
-    typedef typename char_type_of<Device>::type        char_type;
+    typedef typename char_type_of<Device>::type  char_type;
+    typedef typename mode_of<Device>::type       mode;
+    BOOST_STATIC_ASSERT(!(is_convertible<mode, detail::two_sequence>::value));
     struct category
-        : mode_of<Device>::type,
+        : mode,
           device_tag,
           closable_tag,
           flushable_tag,
@@ -78,6 +80,8 @@ class restricted_direct_device : public device_adapter<Device> {
 public:
     typedef typename char_type_of<Device>::type  char_type;
     typedef std::pair<char_type*, char_type*>    pair_type;
+    typedef typename mode_of<Device>::type       mode;
+    BOOST_STATIC_ASSERT(!(is_convertible<mode, detail::two_sequence>::value));
     struct category
         : mode_of<Device>::type,
           device_tag,
@@ -105,8 +109,10 @@ template<typename Filter>
 class restricted_filter : public filter_adapter<Filter> {
 public:
     typedef typename char_type_of<Filter>::type char_type;
+    typedef typename mode_of<Filter>::type      mode;
+    BOOST_STATIC_ASSERT(!(is_convertible<mode, detail::two_sequence>::value));
     struct category
-        : mode_of<Filter>::type,
+        : mode,
           filter_tag,
           multichar_tag,
           closable_tag,
@@ -121,7 +127,7 @@ public:
     {
         using namespace std;
         if (!open_)
-            open(src);
+            open(src, BOOST_IOS::in);
         streamsize amt =
             end_ != -1 ?
                 (std::min) (n, static_cast<streamsize>(end_ - pos_)) :
@@ -136,7 +142,7 @@ public:
     std::streamsize write(Sink& snk, const char_type* s, std::streamsize n)
     {
         if (!open_)
-            open(snk);
+            open(snk, BOOST_IOS::out);
         if (end_ != -1 && pos_ + n >= end_)
             bad_write();
         std::streamsize result = 
@@ -167,13 +173,30 @@ public:
         pos_ = this->component().seek(dev, next, BOOST_IOS::cur);
         return offset_to_position(pos_ - beg_);
     }
+
+    template<typename Device>
+    void close(Device& dev) 
+    { 
+        open_ = false;
+        detail::close_all(this->component(), dev); 
+    }
+
+    template<typename Device>
+    void close(Device& dev, BOOST_IOS::openmode which) 
+    { 
+        open_ = false;
+        iostreams::close(this->component(), dev, which); 
+    }
 private:
     template<typename Device>
-    void open(Device& dev)
+    void open(Device& dev, BOOST_IOS::openmode which)
     {
+        typedef typename is_convertible<mode, dual_use>::type is_dual_use;
         open_ = true;
-        iostreams::skip(this->component(), dev, beg_);
+        which = is_dual_use() ? which : (BOOST_IOS::in | BOOST_IOS::out);
+        iostreams::skip(this->component(), dev, beg_, which);
     }
+
     stream_offset  beg_, pos_, end_;
     bool           open_;
 };

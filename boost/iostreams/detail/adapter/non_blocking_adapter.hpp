@@ -49,6 +49,7 @@ public:
                              BOOST_IOS::in | BOOST_IOS::out )
     { return iostreams::seek(device_, off, way, which); }
 public:
+    non_blocking_adapter& operator=(const non_blocking_adapter&);
     Device& device_;
 };
 

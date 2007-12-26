@@ -153,11 +153,13 @@
             next = pos_ + off;
         } <SPAN CLASS="keyword">else</SPAN> <SPAN CLASS="keyword">if</SPAN> (way == ios_bas::end) {
             next = container_.size() + off - <SPAN CLASS='numeric_literal'>1</SPAN>;
+        } <SPAN CLASS="keyword">else</SPAN> {
+            <SPAN CLASS="keyword">throw</SPAN> ios_base::failure(<SPAN CLASS='numeric_literal'>"bad seek direction"</SPAN>);
         }
 
         <SPAN CLASS='comment'>// Check for errors</SPAN>
         <SPAN CLASS="keyword">if</SPAN> (next < <SPAN CLASS='numeric_literal'>0</SPAN> || next >= container_.size())
-            <SPAN CLASS="keyword">throw</SPAN> ios_base::failure("bad seek offset");
+            <SPAN CLASS="keyword">throw</SPAN> ios_base::failure(<SPAN CLASS='numeric_literal'>"bad seek offset"</SPAN>);
 
         pos_ = next;
         <SPAN CLASS="keyword">return</SPAN> pos_;

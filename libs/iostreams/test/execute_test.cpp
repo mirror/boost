@@ -26,25 +26,33 @@ using boost::unit_test::test_suite;
 // Function object that sets a boolean flag and returns a value
 // specified at construction
 template<typename Result>
-struct operation {
+class operation {
+public:
     typedef Result result_type;
-    operation(Result r, bool& executed) : r(r), executed(executed) { }
+    explicit operation(Result r, bool& executed) 
+        : r_(r), executed_(executed) 
+        { }
     Result operator()() const 
     { 
-        executed = true;
-        return r; 
+        executed_ = true;
+        return r_; 
     }
-    Result  r;
-    bool&   executed;  
+private:
+    operation& operator=(const operation&);
+    Result  r_;
+    bool&   executed_;  
 };
 
 // Specialization for void return
 template<>
-struct operation<void> {
+class operation<void> {
+public:
     typedef void result_type;
-    operation(bool& executed) : executed(executed) { }
-    void operator()() const { executed = true; }
-    bool& executed; 
+    explicit operation(bool& executed) : executed_(executed) { }
+    void operator()() const { executed_ = true; }
+private:
+    operation& operator=(const operation&);
+    bool& executed_; 
 };
 
 // Simple exception class with error code built in to type
@@ -53,24 +61,28 @@ struct error { };
 
 // Function object that sets a boolean flag and throws an exception
 template<int Code>
-struct thrower {
+class thrower {
+public:
     typedef void result_type;
-    thrower(bool& executed) : executed(executed) { }
+    explicit thrower(bool& executed) : executed_(executed) { }
     void operator()() const 
     { 
-        executed = true;
+        executed_ = true;
         throw error<Code>(); 
     }
-    bool& executed; 
+private:
+    thrower& operator=(const thrower&);
+    bool& executed_; 
 };
 
 // Function object for use by foreach_test
-struct foreach_func {
+class foreach_func {
+public:
     typedef void result_type;
-    foreach_func(int& count) : count(count) { }
+    explicit foreach_func(int& count) : count_(count) { }
     void operator()(int x) const
     {
-        ++count;
+        ++count_;
         switch (x) {
         case 0: throw error<0>();
         case 1: throw error<1>();
@@ -86,7 +98,9 @@ struct foreach_func {
             break;
         }
     }
-    int&  count; // Number of times operator() has been called
+private:
+    foreach_func& operator=(const foreach_func&);
+    int&  count_; // Number of times operator() has been called
 };
 
 void success_test()

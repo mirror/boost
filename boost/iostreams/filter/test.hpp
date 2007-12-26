@@ -133,6 +133,7 @@ public:
         return amt;
     }
 private:
+    non_blocking_sink& operator=(const non_blocking_sink&);
     std::string&     dest_;
     std::streamsize  inc_;
 };

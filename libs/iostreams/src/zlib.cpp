@@ -153,7 +153,7 @@ void zlib_base::reset(bool compress, bool realloc)
 void zlib_base::do_init
     ( const zlib_params& p, bool compress, 
       #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-          zlib::alloc_func alloc, zlib::free_func free, 
+          zlib::alloc_func /* alloc */, zlib::free_func /* free*/, 
       #endif
       void* derived )
 {

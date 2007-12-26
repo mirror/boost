@@ -114,6 +114,7 @@ public:
     std::streamsize optimal_buffer_size() const
     { return iostreams::optimal_buffer_size(t_); }
 public:
+    concept_adapter& operator=(const concept_adapter&);
     value_type t_;
 };
 
@@ -218,7 +219,7 @@ struct flt_wrapper_impl<any_tag> {
     template<typename Filter, typename Device>
     static std::streampos
     seek( Filter& f, Device* dev, stream_offset off,
-          BOOST_IOS::seekdir way, BOOST_IOS::openmode which,
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode,
           random_access, any_tag )
     { return f.seek(*dev, off, way); }
 

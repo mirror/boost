@@ -121,8 +121,8 @@ int bzip2_base::decompress()
 void bzip2_base::do_init
     ( bool compress, 
       #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-          bzip2::alloc_func alloc, 
-          bzip2::free_func free, 
+          bzip2::alloc_func /* alloc */, 
+          bzip2::free_func /* free */, 
       #endif
       void* derived )
 {

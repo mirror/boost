@@ -24,8 +24,8 @@
 #include <boost/iostreams/tee.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  
-#include "./detail/closable.hpp"
-#include "./detail/operation_sequence.hpp"
+#include "detail/closable.hpp"
+#include "detail/operation_sequence.hpp"
 
 using namespace std;
 using namespace boost;
@@ -1062,23 +1062,6 @@ void restrict_test()
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
     }
 
-    // Restrict a bidirectional device
-    {
-        operation_sequence    seq;
-        chain<bidirectional>  ch;
-        ch.push(
-            io::restrict(
-                closable_device<bidirectional>(
-                    seq.new_operation(1),
-                    seq.new_operation(2)
-                ),
-                0
-            )
-        );
-        BOOST_CHECK_NO_THROW(ch.reset());
-        BOOST_CHECK_OPERATION_SEQUENCE(seq);
-    }
-
     // Restrict a seekable device
     {
         operation_sequence  seq;
@@ -1096,23 +1079,6 @@ void restrict_test()
         chain<input>        ch;
         ch.push(
             io::restrict(closable_device<direct_input>(seq.new_operation(1)), 0)
-        );
-        BOOST_CHECK_NO_THROW(ch.reset());
-        BOOST_CHECK_OPERATION_SEQUENCE(seq);
-    }
-
-    // Restrict a direct bidirectional device
-    {
-        operation_sequence    seq;
-        chain<bidirectional>  ch;
-        ch.push(
-            io::restrict(
-                closable_device<direct_bidirectional>(
-                    seq.new_operation(1),
-                    seq.new_operation(2)
-                ),
-                0
-            )
         );
         BOOST_CHECK_NO_THROW(ch.reset());
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
@@ -1138,29 +1104,6 @@ void restrict_test()
         chain<input>        ch;
         ch.push(io::restrict(closable_filter<input>(seq.new_operation(2)), 0));
         ch.push(closable_device<input>(seq.new_operation(1)));
-        BOOST_CHECK_NO_THROW(ch.reset());
-        BOOST_CHECK_OPERATION_SEQUENCE(seq);
-    }
-
-    // Restrict a bidirectional filter
-    {
-        operation_sequence    seq;
-        chain<bidirectional>  ch;
-        ch.push(
-            io::restrict(
-                closable_filter<bidirectional>(
-                    seq.new_operation(2),
-                    seq.new_operation(3)
-                ),
-                0
-            )
-        );
-        ch.push(
-            closable_device<bidirectional>(
-                seq.new_operation(1),
-                seq.new_operation(4)
-            )
-        );
         BOOST_CHECK_NO_THROW(ch.reset());
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
     }

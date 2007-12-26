@@ -132,7 +132,10 @@ private:
     }
 
     std::codecvt_base::result 
-    do_unshift(state_type& state, char* first2, char* last2, char*& next2) const
+    do_unshift( state_type& state, 
+                char* /* first2 */, 
+                char* last2, 
+                char*& next2 ) const
     {
         using namespace std;
         next2 = last2;
@@ -231,7 +234,10 @@ class stateless_null_padded_codecvt
     }
 
     std::codecvt_base::result 
-    do_unshift(state_type&, char* first2, char* last2, char*& next2) const
+    do_unshift( state_type&, 
+                char* /* first2 */, 
+                char* /* last2 */, 
+                char*& /* next2 */ ) const
     {  
         return std::codecvt_base::ok;
     }

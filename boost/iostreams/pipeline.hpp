@@ -80,6 +80,7 @@ public:
     template<typename Chain>
     void push(Chain& chn) const { chn.push(component_); }
 private:
+    pipeline_segment operator=(const pipeline_segment&);
     const Component& component_;
 };
 
@@ -109,6 +110,7 @@ struct pipeline : Pipeline {
     const Pipeline& tail() const { return *this; }
     const Component& head() const { return component_; }
 private:
+    pipeline operator=(const pipeline&);
     const Component& component_;
 };
 
