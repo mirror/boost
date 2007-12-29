@@ -1,4 +1,4 @@
-// (C) Copyright Jonathan Turkanis 2003.
+// (C) Copyright Jonathan Turkanis 2003-2007.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -13,19 +13,19 @@
 #define BOOST_IOSTREAMS_SOURCE
 
 #include <cassert>
-#include <boost/config.hpp> // BOOST_JOIN
+#include <cerrno>
+#include <cstdio>                                 // SEEK_SET, etc.
+#include <boost/config.hpp>                       // BOOST_JOIN
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/config/rtl.hpp>  // BOOST_IOSTREAMS_FD_XXX
 #include <boost/iostreams/detail/config/windows_posix.hpp>
-#include <boost/iostreams/detail/ios.hpp>  // openmodes, failure.
+#include <boost/iostreams/detail/ios.hpp>         // openmodes, failure.
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/integer_traits.hpp>
 
     // OS-specific headers for low-level i/o.
 
-#include <cassert>
-#include <cstdio>        // SEEK_SET, etc.
-#include <errno.h>
 #include <fcntl.h>       // file opening flags.
 #include <sys/stat.h>    // file access permissions.
 #ifdef BOOST_IOSTREAMS_WINDOWS
@@ -38,17 +38,6 @@
 #else
 # include <sys/types.h>  // mode_t.
 # include <unistd.h>     // low-level file i/o.
-#endif
-
-// Names of runtime library routines vary.
-#if defined(__BORLANDC__)
-# define BOOST_RTL(x) BOOST_JOIN(_rtl_, x)
-#else
-# if defined(BOOST_IOSTREAMS_WINDOWS) && !defined(__CYGWIN__)
-#  define BOOST_RTL(x) BOOST_JOIN(_, x)
-# else
-#  define BOOST_RTL(x) ::x
-# endif
 #endif
 
 namespace boost { namespace iostreams {
@@ -126,6 +115,9 @@ void file_descriptor::open
     }
     if (m & BOOST_IOS::trunc)
         oflag |= O_CREAT;
+    #ifdef _LARGEFILE64_SOURCE
+        oflag |= O_LARGEFILE;
+    #endif
 
         // Calculate pmode argument to open.
 
@@ -135,7 +127,7 @@ void file_descriptor::open
 
         // Open file.
 
-    int fd = BOOST_RTL(open)(path.c_str(), oflag, pmode);
+    int fd = BOOST_IOSTREAMS_FD_OPEN(path.c_str(), oflag, pmode);
     if (fd == -1) {
         throw BOOST_IOSTREAMS_FAILURE("bad open");
     } else {
@@ -156,7 +148,7 @@ std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
     }
 #endif
     errno = 0;
-    std::streamsize result = BOOST_RTL(read)(pimpl_->fd_, s, n);
+    std::streamsize result = BOOST_IOSTREAMS_FD_READ(pimpl_->fd_, s, n);
     if (errno != 0)
         throw detail::bad_read();
     return result == 0 ? -1 : result;
@@ -181,7 +173,7 @@ std::streamsize file_descriptor::write(const char_type* s, std::streamsize n)
         return n;
     }
 #endif
-    int amt = BOOST_RTL(write)(pimpl_->fd_, s, n);
+    int amt = BOOST_IOSTREAMS_FD_WRITE(pimpl_->fd_, s, n);
     if (amt < n)
         throw detail::bad_write(); // Handles blocking fd's only.
     return n;
@@ -215,32 +207,21 @@ std::streampos file_descriptor::seek
         }
     }
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS
-
-#ifndef BOOST_IOSTREAMS_HAS_LSEEK64
-    if ( off > integer_traits<long>::const_max ||
-         off < integer_traits<long>::const_min )
+    if ( off > integer_traits<BOOST_IOSTREAMS_FD_OFFSET>::const_max ||
+         off < integer_traits<BOOST_IOSTREAMS_FD_OFFSET>::const_min )
     {
         throw BOOST_IOSTREAMS_FAILURE("bad offset");
     }
-#endif
-
     stream_offset result =
-        #ifdef BOOST_IOSTREAMS_HAS_LSEEK64
-            lseek64
-        #else
-            lseek
-        #endif
-            ( pimpl_->fd_,
-              #ifdef BOOST_IOSTREAMS_HAS_LSEEK64
-                  off,
-              #else
-                  static_cast<long>(off),
-              #endif
-              way == BOOST_IOS::beg ?
+        BOOST_IOSTREAMS_FD_SEEK(
+            pimpl_->fd_,
+            static_cast<BOOST_IOSTREAMS_FD_OFFSET>(off),
+            ( way == BOOST_IOS::beg ?
                   SEEK_SET :
-                      way == BOOST_IOS::cur ?
-                          SEEK_CUR :
-                          SEEK_END );
+                  way == BOOST_IOS::cur ?
+                      SEEK_CUR :
+                      SEEK_END ) 
+        );
     if (result == -1)
         throw detail::bad_seek();
     return offset_to_position(result);
@@ -260,7 +241,7 @@ void file_descriptor::close_impl(impl& i)
     }
 #endif
     if (i.fd_ != -1) {
-        if (BOOST_RTL(close)(i.fd_) == -1)
+        if (BOOST_IOSTREAMS_FD_CLOSE(i.fd_) == -1)
             throw BOOST_IOSTREAMS_FAILURE("bad close");
         i.fd_ = -1;
         i.flags_ = 0;

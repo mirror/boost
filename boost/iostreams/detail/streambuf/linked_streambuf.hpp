@@ -61,7 +61,7 @@ protected:
     template<typename Chain, typename Mode, typename Access>
     friend class chainbuf;
     template<typename U>
-    friend struct member_close_operation; 
+    friend class member_close_operation; 
 #else
     public:
         typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) base;
