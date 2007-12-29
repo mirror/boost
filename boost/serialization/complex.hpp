@@ -22,6 +22,7 @@
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/is_bitwise_serializable.hpp>
+#include <boost/serialization/split_free.hpp>
 
 namespace boost { 
 namespace serialization {
