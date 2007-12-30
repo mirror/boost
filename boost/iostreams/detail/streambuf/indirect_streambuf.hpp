@@ -7,6 +7,8 @@
 // A. Langer and K. Kreft, "Standard C++ IOStreams and Locales",
 // Addison-Wesley, 2000, pp. 228-43.
 
+// User "GMSB" provided an optimization for small seeks.
+
 #ifndef BOOST_IOSTREAMS_DETAIL_INDIRECT_STREAMBUF_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DETAIL_INDIRECT_STREAMBUF_HPP_INCLUDED
 
@@ -340,6 +342,13 @@ typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seek_impl
     (stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
+    if ( gptr() != 0 && way == BOOST_IOS::cur && which == BOOST_IOS::in && 
+         eback() - gptr() <= off && off <= egptr() - gptr() ) 
+    {   // Small seek optimization
+        gbump(off);
+        return obj().seek(0, BOOST_IOS::cur, BOOST_IOS::in, next_) -
+               static_cast<off_type>(egptr() - gptr());
+    }
     if (pptr() != 0) 
         this->BOOST_IOSTREAMS_PUBSYNC(); // sync() confuses VisualAge 6.
     if (way == BOOST_IOS::cur && gptr())

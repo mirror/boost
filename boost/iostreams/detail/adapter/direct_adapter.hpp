@@ -42,9 +42,10 @@ namespace boost { namespace iostreams { namespace detail {
 template<typename Direct>
 class direct_adapter_base {
 public:
-    typedef typename char_type_of<Direct>::type char_type;
+    typedef typename char_type_of<Direct>::type  char_type;
+    typedef typename mode_of<Direct>::type       mode_type;
     struct category 
-        : mode_of<Direct>::type,
+        : mode_type,
           device_tag,
           closable_tag
           #ifndef BOOST_IOSTREAMS_NO_LOCALE
@@ -222,7 +223,7 @@ inline std::streampos direct_adapter<Direct>::seek
     pointers& get = ptrs_.first();
     pointers& put = ptrs_.second();
     if (way == BOOST_IOS::cur && get.ptr != put.ptr)
-       bad_seek();
+       throw bad_seek();
     ptrdiff_t next = 0;
     if ((which & BOOST_IOS::in) || !is_double::value) {
         if (way == BOOST_IOS::beg)
@@ -231,10 +232,10 @@ inline std::streampos direct_adapter<Direct>::seek
             next = get.ptr - get.beg + off; 
         else
             next = get.end - get.beg + off; 
-        if (next >= 0 && next < get.end - get.beg)
+        if (next >= 0 && next <= get.end - get.beg)
             get.ptr = get.beg + next;
         else
-            bad_seek();
+            throw bad_seek();
     }
     if ((which & BOOST_IOS::out) && is_double::value) {
         if (way == BOOST_IOS::beg)
@@ -243,10 +244,10 @@ inline std::streampos direct_adapter<Direct>::seek
             next = put.ptr - put.beg + off; 
         else
             next = put.end - put.beg + off; 
-        if (next >= 0 && next < put.end - put.beg)
+        if (next >= 0 && next <= put.end - put.beg)
             put.ptr = put.beg + next;
         else
-            bad_seek();
+            throw bad_seek();
     }
     return offset_to_position(next);
 }
