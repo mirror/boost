@@ -16,11 +16,13 @@
 #include <ctime>
 #include <string>
 #include <boost/config.hpp>  // BOOST_STRINGIZE
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/config/rtl.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/execute.hpp>
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/device/file_descriptor.hpp>
+#include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/iostreams/positioning.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/test/test_tools.hpp>
@@ -147,10 +149,10 @@ bool large_file_exists()
 
 #endif
 
-    // Fetch last mod date of this file
+    // Fetch last mod date of this file ("large_file_test.cpp")
     string timestamp = 
         "$Date$";
-    if (timestamp.size() != 53) { // Length of SVN auto-generated SVN timestamp
+    if (timestamp.size() != 53) { // Length of auto-generated SVN timestamp
         remove_large_file();
         return false;
     }
@@ -168,13 +170,47 @@ bool large_file_exists()
     }
 
     // If last commit was two days or more before file timestamp, existing 
-    // file is okay; otherwise, it must be regenerated
+    // file is okay; otherwise, it must be regenerated (the two-day window 
+    // compensates for time zone differences)
     return difftime(last_mod, mktime(&commit)) >= 60 * 60 * 48; 
+}
+
+//------------------Definition of map_large_file------------------------------//
+
+// Initializes the large file by mapping it in small segments. This is an
+// optimization for Win32; the straightforward implementation using WriteFile 
+// and SetFilePointer (see the Borland workaropund below) is painfully slow.
+bool map_large_file()
+{
+    for (stream_offset z = 0; z <= 8; ++z) {
+        try {
+            mapped_file_params params;
+            params.path = file_name;
+            params.offset = z * gigabyte;
+            params.length = 1;
+            params.mode = BOOST_IOS::out;
+            mapped_file file(params);
+            file.begin()[0] = z + 1;
+        } catch (const std::exception&) {
+            remove_large_file();
+            return false;
+        }
+    }
+    return true;
 }
 
 //------------------Definition of create_large_file---------------------------//
 
-// Creates and initializes the large file if it does not already exist
+// Creates and initializes the large file if it does not already exist. The file 
+// looks like this:
+//     
+//     0     1GB   2GB   3GB   4GB   5GB   6GB   7GB   8GB
+//     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//     1.....2.....3.....4.....5.....6.....7.....8.....9
+//     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//
+// where the characters 1-9 appear at offsets that are multiples of 1GB and the
+// dots represent uninitialized data.
 bool create_large_file()
 {
     // If file exists, has correct size, and is recent, we're done
@@ -190,21 +226,20 @@ bool create_large_file()
             GENERIC_WRITE,
             0,
             NULL,
-            OPEN_ALWAYS,
-            FILE_ATTRIBUTE_NORMAL | 
-                FILE_FLAG_RANDOM_ACCESS |
-                FILE_FLAG_WRITE_THROUGH,
+            CREATE_ALWAYS,
+            FILE_ATTRIBUTE_NORMAL,
             NULL
         );
     if (!hnd)
         return false;
 
     // Set file pointer
-    LARGE_INTEGER length;
-    length.HighPart = 0;
-    length.LowPart = 0;
-    length.QuadPart = file_size;
-    if (!SetFilePointerEx(hnd, length, NULL, FILE_BEGIN)) {
+    LONG off_low = static_cast<LONG>(file_size & 0xffffffff);
+    LONG off_high = static_cast<LONG>(file_size >> 32);
+    if ( SetFilePointer(hnd, off_low, &off_high, FILE_BEGIN) == 
+            INVALID_SET_FILE_POINTER && 
+         GetLastError() != NO_ERROR ) 
+    {
         CloseHandle(hnd);
         remove_large_file();
         return false;
@@ -217,16 +252,25 @@ bool create_large_file()
         return false;
     }
 
+# if !BOOST_WORKAROUND(__BORLANDC__, == 0x582)
+
+    // Close handle; all further access is via mapped_file
+    CloseHandle(hnd);
+
     // Initialize file data
-    for (int z = 0; z <= 8; ++z) {
+    return map_large_file();
+
+# else // Borland 5.8.2
+
+    // Initialize file data (very slow, even though only 9 writes are required)
+    for (stream_offset z = 0; z <= 8; ++z) {
 
         // Seek
-        length.HighPart = 0;
-        length.LowPart = 0;
-        length.QuadPart = z * gigabyte;
-        LARGE_INTEGER ptr;
-        if ( !SetFilePointerEx(hnd, length, &ptr, FILE_BEGIN) ||
-             ptr.QuadPart != z * gigabyte )
+        LONG off_low = static_cast<LONG>((z * gigabyte) & 0xffffffff); // == 0
+        LONG off_high = static_cast<LONG>((z * gigabyte) >> 32);
+        if ( SetFilePointer(hnd, off_low, &off_high, FILE_BEGIN) == 
+                INVALID_SET_FILE_POINTER && 
+             GetLastError() != NO_ERROR ) 
         {
             CloseHandle(hnd);
             remove_large_file();
@@ -248,6 +292,7 @@ bool create_large_file()
     CloseHandle(hnd);
 	return true;
 
+# endif // Borland 5.8.2 workaround
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS
 
     // Create file
@@ -268,6 +313,8 @@ bool create_large_file()
         BOOST_IOSTREAMS_FD_CLOSE(fd);
         return false;
     }
+
+# ifndef __CYGWIN__
 
     // Initialize file data
     for (int z = 0; z <= 8; ++z) {
@@ -295,6 +342,16 @@ bool create_large_file()
     // Close file
     BOOST_IOSTREAMS_FD_CLOSE(fd);
 	return true;
+
+# else // Cygwin
+
+    // Close descriptor; all further access is via mapped_file
+    BOOST_IOSTREAMS_FD_CLOSE(fd);
+
+    // Initialize file data
+    return map_large_file();
+
+# endif 
 #endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
@@ -337,7 +394,7 @@ void large_file_test()
     // Prepare file and file descriptor
     large_file              large;
     file_descriptor_source  file;
-    BOOST_CHECK_MESSAGE(large.exists(), "failed creating file");
+    BOOST_REQUIRE_MESSAGE(large.exists(), "failed creating file");
     BOOST_CHECK_NO_THROW(file.open(large.path(), BOOST_IOS::binary));
 
     // Test seeking using ios_base::beg
