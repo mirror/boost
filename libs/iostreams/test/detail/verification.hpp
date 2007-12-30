@@ -49,7 +49,7 @@ namespace boost { namespace iostreams { namespace test {
 BOOST_TEMPLATE_DECL
 bool compare_streams_in_chars(BOOST_ISTREAM& first, BOOST_ISTREAM& second)
 {
-    for (int z = 0; z < 10; ++z)
+    for (int z = 0; z < data_reps; ++z)
         for (int w = 0; w < data_length(); ++w)
             if (first.eof() != second.eof() || first.get() != second.get())
                 return false;

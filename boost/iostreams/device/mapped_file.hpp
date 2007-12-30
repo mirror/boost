@@ -221,6 +221,7 @@ struct BOOST_IOSTREAMS_DECL mapped_file_sink : private mapped_file {
           public closable_tag
         { };
     using mapped_file::close;
+    using mapped_file::size;
     explicit mapped_file_sink(mapped_file_params p);
     explicit mapped_file_sink( const std::string& path,
                                size_type length = max_length,

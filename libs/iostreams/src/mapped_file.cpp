@@ -22,6 +22,9 @@
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 # include <windows.h>
+# ifndef INVALID_SET_FILE_POINTER
+#  define INVALID_SET_FILE_POINTER ((DWORD)-1)
+# endif
 #else
 # include <errno.h>
 # include <fcntl.h>
@@ -194,9 +197,14 @@ void mapped_file_source::open_impl(mapped_file_params p)
     if (p.new_file_size != 0 && !readonly) {
         LONG sizehigh = (p.new_file_size >> (sizeof(LONG) * 8));
         LONG sizelow = (p.new_file_size & 0xffffffff);
-        ::SetFilePointer(pimpl_->handle_, sizelow, &sizehigh, FILE_BEGIN);
-        if (::GetLastError() != NO_ERROR || !::SetEndOfFile(pimpl_->handle_))
+        DWORD result =
+            ::SetFilePointer(pimpl_->handle_, sizelow, &sizehigh, FILE_BEGIN);
+        if ( result == INVALID_SET_FILE_POINTER && 
+                 ::GetLastError() != NO_ERROR || 
+             !::SetEndOfFile(pimpl_->handle_) )
+        {
             detail::cleanup_and_throw(*pimpl_, "failed setting file size");
+        }
     }
 
     //--------------Create mapping--------------------------------------------//

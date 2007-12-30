@@ -81,7 +81,7 @@ void file_descriptor::open
     HANDLE handle =
         ::CreateFileA( path.c_str(),
                        dwDesiredAccess,
-                       0,                      // dwShareMode
+                       FILE_SHARE_READ | FILE_SHARE_WRITE,
                        NULL,                   // lpSecurityAttributes
                        dwCreationDisposition,
                        FILE_ATTRIBUTE_NORMAL,
