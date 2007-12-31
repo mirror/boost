@@ -41,7 +41,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm300"
+				AdditionalOptions="/Zm300 /bigobj"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
@@ -128,7 +128,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm300"
+				AdditionalOptions="/Zm300 /bigobj"
 				Optimization="3"
 				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="..\..\..\.."
