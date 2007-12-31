@@ -20,7 +20,12 @@
 #ifdef BOOST_HAS_THREADS
 #  ifdef BOOST_MSVC
 #    pragma warning( push )
-#    pragma warning( disable: 4275 ) // non-dll class used as base for dll class
+     // "conditional expression is constant" in basic_timed_mutex.hpp
+#    pragma warning( disable: 4127 )
+     // "Function call with parameters that may be unsafe" in condition_variable.hpp
+#    pragma warning( disable: 4996 )
+     // "conversion from 'int' to 'unsigned short'" in microsec_time_clock.hpp
+#    pragma warning( disable: 4244 )
 #  endif
 
 #  include <boost/thread/mutex.hpp>
