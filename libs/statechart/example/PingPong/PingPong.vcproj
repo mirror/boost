@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\.."
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BOOST_ALL_DYN_LINK"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -71,7 +71,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/PingPong.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\debug\threading-multi&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi&quot;;&quot;$(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/PingPong.pdb"
 				SubSystem="1"
@@ -99,6 +99,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;copy $(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -129,7 +130,7 @@
 				Optimization="3"
 				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="..\..\..\.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BOOST_ALL_DYN_LINK"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -156,7 +157,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/PingPong.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\release\threading-multi&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi&quot;;&quot;$(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi&quot;"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -185,6 +186,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;copy $(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)"
 			/>
 		</Configuration>
 	</Configurations>
