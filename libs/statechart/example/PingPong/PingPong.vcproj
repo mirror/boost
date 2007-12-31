@@ -99,7 +99,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;copy $(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)"
+				CommandLine="copy $(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;copy $(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -186,7 +186,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;copy $(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)"
+				CommandLine="copy $(ProjectDir)..\..\..\..\bin.v2\libs\thread\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;copy $(ProjectDir)..\..\..\..\bin.v2\libs\date_time\build\msvc-9.0\$(ConfigurationName)\threading-multi\*.dll $(TargetDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
