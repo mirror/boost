@@ -836,6 +836,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
   <xsl:template name="print-access-specification">
     <xsl:param name="indentation" select="0"/>
     <xsl:param name="specification" select="'public'"/>
+
     <xsl:text>&#10;</xsl:text>
     <xsl:call-template name="indent">
       <xsl:with-param name="indentation" select="$indentation"/>
@@ -873,11 +874,12 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:if test="ancestor::class|ancestor::class-specialization|
                   ancestor::struct|ancestor::struct-specialization|
                   ancestor::union|ancestor::union-specialization">
-      <xsl:text>&#10;&#10;</xsl:text>
+      <xsl:text>&#10;</xsl:text>
 
       <!-- If this nested class has a "purpose" element, use it as a
            comment. -->
       <xsl:if test="purpose">
+        <xsl:text>&#10;</xsl:text>
         <xsl:call-template name="indent">
           <xsl:with-param name="indentation" select="$indentation"/>
         </xsl:call-template>
@@ -1144,7 +1146,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
     <!-- Spacing -->
     <xsl:if
-      test="not(local-name(preceding-sibling::*[position()=1])=local-name(.))">
+      test="not(local-name(preceding-sibling::*[position()=1])=local-name(.)) and (position() &gt; 1)">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
 
@@ -1161,7 +1163,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:text> </xsl:text>
     </xsl:if>
 
-    <xsl:apply-templates select="type/*|type/text()" mode="annotation"/>
+    <xsl:apply-templates select="type" mode="highlight"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>;</xsl:text>
