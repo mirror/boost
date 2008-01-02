@@ -139,12 +139,21 @@
 
   <p>(<font color="#FF0000">red</font> = points raised during formal
   review)</p>
+  <p>Unreleased (commited to the SVN trunk)</p>
+  <ul>
+    <li>Removed all permanent warning suppressions from library headers
+      and avoided the resulting warnings with other means (suggested by
+      Steven Watanabe; thanks to Peter Dimov and Yuval Ronen for insight
+      into when C4511 & C4512 are issued)</li>
+  </ul>
 
   <p>1.35.0</p>
 
   <ul>
-    <li>Added placement new overload to <code>event&lt;&gt;</code></li>
-    <li>Made <code>event&lt;&gt;</code> copy-assignable</li>
+    <li>Added placement new overload to <code>event&lt;&gt;</code> (due to
+    feedback from Federico J. Fern&aacute;ndez)</li>
+    <li>Made <code>event&lt;&gt;</code> copy-assignable (Federico J.
+    Fern&aacute;ndez)</li>
   </ul>
 
   <p>1.34.0</p>

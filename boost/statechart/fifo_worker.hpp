@@ -26,6 +26,8 @@
 #    pragma warning( disable: 4244 )
      // "... needs to have dll-interface to be used by clients of class ..."
 #    pragma warning( disable: 4251 )
+     // "... assignment operator could not be generated"
+#    pragma warning( disable: 4512 )
      // "Function call with parameters that may be unsafe" in
      // condition_variable.hpp
 #    pragma warning( disable: 4996 )

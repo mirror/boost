@@ -213,6 +213,9 @@ struct Waiting : sc::state< Waiting, Player >
       return terminate();
     }
 
+    // avoids C4512 (assignment operator could not be generated)
+    Waiting & operator=( const Waiting & );
+
     unsigned int noOfReturns_;
     const boost::intrusive_ptr< BallReturned > pBallReturned_;
 };

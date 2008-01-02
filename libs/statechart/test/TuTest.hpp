@@ -31,7 +31,13 @@
 
 namespace sc = boost::statechart;
 
-
+#ifdef BOOST_MSVC
+#  pragma warning( push )
+   // class X needs to have dll-interface to be used by clients of class Y
+#  pragma warning( disable: 4251 )
+   // non dll-interface class X used as base for dll-interface class
+#  pragma warning( disable: 4275 )
+#endif
 
 struct BOOST_STATECHART_DECL EvX : sc::event< EvX > {};
 struct BOOST_STATECHART_DECL EvY : sc::event< EvY > {};
@@ -43,6 +49,9 @@ struct BOOST_STATECHART_DECL TuTest : sc::state_machine< TuTest, Initial >
   void unconsumed_event( const sc::event_base & );
 };
 
+#ifdef BOOST_MSVC
+#  pragma warning( pop )
+#endif
 
 
 #endif

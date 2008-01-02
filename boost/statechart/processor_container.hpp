@@ -70,6 +70,9 @@ class processor_container : noncopyable
       private:
       #endif
 
+        // avoids C4512 (assignment operator could not be generated)
+        processor_context & operator=( const processor_context & );
+
         Scheduler & scheduler_;
         const processor_handle handle_;
 

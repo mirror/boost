@@ -2524,9 +2524,11 @@ outermost_context_type &amp; <a name="outermost_context" id=
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to the outermost context, which is always the
-  state machine this state belongs to</p>
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype then the <code>state_machine<></code> subclass
+  portion must still exist<br>
+  <b>Returns</b>: A reference to the outermost context, which is always the
+  state machine this state belongs to<br></p>
   <pre>
 const outermost_context_type &amp; <a name="outermost_contextconst" id=
 "outermost_contextconst">outermost_context() const</a>;
@@ -2534,8 +2536,10 @@ const outermost_context_type &amp; <a name="outermost_contextconst" id=
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to the const outermost context, which is always
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype then the <code>state_machine<></code> subclass
+  portion must still exist<br>
+  <b>Returns</b>: A reference to the const outermost context, which is always
   the state machine this state belongs to</p>
   <pre>
 template&lt; class OtherContext &gt;
@@ -2544,8 +2548,11 @@ OtherContext &amp; <a name="context" id="context">context</a>();
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to a direct or indirect context</p>
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype with a <code>state_machine<></code> subtype as
+  argument then the <code>state_machine<></code> subclass portion must still
+  exist<br>
+  <b>Returns</b>: A reference to a direct or indirect context</p>
   <pre>
 template&lt; class OtherContext &gt;
 const OtherContext &amp; <a name="contextconst" id=
@@ -2554,8 +2561,11 @@ const OtherContext &amp; <a name="contextconst" id=
 
   <p><b>Requires</b>: If called from a constructor of a direct or indirect
   subtype then the most-derived type must directly or indirectly derive from
-  the <code>state</code> class template<b><br>
-  Returns</b>: A reference to a const direct or indirect context</p>
+  the <code>state</code> class template. If called from a destructor of a
+  direct or indirect subtype with a <code>state_machine<></code> subtype as
+  argument then the <code>state_machine<></code> subclass portion must still
+  exist<br>
+  <b>Returns</b>: A reference to a const direct or indirect context</p>
   <pre>
 template&lt; class Target &gt;
 Target <a name="simple_state::state_cast" id=

@@ -128,6 +128,9 @@ class transition_function
     }
 
   private:
+    // avoids C4512 (assignment operator could not be generated)
+    transition_function & operator=( const transition_function & );
+
     void ( TransitionContext::*pTransitionAction_ )( const Event & );
     const Event & evt_;
 };

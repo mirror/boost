@@ -31,8 +31,13 @@ namespace mpl = boost::mpl;
 
 struct EvCheckCtorArgs : sc::event< EvCheckCtorArgs >
 {
-  EvCheckCtorArgs( int expectedArgs ) : expectedArgs_( expectedArgs ) {}
-  const int expectedArgs_;
+  public:
+    EvCheckCtorArgs( int expectedArgs ) : expectedArgs_( expectedArgs ) {}
+    const int expectedArgs_;
+
+  private:
+    // avoids C4512 (assignment operator could not be generated)
+    EvCheckCtorArgs & operator=( const EvCheckCtorArgs & );
 };
 
 struct EvTerminate : sc::event< EvTerminate > {};

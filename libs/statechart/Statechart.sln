@@ -78,6 +78,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		test\Jamfile.v2 = test\Jamfile.v2
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{FF998410-FD7E-4B0E-8754-20003E19F51D}"
+	ProjectSection(SolutionItems) = preProject
+		doc\acknowledgments.html = doc\acknowledgments.html
+		doc\configuration.html = doc\configuration.html
+		doc\contact.html = doc\contact.html
+		doc\definitions.html = doc\definitions.html
+		doc\faq.html = doc\faq.html
+		doc\future_and_history.html = doc\future_and_history.html
+		doc\index.html = doc\index.html
+		doc\performance.html = doc\performance.html
+		doc\rationale.html = doc\rationale.html
+		doc\reference.html = doc\reference.html
+		doc\tutorial.html = doc\tutorial.html
+		doc\uml_mapping.html = doc\uml_mapping.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -305,5 +321,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FF998410-FD7E-4B0E-8754-20003E19F51D} = {3D7ED412-11AE-4AE7-8258-0FF6CF8BD11C}
 	EndGlobalSection
 EndGlobal

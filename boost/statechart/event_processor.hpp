@@ -70,6 +70,9 @@ class event_processor
     virtual void process_event_impl( const event_base & evt ) = 0;
     virtual void terminate_impl() = 0;
 
+    // avoids C4512 (assignment operator could not be generated)
+    event_processor & operator=( const event_processor & );
+
     Scheduler & myScheduler_;
     const processor_handle myHandle_;
 };
