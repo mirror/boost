@@ -139,16 +139,18 @@
 
   <p>(<font color="#FF0000">red</font> = points raised during formal
   review)</p>
-  <p>Unreleased (commited to the SVN trunk)</p>
+  <p>Unreleased (committed to the SVN trunk)</p>
   <ul>
     <li>Removed all permanent warning suppressions from library headers
       and avoided the resulting warnings with other means (suggested by
       Steven Watanabe; thanks to Peter Dimov and Yuval Ronen for insight
       into when C4511 & C4512 are issued)</li>
+    <li>Added the FAQ item <a href="faq.html#AssertInStateDestructor">Why
+      do I get an assert when I access the state machine from a state
+      destructor?</a> (due to feedback from Jiang Miao)</li>
   </ul>
 
   <p>1.35.0</p>
-
   <ul>
     <li>Added placement new overload to <code>event&lt;&gt;</code> (due to
     feedback from Federico J. Fern&aacute;ndez)</li>
@@ -157,7 +159,6 @@
   </ul>
 
   <p>1.34.0</p>
-
   <ul>
     <li>Fixed a bug that prevented compilation of exception_translator.hpp
     (reported by Oliver Kowalke) and adapted TransitionTest.cpp to also test
