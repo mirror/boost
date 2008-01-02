@@ -38,7 +38,7 @@
 
 // STLport
 #elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-// _fpclass and fpclassify aren't good enough on STLport.
+// fpclassify aren't good enough on STLport.
 
 // GNU libstdc++ 3
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
@@ -50,12 +50,7 @@
 // Dinkumware Library, on Visual C++ 
 #elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
 
-// Not using _fpclass because it causes a warning about a conversion
-// from 'long double' to 'double'. Pity.
-// 
-//#  if defined(BOOST_MSVC)
-//#    define BOOST_HASH_USE_FPCLASS
-//#  endif
+// Not using _fpclass because it is only available for double.
 
 #endif
 
@@ -155,28 +150,6 @@ namespace boost
                 return (std::size_t)(-3);
             case FP_NORMAL:
             case FP_SUBNORMAL:
-                return float_hash_impl(v);
-            default:
-                BOOST_ASSERT(0);
-                return 0;
-            }
-#elif defined(BOOST_HASH_USE_FPCLASS)
-            switch(_fpclass(v)) {
-            case _FPCLASS_NZ:
-            case _FPCLASS_PZ:
-                return 0;
-            case _FPCLASS_PINF:
-                return (std::size_t)(-1);
-            case _FPCLASS_NINF:
-                return (std::size_t)(-2);
-            case _FPCLASS_SNAN:
-            case _FPCLASS_QNAN:
-                return (std::size_t)(-3);
-            case _FPCLASS_NN:
-            case _FPCLASS_ND:
-                return float_hash_impl(v);
-            case _FPCLASS_PD:
-            case _FPCLASS_PN:
                 return float_hash_impl(v);
             default:
                 BOOST_ASSERT(0);
