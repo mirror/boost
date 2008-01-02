@@ -4,7 +4,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef DEFAULT_050329_HPP
-#define DEFAULT_050329_HPP
+# define DEFAULT_050329_HPP
+
+# include <boost/detail/workaround.hpp>
 
 namespace boost { namespace parameter { namespace aux {
 
@@ -27,7 +29,7 @@ struct default_
 //    the user when resolving the value of the parameter with the
 //    given keyword
 //
-#if BOOST_WORKAROUND(__EDG_VERSION__, <= 300)
+# if BOOST_WORKAROUND(__EDG_VERSION__, <= 300)
 // These compilers need a little extra help with overload
 // resolution; we have empty_arg_list's operator[] accept a base
 // class to make that overload less preferable.
@@ -48,8 +50,8 @@ struct lazy_default
         : lazy_default_base<KW,DefaultComputer>(x)
       {}
   };
-# define BOOST_PARAMETER_lazy_default_fallback lazy_default_base
-#else 
+#  define BOOST_PARAMETER_lazy_default_fallback lazy_default_base
+# else 
 template <class KW, class DefaultComputer>
 struct lazy_default
 {
@@ -58,8 +60,8 @@ struct lazy_default
     {}
     DefaultComputer const& compute_default;
 };
-# define BOOST_PARAMETER_lazy_default_fallback lazy_default
-#endif 
+#  define BOOST_PARAMETER_lazy_default_fallback lazy_default
+# endif 
 
 }}} // namespace boost::parameter::aux
 

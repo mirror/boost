@@ -15,6 +15,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/detail/workaround.hpp>
 
 #define BOOST_PARAMETER_FUN_TEMPLATE_HEAD1(n) \
     template<BOOST_PP_ENUM_PARAMS(n, class T)>

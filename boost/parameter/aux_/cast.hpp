@@ -5,6 +5,8 @@
 #ifndef BOOST_PARAMETER_CAST_060902_HPP
 # define BOOST_PARAMETER_CAST_060902_HPP
 
+# include <boost/detail/workaround.hpp>
+
 # if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
   && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 #  include <boost/type_traits/add_reference.hpp>
