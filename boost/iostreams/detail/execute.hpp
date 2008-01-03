@@ -70,11 +70,12 @@ struct execute_traits_impl<void> {
 // returning void and non-void.
 template< typename Op, 
           typename Result = // VC6.5 workaround.
-              #ifndef BOOST_NO_RESULT_OF
+              #if !defined(BOOST_NO_RESULT_OF) && \
+                  !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
                   typename boost::result_of<Op()>::type
               #else
                   BOOST_DEDUCED_TYPENAME Op::result_type
-              #endif 
+              #endif
           >
 struct execute_traits 
     : execute_traits_impl<Result>

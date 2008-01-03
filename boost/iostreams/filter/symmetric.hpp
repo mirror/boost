@@ -115,7 +115,9 @@ public:
                     !filter().filter(next, buf.eptr(), next_s, end_s, flush);
                 buf.ptr() = buf.data() + (next - buf.data());
                 if (done)
-                    return detail::check_eof(static_cast<streamsize>(next_s - s));
+                    return detail::check_eof(
+                               static_cast<std::streamsize>(next_s - s)
+                           );
             }
 
             // If no more characters are available without blocking, or
@@ -123,7 +125,7 @@ public:
             if ( status == f_would_block && buf.ptr() == buf.eptr() ||
                  next_s == end_s )
             {
-                return static_cast<streamsize>(next_s - s);
+                return static_cast<std::streamsize>(next_s - s);
             }
 
             // Fill buffer.
@@ -215,11 +217,10 @@ private:
     template<typename Sink>
     bool flush(Sink& snk, mpl::true_)
     {
-        using std::streamsize;
         typedef char_traits<char_type> traits_type;
-        streamsize amt =
-            static_cast<streamsize>(buf().ptr() - buf().data());
-        streamsize result =
+        std::streamsize amt =
+            static_cast<std::streamsize>(buf().ptr() - buf().data());
+        std::streamsize result =
             boost::iostreams::write(snk, buf().data(), amt);
         if (result < amt && result > 0)
             traits_type::move(buf().data(), buf().data() + result, amt - result);

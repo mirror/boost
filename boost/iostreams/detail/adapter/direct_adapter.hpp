@@ -193,9 +193,9 @@ inline std::streamsize direct_adapter<Direct>::read
 {
     using namespace std;
     pointers& get = ptrs_.first();
-    streamsize avail = 
-        static_cast<streamsize>(get.end - get.ptr);
-    streamsize result = (std::min)(n, avail);
+    std::streamsize avail = 
+        static_cast<std::streamsize>(get.end - get.ptr);
+    std::streamsize result = (std::min)(n, avail);
     std::copy(get.ptr, get.ptr + result, s);
     get.ptr += result;
     return result != 0 ? result : -1;
@@ -207,7 +207,7 @@ inline std::streamsize direct_adapter<Direct>::write
 {
     using namespace std;
     pointers& put = ptrs_.second();
-    if (n > static_cast<streamsize>(put.end - put.ptr))
+    if (n > static_cast<std::streamsize>(put.end - put.ptr))
         throw write_area_exhausted();
     std::copy(s, s + n, put.ptr);
     put.ptr += n;

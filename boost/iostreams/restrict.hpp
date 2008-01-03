@@ -128,11 +128,12 @@ public:
         using namespace std;
         if (!open_)
             open(src, BOOST_IOS::in);
-        streamsize amt =
+        std::streamsize amt =
             end_ != -1 ?
-                (std::min) (n, static_cast<streamsize>(end_ - pos_)) :
+                (std::min) (n, static_cast<std::streamsize>(end_ - pos_)) :
                 n;
-        streamsize result = iostreams::read(this->component(), src, s, amt);
+        std::streamsize result = 
+            iostreams::read(this->component(), src, s, amt);
         if (result != -1)
             pos_ += result;
         return result;
@@ -331,11 +332,11 @@ inline std::streamsize restricted_indirect_device<Device>::read
     (char_type* s, std::streamsize n)
 {
     using namespace std;
-    streamsize amt =
+    std::streamsize amt =
         end_ != -1 ?
-            (std::min) (n, static_cast<streamsize>(end_ - pos_)) :
+            (std::min) (n, static_cast<std::streamsize>(end_ - pos_)) :
             n;
-    streamsize result = iostreams::read(this->component(), s, amt);
+    std::streamsize result = iostreams::read(this->component(), s, amt);
     if (result != -1)
         pos_ += result;
     return result;

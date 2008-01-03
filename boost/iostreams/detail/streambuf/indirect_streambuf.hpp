@@ -167,7 +167,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
     // Construct input buffer.
     if (can_read()) {
         pback_size_ = (std::max)(2, pback_size); // STLPort needs 2.
-        streamsize size =
+        std::streamsize size =
             pback_size_ +
             ( buffer_size ? buffer_size: 1 );
         in().resize(size);
@@ -238,8 +238,9 @@ indirect_streambuf<T, Tr, Alloc, Mode>::underflow()
     if (gptr() < egptr()) return traits_type::to_int_type(*gptr());
 
     // Fill putback buffer.
-    streamsize keep = (std::min)( static_cast<streamsize>(gptr() - eback()),
-                                  pback_size_ );
+    std::streamsize keep = 
+        (std::min)( static_cast<std::streamsize>(gptr() - eback()),
+                    pback_size_ );
     if (keep)
         traits_type::move( buf.data() + (pback_size_ - keep),
                            gptr() - keep, keep );
@@ -250,7 +251,7 @@ indirect_streambuf<T, Tr, Alloc, Mode>::underflow()
           buf.data() + pback_size_ );
 
     // Read from source.
-    streamsize chars =
+    std::streamsize chars =
         obj().read(buf.data() + pback_size_, buf.size() - pback_size_, next_);
     if (chars == -1) {
         this->set_true_eof(true);

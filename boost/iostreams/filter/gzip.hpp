@@ -185,8 +185,7 @@ public:
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
     {
-        using namespace std;
-        streamsize result = 0;
+        std::streamsize result = 0;
 
         // Read header.
         if (!(flags_ & f_header_done))
@@ -196,7 +195,7 @@ public:
         if (!(flags_ & f_body_done)) {
 
             // Read from basic_zlib_filter.
-            streamsize amt = base_type::read(src, s + result, n - result);
+            std::streamsize amt = base_type::read(src, s + result, n - result);
             if (amt != -1) {
                 result += amt;
                 if (amt < n - result) { // Double-check for EOF.
@@ -557,10 +556,9 @@ template<typename Alloc>
 std::streamsize basic_gzip_compressor<Alloc>::read_string
     (char* s, std::streamsize n, std::string& str)
 {
-    using namespace std;
-    streamsize avail =
-        static_cast<streamsize>(str.size() - offset_);
-    streamsize amt = (std::min)(avail, n);
+    std::streamsize avail =
+        static_cast<std::streamsize>(str.size() - offset_);
+    std::streamsize amt = (std::min)(avail, n);
     std::copy( str.data() + offset_,
                str.data() + offset_ + amt,
                s );

@@ -56,11 +56,11 @@ std::streamsize copy_impl( Source& src, Sink& snk,
 {   
     using namespace std;
     typedef typename char_type_of<Source>::type  char_type;
-    typedef pair<char_type*, char_type*>         pair_type;
+    typedef std::pair<char_type*, char_type*>    pair_type;
     pair_type p1 = iostreams::input_sequence(src);
     pair_type p2 = iostreams::output_sequence(snk);
-    streamsize total = 
-        static_cast<streamsize>(
+    std::streamsize total = 
+        static_cast<std::streamsize>(
             (std::min)(p1.second - p1.first, p2.second - p2.first)
         );
     std::copy(p1.first, p1.first + total, p2.first);
@@ -75,10 +75,10 @@ std::streamsize copy_impl( Source& src, Sink& snk,
 {
     using namespace std;
     typedef typename char_type_of<Source>::type  char_type;
-    typedef pair<char_type*, char_type*>         pair_type;
+    typedef std::pair<char_type*, char_type*>    pair_type;
     pair_type p = iostreams::input_sequence(src);
     std::streamsize size, total;
-    for ( total = 0, size = static_cast<streamsize>(p.second - p.first);
+    for ( total = 0, size = static_cast<std::streamsize>(p.second - p.first);
           total < size; )
     {
         std::streamsize amt = 
@@ -96,13 +96,13 @@ std::streamsize copy_impl( Source& src, Sink& snk,
 {
     using namespace std;
     typedef typename char_type_of<Source>::type  char_type;
-    typedef pair<char_type*, char_type*>         pair_type;
+    typedef std::pair<char_type*, char_type*>    pair_type;
     detail::basic_buffer<char_type>  buf(buffer_size);
     pair_type                        p = snk.output_sequence();
-    streamsize                       total = 0;
+    std::streamsize                  total = 0;
     ptrdiff_t                        capacity = p.second - p.first;
     while (true) {
-        streamsize amt = 
+        std::streamsize amt = 
             iostreams::read(
                 src, 
                 buf.data(),

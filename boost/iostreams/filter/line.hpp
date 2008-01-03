@@ -70,7 +70,7 @@ public:
         state_ |= f_read;
 
         // Handle unfinished business.
-        streamsize result = 0;
+        std::streamsize result = 0;
         if (!cur_line_.empty() && (result = read_line(s, n)) == n)
             return n;
 
@@ -143,8 +143,8 @@ private:
     std::streamsize read_line(char_type* s, std::streamsize n)
     {
         using namespace std;
-        streamsize result =
-            (std::min) (n, static_cast<streamsize>(cur_line_.size()));
+        std::streamsize result =
+            (std::min) (n, static_cast<std::streamsize>(cur_line_.size()));
         traits_type::copy(s, cur_line_.data(), result);
         cur_line_.erase(0, result);
         return result;
