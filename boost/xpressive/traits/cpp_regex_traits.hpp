@@ -16,6 +16,7 @@
 # pragma once
 #endif
 
+#include <ios>
 #include <string>
 #include <locale>
 #include <sstream>
