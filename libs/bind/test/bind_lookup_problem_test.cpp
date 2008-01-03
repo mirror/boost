@@ -1,7 +1,7 @@
 //
 // bind_lookup_problem_test.cpp
 //
-// Copyright (C) Markus Schöpflin 2005.
+// Copyright (C) Markus Schoepflin 2005.
 //
 // Use, modification, and distribution are subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at

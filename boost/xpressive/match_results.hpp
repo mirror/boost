@@ -8,7 +8,7 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// Acknowledgements: Thanks to Markus Sch\:opflin for helping to track down
+// Acknowledgements: Thanks to Markus Schoepflin for helping to track down
 // a tricky formatting bug on HP Tru64, and to Steven Watanabe for suggesting
 // the fix.
 
