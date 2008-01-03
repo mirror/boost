@@ -16,6 +16,7 @@
 # pragma once
 #endif
 
+#include <cstdlib>
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/xpressive/traits/detail/c_ctype.hpp>
