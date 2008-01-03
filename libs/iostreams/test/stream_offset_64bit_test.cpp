@@ -13,6 +13,7 @@
  * with large (64-bit) file offsets.
  */
 
+#include <sstream>
 #include <boost/config.hpp>  // BOOST_MSVC
 #include <boost/iostreams/positioning.hpp>
 #include <boost/test/test_tools.hpp>
@@ -37,8 +38,16 @@ void stream_offset_64bit_test()
     stream_offset  last = large_file - large_file % 10000000;
 
     for (stream_offset off = first; off < last; off += 10000000)
-    {                                           
-        BOOST_REQUIRE(off == position_to_offset(offset_to_position(off)));
+    {
+        if (off != position_to_offset(offset_to_position(off))) {
+            stringstream s;
+            s << "off != position_to_offset(offset_to_position(off)) "
+                 "failed for (off >> 32) == " 
+              << static_cast<unsigned int>(off >> 32) 
+              << " and (off & 0xFFFFFFFF) == "
+              << static_cast<unsigned int>(off & 0xFFFFFFFF);
+            BOOST_REQUIRE_MESSAGE(0, s.str().c_str());
+        }
     }
 }
 

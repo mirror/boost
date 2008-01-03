@@ -51,7 +51,7 @@ private:
             if (c == EOF || !std::isalpha((unsigned char) c)) {
                 dictionary_.replace(current_word_);
                 cout.write( current_word_.data(),
-                            static_cast<streamsize>(current_word_.size()) );
+                            static_cast<std::streamsize>(current_word_.size()) );
                 current_word_.erase();
                 if (c == EOF)
                     break;
@@ -167,8 +167,9 @@ private:
     bool write_current_word(Sink& dest)
     {
         using namespace std;
-        streamsize amt = static_cast<streamsize>(current_word_.size() - off_);
-        streamsize result =
+        std::streamsize amt = 
+            static_cast<std::streamsize>(current_word_.size() - off_);
+        std::streamsize result =
             iostreams::write(dest, current_word_.data() + off_, amt);
         if (result == amt) {
             current_word_.erase();

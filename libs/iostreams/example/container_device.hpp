@@ -30,8 +30,8 @@ public:
     std::streamsize read(char_type* s, std::streamsize n)
     {
         using namespace std;
-        streamsize amt = static_cast<streamsize>(container_.size() - pos_);
-        streamsize result = (min)(n, amt);
+        std::streamsize amt = static_cast<streamsize>(container_.size() - pos_);
+        std::streamsize result = (min)(n, amt);
         if (result != 0) {
             std::copy( container_.begin() + pos_,
                        container_.begin() + pos_ + result,
@@ -86,8 +86,9 @@ public:
     std::streamsize read(char_type* s, std::streamsize n)
     {
         using namespace std;
-        streamsize amt = static_cast<streamsize>(container_.size() - pos_);
-        streamsize result = (min)(n, amt);
+        std::streamsize amt = 
+            static_cast<std::streamsize>(container_.size() - pos_);
+        std::streamsize result = (min)(n, amt);
         if (result != 0) {
             std::copy( container_.begin() + pos_,
                        container_.begin() + pos_ + result,
@@ -101,10 +102,10 @@ public:
     std::streamsize write(const char_type* s, std::streamsize n)
     {
         using namespace std;
-        streamsize result = 0;
+        std::streamsize result = 0;
         if (pos_ != container_.size()) {
-            streamsize amt =
-                static_cast<streamsize>(container_.size() - pos_);
+            std::streamsize amt =
+                static_cast<std::streamsize>(container_.size() - pos_);
             result = (min)(n, amt);
             std::copy(s, s + result, container_.begin() + pos_);
             pos_ += result;
