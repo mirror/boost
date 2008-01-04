@@ -30,9 +30,7 @@ class transition
 {
   private:
     //////////////////////////////////////////////////////////////////////////
-    template<
-      class State, class ActionContext,
-      void ( ActionContext::*pAction )( const Event & ), class Destination >
+    template< class State >
     struct reactions
     {
       static result react_without_action( State & stt )
@@ -40,10 +38,10 @@ class transition
         return stt.template transit< Destination >();
       }
 
-      template< class Event >
-      static result react_with_action( State & stt, const Event & evt )
+      template< class Event2 >
+      static result react_with_action( State & stt, const Event2 & evt )
       {
-        return stt.template transit< Destination >( pAction, evt );
+        return stt.template transit< Destination >( pTransitionAction, evt );
       }
     };
 
@@ -57,8 +55,8 @@ class transition
       State & stt, const EventBase & evt, const IdType & eventType )
     {
       typedef detail::reaction_dispatcher<
-        reactions< State, TransitionContext, pTransitionAction, Destination >,
-        State, EventBase, Event, TransitionContext, IdType > dispatcher;
+        reactions< State >, State, EventBase, Event, TransitionContext, IdType
+      > dispatcher;
       return dispatcher::react( stt, evt, eventType );
     }
 };
