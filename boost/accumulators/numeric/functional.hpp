@@ -71,6 +71,12 @@ namespace boost { namespace numeric
         {
             typedef Left &type;
         };
+
+        namespace detail
+        {
+            template<typename T>
+            T &lvalue_of();
+        }
     }
 
     // TODO: handle complex weight, valarray, MTL vectors
@@ -83,7 +89,10 @@ namespace boost { namespace numeric
         template<typename Arg>                                                                  \
         struct result_of_ ## Name                                                               \
         {                                                                                       \
-            BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, Op (*(Arg*)0))                              \
+            BOOST_TYPEOF_NESTED_TYPEDEF_TPL(                                                    \
+                nested                                                                          \
+              , Op boost::numeric::functional::detail::lvalue_of<Arg>()                         \
+            )                                                                                   \
             typedef typename nested::type type;                                                 \
         };                                                                                      \
         template<typename Arg, typename EnableIf>                                               \
@@ -154,7 +163,11 @@ namespace boost { namespace numeric
     /// INTERNAL ONLY
     ///
 #define BOOST_NUMERIC_FUNCTIONAL_DEDUCED(Left, Op, Right)                                       \
-    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (*(Left*)0) Op (*(Right*)0))                        \
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(                                                            \
+        nested                                                                                  \
+      , boost::numeric::functional::detail::lvalue_of<Left>() Op                                \
+        boost::numeric::functional::detail::lvalue_of<Right>()                                  \
+    )                                                                                           \
     typedef typename nested::type type;                                                         \
     /**/
 
