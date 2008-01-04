@@ -74,7 +74,7 @@ This flag is used when matching incomplete or very long texts, see the partial m
 [[match_single_line][Equivalent to the inverse of Perl's m/ modifier; prevents ^ from matching after an embedded newline character (so that it only matches at the start of the text being matched), and $ from matching before an embedded newline (so that it only matches at the end of the text being matched).]]
 [[match_prev_avail][Specifies that --first is a valid iterator position, when this flag is set then the flags match_not_bol and match_not_bow are ignored by the regular expression algorithms (RE.7) and iterators (RE.8).]]
 [[match_not_dot_newline][Specifies that the expression "." does not match a newline character.  This is the inverse of Perl's s/ modifier.]]
-[[match_not_dot_null][Specified that the expression "." does not match a character null '\\0'.]]
+[[match_not_dot_null][Specifies that the expression "." does not match a character null '\\0'.]]
 [[match_posix][Specifies that the expression should be matched according to the POSIX
    [link boost_regex.syntax.leftmost_longest_rule leftmost-longest rule], 
    regardless of what kind of expression was compiled.
@@ -108,7 +108,7 @@ This flag is used when matching incomplete or very long texts, see the partial m
 [[format_perl][Specifies that when a regular expression match is to be replaced by 
       a new string, that the new string is constructed using 
       [link boost_regex.format.perl_format the same rules as Perl 5].]]
-[[format_literal][Specified that when a regular expression match is to be 
+[[format_literal][Specifies that when a regular expression match is to be 
       replaced by a new string, that the new string is a literal copy of 
       the replacement text.]]
 [[format_all][Specifies that all syntax extensions are enabled, including 
