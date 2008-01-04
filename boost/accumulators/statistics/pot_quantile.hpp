@@ -72,9 +72,9 @@ namespace impl
 
             extractor<peaks_over_threshold_tag> const some_peaks_over_threshold = {};
                 
-            float_type u_bar    = some_peaks_over_threshold(args).get<0>();
-            float_type beta_bar = some_peaks_over_threshold(args).get<1>();
-            float_type xi_hat   = some_peaks_over_threshold(args).get<2>();
+            float_type u_bar    = some_peaks_over_threshold(args).template get<0>();
+            float_type beta_bar = some_peaks_over_threshold(args).template get<1>();
+            float_type xi_hat   = some_peaks_over_threshold(args).template get<2>();
                 
                 return this->sign_*(u_bar + beta_bar/xi_hat * ( std::pow(
                         is_same<LeftRight, left>::value ? args[quantile_probability] : 1. - args[quantile_probability]
