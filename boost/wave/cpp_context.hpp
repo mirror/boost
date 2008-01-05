@@ -4,7 +4,7 @@
     
     http://www.boost.org/
 
-    Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2008 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -50,7 +50,7 @@ namespace wave {
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
-//  The C preprocessor context template class
+//  The C/C++ preprocessor context template class
 //
 //      The boost::wave::context template is the main interface class to 
 //      control the behavior of the preprocessing engine.
