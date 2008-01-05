@@ -4,11 +4,17 @@
 <head>
   <meta http-equiv="Content-Language" content="en-us">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+  <meta name="GENERATOR" content="Microsoft FrontPage 12.0">
   <meta name="ProgId" content="FrontPage.Editor.Document">
   <link rel="stylesheet" type="text/css" href="../../../boost.css">
 
   <title>The Boost Statechart Library - Reference</title>
+  <style type="text/css">
+    .style1
+    {
+      width: 45%;
+    }
+  </style>
 </head>
 
 <body link="#0000FF" vlink="#800080">
@@ -3110,7 +3116,7 @@ static void <a name="event::custom_static_type_ptr1" id=
 
       <td width="24%"><b>Semantics</b></td>
 
-      <td width="19%"><b>Default</b></td>
+      <td width="16%"><b>Default</b></td>
     </tr>
 
     <tr>
@@ -3124,7 +3130,7 @@ static void <a name="event::custom_static_type_ptr1" id=
       is triggered by all models of the <a href="#Event">Event</a>
       concept</td>
 
-      <td width="19%">&nbsp;</td>
+      <td width="16%">&nbsp;</td>
     </tr>
 
     <tr>
@@ -3141,7 +3147,7 @@ static void <a name="event::custom_static_type_ptr1" id=
 
       <td width="24%">The destination state to make a transition to</td>
 
-      <td width="19%">&nbsp;</td>
+      <td width="16%">&nbsp;</td>
     </tr>
 
     <tr>
@@ -3153,7 +3159,7 @@ static void <a name="event::custom_static_type_ptr1" id=
       <td width="24%">The state of which the transition action is a
       member</td>
 
-      <td width="19%"><i><code>unspecified</code></i></td>
+      <td width="16%"><i><code>unspecified</code></i></td>
     </tr>
 
     <tr>
@@ -3167,7 +3173,7 @@ static void <a name="event::custom_static_type_ptr1" id=
       <td width="24%">The transition action that is executed during the
       transition. By default no transition action is executed</td>
 
-      <td width="19%"><i><code>unspecified</code></i></td>
+      <td width="16%"><i><code>unspecified</code></i></td>
     </tr>
   </table>
 
@@ -3227,6 +3233,8 @@ namespace statechart
       <td width="45%"><b>Requirements</b></td>
 
       <td width="24%"><b>Semantics</b></td>
+
+      <td width="16%"><b>Default</b></td>
     </tr>
 
     <tr>
@@ -3239,6 +3247,8 @@ namespace statechart
       <code><a href="#Classevent_base">event_base</a></code> is specified,
       the in-state reaction is triggered by all models of the <a href=
       "#Event">Event</a> concept</td>
+
+      <td width="16%">&nbsp;</td>
     </tr>
 
     <tr>
@@ -3248,6 +3258,8 @@ namespace statechart
       or one of it direct or indirect contexts</td>
 
       <td width="24%">The state of which the action is a member</td>
+
+      <td width="16%"><i><code>unspecified</code></i></td>
     </tr>
 
     <tr>
@@ -3260,6 +3272,8 @@ namespace statechart
 
       <td width="24%">The action that is executed during the in-state
       reaction</td>
+
+      <td width="16%"><i><code>unspecified</code></i></td>
     </tr>
   </table>
 
@@ -3271,8 +3285,9 @@ namespace statechart
 {
   template&lt;
     class Event,
-    class ReactionContext,
-    void ( ReactionContext::*pAction )( const Event &amp; ) &gt;
+    class ReactionContext = <i>unspecified</i>,
+    void ( ReactionContext::*pAction )(
+      const Event &amp; ) = <i>unspecified</i> &gt;
   class in_state_reaction
   {
     // <i>implementation-defined</i>
@@ -3283,10 +3298,14 @@ namespace statechart
 
   <h3>Class template <code>in_state_reaction</code> semantics</h3>
 
-  <p>When executed, <code>pAction</code> is called, passing the triggering
-  event as the only argument. Afterwards, a call is made to the
-  <code><a href="#discard_event">discard_event</a></code> member function of
-  the state for which the reaction was defined.</p>
+  <p>When executed then the following happens:</p>
+  <ol>
+    <li>If an action was specified, <code>pAction</code> is called, passing
+    the triggering event as the only argument</li>
+    <li>A call is made to the <code><a href="#discard_event">discard_event</a>
+    </code> member function of the state for which the reaction was defined
+    </li>
+  </ol>
 
   <h1>Header &lt;boost/statechart/<a name="termination.hpp" id=
   "termination.hpp">termination.hpp</a>&gt;</h1>
@@ -3536,9 +3555,10 @@ namespace statechart
   height="31" width="88"></a></p>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 April, 2007<!--webbot bot="Timestamp" endspan i-checksum="30014" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" --></p>
 
-  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2007<!--webbot bot="Timestamp" endspan i-checksum="778" -->
+  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" 
+      s-format="%Y" -->
    <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See

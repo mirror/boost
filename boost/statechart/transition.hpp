@@ -38,8 +38,7 @@ class transition
         return stt.template transit< Destination >();
       }
 
-      template< class Event2 >
-      static result react_with_action( State & stt, const Event2 & evt )
+      static result react_with_action( State & stt, const Event & evt )
       {
         return stt.template transit< Destination >( pTransitionAction, evt );
       }
