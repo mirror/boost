@@ -36,8 +36,9 @@ namespace boost { namespace iostreams {
 //
 // Template name: inverse.
 // Template paramters:
-//      Filter - A filter adapter which 
-// Description: Returns an instance of an appropriate specialization of inverse.
+//      Filter - A model of InputFilter or OutputFilter.
+// Description: Generates an InputFilter from an OutputFilter or
+//      vice versa.
 //
 template<typename Filter>
 class inverse {

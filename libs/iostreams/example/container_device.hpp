@@ -30,7 +30,8 @@ public:
     std::streamsize read(char_type* s, std::streamsize n)
     {
         using namespace std;
-        std::streamsize amt = static_cast<streamsize>(container_.size() - pos_);
+        std::streamsize amt = 
+            static_cast<std::streamsize>(container_.size() - pos_);
         std::streamsize result = (min)(n, amt);
         if (result != 0) {
             std::copy( container_.begin() + pos_,
