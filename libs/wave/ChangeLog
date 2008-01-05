@@ -1,7 +1,7 @@
 Boost.Wave: A Standard compliant C++ preprocessor library
 http://www.boost.org/
 
-Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost
+Copyright (c) 2001-2008 Hartmut Kaiser. Distributed under the Boost
 Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -------------------------------------------------------------------------------
@@ -156,7 +156,8 @@ Boost V1.35.0
   anymore.
 - Applied patch provided by Jens Seidel making sure every header compiles on 
   its own.
-  
+- Updates to the documentation.
+
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
