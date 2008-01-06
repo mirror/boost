@@ -62,7 +62,7 @@
     <LI><A STYLE="font-weight:normal" HREF="../concepts/device.html">Device:</A> Base for all Device concepts, provides associated character type and category.
     <LI><A STYLE="font-weight:normal" HREF="../concepts/source.html">Source:</A> Provides read-only access to a sequence of characters.
     <LI><A STYLE="font-weight:normal" HREF="../concepts/sink.html">Sink:</A> Provides write-only access to a sequence of characters.
-    <LI><A STYLE="font-weight:normal" HREF="../concepts/bidirectional_device.html">Bidirectionaldevice:</A> Provides access to two separate sequences of characters, one for reading and the other for writing.
+    <LI><A STYLE="font-weight:normal" HREF="../concepts/bidirectional_device.html">BidirectionalDevice:</A> Provides access to two separate sequences of characters, one for reading and the other for writing.
     <LI><A STYLE="font-weight:normal" HREF="../concepts/seekable_device.html">SeekableDevice:</A> Provides read-write access to a single sequence of characters, with a single repositionable read/write head. 
 </UL>
 
@@ -73,10 +73,10 @@
 
 <UL>
     <LI><A STYLE="font-weight:normal" HREF="../concepts/filter.html">Filter:</A> Base for all Filter concepts, provides associated character type and category.
-    <LI><A HREF="../concepts/input_filter.html">InputFilter:</A> Filters characters read from a stream buffer.
-    <LI><A HREF="../concepts/output_filter.html">OutputFilter:</A> Filters characters written to a stream buffer.
-    <LI><A HREF="../concepts/bidirectional_filter.html">BidirectionalFilter:</A> Filters two separate character sequences, one read from a stream buffer and the other written to a stream buffer.
-    <LI><A HREF="../concepts/seekable_filter.html">SeekableFilter:</A> Filters a single characters sequence, controlled by a stream buffer, 
+    <LI><A HREF="../concepts/input_filter.html">InputFilter:</A> Filters characters read from a Source.
+    <LI><A HREF="../concepts/output_filter.html">OutputFilter:</A> Filters characters written to a Sink
+    <LI><A HREF="../concepts/bidirectional_filter.html">BidirectionalFilter:</A> Filters two separate character sequences, one read from a Sink and the other written to a Sink.
+    <LI><A HREF="../concepts/seekable_filter.html">SeekableFilter:</A> Filters a single characters sequence, controlled by a SeekableDevice, 
     providing filtered input, output and random access with a single repositionable read/write head
 </UL>
 

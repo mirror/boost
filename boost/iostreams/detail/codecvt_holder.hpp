@@ -30,7 +30,7 @@ template<typename Codecvt>
 struct codecvt_holder {
     typedef Codecvt codecvt_type;
     const codecvt_type& get() const { return codecvt_; }
-    void imbue(const std::locale& loc) { }
+    void imbue(const std::locale&) { }
     Codecvt codecvt_;
 };
 

@@ -4,68 +4,147 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-#include <fstream>
+#include <algorithm>         // Equal
+#include <vector>
 #include <boost/config.hpp>  // MSVC.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/concepts.hpp>  // sink
 #include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/device/file.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-#include "detail/temp_file.hpp"
-#include "detail/verification.hpp"
+#include "../example/container_device.hpp"
+#include "detail/sequence.hpp"
 
 using namespace std;
 using namespace boost;
 using namespace boost::iostreams;
+using namespace boost::iostreams::example;
 using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;
+                    
+//------------------Definition of fixed_sink----------------------------------//
+
+/*class fixed_sink : public sink {
+public:
+    fixed_sink(vector<char>& storage)
+        : storage_(storage), pos_(0)
+        { }
+    std::streamsize write(const char_type* s, std::streamsize n)
+    {
+        streamsize capacity = static_cast<streamsize>(storage_.size() - pos_);
+        streamsize result = (min)(n, capacity);
+        std::copy(s, s + result, storage_.begin() + pos_);
+        pos_ += result;
+        return result;
+    }
+private:
+    fixed_sink operator=(const fixed_sink&);
+    typedef vector<char>::size_type size_type;
+    vector<char>&  storage_;
+    size_type      pos_;
+};*/
+
+//------------------Definition of stream types--------------------------------//
+
+typedef container_source< vector<char> >  vector_source;
+typedef container_sink< vector<char> >    vector_sink;
+typedef stream<vector_source>             vector_istream;
+typedef stream<vector_sink>               vector_ostream;
+//typedef stream<fixed_sink>              fixed_ostream;
+
+//------------------Definition of copy_test-----------------------------------//
 
 void copy_test()
 {
-    test_file test;         
-
+    // Stream to stream
     {
-        temp_file  dest;
-        ifstream   first(test.name().c_str(), in_mode);
-        ofstream   second(dest.name().c_str(), out_mode);
-        boost::iostreams::copy(first, second);
-        first.close();
-        second.close();
+        test_sequence<>  src;
+        vector<char>     dest;
+        vector_istream   first;
+        vector_ostream   second;
+        first.open(vector_source(src));
+        second.open(vector_sink(dest));
         BOOST_CHECK_MESSAGE(
-            compare_files(test.name(), dest.name()),
+            boost::iostreams::copy(first, second) == src.size() && src == dest,
             "failed copying from stream to stream"
         );
     }
 
+    // Stream to indirect sink
     {
-        temp_file  dest;
-        ifstream   first(test.name().c_str(), in_mode);
-        boost::iostreams::copy(first, file_sink(dest.name(), out_mode));
-        first.close();
+        test_sequence<>  src;
+        vector<char>     dest;
+        vector_istream   in;
+        vector_sink      out(dest);
+        in.open(vector_source(src));
         BOOST_CHECK_MESSAGE(
-            compare_files(test.name(), dest.name()),
-            "failed copying from stream to file_sink"
+            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            "failed copying from stream to indirect sink"
         );
     }
 
+    // Indirect source to stream
     {
-        temp_file  dest;
-        ofstream   second(dest.name().c_str(), out_mode);
-        boost::iostreams::copy(file_source(test.name(), in_mode), second);
-        second.close();
+        test_sequence<>  src;
+        vector<char>     dest;
+        vector_source    in(src);
+        vector_ostream   out;
+        out.open(vector_sink(dest));
         BOOST_CHECK_MESSAGE(
-            compare_files(test.name(), dest.name()),
-            "failed copying from file_source to stream"
+            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            "failed copying from indirect source to stream"
         );
     }
 
+    // Indirect source to indirect sink
     {
-        temp_file dest;
-        boost::iostreams::copy( file_source(test.name(), in_mode),
-                                file_sink(dest.name(), out_mode) );
+        test_sequence<>  src;
+        vector<char>     dest;
+        vector_source    in(src);
+        vector_sink      out(dest);
         BOOST_CHECK_MESSAGE(
-            compare_files(test.name(), dest.name()),
-            "failed copying from file_source to file_sink"
+            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            "failed copying from indirect source to indirect sink"
+        );
+    }
+
+    // Direct source to direct sink
+    {
+        test_sequence<>  src;
+        vector<char>     dest(src.size(), '?');
+        array_source     in(&src[0], &src[0] + src.size());
+        array_sink       out(&dest[0], &dest[0] + dest.size());
+        BOOST_CHECK_MESSAGE(
+            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            "failed copying from direct source to direct sink"
+        );
+    }
+
+    // Direct source to indirect sink
+    {
+        test_sequence<>  src;
+        vector<char>     dest;
+        array_source     in(&src[0], &src[0] + src.size());
+        vector_ostream   out(dest);
+        BOOST_CHECK_MESSAGE(
+            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            "failed copying from direct source to indirect sink"
+        );
+    }
+
+    // Indirect source to direct sink
+    {
+        test_sequence<>  src;
+        vector<char>     dest(src.size(), '?');
+        vector_istream   in;
+        array_sink       out(&dest[0], &dest[0] + dest.size());
+        in.open(vector_source(src));
+        BOOST_CHECK_MESSAGE(
+            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            "failed copying from indirect source to direct sink"
         );
     }
 }

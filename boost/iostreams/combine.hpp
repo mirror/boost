@@ -97,10 +97,10 @@ public:
     template<typename Sink>
     void close(Sink& snk, BOOST_IOS::openmode which)
         {
-            if (which & BOOST_IOS::in)
-                iostreams::close(in_, snk, which);
-            if (which & BOOST_IOS::out)
-                iostreams::close(out_, snk, which);
+            if (which == BOOST_IOS::in)
+                detail::close_all(in_, snk);
+            if (which == BOOST_IOS::out)
+                detail::close_all(out_, snk);
         }
     #ifndef BOOST_NO_STD_LOCALE
         void imbue(const std::locale& loc);
@@ -193,10 +193,10 @@ template<typename Source, typename Sink>
 inline void
 combined_device<Source, Sink>::close(BOOST_IOS::openmode which)
 { 
-    if (which & BOOST_IOS::in)
-        iostreams::close(src_, which); 
-    if (which & BOOST_IOS::out)
-        iostreams::close(sink_, which); 
+    if (which == BOOST_IOS::in)
+        detail::close_all(src_); 
+    if (which == BOOST_IOS::out)
+        detail::close_all(sink_); 
 }
 
 #ifndef BOOST_NO_STD_LOCALE

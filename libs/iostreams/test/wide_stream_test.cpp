@@ -13,11 +13,11 @@
 #include <vector>
 #include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
-#include <boost/range/iterator_range.hpp>
-#include "detail/filters.hpp"
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
-#include "detail/sequence.hpp"
+#include "../example/container_device.hpp"  // We use container_device instead
+#include "detail/filters.hpp"               // of make_iterator_range to 
+#include "detail/sequence.hpp"              // reduce dependence on Boost.Range
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
@@ -28,12 +28,14 @@ void read_wide_input_test()
     using namespace std;
     using namespace boost;
     using namespace boost::iostreams;
+    using namespace boost::iostreams::example;
     using namespace boost::iostreams::test;
 
-    test_sequence<wchar_t> seq;
+    test_sequence<wchar_t>                      seq;
+    container_device< test_sequence<wchar_t> >  source(seq);
 
     {
-        filtering_wistream            first(make_iterator_range(seq), 0);
+        filtering_wistream            first(source, 0);
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );
@@ -44,7 +46,7 @@ void read_wide_input_test()
     }
 
     {
-        filtering_wistream            first(make_iterator_range(seq), 0);
+        filtering_wistream            first(source, 0);
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );
@@ -55,7 +57,7 @@ void read_wide_input_test()
     }
 
     {
-        filtering_wistream            first(make_iterator_range(seq));
+        filtering_wistream            first(source);
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );
@@ -66,7 +68,7 @@ void read_wide_input_test()
     }
 
     {
-        filtering_wistream            first(make_iterator_range(seq));
+        filtering_wistream            first(source);
         basic_istringstream<wchar_t>  second(
             basic_string<wchar_t>(seq.begin(), seq.end())
         );

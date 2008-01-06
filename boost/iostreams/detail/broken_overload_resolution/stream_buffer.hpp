@@ -44,7 +44,7 @@ public:
         try { 
             if (this->is_open() && this->auto_close()) 
                 this->close(); 
-        } catch (std::exception&) { } 
+        } catch (...) { } 
     }
     template<typename U0>
     stream_buffer(const U0& u0)

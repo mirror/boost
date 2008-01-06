@@ -14,6 +14,9 @@ struct close_impl;
 } // End namespace detail.
 
 template<typename T>
+void close(T& t) { detail::close_all(t); }
+
+template<typename T>
 void close(T& t, BOOST_IOS::openmode which)
 {
     typedef typename detail::unwrapped_type<T>::type unwrapped;
@@ -64,14 +67,14 @@ struct close_impl<any_tag> {
     struct inner {
         static void close(T& t, BOOST_IOS::openmode which)
         {
-            if ((which & BOOST_IOS::out) != 0)
+            if (which == BOOST_IOS::out)
                 iostreams::flush(t);
         }
 
         template<typename Sink>
         static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
         {
-            if ((which & BOOST_IOS::out) != 0) {
+            if (which == BOOST_IOS::out) {
                 non_blocking_adapter<Sink> nb(snk);
                 iostreams::flush(t, nb);
             }
@@ -88,7 +91,7 @@ struct close_impl<closable_tag> {
             typedef typename category_of<T>::type category;
             const bool in =  is_convertible<category, input>::value &&
                             !is_convertible<category, output>::value;
-            if (in == ((which & BOOST_IOS::in) != 0))
+            if (in == (which == BOOST_IOS::in))
                 t.close();
         }
         template<typename Sink>
@@ -97,7 +100,7 @@ struct close_impl<closable_tag> {
             typedef typename category_of<T>::type category;
             const bool in =  is_convertible<category, input>::value &&
                             !is_convertible<category, output>::value;
-            if (in == ((which & BOOST_IOS::in) != 0)) {
+            if (in == (which == BOOST_IOS::in)) {
                 non_blocking_adapter<Sink> nb(snk);
                 t.close(nb);
             }

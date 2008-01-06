@@ -14,9 +14,11 @@
 #include <cassert>
 #include <boost/config.hpp>  // BOOST_DEDUCE_TYPENAME.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/adapter/basic_adapter.hpp>
+#include <boost/iostreams/detail/adapter/device_adapter.hpp>
+#include <boost/iostreams/detail/adapter/filter_adapter.hpp>
 #include <boost/iostreams/detail/call_traits.hpp>
-#include <boost/iostreams/detail/closer.hpp>
+#include <boost/iostreams/detail/execute.hpp>
+#include <boost/iostreams/detail/functional.hpp>  // call_close_all 
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/pipeline.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -32,7 +34,7 @@ namespace boost { namespace iostreams {
 //      Device - A blocking Sink.
 //
 template<typename Device>
-class tee_filter : public detail::basic_adapter<Device> {
+class tee_filter : public detail::filter_adapter<Device> {
 public:
     typedef typename detail::param_type<Device>::type  param_type;
     typedef typename char_type_of<Device>::type        char_type;
@@ -51,7 +53,7 @@ public:
     ));
 
     explicit tee_filter(param_type dev) 
-        : detail::basic_adapter<Device>(dev) 
+        : detail::filter_adapter<Device>(dev) 
         { }
 
     template<typename Sink>
@@ -65,10 +67,10 @@ public:
     }
 
     template<typename Next>
-    void close( Next&,
-                BOOST_IOS::openmode which =
-                    BOOST_IOS::in | BOOST_IOS::out )
-    { iostreams::close(this->component(), which); }
+    void close(Next&)
+    { 
+        detail::close_all(this->component());
+    }
 
     template<typename Sink>
     bool flush(Sink& snk)
@@ -130,10 +132,10 @@ public:
         assert(result1 == n && result2 == n);
         return n;
     }
-    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out)
-    { 
-        detail::external_closer<Sink2> close2(sink2_, which);
-        detail::external_closer<Sink1> close1(sink1_, which);
+    void close()
+    {
+        detail::execute_all( detail::call_close_all(sink1_),
+                             detail::call_close_all(sink2_) );
     }
     bool flush()
     {

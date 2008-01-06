@@ -7,6 +7,8 @@
 // A. Langer and K. Kreft, "Standard C++ IOStreams and Locales",
 // Addison-Wesley, 2000, pp. 228-43.
 
+// User "GMSB" provided an optimization for small seeks.
+
 #ifndef BOOST_IOSTREAMS_DETAIL_INDIRECT_STREAMBUF_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DETAIL_INDIRECT_STREAMBUF_HPP_INCLUDED
 
@@ -21,6 +23,8 @@
 #include <boost/iostreams/detail/buffer.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/double_object.hpp> 
+#include <boost/iostreams/detail/execute.hpp>
+#include <boost/iostreams/detail/functional.hpp>
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/detail/optional.hpp>
 #include <boost/iostreams/detail/push.hpp>
@@ -89,7 +93,7 @@ protected:
 
     // Declared in linked_streambuf.
     void set_next(streambuf_type* next);
-    void close(BOOST_IOS::openmode m);
+    void close_impl(BOOST_IOS::openmode m);
     const std::type_info& component_type() const { return typeid(T); }
     void* component_impl() { return component(); }
 private:
@@ -116,14 +120,11 @@ private:
     pos_type seek_impl( stream_offset off, BOOST_IOS::seekdir way,
                         BOOST_IOS::openmode which );
     void sync_impl();
-    void close_impl(BOOST_IOS::openmode);
 
     enum flag_type {
         f_open             = 1,
-        f_input_closed     = f_open << 1,
-        f_output_closed    = f_input_closed << 1,
-        f_output_buffered  = f_output_closed << 1,
-        f_auto_close       = f_output_buffered << 1
+        f_output_buffered  = f_open << 1,
+        f_auto_close       = f_output_buffered << 1,
     };
 
     optional<wrapper>           storage_;
@@ -166,7 +167,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
     // Construct input buffer.
     if (can_read()) {
         pback_size_ = (std::max)(2, pback_size); // STLPort needs 2.
-        streamsize size =
+        std::streamsize size =
             pback_size_ +
             ( buffer_size ? buffer_size: 1 );
         in().resize(size);
@@ -196,10 +197,13 @@ template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::close()
 {
     using namespace std;
-    try { close(BOOST_IOS::in); } catch (std::exception&) { }
-    try { close(BOOST_IOS::out); } catch (std::exception&) { }
-    storage_.reset();
-    flags_ = 0;
+    base_type* self = this;
+    detail::execute_all(
+        detail::call_member_close(*self, BOOST_IOS::in),
+        detail::call_member_close(*self, BOOST_IOS::out),
+        detail::call_reset(storage_),
+        detail::clear_flags(flags_)
+    );
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
@@ -234,8 +238,9 @@ indirect_streambuf<T, Tr, Alloc, Mode>::underflow()
     if (gptr() < egptr()) return traits_type::to_int_type(*gptr());
 
     // Fill putback buffer.
-    streamsize keep = (std::min)( static_cast<streamsize>(gptr() - eback()),
-                                  pback_size_ );
+    std::streamsize keep = 
+        (std::min)( static_cast<std::streamsize>(gptr() - eback()),
+                    pback_size_ );
     if (keep)
         traits_type::move( buf.data() + (pback_size_ - keep),
                            gptr() - keep, keep );
@@ -246,7 +251,7 @@ indirect_streambuf<T, Tr, Alloc, Mode>::underflow()
           buf.data() + pback_size_ );
 
     // Read from source.
-    streamsize chars =
+    std::streamsize chars =
         obj().read(buf.data() + pback_size_, buf.size() - pback_size_, next_);
     if (chars == -1) {
         this->set_true_eof(true);
@@ -306,7 +311,7 @@ int indirect_streambuf<T, Tr, Alloc, Mode>::sync()
         sync_impl();
         obj().flush(next_);
         return 0;
-    } catch (std::exception&) { return -1; }
+    } catch (...) { return -1; }
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
@@ -315,7 +320,7 @@ bool indirect_streambuf<T, Tr, Alloc, Mode>::strict_sync()
     try { // sync() is no-throw.
         sync_impl();
         return obj().flush(next_);
-    } catch (std::exception&) { return false; }
+    } catch (...) { return false; }
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
@@ -338,6 +343,13 @@ typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seek_impl
     (stream_offset off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
+    if ( gptr() != 0 && way == BOOST_IOS::cur && which == BOOST_IOS::in && 
+         eback() - gptr() <= off && off <= egptr() - gptr() ) 
+    {   // Small seek optimization
+        gbump(off);
+        return obj().seek(0, BOOST_IOS::cur, BOOST_IOS::in, next_) -
+               static_cast<off_type>(egptr() - gptr());
+    }
     if (pptr() != 0) 
         this->BOOST_IOSTREAMS_PUBSYNC(); // sync() confuses VisualAge 6.
     if (way == BOOST_IOS::cur && gptr())
@@ -353,29 +365,20 @@ inline void indirect_streambuf<T, Tr, Alloc, Mode>::set_next
 { next_ = next; }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
-inline void indirect_streambuf<T, Tr, Alloc, Mode>::close
-    (BOOST_IOS::openmode which)
-{
-    close_impl(which);
-    try { obj().close(which, next_); } catch (std::exception&) { }
-}
-
-//----------State changing functions------------------------------------------//
-
-template<typename T, typename Tr, typename Alloc, typename Mode>
 inline void indirect_streambuf<T, Tr, Alloc, Mode>::close_impl
     (BOOST_IOS::openmode which)
 {
-    if (which == BOOST_IOS::in && (flags_ & f_input_closed) == 0) {
+    if (which == BOOST_IOS::in && is_convertible<Mode, input>::value) {
         setg(0, 0, 0);
-        flags_ |= f_input_closed;
     }
-    if (which == BOOST_IOS::out && (flags_ & f_output_closed) == 0) {
+    if (which == BOOST_IOS::out && is_convertible<Mode, output>::value) {
         sync();
         setp(0, 0);
-        flags_ |= f_output_closed;
     }
+    obj().close(which, next_);
 }
+
+//----------State changing functions------------------------------------------//
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::sync_impl()

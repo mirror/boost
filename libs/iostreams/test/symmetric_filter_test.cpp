@@ -29,7 +29,7 @@ struct toupper_symmetric_filter_impl {
                 std::streamsize buffer_size = 
                     default_filter_buffer_size 
              ) 
-        : buf_(default_filter_buffer_size) 
+        : buf_(buffer_size) 
     {
         buf_.set(0, 0);
     }

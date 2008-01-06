@@ -342,11 +342,12 @@ public:
     void close(Device& dev, BOOST_IOS::openmode which)
     {
         if (which == BOOST_IOS::out) {
-            while (!this->empty())
-                iostreams::put_if(dev, this->pop());
+            if (flags_ & f_write)
+                while (!this->empty())
+                    iostreams::put_if(dev, this->pop());
+            this->reset();
+            flags_ = 0;
         }
-        this->reset();
-        flags_ = 0;
     }
 private:
     enum flags {

@@ -79,7 +79,7 @@ struct true_eof_impl<true> {
 template<>
 struct true_eof_impl<false> {
     template<typename T>
-    static bool true_eof(T& t) { return true; }
+    static bool true_eof(T&) { return true; }
 };
 
 template<typename T>

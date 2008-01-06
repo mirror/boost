@@ -34,7 +34,6 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/compose.hpp>
 #include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/detail/adapter/basic_adapter.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp>
 #include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/device/array.hpp>
@@ -134,6 +133,7 @@ public:
         return amt;
     }
 private:
+    non_blocking_sink& operator=(const non_blocking_sink&);
     std::string&     dest_;
     std::streamsize  inc_;
 };

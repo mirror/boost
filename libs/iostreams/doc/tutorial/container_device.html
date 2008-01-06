@@ -131,7 +131,7 @@
         <SPAN CLASS="keyword">if</SPAN> (pos_ != container_.size()) {
             streamsize amt = 
                 <SPAN CLASS="keyword">static_cast</SPAN>&lt;streamsize&gt;(container_.size() - pos_);
-            streamsize result = (min)(n, amt);
+            result = (min)(n, amt);
             std::copy(s, s + result, container_.begin() + pos_);
             pos_ += result;
         }
@@ -153,11 +153,13 @@
             next = pos_ + off;
         } <SPAN CLASS="keyword">else</SPAN> <SPAN CLASS="keyword">if</SPAN> (way == ios_bas::end) {
             next = container_.size() + off - <SPAN CLASS='numeric_literal'>1</SPAN>;
+        } <SPAN CLASS="keyword">else</SPAN> {
+            <SPAN CLASS="keyword">throw</SPAN> ios_base::failure(<SPAN CLASS='numeric_literal'>"bad seek direction"</SPAN>);
         }
 
         <SPAN CLASS='comment'>// Check for errors</SPAN>
         <SPAN CLASS="keyword">if</SPAN> (next < <SPAN CLASS='numeric_literal'>0</SPAN> || next >= container_.size())
-            <SPAN CLASS="keyword">throw</SPAN> ios_base::failure("bad seek offset");
+            <SPAN CLASS="keyword">throw</SPAN> ios_base::failure(<SPAN CLASS='numeric_literal'>"bad seek offset"</SPAN>);
 
         pos_ = next;
         <SPAN CLASS="keyword">return</SPAN> pos_;
@@ -200,7 +202,7 @@
     <SPAN CLASS="keyword">using</SPAN> <SPAN CLASS="keyword">namespace</SPAN> std;
     <SPAN CLASS="keyword">typedef</SPAN> ex::container_device&lt;string&gt; string_device;
 
-    string                            one, two;
+    string                     one, two;
     io::stream&lt;string_device&gt;  io(one);
     io &lt;&lt; <SPAN CLASS='literal'>"Hello World!"</SPAN>;
     io.flush();

@@ -52,7 +52,8 @@ public:
                          BOOST_IOS::openmode which = 
                              BOOST_IOS::in | BOOST_IOS::out );
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out);
+    void close();
+    void close(BOOST_IOS::openmode which);
 #endif
 
         // Filter member functions.
@@ -76,7 +77,7 @@ public:
 
     template<typename Device>
     void close(Device& dev)
-    { iostreams::close(t_, dev); }
+    { detail::close_all(t_, dev); }
 
     template<typename Device>
     void close(Device& dev, BOOST_IOS::openmode which)
@@ -107,6 +108,10 @@ std::streampos mode_adapter<Mode, T>::seek
 { return boost::iostreams::seek(t_, off, way, which); }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    template<typename Mode, typename T>
+    void mode_adapter<Mode, T>::close() 
+    { detail::close_all(t_); }
+
     template<typename Mode, typename T>
     void mode_adapter<Mode, T>::close(BOOST_IOS::openmode which) 
     { iostreams::close(t_, which); }

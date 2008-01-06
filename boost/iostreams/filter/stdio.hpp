@@ -56,8 +56,9 @@ private:
             : ios_(ios), old_(ios.rdbuf(newbuf))
             { }
         ~scoped_redirector() { ios_.rdbuf(old_); }
-        ios_type&  ios_;
-        streambuf_type*                 old_;
+        scoped_redirector& operator=(const scoped_redirector&);
+        ios_type&        ios_;
+        streambuf_type*  old_;
     };
 
     virtual void do_filter() = 0;

@@ -6,7 +6,7 @@
 
 #include <cassert>
 #include <string>
-#include <boost/iostreams/stream_facade.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <libs/iostreams/example/container_device.hpp>
 
 namespace io = boost::iostreams;
@@ -17,8 +17,8 @@ int main()
     using namespace std;
     typedef ex::container_sink<string> string_sink;
 
-    string                          result;
-    io::stream_facade<string_sink>  out(result);
+    string                   result;
+    io::stream<string_sink>  out(result);
     out << "Hello World!";
     out.flush();
     assert(result == "Hello World!");

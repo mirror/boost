@@ -68,8 +68,8 @@ inline stream_offset position_to_offset(std::streampos pos)
 {
     // Use implementation-specific member function seekpos().
     return fpos_t_to_offset(pos.seekpos()) +
-           stream_offset(std::streamoff(pos)) -
-           stream_offset(std::streamoff(pos.seekpos()));
+           static_cast<stream_offset>(static_cast<std::streamoff>(pos)) -
+           static_cast<stream_offset>(_FPOSOFF(pos.seekpos()));
 }
 
 # else // # if defined(_CPPLIB_VER) //----------------------------------------//
@@ -80,8 +80,10 @@ inline stream_offset position_to_offset(std::streampos pos)
 {
     // use implementation-specific member function get_fpos_t().
     return fpos_t_to_offset(pos.get_fpos_t()) +
-           stream_offset(std::streamoff(pos)) -
-           stream_offset(std::streamoff(pos.get_fpos_t()));
+           static_cast<stream_offset>(static_cast<std::streamoff>(pos)) -
+           static_cast<stream_offset>(
+               static_cast<std::streamoff>(pos.get_fpos_t())
+           );
 }
 
 # endif // # if defined(_CPPLIB_VER) //---------------------------------------//

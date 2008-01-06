@@ -11,7 +11,8 @@ import modules ;
 
 local NO_BZIP2 = [ modules.peek : NO_BZIP2 ] ;
 local NO_ZLIB = [ modules.peek : NO_ZLIB ] ;
-
+local LARGE_FILE_TEMP = [ modules.peek : LARGE_FILE_TEMP ] ;
+local LARGE_FILE_KEEP = [ modules.peek : LARGE_FILE_KEEP ] ;
 
 rule test-iostreams ( sources * : requirements * ) {
     return [
@@ -22,6 +23,7 @@ rule test-iostreams ( sources * : requirements * ) {
             : # input files
             : # build requirements
                 <toolset>msvc,<stdlib>stlport:<runtime-link>static
+                <toolset>msvc:<cxxflags>"-wd4996"
                 <toolset>cw-9.3,<os>darwin:<runtime-link>static
                 <define>BOOST_IOSTREAMS_NO_LIB
                 <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
@@ -29,35 +31,27 @@ rule test-iostreams ( sources * : requirements * ) {
         ] ;
 }
 
-
     local all-tests = 
           [ test-iostreams array_test.cpp ]
           [ test-iostreams auto_close_test.cpp ]
           [ test-iostreams buffer_size_test.cpp ]
+          [ test-iostreams close_test.cpp ]
           [ test-iostreams 
                 code_converter_test.cpp    
                 detail/utf8_codecvt_facet.cpp ]
-                         
-              #: # build requirements 
-              #  std::locale-support ]   
           [ test-iostreams compose_test.cpp ]
           [ test-iostreams component_access_test.cpp ]
           [ test-iostreams copy_test.cpp ]
           [ test-iostreams counter_test.cpp ]
           [ test-iostreams direct_adapter_test.cpp ]
           [ test-iostreams example_test.cpp ]
+          [ test-iostreams execute_test.cpp ]
           [ test-iostreams file_test.cpp ]
           [ test-iostreams 
                 file_descriptor_test.cpp 
                 ../build//boost_iostreams : <link>static ]
           [ test-iostreams filtering_stream_test.cpp ]
-          [ test-iostreams 
-                finite_state_filter_test.cpp 
-              : # build requirements 
-                # FIXME: yet to implement
-                #std::locale-support 
-          ]
-
+          [ test-iostreams finite_state_filter_test.cpp ]
           [ test-iostreams flush_test.cpp ]
           [ test-iostreams invert_test.cpp ]
           [ test-iostreams line_filter_test.cpp ]
@@ -66,32 +60,55 @@ rule test-iostreams ( sources * : requirements * ) {
                 ../build//boost_iostreams : <link>static ]
           [ test-iostreams newline_test.cpp ]
           [ test-iostreams null_test.cpp ]
+          [ test-iostreams operation_sequence_test.cpp ]
           [ test-iostreams pipeline_test.cpp ]
-          [ test-iostreams positioning_test.cpp ]
           [ test-iostreams 
                 regex_filter_test.cpp     
                 /boost/regex//boost_regex ]
           [ test-iostreams restrict_test.cpp ]
           [ test-iostreams seekable_file_test.cpp ]
           [ test-iostreams seekable_filter_test.cpp ]
+          [ test-iostreams sequence_test.cpp ]
           [ test-iostreams stdio_filter_test.cpp ]
+          [ test-iostreams stream_offset_32bit_test.cpp ]
+          [ test-iostreams stream_offset_64bit_test.cpp ]
+          #[ test-iostreams stream_state_test.cpp ]
           [ test-iostreams symmetric_filter_test.cpp ]
           [ test-iostreams tee_test.cpp ]
           [ test-iostreams wide_stream_test.cpp ]
           ;  
 
+      if $(LARGE_FILE_KEEP) 
+      {
+          all-tests += 
+              [ test-iostreams 
+                    large_file_test.cpp 
+                    ../build//boost_iostreams 
+                  : <define>LARGE_FILE_KEEP=$(LARGE_FILE_KEEP)
+                    $(KEEP) ] ;
+      }
+      if $(LARGE_FILE_TEMP)
+      {
+          all-tests += 
+              [ test-iostreams 
+                    large_file_test.cpp 
+                    ../build//boost_iostreams 
+                  : <define>LARGE_FILE_TEMP=$(LARGE_FILE_TEMP)
+                    $(KEEP) ] ;
+      }
       if ! $(NO_BZIP2)
       {     
           all-tests += [ test-iostreams 
-              bzip2_test.cpp ../build//boost_iostreams ] ;
-      }         
+                    bzip2_test.cpp ../build//boost_iostreams ] ;
+      }
       if ! $(NO_ZLIB)
       {              
-          all-tests += [ test-iostreams 
-                         gzip_test.cpp ../build//boost_iostreams ]
-                       [ test-iostreams 
-                         zlib_test.cpp ../build//boost_iostreams ] ;
-      }          
+          all-tests += 
+              [ test-iostreams 
+                    gzip_test.cpp ../build//boost_iostreams ]
+              [ test-iostreams 
+                    zlib_test.cpp ../build//boost_iostreams ] ;
+      }
           
     test-suite "iostreams" : $(all-tests) ;
     

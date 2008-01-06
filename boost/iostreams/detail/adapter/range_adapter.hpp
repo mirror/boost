@@ -155,18 +155,18 @@ struct range_adapter_impl<std::random_access_iterator_tag> {
         using namespace std;
         switch (way) {
         case BOOST_IOS::beg:
-            if (off > last - first || off < 0) bad_seek();
+            if (off > last - first || off < 0) throw bad_seek();
             cur = first + off;
             break;
         case BOOST_IOS::cur:
             {
                 std::ptrdiff_t newoff = cur - first + off;
-                if (newoff > last - first || newoff < 0) bad_seek();
+                if (newoff > last - first || newoff < 0) throw bad_seek();
                 cur += off;
                 break;
             }
         case BOOST_IOS::end:
-            if (last - first + off < 0 || off > 0) bad_seek();
+            if (last - first + off < 0 || off > 0) throw bad_seek();
             cur = last + off;
             break;
         default:
