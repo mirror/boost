@@ -13,7 +13,7 @@
 #include "../objects/minimal.hpp"
 #include "./compile_tests.hpp"
 
-int main()
+void test0()
 {
     test::minimal::assignable assignable = test::minimal::assignable::create();
 
@@ -34,6 +34,71 @@ int main()
         test::minimal::allocator<test::minimal::assignable> > multiset;
 
     container_test(multiset, assignable);
+}
+
+void test1()
+{
+    boost::hash<int> hash;
+    std::equal_to<int> equal_to;
+    int value = 0;
+
+    std::cout<<"Test unordered_set.\n";
+
+    boost::unordered_set<int> set;
+    
+    unordered_unique_test(set, value);
+    unordered_set_test(set, value);
+    unordered_test(set, value, value, hash, equal_to);
+
+    std::cout<<"Test unordered_multiset.\n";
+
+    boost::unordered_multiset<int> multiset;
+    
+    unordered_equivalent_test(multiset, value);
+    unordered_set_test(multiset, value);
+    unordered_test(multiset, value, value, hash, equal_to);
+}
+
+void test2()
+{
+    test::minimal::assignable assignable
+        = test::minimal::assignable::create();
+    test::minimal::copy_constructible copy_constructible
+        = test::minimal::copy_constructible::create();
+    test::minimal::hash<test::minimal::assignable> hash
+        = test::minimal::hash<test::minimal::assignable>::create();
+    test::minimal::equal_to<test::minimal::assignable> equal_to
+        = test::minimal::equal_to<test::minimal::assignable>::create();
+
+    std::cout<<"Test unordered_set.\n";
+
+    boost::unordered_set<
+        test::minimal::assignable,
+        test::minimal::hash<test::minimal::assignable>,
+        test::minimal::equal_to<test::minimal::assignable>,
+        test::minimal::allocator<test::minimal::assignable> > set;
+
+    unordered_unique_test(set, assignable);
+    unordered_set_test(set, assignable);
+    unordered_test(set, assignable, assignable, hash, equal_to);
+
+    std::cout<<"Test unordered_multiset.\n";
+
+    boost::unordered_multiset<
+        test::minimal::assignable,
+        test::minimal::hash<test::minimal::assignable>,
+        test::minimal::equal_to<test::minimal::assignable>,
+        test::minimal::allocator<test::minimal::assignable> > multiset;
+
+    unordered_equivalent_test(multiset, assignable);
+    unordered_set_test(multiset, assignable);
+    unordered_test(multiset, assignable, assignable, hash, equal_to);
+}
+
+int main() {
+    test0();
+    test1();
+    test2();
 
     return boost::report_errors();
 }
