@@ -10,6 +10,8 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
+#include "detail/closable.hpp"
+#include "detail/operation_sequence.hpp"
 #include "detail/filters.hpp"
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
@@ -17,13 +19,14 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // BCC 5.x.
 
+using namespace std;
 using namespace boost::iostreams;
+using namespace boost::iostreams::test;
 using boost::unit_test::test_suite;
+namespace io = boost::iostreams;
 
 void read_composite()
 {
-    using namespace boost::iostreams::test;
-
     test_file          src1, src2;
     filtering_istream  first, second;
 
@@ -56,9 +59,6 @@ void read_composite()
 
 void write_composite()
 {
-    using namespace std;
-    using namespace boost::iostreams::test;
-
     temp_file          dest1, dest2;
     filtering_ostream  out1, out2;
 
@@ -105,11 +105,392 @@ void write_composite()
     }
 }
 
+void close_composite_device()
+{
+    // Compose an input filter with a source
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<input>(seq.new_operation(2)),
+                closable_device<input>(seq.new_operation(1))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a bidirectional filter with a source
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<bidirectional>(
+                    seq.new_operation(2),
+                    seq.new_operation(3)
+                ),
+                closable_device<input>(seq.new_operation(1))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a seekable filter with a source
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<seekable>(seq.new_operation(2)),
+                closable_device<input>(seq.new_operation(1))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a dual-use filter with a source
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<dual_use>(
+                    seq.new_operation(2),
+                    seq.new_operation(3)
+                ),
+                closable_device<input>(seq.new_operation(1))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose an output filter with a sink
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<output>(seq.new_operation(1)),
+                closable_device<output>(seq.new_operation(2))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a bidirectional filter with a sink
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<bidirectional>(
+                    seq.new_operation(1),
+                    seq.new_operation(2)
+                ),
+                closable_device<output>(seq.new_operation(3))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a seekable filter with a sink
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<seekable>(seq.new_operation(1)),
+                closable_device<output>(seq.new_operation(2))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a dual-use filter with a sink
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<dual_use>(
+                    seq.new_operation(1),
+                    seq.new_operation(2)
+                ),
+                closable_device<output>(seq.new_operation(3))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a bidirectional filter with a bidirectional device
+    {
+        operation_sequence    seq;
+        chain<bidirectional>  ch;
+        ch.push(
+            io::compose(
+                closable_filter<bidirectional>(
+                    seq.new_operation(2),
+                    seq.new_operation(3)
+                ),
+                closable_device<bidirectional>(
+                    seq.new_operation(1),
+                    seq.new_operation(4)
+                )
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a seekable filter with a seekable device
+    {
+        operation_sequence  seq;
+        chain<seekable>     ch;
+        ch.push(
+            io::compose(
+                closable_filter<seekable>(seq.new_operation(1)),
+                closable_device<seekable>(seq.new_operation(2))
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+}
+
+void close_composite_filter()
+{
+    // Compose two input filters
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<input>(seq.new_operation(3)),
+                closable_filter<input>(seq.new_operation(2))
+            )
+        );
+        ch.push(closable_device<input>(seq.new_operation(1)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a bidirectional filter with an input filter
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<bidirectional>(
+                    seq.new_operation(3),
+                    seq.new_operation(4)
+                ),
+                closable_filter<input>(seq.new_operation(2))
+            )
+        );
+        ch.push(closable_device<input>(seq.new_operation(1)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_MESSAGE(seq.is_success(), seq.message());
+    }
+
+    // Compose a seekable filter with an input filter
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<seekable>(seq.new_operation(3)),
+                closable_filter<input>(seq.new_operation(2))
+            )
+        );
+        ch.push(closable_device<input>(seq.new_operation(1)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a dual-use filter with an input filter
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<dual_use>(
+                    seq.new_operation(3),
+                    seq.new_operation(4)
+                ),
+                closable_filter<input>(seq.new_operation(2))
+            )
+        );
+        ch.push(closable_device<input>(seq.new_operation(1)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose two output filters
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<output>(seq.new_operation(1)),
+                closable_filter<output>(seq.new_operation(2))
+            )
+        );
+        ch.push(closable_device<output>(seq.new_operation(3)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a bidirectional filter with an output filter
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<bidirectional>(
+                    seq.new_operation(1),
+                    seq.new_operation(2)
+                ),
+                closable_filter<output>(seq.new_operation(3))
+            )
+        );
+        ch.push(closable_device<output>(seq.new_operation(4)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a seekable filter with an output filter
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<seekable>(seq.new_operation(1)),
+                closable_filter<output>(seq.new_operation(2))
+            )
+        );
+        ch.push(closable_device<output>(seq.new_operation(3)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose a dual-use filter with an output filter
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<dual_use>(
+                    seq.new_operation(1),
+                    seq.new_operation(2)
+                ),
+                closable_filter<output>(seq.new_operation(3))
+            )
+        );
+        ch.push(closable_device<output>(seq.new_operation(4)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose two bidirectional filters
+    {
+        operation_sequence    seq;
+        chain<bidirectional>  ch;
+        ch.push(
+            io::compose(
+                closable_filter<bidirectional>(
+                    seq.new_operation(3),
+                    seq.new_operation(4)
+                ),
+                closable_filter<bidirectional>(
+                    seq.new_operation(2),
+                    seq.new_operation(5)
+                )
+            )
+        );
+        ch.push(
+            closable_device<bidirectional>(
+                seq.new_operation(1),
+                seq.new_operation(6)
+            )
+        );
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose two seekable filters
+    {
+        operation_sequence  seq;
+        chain<seekable>     ch;
+        ch.push(
+            io::compose(
+                closable_filter<seekable>(seq.new_operation(1)),
+                closable_filter<seekable>(seq.new_operation(2))
+            )
+        );
+        ch.push(closable_device<seekable>(seq.new_operation(3)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose two dual-use filters for input
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::compose(
+                closable_filter<dual_use>(
+                    seq.new_operation(3),
+                    seq.new_operation(4)
+                ),
+                closable_filter<dual_use>(
+                    seq.new_operation(2),
+                    seq.new_operation(5)
+                )
+            )
+        );
+        ch.push(closable_device<input>(seq.new_operation(1)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Compose two dual-use filters for output
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::compose(
+                closable_filter<dual_use>(
+                    seq.new_operation(2),
+                    seq.new_operation(3)
+                ),
+                closable_filter<dual_use>(
+                    seq.new_operation(1),
+                    seq.new_operation(4)
+                )
+            )
+        );
+        ch.push(closable_device<output>(seq.new_operation(5)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+}
+
 test_suite* init_unit_test_suite(int, char* [])
 {
     test_suite* test = BOOST_TEST_SUITE("line_filter test");
     test->add(BOOST_TEST_CASE(&read_composite));
     test->add(BOOST_TEST_CASE(&write_composite));
+    test->add(BOOST_TEST_CASE(&close_composite_device));
+    test->add(BOOST_TEST_CASE(&close_composite_filter));
     return test;
 }
 

@@ -124,7 +124,7 @@ private:
     enum flag_type {
         f_open             = 1,
         f_output_buffered  = f_open << 1,
-        f_auto_close       = f_output_buffered << 1,
+        f_auto_close       = f_output_buffered << 1
     };
 
     optional<wrapper>           storage_;

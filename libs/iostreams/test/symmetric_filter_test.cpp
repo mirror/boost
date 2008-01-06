@@ -10,7 +10,9 @@
 #include <boost/iostreams/filter/test.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
+#include "detail/closable.hpp"
 #include "./detail/constants.hpp"
+#include "detail/operation_sequence.hpp"
 #include "./detail/temp_file.hpp"
 #include "./detail/verification.hpp"
 
@@ -19,7 +21,8 @@
 
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
-using boost::unit_test::test_suite;   
+using boost::unit_test::test_suite;  
+namespace io = boost::iostreams; 
 
 // Note: The filter is given an internal buffer -- unnecessary in this simple
 // case -- to stress test symmetric_filter.
@@ -77,7 +80,7 @@ struct toupper_symmetric_filter_impl {
 typedef symmetric_filter<toupper_symmetric_filter_impl>
         toupper_symmetric_filter;
 
-void read_symmetric_filter_test()
+void read_symmetric_filter()
 {
     test_file       test;
     uppercase_file  upper;
@@ -88,7 +91,7 @@ void read_symmetric_filter_test()
     );
 } 
 
-void write_symmetric_filter_test()
+void write_symmetric_filter()
 {
     test_file       test;
     uppercase_file  upper;
@@ -99,11 +102,41 @@ void write_symmetric_filter_test()
     );
 }
 
+void close_symmetric_filter()
+{
+    // Test input
+    {
+        operation_sequence  seq;
+        chain<input>        ch;
+        ch.push(
+            io::symmetric_filter<closable_symmetric_filter>
+                (0, seq.new_operation(2))
+        );
+        ch.push(closable_device<input>(seq.new_operation(1)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+
+    // Test output
+    {
+        operation_sequence  seq;
+        chain<output>       ch;
+        ch.push(
+            io::symmetric_filter<closable_symmetric_filter>
+                (0, seq.new_operation(1))
+        );
+        ch.push(closable_device<output>(seq.new_operation(2)));
+        BOOST_CHECK_NO_THROW(ch.reset());
+        BOOST_CHECK_OPERATION_SEQUENCE(seq);
+    }
+}
+
 test_suite* init_unit_test_suite(int, char* []) 
 {
     test_suite* test = BOOST_TEST_SUITE("symmetric_filter test");
-    test->add(BOOST_TEST_CASE(&read_symmetric_filter_test));
-    test->add(BOOST_TEST_CASE(&write_symmetric_filter_test));
+    test->add(BOOST_TEST_CASE(&read_symmetric_filter));
+    test->add(BOOST_TEST_CASE(&write_symmetric_filter));
+    test->add(BOOST_TEST_CASE(&close_symmetric_filter));
     return test;
 }
 
