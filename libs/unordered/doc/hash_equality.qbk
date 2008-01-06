@@ -1,0 +1,71 @@
+[/ Copyright 2006-2007 Daniel James.
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
+
+[section:hash_equality Equality Predicates and Hash Functions]
+
+While the associative containers use an ordering relation to specify how the
+elements are stored, the unordered associative containers use an equality
+predicate and a hash function. For example, [classref boost::unordered_set]
+is declared as:
+
+    template<typename Value,
+           typename Hash = ``[classref boost::hash]``<Value>, 
+           typename Pred = std::equal_to<Value>, 
+           typename Alloc = std::allocator<Value> > 
+    class ``[classref boost::unordered_set unordered_set]``;
+
+The hash function comes first as you might want to change the hash function
+but not the equality predicate, while if you were to change the behavior
+of the equality predicate you would have to change the hash function to match
+it.  So, if you wanted to use the
+[@http://www.isthe.com/chongo/tech/comp/fnv/ FNV-1 hash] you could write:
+
+    ``[classref boost::unordered_set]``<std::string, hash::fnv_1> words;
+
+An example implementation of FNV-1, and some other hash functions are supplied
+in the examples directory.
+
+Alternatively, you might wish to use a different equality function. If you do
+this you will need to use a hash function that matches it. So to implement a
+case-insensitive dictionary:
+
+[import src_code/insensitive.cpp]
+[case_insensitive_functions]
+[case_insensitive_dictionary]
+
+This is a simplified version of the example at
+[@../../libs/unordered/examples/case_insensitive.hpp /libs/unordered/examples/case_insensitive.hpp]
+which supports other locales and string types.
+
+[h2 Custom Types]
+
+Similarly, a custom hash function can be used for custom types:
+
+[import src_code/point1.cpp]
+[point_example1]
+
+Although, [link hash.custom extending boost::hash to support the type] is
+probably a better solution:
+
+[import src_code/point2.cpp]
+[point_example2]
+
+See the [link hash.custom Boost.Hash documentation] for more detail on how to
+do this.  Remember that it relies on extensions to the draft standard - so it
+won't work on other implementations of the unordered associative containers.
+
+[table Methods for accessing the hash and equality functions.
+    [[Method] [Description]]
+
+    [
+        [``hasher hash_function() const``]
+        [Returns the container's hash function.]
+    ]
+    [
+        [``key_equal key_eq() const``]
+        [Returns the container's key equality function.]
+    ]
+]
+
+[endsect]

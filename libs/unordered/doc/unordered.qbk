@@ -1,0 +1,26 @@
+[/ Copyright 2006-2007 Daniel James.
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
+
+[library Unordered Associative Containers
+    [quickbook 1.4]
+    [authors [James, Daniel]]
+    [copyright 2003 2004 Jeremy B. Maitin-Shepard]
+    [copyright 2005 2006 2007 Daniel James]
+    [purpose std::tr1 compliant hash containers]
+    [id unordered]
+    [dirname unordered]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        [@http://www.boost.org/LICENSE_1_0.txt]
+    ]
+]
+
+[include:unordered intro.qbk]
+[include:unordered buckets.qbk]
+[include:unordered hash_equality.qbk]
+[include:unordered comparison.qbk]
+[include:unordered rationale.qbk]
+
+[xinclude ref.xml]
