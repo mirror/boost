@@ -13,7 +13,7 @@ project unordered-test/exception-tests
         <toolset>gcc:<cxxflags>-Wsign-promo
     ;
 
-test-suite unordered-exception-tests
+test-suite unordered-exception
     :
         [ run constructor_tests.cpp framework ]
         [ run copy_tests.cpp framework ]
