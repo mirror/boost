@@ -70,6 +70,7 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams seekable_file_test.cpp ]
           [ test-iostreams seekable_filter_test.cpp ]
           [ test-iostreams sequence_test.cpp ]
+          [ test-iostreams slice_test.cpp ]
           [ test-iostreams stdio_filter_test.cpp ]
           [ test-iostreams stream_offset_32bit_test.cpp ]
           [ test-iostreams stream_offset_64bit_test.cpp ]

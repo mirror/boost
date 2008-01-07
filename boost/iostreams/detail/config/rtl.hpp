@@ -48,9 +48,10 @@
 #else // Non-windows
 # if defined(_LARGEFILE64_SOURCE) && \
          (!defined(_FILE_OFFSET_BITS) || _FILE_OFFSET_BITS != 64) || \
-     defined(BOOST_IOSTREAMS_HAS_LSEEK64) \
+     defined(__IBMCPP__) && !defined(__64BIT__) && !defined(_LARGE_FILE) || \
+     defined(BOOST_IOSTREAMS_HAS_LSEEK64)
      /**/
-#  define BOOST_IOSTREAMS_FD_SEEK      lseek64  // GCC for some 32-bit *nix
+#  define BOOST_IOSTREAMS_FD_SEEK      lseek64  // Some GCC and IBM
 #  define BOOST_IOSTREAMS_FD_TRUNCATE  ftruncate64
 #  define BOOST_IOSTREAMS_FD_STAT      stat64
 #  define BOOST_IOSTREAMS_FD_OFFSET    off64_t

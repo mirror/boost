@@ -10,14 +10,16 @@
  * Author:      Jonathan Turkanis
  *
  * Defines the class template boost::iostreams::restriction and the 
- * overloaded function template boost::iostreams::restrict
+ * overloaded function template boost::iostreams::slice.
+ *
+ * This header is provided for platforms on which "restrict" is a keyword.
  */
 
 #ifndef BOOST_IOSTREAMS_RESTRICT_HPP_INCLUDED
 #define BOOST_IOSTREAMS_RESTRICT_HPP_INCLUDED
 
 #include <boost/iostreams/detail/restrict_impl.hpp>
-#define BOOST_IOSTREAMS_RESTRICT restrict
+#define BOOST_IOSTREAMS_RESTRICT slice
 #include <boost/iostreams/detail/restrict_impl.hpp>
 #undef BOOST_IOSTREAMS_RESTRICT
 
