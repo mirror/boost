@@ -1225,6 +1225,8 @@ namespace boost {
             // no throw
             size_type max_size() const
             {
+                using namespace std;
+
                 // size < mlf_ * count
                 return float_to_size_t(ceil(
                         max_bucket_count() * mlf_)) - 1;
@@ -1303,6 +1305,8 @@ namespace boost {
             // factor. This is to try to avoid excessive rehashes.
             bool reserve_extra(size_type n)
             {
+                using namespace std;
+
                 bool need_to_reserve = n >= max_load_;
                 // throws - basic:
                 if (need_to_reserve) {
