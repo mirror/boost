@@ -354,7 +354,7 @@ code below shows how this all works, and is described in more detail below.
     // Define a feature for tracking covariate data
     typedef tag::tail_variate< int, tag::covariate1, left > my_tail_variate_tag;
 
-    // This will calculate the left tail and my_order_variate for N == 2
+    // This will calculate the left tail and my_tail_variate_tag for N == 2
     // using the tag::tail<left>::cache_size named parameter
     accumulator_set< double, features< my_tail_variate_tag > > acc( 
         tag::tail<left>::cache_size = 2 );
@@ -367,7 +367,7 @@ code below shows how this all works, and is described in more detail below.
     acc( 4.5, covariate1 = -45 );
 
     // Define an extractor for the my_tail_variate_tag feature
-    extractor< my_tail_variate_tag > my_order_variate;
+    extractor< my_tail_variate_tag > my_tail_variate;
     
     // Write the tail statistic to std::cout. This will print "4.5, 3.4, "
     std::ostream_iterator< double > dout( std::cout, ", " );
@@ -375,7 +375,7 @@ code below shows how this all works, and is described in more detail below.
     
     // Write the tail_variate statistic to std::cout. This will print "-45, 34, "
     std::ostream_iterator< int > iout( std::cout, ", " );
-    std::copy( my_order_variate( acc ).begin(), my_order_variate( acc ).end(), iout );
+    std::copy( my_tail_variate( acc ).begin(), my_tail_variate( acc ).end(), iout );
 
 There are several things to note about the code above. First, notice that we didn't have
 to request that the _tail_ feature be calculated. That is implicit because the _tail_variate_
@@ -388,7 +388,7 @@ every accumulator in an accumulator set.
 We also use a named parameter to pass covariate data into the accumulator set along with
 the samples. As with the constructor parameters, all parameters to the accumulate function
 are made available to all the accumulators in the set. In this case, only the accumulator
-for the `my_order_variate` feature would be interested in the value of the `covariate1` named
+for the `my_tail_variate` feature would be interested in the value of the `covariate1` named
 parameter.
 
 We can make one final observation about the example above. Since _tail_ and _tail_variate_
