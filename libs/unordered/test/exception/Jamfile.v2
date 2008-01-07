@@ -15,12 +15,12 @@ project unordered-test/exception-tests
 
 test-suite unordered-exception
     :
-        [ run constructor_tests.cpp framework ]
-        [ run copy_tests.cpp framework ]
-        [ run assign_tests.cpp framework ]
-        [ run insert_tests.cpp framework ]
-        [ run erase_tests.cpp framework ]
-        [ run rehash_tests.cpp framework ]
-        [ run swap_tests.cpp framework : : :
+        [ run constructor_exception_tests.cpp framework ]
+        [ run copy_exception_tests.cpp framework ]
+        [ run assign_exception_tests.cpp framework ]
+        [ run insert_exception_tests.cpp framework ]
+        [ run erase_exception_tests.cpp framework ]
+        [ run rehash_exception_tests.cpp framework ]
+        [ run swap_exception_tests.cpp framework : : :
             <define>BOOST_UNORDERED_SWAP_METHOD=2 ]
     ;
