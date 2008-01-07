@@ -311,11 +311,14 @@ namespace test
         {
             allocated_memory_type::iterator pos
                 = allocated_memory.find(memory_area(ptr, ptr));
-            if(pos == allocated_memory.end())
+            if(pos == allocated_memory.end()) {
                 BOOST_ERROR("Constructing unknown pointer.");
-            BOOST_TEST(pos->second.tag_ == tag);
+            }
+            else {
+                BOOST_TEST(pos->second.tag_ == tag);
+                ++pos->second.constructed_;
+            }
             ++count_constructions;
-            ++pos->second.constructed_;
         }
 
         void track_destroy(void* ptr, std::size_t /*size*/, int tag)
@@ -324,11 +327,13 @@ namespace test
                 = allocated_memory.find(memory_area(ptr, ptr));
             if(pos == allocated_memory.end())
                 BOOST_ERROR("Destroying unknown pointer.");
+            else {
+                BOOST_TEST(pos->second.tag_ == tag);
+                BOOST_TEST(pos->second.constructed_ > 0);
+                if(pos->second.constructed_ > 0) --pos->second.constructed_;
+            }
             BOOST_TEST(count_constructions > 0);
-            BOOST_TEST(pos->second.tag_ == tag);
-            BOOST_TEST(pos->second.constructed_ > 0);
             if(count_constructions > 0) --count_constructions;
-            if(pos->second.constructed_ > 0) --pos->second.constructed_;
         }
     }
 
