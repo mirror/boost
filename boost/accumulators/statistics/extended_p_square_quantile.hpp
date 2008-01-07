@@ -42,7 +42,7 @@ namespace impl
     /**
         @brief Quantile estimation using the extended \f$P^2\f$ algorithm for weighted and unweighted samples
 
-        Uses the quantile estimates calculated by the extended \f$P^2\f$ algorithm to compute 
+        Uses the quantile estimates calculated by the extended \f$P^2\f$ algorithm to compute
         intermediate quantile estimates by means of quadratic interpolation.
 
         @param quantile_probability The probability of the quantile to be estimated.
@@ -63,7 +63,7 @@ namespace impl
         > range_type;
         // for boost::result_of
         typedef float_type result_type;
-        
+
         template<typename Args>
         extended_p_square_quantile_impl(Args const &args)
           : probabilities(
@@ -83,18 +83,18 @@ namespace impl
                   , tag::extended_p_square
                 >::type
             extended_p_square_tag;
-            
+
             extractor<extended_p_square_tag> const some_extended_p_square = {};
-        
+
             array_type heights(some_extended_p_square(args).size());
             std::copy(some_extended_p_square(args).begin(), some_extended_p_square(args).end(), heights.begin());
 
             this->probability = args[quantile_probability];
-            
+
             typename array_type::const_iterator iter_probs = std::lower_bound(this->probabilities.begin(), this->probabilities.end(), this->probability);
             std::size_t dist = std::distance(this->probabilities.begin(), iter_probs);
             typename array_type::const_iterator iter_heights = heights.begin() + dist;
-            
+
             // If this->probability is not in a valid range return NaN or throw exception
             if (this->probability < *this->probabilities.begin() || this->probability > *(this->probabilities.end() - 1))
             {
@@ -112,7 +112,7 @@ namespace impl
                 }
 
             }
-            
+
             if (*iter_probs == this->probability)
             {
                 return heights[dist];
@@ -120,7 +120,7 @@ namespace impl
             else
             {
                 result_type result;
-            
+
                 if (is_same<Impl2, linear>::value)
                 {
                     /////////////////////////////////////////////////////////////////////////////////
@@ -130,10 +130,10 @@ namespace impl
                     float_type p0 = *(iter_probs - 1);
                     float_type h1 = *iter_heights;
                     float_type h0 = *(iter_heights - 1);
-                    
+
                     float_type a = numeric::average(h1 - h0, p1 - p0);
                     float_type b = h1 - p1 * a;
-                    
+
                     result = a * this->probability + b;
                 }
                 else
@@ -143,7 +143,7 @@ namespace impl
                     //
                     float_type p0, p1, p2;
                     float_type h0, h1, h2;
-                    
+
                     if ( (dist == 1 || *iter_probs - this->probability <= this->probability - *(iter_probs - 1) ) && dist != this->probabilities.size() - 1 )
                     {
                         p0 = *(iter_probs - 1);
@@ -162,28 +162,28 @@ namespace impl
                         h1 = *(iter_heights - 1);
                         h2 = *iter_heights;
                     }
-                    
+
                     float_type hp21 = numeric::average(h2 - h1, p2 - p1);
                     float_type hp10 = numeric::average(h1 - h0, p1 - p0);
                     float_type p21  = numeric::average(p2 * p2 - p1 * p1, p2 - p1);
                     float_type p10  = numeric::average(p1 * p1 - p0 * p0, p1 - p0);
-                    
+
                     float_type a = numeric::average(hp21 - hp10, p21 - p10);
                     float_type b = hp21 - a * p21;
                     float_type c = h2 - a * p2 * p2 - b * p2;
-                    
+
                     result = a * this->probability * this-> probability + b * this->probability + c;
                 }
-                
+
                 return result;
             }
-            
+
         }
     private:
-    
+
         array_type probabilities;
         mutable float_type probability;
-    
+
     };
 
 } // namespace impl
@@ -261,7 +261,7 @@ struct as_feature<tag::weighted_extended_p_square_quantile(quadratic)>
 };
 
 // for the purposes of feature-based dependency resolution,
-// extended_p_square_quantile and weighted_extended_p_square_quantile 
+// extended_p_square_quantile and weighted_extended_p_square_quantile
 // provide the same feature as quantile
 template<>
 struct feature_of<tag::extended_p_square_quantile>
@@ -273,7 +273,7 @@ struct feature_of<tag::extended_p_square_quantile_quadratic>
   : feature_of<tag::quantile>
 {
 };
-// So that extended_p_square_quantile can be automatically substituted with 
+// So that extended_p_square_quantile can be automatically substituted with
 // weighted_extended_p_square_quantile when the weight parameter is non-void
 template<>
 struct as_weighted_feature<tag::extended_p_square_quantile>
@@ -287,7 +287,7 @@ struct feature_of<tag::weighted_extended_p_square_quantile>
 {
 };
 
-// So that extended_p_square_quantile_quadratic can be automatically substituted with 
+// So that extended_p_square_quantile_quadratic can be automatically substituted with
 // weighted_extended_p_square_quantile_quadratic when the weight parameter is non-void
 template<>
 struct as_weighted_feature<tag::extended_p_square_quantile_quadratic>

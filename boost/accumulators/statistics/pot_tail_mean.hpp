@@ -36,17 +36,17 @@ namespace impl
 {
     ///////////////////////////////////////////////////////////////////////////////
     // pot_tail_mean_impl
-    //  
+    //
     /**
         @brief Estimation of the (coherent) tail mean based on the peaks over threshold method (for both left and right tails)
-        
+
         Computes an estimate for the (coherent) tail mean
         \f[
             \widehat{CTM}_{\alpha} = \hat{q}_{\alpha} - \frac{\bar{\beta}}{\xi-1}(1-\alpha)^{-\xi},
         \f]
-        where \f$\bar[u]\f$, \f$\bar{\beta}\f$ and \f$\xi\f$ are the parameters of the 
-        generalized Pareto distribution that approximates the right tail of the distribution (or the 
-        mirrored left tail, in case the left tail is used). In the latter case, the result is mirrored 
+        where \f$\bar[u]\f$, \f$\bar{\beta}\f$ and \f$\xi\f$ are the parameters of the
+        generalized Pareto distribution that approximates the right tail of the distribution (or the
+        mirrored left tail, in case the left tail is used). In the latter case, the result is mirrored
         back, yielding the correct result.
     */
     template<typename Sample, typename Impl, typename LeftRight>
@@ -56,12 +56,12 @@ namespace impl
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type float_type;
         // for boost::result_of
         typedef float_type result_type;
-        
+
         pot_tail_mean_impl(dont_care)
           : sign_((is_same<LeftRight, left>::value) ? -1 : 1)
         {
         }
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
@@ -83,10 +83,10 @@ namespace impl
 
             extractor<peaks_over_threshold_tag> const some_peaks_over_threshold = {};
             extractor<pot_quantile_tag> const some_pot_quantile = {};
-        
+
             float_type beta_bar = some_peaks_over_threshold(args).get<1>();
             float_type xi_hat   = some_peaks_over_threshold(args).get<2>();
-            
+
             return some_pot_quantile(args) - this->sign_ * beta_bar/( xi_hat - 1. ) * std::pow(
                 is_same<LeftRight, left>::value ? args[quantile_probability] : 1. - args[quantile_probability]
               , -xi_hat);
@@ -165,7 +165,7 @@ struct as_feature<tag::weighted_pot_tail_mean<LeftRight>(with_threshold_probabil
 };
 
 // for the purposes of feature-based dependency resolution,
-// pot_tail_mean<LeftRight> and pot_tail_mean_prob<LeftRight> provide 
+// pot_tail_mean<LeftRight> and pot_tail_mean_prob<LeftRight> provide
 // the same feature as tail_mean
 template<typename LeftRight>
 struct feature_of<tag::pot_tail_mean<LeftRight> >
@@ -179,7 +179,7 @@ struct feature_of<tag::pot_tail_mean_prob<LeftRight> >
 {
 };
 
-// So that pot_tail_mean can be automatically substituted 
+// So that pot_tail_mean can be automatically substituted
 // with weighted_pot_tail_mean when the weight parameter is non-void.
 template<typename LeftRight>
 struct as_weighted_feature<tag::pot_tail_mean<LeftRight> >
@@ -193,7 +193,7 @@ struct feature_of<tag::weighted_pot_tail_mean<LeftRight> >
 {
 };
 
-// So that pot_tail_mean_prob can be automatically substituted 
+// So that pot_tail_mean_prob can be automatically substituted
 // with weighted_pot_tail_mean_prob when the weight parameter is non-void.
 template<typename LeftRight>
 struct as_weighted_feature<tag::pot_tail_mean_prob<LeftRight> >

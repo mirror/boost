@@ -34,16 +34,16 @@ namespace impl
 {
     ///////////////////////////////////////////////////////////////////////////////
     // pot_quantile_impl
-    //  
+    //
     /**
         @brief Quantile Estimation based on Peaks over Threshold Method (for both left and right tails)
-        
+
         Computes an estimate
         \f[
             \hat{q}_{\alpha} = \bar{u} + \frac{\bar{\beta}}{\xi}\left[(1-\alpha)^{-\xi}-1\right]
         \f]
-        for a right or left extreme quantile, \f$\bar[u]\f$, \f$\bar{\beta}\f$ and \f$\xi\f$ being the parameters of the 
-        generalized Pareto distribution that approximates the right tail of the distribution (or the mirrored left tail, 
+        for a right or left extreme quantile, \f$\bar[u]\f$, \f$\bar{\beta}\f$ and \f$\xi\f$ being the parameters of the
+        generalized Pareto distribution that approximates the right tail of the distribution (or the mirrored left tail,
         in case the left tail is used). In the latter case, the result is mirrored back, yielding the correct result.
     */
     template<typename Sample, typename Impl, typename LeftRight>
@@ -53,7 +53,7 @@ namespace impl
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type float_type;
         // for boost::result_of
         typedef float_type result_type;
-        
+
         pot_quantile_impl(dont_care)
          : sign_((is_same<LeftRight, left>::value) ? -1 : 1)
         {
@@ -71,11 +71,11 @@ namespace impl
             peaks_over_threshold_tag;
 
             extractor<peaks_over_threshold_tag> const some_peaks_over_threshold = {};
-                
+
             float_type u_bar    = some_peaks_over_threshold(args).template get<0>();
             float_type beta_bar = some_peaks_over_threshold(args).template get<1>();
             float_type xi_hat   = some_peaks_over_threshold(args).template get<2>();
-                
+
                 return this->sign_*(u_bar + beta_bar/xi_hat * ( std::pow(
                         is_same<LeftRight, left>::value ? args[quantile_probability] : 1. - args[quantile_probability]
                     , -xi_hat
@@ -85,7 +85,7 @@ namespace impl
     private:
         short sign_; // if the fit parameters from the mirrored left tail extreme values are used, mirror back the result
     };
-    
+
 } // namespace impl
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ struct as_feature<tag::weighted_pot_quantile<LeftRight>(with_threshold_probabili
 };
 
 // for the purposes of feature-based dependency resolution,
-// pot_quantile<LeftRight> and pot_quantile_prob<LeftRight> provide 
+// pot_quantile<LeftRight> and pot_quantile_prob<LeftRight> provide
 // the same feature as quantile
 template<typename LeftRight>
 struct feature_of<tag::pot_quantile<LeftRight> >
@@ -173,7 +173,7 @@ struct feature_of<tag::pot_quantile_prob<LeftRight> >
 {
 };
 
-// So that pot_quantile can be automatically substituted 
+// So that pot_quantile can be automatically substituted
 // with weighted_pot_quantile when the weight parameter is non-void.
 template<typename LeftRight>
 struct as_weighted_feature<tag::pot_quantile<LeftRight> >
@@ -187,7 +187,7 @@ struct feature_of<tag::weighted_pot_quantile<LeftRight> >
 {
 };
 
-// So that pot_quantile_prob can be automatically substituted 
+// So that pot_quantile_prob can be automatically substituted
 // with weighted_pot_quantile_prob when the weight parameter is non-void.
 template<typename LeftRight>
 struct as_weighted_feature<tag::pot_quantile_prob<LeftRight> >

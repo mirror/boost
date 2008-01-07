@@ -35,17 +35,17 @@ namespace impl
     /**
         @brief Histogram calculation of the cumulative distribution with the \f$P^2\f$ algorithm
 
-        A histogram of the sample cumulative distribution is computed dynamically without storing samples 
-        based on the \f$ P^2 \f$ algorithm. The returned histogram has a specifiable amount (num_cells) 
+        A histogram of the sample cumulative distribution is computed dynamically without storing samples
+        based on the \f$ P^2 \f$ algorithm. The returned histogram has a specifiable amount (num_cells)
         equiprobable (and not equal-sized) cells.
 
         For further details, see
-        
-        R. Jain and I. Chlamtac, The P^2 algorithmus for dynamic calculation of quantiles and 
-        histograms without storing observations, Communications of the ACM,   
+
+        R. Jain and I. Chlamtac, The P^2 algorithmus for dynamic calculation of quantiles and
+        histograms without storing observations, Communications of the ACM,
         Volume 28 (October), Number 10, 1985, p. 1076-1085.
 
-        @param p_square_cumulative_distribution_num_cells. 
+        @param p_square_cumulative_distribution_num_cells.
     */
     template<typename Sample>
     struct p_square_cumulative_distribution_impl
@@ -56,7 +56,7 @@ namespace impl
         typedef std::vector<std::pair<float_type, float_type> > histogram_type;
         // for boost::result_of
         typedef iterator_range<typename histogram_type::iterator> result_type;
-                
+
         template<typename Args>
         p_square_cumulative_distribution_impl(Args const &args)
           : num_cells(args[p_square_cumulative_distribution_num_cells])
@@ -68,20 +68,20 @@ namespace impl
           , is_dirty(true)
         {
             std::size_t b = this->num_cells;
-            
+
             for (std::size_t i = 0; i < b + 1; ++i)
             {
                 this->actual_positions[i] = i + 1.;
                 this->desired_positions[i] = i + 1.;
                 this->positions_increments[i] = numeric::average(i, b);
-            }       
+            }
         }
-        
+
         template<typename Args>
         void operator ()(Args const &args)
         {
             this->is_dirty = true;
-        
+
             std::size_t cnt = count(args);
             std::size_t sample_cell = 1; // k
             std::size_t b = this->num_cells;
@@ -90,13 +90,13 @@ namespace impl
             if (cnt <= b + 1)
             {
                 this->heights[cnt - 1] = args[sample];
-                
+
                 // complete the initialization of heights by sorting
                 if (cnt == b + 1)
                 {
                     std::sort(this->heights.begin(), this->heights.end());
                 }
-            }     
+            }
             else
             {
                 // find cell k such that heights[k-1] <= args[sample] < heights[k] and adjust extreme values
@@ -118,46 +118,46 @@ namespace impl
                       , this->heights.end()
                       , args[sample]
                     );
-                                    
+
                     sample_cell = std::distance(this->heights.begin(), it);
                 }
-                
+
                 // increment positions of markers above sample_cell
                 for (std::size_t i = sample_cell; i < b + 1; ++i)
                 {
                     ++this->actual_positions[i];
                 }
-                
+
                 // update desired position of markers 2 to num_cells + 1
                 // (desired position of first marker is always 1)
                 for (std::size_t i = 1; i < b + 1; ++i)
                 {
                     this->desired_positions[i] += this->positions_increments[i];
                 }
-                
+
                 // adjust heights of markers 2 to num_cells if necessary
                 for (std::size_t i = 1; i < b; ++i)
                 {
                     // offset to desire position
                     float_type d = this->desired_positions[i] - this->actual_positions[i];
-                                        
+
                     // offset to next position
                     float_type dp = this->actual_positions[i + 1] - this->actual_positions[i];
-                    
+
                     // offset to previous position
                     float_type dm = this->actual_positions[i - 1] - this->actual_positions[i];
-                    
+
                     // height ds
                     float_type hp = (this->heights[i + 1] - this->heights[i]) / dp;
                     float_type hm = (this->heights[i - 1] - this->heights[i]) / dm;
-                    
+
                     if ( ( d >= 1. && dp > 1. ) || ( d <= -1. && dm < -1. ) )
                     {
                         short sign_d = static_cast<short>(d / std::abs(d));
-                                               
+
                         // try adjusting heights[i] using p-squared formula
                         float_type h = this->heights[i] + sign_d / (dp - dm) * ( (sign_d - dm) * hp + (dp - sign_d) * hm );
-                        
+
                         if ( this->heights[i - 1] < h && h < this->heights[i + 1] )
                         {
                             this->heights[i] = h;
@@ -182,17 +182,17 @@ namespace impl
 
         template<typename Args>
         result_type result(Args const &args) const
-        { 
+        {
             if (this->is_dirty)
             {
                 this->is_dirty = false;
-            
+
                 // creates a vector of std::pair where each pair i holds
                 // the values heights[i] (x-axis of histogram) and
                 // actual_positions[i] / cnt (y-axis of histogram)
-    
+
                 std::size_t cnt = count(args);
-                
+
                 for (std::size_t i = 0; i < this->histogram.size(); ++i)
                 {
                     this->histogram[i] = std::make_pair(this->heights[i], numeric::average(this->actual_positions[i], cnt));
@@ -239,7 +239,7 @@ namespace extract
 
 using extract::p_square_cumulative_distribution;
 
-// So that p_square_cumulative_distribution can be automatically substituted with 
+// So that p_square_cumulative_distribution can be automatically substituted with
 // weighted_p_square_cumulative_distribution when the weight parameter is non-void
 template<>
 struct as_weighted_feature<tag::p_square_cumulative_distribution>

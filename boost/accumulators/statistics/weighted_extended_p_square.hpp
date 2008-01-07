@@ -40,17 +40,17 @@ namespace impl
     /**
         @brief Multiple quantile estimation with the extended \f$P^2\f$ algorithm for weighted samples
 
-        This version of the extended \f$P^2\f$ algorithm extends the extended \f$P^2\f$ algorithm to 
-        support weighted samples. The extended \f$P^2\f$ algorithm dynamically estimates several 
-        quantiles without storing samples. Assume that \f$m\f$ quantiles 
-        \f$\xi_{p_1}, \ldots, \xi_{p_m}\f$ are to be estimated. Instead of storing the whole sample 
-        cumulative distribution, the algorithm maintains only \f$m+2\f$ principal markers and 
-        \f$m+1\f$ middle markers, whose positions are updated with each sample and whose heights 
-        are adjusted (if necessary) using a piecewise-parablic formula. The heights of the principal 
+        This version of the extended \f$P^2\f$ algorithm extends the extended \f$P^2\f$ algorithm to
+        support weighted samples. The extended \f$P^2\f$ algorithm dynamically estimates several
+        quantiles without storing samples. Assume that \f$m\f$ quantiles
+        \f$\xi_{p_1}, \ldots, \xi_{p_m}\f$ are to be estimated. Instead of storing the whole sample
+        cumulative distribution, the algorithm maintains only \f$m+2\f$ principal markers and
+        \f$m+1\f$ middle markers, whose positions are updated with each sample and whose heights
+        are adjusted (if necessary) using a piecewise-parablic formula. The heights of the principal
         markers are the current estimates of the quantiles and are returned as an iterator range.
 
         For further details, see
-        
+
         K. E. E. Raatikainen, Simultaneous estimation of several quantiles, Simulation, Volume 49,
         Number 4 (October), 1986, p. 159-164.
 
@@ -78,7 +78,7 @@ namespace impl
                 >
             >
         > result_type;
-        
+
         template<typename Args>
         weighted_extended_p_square_impl(Args const &args)
           : probabilities(
@@ -97,29 +97,29 @@ namespace impl
             std::size_t cnt = count(args);
             std::size_t sample_cell = 1; // k
             std::size_t num_quantiles = this->probabilities.size();
-            
+
             // m+2 principal markers and m+1 middle markers
             std::size_t num_markers = 2 * num_quantiles + 3;
-                        
+
             // first accumulate num_markers samples
             if(cnt <= num_markers)
             {
                 this->heights[cnt - 1] = args[sample];
                 this->actual_positions[cnt - 1] = args[weight];
-                                
+
                 // complete the initialization of heights (and actual_positions) by sorting
                 if(cnt == num_markers)
                 {
-                    // TODO: we need to sort the initial samples (in heights) in ascending order and 
-                    // sort their weights (in actual_positions) the same way. The following lines do 
+                    // TODO: we need to sort the initial samples (in heights) in ascending order and
+                    // sort their weights (in actual_positions) the same way. The following lines do
                     // it, but there must be a better and more efficient way of doing this.
                     typename array_type::iterator it_begin, it_end, it_min;
-                    
+
                     it_begin = this->heights.begin();
                     it_end   = this->heights.end();
-                    
+
                     std::size_t pos = 0;
-                    
+
                     while (it_begin != it_end)
                     {
                         it_min = std::min_element(it_begin, it_end);
@@ -129,7 +129,7 @@ namespace impl
                         ++it_begin;
                         ++pos;
                     }
-                    
+
                     // calculate correct initial actual positions
                     for (std::size_t i = 1; i < num_markers; ++i)
                     {
@@ -160,7 +160,7 @@ namespace impl
                       , this->heights.end()
                       , args[sample]
                     );
-                    
+
                     sample_cell = std::distance(this->heights.begin(), it);
                 }
 
@@ -176,24 +176,24 @@ namespace impl
                     this->desired_positions[num_markers - 1] = sum_of_weights(args);
                     this->desired_positions[1] = (sum_of_weights(args) - this->actual_positions[0]) * probabilities[0]
                                               / 2. + this->actual_positions[0];
-                    this->desired_positions[num_markers - 2] = (sum_of_weights(args) - this->actual_positions[0]) 
-                                                            * (probabilities[num_quantiles - 1] + 1.) 
+                    this->desired_positions[num_markers - 2] = (sum_of_weights(args) - this->actual_positions[0])
+                                                            * (probabilities[num_quantiles - 1] + 1.)
                                                             / 2. + this->actual_positions[0];
-                    
+
                     for (std::size_t i = 0; i < num_quantiles; ++i)
                     {
                         this->desired_positions[2 * i + 2] = (sum_of_weights(args) - this->actual_positions[0])
                                                           * probabilities[i] + this->actual_positions[0];
                     }
-                    
+
                     for (std::size_t i = 1; i < num_quantiles; ++i)
                     {
                         this->desired_positions[2 * i + 1] = (sum_of_weights(args) - this->actual_positions[0])
-                                                      * (probabilities[i - 1] + probabilities[i]) 
+                                                      * (probabilities[i - 1] + probabilities[i])
                                                       / 2. + this->actual_positions[0];
                     }
                 }
-                                
+
                 // adjust heights and actual_positions of markers 1 to num_markers - 2 if necessary
                 for (std::size_t i = 1; i <= num_markers - 2; ++i)
                 {
@@ -251,7 +251,7 @@ namespace impl
               , make_permutation_iterator(this->heights.begin(), idx_end)
             );
         }
-        
+
     private:
         array_type probabilities;         // the quantile probabilities
         array_type heights;               // q_i

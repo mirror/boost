@@ -33,14 +33,14 @@ namespace boost { namespace accumulators
 {
 
 namespace impl
-{      
+{
 
     ///////////////////////////////////////////////////////////////////////////////
     // weighted_peaks_over_threshold_impl
     //  works with an explicit threshold value and does not depend on order statistics of weighted samples
     /**
         @brief Weighted Peaks over Threshold Method for Weighted Quantile and Weighted Tail Mean Estimation
-        
+
         @sa peaks_over_threshold_impl
 
         @param quantile_probability
@@ -54,7 +54,7 @@ namespace impl
         typedef typename numeric::functional::average<weighted_sample, std::size_t>::result_type float_type;
         // for boost::result_of
         typedef boost::tuple<float_type, float_type, float_type> result_type;
-        
+
         template<typename Args>
         weighted_peaks_over_threshold_impl(Args const &args)
           : sign_((is_same<LeftRight, left>::value) ? -1 : 1)
@@ -66,12 +66,12 @@ namespace impl
           , is_dirty_(true)
         {
         }
-        
+
         template<typename Args>
         void operator ()(Args const &args)
         {
             this->is_dirty_ = true;
-        
+
             if (this->sign_ * args[sample] > this->threshold_)
             {
                 this->mu_ += args[weight] * args[sample];
@@ -86,13 +86,13 @@ namespace impl
             if (this->is_dirty_)
             {
                 this->is_dirty_ = false;
-            
+
                 this->mu_ = this->sign_ * numeric::average(this->mu_, this->w_sum_);
                 this->sigma2_ = numeric::average(this->sigma2_, this->w_sum_);
                 this->sigma2_ -= this->mu_ * this->mu_;
-                
+
                 float_type threshold_probability = numeric::average(sum_of_weights(args) - this->w_sum_, sum_of_weights(args));
-                
+
                 float_type tmp = numeric::average(( this->mu_ - this->threshold_ )*( this->mu_ - this->threshold_ ), this->sigma2_);
                 float_type xi_hat = 0.5 * ( 1. - tmp );
                 float_type beta_hat = 0.5 * ( this->mu_ - this->threshold_ ) * ( 1. + tmp );
@@ -100,7 +100,7 @@ namespace impl
                 float_type u_bar = this->threshold_ - beta_bar * ( std::pow(1. - threshold_probability, -xi_hat) - 1.)/xi_hat;
                 this->fit_parameters_ = boost::make_tuple(u_bar, beta_bar, xi_hat);
             }
-                      
+
             return this->fit_parameters_;
         }
 
@@ -121,7 +121,7 @@ namespace impl
         @brief Peaks over Threshold Method for Quantile and Tail Mean Estimation
 
         @sa weighted_peaks_over_threshold_impl
-        
+
         @param quantile_probability
         @param pot_threshold_probability
     */
@@ -133,7 +133,7 @@ namespace impl
         typedef typename numeric::functional::average<weighted_sample, std::size_t>::result_type float_type;
         // for boost::result_of
         typedef boost::tuple<float_type, float_type, float_type> result_type;
-        
+
         template<typename Args>
         weighted_peaks_over_threshold_prob_impl(Args const &args)
           : sign_((is_same<LeftRight, left>::value) ? -1 : 1)
@@ -144,25 +144,25 @@ namespace impl
           , is_dirty_(true)
         {
         }
-        
+
         void operator ()(dont_care)
         {
             this->is_dirty_ = true;
         }
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             if (this->is_dirty_)
-            {            
+            {
                 this->is_dirty_ = false;
-                
+
                 float_type threshold = sum_of_weights(args)
                              * ( ( is_same<LeftRight, left>::value ) ? this->threshold_probability_ : 1. - this->threshold_probability_ );
 
                 std::size_t n = 0;
                 Weight sum = Weight(0);
-                
+
                 while (sum < threshold)
                 {
                     if (n < tail_weights(args).size())
@@ -191,17 +191,17 @@ namespace impl
                         }
                     }
                 }
-                
+
                 float_type u = *(tail(args).begin() + n - 1) * this->sign_;
 
-                
+
                 this->mu_ = this->sign_ * numeric::average(this->mu_, sum);
                 this->sigma2_ = numeric::average(this->sigma2_, sum);
                 this->sigma2_ -= this->mu_ * this->mu_;
 
                 if (is_same<LeftRight, left>::value)
                     this->threshold_probability_ = 1. - this->threshold_probability_;
-                
+
                 float_type tmp = numeric::average(( this->mu_ - u )*( this->mu_ - u ), this->sigma2_);
                 float_type xi_hat = 0.5 * ( 1. - tmp );
                 float_type beta_hat = 0.5 * ( this->mu_ - u ) * ( 1. + tmp );
@@ -210,7 +210,7 @@ namespace impl
                 this->fit_parameters_ = boost::make_tuple(u_bar, beta_bar, xi_hat);
 
             }
-            
+
             return this->fit_parameters_;
         }
 
@@ -219,7 +219,7 @@ namespace impl
         mutable float_type mu_;                     // mean of samples above threshold u
         mutable float_type sigma2_;                 // variance of samples above threshold u
         mutable float_type threshold_probability_;
-        mutable result_type fit_parameters_;        // boost::tuple that stores fit parameters 
+        mutable result_type fit_parameters_;        // boost::tuple that stores fit parameters
         mutable bool is_dirty_;
     };
 
@@ -238,7 +238,7 @@ namespace tag
         /// INTERNAL ONLY
         typedef accumulators::impl::weighted_peaks_over_threshold_impl<mpl::_1, mpl::_2, LeftRight> impl;
     };
-    
+
     template<typename LeftRight>
     struct weighted_peaks_over_threshold_prob
       : depends_on<sum_of_weights, tail_weights<LeftRight> >

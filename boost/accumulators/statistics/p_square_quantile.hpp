@@ -34,10 +34,10 @@ namespace impl
         @brief Single quantile estimation with the \f$P^2\f$ algorithm
 
         The \f$P^2\f$ algorithm estimates a quantile dynamically without storing samples. Instead of
-        storing the whole sample cumulative distribution, only five points (markers) are stored. The heights 
-        of these markers are the minimum and the maximum of the samples and the current estimates of the 
-        \f$(p/2)\f$-, \f$p\f$- and \f$(1+p)/2\f$-quantiles. Their positions are equal to the number 
-        of samples that are smaller or equal to the markers. Each time a new samples is recorded, the 
+        storing the whole sample cumulative distribution, only five points (markers) are stored. The heights
+        of these markers are the minimum and the maximum of the samples and the current estimates of the
+        \f$(p/2)\f$-, \f$p\f$- and \f$(1+p)/2\f$-quantiles. Their positions are equal to the number
+        of samples that are smaller or equal to the markers. Each time a new samples is recorded, the
         positions of the markers are updated and if necessary their heights are adjusted using a piecewise-
         parabolic formula.
 
@@ -76,7 +76,7 @@ namespace impl
             this->desired_positions[2] = 1. + 4. * this->p;
             this->desired_positions[3] = 3. + 2. * this->p;
             this->desired_positions[4] = 5.;
-            
+
             this->positions_increments[0] = 0.;
             this->positions_increments[1] = this->p / 2.;
             this->positions_increments[2] = this->p;
@@ -103,7 +103,7 @@ namespace impl
             else
             {
                 std::size_t sample_cell = 1; // k
-                
+
                 // find cell k such that heights[k-1] <= args[sample] < heights[k] and ajust extreme values
                 if (args[sample] < this->heights[0])
                 {
@@ -225,7 +225,7 @@ namespace tag
 ///////////////////////////////////////////////////////////////////////////////
 // extract::p_square_quantile
 // extract::p_square_quantile_for_median
-// 
+//
 namespace extract
 {
     extractor<tag::p_square_quantile> const p_square_quantile = {};
@@ -235,7 +235,7 @@ namespace extract
 using extract::p_square_quantile;
 using extract::p_square_quantile_for_median;
 
-// So that p_square_quantile can be automatically substituted with 
+// So that p_square_quantile can be automatically substituted with
 // weighted_p_square_quantile when the weight parameter is non-void
 template<>
 struct as_weighted_feature<tag::p_square_quantile>

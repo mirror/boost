@@ -81,7 +81,7 @@ namespace tag
         ///
         typedef accumulators::impl::sum_impl<mpl::_2, tag::weight> impl;
     };
-    
+
     template<typename VariateType, typename VariateTag>
     struct sum_of_variates
       : depends_on<>
@@ -90,7 +90,7 @@ namespace tag
         ///
         typedef mpl::always<accumulators::impl::sum_impl<VariateType, VariateTag> > impl;
     };
-    
+
     struct abstract_sum_of_variates
       : depends_on<>
     {

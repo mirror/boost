@@ -105,7 +105,7 @@ namespace extract
 
 using extract::moment;
 
-// So that moment<N> can be automatically substituted with 
+// So that moment<N> can be automatically substituted with
 // weighted_moment<N> when the weight parameter is non-void
 template<int N>
 struct as_weighted_feature<tag::moment<N> >

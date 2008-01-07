@@ -30,12 +30,12 @@ namespace impl
         Default sample variance implementation based on the second moment \f$ M_n^{(2)} \f$ moment<2>, mean and count.
         \f[
             \sigma_n^2 = M_n^{(2)} - \mu_n^2.
-        \f]   
-        where 
+        \f]
+        where
         \f[
             \mu_n = \frac{1}{n} \sum_{i = 1}^n x_i.
-        \f]   
-        is the estimate of the sample mean and \f$n\f$ is the number of samples. 
+        \f]
+        is the estimate of the sample mean and \f$n\f$ is the number of samples.
     */
     template<typename Sample, typename MeanFeature>
     struct variance_impl
@@ -60,24 +60,24 @@ namespace impl
         Iterative calculation of sample variance \f$\sigma_n^2\f$ according to the formula
         \f[
             \sigma_n^2 = \frac{1}{n} \sum_{i = 1}^n (x_i - \mu_n)^2 = \frac{n-1}{n} \sigma_{n-1}^2 + \frac{1}{n-1}(x_n - \mu_n)^2.
-        \f]   
-        where 
+        \f]
+        where
         \f[
             \mu_n = \frac{1}{n} \sum_{i = 1}^n x_i.
-        \f]   
-        is the estimate of the sample mean and \f$n\f$ is the number of samples. 
-        
+        \f]
+        is the estimate of the sample mean and \f$n\f$ is the number of samples.
+
         Note that the sample variance is not defined for \f$n <= 1\f$.
-        
-        A simplification can be obtained by the approximate recursion 
+
+        A simplification can be obtained by the approximate recursion
         \f[
             \sigma_n^2 \approx \frac{n-1}{n} \sigma_{n-1}^2 + \frac{1}{n}(x_n - \mu_n)^2.
-        \f]   
-        because the difference 
+        \f]
+        because the difference
         \f[
             \left(\frac{1}{n-1} - \frac{1}{n}\right)(x_n - \mu_n)^2 = \frac{1}{n(n-1)}(x_n - \mu_n)^2.
-        \f]   
-        converges to zero as \f$n \rightarrow \infty\f$. However, for small \f$ n \f$ the difference 
+        \f]
+        converges to zero as \f$n \rightarrow \infty\f$. However, for small \f$ n \f$ the difference
         can be non-negligible.
     */
     template<typename Sample, typename MeanFeature, typename Tag>

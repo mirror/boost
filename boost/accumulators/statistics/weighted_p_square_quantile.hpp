@@ -32,22 +32,22 @@ namespace impl {
     /**
         @brief Single quantile estimation with the \f$P^2\f$ algorithm for weighted samples
 
-        This version of the \f$P^2\f$ algorithm extends the \f$P^2\f$ algorithm to support weighted samples. 
+        This version of the \f$P^2\f$ algorithm extends the \f$P^2\f$ algorithm to support weighted samples.
         The \f$P^2\f$ algorithm estimates a quantile dynamically without storing samples. Instead of
-        storing the whole sample cumulative distribution, only five points (markers) are stored. The heights 
-        of these markers are the minimum and the maximum of the samples and the current estimates of the 
-        \f$(p/2)\f$-, \f$p\f$ - and \f$(1+p)/2\f$ -quantiles. Their positions are equal to the number 
-        of samples that are smaller or equal to the markers. Each time a new sample is added, the 
+        storing the whole sample cumulative distribution, only five points (markers) are stored. The heights
+        of these markers are the minimum and the maximum of the samples and the current estimates of the
+        \f$(p/2)\f$-, \f$p\f$ - and \f$(1+p)/2\f$ -quantiles. Their positions are equal to the number
+        of samples that are smaller or equal to the markers. Each time a new sample is added, the
         positions of the markers are updated and if necessary their heights are adjusted using a piecewise-
         parabolic formula.
 
         For further details, see
 
-        R. Jain and I. Chlamtac, The P^2 algorithmus for dynamic calculation of quantiles and 
-        histograms without storing observations, Communications of the ACM,   
+        R. Jain and I. Chlamtac, The P^2 algorithmus for dynamic calculation of quantiles and
+        histograms without storing observations, Communications of the ACM,
         Volume 28 (October), Number 10, 1985, p. 1076-1085.
 
-        @param quantile_probability 
+        @param quantile_probability
     */
     template<typename Sample, typename Weight, typename Impl>
     struct weighted_p_square_quantile_impl
@@ -58,44 +58,44 @@ namespace impl {
         typedef array<float_type, 5> array_type;
         // for boost::result_of
         typedef float_type result_type;
-        
+
         template<typename Args>
         weighted_p_square_quantile_impl(Args const &args)
-          : p(is_same<Impl, for_median>::value ? 0.5 : args[quantile_probability | 0.5]) 
+          : p(is_same<Impl, for_median>::value ? 0.5 : args[quantile_probability | 0.5])
           , heights()
           , actual_positions()
           , desired_positions()
         {
         }
-        
+
         template<typename Args>
         void operator ()(Args const &args)
         {
             std::size_t cnt = count(args);
-                      
+
             // accumulate 5 first samples
             if (cnt <= 5)
             {
                 this->heights[cnt - 1] = args[sample];
-                
+
                 // In this initialization phase, actual_positions stores the weights of the
                 // inital samples that are needed at the end of the initialization phase to
                 // compute the correct initial positions of the markers.
                 this->actual_positions[cnt - 1] = args[weight];
-                
+
                 // complete the initialization of heights and actual_positions by sorting
                 if (cnt == 5)
                 {
-                    // TODO: we need to sort the initial samples (in heights) in ascending order and 
-                    // sort their weights (in actual_positions) the same way. The following lines do 
+                    // TODO: we need to sort the initial samples (in heights) in ascending order and
+                    // sort their weights (in actual_positions) the same way. The following lines do
                     // it, but there must be a better and more efficient way of doing this.
                     typename array_type::iterator it_begin, it_end, it_min;
-                    
+
                     it_begin = this->heights.begin();
                     it_end   = this->heights.end();
-                    
+
                     std::size_t pos = 0;
-                    
+
                     while (it_begin != it_end)
                     {
                         it_min = std::min_element(it_begin, it_end);
@@ -105,7 +105,7 @@ namespace impl {
                         ++it_begin;
                         ++pos;
                     }
-                    
+
                     // calculate correct initial actual positions
                     for (std::size_t i = 1; i < 5; ++i)
                     {
@@ -140,13 +140,13 @@ namespace impl {
 
                     sample_cell = std::distance(this->heights.begin(), it);
                 }
-                
+
                 // increment positions of markers above sample_cell
                 for (std::size_t i = sample_cell; i < 5; ++i)
                 {
                     this->actual_positions[i] += args[weight];
                 }
-                
+
                 // update desired positions for all markers
                 this->desired_positions[0] = this->actual_positions[0];
                 this->desired_positions[1] = (sum_of_weights(args) - this->actual_positions[0])
@@ -156,30 +156,30 @@ namespace impl {
                 this->desired_positions[3] = (sum_of_weights(args) - this->actual_positions[0])
                                            * (1. + this->p)/2. + this->actual_positions[0];
                 this->desired_positions[4] = sum_of_weights(args);
-                                
+
                 // adjust height and actual positions of markers 1 to 3 if necessary
                 for (std::size_t i = 1; i <= 3; ++i)
                 {
                     // offset to desired positions
                     float_type d = this->desired_positions[i] - this->actual_positions[i];
-                    
+
                     // offset to next position
                     float_type dp = this->actual_positions[i + 1] - this->actual_positions[i];
-                    
+
                     // offset to previous position
                     float_type dm = this->actual_positions[i - 1] - this->actual_positions[i];
-                    
+
                     // height ds
                     float_type hp = (this->heights[i + 1] - this->heights[i]) / dp;
                     float_type hm = (this->heights[i - 1] - this->heights[i]) / dm;
-                    
+
                     if ( ( d >= 1. && dp > 1. ) || ( d <= -1. && dm < -1. ) )
                     {
                         short sign_d = static_cast<short>(d / std::abs(d));
-                                               
+
                         // try adjusting heights[i] using p-squared formula
                         float_type h = this->heights[i] + sign_d / (dp - dm) * ( (sign_d - dm) * hp + (dp - sign_d) * hm );
-                        
+
                         if ( this->heights[i - 1] < h && h < this->heights[i + 1] )
                         {
                             this->heights[i] = h;

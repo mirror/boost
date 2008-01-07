@@ -13,6 +13,7 @@
 #include <functional>
 #include <sstream>
 #include <stdexcept>
+#include <cmath>             // For ceil
 #include <boost/throw_exception.hpp>
 #include <boost/parameter/keyword.hpp>
 #include <boost/mpl/placeholders.hpp>
@@ -32,22 +33,22 @@ namespace boost { namespace accumulators
 {
 
 namespace impl
-{  
+{
     ///////////////////////////////////////////////////////////////////////////////
     // tail_quantile_impl
     //  Tail quantile estimation based on order statistics
     /**
         @brief Tail quantile estimation based on order statistics (for both left and right tails)
 
-        The estimation of a tail quantile \f$\hat{q}\f$ with level \f$\alpha\f$ based on order statistics requires the 
-        chaching of at least the \f$\lceil n\alpha\rceil\f$ smallest or the \f$\lceil n(1-\alpha)\rceil\f$ largest samples, 
-        \f$n\f$ being the total number of samples. The largest of the \f$\lceil n\alpha\rceil\f$ smallest samples or the 
+        The estimation of a tail quantile \f$\hat{q}\f$ with level \f$\alpha\f$ based on order statistics requires the
+        chaching of at least the \f$\lceil n\alpha\rceil\f$ smallest or the \f$\lceil n(1-\alpha)\rceil\f$ largest samples,
+        \f$n\f$ being the total number of samples. The largest of the \f$\lceil n\alpha\rceil\f$ smallest samples or the
         smallest of the \f$\lceil n(1-\alpha)\rceil\f$ largest samples provides an estimate for the quantile:
-        
+
         \f[
             \hat{q}_{n,\alpha} = X_{\lceil \alpha n \rceil:n}
         \f]
-        
+
         @param quantile_probability
     */
     template<typename Sample, typename LeftRight>
@@ -56,24 +57,24 @@ namespace impl
     {
         // for boost::result_of
         typedef Sample result_type;
-        
+
         tail_quantile_impl(dont_care) {}
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             std::size_t cnt = count(args);
-            
+
             std::size_t n = static_cast<std::size_t>(
                 std::ceil(
                     cnt * ( ( is_same<LeftRight, left>::value ) ? args[quantile_probability] : 1. - args[quantile_probability] )
                 )
             );
-            
+
             // If n is in a valid range, return result, otherwise return NaN or throw exception
-            if ( n < tail(args).size())
+            if ( n < static_cast<std::size_t>(tail(args).size()))
             {
-               // Note that the cached samples of the left are sorted in ascending order, 
+               // Note that the cached samples of the left are sorted in ascending order,
                // whereas the samples of the right tail are sorted in descending order
                return *(boost::begin(tail(args)) + n - 1);
             }

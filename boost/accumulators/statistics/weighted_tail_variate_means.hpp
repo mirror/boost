@@ -53,49 +53,49 @@ namespace impl
 {
     /**
         @brief Estimation of the absolute and relative weighted tail variate means (for both left and right tails)
-        
-        For all \f$j\f$-th variates associated to the 
-        
+
+        For all \f$j\f$-th variates associated to the
+
         \f[
             \lambda = \inf\left\{ l \left| \frac{1}{\bar{w}_n}\sum_{i=1}^{l} w_i \geq \alpha \right. \right\}
         \f]
-        
+
         smallest samples (left tail) or the weighted mean of the
-        
+
         \f[
             n + 1 - \rho = n + 1 - \sup\left\{ r \left| \frac{1}{\bar{w}_n}\sum_{i=r}^{n} w_i \geq (1 - \alpha) \right. \right\}
         \f]
-        
-        largest samples (right tail), the absolute weighted tail means \f$\widehat{ATM}_{n,\alpha}(X, j)\f$ 
-        are computed and returned as an iterator range. Alternatively, the relative weighted tail means 
-        \f$\widehat{RTM}_{n,\alpha}(X, j)\f$ are returned, which are the absolute weighted tail means 
+
+        largest samples (right tail), the absolute weighted tail means \f$\widehat{ATM}_{n,\alpha}(X, j)\f$
+        are computed and returned as an iterator range. Alternatively, the relative weighted tail means
+        \f$\widehat{RTM}_{n,\alpha}(X, j)\f$ are returned, which are the absolute weighted tail means
         normalized with the weighted (non-coherent) sample tail mean \f$\widehat{NCTM}_{n,\alpha}(X)\f$.
-        
+
         \f[
-            \widehat{ATM}_{n,\alpha}^{\mathrm{right}}(X, j) = 
+            \widehat{ATM}_{n,\alpha}^{\mathrm{right}}(X, j) =
                 \frac{1}{\sum_{i=\rho}^n w_i}
                 \sum_{i=\rho}^n w_i \xi_{j,i}
         \f]
-        
+
         \f[
-            \widehat{ATM}_{n,\alpha}^{\mathrm{left}}(X, j) = 
+            \widehat{ATM}_{n,\alpha}^{\mathrm{left}}(X, j) =
                 \frac{1}{\sum_{i=1}^{\lambda}}
                 \sum_{i=1}^{\lambda} w_i \xi_{j,i}
         \f]
-        
+
         \f[
-            \widehat{RTM}_{n,\alpha}^{\mathrm{right}}(X, j) = 
+            \widehat{RTM}_{n,\alpha}^{\mathrm{right}}(X, j) =
                 \frac{\sum_{i=\rho}^n w_i \xi_{j,i}}
             {\sum_{i=\rho}^n w_i \widehat{NCTM}_{n,\alpha}^{\mathrm{right}}(X)}
         \f]
-        
+
         \f[
-            \widehat{RTM}_{n,\alpha}^{\mathrm{left}}(X, j) = 
+            \widehat{RTM}_{n,\alpha}^{\mathrm{left}}(X, j) =
                 \frac{\sum_{i=1}^{\lambda} w_i \xi_{j,i}}
             {\sum_{i=1}^{\lambda} w_i \widehat{NCTM}_{n,\alpha}^{\mathrm{left}}(X)}
         \f]
     */
-    
+
     ///////////////////////////////////////////////////////////////////////////////
     // weighted_tail_variate_means_impl
     //  by default: absolute weighted_tail_variate_means
@@ -107,18 +107,18 @@ namespace impl
         typedef typename numeric::functional::average<typename numeric::functional::multiplies<VariateType, Weight>::result_type, Weight>::result_type array_type;
         // for boost::result_of
         typedef iterator_range<typename array_type::iterator> result_type;
-        
+
         weighted_tail_variate_means_impl(dont_care) {}
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             float_type threshold = sum_of_weights(args)
                              * ( ( is_same<LeftRight, left>::value ) ? args[quantile_probability] : 1. - args[quantile_probability] );
-            
+
             std::size_t n = 0;
             Weight sum = Weight(0);
-            
+
             while (sum < threshold)
             {
                 if (n < tail_weights(args).size())
@@ -144,9 +144,9 @@ namespace impl
                     }
                 }
             }
-            
+
             std::size_t num_variates = tail_variate(args).begin()->size();
-            
+
             this->tail_means_.clear();
             this->tail_means_.resize(num_variates, Sample(0));
 
@@ -158,27 +158,27 @@ namespace impl
               , numeric::functional::plus<array_type const, array_type const>()
               , numeric::functional::multiply_and_promote_to_double<VariateType const, Weight const>()
             );
-            
+
             float_type factor = sum * ( (is_same<Impl, relative>::value) ? non_coherent_weighted_tail_mean(args) : 1. );
-            
+
             using boost::lambda::_1;
-            
+
             std::transform(
                 this->tail_means_.begin()
               , this->tail_means_.end()
               , this->tail_means_.begin()
               , _1 / factor
-            );           
-            
+            );
+
             return make_iterator_range(this->tail_means_);
         }
 
     private:
-    
+
         mutable array_type tail_means_;
-    
+
     };
-    
+
 } // namespace impl
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -193,7 +193,7 @@ namespace tag
     {
         typedef accumulators::impl::weighted_tail_variate_means_impl<mpl::_1, mpl::_2, absolute, LeftRight, VariateType> impl;
     };
-    template<typename LeftRight, typename VariateType, typename VariateTag>  
+    template<typename LeftRight, typename VariateType, typename VariateTag>
     struct relative_weighted_tail_variate_means
       : depends_on<non_coherent_weighted_tail_mean<LeftRight>, tail_variate<VariateType, VariateTag, LeftRight>, tail_weights<LeftRight> >
     {

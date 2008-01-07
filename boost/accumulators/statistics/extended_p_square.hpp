@@ -43,15 +43,15 @@ namespace impl
         @brief Multiple quantile estimation with the extended \f$P^2\f$ algorithm
 
         Extended \f$P^2\f$ algorithm for estimation of several quantiles without storing samples.
-        Assume that \f$m\f$ quantiles \f$\xi_{p_1}, \ldots, \xi_{p_m}\f$ are to be estimated. 
-        Instead of storing the whole sample cumulative distribution, the algorithm maintains only 
-        \f$m+2\f$ principal markers and \f$m+1\f$ middle markers, whose positions are updated 
-        with each sample and whose heights are adjusted (if necessary) using a piecewise-parablic 
-        formula. The heights of these central markers are the current estimates of the quantiles 
+        Assume that \f$m\f$ quantiles \f$\xi_{p_1}, \ldots, \xi_{p_m}\f$ are to be estimated.
+        Instead of storing the whole sample cumulative distribution, the algorithm maintains only
+        \f$m+2\f$ principal markers and \f$m+1\f$ middle markers, whose positions are updated
+        with each sample and whose heights are adjusted (if necessary) using a piecewise-parablic
+        formula. The heights of these central markers are the current estimates of the quantiles
         and returned as an iterator range.
 
         For further details, see
-        
+
         K. E. E. Raatikainen, Simultaneous estimation of several quantiles, Simulation, Volume 49,
         Number 4 (October), 1986, p. 159-164.
 
@@ -78,7 +78,7 @@ namespace impl
                 >
             >
         > result_type;
-        
+
         template<typename Args>
         extended_p_square_impl(Args const &args)
           : probabilities(
@@ -125,7 +125,7 @@ namespace impl
 
             // m+2 principal markers and m+1 middle markers
             std::size_t num_markers = 2 * this->probabilities.size() + 3;
-                        
+
             // first accumulate num_markers samples
             if(cnt <= num_markers)
             {
@@ -273,7 +273,7 @@ namespace extract
 
 using extract::extended_p_square;
 
-// So that extended_p_square can be automatically substituted with 
+// So that extended_p_square can be automatically substituted with
 // weighted_extended_p_square when the weight parameter is non-void
 template<>
 struct as_weighted_feature<tag::extended_p_square>

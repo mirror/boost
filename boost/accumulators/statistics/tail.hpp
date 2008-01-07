@@ -122,7 +122,7 @@ namespace detail
       : mpl::true_
     {
     };
-    
+
 } // namespace detail
 
 namespace impl
@@ -171,7 +171,7 @@ namespace impl
 
         // This just stores the heap and the samples.
         // In operator()() below, if we are adding a new sample
-        // to the sample cache, we force all the 
+        // to the sample cache, we force all the
         // tail_variates to update also. (It's not
         // good enough to wait for the accumulator_set to do it
         // for us because then information about whether a sample
@@ -239,7 +239,7 @@ namespace impl
         }
 
         ///////////////////////////////////////////////////////////////////////////////
-        // 
+        //
         struct indirect_cmp
           : std::binary_function<std::size_t, std::size_t, bool>
         {
@@ -300,7 +300,7 @@ namespace tag
         static boost::parameter::keyword<tail_cache_size_named_arg<LeftRight> > const cache_size;
         #endif
     };
-    
+
     struct abstract_tail
       : depends_on<>
     {

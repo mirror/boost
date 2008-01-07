@@ -34,7 +34,7 @@ namespace detail
         );
     }
 
-    
+
     ///////////////////////////////////////////////////////////////////////////////
     // lvalue_index_iterator
     template<typename Base>

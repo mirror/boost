@@ -30,7 +30,7 @@ namespace impl
       : accumulator_base
     {
         typedef typename numeric::functional::multiplies<Sample, Weight>::result_type weighted_sample;
-        
+
         // for boost::result_of
         typedef weighted_sample result_type;
 
@@ -42,7 +42,7 @@ namespace impl
             )
         {
         }
-        
+
         template<typename Args>
         void operator ()(Args const &args)
         {
@@ -74,7 +74,7 @@ namespace tag
         ///
         typedef accumulators::impl::weighted_sum_impl<mpl::_1, mpl::_2, tag::sample> impl;
     };
-    
+
     template<typename VariateType, typename VariateTag>
     struct weighted_sum_of_variates
       : depends_on<>
@@ -83,7 +83,7 @@ namespace tag
         ///
         typedef accumulators::impl::weighted_sum_impl<VariateType, mpl::_2, VariateTag> impl;
     };
-    
+
     struct abstract_weighted_sum_of_variates
       : depends_on<>
     {

@@ -51,7 +51,7 @@ namespace extract
 using extract::tail_mean;
 
 namespace tag
-{   
+{
     ///////////////////////////////////////////////////////////////////////////////
     // Variates tags
     struct weights;
@@ -121,7 +121,7 @@ namespace tag
     struct right_tail_variate;
     template<typename VariateType, typename VariateTag, typename LeftRight>
     struct left_tail_variate;
-    template<typename LeftRight, typename VariateType, typename VariateTag>  
+    template<typename LeftRight, typename VariateType, typename VariateTag>
     struct tail_variate_means;
     template<typename LeftRight, typename VariateType, typename VariateTag>
     struct absolute_tail_variate_means;
@@ -134,7 +134,7 @@ namespace tag
     struct weighted_density;
     struct weighted_kurtosis;
     struct weighted_mean;
-    struct immediate_weighted_mean; 
+    struct immediate_weighted_mean;
     template<typename VariateType, typename VariateTag>
     struct weighted_mean_of_variates;
     template<typename VariateType, typename VariateTag>
@@ -187,28 +187,28 @@ namespace impl
     ///////////////////////////////////////////////////////////////////////////////
     // Statistics impls
     struct count_impl;
-    
+
     template<typename Sample, typename VariateType, typename VariateTag>
     struct covariance_impl;
 
     template<typename Sample>
     struct density_impl;
-    
+
     template<typename Sample, typename Feature>
     struct error_of_impl;
 
     template<typename Sample, typename Variance>
     struct error_of_mean_impl;
-    
+
     template<typename Sample>
     struct extended_p_square_impl;
-    
+
     template<typename Sample, typename Impl1, typename Impl2>
     struct extended_p_square_quantile_impl;
-    
+
     template<typename Sample>
     struct kurtosis_impl;
-    
+
     template<typename Sample>
     struct max_impl;
 
@@ -220,7 +220,7 @@ namespace impl
 
     template<typename Sample>
     struct with_p_square_cumulative_distribution_median_impl;
-       
+
     template<typename Sample>
     struct min_impl;
 
@@ -232,16 +232,16 @@ namespace impl
 
     template<typename N, typename Sample>
     struct moment_impl;
-    
+
     template<typename Sample, typename LeftRight>
     struct peaks_over_threshold_prob_impl;
-    
+
     template<typename Sample, typename Impl, typename LeftRight>
     struct pot_quantile_impl;
 
     template<typename Sample, typename Impl, typename LeftRight>
     struct pot_tail_mean_impl;
-    
+
     template<typename Sample>
     struct p_square_cumulative_distribution_impl;
 
@@ -250,37 +250,37 @@ namespace impl
 
     template<typename Sample>
     struct skewness_impl;
-        
+
     template<typename Sample, typename Tag = tag::sample>
     struct sum_impl;
-    
+
     template<typename Sample, typename LeftRight>
     struct tail_impl;
-    
+
     template<typename Sample, typename LeftRight>
     struct coherent_tail_mean_impl;
 
     template<typename Sample, typename LeftRight>
     struct non_coherent_tail_mean_impl;
-    
+
     template<typename Sample, typename LeftRight>
     struct tail_quantile_impl;
 
     template<typename VariateType, typename VariateTag, typename LeftRight>
     struct tail_variate_impl;
-      
+
     template<typename Sample, typename Impl, typename LeftRight, typename VariateTag>
     struct tail_variate_means_impl;
-    
+
     template<typename Sample, typename MeanFeature>
     struct variance_impl;
 
     template<typename Sample, typename MeanFeature, typename Tag>
     struct immediate_variance_impl;
-    
+
     template<typename Sample, typename Weight, typename VariateType, typename VariateTag>
     struct weighted_covariance_impl;
-    
+
     template<typename Sample, typename Weight>
     struct weighted_density_impl;
 
@@ -294,22 +294,22 @@ namespace impl
     struct with_density_weighted_median_impl;
 
     template<typename Sample, typename Weight>
-    struct with_p_square_cumulative_distribution_weighted_median_impl; 
+    struct with_p_square_cumulative_distribution_weighted_median_impl;
 
     template<typename Sample, typename Weight, typename Tag>
     struct weighted_mean_impl;
 
     template<typename Sample, typename Weight, typename Tag>
     struct immediate_weighted_mean_impl;
-        
+
     template<typename Sample, typename Weight, typename LeftRight>
     struct weighted_peaks_over_threshold_impl;
-    
+
     template<typename Sample, typename Weight, typename LeftRight>
-    struct weighted_peaks_over_threshold_prob_impl;    
-    
+    struct weighted_peaks_over_threshold_prob_impl;
+
     template<typename Sample, typename Weight>
-    struct with_p_square_cumulative_distribution_weighted_median_impl; 
+    struct with_p_square_cumulative_distribution_weighted_median_impl;
 
     template<typename Sample, typename Weight>
     struct weighted_extended_p_square_impl;
@@ -328,16 +328,16 @@ namespace impl
 
     template<typename Sample, typename Weight, typename Tag>
     struct weighted_sum_impl;
-    
+
     template<typename Sample, typename Weight, typename LeftRight>
     struct non_coherent_weighted_tail_mean_impl;
-    
+
     template<typename Sample, typename Weight, typename LeftRight>
     struct weighted_tail_quantile_impl;
-    
+
     template<typename Sample, typename Weight, typename Impl, typename LeftRight, typename VariateType>
     struct weighted_tail_variate_means_impl;
-    
+
     template<typename Sample, typename Weight, typename MeanFeature>
     struct weighted_variance_impl;
 

@@ -29,18 +29,18 @@ namespace impl
     // skewness_impl
     /**
         @brief Skewness estimation
-        
-        The skewness of a sample distribution is defined as the ratio of the 3rd central moment and the \f$ 3/2 \f$-th power 
+
+        The skewness of a sample distribution is defined as the ratio of the 3rd central moment and the \f$ 3/2 \f$-th power
         of the 2nd central moment (the variance) of the sampless 3. The skewness can also be expressed by the simple moments:
-        
+
         \f[
             \hat{g}_1 =
                 \frac
                 {\widehat{m}_n^{(3)}-3\widehat{m}_n^{(2)}\hat{\mu}_n+2\hat{\mu}_n^3}
                 {\left(\widehat{m}_n^{(2)} - \hat{\mu}_n^{2}\right)^{3/2}}
         \f]
-        
-        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the 
+
+        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the
         \f$ n \f$ samples.
     */
     template<typename Sample>
@@ -58,10 +58,10 @@ namespace impl
         result_type result(Args const &args) const
         {
             return numeric::average(
-                        moment<3>(args) 
+                        moment<3>(args)
                         - 3. * moment<2>(args) * mean(args)
                         + 2. * mean(args) * mean(args) * mean(args)
-                      , ( moment<2>(args) - mean(args) * mean(args) ) 
+                      , ( moment<2>(args) - mean(args) * mean(args) )
                         * std::sqrt( moment<2>(args) - mean(args) * mean(args) )
                    );
         }
@@ -93,7 +93,7 @@ namespace extract
 
 using extract::skewness;
 
-// So that skewness can be automatically substituted with 
+// So that skewness can be automatically substituted with
 // weighted_skewness when the weight parameter is non-void
 template<>
 struct as_weighted_feature<tag::skewness>

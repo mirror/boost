@@ -99,7 +99,7 @@ struct extractor
     typename detail::extractor_result<Arg1, Feature>::type
     operator ()(Arg1 const &arg1) const
     {
-        // Arg1 could be an accumulator_set or an argument pack containing 
+        // Arg1 could be an accumulator_set or an argument pack containing
         // an accumulator_set. Dispatch accordingly.
         return detail::do_extract<Feature>(arg1, detail::is_accumulator_set<Arg1>());
     }

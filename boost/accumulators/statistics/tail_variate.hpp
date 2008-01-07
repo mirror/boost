@@ -87,7 +87,7 @@ namespace tag
         ///
         typedef mpl::always<accumulators::impl::tail_variate_impl<VariateType, VariateTag, LeftRight> > impl;
     };
-    
+
     struct abstract_tail_variate
       : depends_on<>
     {
@@ -101,7 +101,7 @@ namespace tag
         ///
         typedef accumulators::impl::tail_variate_impl<mpl::_2, tag::weight, LeftRight> impl;
     };
-    
+
     struct abstract_tail_weights
       : depends_on<>
     {

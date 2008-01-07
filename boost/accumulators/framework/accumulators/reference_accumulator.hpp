@@ -75,7 +75,7 @@ namespace extract
 using extract::reference;
 using extract::reference_tag;
 
-// Map all reference<V,T> features to reference_tag<T> so 
+// Map all reference<V,T> features to reference_tag<T> so
 // that references can be extracted using reference_tag<T>
 // without specifying the referent type.
 template<typename ValueType, typename Tag>

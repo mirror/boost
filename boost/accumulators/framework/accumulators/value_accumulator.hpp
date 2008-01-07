@@ -75,7 +75,7 @@ namespace extract
 using extract::value;
 using extract::value_tag;
 
-// Map all value<V,T> features to value_tag<T> so 
+// Map all value<V,T> features to value_tag<T> so
 // that values can be extracted using value_tag<T>
 // without specifying the value type.
 template<typename ValueType, typename Tag>

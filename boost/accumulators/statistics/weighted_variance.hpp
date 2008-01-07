@@ -28,11 +28,11 @@ namespace impl
 {
     //! Lazy calculation of variance of weighted samples.
     /*!
-        The default implementation of the variance of weighted samples is based on the second moment 
+        The default implementation of the variance of weighted samples is based on the second moment
         \f$\widehat{m}_n^{(2)}\f$ (weighted_moment<2>) and the mean\f$ \hat{\mu}_n\f$ (weighted_mean):
         \f{
             \hat{\sigma}_n^2 = \widehat{m}_n^{(2)}-\hat{\mu}_n^2,
-        \f]   
+        \f]
         where \f$n\f$ is the number of samples.
     */
     template<typename Sample, typename Weight, typename MeanFeature>
@@ -44,7 +44,7 @@ namespace impl
         typedef typename numeric::functional::average<weighted_sample, Weight>::result_type result_type;
 
         weighted_variance_impl(dont_care) {}
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
@@ -58,13 +58,13 @@ namespace impl
     /*!
         Iterative calculation of variance of weighted samples:
         \f[
-            \hat{\sigma}_n^2 = 
-                \frac{\bar{w}_n - w_n}{\bar{w}_n}\hat{\sigma}_{n - 1}^2 
+            \hat{\sigma}_n^2 =
+                \frac{\bar{w}_n - w_n}{\bar{w}_n}\hat{\sigma}_{n - 1}^2
               + \frac{w_n}{\bar{w}_n - w_n}\left(X_n - \hat{\mu}_n\right)^2
             ,\quad n\ge2,\quad\hat{\sigma}_0^2 = 0.
         \f]
-        where \f$\bar{w}_n\f$ is the sum of the \f$n\f$ weights \f$w_i\f$ and \f$\hat{\mu}_n\f$ 
-        the estimate of the mean of the weighted smaples. Note that the sample variance is not defined for 
+        where \f$\bar{w}_n\f$ is the sum of the \f$n\f$ weights \f$w_i\f$ and \f$\hat{\mu}_n\f$
+        the estimate of the mean of the weighted smaples. Note that the sample variance is not defined for
         \f$n <= 1\f$.
     */
     template<typename Sample, typename Weight, typename MeanFeature, typename Tag>
@@ -85,13 +85,13 @@ namespace impl
         void operator ()(Args const &args)
         {
             std::size_t cnt = count(args);
-                        
+
             if(cnt > 1)
             {
                 extractor<MeanFeature> const some_mean = {};
-                                
+
                 result_type tmp = args[parameter::keyword<Tag>::get()] - some_mean(args);
-                
+
                 this->weighted_variance =
                     numeric::average(this->weighted_variance * (sum_of_weights(args) - args[weight]), sum_of_weights(args))
                   + numeric::average(tmp * tmp * args[weight], sum_of_weights(args) - args[weight] );

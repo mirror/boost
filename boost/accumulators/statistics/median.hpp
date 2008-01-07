@@ -31,7 +31,7 @@ namespace impl
     //
     /**
         @brief Median estimation based on the \f$P^2\f$ quantile estimator
-        
+
         The \f$P^2\f$ algorithm is invoked with a quantile probability of 0.5.
     */
     template<typename Sample>
@@ -40,9 +40,9 @@ namespace impl
     {
         // for boost::result_of
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type result_type;
-        
+
         median_impl(dont_care) {}
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
@@ -54,9 +54,9 @@ namespace impl
     //
     /**
         @brief Median estimation based on the density estimator
-        
-        The algorithm determines the bin in which the \f$0.5*cnt\f$-th sample lies, \f$cnt\f$ being 
-        the total number of samples. It returns the approximate horizontal position of this sample, 
+
+        The algorithm determines the bin in which the \f$0.5*cnt\f$-th sample lies, \f$cnt\f$ being
+        the total number of samples. It returns the approximate horizontal position of this sample,
         based on a linear interpolation inside the bin.
     */
     template<typename Sample>
@@ -68,7 +68,7 @@ namespace impl
         typedef iterator_range<typename histogram_type::iterator> range_type;
         // for boost::result_of
         typedef float_type result_type;
-                
+
         template<typename Args>
         with_density_median_impl(Args const &args)
           : sum(numeric::average(args[sample | Sample()], (std::size_t)1))
@@ -81,14 +81,14 @@ namespace impl
             this->is_dirty = true;
         }
 
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             if (this->is_dirty)
             {
                 this->is_dirty = false;
-            
+
                 std::size_t cnt = count(args);
                 range_type histogram = density(args);
                 typename range_type::iterator it = histogram.begin();
@@ -101,7 +101,7 @@ namespace impl
                 float_type over = numeric::average(this->sum - 0.5 * cnt, it->second * cnt);
                 this->median = it->first * over + (it + 1)->first * (1. - over);
             }
-            
+
             return this->median;
         }
 
@@ -116,9 +116,9 @@ namespace impl
     //
     /**
         @brief Median estimation based on the \f$P^2\f$ cumulative distribution estimator
-        
-        The algorithm determines the first (leftmost) bin with a height exceeding 0.5. It 
-        returns the approximate horizontal position of where the cumulative distribution 
+
+        The algorithm determines the first (leftmost) bin with a height exceeding 0.5. It
+        returns the approximate horizontal position of where the cumulative distribution
         equals 0.5, based on a linear interpolation inside the bin.
     */
     template<typename Sample>
@@ -130,7 +130,7 @@ namespace impl
         typedef iterator_range<typename histogram_type::iterator> range_type;
         // for boost::result_of
         typedef float_type result_type;
-                
+
         with_p_square_cumulative_distribution_median_impl(dont_care)
           : is_dirty(true)
         {
@@ -140,14 +140,14 @@ namespace impl
         {
             this->is_dirty = true;
         }
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             if (this->is_dirty)
             {
                 this->is_dirty = false;
-            
+
                 range_type histogram = p_square_cumulative_distribution(args);
                 typename range_type::iterator it = histogram.begin();
                 while (it->second < 0.5)
@@ -157,15 +157,15 @@ namespace impl
                 float_type over = numeric::average(it->second - 0.5, it->second - (it - 1)->second);
                 this->median = it->first * over + (it + 1)->first * ( 1. - over );
             }
-            
+
             return this->median;
         }
     private:
-        
+
         mutable bool is_dirty;
         mutable float_type median;
     };
-    
+
 } // namespace impl
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -235,8 +235,8 @@ struct as_feature<tag::median(with_p_square_cumulative_distribution)>
     typedef tag::with_p_square_cumulative_distribution_median type;
 };
 
-// for the purposes of feature-based dependency resolution, 
-// with_density_median and with_p_square_cumulative_distribution_median 
+// for the purposes of feature-based dependency resolution,
+// with_density_median and with_p_square_cumulative_distribution_median
 // provide the same feature as median
 template<>
 struct feature_of<tag::with_density_median>

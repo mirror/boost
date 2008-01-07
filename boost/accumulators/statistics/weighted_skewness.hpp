@@ -31,18 +31,18 @@ namespace impl
 
         The skewness of a sample distribution is defined as the ratio of the 3rd central moment and the \f$ 3/2 \f$-th power $
         of the 2nd central moment (the variance) of the samples. The skewness can also be expressed by the simple moments:
-        
+
         \f[
             \hat{g}_1 =
                 \frac
                 {\widehat{m}_n^{(3)}-3\widehat{m}_n^{(2)}\hat{\mu}_n+2\hat{\mu}_n^3}
                 {\left(\widehat{m}_n^{(2)} - \hat{\mu}_n^{2}\right)^{3/2}}
         \f]
-        
-        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the 
+
+        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the
         \f$ n \f$ samples.
-        
-        The skewness estimator for weighted samples is formally identical to the estimator for unweighted samples, except that 
+
+        The skewness estimator for weighted samples is formally identical to the estimator for unweighted samples, except that
         the weighted counterparts of all measures it depends on are to be taken.
     */
     template<typename Sample, typename Weight>
@@ -59,10 +59,10 @@ namespace impl
         result_type result(Args const &args) const
         {
             return numeric::average(
-                        weighted_moment<3>(args) 
+                        weighted_moment<3>(args)
                         - 3. * weighted_moment<2>(args) * weighted_mean(args)
                         + 2. * weighted_mean(args) * weighted_mean(args) * weighted_mean(args)
-                      , ( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) ) 
+                      , ( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
                       * std::sqrt( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
                    );
         }

@@ -67,7 +67,7 @@ namespace boost { namespace accumulators
         typedef Feature type;
     };
 
-    namespace detail 
+    namespace detail
     {
         ///////////////////////////////////////////////////////////////////////////
         // feature_tag
@@ -165,7 +165,7 @@ namespace boost { namespace accumulators
         };
 
         // This is to work around a bug in early versions of Fusion which caused
-        // a compile error if contains_feature_of<List, mpl::_> is used as a 
+        // a compile error if contains_feature_of<List, mpl::_> is used as a
         // predicate to fusion::find_if
         template<typename Features>
         struct contains_feature_of_
@@ -187,7 +187,7 @@ namespace boost { namespace accumulators
         struct build_acc_list<First, Last, true>
         {
             typedef fusion::nil type;
-            
+
             template<typename Args>
             static fusion::nil
             call(Args const &, First const&, Last const&)
@@ -205,7 +205,7 @@ namespace boost { namespace accumulators
 
             typedef fusion::cons<
                 typename fusion::result_of::value_of<First>::type
-              , typename next_build_acc_list::type> 
+              , typename next_build_acc_list::type>
             type;
 
             template<typename Args>

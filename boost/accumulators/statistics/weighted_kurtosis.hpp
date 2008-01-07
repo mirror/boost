@@ -29,21 +29,21 @@ namespace impl
     /**
         @brief Kurtosis estimation for weighted samples
 
-        The kurtosis of a sample distribution is defined as the ratio of the 4th central moment and the square of the 2nd central 
-        moment (the variance) of the samples, minus 3. The term \f$ -3 \f$ is added in order to ensure that the normal distribution 
+        The kurtosis of a sample distribution is defined as the ratio of the 4th central moment and the square of the 2nd central
+        moment (the variance) of the samples, minus 3. The term \f$ -3 \f$ is added in order to ensure that the normal distribution
         has zero kurtosis. The kurtosis can also be expressed by the simple moments:
-        
+
         \f[
-            \hat{g}_2 = 
+            \hat{g}_2 =
                 \frac
                 {\widehat{m}_n^{(4)}-4\widehat{m}_n^{(3)}\hat{\mu}_n+6\widehat{m}_n^{(2)}\hat{\mu}_n^2-3\hat{\mu}_n^4}
                 {\left(\widehat{m}_n^{(2)} - \hat{\mu}_n^{2}\right)^2} - 3,
         \f]
-        
-        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the 
+
+        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the
         \f$ n \f$ samples.
-        
-        The kurtosis estimator for weighted samples is formally identical to the estimator for unweighted samples, except that 
+
+        The kurtosis estimator for weighted samples is formally identical to the estimator for unweighted samples, except that
         the weighted counterparts of all measures it depends on are to be taken.
     */
     template<typename Sample, typename Weight>
@@ -61,12 +61,12 @@ namespace impl
         template<typename Args>
         result_type result(Args const &args) const
         {
-            return numeric::average( 
-                        weighted_moment<4>(args) 
+            return numeric::average(
+                        weighted_moment<4>(args)
                         - 4. * weighted_moment<3>(args) * weighted_mean(args)
-                        + 6. * weighted_moment<2>(args) * weighted_mean(args) * weighted_mean(args) 
+                        + 6. * weighted_moment<2>(args) * weighted_mean(args) * weighted_mean(args)
                         - 3. * weighted_mean(args) * weighted_mean(args) * weighted_mean(args) * weighted_mean(args)
-                      , ( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) ) 
+                      , ( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
                         * ( weighted_moment<2>(args) - weighted_mean(args) * weighted_mean(args) )
                    ) - 3.;
         }

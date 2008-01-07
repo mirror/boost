@@ -33,17 +33,17 @@ namespace impl
     /**
         @brief Histogram calculation of the cumulative distribution with the \f$P^2\f$ algorithm for weighted samples
 
-        A histogram of the sample cumulative distribution is computed dynamically without storing samples 
-        based on the \f$ P^2 \f$ algorithm for weighted samples. The returned histogram has a specifiable 
+        A histogram of the sample cumulative distribution is computed dynamically without storing samples
+        based on the \f$ P^2 \f$ algorithm for weighted samples. The returned histogram has a specifiable
         amount (num_cells) equiprobable (and not equal-sized) cells.
-        
-        Note that applying importance sampling results in regions to be more and other regions to be less 
+
+        Note that applying importance sampling results in regions to be more and other regions to be less
         accurately estimated than without importance sampling, i.e., with unweighted samples.
 
         For further details, see
 
-        R. Jain and I. Chlamtac, The P^2 algorithmus for dynamic calculation of quantiles and 
-        histograms without storing observations, Communications of the ACM,   
+        R. Jain and I. Chlamtac, The P^2 algorithmus for dynamic calculation of quantiles and
+        histograms without storing observations, Communications of the ACM,
         Volume 28 (October), Number 10, 1985, p. 1076-1085.
 
         @param p_square_cumulative_distribution_num_cells
@@ -58,7 +58,7 @@ namespace impl
         typedef std::vector<float_type> array_type;
         // for boost::result_of
         typedef iterator_range<typename histogram_type::iterator> result_type;
-        
+
         template<typename Args>
         weighted_p_square_cumulative_distribution_impl(Args const &args)
           : num_cells(args[p_square_cumulative_distribution_num_cells])
@@ -67,14 +67,14 @@ namespace impl
           , desired_positions(num_cells + 1)
           , histogram(num_cells + 1)
           , is_dirty(true)
-        {     
+        {
         }
-        
+
         template<typename Args>
         void operator ()(Args const &args)
         {
             this->is_dirty = true;
-        
+
             std::size_t cnt = count(args);
             std::size_t sample_cell = 1; // k
             std::size_t b = this->num_cells;
@@ -84,22 +84,22 @@ namespace impl
             {
                 this->heights[cnt - 1] = args[sample];
                 this->actual_positions[cnt - 1] = args[weight];
-                
+
                 // complete the initialization of heights by sorting
                 if (cnt == b + 1)
                 {
                     //std::sort(this->heights.begin(), this->heights.end());
-                    
-                    // TODO: we need to sort the initial samples (in heights) in ascending order and 
-                    // sort their weights (in actual_positions) the same way. The following lines do 
+
+                    // TODO: we need to sort the initial samples (in heights) in ascending order and
+                    // sort their weights (in actual_positions) the same way. The following lines do
                     // it, but there must be a better and more efficient way of doing this.
                     typename array_type::iterator it_begin, it_end, it_min;
-                    
+
                     it_begin = this->heights.begin();
                     it_end   = this->heights.end();
-                    
+
                     std::size_t pos = 0;
-                    
+
                     while (it_begin != it_end)
                     {
                         it_min = std::min_element(it_begin, it_end);
@@ -109,14 +109,14 @@ namespace impl
                         ++it_begin;
                         ++pos;
                     }
-                    
+
                     // calculate correct initial actual positions
                     for (std::size_t i = 1; i < b; ++i)
                     {
                         this->actual_positions[i] += this->actual_positions[i - 1];
                     }
                 }
-            }     
+            }
             else
             {
                 // find cell k such that heights[k-1] <= args[sample] < heights[k] and adjust extreme values
@@ -139,46 +139,46 @@ namespace impl
                       , this->heights.end()
                       , args[sample]
                     );
-                                    
+
                     sample_cell = std::distance(this->heights.begin(), it);
                 }
-                
+
                 // increment positions of markers above sample_cell
                 for (std::size_t i = sample_cell; i < b + 1; ++i)
                 {
                     this->actual_positions[i] += args[weight];
                 }
-                
+
                 // determine desired marker positions
                 for (std::size_t i = 1; i < b + 1; ++i)
                 {
                     this->desired_positions[i] = this->actual_positions[0]
                                                + numeric::average((i-1) * (sum_of_weights(args) - this->actual_positions[0]), b);
                 }
-                
+
                 // adjust heights of markers 2 to num_cells if necessary
                 for (std::size_t i = 1; i < b; ++i)
                 {
                     // offset to desire position
                     float_type d = this->desired_positions[i] - this->actual_positions[i];
-                                        
+
                     // offset to next position
                     float_type dp = this->actual_positions[i + 1] - this->actual_positions[i];
-                    
+
                     // offset to previous position
                     float_type dm = this->actual_positions[i - 1] - this->actual_positions[i];
-                    
+
                     // height ds
                     float_type hp = (this->heights[i + 1] - this->heights[i]) / dp;
                     float_type hm = (this->heights[i - 1] - this->heights[i]) / dm;
-                    
+
                     if ( ( d >= 1. && dp > 1. ) || ( d <= -1. && dm < -1. ) )
                     {
                         short sign_d = static_cast<short>(d / std::abs(d));
-                                               
+
                         // try adjusting heights[i] using p-squared formula
                         float_type h = this->heights[i] + sign_d / (dp - dm) * ( (sign_d - dm) * hp + (dp - sign_d) * hm );
-                        
+
                         if ( this->heights[i - 1] < h && h < this->heights[i + 1] )
                         {
                             this->heights[i] = h;
@@ -207,17 +207,17 @@ namespace impl
             if (this->is_dirty)
             {
                 this->is_dirty = false;
-            
+
                 // creates a vector of std::pair where each pair i holds
                 // the values heights[i] (x-axis of histogram) and
                 // actual_positions[i] / sum_of_weights (y-axis of histogram)
-                            
+
                 for (std::size_t i = 0; i < this->histogram.size(); ++i)
                 {
                     this->histogram[i] = std::make_pair(this->heights[i], numeric::average(this->actual_positions[i], sum_of_weights(args)));
                 }
             }
-            
+
             return make_iterator_range(this->histogram);
         }
 

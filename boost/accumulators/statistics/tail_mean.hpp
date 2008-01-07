@@ -33,23 +33,23 @@ namespace boost { namespace accumulators
 
 namespace impl
 {
-     
+
     ///////////////////////////////////////////////////////////////////////////////
     // coherent_tail_mean_impl
     //
     /**
         @brief Estimation of the coherent tail mean based on order statistics (for both left and right tails)
 
-        The coherent tail mean \f$\widehat{CTM}_{n,\alpha}(X)\f$ is equal to the non-coherent tail mean \f$\widehat{NCTM}_{n,\alpha}(X)\f$ 
+        The coherent tail mean \f$\widehat{CTM}_{n,\alpha}(X)\f$ is equal to the non-coherent tail mean \f$\widehat{NCTM}_{n,\alpha}(X)\f$
         plus a correction term that ensures coherence in case of non-continuous distributions.
-        
+
         \f[
-            \widehat{CTM}_{n,\alpha}^{\mathrm{right}}(X) = \widehat{NCTM}_{n,\alpha}^{\mathrm{right}}(X) + 
+            \widehat{CTM}_{n,\alpha}^{\mathrm{right}}(X) = \widehat{NCTM}_{n,\alpha}^{\mathrm{right}}(X) +
             \frac{1}{\lceil n(1-\alpha)\rceil}\hat{q}_{n,\alpha}(X)\left(1 - \alpha - \frac{1}{n}\lceil n(1-\alpha)\rceil \right)
         \f]
-        
+
         \f[
-            \widehat{CTM}_{n,\alpha}^{\mathrm{left}}(X) = \widehat{NCTM}_{n,\alpha}^{\mathrm{left}}(X) + 
+            \widehat{CTM}_{n,\alpha}^{\mathrm{left}}(X) = \widehat{NCTM}_{n,\alpha}^{\mathrm{left}}(X) +
             \frac{1}{\lceil n\alpha\rceil}\hat{q}_{n,\alpha}(X)\left(\alpha - \frac{1}{n}\lceil n\alpha\rceil \right)
         \f]
     */
@@ -60,22 +60,22 @@ namespace impl
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type float_type;
         // for boost::result_of
         typedef float_type result_type;
-        
+
         coherent_tail_mean_impl(dont_care) {}
-               
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             std::size_t cnt = count(args);
-        
+
             std::size_t n = static_cast<std::size_t>(
                 std::ceil(
                     cnt * ( ( is_same<LeftRight, left>::value ) ? args[quantile_probability] : 1. - args[quantile_probability] )
                 )
             );
-            
+
             extractor<tag::non_coherent_tail_mean<LeftRight> > const some_non_coherent_tail_mean = {};
-            
+
             return some_non_coherent_tail_mean(args)
                  + numeric::average(quantile(args), n)
                  * (
@@ -84,28 +84,28 @@ namespace impl
                    );
         }
     };
-    
+
     ///////////////////////////////////////////////////////////////////////////////
     // non_coherent_tail_mean_impl
-    //       
+    //
     /**
         @brief Estimation of the (non-coherent) tail mean based on order statistics (for both left and right tails)
 
-        An estimation of the non-coherent tail mean \f$\widehat{NCTM}_{n,\alpha}(X)\f$ is given by the mean of the 
-        \f$\lceil n\alpha\rceil\f$ smallest samples (left tail) or the mean of the  \f$\lceil n(1-\alpha)\rceil\f$ 
+        An estimation of the non-coherent tail mean \f$\widehat{NCTM}_{n,\alpha}(X)\f$ is given by the mean of the
+        \f$\lceil n\alpha\rceil\f$ smallest samples (left tail) or the mean of the  \f$\lceil n(1-\alpha)\rceil\f$
         largest samples (right tail), \f$n\f$ being the total number of samples and \f$\alpha\f$ the quantile level:
-        
+
         \f[
             \widehat{NCTM}_{n,\alpha}^{\mathrm{right}}(X) = \frac{1}{\lceil n(1-\alpha)\rceil} \sum_{i=\lceil \alpha n \rceil}^n X_{i:n}
         \f]
-        
+
         \f[
             \widehat{NCTM}_{n,\alpha}^{\mathrm{left}}(X) = \frac{1}{\lceil n\alpha\rceil} \sum_{i=1}^{\lceil \alpha n \rceil} X_{i:n}
         \f]
-        
-        It thus requires the caching of at least the \f$\lceil n\alpha\rceil\f$ smallest or the \f$\lceil n(1-\alpha)\rceil\f$ 
+
+        It thus requires the caching of at least the \f$\lceil n\alpha\rceil\f$ smallest or the \f$\lceil n(1-\alpha)\rceil\f$
         largest samples.
-                
+
         @param quantile_probability
     */
     template<typename Sample, typename LeftRight>
@@ -115,22 +115,22 @@ namespace impl
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type float_type;
         // for boost::result_of
         typedef float_type result_type;
-        
+
         non_coherent_tail_mean_impl(dont_care) {}
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             std::size_t cnt = count(args);
-        
+
             std::size_t n = static_cast<std::size_t>(
                 std::ceil(
                     cnt * ( ( is_same<LeftRight, left>::value ) ? args[quantile_probability] : 1. - args[quantile_probability] )
                 )
             );
-            
+
             // If n is in a valid range, return result, otherwise return NaN or throw exception
-            if (n <= tail(args).size())
+            if (n <= static_cast<std::size_t>(tail(args).size()))
                 return numeric::average(
                     std::accumulate(
                         tail(args).begin()
@@ -152,7 +152,7 @@ namespace impl
                     boost::throw_exception(std::runtime_error(msg.str()));
                     return Sample(0);
                 }
-            }          
+            }
         }
     };
 
@@ -171,14 +171,14 @@ namespace tag
     {
         typedef accumulators::impl::coherent_tail_mean_impl<mpl::_1, LeftRight> impl;
     };
-    
+
     template<typename LeftRight>
     struct non_coherent_tail_mean
       : depends_on<count, tail<LeftRight> >
     {
         typedef accumulators::impl::non_coherent_tail_mean_impl<mpl::_1, LeftRight> impl;
     };
-    
+
     struct abstract_non_coherent_tail_mean
       : depends_on<>
     {
@@ -212,7 +212,7 @@ struct feature_of<tag::non_coherent_tail_mean<LeftRight> >
 {
 };
 
-// So that non_coherent_tail_mean can be automatically substituted 
+// So that non_coherent_tail_mean can be automatically substituted
 // with weighted_non_coherent_tail_mean when the weight parameter is non-void.
 template<typename LeftRight>
 struct as_weighted_feature<tag::non_coherent_tail_mean<LeftRight> >

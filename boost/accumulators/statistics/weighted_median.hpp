@@ -32,7 +32,7 @@ namespace impl
     //
     /**
         @brief Median estimation for weighted samples based on the \f$P^2\f$ quantile estimator
-        
+
         The \f$P^2\f$ algorithm for weighted samples is invoked with a quantile probability of 0.5.
     */
     template<typename Sample>
@@ -41,9 +41,9 @@ namespace impl
     {
         // for boost::result_of
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type result_type;
-        
+
         weighted_median_impl(dont_care) {}
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
@@ -56,9 +56,9 @@ namespace impl
     //
     /**
         @brief Median estimation for weighted samples based on the density estimator
-        
-        The algorithm determines the bin in which the \f$0.5*cnt\f$-th sample lies, \f$cnt\f$ being 
-        the total number of samples. It returns the approximate horizontal position of this sample, 
+
+        The algorithm determines the bin in which the \f$0.5*cnt\f$-th sample lies, \f$cnt\f$ being
+        the total number of samples. It returns the approximate horizontal position of this sample,
         based on a linear interpolation inside the bin.
     */
     template<typename Sample>
@@ -70,7 +70,7 @@ namespace impl
         typedef iterator_range<typename histogram_type::iterator> range_type;
         // for boost::result_of
         typedef float_type result_type;
-         
+
         template<typename Args>
         with_density_weighted_median_impl(Args const &args)
           : sum(numeric::average(args[sample | Sample()], (std::size_t)1))
@@ -82,14 +82,14 @@ namespace impl
         {
             this->is_dirty = true;
         }
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             if (this->is_dirty)
             {
                 this->is_dirty = false;
-            
+
                 std::size_t cnt = count(args);
                 range_type histogram = weighted_density(args);
                 typename range_type::iterator it = histogram.begin();
@@ -102,7 +102,7 @@ namespace impl
                 float_type over = numeric::average(this->sum - 0.5 * cnt, it->second * cnt);
                 this->median = it->first * over + (it + 1)->first * ( 1. - over );
             }
-            
+
             return this->median;
         }
 
@@ -117,9 +117,9 @@ namespace impl
     //
     /**
         @brief Median estimation for weighted samples based on the \f$P^2\f$ cumulative distribution estimator
-        
-        The algorithm determines the first (leftmost) bin with a height exceeding 0.5. It 
-        returns the approximate horizontal position of where the cumulative distribution 
+
+        The algorithm determines the first (leftmost) bin with a height exceeding 0.5. It
+        returns the approximate horizontal position of where the cumulative distribution
         equals 0.5, based on a linear interpolation inside the bin.
     */
     template<typename Sample, typename Weight>
@@ -132,13 +132,13 @@ namespace impl
         typedef iterator_range<typename histogram_type::iterator> range_type;
         // for boost::result_of
         typedef float_type result_type;
-                
+
         template<typename Args>
         with_p_square_cumulative_distribution_weighted_median_impl(Args const &args)
           : is_dirty(true)
         {
         }
-        
+
         void operator ()(dont_care)
         {
             this->is_dirty = true;
@@ -150,7 +150,7 @@ namespace impl
             if (this->is_dirty)
             {
                 this->is_dirty = false;
-            
+
                 range_type histogram = weighted_p_square_cumulative_distribution(args);
                 typename range_type::iterator it = histogram.begin();
                 while (it->second < 0.5)
@@ -160,7 +160,7 @@ namespace impl
                 float_type over = numeric::average(it->second - 0.5, it->second - (it - 1)->second);
                 this->median = it->first * over + (it + 1)->first * ( 1. - over );
             }
-            
+
             return this->median;
         }
     private:

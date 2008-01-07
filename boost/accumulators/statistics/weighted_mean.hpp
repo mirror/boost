@@ -50,9 +50,9 @@ namespace impl
                   , tag::weighted_sum_of_variates<Sample, Tag>
                 >::type
             weighted_sum_tag;
-            
+
             extractor<weighted_sum_tag> const some_weighted_sum = {};
-            
+
             return numeric::average(some_weighted_sum(args), sum_of_weights(args));
         }
     };
@@ -148,7 +148,7 @@ namespace tag
 namespace extract
 {
     extractor<tag::mean> const weighted_mean = {};
-    BOOST_ACCUMULATORS_DEFINE_EXTRACTOR(tag, weighted_mean_of_variates, (typename)(typename));
+    BOOST_ACCUMULATORS_DEFINE_EXTRACTOR(tag, weighted_mean_of_variates, (typename)(typename))
 }
 
 using extract::weighted_mean;

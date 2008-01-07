@@ -28,18 +28,18 @@ namespace impl
     /**
         @brief Kurtosis estimation
 
-        The kurtosis of a sample distribution is defined as the ratio of the 4th central moment and the square of the 2nd central 
-        moment (the variance) of the samples, minus 3. The term \f$ -3 \f$ is added in order to ensure that the normal distribution 
+        The kurtosis of a sample distribution is defined as the ratio of the 4th central moment and the square of the 2nd central
+        moment (the variance) of the samples, minus 3. The term \f$ -3 \f$ is added in order to ensure that the normal distribution
         has zero kurtosis. The kurtosis can also be expressed by the simple moments:
-        
+
         \f[
-            \hat{g}_2 = 
+            \hat{g}_2 =
                 \frac
                 {\widehat{m}_n^{(4)}-4\widehat{m}_n^{(3)}\hat{\mu}_n+6\widehat{m}_n^{(2)}\hat{\mu}_n^2-3\hat{\mu}_n^4}
                 {\left(\widehat{m}_n^{(2)} - \hat{\mu}_n^{2}\right)^2} - 3,
         \f]
-        
-        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the 
+
+        where \f$ \widehat{m}_n^{(i)} \f$ are the \f$ i \f$-th moment and \f$ \hat{\mu}_n \f$ the mean (first moment) of the
         \f$ n \f$ samples.
     */
     template<typename Sample>
@@ -57,10 +57,10 @@ namespace impl
             return numeric::average(
                         moment<4>(args)
                         - 4. * moment<3>(args) * mean(args)
-                        + 6. * moment<2>(args) * mean(args) * mean(args) 
+                        + 6. * moment<2>(args) * mean(args) * mean(args)
                         - 3. * mean(args) * mean(args) * mean(args) * mean(args)
-                      , ( moment<2>(args) - mean(args) * mean(args) ) 
-                        * ( moment<2>(args) - mean(args) * mean(args) ) 
+                      , ( moment<2>(args) - mean(args) * mean(args) )
+                        * ( moment<2>(args) - mean(args) * mean(args) )
                     ) - 3.;
         }
     };
@@ -91,7 +91,7 @@ namespace extract
 
 using extract::kurtosis;
 
-// So that kurtosis can be automatically substituted with 
+// So that kurtosis can be automatically substituted with
 // weighted_kurtosis when the weight parameter is non-void
 template<>
 struct as_weighted_feature<tag::kurtosis>

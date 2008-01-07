@@ -12,6 +12,10 @@
 #include <limits>
 #include <numeric>
 #include <functional>
+#include <cmath> // pow
+#include <sstream> // stringstream
+#include <stdexcept> // runtime_error
+#include <boost/throw_exception.hpp>
 #include <boost/range.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/int.hpp>
@@ -39,26 +43,26 @@ BOOST_PARAMETER_NESTED_KEYWORD(tag, pot_threshold_value, threshold_value)
 BOOST_PARAMETER_NESTED_KEYWORD(tag, pot_threshold_probability, threshold_probability)
 
 namespace impl
-{      
+{
     ///////////////////////////////////////////////////////////////////////////////
     // peaks_over_threshold_impl
     //  works with an explicit threshold value and does not depend on order statistics
     /**
         @brief Peaks over Threshold Method for Quantile and Tail Mean Estimation
-        
-        According to the theorem of Pickands-Balkema-de Haan, the distribution function \f$F_u(x)\f$ of 
-        the excesses \f$x\f$ over some sufficiently high threshold \f$u\f$ of a distribution function \f$F(x)\f$ 
+
+        According to the theorem of Pickands-Balkema-de Haan, the distribution function \f$F_u(x)\f$ of
+        the excesses \f$x\f$ over some sufficiently high threshold \f$u\f$ of a distribution function \f$F(x)\f$
         may be approximated by a generalized Pareto distribution
         \f[
             G_{\xi,\beta}(x) =
             \left\{
             \begin{array}{ll}
                 \beta^{-1}\left(1+\frac{\xi x}{\beta}\right)^{-1/\xi-1} & \textrm{if }\xi\neq0\\
-                \beta^{-1}\exp\left(-\frac{x}{\beta}\right) & \textrm{if }\xi=0,    
-            \end{array}   
+                \beta^{-1}\exp\left(-\frac{x}{\beta}\right) & \textrm{if }\xi=0,
+            \end{array}
             \right.
         \f]
-        with suitable parameters \f$\xi\f$ and \f$\beta\f$ that can be estimated, e.g., with the method of moments, cf. 
+        with suitable parameters \f$\xi\f$ and \f$\beta\f$ that can be estimated, e.g., with the method of moments, cf.
         Hosking and Wallis (1987),
         \f[
             \begin{array}{lll}
@@ -66,22 +70,22 @@ namespace impl
             \hat{\beta} & = & \frac{\hat{\mu}-u}{2}\left[\frac{(\hat{\mu}-u)^2}{\hat{\sigma}^2}+1\right],
             \end{array}
         \f]
-        \f$\hat{\mu}\f$ and \f$\hat{\sigma}^2\f$ being the empirical mean and variance of the samples over 
-        the threshold \f$u\f$. Equivalently, the distribution function 
-        \f$F_u(x-u)\f$ of the exceedances \f$x-u\f$ can be approximated by 
-        \f$G_{\xi,\beta}(x-u)=G_{\xi,\beta,u}(x)\f$. Since for \f$x\geq u\f$ the distribution function \f$F(x)\f$ 
+        \f$\hat{\mu}\f$ and \f$\hat{\sigma}^2\f$ being the empirical mean and variance of the samples over
+        the threshold \f$u\f$. Equivalently, the distribution function
+        \f$F_u(x-u)\f$ of the exceedances \f$x-u\f$ can be approximated by
+        \f$G_{\xi,\beta}(x-u)=G_{\xi,\beta,u}(x)\f$. Since for \f$x\geq u\f$ the distribution function \f$F(x)\f$
         can be written as
         \f[
             F(x) = [1 - \P(X \leq u)]F_u(x - u) + \P(X \leq u)
         \f]
-        and the probability \f$\P(X \leq u)\f$ can be approximated by the empirical distribution function 
-        \f$F_n(u)\f$ evaluated at \f$u\f$, an estimator of \f$F(x)\f$ is given by 
+        and the probability \f$\P(X \leq u)\f$ can be approximated by the empirical distribution function
+        \f$F_n(u)\f$ evaluated at \f$u\f$, an estimator of \f$F(x)\f$ is given by
         \f[
             \widehat{F}(x) = [1 - F_n(u)]G_{\xi,\beta,u}(x) + F_n(u).
         \f]
-        It can be shown that \f$\widehat{F}(x)\f$ is a generalized 
-        Pareto distribution \f$G_{\xi,\bar{\beta},\bar{u}}(x)\f$ with \f$\bar{\beta}=\beta[1-F_n(u)]^{\xi}\f$ 
-        and \f$\bar{u}=u-\bar{\beta}\left\{[1-F_n(u)]^{-\xi}-1\right\}/\xi\f$. By inverting \f$\widehat{F}(x)\f$, 
+        It can be shown that \f$\widehat{F}(x)\f$ is a generalized
+        Pareto distribution \f$G_{\xi,\bar{\beta},\bar{u}}(x)\f$ with \f$\bar{\beta}=\beta[1-F_n(u)]^{\xi}\f$
+        and \f$\bar{u}=u-\bar{\beta}\left\{[1-F_n(u)]^{-\xi}-1\right\}/\xi\f$. By inverting \f$\widehat{F}(x)\f$,
         one obtains an estimator for the \f$\alpha\f$-quantile,
         \f[
             \hat{q}_{\alpha} = \bar{u} + \frac{\bar{\beta}}{\xi}\left[(1-\alpha)^{-\xi}-1\right],
@@ -91,19 +95,19 @@ namespace impl
             \widehat{CTM}_{\alpha} = \hat{q}_{\alpha} - \frac{\bar{\beta}}{\xi-1}(1-\alpha)^{-\xi},
         \f]
         cf. McNeil and Frey (2000).
-        
+
         Note that in case extreme values of the left tail are fitted, the distribution is mirrored with respect to the
-        \f$y\f$ axis such that the left tail can be treated as a right tail. The computed fit parameters thus define 
-        the Pareto distribution that fits the mirrored left tail. When quantities like a quantile or a tail mean are 
-        computed using the fit parameters obtained from the mirrored data, the result is mirrored back, yielding the 
+        \f$y\f$ axis such that the left tail can be treated as a right tail. The computed fit parameters thus define
+        the Pareto distribution that fits the mirrored left tail. When quantities like a quantile or a tail mean are
+        computed using the fit parameters obtained from the mirrored data, the result is mirrored back, yielding the
         correct result.
-        
+
         For further details, see
-        
-        J. R. M. Hosking and J. R. Wallis, Parameter and quantile estimation for the generalized Pareto distribution, 
+
+        J. R. M. Hosking and J. R. Wallis, Parameter and quantile estimation for the generalized Pareto distribution,
         Technometrics, Volume 29, 1987, p. 339-349
-        
-        A. J. McNeil and R. Frey, Estimation of Tail-Related Risk Measures for Heteroscedastic Financial Time Series: 
+
+        A. J. McNeil and R. Frey, Estimation of Tail-Related Risk Measures for Heteroscedastic Financial Time Series:
         an Extreme Value Approach, Journal of Empirical Finance, Volume 7, 2000, p. 271-300
 
         @param quantile_probability
@@ -118,7 +122,7 @@ namespace impl
         typedef boost::tuple<float_type, float_type, float_type> result_type;
         // for left tail fitting, mirror the extreme values
         typedef mpl::int_<is_same<LeftRight, left>::value ? -1 : 1> sign;
-        
+
         template<typename Args>
         peaks_over_threshold_impl(Args const &args)
           : Nu_(0)
@@ -129,12 +133,12 @@ namespace impl
           , is_dirty_(true)
         {
         }
-        
+
         template<typename Args>
         void operator ()(Args const &args)
         {
             this->is_dirty_ = true;
-        
+
             if (sign::value * args[sample] > this->threshold_)
             {
                 this->mu_ += args[sample];
@@ -149,15 +153,15 @@ namespace impl
             if (this->is_dirty_)
             {
                 this->is_dirty_ = false;
-            
+
                 std::size_t cnt = count(args);
-                
+
                 this->mu_ = sign::value * numeric::average(this->mu_, this->Nu_);
                 this->sigma2_ = numeric::average(this->sigma2_, this->Nu_);
                 this->sigma2_ -= this->mu_ * this->mu_;
-                
+
                 float_type threshold_probability = numeric::average(cnt - this->Nu_, cnt);
-                
+
                 float_type tmp = numeric::average(( this->mu_ - this->threshold_ )*( this->mu_ - this->threshold_ ), this->sigma2_);
                 float_type xi_hat = 0.5 * ( 1. - tmp );
                 float_type beta_hat = 0.5 * ( this->mu_ - this->threshold_ ) * ( 1. + tmp );
@@ -165,7 +169,7 @@ namespace impl
                 float_type u_bar = this->threshold_ - beta_bar * ( std::pow(1. - threshold_probability, -xi_hat) - 1.)/xi_hat;
                 this->fit_parameters_ = boost::make_tuple(u_bar, beta_bar, xi_hat);
             }
-                      
+
             return this->fit_parameters_;
         }
 
@@ -185,7 +189,7 @@ namespace impl
         @brief Peaks over Threshold Method for Quantile and Tail Mean Estimation
 
         @sa peaks_over_threshold_impl
-        
+
         @param quantile_probability
         @param pot_threshold_probability
     */
@@ -198,7 +202,7 @@ namespace impl
         typedef boost::tuple<float_type, float_type, float_type> result_type;
         // for left tail fitting, mirror the extreme values
         typedef mpl::int_<is_same<LeftRight, left>::value ? -1 : 1> sign;
-        
+
         template<typename Args>
         peaks_over_threshold_prob_impl(Args const &args)
           : mu_(sign::value * numeric::average(args[sample | Sample()], (std::size_t)1))
@@ -208,28 +212,28 @@ namespace impl
           , is_dirty_(true)
         {
         }
-        
+
         void operator ()(dont_care)
         {
             this->is_dirty_ = true;
         }
-        
+
         template<typename Args>
         result_type result(Args const &args) const
         {
             if (this->is_dirty_)
-            {            
+            {
                 this->is_dirty_ = false;
-             
+
                 std::size_t cnt = count(args);
-                
+
                 // the n'th cached sample provides an approximate threshold value u
                 std::size_t n = static_cast<std::size_t>(
                     std::ceil(
                         cnt * ( ( is_same<LeftRight, left>::value ) ? this->threshold_probability_ : 1. - this->threshold_probability_ )
                     )
                 );
-                
+
                 // If n is in a valid range, return result, otherwise return NaN or throw exception
                 if ( n >= tail(args).size())
                 {
@@ -252,21 +256,21 @@ namespace impl
                 else
                 {
                     float_type u = *(tail(args).begin() + n - 1) * sign::value;
-    
+
                     // compute mean and variance of samples above/under threshold value u
                     for (std::size_t i = 0; i < n; ++i)
                     {
                         mu_ += *(tail(args).begin() + i);
                         sigma2_ += *(tail(args).begin() + i) * (*(tail(args).begin() + i));
                     }
-                    
+
                     this->mu_ = sign::value * numeric::average(this->mu_, n);
                     this->sigma2_ = numeric::average(this->sigma2_, n);
                     this->sigma2_ -= this->mu_ * this->mu_;
-    
+
                     if (is_same<LeftRight, left>::value)
                         this->threshold_probability_ = 1. - this->threshold_probability_;
-                    
+
                     float_type tmp = numeric::average(( this->mu_ - u )*( this->mu_ - u ), this->sigma2_);
                     float_type xi_hat = 0.5 * ( 1. - tmp );
                     float_type beta_hat = 0.5 * ( this->mu_ - u ) * ( 1. + tmp );
@@ -275,7 +279,7 @@ namespace impl
                     this->fit_parameters_ = boost::make_tuple(u_bar, beta_bar, xi_hat);
                 }
             }
-            
+
             return this->fit_parameters_;
         }
 
@@ -283,10 +287,10 @@ namespace impl
         mutable float_type mu_;                     // mean of samples above threshold u
         mutable float_type sigma2_;                 // variance of samples above threshold u
         mutable float_type threshold_probability_;
-        mutable result_type fit_parameters_;        // boost::tuple that stores fit parameters 
+        mutable result_type fit_parameters_;        // boost::tuple that stores fit parameters
         mutable bool is_dirty_;
     };
-    
+
 } // namespace impl
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -303,7 +307,7 @@ namespace tag
         ///
         typedef accumulators::impl::peaks_over_threshold_impl<mpl::_1, LeftRight> impl;
     };
-    
+
     template<typename LeftRight>
     struct peaks_over_threshold_prob
       : depends_on<count, tail<LeftRight> >
@@ -313,7 +317,7 @@ namespace tag
         ///
         typedef accumulators::impl::peaks_over_threshold_prob_impl<mpl::_1, LeftRight> impl;
     };
-    
+
     struct abstract_peaks_over_threshold
       : depends_on<>
     {
@@ -356,7 +360,7 @@ struct feature_of<tag::peaks_over_threshold_prob<LeftRight> >
 {
 };
 
-// So that peaks_over_threshold can be automatically substituted 
+// So that peaks_over_threshold can be automatically substituted
 // with weighted_peaks_over_threshold when the weight parameter is non-void.
 template<typename LeftRight>
 struct as_weighted_feature<tag::peaks_over_threshold<LeftRight> >
@@ -369,7 +373,7 @@ struct feature_of<tag::weighted_peaks_over_threshold<LeftRight> >
   : feature_of<tag::peaks_over_threshold<LeftRight> >
 {};
 
-// So that peaks_over_threshold_prob can be automatically substituted 
+// So that peaks_over_threshold_prob can be automatically substituted
 // with weighted_peaks_over_threshold_prob when the weight parameter is non-void.
 template<typename LeftRight>
 struct as_weighted_feature<tag::peaks_over_threshold_prob<LeftRight> >
