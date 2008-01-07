@@ -14,8 +14,8 @@ project unordered-test/unordered
 
 test-suite unordered
     :
-        [ run set_compile.cpp ]
-        [ run map_compile.cpp ]
+        [ run compile_set.cpp ]
+        [ run compile_map.cpp ]
         [ run link_test_1.cpp link_test_2.cpp ]
         [ run simple_tests.cpp ]
         [ run equivalent_keys_tests.cpp ]
