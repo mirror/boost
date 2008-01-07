@@ -44,6 +44,24 @@ namespace boost { namespace iostreams {
 
 //------------------Implementation of file_descriptor-------------------------//
 
+file_descriptor::file_descriptor() : pimpl_(new impl) { }
+
+file_descriptor::file_descriptor(handle_type fd, bool close_on_exit)
+    : pimpl_(new impl(fd, close_on_exit))
+    { }
+
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    file_descriptor::file_descriptor(int fd, bool close_on_exit)
+        : pimpl_(new impl(int_to_handle(fd), close_on_exit))
+        { }
+#endif
+
+file_descriptor::file_descriptor( const std::string& path,
+                                  BOOST_IOS::openmode mode,
+                                  BOOST_IOS::openmode base_mode )
+    : pimpl_(new impl)
+{ open(path, mode, base_mode); }
+
 void file_descriptor::open
     ( const std::string& path, BOOST_IOS::openmode m,
       BOOST_IOS::openmode base )
@@ -88,7 +106,7 @@ void file_descriptor::open
                        NULL );                 // hTemplateFile
     if (handle != INVALID_HANDLE_VALUE) {
         pimpl_->handle_ = handle;
-        pimpl_->flags_ |= impl::close_on_exit | impl::has_handle;
+        pimpl_->flags_ |= impl::close_on_exit;
     } else {
         pimpl_->flags_ = 0;
         throw BOOST_IOSTREAMS_FAILURE("bad open");
@@ -131,7 +149,7 @@ void file_descriptor::open
     if (fd == -1) {
         throw BOOST_IOSTREAMS_FAILURE("bad open");
     } else {
-        pimpl_->fd_ = fd;
+        pimpl_->handle_ = fd;
         pimpl_->flags_ = impl::close_on_exit;
     }
 #endif // #ifndef BOOST_IOSTREAMS_WINDOWS //----------------------------------//
@@ -140,43 +158,41 @@ void file_descriptor::open
 std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    if (pimpl_->flags_ & impl::has_handle) {
-        DWORD result;
-        if (!::ReadFile(pimpl_->handle_, s, n, &result, NULL))
-            throw detail::bad_read();
-        return static_cast<std::streamsize>(result);
-    }
-#endif
+    DWORD result;
+    if (!::ReadFile(pimpl_->handle_, s, n, &result, NULL))
+        throw detail::bad_read();
+    return static_cast<std::streamsize>(result);
+#else // #ifdef BOOST_IOSTREAMS_WINDOWS
     errno = 0;
-    std::streamsize result = BOOST_IOSTREAMS_FD_READ(pimpl_->fd_, s, n);
+    std::streamsize result = BOOST_IOSTREAMS_FD_READ(pimpl_->handle_, s, n);
     if (errno != 0)
         throw detail::bad_read();
     return result == 0 ? -1 : result;
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
 std::streamsize file_descriptor::write(const char_type* s, std::streamsize n)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    if (pimpl_->flags_ & impl::has_handle) {
-        if (pimpl_->flags_ & impl::append) {
-            DWORD const dwResult =
-                ::SetFilePointer(pimpl_->handle_, 0, NULL, FILE_END);
-            if ( dwResult == INVALID_SET_FILE_POINTER &&
-                 ::GetLastError() != NO_ERROR )
-            {
-                throw detail::bad_seek();
-            }
+    if (pimpl_->flags_ & impl::append) {
+        DWORD const dwResult =
+            ::SetFilePointer(pimpl_->handle_, 0, NULL, FILE_END);
+        if ( dwResult == INVALID_SET_FILE_POINTER &&
+             ::GetLastError() != NO_ERROR )
+        {
+            throw detail::bad_seek();
         }
-        DWORD ignore;
-        if (!::WriteFile(pimpl_->handle_, s, n, &ignore, NULL))
-            throw detail::bad_write();
-        return n;
     }
-#endif
-    int amt = BOOST_IOSTREAMS_FD_WRITE(pimpl_->fd_, s, n);
+    DWORD ignore;
+    if (!::WriteFile(pimpl_->handle_, s, n, &ignore, NULL))
+        throw detail::bad_write();
+    return n;
+#else // #ifdef BOOST_IOSTREAMS_WINDOWS
+    int amt = BOOST_IOSTREAMS_FD_WRITE(pimpl_->handle_, s, n);
     if (amt < n)
         throw detail::bad_write(); // Handles blocking fd's only.
     return n;
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
 std::streampos file_descriptor::seek
@@ -184,29 +200,27 @@ std::streampos file_descriptor::seek
 {
     using namespace std;
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    if (pimpl_->flags_ & impl::has_handle) {
-        LONG lDistanceToMove = static_cast<LONG>(off & 0xffffffff);
-        LONG lDistanceToMoveHigh = static_cast<LONG>(off >> 32);
-        DWORD dwResultLow =
-            ::SetFilePointer( pimpl_->handle_,
-                              lDistanceToMove,
-                              &lDistanceToMoveHigh,
-                              way == BOOST_IOS::beg ?
-                                  FILE_BEGIN :
-                                  way == BOOST_IOS::cur ?
-                                    FILE_CURRENT :
-                                    FILE_END );
-        if ( dwResultLow == INVALID_SET_FILE_POINTER &&
-             ::GetLastError() != NO_ERROR )
-        {
-            throw detail::bad_seek();
-        } else {
-           return offset_to_position(
- 	   	              (stream_offset(lDistanceToMoveHigh) << 32) + dwResultLow
-                  );
-        }
+    LONG lDistanceToMove = static_cast<LONG>(off & 0xffffffff);
+    LONG lDistanceToMoveHigh = static_cast<LONG>(off >> 32);
+    DWORD dwResultLow =
+        ::SetFilePointer( pimpl_->handle_,
+                          lDistanceToMove,
+                          &lDistanceToMoveHigh,
+                          way == BOOST_IOS::beg ?
+                              FILE_BEGIN :
+                              way == BOOST_IOS::cur ?
+                                FILE_CURRENT :
+                                FILE_END );
+    if ( dwResultLow == INVALID_SET_FILE_POINTER &&
+         ::GetLastError() != NO_ERROR )
+    {
+        throw detail::bad_seek();
+    } else {
+       return offset_to_position(
+   	              (stream_offset(lDistanceToMoveHigh) << 32) + dwResultLow
+              );
     }
-#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
+#else // #ifdef BOOST_IOSTREAMS_WINDOWS
     if ( off > integer_traits<BOOST_IOSTREAMS_FD_OFFSET>::const_max ||
          off < integer_traits<BOOST_IOSTREAMS_FD_OFFSET>::const_min )
     {
@@ -214,7 +228,7 @@ std::streampos file_descriptor::seek
     }
     stream_offset result =
         BOOST_IOSTREAMS_FD_SEEK(
-            pimpl_->fd_,
+            pimpl_->handle_,
             static_cast<BOOST_IOSTREAMS_FD_OFFSET>(off),
             ( way == BOOST_IOS::beg ?
                   SEEK_SET :
@@ -225,6 +239,7 @@ std::streampos file_descriptor::seek
     if (result == -1)
         throw detail::bad_seek();
     return offset_to_position(result);
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
 
 void file_descriptor::close() { close_impl(*pimpl_); }
@@ -232,20 +247,28 @@ void file_descriptor::close() { close_impl(*pimpl_); }
 void file_descriptor::close_impl(impl& i)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    if (i.flags_ & impl::has_handle) {
+    if (i.handle_ != reinterpret_cast<handle_type>(-1)) {
         if (!::CloseHandle(i.handle_))
             throw BOOST_IOSTREAMS_FAILURE("bad close");
-        i.fd_ = -1;
+        i.handle_ = reinterpret_cast<handle_type>(-1);
         i.flags_ = 0;
         return;
     }
-#endif
-    if (i.fd_ != -1) {
-        if (BOOST_IOSTREAMS_FD_CLOSE(i.fd_) == -1)
+#else // #ifdef BOOST_IOSTREAMS_WINDOWS
+    if (i.handle_ != -1) {
+        if (BOOST_IOSTREAMS_FD_CLOSE(i.handle_) == -1)
             throw BOOST_IOSTREAMS_FAILURE("bad close");
-        i.fd_ = -1;
+        i.handle_ = -1;
         i.flags_ = 0;
     }
+#endif // #ifdef BOOST_IOSTREAMS_WINDOWS
 }
+
+#ifdef BOOST_IOSTREAMS_WINDOWS
+file_descriptor::handle_type file_descriptor::int_to_handle(int fd)
+{
+    return reinterpret_cast<handle_type>(_get_osfhandle(fd));
+}
+#endif
 
 } } // End namespaces iostreams, boost.
