@@ -20,7 +20,7 @@ value of type `std::size_t`.  `std::size_t` has a much greater range of values
 then the number of buckets, so that container applies another transformation to
 that value to choose a bucket to place the element in.
 
-Retreiving the elements for a given key is simple. The same process is applied
+Retrieving the elements for a given key is simple. The same process is applied
 to the key to find the correct bucket. Then the key is compared with the
 elements in the bucket to find any elements that match (using the equality
 predicate `Pred`).  If the hash function has worked well the elements will be
@@ -75,7 +75,7 @@ To combat this the containers increase the bucket count as elements are inserted
 You can also tell the container to change the bucket count (if required) by
 calling `rehash`.
 
-The standard leaves a lot of freedom to the implementor to decide how the
+The standard leaves a lot of freedom to the implementer to decide how the
 number of buckets are chosen, but it does make some requirements based on the
 container's 'load factor', the average number of elements per bucket.
 Containers also have a 'maximum load factor' which they should try to keep the
