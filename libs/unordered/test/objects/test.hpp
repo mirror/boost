@@ -302,7 +302,7 @@ namespace test
                 BOOST_ERROR("Deallocating unknown pointer.");
             } else {
                 BOOST_TEST(pos->first.start == ptr);
-                BOOST_TEST(pos->first.end == (char*) ptr + n * size - 1);
+                BOOST_TEST(pos->first.end == (char*) ptr + n * size);
                 BOOST_TEST(pos->second.tag_ == tag);
                 BOOST_TEST(pos->second.constructed_ == 0);
                 allocated_memory.erase(pos);
