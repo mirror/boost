@@ -252,7 +252,7 @@ bool create_large_file()
         return false;
     }
 
-# if !BOOST_WORKAROUND(__BORLANDC__, == 0x582)
+# if !defined(__BORLANDC__) || __BORLANDC__ < 0x582 || __BORLANDC__ >= 0x592
 
     // Close handle; all further access is via mapped_file
     CloseHandle(hnd);
@@ -260,7 +260,7 @@ bool create_large_file()
     // Initialize file data
     return map_large_file();
 
-# else // Borland 5.8.2
+# else // Borland >= 5.8.2 and Borland < 5.9.2
 
     // Initialize file data (very slow, even though only 9 writes are required)
     for (stream_offset z = 0; z <= 8; ++z) {
@@ -292,7 +292,7 @@ bool create_large_file()
     CloseHandle(hnd);
 	return true;
 
-# endif // Borland 5.8.2 workaround
+# endif // Borland workaround
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS
 
     // Create file

@@ -64,7 +64,14 @@ public:
     handle_type handle() const { return pimpl_->handle_; }
 private:
     struct impl {
-        impl() : handle_(reinterpret_cast<handle_type>(-1)), flags_(0) { }
+        impl() : 
+            #ifdef BOOST_IOSTREAMS_WINDOWS
+                handle_(reinterpret_cast<handle_type>(-1)), 
+            #else
+                handle_(-1),
+            #endif
+                flags_(0) 
+            { }
         impl(handle_type fd, bool close_on_exit)
             : handle_(fd), flags_(0)
         { if (close_on_exit) flags_ |= impl::close_on_exit; }

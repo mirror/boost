@@ -15,10 +15,13 @@
 #include <cassert>
 #include <iterator>                           // back_inserter
 #include <vector>
+#include <boost/iostreams/constants.hpp>      // default_device_buffer_size 
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/ios.hpp>     // openmode, streamsize.
 #include <boost/iostreams/pipeline.hpp>
+#include <boost/iostreams/read.hpp>           // check_eof 
+#include <boost/iostreams/write.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 

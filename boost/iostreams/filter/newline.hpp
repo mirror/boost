@@ -19,8 +19,12 @@
 #include <stdexcept>                       // logic_error.
 #include <boost/config.hpp>                // BOOST_STATIC_CONSTANT.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/char_traits.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>	
+#include <boost/iostreams/detail/ios.hpp>  // BOOST_IOSTREAMS_FAILURE 
+#include <boost/iostreams/read.hpp>        // get 
+#include <boost/iostreams/write.hpp>       // put 
 #include <boost/iostreams/pipeline.hpp>
+#include <boost/iostreams/putback.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 

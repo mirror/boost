@@ -78,7 +78,7 @@ inline stream_offset fpos_t_to_offset(std::fpos_t pos)
 // Helper function
 inline std::fpos_t streampos_to_fpos_t(std::streampos pos)
 {
-#  ifdef _CPPLIB_VER
+#  if defined (_CPPLIB_VER) || defined(__IBMCPP__)
     return pos.seekpos();
 #  else
     return pos.get_fpos_t();
