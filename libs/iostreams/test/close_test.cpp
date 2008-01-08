@@ -15,13 +15,7 @@
  */
 
 #include <boost/iostreams/chain.hpp>
-#include <boost/iostreams/combine.hpp>
-#include <boost/iostreams/compose.hpp>
-#include <boost/iostreams/filter/symmetric.hpp>
-#include <boost/iostreams/invert.hpp>
-#include <boost/iostreams/restrict.hpp>
 #include <boost/iostreams/stream.hpp>
-#include <boost/iostreams/tee.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>  
 #include "detail/closable.hpp"
