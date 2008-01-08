@@ -207,7 +207,7 @@ namespace boost {
                 BOOST_ASSERT(!ptr_);
                 length_ = l;
                 ptr_ = alloc_.allocate(length_);
-                pointer end = ptr_ + length_;
+                pointer end = ptr_ + static_cast<std::ptrdiff_t>(length_);
                 for(constructed_ = ptr_; constructed_ != end; ++constructed_)
                     alloc_.construct(constructed_, v);
             }

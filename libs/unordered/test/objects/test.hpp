@@ -297,7 +297,7 @@ namespace test
         void track_deallocate(void* ptr, std::size_t n, std::size_t size, int tag)
         {
             allocated_memory_type::iterator pos
-                = allocated_memory.find(memory_area(ptr, (char*) ptr + n));
+                = allocated_memory.find(memory_area(ptr, (char*) ptr + n * size));
             if(pos == allocated_memory.end()) {
                 BOOST_ERROR("Deallocating unknown pointer.");
             } else {
