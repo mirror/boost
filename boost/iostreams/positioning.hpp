@@ -18,6 +18,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
 #include <boost/iostreams/detail/config/codecvt.hpp> // mbstate_t.
+#include <boost/iostreams/detail/config/fpos.hpp>
 #include <boost/iostreams/detail/ios.hpp> // streamoff, streampos.
 
 // Must come last.
@@ -28,74 +29,70 @@ namespace std { using ::fpos_t; }
 #endif
 
 namespace boost { namespace iostreams {
+                    
+//------------------Definition of stream_offset-------------------------------//
 
 typedef boost::intmax_t stream_offset;
+
+//------------------Definition of stream_offset_to_streamoff------------------//
 
 inline std::streamoff stream_offset_to_streamoff(stream_offset off)
 { return static_cast<stream_offset>(off); }
 
-template<typename PosType> // Hande custom pos_type's.
-inline stream_offset position_to_offset(PosType pos)
-{ return std::streamoff(pos); }
+//------------------Definition of offset_to_position--------------------------//
 
-#if ((defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)) && \
-     !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) \
-     && !defined(__QNX__) \
-   /**/
-
-        /* Dinkumware */
-
-inline std::streampos offset_to_position(stream_offset off)
-{
-    // Use implementation-specific constructor.
-    return std::streampos(std::mbstate_t(), off);
-}
-
-inline stream_offset fpos_t_to_offset(std::fpos_t pos)
-{ // Helper function.
-#if defined(_POSIX_) || (_INTEGRAL_MAX_BITS >= 64)
-    return pos;
-#else
-    return _FPOSOFF(pos);
-#endif
-}
-
-# if defined(_CPPLIB_VER) //--------------------------------------------------//
-
-        /* Recent Dinkumware */
-
-inline stream_offset position_to_offset(std::streampos pos)
-{
-    // Use implementation-specific member function seekpos().
-    return fpos_t_to_offset(pos.seekpos()) +
-           static_cast<stream_offset>(static_cast<std::streamoff>(pos)) -
-           static_cast<stream_offset>(_FPOSOFF(pos.seekpos()));
-}
-
-# else // # if defined(_CPPLIB_VER) //----------------------------------------//
-
-        /* Old Dinkumware */
-
-inline stream_offset position_to_offset(std::streampos pos)
-{
-    // use implementation-specific member function get_fpos_t().
-    return fpos_t_to_offset(pos.get_fpos_t()) +
-           static_cast<stream_offset>(static_cast<std::streamoff>(pos)) -
-           static_cast<stream_offset>(
-               static_cast<std::streamoff>(pos.get_fpos_t())
-           );
-}
-
-# endif // # if defined(_CPPLIB_VER) //---------------------------------------//
-#else // Dinkumware //--------------------------------------------------------//
-
-        /* Non-Dinkumware */
+# ifndef BOOST_IOSTREAMS_HAS_DINKUMWARE_FPOS
 
 inline std::streampos offset_to_position(stream_offset off) { return off; }
 
+# else // # ifndef BOOST_IOSTREAMS_HAS_DINKUMWARE_FPOS
+
+inline std::streampos offset_to_position(stream_offset off)
+{ return std::streampos(std::mbstate_t(), off); }
+
+# endif // # ifndef BOOST_IOSTREAMS_HAS_DINKUMWARE_FPOS
+
+//------------------Definition of position_to_offset--------------------------//
+
+// Hande custom pos_type's
+template<typename PosType> 
+inline stream_offset position_to_offset(PosType pos)
+{ return std::streamoff(pos); }
+
+# ifndef BOOST_IOSTREAMS_HAS_DINKUMWARE_FPOS
+
 inline stream_offset position_to_offset(std::streampos pos) { return pos; }
 
-#endif // Dinkumware //-------------------------------------------------------//
+# else // # ifndef BOOST_IOSTREAMS_HAS_DINKUMWARE_FPOS
+
+// Helper function
+inline stream_offset fpos_t_to_offset(std::fpos_t pos)
+{
+#  if defined(_POSIX_) || (_INTEGRAL_MAX_BITS >= 64)
+    return pos;
+#  else
+    return _FPOSOFF(pos);
+#  endif
+}
+
+// Helper function
+inline std::fpos_t streampos_to_fpos_t(std::streampos pos)
+{
+#  ifdef _CPPLIB_VER
+    return pos.seekpos();
+#  else
+    return pos.get_fpos_t();
+#  endif
+}
+
+inline stream_offset position_to_offset(std::streampos pos)
+{
+    return fpos_t_to_offset(streampos_to_fpos_t(pos)) +
+           static_cast<stream_offset>(static_cast<std::streamoff>(pos)) -
+           static_cast<stream_offset>(_FPOSOFF(streampos_to_fpos_t(pos)));
+}
+
+# endif // # ifndef BOOST_IOSTREAMS_HAS_DINKUMWARE_FPOS 
 
 } } // End namespaces iostreams, boost.
 
