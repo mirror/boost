@@ -20,9 +20,9 @@ project
       <library>/boost/test//boost_unit_test_framework
       <link>static
       <include>../../..
-      <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
-      # MSVC-8's iterator debugging causes some tests to run forever.
-      <toolset>msvc-8.0:<iterator_debugging>off
+      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+      # MSVC's iterator debugging causes some tests to run forever.
+      <toolset>msvc:<iterator_debugging>off
     ;
 
 test-suite "accumulators"
