@@ -37,10 +37,13 @@
   <!-- The title that will be used for the BoostBook library reference emitted. 
        If left blank, BoostBook will assign a default title. -->
   <xsl:param name="boost.doxygen.reftitle" select="''"/>
-  
+
   <!-- The id used for the library-reference. By default, it is the normalized
        form of the reftitle. -->
   <xsl:param name="boost.doxygen.refid" select="''"/>
+
+  <!-- The directory into which png files corresponding to LaTeX formulas will be found. -->
+  <xsl:param name="boost.doxygen.formuladir" select="'images/'"/>
 
   <xsl:output method="xml" indent="no" standalone="yes"/>
 
@@ -1358,18 +1361,25 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   </xsl:template>
 
   <!--
-  Eric Niebler: 4-4-2007
-  Here is some half-baked support for LaTeX formulas in
+  Eric Niebler: Jan-8-2008
+  Here is some 3/4-baked support for LaTeX formulas in
   Doxygen comments. Doxygen doesn't generate the PNG files
   when outputting XML. In order to use this code, you must
   run Doxygen first to generate HTML (and the PNG files for
-  the formulas), then copy the PNG files into the images/
-  directory, and then build the docs with bjam. Commented
-  out until something better comes along.
+  the formulas). You can do this in a Jamfile with 
+  "doxygen foo.html : <sources, etc...> ; ", where the ".html"
+  is significant. Then the png files should be copied into the 
+  images/ directory (or another place relative to the html/
+  directory, as specified by $boost.doxygen.formuladir XSL
+  parameter). This can be done with a custom action in a 
+  Jamfile. Finally, the docs can be built as normal.
+  See libs/accumulators/doc/Jamfile.v2 for a working example.
+  -->
   <xsl:template match="formula" mode="passthrough">
     <xsl:choose>
       <xsl:when test="substring(*|text(), 1, 2) = '\['">
         <equation>
+          <title/>
           <alt>
             <xsl:value-of select="*|text()"/>
           </alt>
@@ -1377,7 +1387,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
             <imageobject role="html">
               <imagedata format="PNG" align="center">
                 <xsl:attribute name="fileref">
-                  <xsl:value-of select="concat(concat('images/form_', @id), '.png')"/>
+                  <xsl:value-of select="concat(concat(concat($boost.doxygen.formuladir, 'form_'), @id), '.png')"/>
                 </xsl:attribute>
               </imagedata>
             </imageobject>
@@ -1398,7 +1408,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
             <imageobject role="html">
               <imagedata format="PNG">
                 <xsl:attribute name="fileref">
-                  <xsl:value-of select="concat(concat('images/form_', @id), '.png')"/>
+                  <xsl:value-of select="concat(concat(concat($boost.doxygen.formuladir, 'form_'), @id), '.png')"/>
                 </xsl:attribute>
               </imagedata>
             </imageobject>
@@ -1412,6 +1422,4 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
- -->
  </xsl:stylesheet>
-  
