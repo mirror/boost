@@ -2,6 +2,8 @@
 # subject to the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+import os ;
+import common ;
 import doxygen ;
 import quickbook ;
 
@@ -46,6 +48,42 @@ doxygen accdoc
         <reftitle>"Accumulators Framework Reference"
     ;
 
+# Generate the HTML form of the stats documentation, as this
+# causes Doxygen to generate .png images for the LaTeX formulas
+# embedded in the doc comments.
+doxygen statsdoc.html
+    :
+        [ glob ../../../boost/accumulators/statistics*.hpp ]
+        [ glob ../../../boost/accumulators/statistics/*.hpp ]
+        [ glob ../../../boost/accumulators/statistics/variates/*.hpp ]
+    ;
+
+if [ os.name ] = NT
+{
+    CP = copy /y ;
+    FROM = \\..\\..\\html\\statsdoc\\*.png ;
+    TO = .\\html\\images\\accumulators ;
+}
+else
+{
+    CP = cp ;
+    FROM = /../../html/statsdoc/*.png ;
+    TO = ./html/images/accumulators ;
+}
+
+actions copy-latex-pngs
+{
+    mkdir $(TO)
+    $(CP) $(<:D)$(FROM) $(TO) && echo "Stamped" > "$(<)"
+}
+
+# This causes the png files built above to be copied
+# into the html/images/accumulators directory.
+make statsdoclatex.tag
+    : statsdoc.html
+    : @copy-latex-pngs
+    ;
+
 doxygen statsdoc
     :
         [ glob ../../../boost/accumulators/statistics*.hpp ]
@@ -67,8 +105,10 @@ doxygen statsdoc
         <doxygen:param>EXPAND_ONLY_PREDEF=YES
         <doxygen:param>SEARCH_INCLUDES=NO
         <doxygen:param>TAGFILES=accumulators.tag
+        <xsl:param>boost.doxygen.formuladir=images/accumulators/
         <reftitle>"Statistics Library Reference"
         <dependency>tagfile
+        <dependency>statsdoclatex.tag
     ;
 
 doxygen opdoc
