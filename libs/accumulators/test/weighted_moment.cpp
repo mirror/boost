@@ -20,15 +20,15 @@ void test_stat()
 {
     accumulator_set<double, stats<tag::weighted_moment<2> >, double> acc2;
     accumulator_set<double, stats<tag::weighted_moment<7> >, double> acc7;
-        
+
     acc2(2.1, weight = 0.7);
     acc2(2.7, weight = 1.4);
     acc2(1.8, weight = 0.9);
-    
+
     acc7(2.1, weight = 0.7);
     acc7(2.7, weight = 1.4);
     acc7(1.8, weight = 0.9);
-        
+
     BOOST_CHECK_CLOSE(5.403, weighted_moment<2>(acc2), 1e-5);
     BOOST_CHECK_CLOSE(548.54182, weighted_moment<7>(acc7), 1e-5);
 }

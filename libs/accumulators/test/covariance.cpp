@@ -24,12 +24,12 @@ void test_stat()
     std::vector<double> dummy;
     dummy.push_back(0);
     dummy.push_back(0);
-    
+
     accumulator_set<double, stats<tag::covariance<double, tag::covariate1> > > acc;
     accumulator_set<std::vector<double>, stats<tag::covariance<double, tag::covariate1> > > acc2(sample = dummy);
     accumulator_set<double, stats<tag::covariance<std::vector<double>, tag::covariate1> > > acc3(covariate1 = dummy);
     accumulator_set<std::vector<double>, stats<tag::covariance<std::vector<double>, tag::covariate1> > > acc4(sample = dummy, covariate1 = dummy);
-    
+
     std::vector<double> a;
     a.push_back(1.);
     a.push_back(2.);
@@ -42,7 +42,7 @@ void test_stat()
     std::vector<double> d;
     d.push_back(4.);
     d.push_back(2.);
-    
+
     // double - double
     {
         acc(1., covariate1 = 2.);
@@ -50,7 +50,7 @@ void test_stat()
         acc(2., covariate1 = 3.);
         acc(6., covariate1 = 1.);
     }
-    
+
     // vector - double
     {
         acc2(a, covariate1 = 1.);
@@ -58,7 +58,7 @@ void test_stat()
         acc2(c, covariate1 = 2.);
         acc2(d, covariate1 = 6.);
     }
-    
+
     // double - vector
     {
         acc3(1., covariate1 = a);
@@ -66,7 +66,7 @@ void test_stat()
         acc3(2., covariate1 = c);
         acc3(6., covariate1 = d);
     }
-    
+
     // vector - vector
     {
         acc4(a, covariate1 = b);
@@ -74,9 +74,9 @@ void test_stat()
         acc4(a, covariate1 = c);
         acc4(d, covariate1 = b);
     }
-    
+
     double epsilon = 1e-6;
-    
+
     BOOST_CHECK_CLOSE((covariance(acc)), -1.75, epsilon);
     BOOST_CHECK_CLOSE((covariance(acc2))[0], 1.75, epsilon);
     BOOST_CHECK_CLOSE((covariance(acc2))[1], -1.125, epsilon);

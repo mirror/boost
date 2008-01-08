@@ -43,28 +43,28 @@ void test_stat()
     double epsilon = 3;
 
     typedef accumulator_set<double, stats<tag::p_square_cumulative_distribution> > accumulator_t;
-        
+
     accumulator_t acc(p_square_cumulative_distribution_num_cells = 100);
-    
+
     // two random number generators
     boost::lagged_fibonacci607 rng;
     boost::normal_distribution<> mean_sigma(0,1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal(rng, mean_sigma);
-    
+
     for (std::size_t i=0; i<100000; ++i)
     {
         acc(normal());
     }
-    
+
     typedef iterator_range<std::vector<std::pair<double, double> >::iterator > histogram_type;
     histogram_type histogram = p_square_cumulative_distribution(acc);
-    
+
     for (std::size_t i = 0; i < histogram.size(); ++i)
-    {   
+    {
         // problem with small results: epsilon is relative (in percent), not absolute!
-        if ( histogram[i].second > 0.001 )    
+        if ( histogram[i].second > 0.001 )
             BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram[i].first / sqrt(2.0) )), histogram[i].second, epsilon );
-    }        
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

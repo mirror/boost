@@ -52,9 +52,9 @@ void test_external()
 
     sum_acc(1);
     sum_acc(2); // sum is now 3 for both
-    
-    BOOST_CHECK_EQUAL(sum(acc_with_ref), sum(sum_acc));      
-    BOOST_CHECK_EQUAL(sum(acc_with_ref), 3);      
+
+    BOOST_CHECK_EQUAL(sum(acc_with_ref), sum(sum_acc));
+    BOOST_CHECK_EQUAL(sum(acc_with_ref), 3);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,15 +69,15 @@ void test_external2()
       , stats<
             tag::mean
             // make sum external and hold a reference to it
-          , tag::external<tag::sum, my::tag::sum_acc, sum_acc_type> 
+          , tag::external<tag::sum, my::tag::sum_acc, sum_acc_type>
         >
     > acc_with_ref(my::sum_acc = sum_acc); // initialize the reference sum
 
     sum_acc(1);
     sum_acc(2); // sum is now 3 for both
-    
-    BOOST_CHECK_EQUAL(sum(acc_with_ref), sum(sum_acc));      
-    BOOST_CHECK_EQUAL(sum(acc_with_ref), 3);      
+
+    BOOST_CHECK_EQUAL(sum(acc_with_ref), sum(sum_acc));
+    BOOST_CHECK_EQUAL(sum(acc_with_ref), 3);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

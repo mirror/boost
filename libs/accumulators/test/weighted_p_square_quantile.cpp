@@ -29,7 +29,7 @@ void test_stat()
 
     // tolerance in %
     double epsilon = 1;
-    
+
     // some random number generators
     double mu4 = -1.0;
     double mu5 = -1.0;
@@ -44,7 +44,7 @@ void test_stat()
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal5(rng, mean_sigma5);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal6(rng, mean_sigma6);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal7(rng, mean_sigma7);
-        
+
     accumulator_t acc0(quantile_probability = 0.001);
     accumulator_t acc1(quantile_probability = 0.025);
     accumulator_t acc2(quantile_probability = 0.975);
@@ -55,7 +55,7 @@ void test_stat()
     accumulator_t acc6(quantile_probability = 0.975);
     accumulator_t acc7(quantile_probability = 0.999);
 
-        
+
     for (std::size_t i=0; i<100000; ++i)
     {
         double sample = rng();
@@ -63,7 +63,7 @@ void test_stat()
         acc1(sample, weight = 1.);
         acc2(sample, weight = 1.);
         acc3(sample, weight = 1.);
-        
+
         double sample4 = normal4();
         double sample5 = normal5();
         double sample6 = normal6();
@@ -78,7 +78,7 @@ void test_stat()
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc1), 0.025, 5 );
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc2), 0.975, epsilon );
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc3), 0.999, epsilon );
-    
+
     // check for shifted standard normal distribution ("importance sampling")
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc4), -3.090232, epsilon );
     BOOST_CHECK_CLOSE( weighted_p_square_quantile(acc5), -1.959963, epsilon );

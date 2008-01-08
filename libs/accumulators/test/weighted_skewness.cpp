@@ -26,29 +26,29 @@ void test_stat()
 {
     // tolerance in %
     // double epsilon = 1;
-    
+
     accumulator_set<double, stats<tag::weighted_skewness>, double > acc1;
     accumulator_set<int, stats<tag::weighted_skewness>, int > acc2;
-        
+
     // two random number generators
     boost::lagged_fibonacci607 rng;
     boost::normal_distribution<> mean_sigma(0,1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal(rng, mean_sigma);
-    
+
     for (std::size_t i=0; i<100000; ++i)
     {
         acc1(normal(), weight = rng());
     }
-    
+
     // This check fails because epsilon is relative and not absolute
-    // BOOST_CHECK_CLOSE( weighted_skewness(acc1), 0., epsilon );          
-    
+    // BOOST_CHECK_CLOSE( weighted_skewness(acc1), 0., epsilon );
+
     acc2(2, weight = 4);
     acc2(7, weight = 1);
     acc2(4, weight = 3);
     acc2(9, weight = 1);
     acc2(3, weight = 2);
-    
+
     BOOST_CHECK_EQUAL( weighted_mean(acc2), 42./11. );
     BOOST_CHECK_EQUAL( weighted_moment<2>(acc2), 212./11. );
     BOOST_CHECK_EQUAL( weighted_moment<3>(acc2), 1350./11. );

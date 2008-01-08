@@ -53,7 +53,7 @@ void test_stat()
     accumulator_t_weighted acc_weighted(extended_p_square_probabilities = probs);
     accumulator_t_quadratic acc2(extended_p_square_probabilities = probs);
     accumulator_t_weighted_quadratic acc_weighted2(extended_p_square_probabilities = probs);
-    
+
     for (int i=0; i<10000; ++i)
     {
         double sample = rng();
@@ -62,7 +62,7 @@ void test_stat()
         acc_weighted(sample, weight = 1.);
         acc_weighted2(sample, weight = 1.);
     }
-    
+
     for (std::size_t i = 0; i < probs.size() - 1; ++i)
     {
         BOOST_CHECK_CLOSE(

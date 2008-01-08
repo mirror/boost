@@ -27,10 +27,10 @@ void test_stat()
 {
     // tolerance in %
     double epsilon = 1;
-    
+
     std::size_t n = 100000; // number of MC steps
     std::size_t c =  10000; // cache size
-    
+
     typedef accumulator_set<double, stats<tag::non_coherent_tail_mean<right>, tag::tail_quantile<right> > > accumulator_t_right1;
     typedef accumulator_set<double, stats<tag::non_coherent_tail_mean<left>, tag::tail_quantile<left> > > accumulator_t_left1;
     typedef accumulator_set<double, stats<tag::coherent_tail_mean<right>, tag::tail_quantile<right> > > accumulator_t_right2;
@@ -40,10 +40,10 @@ void test_stat()
     accumulator_t_left1 acc1( left_tail_cache_size = c );
     accumulator_t_right2 acc2( right_tail_cache_size = c );
     accumulator_t_left2 acc3( left_tail_cache_size = c );
-    
+
     // a random number generator
     boost::lagged_fibonacci607 rng;
-                    
+
     for (std::size_t i = 0; i < n; ++i)
     {
         double sample = rng();
@@ -52,7 +52,7 @@ void test_stat()
         acc2(sample);
         acc3(sample);
     }
-    
+
     // check uniform distribution
     BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc0, quantile_probability = 0.95), 0.975, epsilon );
     BOOST_CHECK_CLOSE( non_coherent_tail_mean(acc0, quantile_probability = 0.975), 0.9875, epsilon );

@@ -28,10 +28,10 @@ void test_stat()
 
     // tolerance in %
     double epsilon = 1;
-    
+
     // a random number generator
     boost::lagged_fibonacci607 rng;
-  
+
     accumulator_t acc0(quantile_probability = 0.001);
     accumulator_t acc1(quantile_probability = 0.01 );
     accumulator_t acc2(quantile_probability = 0.1  );
@@ -41,7 +41,7 @@ void test_stat()
     accumulator_t acc6(quantile_probability = 0.9  );
     accumulator_t acc7(quantile_probability = 0.99 );
     accumulator_t acc8(quantile_probability = 0.999);
-    
+
     for (int i=0; i<100000; ++i)
     {
         double sample = rng();
@@ -55,7 +55,7 @@ void test_stat()
         acc7(sample);
         acc8(sample);
     }
-    
+
     BOOST_CHECK_CLOSE( p_square_quantile(acc0), 0.001, 15*epsilon );
     BOOST_CHECK_CLOSE( p_square_quantile(acc1), 0.01 , 5*epsilon );
     BOOST_CHECK_CLOSE( p_square_quantile(acc2), 0.1  , epsilon );
@@ -64,7 +64,7 @@ void test_stat()
     BOOST_CHECK_CLOSE( p_square_quantile(acc5), 0.75 , epsilon );
     BOOST_CHECK_CLOSE( p_square_quantile(acc6), 0.9  , epsilon );
     BOOST_CHECK_CLOSE( p_square_quantile(acc7), 0.99 , epsilon );
-    BOOST_CHECK_CLOSE( p_square_quantile(acc8), 0.999, epsilon );    
+    BOOST_CHECK_CLOSE( p_square_quantile(acc8), 0.999, epsilon );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

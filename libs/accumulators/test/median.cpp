@@ -24,13 +24,13 @@ void test_stat()
     boost::lagged_fibonacci607 rng;
     boost::normal_distribution<> mean_sigma(mu,1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal(rng, mean_sigma);
-    
+
     accumulator_set<double, stats<tag::median(with_p_square_quantile) > > acc;
-    accumulator_set<double, stats<tag::median(with_density) > > 
+    accumulator_set<double, stats<tag::median(with_density) > >
         acc_dens( density_cache_size = 10000, density_num_bins = 1000 );
-    accumulator_set<double, stats<tag::median(with_p_square_cumulative_distribution) > > 
+    accumulator_set<double, stats<tag::median(with_p_square_cumulative_distribution) > >
         acc_cdist( p_square_cumulative_distribution_num_cells = 100 );
-        
+
     for (std::size_t i=0; i<100000; ++i)
     {
         double sample = normal();
@@ -38,7 +38,7 @@ void test_stat()
         acc_dens(sample);
         acc_cdist(sample);
     }
-    
+
     BOOST_CHECK_CLOSE(1., median(acc), 1.);
     BOOST_CHECK_CLOSE(1., median(acc_dens), 1.);
     BOOST_CHECK_CLOSE(1., median(acc_cdist), 3.);

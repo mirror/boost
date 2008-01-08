@@ -32,7 +32,7 @@ void test_stat()
           , tag::mean_of_weights
           , tag::weighted_mean_of_variates<int, tag::covariate1>
         >
-      , int 
+      , int
     > acc, test_acc(sample = 0);
 
     acc(1, weight = 2, covariate1 = 3);
@@ -73,13 +73,13 @@ void test_stat()
     BOOST_CHECK_EQUAL(1u, count(acc2));
     BOOST_CHECK_CLOSE(2., mean_of_weights(acc2), 1e-5);
     BOOST_CHECK_CLOSE(3., (weighted_mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
-        
+
     acc2(0, weight = 4, covariate1 = 4);
     BOOST_CHECK_CLOSE(1./3., weighted_mean(acc2), 1e-5);
     BOOST_CHECK_EQUAL(2u, count(acc2));
     BOOST_CHECK_CLOSE(3., mean_of_weights(acc2), 1e-5);
     BOOST_CHECK_CLOSE(11./3., (weighted_mean_of_variates<int, tag::covariate1>(acc2)), 1e-5);
-    
+
     acc2(2, weight = 9, covariate1 = 8);
     BOOST_CHECK_CLOSE(4./3., weighted_mean(acc2), 1e-5);
     BOOST_CHECK_EQUAL(3u, count(acc2));

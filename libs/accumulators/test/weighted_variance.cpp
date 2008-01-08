@@ -46,24 +46,24 @@ void test_stat()
     BOOST_CHECK_EQUAL(5u, count(acc2));
     BOOST_CHECK_CLOSE(2.9090909, weighted_mean(acc2), 1e-5);
     BOOST_CHECK_CLOSE(1.7190083, weighted_variance(acc2), 1e-5);
-    
+
     // check lazy and immediate variance with random numbers
-    
+
     // two random number generators
     boost::lagged_fibonacci607 rng;
     boost::normal_distribution<> mean_sigma(0,1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal(rng, mean_sigma);
-    
-    accumulator_set<double, stats<tag::weighted_variance>, double > acc_lazy;    
+
+    accumulator_set<double, stats<tag::weighted_variance>, double > acc_lazy;
     accumulator_set<double, stats<tag::weighted_variance(immediate)>, double > acc_immediate;
-    
+
     for (std::size_t i=0; i<10000; ++i)
     {
         double value = normal();
         acc_lazy(value, weight = rng());
         acc_immediate(value, weight = rng());
     }
-    
+
     BOOST_CHECK_CLOSE(1., weighted_variance(acc_lazy), 1.);
     BOOST_CHECK_CLOSE(1., weighted_variance(acc_immediate), 1.);
 }

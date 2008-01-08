@@ -38,7 +38,7 @@ void test_stat()
     BOOST_CHECK_EQUAL(1u, count(acc));
     BOOST_CHECK_EQUAL(1, sum(acc));
     BOOST_CHECK_CLOSE(3., (mean_of_variates<int, tag::covariate1>(acc)), 1e-5);
-    
+
     acc(0, covariate1 = 4);
     BOOST_CHECK_CLOSE(0.5, mean(acc), 1e-5);
     BOOST_CHECK_EQUAL(2u, count(acc));

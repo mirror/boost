@@ -28,30 +28,30 @@ void test_stat()
 {
     // tolerance in %
     double epsilon = 1;
-    
+
     std::size_t n = 100000; // number of MC steps
     std::size_t c = 25000; // cache size
-    
+
     accumulator_set<double, stats<tag::non_coherent_weighted_tail_mean<right> >, double >
         acc0( right_tail_cache_size = c );
     accumulator_set<double, stats<tag::non_coherent_weighted_tail_mean<left> >, double >
         acc1( left_tail_cache_size = c );
-    
+
     // random number generators
     boost::lagged_fibonacci607 rng;
-    
+
     for (std::size_t i = 0; i < n; ++i)
     {
         double smpl = std::sqrt(rng());
         acc0(smpl, weight = 1./smpl);
     }
-    
+
     for (std::size_t i = 0; i < n; ++i)
     {
         double smpl = rng();
         acc1(smpl*smpl, weight = smpl);
     }
-    
+
     // check uniform distribution
     BOOST_CHECK_CLOSE( non_coherent_weighted_tail_mean(acc0, quantile_probability = 0.95), 0.975, epsilon );
     BOOST_CHECK_CLOSE( non_coherent_weighted_tail_mean(acc0, quantile_probability = 0.975), 0.9875, epsilon );

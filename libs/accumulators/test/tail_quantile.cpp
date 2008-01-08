@@ -26,23 +26,23 @@ void test_stat()
 {
     // tolerance in %
     double epsilon = 1;
-    
+
     std::size_t n = 100000; // number of MC steps
     std::size_t c =  10000; // cache size
-        
+
     typedef accumulator_set<double, stats<tag::tail_quantile<right> > > accumulator_t_right;
     typedef accumulator_set<double, stats<tag::tail_quantile<left> > > accumulator_t_left;
-    
+
     accumulator_t_right acc0( right_tail_cache_size = c );
     accumulator_t_right acc1( right_tail_cache_size = c );
     accumulator_t_left  acc2( left_tail_cache_size = c );
     accumulator_t_left  acc3( left_tail_cache_size = c );
-                    
+
     // two random number generators
     boost::lagged_fibonacci607 rng;
     boost::normal_distribution<> mean_sigma(0,1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal(rng, mean_sigma);
-                    
+
     for (std::size_t i = 0; i < n; ++i)
     {
         double sample1 = rng();
@@ -52,7 +52,7 @@ void test_stat()
         acc2(sample1);
         acc3(sample2);
     }
-    
+
     // check uniform distribution
     BOOST_CHECK_CLOSE( quantile(acc0, quantile_probability = 0.95 ), 0.95,  epsilon );
     BOOST_CHECK_CLOSE( quantile(acc0, quantile_probability = 0.975), 0.975, epsilon );
@@ -62,13 +62,13 @@ void test_stat()
     BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.025), 0.025, 2 );
     BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.01 ), 0.01,  3 );
     BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability  = 0.001), 0.001, 20 );
-    
+
     // check standard normal distribution
     BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.975),  1.959963, epsilon );
     BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.999),  3.090232, epsilon );
     BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability  = 0.025), -1.959963, epsilon );
     BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability  = 0.001), -3.090232, epsilon );
-    
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////

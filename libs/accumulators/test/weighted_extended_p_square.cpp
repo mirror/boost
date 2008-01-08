@@ -28,7 +28,7 @@ void test_stat()
     typedef accumulator_set<double, stats<tag::weighted_extended_p_square>, double> accumulator_t;
 
     // problem with small results: epsilon is relative (in percent), not absolute
-    
+
     // tolerance in %
     double epsilon = 1;
 
@@ -45,17 +45,17 @@ void test_stat()
 
     double p1[] = {/*0.001,*/ 0.01, 0.1, 0.5, 0.9, 0.99, 0.999};
     probs_uniform.assign(p1, p1 + sizeof(p1) / sizeof(double));
-    
+
     double p2[] = {0.001, 0.025};
     double p3[] = {0.975, 0.999};
     probs_normal1.assign(p2, p2 + sizeof(p2) / sizeof(double));
     probs_normal2.assign(p3, p3 + sizeof(p3) / sizeof(double));
-    
+
     double p4[] = {-3.090232, -1.959963};
     double p5[] = {1.959963, 3.090232};
     probs_normal_exact1.assign(p4, p4 + sizeof(p4) / sizeof(double));
     probs_normal_exact2.assign(p5, p5 + sizeof(p5) / sizeof(double));
-        
+
     accumulator_t acc_uniform(extended_p_square_probabilities = probs_uniform);
     accumulator_t acc_normal1(extended_p_square_probabilities = probs_normal1);
     accumulator_t acc_normal2(extended_p_square_probabilities = probs_normal2);
@@ -63,19 +63,19 @@ void test_stat()
     for (std::size_t i = 0; i < 100000; ++i)
     {
         acc_uniform(rng(), weight = 1.);
-        
+
         double sample1 = normal1();
         double sample2 = normal2();
         acc_normal1(sample1, weight = std::exp(-mu1 * (sample1 - 0.5 * mu1)));
         acc_normal2(sample2, weight = std::exp(-mu2 * (sample2 - 0.5 * mu2)));
     }
-    
-    // check for uniform distribution    
+
+    // check for uniform distribution
     for (std::size_t i = 0; i < probs_uniform.size(); ++i)
     {
         BOOST_CHECK_CLOSE(weighted_extended_p_square(acc_uniform)[i], probs_uniform[i], epsilon);
     }
-    
+
     // check for standard normal distribution
     for (std::size_t i = 0; i < probs_normal1.size(); ++i)
     {

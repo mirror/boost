@@ -22,7 +22,7 @@ void test_stat()
 {
     // Median estimation of normal distribution N(1,1) using samples from a narrow normal distribution N(1,0.01)
     // The weights equal to the likelihood ratio of the corresponding samples
-    
+
     // two random number generators
     double mu = 1.;
     double sigma_narrow = 0.01;
@@ -30,14 +30,14 @@ void test_stat()
     boost::lagged_fibonacci607 rng;
     boost::normal_distribution<> mean_sigma_narrow(mu,sigma_narrow);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal_narrow(rng, mean_sigma_narrow);
-    
+
     accumulator_set<double, stats<tag::weighted_median(with_p_square_quantile) >, double > acc;
-    accumulator_set<double, stats<tag::weighted_median(with_density) >, double > 
+    accumulator_set<double, stats<tag::weighted_median(with_density) >, double >
         acc_dens( density_cache_size = 10000, density_num_bins = 1000 );
-    accumulator_set<double, stats<tag::weighted_median(with_p_square_cumulative_distribution) >, double > 
+    accumulator_set<double, stats<tag::weighted_median(with_p_square_cumulative_distribution) >, double >
         acc_cdist( p_square_cumulative_distribution_num_cells = 100 );
-        
-        
+
+
     for (std::size_t i=0; i<100000; ++i)
     {
         double sample = normal_narrow();
@@ -45,7 +45,7 @@ void test_stat()
         acc_dens(sample, weight = std::exp(0.5 * (sample - mu) * (sample - mu) * ( 1./sigma_narrow/sigma_narrow - 1./sigma/sigma )));
         acc_cdist(sample, weight = std::exp(0.5 * (sample - mu) * (sample - mu) * ( 1./sigma_narrow/sigma_narrow - 1./sigma/sigma )));
     }
-    
+
     BOOST_CHECK_CLOSE(1., weighted_median(acc), 1e-1);
     BOOST_CHECK_CLOSE(1., weighted_median(acc_dens), 1e-1);
     BOOST_CHECK_CLOSE(1., weighted_median(acc_cdist), 1e-1);

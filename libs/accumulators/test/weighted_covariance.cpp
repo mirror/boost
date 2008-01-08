@@ -24,12 +24,12 @@ void test_stat()
     std::vector<double> dummy;
     dummy.push_back(0);
     dummy.push_back(0);
-    
+
     accumulator_set<double, stats<tag::weighted_covariance<double, tag::covariate1> >, double > acc;
     accumulator_set<std::vector<double>, stats<tag::weighted_covariance<double, tag::covariate1> >, double > acc2(sample = dummy);
     accumulator_set<double, stats<tag::weighted_covariance<std::vector<double>, tag::covariate1> >, double > acc3(covariate1 = dummy);
     accumulator_set<std::vector<double>, stats<tag::weighted_covariance<std::vector<double>, tag::covariate1> >, double > acc4(sample = dummy, covariate1 = dummy);
-    
+
     std::vector<double> a;
     a.push_back(1.);
     a.push_back(2.);
@@ -42,15 +42,15 @@ void test_stat()
     std::vector<double> d;
     d.push_back(4.);
     d.push_back(2.);
-    
+
     // double - double
     {
         acc(1., weight = 1.1, covariate1 = 2.);
         acc(1., weight = 2.2, covariate1 = 4.);
         acc(2., weight = 3.3, covariate1 = 3.);
-        acc(6., weight = 4.4, covariate1 = 1.);        
+        acc(6., weight = 4.4, covariate1 = 1.);
     }
-    
+
     // vector - double
     {
         acc2(a, weight = 1.1, covariate1 = 1.);
@@ -58,7 +58,7 @@ void test_stat()
         acc2(c, weight = 3.3, covariate1 = 2.);
         acc2(d, weight = 4.4, covariate1 = 6.);
     }
-    
+
     // double - vector
     {
         acc3(1., weight = 1.1, covariate1 = a);
@@ -66,7 +66,7 @@ void test_stat()
         acc3(2., weight = 3.3, covariate1 = c);
         acc3(6., weight = 4.4, covariate1 = d);
     }
-    
+
     // vector - vector
     {
         acc4(a, weight = 1.1, covariate1 = b);
@@ -74,9 +74,9 @@ void test_stat()
         acc4(a, weight = 3.3, covariate1 = c);
         acc4(d, weight = 4.4, covariate1 = b);
     }
-    
+
     double epsilon = 1e-6;
-    
+
     BOOST_CHECK_CLOSE((weighted_covariance(acc)), -2.39, epsilon);
     BOOST_CHECK_CLOSE((weighted_covariance(acc2))[0], 1.93, epsilon);
     BOOST_CHECK_CLOSE((weighted_covariance(acc2))[1], -2.09, epsilon);

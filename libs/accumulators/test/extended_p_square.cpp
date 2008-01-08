@@ -53,7 +53,7 @@ void test_stat()
     BOOST_CHECK_CLOSE(extended_p_square(acc)[0], probs[0], 25);
     BOOST_CHECK_CLOSE(extended_p_square(acc)[1], probs[1], 10);
     BOOST_CHECK_CLOSE(extended_p_square(acc)[2], probs[2], 5);
-    
+
     for (std::size_t i=3; i<probs.size(); ++i)
     {
         BOOST_CHECK_CLOSE(extended_p_square(acc)[i], probs[i], epsilon);

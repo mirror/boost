@@ -43,10 +43,10 @@ void test_stat()
     double epsilon = 4;
 
     typedef accumulator_set<double, stats<tag::weighted_p_square_cumulative_distribution>, double > accumulator_t;
-        
+
     accumulator_t acc_upper(p_square_cumulative_distribution_num_cells = 100);
     accumulator_t acc_lower(p_square_cumulative_distribution_num_cells = 100);
-    
+
     // two random number generators
     double mu_upper = 1.0;
     double mu_lower = -1.0;
@@ -55,38 +55,38 @@ void test_stat()
     boost::normal_distribution<> mean_sigma_lower(mu_lower,1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal_upper(rng, mean_sigma_upper);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal_lower(rng, mean_sigma_lower);
-    
+
     for (std::size_t i=0; i<100000; ++i)
     {
         double sample = normal_upper();
         acc_upper(sample, weight = std::exp(-mu_upper * (sample - 0.5 * mu_upper)));
     }
-    
+
     for (std::size_t i=0; i<100000; ++i)
     {
         double sample = normal_lower();
         acc_lower(sample, weight = std::exp(-mu_lower * (sample - 0.5 * mu_lower)));
     }
-    
+
     typedef iterator_range<std::vector<std::pair<double, double> >::iterator > histogram_type;
     histogram_type histogram_upper = weighted_p_square_cumulative_distribution(acc_upper);
     histogram_type histogram_lower = weighted_p_square_cumulative_distribution(acc_lower);
-    
-    // Note that applaying importance sampling results in a region of the distribution 
+
+    // Note that applaying importance sampling results in a region of the distribution
     // to be estimated more accurately and another region to be estimated less accurately
     // than without importance sampling, i.e., with unweighted samples
-    
+
     for (std::size_t i = 0; i < histogram_upper.size(); ++i)
-    {   
+    {
         // problem with small results: epsilon is relative (in percent), not absolute!
-        
+
         // check upper region of distribution
-        if ( histogram_upper[i].second > 0.1 )    
+        if ( histogram_upper[i].second > 0.1 )
             BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram_upper[i].first / sqrt(2.0) )), histogram_upper[i].second, epsilon );
         // check lower region of distribution
-        if ( histogram_lower[i].second < -0.1 )    
+        if ( histogram_lower[i].second < -0.1 )
             BOOST_CHECK_CLOSE( 0.5 * (1.0 + my_erf( histogram_lower[i].first / sqrt(2.0) )), histogram_lower[i].second, epsilon );
-    }        
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

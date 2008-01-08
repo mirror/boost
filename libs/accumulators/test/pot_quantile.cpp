@@ -34,7 +34,7 @@ void test_stat()
     boost::exponential_distribution<> lambda(1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal(rng, mean_sigma);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::exponential_distribution<> > exponential(rng, lambda);
-    
+
     accumulator_set<double, stats<tag::pot_quantile<right>(with_threshold_value)> > acc1(
         pot_threshold_value = 3.
     );
@@ -49,7 +49,7 @@ void test_stat()
         left_tail_cache_size = 2000
       , pot_threshold_probability = 0.01
     );
-    
+
     accumulator_set<double, stats<tag::pot_quantile<right>(with_threshold_value)> > acc5(
         pot_threshold_value = 5.
     );
@@ -57,7 +57,7 @@ void test_stat()
         right_tail_cache_size = 2000
       , pot_threshold_probability = 0.995
     );
-    
+
     for (std::size_t i = 0; i < 100000; ++i)
     {
         double sample = normal();
@@ -66,21 +66,21 @@ void test_stat()
         acc3(sample);
         acc4(sample);
     }
-    
+
     for (std::size_t i = 0; i < 100000; ++i)
     {
         double sample = exponential();
         acc5(sample);
         acc6(sample);
     }
-   
+
     BOOST_CHECK_CLOSE( quantile(acc1, quantile_probability = 0.999), 3.090232, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability = 0.999), 3.090232, epsilon );  
+    BOOST_CHECK_CLOSE( quantile(acc2, quantile_probability = 0.999), 3.090232, epsilon );
     BOOST_CHECK_CLOSE( quantile(acc3, quantile_probability = 0.001), -3.090232, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc4, quantile_probability = 0.001), -3.090232, epsilon );  
-    
+    BOOST_CHECK_CLOSE( quantile(acc4, quantile_probability = 0.001), -3.090232, epsilon );
+
     BOOST_CHECK_CLOSE( quantile(acc5, quantile_probability = 0.999), 6.908, epsilon );
-    BOOST_CHECK_CLOSE( quantile(acc6, quantile_probability = 0.999), 6.908, epsilon );  
+    BOOST_CHECK_CLOSE( quantile(acc6, quantile_probability = 0.999), 6.908, epsilon );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

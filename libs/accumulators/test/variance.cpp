@@ -23,7 +23,7 @@ void test_stat()
     // >> mean(samples)
     // ans = 3
     // >> sum(samples .* samples) / length(samples)
-    // ans = 11  
+    // ans = 11
     // >> sum(samples .* samples) / length(samples) - mean(samples)^2
     // ans = 2
 
