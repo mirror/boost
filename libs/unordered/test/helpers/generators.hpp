@@ -84,6 +84,7 @@ namespace test
 
     float generate(float const*)
     {
+        using namespace std;
         return (float) rand() / (float) RAND_MAX;
     }
 }
