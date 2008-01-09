@@ -165,7 +165,7 @@ namespace impl
 
                 while (sum < threshold)
                 {
-                    if (n < tail_weights(args).size())
+                    if (n < static_cast<std::size_t>(tail_weights(args).size()))
                     {
                         mu_ += *(tail_weights(args).begin() + n) * *(tail(args).begin() + n);
                         sigma2_ += *(tail_weights(args).begin() + n) * *(tail(args).begin() + n) * (*(tail(args).begin() + n));

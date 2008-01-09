@@ -235,7 +235,7 @@ namespace impl
                 );
 
                 // If n is in a valid range, return result, otherwise return NaN or throw exception
-                if ( n >= tail(args).size())
+                if ( n >= static_cast<std::size_t>(tail(args).size()))
                 {
                     if (std::numeric_limits<float_type>::has_quiet_NaN)
                     {
