@@ -383,7 +383,8 @@ BOOST_IOSTREAMS_RESTRICT( const T& t, stream_offset off, stream_offset len = -1
 
 template<typename Ch, typename Tr>
 restriction< std::basic_streambuf<Ch, Tr> >
-restrict(std::basic_streambuf<Ch, Tr>& sb, stream_offset off, stream_offset len = -1)
+BOOST_IOSTREAMS_RESTRICT( std::basic_streambuf<Ch, Tr>& sb, stream_offset off, 
+                          stream_offset len = -1 )
 { return restriction< std::basic_streambuf<Ch, Tr> >(sb, off, len); }
 
 template<typename Ch, typename Tr>
@@ -453,7 +454,7 @@ template<typename T>
 restriction<T> 
 BOOST_IOSTREAMS_RESTRICT( const T& t, stream_offset off, stream_offset len = -1
                           BOOST_IOSTREAMS_DISABLE_IF_STREAM(T) )
-{ return restrict(t, off, len, is_std_io<T>()); }
+{ return BOOST_IOSTREAMS_RESTRICT(t, off, len, is_std_io<T>()); }
 
 # if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) && \
      !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && \
