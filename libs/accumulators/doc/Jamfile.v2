@@ -61,20 +61,27 @@ doxygen statsdoc.html
 if [ os.name ] = NT
 {
     CP = copy /y ;
+    MKDIR = mkdir ;
     FROM = \\..\\..\\html\\statsdoc\\*.png ;
-    TO = .\\html\\images\\accumulators ;
+    TOHTML = .\\html\\images\\accumulators ;
+    TOPDF = \\images\\accumulators ;
 }
 else
 {
     CP = cp ;
+    MKDIR = mkdir -p ;
     FROM = /../../html/statsdoc/*.png ;
-    TO = ./html/images/accumulators ;
+    TOHTML = ./html/images/accumulators ;
+    TOPDF = /images/accumulators ;
 }
 
 actions copy-latex-pngs
 {
-    mkdir $(TO)
-    $(CP) $(<:D)$(FROM) $(TO) && echo "Stamped" > "$(<)"
+    $(MKDIR) $(TOHTML)
+    $(MKDIR) $(<:D)$(TOPDF)
+    $(CP) $(<:D)$(FROM) $(TOHTML)
+    $(CP) $(<:D)$(FROM) $(<:D)$(TOPDF)
+    echo "Stamped" > "$(<)"
 }
 
 # This causes the png files built above to be copied
