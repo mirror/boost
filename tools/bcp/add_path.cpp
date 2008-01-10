@@ -40,9 +40,14 @@ void bcp_implementation::add_path(const fs::path& p)
 void bcp_implementation::add_directory(const fs::path& p)
 {
    //
-   // don't add files created by build system
+   // Don't add files created by build system:
    //
    if((p.leaf() == "bin") || (p.leaf() == "bin-stage"))
+      return; 
+   //
+   // Don't add version control directories:
+   //
+   if((p.leaf() == "CVS") || (p.leaf() == ".svn"))
       return; 
    //
    // don't add directories not under version control:
