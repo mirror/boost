@@ -16,6 +16,7 @@
 #include <iostream>
 #include "../helpers/fwd.hpp"
 #include "../helpers/allocator.hpp"
+#include "memory.hpp"
 #include <map>
 
 #define RUN_EXCEPTION_TESTS(test_seq, param_seq) \
@@ -52,8 +53,6 @@
     ::test::exceptions_enable BOOST_PP_CAT(ENABLE_EXCEPTIONS_, __LINE__)(true)
 #define DISABLE_EXCEPTIONS \
     ::test::exceptions_enable BOOST_PP_CAT(ENABLE_EXCEPTIONS_, __LINE__)(false)
-
-#define HASH_CHECK(test) if(!(test)) BOOST_ERROR(BOOST_STRINGIZE(test))
 
 namespace test {
     static char const* scope = "";
@@ -151,8 +150,8 @@ namespace test {
         test_runner(Test const& t) : test_(t) {}
         void operator()() const {
             DISABLE_EXCEPTIONS;
-            typename Test::data_type x(test_.init());
-            typename Test::strong_type strong;
+            BOOST_DEDUCED_TYPENAME Test::data_type x(test_.init());
+            BOOST_DEDUCED_TYPENAME Test::strong_type strong;
             strong.store(x);
             try {
                 ENABLE_EXCEPTIONS;
@@ -179,123 +178,15 @@ namespace exception
 {
     namespace detail
     {
-        // This annoymous namespace won't cause ODR violations as I won't
-        // be linking multiple translation units together. I'll probably
-        // move this into a cpp file before a full release, but for now it's
-        // the most convenient way.
+        struct malloc_allocator_holder {
+            template <class T> struct apply {
+                typedef test::malloc_allocator<T> type;
+            };
+        };
+
         namespace
         {
-            struct memory_area {
-                void const* start;
-                void const* end;
-
-                memory_area(void const* s, void const* e)
-                    : start(s), end(e)
-                {
-                    BOOST_ASSERT(start != end);
-                }
-            };
-
-            struct memory_track {
-                explicit memory_track(int tag = -1) :
-                    tag_(tag) {}
-
-                int tag_;
-            };
-
-            // This is a bit dodgy as it defines overlapping
-            // areas as 'equal', so this isn't a total ordering.
-            // But it is for non-overlapping memory regions - which
-            // is what'll be stored.
-            //
-            // All searches will be for areas entirely contained by
-            // a member of the set - so it should find the area that contains
-            // the region that is searched for.
-
-            struct memory_area_compare {
-                bool operator()(memory_area const& x, memory_area const& y) const {
-                    return x.end <= y.start;
-                }
-            };
-
-            typedef std::map<memory_area, memory_track, memory_area_compare,
-                test::malloc_allocator<std::pair<memory_area const, memory_track> > >
-                allocated_memory_type;
-            allocated_memory_type allocated_memory;
-            unsigned int count_allocators = 0;
-            unsigned int count_allocations = 0;
-            unsigned int count_constructions = 0;
-        }
-
-        void allocator_ref()
-        {
-            if(count_allocators == 0) {
-                count_allocations = 0;
-                count_constructions = 0;
-                allocated_memory.clear();
-            }
-            ++count_allocators;
-        }
-
-        void allocator_unref()
-        {
-            HASH_CHECK(count_allocators > 0);
-            if(count_allocators > 0) {
-                --count_allocators;
-                if(count_allocators == 0) {
-                    bool no_allocations_left = (count_allocations == 0);
-                    bool no_constructions_left = (count_constructions == 0);
-                    bool allocated_memory_empty = allocated_memory.empty();
-
-                    // Clearing the data before the checks terminate the tests.
-                    count_allocations = 0;
-                    count_constructions = 0;
-                    allocated_memory.clear();
-
-                    HASH_CHECK(no_allocations_left);
-                    HASH_CHECK(no_constructions_left);
-                    HASH_CHECK(allocated_memory_empty);
-                }
-            }
-        }
-
-        void track_allocate(void *ptr, std::size_t n, std::size_t size, int tag)
-        {
-            if(n == 0) {
-                BOOST_ERROR("Allocating 0 length array.");
-            }
-            else {
-                ++count_allocations;
-                allocated_memory[memory_area(ptr, (char*) ptr + n * size)] =
-                    memory_track(tag);
-            }
-        }
-
-        void track_deallocate(void* ptr, std::size_t n, std::size_t size, int tag)
-        {
-            allocated_memory_type::iterator pos
-                = allocated_memory.find(memory_area(ptr, (char*) ptr + n * size));
-            if(pos == allocated_memory.end()) {
-                BOOST_ERROR("Deallocating unknown pointer.");
-            } else {
-                HASH_CHECK(pos->first.start == ptr);
-                HASH_CHECK(pos->first.end == (char*) ptr + n * size);
-                HASH_CHECK(pos->second.tag_ == tag);
-                allocated_memory.erase(pos);
-            }
-            HASH_CHECK(count_allocations > 0);
-            if(count_allocations > 0) --count_allocations;
-        }
-
-        void track_construct(void* ptr, std::size_t /*size*/, int tag)
-        {
-            ++count_constructions;
-        }
-
-        void track_destroy(void* ptr, std::size_t /*size*/, int tag)
-        {
-            HASH_CHECK(count_constructions > 0);
-            if(count_constructions > 0) --count_constructions;
+            test::detail::memory_tracker<malloc_allocator_holder> tracker;
         }
     }
 
@@ -519,7 +410,7 @@ namespace exception
             SCOPE(allocator::allocator()) {
                 EPOINT("Mock allocator default constructor.");
             }
-            detail::allocator_ref();
+            detail::tracker.allocator_ref();
         }
 
         template <class Y> allocator(allocator<Y> const& x) : tag_(x.tag_)
@@ -527,7 +418,7 @@ namespace exception
             SCOPE(allocator::allocator()) {
                 EPOINT("Mock allocator template copy constructor.");
             }
-            detail::allocator_ref();
+            detail::tracker.allocator_ref();
         }
 
         allocator(allocator const& x) : tag_(x.tag_)
@@ -535,11 +426,11 @@ namespace exception
             SCOPE(allocator::allocator()) {
                 EPOINT("Mock allocator copy constructor.");
             }
-            detail::allocator_ref();
+            detail::tracker.allocator_ref();
         }
 
         ~allocator() {
-            detail::allocator_unref();
+            detail::tracker.allocator_unref();
         }
 
         allocator& operator=(allocator const& x) {
@@ -577,7 +468,7 @@ namespace exception
                 ptr = (T*) malloc(n * sizeof(T));
                 if(!ptr) throw std::bad_alloc();
             }
-            detail::track_allocate((void*) ptr, n, sizeof(T), tag_);
+            detail::tracker.track_allocate((void*) ptr, n, sizeof(T), tag_);
             return pointer(ptr);
 
             //return pointer(static_cast<T*>(::operator new(n * sizeof(T))));
@@ -593,7 +484,7 @@ namespace exception
                 ptr = (T*) malloc(n * sizeof(T));
                 if(!ptr) throw std::bad_alloc();
             }
-            detail::track_allocate((void*) ptr, n, sizeof(T), tag_);
+            detail::tracker.track_allocate((void*) ptr, n, sizeof(T), tag_);
             return pointer(ptr);
 
             //return pointer(static_cast<T*>(::operator new(n * sizeof(T))));
@@ -603,7 +494,7 @@ namespace exception
         {
             //::operator delete((void*) p);
             if(p) {
-                detail::track_deallocate((void*) p, n, sizeof(T), tag_);
+                detail::tracker.track_deallocate((void*) p, n, sizeof(T), tag_);
                 using namespace std;
                 free(p);
             }
@@ -614,11 +505,11 @@ namespace exception
                 EPOINT("Mock allocator construct function.");
                 new(p) T(t);
             }
-            detail::track_construct((void*) p, sizeof(T), tag_);
+            detail::tracker.track_construct((void*) p, sizeof(T), tag_);
         }
 
         void destroy(pointer p) {
-            detail::track_destroy((void*) p, sizeof(T), tag_);
+            detail::tracker.track_destroy((void*) p, sizeof(T), tag_);
             p->~T();
         }
 

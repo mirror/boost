@@ -42,8 +42,8 @@ struct assign_base : public test::exception_base
 
     assign_base(unsigned int count1, unsigned int count2, int tag1, int tag2)
         : x_values(count1), y_values(count2),
-        x(x_values.begin(), x_values.end(), 0, typename T::hasher(tag1), typename T::key_equal(tag1), typename T::allocator_type(tag1)),
-        y(y_values.begin(), y_values.end(), 0, typename T::hasher(tag2), typename T::key_equal(tag2), typename T::allocator_type(tag2)) {}
+        x(x_values.begin(), x_values.end(), 0, BOOST_DEDUCED_TYPENAME T::hasher(tag1), BOOST_DEDUCED_TYPENAME T::key_equal(tag1), BOOST_DEDUCED_TYPENAME T::allocator_type(tag1)),
+        y(y_values.begin(), y_values.end(), 0, BOOST_DEDUCED_TYPENAME T::hasher(tag2), BOOST_DEDUCED_TYPENAME T::key_equal(tag2), BOOST_DEDUCED_TYPENAME T::allocator_type(tag2)) {}
 
     typedef T data_type;
     T init() const { return T(x); }

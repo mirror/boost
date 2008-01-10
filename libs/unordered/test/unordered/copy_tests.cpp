@@ -17,9 +17,9 @@ test::seed_t seed(9063);
 template <class T>
 void copy_construct_tests1(T* = 0)
 {
-    typename T::hasher hf;
-    typename T::key_equal eq;
-    typename T::allocator_type al;
+    BOOST_DEDUCED_TYPENAME T::hasher hf;
+    BOOST_DEDUCED_TYPENAME T::key_equal eq;
+    BOOST_DEDUCED_TYPENAME T::allocator_type al;
 
     {
         T x;
@@ -64,9 +64,9 @@ void copy_construct_tests2(T* ptr = 0)
 {
     copy_construct_tests1(ptr);
 
-    typename T::hasher hf(1);
-    typename T::key_equal eq(1);
-    typename T::allocator_type al(1);
+    BOOST_DEDUCED_TYPENAME T::hasher hf(1);
+    BOOST_DEDUCED_TYPENAME T::key_equal eq(1);
+    BOOST_DEDUCED_TYPENAME T::allocator_type al(1);
 
     {
         T x(10000, hf, eq, al);

@@ -61,9 +61,9 @@ void swap_tests2(X* ptr = 0)
 {
     swap_tests1(ptr);
 
-    typedef typename X::hasher hasher;
-    typedef typename X::key_equal key_equal;
-    typedef typename X::allocator_type allocator_type;
+    typedef BOOST_DEDUCED_TYPENAME X::hasher hasher;
+    typedef BOOST_DEDUCED_TYPENAME X::key_equal key_equal;
+    typedef BOOST_DEDUCED_TYPENAME X::allocator_type allocator_type;
 
     {
         X x(0, hasher(1), key_equal(1));

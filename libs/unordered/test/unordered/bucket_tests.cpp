@@ -16,8 +16,8 @@ test::seed_t seed(54635);
 template <class X>
 void bucket_tests(X* = 0)
 {
-    typedef typename X::size_type size_type;
-    typedef typename X::const_local_iterator const_local_iterator;
+    typedef BOOST_DEDUCED_TYPENAME X::size_type size_type;
+    typedef BOOST_DEDUCED_TYPENAME X::const_local_iterator const_local_iterator;
     test::random_values<X> v(1000);
 
     X x(v.begin(), v.end());
@@ -25,7 +25,7 @@ void bucket_tests(X* = 0)
     BOOST_TEST(x.bucket_count() < x.max_bucket_count());
     std::cerr<<x.bucket_count()<<"<"<<x.max_bucket_count()<<"\n";
 
-    for(typename test::random_values<X>::const_iterator
+    for(BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator
             it = v.begin(), end = v.end(); it != end; ++it)
     {
         size_type bucket = x.bucket(test::get_key<X>(*it));

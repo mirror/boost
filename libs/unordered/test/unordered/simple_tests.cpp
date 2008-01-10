@@ -51,8 +51,8 @@ void simple_test(X const& a)
         BOOST_TEST(b.empty());
         BOOST_TEST(equivalent(c));
         b.swap(c);
-        BOOST_TEST(b.empty());
-        BOOST_TEST(equivalent(c));
+        BOOST_TEST(c.empty());
+        BOOST_TEST(equivalent(b));
     }
 
     {
@@ -68,7 +68,7 @@ void simple_test(X const& a)
 
     {
         BOOST_TEST(a.size() ==
-                (typename X::size_type) std::distance(a.begin(), a.end()));
+                (BOOST_DEDUCED_TYPENAME X::size_type) std::distance(a.begin(), a.end()));
     }
 
     {
@@ -84,20 +84,43 @@ void simple_test(X const& a)
 
 int main()
 {
+  	using namespace std;
+   	srand(14878);
+
     std::cout<<"Test unordered_set.\n";
     boost::unordered_set<int> set;
+    simple_test(set);
+    
+    set.insert(1); set.insert(2); set.insert(1456);
     simple_test(set);
 
     std::cout<<"Test unordered_multiset.\n";
     boost::unordered_multiset<int> multiset;
     simple_test(multiset);
     
+    for(int i1 = 0; i1 < 1000; ++i1) {
+    	int count = rand() % 10, index = rand();
+    	for(int j = 0; j < count; ++j)
+	    	multiset.insert(index);
+    }
+    simple_test(multiset);
+    
     std::cout<<"Test unordered_map.\n";
     boost::unordered_map<int, int> map;
+
+    for(int i2 = 0; i2 < 1000; ++i2) {
+    	map.insert(std::pair<const int, int>(rand(), rand()));
+    }
     simple_test(map);
 
     std::cout<<"Test unordered_multimap.\n";
     boost::unordered_multimap<int, int> multimap;
+
+    for(int i3 = 0; i3 < 1000; ++i3) {
+    	int count = rand() % 10, index = rand();
+    	for(int j = 0; j < count; ++j)
+	    	multimap.insert(std::pair<const int, int>(index, rand()));
+    }
     simple_test(multimap);
 
     return boost::report_errors();

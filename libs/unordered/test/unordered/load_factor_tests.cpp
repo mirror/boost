@@ -39,10 +39,10 @@ void insert_test(X*, float mlf)
 
     test::random_values<X> values(1000);
 
-    for(typename test::random_values<X>::const_iterator
+    for(BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator
             it = values.begin(), end = values.end(); it != end; ++it)
     {
-        typename X::size_type old_size = x.size(),
+        BOOST_DEDUCED_TYPENAME X::size_type old_size = x.size(),
                  old_bucket_count = x.bucket_count();
         x.insert(*it);
         if(old_size + 1 < b * old_bucket_count)

@@ -14,10 +14,10 @@ namespace test
 {
     template <class X>
     struct random_values
-        : public std::list<typename X::value_type>
+        : public std::list<BOOST_DEDUCED_TYPENAME X::value_type>
     {
         random_values(int count) {
-            typedef typename X::value_type value_type;
+            typedef BOOST_DEDUCED_TYPENAME X::value_type value_type;
             static test::generator<value_type> gen;
             std::generate_n(std::back_inserter(*this), count, gen);
         }

@@ -25,14 +25,14 @@ namespace test
     template <class X>
     void check_equivalent_keys(X const& x1)
     {
-        typename X::key_equal eq = x1.key_eq();
-        typedef typename X::key_type key_type;
+        BOOST_DEDUCED_TYPENAME X::key_equal eq = x1.key_eq();
+        typedef BOOST_DEDUCED_TYPENAME X::key_type key_type;
         // Boost.Test was reporting memory leaks for std::set on g++-3.3.
         // So I work around it by using malloc.
         std::set<key_type, std::less<key_type>, test::malloc_allocator<key_type> > found_;
 
-        typename X::const_iterator it = x1.begin(), end = x1.end();
-        typename X::size_type size = 0;
+        BOOST_DEDUCED_TYPENAME X::const_iterator it = x1.begin(), end = x1.end();
+        BOOST_DEDUCED_TYPENAME X::size_type size = 0;
         while(it != end) {
             // First test that the current key has not occured before, required
             // to test either that keys are unique or that equivalent keys are
@@ -70,8 +70,8 @@ namespace test
 
             // // Check that the keys are in the correct bucket and are
             // // adjacent in the bucket.
-            // typename X::size_type bucket = x1.bucket(key);
-            // typename X::const_local_iterator lit = x1.begin(bucket), lend = x1.end(bucket);
+            // BOOST_DEDUCED_TYPENAME X::size_type bucket = x1.bucket(key);
+            // BOOST_DEDUCED_TYPENAME X::const_local_iterator lit = x1.begin(bucket), lend = x1.end(bucket);
             // for(; lit != lend && !eq(get_key<X>(*lit), key); ++lit) continue;
             // if(lit == lend)
             //     BOOST_ERROR("Unable to find element with a local_iterator");

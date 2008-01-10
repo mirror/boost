@@ -16,7 +16,7 @@ test::seed_t seed(78937);
 template <class X>
 void find_tests1(X*)
 {
-    typedef typename X::iterator iterator;
+    typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
 
     {
         test::random_values<X> v(500);
@@ -25,12 +25,12 @@ void find_tests1(X*)
         test::ordered<X> tracker = test::create_ordered(x);
         tracker.insert_range(v.begin(), v.end());
 
-        for(typename test::ordered<X>::const_iterator it1 =
+        for(BOOST_DEDUCED_TYPENAME test::ordered<X>::const_iterator it1 =
                 tracker.begin(); it1 != tracker.end(); ++it1)
         {
-            typename X::key_type key = test::get_key<X>(*it1);
+            BOOST_DEDUCED_TYPENAME X::key_type key = test::get_key<X>(*it1);
             iterator pos = x.find(key);
-            typename X::const_iterator const_pos = x_const.find(key);
+            BOOST_DEDUCED_TYPENAME X::const_iterator const_pos = x_const.find(key);
             BOOST_TEST(pos != x.end() &&
                     x.key_eq()(key, test::get_key<X>(*pos)));
             BOOST_TEST(const_pos != x_const.end() &&
@@ -40,17 +40,17 @@ void find_tests1(X*)
 
             test::compare_pairs(x.equal_range(key),
                     tracker.equal_range(key),
-                    (typename test::non_const_value_type<X>::type*) 0);
+                    (BOOST_DEDUCED_TYPENAME test::non_const_value_type<X>::type*) 0);
             test::compare_pairs(x_const.equal_range(key),
                     tracker.equal_range(key),
-                    (typename test::non_const_value_type<X>::type*) 0);
+                    (BOOST_DEDUCED_TYPENAME test::non_const_value_type<X>::type*) 0);
         }
 
         test::random_values<X> v2(500);
-        for(typename test::random_values<X>::const_iterator it2 =
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator it2 =
                 v2.begin(); it2 != v2.end(); ++it2)
         {
-            typename X::key_type key = test::get_key<X>(*it2);
+            BOOST_DEDUCED_TYPENAME X::key_type key = test::get_key<X>(*it2);
             if(tracker.find(test::get_key<X>(key)) == tracker.end())
             {
                 BOOST_TEST(x.find(key) == x.end());
@@ -66,10 +66,10 @@ void find_tests1(X*)
         X x;
 
         test::random_values<X> v2(5);
-        for(typename test::random_values<X>::const_iterator it3 =
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator it3 =
                 v2.begin(); it3 != v2.end(); ++it3)
         {
-            typename X::key_type key = test::get_key<X>(*it3);
+            BOOST_DEDUCED_TYPENAME X::key_type key = test::get_key<X>(*it3);
             BOOST_TEST(x.find(key) == x.end());
             BOOST_TEST(x.count(key) == 0);
             std::pair<iterator, iterator> range = x.equal_range(key);

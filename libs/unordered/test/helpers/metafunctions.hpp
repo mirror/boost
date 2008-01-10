@@ -8,10 +8,11 @@
 
 #include <boost/config.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/apply.hpp>
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -40,8 +41,8 @@ namespace test
     template <class Container>
     struct is_set
         : public boost::is_same<
-            typename Container::key_type,
-            typename Container::value_type> {};
+            BOOST_DEDUCED_TYPENAME Container::key_type,
+            BOOST_DEDUCED_TYPENAME Container::value_type> {};
 
     template <class Container>
     struct is_map
@@ -81,20 +82,29 @@ namespace test
 
     // Non Const Value Type
 
-    template <class Container>
     struct map_non_const_value_type
     {
-        typedef std::pair<
-            typename Container::key_type,
-            typename Container::mapped_type> type;
+        template <class Container>
+        struct apply {
+            typedef std::pair<
+                BOOST_DEDUCED_TYPENAME Container::key_type,
+                BOOST_DEDUCED_TYPENAME Container::mapped_type> type;
+        };
     };
 
-
+    struct set_non_const_value_type
+    {
+        template <class Container>
+        struct apply {
+            typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
+        };
+    };
+    
     template <class Container>
     struct non_const_value_type
-        : boost::mpl::eval_if<is_map<Container>,
-            map_non_const_value_type<Container>,
-            boost::mpl::identity<typename Container::value_type> >
+        : boost::mpl::apply1<
+            BOOST_DEDUCED_TYPENAME boost::mpl::if_<is_map<Container>, map_non_const_value_type, set_non_const_value_type>::type,
+            Container>
     {
     };
 }

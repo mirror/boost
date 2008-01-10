@@ -43,10 +43,10 @@ struct insert_test_base : public test::exception_base
 template <class T>
 struct insert_test1 : public insert_test_base<T>
 {
-    typedef typename insert_test_base<T>::strong_type strong_type;
+    typedef BOOST_DEDUCED_TYPENAME insert_test_base<T>::strong_type strong_type;
 
     void run(T& x, strong_type& strong) const {
-        for(typename test::random_values<T>::const_iterator
+        for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
                 it = this->values.begin(), end = this->values.end(); it != end; ++it)
         {
             strong.store(x);
@@ -58,10 +58,10 @@ struct insert_test1 : public insert_test_base<T>
 template <class T>
 struct insert_test2 : public insert_test_base<T>
 {
-    typedef typename insert_test_base<T>::strong_type strong_type;
+    typedef BOOST_DEDUCED_TYPENAME insert_test_base<T>::strong_type strong_type;
 
     void run(T& x, strong_type& strong) const {
-        for(typename test::random_values<T>::const_iterator
+        for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
                 it = this->values.begin(), end = this->values.end(); it != end; ++it)
         {
             strong.store(x);
@@ -85,10 +85,10 @@ struct insert_test3 : public insert_test_base<T>
 template <class T>
 struct insert_test4 : public insert_test_base<T>
 {
-    typedef typename insert_test_base<T>::strong_type strong_type;
+    typedef BOOST_DEDUCED_TYPENAME insert_test_base<T>::strong_type strong_type;
 
     void run(T& x, strong_type& strong) const {
-        for(typename test::random_values<T>::const_iterator
+        for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
                 it = this->values.begin(), end = this->values.end(); it != end; ++it)
         {
             strong.store(x);
@@ -100,12 +100,12 @@ struct insert_test4 : public insert_test_base<T>
 template <class T>
 struct insert_test_rehash1 : public insert_test_base<T>
 {
-    typedef typename insert_test_base<T>::strong_type strong_type;
+    typedef BOOST_DEDUCED_TYPENAME insert_test_base<T>::strong_type strong_type;
 
     insert_test_rehash1() : insert_test_base<T>(1000) {}
 
     T init() const {
-        typedef typename T::size_type size_type;
+        typedef BOOST_DEDUCED_TYPENAME T::size_type size_type;
 
         T x;
         x.max_load_factor(0.25);
@@ -120,11 +120,11 @@ struct insert_test_rehash1 : public insert_test_base<T>
     }
 
     void run(T& x, strong_type& strong) const {
-        typename T::size_type bucket_count = x.bucket_count();
+        BOOST_DEDUCED_TYPENAME T::size_type bucket_count = x.bucket_count();
         int count = 0;
-        typename T::const_iterator pos = x.cbegin();
+        BOOST_DEDUCED_TYPENAME T::const_iterator pos = x.cbegin();
 
-        for(typename test::random_values<T>::const_iterator
+        for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
             it = boost::next(this->values.begin(), x.size()), end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
@@ -141,13 +141,13 @@ struct insert_test_rehash1 : public insert_test_base<T>
 template <class T>
 struct insert_test_rehash2 : public insert_test_rehash1<T>
 {
-    typedef typename insert_test_base<T>::strong_type strong_type;
+    typedef BOOST_DEDUCED_TYPENAME insert_test_base<T>::strong_type strong_type;
 
     void run(T& x, strong_type& strong) const {
-        typename T::size_type bucket_count = x.bucket_count();
+        BOOST_DEDUCED_TYPENAME T::size_type bucket_count = x.bucket_count();
         int count = 0;
 
-        for(typename test::random_values<T>::const_iterator
+        for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
             it = boost::next(this->values.begin(), x.size()), end = this->values.end();
             it != end && count < 10; ++it, ++count)
         {
@@ -164,12 +164,12 @@ struct insert_test_rehash2 : public insert_test_rehash1<T>
 template <class T>
 struct insert_test_rehash3 : public insert_test_base<T>
 {
-    typename T::size_type mutable rehash_bucket_count, original_bucket_count;
+    BOOST_DEDUCED_TYPENAME T::size_type mutable rehash_bucket_count, original_bucket_count;
 
     insert_test_rehash3() : insert_test_base<T>(1000) {}
 
     T init() const {
-        typedef typename T::size_type size_type;
+        typedef BOOST_DEDUCED_TYPENAME T::size_type size_type;
 
         T x;
         x.max_load_factor(0.25);
@@ -188,7 +188,7 @@ struct insert_test_rehash3 : public insert_test_base<T>
     }
 
     void run(T& x) const {
-        typename T::size_type bucket_count = x.bucket_count();
+        BOOST_DEDUCED_TYPENAME T::size_type bucket_count = x.bucket_count();
 
         x.insert(boost::next(this->values.begin(), x.size()),
                 boost::next(this->values.begin(), x.size() + 20));

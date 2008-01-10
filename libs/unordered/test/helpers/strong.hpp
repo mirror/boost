@@ -18,7 +18,7 @@ namespace test
     template <class X>
     class strong
     {
-        typedef std::vector<typename non_const_value_type<X>::type> values_type;
+        typedef std::vector<BOOST_DEDUCED_TYPENAME non_const_value_type<X>::type> values_type;
         values_type values_;
     public:
         void store(X const& x) {

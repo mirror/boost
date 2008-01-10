@@ -1228,8 +1228,8 @@ namespace boost {
                 using namespace std;
 
                 // size < mlf_ * count
-                return float_to_size_t(ceil(
-                        max_bucket_count() * mlf_)) - 1;
+                return double_to_size_t(ceil(
+                        (double) mlf_ * max_bucket_count())) - 1;
             }
 
             // strong safety
@@ -1274,7 +1274,7 @@ namespace boost {
                 //
                 // Or from rehash post-condition:
                 // count > size / mlf_
-                return static_cast<size_type>(floor(n / mlf_)) + 1;
+                return double_to_size_t(floor(n / (double) mlf_)) + 1;
             }
 
             // no throw
@@ -1284,7 +1284,8 @@ namespace boost {
 
                 // From 6.3.1/13:
                 // Only resize when size >= mlf_ * count
-                max_load_ = float_to_size_t(ceil(mlf_ * this->bucket_count_));
+                max_load_ = double_to_size_t(ceil(
+                        (double) mlf_ * this->bucket_count_));
             }
 
             // basic exception safety
@@ -1310,7 +1311,8 @@ namespace boost {
                 bool need_to_reserve = n >= max_load_;
                 // throws - basic:
                 if (need_to_reserve) {
-                    rehash_impl(static_cast<size_type>(floor(n / mlf_ * 1.25)) + 1);
+                    rehash_impl(double_to_size_t(floor(
+                    	n / (double) mlf_ * 1.25)) + 1);
                 }
                 BOOST_ASSERT(n < max_load_ || n > max_size());
                 return need_to_reserve;
@@ -1721,8 +1723,7 @@ namespace boost {
 
                         // Create the node before rehashing in case it throws an
                         // exception (need strong safety in such a case).
-                        value_type const& v = *i;
-                        a.construct(v);
+                        a.construct(*i);
 
                         // reserve has basic exception safety if the hash function
                         // throws, strong otherwise.

@@ -20,9 +20,9 @@ test::seed_t seed(356730);
 template <class T>
 void constructor_tests1(T* = 0)
 {
-    typename T::hasher hf;
-    typename T::key_equal eq;
-    typename T::allocator_type al;
+    BOOST_DEDUCED_TYPENAME T::hasher hf;
+    BOOST_DEDUCED_TYPENAME T::key_equal eq;
+    BOOST_DEDUCED_TYPENAME T::allocator_type al;
 
     std::cerr<<"Construct 1\n";
     {
@@ -139,15 +139,15 @@ void constructor_tests1(T* = 0)
 template <class T>
 void constructor_tests2(T* = 0)
 {
-    typename T::hasher hf;
-    typename T::hasher hf1(1);
-    typename T::hasher hf2(2);
-    typename T::key_equal eq;
-    typename T::key_equal eq1(1);
-    typename T::key_equal eq2(2);
-    typename T::allocator_type al;
-    typename T::allocator_type al1(1);
-    typename T::allocator_type al2(2);
+    BOOST_DEDUCED_TYPENAME T::hasher hf;
+    BOOST_DEDUCED_TYPENAME T::hasher hf1(1);
+    BOOST_DEDUCED_TYPENAME T::hasher hf2(2);
+    BOOST_DEDUCED_TYPENAME T::key_equal eq;
+    BOOST_DEDUCED_TYPENAME T::key_equal eq1(1);
+    BOOST_DEDUCED_TYPENAME T::key_equal eq2(2);
+    BOOST_DEDUCED_TYPENAME T::allocator_type al;
+    BOOST_DEDUCED_TYPENAME T::allocator_type al1(1);
+    BOOST_DEDUCED_TYPENAME T::allocator_type al2(2);
 
     std::cerr<<"Construct 1\n";
     {

@@ -21,9 +21,8 @@ test::seed_t seed(243432);
 template <class X>
 void unique_insert_tests1(X* = 0)
 {
-    typedef typename X::iterator iterator;
+    typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
     typedef test::ordered<X> ordered;
-    typedef typename test::ordered<X>::iterator ordered_iterator;
 
     std::cerr<<"insert(value) tests for containers with unique keys.\n";
 
@@ -31,14 +30,16 @@ void unique_insert_tests1(X* = 0)
     test::ordered<X> tracker = test::create_ordered(x);
 
     test::random_values<X> v(1000);
-    for(typename test::random_values<X>::iterator it = v.begin();
+
+    for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
             it != v.end(); ++it)
     {
-        typename X::size_type old_bucket_count = x.bucket_count();
+
+        BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
         float b = x.max_load_factor();
 
         std::pair<iterator, bool> r1 = x.insert(*it);
-        std::pair<ordered_iterator, bool> r2 = tracker.insert(*it);
+        std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool> r2 = tracker.insert(*it);
 
         BOOST_TEST(r1.second == r2.second);
         BOOST_TEST(*r1.first == *r2.first);
@@ -61,14 +62,14 @@ void equivalent_insert_tests1(X* = 0)
     test::ordered<X> tracker = test::create_ordered(x);
 
     test::random_values<X> v(1000);
-    for(typename test::random_values<X>::iterator it = v.begin();
+    for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
             it != v.end(); ++it)
     {
-        typename X::size_type old_bucket_count = x.bucket_count();
+        BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
         float b = x.max_load_factor();
 
-        typename X::iterator r1 = x.insert(*it);
-        typename test::ordered<X>::iterator r2 = tracker.insert(*it);
+        BOOST_DEDUCED_TYPENAME X::iterator r1 = x.insert(*it);
+        BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator r2 = tracker.insert(*it);
 
         BOOST_TEST(*r1 == *r2);
 
@@ -84,10 +85,10 @@ void equivalent_insert_tests1(X* = 0)
 template <class X>
 void insert_tests2(X* = 0)
 {
-    typedef typename test::ordered<X> tracker_type;
-    typedef typename X::iterator iterator;
-    typedef typename X::const_iterator const_iterator;
-    typedef typename tracker_type::iterator tracker_iterator;
+    typedef BOOST_DEDUCED_TYPENAME test::ordered<X> tracker_type;
+    typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
+    typedef BOOST_DEDUCED_TYPENAME X::const_iterator const_iterator;
+    typedef BOOST_DEDUCED_TYPENAME tracker_type::iterator tracker_iterator;
 
     std::cerr<<"insert(begin(), value) tests.\n";
 
@@ -96,10 +97,10 @@ void insert_tests2(X* = 0)
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(1000);
-        for(typename test::random_values<X>::iterator it = v.begin();
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
-            typename X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             iterator r1 = x.insert(x.begin(), *it);
@@ -122,10 +123,10 @@ void insert_tests2(X* = 0)
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(100);
-        for(typename test::random_values<X>::iterator it = v.begin();
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
-            typename X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             const_iterator r1 = x.insert(x_const.end(), *it);
@@ -148,10 +149,10 @@ void insert_tests2(X* = 0)
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(1000);
-        for(typename test::random_values<X>::iterator it = v.begin();
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
-            typename X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             pos = x.insert(pos, *it);
@@ -173,10 +174,10 @@ void insert_tests2(X* = 0)
         tracker_type tracker = test::create_ordered(x);
 
         test::random_values<X> v(1000);
-        for(typename test::random_values<X>::iterator it = v.begin();
+        for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
-            typename X::size_type old_bucket_count = x.bucket_count();
+            BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
             float b = x.max_load_factor();
 
             x.insert(it, boost::next(it));
@@ -224,10 +225,10 @@ void map_tests(X* = 0)
     test::ordered<X> tracker = test::create_ordered(x);
 
     test::random_values<X> v(1000);
-    for(typename test::random_values<X>::iterator it = v.begin();
+    for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
             it != v.end(); ++it)
     {
-        typename X::size_type old_bucket_count = x.bucket_count();
+        BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
         float b = x.max_load_factor();
 
         x[it->first] = it->second;
@@ -296,6 +297,5 @@ int main()
     associative_insert_range_test((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
     associative_insert_range_test((boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
     associative_insert_range_test((boost::unordered_multimap<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-
     return boost::report_errors();
 }

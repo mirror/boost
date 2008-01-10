@@ -38,11 +38,15 @@ namespace test
         const_pointer address(const_reference r) { return &r; }
 
         pointer allocate(size_type n) {
+            using namespace std;
             return static_cast<T*>(malloc(n * sizeof(T)));
         }
 
         pointer allocate(size_type n, const_pointer u) { return allocate(n); }
-        void deallocate(pointer p, size_type) { free(p); }
+        void deallocate(pointer p, size_type) {
+            using namespace std;
+            free(p);
+        }
         void construct(pointer p, T const& t) { new(p) T(t); }
         void destroy(pointer p) { p->~T(); }
 
@@ -55,9 +59,11 @@ namespace test
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         template <class T> void deallocate(T* p, size_type) {
+            using namespace std;
             free(p);
         }
         char* _Charalloc(size_type n) {
+            using namespace std;
             return static_cast<char*>(malloc(n * sizeof(char)));
         }
 #endif
