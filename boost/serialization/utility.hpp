@@ -50,9 +50,9 @@ struct is_bitwise_serializable<std::pair<T,U> >
 {
 };
 
-template <class T, class U>
-struct implementation_level<std::pair<T,U> >
- : mpl::int_<object_serializable> {} ;
+//template <class T, class U>
+//struct implementation_level<std::pair<T,U> >
+// : mpl::int_<object_serializable> {} ;
 
 } // serialization
 } // namespace boost
