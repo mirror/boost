@@ -20,6 +20,11 @@
 #include <mpi.h>
 #include <boost/config.hpp>
 
+/** @brief Define this macro to avoid expensice MPI_Pack/Unpack calls on 
+ *  homogeneous machines.
+*/
+//#define BOOST_MPI_HOMOGENEOUS
+
 // If this is an MPI-2 implementation, define configuration macros for
 // the features we are interested in.
 #if defined(MPI_VERSION) && MPI_VERSION == 2
