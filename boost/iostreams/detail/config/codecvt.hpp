@@ -41,7 +41,8 @@
 //------------------Normalize codecvt::length---------------------------------//
 
 #if !defined(__MSL_CPP__) && !defined(__LIBCOMO__) && \
-    (!defined(BOOST_RWSTD_VER) || BOOST_RWSTD_VER < 0x04010300)
+    (!defined(BOOST_RWSTD_VER) || BOOST_RWSTD_VER < 0x04010300) && \
+    (!defined(__MACH__) || !defined(__INTEL_COMPILER))
     /**/
 # define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER const
 #else
