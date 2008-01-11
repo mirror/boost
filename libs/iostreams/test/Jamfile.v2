@@ -22,9 +22,11 @@ rule test-iostreams ( sources * : requirements * ) {
             : # command
             : # input files
             : # build requirements
+                <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+                <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
                 <toolset>msvc,<stdlib>stlport:<runtime-link>static
-                <toolset>msvc:<cxxflags>"-wd4996"
                 <toolset>cw-9.3,<os>darwin:<runtime-link>static
+                <toolset>intel,<os>darwin:<runtime-link>static
                 <define>BOOST_IOSTREAMS_NO_LIB
                 <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
                 $(requirements)
