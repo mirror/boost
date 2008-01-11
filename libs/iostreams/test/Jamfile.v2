@@ -26,7 +26,6 @@ rule test-iostreams ( sources * : requirements * ) {
                 <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
                 <toolset>msvc,<stdlib>stlport:<runtime-link>static
                 <toolset>cw-9.3,<os>darwin:<runtime-link>static
-                <toolset>intel,<os>darwin:<runtime-link>static
                 <define>BOOST_IOSTREAMS_NO_LIB
                 <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
                 $(requirements)
@@ -102,16 +101,23 @@ rule test-iostreams ( sources * : requirements * ) {
       }
       if ! $(NO_BZIP2)
       {     
-          all-tests += [ test-iostreams 
-                    bzip2_test.cpp ../build//boost_iostreams ] ;
+          all-tests += 
+              [ test-iostreams 
+                    bzip2_test.cpp 
+                    ../build//boost_iostreams
+                  : <toolset>intel,<os>darwin:<link>static ] ;
       }
       if ! $(NO_ZLIB)
       {              
           all-tests += 
               [ test-iostreams 
-                    gzip_test.cpp ../build//boost_iostreams ]
+                    gzip_test.cpp 
+                    ../build//boost_iostreams
+                  : <toolset>intel,<os>darwin:<link>static ]
               [ test-iostreams 
-                    zlib_test.cpp ../build//boost_iostreams ] ;
+                    zlib_test.cpp 
+                    ../build//boost_iostreams
+                  : <toolset>intel,<os>darwin:<link>static ] ;
       }
           
     test-suite "iostreams" : $(all-tests) ;
