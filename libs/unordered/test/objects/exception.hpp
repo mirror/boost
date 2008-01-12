@@ -6,24 +6,32 @@
 #if !defined(BOOST_UNORDERED_TEST_OBJECTS_HEADER)
 #define BOOST_UNORDERED_TEST_OBJECTS_HEADER
 
-#include <cstddef>
-#include <boost/limits.hpp>
-#include <boost/test/test_tools.hpp>
+#if defined(BOOST_UNORDERED_USE_TEST)
+#define BOOST_TEST_MAIN
 #include <boost/test/exception_safety.hpp>
+#include <boost/test/test_tools.hpp>
+#include <boost/test/unit_test.hpp>
+#else
+#include <boost/detail/lightweight_test.hpp>
+#endif
+
+#include <cstddef>
+#include <iostream>
+#include <boost/limits.hpp>
 #include <boost/preprocessor/seq/for_each_product.hpp>
 #include <boost/preprocessor/seq/elem.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <iostream>
 #include "../helpers/fwd.hpp"
 #include "../helpers/allocator.hpp"
-#include "memory.hpp"
-#include <map>
+#include "./memory.hpp"
 
 #define RUN_EXCEPTION_TESTS(test_seq, param_seq) \
-    BOOST_PP_SEQ_FOR_EACH_PRODUCT(RUN_EXCEPTION_TESTS_OP, (test_seq)(param_seq))
+    UNORDERED_EXCEPTION_TEST_PREFIX \
+    BOOST_PP_SEQ_FOR_EACH_PRODUCT(RUN_EXCEPTION_TESTS_OP, (test_seq)(param_seq)) \
+    UNORDERED_EXCEPTION_TEST_POSTFIX
 
 #define RUN_EXCEPTION_TESTS_OP(r, product) \
-    RUN_EXCEPTION_TESTS_OP2( \
+    UNORDERED_EXCEPTION_TEST_CASE( \
         BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(0, product), \
             BOOST_PP_CAT(_, BOOST_PP_SEQ_ELEM(1, product)) \
         ), \
@@ -31,12 +39,25 @@
         BOOST_PP_SEQ_ELEM(1, product) \
     )
 
-#define RUN_EXCEPTION_TESTS_OP2(name, test_func, type) \
+
+#if defined(BOOST_UNORDERED_USE_TEST)
+#define UNORDERED_EXCEPTION_TEST_PREFIX
+#define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
     BOOST_AUTO_TEST_CASE(name) \
     { \
         test_func< type > fixture; \
         ::test::exception_safety(fixture, BOOST_STRINGIZE(test_func<type>)); \
     }
+#define UNORDERED_EXCEPTION_TEST_POSTFIX
+#else
+#define UNORDERED_EXCEPTION_TEST_PREFIX int main() {
+#define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
+    { \
+        test_func< type > fixture; \
+        ::test::lightweight::exception_safety(fixture, BOOST_STRINGIZE(test_func<type>)); \
+    }
+#define UNORDERED_EXCEPTION_TEST_POSTFIX return boost::report_errors(); }
+#endif
 
 #define SCOPE(scope_name) \
     for(::test::scope_guard unordered_test_guard( \
@@ -44,10 +65,17 @@
         !unordered_test_guard.dismissed(); \
         unordered_test_guard.dismiss())
 
+#if defined(BOOST_UNORDERED_USE_TEST)
 #define EPOINT(name) \
     if(::test::exceptions_enabled) { \
         BOOST_ITEST_EPOINT(name); \
     }
+#else
+#define EPOINT(name) \
+    if(::test::exceptions_enabled) { \
+        ::test::lightweight::epoint(name); \
+    }
+#endif
 
 #define ENABLE_EXCEPTIONS \
     ::test::exceptions_enable BOOST_PP_CAT(ENABLE_EXCEPTIONS_, __LINE__)(true)
@@ -155,21 +183,71 @@ namespace test {
             strong.store(x);
             try {
                 ENABLE_EXCEPTIONS;
-                call_ignore_extra_parameters(&Test::run, test_, x, strong);
+                call_ignore_extra_parameters<Test, BOOST_DEDUCED_TYPENAME Test::data_type, BOOST_DEDUCED_TYPENAME Test::strong_type>(&Test::run, test_, x, strong);
             }
             catch(...) {
-                call_ignore_extra_parameters(&Test::check, test_,
+                call_ignore_extra_parameters<Test, BOOST_DEDUCED_TYPENAME Test::data_type const, BOOST_DEDUCED_TYPENAME Test::strong_type const>(&Test::check, test_,
                         constant(x), constant(strong));
                 throw;
             }
         }
     };
+    
+    
 
+#if defined(BOOST_UNORDERED_USE_TEST)
     template <class Test>
     void exception_safety(Test const& f, char const* name) {
         test_runner<Test> runner(f);
         ::boost::itest::exception_safety(runner, name);
     }
+#else
+
+    // Quick exception testing based on lightweight test
+
+    namespace lightweight {
+        static int iteration;
+        static int count;
+
+        struct test_exception {
+            char const* name;
+            test_exception(char const* n) : name(n) {}
+        };
+
+        struct test_failure {
+        };
+
+        void epoint(char const* name) {
+            ++count;
+            if(count == iteration) {
+                throw test_exception(name);
+            }
+        }
+
+        template <class Test>
+        void exception_safety(Test const& f, char const* name) {
+            test_runner<Test> runner(f);
+
+            iteration = 0;
+            bool success = false;
+            do {
+                ++iteration;
+                count = 0;
+
+                try {
+                    runner();
+                    success = true;
+                }
+                catch(test_failure) {
+                    break;
+                }
+                catch(...) {
+                }
+            } while(!success);
+        }
+    }
+#endif
+
 }
 
 namespace test
@@ -549,6 +627,16 @@ namespace exception
     }
 }
 }
+
+// Workaround for ADL deficient compilers
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+namespace test
+{
+    test::exception::object generate(test::exception::object const* x) {
+        return test::exception::generate(x);
+    }
+}
+#endif
 
 #endif
 

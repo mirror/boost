@@ -6,7 +6,11 @@
 #if !defined(BOOST_UNORDERED_TEST_MEMORY_HEADER)
 #define BOOST_UNORDERED_TEST_MEMORY_HEADER
 
-#define HASH_CHECK(test) if(!(test)) BOOST_ERROR(BOOST_STRINGIZE(test))
+#include <memory>
+#include <map>
+#include <boost/mpl/apply.hpp>
+#include <boost/assert.hpp>
+#include "../helpers/test.hpp"
 
 namespace test
 {
@@ -58,8 +62,7 @@ namespace test
         template <class AllocatorHolder = default_allocator_holder>
         struct memory_tracker {
             typedef std::map<memory_area, memory_track, memory_area_compare,
-                BOOST_DEDUCED_TYPENAME AllocatorHolder::
-                template apply<std::pair<memory_area const, memory_track> >::type
+                BOOST_DEDUCED_TYPENAME boost::mpl::apply1<AllocatorHolder, std::pair<memory_area const, memory_track> >::type
             > allocated_memory_type;
 
             allocated_memory_type allocated_memory;
@@ -84,7 +87,7 @@ namespace test
 
             void allocator_unref()
             {
-                HASH_CHECK(count_allocators > 0);
+                UNORDERED_CHECK(count_allocators > 0);
                 if(count_allocators > 0) {
                     --count_allocators;
                     if(count_allocators == 0) {
@@ -97,9 +100,9 @@ namespace test
                         count_constructions = 0;
                         allocated_memory.clear();
 
-                        HASH_CHECK(no_allocations_left);
-                        HASH_CHECK(no_constructions_left);
-                        HASH_CHECK(allocated_memory_empty);
+                        UNORDERED_CHECK(no_allocations_left);
+                        UNORDERED_CHECK(no_constructions_left);
+                        UNORDERED_CHECK(allocated_memory_empty);
                     }
                 }
             }
@@ -111,8 +114,10 @@ namespace test
                 }
                 else {
                     ++count_allocations;
-                    allocated_memory[memory_area(ptr, (char*) ptr + n * size)] =
-                        memory_track(tag);
+                    allocated_memory.insert(
+                        std::pair<memory_area const, memory_track>(
+                            memory_area(ptr, (char*) ptr + n * size),
+                            memory_track(tag)));
                 }
             }
 
@@ -123,12 +128,12 @@ namespace test
                 if(pos == allocated_memory.end()) {
                     BOOST_ERROR("Deallocating unknown pointer.");
                 } else {
-                    HASH_CHECK(pos->first.start == ptr);
-                    HASH_CHECK(pos->first.end == (char*) ptr + n * size);
-                    HASH_CHECK(pos->second.tag_ == tag);
+                    UNORDERED_CHECK(pos->first.start == ptr);
+                    UNORDERED_CHECK(pos->first.end == (char*) ptr + n * size);
+                    UNORDERED_CHECK(pos->second.tag_ == tag);
                     allocated_memory.erase(pos);
                 }
-                HASH_CHECK(count_allocations > 0);
+                UNORDERED_CHECK(count_allocations > 0);
                 if(count_allocations > 0) --count_allocations;
             }
 
@@ -139,7 +144,7 @@ namespace test
 
             void track_destroy(void* ptr, std::size_t /*size*/, int tag)
             {
-                HASH_CHECK(count_constructions > 0);
+                UNORDERED_CHECK(count_constructions > 0);
                 if(count_constructions > 0) --count_constructions;
             }
         };

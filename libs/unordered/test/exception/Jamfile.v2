@@ -5,7 +5,8 @@
 
 import testing ;
 
-alias framework : /boost/test//boost_unit_test_framework ;
+#alias framework : /boost/test//boost_unit_test_framework ;
+alias framework : ;
 
 project unordered-test/exception-tests
     : requirements

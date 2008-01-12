@@ -4,10 +4,6 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "./containers.hpp"
-
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
-#include <boost/test/exception_safety.hpp>
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
 
@@ -26,7 +22,7 @@ struct self_swap_base : public test::exception_base
         std::string scope(test::scope);
 
 #if BOOST_UNORDERED_SWAP_METHOD != 2
-        HASH_CHECK(
+        UNORDERED_CHECK(
                 scope == "hash::operator(hash)" ||
                 scope == "hash::operator=(hash)" ||
                 scope == "equal_to::operator(equal_to)" ||
@@ -77,7 +73,7 @@ struct swap_base : public test::exception_base
         std::string scope(test::scope);
 
 #if BOOST_UNORDERED_SWAP_METHOD != 2
-        HASH_CHECK(
+        UNORDERED_CHECK(
                 scope == "hash::operator(hash)" ||
                 scope == "hash::operator=(hash)" ||
                 scope == "equal_to::operator(equal_to)" ||

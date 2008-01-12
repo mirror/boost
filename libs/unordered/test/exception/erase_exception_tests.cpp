@@ -4,10 +4,6 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "./containers.hpp"
-
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
-#include <boost/test/exception_safety.hpp>
 #include "../helpers/random_values.hpp"
 #include "../helpers/invariants.hpp"
 #include "../helpers/helpers.hpp"
@@ -29,7 +25,7 @@ struct erase_test_base : public test::exception_base
     void check(T const& x) const {
         std::string scope(test::scope);
 
-        HASH_CHECK(scope.find("hash::") != std::string::npos ||
+        UNORDERED_CHECK(scope.find("hash::") != std::string::npos ||
                 scope.find("equal_to::") != std::string::npos ||
                 scope == "operator==(object, object)");
 
