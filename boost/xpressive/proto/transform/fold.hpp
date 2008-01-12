@@ -11,6 +11,11 @@
     #define BOOST_PROTO_TRANSFORM_FOLD_HPP_EAN_11_04_2007
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/preprocessor/arithmetic/inc.hpp>
+    #include <boost/preprocessor/arithmetic/sub.hpp>
+    #include <boost/preprocessor/repetition/repeat.hpp>
     #include <boost/fusion/include/fold.hpp>
     #include <boost/fusion/include/reverse.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>

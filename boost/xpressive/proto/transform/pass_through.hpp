@@ -12,8 +12,8 @@
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
     #include <boost/preprocessor/cat.hpp>
-    #include <boost/preprocessor/enum.hpp>
-    #include <boost/preprocessor/iterate.hpp>
+    #include <boost/preprocessor/repetition/enum.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/args.hpp>

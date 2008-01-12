@@ -419,28 +419,6 @@
                 typedef not_ proto_base_expr;
             };
 
-            //// if_
-            //template<typename Condition, typename Then, typename Else>
-            //struct if_
-            //  : or_<
-            //        and_<if_<Condition>, Then>
-            //      , and_<not_<if_<Condition> >, Else>
-            //    >
-            //{};
-
-            //template<typename Condition, typename Then>
-            //struct if_<Condition, Then, void>
-            //  : and_<if_<Condition>, Then>
-            //{};
-
-            //template<typename Condition>
-            //struct if_<Condition, void, void>
-            //  : has_identity_transform
-            //{
-            //    typedef if_ proto_base_expr;
-            //};
-
-
             // if_
             template<typename If, typename Then, typename Else>
             struct if_ : callable

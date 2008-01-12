@@ -11,6 +11,10 @@
     #define BOOST_PROTO_TRANSFORM_WHEN_HPP_EAN_10_29_2007
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>

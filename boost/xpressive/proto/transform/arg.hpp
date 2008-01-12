@@ -31,12 +31,6 @@ namespace boost { namespace proto
                 typedef Expr type;
             };
 
-            //template<typename This, typename Expr, typename State, typename Visitor>
-            //struct result<This(Expr &, State, Visitor)>
-            //{
-            //    typedef Expr const &type;
-            //};
-
             template<typename Expr, typename State, typename Visitor>
             Expr const &
             operator ()(Expr const &expr, State const &, Visitor &) const
@@ -55,12 +49,6 @@ namespace boost { namespace proto
             {
                 typedef State type;
             };
-
-            //template<typename This, typename Expr, typename State, typename Visitor>
-            //struct result<This(Expr, State &, Visitor)>
-            //{
-            //    typedef State const &type;
-            //};
 
             template<typename Expr, typename State, typename Visitor>
             State const &
@@ -94,16 +82,6 @@ namespace boost { namespace proto
         {
             template<typename Sig>
             struct result;
-
-            //template<typename This, typename Expr, typename State, typename Visitor>
-            //struct result<This(Expr, State, Visitor)>
-            //  : proto::result_of::value_at_c<Expr, I>
-            //{};
-
-            //template<typename This, typename Expr, typename State, typename Visitor>
-            //struct result<This(Expr &, State, Visitor)>
-            //  : proto::result_of::arg_c<Expr const &, I>
-            //{};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>

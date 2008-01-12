@@ -27,6 +27,7 @@
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
+#include <boost/xpressive/proto/eval.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 /// INTERNAL ONLY

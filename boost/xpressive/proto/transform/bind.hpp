@@ -11,6 +11,9 @@
     #define BOOST_PROTO_TRANSFORM_BIND_HPP_EAN_12_02_2007
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/transform/make.hpp>
     #include <boost/xpressive/proto/transform/call.hpp>

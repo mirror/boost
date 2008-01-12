@@ -11,6 +11,17 @@
     #define BOOST_PROTO_TRANSFORM_MAKE_HPP_EAN_12_02_2007
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/preprocessor/repetition/enum.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/preprocessor/repetition/enum_binary_params.hpp>
+    #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+    #include <boost/preprocessor/repetition/repeat_from_to.hpp>
+    #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/preprocessor/selection/max.hpp>
+    #include <boost/preprocessor/arithmetic/inc.hpp>
     #include <boost/mpl/aux_/has_type.hpp>
     #include <boost/mpl/aux_/template_arity.hpp>
     #include <boost/mpl/aux_/lambda_arity_param.hpp>

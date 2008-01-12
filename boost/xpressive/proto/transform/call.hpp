@@ -11,6 +11,11 @@
     #define BOOST_PROTO_TRANSFORM_CALL_HPP_EAN_11_02_2007
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/preprocessor/repetition/enum.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/utility/result_of.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
