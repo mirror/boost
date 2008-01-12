@@ -14,6 +14,7 @@
 #endif
 
 #include <list>
+#include <boost/detail/workaround.hpp>
 #include <boost/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/access.hpp>
