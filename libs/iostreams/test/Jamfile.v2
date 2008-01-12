@@ -101,23 +101,16 @@ rule test-iostreams ( sources * : requirements * ) {
       }
       if ! $(NO_BZIP2)
       {     
-          all-tests += 
-              [ test-iostreams 
-                    bzip2_test.cpp 
-                    ../build//boost_iostreams
-                  : <toolset>intel,<os>darwin:<link>static ] ;
+          all-tests += [ test-iostreams 
+                    bzip2_test.cpp ../build//boost_iostreams ] ;
       }
       if ! $(NO_ZLIB)
       {              
           all-tests += 
               [ test-iostreams 
-                    gzip_test.cpp 
-                    ../build//boost_iostreams
-                  : <toolset>intel,<os>darwin:<link>static ]
+                    gzip_test.cpp ../build//boost_iostreams ]
               [ test-iostreams 
-                    zlib_test.cpp 
-                    ../build//boost_iostreams
-                  : <toolset>intel,<os>darwin:<link>static ] ;
+                    zlib_test.cpp ../build//boost_iostreams ] ;
       }
           
     test-suite "iostreams" : $(all-tests) ;
