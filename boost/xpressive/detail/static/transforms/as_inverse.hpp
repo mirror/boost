@@ -14,11 +14,16 @@
 #endif
 
 #include <boost/mpl/sizeof.hpp>
+#include <boost/mpl/not.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+#define UNCV(x) typename remove_const<x>::type
+#define UNREF(x) typename remove_reference<x>::type
+#define UNCVREF(x) UNCV(UNREF(x))
+
+namespace boost { namespace xpressive { namespace grammar_detail
 {
 
     template<typename T>
@@ -32,62 +37,58 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    template<typename Traits, bool ICase, bool Not>
-    struct inverter<literal_matcher<Traits, ICase, Not> >
+    template<typename Traits, typename ICase, typename Not>
+    struct inverter<detail::literal_matcher<Traits, ICase, Not> >
     {
-        typedef literal_matcher<Traits, ICase, !Not> type;
-        static type call(literal_matcher<Traits, ICase, Not> t)
+        typedef detail::literal_matcher<Traits, ICase, typename mpl::not_<Not>::type> type;
+        static type call(detail::literal_matcher<Traits, ICase, Not> t)
         {
-            return type(t);
+            return type(t.ch_);
         }
     };
 
     template<typename Traits>
-    struct inverter<logical_newline_matcher<Traits> >
+    struct inverter<detail::logical_newline_matcher<Traits> >
     {
         // ~_ln matches any one character that is not in the "newline" character class
-        typedef posix_charset_matcher<Traits> type;
-        static type call(logical_newline_matcher<Traits> t)
+        typedef detail::posix_charset_matcher<Traits> type;
+        static type call(detail::logical_newline_matcher<Traits> t)
         {
             return type(t.newline(), true);
         }
     };
 
     template<typename Traits>
-    struct inverter<assert_word_matcher<word_boundary<true>, Traits> >
+    struct inverter<detail::assert_word_matcher<detail::word_boundary<mpl::true_>, Traits> >
     {
-        typedef assert_word_matcher<word_boundary<false>, Traits> type;
-        static type call(assert_word_matcher<word_boundary<true>, Traits> t)
+        typedef detail::assert_word_matcher<detail::word_boundary<mpl::false_>, Traits> type;
+        static type call(detail::assert_word_matcher<detail::word_boundary<mpl::true_>, Traits> t)
         {
             return type(t.word());
         }
     };
 
-    template<typename T>
-    typename inverter<T>::type invert(T const &t)
+    struct as_inverse : callable
     {
-        return inverter<T>::call(t);
-    }
+        template<typename Sig>
+        struct result;
 
-    template<typename Grammar>
-    struct as_inverse
-      : Grammar
-    {
-        as_inverse();
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : inverter<typename Grammar::template apply<Expr, State, Visitor>::type>
+        template<typename This, typename Matcher>
+        struct result<This(Matcher)>
+          : inverter<UNCVREF(Matcher)>
         {};
 
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        template<typename Matcher>
+        typename inverter<Matcher>::type operator ()(Matcher const &matcher) const
         {
-            return detail::invert(Grammar::call(expr, state, visitor));
+            return inverter<Matcher>::call(matcher);
         }
     };
 
 }}}
+
+#undef UNCV
+#undef UNREF
+#undef UNCVREF
 
 #endif

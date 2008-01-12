@@ -36,7 +36,7 @@ struct calculator_context
 
     // Handle the evaluation of the placeholder terminals
     template<typename I>
-    double operator()(proto::tag::terminal, arg<I>) const
+    double operator ()(proto::tag::terminal, arg<I>) const
     {
         return d[ I() - 1 ];
     }
@@ -60,7 +60,7 @@ int main()
     // Displays "6"
     std::cout << evaluate( _1 * _2, 3.0, 2.0 ) << std::endl;
 
-    // Displays "1.5"
+    // Displays "0.5"
     std::cout << evaluate( (_1 - _2) / _2, 3.0, 2.0 ) << std::endl;
 
     return 0;

@@ -95,7 +95,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter>
     struct sequence;
 
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     struct mark_matcher;
 
     struct mark_begin_matcher;
@@ -111,27 +111,27 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Traits>
     struct compound_charset;
 
-    template<typename Traits, bool ICase, typename CharSet = compound_charset<Traits> >
+    template<typename Traits, typename ICase, typename CharSet = compound_charset<Traits> >
     struct charset_matcher;
 
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     struct range_matcher;
 
-    template<typename Traits, int Size>
+    template<typename Traits, typename Size>
     struct set_matcher;
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     struct simple_repeat_matcher;
 
     struct repeat_begin_matcher;
 
-    template<bool Greedy>
+    template<typename Greedy>
     struct repeat_end_matcher;
 
-    template<typename Traits, bool ICase, bool Not>
+    template<typename Traits, typename ICase, typename Not>
     struct literal_matcher;
 
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     struct string_matcher;
 
     template<typename Actor>
@@ -140,13 +140,13 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Predicate>
     struct predicate_matcher;
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     struct optional_matcher;
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     struct optional_mark_matcher;
 
-    template<typename Matcher, typename Traits, bool ICase>
+    template<typename Matcher, typename Traits, typename ICase>
     struct attr_matcher;
 
     template<typename Nbr>
@@ -188,7 +188,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr>
     struct lookbehind_matcher;
 
-    template<bool IsBoundary>
+    template<typename IsBoundary>
     struct word_boundary;
 
     template<typename BidiIter, typename Matcher>
@@ -385,6 +385,46 @@ namespace boost { namespace xpressive { namespace detail
     #endif
 
 }}} // namespace boost::xpressive::detail
+
+namespace boost { namespace xpressive { namespace grammar_detail
+{
+    using proto::_;
+    using proto::or_;
+    using proto::if_;
+    using proto::call;
+    using proto::when;
+    using proto::otherwise;
+    using proto::switch_;
+    using proto::make;
+    using proto::_arg;
+    using proto::_left;
+    using proto::_right;
+    using proto::not_;
+    using proto::_state;
+    using proto::_visitor;
+    using proto::callable;
+    using proto::fold;
+    using proto::reverse_fold;
+    using proto::fold_tree;
+    using proto::reverse_fold_tree;
+    using proto::terminal;
+    using proto::shift_right;
+    using proto::bitwise_or;
+    using proto::logical_not;
+    using proto::dereference;
+    using proto::posit;
+    using proto::negate;
+    using proto::complement;
+    using proto::comma;
+    using proto::assign;
+    using proto::subscript;
+    using proto::nary_expr;
+    using proto::unary_expr;
+    using proto::binary_expr;
+    using proto::_deep_copy;
+    using proto::vararg;
+    namespace tag = proto::tag;
+}}}
 
 namespace boost { namespace xpressive { namespace op
 {

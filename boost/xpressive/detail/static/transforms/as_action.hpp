@@ -24,52 +24,10 @@
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/static/transforms/as_quantifier.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/transform/arg.hpp>
-#include <boost/xpressive/proto/transform/fold.hpp>
+#include <boost/xpressive/proto/transform.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // FindAttr
-    //  Look for patterns like (a1= terminal<RHS>) and return the type of the RHS.
-    template<typename Nbr>
-    struct FindAttr
-      : proto::or_<
-            proto::transform::state< proto::terminal<proto::_> >
-            // Ignore nested actions, because attributes are scoped:
-          , proto::transform::state< proto::subscript<proto::_, proto::_> >
-          , proto::transform::arg<
-                proto::transform::right<
-                    proto::assign<
-                        proto::terminal<xpressive::detail::attribute_placeholder<Nbr> >
-                      , proto::_
-                    >
-                >
-            >
-          , proto::transform::fold<proto::nary_expr<proto::_, proto::vararg<FindAttr<Nbr> > > >
-        >
-    {};
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // by_value
-    //  Store all terminals within an action by value to avoid dangling references.
-    template<typename Terminal>
-    struct by_value
-      : Terminal
-    {
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : proto::result_of::as_expr<typename proto::result_of::arg<Expr>::type>
-        {};
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
-        {
-            return proto::as_expr(proto::arg(expr));
-        }
-    };
-
     ///////////////////////////////////////////////////////////////////////////////
     // read_attr
     //  Placeholder that knows the slot number of an attribute as well as the type
@@ -81,32 +39,72 @@ namespace boost { namespace xpressive { namespace detail
         typedef Matcher matcher_type;
     };
 
+}}}
+
+namespace boost { namespace xpressive { namespace grammar_detail
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    // FindAttr
+    //  Look for patterns like (a1= terminal<RHS>) and return the type of the RHS.
+    template<typename Nbr>
+    struct FindAttr
+      : or_<
+            // Ignore nested actions, because attributes are scoped
+            when< subscript<_, _>,                                  _state >
+          , when< terminal<_>,                                      _state >
+          , when< proto::assign<terminal<detail::attribute_placeholder<Nbr> >, _>, call<_arg(_right)> >
+          , otherwise< fold<_, _state, FindAttr<Nbr> > >
+        >
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // as_read_attr
     //  For patterns like (a1 = RHS)[ref(i) = a1], transform to
     //  (a1 = RHS)[ref(i) = read_attr<1, RHS>] so that when reading the attribute
     //  we know what type is stored in the attribute slot.
-    template<typename Grammar>
-    struct as_read_attr
-      : Grammar
+    struct as_read_attr : callable
     {
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename Sig>
+        struct result;
+
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
           : proto::result_of::as_expr<
-                read_attr<
+                detail::read_attr<
                     typename Expr::proto_arg0::nbr_type
                   , typename FindAttr<typename Expr::proto_arg0::nbr_type>
-                        ::template apply<State, mpl::void_, int>::type
+                        ::template result<void(State, mpl::void_, int)>::type
                 >
             >
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &, State const &, Visitor &)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &, State const &, Visitor &) const
         {
-            typename apply<Expr, State, Visitor>::type that = {{}};
+            typename result<void(Expr, State, Visitor)>::type that = {{}};
             return that;
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // by_value
+    //  Store all terminals within an action by value to avoid dangling references.
+    struct by_value : callable
+    {
+        template<typename Sig>
+        struct result;
+
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
+          : proto::result_of::as_expr<typename proto::result_of::arg<Expr>::type>
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &) const
+        {
+            return proto::as_expr(proto::arg(expr));
         }
     };
 
@@ -115,78 +113,81 @@ namespace boost { namespace xpressive { namespace detail
     //  Turn all refs into values, and also bind all attribute placeholders with
     //  the types from which they are being assigned.
     struct DeepCopy
-      : proto::or_<
-            as_read_attr<proto::terminal<xpressive::detail::attribute_placeholder<proto::_> > >
-          , by_value<proto::terminal<proto::_> >
-          , proto::nary_expr<proto::_, proto::vararg<DeepCopy> >
+      : or_<
+            when< terminal<detail::attribute_placeholder<_> >,  as_read_attr>
+          , when< terminal<_>,                          by_value >
+          , otherwise< nary_expr<_, vararg<DeepCopy> > >
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // attr_nbr
+    //  For an attribute placeholder, return the attribute's slot number.
+    struct attr_nbr : callable
+    {
+        template<typename Sig>
+        struct result;
+
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
+          : Expr::proto_arg0::nbr_type
+        {};
+    };
+
+    struct max_attr;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // MaxAttr
+    //  In an action (rx)[act], find the largest attribute slot being used.
+    struct MaxAttr
+      : or_<
+            when< terminal<detail::attribute_placeholder<_> >, attr_nbr>
+          , when< terminal<_>, make<mpl::int_<0> > >
+            // Ignore nested actions, because attributes are scoped:
+          , when< subscript<_, _>, make<mpl::int_<0> > >
+          , otherwise< fold<_, make<mpl::int_<0> >, max_attr> >
         >
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // max_attr
     //  Take the maximum of the current attr slot number and the state.
-    template<typename Grammar>
-    struct max_attr
-      : Grammar
+    struct max_attr : callable
     {
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : mpl::max<State, typename Grammar::template apply<Expr, State, Visitor>::type>
+        template<typename Sig>
+        struct result;
+
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
+          : mpl::max<State, typename MaxAttr::result<void(Expr, State, Visitor)>::type>
         {};
     };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // attr_nbr
-    //  For an attribute placeholder, return the attribute's slot number.
-    template<typename Grammar>
-    struct attr_nbr
-      : Grammar
-    {
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : Expr::proto_arg0::nbr_type
-        {};
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // MaxAttr
-    //  In an action (rx)[act], find the largest attribute slot being used.
-    struct MaxAttr
-      : proto::or_<
-            attr_nbr< proto::terminal< xpressive::detail::attribute_placeholder<proto::_> > >
-          , proto::transform::state< proto::terminal<proto::_> >
-            // Ignore nested actions, because attributes are scoped:
-          , proto::transform::state< proto::subscript<proto::_, proto::_> >
-          , proto::transform::fold<proto::nary_expr<proto::_, max_attr<proto::vararg<MaxAttr> > > >
-        >
-    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_attr_matcher
     //  turn a1=matcher into attr_matcher<Matcher>(1)
-    template<typename Grammar>
-    struct as_attr_matcher
-      : Grammar
+    struct as_attr_matcher : callable
     {
-        as_attr_matcher();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
             typedef
-                attr_matcher<
+                detail::attr_matcher<
                     typename proto::result_of::arg<typename Expr::proto_arg1>::type
                   , typename Visitor::traits_type
-                  , Visitor::icase_type::value
+                  , typename Visitor::icase_type
                 >
             type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
-            return typename apply<Expr, State, Visitor>::type(
+            return typename result<void(Expr, State, Visitor)>::type(
                 Expr::proto_arg0::proto_base_expr::proto_arg0::nbr_type::value
               , proto::arg(proto::right(expr))
               , visitor.traits()
@@ -197,32 +198,31 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // add_attrs
     //  Wrap an expression in attr_begin_matcher/attr_end_matcher pair
-    template<typename Grammar>
-    struct add_attrs
-      : Grammar
+    struct add_attrs : callable
     {
-        add_attrs();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename, typename>
-        struct apply
-          : proto::shift_right<
-                typename proto::terminal<
-                    attr_begin_matcher<typename MaxAttr::apply<Expr, mpl::int_<0>, int>::type>
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
+          : shift_right<
+                typename terminal<
+                    detail::attr_begin_matcher<typename MaxAttr::result<void(Expr, mpl::int_<0>, int)>::type>
                 >::type
-              , typename proto::shift_right<
+              , typename shift_right<
                     Expr
-                  , proto::terminal<attr_end_matcher>::type
+                  , terminal<detail::attr_end_matcher>::type
                 >::type
             >
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &) const
         {
-            attr_begin_matcher<typename MaxAttr::apply<Expr, mpl::int_<0>, int>::type> begin;
-            attr_end_matcher end;
-            typename apply<Expr, State, Visitor>::type that = {{begin}, {expr, {end}}};
+            detail::attr_begin_matcher<typename MaxAttr::result<void(Expr, mpl::int_<0>, int)>::type> begin;
+            detail::attr_end_matcher end;
+            typename result<void(Expr, State, Visitor)>::type that = {{begin}, {expr, {end}}};
             return that;
         }
     };
@@ -230,19 +230,13 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // InsertAttrs
     struct InsertAttrs
-      : proto::or_<
-            add_attrs<proto::if_<mpl::apply_wrap3<MaxAttr, mpl::_, mpl::int_<0>, int> > >
-          , proto::_
-        >
+      : if_<MaxAttr, add_attrs, _>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // CheckAssertion
     struct CheckAssertion
-      : proto::function<
-            proto::terminal<check_tag>
-          , proto::_
-        >
+      : proto::function<terminal<detail::check_tag>, _>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -251,28 +245,27 @@ namespace boost { namespace xpressive { namespace detail
     //  If A and B use attributes, wrap the above expression in
     //  a attr_begin_matcher<Count> / attr_end_matcher pair, where Count is
     //  the number of attribute slots used by the pattern/action.
-    template<typename Grammar>
-    struct as_action
-      : Grammar
+    struct as_action : callable
     {
-        as_action();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
             typedef typename proto::result_of::left<Expr>::type expr_type;
             typedef typename proto::result_of::right<Expr>::type action_type;
-            typedef typename DeepCopy::apply<action_type, expr_type, int>::type action_copy_type;
+            typedef typename DeepCopy::result<void(action_type, expr_type, int)>::type action_copy_type;
 
             typedef
-                typename InsertMark::apply<expr_type, State, Visitor>::type
+                typename InsertMark::result<void(expr_type, State, Visitor)>::type
             marked_expr_type;
 
             typedef
                 typename mpl::if_<
                     proto::matches<action_type, CheckAssertion>
-                  , predicate_matcher<action_copy_type>
-                  , action_matcher<action_copy_type>
+                  , detail::predicate_matcher<action_copy_type>
+                  , detail::action_matcher<action_copy_type>
                 >::type
             matcher_type;
 
@@ -284,20 +277,20 @@ namespace boost { namespace xpressive { namespace detail
             no_attr_type;
 
             typedef
-                typename InsertAttrs::apply<no_attr_type, State, Visitor>::type
+                typename InsertAttrs::result<void(no_attr_type, State, Visitor)>::type
             type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
         {
-            typedef apply<Expr, State, Visitor> apply_type;
+            typedef result<void(Expr, State, Visitor)> apply_type;
             typedef typename apply_type::matcher_type matcher_type;
 
             int dummy = 0;
             typename apply_type::marked_expr_type marked_expr =
-                InsertMark::call(proto::left(expr), state, visitor);
+                InsertMark()(proto::left(expr), state, visitor);
 
             typename apply_type::no_attr_type that =
             {
@@ -305,13 +298,13 @@ namespace boost { namespace xpressive { namespace detail
               , {
                     matcher_type
                     (
-                        DeepCopy::call(proto::right(expr), proto::left(expr), dummy)
+                        DeepCopy()(proto::right(expr), proto::left(expr), dummy)
                       , proto::arg(proto::left(marked_expr)).mark_number_
                     )
                 }
             };
 
-            return InsertAttrs::call(that, state, visitor);
+            return InsertAttrs()(that, state, visitor);
         }
     };
 

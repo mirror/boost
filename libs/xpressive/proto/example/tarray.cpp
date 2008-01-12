@@ -52,7 +52,7 @@ struct TArraySubscriptCtx
 
     // Index array terminals with our subscript. Everything
     // else will be handled by the default evaluation context.
-    int operator()(proto::tag::terminal, int const (&data)[3]) const
+    int operator ()(proto::tag::terminal, int const (&data)[3]) const
     {
         return data[this->i_];
     }
@@ -68,43 +68,43 @@ struct TArrayPrintCtx
 
     TArrayPrintCtx() {}
 
-    std::ostream &operator()(proto::tag::terminal, int i) const
+    std::ostream &operator ()(proto::tag::terminal, int i) const
     {
         return std::cout << i;
     }
 
-    std::ostream &operator()(proto::tag::terminal, int const (&arr)[3]) const
+    std::ostream &operator ()(proto::tag::terminal, int const (&arr)[3]) const
     {
         return std::cout << '{' << arr[0] << ", " << arr[1] << ", " << arr[2] << '}';
     }
 
     template<typename L, typename R>
-    std::ostream &operator()(proto::tag::plus, L const &l, R const &r) const
+    std::ostream &operator ()(proto::tag::plus, L const &l, R const &r) const
     {
         return std::cout << '(' << l << " + " << r << ')';
     }
 
     template<typename L, typename R>
-    std::ostream &operator()(proto::tag::minus, L const &l, R const &r) const
+    std::ostream &operator ()(proto::tag::minus, L const &l, R const &r) const
     {
         return std::cout << '(' << l << " - " << r << ')';
     }
 
     template<typename L, typename R>
-    std::ostream &operator()(proto::tag::multiplies, L const &l, R const &r) const
+    std::ostream &operator ()(proto::tag::multiplies, L const &l, R const &r) const
     {
         return std::cout << l << " * " << r;
     }
 
     template<typename L, typename R>
-    std::ostream &operator()(proto::tag::divides, L const &l, R const &r) const
+    std::ostream &operator ()(proto::tag::divides, L const &l, R const &r) const
     {
         return std::cout << l << " / " << r;
     }
 };
 
 // Here is the domain-specific expression wrapper, which overrides
-// operator[] to evaluate the expression using the TArraySubscriptCtx.
+// operator [] to evaluate the expression using the TArraySubscriptCtx.
 template<typename Expr>
 struct TArrayExpr
   : proto::extends<Expr, TArrayExpr<Expr>, TArrayDomain>
@@ -143,9 +143,9 @@ struct TArray
         (*this)[2] = k;
     }
 
-    // Here we override operator[] to give read/write access to
+    // Here we override operator [] to give read/write access to
     // the elements of the array. (We could use the TArrayExpr
-    // operator[] if we made the subscript context smarter about
+    // operator [] if we made the subscript context smarter about
     // returning non-const reference when appropriate.)
     int &operator [](std::ptrdiff_t i)
     {
@@ -157,13 +157,13 @@ struct TArray
         return proto::arg(*this)[i];
     }
 
-    // Here we define a operator= for TArray terminals that
+    // Here we define a operator = for TArray terminals that
     // takes a TArray expression.
     template< typename Expr >
     TArray &operator =(Expr const & expr)
     {
         // proto::as_expr<TArrayDomain>(expr) is the same as
-        // expr unless expr is an integer, in which case it 
+        // expr unless expr is an integer, in which case it
         // is made into a TArrayExpr terminal first.
         return this->assign(proto::as_expr<TArrayDomain>(expr));
     }

@@ -22,36 +22,36 @@ struct calculator : proto::callable_context<calculator const>
       : i_(i)
     {}
 
-    int operator()(proto::tag::terminal, placeholder) const
+    int operator ()(proto::tag::terminal, placeholder) const
     {
         return this->i_;
     }
 
-    int operator()(proto::tag::terminal, int j) const
+    int operator ()(proto::tag::terminal, int j) const
     {
         return j;
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::plus, Left const &left, Right const &right) const
+    int operator ()(proto::tag::plus, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) + proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::minus, Left const &left, Right const &right) const
+    int operator ()(proto::tag::minus, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) - proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::multiplies, Left const &left, Right const &right) const
+    int operator ()(proto::tag::multiplies, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) * proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::divides, Left const &left, Right const &right) const
+    int operator ()(proto::tag::divides, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) / proto::eval(right, *this);
     }
@@ -70,7 +70,7 @@ struct functor
     {}
 
     template<typename T>
-    result_type operator()(T const &t) const
+    result_type operator ()(T const &t) const
     {
         Fun fun(t);
         return proto::eval(this->expr_, fun);

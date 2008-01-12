@@ -26,13 +26,13 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // string_matcher
     //
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     struct string_matcher
       : quant_style_fixed_unknown_width
     {
         typedef typename Traits::char_type char_type;
         typedef typename Traits::string_type string_type;
-        typedef mpl::bool_<ICase> icase_type;
+        typedef ICase icase_type;
         string_type str_;
         char_type const *end_;
 

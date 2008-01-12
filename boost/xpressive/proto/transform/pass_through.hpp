@@ -28,11 +28,11 @@
 
             #define BOOST_PROTO_DEFINE_TRANSFORM_TYPE(z, n, data)\
                 typename Grammar::BOOST_PP_CAT(proto_arg, n)\
-                    ::template apply<typename Expr::BOOST_PP_CAT(proto_arg, n)::proto_base_expr, State, Visitor>\
+                    ::template result<void(typename Expr::BOOST_PP_CAT(proto_arg, n)::proto_base_expr, State, Visitor)>\
                 ::type
 
             #define BOOST_PROTO_DEFINE_TRANSFORM(z, n, data)\
-                Grammar::BOOST_PP_CAT(proto_arg, n)::call(\
+                typename Grammar::BOOST_PP_CAT(proto_arg, n)()(\
                     expr.BOOST_PP_CAT(arg, n).proto_base(), state, visitor\
                 )
 
@@ -54,46 +54,48 @@
             };
         } // namespace detail
 
-        template<typename Grammar>
-        struct pass_through
-          : Grammar
-        {
-            pass_through() {}
+        //template<typename Grammar>
+        //struct pass_through
+        //  : Grammar
+        //{
+        //    pass_through() {}
 
-            template<typename Expr, typename State, typename Visitor>
-            struct apply
-              : detail::pass_through_impl<
-                    Grammar
-                  , typename Expr::proto_base_expr
-                  , State
-                  , Visitor
-                  , Expr::proto_arity::value
-                >
-            {};
+        //    template<typename Expr, typename State, typename Visitor>
+        //    struct apply
+        //      : detail::pass_through_impl<
+        //            Grammar
+        //          , typename Expr::proto_base_expr
+        //          , State
+        //          , Visitor
+        //          , Expr::proto_arity::value
+        //        >
+        //    {};
 
-            template<typename Expr, typename State, typename Visitor>
-            static typename apply<Expr, State, Visitor>::type
-            call(Expr const &expr, State const &state, Visitor &visitor)
-            {
-                return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
-            }
-        };
+        //    template<typename Expr, typename State, typename Visitor>
+        //    static typename apply<Expr, State, Visitor>::type
+        //    call(Expr const &expr, State const &state, Visitor &visitor)
+        //    {
+        //        return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
+        //    }
+        //};
+
     } // namespace transform
 
-    template<typename Grammar>
-    struct is_transform<transform::pass_through<Grammar> >
-      : mpl::true_
-    {};
+    //template<typename Grammar>
+    //struct is_transform<transform::pass_through<Grammar> >
+    //  : mpl::true_
+    //{};
 
     namespace has_transformns_
     {
         template<typename Grammar>
         struct has_pass_through_transform
         {
-            has_pass_through_transform() {}
+            template<typename Sig>
+            struct result;
 
-            template<typename Expr, typename State, typename Visitor>
-            struct apply
+            template<typename This, typename Expr, typename State, typename Visitor>
+            struct result<This(Expr, State, Visitor)>
               : transform::detail::pass_through_impl<
                     Grammar
                   , typename Expr::proto_base_expr
@@ -104,10 +106,10 @@
             {};
 
             template<typename Expr, typename State, typename Visitor>
-            static typename apply<Expr, State, Visitor>::type
-            call(Expr const &expr, State const &state, Visitor &visitor)
+            typename result<void(Expr, State, Visitor)>::type
+            operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
-                return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
+                return result<void(Expr, State, Visitor)>::call(expr.proto_base(), state, visitor);
             }
         };
 

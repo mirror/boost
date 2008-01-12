@@ -28,11 +28,11 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // mark_matcher
     //
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     struct mark_matcher
       : quant_style_variable_width
     {
-        typedef mpl::bool_<ICase> icase_type;
+        typedef ICase icase_type;
         int mark_number_;
 
         mark_matcher(int mark_number, Traits const &)

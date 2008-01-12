@@ -159,7 +159,7 @@ struct xpression_linker
         this->back_stack_.push(next);
     }
 
-    template<bool Greedy>
+    template<typename Greedy>
     void accept(repeat_end_matcher<Greedy> const &matcher, void const *)
     {
         matcher.back_ = this->back_stack_.top();
@@ -179,14 +179,14 @@ struct xpression_linker
         this->back_stack_.pop();
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     void accept(optional_matcher<Xpr, Greedy> const &matcher, void const *next)
     {
         this->back_stack_.push(next);
         matcher.xpr_.link(*this);
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     void accept(optional_mark_matcher<Xpr, Greedy> const &matcher, void const *next)
     {
         this->back_stack_.push(next);
@@ -211,7 +211,7 @@ struct xpression_linker
         matcher.xpr_.link(*this);
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     void accept(simple_repeat_matcher<Xpr, Greedy> const &matcher, void const *)
     {
         matcher.xpr_.link(*this);

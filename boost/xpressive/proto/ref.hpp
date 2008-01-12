@@ -43,7 +43,7 @@ namespace boost { namespace proto
             typedef typename Expr::proto_args proto_args;
             typedef typename Expr::proto_arity proto_arity;
             typedef typename Expr::proto_domain proto_domain;
-            typedef tag::proto_ref fusion_tag;
+            //typedef tag::proto_expr fusion_tag;
             typedef void proto_is_ref_;
             typedef void proto_is_expr_;
             typedef Expr proto_derived_expr;

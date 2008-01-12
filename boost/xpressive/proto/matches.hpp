@@ -35,6 +35,7 @@
     #include <boost/type_traits/is_pointer.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
+    #include <boost/xpressive/proto/transform/when.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
     // Some compilers (like GCC) need extra help figuring out a template's arity.
@@ -59,7 +60,7 @@
 
         namespace detail
         {
-            struct _;
+            struct ignore;
 
             template<typename Expr, typename Grammar>
             struct matches_impl;
@@ -83,6 +84,26 @@
             template<typename And>
             struct last;
 
+            template<typename T, typename U>
+            struct array_matches
+              : mpl::false_
+            {};
+
+            template<typename T, std::size_t M>
+            struct array_matches<T[M], T *>
+              : mpl::true_
+            {};
+
+            template<typename T, std::size_t M>
+            struct array_matches<T[M], T const *>
+              : mpl::true_
+            {};
+
+            template<typename T, std::size_t M>
+            struct array_matches<T[M], T[proto::N]>
+              : mpl::true_
+            {};
+
             template<typename T, typename U
                 BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<U>::value)
             >
@@ -97,6 +118,16 @@
 
             template<typename T>
             struct lambda_matches<T, T BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+              : mpl::true_
+            {};
+
+            template<typename T, std::size_t M, typename U>
+            struct lambda_matches<T[M], U BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+              : array_matches<T[M], U>
+            {};
+
+            template<typename T, std::size_t M>
+            struct lambda_matches<T[M], T[M] BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
               : mpl::true_
             {};
 
@@ -117,13 +148,13 @@
 
             template<typename Args1, typename Args2, typename Back>
             struct vararg_matches<Args1, Args2, Back, true, true, typename Back::proto_is_vararg_>
-              : matches_impl<expr<_, Args1, Args1::size>, expr<_, Args2, Args1::size> >
+              : matches_impl<expr<ignore, Args1, Args1::size>, expr<ignore, Args2, Args1::size> >
             {};
 
             template<typename Args1, typename Args2, typename Back>
             struct vararg_matches<Args1, Args2, Back, true, false, typename Back::proto_is_vararg_>
               : and2<
-                    matches_impl<expr<_, Args1, Args2::size>, expr<_, Args2, Args2::size> >::value
+                    matches_impl<expr<ignore, Args1, Args2::size>, expr<ignore, Args2, Args2::size> >::value
                   , vararg_matches_impl<Args1, typename Back::proto_base_expr, Args2::size + 1, Args1::size>
                 >
             {};
@@ -328,9 +359,18 @@
         #undef BOOST_PROTO_DEFINE_LAMBDA_MATCHES
 
             // handle proto::if_
-            template<typename Expr, typename Condition>
-            struct matches_impl<Expr, if_<Condition> >
-              : mpl::apply1<Condition, Expr>::type
+            template<typename Expr, typename If, typename Then, typename Else>
+            struct matches_impl<Expr, proto::if_<If, Then, Else> >
+              : mpl::eval_if<
+                    typename when<_, If>::template result<void(Expr, mpl::void_, mpl::void_)>::type
+                  , matches_impl<Expr, typename Then::proto_base_expr>
+                  , matches_impl<Expr, typename Else::proto_base_expr>
+                >::type
+            {};
+
+            template<typename Expr, typename If>
+            struct matches_impl<Expr, proto::if_<If> >
+              : when<_, If>::template result<void(Expr, mpl::void_, mpl::void_)>::type
             {};
 
             // handle proto::not_
@@ -362,12 +402,10 @@
             struct _
               : has_identity_transform
             {
+                BOOST_PROTO_CALLABLE()
                 typedef _ proto_base_expr;
                 typedef void proto_is_wildcard_;
             };
-
-            template<typename T>
-            transform::detail::yes_type is_wildcard_expression_fun(T const *);
         }
 
         namespace control
@@ -377,90 +415,135 @@
             struct not_
               : has_identity_transform
             {
+                BOOST_PROTO_CALLABLE()
                 typedef not_ proto_base_expr;
             };
 
+            //// if_
+            //template<typename Condition, typename Then, typename Else>
+            //struct if_
+            //  : or_<
+            //        and_<if_<Condition>, Then>
+            //      , and_<not_<if_<Condition> >, Else>
+            //    >
+            //{};
+
+            //template<typename Condition, typename Then>
+            //struct if_<Condition, Then, void>
+            //  : and_<if_<Condition>, Then>
+            //{};
+
+            //template<typename Condition>
+            //struct if_<Condition, void, void>
+            //  : has_identity_transform
+            //{
+            //    typedef if_ proto_base_expr;
+            //};
+
+
             // if_
-            template<typename Condition, typename Then, typename Else>
-            struct if_
-              : or_<
-                    and_<if_<Condition>, Then>
-                  , and_<not_<if_<Condition> >, Else>
-                >
-            {};
-
-            template<typename Condition, typename Then>
-            struct if_<Condition, Then, void>
-              : and_<if_<Condition>, Then>
-            {};
-
-            template<typename Condition>
-            struct if_<Condition, void, void>
-              : has_identity_transform
+            template<typename If, typename Then, typename Else>
+            struct if_ : callable
             {
                 typedef if_ proto_base_expr;
+
+                template<typename Sig>
+                struct result;
+
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
+                  : mpl::eval_if<
+                        typename when<_, If>::template result<void(Expr, State, Visitor)>::type
+                      , typename when<_, Then>::template result<void(Expr, State, Visitor)>
+                      , typename when<_, Else>::template result<void(Expr, State, Visitor)>
+                    >
+                {};
+
+                template<typename Expr, typename State, typename Visitor>
+                typename result<void(Expr, State, Visitor)>::type
+                operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+                {
+                    typedef
+                        typename mpl::if_<
+                            typename when<_, If>::template result<void(Expr, State, Visitor)>::type
+                          , when<_, Then>
+                          , when<_, Else>
+                        >::type
+                    branch;
+
+                    return branch()(expr, state, visitor);
+                }
             };
 
             // or_
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
-            struct or_
+            struct or_ : callable
             {
                 typedef or_ proto_base_expr;
 
-                template<typename Expr, typename State, typename Visitor>
-                struct apply
+                template<typename Sig>
+                struct result;
+
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
                 {
                     typedef typename detail::matches_impl<Expr, or_>::which which;
-                    typedef typename which::template apply<Expr, State, Visitor>::type type;
+                    typedef typename which::template result<void(Expr, State, Visitor)>::type type;
                 };
 
                 template<typename Expr, typename State, typename Visitor>
-                static typename apply<Expr, State, Visitor>::type
-                call(Expr const &expr, State const &state, Visitor &visitor)
+                typename result<void(Expr, State, Visitor)>::type
+                operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
                     typedef typename detail::matches_impl<Expr, or_>::which which;
-                    return which::call(expr, state, visitor);
+                    return which()(expr, state, visitor);
                 }
             };
 
             // and_
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
-            struct and_
+            struct and_ : callable
             {
                 typedef and_ proto_base_expr;
 
-                template<typename Expr, typename State, typename Visitor>
-                struct apply
+                template<typename Sig>
+                struct result;
+
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
                 {
                     typedef typename detail::last<and_>::type which;
-                    typedef typename which::template apply<Expr, State, Visitor>::type type;
+                    typedef typename which::template result<void(Expr, State, Visitor)>::type type;
                 };
 
                 template<typename Expr, typename State, typename Visitor>
-                static typename apply<Expr, State, Visitor>::type
-                call(Expr const &expr, State const &state, Visitor &visitor)
+                typename result<void(Expr, State, Visitor)>::type
+                operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
                     typedef typename detail::last<and_>::type which;
-                    return which::call(expr, state, visitor);
+                    return which()(expr, state, visitor);
                 }
             };
 
             // switch_
             template<typename Cases>
-            struct switch_
+            struct switch_ : callable
             {
                 typedef switch_ proto_base_expr;
 
-                template<typename Expr, typename State, typename Visitor>
-                struct apply
-                  : Cases::template case_<typename Expr::proto_tag>::template apply<Expr, State, Visitor>
+                template<typename Sig>
+                struct result;
+
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
+                  : Cases::template case_<typename Expr::proto_tag>::template result<void(Expr, State, Visitor)>
                 {};
 
                 template<typename Expr, typename State, typename Visitor>
-                static typename apply<Expr, State, Visitor>::type
-                call(Expr const &expr, State const &state, Visitor &visitor)
+                typename result<void(Expr, State, Visitor)>::type
+                operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return Cases::template case_<typename Expr::proto_tag>::call(expr, state, visitor);
+                    return typename Cases::template case_<typename Expr::proto_tag>()(expr, state, visitor);
                 }
             };
 
@@ -479,6 +562,32 @@
                 typedef void proto_is_vararg_;
             };
         }
+
+        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
+        struct is_callable<or_<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, G)> >
+          : mpl::true_
+        {};
+
+        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
+        struct is_callable<and_<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, G)> >
+          : mpl::true_
+        {};
+
+        template<typename Grammar>
+        struct is_callable<not_<Grammar> >
+          : mpl::true_
+        {};
+
+        template<typename If, typename Then, typename Else>
+        struct is_callable<if_<If, Then, Else> >
+          : mpl::true_
+        {};
+
+        template<typename Grammar>
+        struct is_callable<vararg<Grammar> >
+          : mpl::true_
+        {};
+
     }}
 
     #if defined(_MSC_VER) && (_MSC_VER >= 1020)

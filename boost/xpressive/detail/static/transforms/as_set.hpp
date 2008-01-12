@@ -15,214 +15,155 @@
 
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/transform/arg.hpp>
-#include <boost/xpressive/proto/transform/apply.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/utility/chset/chset.hpp>
 #include <boost/xpressive/detail/utility/traits_utils.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+#define UNCV(x) typename remove_const<x>::type
+#define UNREF(x) typename remove_reference<x>::type
+#define UNCVREF(x) UNCV(UNREF(x))
+
+namespace boost { namespace xpressive { namespace grammar_detail
 {
-
-    template<typename I>
-    typename I::next next_(I)
-    {
-        return typename I::next();
-    }
-
-    template<typename Grammar>
-    struct next
-      : Grammar
-    {
-        next();
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : Grammar::template apply<Expr, State, Visitor>::type::next
-        {};
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            return detail::next_(Grammar::call(expr, state, visitor));
-        }
-    };
-
-    template<typename Grammar>
-    struct push_back
-      : Grammar
-    {
-        push_back();
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename Grammar::template apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            visitor.accept(proto::arg(expr));
-            return Grammar::call(expr, state, visitor);
-        }
-    };
 
     ///////////////////////////////////////////////////////////////////////////
     // CharLiteral
     template<typename Char>
     struct CharLiteral
-      : proto::or_<
-            proto::terminal<char>
-          , proto::terminal<Char>
+      : or_<
+            terminal<char>
+          , terminal<Char>
         >
     {};
 
     template<>
     struct CharLiteral<char>
-      : proto::terminal<char>
+      : terminal<char>
     {};
 
     ///////////////////////////////////////////////////////////////////////////
     // ListSet
     //  matches expressions like (set= 'a','b','c')
     //  calculates the size of the set
-    //  populates an array of characters
     template<typename Char>
     struct ListSet
-      : proto::transform::left<
-            proto::or_<
-                proto::comma<
-                    next<ListSet<Char> >
-                  , push_back<CharLiteral<Char> >
-                >
-              , proto::assign<
-                    proto::transform::always<set_initializer_type, mpl::int_<1> >
-                  , push_back<CharLiteral<Char> >
-                >
+      : or_<
+            when<
+                comma<ListSet<Char>, CharLiteral<Char> >
+              , make<mpl::next<call<ListSet<Char>(_left)> > > // TODO make a custom transform for this...
+            >
+          , when<
+                assign<detail::set_initializer_type, CharLiteral<Char> >
+              , make<mpl::int_<1> >
             >
         >
     {};
 
-    ///////////////////////////////////////////////////////////////////////////
-    // set_fill_visitor
-    template<typename Traits>
-    struct set_fill_visitor
+    template<typename Char, typename Traits>
+    void fill_list_set(Char *&, detail::set_initializer_type, Traits const &)
+    {}
+
+    template<typename Char, typename Expr, typename Traits>
+    void fill_list_set(Char *&buffer, Expr const &expr, Traits const &traits)
     {
-        typedef typename Traits::char_type char_type;
-
-        set_fill_visitor(char_type *buffer, Traits const &traits)
-          : buffer_(buffer)
-          , traits_(traits)
-        {}
-
-        template<typename Char>
-        void accept(Char ch)
-        {
-            *this->buffer_++ = this->traits_.translate(
-                char_cast<typename Traits::char_type>(ch, this->traits_)
-            );
-        }
-
-        char_type *buffer_;
-        Traits const &traits_;
-    };
+        fill_list_set(buffer, proto::left(expr), traits);
+        *buffer++ = traits.translate(detail::char_cast<Char>(proto::arg(proto::right(expr)), traits));
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // as_list_set
-    template<typename Grammar>
-    struct as_list_set
-      : Grammar
+    // as_list_set_matcher
+    template<typename Char>
+    struct as_list_set_matcher
     {
-        as_list_set();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
-            typedef typename Visitor::traits_type traits_type;
-            typedef set_matcher<
-                traits_type
-              , Grammar::template apply<Expr, State, set_fill_visitor<traits_type> >::type::value
+            typedef detail::set_matcher<
+                typename Visitor::traits_type
+              , typename ListSet<Char>::template result<void(Expr, State, Visitor)>::type
             > type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
-            typename apply<Expr, State, Visitor>::type set;
-            set_fill_visitor<typename Visitor::traits_type> filler(set.set_, visitor.traits());
-            Grammar::call(expr, state, filler);
+            detail::set_matcher<
+                typename Visitor::traits_type
+              , typename ListSet<Char>::template result<void(Expr, State, Visitor)>::type
+            > set;
+            typename Visitor::char_type *buffer = set.set_;
+            fill_list_set(buffer, expr, visitor.traits());
             return set;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // charset_context
+    // merge_charset
     //
     template<typename Grammar, typename CharSet, typename Visitor>
-    struct charset_context
+    struct merge_charset
     {
-        template<typename Expr, typename Tag>
-        struct eval_
-        {
-            typedef void result_type;
-            void operator()(Expr const &expr, charset_context const &ctx) const
-            {
-                ctx.set(Grammar::call(expr, end_xpression(), ctx.visitor_));
-            }
-        };
-
-        template<typename Expr>
-        struct eval_<Expr, proto::tag::bitwise_or>
-        {
-            typedef void result_type;
-            void operator()(Expr const &expr, charset_context const &ctx) const
-            {
-                proto::eval(proto::left(expr), ctx);
-                proto::eval(proto::right(expr), ctx);
-            }
-        };
-
-        // Gah, this is to work around a MSVC bug.
-        template<typename Expr>
-        struct eval
-          : eval_<Expr, typename Expr::proto_tag>
-        {};
-
         typedef typename Visitor::traits_type traits_type;
         typedef typename CharSet::char_type char_type;
         typedef typename CharSet::icase_type icase_type;
 
-        explicit charset_context(CharSet &charset, Visitor &visitor)
+        merge_charset(CharSet &charset, Visitor &visitor)
           : charset_(charset)
           , visitor_(visitor)
         {}
 
-        template<bool Not>
-        void set(literal_matcher<traits_type, icase_type::value, Not> const &ch) const
+        template<typename Expr>
+        void operator ()(Expr const &expr) const
+        {
+            this->call_(expr, typename Expr::proto_tag());
+        }
+
+    private:
+        template<typename Expr, typename Tag>
+        void call_(Expr const &expr, Tag) const
+        {
+            this->set_(Grammar()(expr, detail::end_xpression(), this->visitor_));
+        }
+
+        template<typename Expr>
+        void call_(Expr const &expr, tag::bitwise_or) const
+        {
+            (*this)(proto::left(expr));
+            (*this)(proto::right(expr));
+        }
+
+        template<typename Not>
+        void set_(detail::literal_matcher<traits_type, icase_type, Not> const &ch) const
         {
             // BUGBUG fixme!
-            BOOST_MPL_ASSERT_NOT((mpl::bool_<Not>));
+            BOOST_MPL_ASSERT_NOT((Not));
             set_char(this->charset_.charset_, ch.ch_, this->visitor_.traits(), icase_type());
         }
 
-        void set(range_matcher<traits_type, icase_type::value> const &rg) const
+        void set_(detail::range_matcher<traits_type, icase_type> const &rg) const
         {
             // BUGBUG fixme!
             BOOST_ASSERT(!rg.not_);
             set_range(this->charset_.charset_, rg.ch_min_, rg.ch_max_, this->visitor_.traits(), icase_type());
         }
 
-        template<int Size>
-        void set(set_matcher<traits_type, Size> const &set_) const
+        template<typename Size>
+        void set_(detail::set_matcher<traits_type, Size> const &set_) const
         {
             // BUGBUG fixme!
             BOOST_ASSERT(!set_.not_);
-            for(int i=0; i<Size; ++i)
+            for(int i = 0; i < Size::value; ++i)
             {
-                set_char(this->charset_.charset_, set_.set_[i], this->visitor_.traits(), icase_type::value);
+                set_char(this->charset_.charset_, set_.set_[i], this->visitor_.traits(), icase_type());
             }
         }
 
-        void set(posix_charset_matcher<traits_type> const &posix) const
+        void set_(detail::posix_charset_matcher<traits_type> const &posix) const
         {
             set_class(this->charset_.charset_, posix.mask_, posix.not_, this->visitor_.traits());
         }
@@ -234,44 +175,47 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Grammar>
-    struct as_set
-      : Grammar
+    struct as_set_matcher
     {
-        as_set();
+        template<typename Sig>
+        struct result;
 
-        template<typename, typename, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
             typedef typename Visitor::char_type char_type;
 
             // if sizeof(char_type)==1, merge everything into a basic_chset
             // BUGBUG this is not optimal.
             typedef typename mpl::if_<
-                is_narrow_char<char_type>
-              , basic_chset<char_type>
-              , compound_charset<typename Visitor::traits_type>
+                detail::is_narrow_char<char_type>
+              , detail::basic_chset<char_type>
+              , detail::compound_charset<typename Visitor::traits_type>
             >::type charset_type;
 
-            typedef charset_matcher<
+            typedef detail::charset_matcher<
                 typename Visitor::traits_type
-              , Visitor::icase_type::value
+              , typename Visitor::icase_type
               , charset_type
             > type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
-            typedef typename apply<Expr, State, Visitor>::type set_type;
+            typedef typename result<void(Expr, State, Visitor)>::type set_type;
             set_type matcher;
-            charset_context<Grammar, set_type, Visitor> ctx(matcher, visitor);
-            // Walks the tree and fills in the charset
-            proto::eval(expr, ctx);
+            merge_charset<Grammar, set_type, Visitor> merge(matcher, visitor);
+            merge(expr); // Walks the tree and fills in the charset
             return matcher;
         }
     };
 
 }}}
+
+#undef UNCV
+#undef UNREF
+#undef UNCVREF
 
 #endif

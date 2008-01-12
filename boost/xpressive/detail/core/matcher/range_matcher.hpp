@@ -26,12 +26,12 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // range_matcher
     //
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     struct range_matcher
       : quant_style_fixed_width<1>
     {
         typedef typename Traits::char_type char_type;
-        typedef mpl::bool_<ICase> icase_type;
+        typedef ICase icase_type;
         char_type ch_min_;
         char_type ch_max_;
         bool not_;

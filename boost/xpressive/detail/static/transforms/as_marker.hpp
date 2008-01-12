@@ -17,67 +17,38 @@
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 
-//#include <boost/xpressive/proto/transform/construct.hpp>
-
-namespace boost { namespace xpressive { namespace detail
+namespace boost { namespace xpressive { namespace grammar_detail
 {
-
-    //template<typename Grammar>
-    //struct as_marker
-    //  : proto::transform::construct<
-    //        proto::transform::identity<Grammar>
-    //      , proto::shift_right<
-    //            proto::terminal<mark_begin_matcher>::type
-    //          , proto::shift_right<
-    //                proto::transform::right<proto::_>
-    //              , proto::terminal<mark_end_matcher>::type
-    //            >
-    //        >(
-    //            proto::terminal<mark_begin_matcher>::type(
-    //                mark_begin_matcher(proto::transform::arg<proto::transform::left<proto::_> > )
-    //            )
-    //          , proto::shift_right<
-    //                proto::transform::right<proto::_>
-    //              , proto::terminal<mark_end_matcher>::type
-    //            >(
-    //                proto::transform::right<proto::_>
-    //              , proto::terminal<mark_end_matcher>::type(
-    //                    mark_end_matcher(proto::transform::arg<proto::transform::left<proto::_> > )
-    //                )
-    //            )
-    //        )
-    //    >
-    //{};
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_marker
     //   Insert mark tags before and after the expression
-    template<typename Grammar>
-    struct as_marker
-      : Grammar
+    struct as_marker : callable
     {
-        as_marker();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename, typename>
-        struct apply
-          : proto::shift_right<
-                proto::terminal<mark_begin_matcher>::type
-              , typename proto::shift_right<
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
+          : shift_right<
+                terminal<detail::mark_begin_matcher>::type
+              , typename shift_right<
                     typename proto::result_of::right<Expr>::type
-                  , proto::terminal<mark_end_matcher>::type
+                  , terminal<detail::mark_end_matcher>::type
                 >::type
             >
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &) const
         {
-            int mark_nbr = get_mark_number(proto::left(expr));
-            mark_begin_matcher begin(mark_nbr);
-            mark_end_matcher end(mark_nbr);
+            int mark_nbr = detail::get_mark_number(proto::left(expr));
+            detail::mark_begin_matcher begin(mark_nbr);
+            detail::mark_end_matcher end(mark_nbr);
 
-            typename apply<Expr, State, Visitor>::type that = {{begin}, {proto::right(expr), {end}}};
+            typename result<void(Expr, State, Visitor)>::type that
+                = {{begin}, {proto::right(expr), {end}}};
             return that;
         }
     };

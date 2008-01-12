@@ -172,7 +172,7 @@
             typedef void proto_is_expr_;
             typedef expr proto_derived_expr;
 
-            BOOST_PROTO_IDENTITY_TRANSFORM();
+            //BOOST_PROTO_IDENTITY_TRANSFORM();
             BOOST_PP_REPEAT(ARG_COUNT, BOOST_PROTO_ARG, ~)
             BOOST_PP_REPEAT_FROM_TO(ARG_COUNT, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)
 

@@ -142,20 +142,20 @@ struct xpression_peeker
         return mpl::true_();
     }
 
-    template<typename Traits, bool ICase>
-    mpl::false_ accept(literal_matcher<Traits, ICase, false> const &xpr)
+    template<typename Traits, typename ICase>
+    mpl::false_ accept(literal_matcher<Traits, ICase, mpl::false_> const &xpr)
     {
-        this->bset_.set_char(xpr.ch_, ICase, this->get_traits_<Traits>());
+        this->bset_.set_char(xpr.ch_, ICase(), this->get_traits_<Traits>());
         return mpl::false_();
     }
 
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     mpl::false_ accept(string_matcher<Traits, ICase> const &xpr)
     {
-        this->bset_.set_char(xpr.str_[0], ICase, this->get_traits_<Traits>());
+        this->bset_.set_char(xpr.str_[0], ICase(), this->get_traits_<Traits>());
         this->str_.begin_ = detail::data_begin(xpr.str_);
         this->str_.end_ = detail::data_end(xpr.str_);
-        this->str_.icase_ = ICase;
+        this->str_.icase_ = ICase::value;
         return mpl::false_();
     }
 
@@ -167,35 +167,35 @@ struct xpression_peeker
         return mpl::false_();
     }
 
-    template<typename Matcher, typename Traits, bool ICase>
+    template<typename Matcher, typename Traits, typename ICase>
     mpl::false_ accept(attr_matcher<Matcher, Traits, ICase> const &xpr)
     {
-        xpr.sym_.peek(char_sink<Traits, ICase>(this->bset_, this->get_traits_<Traits>()));
+        xpr.sym_.peek(char_sink<Traits, ICase::value>(this->bset_, this->get_traits_<Traits>()));
         return mpl::false_();
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     mpl::false_ accept(optional_matcher<Xpr, Greedy> const &)
     {
         this->fail();  // a union of xpr and next
         return mpl::false_();
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     mpl::false_ accept(optional_mark_matcher<Xpr, Greedy> const &)
     {
         this->fail();  // a union of xpr and next
         return mpl::false_();
     }
 
-    //template<typename Xpr, bool Greedy>
+    //template<typename Xpr, typename Greedy>
     //mpl::true_ accept(optional_matcher<Xpr, Greedy> const &xpr)
     //{
     //    xpr.xpr_.peek(*this);  // a union of xpr and next
     //    return mpl::true_();
     //}
 
-    //template<typename Xpr, bool Greedy>
+    //template<typename Xpr, typename Greedy>
     //mpl::true_ accept(optional_mark_matcher<Xpr, Greedy> const &xpr)
     //{
     //    xpr.xpr_.peek(*this);  // a union of xpr and next
@@ -209,23 +209,23 @@ struct xpression_peeker
         return mpl::false_();
     }
 
-    template<bool ICase, typename Traits>
+    template<typename ICase, typename Traits>
     typename enable_if<is_narrow_char<typename Traits::char_type>, mpl::false_>::type
     accept(charset_matcher<Traits, ICase, basic_chset<Char> > const &xpr)
     {
         BOOST_ASSERT(0 != xpr.charset_.base().count());
-        this->bset_.set_charset(xpr.charset_, ICase);
+        this->bset_.set_charset(xpr.charset_, ICase());
         return mpl::false_();
     }
 
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     mpl::false_ accept(range_matcher<Traits, ICase> const &xpr)
     {
-        this->bset_.set_range(xpr.ch_min_, xpr.ch_max_, xpr.not_, ICase, this->get_traits_<Traits>());
+        this->bset_.set_range(xpr.ch_min_, xpr.ch_max_, xpr.not_, ICase(), this->get_traits_<Traits>());
         return mpl::false_();
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     mpl::false_ accept(simple_repeat_matcher<Xpr, Greedy> const &xpr)
     {
         0 != xpr.min_ ? xpr.xpr_.peek(*this) : this->fail(); // could be a union of xpr and next

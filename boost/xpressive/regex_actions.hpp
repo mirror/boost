@@ -40,7 +40,7 @@
 
 // Doxygen can't handle proto :-(
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
-# include <boost/xpressive/proto/transform/fold.hpp>
+# include <boost/xpressive/proto/transform.hpp>
 # include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #endif
 
@@ -86,21 +86,15 @@ namespace boost { namespace xpressive
         struct check_tag
         {};
 
-        template<typename Grammar>
-        struct BindArg
-          : Grammar
+        struct BindArg : proto::callable
         {
-            template<typename Expr, typename State, typename Visitor>
-            struct apply
-            {
-                typedef State type;
-            };
+            typedef int result_type;
 
-            template<typename Expr, typename State, typename Visitor>
-            static State call(Expr const &expr, State const &state, Visitor &visitor)
+            template<typename Visitor, typename Expr>
+            int operator ()(Visitor &visitor, Expr const &expr) const
             {
                 visitor.let(expr);
-                return state;
+                return 0;
             }
         };
 
@@ -108,10 +102,15 @@ namespace boost { namespace xpressive
         {};
 
         struct BindArgs
-          : boost::proto::transform::fold<
-                boost::proto::function<
-                    boost::proto::transform::state<boost::proto::terminal<let_tag> >
-                  , boost::proto::vararg< BindArg< boost::proto::assign<boost::proto::_, boost::proto::_> > > 
+          : proto::when<
+                // let(_a = b, _c = d)
+                proto::function<
+                    proto::terminal<let_tag>
+                  , proto::vararg<proto::assign<proto::_, proto::_> >
+                >
+              , proto::function<
+                    proto::_state   // no-op
+                  , proto::vararg<proto::call<BindArg(proto::_visitor, proto::_)> >
                 >
             >
         {};
@@ -130,7 +129,7 @@ namespace boost { namespace xpressive
         template<typename Args, typename BidiIter>
         void bind_args(let_<Args> const &args, match_results<BidiIter> &what)
         {
-            BindArgs::call(args, 0, what);
+            BindArgs()(args, 0, what);
         }
     }
 

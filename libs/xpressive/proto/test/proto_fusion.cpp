@@ -65,7 +65,7 @@ struct to_string
     {}
 
     template<typename Op>
-    void operator()(Op const &op) const
+    void operator ()(Op const &op) const
     {
         this->sout_ << '(' << boost::addressof(op) << ')';
     }
@@ -75,41 +75,43 @@ private:
 
 void test1()
 {
+    using boost::proto::flatten;
+
     std::stringstream sout;
 
     // Test for 1-way branching "tree"
     sout.str("");
-    boost::fusion::for_each(!!!!(a_ >> b_), to_string(sout));
+    boost::fusion::for_each(flatten(!!!!(a_ >> b_)), to_string(sout));
     BOOST_CHECK_EQUAL("(a>>b)", sout.str());
 
     // Tests for 2-way branching trees
     sout.str("");
-    boost::fusion::for_each(a_ >> b_ >> c_, to_string(sout));
+    boost::fusion::for_each(flatten(a_ >> b_ >> c_), to_string(sout));
     BOOST_CHECK_EQUAL("(a)(b)(c)", sout.str());
 
     sout.str("");
-    boost::fusion::for_each(a_ | b_ | c_, to_string(sout));
+    boost::fusion::for_each(flatten(a_ | b_ | c_), to_string(sout));
     BOOST_CHECK_EQUAL("(a)(b)(c)", sout.str());
 
     sout.str("");
-    boost::fusion::for_each(a_ >> b_ | c_ >> d_, to_string(sout));
+    boost::fusion::for_each(flatten(a_ >> b_ | c_ >> d_), to_string(sout));
     BOOST_CHECK_EQUAL("(a>>b)(c>>d)", sout.str());
 
     sout.str("");
-    boost::fusion::for_each(a_ | b_ >> c_ | d_, to_string(sout));
+    boost::fusion::for_each(flatten(a_ | b_ >> c_ | d_), to_string(sout));
     BOOST_CHECK_EQUAL("(a)(b>>c)(d)", sout.str());
 
     sout.str("");
-    boost::fusion::for_each(a_ >> b_ | c_ >> d_ | e_ >> f_ >> g_, to_string(sout));
+    boost::fusion::for_each(flatten(a_ >> b_ | c_ >> d_ | e_ >> f_ >> g_), to_string(sout));
     BOOST_CHECK_EQUAL("(a>>b)(c>>d)(e>>f>>g)", sout.str());
 
     sout.str("");
-    boost::fusion::for_each(a_ >> b_ | c_ >> d_ | e_ >> (f_ | g_) >> h_, to_string(sout));
+    boost::fusion::for_each(flatten(a_ >> b_ | c_ >> d_ | e_ >> (f_ | g_) >> h_), to_string(sout));
     BOOST_CHECK_EQUAL("(a>>b)(c>>d)(e>>f|g>>h)", sout.str());
 
     // Test for n-way branching tree
     sout.str("");
-    boost::fusion::for_each(a_(b_(c_ >> d_, e_ | f_), g_ >> h_)(i_), to_string(sout));
+    boost::fusion::for_each(flatten(a_(b_(c_ >> d_, e_ | f_), g_ >> h_)(i_)), to_string(sout));
     BOOST_CHECK_EQUAL("(a)(b)(c>>d)(e|f)(g>>h)(i)", sout.str());
 }
 

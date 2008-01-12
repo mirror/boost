@@ -502,10 +502,10 @@ private:
             return detail::make_assert_end_line<BidiIter>(this->traits_.flags(), this->rxtraits());
 
         case token_assert_word_boundary:
-            return detail::make_assert_word<BidiIter>(detail::word_boundary<true>(), this->rxtraits());
+            return detail::make_assert_word<BidiIter>(detail::word_boundary<mpl::true_>(), this->rxtraits());
 
         case token_assert_not_word_boundary:
-            return detail::make_assert_word<BidiIter>(detail::word_boundary<false>(), this->rxtraits());
+            return detail::make_assert_word<BidiIter>(detail::word_boundary<mpl::false_>(), this->rxtraits());
 
         case token_assert_word_begin:
             return detail::make_assert_word<BidiIter>(detail::word_begin(), this->rxtraits());

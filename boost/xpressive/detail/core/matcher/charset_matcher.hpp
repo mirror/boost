@@ -23,13 +23,13 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // charset_matcher
     //
-    template<typename Traits, bool ICase, typename CharSet>
+    template<typename Traits, typename ICase, typename CharSet>
     struct charset_matcher
       : quant_style_fixed_width<1>
     {
         typedef typename Traits::char_type char_type;
         typedef Traits traits_type;
-        typedef mpl::bool_<ICase> icase_type;
+        typedef ICase icase_type;
 
         charset_matcher(CharSet const &charset = CharSet())
           : charset_(charset)

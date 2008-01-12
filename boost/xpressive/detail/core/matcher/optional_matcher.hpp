@@ -23,7 +23,7 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // optional_matcher
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     struct optional_matcher
       : quant_style<quant_variable_width, unknown_width::value, Xpr::pure>
     {
@@ -37,7 +37,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Next>
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
-            return this->match_(state, next, mpl::bool_<Greedy>());
+            return this->match_(state, next, Greedy());
         }
 
     private:
@@ -79,7 +79,7 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // optional_mark_matcher
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     struct optional_mark_matcher
       : quant_style<quant_variable_width, unknown_width::value, Xpr::pure>
     {
@@ -95,7 +95,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Next>
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
-            return this->match_(state, next, mpl::bool_<Greedy>());
+            return this->match_(state, next, Greedy());
         }
 
     private:

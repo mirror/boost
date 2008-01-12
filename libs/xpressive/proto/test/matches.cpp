@@ -11,6 +11,7 @@
 #include <boost/mpl/placeholders.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/proto/proto.hpp>
+#include <boost/xpressive/proto/transform.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace boost;
@@ -48,8 +49,8 @@ struct Output
     >
 {};
 
-terminal< std::istream & >::type const cin_ = { std::cin };
-terminal< std::ostream & >::type const cout_ = { std::cout };
+terminal< std::istream & >::type const cin_ = {std::cin};
+terminal< std::ostream & >::type const cout_ = {std::cout};
 
 struct Anything
   : or_<
@@ -130,20 +131,20 @@ void test_matches()
     assert_matches< terminal<convertible_to<int> > >( as_arg((int_convertible())) );
     assert_matches< terminal<convertible_to<int> > >( as_expr((int_convertible())) );
 
-    assert_matches< if_<is_same<proto::result_of::arg<mpl::_>, int> > >( lit(1) );
-    assert_not_matches< if_<is_same<proto::result_of::arg<mpl::_>, int> > >( lit('a') );
+    assert_matches< if_<is_same<_arg, int>() > >( lit(1) );
+    assert_not_matches< if_<is_same<_arg, int>() > >( lit('a') );
 
     assert_matches<
         and_<
             terminal<_>
-          , if_<is_same<proto::result_of::arg<mpl::_>, int> >
+          , if_<is_same<_arg, int>() >
         >
     >( lit(1) );
 
     assert_not_matches<
         and_<
             terminal<_>
-          , if_<is_same<proto::result_of::arg<mpl::_>, int> >
+          , if_<is_same<_arg, int>() >
         >
     >( lit('a') );
 
@@ -155,9 +156,17 @@ void test_matches()
     assert_matches< terminal<char const (&)[6]> >( as_arg("hello") );
     assert_matches< terminal<char const (&)[6]> >( as_expr("hello") );
 
+    assert_matches< terminal<char [6]> >( lit("hello") );
+    assert_matches< terminal<char [6]> >( as_arg("hello") );
+    assert_matches< terminal<char [6]> >( as_expr("hello") );
+
     assert_matches< terminal<char const (&)[N]> >( lit("hello") );
     assert_matches< terminal<char const (&)[N]> >( as_arg("hello") );
     assert_matches< terminal<char const (&)[N]> >( as_expr("hello") );
+
+    assert_matches< terminal<char [N]> >( lit("hello") );
+    assert_matches< terminal<char [N]> >( as_arg("hello") );
+    assert_matches< terminal<char [N]> >( as_expr("hello") );
 
     assert_matches< terminal<std::string> >( lit(std::string("hello")) );
     assert_matches< terminal<std::string> >( as_arg(std::string("hello")) );
@@ -201,15 +210,15 @@ void test_matches()
 
     assert_matches<
         or_<
-            if_<is_same<proto::result_of::arg<mpl::_>, char> >
-          , if_<is_same<proto::result_of::arg<mpl::_>, int> >
+            if_<is_same<_arg, char>() >
+          , if_<is_same<_arg, int>() >
         >
     >( lit(1) );
 
     assert_not_matches<
         or_<
-            if_<is_same<proto::result_of::arg<mpl::_>, char> >
-          , if_<is_same<proto::result_of::arg<mpl::_>, int> >
+            if_<is_same<_arg, char>() >
+          , if_<is_same<_arg, int>() >
         >
     >( lit(1u) );
 
@@ -244,3 +253,4 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 
     return test;
 }
+

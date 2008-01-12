@@ -42,7 +42,7 @@ struct VectorSubscriptCtx
     {
         typedef T result_type;
 
-        T operator()(Expr &expr, VectorSubscriptCtx const &ctx) const
+        T operator ()(Expr &expr, VectorSubscriptCtx const &ctx) const
         {
             return proto::arg(expr)[ctx.i_];
         }
@@ -73,11 +73,11 @@ struct VectorSizeCtx
     {
         typedef void result_type;
 
-        result_type operator()(Expr &expr, VectorSizeCtx const &ctx) const
+        result_type operator ()(Expr &expr, VectorSizeCtx const &ctx) const
         {
             if(ctx.size_ != proto::arg(expr).size())
             {
-                throw std::invalid_argument("LHS and RHS are not compatible");
+                throw std::runtime_error("LHS and RHS are not compatible");
             }
         }
     };
@@ -124,7 +124,7 @@ struct VectorDomain
 {};
 
 // Here is VectorExpr, which extends a proto expr type by
-// giving it an operator[] which uses the VectorSubscriptCtx 
+// giving it an operator [] which uses the VectorSubscriptCtx
 // to evaluate an expression with a given index.
 template<typename Expr>
 struct VectorExpr

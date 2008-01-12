@@ -18,35 +18,42 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+#define UNCV(x) typename remove_const<x>::type
+#define UNREF(x) typename remove_reference<x>::type
+#define UNCVREF(x) UNCV(UNREF(x))
+
+namespace boost { namespace xpressive { namespace grammar_detail
 {
-
     template<typename Grammar>
-    struct in_sequence
-      : Grammar
+    struct in_sequence : callable
     {
-        in_sequence();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
-            typedef static_xpression<
-                typename Grammar::template apply<Expr, State, Visitor>::type
+            typedef detail::static_xpression<
+                typename Grammar::template result<void(Expr, State, Visitor)>::type
               , State
             > type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
         {
-            return typename apply<Expr, State, Visitor>::type(
-                Grammar::call(expr, state, visitor)
+            return typename result<void(Expr, State, Visitor)>::type(
+                Grammar()(expr, state, visitor)
               , state
             );
         }
     };
 
 }}}
+
+#undef UNCV
+#undef UNREF
+#undef UNCVREF
 
 #endif

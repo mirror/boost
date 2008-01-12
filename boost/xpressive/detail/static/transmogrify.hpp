@@ -44,8 +44,8 @@ namespace boost { namespace xpressive { namespace detail
         typedef typename mpl::if_
         <
             is_char_literal<Matcher, char_type>
-          , literal_matcher<Traits, ICase::value, false>
-          , string_matcher<Traits, ICase::value>
+          , literal_matcher<Traits, ICase, mpl::false_>
+          , string_matcher<Traits, ICase>
         >::type type;
 
         template<typename Matcher2, typename Visitor>
@@ -128,7 +128,7 @@ namespace boost { namespace xpressive { namespace detail
         // By design, we don't widen character ranges.
         typedef typename iterator_value<BidiIter>::type char_type;
         BOOST_MPL_ASSERT((is_same<Char, char_type>));
-        typedef range_matcher<Traits, ICase::value> type;
+        typedef range_matcher<Traits, ICase> type;
 
         template<typename Matcher2, typename Visitor>
         static type call(Matcher2 const &m, Visitor &visitor)
@@ -140,7 +140,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter, typename ICase, typename Traits>
     struct transmogrify<BidiIter, ICase, Traits, mark_placeholder >
     {
-        typedef mark_matcher<Traits, ICase::value> type;
+        typedef mark_matcher<Traits, ICase> type;
 
         template<typename Matcher2, typename Visitor>
         static type call(Matcher2 const &m, Visitor &visitor)
@@ -162,7 +162,7 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    template<typename BidiIter, typename Traits, int Size>
+    template<typename BidiIter, typename Traits, typename Size>
     struct transmogrify<BidiIter, mpl::true_, Traits, set_matcher<Traits, Size> >
     {
         typedef set_matcher<Traits, Size> type;

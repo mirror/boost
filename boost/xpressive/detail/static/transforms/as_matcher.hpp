@@ -14,29 +14,29 @@
 #endif
 
 #include <boost/mpl/assert.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost { namespace xpressive { namespace grammar_detail
 {
-
-    template<typename Grammar>
-    struct as_matcher
-      : Grammar
+    struct as_matcher : callable
     {
-        as_matcher();
+        template<typename Sig>
+        struct result;
+
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
+        {
+            typedef
+                typename Visitor::template apply<
+                    typename proto::result_of::arg<Expr>::type
+                >::type
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : Visitor::template apply<
-                typename proto::result_of::arg<Expr>::type
-            >
-        {};
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             return visitor.call(proto::arg(expr));
         }

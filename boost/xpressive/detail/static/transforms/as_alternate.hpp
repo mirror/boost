@@ -16,124 +16,114 @@
 #include <boost/config.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/xpressive/proto/traits.hpp>
-#include <boost/xpressive/proto/matches.hpp>
-#include <boost/xpressive/proto/transform/fold.hpp>
-#include <boost/xpressive/proto/transform/branch.hpp>
-#include <boost/xpressive/proto/transform/fold_tree.hpp>
+#include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/core/matcher/alternate_matcher.hpp>
 #include <boost/xpressive/detail/utility/cons.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+#define UNCV(x) typename remove_const<x>::type
+#define UNREF(x) typename remove_reference<x>::type
+#define UNCVREF(x) UNCV(UNREF(x))
+
+namespace boost { namespace xpressive
 {
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // alternates_list
-    //   a fusion-compatible sequence of alternate expressions, that also keeps
-    //   track of the list's width and purity.
-    template<typename Head, typename Tail>
-    struct alternates_list
-      : fusion::cons<Head, Tail>
+    namespace detail
     {
-        BOOST_STATIC_CONSTANT(std::size_t, width = Head::width == Tail::width ? Head::width : unknown_width::value);
-        BOOST_STATIC_CONSTANT(bool, pure = Head::pure && Tail::pure);
-
-        alternates_list(Head const &head, Tail const &tail)
-          : fusion::cons<Head, Tail>(head, tail)
+        ///////////////////////////////////////////////////////////////////////////////
+        // alternates_list
+        //   a fusion-compatible sequence of alternate expressions, that also keeps
+        //   track of the list's width and purity.
+        template<typename Head, typename Tail>
+        struct alternates_list
+          : fusion::cons<Head, Tail>
         {
-        }
-    };
+            BOOST_STATIC_CONSTANT(std::size_t, width = Head::width == Tail::width ? Head::width : detail::unknown_width::value);
+            BOOST_STATIC_CONSTANT(bool, pure = Head::pure && Tail::pure);
 
-    template<typename Head>
-    struct alternates_list<Head, fusion::nil>
-      : fusion::cons<Head, fusion::nil>
-    {
-        BOOST_STATIC_CONSTANT(std::size_t, width = Head::width);
-        BOOST_STATIC_CONSTANT(bool, pure = Head::pure);
-
-        alternates_list(Head const &head, fusion::nil const &tail)
-          : fusion::cons<Head, fusion::nil>(head, tail)
-        {
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // in_alternate
-    template<typename Grammar>
-    struct in_alternate
-      : Grammar
-    {
-        in_alternate();
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-        {
-            typedef alternates_list<
-                typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type
-              , State
-            > type;
+            alternates_list(Head const &head, Tail const &tail)
+              : fusion::cons<Head, Tail>(head, tail)
+            {
+            }
         };
 
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        template<typename Head>
+        struct alternates_list<Head, fusion::nil>
+          : fusion::cons<Head, fusion::nil>
         {
-            return typename apply<Expr, State, Visitor>::type(
-                Grammar::call(expr, alternate_end_xpression(), visitor)
-              , state
-            );
-        }
-    };
+            BOOST_STATIC_CONSTANT(std::size_t, width = Head::width);
+            BOOST_STATIC_CONSTANT(bool, pure = Head::pure);
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // as_alternate_matcher
-    template<typename Grammar>
-    struct as_alternate_matcher
-      : Grammar
+            alternates_list(Head const &head, fusion::nil const &tail)
+              : fusion::cons<Head, fusion::nil>(head, tail)
+            {
+            }
+        };
+    }
+
+    namespace grammar_detail
     {
-        as_alternate_matcher();
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        ///////////////////////////////////////////////////////////////////////////////
+        // in_alternate_list
+        template<typename Grammar>
+        struct in_alternate_list : callable
         {
-            typedef alternate_matcher<
-                typename Grammar::template apply<Expr, State, Visitor>::type
-              , typename Visitor::traits_type
-            > type;
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Expr, typename State, typename Visitor>
+            struct result<This(Expr, State, Visitor)>
+            {
+                typedef detail::alternates_list<
+                    typename Grammar::template result<void(Expr, detail::alternate_end_xpression, Visitor)>::type
+                  , State
+                > type;
+            };
+
+            template<typename Expr, typename State, typename Visitor>
+            typename result<void(Expr, State, Visitor)>::type
+            operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+            {
+                return typename result<void(Expr, State, Visitor)>::type(
+                    Grammar()(expr, detail::alternate_end_xpression(), visitor)
+                  , state
+                );
+            }
         };
 
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        ///////////////////////////////////////////////////////////////////////////////
+        // as_alternate_matcher
+        template<typename Grammar>
+        struct as_alternate_matcher : callable
         {
-            return typename apply<Expr, State, Visitor>::type(
-                Grammar::call(expr, state, visitor)
-            );
-        }
-    };
+            template<typename Sig>
+            struct result;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // as_alternate
-    template<typename Grammar>
-    struct as_alternate
-      : as_alternate_matcher<
-            proto::transform::reverse_fold_tree<
-                typename Grammar::proto_tag
-              , in_alternate<typename Grammar::proto_arg0>
-              , fusion::nil
-            >
-        >
-    {
-        BOOST_MPL_ASSERT((
-            is_same<
-                typename Grammar::proto_arg0
-              , typename Grammar::proto_arg1
-            >
-        ));
-    };
+            template<typename This, typename Expr, typename State, typename Visitor>
+            struct result<This(Expr, State, Visitor)>
+            {
+                typedef detail::alternate_matcher<
+                    typename Grammar::template result<void(Expr, State, Visitor)>::type
+                  , typename Visitor::traits_type
+                > type;
+            };
 
-}}}
+            template<typename Expr, typename State, typename Visitor>
+            typename result<void(Expr, State, Visitor)>::type
+            operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+            {
+                return typename result<void(Expr, State, Visitor)>::type(
+                    Grammar()(expr, state, visitor)
+                );
+            }
+        };
+
+    }
+
+}}
+
+#undef UNCV
+#undef UNREF
+#undef UNCVREF
 
 #endif

@@ -29,8 +29,12 @@
     #include <boost/mpl/or.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/eval_if.hpp>
+    #include <boost/mpl/aux_/template_arity.hpp>
+    #include <boost/mpl/aux_/lambda_arity_param.hpp>
     #include <boost/static_assert.hpp>
     #include <boost/utility/result_of.hpp>
+    #include <boost/type_traits/is_pod.hpp>
+    #include <boost/type_traits/is_same.hpp>
     #include <boost/type_traits/is_array.hpp>
     #include <boost/type_traits/is_function.hpp>
     #include <boost/type_traits/remove_cv.hpp>
@@ -56,13 +60,56 @@
 
     namespace boost { namespace proto
     {
+        namespace detail
+        {
+            template<typename T, typename EnableIf = void>
+            struct is_callable2_
+              : mpl::false_
+            {};
+
+            template<typename T>
+            struct is_callable2_<T, typename T::proto_is_callable_>
+              : mpl::true_
+            {};
+
+            template<typename T BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<T>::value)>
+            struct is_callable_
+              : is_callable2_<T>
+            {};
+        }
+
         template<typename T>
-        struct is_transform
-          : mpl::false_
+        struct is_callable
+          : proto::detail::is_callable_<T>
         {};
 
         template<>
-        struct is_transform<proto::_>
+        struct is_callable<proto::_>
+          : mpl::true_
+        {};
+
+        template<>
+        struct is_callable<proto::callable>
+          : mpl::false_
+        {};
+
+        #if BOOST_WORKAROUND(__GNUC__, == 3)
+        // work around GCC bug
+        template<typename Tag, typename Args, long N>
+        struct is_callable<proto::expr<Tag, Args, N> >
+          : mpl::false_
+        {};
+        #endif
+
+        /// is_aggregate
+        ///
+        template<typename T>
+        struct is_aggregate
+          : is_pod<T>
+        {};
+
+        template<typename Tag, typename Args, long N>
+        struct is_aggregate<expr<Tag, Args, N> >
           : mpl::true_
         {};
 
@@ -202,7 +249,6 @@
             template<typename T>
             struct terminal : has_identity_transform
             {
-                terminal();
                 typedef expr<proto::tag::terminal, args0<T> > type;
                 typedef type proto_base_expr;
                 typedef proto::tag::terminal proto_tag;
@@ -213,7 +259,6 @@
             template<typename T, typename U, typename V>
             struct if_else_ : has_pass_through_transform<if_else_<T, U, V> >
             {
-                if_else_();
                 typedef expr<proto::tag::if_else_, args3<T, U, V> > type;
                 typedef type proto_base_expr;
                 typedef proto::tag::if_else_ proto_tag;
@@ -226,7 +271,6 @@
             template<typename Tag, typename T>
             struct unary_expr : has_pass_through_transform<unary_expr<Tag, T> >
             {
-                unary_expr();
                 typedef expr<Tag, args1<T> > type;
                 typedef type proto_base_expr;
                 typedef Tag proto_tag;
@@ -237,7 +281,6 @@
             template<typename Tag, typename T, typename U>
             struct binary_expr : has_pass_through_transform<binary_expr<Tag, T, U> >
             {
-                binary_expr();
                 typedef expr<Tag, args2<T, U> > type;
                 typedef type proto_base_expr;
                 typedef Tag proto_tag;
@@ -249,7 +292,6 @@
             template<typename T>                                                                    \
             struct Name : has_pass_through_transform<Name<T> >                                      \
             {                                                                                       \
-                Name();                                                                             \
                 typedef expr<proto::tag::Name, args1<T> > type;                                     \
                 typedef type proto_base_expr;                                                       \
                 typedef proto::tag::Name proto_tag;                                                 \
@@ -261,7 +303,6 @@
             template<typename T, typename U>                                                        \
             struct Name : has_pass_through_transform<Name<T, U> >                                   \
             {                                                                                       \
-                Name();                                                                             \
                 typedef expr<proto::tag::Name, args2<T, U> > type;                                  \
                 typedef type proto_base_expr;                                                       \
                 typedef proto::tag::Name proto_tag;                                                 \
@@ -704,6 +745,14 @@
                     return that;
                 }
             };
+
+            template<
+                template<BOOST_PP_ENUM_PARAMS(N, typename BOOST_PP_INTERCEPT)> class T
+              , BOOST_PP_ENUM_PARAMS(N, typename A)
+            >
+            struct is_callable_<T<BOOST_PP_ENUM_PARAMS(N, A)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N)>
+              : is_same<BOOST_PP_CAT(A, BOOST_PP_DEC(N)), callable>
+            {};
         }
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>

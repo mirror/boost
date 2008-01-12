@@ -65,7 +65,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // attr_matcher
     //  Note: the Matcher is a std::map
-    template<typename Matcher, typename Traits, bool ICase>
+    template<typename Matcher, typename Traits, typename ICase>
     struct attr_matcher
       : quant_style<quant_none, 0, false>
     {
@@ -74,7 +74,7 @@ namespace boost { namespace xpressive { namespace detail
         attr_matcher(int slot, Matcher const &matcher, Traits const& traits)
           : slot_(slot-1)
         {
-            char_translate<Traits, ICase> trans(traits);
+            char_translate<Traits, ICase::value> trans(traits);
             this->sym_.load(matcher, trans);
         }
 
@@ -82,7 +82,7 @@ namespace boost { namespace xpressive { namespace detail
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
             BidiIter tmp = state.cur_;
-            char_translate<Traits, ICase> trans(traits_cast<Traits>(state));
+            char_translate<Traits, ICase::value> trans(traits_cast<Traits>(state));
             result_type const &result = this->sym_(state.cur_, state.end_, trans);
             if(result)
             {

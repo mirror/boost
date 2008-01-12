@@ -55,12 +55,12 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // simple_repeat_matcher
     //
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     struct simple_repeat_matcher
       : quant_style_variable_width
     {
         typedef Xpr xpr_type;
-        typedef mpl::bool_<Greedy> greedy_type;
+        typedef Greedy greedy_type;
 
         Xpr xpr_;
         unsigned int min_, max_;

@@ -22,7 +22,7 @@
 // Doxygen can't handle proto :-(
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
 # include <boost/xpressive/proto/proto.hpp>
-# include <boost/xpressive/proto/transform/arg.hpp>
+# include <boost/xpressive/proto/transform.hpp>
 # include <boost/xpressive/detail/core/icase.hpp>
 # include <boost/xpressive/detail/static/compile.hpp>
 # include <boost/xpressive/detail/static/modifier.hpp>
@@ -31,7 +31,7 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    typedef assert_word_placeholder<word_boundary<true> > assert_word_boundary;
+    typedef assert_word_placeholder<word_boundary<mpl::true_> > assert_word_boundary;
     typedef assert_word_placeholder<word_begin> assert_word_begin;
     typedef assert_word_placeholder<word_end> assert_word_end;
 
@@ -52,33 +52,35 @@ namespace boost { namespace xpressive { namespace detail
         using proto::extends<basic_mark_tag, mark_tag>::operator =;
     };
 
-    template<typename Grammar>
-    struct push_back_sub
-      : proto::transform::identity<Grammar>
+    struct push_back : proto::callable
     {
-        template<typename Sub>
-        static int to_sub(Sub const &sub, proto::tag::terminal)
-        {
-            return proto::arg(sub).mark_number_;
-        }
+        typedef int result_type;
 
-        template<typename Sub>
-        static int to_sub(Sub const &, proto::tag::negate)
+        template<typename Subs>
+        int operator ()(Subs &subs, int i) const
         {
-            return -1;
+            subs.push_back(i);
+            return i;
         }
+    };
 
-        template<typename Expr, typename State, typename Visitor>
-        static Expr const &call(Expr const &expr, State const &, Visitor &subs)
+    struct mark_number2 : proto::callable
+    {
+        typedef int result_type;
+
+        template<typename Expr>
+        int operator ()(Expr const &expr) const
         {
-            subs.push_back(push_back_sub::to_sub(expr, typename Expr::proto_tag()));
-            return expr;
+            return expr.mark_number_;
         }
     };
 
     // s1 or -s1
     struct SubMatch
-      : push_back_sub<proto::or_<basic_mark_tag, proto::negate<basic_mark_tag > > >
+      : proto::or_<
+            proto::when<basic_mark_tag,                push_back(proto::_visitor, mark_number2(proto::_arg)) >
+          , proto::when<proto::negate<basic_mark_tag>, push_back(proto::_visitor, mpl::int_<-1>())          >
+        >
     {};
 
     struct SubMatchList
@@ -93,7 +95,7 @@ namespace boost { namespace xpressive { namespace detail
     to_vector(Subs const &subs)
     {
         std::vector<int> subs_;
-        SubMatchList::call(subs, 0, subs_);
+        SubMatchList()(subs, 0, subs_);
         return subs_;
     }
 

@@ -41,7 +41,7 @@ namespace boost { namespace xpressive { namespace detail
         // "compile" the regex and wrap it in an xpression_adaptor.
         xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, impl);
         intrusive_ptr<matchable_ex<BidiIter> const> adxpr = make_adaptor<matchable_ex<BidiIter> >(
-            Grammar<char_type>::call(xpr, end_xpression(), visitor)
+            Grammar<char_type>()(xpr, end_xpression(), visitor)
         );
 
         // Link and optimize the regex

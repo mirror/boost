@@ -513,6 +513,8 @@
             template<typename Tag, typename Domain>
             struct make_expr
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result
                 {};
@@ -534,6 +536,8 @@
             template<typename Domain>
             struct make_expr<tag::terminal, Domain>
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result
                 {};
@@ -561,6 +565,8 @@
             template<typename Tag, typename Domain>
             struct unpack_expr
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result
                 {};
@@ -585,6 +591,8 @@
             template<typename Tag, typename Domain>
             struct unfused_expr_fun
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sequence>
                 struct result
                   : result_of::unpack_expr<Tag, Domain, Sequence>
@@ -601,7 +609,9 @@
             template<typename Tag, typename Domain>
             struct unfused_expr
               : fusion::unfused_generic<unfused_expr_fun<Tag, Domain> >
-            {};
+            {
+                BOOST_PROTO_CALLABLE()
+            };
         }
 
         /// unpack_expr
@@ -651,6 +661,22 @@
         /**/
 
     #include BOOST_PP_ITERATE()
+
+        template<typename Tag, typename Domain>
+        struct is_callable<functional::make_expr<Tag, Domain> >
+          : mpl::true_
+        {};
+
+        template<typename Tag, typename Domain>
+        struct is_callable<functional::unpack_expr<Tag, Domain> >
+          : mpl::true_
+        {};
+
+        template<typename Tag, typename Domain>
+        struct is_callable<functional::unfused_expr<Tag, Domain> >
+          : mpl::true_
+        {};
+
     }}
 
     #undef BOOST_PROTO_AT

@@ -17,7 +17,7 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -29,77 +29,87 @@ namespace boost { namespace xpressive { namespace detail
 
     struct lookbehind_tag
     {};
+}}}
+
+namespace boost { namespace xpressive { namespace grammar_detail
+{
 
     template<typename Grammar>
-    struct as_lookahead
-      : Grammar
+    struct as_lookahead : callable
     {
-        as_lookahead();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
-            typedef lookahead_matcher<
-                typename Grammar::template apply<Expr, true_xpression, Visitor>::type
+            typedef typename proto::result_of::arg<Expr>::type arg_type;
+            typedef detail::lookahead_matcher<
+                typename Grammar::template result<void(arg_type, detail::true_xpression, Visitor)>::type
             > type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
-            return typename apply<Expr, State, Visitor>::type(
-                Grammar::call(expr, true_xpression(), visitor)
+            return typename result<void(Expr, State, Visitor)>::type(
+                Grammar()(proto::arg(expr), detail::true_xpression(), visitor)
               , false
             );
         }
     };
 
     template<typename Grammar>
-    struct as_lookbehind
-      : Grammar
+    struct as_lookbehind : callable
     {
-        as_lookbehind();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
-            typedef lookbehind_matcher<
-                typename Grammar::template apply<Expr, true_xpression, Visitor>::type
+            typedef typename proto::result_of::arg<Expr>::type arg_type;
+            typedef detail::lookbehind_matcher<
+                typename Grammar::template result<void(arg_type, detail::true_xpression, Visitor)>::type
             > type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
-            typename Grammar::template apply<Expr, true_xpression, Visitor>::type const &
-                expr2 = Grammar::call(expr, true_xpression(), visitor);
+            typedef typename proto::result_of::arg<Expr>::type arg_type;
+            typedef 
+                typename Grammar::template result<void(arg_type, detail::true_xpression, Visitor)>::type
+            xpr_type;
+            xpr_type const &expr2 = Grammar()(proto::arg(expr), detail::true_xpression(), visitor);
             std::size_t width = expr2.get_width().value();
-            return typename apply<Expr, State, Visitor>::type(expr2, width, false);
+            return detail::lookbehind_matcher<xpr_type>(expr2, width, false);
         }
     };
 
     template<typename Grammar>
-    struct as_keeper
-      : Grammar
+    struct as_keeper : callable
     {
-        as_keeper();
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
-            typedef keeper_matcher<
-                typename Grammar::template apply<Expr, true_xpression, Visitor>::type
+            typedef typename proto::result_of::arg<Expr>::type arg_type;
+            typedef detail::keeper_matcher<
+                typename Grammar::template result<void(arg_type, detail::true_xpression, Visitor)>::type
             > type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
-            return typename apply<Expr, State, Visitor>::type(
-                Grammar::call(expr, true_xpression(), visitor)
+            return typename result<void(Expr, State, Visitor)>::type(
+                Grammar()(proto::arg(expr), detail::true_xpression(), visitor)
             );
         }
     };

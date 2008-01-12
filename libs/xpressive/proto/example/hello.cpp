@@ -10,7 +10,7 @@
 #include <boost/typeof/std/ostream.hpp>
 using namespace boost;
 
-proto::terminal< std::ostream & >::type cout_ = { std::cout };
+proto::terminal< std::ostream & >::type cout_ = {std::cout};
 
 template< typename Expr >
 void evaluate( Expr const & expr )

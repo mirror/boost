@@ -24,7 +24,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // word_boundary
     //
-    template<bool IsBoundary>
+    template<typename IsBoundary>
     struct word_boundary
     {
         template<typename BidiIter>
@@ -32,10 +32,10 @@ namespace boost { namespace xpressive { namespace detail
         {
             if((state.flags_.match_not_bow_ && state.bos()) || (state.flags_.match_not_eow_ && state.eos()))
             {
-                return !IsBoundary;
+                return !IsBoundary::value;
             }
 
-            return IsBoundary == (prevword != thisword);
+            return IsBoundary::value == (prevword != thisword);
         }
     };
 

@@ -52,10 +52,7 @@ namespace boost { namespace proto
         typedef char yes_type;
         typedef char (&no_type)[2];
 
-        struct dont_care
-        {
-            dont_care(...);
-        };
+        struct dont_care;
 
         template<typename T>
         struct remove_cv_ref
@@ -117,8 +114,8 @@ namespace boost { namespace proto
 
         // Fusion tags
         struct proto_expr;
-        struct proto_ref;
-        struct proto_ref_iterator;
+        struct proto_expr_iterator;
+        struct proto_flat_view;
     }
 
     namespace wildcardns_
@@ -205,14 +202,14 @@ namespace boost { namespace proto
         >
         struct and_;
 
-        template<typename Condition, typename Then = void, typename Else = void>
+        template<typename Grammar>
+        struct not_;
+
+        template<typename Condition, typename Then = _, typename Else = not_<_> >
         struct if_;
 
         template<typename Cases>
         struct switch_;
-
-        template<typename Grammar>
-        struct not_;
 
         template<typename T>
         struct exact;
@@ -440,106 +437,215 @@ namespace boost { namespace proto
 
         template<typename Tag, typename Domain = deduce_domain>
         struct unfused_expr;
+    
+        typedef make_expr<tag::terminal>            make_terminal;
+        typedef make_expr<tag::posit>               make_posit;
+        typedef make_expr<tag::negate>              make_negate;
+        typedef make_expr<tag::dereference>         make_dereference;
+        typedef make_expr<tag::complement>          make_complement;
+        typedef make_expr<tag::address_of>          make_address_of;
+        typedef make_expr<tag::logical_not>         make_logical_not;
+        typedef make_expr<tag::pre_inc>             make_pre_inc;
+        typedef make_expr<tag::pre_dec>             make_pre_dec;
+        typedef make_expr<tag::post_inc>            make_post_inc;
+        typedef make_expr<tag::post_dec>            make_post_dec;
+        typedef make_expr<tag::shift_left>          make_shift_left;
+        typedef make_expr<tag::shift_right>         make_shift_right;
+        typedef make_expr<tag::multiplies>          make_multiplies;
+        typedef make_expr<tag::divides>             make_divides;
+        typedef make_expr<tag::modulus>             make_modulus;
+        typedef make_expr<tag::plus>                make_plus;
+        typedef make_expr<tag::minus>               make_minus;
+        typedef make_expr<tag::less>                make_less;
+        typedef make_expr<tag::greater>             make_greater;
+        typedef make_expr<tag::less_equal>          make_less_equal;
+        typedef make_expr<tag::greater_equal>       make_greater_equal;
+        typedef make_expr<tag::equal_to>            make_equal_to;
+        typedef make_expr<tag::not_equal_to>        make_not_equal_to;
+        typedef make_expr<tag::logical_or>          make_logical_or;
+        typedef make_expr<tag::logical_and>         make_logical_and;
+        typedef make_expr<tag::bitwise_and>         make_bitwise_and;
+        typedef make_expr<tag::bitwise_or>          make_bitwise_or;
+        typedef make_expr<tag::bitwise_xor>         make_bitwise_xor;
+        typedef make_expr<tag::comma>               make_comma;
+        typedef make_expr<tag::mem_ptr>             make_mem_ptr;
+        typedef make_expr<tag::assign>              make_assign;
+        typedef make_expr<tag::shift_left_assign>   make_shift_left_assign;
+        typedef make_expr<tag::shift_right_assign>  make_shift_right_assign;
+        typedef make_expr<tag::multiplies_assign>   make_multiplies_assign;
+        typedef make_expr<tag::divides_assign>      make_divides_assign;
+        typedef make_expr<tag::modulus_assign>      make_modulus_assign;
+        typedef make_expr<tag::plus_assign>         make_plus_assign;
+        typedef make_expr<tag::minus_assign>        make_minus_assign;
+        typedef make_expr<tag::bitwise_and_assign>  make_bitwise_and_assign;
+        typedef make_expr<tag::bitwise_or_assign>   make_bitwise_or_assign;
+        typedef make_expr<tag::bitwise_xor_assign>  make_bitwise_xor_assign;
+        typedef make_expr<tag::subscript>           make_subscript;
+        typedef make_expr<tag::if_else_>            make_if_else;
+        typedef make_expr<tag::function>            make_function;
+
+        //typedef make_expr_ref<tag::terminal>            make_terminal_ref;
+        //typedef make_expr_ref<tag::posit>               make_posit_ref;
+        //typedef make_expr_ref<tag::negate>              make_negate_ref;
+        //typedef make_expr_ref<tag::dereference>         make_dereference_ref;
+        //typedef make_expr_ref<tag::complement>          make_complement_ref;
+        //typedef make_expr_ref<tag::address_of>          make_address_of_ref;
+        //typedef make_expr_ref<tag::logical_not>         make_logical_not_ref;
+        //typedef make_expr_ref<tag::pre_inc>             make_pre_inc_ref;
+        //typedef make_expr_ref<tag::pre_dec>             make_pre_dec_ref;
+        //typedef make_expr_ref<tag::post_inc>            make_post_inc_ref;
+        //typedef make_expr_ref<tag::post_dec>            make_post_dec_ref;
+        //typedef make_expr_ref<tag::shift_left>          make_shift_left_ref;
+        //typedef make_expr_ref<tag::shift_right>         make_shift_right_ref;
+        //typedef make_expr_ref<tag::multiplies>          make_multiplies_ref;
+        //typedef make_expr_ref<tag::divides>             make_divides_ref;
+        //typedef make_expr_ref<tag::modulus>             make_modulus_ref;
+        //typedef make_expr_ref<tag::plus>                make_plus_ref;
+        //typedef make_expr_ref<tag::minus>               make_minus_ref;
+        //typedef make_expr_ref<tag::less>                make_less_ref;
+        //typedef make_expr_ref<tag::greater>             make_greater_ref;
+        //typedef make_expr_ref<tag::less_equal>          make_less_equal_ref;
+        //typedef make_expr_ref<tag::greater_equal>       make_greater_equal_ref;
+        //typedef make_expr_ref<tag::equal_to>            make_equal_to_ref;
+        //typedef make_expr_ref<tag::not_equal_to>        make_not_equal_to_ref;
+        //typedef make_expr_ref<tag::logical_or>          make_logical_or_ref;
+        //typedef make_expr_ref<tag::logical_and>         make_logical_and_ref;
+        //typedef make_expr_ref<tag::bitwise_and>         make_bitwise_and_ref;
+        //typedef make_expr_ref<tag::bitwise_or>          make_bitwise_or_ref;
+        //typedef make_expr_ref<tag::bitwise_xor>         make_bitwise_xor_ref;
+        //typedef make_expr_ref<tag::comma>               make_comma_ref;
+        //typedef make_expr_ref<tag::mem_ptr>             make_mem_ptr_ref;
+        //typedef make_expr_ref<tag::assign>              make_assign_ref;
+        //typedef make_expr_ref<tag::shift_left_assign>   make_shift_left_assign_ref;
+        //typedef make_expr_ref<tag::shift_right_assign>  make_shift_right_assign_ref;
+        //typedef make_expr_ref<tag::multiplies_assign>   make_multiplies_assign_ref;
+        //typedef make_expr_ref<tag::divides_assign>      make_divides_assign_ref;
+        //typedef make_expr_ref<tag::modulus_assign>      make_modulus_assign_ref;
+        //typedef make_expr_ref<tag::plus_assign>         make_plus_assign_ref;
+        //typedef make_expr_ref<tag::minus_assign>        make_minus_assign_ref;
+        //typedef make_expr_ref<tag::bitwise_and_assign>  make_bitwise_and_assign_ref;
+        //typedef make_expr_ref<tag::bitwise_or_assign>   make_bitwise_or_assign_ref;
+        //typedef make_expr_ref<tag::bitwise_xor_assign>  make_bitwise_xor_assign_ref;
+        //typedef make_expr_ref<tag::subscript>           make_subscript_ref;
+        //typedef make_expr_ref<tag::if_else_>            make_if_else_ref;
+        //typedef make_expr_ref<tag::function>            make_function_ref;
+
+        struct flatten;
+        struct pop_front;
+        struct reverse;
     }
 
-#define BOOST_PROTO_IDENTITY_TRANSFORM()\
-    template<typename Expr_, typename State_, typename Visitor_>\
-    static Expr_ const &call(Expr_ const &expr_, State_ const &, Visitor_ &)\
-    {\
-        return expr_;\
-    }\
-    template<typename Expr_, typename, typename>\
-    struct apply\
-    {\
-        typedef Expr_ type;\
-    }
+    typedef functional::make_terminal               _make_terminal;
+    typedef functional::make_posit                  _make_posit;
+    typedef functional::make_negate                 _make_negate;
+    typedef functional::make_dereference            _make_dereference;
+    typedef functional::make_complement             _make_complement;
+    typedef functional::make_address_of             _make_address_of;
+    typedef functional::make_logical_not            _make_logical_not;
+    typedef functional::make_pre_inc                _make_pre_inc;
+    typedef functional::make_pre_dec                _make_pre_dec;
+    typedef functional::make_post_inc               _make_post_inc;
+    typedef functional::make_post_dec               _make_post_dec;
+    typedef functional::make_shift_left             _make_shift_left;
+    typedef functional::make_shift_right            _make_shift_right;
+    typedef functional::make_multiplies             _make_multiplies;
+    typedef functional::make_divides                _make_divides;
+    typedef functional::make_modulus                _make_modulus;
+    typedef functional::make_plus                   _make_plus;
+    typedef functional::make_minus                  _make_minus;
+    typedef functional::make_less                   _make_less;
+    typedef functional::make_greater                _make_greater;
+    typedef functional::make_less_equal             _make_less_equal;
+    typedef functional::make_greater_equal          _make_greater_equal;
+    typedef functional::make_equal_to               _make_equal_to;
+    typedef functional::make_not_equal_to           _make_not_equal_to;
+    typedef functional::make_logical_or             _make_logical_or;
+    typedef functional::make_logical_and            _make_logical_and;
+    typedef functional::make_bitwise_and            _make_bitwise_and;
+    typedef functional::make_bitwise_or             _make_bitwise_or;
+    typedef functional::make_bitwise_xor            _make_bitwise_xor;
+    typedef functional::make_comma                  _make_comma;
+    typedef functional::make_mem_ptr                _make_mem_ptr;
+    typedef functional::make_assign                 _make_assign;
+    typedef functional::make_shift_left_assign      _make_shift_left_assign;
+    typedef functional::make_shift_right_assign     _make_shift_right_assign;
+    typedef functional::make_multiplies_assign      _make_multiplies_assign;
+    typedef functional::make_divides_assign         _make_divides_assign;
+    typedef functional::make_modulus_assign         _make_modulus_assign;
+    typedef functional::make_plus_assign            _make_plus_assign;
+    typedef functional::make_minus_assign           _make_minus_assign;
+    typedef functional::make_bitwise_and_assign     _make_bitwise_and_assign;
+    typedef functional::make_bitwise_or_assign      _make_bitwise_or_assign;
+    typedef functional::make_bitwise_xor_assign     _make_bitwise_xor_assign;
+    typedef functional::make_subscript              _make_subscript;
+    typedef functional::make_if_else                _make_if_else;
+    typedef functional::make_function               _make_function;
 
-    namespace transform
-    {
-        namespace detail
-        {
-            using proto::detail::yes_type;
-            using proto::detail::no_type;
-            
-            struct default_factory;
+    //typedef functional::make_terminal_ref               _make_terminal_ref;
+    //typedef functional::make_posit_ref                  _make_posit_ref;
+    //typedef functional::make_negate_ref                 _make_negate_ref;
+    //typedef functional::make_dereference_ref            _make_dereference_ref;
+    //typedef functional::make_complement_ref             _make_complement_ref;
+    //typedef functional::make_address_of_ref             _make_address_of_ref;
+    //typedef functional::make_logical_not_ref            _make_logical_not_ref;
+    //typedef functional::make_pre_inc_ref                _make_pre_inc_ref;
+    //typedef functional::make_pre_dec_ref                _make_pre_dec_ref;
+    //typedef functional::make_post_inc_ref               _make_post_inc_ref;
+    //typedef functional::make_post_dec_ref               _make_post_dec_ref;
+    //typedef functional::make_shift_left_ref             _make_shift_left_ref;
+    //typedef functional::make_shift_right_ref            _make_shift_right_ref;
+    //typedef functional::make_multiplies_ref             _make_multiplies_ref;
+    //typedef functional::make_divides_ref                _make_divides_ref;
+    //typedef functional::make_modulus_ref                _make_modulus_ref;
+    //typedef functional::make_plus_ref                   _make_plus_ref;
+    //typedef functional::make_minus_ref                  _make_minus_ref;
+    //typedef functional::make_less_ref                   _make_less_ref;
+    //typedef functional::make_greater_ref                _make_greater_ref;
+    //typedef functional::make_less_equal_ref             _make_less_equal_ref;
+    //typedef functional::make_greater_equal_ref          _make_greater_equal_ref;
+    //typedef functional::make_equal_to_ref               _make_equal_to_ref;
+    //typedef functional::make_not_equal_to_ref           _make_not_equal_to_ref;
+    //typedef functional::make_logical_or_ref             _make_logical_or_ref;
+    //typedef functional::make_logical_and_ref            _make_logical_and_ref;
+    //typedef functional::make_bitwise_and_ref            _make_bitwise_and_ref;
+    //typedef functional::make_bitwise_or_ref             _make_bitwise_or_ref;
+    //typedef functional::make_bitwise_xor_ref            _make_bitwise_xor_ref;
+    //typedef functional::make_comma_ref                  _make_comma_ref;
+    //typedef functional::make_mem_ptr_ref                _make_mem_ptr_ref;
+    //typedef functional::make_assign_ref                 _make_assign_ref;
+    //typedef functional::make_shift_left_assign_ref      _make_shift_left_assign_ref;
+    //typedef functional::make_shift_right_assign_ref     _make_shift_right_assign_ref;
+    //typedef functional::make_multiplies_assign_ref      _make_multiplies_assign_ref;
+    //typedef functional::make_divides_assign_ref         _make_divides_assign_ref;
+    //typedef functional::make_modulus_assign_ref         _make_modulus_assign_ref;
+    //typedef functional::make_plus_assign_ref            _make_plus_assign_ref;
+    //typedef functional::make_minus_assign_ref           _make_minus_assign_ref;
+    //typedef functional::make_bitwise_and_assign_ref     _make_bitwise_and_assign_ref;
+    //typedef functional::make_bitwise_or_assign_ref      _make_bitwise_or_assign_ref;
+    //typedef functional::make_bitwise_xor_assign_ref     _make_bitwise_xor_assign_ref;
+    //typedef functional::make_subscript_ref              _make_subscript_ref;
+    //typedef functional::make_if_else_ref                _make_if_else_ref;
+    //typedef functional::make_function_ref               _make_function_ref;
 
-            no_type is_wildcard_expression_fun(...);
+    typedef functional::flatten     _flatten;
+    typedef functional::pop_front   _pop_front;
+    typedef functional::reverse     _reverse;
+    typedef functional::deep_copy   _deep_copy;
 
-            template<typename T>
-            struct is_wildcard_expression;
-        }
-
-        template<typename Grammar, typename N = mpl::long_<0> >
-        struct arg;
-
-        template<typename Grammar, long N>
-        struct arg_c;
-
-        template<typename Grammar>
-        struct left;
-
-        template<typename Grammar>
-        struct right;
-
-        template<typename Grammar>
-        struct state;
-
-        template<typename Grammar>
-        struct visitor;
-
-        template<typename Grammar>
-        struct identity;
-
-        template<typename Grammar, typename Always, typename Factory = detail::default_factory>
-        struct always;
-
-        template<typename Grammar, typename Lambda, typename Factory = detail::default_factory>
-        struct apply1;
-
-        template<typename Grammar, typename Lambda, typename Factory = detail::default_factory>
-        struct apply2;
-
-        template<typename Grammar, typename Lambda, typename Factory = detail::default_factory>
-        struct apply3;
-
-        template<typename Grammar, typename State>
-        struct branch;
-
-        template<typename Grammar, typename State = void>
-        struct fold;
-
-        template<typename Grammar, typename State = void>
-        struct reverse_fold;
-
-        template<typename Tag, typename Grammar, typename State = void>
-        struct fold_tree;
-
-        template<typename Tag, typename Grammar, typename State = void>
-        struct reverse_fold_tree;
-
-        template<typename Grammar, typename Function1>
-        struct function1;
-
-        template<typename Grammar, typename Function2>
-        struct function2;
-
-        template<typename Grammar, typename Function3>
-        struct function3;
-
-        template<typename Grammar>
-        struct list;
-
-        template<typename Grammar>
-        struct tail;
-
-        template<typename Grammar>
-        struct pass_through;
-
-        template<typename Grammar, typename ConstructorFun>
-        struct construct;
-
-        template<typename Grammar, typename ConstructorFun>
-        struct pod_construct;
+#define BOOST_PROTO_IDENTITY_TRANSFORM()                                                            \
+    template<typename Expr_, typename State_, typename Visitor_>                                    \
+    Expr_ const &operator ()(Expr_ const &expr_, State_ const &, Visitor_ &) const                  \
+    {                                                                                               \
+        return expr_;                                                                               \
+    }                                                                                               \
+                                                                                                    \
+    template<typename Sig>                                                                          \
+    struct result;                                                                                  \
+                                                                                                    \
+    template<typename This, typename Expr_, typename State_, typename Visitor_>                     \
+    struct result<This(Expr_,State_,Visitor_)>                                                      \
+    {                                                                                               \
+        typedef Expr_ type;                                                                         \
     }
 
     namespace has_transformns_
@@ -556,8 +662,102 @@ namespace boost { namespace proto
     using has_transformns_::has_identity_transform;
     using has_transformns_::has_pass_through_transform;
 
+    //template<typename T>
+    //struct is_transform;
+
     template<typename T>
-    struct is_transform;
+    struct is_callable;
+
+    template<typename T>
+    struct is_aggregate;
+
+    namespace transform
+    {
+        #define BOOST_PROTO_CALLABLE() typedef void proto_is_callable_;
+
+        struct callable
+        {
+            BOOST_PROTO_CALLABLE()
+        };
+
+        template<typename Grammar, typename Fun = Grammar>
+        struct when;
+
+        template<typename Fun>
+        struct otherwise;
+
+        template<typename Fun>
+        struct call;
+
+        template<typename Fun>
+        struct make;
+
+        template<typename Fun>
+        struct bind;
+
+        template<typename Sequence, typename State, typename Fun>
+        struct fold;
+
+        template<typename Sequence, typename State, typename Fun>
+        struct reverse_fold;
+
+        // BUGBUG can we replace fold_tree with fold<flatten(_), state, fun> ?
+        template<typename Sequence, typename State, typename Fun>
+        struct fold_tree;
+
+        template<typename Sequence, typename State, typename Fun>
+        struct reverse_fold_tree;
+
+        struct _expr;
+        struct _state;
+        struct _visitor;
+
+        template<int I>
+        struct _arg_c;
+
+        struct _arg0;
+        struct _arg1;
+        struct _arg2;
+        struct _arg3;
+        struct _arg4;
+        struct _arg5;
+        struct _arg6;
+        struct _arg7;
+        struct _arg8;
+        struct _arg9;
+
+        typedef _arg0 _arg;
+        typedef _arg0 _left;
+        typedef _arg1 _right;
+    }
+
+    using transform::when;
+    using transform::otherwise;
+    using transform::_arg0;
+    using transform::_arg1;
+    using transform::_arg2;
+    using transform::_arg3;
+    using transform::_arg4;
+    using transform::_arg5;
+    using transform::_arg6;
+    using transform::_arg7;
+    using transform::_arg8;
+    using transform::_arg9;
+    using transform::_arg;
+    using transform::_left;
+    using transform::_right;
+    using transform::_expr;
+    using transform::_state;
+    using transform::_visitor;
+    using transform::_arg_c;
+    using transform::call;
+    using transform::make;
+    using transform::bind;
+    using transform::fold;
+    using transform::reverse_fold;
+    using transform::fold_tree;
+    using transform::reverse_fold_tree;
+    using transform::callable;
 
     template<typename T>
     struct is_extension;
