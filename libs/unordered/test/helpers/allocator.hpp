@@ -43,6 +43,13 @@ namespace test
         }
 
         pointer allocate(size_type n, const_pointer u) { return allocate(n); }
+
+#if defined(__IBMCPP__)
+        // Workaround for IBM Visual Age which seems to use a void pointer
+        // for the second argument.
+        pointer allocate(size_type n, void const* u) { return allocate(n); }
+#endif
+
         void deallocate(pointer p, size_type) {
             using namespace std;
             free(p);

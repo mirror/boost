@@ -77,8 +77,8 @@ void erase_tests1(Container* = 0)
             BOOST_TEST(next == x.erase(pos));
             --size;
             if(size > 0)
-                BOOST_TEST(next ==
-                        (index == 0 ? x.begin() : boost::next(prev)));
+                BOOST_TEST(index == 0 ? next == x.begin() :
+                        next == boost::next(prev));
             BOOST_TEST(x.count(key) == count - 1);
             BOOST_TEST(x.size() == size);
         }

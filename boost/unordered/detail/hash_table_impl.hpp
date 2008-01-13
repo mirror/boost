@@ -131,7 +131,7 @@ namespace boost {
 
                 void destroy(link_ptr ptr)
                 {
-                    node_ptr n(node_alloc_.address(static_cast<node&>(*ptr)));
+                    node_ptr n(node_alloc_.address(*static_cast<node*>(&*ptr)));
                     value_alloc_.destroy(value_alloc_.address(n->value_));
                     node_base_alloc_.destroy(node_base_alloc_.address(*n));
                     node_alloc_.deallocate(n, 1);
@@ -224,7 +224,7 @@ namespace boost {
 
 #if BOOST_UNORDERED_EQUIVALENT_KEYS
             static inline link_ptr& prev_in_group(link_ptr n) {
-                return static_cast<node&>(*n).group_prev_;
+                return static_cast<node*>(&*n)->group_prev_;
             }
 
             // pre: Must be pointing to the first node in a group.
@@ -242,13 +242,13 @@ namespace boost {
             // pre: Must be pointing to a node
             static inline node& get_node(link_ptr p) {
                 BOOST_ASSERT(p);
-                return static_cast<node&>(*p);
+                return *static_cast<node*>(&*p);
             }
 
             // pre: Must be pointing to a node
             static inline reference get_value(link_ptr p) {
                 BOOST_ASSERT(p);
-                return static_cast<node&>(*p).value_;
+                return static_cast<node*>(&*p)->value_;
             }
 
             class iterator_base
