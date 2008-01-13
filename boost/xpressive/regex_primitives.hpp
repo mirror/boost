@@ -11,9 +11,11 @@
 
 #include <vector>
 #include <climits>
+#include <boost/config.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
@@ -52,6 +54,13 @@ namespace boost { namespace xpressive { namespace detail
         using proto::extends<basic_mark_tag, mark_tag>::operator =;
     };
 
+    // workaround msvc-7.1 bug with function pointer types
+    // within function types:
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+    #define mark_number(x) proto::call<mark_number(x)>
+    #define minus_one() proto::make<minus_one()>
+    #endif
+
     struct push_back : proto::callable
     {
         typedef int result_type;
@@ -64,7 +73,7 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    struct mark_number2 : proto::callable
+    struct mark_number : proto::callable
     {
         typedef int result_type;
 
@@ -75,11 +84,13 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
+    typedef mpl::int_<-1> minus_one;
+
     // s1 or -s1
     struct SubMatch
       : proto::or_<
-            proto::when<basic_mark_tag,                push_back(proto::_visitor, mark_number2(proto::_arg)) >
-          , proto::when<proto::negate<basic_mark_tag>, push_back(proto::_visitor, mpl::int_<-1>())          >
+            proto::when<basic_mark_tag,                push_back(proto::_visitor, mark_number(proto::_arg)) >
+          , proto::when<proto::negate<basic_mark_tag>, push_back(proto::_visitor, minus_one())              >
         >
     {};
 
@@ -99,6 +110,10 @@ namespace boost { namespace xpressive { namespace detail
         return subs_;
     }
 
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+    #undef mark_number
+    #undef minus_one
+    #endif
 
 /*
 ///////////////////////////////////////////////////////////////////////////////
