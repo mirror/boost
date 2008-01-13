@@ -15,7 +15,7 @@
 # pragma once
 #endif
 
-#if BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #include <boost/range/detail/as_literal.hpp>
 #else
 
@@ -116,14 +116,14 @@ namespace boost
 
     
     template< class Char, std::size_t sz >
-	inline iterator_range<const Char*> as_literal( const Char (&arr)[sz] )
+    inline iterator_range<const Char*> as_literal( const Char (&arr)[sz] )
     {
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590)) && __BORLANDC__ >= 0x590
         return boost::make_iterator_range<const Char*>( arr, arr + sz - 1 );
 #else
         return boost::make_iterator_range( arr, arr + sz - 1 );
 #endif
-	}
+    }
 }
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
