@@ -134,7 +134,7 @@ struct gzip_params : zlib_params {
                  std::string comment    = "",
                  std::time_t mtime      = 0 )
         : zlib_params(level, method, window_bits, mem_level, strategy),
-          file_name(file_name), mtime(mtime)
+          file_name(file_name), comment(comment), mtime(mtime)
         { }
     std::string  file_name;
     std::string  comment;

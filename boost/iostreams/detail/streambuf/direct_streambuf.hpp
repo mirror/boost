@@ -187,10 +187,9 @@ direct_streambuf<T, Tr>::seekoff
 template<typename T, typename Tr>
 inline typename direct_streambuf<T, Tr>::pos_type
 direct_streambuf<T, Tr>::seekpos
-    (pos_type sp, BOOST_IOS::openmode)
+    (pos_type sp, BOOST_IOS::openmode which)
 { 
-    return seek_impl( position_to_offset(sp), BOOST_IOS::beg, 
-                      BOOST_IOS::in | BOOST_IOS::out );
+    return seek_impl(position_to_offset(sp), BOOST_IOS::beg, which);
 }
 
 template<typename T, typename Tr>

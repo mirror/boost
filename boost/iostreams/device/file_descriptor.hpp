@@ -32,29 +32,25 @@ namespace boost { namespace iostreams {
 class BOOST_IOSTREAMS_DECL file_descriptor {
 public:
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    typedef void*  handle_type;
+    typedef void*  handle_type;  // A.k.a HANDLE
+#else
+    typedef int    handle_type;
 #endif
     typedef char   char_type;
     struct category
         : seekable_device_tag,
           closable_tag
         { };
-    file_descriptor() : pimpl_(new impl) { }
-    explicit file_descriptor(int fd, bool close_on_exit = false)
-        : pimpl_(new impl(fd, close_on_exit))
-        { }
+    file_descriptor();
+    explicit file_descriptor(handle_type fd, bool close_on_exit = false);
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    explicit file_descriptor(handle_type handle, bool close_on_exit = false)
-        : pimpl_(new impl(handle, close_on_exit))
-        { }
+    explicit file_descriptor(int fd, bool close_on_exit = false);
 #endif
     explicit file_descriptor( const std::string& path,
                               BOOST_IOS::openmode mode =
                                   BOOST_IOS::in | BOOST_IOS::out,
                               BOOST_IOS::openmode base_mode =
-                                  BOOST_IOS::in | BOOST_IOS::out )
-        : pimpl_(new impl)
-    { open(path, mode, base_mode); }
+                                  BOOST_IOS::in | BOOST_IOS::out );
     void open( const std::string& path,
                BOOST_IOS::openmode =
                    BOOST_IOS::in | BOOST_IOS::out,
@@ -65,41 +61,44 @@ public:
     std::streamsize write(const char_type* s, std::streamsize n);
     std::streampos seek(stream_offset off, BOOST_IOS::seekdir way);
     void close();
+    handle_type handle() const { return pimpl_->handle_; }
 private:
     struct impl {
-        impl() : fd_(-1), flags_(0) { }
-        impl(int fd, bool close_on_exit)
-            : fd_(fd), flags_(0)
+        impl() : 
+            #ifdef BOOST_IOSTREAMS_WINDOWS
+                handle_(reinterpret_cast<handle_type>(-1)), 
+            #else
+                handle_(-1),
+            #endif
+                flags_(0) 
+            { }
+        impl(handle_type fd, bool close_on_exit)
+            : handle_(fd), flags_(0)
         { if (close_on_exit) flags_ |= impl::close_on_exit; }
-    #ifdef BOOST_IOSTREAMS_WINDOWS
-        impl(handle_type handle, bool close_on_exit)
-            : handle_(handle), flags_(has_handle)
-        { if (close_on_exit) flags_ |= impl::close_on_exit; }
-    #endif
-        ~impl() {
-            if (flags_ & close_on_exit) close_impl(*this);
-        }
+        ~impl() 
+        { if (flags_ & close_on_exit) close_impl(*this); }
         enum flags {
             close_on_exit = 1,
-            has_handle = 2,
             append = 4
         };
-        int          fd_;
-    #ifdef BOOST_IOSTREAMS_WINDOWS
         handle_type  handle_;
-    #endif
         int          flags_;
     };
     friend struct impl;
 
     static void close_impl(impl&);
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    static handle_type int_to_handle(int fd);
+#endif
 
     shared_ptr<impl> pimpl_;
 };
 
 struct file_descriptor_source : private file_descriptor {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    typedef void*  handle_type;
+    typedef void*  handle_type;  // A.k.a HANDLE
+#else
+    typedef int    handle_type;
 #endif
     typedef char   char_type;
     struct category
@@ -112,14 +111,14 @@ struct file_descriptor_source : private file_descriptor {
     using file_descriptor::open;
     using file_descriptor::is_open;
     using file_descriptor::close;
+    using file_descriptor::handle;
     file_descriptor_source() { }
-    explicit file_descriptor_source(int fd, bool close_on_exit = false)
+    explicit file_descriptor_source(handle_type fd, bool close_on_exit = false)
         : file_descriptor(fd, close_on_exit)
         { }
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    explicit file_descriptor_source( handle_type handle,
-                                     bool close_on_exit = false )
-        : file_descriptor(handle, close_on_exit)
+    explicit file_descriptor_source(int fd, bool close_on_exit = false)
+        : file_descriptor(fd, close_on_exit)
         { }
 #endif
     explicit file_descriptor_source( const std::string& path,
@@ -130,7 +129,9 @@ struct file_descriptor_source : private file_descriptor {
 
 struct file_descriptor_sink : private file_descriptor {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    typedef void*  handle_type;
+    typedef void*  handle_type;  // A.k.a HANDLE
+#else
+    typedef int    handle_type;
 #endif
     typedef char   char_type;
     struct category
@@ -143,14 +144,14 @@ struct file_descriptor_sink : private file_descriptor {
     using file_descriptor::open;
     using file_descriptor::is_open;
     using file_descriptor::close;
+    using file_descriptor::handle;
     file_descriptor_sink() { }
-    explicit file_descriptor_sink(int fd, bool close_on_exit = false)
+    explicit file_descriptor_sink(handle_type fd, bool close_on_exit = false)
         : file_descriptor(fd, close_on_exit)
         { }
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    explicit file_descriptor_sink( handle_type handle,
-                                   bool close_on_exit = false )
-        : file_descriptor(handle, close_on_exit)
+    explicit file_descriptor_sink(int fd, bool close_on_exit = false)
+        : file_descriptor(fd, close_on_exit)
         { }
 #endif
     explicit file_descriptor_sink( const std::string& path,

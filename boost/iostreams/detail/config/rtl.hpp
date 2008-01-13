@@ -22,22 +22,20 @@
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 
 // Handle open, close, read, and write
-#if defined(__BORLANDC__)
+#ifdef __BORLANDC__
 # define BOOST_IOSTREAMS_RTL(x) BOOST_JOIN(_rtl_, x)
+#elif defined BOOST_IOSTREAMS_WINDOWS
+# define BOOST_IOSTREAMS_RTL(x) BOOST_JOIN(_, x)
 #else
-# if defined(BOOST_IOSTREAMS_WINDOWS) && !defined(__CYGWIN__)
-#  define BOOST_IOSTREAMS_RTL(x) BOOST_JOIN(_, x)
-# else
-#  define BOOST_IOSTREAMS_RTL(x) ::x
-# endif
+# define BOOST_IOSTREAMS_RTL(x) ::x  // Distinguish from member function named x
 #endif
 #define BOOST_IOSTREAMS_FD_OPEN   BOOST_IOSTREAMS_RTL(open)
 #define BOOST_IOSTREAMS_FD_CLOSE  BOOST_IOSTREAMS_RTL(close)
 #define BOOST_IOSTREAMS_FD_READ   BOOST_IOSTREAMS_RTL(read)
 #define BOOST_IOSTREAMS_FD_WRITE  BOOST_IOSTREAMS_RTL(write)
 
-// Handle lseek, ftruncate, stat, and off_t
-#if defined(BOOST_IOSTREAMS_WINDOWS) && !defined(__CYGWIN__)
+// Handle lseek, off_t, ftruncate, and stat
+#ifdef BOOST_IOSTREAMS_WINDOWS
 # if defined(BOOST_MSVC) || defined(__MSVCRT__) // MSVC, MinGW
 #  define BOOST_IOSTREAMS_FD_SEEK    _lseeki64
 #  define BOOST_IOSTREAMS_FD_OFFSET  __int64
@@ -48,13 +46,17 @@
 #else // Non-windows
 # if defined(_LARGEFILE64_SOURCE) && \
          (!defined(_FILE_OFFSET_BITS) || _FILE_OFFSET_BITS != 64) || \
-     defined(BOOST_IOSTREAMS_HAS_LSEEK64) \
+     defined(__IBMCPP__) && !defined(_LARGE_FILES) || \
+     defined(BOOST_IOSTREAMS_HAS_LARGE_FILE_EXTENSIONS)
      /**/
-#  define BOOST_IOSTREAMS_FD_SEEK      lseek64  // GCC for some 32-bit *nix
+
+    /* Systems with transitional extensions for large file support */
+
+#  define BOOST_IOSTREAMS_FD_SEEK      lseek64
 #  define BOOST_IOSTREAMS_FD_TRUNCATE  ftruncate64
 #  define BOOST_IOSTREAMS_FD_STAT      stat64
 #  define BOOST_IOSTREAMS_FD_OFFSET    off64_t
-# else                                          // Cygwin, Darwin, ...
+# else
 #  define BOOST_IOSTREAMS_FD_SEEK      lseek
 #  define BOOST_IOSTREAMS_FD_TRUNCATE  ftruncate
 #  define BOOST_IOSTREAMS_FD_STAT      stat

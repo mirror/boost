@@ -13,8 +13,11 @@
  * with large (64-bit) file offsets.
  */
 
+#include <cstdio>            // fpos_t
+#include <iostream>
 #include <sstream>
 #include <boost/config.hpp>  // BOOST_MSVC
+#include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/positioning.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
@@ -29,7 +32,7 @@ using boost::unit_test::test_suite;
 #endif
 
 void stream_offset_64bit_test()
-{    
+{
     stream_offset  large_file = (stream_offset) 100 *
                                 (stream_offset) 1024 *
                                 (stream_offset) 1024 *
@@ -40,11 +43,18 @@ void stream_offset_64bit_test()
     for (stream_offset off = first; off < last; off += 10000000)
     {
         if (off != position_to_offset(offset_to_position(off))) {
+            cout << "****************************************\n"
+                 << "* sizeof(fpos_t) = " << sizeof(fpos_t) << "\n"
+                 << "* sizeof(streamoff) = " << sizeof(streamoff) << "\n"
+                 << "* sizeof(stream_offset) = " 
+                 << sizeof(stream_offset) << "\n"
+                 << "****************************************\n";
             stringstream s;
             s << "off != position_to_offset(offset_to_position(off)) "
-                 "failed for (off >> 32) == " 
+                 "failed for (off >> 32) == 0x" 
+              << hex
               << static_cast<unsigned int>(off >> 32) 
-              << " and (off & 0xFFFFFFFF) == "
+              << " and (off & 0xFFFFFFFF) == 0x"
               << static_cast<unsigned int>(off & 0xFFFFFFFF);
             BOOST_REQUIRE_MESSAGE(0, s.str().c_str());
         }

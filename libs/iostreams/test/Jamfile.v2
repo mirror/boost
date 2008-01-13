@@ -22,8 +22,9 @@ rule test-iostreams ( sources * : requirements * ) {
             : # command
             : # input files
             : # build requirements
+                <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+                <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
                 <toolset>msvc,<stdlib>stlport:<runtime-link>static
-                <toolset>msvc:<cxxflags>"-wd4996"
                 <toolset>cw-9.3,<os>darwin:<runtime-link>static
                 <define>BOOST_IOSTREAMS_NO_LIB
                 <link>shared:<define>BOOST_IOSTREAMS_DYN_LINK=1
@@ -38,7 +39,8 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams close_test.cpp ]
           [ test-iostreams 
                 code_converter_test.cpp    
-                detail/utf8_codecvt_facet.cpp ]
+                detail/utf8_codecvt_facet.cpp : <link>static ]
+          [ test-iostreams combine_test.cpp ]
           [ test-iostreams compose_test.cpp ]
           [ test-iostreams component_access_test.cpp ]
           [ test-iostreams copy_test.cpp ]
@@ -47,17 +49,15 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams example_test.cpp ]
           [ test-iostreams execute_test.cpp ]
           [ test-iostreams file_test.cpp ]
-          [ test-iostreams 
-                file_descriptor_test.cpp 
-                ../build//boost_iostreams : <link>static ]
+          [ test-iostreams file_descriptor_test.cpp
+                ../src/file_descriptor.cpp : <link>static ]
           [ test-iostreams filtering_stream_test.cpp ]
           [ test-iostreams finite_state_filter_test.cpp ]
           [ test-iostreams flush_test.cpp ]
           [ test-iostreams invert_test.cpp ]
           [ test-iostreams line_filter_test.cpp ]
-          [ test-iostreams 
-                mapped_file_test.cpp 
-                ../build//boost_iostreams : <link>static ]
+          [ test-iostreams mapped_file_test.cpp 
+                ../src/mapped_file.cpp : <link>static ]
           [ test-iostreams newline_test.cpp ]
           [ test-iostreams null_test.cpp ]
           [ test-iostreams operation_sequence_test.cpp ]
@@ -69,6 +69,7 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams seekable_file_test.cpp ]
           [ test-iostreams seekable_filter_test.cpp ]
           [ test-iostreams sequence_test.cpp ]
+          [ test-iostreams slice_test.cpp ]
           [ test-iostreams stdio_filter_test.cpp ]
           [ test-iostreams stream_offset_32bit_test.cpp ]
           [ test-iostreams stream_offset_64bit_test.cpp ]
@@ -83,18 +84,20 @@ rule test-iostreams ( sources * : requirements * ) {
           all-tests += 
               [ test-iostreams 
                     large_file_test.cpp 
-                    ../build//boost_iostreams 
+                    ../src/file_descriptor.cpp
+                    ../src/mapped_file.cpp
                   : <define>LARGE_FILE_KEEP=$(LARGE_FILE_KEEP)
-                    $(KEEP) ] ;
+                    <link>static ] ;
       }
       if $(LARGE_FILE_TEMP)
       {
           all-tests += 
               [ test-iostreams 
                     large_file_test.cpp 
-                    ../build//boost_iostreams 
+                    ../src/file_descriptor.cpp
+                    ../src/mapped_file.cpp
                   : <define>LARGE_FILE_TEMP=$(LARGE_FILE_TEMP)
-                    $(KEEP) ] ;
+                    <link>static ] ;
       }
       if ! $(NO_BZIP2)
       {     

@@ -15,6 +15,7 @@
 #include <boost/config.hpp>  // DEDUCED_TYPENAME, MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
+#include <boost/iostreams/operations_fwd.hpp>  // is_custom 
 #include <boost/iostreams/traits.hpp>
 #include <boost/mpl/if.hpp>
 
