@@ -65,16 +65,18 @@ inline stream_offset position_to_offset(std::streampos pos) { return pos; }
 
 # else // # ifndef BOOST_IOSTREAMS_HAS_DINKUMWARE_FPOS
 
-// In the Dinkumware standard library, a stream position is represented by two
-// integral stream offsets -- _Fpos, of type std::fpos_t, and _Myoff, of type 
-// std::streamoff -- together with a conversion state. The value of _Fpos can be
-// extracted using the implementation-defined member functions seekpos() or
-// get_fpos_t(), depending on the Dinkumware version. The value of _Myoff cannot 
-// be extracted directly, but can be calculated as the difference between the 
-// result of converting the std::fpos to a std::streamoff and the result of 
-// converting the member _Fpos to a long. The latter operation is accomplished
-// with the macro _FPOSOFF, which works correctly on platforms where std::fpos_t 
-// is a struct and platforms where it is an integral type.
+// In the Dinkumware standard library, a std::streampos consists of two stream
+// offsets -- _Fpos, of type std::fpos_t, and _Myoff, of type std::streamoff --
+// together with a conversion state. A std::streampos is converted to a 
+// boost::iostreams::stream_offset by extracting the two stream offsets and
+// summing them. The value of _Fpos can be extracted using the implementation-
+// defined member functions seekpos() or get_fpos_t(), depending on the 
+// Dinkumware version. The value of _Myoff cannot be extracted directly, but can
+// be calculated as the difference between the result of converting the 
+// std::fpos to a std::streamoff and the result of converting the member _Fpos
+// to a long. The latter operation is accomplished with the macro _FPOSOFF, 
+// which works correctly on platforms where std::fpos_t is an integral type and 
+// platforms where it is a struct
 
 // Converts a std::fpos_t to a stream_offset
 inline stream_offset fpos_t_to_offset(std::fpos_t pos)
