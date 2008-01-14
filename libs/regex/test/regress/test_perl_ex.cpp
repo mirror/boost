@@ -121,6 +121,17 @@ void test_conditionals()
    TEST_INVALID_REGEX("(?:(a)|b)(?(?:", perl);
    TEST_INVALID_REGEX("(?:(a)|b)(?(?<", perl);
    TEST_INVALID_REGEX("(?:(a)|b)(?(?<a", perl);
+
+   TEST_INVALID_REGEX("(?(?!#?)+)", perl);
+   TEST_INVALID_REGEX("(?(?=:-){0})", perl);
+   TEST_INVALID_REGEX("(?(123){1})", perl);
+   TEST_INVALID_REGEX("(?(?<=A)*)", perl);
+   TEST_INVALID_REGEX("(?(?<=A)+)", perl);
+
+   TEST_INVALID_REGEX("(?<!*|^)", perl);
+   TEST_INVALID_REGEX("(?<!*|A)", perl);
+   TEST_INVALID_REGEX("(?<=?|A)", perl);
+   TEST_INVALID_REGEX("(?<=*|\\B)", perl);
 }
 
 void test_options()
