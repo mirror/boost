@@ -104,12 +104,13 @@ void input_chain_test()
     {
         operation_sequence  seq;
         chain<input>        ch;
+        operation           dummy;
 
         // Test chain::pop()
         ch.push(
             closable_filter<dual_use>(
                 seq.new_operation(2), 
-                seq.new_operation(3)
+                dummy
             )
         );
         ch.push(closable_device<input>(seq.new_operation(1)));
@@ -264,12 +265,13 @@ void output_chain_test()
     {
         operation_sequence  seq;
         chain<output>       ch;
+        operation           dummy;
 
         // Test chain::pop()
         ch.push(
             closable_filter<dual_use>(
-                seq.new_operation(1), 
-                seq.new_operation(2)
+                dummy, 
+                seq.new_operation(1)
             )
         );
         ch.push(closable_device<output>(seq.new_operation(3)));

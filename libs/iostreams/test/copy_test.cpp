@@ -68,7 +68,9 @@ void copy_test()
         first.open(vector_source(src));
         second.open(vector_sink(dest));
         BOOST_CHECK_MESSAGE(
-            boost::iostreams::copy(first, second) == src.size() && src == dest,
+            boost::iostreams::copy(first, second) ==
+                static_cast<streamsize>(src.size()) &&
+                    src == dest,
             "failed copying from stream to stream"
         );
     }
@@ -81,7 +83,9 @@ void copy_test()
         vector_sink      out(dest);
         in.open(vector_source(src));
         BOOST_CHECK_MESSAGE(
-            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            boost::iostreams::copy(in, out) ==
+                static_cast<streamsize>(src.size()) &&
+                    src == dest,
             "failed copying from stream to indirect sink"
         );
     }
@@ -94,7 +98,9 @@ void copy_test()
         vector_ostream   out;
         out.open(vector_sink(dest));
         BOOST_CHECK_MESSAGE(
-            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            boost::iostreams::copy(in, out) ==
+                static_cast<streamsize>(src.size()) &&
+                    src == dest,
             "failed copying from indirect source to stream"
         );
     }
@@ -106,7 +112,9 @@ void copy_test()
         vector_source    in(src);
         vector_sink      out(dest);
         BOOST_CHECK_MESSAGE(
-            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            boost::iostreams::copy(in, out) ==
+                static_cast<streamsize>(src.size()) &&
+                    src == dest,
             "failed copying from indirect source to indirect sink"
         );
     }
@@ -118,7 +126,9 @@ void copy_test()
         array_source     in(&src[0], &src[0] + src.size());
         array_sink       out(&dest[0], &dest[0] + dest.size());
         BOOST_CHECK_MESSAGE(
-            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            boost::iostreams::copy(in, out) ==
+                static_cast<streamsize>(src.size()) &&
+                    src == dest,
             "failed copying from direct source to direct sink"
         );
     }
@@ -130,7 +140,9 @@ void copy_test()
         array_source     in(&src[0], &src[0] + src.size());
         vector_ostream   out(dest);
         BOOST_CHECK_MESSAGE(
-            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            boost::iostreams::copy(in, out) ==
+                static_cast<streamsize>(src.size()) && 
+                    src == dest,
             "failed copying from direct source to indirect sink"
         );
     }
@@ -143,7 +155,9 @@ void copy_test()
         array_sink       out(&dest[0], &dest[0] + dest.size());
         in.open(vector_source(src));
         BOOST_CHECK_MESSAGE(
-            boost::iostreams::copy(in, out) == src.size() && src == dest,
+            boost::iostreams::copy(in, out) ==
+                static_cast<streamsize>(src.size()) && 
+                    src == dest,
             "failed copying from indirect source to direct sink"
         );
     }

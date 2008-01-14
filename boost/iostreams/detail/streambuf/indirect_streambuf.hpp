@@ -374,7 +374,11 @@ inline void indirect_streambuf<T, Tr, Alloc, Mode>::close_impl
         sync();
         setp(0, 0);
     }
-    obj().close(which, next_);
+    if ( !is_convertible<category, dual_use>::value ||
+         is_convertible<Mode, input>::value == (which == BOOST_IOS::in) )
+    {
+        obj().close(which, next_);
+    }
 }
 
 //----------State changing functions------------------------------------------//
