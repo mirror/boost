@@ -86,23 +86,39 @@ macx:LIBS   += /usr/local/lib/libboost_signals-1_33_1.a  # ...your exact paths m
   }
 </programlisting>
 
-        <para>The second way, provided by Frank Hess, involves
+        <para>The second way, provided by Frank Hess and improved by
+        Niels Dekker, involves 
         creating a header <code>signalslib.hpp</code> that contains
           the following code:</para>
 
-        <programlisting>#ifdef signals
-#error "signalslib.hpp must be included before any qt header"
+        <programlisting>#ifndef SIGNALSLIB_HPP_INCLUDED
+#define SIGNALSLIB_HPP_INCLUDED 
+
+#if defined(signals) && defined(QOBJECTDEFS_H) && \
+  !defined(QT_MOC_CPP)
+#  undef signals
+#  define signals signals
 #endif
 
 #include &lt;boost/signal.hpp&gt;
 namespace boost
 {
   namespace signalslib = signals;
-}</programlisting>
+}
 
-        <para>This header must be included before any Qt headers. Once
-        it has been included, you can refer to the Signals library via
-        the namespace <code>boost::signalslib</code>. This option is
+#if defined(signals) && defined(QOBJECTDEFS_H) && \
+  !defined(QT_MOC_CPP)
+#  undef signals
+// Restore the macro definition of "signals", as it was
+// defined by Qt's &lt;qobjectdefs.h&gt;.
+#  define signals protected
+#endif
+
+#endif</programlisting>
+
+        <para>Use this header to include the Boost library, then refer
+          to it in the namespace <code>boost::signalslib</code>. This
+          option is often
         preferable to the first option because it can be used without
         recompiling the Signals library binary. </para>
       </answer>
