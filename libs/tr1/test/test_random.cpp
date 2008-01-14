@@ -10,6 +10,7 @@
 #endif
 
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
 #include "verify_return.hpp"
 #include <iostream>

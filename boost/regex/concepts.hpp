@@ -235,7 +235,7 @@ template <class Regex>
 struct BaseRegexConcept
 {
    typedef typename Regex::value_type value_type;
-   typedef typename Regex::size_type size_type;
+   //typedef typename Regex::size_type size_type;
    typedef typename Regex::flag_type flag_type;
    typedef typename Regex::locale_type locale_type;
    typedef input_iterator_archetype<value_type> input_iterator_type;
@@ -370,7 +370,7 @@ struct BaseRegexConcept
       const Regex ce;
       bool b = ce.empty();
       ignore_unused_variable_warning(b);
-      size_type i = ce.mark_count();
+      unsigned i = ce.mark_count();
       ignore_unused_variable_warning(i);
       m_flags = ce.flags();
       e.imbue(ce.getloc());
@@ -533,7 +533,7 @@ struct BaseRegexConcept
 
    pointer_type m_pointer;
    flag_type m_flags;
-   size_type m_size;
+   std::size_t m_size;
    input_iterator_type in1, in2;
    const sub_match_type m_sub;
    const value_type m_char;
@@ -557,7 +557,7 @@ template <class Regex>
 struct RegexConcept
 {
    typedef typename Regex::value_type value_type;
-   typedef typename Regex::size_type size_type;
+   //typedef typename Regex::size_type size_type;
    typedef typename Regex::flag_type flag_type;
    typedef typename Regex::locale_type locale_type;
 
