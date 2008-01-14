@@ -17,11 +17,13 @@
 <dl>
   <dt><a href="#rationale">Rationale</a></dt>
   <dt><a href="#intro">Introduction</a></dt>
+  <dt><a href="#details">Details</a></dt>
 </dl>
                    
 <ul>
           <li><a href="#valueinit">value-initialization</a></li>
           <li><a href="#valueinitsyn">value-initialization syntax</a></li>
+          <li><a href="#compiler_issues">compiler issues</a></li>
                    
 </ul>
                    
@@ -46,22 +48,89 @@ for    initialization. Depending on the type, the value of a newly constructed
   the default constructor), or indeterminate. When writing generic code,
 this   problem must be addressed. <code>value_initialized</code> provides
 a solution   with consistent syntax for value   initialization of scalar,
-union and class   types. <br>
+union and class   types.
+Moreover, <code>value_initialized</code> offers a workaround to various
+compiler issues regarding value-initialization.
+
+<br>
   </p>
         
 <h2><a name="intro"></a>Introduction</h2>
      
+<p>
+There are various ways to initialize a variable, in C++. The following
+declarations all <em>may</em> have a local variable initialized to its default
+value:
+<pre>
+  T1 var1;
+  T2 var2 = 0;
+  T3 var3 = {};
+  T4 var4 = T4();
+</pre> 
+Unfortunately, whether or not any of those declarations correctly
+initialize the variable very much depends on its type. The first
+declaration is valid for any <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
+DefaultConstructible</a> type (by definition).
+However, it does not always do an initialization!
+It correctly initializes the variable when it's an instance of a
+class, and the author of the class has provided a proper default
+constructor. On the other hand, the value of <code>var1</code> is <em>indeterminate</em> when
+its type is an arithmetic type, like <code>int</code>, <code>float</code>, or <code>char</code>.
+An arithmetic variable
+is of course initialized properly by the second declaration, <code>T2
+var2 = 0</code>. But this initialization form usually won't work for a
+class type (unless the class was especially written to support being
+initialized that way). The third form,  <code>T3 var3 = {}</code>
+initializes an aggregate, typically a "C-style" <code>struct</code> or a "C-style" array.
+However, the syntax is not allowed for a class that has an explicitly declared
+constructor.  (But watch out for an upcoming C++ language change, 
+by Bjarne Stroustrup et al [<a href="#references">3</a>]!)
+The fourth form is the most generic form of them, as it
+can be used to initialize arithmetic types, class types, aggregates, pointers, and
+other types. The declaration,  <code>T4 var4 = T4()</code>, should be read
+as follows: First a temporary object is created, by <code>T4()</code>.
+This object is <a href="#valueinit">value-initialized</a>. Next the temporary
+object is copied to the named variable, <code>var4</code>. Afterwards, the temporary
+is destroyed. While the copying and the destruction are likely to
+be optimized away, C++ still requires the type <code>T4</code> to be
+<a href="CopyConstructible.html">CopyConstructible</a>.
+(So <code>T4</code> needs to be <em>both</em> DefaultConstructible <em>and</em> CopyConstructible.) 
+A class may not be CopyConstructible, for example because it may have a
+private and undefined copy constructor,
+or because it may be derived from <a href="utility.htm#Class_noncopyable">boost::noncopyable</a>.
+Scott Meyers [<a href="#references">4</a>] explains why a class would be defined like that.
+</p>
+<p>
+There is another, less obvious disadvantage to the fourth form, <code>T4 var4 = T4()</code>:
+It suffers from various  <a href="#compiler_issues">compiler issues</a>, causing
+a variable to be left uninitialized in some compiler specific cases.
+</p>
+<p>
+The template <a href="#val_init"><code>value_initialized</code></a>
+offers a generic way to initialize
+an object, like <code>T4 var4 = T4()</code>, but without requiring its type
+to be CopyConstructible. And it offers a workaround to those compiler issues
+regarding value-initialization as well! It allows getting an initialized
+variable of any type; it <em>only</em> requires the type to be DefaultConstructible.
+A properly <em>value-initialized</em> object of type <code>T</code> is
+constructed by the following declaration:
+<pre>
+  value_initialized&lt;T&gt; var;
+</pre>
+</p>
+
+<h2><a name="details"></a>Details</h2>
 <p>The C++ standard [<a href="#references">1</a>] contains the definitions 
     of <code>zero-initialization</code> and <code>default-initialization</code>.
      Informally, zero-initialization means that the object is given the initial
      value 0 (converted to the type) and default-initialization means that
- POD   [<a href="#references">2</a>] types are zero-initialized, while class
+ POD   [<a href="#references">2</a>] types are zero-initialized, while non-POD class
  types   are initialized with their corresponding default constructors. A
 <i>declaration</i>   can contain an <i>initializer</i>, which specifies the
 object's initial value.  The initializer can be just '()', which states that
-the object shall be default-initialized  (but see below). However, if a <i>declaration</i> 
+the object shall be value-initialized  (but see below). However, if a <i>declaration</i> 
   has no <i>initializer</i>  and it is of a non-<code>const</code>, non-<code>static</code> 
-   POD type, the initial value is indeterminate:<cite>(see &sect;8.5 for the
+   POD type, the initial value is indeterminate: <cite>(see &sect;8.5, [dcl.init], for the
    accurate definitions).</cite></p>
                    
 <pre>int x ; // no initializer. x value is indeterminate.<br>std::string s ; // no initializer, s is default-constructed.<br><br>int y = int() ; <br>// y is initialized using copy-initialization<br>// but the temporary uses an empty set of parentheses as the initializer,<br>// so it is default-constructed.<br>// A default constructed POD type is zero-initialized,<br>// therefore, y == 0.<br><br>void foo ( std::string ) ;<br>foo ( std::string() ) ; <br>// the temporary string is default constructed <br>// as indicated by the initializer ()  </pre>
@@ -87,14 +156,11 @@ the object shall be default-initialized  (but see below). However, if a <i>decla
 <p>In order to specify value-initialization of an object we need to use the
      empty-set initializer: (). </p>
                    
-<p><i>(but recall that the current C++ Standard states that '()' invokes default-initialization,
-not value-initialization)</i></p>
-                   
 <p>As before, a declaration with no intializer specifies default-initialization, 
     and a declaration with a non-empty initializer specifies copy (=xxx) or
   direct  (xxx) initialization. </p>
                    
-<pre>template&lt;class T&gt; void eat(T);<br>int x ; // indeterminate initial value.<br>std::string s; // default-initialized.<br>eat ( int() ) ; // value-initialized<br>eat ( std::string() ) ; // value-initialied</pre>
+<pre>template&lt;class T&gt; void eat(T);<br>int x ; // indeterminate initial value.<br>std::string s; // default-initialized.<br>eat ( int() ) ; // value-initialized<br>eat ( std::string() ) ; // value-initialized</pre>
                     
 <h4><a name="valueinitsyn">value-initialization</a> syntax</h4>
                    
@@ -102,7 +168,7 @@ not value-initialization)</i></p>
 parentheses is not permitted by the syntax of initializers because it is
 parsed as the declaration of a function taking no arguments: </p>
                    
-<pre>int x() ; // declares function int(*)()<br>int y ( int() ) ; // decalares function int(*)( int(*)() )</pre>
+<pre>int x() ; // declares function int(*)()</pre>
                     
 <p>Thus, the empty () must be put in some other initialization context.</p>
                    
@@ -124,8 +190,50 @@ data member:</p>
                    
 <pre>template&lt;class T&gt; <br>struct W <br>{<br>  // value-initialization of 'data' here.<br>  W() : data() {}<br>  T data ;<br>} ;<br>W&lt;int&gt; w ;<br>// w.data is value-initialized for any type. </pre>
                     
-<p><code>This is the solution supplied by the value_initialized&lt;&gt; template
-     class.</code></p>
+<p>This is the solution as it was supplied by earlier versions of the
+<code>value_initialized&lt;T&gt;</code> template
+     class. Unfortunately this approach suffered from various compiler issues.</p>
+		 
+<h4><a name="compiler_issues">compiler issues</a> </h4>
+
+Various compilers haven't yet fully implemented value-initialization.
+So when an object should be <em>value-initialized</em> (according to the C++ Standard),
+it <em>may</em> in practice still be left uninitialized, because of those
+compiler issues! It's hard to make a general statement on what those issues
+are like, because they depend on the compiler you are using, its version number,
+and the type of object you would like to have value-initialized.
+Compilers usually support value-initialization for built-in types properly.
+But objects of user-defined types that involve <em>aggregates</em> may <em>in some cases</em>
+be partially, or even entirely left uninitialized, when they should be value-initialized.
+</p>
+<p>
+We have encountered issues regarding value-initialization on compilers by
+Microsoft, Sun, Borland, and GNU. Here is a list of bug reports on those issues:
+<table summary="Compiler bug reports regarding value-initialization" border="0" cellpadding="7" cellspacing="1" >
+<tr><td>
+<a href="https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=100744">
+Microsoft Feedback ID 100744 - Value-initialization in new-expression</a>
+<br>Reported by Pavel Kuznetsov (MetaCommunications Engineering), 2005-07-28
+<br>
+<a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111">
+GCC Bug 30111 - Value-initialization of POD base class doesn't initialize members</a>
+<br>Reported by Jonathan Wakely, 2006-12-07 
+<br>
+<a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916">
+GCC Bug 33916 - Default constructor fails to initialize array members</a>
+<br>Reported by Michael Elizabeth Chastain, 2007-10-26
+<br>
+<a href="http://qc.codegear.com/wc/qcmain.aspx?d=51854">
+Borland Report 51854 - Value-initialization: POD struct should be zero-initialized</a>
+<br>Reported by Niels Dekker (LKEB, Leiden University Medical Center), 2007-11-09
+<br>
+</td></tr></table>
+</p><p>
+New versions of <code>value_initialized</code>
+(Boost release version 1.35 or higher)
+offer a workaround to these issues: <code>value_initialized</code> will now clear
+its internal data, prior to constructing the object that it contains.
+</p>
                    
 <h2><a name="types"></a>Types</h2>
                    
@@ -191,23 +299,36 @@ the wrapped object is always performed with the <code>get()</code> idiom:</p>
 <pre>value_initialized&lt;int&gt; x ;<br>get(x) = 1 ; // OK<br><br>value_initialized&lt;int const&gt; cx ;<br>get(x) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int&gt; const x_c ;<br>get(x_c) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int const&gt; const cx_c ;<br>get(cx_c) = 1 ; // ERROR: Cannot modify a const object<br></pre>
                     
 <h3><a name="references">References</a></h3>
-          [1] The C++ Standard, ISO/IEC 14882:98 <br>
-          [2] Plain Old Data           
+          [1] The C++ Standard, Second edition (2003), ISO/IEC 14882:2003 <br>
+          [2] POD stands for "Plain Old Data" <br>
+          [3] Bjarne Stroustrup, Gabriel Dos Reis, and J. Stephen Adamczyk wrote
+          various papers, proposing to extend the support for brace-enclosed <em>initializer lists</em>
+          in the next version of C++.
+          This would allow a variable <code>var</code> of any DefaultConstructible type
+          <code>T</code> to be <em>value-initialized</em> by doing <code>T var = {}</code>.
+          The papers are listed at Bjarne's web page,
+          <a href="http://www.research.att.com/~bs/WG21.html">My C++ Standards committee papers</a>  <br> 
+          [4] Scott Meyers, Effective C++, Third Edition, item 6,
+          <em>Explicitly disallow the use of compiler-generated functions you do not want</em>, 
+          <a href="http://www.aristeia.com/books.html">Scott Meyers: Books and CDs</a>
+
 <h3><a name="acknowledgements"></a>Acknowledgements</h3>
      value_initialized was developed by Fernando Cacciola, with help and
 suggestions from David Abrahams and Darin Adler.<br>
 Special thanks to Björn Karlsson who carefully edited and completed this documentation.
-                   
+                 
+<p>value_initialized was reimplemented by Fernando Cacciola and Niels Dekker
+for Boost release version 1.35 (2008), offering a workaround to various compiler issues.
+     </p>
 <p>Developed by <a href="mailto:fernando_cacciola@hotmail.com">Fernando Cacciola</a>,
      the latest version of this file can be found at <a
- href="http://www.boost.org">www.boost.org</a>, and the boost discussion list
-at <a href="http://www.yahoogroups.com/list/boost">www.yahoogroups.com/list/boost</a>.
+ href="http://www.boost.org">www.boost.org</a>.
      </p>
                     
 <hr>          
-<p>Revised 19 September 2002</p>
+<p>Revised January 2008</p>
                    
-<p>&copy; Copyright Fernando Cacciola, 2002.</p>
+<p>&copy; Copyright Fernando Cacciola, 2002, 2008.</p>
                    
 <p>Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
