@@ -115,6 +115,93 @@ namespace boost { namespace xpressive { namespace detail
     #undef minus_one
     #endif
 
+    // replace "Expr" with "keep(*State) >> Expr"
+    struct skip_primitives : proto::callable
+    {
+        template<typename Sig>
+        struct result;
+
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
+          : proto::shift_right<
+                typename proto::unary_expr<
+                    keeper_tag
+                  , typename proto::dereference<State>::type
+                >::type
+              , Expr
+            >
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        typename result<void(Expr, State, Visitor)>::type
+        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+        {
+            typedef typename result<void(Expr, State, Visitor)>::type type;
+            type that = {{{state}}, expr};
+            return that;
+        }
+    };
+
+    struct Primitives
+      : proto::or_<
+            proto::terminal<proto::_>
+          , proto::comma<proto::_, proto::_>
+          , proto::subscript<proto::terminal<set_initializer>, proto::_> 
+          , proto::assign<proto::terminal<set_initializer>, proto::_>
+          , proto::assign<proto::terminal<attribute_placeholder<proto::_> >, proto::_>
+          , proto::complement<Primitives>
+        >
+    {};
+
+    struct SkipGrammar
+      : proto::or_<
+            proto::when<Primitives, skip_primitives>
+          , proto::assign<proto::terminal<mark_placeholder>, SkipGrammar>   // don't "skip" mark tags
+          , proto::subscript<SkipGrammar, proto::_>                         // don't put skips in actions
+          , proto::binary_expr<modifier_tag, proto::_, SkipGrammar>         // don't skip modifiers
+          , proto::unary_expr<lookbehind_tag, proto::_>                     // don't skip lookbehinds
+          , proto::nary_expr<proto::_, proto::vararg<SkipGrammar> >         // everything else is fair game!
+        >
+    {};
+
+    template<typename Skip>
+    struct skip_directive
+    {
+        typedef typename proto::result_of::as_expr<Skip>::type skip_type;
+
+        skip_directive(Skip const &skip)
+          : skip_(proto::as_expr(skip))
+        {}
+
+        template<typename Sig>
+        struct result;
+
+        template<typename This, typename Expr>
+        struct result<This(Expr)>
+          : proto::shift_right<
+                typename SkipGrammar::result<void(
+                    typename proto::result_of::as_expr<Expr>::type
+                  , skip_type
+                  , mpl::void_
+                )>::type
+              , typename proto::dereference<skip_type>::type
+            >
+        {};
+
+        template<typename Expr>
+        typename result<skip_directive(Expr)>::type
+        operator ()(Expr const &expr) const
+        {
+            mpl::void_ ignore;
+            typedef typename result<skip_directive(Expr)>::type result_type;
+            result_type result = {SkipGrammar()(proto::as_expr(expr), this->skip_, ignore), {skip_}};
+            return result;
+        }
+
+    private:
+        skip_type skip_;
+    };
+
 /*
 ///////////////////////////////////////////////////////////////////////////////
 /// INTERNAL ONLY
@@ -636,6 +723,48 @@ proto::terminal<detail::attribute_placeholder<mpl::int_<6> > >::type const a6 = 
 proto::terminal<detail::attribute_placeholder<mpl::int_<7> > >::type const a7 = {{}};
 proto::terminal<detail::attribute_placeholder<mpl::int_<8> > >::type const a8 = {{}};
 proto::terminal<detail::attribute_placeholder<mpl::int_<9> > >::type const a9 = {{}};
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Specify which characters to skip when matching a regex.
+///
+/// <tt>skip()</tt> instructs the regex engine to skip certain characters when matching
+/// a regex. It is most useful for writing regexes that ignore whitespace.
+/// For instance, the following specifies a regex that skips whitespace and
+/// punctuation:
+///
+/// \code
+/// // A sentence is one or more words separated by whitespace
+/// // and punctuation.
+/// sregex word = +alpha;
+/// sregex sentence = skip(set[_s | punct])( +word );
+/// \endcode
+///
+/// The way it works in the above example is to insert
+/// <tt>keep(*set[_s | punct])</tt> before each primitive within the regex.
+/// A "primitive" includes terminals like strings, character sets and nested
+/// regexes. A final <tt>*set[_s | punct]</tt> is added to the end of the
+/// regex. The regex <tt>sentence</tt> specified above is equivalent to
+/// the following:
+///
+/// \code
+/// sregex sentence = +( keep(*set[_s | punct]) >> word )
+///                        >> *set[_s | punct];
+/// \endcode
+///
+/// \attention Skipping does not affect how nested regexes are handles because
+/// they are treated atomically. String literals are also treated
+/// atomically; that is, no skipping is done within a string literal. So
+/// <tt>skip(_s)("this that")</tt> is not the same as
+/// <tt>skip(_s)("this" >> as_xpr("that"))</tt>. The first will only match
+/// when there is only one space between "this" and "that". The second will
+/// skip any and all whitespace between "this" and "that".
+///
+/// \param skip A regex that specifies which characters to skip.
+template<typename Skip>
+detail::skip_directive<Skip> skip(Skip const &skip)
+{
+    return detail::skip_directive<Skip>(skip);
+}
 
 namespace detail
 {
