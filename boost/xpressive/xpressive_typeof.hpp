@@ -24,6 +24,8 @@
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::mpl::bool_, (bool))
+
 ///////////////////////////////////////////////////////////////////////////////
 // Misc.
 //
