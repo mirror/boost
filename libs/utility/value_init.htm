@@ -32,7 +32,7 @@
 </dl>
                    
 <ul>
-          <li><a href="#val_init"><code>value_initialized&lt;&gt;</code></a></li>
+          <li><a href="#val_init"><code>value_initialized&lt;T&gt;</code></a></li>
                    
 </ul>
               <a href="#acknowledgements">Acknowledgements</a><br>
@@ -46,7 +46,7 @@
 for    initialization. Depending on the type, the value of a newly constructed
   object  can be zero-initialized (logically 0), default-constructed (using
   the default constructor), or indeterminate. When writing generic code,
-this   problem must be addressed. <code>value_initialized</code> provides
+this  problem must be addressed. The template <code>value_initialized</code> provides
 a solution   with consistent syntax for value   initialization of scalar,
 union and class   types.
 Moreover, <code>value_initialized</code> offers a workaround to various
@@ -84,7 +84,7 @@ initialized that way). The third form,  <code>T3 var3 = {}</code>
 initializes an aggregate, typically a "C-style" <code>struct</code> or a "C-style" array.
 However, the syntax is not allowed for a class that has an explicitly declared
 constructor.  (But watch out for an upcoming C++ language change, 
-by Bjarne Stroustrup et al [<a href="#references">3</a>]!)
+by Bjarne Stroustrup et al [<a href="#references">1</a>]!)
 The fourth form is the most generic form of them, as it
 can be used to initialize arithmetic types, class types, aggregates, pointers, and
 other types. The declaration,  <code>T4 var4 = T4()</code>, should be read
@@ -98,7 +98,7 @@ be optimized away, C++ still requires the type <code>T4</code> to be
 A class may not be CopyConstructible, for example because it may have a
 private and undefined copy constructor,
 or because it may be derived from <a href="utility.htm#Class_noncopyable">boost::noncopyable</a>.
-Scott Meyers [<a href="#references">4</a>] explains why a class would be defined like that.
+Scott Meyers [<a href="#references">2</a>] explains why a class would be defined like that.
 </p>
 <p>
 There is another, less obvious disadvantage to the fourth form, <code>T4 var4 = T4()</code>:
@@ -120,11 +120,11 @@ constructed by the following declaration:
 </p>
 
 <h2><a name="details"></a>Details</h2>
-<p>The C++ standard [<a href="#references">1</a>] contains the definitions 
+<p>The C++ standard [<a href="#references">3</a>] contains the definitions 
     of <code>zero-initialization</code> and <code>default-initialization</code>.
      Informally, zero-initialization means that the object is given the initial
      value 0 (converted to the type) and default-initialization means that
- POD   [<a href="#references">2</a>] types are zero-initialized, while non-POD class
+ POD   [<a href="#references">4</a>] types are zero-initialized, while non-POD class
  types   are initialized with their corresponding default constructors. A
 <i>declaration</i>   can contain an <i>initializer</i>, which specifies the
 object's initial value.  The initializer can be just '()', which states that
@@ -225,7 +225,7 @@ GCC Bug 33916 - Default constructor fails to initialize array members</a>
 <br>
 <a href="http://qc.codegear.com/wc/qcmain.aspx?d=51854">
 Borland Report 51854 - Value-initialization: POD struct should be zero-initialized</a>
-<br>Reported by Niels Dekker (LKEB, Leiden University Medical Center), 2007-11-09
+<br>Reported by Niels Dekker (LKEB, Leiden University Medical Center), 2007-09-11
 <br>
 </td></tr></table>
 </p><p>
@@ -299,23 +299,23 @@ the wrapped object is always performed with the <code>get()</code> idiom:</p>
 <pre>value_initialized&lt;int&gt; x ;<br>get(x) = 1 ; // OK<br><br>value_initialized&lt;int const&gt; cx ;<br>get(x) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int&gt; const x_c ;<br>get(x_c) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int const&gt; const cx_c ;<br>get(cx_c) = 1 ; // ERROR: Cannot modify a const object<br></pre>
                     
 <h3><a name="references">References</a></h3>
-          [1] The C++ Standard, Second edition (2003), ISO/IEC 14882:2003 <br>
-          [2] POD stands for "Plain Old Data" <br>
-          [3] Bjarne Stroustrup, Gabriel Dos Reis, and J. Stephen Adamczyk wrote
+          [1] Bjarne Stroustrup, Gabriel Dos Reis, and J. Stephen Adamczyk wrote
           various papers, proposing to extend the support for brace-enclosed <em>initializer lists</em>
           in the next version of C++.
           This would allow a variable <code>var</code> of any DefaultConstructible type
           <code>T</code> to be <em>value-initialized</em> by doing <code>T var = {}</code>.
           The papers are listed at Bjarne's web page,
           <a href="http://www.research.att.com/~bs/WG21.html">My C++ Standards committee papers</a>  <br> 
-          [4] Scott Meyers, Effective C++, Third Edition, item 6,
+          [2] Scott Meyers, Effective C++, Third Edition, item 6,
           <em>Explicitly disallow the use of compiler-generated functions you do not want</em>, 
-          <a href="http://www.aristeia.com/books.html">Scott Meyers: Books and CDs</a>
+          <a href="http://www.aristeia.com/books.html">Scott Meyers: Books and CDs</a>  <br>
+          [3] The C++ Standard, Second edition (2003), ISO/IEC 14882:2003 <br>
+          [4] POD stands for "Plain Old Data"
 
 <h3><a name="acknowledgements"></a>Acknowledgements</h3>
      value_initialized was developed by Fernando Cacciola, with help and
 suggestions from David Abrahams and Darin Adler.<br>
-Special thanks to Björn Karlsson who carefully edited and completed this documentation.
+Special thanks to Bj&ouml;rn Karlsson who carefully edited and completed this documentation.
                  
 <p>value_initialized was reimplemented by Fernando Cacciola and Niels Dekker
 for Boost release version 1.35 (2008), offering a workaround to various compiler issues.
