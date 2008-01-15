@@ -1,4 +1,4 @@
-// Copyright 2002, Fernando Luis Cacciola Carballal.
+// Copyright 2002-2008, Fernando Luis Cacciola Carballal.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -6,7 +6,8 @@
 //
 // Test program for "boost/utility/value_init.hpp"
 //
-// Initial: 21 Agu 2002
+// 21 Agu 2002 (Created) Fernando Cacciola
+// 15 Jan 2008 (Added tests regarding compiler issues) Fernando Cacciola, Niels Dekker
 
 #include <cstring>  // For memcmp.
 #include <iostream>
