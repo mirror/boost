@@ -23,6 +23,7 @@ project
       <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
       # MSVC's iterator debugging causes some tests to run forever.
       <toolset>msvc:<iterator_debugging>off
+      <toolset>intel-win:<iterator_debugging>off
     ;
 
 test-suite "accumulators"
