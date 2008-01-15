@@ -8,6 +8,7 @@
 // See interface.hpp in this directory for details.
 
 #include <iostream>
+#include <typeinfo>
 
 #include "interface.hpp"
 
