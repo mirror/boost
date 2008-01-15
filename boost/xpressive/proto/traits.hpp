@@ -109,7 +109,7 @@
         {};
 
         template<typename Tag, typename Args, long N>
-        struct is_aggregate<expr<Tag, Args, N> >
+        struct is_aggregate<proto::expr<Tag, Args, N> >
           : mpl::true_
         {};
 
@@ -144,12 +144,6 @@
                 typedef typename Expr::proto_tag type;
             };
 
-            // id
-            template<typename Expr>
-            struct id
-              : result_of::deep_copy<Expr>
-            {};
-
             // as_expr
             template<typename T, typename Domain, typename EnableIf>
             struct as_expr
@@ -160,7 +154,7 @@
                   , remove_cv<T>
                 >::type proto_arg0;
 
-                typedef expr<proto::tag::terminal, args0<proto_arg0> > expr_type;
+                typedef proto::expr<proto::tag::terminal, args0<proto_arg0> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
                 typedef type const result_type;
 
@@ -188,7 +182,7 @@
             template<typename T, typename Domain, typename EnableIf>
             struct as_arg
             {
-                typedef expr<proto::tag::terminal, args0<T &> > expr_type;
+                typedef proto::expr<proto::tag::terminal, args0<T &> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
 
                 template<typename T2>
@@ -217,8 +211,8 @@
 
             // left
                 // BUGBUG this forces the instantiation of Expr. Couldn't we
-                // partially specialize left<> on expr< T, A > and
-                // ref_< expr< T, A > > and return A::arg0 ?
+                // partially specialize left<> on proto::expr< T, A > and
+                // ref_< proto::expr< T, A > > and return A::arg0 ?
             template<typename Expr>
             struct left
               : unref<typename Expr::proto_arg0>
@@ -249,7 +243,8 @@
             template<typename T>
             struct terminal : has_identity_transform
             {
-                typedef expr<proto::tag::terminal, args0<T> > type;
+                BOOST_PROTO_NOT_CALLABLE()
+                typedef proto::expr<proto::tag::terminal, args0<T> > type;
                 typedef type proto_base_expr;
                 typedef proto::tag::terminal proto_tag;
                 typedef T proto_arg0;
@@ -257,9 +252,10 @@
 
             // if_else
             template<typename T, typename U, typename V>
-            struct if_else_ : has_pass_through_transform<if_else_<T, U, V> >
+            struct if_else_ : pass_through<if_else_<T, U, V> >
             {
-                typedef expr<proto::tag::if_else_, args3<T, U, V> > type;
+                BOOST_PROTO_NOT_CALLABLE()
+                typedef proto::expr<proto::tag::if_else_, args3<T, U, V> > type;
                 typedef type proto_base_expr;
                 typedef proto::tag::if_else_ proto_tag;
                 typedef T proto_arg0;
@@ -269,9 +265,10 @@
 
             // unary_expr
             template<typename Tag, typename T>
-            struct unary_expr : has_pass_through_transform<unary_expr<Tag, T> >
+            struct unary_expr : pass_through<unary_expr<Tag, T> >
             {
-                typedef expr<Tag, args1<T> > type;
+                BOOST_PROTO_NOT_CALLABLE()
+                typedef proto::expr<Tag, args1<T> > type;
                 typedef type proto_base_expr;
                 typedef Tag proto_tag;
                 typedef T proto_arg0;
@@ -279,9 +276,10 @@
 
             // binary_expr
             template<typename Tag, typename T, typename U>
-            struct binary_expr : has_pass_through_transform<binary_expr<Tag, T, U> >
+            struct binary_expr : pass_through<binary_expr<Tag, T, U> >
             {
-                typedef expr<Tag, args2<T, U> > type;
+                BOOST_PROTO_NOT_CALLABLE()
+                typedef proto::expr<Tag, args2<T, U> > type;
                 typedef type proto_base_expr;
                 typedef Tag proto_tag;
                 typedef T proto_arg0;
@@ -290,9 +288,10 @@
 
         #define BOOST_PROTO_UNARY_GENERATOR(Name)                                                   \
             template<typename T>                                                                    \
-            struct Name : has_pass_through_transform<Name<T> >                                      \
+            struct Name : pass_through<Name<T> >                                                    \
             {                                                                                       \
-                typedef expr<proto::tag::Name, args1<T> > type;                                     \
+                BOOST_PROTO_NOT_CALLABLE()                                                          \
+                typedef proto::expr<proto::tag::Name, args1<T> > type;                              \
                 typedef type proto_base_expr;                                                       \
                 typedef proto::tag::Name proto_tag;                                                 \
                 typedef T proto_arg0;                                                               \
@@ -301,9 +300,10 @@
 
         #define BOOST_PROTO_BINARY_GENERATOR(Name)                                                  \
             template<typename T, typename U>                                                        \
-            struct Name : has_pass_through_transform<Name<T, U> >                                   \
+            struct Name : pass_through<Name<T, U> >                                                 \
             {                                                                                       \
-                typedef expr<proto::tag::Name, args2<T, U> > type;                                  \
+                BOOST_PROTO_NOT_CALLABLE()                                                          \
+                typedef proto::expr<proto::tag::Name, args2<T, U> > type;                           \
                 typedef type proto_base_expr;                                                       \
                 typedef proto::tag::Name proto_tag;                                                 \
                 typedef T proto_arg0;                                                               \
@@ -695,14 +695,15 @@
                 BOOST_PP_ENUM_PARAMS(N, A)
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
             >
-              : has_pass_through_transform<
+              : pass_through<
                     function<
                         BOOST_PP_ENUM_PARAMS(N, A)
                         BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
                     >
                 >
             {
-                typedef expr<proto::tag::function, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                BOOST_PROTO_NOT_CALLABLE()
+                typedef proto::expr<proto::tag::function, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
                 typedef type proto_base_expr;
                 typedef proto::tag::function proto_tag;
                 BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, A)
@@ -715,7 +716,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
             >
-              : has_pass_through_transform<
+              : pass_through<
                     nary_expr<
                         Tag
                         BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
@@ -723,7 +724,8 @@
                     >
                 >
             {
-                typedef expr<Tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                BOOST_PROTO_NOT_CALLABLE()
+                typedef proto::expr<Tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
                 typedef type proto_base_expr;
                 typedef Tag proto_tag;
                 BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, A)
@@ -739,9 +741,9 @@
                 BOOST_PP_REPEAT(N, BOOST_PROTO_IMPLICIT_ARG, A)
 
                 template<typename Tag, typename Args, long Arity>
-                operator expr<Tag, Args, Arity> () const
+                operator proto::expr<Tag, Args, Arity> () const
                 {
-                    expr<Tag, Args, Arity> that = {BOOST_PP_ENUM_PARAMS(N, a)};
+                    proto::expr<Tag, Args, Arity> that = {BOOST_PP_ENUM_PARAMS(N, a)};
                     return that;
                 }
             };

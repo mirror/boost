@@ -20,7 +20,7 @@ namespace boost { namespace proto
     namespace transform
     {
 
-        struct _expr : callable
+        struct expr : callable
         {
             template<typename Sig>
             struct result;
@@ -33,13 +33,13 @@ namespace boost { namespace proto
 
             template<typename Expr, typename State, typename Visitor>
             Expr const &
-            operator ()(Expr const &expr, State const &, Visitor &) const
+            operator ()(Expr const &expr_, State const &, Visitor &) const
             {
-                return expr;
+                return expr_;
             }
         };
 
-        struct _state : callable
+        struct state : callable
         {
             template<typename Sig>
             struct result;
@@ -52,13 +52,13 @@ namespace boost { namespace proto
 
             template<typename Expr, typename State, typename Visitor>
             State const &
-            operator ()(Expr const &, State const &state, Visitor &) const
+            operator ()(Expr const &, State const &state_, Visitor &) const
             {
-                return state;
+                return state_;
             }
         };
 
-        struct _visitor : callable
+        struct visitor : callable
         {
             template<typename Sig>
             struct result;
@@ -71,14 +71,14 @@ namespace boost { namespace proto
 
             template<typename Expr, typename State, typename Visitor>
             Visitor &
-            operator ()(Expr const &, State const &, Visitor &visitor) const
+            operator ()(Expr const &, State const &, Visitor &visitor_) const
             {
-                return visitor;
+                return visitor_;
             }
         };
 
         template<int I>
-        struct _arg_c : callable
+        struct arg_c : callable
         {
             template<typename Sig>
             struct result;
@@ -95,25 +95,35 @@ namespace boost { namespace proto
                 return proto::arg_c<I>(expr);
             }
         };
-
-        struct _arg0 : _arg_c<0> {};
-        struct _arg1 : _arg_c<1> {};
-        struct _arg2 : _arg_c<2> {};
-        struct _arg3 : _arg_c<3> {};
-        struct _arg4 : _arg_c<4> {};
-        struct _arg5 : _arg_c<5> {};
-        struct _arg6 : _arg_c<6> {};
-        struct _arg7 : _arg_c<7> {};
-        struct _arg8 : _arg_c<8> {};
-        struct _arg9 : _arg_c<9> {};
-
-        typedef _arg0 _arg;
-        typedef _arg0 _left;
-        typedef _arg1 _right;
     }
 
     template<int I>
-    struct is_callable<transform::_arg_c<I> >
+    struct _arg_c
+      : transform::arg_c<I>
+    {};
+
+    template<>
+    struct is_callable<transform::expr>
+      : mpl::true_
+    {};
+
+    template<>
+    struct is_callable<transform::state>
+      : mpl::true_
+    {};
+
+    template<>
+    struct is_callable<transform::visitor>
+      : mpl::true_
+    {};
+
+    template<int I>
+    struct is_callable<transform::arg_c<I> >
+      : mpl::true_
+    {};
+
+    template<int I>
+    struct is_callable<_arg_c<I> >
       : mpl::true_
     {};
 

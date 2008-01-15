@@ -17,9 +17,10 @@
 #include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/proto_typeof.hpp>
 #include <boost/xpressive/proto/transform.hpp>
-using namespace boost::proto;
-using namespace transform;
+
 namespace mpl = boost::mpl;
+namespace proto = boost::proto;
+using namespace proto;
 
 // Here is an evaluation context that indexes into a Vec3
 // expression, and combines the result.
@@ -93,12 +94,12 @@ struct Vec3
 
     int &operator [](int i)
     {
-        return arg(*this)[i];
+        return proto::arg(*this)[i];
     }
 
     int const &operator [](int i) const
     {
-        return arg(*this)[i];
+        return proto::arg(*this)[i];
     }
 
     // Here we define a operator = for Vec3 terminals that

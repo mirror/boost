@@ -6,8 +6,8 @@ import path ;
 import doxygen ;
 import quickbook ;
 
-wave-command = [ path.native ../../../../dist/bin/wave ] ;
-
+#wave-command = [ path.native ../../../../dist/bin/wave ] ;
+#
 ## Generate reference section using Doxygen
 #doxygen protodoc
 #    :
@@ -36,15 +36,13 @@ wave-command = [ path.native ../../../../dist/bin/wave ] ;
 #        ../../../../boost/xpressive/proto/context/default.hpp
 #        ../../../../boost/xpressive/proto/context/null.hpp
 #        ../../../../boost/xpressive/proto/transform/arg.hpp
-#        ../../../../boost/xpressive/proto/transform/apply.hpp
-#        ../../../../boost/xpressive/proto/transform/branch.hpp
-#        ../../../../boost/xpressive/proto/transform/compose.hpp
-#        ../../../../boost/xpressive/proto/transform/construct.hpp
+#        ../../../../boost/xpressive/proto/transform/bind.hpp
+#        ../../../../boost/xpressive/proto/transform/call.hpp
 #        ../../../../boost/xpressive/proto/transform/fold.hpp
 #        ../../../../boost/xpressive/proto/transform/fold_tree.hpp
-#        ../../../../boost/xpressive/proto/transform/function.hpp
-#        ../../../../boost/xpressive/proto/transform/list.hpp
+#        ../../../../boost/xpressive/proto/transform/make.hpp
 #        ../../../../boost/xpressive/proto/transform/pass_through.hpp
+#        ../../../../boost/xpressive/proto/transform/when.hpp
 #    :
 #        <doxygen:param>EXTRACT_ALL=YES
 #        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
@@ -62,6 +60,8 @@ wave-command = [ path.native ../../../../dist/bin/wave ] ;
 xml proto
     :
         proto.qbk
+    :
+        <dependency>../test/examples.cpp
     ;
 
 boostbook standalone

@@ -326,9 +326,6 @@ namespace boost { namespace proto
         template<typename T, typename EnableIf = void>
         struct domain_of;
 
-        template<typename Expr>
-        struct id;
-
         template<typename Expr, typename Grammar>
         struct matches;
     }
@@ -338,7 +335,6 @@ namespace boost { namespace proto
     using proto::result_of::is_domain;
     using proto::result_of::tag_of;
     using proto::result_of::domain_of;
-    using proto::result_of::id;
     using proto::result_of::matches;
 
     namespace op
@@ -650,9 +646,6 @@ namespace boost { namespace proto
 
     namespace has_transformns_
     {
-        template<typename Grammar>
-        struct has_pass_through_transform;
-
         struct has_identity_transform
         {
             BOOST_PROTO_IDENTITY_TRANSFORM();
@@ -660,10 +653,6 @@ namespace boost { namespace proto
     }
 
     using has_transformns_::has_identity_transform;
-    using has_transformns_::has_pass_through_transform;
-
-    //template<typename T>
-    //struct is_transform;
 
     template<typename T>
     struct is_callable;
@@ -674,6 +663,7 @@ namespace boost { namespace proto
     namespace transform
     {
         #define BOOST_PROTO_CALLABLE() typedef void proto_is_callable_;
+        #define BOOST_PROTO_NOT_CALLABLE() typedef int proto_is_callable_;
 
         struct callable
         {
@@ -708,56 +698,63 @@ namespace boost { namespace proto
         template<typename Sequence, typename State, typename Fun>
         struct reverse_fold_tree;
 
-        struct _expr;
-        struct _state;
-        struct _visitor;
+        template<typename Grammar>
+        struct pass_through;
+
+        struct expr;
+        struct state;
+        struct visitor;
 
         template<int I>
-        struct _arg_c;
+        struct arg_c;
 
-        struct _arg0;
-        struct _arg1;
-        struct _arg2;
-        struct _arg3;
-        struct _arg4;
-        struct _arg5;
-        struct _arg6;
-        struct _arg7;
-        struct _arg8;
-        struct _arg9;
+        typedef arg_c<0> arg0;
+        typedef arg_c<1> arg1;
+        typedef arg_c<2> arg2;
+        typedef arg_c<3> arg3;
+        typedef arg_c<4> arg4;
+        typedef arg_c<5> arg5;
+        typedef arg_c<6> arg6;
+        typedef arg_c<7> arg7;
+        typedef arg_c<8> arg8;
+        typedef arg_c<9> arg9;
 
-        typedef _arg0 _arg;
-        typedef _arg0 _left;
-        typedef _arg1 _right;
+        typedef arg0 arg;
+        typedef arg0 left;
+        typedef arg1 right;
     }
 
     using transform::when;
-    using transform::otherwise;
-    using transform::_arg0;
-    using transform::_arg1;
-    using transform::_arg2;
-    using transform::_arg3;
-    using transform::_arg4;
-    using transform::_arg5;
-    using transform::_arg6;
-    using transform::_arg7;
-    using transform::_arg8;
-    using transform::_arg9;
-    using transform::_arg;
-    using transform::_left;
-    using transform::_right;
-    using transform::_expr;
-    using transform::_state;
-    using transform::_visitor;
-    using transform::_arg_c;
     using transform::call;
     using transform::make;
     using transform::bind;
     using transform::fold;
+    using transform::otherwise;
     using transform::reverse_fold;
     using transform::fold_tree;
     using transform::reverse_fold_tree;
     using transform::callable;
+    using transform::pass_through;
+
+    typedef transform::expr     _expr;
+    typedef transform::state    _state;
+    typedef transform::visitor  _visitor;
+    typedef transform::arg0     _arg0;
+    typedef transform::arg1     _arg1;
+    typedef transform::arg2     _arg2;
+    typedef transform::arg3     _arg3;
+    typedef transform::arg4     _arg4;
+    typedef transform::arg5     _arg5;
+    typedef transform::arg6     _arg6;
+    typedef transform::arg7     _arg7;
+    typedef transform::arg8     _arg8;
+    typedef transform::arg9     _arg9;
+    typedef transform::arg      _arg;
+    typedef transform::left     _left;
+    typedef transform::right    _right;
+
+    template<int I>
+    struct _arg_c;
 
     template<typename T>
     struct is_extension;

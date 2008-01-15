@@ -45,7 +45,7 @@
             struct arity_;
 
             template<typename Tag, typename Args, long N>
-            struct arity_<expr<Tag, Args, N> >
+            struct arity_<proto::expr<Tag, Args, N> >
               : mpl::long_<N>
             {};
 
@@ -53,7 +53,7 @@
             struct tag_;
 
             template<typename Tag, typename Args, long N>
-            struct tag_<expr<Tag, Args, N> >
+            struct tag_<proto::expr<Tag, Args, N> >
             {
                 typedef Tag type;
             };
@@ -62,7 +62,7 @@
             struct args_;
 
             template<typename Tag, typename Args, long N>
-            struct args_<expr<Tag, Args, N> >
+            struct args_<proto::expr<Tag, Args, N> >
             {
                 typedef Args type;
             };
@@ -163,7 +163,7 @@
             template<typename Expr>
             struct by_value_generator_<Expr, N>
             {
-                typedef expr<
+                typedef proto::expr<
                     typename tag_<Expr>::type
                   , BOOST_PP_CAT(args, N)<
                         // typename result_of::unref<typename args_<Expr>::type::arg0>::type, ...

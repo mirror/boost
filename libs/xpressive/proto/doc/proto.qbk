@@ -2,7 +2,7 @@
 [library Boost.Proto
     [quickbook 1.3]
     [authors [Niebler, Eric]]
-    [copyright 2006 Eric Niebler]
+    [copyright 2008 Eric Niebler]
     [category template]
     [id proto]
     [dirname proto]
@@ -18,7 +18,7 @@
 ]
 
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -69,6 +69,7 @@
 [def _vararg_               [classref boost::proto::control::vararg `vararg<>`]]
 [def _default_context_      [classref boost::proto::context::default_context `default_context`]]
 [def _callable_context_     [classref boost::proto::context::callable_context `callable_context<>`]]
+[def _when_                 [classref boost::proto::transform::when `when<>`]]
 
 [include preface.qbk]
 
@@ -118,7 +119,7 @@ and say a few words about Proto's philosophy.
 
 [endsect]
 
-[xinclude protodoc.xml]
+[/ xinclude protodoc.xml]
 
 [section Appendices]
 

@@ -23,9 +23,9 @@
 #include <boost/typeof/std/vector.hpp>
 #include <boost/typeof/std/complex.hpp>
 
-using namespace boost;
-using namespace proto::transform;
-using proto::_;
+namespace proto = boost::proto;
+namespace mpl = boost::mpl;
+using namespace proto;
 
 template<typename Expr>
 struct MixedExpr;
@@ -48,7 +48,7 @@ struct begin : proto::callable
     template<class This, class Cont>
     struct result<This(Cont)>
       : proto::result_of::as_expr<
-            iterator_wrapper<typename remove_reference<Cont>::type::const_iterator>
+            iterator_wrapper<typename boost::remove_reference<Cont>::type::const_iterator>
         >
     {};
     
@@ -231,7 +231,7 @@ namespace VectorOps
 
         template<typename This, typename Arg>
         struct result<This(Arg)>
-          : remove_const<typename remove_reference<Arg>::type>
+          : boost::remove_const<typename boost::remove_reference<Arg>::type>
         {};
 
         template<typename Arg>

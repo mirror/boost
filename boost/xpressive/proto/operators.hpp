@@ -35,17 +35,17 @@ namespace boost { namespace proto
         struct as_expr_if2<Tag, Left, Right, typename Left::proto_is_expr_, void>
           : generate_if<
                 typename Left::proto_domain
-              , expr<
+              , proto::expr<
                     Tag
                   , args2<
                         ref_<Left>
-                      , typename Left::proto_domain::template apply<expr<tag::terminal, args0<Right &> > >::type
+                      , typename Left::proto_domain::template apply<proto::expr<tag::terminal, args0<Right &> > >::type
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args0<Right &> > term_type;
-            typedef expr<Tag, args2<ref_<Left>, typename Left::proto_domain::template apply<term_type>::type> > expr_type;
+            typedef proto::expr<tag::terminal, args0<Right &> > term_type;
+            typedef proto::expr<Tag, args2<ref_<Left>, typename Left::proto_domain::template apply<term_type>::type> > expr_type;
 
             static typename Left::proto_domain::template apply<expr_type>::type
             make(Left &left, Right &right)
@@ -60,17 +60,17 @@ namespace boost { namespace proto
         struct as_expr_if2<Tag, Left, Right, void, typename Right::proto_is_expr_>
           : generate_if<
                 typename Right::proto_domain
-              , expr<
+              , proto::expr<
                     Tag
                   , args2<
-                        typename Right::proto_domain::template apply<expr<tag::terminal, args0<Left &> > >::type
+                        typename Right::proto_domain::template apply<proto::expr<tag::terminal, args0<Left &> > >::type
                       , ref_<Right>
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args0<Left &> > term_type;
-            typedef expr<Tag, args2<typename Right::proto_domain::template apply<term_type>::type, ref_<Right> > > expr_type;
+            typedef proto::expr<tag::terminal, args0<Left &> > term_type;
+            typedef proto::expr<Tag, args2<typename Right::proto_domain::template apply<term_type>::type, ref_<Right> > > expr_type;
 
             static typename Right::proto_domain::template apply<expr_type>::type
             make(Left &left, Right &right)
@@ -90,10 +90,10 @@ namespace boost { namespace proto
         struct as_expr_if<Tag, Left, Right, typename Left::proto_is_expr_, typename Right::proto_is_expr_>
           : generate_if<
                 typename Left::proto_domain
-              , expr<Tag, args2<ref_<Left>, ref_<Right> > >
+              , proto::expr<Tag, args2<ref_<Left>, ref_<Right> > >
             >
         {
-            typedef expr<Tag, args2<ref_<Left>, ref_<Right> > > expr_type;
+            typedef proto::expr<Tag, args2<ref_<Left>, ref_<Right> > > expr_type;
             BOOST_MPL_ASSERT((is_same<typename Left::proto_domain, typename Right::proto_domain>));
 
             static typename Left::proto_domain::template apply<expr_type>::type
@@ -179,22 +179,22 @@ namespace boost { namespace proto
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > >                                  \
+      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > >                                  \
     >::type const                                                                                   \
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
-        typedef expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > > that_type;               \
+        typedef proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > > that_type;        \
         that_type that = {{arg}};                                                                   \
         return Arg::proto_domain::make(that);                                                       \
     }                                                                                               \
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > >                            \
+      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > >                            \
     >::type const                                                                                   \
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \
-        typedef expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > > that_type;         \
+        typedef proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > > that_type;  \
         that_type that = {{arg}};                                                                   \
         return Arg::proto_domain::make(that);                                                       \
     }                                                                                               \

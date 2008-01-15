@@ -54,42 +54,8 @@
             };
         } // namespace detail
 
-        //template<typename Grammar>
-        //struct pass_through
-        //  : Grammar
-        //{
-        //    pass_through() {}
-
-        //    template<typename Expr, typename State, typename Visitor>
-        //    struct apply
-        //      : detail::pass_through_impl<
-        //            Grammar
-        //          , typename Expr::proto_base_expr
-        //          , State
-        //          , Visitor
-        //          , Expr::proto_arity::value
-        //        >
-        //    {};
-
-        //    template<typename Expr, typename State, typename Visitor>
-        //    static typename apply<Expr, State, Visitor>::type
-        //    call(Expr const &expr, State const &state, Visitor &visitor)
-        //    {
-        //        return apply<Expr, State, Visitor>::call(expr.proto_base(), state, visitor);
-        //    }
-        //};
-
-    } // namespace transform
-
-    //template<typename Grammar>
-    //struct is_transform<transform::pass_through<Grammar> >
-    //  : mpl::true_
-    //{};
-
-    namespace has_transformns_
-    {
         template<typename Grammar>
-        struct has_pass_through_transform
+        struct pass_through : callable
         {
             template<typename Sig>
             struct result;
@@ -113,7 +79,12 @@
             }
         };
 
-    } // namespace has_transformns_
+    } // namespace transform
+
+    template<typename Grammar>
+    struct is_callable<transform::pass_through<Grammar> >
+      : mpl::true_
+    {};
 
     }} // namespace boost::proto
 
@@ -126,7 +97,7 @@
             template<typename Grammar, typename Expr, typename State, typename Visitor>
             struct pass_through_impl<Grammar, Expr, State, Visitor, N>
             {
-                typedef expr<
+                typedef proto::expr<
                     typename Expr::proto_tag
                   , BOOST_PP_CAT(args, N)<
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TRANSFORM_TYPE, ~)

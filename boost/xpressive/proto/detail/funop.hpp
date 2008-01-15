@@ -13,7 +13,7 @@
     template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A)>
     struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     {
-        typedef expr<
+        typedef proto::expr<
             tag::function
           , BOOST_PP_CAT(args, BOOST_PP_INC(BOOST_PP_ITERATION()))<
                 ref_<Expr>

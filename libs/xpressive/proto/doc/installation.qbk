@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -9,9 +9,9 @@
 
 [heading Getting Proto]
 
-Currently the only way to get Proto is through CVS via the boost project on
-SourceForge.net. Just go to [@http://sf.net/projects/boost] and follow the
-instructions there for anonymous CVS access.
+Currently the only way to get Proto is through SVN via the boost project on
+SourceForge.net. Just go to [@http://svn.boost.org/trac/boost/wiki/BoostSubversion]
+and follow the instructions there for anonymous SVN access.
 
 [heading Building with Proto]
 
@@ -23,14 +23,14 @@ appropriate header from the [^boost\/xpressive\/proto\/transform\/] directory.
 
 [heading Requirements]
 
-Proto depends on Boost. You must use the version in CVS HEAD.
+Proto depends on Boost. You must use the version in SVN HEAD.
 
 [heading Supported Compilers]
 
 Currently, Boost.Proto is known to work on the following compilers:
 
 * Visual C++ 7.1 and higher
-* GNU C++ 3.2 and higher
+* GNU C++ 3.4 and higher
 * Intel on Linun 8.1 and higher
 * Intel on Windows 9.1 and higher
 

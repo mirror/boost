@@ -25,11 +25,14 @@ struct placeholder2 {};
 
 namespace test1
 {
-//[ CalculatorGrammar
+//[ CalcGrammar
     using namespace boost::proto;
 
+    // This is the grammar for calculator expressions,
+    // to which we will attach transforms for computing
+    // the expressions' arity.
     /*<< A Calculator expression is ... >>*/
-    struct CalculatorGrammar
+    struct CalcArity
       : or_<
             /*<< placeholder1, or ... >>*/
             terminal< placeholder1 >
@@ -38,9 +41,9 @@ namespace test1
           /*<< some other terminal, or ... >>*/
           , terminal< _ >
           /*<< a unary expression where the operand is a calculator expression, or ... >>*/
-          , unary_expr< _, CalculatorGrammar >
-          /*<< a binary expression where the operands are calculator expressions, or ... >>*/
-          , binary_expr< _, CalculatorGrammar, CalculatorGrammar >
+          , unary_expr< _, CalcArity >
+          /*<< a binary expression where the operands are calculator expressions >>*/
+          , binary_expr< _, CalcArity, CalcArity >
         >
     {};
 //]
@@ -146,14 +149,25 @@ struct CalculatorArity
 {};
 //]
 
-//[ CalculatorArityGrammar2
-struct CalcArity2
+//[ CalcArity
+struct CalcArity
   : or_<
-        when< terminal< placeholder1 >,                mpl::int_<1>()      >
-      , when< terminal< placeholder2 >,                mpl::int_<2>()      >
-      , when< terminal<_>,                             mpl::int_<0>()      >
-      , when< unary_expr<_, CalcArity2>,               CalcArity2(_arg)    >
-      , when< binary_expr<_, CalcArity2, CalcArity2>,  mpl::max<CalcArity2(_left), CalcArity2(_right)>()   >
+        when< terminal< placeholder1 >,
+                mpl::int_<1>()
+        >
+      , when< terminal< placeholder2 >,
+                mpl::int_<2>()
+        >
+      , when< terminal<_>,
+                mpl::int_<0>()
+        >
+      , when< unary_expr<_, CalcArity>,
+                CalcArity(_arg)
+        >
+      , when< binary_expr<_, CalcArity, CalcArity>,
+                mpl::max<CalcArity(_left),
+                         CalcArity(_right)>()
+        >
     >
 {};
 //]
@@ -177,7 +191,7 @@ struct ArgsAsList
       , reverse_fold<
             /*<< The first child expression of a `function<>` node is the
             function being invoked. We don't want that in our list, so use
-            the `pop_front()` to remove it. >>*/
+            `pop_front()` to remove it. >>*/
             _pop_front(_)
           /*<< `nil` is the initial state used by the `reverse_fold<>`
           transform. >>*/
@@ -286,9 +300,9 @@ void test_examples()
     BOOST_CHECK_EQUAL(1, CalculatorArity()( (_1 - _1) / _1 * 100, i, i));
     BOOST_CHECK_EQUAL(2, CalculatorArity()( (_2 - _1) / _2 * 100, i, i));
 
-    BOOST_CHECK_EQUAL(0, CalcArity2()( lit(100) * 200, i, i));
-    BOOST_CHECK_EQUAL(1, CalcArity2()( (_1 - _1) / _1 * 100, i, i));
-    BOOST_CHECK_EQUAL(2, CalcArity2()( (_2 - _1) / _2 * 100, i, i));
+    BOOST_CHECK_EQUAL(0, CalcArity()( lit(100) * 200, i, i));
+    BOOST_CHECK_EQUAL(1, CalcArity()( (_1 - _1) / _1 * 100, i, i));
+    BOOST_CHECK_EQUAL(2, CalcArity()( (_2 - _1) / _2 * 100, i, i));
 
     using boost::fusion::cons;
     using boost::fusion::nil;

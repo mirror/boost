@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -138,7 +138,7 @@ evaluate our arithmetic expressions, as below:
 You might notice that the `calculator_context` has a lot of boilerplate. It
 is fairly common for addition nodes to be handled by evaluating the left and
 right children and then adding the result, for instance. For this purpose,
-proto provides the _default_context_, which gives the operators their usual
+Boost.Proto provides the _default_context_, which gives the operators their usual
 meanings, and uses Boost.Typeof to deduce return types. In fact, the
 _callable_context_ from which our `calculator_context` inherits uses
 _default_context_ as a fall-back for any expression types you don't handle

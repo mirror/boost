@@ -87,9 +87,9 @@
                 #if BOOST_WORKAROUND(__GNUC__, == 3)
                 // work around GCC bug
                 template<typename Tag, typename Args, long N, typename Expr, typename State, typename Visitor>
-                struct make_if_<expr<Tag, Args, N>, Expr, State, Visitor, false>
+                struct make_if_<proto::expr<Tag, Args, N>, Expr, State, Visitor, false>
                 {
-                    typedef expr<Tag, Args, N> type;
+                    typedef proto::expr<Tag, Args, N> type;
                     typedef void not_applied_;
                 };
                 #endif
@@ -141,9 +141,9 @@
                 };
 
                 template<typename T, typename A, long N>
-                struct construct_<expr<T, A, N>, true>
+                struct construct_<proto::expr<T, A, N>, true>
                 {
-                    typedef expr<T, A, N> result_type;
+                    typedef proto::expr<T, A, N> result_type;
 
                     #define TMP(Z, N, DATA)                                                             \
                     template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>                                  \
@@ -256,9 +256,9 @@
             {};
 
             template<typename T, typename A>
-            struct construct_<expr<T, A, N>, true>
+            struct construct_<proto::expr<T, A, N>, true>
             {
-                typedef expr<T, A, N> result_type;
+                typedef proto::expr<T, A, N> result_type;
 
                 template<BOOST_PP_ENUM_PARAMS(BOOST_PP_MAX(N, 1), typename A)>
                 result_type operator ()(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_MAX(N, 1), A, &a)) const
@@ -295,16 +295,16 @@
         #if BOOST_WORKAROUND(__GNUC__, == 3)
         // work around GCC bug
         template<typename Tag, typename Args, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct make<expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))> : callable
+        struct make<proto::expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))> : callable
         {
             template<typename Sig>
             struct result
             {
-                typedef expr<Tag, Args, Arity> type;
+                typedef proto::expr<Tag, Args, Arity> type;
             };
 
             template<typename Expr, typename State, typename Visitor>
-            expr<Tag, Args, Arity> operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+            proto::expr<Tag, Args, Arity> operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
                 return proto::expr<Tag, Args, Arity>::make(
                     #define TMP(Z, M, DATA) detail::as_lvalue(when<_, BOOST_PP_CAT(A, M)>()(expr, state, visitor))

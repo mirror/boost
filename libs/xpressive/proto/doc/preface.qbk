@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -61,6 +61,7 @@ is similar to Fusion data structures in many respects, and is interoperable
 with Fusion's iterators and algorithms.
 
 The syntax for the grammar-matching features of `proto::matches<>` is inspired
-by MPL's lambda expressions.
+by MPL's lambda expressions, and by Aleksey Gurtovoy's 
+[@http://lists.boost.org/Archives/boost/2002/11/39718.php "round" lambda] notation.
 
 [endsect]

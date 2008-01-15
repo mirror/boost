@@ -255,20 +255,20 @@
             /// \param a The rhs.
             /// \return A new \c expr\<\> node representing an assignment of \c a to \c *this.
             template<typename A>
-            expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
+            proto::expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
             operator =(A &a) const
             {
-                expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             /// \overload
             ///
             template<typename A>
-            expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > const
+            proto::expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > const
             operator =(A const &a) const
             {
-                expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
@@ -276,20 +276,20 @@
             /// \overload
             ///
             template<typename A>
-            expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
+            proto::expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
             operator =(A &a)
             {
-                expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             /// \overload
             ///
             template<typename A>
-            expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
+            proto::expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
             operator =(A const &a)
             {
-                expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
         #endif
@@ -299,20 +299,20 @@
             /// \param a The rhs.
             /// \return A new \c expr\<\> node representing \c *this subscripted with \c a.
             template<typename A>
-            expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
+            proto::expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
             operator [](A &a) const
             {
-                expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             /// \overload
             ///
             template<typename A>
-            expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > const
+            proto::expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > const
             operator [](A const &a) const
             {
-                expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
@@ -320,20 +320,20 @@
             /// \overload
             ///
             template<typename A>
-            expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
+            proto::expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
             operator [](A &a)
             {
-                expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             /// \overload
             ///
             template<typename A>
-            expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
+            proto::expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
             operator [](A const &a)
             {
-                expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                proto::expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
         #endif
@@ -349,20 +349,20 @@
             /// Function call
             ///
             /// \return A new \c expr\<\> node representing the function invocation of \c (*this)().
-            expr<tag::function, args1<ref_<expr const> > > const
+            proto::expr<tag::function, args1<ref_<expr const> > > const
             operator ()() const
             {
-                expr<tag::function, args1<ref_<expr const> > > that = {{*this}};
+                proto::expr<tag::function, args1<ref_<expr const> > > that = {{*this}};
                 return that;
             }
 
         #if IS_TERMINAL
             /// \overload
             ///
-            expr<tag::function, args1<ref_<expr> > > const
+            proto::expr<tag::function, args1<ref_<expr> > > const
             operator ()()
             {
-                expr<tag::function, args1<ref_<expr> > > that = {{*this}};
+                proto::expr<tag::function, args1<ref_<expr> > > that = {{*this}};
                 return that;
             }
         #endif

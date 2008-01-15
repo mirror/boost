@@ -19,10 +19,9 @@
 using namespace boost;
 
 // Will be used to define the placeholders _1 and _2
-template<typename I> struct arg : I {};
+template<typename I> struct placeholder : I {};
 
 using proto::_;
-using namespace proto::transform;
 
 // This grammar basically says that a calculator expression is one of:
 //   - A placeholder terminal
@@ -34,15 +33,15 @@ struct CalculatorGrammar
   : proto::or_<
 
         // placeholders have a non-zero arity ...
-        when< proto::terminal< arg<_> >, _arg >
+        proto::when< proto::terminal< placeholder<_> >, proto::_arg >
 
         // Any other terminals have arity 0 ...
-      , when< proto::terminal<_>, mpl::int_<0>() >
+      , proto::when< proto::terminal<_>, mpl::int_<0>() >
 
         // For any non-terminals, find the arity of the children and
         // take the maximum. This is recursive.
-      , when< proto::nary_expr<_, proto::vararg<_> >
-             , fold<_, mpl::int_<0>(), mpl::max<CalculatorGrammar, _state>() > >
+      , proto::when< proto::nary_expr<_, proto::vararg<_> >
+             , proto::fold<_, mpl::int_<0>(), mpl::max<CalculatorGrammar, proto::_state>() > >
 
     >
 {};
@@ -78,7 +77,7 @@ struct calculator_context
 
     // Handle the evaluation of the placeholder terminals
     template<typename I>
-    double operator ()(proto::tag::terminal, arg<I>) const
+    double operator ()(proto::tag::terminal, placeholder<I>) const
     {
         return d[ I() - 1 ];
     }
@@ -132,8 +131,8 @@ struct calculator_domain
 {};
 
 // Define some placeholders (notice they're wrapped in calculator_expression<>)
-calculator_expression<proto::terminal< arg< mpl::int_<1> > >::type> const _1;
-calculator_expression<proto::terminal< arg< mpl::int_<2> > >::type> const _2;
+calculator_expression<proto::terminal< placeholder< mpl::int_<1> > >::type> const _1;
+calculator_expression<proto::terminal< placeholder< mpl::int_<2> > >::type> const _2;
 
 // Now, our arithmetic expressions are immediately executable function objects:
 int main()

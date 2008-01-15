@@ -98,7 +98,7 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, N>
             {
-                typedef expr<typename Expr::proto_tag, BOOST_PP_CAT(args, N)<
+                typedef proto::expr<typename Expr::proto_tag, BOOST_PP_CAT(args, N)<
                     BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
                 > > expr_type;
                 typedef typename Expr::proto_domain::template apply<expr_type>::type type;

@@ -379,7 +379,7 @@
             template<typename Domain, typename Sequence>
             struct unpack_expr_<tag::terminal, Domain, Sequence, 1u>
             {
-                typedef expr<
+                typedef proto::expr<
                     tag::terminal
                   , args0<typename fusion_::result_of::value_at_c<Sequence, 0>::type>
                 > expr_type;
@@ -416,7 +416,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, void BOOST_PP_INTERCEPT)>
             {
                 typedef typename add_reference<A>::type reference;
-                typedef expr<tag::terminal, args0<reference> > expr_type;
+                typedef proto::expr<tag::terminal, args0<reference> > expr_type;
                 typedef typename Domain::template apply<expr_type>::type type;
 
                 static type const call(reference a)
@@ -695,7 +695,7 @@
         struct make_expr_<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
             BOOST_PP_ENUM_TRAILING_PARAMS(M, void BOOST_PP_INTERCEPT), void>
         {
-            typedef expr<
+            typedef proto::expr<
                 Tag
               , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_TYPE, (A, Domain)) >
             > expr_type;
@@ -714,7 +714,7 @@
         template<typename Tag, typename Domain, typename Sequence>
         struct unpack_expr_<Tag, Domain, Sequence, N>
         {
-            typedef expr<
+            typedef proto::expr<
                 Tag
               , BOOST_PP_CAT(args, N)<
                     BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT_TYPE, (Sequence const, Domain))
