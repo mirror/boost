@@ -137,8 +137,8 @@ the calculator grammar.
 The total arity of a calculator expression is found by recursively evaluating
 the arity of all of the sub-expressions and taking the maximum.
 
-Let's look at the sub-expression for placeholder 1. It is matched by this part
-of our grammar: `terminal< placeholder1 >`. We want to associate this
+Let's look at the sub-expression for the placeholder `_1`. It is matched by this
+part of our grammar: `terminal< placeholder1 >`. We want to associate this
 part of our grammar with an arity of `1`. We do that by attaching a transform.
 Since the arity of an expression can be evaluated at compile time, let's use
 `mpl::int_<1>` to represent the arity of the first placeholder. The following
@@ -454,6 +454,243 @@ Example:
     struct Subscript
       : when< subscript<MyGrammar, MyGrammar>, _expr >
     {};
+
+[endsect]
+
+[section:call [^call<>]]
+
+    namespace boost { namespace proto
+    {
+        namespace transform
+        {
+            template<typename Fun>
+            struct call;
+        }
+
+        using transform::call;
+    }}
+
+The `call<>` transform is used to invoke callable transforms and evaluate
+their arguments. When you use a callable transform as in 
+`when< posit<_>, Callable(_arg) >`, the `call<>` transform is used behind
+the scenes to evaluate `Callable(_arg)`. In fact, for any callable
+transform, the following short- and long-forms are equivalent:
+
+[table
+    [ [Short From]
+      [Long Form] ]
+    [ [ `when< Grammar, Callable(Tran1, Tran2...) >` ]
+      [ `when< Grammar, call< Callable(Tran1, Tran2...) > >` ] ]
+]
+
+You might decide to use `call<>` explicitly in cases when Proto
+can't figure out that a given transform is callable. (See the discussion on
+the `is_callable<>` traits TODO LINK.) Rather than specialize 
+`proto::is_callable<>` for your transform, you can simply wrap its use in
+`call<>`, instead. 
+
+[tip For users of legacy compilers like MSVC 7.1, `call<>` is useful to work
+around compiler bugs. Doubly-nested transforms such as `Callable(_arg1(_arg2))`
+cause older compilers problems, but the equivalent `Callable(call<_arg1(_arg2)>)`
+solves the problem.]
+
+The semantics of `call<>` are described in the table below:
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`call<Fun(A0, A1, ... AN)>::result<void(Expr, State, Visitor)>::type`]
+        [``boost::result_of<Fun(
+    when<_, A0>::result<void(Expr, State, Visitor)>::type
+  , when<_, A1>::result<void(Expr, State, Visitor)>::type
+    ...
+  , when<_, AN>::result<void(Expr, State, Visitor)>::type
+)>::type``]
+    ]
+    [   [`call<Fun(A0, A1, ... AN)>()(expr, state, visitor)`]
+        [``Fun()(
+    when<_, A0>()(expr, state, visitor)
+  , when<_, A1>()(expr, state, visitor)
+    ...
+  , when<_, AN>()(expr, state, visitor)
+)``]
+    ]
+]
+
+The target of a callable transform can be any function object that implements
+the Boost.ResultOf protocol. Function objects that take up to
+`BOOST_PROTO_MAX_ARITY` are handled.
+
+For callable transforms that take 0, 1, or 2 arguments, special handling is done 
+to see if the transform actually expects 3 arguments, as Proto's primitive 
+transforms do. (This can be detected with meta-programming tricks.) So, even 
+though a transform like `_arg1` requires three parameters: expression, 
+state and visitor; it can be "called" with just one, like `_arg1(_arg2)`. Proto
+treats this as if were `call<_arg1(_arg2, _state, _visitor)>`.
+
+If no transform arguments are specified at all, as in `call<_arg1>`, this is
+the same as `_arg1`. For this reason, `call<_arg1>(_arg2)` is the same as
+`call<_arg1(_arg2)>`.
+
+Example:
+
+[LazyMakePair2]
+
+[endsect]
+
+[section:make [^make<>]]
+
+    namespace boost { namespace proto
+    {
+        namespace transform
+        {
+            template<typename Fun>
+            struct make;
+        }
+
+        using transform::make;
+    }}
+
+The `make<>` transform is used to construct objects and evaluate
+their constructor arguments. When you use an object transform as in 
+`when< posit<_>, Object(_arg) >`, the `make<>` transform is used behind
+the scenes to evaluate `Object(_arg)`. In fact, for any object
+transform, the following short- and long-forms are equivalent:
+
+[table
+    [ [Short From]
+      [Long Form] ]
+    [ [ `when< Grammar, Object(Tran1, Tran2...) >` ]
+      [ `when< Grammar, make< Object(Tran1, Tran2...) > >` ] ]
+]
+
+You might decide to use `make<>` to explicitly differentiate object
+transforms from callable transforms. (See `call<>`.)
+
+[tip For users of legacy compilers like MSVC 7.1, `make<>` is useful to work
+around compiler bugs. Doubly-nested transforms such as `Object1(Object2(_arg))`
+cause older compilers problems, but the equivalent `Object1(make<Object2(_arg)>)`
+solves the problem.]
+
+The `make<>` transform checks to see if the resulting object type is a template.
+If it is, the template type is disassembled to find nested transforms. Proto
+considers the following types to represent transforms:
+
+[def __type__ [~type]]
+[def __X__  X\']
+[def __X0__ X0\']
+[def __X1__ X1\']
+
+* Function types
+* Function pointer types
+* Types for which `proto::is_callable<__type__>::value` is `true`
+
+When an object transform with a template type such as
+`Object<X0,X1,...>(Args...)` is evaluated with a given
+`Expr`, `State`, and `Visitor`, the result type is 
+`make_<Object<X0,X1,...>, Expr, State, Visitor>::type` which is
+defined as follows. For each `X` in `X0,X1,...`, do:
+
+* If `X` is a template like `Object2<Y0,Y1,...>`, then let `__X__`
+  be `make_<Object2<Y0,Y1,...>, Expr, State, Visitor>::type`
+  (which evaluates this procedure recursively). Note whether any
+  substitutions took place during this operation.
+* Otherwise, if `X` is a transform, then let `__X__` be
+  `when<_, X>::result<void(Expr, State, Visitor)>::type`.
+  Note that a substitution took place.
+* Otherwise, let `__X__` be `X`, and note that no substitution
+  took place.
+* If any substitutions took place in any of the above steps and
+  `Object<__X0__,__X1__,...>` has a nested `::type` typedef, the
+  result type is `Object<__X0__,__X1__,...>::type`.
+* Otherwise, the result type is `Object<__X0__,__X1__,...>`.
+
+Note that `when<>` is implemented in terms of `call<>` and `make<>`,
+so the above procedure is evaluated recursively.
+
+Given the above description of the `make_<>` helper, the semantics
+of the `make<>` transform is described as follows:
+
+[def __AN__ A[~N]]
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`make<Object(A0, A1, ... __AN__)>::result<void(Expr, State, Visitor)>::type`]
+        [`make_<Object, Expr, State, Visitor>::type`]
+    ]
+    [   [`make<Object(A0, A1, ... __AN__)>()(expr, state, visitor)`]
+        [``make_<Object, Expr, State, Visitor>::type(
+    when<_, A0>()(expr, state, visitor)
+  , when<_, A1>()(expr, state, visitor)
+    ...
+  , when<_, __AN__>()(expr, state, visitor)
+)``]
+    ]
+]
+
+Objects with constructors that take up to `BOOST_PROTO_MAX_ARITY` are handled.
+Some types are so-called /aggregates/ that do not have constructors; rather,
+they use /aggregate initialization/. For these types, you can specialize 
+`proto::is_aggregate<>` and Proto will use a brace initializer list to
+initialize the object rather than a constructor. Proto knows that `proto::expr<>`
+is such an aggregate, so if you use object transforms to "construct" a
+new node in an expression tree, the right thing happens.
+
+If no transform arguments are specified at all, as in `make<Object>`, this is
+the same as `make<Object()>`.
+
+Example:
+
+[LazyMakePair]
+
+[endsect]
+
+[section:bind [^bind<>]]
+
+    namespace boost { namespace proto
+    {
+        namespace transform
+        {
+            template<typename Fun>
+            struct bind;
+        }
+
+        using transform::bind;
+    }}
+
+Sometimes you would like a higher-order transform that returns another
+transform to be evaluated. This can happen when you have a transform
+whose behavior needs to be parameterized on the current state of the
+transformation. For these situations, you can use the `bind<>` transform,
+which is essentially an invocation of the `make<>` transform (to evaluate
+any nested transforms and create the higher-order transform) followed
+by an invocation of `call<>` (to actually execute the higher-order
+transform).
+
+The behavior of `bind<>` is easily specified in terms of `make<>` and
+`call<>`.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`bind<Object(A0, A1, ... __AN__)>::result<void(Expr, State, Visitor)>::type`]
+        [``call<
+    make<Object>::result<void(Expr, State, Visitor)>::type(A0, A1, ... __AN__)
+>::result<void(Expr, State, Visitor)>::type``]
+    ]
+    [   [`bind<Object(A0, A1, ... __AN__)>()(expr, state, visitor)`]
+        [``call<
+    make<Object>::result<void(Expr, State, Visitor)>::type(A0, A1, ... __AN__)
+>()(expr, state, visitor)``]
+    ]
+]
+
+If no transform arguments are specified at all, as in `bind<Object>`, this is
+the same as `bind<Object(_expr, _state, _visitor)>`.
 
 [endsect]
 
