@@ -18,13 +18,9 @@
  * are thrown. If one of the operations throws an exception, performs the
  * remaining operations and rethrows the initial exception.
  *
- * In order to preserve support for old compilers, no attempt is made to deduce 
- * the return type of the primary operation, even though it could be easily
- * deduced in all the intended use cases.
- *
  * execute_foreach() is a variant of std::foreach which invokes a function 
  * object for each item in a sequence, catching all execptions and rethrowing
- * the first caucht exception after the function object has been invoked on each
+ * the first caught exception after the function object has been invoked on each
  * item.
  */
 
@@ -35,7 +31,15 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>                           // BOOST_NO_RESULT_OF
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+#if !defined(BOOST_IOSTREAMS_NO_RESULT_OF) && \
+     defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || \
+     defined(BOOST_NO_SFINAE) || \
+     BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x593))
+     /**/
+# define BOOST_IOSTREAMS_NO_RESULT_OF
+#endif
 #include <boost/iostreams/detail/config/limits.hpp>   // MAX_EXECUTE_ARITY
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -43,7 +47,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
-#ifndef BOOST_NO_RESULT_OF
+#ifndef BOOST_IOSTREAMS_NO_RESULT_OF
 # include <boost/utility/result_of.hpp>
 #endif
 
@@ -70,8 +74,7 @@ struct execute_traits_impl<void> {
 // returning void and non-void.
 template< typename Op, 
           typename Result = // VC6.5 workaround.
-              #if !defined(BOOST_NO_RESULT_OF) && \
-                  !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
+              #ifndef BOOST_IOSTREAMS_NO_RESULT_OF
                   typename boost::result_of<Op()>::type
               #else
                   BOOST_DEDUCED_TYPENAME Op::result_type
