@@ -51,7 +51,7 @@ A grammar decorated with transforms is a function object which takes three
 parameters:
 
 * `expr`    -- the Proto expression to transform
-* `state`   -- the state of the transformation so far
+* `state`   -- the initial state of the transformation
 * `visitor` -- any optional mutable state information
 
 Grammars with transforms are proper function objects, so you can use 
@@ -485,7 +485,7 @@ transform, the following short- and long-forms are equivalent:
 
 You might decide to use `call<>` explicitly in cases when Proto
 can't figure out that a given transform is callable. (See the discussion on
-the `is_callable<>` traits TODO LINK.) Rather than specialize 
+the `is_callable<>` trait TODO LINK.) Rather than specialize 
 `proto::is_callable<>` for your transform, you can simply wrap its use in
 `call<>`, instead. 
 
@@ -691,6 +691,59 @@ The behavior of `bind<>` is easily specified in terms of `make<>` and
 
 If no transform arguments are specified at all, as in `bind<Object>`, this is
 the same as `bind<Object(_expr, _state, _visitor)>`.
+
+[endsect]
+
+[section:when [^when<>]]
+
+    namespace boost { namespace proto
+    {
+        namespace transform
+        {
+            template<typename Grammar, typename Transform = Grammar>
+            struct when;
+        }
+
+        using transform::when;
+    }}
+
+`when<>` associates a grammar rule with a transform. It can be used
+in a grammar in place of the rule; that is, it behaves as a grammar
+rule. Expression tree nodes that match the grammar rule are processed
+with the associated transform; that it, `when<>` also behaves like
+a transform.
+
+When no transform is specified, as with `when< posit<Calculator> >`,
+the grammar is treated as the transform. Every grammar element has
+a default transform. For most, such as `posit<>`, the default transform
+is `pass_through<>`.
+
+The `when<>` transform is easily specified in terms of `call<>`,
+`make<>`, and the `is_callable<>` trait.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [`when<Grammar, R(A0, A1, ... __AN__)>::result<void(Expr, State, Visitor)>::type`]
+        [``mpl::if_<
+    is_callable<R>
+  , call<R(A0, A1, ... __AN__)>
+  , make<R(A0, A1, ... __AN__)>
+>::type::result<void(Expr, State, Visitor)>::type``]
+    ]
+    [   [`when<Grammar, R(A0, A1, ... __AN__)>()(expr, state, visitor)`]
+        [``mpl::if_<
+    is_callable<R>
+  , call<R(A0, A1, ... __AN__)>
+  , make<R(A0, A1, ... __AN__)>
+>::type()(expr, state, visitor)``]
+    ]
+]
+
+If no transform arguments are specified, as in `when<Grammar, _arg>`, the
+transform is assumed to be callable; that is, it is equivalent to
+`when<Grammar, call<_arg> >`.
 
 [endsect]
 
@@ -961,6 +1014,141 @@ Example:
 [Promote]
 
 [endsect]
+
+[endsect]
+
+[/======================================================]
+[section:user_defined_transforms User-Defined Transforms]
+[/======================================================]
+
+TODO describe how to implement custom transforms.
+
+[endsect]
+
+[/=================================================]
+[section:is_callable Making Your Transform Callable]
+[/=================================================]
+
+Transforms are typically of the form `when< Something, R(A0,A1,...) >`. The
+question is whether `R` represents a function to call or an object to
+construct, and the answer determines how `when<>` evaluates the transform.
+`when<>` uses the `is_callable<>` trait to disambiguate between the two.
+Proto does its best to guess whether a transform is callable or not, but
+it doesn't always get it right. It's best to know the rules Proto uses,
+so that you know when you need to specialize `is_callable<>`.
+
+The first thing to know is that templates are not considered callable
+by default. This is true ['even if the template inherits from 
+`proto::callable`]. Consider the following erroneous transform:
+
+    // Proto can't tell this defines a 
+    // callable transform!
+    template<typename T>
+    struct times2 : callable
+    {
+        typedef T result_type;
+
+        T operator()(T i) const
+        {
+            return i * 2;
+        }
+    };
+
+    // ERROR! This is not going to
+    // multiply the int by 2. 
+    struct IntTimes2
+      : when< terminal<int>, times2<int>(_arg) >
+    {};
+
+The problem is that Proto doesn't know that `times2<int>` is a callable
+transform. Instead, it assumes it's an object transform and will try to 
+construct a `times2<int>` object and initialize it will an `int`. That
+will not compile.
+
+[note Why can't Proto tell that `times2<int>` is callable? After all,
+it inherits from `proto::callable`, and that is detectable, right?
+In fact, determining whether some type `X<Y>` inherits from
+`callable` will cause the template `X<Y>` to be instantiated. That's a
+problem for a type like `std::vector<_arg(_arg1)>()`, which is a valid
+transform that default-constructs a particular instantiation of 
+`std::vector<>`. But `std::vector<>` will not suffer to be instantiated
+with `_arg(_arg1)` as a template parameter! As a result, Proto has
+to assume that a type `X<Y>` represents an object transform and not
+a callable transform.]
+
+There are a couple of solutions to the `times2<int>` problem. One 
+solution is to wrap the transform in `call<>`. This forces Proto to
+treat `times2<int>` as callable:
+
+    // OK, calls times2<int>
+    struct IntTimes2
+      : when< terminal<int>, call<times2<int>(_arg)> >
+    {};
+
+This can be a bit of a pain, because we need to wrap every use of
+`times2<int>`, which can be tedious and error prone, and makes our
+grammar cluttered and harder to read.
+
+Another solution is to specialize `proto::is_callable<>` on our 
+`times2<>` template:
+
+    namespace boost { namespace proto
+    {
+        template<typename T>
+        struct is_callable<times2<T> >
+          : mpl::true_
+        {};
+    }}
+
+    // OK, times2<> is callable
+    struct IntTimes2
+      : when< terminal<int>, times2<int>(_arg) >
+    {};
+
+This is better, but still a pain because of the need to open
+Proto's namespace.
+
+You could simply make sure that the transform is not
+a template. Consider the following:
+
+    // No longer a template!
+    struct times2int : times2<int> {};
+
+    // OK, times2int is callable
+    struct IntTimes2
+      : when< terminal<int>, times2int(_arg) >
+    {};
+
+This works because now Proto can tell that `times2int` inherits
+(indirectly) from `proto::callable`. Any non-template types can
+be safely checked for inheritance because, as they are not
+templates, there is no worry about instantiation errors.
+
+There is one last way to tell Proto that `times2<>` is callable.
+You could add an extra dummy template parameter that defaults
+to `proto::callable`:
+
+    // Proto will recognize this as callable
+    template<typename T, typename Dummy = callable>
+    struct times2 : callable
+    {
+        typedef T result_type;
+
+        T operator()(T i) const
+        {
+            return i * 2;
+        }
+    };
+
+    // OK, this works!
+    struct IntTimes2
+      : when< terminal<int>, times2<int>(_arg) >
+    {};
+
+Note that in addition to the extra template parameter, `times2<>`
+still inherits from `callable`. That's not necessary in this example
+but it's good style because any types derived from `times2<>` (as
+`times2int` defined above) will still be considered callable.
 
 [endsect]
 
