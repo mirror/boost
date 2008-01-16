@@ -33,13 +33,6 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-#if !defined(BOOST_IOSTREAMS_NO_RESULT_OF) && \
-     defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || \
-     defined(BOOST_NO_SFINAE) || \
-     BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x593))
-     /**/
-# define BOOST_IOSTREAMS_NO_RESULT_OF
-#endif
 #include <boost/iostreams/detail/config/limits.hpp>   // MAX_EXECUTE_ARITY
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -74,7 +67,8 @@ struct execute_traits_impl<void> {
 // returning void and non-void.
 template< typename Op, 
           typename Result = // VC6.5 workaround.
-              #ifndef BOOST_IOSTREAMS_NO_RESULT_OF
+              #if !defined(BOOST_NO_RESULT_OF) && \
+                  !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x592))
                   typename boost::result_of<Op()>::type
               #else
                   BOOST_DEDUCED_TYPENAME Op::result_type
