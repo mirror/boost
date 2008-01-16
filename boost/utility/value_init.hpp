@@ -1,31 +1,20 @@
-// (C) Copyright 2002-2007, Fernando Luis Cacciola Carballal.
+// (C) Copyright 2002-2008, Fernando Luis Cacciola Carballal.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
-// 24 Dec 2007 (Refactored and worked around various compiler bugs) Fernando Cacciola, Niels Dekker
+// 16 Jan 2008 (Worked around compiler bugs, added initialized_value) Fernando Cacciola, Niels Dekker
 //
 #ifndef BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 #define BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 
 // Note: The implementation of boost::value_initialized had to deal with the
-// fact that various compilers haven't fully implemented value-initialization:
-// Microsoft Feedback ID 100744 - Value-initialization in new-expression
-// Reported by Pavel Kuznetsov (MetaCommunications Engineering), 2005-07-28
-// https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=100744
-// GCC Bug 30111 - Value-initialization of POD base class doesn't initialize members
-// Reported by Jonathan Wakely, 2006-12-07 
-// http://gcc.gnu.org/bugzilla/show_bug.cgi?id=30111
-// GCC Bug 33916 - Default constructor fails to initialize array members
-// Reported by Michael Elizabeth Chastain, 2007-10-26
-// http://gcc.gnu.org/bugzilla/show_bug.cgi?id=33916
-// Borland Report 51854 - Value-initialization: POD struct should be zero-initialized
-// Reported by Niels Dekker (LKEB, Leiden University Medical Center), 2007-11-09
-// http://qc.codegear.com/wc/qcmain.aspx?d=51854
-// The constructor of boost::value_initialized<T> works around these issues, by
-// clearing the bytes of T, before constructing the T object it contains. 
+// fact that various compilers haven't fully implemented value-initialization.
+// The constructor of boost::value_initialized<T> works around these compiler
+// issues, by clearing the bytes of T, before constructing the T object it
+// contains. More details on these issues are at libs/utility/value_init.htm
 
 #include <boost/aligned_storage.hpp>
 #include <boost/detail/workaround.hpp>
@@ -109,6 +98,18 @@ T& get ( value_initialized<T>& x )
 {
   return x.data() ;
 }
+
+
+class initialized_value
+{
+  public :
+    
+    template <class T> operator T() const
+    {
+      return get( value_initialized<T>() );
+    }
+};
+
 
 } // namespace boost
 
