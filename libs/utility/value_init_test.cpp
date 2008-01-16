@@ -7,7 +7,7 @@
 // Test program for "boost/utility/value_init.hpp"
 //
 // 21 Agu 2002 (Created) Fernando Cacciola
-// 15 Jan 2008 (Added tests regarding compiler issues) Fernando Cacciola, Niels Dekker
+// 16 Jan 2008 (Added tests regarding compiler issues and initialized_value) Fernando Cacciola, Niels Dekker
 
 #include <cstring>  // For memcmp.
 #include <iostream>
@@ -52,7 +52,7 @@ struct NonPODBase
 struct NonPOD : NonPODBase
 {
   NonPOD () : id() {}
-  NonPOD ( std::string const& id_) : id(id_) {}
+  explicit NonPOD ( std::string const& id_) : id(id_) {}
 
   friend std::ostream& operator << ( std::ostream& os, NonPOD const& npod )
     { return os << '(' << npod.id << ')' ; }
@@ -192,6 +192,10 @@ bool test ( T const& y, T const& z )
   boost::value_initialized<T> x ;
   BOOST_CHECK ( y == x ) ;
   BOOST_CHECK ( y == boost::get(x) ) ;
+
+  T initializedValue = boost::initialized_value() ;
+  BOOST_CHECK ( y == initializedValue ) ;
+
   static_cast<T&>(x) = z ;
   boost::get(x) = z ;
   BOOST_CHECK ( x == z ) ;
