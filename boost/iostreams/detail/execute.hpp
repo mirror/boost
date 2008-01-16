@@ -40,9 +40,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
-#ifndef BOOST_IOSTREAMS_NO_RESULT_OF
-# include <boost/utility/result_of.hpp>
-#endif
+#include <boost/utility/result_of.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 
