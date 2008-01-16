@@ -101,7 +101,11 @@ int main()
 
   setup_test(v);
   t.restart();
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1400)
   do_test(v, BOOST_EXAMPLE_FAST_MEM_FN(& test::id));
+#else // MSVC<8 does not like the implementation of the deduction macro:
+  do_test(v, ::example::fast_mem_fn< int (test::*)() const, & test::id >());
+#endif
   time1 = t.elapsed();
   std::cout << "fast_mem_fn                    | " << time1 << std::endl;
 
