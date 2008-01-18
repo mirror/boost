@@ -135,7 +135,7 @@ namespace example
       typedef typename mpl::deref<From>::type arg_type;
       typedef typename mpl::next<From>::type next_iter_type;
 
-      invoker<Function, next_iter_type, To>::apply
+      interpreter::invoker<Function, next_iter_type, To>::apply
           ( func, parser, fusion::push_back(args, parser.get<arg_type>()) );
     }
   };
