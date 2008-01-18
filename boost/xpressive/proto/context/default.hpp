@@ -30,6 +30,8 @@
     #include <boost/xpressive/proto/traits.hpp> // for proto::arg_c()
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
+    namespace boost { namespace proto
+    {
     // If we're generating doxygen documentation, hide all the nasty
     // Boost.Typeof gunk.
     #ifndef BOOST_PROTO_DOXYGEN_INVOKED
@@ -61,8 +63,6 @@
     ///
     #define UNREF(x) typename boost::remove_reference<x>::type
 
-    namespace boost { namespace proto
-    {
         namespace detail
         {
             template<typename T> T make();

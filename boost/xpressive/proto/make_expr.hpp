@@ -77,6 +77,14 @@
     #endif
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
+    namespace boost { namespace fusion
+    {
+        template<typename Function>
+        class unfused_generic;
+    }}
+
+    namespace boost { namespace proto
+    {
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_AS_ARG_TYPE(Z, N, DATA)                                                     \
@@ -332,14 +340,6 @@
         )                                                                                           \
         /**/
 
-    namespace boost { namespace fusion
-    {
-        template<typename Function>
-        class unfused_generic;
-    }}
-
-    namespace boost { namespace proto
-    {
         namespace detail
         {
             template<

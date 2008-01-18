@@ -20,7 +20,7 @@
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #else
-/// INTERNAL ONLY
+/// INTERNAL <> ONLY
 /// Needed to work around doxygen bug
 struct a_dummy_global;
 #endif

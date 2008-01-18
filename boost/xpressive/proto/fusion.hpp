@@ -30,12 +30,12 @@
 #include <boost/xpressive/proto/eval.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
-/// INTERNAL ONLY
-///
-#define UNREF(x) typename boost::remove_reference<x>::type
-
 namespace boost { namespace proto
 {
+
+/// INTERNAL MACRO
+///
+#define UNREF(x) typename boost::remove_reference<x>::type
 
     namespace detail
     {
@@ -156,7 +156,7 @@ namespace boost { namespace proto
         {}
 
         template<typename Sig>
-        struct result {};
+        struct result;
 
         template<typename This, typename Expr>
         struct result<This(Expr)>
@@ -411,7 +411,7 @@ namespace boost { namespace fusion
         struct as_element
         {
             template<typename Sig>
-            struct result {};
+            struct result;
 
             template<typename This, typename Expr>
             struct result<This(Expr)>

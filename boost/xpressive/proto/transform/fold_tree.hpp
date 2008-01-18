@@ -10,34 +10,39 @@
 #define BOOST_PROTO_TRANSFORM_FOLD_TREE_HPP_EAN_11_05_2007
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
+#include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
 {
-
     namespace transform
     {
-
         namespace detail
         {
+            template<typename Tag>
+            struct is_tag : callable
+            {
+                template<typename Sig>
+                struct result;
 
-            template<typename Grammar, typename Fun>
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
+                  : is_same<Tag, typename Expr::proto_tag>
+                {};
+            };
+
+            template<typename Tag, typename Fun>
             struct fold_tree_
-              : or_<
-                    when<Grammar, fold<_, _state, fold_tree_<Grammar, Fun> > >
-                  , when<_, Fun>
-                >
+              : if_<is_tag<Tag>, fold<_, _state, fold_tree_<Tag, Fun> >, Fun>
             {};
 
-            template<typename Grammar, typename Fun>
+            template<typename Tag, typename Fun>
             struct reverse_fold_tree_
-              : or_<
-                    when<Grammar, reverse_fold<_, _state, reverse_fold_tree_<Grammar, Fun> > >
-                  , when<_, Fun>
-                >
+              : if_<is_tag<Tag>, reverse_fold<_, _state, reverse_fold_tree_<Tag, Fun> >, Fun>
             {};
         }
 
@@ -54,10 +59,7 @@ namespace boost { namespace proto
                 typedef fold<
                     Sequence
                   , State0
-                  , detail::fold_tree_<
-                        nary_expr<typename Expr::proto_tag, vararg<_> >
-                      , Fun
-                    >
+                  , detail::fold_tree_<typename Expr::proto_tag, Fun>
                 > impl;
 
                 typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
@@ -85,10 +87,7 @@ namespace boost { namespace proto
                 typedef reverse_fold<
                     Sequence
                   , State0
-                  , detail::reverse_fold_tree_<
-                        nary_expr<typename Expr::proto_tag, vararg<_> >
-                      , Fun
-                    >
+                  , detail::reverse_fold_tree_<typename Expr::proto_tag, Fun>
                 > impl;
 
                 typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
