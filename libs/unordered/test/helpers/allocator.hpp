@@ -44,9 +44,9 @@ namespace test
 
         pointer allocate(size_type n, const_pointer u) { return allocate(n); }
 
-#if defined(__IBMCPP__)
-        // Workaround for IBM Visual Age which seems to use a void pointer
-        // for the second argument.
+#if defined(__IBMCPP__) || BOOST_WORKAROUND(BOOST_RWSTD_VER, < 0x04020000)
+        // Workaround for IBM Visual Age and Rogue Wave (or maybe just Apache stdcxx?)
+        // which seem to use a void pointer for the second argument.
         pointer allocate(size_type n, void const* u) { return allocate(n); }
 #endif
 

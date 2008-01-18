@@ -21,15 +21,9 @@ namespace exception
 {
     namespace detail
     {
-        struct malloc_allocator_holder {
-            template <class T> struct apply {
-                typedef test::malloc_allocator<T> type;
-            };
-        };
-
         namespace
         {
-            test::detail::memory_tracker<malloc_allocator_holder> tracker;
+            test::detail::memory_tracker<test::malloc_allocator<int> > tracker;
         }
     }
 

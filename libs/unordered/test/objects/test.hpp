@@ -205,7 +205,7 @@ namespace test
     namespace detail
     {
         namespace {
-            test::detail::memory_tracker<test::detail::default_allocator_holder> tracker;
+            test::detail::memory_tracker<std::allocator<int> > tracker;
         }
     }
 
