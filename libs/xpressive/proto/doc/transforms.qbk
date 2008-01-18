@@ -1021,7 +1021,78 @@ Example:
 [section:user_defined_transforms User-Defined Transforms]
 [/======================================================]
 
-TODO describe how to implement custom transforms.
+In previous sections, we've seen how to compose larger transforms
+out of smaller transforms using function types.
+We've also seen the primitive transforms that Proto provides. 
+So-called primitive transforms can be used without specifying
+arguments, like `_arg0` which returns the first child of the 
+current node. But primitive transforms are not special in any way.
+They are merely ternary function objects that take the current
+expression, state and visitor as arguments.
+
+You can define your own primitive transforms. You might want to
+do this if your transform is complicated and composing it out
+of primitives becomes unwieldy. You might also do this
+to work around compiler bugs on legacy compilers that makes
+composing transforms using function types problematic. Finally,
+you might also decide to define your own primitive transforms
+to improve compile times. Since Proto can simply invoke a
+primitive transform directly without having to process arguments
+or differentiate callable transforms from object transforms,
+primitive transforms are more efficient.
+
+To define your own primitive transform, merely define a ternary
+function object that accepts an expression, a state and a visitor.
+Here, for example, is how Proto defines the `arg_c<>` transform:
+
+    namespace boost { namespace proto { namespace transform
+    {
+        // A transform that returns the I-th child
+        template<int I>
+        struct arg_c : callable
+        {
+            // Nested "result" template, used by
+            // boost::result_of<> to compute the
+            // return type of the function.
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Expr, typename State, typename Visitor>
+            struct result<This(Expr, State, Visitor)>
+              : proto::result_of::arg_c<Expr, I>
+            {};
+
+            // Function call operator that actually
+            // executes the transform.
+            template<typename Expr, typename State, typename Visitor>
+            typename proto::result_of::arg_c<Expr, I>::type
+            operator ()(Expr const &expr, State const &, Visitor &) const
+            {
+                return proto::arg_c<I>(expr);
+            }
+        };
+    }}}
+
+    namespace boost { namespace proto
+    {
+        // Note that arg_c<I> is callable, so that
+        // it can be used with arguments, as:
+        //   arg_c<0>(arg_c<1>)
+        template<int I>
+        struct is_callable<transform::arg_c<I> >
+          : mpl::true_
+        {};
+    }}
+
+There is nothing particularly special about the definition of
+`arg_c<>`. It is just an ordinary polymorphic function object. The
+only interesting bit is the `is_callable<>` specialization, which
+will be described in the section called "Making Your Transform 
+Callable".
+
+Once you have defined such a ternary function object, you can use
+it as a transform without any arguments and Proto will automatically
+pass it the current expression, state and visitor parameters.
 
 [endsect]
 
