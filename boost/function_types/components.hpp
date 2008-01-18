@@ -407,7 +407,7 @@ namespace boost
     struct components_bcc
       : mpl::if_
         < detail::represents_impl< detail::components_impl<T,L>
-                                 , member_pointer_tag>
+                                 , member_function_pointer_tag>
         , detail::mfp_components<detail::components_impl<T,L>,T,OrigT,L>
         , detail::components_impl<T,L>
         >::type
