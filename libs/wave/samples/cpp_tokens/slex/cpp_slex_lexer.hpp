@@ -271,7 +271,6 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(CONSTCAST, "const_cast"),
     TOKEN_DATA(CONTINUE, "continue"),
     TOKEN_DATA(DEFAULT, "default"),
-//    TOKEN_DATA(DEFINED, "defined"),
     TOKEN_DATA(DELETE, "delete"),
     TOKEN_DATA(DO, "do"),
     TOKEN_DATA(DOUBLE, "double"),
