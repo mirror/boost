@@ -156,11 +156,12 @@ void close_composite_device()
     {
         operation_sequence  seq;
         chain<input>        ch;
+        operation           dummy;
         ch.push(
             io::compose(
                 closable_filter<dual_use>(
                     seq.new_operation(2),
-                    seq.new_operation(3)
+                    dummy
                 ),
                 closable_device<input>(seq.new_operation(1))
             )
@@ -218,13 +219,14 @@ void close_composite_device()
     {
         operation_sequence  seq;
         chain<output>       ch;
+        operation           dummy;
         ch.push(
             io::compose(
                 closable_filter<dual_use>(
-                    seq.new_operation(1),
-                    seq.new_operation(2)
+                    dummy,
+                    seq.new_operation(1)
                 ),
-                closable_device<output>(seq.new_operation(3))
+                closable_device<output>(seq.new_operation(2))
             )
         );
         BOOST_CHECK_NO_THROW(ch.reset());
@@ -320,11 +322,12 @@ void close_composite_filter()
     {
         operation_sequence  seq;
         chain<input>        ch;
+        operation           dummy;
         ch.push(
             io::compose(
                 closable_filter<dual_use>(
                     seq.new_operation(3),
-                    seq.new_operation(4)
+                    dummy
                 ),
                 closable_filter<input>(seq.new_operation(2))
             )
@@ -386,16 +389,17 @@ void close_composite_filter()
     {
         operation_sequence  seq;
         chain<output>       ch;
+        operation           dummy;
         ch.push(
             io::compose(
                 closable_filter<dual_use>(
-                    seq.new_operation(1),
-                    seq.new_operation(2)
+                    dummy,
+                    seq.new_operation(1)
                 ),
-                closable_filter<output>(seq.new_operation(3))
+                closable_filter<output>(seq.new_operation(2))
             )
         );
-        ch.push(closable_device<output>(seq.new_operation(4)));
+        ch.push(closable_device<output>(seq.new_operation(3)));
         BOOST_CHECK_NO_THROW(ch.reset());
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
     }
@@ -445,15 +449,16 @@ void close_composite_filter()
     {
         operation_sequence  seq;
         chain<input>        ch;
+        operation           dummy;
         ch.push(
             io::compose(
                 closable_filter<dual_use>(
                     seq.new_operation(3),
-                    seq.new_operation(4)
+                    dummy
                 ),
                 closable_filter<dual_use>(
                     seq.new_operation(2),
-                    seq.new_operation(5)
+                    dummy
                 )
             )
         );
@@ -466,19 +471,20 @@ void close_composite_filter()
     {
         operation_sequence  seq;
         chain<output>       ch;
+        operation           dummy;
         ch.push(
             io::compose(
                 closable_filter<dual_use>(
-                    seq.new_operation(2),
-                    seq.new_operation(3)
+                    dummy,
+                    seq.new_operation(1)
                 ),
                 closable_filter<dual_use>(
-                    seq.new_operation(1),
-                    seq.new_operation(4)
+                    dummy,
+                    seq.new_operation(2)
                 )
             )
         );
-        ch.push(closable_device<output>(seq.new_operation(5)));
+        ch.push(closable_device<output>(seq.new_operation(3)));
         BOOST_CHECK_NO_THROW(ch.reset());
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
     }

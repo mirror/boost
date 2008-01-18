@@ -65,6 +65,8 @@ template< typename Filter,
 class composite_device {
 private:
     typedef typename detail::param_type<Device>::type       param_type;
+    typedef typename mode_of<Filter>::type                  filter_mode;
+    typedef typename mode_of<Device>::type                  device_mode;
     typedef typename
             iostreams::select<  // Disambiguation for Tru64.
                 is_direct<Device>,  direct_adapter<Device>,
@@ -120,7 +122,23 @@ template< typename Filter1,
               BOOST_DEDUCED_TYPENAME composite_mode<Filter1, Filter2>::type >
 class composite_filter {
 private:
-     typedef reference_wrapper<Filter2>           filter_ref;
+    typedef reference_wrapper<Filter2>           filter_ref;
+    typedef typename mode_of<Filter1>::type      first_mode;
+    typedef typename mode_of<Filter2>::type      second_mode;
+
+    // A dual-use filter cannot be composed with a read-write filter
+    BOOST_STATIC_ASSERT(
+        !(is_convertible<first_mode, dual_use>::value) ||
+        !(is_convertible<second_mode, input>::value) ||
+        !(is_convertible<second_mode, output>::value) ||
+         (is_convertible<second_mode, dual_use>::value)
+    );
+    BOOST_STATIC_ASSERT(
+        !(is_convertible<second_mode, dual_use>::value) ||
+        !(is_convertible<first_mode, input>::value) ||
+        !(is_convertible<first_mode, output>::value) ||
+         (is_convertible<first_mode, dual_use>::value)
+    );
 public:
     typedef typename char_type_of<Filter1>::type  char_type;
     struct category
@@ -170,12 +188,24 @@ public:
 
         // Close input sequences in reverse order and output sequences in 
         // forward order
-        detail::execute_all(
-            detail::call_close(filter2_, dev, BOOST_IOS::in),
-            detail::call_close(filter1_, cmp, BOOST_IOS::in),
-            detail::call_close(filter1_, cmp, BOOST_IOS::out),
-            detail::call_close(filter2_, dev, BOOST_IOS::out)
-        );
+        if (!is_convertible<first_mode, dual_use>::value) {
+            detail::execute_all(
+                detail::call_close(filter2_, dev, BOOST_IOS::in),
+                detail::call_close(filter1_, cmp, BOOST_IOS::in),
+                detail::call_close(filter1_, cmp, BOOST_IOS::out),
+                detail::call_close(filter2_, dev, BOOST_IOS::out)
+            );
+        } else if (is_convertible<second_mode, input>::value) {
+            detail::execute_all(
+                detail::call_close(filter2_, dev, BOOST_IOS::in),
+                detail::call_close(filter1_, cmp, BOOST_IOS::in)
+            );
+        } else {
+            detail::execute_all(
+                detail::call_close(filter1_, cmp, BOOST_IOS::out),
+                detail::call_close(filter2_, dev, BOOST_IOS::out)
+            );
+        }
     }
 
     template<typename Device>
@@ -190,18 +220,26 @@ public:
         composite_device<filter_ref, Device> cmp(boost::ref(filter2_), dev);
 
         // Close input sequences in reverse order
-        if (which == BOOST_IOS::in)
+        if ( which == BOOST_IOS::in &&
+             ( !is_convertible<first_mode, dual_use>::value ||
+                is_convertible<second_mode, input>::value ) )
+        {
             detail::execute_all(
                 detail::call_close(filter2_, dev, BOOST_IOS::in),
                 detail::call_close(filter1_, cmp, BOOST_IOS::in)
             );
+        }
 
         // Close output sequences in forward order
-        if (which == BOOST_IOS::out)
+        if ( which == BOOST_IOS::out &&
+             ( !is_convertible<first_mode, dual_use>::value ||
+                is_convertible<second_mode, output>::value ) )
+        {
             detail::execute_all(
                 detail::call_close(filter1_, cmp, BOOST_IOS::out),
                 detail::call_close(filter2_, dev, BOOST_IOS::out)
             );
+        }
     }
 
     template<typename Device>
@@ -378,33 +416,55 @@ template<typename Filter, typename Device, typename Mode>
 void composite_device<Filter, Device, Mode>::close()
 {
     BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
+    BOOST_STATIC_ASSERT(
+        !(is_convertible<filter_mode, dual_use>::value) ||
+        !(is_convertible<device_mode, input>::value) ||
+        !(is_convertible<device_mode, output>::value)
+    );
 
     // Close input sequences in reverse order and output sequences 
     // in forward order
-    detail::execute_all( detail::call_close(device_, BOOST_IOS::in),
-                         detail::call_close(filter_, device_, BOOST_IOS::in),
-                         detail::call_close(filter_, device_, BOOST_IOS::out),
-                         detail::call_close(device_, BOOST_IOS::out) );
+    if (!is_convertible<filter_mode, dual_use>::value) {
+        detail::execute_all(
+            detail::call_close(device_, BOOST_IOS::in),
+            detail::call_close(filter_, device_, BOOST_IOS::in),
+            detail::call_close(filter_, device_, BOOST_IOS::out),
+            detail::call_close(device_, BOOST_IOS::out)
+        );
+    } else if (is_convertible<device_mode, input>::value) {
+        detail::execute_all(
+            detail::call_close(device_, BOOST_IOS::in),
+            detail::call_close(filter_, device_, BOOST_IOS::in)
+        );
+    } else {
+        detail::execute_all(
+            detail::call_close(filter_, device_, BOOST_IOS::out),
+            detail::call_close(device_, BOOST_IOS::out)
+        );
+    }
 }
 
 template<typename Filter, typename Device, typename Mode>
 void composite_device<Filter, Device, Mode>::close(BOOST_IOS::openmode which)
 {
     BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
+    BOOST_STATIC_ASSERT(!(is_convertible<filter_mode, dual_use>::value));
 
     // Close input sequences in reverse order
-    if (which == BOOST_IOS::in)
+    if (which == BOOST_IOS::in) {
         detail::execute_all(
             detail::call_close(device_, BOOST_IOS::in),
             detail::call_close(filter_, device_, BOOST_IOS::in) 
         );
+    }
 
     // Close output sequences in forward order
-    if (which == BOOST_IOS::out)
+    if (which == BOOST_IOS::out) {
         detail::execute_all(
             detail::call_close(filter_, device_, BOOST_IOS::out),
             detail::call_close(device_, BOOST_IOS::out)
         );
+    }
 }
 
 template<typename Filter, typename Device, typename Mode>

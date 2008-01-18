@@ -62,7 +62,9 @@ struct mapped_file_impl;
 
 struct mapped_file_params {
     explicit mapped_file_params()
-    #if BOOST_WORKAROUND(BOOST_MSVC, < 1400) && defined(BOOST_RWSTD_VER)
+    #if BOOST_WORKAROUND(BOOST_MSVC, < 1400) && defined(BOOST_RWSTD_VER) || \
+        defined(__BORLANDC__) && defined(_CPPLIB_VER)
+        /**/
         : mode(std::ios_base::openmode(0)),
     #else
         : mode(),
@@ -72,7 +74,8 @@ struct mapped_file_params {
         { }
     explicit mapped_file_params(const std::string& path)
         : path(path),
-    #if BOOST_WORKAROUND(BOOST_MSVC, < 1400) && defined(BOOST_RWSTD_VER)
+    #if BOOST_WORKAROUND(BOOST_MSVC, < 1400) && defined(BOOST_RWSTD_VER) || \
+        defined(__BORLANDC__) && defined(_CPPLIB_VER)
           mode(std::ios_base::openmode(0)),
     #else
           mode(),

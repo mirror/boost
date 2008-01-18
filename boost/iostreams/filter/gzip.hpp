@@ -251,6 +251,8 @@ public:
                 throw;
             }
             close_impl();
+        } else {
+            close_impl();
         }
     }
 private:

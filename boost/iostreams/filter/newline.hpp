@@ -215,8 +215,7 @@ public:
         typedef typename iostreams::category_of<Sink>::type category;
         if ((flags_ & f_write) != 0 && (flags_ & f_has_CR) != 0)
             newline_if_sink(dest);
-        if (which == BOOST_IOS::out)
-            flags_ &= newline::platform_mask;
+        flags_ &= ~f_has_LF; // Restore original flags.
     }
 private:
 
@@ -402,24 +401,21 @@ public:
     {
         using iostreams::newline::final_newline;
 
-        if (which == BOOST_IOS::out) {
+        // Update final_newline flag.
+        if ( (source() & f_has_CR) != 0 ||
+             (source() & f_line_complete) != 0 )
+        {
+            source() |= final_newline;
+        }
 
-            // Update final_newline flag.
-            if ( (source() & f_has_CR) != 0 ||
-                (source() & f_line_complete) != 0 )
-            {
-                source() |= final_newline;
-            }
+        // Clear non-sticky flags.
+        source() &= ~(f_has_CR | f_line_complete);
 
-            // Clear non-sticky flags.
-            source() &= ~(f_has_CR | f_line_complete);
-
-            // Check for errors.
-            if ( (target_ & final_newline) != 0 &&
-                 (source() & final_newline) == 0 )
-            {
-                fail();
-            }
+        // Check for errors.
+        if ( (target_ & final_newline) != 0 &&
+             (source() & final_newline) == 0 )
+        {
+            fail();
         }
     }
 private:

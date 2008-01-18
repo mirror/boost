@@ -236,7 +236,8 @@ int get_cont_octet_out_count_impl(wchar_t word){
 // wchar_t is defined as UCS2.  The warnings are superfluous as
 // the specialization is never instantitiated with such compilers.
 template<>
-int get_cont_octet_out_count_impl<4>(wchar_t word){
+int get_cont_octet_out_count_impl<4>(wchar_t word)
+{
     if (word < 0x80) {
         return 0;
     }

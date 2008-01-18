@@ -8,7 +8,6 @@
 // replace BOOST_RESTRICT with BOOST_IOSTREAMS_RESTRICT here, since that
 // would interfere with the oepration of the header 
 // <boost/iostreams/restrict.hpp>
-
 #ifndef BOOST_RESTRICT
 # define BOOST_RESTRICT restrict
 # define BOOST_RESTRICT_HEADER <boost/iostreams/restrict.hpp>
@@ -633,11 +632,12 @@ void close_filter()
     {
         operation_sequence  seq;
         chain<input>        ch;
+        operation           dummy;
         ch.push(
             io::BOOST_RESTRICT(
                 closable_filter<dual_use>(
                     seq.new_operation(2),
-                    seq.new_operation(3)
+                    dummy
                 ),
                 0
             )
@@ -651,16 +651,17 @@ void close_filter()
     {
         operation_sequence  seq;
         chain<output>       ch;
+        operation           dummy;
         ch.push(
             io::BOOST_RESTRICT(
                 closable_filter<dual_use>(
-                    seq.new_operation(1),
-                    seq.new_operation(2)
+                    dummy,
+                    seq.new_operation(1)
                 ),
                 0
             )
         );
-        ch.push(closable_device<output>(seq.new_operation(3)));
+        ch.push(closable_device<output>(seq.new_operation(2)));
         BOOST_CHECK_NO_THROW(ch.reset());
         BOOST_CHECK_OPERATION_SEQUENCE(seq);
     }

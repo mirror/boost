@@ -18,13 +18,9 @@
  * are thrown. If one of the operations throws an exception, performs the
  * remaining operations and rethrows the initial exception.
  *
- * In order to preserve support for old compilers, no attempt is made to deduce 
- * the return type of the primary operation, even though it could be easily
- * deduced in all the intended use cases.
- *
  * execute_foreach() is a variant of std::foreach which invokes a function 
  * object for each item in a sequence, catching all execptions and rethrowing
- * the first caucht exception after the function object has been invoked on each
+ * the first caught exception after the function object has been invoked on each
  * item.
  */
 
@@ -35,7 +31,8 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>                           // BOOST_NO_RESULT_OF
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/config/limits.hpp>   // MAX_EXECUTE_ARITY
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -43,9 +40,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
-#ifndef BOOST_NO_RESULT_OF
-# include <boost/utility/result_of.hpp>
-#endif
+#include <boost/utility/result_of.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
 

@@ -153,10 +153,7 @@ public:
     template<typename Sink>
     void close(Sink& snk, BOOST_IOS::openmode which)
     {
-        using namespace std;
-        if ((state() & f_write) == 0 && which == BOOST_IOS::in)
-            close_impl();
-        if ((state() & f_write) != 0 && which == BOOST_IOS::out) {
+        if ((state() & f_write) != 0) {
 
             // Repeatedly invoke filter() with no input.
             try {
@@ -174,6 +171,8 @@ public:
                 try { close_impl(); } catch (...) { }
                 throw;
             }
+            close_impl();
+        } else {
             close_impl();
         }
     }
