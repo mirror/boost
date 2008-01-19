@@ -5,7 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
-// 16 Jan 2008 (Worked around compiler bugs, added initialized_value) Fernando Cacciola, Niels Dekker
+// 19 Jan 2008 (Worked around compiler bugs, added initialized_value) Fernando Cacciola, Niels Dekker
 //
 #ifndef BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 #define BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
@@ -49,7 +49,7 @@ class value_initialized
 #if _MSC_VER >= 1310
 // When using MSVC 7.1 or higher, the following placement new expression may trigger warning C4345:
 // "behavior change: an object of POD type constructed with an initializer of the form ()
-// will be default-initialized".  There is no need to worry about this, though.
+// will be default-initialized".  It is safe to ignore this warning when using value_initialized.
 #pragma warning(disable: 4345)
 #endif
 #endif
@@ -66,9 +66,8 @@ class value_initialized
 
     value_initialized & operator=(value_initialized const & arg)
     {
-      T & this_data = this->data();
       T const & arg_data = arg.data();
-      this_data = arg_data;
+      this->data() = arg_data;
       return *this;
     }
 
