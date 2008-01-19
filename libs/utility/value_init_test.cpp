@@ -6,8 +6,8 @@
 //
 // Test program for "boost/utility/value_init.hpp"
 //
-// 21 Agu 2002 (Created) Fernando Cacciola
-// 16 Jan 2008 (Added tests regarding compiler issues and initialized_value) Fernando Cacciola, Niels Dekker
+// 21 Ago 2002 (Created) Fernando Cacciola
+// 19 Jan 2008 (Added tests regarding compiler issues and initialized_value) Fernando Cacciola, Niels Dekker
 
 #include <cstring>  // For memcmp.
 #include <iostream>
@@ -180,6 +180,32 @@ struct CopyFunctionCallTester
 };
 
 
+template<class T>
+void check_initialized_value ( T const& y )
+{
+  T initializedValue = boost::initialized_value() ;
+  BOOST_CHECK ( y == initializedValue ) ;
+}
+
+#ifdef  __BORLANDC__
+#if __BORLANDC__ == 0x582
+void check_initialized_value( NonPOD const& )
+{
+  // The initialized_value check is skipped for Borland 5.82
+  // and this type (NonPOD), because the following statement
+  // won't compile on this particular compiler version:
+  //   NonPOD initializedValue = boost::initialized_value() ;
+  //
+  // This is caused by a compiler bug, that is fixed with a newer version
+  // of the Borland compiler.  The Release Notes for Delphi(R) 2007 for
+  // Win32(R) and C++Builder(R) 2007 (http://dn.codegear.com/article/36575)
+  // say about similar statements:
+  //   both of these statements now compile but under 5.82 got the error:
+  //   Error E2015: Ambiguity between 'V::V(const A &)' and 'V::V(const V &)'
+}
+#endif
+#endif
+
 //
 // This test function tests boost::value_initialized<T> for a specific type T.
 // The first argument (y) is assumed have the value of a value-initialized object.
@@ -189,12 +215,12 @@ template<class T>
 bool test ( T const& y, T const& z )
 {
   const boost::unit_test::counter_t counter_before_test = boost::minimal_test::errors_counter();
+
+  check_initialized_value(y);
+
   boost::value_initialized<T> x ;
   BOOST_CHECK ( y == x ) ;
   BOOST_CHECK ( y == boost::get(x) ) ;
-
-  T initializedValue = boost::initialized_value() ;
-  BOOST_CHECK ( y == initializedValue ) ;
 
   static_cast<T&>(x) = z ;
   boost::get(x) = z ;
