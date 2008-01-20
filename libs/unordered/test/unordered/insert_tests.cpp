@@ -19,7 +19,7 @@
 test::seed_t seed(243432);
 
 template <class X>
-void unique_insert_tests1(X* = 0)
+void unique_insert_tests1(X*, test::random_generator generator = test::default_generator)
 {
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
     typedef test::ordered<X> ordered;
@@ -29,7 +29,7 @@ void unique_insert_tests1(X* = 0)
     X x;
     test::ordered<X> tracker = test::create_ordered(x);
 
-    test::random_values<X> v(1000);
+    test::random_values<X> v(1000, generator);
 
     for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
             it != v.end(); ++it)
@@ -54,14 +54,14 @@ void unique_insert_tests1(X* = 0)
 }
 
 template <class X>
-void equivalent_insert_tests1(X* = 0)
+void equivalent_insert_tests1(X*, test::random_generator generator = test::default_generator)
 {
     std::cerr<<"insert(value) tests for containers with equivalent keys.\n";
 
     X x;
     test::ordered<X> tracker = test::create_ordered(x);
 
-    test::random_values<X> v(1000);
+    test::random_values<X> v(1000, generator);
     for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
             it != v.end(); ++it)
     {
@@ -83,7 +83,7 @@ void equivalent_insert_tests1(X* = 0)
 }
 
 template <class X>
-void insert_tests2(X* = 0)
+void insert_tests2(X*, test::random_generator generator = test::default_generator)
 {
     typedef BOOST_DEDUCED_TYPENAME test::ordered<X> tracker_type;
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
@@ -96,7 +96,7 @@ void insert_tests2(X* = 0)
         X x;
         tracker_type tracker = test::create_ordered(x);
 
-        test::random_values<X> v(1000);
+        test::random_values<X> v(1000, generator);
         for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
@@ -122,7 +122,7 @@ void insert_tests2(X* = 0)
         X const& x_const = x;
         tracker_type tracker = test::create_ordered(x);
 
-        test::random_values<X> v(100);
+        test::random_values<X> v(100, generator);
         for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
@@ -148,7 +148,7 @@ void insert_tests2(X* = 0)
         const_iterator pos = x.begin();
         tracker_type tracker = test::create_ordered(x);
 
-        test::random_values<X> v(1000);
+        test::random_values<X> v(1000, generator);
         for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
@@ -173,7 +173,7 @@ void insert_tests2(X* = 0)
         X x;
         tracker_type tracker = test::create_ordered(x);
 
-        test::random_values<X> v(1000);
+        test::random_values<X> v(1000, generator);
         for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
                 it != v.end(); ++it)
         {
@@ -196,7 +196,7 @@ void insert_tests2(X* = 0)
     {
         X x;
 
-        test::random_values<X> v(1000);
+        test::random_values<X> v(1000, generator);
         x.insert(v.begin(), v.end());
 
         test::check_container(x, v);
@@ -208,7 +208,7 @@ void insert_tests2(X* = 0)
     {
         X x;
 
-        test::random_values<X> v(1000);
+        test::random_values<X> v(1000, generator);
         x.insert(test::input_iterator(v.begin()), test::input_iterator(v.end()));
         test::check_container(x, v);
 
@@ -217,14 +217,14 @@ void insert_tests2(X* = 0)
 }
 
 template <class X>
-void map_tests(X* = 0)
+void map_tests(X*, test::random_generator generator = test::default_generator)
 {
     std::cerr<<"map tests.\n";
 
     X x;
     test::ordered<X> tracker = test::create_ordered(x);
 
-    test::random_values<X> v(1000);
+    test::random_values<X> v(1000, generator);
     for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
             it != v.end(); ++it)
     {
@@ -244,12 +244,12 @@ void map_tests(X* = 0)
 }
 
 template <class X>
-void associative_insert_range_test(X* = 0)
+void associative_insert_range_test(X*, test::random_generator generator = test::default_generator)
 {
     std::cerr<<"associative_insert_range_test\n";
 
     typedef std::list<std::pair<BOOST_DEDUCED_TYPENAME X::key_type, BOOST_DEDUCED_TYPENAME X::mapped_type> > list;
-    test::random_values<X> v(1000);
+    test::random_values<X> v(1000, generator);
     list l;
     std::copy(v.begin(), v.end(), std::back_inserter(l));
 
@@ -260,42 +260,38 @@ void associative_insert_range_test(X* = 0)
 
 int main()
 {
-    unique_insert_tests1((boost::unordered_set<int>*) 0);
-    equivalent_insert_tests1((boost::unordered_multiset<int>*) 0);
-    unique_insert_tests1((boost::unordered_map<int, int>*) 0);
-    equivalent_insert_tests1((boost::unordered_multimap<int, int>*) 0);
+    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    unique_insert_tests1((boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    equivalent_insert_tests1((boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    unique_insert_tests1((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    equivalent_insert_tests1((boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
+    unique_insert_tests1(test_set);
+    equivalent_insert_tests1(test_multiset);
+    unique_insert_tests1(test_map);
+    equivalent_insert_tests1(test_multimap);
 
-    unique_insert_tests1((boost::unordered_set<test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    equivalent_insert_tests1((boost::unordered_multiset<test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    unique_insert_tests1((boost::unordered_map<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    equivalent_insert_tests1((boost::unordered_multimap<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
+    unique_insert_tests1(test_set, test::generate_collisions);
+    equivalent_insert_tests1(test_multiset, test::generate_collisions);
+    unique_insert_tests1(test_map, test::generate_collisions);
+    equivalent_insert_tests1(test_multimap, test::generate_collisions);
 
-    insert_tests2((boost::unordered_set<int>*) 0);
-    insert_tests2((boost::unordered_multiset<int>*) 0);
-    insert_tests2((boost::unordered_map<int, int>*) 0);
-    insert_tests2((boost::unordered_multimap<int, int>*) 0);
+    insert_tests2(test_set);
+    insert_tests2(test_multiset);
+    insert_tests2(test_map);
+    insert_tests2(test_multimap);
 
-    insert_tests2((boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    insert_tests2((boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    insert_tests2((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    insert_tests2((boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
+    insert_tests2(test_set, test::generate_collisions);
+    insert_tests2(test_multiset, test::generate_collisions);
+    insert_tests2(test_map, test::generate_collisions);
+    insert_tests2(test_multimap, test::generate_collisions);
 
-    insert_tests2((boost::unordered_set<test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    insert_tests2((boost::unordered_multiset<test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    insert_tests2((boost::unordered_map<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    insert_tests2((boost::unordered_multimap<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
+    map_tests(test_map);
+    map_tests(test_map, test::generate_collisions);
 
-    map_tests((boost::unordered_map<int, int>*) 0);
-    map_tests((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    map_tests((boost::unordered_map<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
+    associative_insert_range_test(test_map);
+    associative_insert_range_test(test_map, test::generate_collisions);
+    associative_insert_range_test(test_multimap);
+    associative_insert_range_test(test_multimap, test::generate_collisions);
 
-    associative_insert_range_test((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    associative_insert_range_test((boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    associative_insert_range_test((boost::unordered_multimap<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
     return boost::report_errors();
 }

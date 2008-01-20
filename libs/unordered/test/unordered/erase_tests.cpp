@@ -18,11 +18,11 @@
 test::seed_t seed(85638);
 
 template <class Container>
-void erase_tests1(Container* = 0)
+void erase_tests1(Container*, test::random_generator generator = test::default_generator)
 {
     std::cerr<<"Erase by key.\n";
     {
-        test::random_values<Container> v(1000);
+        test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         for(BOOST_DEDUCED_TYPENAME test::random_values<Container>::iterator it = v.begin();
             it != v.end(); ++it)
@@ -38,7 +38,7 @@ void erase_tests1(Container* = 0)
 
     std::cerr<<"erase(begin()).\n";
     {
-        test::random_values<Container> v(1000);
+        test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         std::size_t size = x.size();
         while(size > 0 && !x.empty())
@@ -56,7 +56,7 @@ void erase_tests1(Container* = 0)
 
     std::cerr<<"erase(random position).\n";
     {
-        test::random_values<Container> v(1000);
+        test::random_values<Container> v(1000, generator);
         Container x(v.begin(), v.end());
         std::size_t size = x.size();
         while(size > 0 && !x.empty())
@@ -87,7 +87,7 @@ void erase_tests1(Container* = 0)
 
     std::cerr<<"erase(ranges).\n";
     {
-        test::random_values<Container> v(500);
+        test::random_values<Container> v(500, generator);
         Container x(v.begin(), v.end());
 
         std::size_t size = x.size();
@@ -109,42 +109,40 @@ void erase_tests1(Container* = 0)
 
     std::cerr<<"clear().\n";
     {
-        test::random_values<Container> v(500);
+        test::random_values<Container> v(500, generator);
         Container x(v.begin(), v.end());
         x.clear();
         BOOST_TEST(x.empty());
         BOOST_TEST(x.begin() == x.end());
     }
+
+    std::cerr<<"\n";
 }
 
 int main()
 {
-    std::cerr<<"Erase unordered_set<int>.\n";
-    erase_tests1((boost::unordered_set<int>*) 0);
-    std::cerr<<"\nErase unordered_multiset<int>.\n";
-    erase_tests1((boost::unordered_multiset<int>*) 0);
-    std::cerr<<"\nErase unordered_map<int>.\n";
-    erase_tests1((boost::unordered_map<int, int>*) 0);
-    std::cerr<<"\nErase unordered_multimap<int>.\n";
-    erase_tests1((boost::unordered_multimap<int, int>*) 0);
+    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    std::cerr<<"\nErase unordered_set<test::object,..>.\n";
-    erase_tests1((boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    std::cerr<<"\nErase unordered_multiset<test::object,..>.\n";
-    erase_tests1((boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    std::cerr<<"\nErase unordered_map<test::object,..>.\n";
-    erase_tests1((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    std::cerr<<"\nErase unordered_multimap<test::object,..>.\n";
-    erase_tests1((boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
+    std::cerr<<"Erase test_set.\n";
+    erase_tests1(test_set);
+    std::cerr<<"Erase test_multiset.\n";
+    erase_tests1(test_multiset);
+    std::cerr<<"Erase test_map.\n";
+    erase_tests1(test_map);
+    std::cerr<<"Erase test_multimap.\n";
+    erase_tests1(test_multimap);
 
-    std::cerr<<"\nErase unordered_set<test::equivalent_object,..>.\n";
-    erase_tests1((boost::unordered_set<test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    std::cerr<<"\nErase unordered_multiset<test::equivalent_object,..>.\n";
-    erase_tests1((boost::unordered_multiset<test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    std::cerr<<"\nErase unordered_map<test::equivalent_object,..>.\n";
-    erase_tests1((boost::unordered_map<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
-    std::cerr<<"\nErase unordered_multimap<test::equivalent_object,..>.\n";
-    erase_tests1((boost::unordered_multimap<test::equivalent_object, test::equivalent_object, test::hash, test::equal_to, test::allocator<test::equivalent_object> >*) 0);
+    std::cerr<<"Erase test_set, collisions.\n";
+    erase_tests1(test_set, test::generate_collisions);
+    std::cerr<<"Erase test_multiset, collisions.\n";
+    erase_tests1(test_multiset, test::generate_collisions);
+    std::cerr<<"Erase test_map, collisions.\n";
+    erase_tests1(test_map, test::generate_collisions);
+    std::cerr<<"Erase test_multimap, collisions.\n";
+    erase_tests1(test_multimap, test::generate_collisions);
 
     return boost::report_errors();
 }

@@ -32,6 +32,7 @@ namespace exception
     class hash;
     class equal_to;
     template <class T> class allocator;
+    object generate(object const*);
 
     class object
     {

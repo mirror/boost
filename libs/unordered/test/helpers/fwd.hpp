@@ -15,8 +15,6 @@ namespace test
     signed char generate(signed char const*);
     std::string generate(std::string*);
     float generate(float const*);
-    template <class T1, class T2>
-    std::pair<T1, T2> generate(std::pair<T1, T2>*);
 
     struct base_type {} base;
     struct derived_type : base_type {} derived;

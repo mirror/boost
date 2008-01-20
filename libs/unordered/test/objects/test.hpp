@@ -23,6 +23,7 @@ namespace test
     class less;
     class equal_to;
     template <class T> class allocator;
+    object generate(object const*);
 
     class object
     {
@@ -62,44 +63,6 @@ namespace test
         }
     };
 
-    // This object is usd to test how well the containers cope with equivalent keys.
-    class equivalent_object
-    {
-        friend class hash;
-        friend class equal_to;
-        friend class less;
-        int tag1_, tag2_;
-    public:
-        explicit equivalent_object(int t1 = 0, int t2 = 0) : tag1_(t1), tag2_(t2) {}
-
-        ~equivalent_object() {
-            tag1_ = -1;
-            tag2_ = -1;
-        }
-
-        friend bool operator==(equivalent_object const& x1, equivalent_object const& x2) {
-            return x1.tag1_ == x2.tag1_;
-        }
-
-        friend bool operator!=(equivalent_object const& x1, equivalent_object const& x2) {
-            return x1.tag1_ != x2.tag1_;
-        }
-
-        friend bool operator<(equivalent_object const& x1, equivalent_object const& x2) {
-            return x1.tag1_ < x2.tag1_;
-        }
-
-        friend equivalent_object generate(equivalent_object const*) {
-            signed char* x = 0;
-            return equivalent_object(generate(x), generate(x));
-        }
-
-        friend std::ostream& operator<<(std::ostream& out, equivalent_object const& o)
-        {
-            return out<<"("<<o.tag1_<<","<<o.tag2_<<")";
-        }
-    };
-
     class hash
     {
         int type_;
@@ -115,10 +78,6 @@ namespace test
             default:
                 return x.tag1_ + x.tag2_; 
             }
-        }
-
-        std::size_t operator()(equivalent_object const& x) const {
-            return x.tag1_;
         }
 
         std::size_t operator()(int x) const {
@@ -151,10 +110,6 @@ namespace test
             }
         }
 
-        bool operator()(equivalent_object const& x1, equivalent_object const& x2) const {
-            return x1 < x2;
-        }
-
         std::size_t operator()(int x1, int x2) const {
             return x1 < x2;
         }
@@ -179,10 +134,6 @@ namespace test
             default:
                 return x1 == x2;
             }
-        }
-
-        bool operator()(equivalent_object const& x1, equivalent_object const& x2) const {
-            return x1 == x2;
         }
 
         std::size_t operator()(int x1, int x2) const {
@@ -289,13 +240,6 @@ namespace test
 #if BOOST_WORKAROUND(__GNUC__, < 3)
     void swap(test::object& x, test::object& y) {
         test::object tmp;
-        tmp = x;
-        x = y;
-        y = tmp;
-    }
-
-    void swap(test::equivalent_object& x, test::equivalent_object& y) {
-        test::equivalent_object tmp;
         tmp = x;
         x = y;
         y = tmp;

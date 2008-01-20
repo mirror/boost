@@ -16,7 +16,6 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <boost/type_traits/add_const.hpp>
-
 #include "./fwd.hpp"
 
 namespace test
@@ -25,29 +24,6 @@ namespace test
         seed_t(unsigned int x) {
             using namespace std;
             srand(x);
-        }
-    };
-    
-    template <class T>
-    struct generator;
-
-    template <class T1, class T2> std::pair<T1, T2> generate(
-            std::pair<T1, T2> const*)
-    {
-        static generator<T1> g1;
-        static generator<T2> g2;
-
-        return std::pair<T1, T2>(g1(), g2());
-    }
-
-    template <class T>
-    struct generator
-    {
-        typedef T value_type;
-        typedef BOOST_DEDUCED_TYPENAME boost::add_const<T>::type const_value_type;
-        value_type operator()() const
-        {
-            return generate((const_value_type*) 0);
         }
     };
 
@@ -73,13 +49,13 @@ namespace test
     {
         using namespace std;
 
-        static test::generator<char> char_gen;
+        char* char_ptr = 0;
 
         std::string result;
 
         int length = rand() % 10;
         for(int i = 0; i < length; ++i)
-            result += char_gen();
+            result += generate(char_ptr);
 
         return result;
     }

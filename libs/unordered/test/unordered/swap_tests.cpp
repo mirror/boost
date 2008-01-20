@@ -116,23 +116,20 @@ void swap_tests2(X* ptr = 0)
 
 int main()
 {
-    std::cerr<<"Erase unordered_set<int>.\n";
-    swap_tests1((boost::unordered_set<int>*) 0);
-    std::cerr<<"\nErase unordered_multiset<int>.\n";
-    swap_tests1((boost::unordered_multiset<int>*) 0);
-    std::cerr<<"\nErase unordered_map<int>.\n";
-    swap_tests1((boost::unordered_map<int, int>*) 0);
-    std::cerr<<"\nErase unordered_multimap<int>.\n";
-    swap_tests1((boost::unordered_multimap<int, int>*) 0);
+    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    std::cerr<<"\nErase unordered_set<test::object,..>.\n";
-    swap_tests2((boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    std::cerr<<"\nErase unordered_multiset<test::object,..>.\n";
-    swap_tests2((boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    std::cerr<<"\nErase unordered_map<test::object,..>.\n";
-    swap_tests2((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    std::cerr<<"\nErase unordered_multimap<test::object,..>.\n";
-    swap_tests2((boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
+    swap_tests1(test_set);
+    swap_tests1(test_multiset);
+    swap_tests1(test_map);
+    swap_tests1(test_multimap);
+
+    swap_tests2(test_set);
+    swap_tests2(test_multiset);
+    swap_tests2(test_map);
+    swap_tests2(test_multimap);
 
     return boost::report_errors();
 }
