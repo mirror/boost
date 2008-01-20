@@ -19,31 +19,24 @@ project
            : # command line
            : # input files
            : # requirements
-                   <define>BOOST_SYSTEM_STATIC_LINK 
                    <link>static
          ]
          [ run error_code_test.cpp
-           :  :  : <define>BOOST_SYSTEM_DYN_LINK 
-                 : error_code_test_dll
+           :  :  :  : error_code_test_dll
          ]
          [ run error_code_user_test.cpp
-           :  :  : <define>BOOST_SYSTEM_STATIC_LINK 
-                   <link>static
+           :  :  : <link>static
          ]
          [ run error_code_user_test.cpp
-           :  :  : <define>BOOST_SYSTEM_DYN_LINK 
-                 : error_code_user_test_dll
+           :  :  :  : error_code_user_test_dll
          ]
          [ run system_error_test.cpp
-           :  :  : <define>BOOST_SYSTEM_STATIC_LINK 
-                   <link>static
+           :  :  : <link>static
          ]
          [ run system_error_test.cpp
-            :  :  : <define>BOOST_SYSTEM_DYN_LINK 
-                  : system_error_test_dll
+            :  :  :  : system_error_test_dll
          ]
          [ run initialization_test.cpp
-            :  :  : <define>BOOST_SYSTEM_DYN_LINK 
          ]
          [ run header_only_test.cpp
            :  :  : <link>static
