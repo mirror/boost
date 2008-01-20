@@ -19,6 +19,7 @@
 #include <boost/intrusive/detail/utilities.hpp>
 #include <boost/intrusive/detail/slist_node.hpp>
 #include <boost/intrusive/circular_slist_algorithms.hpp>
+#include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/options.hpp>
 #include <boost/intrusive/detail/generic_hook.hpp>
 
@@ -31,6 +32,7 @@ struct get_slist_node_algo
 {
    typedef circular_slist_algorithms<slist_node_traits<VoidPointer> > type;
 };
+
 /// @endcond
 
 //! Helper metafunction to define a \c slist_base_hook that yields to the same

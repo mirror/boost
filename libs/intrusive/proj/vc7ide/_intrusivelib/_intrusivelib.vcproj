@@ -136,6 +136,9 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\intrusive_fwd.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\linear_slist_algorithms.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\link_mode.hpp">
 			</File>
 			<File

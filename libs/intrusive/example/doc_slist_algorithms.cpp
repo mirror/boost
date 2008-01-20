@@ -36,7 +36,7 @@ int main()
 
    //Create an empty singly linked list container:
    //"one" will be the first node of the container
-   algo::init(&one);
+   algo::init_header(&one);
    assert(algo::count(&one) == 1);
 
    //Now add a new node

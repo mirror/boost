@@ -208,7 +208,7 @@ class list_impl
       :  data_(v_traits)
    {  
       this->priv_size_traits().set_size(size_type(0));
-      node_algorithms::init(this->get_root_node());  
+      node_algorithms::init_header(this->get_root_node());  
    }
 
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue of type value_type.
@@ -224,7 +224,7 @@ class list_impl
       :  data_(v_traits)
    {
       this->priv_size_traits().set_size(size_type(0));
-      node_algorithms::init(this->get_root_node());
+      node_algorithms::init_header(this->get_root_node());
       this->insert(this->end(), b, e);
    }
 
@@ -258,7 +258,7 @@ class list_impl
    {
       node_ptr to_insert = get_real_value_traits().to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::inited(to_insert));
       node_algorithms::link_before(this->get_root_node(), to_insert);
       this->priv_size_traits().increment();
    }
@@ -277,7 +277,7 @@ class list_impl
    {
       node_ptr to_insert = get_real_value_traits().to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::inited(to_insert));
       node_algorithms::link_before(node_traits::get_next(this->get_root_node()), to_insert); 
       this->priv_size_traits().increment();
    }
@@ -569,21 +569,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    void shift_backwards(size_type n = 1)
-   {
-      //Null shift, nothing to do
-      if(!n)   return;
-      node_ptr root  = this->get_root_node();
-      node_ptr last  = node_traits::get_previous(root);
-      //size() == 0 or 1, nothing to do
-      if(last == node_traits::get_next(root))   return;
-
-      node_algorithms::unlink(root);
-      //Now get the new last node
-      while(n--){
-         last = node_traits::get_previous(last);
-      }
-      node_algorithms::link_after(last, root);
-   }
+   {  node_algorithms::move_forward(this->get_root_node(), n);  }
 
    //! <b>Effects</b>: Moves forward all the elements, so that the second
    //!   element becomes the first, the third becomes the second...
@@ -595,20 +581,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    void shift_forward(size_type n = 1)
-   {
-      //Null shift, nothing to do
-      if(!n) return;
-      node_ptr root  = this->get_root_node();
-      node_ptr first  = node_traits::get_next(root);
-      //size() == 0 or 1, nothing to do
-      if(first == node_traits::get_previous(root)) return;
-      node_algorithms::unlink(root);
-      //Now get the new first node
-      while(n--){
-         first = node_traits::get_next(first);
-      }
-      node_algorithms::link_before(first, root);
-   }
+   {  node_algorithms::move_backwards(this->get_root_node(), n);  }
 
    //! <b>Effects</b>: Erases the element pointed by i of the list.
    //!   No destructors are called.
@@ -729,7 +702,7 @@ class list_impl
          this->erase(this->begin(), this->end()); 
       }
       else{
-         node_algorithms::init(this->get_root_node());
+         node_algorithms::init_header(this->get_root_node());
          this->priv_size_traits().set_size(size_type(0));
       }
    }
@@ -794,7 +767,7 @@ class list_impl
    {
       node_ptr to_insert = get_real_value_traits().to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::inited(to_insert));
       node_algorithms::link_before(p.pointed_node(), to_insert);
       this->priv_size_traits().increment();
       return iterator(to_insert, this);
@@ -1234,7 +1207,7 @@ class list_impl
    static iterator s_iterator_to(reference value)
    {
       BOOST_STATIC_ASSERT((!stateful_value_traits));
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(value)));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(value)));
       return iterator(real_value_traits::to_node_ptr(value), 0);
    }
 
@@ -1252,7 +1225,7 @@ class list_impl
    static const_iterator s_iterator_to(const_reference value) 
    {
       BOOST_STATIC_ASSERT((!stateful_value_traits));
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(const_cast<reference> (value))));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(const_cast<reference> (value))));
       return const_iterator(real_value_traits::to_node_ptr(const_cast<reference> (value)), 0);
    }
 
@@ -1267,7 +1240,7 @@ class list_impl
    //! <b>Note</b>: Iterators and references are not invalidated.
    iterator iterator_to(reference value)
    { 
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(value)));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(value)));
       return iterator(real_value_traits::to_node_ptr(value), this);
    }
 
@@ -1282,7 +1255,7 @@ class list_impl
    //! <b>Note</b>: Iterators and references are not invalidated.
    const_iterator iterator_to(const_reference value) const
    { 
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(const_cast<reference> (value))));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(const_cast<reference> (value))));
       return const_iterator(real_value_traits::to_node_ptr(const_cast<reference> (value)), this);
    }
 

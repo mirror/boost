@@ -498,8 +498,8 @@ inline std::size_t floor_log2 (std::size_t x)
 
 inline float fast_log2 (float val)
 {
-  boost::uint32_t * const exp_ptr = 
-     static_cast <boost::uint32_t * const>(static_cast<void * const >(&val));
+   boost::uint32_t * exp_ptr =
+      static_cast<boost::uint32_t *>(static_cast<void*>(&val));
    boost::uint32_t x = *exp_ptr;
    const int log_2 = (int)(((x >> 23) & 255) - 128);
    x &= ~(255 << 23);

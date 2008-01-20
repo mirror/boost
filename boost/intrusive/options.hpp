@@ -318,10 +318,8 @@ struct tag
 /// @endcond
 };
 
-//!This option setter specifies the type of
-//!a void pointer. This will instruct the hook
-//!to use this type of pointer instead of the
-//!default one
+//!This option setter specifies the link mode
+//!(normal_link, safe_link or auto_unlink)
 template<link_mode_type LinkType>
 struct link_mode
 {
@@ -334,10 +332,8 @@ struct link_mode
 /// @endcond
 };
 
-//!This option setter specifies the type of
-//!a void pointer. This will instruct the hook
-//!to use this type of pointer instead of the
-//!default one
+//!This option setter specifies if the hook
+//!should be optimized for size instead of for speed.
 template<bool Enabled>
 struct optimize_size
 {
@@ -346,6 +342,20 @@ struct optimize_size
    struct pack : Base
    {
       static const bool optimize_size = Enabled;
+   };
+/// @endcond
+};
+
+//!This option setter specifies if the list container should
+//!use a linear implementation instead of a circular one.
+template<bool Enabled>
+struct linear
+{
+/// @cond
+   template<class Base>
+   struct pack : Base
+   {
+      static const bool linear = Enabled;
    };
 /// @endcond
 };
@@ -475,6 +485,7 @@ struct hook_defaults
       , tag<default_tag>
       , optimize_size<false>
       , store_hash<false>
+      , linear<false>
       >::type
 {};
 

@@ -38,7 +38,7 @@ int main()
 
    //Create an empty doubly linked list container:
    //"one" will be the first node of the container
-   algo::init(&one);
+   algo::init_header(&one);
    assert(algo::count(&one) == 1);
 
    //Now add a new node before "one"
