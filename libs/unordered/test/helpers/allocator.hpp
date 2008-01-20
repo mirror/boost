@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <boost/limits.hpp>
+#include <new>
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
@@ -39,7 +40,9 @@ namespace test
 
         pointer allocate(size_type n) {
             using namespace std;
-            return static_cast<T*>(malloc(n * sizeof(T)));
+            T* ptr = static_cast<T*>(malloc(n * sizeof(T)));
+            if(!ptr) throw std::bad_alloc();
+            return ptr;
         }
 
         pointer allocate(size_type n, const_pointer u) { return allocate(n); }
@@ -71,7 +74,9 @@ namespace test
         }
         char* _Charalloc(size_type n) {
             using namespace std;
-            return static_cast<char*>(malloc(n * sizeof(char)));
+            T* ptr = static_cast<T*>(malloc(n * sizeof(char)));
+            if(!ptr) throw std::bad_alloc();
+            return ptr;
         }
 #endif
     };

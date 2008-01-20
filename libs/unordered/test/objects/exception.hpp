@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <iostream>
 #include <boost/limits.hpp>
+#include <new>
 #include "../helpers/fwd.hpp"
 #include "../helpers/allocator.hpp"
 #include "./memory.hpp"
