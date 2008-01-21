@@ -179,7 +179,7 @@ namespace boost { namespace proto
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > >                                  \
+      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > >                           \
     >::type const                                                                                   \
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
@@ -190,7 +190,7 @@ namespace boost { namespace proto
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > >                            \
+      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > >                     \
     >::type const                                                                                   \
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \

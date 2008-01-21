@@ -241,9 +241,22 @@
         {
             // terminal
             template<typename T>
-            struct terminal : has_identity_transform
+            struct terminal
             {
-                BOOST_PROTO_NOT_CALLABLE()
+                template<typename Sig> struct result {};
+
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
+                {
+                    typedef Expr type;
+                };
+
+                template<typename Expr, typename State, typename Visitor>
+                Expr const &operator ()(Expr const &expr, State const &, Visitor &) const
+                {
+                    return expr;
+                }
+
                 typedef proto::expr<proto::tag::terminal, args0<T> > type;
                 typedef type proto_base_expr;
                 typedef proto::tag::terminal proto_tag;
@@ -388,7 +401,7 @@
             struct as_expr
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename T>
                 struct result<This(T)>
@@ -430,7 +443,7 @@
             struct as_arg
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename T>
                 struct result<This(T)>
@@ -456,7 +469,7 @@
             struct arg_c
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -480,7 +493,7 @@
             struct arg
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -503,7 +516,7 @@
             struct left
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -526,7 +539,7 @@
             struct right
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>

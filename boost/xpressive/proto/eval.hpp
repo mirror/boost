@@ -30,7 +30,7 @@ namespace boost { namespace proto
         struct eval
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Expr, typename Context>
             struct result<This(Expr, Context)>

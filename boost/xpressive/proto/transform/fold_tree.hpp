@@ -24,10 +24,9 @@ namespace boost { namespace proto
         namespace detail
         {
             template<typename Tag>
-            struct is_tag : callable
+            struct is_tag : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -48,10 +47,9 @@ namespace boost { namespace proto
 
         template<typename Sequence, typename State0, typename Fun>
         struct fold_tree
-          : callable
+          : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -66,20 +64,24 @@ namespace boost { namespace proto
             };
 
             template<typename Expr, typename State, typename Visitor>
-            typename result<fold_tree(Expr const &, State const &, Visitor &)>::type
+            typename result<void(Expr, State, Visitor)>::type
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
-                typedef typename result<void(Expr, State, Visitor)>::impl impl;
+                typedef fold<
+                    Sequence
+                  , State0
+                  , detail::fold_tree_<typename Expr::proto_tag, Fun>
+                > impl;
+
                 return impl()(expr, state, visitor);
             }
         };
 
         template<typename Sequence, typename State0, typename Fun>
         struct reverse_fold_tree
-          : callable
+          : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -97,7 +99,12 @@ namespace boost { namespace proto
             typename result<void(Expr, State, Visitor)>::type
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
-                typedef typename result<void(Expr, State, Visitor)>::impl impl;
+                typedef reverse_fold<
+                    Sequence
+                  , State0
+                  , detail::reverse_fold_tree_<typename Expr::proto_tag, Fun>
+                > impl;
+
                 return impl()(expr, state, visitor);
             }
         };

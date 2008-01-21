@@ -18,17 +18,12 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 
-#define UNCV(x) typename remove_const<x>::type
-#define UNREF(x) typename remove_reference<x>::type
-#define UNCVREF(x) UNCV(UNREF(x))
-
 namespace boost { namespace xpressive { namespace grammar_detail
 {
     template<typename Grammar>
-    struct in_sequence : callable
+    struct in_sequence : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
@@ -51,9 +46,5 @@ namespace boost { namespace xpressive { namespace grammar_detail
     };
 
 }}}
-
-#undef UNCV
-#undef UNREF
-#undef UNCVREF
 
 #endif

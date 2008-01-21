@@ -78,7 +78,7 @@ namespace boost { namespace proto
         struct flatten
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
@@ -96,7 +96,7 @@ namespace boost { namespace proto
         struct pop_front
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
@@ -114,7 +114,7 @@ namespace boost { namespace proto
         struct reverse
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
@@ -156,7 +156,7 @@ namespace boost { namespace proto
         {}
 
         template<typename Sig>
-        struct result;
+        struct result {};
 
         template<typename This, typename Expr>
         struct result<This(Expr)>
@@ -411,7 +411,7 @@ namespace boost { namespace fusion
         struct as_element
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Expr>
             struct result<This(Expr)>

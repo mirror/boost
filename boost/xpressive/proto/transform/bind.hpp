@@ -25,25 +25,22 @@
         namespace transform
         {
             template<typename Fun>
-            struct bind : callable
+            struct bind : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : call<
-                        typename make<Fun>::template result<void(Expr, State, Visitor)>::type
-                    >::template result<void(Expr, State, Visitor)>
-                {};
+                {
+                    typedef call<typename make<Fun>::template result<void(Expr, State, Visitor)>::type> impl;
+                    typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return call<
-                        typename make<Fun>::template result<void(Expr, State, Visitor)>::type
-                    >()(expr, state, visitor);
+                    return call<typename make<Fun>::template result<void(Expr, State, Visitor)>::type>()(expr, state, visitor);
                 }
             };
 
@@ -66,17 +63,16 @@
     #define N BOOST_PP_ITERATION()
 
             template<typename Return BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-            struct bind<Return(BOOST_PP_ENUM_PARAMS(N, A))> : callable
+            struct bind<Return(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : call<
-                        typename make<Return>::template result<void(Expr, State, Visitor)>::type(BOOST_PP_ENUM_PARAMS(N, A))
-                    >::template result<void(Expr, State, Visitor)>
-                {};
+                {
+                    typedef call<typename make<Return>::template result<void(Expr, State, Visitor)>::type(BOOST_PP_ENUM_PARAMS(N, A))> impl;
+                    typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type

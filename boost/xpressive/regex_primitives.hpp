@@ -118,19 +118,21 @@ namespace boost { namespace xpressive { namespace detail
     // replace "Expr" with "keep(*State) >> Expr"
     struct skip_primitives : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::shift_right<
-                typename proto::unary_expr<
-                    keeper_tag
-                  , typename proto::dereference<State>::type
+        {
+            typedef
+                typename proto::shift_right<
+                    typename proto::unary_expr<
+                        keeper_tag
+                      , typename proto::dereference<State>::type
+                    >::type
+                  , Expr
                 >::type
-              , Expr
-            >
-        {};
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -178,15 +180,18 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename This, typename Expr>
         struct result<This(Expr)>
-          : proto::shift_right<
-                typename SkipGrammar::result<void(
-                    typename proto::result_of::as_expr<Expr>::type
-                  , skip_type
-                  , mpl::void_
-                )>::type
-              , typename proto::dereference<skip_type>::type
-            >
-        {};
+        {
+            typedef
+                typename proto::shift_right<
+                    typename SkipGrammar::result<void(
+                        typename proto::result_of::as_expr<Expr>::type
+                      , skip_type
+                      , mpl::void_
+                    )>::type
+                  , typename proto::dereference<skip_type>::type
+                >::type
+            type;
+        };
 
         template<typename Expr>
         typename result<skip_directive(Expr)>::type

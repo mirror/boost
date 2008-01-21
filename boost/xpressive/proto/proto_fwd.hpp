@@ -15,10 +15,11 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
+#include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 #include <boost/mpl/long.hpp>
-#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
@@ -56,7 +57,7 @@ namespace boost { namespace proto
 
         template<typename T>
         struct remove_cv_ref
-          : remove_cv<typename remove_reference<T>::type>
+          : remove_const<typename remove_reference<T>::type>
         {};
     }
 
@@ -627,32 +628,6 @@ namespace boost { namespace proto
     typedef functional::pop_front   _pop_front;
     typedef functional::reverse     _reverse;
     typedef functional::deep_copy   _deep_copy;
-
-#define BOOST_PROTO_IDENTITY_TRANSFORM()                                                            \
-    template<typename Expr_, typename State_, typename Visitor_>                                    \
-    Expr_ const &operator ()(Expr_ const &expr_, State_ const &, Visitor_ &) const                  \
-    {                                                                                               \
-        return expr_;                                                                               \
-    }                                                                                               \
-                                                                                                    \
-    template<typename Sig>                                                                          \
-    struct result;                                                                                  \
-                                                                                                    \
-    template<typename This, typename Expr_, typename State_, typename Visitor_>                     \
-    struct result<This(Expr_,State_,Visitor_)>                                                      \
-    {                                                                                               \
-        typedef Expr_ type;                                                                         \
-    }
-
-    namespace has_transformns_
-    {
-        struct has_identity_transform
-        {
-            BOOST_PROTO_IDENTITY_TRANSFORM();
-        };
-    }
-
-    using has_transformns_::has_identity_transform;
 
     template<typename T>
     struct is_callable;

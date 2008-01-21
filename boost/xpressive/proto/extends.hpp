@@ -106,7 +106,6 @@ namespace boost { namespace proto
         typedef void proto_is_expr_;\
         typedef boost::proto::tag::proto_expr fusion_tag;\
         \
-        BOOST_PROTO_IDENTITY_TRANSFORM();\
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_ARG, Expr)\
         \
         static Derived const make(Expr const &expr)\

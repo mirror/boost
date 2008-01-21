@@ -19,10 +19,9 @@
 
 namespace boost { namespace xpressive { namespace grammar_detail
 {
-    struct as_matcher : callable
+    struct as_matcher : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>

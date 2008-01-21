@@ -184,50 +184,72 @@
             };
 
             template<typename Fun>
-            struct call<Fun()> : callable
+            struct call<Fun()> : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : detail::call0<
-                        Fun
-                      , Expr
-                      , State
-                      , Visitor
-                    >
-                {};
+                {
+                    typedef
+                        typename detail::call0<
+                            Fun
+                          , Expr
+                          , State
+                          , Visitor
+                        >::type
+                    type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return result<void(Expr, State, Visitor)>::call(expr, state, visitor);
+                    typedef
+                        detail::call0<
+                            Fun
+                          , Expr
+                          , State
+                          , Visitor
+                        >
+                    impl;
+
+                    return impl::call(expr, state, visitor);
                 }
             };
 
             template<typename Fun, typename Arg0>
-            struct call<Fun(Arg0)> : callable
+            struct call<Fun(Arg0)> : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : detail::call1<
-                        Fun
-                      , typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
-                      , State
-                      , Visitor
-                    >
-                {};
+                {
+                    typedef
+                        typename detail::call1<
+                            Fun
+                          , typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
+                          , State
+                          , Visitor
+                        >::type
+                    type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return result<void(Expr, State, Visitor)>::call(
+                    typedef
+                        detail::call1<
+                            Fun
+                          , typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
+                          , State
+                          , Visitor
+                        >
+                    impl;
+
+                    return impl::call(
                         detail::as_lvalue(when<_, Arg0>()(expr, state, visitor))
                       , state
                       , visitor
@@ -236,26 +258,37 @@
             };
 
             template<typename Fun, typename Arg0, typename Arg1>
-            struct call<Fun(Arg0, Arg1)> : callable
+            struct call<Fun(Arg0, Arg1)> : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : detail::call2<
-                        Fun
-                      , typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
-                      , typename when<_, Arg1>::template result<void(Expr, State, Visitor)>::type
-                      , Visitor
-                    >
-                {};
+                {
+                    typedef
+                        typename detail::call2<
+                            Fun
+                          , typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
+                          , typename when<_, Arg1>::template result<void(Expr, State, Visitor)>::type
+                          , Visitor
+                        >::type
+                    type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return result<void(Expr, State, Visitor)>::call(
+                    typedef
+                        detail::call2<
+                            Fun
+                          , typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
+                          , typename when<_, Arg1>::template result<void(Expr, State, Visitor)>::type
+                          , Visitor
+                        >
+                    impl;
+
+                    return impl::call(
                         detail::as_lvalue(when<_, Arg0>()(expr, state, visitor))
                       , detail::as_lvalue(when<_, Arg1>()(expr, state, visitor))
                       , visitor
@@ -264,22 +297,23 @@
             };
 
             template<typename Fun, typename Arg0, typename Arg1, typename Arg2>
-            struct call<Fun(Arg0, Arg1, Arg2)> : callable
+            struct call<Fun(Arg0, Arg1, Arg2)> : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                    // TODO can I avoid boost::result_of here
-                  : boost::result_of<
-                        Fun(
-                            typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
-                          , typename when<_, Arg1>::template result<void(Expr, State, Visitor)>::type
-                          , typename when<_, Arg2>::template result<void(Expr, State, Visitor)>::type
-                        )
-                    >
-                {};
+                {
+                    typedef
+                        typename boost::result_of<
+                            Fun(
+                                typename when<_, Arg0>::template result<void(Expr, State, Visitor)>::type
+                              , typename when<_, Arg1>::template result<void(Expr, State, Visitor)>::type
+                              , typename when<_, Arg2>::template result<void(Expr, State, Visitor)>::type
+                            )
+                        >::type
+                    type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
@@ -314,19 +348,21 @@
     #define N BOOST_PP_ITERATION()
 
         template<typename Fun BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct call<Fun(BOOST_PP_ENUM_PARAMS(N, A))> : callable
+        struct call<Fun(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
-              : boost::result_of<
-                    #define TMP(Z, M, DATA) typename when<_, BOOST_PP_CAT(A, M)>::template result<void(Expr, State, Visitor)>::type
-                    Fun(BOOST_PP_ENUM(N, TMP, ~))
-                    #undef TMP
-                >
-            {};
+            {
+                typedef
+                    typename boost::result_of<
+                        #define TMP(Z, M, DATA) typename when<_, BOOST_PP_CAT(A, M)>::template result<void(Expr, State, Visitor)>::type
+                        Fun(BOOST_PP_ENUM(N, TMP, ~))
+                        #undef TMP
+                    >::type
+                type;
+            };
 
             template<typename Expr, typename State, typename Visitor>
             typename result<void(Expr, State, Visitor)>::type

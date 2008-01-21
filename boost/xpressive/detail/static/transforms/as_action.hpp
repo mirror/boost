@@ -62,21 +62,26 @@ namespace boost { namespace xpressive { namespace grammar_detail
     //  For patterns like (a1 = RHS)[ref(i) = a1], transform to
     //  (a1 = RHS)[ref(i) = read_attr<1, RHS>] so that when reading the attribute
     //  we know what type is stored in the attribute slot.
-    struct as_read_attr : callable
+    struct as_read_attr : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::result_of::as_expr<
-                detail::read_attr<
-                    typename Expr::proto_arg0::nbr_type
-                  , typename FindAttr<typename Expr::proto_arg0::nbr_type>
-                        ::template result<void(State, mpl::void_, int)>::type
-                >
-            >
-        {};
+        {
+            typedef
+                typename proto::result_of::as_expr<
+                    detail::read_attr<
+                        typename Expr::proto_arg0::nbr_type
+                      , typename FindAttr<typename Expr::proto_arg0::nbr_type>::template result<void(
+                            State
+                          , mpl::void_
+                          , int
+                        )>::type
+                    >
+                >::type
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -90,15 +95,19 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // by_value
     //  Store all terminals within an action by value to avoid dangling references.
-    struct by_value : callable
+    struct by_value : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::result_of::as_expr<typename proto::result_of::arg<Expr>::type>
-        {};
+        {
+            typedef
+                typename proto::result_of::as_expr<
+                    typename proto::result_of::arg<Expr>::type
+                >::type
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -123,15 +132,15 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // attr_nbr
     //  For an attribute placeholder, return the attribute's slot number.
-    struct attr_nbr : callable
+    struct attr_nbr : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : Expr::proto_arg0::nbr_type
-        {};
+        {
+            typedef typename Expr::proto_arg0::nbr_type::type type;
+        };
     };
 
     struct max_attr;
@@ -152,24 +161,23 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // max_attr
     //  Take the maximum of the current attr slot number and the state.
-    struct max_attr : callable
+    struct max_attr : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : mpl::max<State, typename MaxAttr::result<void(Expr, State, Visitor)>::type>
-        {};
+        {
+            typedef typename mpl::max<State, typename MaxAttr::template result<void(Expr, State, Visitor)>::type >::type type;
+        };
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_attr_matcher
     //  turn a1=matcher into attr_matcher<Matcher>(1)
-    struct as_attr_matcher : callable
+    struct as_attr_matcher : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
@@ -198,29 +206,31 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // add_attrs
     //  Wrap an expression in attr_begin_matcher/attr_end_matcher pair
-    struct add_attrs : callable
+    struct add_attrs : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : shift_right<
-                typename terminal<
-                    detail::attr_begin_matcher<typename MaxAttr::result<void(Expr, mpl::int_<0>, int)>::type>
+        {
+            typedef
+                typename shift_right<
+                    typename terminal<
+                        detail::attr_begin_matcher<typename MaxAttr::template result<void(Expr, mpl::int_<0>, int)>::type >
+                    >::type
+                  , typename shift_right<
+                        Expr
+                      , terminal<detail::attr_end_matcher>::type
+                    >::type
                 >::type
-              , typename shift_right<
-                    Expr
-                  , terminal<detail::attr_end_matcher>::type
-                >::type
-            >
-        {};
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
         operator ()(Expr const &expr, State const &, Visitor &) const
         {
-            detail::attr_begin_matcher<typename MaxAttr::result<void(Expr, mpl::int_<0>, int)>::type> begin;
+            detail::attr_begin_matcher<typename MaxAttr::template result<void(Expr, mpl::int_<0>, int)>::type > begin;
             detail::attr_end_matcher end;
             typename result<void(Expr, State, Visitor)>::type that = {{begin}, {expr, {end}}};
             return that;
@@ -245,20 +255,19 @@ namespace boost { namespace xpressive { namespace grammar_detail
     //  If A and B use attributes, wrap the above expression in
     //  a attr_begin_matcher<Count> / attr_end_matcher pair, where Count is
     //  the number of attribute slots used by the pattern/action.
-    struct as_action : callable
+    struct as_action : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
         {
             typedef typename proto::result_of::left<Expr>::type expr_type;
             typedef typename proto::result_of::right<Expr>::type action_type;
-            typedef typename DeepCopy::result<void(action_type, expr_type, int)>::type action_copy_type;
+            typedef typename DeepCopy::template result<void(action_type, expr_type, int)>::type action_copy_type;
 
             typedef
-                typename InsertMark::result<void(expr_type, State, Visitor)>::type
+                typename InsertMark::template result<void(expr_type, State, Visitor)>::type
             marked_expr_type;
 
             typedef
@@ -277,7 +286,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             no_attr_type;
 
             typedef
-                typename InsertAttrs::result<void(no_attr_type, State, Visitor)>::type
+                typename InsertAttrs::template result<void(no_attr_type, State, Visitor)>::type
             type;
         };
 

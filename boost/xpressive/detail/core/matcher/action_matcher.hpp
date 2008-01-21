@@ -265,13 +265,14 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct subreg_transform : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::terminal<sub_match<typename State::iterator> >
-        {};
+        {
+            typedef State unref_state;
+            typedef typename proto::terminal<sub_match<typename unref_state::iterator> >::type type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -287,13 +288,16 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct mark_transform : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::terminal<sub_match<typename State::iterator> >
-        {};
+        {
+            typedef State unref_state;
+            typedef
+                typename proto::terminal<sub_match<typename unref_state::iterator> >::type
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -331,15 +335,17 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct attr_transform : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::result_of::as_expr<
-                opt<typename Expr::proto_arg0::matcher_type::value_type::second_type>
-            >
-        {};
+        {
+            typedef
+                typename proto::result_of::as_expr<
+                    opt<typename Expr::proto_arg0::matcher_type::value_type::second_type>
+                >::type
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -356,18 +362,20 @@ namespace boost { namespace xpressive { namespace detail
     // attr_with_default_transform
     //
     template<typename Grammar, typename Callable = proto::callable>
-    struct attr_with_default_transform
+    struct attr_with_default_transform : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::unary_expr<
-                attr_with_default_tag
-              , typename Grammar::template result<void(Expr, State, Visitor)>::type
-            >
-        {};
+        {
+            typedef
+                typename proto::unary_expr<
+                    attr_with_default_tag
+                  , typename Grammar::template result<void(Expr, State, Visitor)>::type
+                >::type
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -385,19 +393,22 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct by_ref_transform : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : proto::terminal<typename proto::result_of::arg<Expr>::const_reference>
-        {};
+        {
+            typedef
+                typename proto::terminal<typename proto::result_of::arg<Expr>::const_reference>::type
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
         operator ()(Expr const &expr, State const &, Visitor &) const
         {
-            return result<void(Expr, State, Visitor)>::type::make(proto::arg(expr));
+            typedef typename result<void(Expr, State, Visitor)>::type that_type;
+            return that_type::make(proto::arg(expr));
         }
     };
 
@@ -439,7 +450,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             // Bind the arguments
             int sub = this->sub_; // BUGBUG this is a hack
-            typedef typename BindActionArgs::result<void(Actor, match_state<BidiIter>, int)>::type action_type;
+            typedef typename BindActionArgs::template result<void(Actor, match_state<BidiIter>, int)>::type action_type;
             action<action_type> actor(BindActionArgs()(this->actor_, state, sub));
 
             // Put the action in the action list

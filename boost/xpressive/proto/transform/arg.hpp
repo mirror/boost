@@ -20,10 +20,9 @@ namespace boost { namespace proto
     namespace transform
     {
 
-        struct expr : callable
+        struct expr : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -39,10 +38,9 @@ namespace boost { namespace proto
             }
         };
 
-        struct state : callable
+        struct state : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -58,10 +56,9 @@ namespace boost { namespace proto
             }
         };
 
-        struct visitor : callable
+        struct visitor : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -78,15 +75,15 @@ namespace boost { namespace proto
         };
 
         template<int I>
-        struct arg_c : callable
+        struct arg_c : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
-              : proto::result_of::arg_c<Expr, I>
-            {};
+            {
+                typedef typename proto::result_of::arg_c<Expr, I>::type type;
+            };
 
             template<typename Expr, typename State, typename Visitor>
             typename proto::result_of::arg_c<Expr, I>::type

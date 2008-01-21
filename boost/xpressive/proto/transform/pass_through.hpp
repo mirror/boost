@@ -27,9 +27,11 @@
             struct pass_through_impl {};
 
             #define BOOST_PROTO_DEFINE_TRANSFORM_TYPE(z, n, data)\
-                typename Grammar::BOOST_PP_CAT(proto_arg, n)\
-                    ::template result<void(typename Expr::BOOST_PP_CAT(proto_arg, n)::proto_base_expr, State, Visitor)>\
-                ::type
+                typename Grammar::BOOST_PP_CAT(proto_arg, n)::template result<void(\
+                    typename Expr::BOOST_PP_CAT(proto_arg, n)::proto_base_expr\
+                  , State\
+                  , Visitor\
+                )>::type
 
             #define BOOST_PROTO_DEFINE_TRANSFORM(z, n, data)\
                 typename Grammar::BOOST_PP_CAT(proto_arg, n)()(\
@@ -55,27 +57,39 @@
         } // namespace detail
 
         template<typename Grammar>
-        struct pass_through : callable
+        struct pass_through : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
-              : transform::detail::pass_through_impl<
-                    Grammar
-                  , typename Expr::proto_base_expr
-                  , State
-                  , Visitor
-                  , Expr::proto_arity::value
-                >
-            {};
+            {
+                typedef
+                    typename transform::detail::pass_through_impl<
+                        Grammar
+                      , typename Expr::proto_base_expr
+                      , State
+                      , Visitor
+                      , Expr::proto_arity::value
+                    >::type
+                type;
+            };
 
             template<typename Expr, typename State, typename Visitor>
             typename result<void(Expr, State, Visitor)>::type
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
-                return result<void(Expr, State, Visitor)>::call(expr.proto_base(), state, visitor);
+                typedef
+                    transform::detail::pass_through_impl<
+                        Grammar
+                      , typename Expr::proto_base_expr
+                      , State
+                      , Visitor
+                      , Expr::proto_arity::value
+                    >
+                impl;
+
+                return impl::call(expr.proto_base(), state, visitor);
             }
         };
 

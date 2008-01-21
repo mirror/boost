@@ -166,15 +166,15 @@
             }
 
             template<typename Fun>
-            struct make : callable
+            struct make : proto::callable
             {
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : detail::make_<Fun, Expr, State, Visitor>
-                {};
+                {
+                    typedef typename detail::make_<Fun, Expr, State, Visitor>::type type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
@@ -243,8 +243,9 @@
               , typename Expr, typename State, typename Visitor
             >
             struct make_if_<R(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Visitor, false>
-              : when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>::template result<void(Expr, State, Visitor)>
-            {};
+            {
+                typedef typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>::template result<void(Expr, State, Visitor)>::type type;
+            };
 
             template<
                 typename R
@@ -252,8 +253,9 @@
               , typename Expr, typename State, typename Visitor
             >
             struct make_if_<R(*)(BOOST_PP_ENUM_PARAMS(N, A)), Expr, State, Visitor, false>
-              : when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>::template result<void(Expr, State, Visitor)>
-            {};
+            {
+                typedef typename when<_, R(BOOST_PP_ENUM_PARAMS(N, A))>::template result<void(Expr, State, Visitor)>::type type;
+            };
 
             template<typename T, typename A>
             struct construct_<proto::expr<T, A, N>, true>
@@ -269,15 +271,15 @@
         }
 
         template<typename Return BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct make<Return(BOOST_PP_ENUM_PARAMS(N, A))> : callable
+        struct make<Return(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
         {
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
-              : detail::make_<Return, Expr, State, Visitor>
-            {};
+            {
+                typedef typename detail::make_<Return, Expr, State, Visitor>::type type;
+            };
 
             template<typename Expr, typename State, typename Visitor>
             typename result<void(Expr, State, Visitor)>::type
@@ -295,10 +297,13 @@
         #if BOOST_WORKAROUND(__GNUC__, == 3)
         // work around GCC bug
         template<typename Tag, typename Args, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct make<proto::expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))> : callable
+        struct make<proto::expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))>
+          : proto::callable
         {
-            template<typename Sig>
-            struct result
+            template<typename Sig> struct result {};
+
+            template<typename This, typename Expr, typename State, typename Visitor>
+            struct result<This(Expr, State, Visitor)>
             {
                 typedef proto::expr<Tag, Args, Arity> type;
             };

@@ -56,31 +56,36 @@
 
         template<typename Grammar, typename Return BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct when<Grammar, Return(BOOST_PP_ENUM_PARAMS(N, A))>
-          : callable
+          : proto::callable
         {
-            typedef Return when_function_type_(BOOST_PP_ENUM_PARAMS(N, A));
             typedef typename Grammar::proto_base_expr proto_base_expr;
 
-            template<typename Sig>
-            struct result;
+            template<typename Sig> struct result {};
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
-              : mpl::if_<
-                    is_callable<Return>
-                  , call<when_function_type_> // "Return" is a function to call
-                  , make<when_function_type_> // "Return" is an object to construct
-                >::type::template result<void(Expr, State, Visitor)>
-            {};
+            {
+                typedef
+                    typename mpl::if_<
+                        is_callable<Return>
+                      , call<Return(BOOST_PP_ENUM_PARAMS(N, A))> // "Return" is a function to call
+                      , make<Return(BOOST_PP_ENUM_PARAMS(N, A))> // "Return" is an object to construct
+                    >::type
+                impl;
 
+                typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
+            };
+
+            /// Function call operator
+            ///
             template<typename Expr, typename State, typename Visitor>
             typename result<void(Expr, State, Visitor)>::type
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
                 return typename mpl::if_<
                     is_callable<Return>
-                  , call<when_function_type_>
-                  , make<when_function_type_>
+                  , call<Return(BOOST_PP_ENUM_PARAMS(N, A))>
+                  , make<Return(BOOST_PP_ENUM_PARAMS(N, A))>
                 >::type()(expr, state, visitor);
             }
         };

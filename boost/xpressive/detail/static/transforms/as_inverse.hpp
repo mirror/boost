@@ -68,7 +68,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
         }
     };
 
-    struct as_inverse : callable
+    struct as_inverse : proto::callable
     {
         template<typename Sig>
         struct result;

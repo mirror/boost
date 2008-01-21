@@ -20,10 +20,6 @@
 #include <boost/xpressive/detail/utility/chset/chset.hpp>
 #include <boost/xpressive/detail/utility/traits_utils.hpp>
 
-#define UNCV(x) typename remove_const<x>::type
-#define UNREF(x) typename remove_reference<x>::type
-#define UNCVREF(x) UNCV(UNREF(x))
-
 namespace boost { namespace xpressive { namespace grammar_detail
 {
 
@@ -76,8 +72,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
     template<typename Char>
     struct as_list_set_matcher
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
@@ -175,10 +170,9 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Grammar>
-    struct as_set_matcher
+    struct as_set_matcher : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
@@ -213,9 +207,5 @@ namespace boost { namespace xpressive { namespace grammar_detail
     };
 
 }}}
-
-#undef UNCV
-#undef UNREF
-#undef UNCVREF
 
 #endif

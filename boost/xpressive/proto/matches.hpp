@@ -400,11 +400,23 @@
 
         namespace wildcardns_
         {
-            struct _
-              : has_identity_transform
+            struct _ : proto::callable
             {
-                BOOST_PROTO_CALLABLE()
                 typedef _ proto_base_expr;
+
+                template<typename Sig> struct result {};
+
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
+                {
+                    typedef Expr type;
+                };
+
+                template<typename Expr, typename State, typename Visitor>
+                Expr const &operator ()(Expr const &expr, State const &, Visitor &) const
+                {
+                    return expr;
+                }
             };
         }
 
@@ -412,30 +424,46 @@
         {
             // not_
             template<typename Grammar>
-            struct not_
-              : has_identity_transform
+            struct not_ : proto::callable
             {
-                BOOST_PROTO_CALLABLE()
                 typedef not_ proto_base_expr;
+
+                template<typename Sig> struct result {};
+
+                template<typename This, typename Expr, typename State, typename Visitor>
+                struct result<This(Expr, State, Visitor)>
+                {
+                    typedef Expr type;
+                };
+
+                template<typename Expr, typename State, typename Visitor>
+                Expr const &operator ()(Expr const &expr, State const &, Visitor &) const
+                {
+                    return expr;
+                }
             };
 
             // if_
             template<typename If, typename Then, typename Else>
-            struct if_ : callable
+            struct if_ : proto::callable
             {
                 typedef if_ proto_base_expr;
 
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : mpl::eval_if<
-                        typename when<_, If>::template result<void(Expr, State, Visitor)>::type
-                      , typename when<_, Then>::template result<void(Expr, State, Visitor)>
-                      , typename when<_, Else>::template result<void(Expr, State, Visitor)>
-                    >
-                {};
+                {
+                    typedef
+                        typename mpl::if_<
+                            typename when<_, If>::template result<void(Expr, State, Visitor)>::type
+                          , when<_, Then>
+                          , when<_, Else>
+                        >::type
+                    branch;
+
+                    typedef typename branch::template result<void(Expr, State, Visitor)>::type type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
@@ -455,12 +483,11 @@
 
             // or_
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
-            struct or_ : callable
+            struct or_ : proto::callable
             {
                 typedef or_ proto_base_expr;
 
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -480,12 +507,11 @@
 
             // and_
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
-            struct and_ : callable
+            struct and_ : proto::callable
             {
                 typedef and_ proto_base_expr;
 
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -505,23 +531,25 @@
 
             // switch_
             template<typename Cases>
-            struct switch_ : callable
+            struct switch_ : proto::callable
             {
                 typedef switch_ proto_base_expr;
 
-                template<typename Sig>
-                struct result;
+                template<typename Sig> struct result {};
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
-                  : Cases::template case_<typename Expr::proto_tag>::template result<void(Expr, State, Visitor)>
-                {};
+                {
+                    typedef typename Cases::template case_<typename Expr::proto_tag> impl;
+                    typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
+                };
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return typename Cases::template case_<typename Expr::proto_tag>()(expr, state, visitor);
+                    typedef typename Cases::template case_<typename Expr::proto_tag> impl;
+                    return impl()(expr, state, visitor);
                 }
             };
 

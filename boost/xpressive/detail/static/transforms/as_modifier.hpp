@@ -37,10 +37,9 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // as_modifier
     template<typename Grammar>
-    struct as_modifier : callable
+    struct as_modifier : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>

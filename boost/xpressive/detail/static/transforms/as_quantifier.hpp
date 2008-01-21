@@ -19,13 +19,6 @@
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 
-#define CV(x) typename add_const<x>::type
-#define REF(x) typename add_reference<x>::type
-#define CVREF(x) REF(CV(x))
-#define UNCV(x) typename remove_const<x>::type
-#define UNREF(x) typename remove_reference<x>::type
-#define UNCVREF(x) UNCV(UNREF(x))
-
 namespace boost { namespace xpressive { namespace detail
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -71,10 +64,9 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // as_simple_quantifier
     template<typename Grammar, typename Greedy>
-    struct as_simple_quantifier : callable
+    struct as_simple_quantifier : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
@@ -89,9 +81,10 @@ namespace boost { namespace xpressive { namespace grammar_detail
         typename result<void(Expr, State, Visitor)>::type
         operator ()(Expr const &expr, State const &state, Visitor &visitor) const
         {
-            typedef typename proto::result_of::arg<Expr>::type arg_type;
-            typedef typename Grammar::template result<void(arg_type, detail::true_xpression, Visitor)>::type xpr_type;
-            typedef detail::simple_repeat_matcher<xpr_type, Greedy> matcher_type;
+            typedef result<void(Expr, State, Visitor)> result_;
+            typedef typename result_::arg_type arg_type;
+            typedef typename result_::xpr_type xpr_type;
+            typedef typename result_::matcher_type matcher_type;
             typedef typename Expr::proto_tag tag;
 
             xpr_type const &xpr = Grammar()(proto::arg(expr), detail::true_xpression(), visitor);
@@ -102,21 +95,23 @@ namespace boost { namespace xpressive { namespace grammar_detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // add_hidden_mark
-    struct add_hidden_mark : callable
+    struct add_hidden_mark : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : shift_right<
-                terminal<detail::mark_begin_matcher>::type
-              , typename shift_right<
-                    Expr
-                  , terminal<detail::mark_end_matcher>::type
+        {
+            typedef
+                typename shift_right<
+                    terminal<detail::mark_begin_matcher>::type
+                  , typename shift_right<
+                        Expr
+                      , terminal<detail::mark_end_matcher>::type
+                    >::type
                 >::type
-            >
-        {};
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -145,29 +140,34 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // as_default_quantifier_impl
     template<typename Greedy, uint_t Min, uint_t Max>
-    struct as_default_quantifier_impl : callable
+    struct as_default_quantifier_impl : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : shift_right<
-                terminal<detail::repeat_begin_matcher>::type
-              , typename shift_right<
-                    typename InsertMark::template result<void(typename proto::result_of::arg<Expr>::type, State, Visitor)>::type
-                  , typename terminal<detail::repeat_end_matcher<Greedy> >::type
+        {
+            typedef
+                typename InsertMark::template result<void(typename proto::result_of::arg<Expr>::type, State, Visitor)>::type
+            marked_sub_type;
+
+            typedef
+                typename shift_right<
+                    terminal<detail::repeat_begin_matcher>::type
+                  , typename shift_right<
+                        marked_sub_type
+                      , typename terminal<detail::repeat_end_matcher<Greedy> >::type
+                    >::type
                 >::type
-            >
-        {};
+            type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
         operator ()(Expr const &expr, State const &state, Visitor &visitor) const
         {
             // Ensure this sub-expression is book-ended with mark matchers
-            typedef typename proto::result_of::arg<Expr>::type arg_type;
-            typename InsertMark::template result<void(arg_type, State, Visitor)>::type const &
+            typename result<void(Expr, State, Visitor)>::marked_sub_type const &
                 marked_sub = InsertMark()(proto::arg(expr), state, visitor);
 
             // Get the mark_number from the begin_mark_matcher
@@ -195,10 +195,9 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // as_default_optional
     template<typename Grammar, typename Greedy>
-    struct as_default_optional : callable
+    struct as_default_optional : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
@@ -222,10 +221,9 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // as_mark_optional
     template<typename Grammar, typename Greedy>
-    struct as_mark_optional : callable
+    struct as_mark_optional : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
@@ -270,15 +268,15 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // make_optional_
     template<typename Greedy>
-    struct make_optional_ : callable
+    struct make_optional_ : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : unary_expr<optional_tag<Greedy>, Expr>
-        {};
+        {
+            typedef typename unary_expr<optional_tag<Greedy>, Expr>::type type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename unary_expr<optional_tag<Greedy>, Expr>::type
@@ -306,21 +304,23 @@ namespace boost { namespace xpressive { namespace grammar_detail
     ///////////////////////////////////////////////////////////////////////////////
     // as_default_quantifier
     template<typename Greedy>
-    struct as_default_quantifier : callable
+    struct as_default_quantifier : proto::callable
     {
-        template<typename Sig>
-        struct result;
+        template<typename Sig> struct result {};
 
         template<typename This, typename Expr, typename State, typename Visitor>
         struct result<This(Expr, State, Visitor)>
-          : boost::result_of<
+        {
+            typedef
                 as_default_quantifier_impl<
                     Greedy
                   , min_type<typename Expr::proto_tag>::value
                   , max_type<typename Expr::proto_tag>::value
-                >(Expr, State, Visitor)
-            >
-        {};
+                >
+            impl;
+
+            typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
+        };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
@@ -335,12 +335,5 @@ namespace boost { namespace xpressive { namespace grammar_detail
     };
 
 }}}
-
-#undef CV
-#undef REF
-#undef CVREF
-#undef UNCV
-#undef UNREF
-#undef UNCVREF
 
 #endif
