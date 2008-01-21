@@ -20,7 +20,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<short>::type, short);
 BOOST_CHECK_TYPE(::tt::make_signed<int>::type, int);
 BOOST_CHECK_TYPE(::tt::make_signed<long>::type, long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<long long>::type, long long);
+BOOST_CHECK_TYPE(::tt::make_signed<boost::long_long_type>::type, boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<__int64>::type, __int64);
 #endif
@@ -30,7 +30,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<const short>::type, const short);
 BOOST_CHECK_TYPE(::tt::make_signed<const int>::type, const int);
 BOOST_CHECK_TYPE(::tt::make_signed<const long>::type, const long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<const long long>::type, const long long);
+BOOST_CHECK_TYPE(::tt::make_signed<const boost::long_long_type>::type, const boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<const __int64>::type, const __int64);
 #endif
@@ -40,7 +40,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<volatile short>::type, volatile short);
 BOOST_CHECK_TYPE(::tt::make_signed<volatile int>::type, volatile int);
 BOOST_CHECK_TYPE(::tt::make_signed<volatile long>::type, volatile long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<volatile long long>::type, volatile long long);
+BOOST_CHECK_TYPE(::tt::make_signed<volatile boost::long_long_type>::type, volatile boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<volatile __int64>::type, volatile __int64);
 #endif
@@ -50,7 +50,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<const volatile short>::type, const volatile s
 BOOST_CHECK_TYPE(::tt::make_signed<const volatile int>::type, const volatile int);
 BOOST_CHECK_TYPE(::tt::make_signed<const volatile long>::type, const volatile long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<const volatile long long>::type, const volatile long long);
+BOOST_CHECK_TYPE(::tt::make_signed<const volatile boost::long_long_type>::type, const volatile boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<const volatile __int64>::type, const volatile __int64);
 #endif
@@ -61,7 +61,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<unsigned short>::type, short);
 BOOST_CHECK_TYPE(::tt::make_signed<unsigned int>::type, int);
 BOOST_CHECK_TYPE(::tt::make_signed<unsigned long>::type, long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<unsigned long long>::type, long long);
+BOOST_CHECK_TYPE(::tt::make_signed<boost::ulong_long_type>::type, boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<unsigned __int64>::type, __int64);
 #endif
@@ -71,7 +71,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<const unsigned short>::type, const short);
 BOOST_CHECK_TYPE(::tt::make_signed<const unsigned int>::type, const int);
 BOOST_CHECK_TYPE(::tt::make_signed<const unsigned long>::type, const long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<const unsigned long long>::type, const long long);
+BOOST_CHECK_TYPE(::tt::make_signed<const boost::ulong_long_type>::type, const boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<const unsigned __int64>::type, const __int64);
 #endif
@@ -81,7 +81,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<volatile unsigned short>::type, volatile shor
 BOOST_CHECK_TYPE(::tt::make_signed<volatile unsigned int>::type, volatile int);
 BOOST_CHECK_TYPE(::tt::make_signed<volatile unsigned long>::type, volatile long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<volatile unsigned long long>::type, volatile long long);
+BOOST_CHECK_TYPE(::tt::make_signed<volatile boost::ulong_long_type>::type, volatile boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<volatile unsigned __int64>::type, volatile __int64);
 #endif
@@ -91,7 +91,7 @@ BOOST_CHECK_TYPE(::tt::make_signed<const volatile unsigned short>::type, const v
 BOOST_CHECK_TYPE(::tt::make_signed<const volatile unsigned int>::type, const volatile int);
 BOOST_CHECK_TYPE(::tt::make_signed<const volatile unsigned long>::type, const volatile long);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_TYPE(::tt::make_signed<const volatile unsigned long long>::type, const volatile long long);
+BOOST_CHECK_TYPE(::tt::make_signed<const volatile boost::ulong_long_type>::type, const volatile boost::long_long_type);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_TYPE(::tt::make_signed<const volatile unsigned __int64>::type, const volatile __int64);
 #endif

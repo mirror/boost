@@ -125,9 +125,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<double,float>::value), true)
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long,int>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int,char>::value), true);
 #ifdef BOOST_HAS_LONG_LONG
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long long,int>::value), true);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long long,char>::value), true);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<long long,float>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<boost::long_long_type,int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<boost::long_long_type,char>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<boost::long_long_type,float>::value), true);
 #elif defined(BOOST_HAS_MS_INT64)
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,int>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,char>::value), true);
