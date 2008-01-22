@@ -88,13 +88,13 @@ int main()
     //[ code_bimap_and_boost_foreach_using_range
 
     BOOST_FOREACH( bm_type::left_reference p,
-                 ( bm.left.range( "1" <= _key, _key < "3" ) ))
+                 ( bm.left.range( std::string("1") <= _key, _key < std::string("3") ) ))
     {
         ++p.second;
     }
 
     BOOST_FOREACH( bm_type::left_const_reference p,
-                 ( bm.left.range( "1" <= _key, _key < "3" ) ))
+                 ( bm.left.range( std::string("1") <= _key, _key < std::string("3") ) ))
     {
         std::cout << p.first << "-->" << p.second << std::endl;
     }
