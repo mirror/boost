@@ -7,7 +7,7 @@ import doxygen ;
 import quickbook ;
 
 #wave-command = [ path.native ../../../../dist/bin/wave ] ;
-#
+
 ## Generate reference section using Doxygen
 #doxygen protodoc
 #    :
@@ -47,6 +47,7 @@ import quickbook ;
 #        <doxygen:param>EXTRACT_ALL=YES
 #        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
 #        # Use Boost.Wave to preprocess Proto's source
+#        <doxygen:param>INPUT_FILTER=./wave.sh
 #        <doxygen:param>"INPUT_FILTER=\"$(wave-command) \\
 #                                        -S ../../../.. \\
 #                                        -S \\\"C:\\Program Files\\Microsoft Visual Studio .NET 2003\\vc7\\include\\\" \\

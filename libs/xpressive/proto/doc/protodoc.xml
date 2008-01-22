@@ -246,10 +246,12 @@
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></function><function name="display_expr"><type>void</type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="sout"><paramtype>std::ostream &amp;</paramtype></parameter></function></namespace></namespace></header><header name="boost/xpressive/proto/deep_copy.hpp"><para>Replace all nodes stored by reference by nodes stored by value. </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="deep_copy"><struct-specialization name="result"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="sout"><paramtype>std::ostream &amp;</paramtype></parameter></function></namespace></namespace></header><header name="boost/xpressive/proto/deep_copy.hpp"><para>Replace all nodes stored by reference by nodes stored by value. </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="deep_copy"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
-    </template><specialization><template-arg>This(Expr)</template-arg></specialization><inherit access="public">boost::proto::result_of::deep_copy&lt; Expr &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::deep_copy</classname>&lt; Expr &gt;::type</type><template>
+    </template><specialization><template-arg>This(Expr)</template-arg></specialization><inherit access="public">boost::proto::result_of::deep_copy&lt; Expr &gt;</inherit></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::deep_copy</classname>&lt; Expr &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct></namespace><namespace name="result_of"><struct name="deep_copy"><template>
       <template-type-parameter name="Expr"/>
@@ -266,7 +268,9 @@
       <template-type-parameter name="T"/>
     </template><specialization><template-arg>T</template-arg><template-arg>typename T::proto_is_domain_</template-arg></specialization></struct-specialization><struct-specialization name="domain_of"><template>
       <template-type-parameter name="T"/>
-    </template><specialization><template-arg>T</template-arg><template-arg>typename T::proto_is_expr_</template-arg></specialization><typedef name="type"><type>T::proto_domain</type></typedef></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/eval.hpp"><para>Contains the eval() expression evaluator. </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="eval"><struct-specialization name="result"><template>
+    </template><specialization><template-arg>T</template-arg><template-arg>typename T::proto_is_expr_</template-arg></specialization><typedef name="type"><type>T::proto_domain</type></typedef></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/eval.hpp"><para>Contains the eval() expression evaluator. </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="eval"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
@@ -613,16 +617,7 @@
       <template-type-parameter name="Tag"/>
     </template><purpose>extends&lt;&gt; class template for adding behaviors to a proto expression template </purpose><struct name="result"><template>
       <template-type-parameter name="Sig"/>
-    </template><typedef name="type"><type>boost::mpl::apply_wrap1&lt; Domain, typename boost::proto::result_of::funop&lt; Sig, Derived &gt;::type &gt;::type</type></typedef></struct><struct-specialization name="result"><template>
-      <template-type-parameter name="This"/>
-      <template-type-parameter name="Expr_"/>
-      <template-type-parameter name="State_"/>
-      <template-type-parameter name="Visitor_"/>
-    </template><specialization><template-arg>This(Expr_</template-arg><template-arg>State_</template-arg><template-arg>Visitor_)</template-arg></specialization><typedef name="type"><type>Expr_</type></typedef></struct-specialization><data-member name="expr"><type>Expr</type></data-member><typedef name="proto_base_expr"><type>Expr</type></typedef><typedef name="proto_domain"><type>Domain</type></typedef><typedef name="proto_derived_expr"><type>Derived</type></typedef><typedef name="proto_tag"><type>Expr::proto_tag</type></typedef><typedef name="proto_args"><type>Expr::proto_args</type></typedef><typedef name="proto_arity"><type>Expr::proto_arity</type></typedef><typedef name="proto_is_expr_"><type>void</type></typedef><typedef name="fusion_tag"><type>boost::proto::tag::proto_expr</type></typedef><typedef name="proto_arg0"><type>Expr::proto_arg0</type></typedef><typedef name="proto_arg1"><type>Expr::proto_arg1</type></typedef><typedef name="proto_arg2"><type>Expr::proto_arg2</type></typedef><typedef name="proto_arg3"><type>Expr::proto_arg3</type></typedef><typedef name="proto_arg4"><type>Expr::proto_arg4</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>Expr_ const &amp;</type><template>
-          <template-type-parameter name="Expr_"/>
-          <template-type-parameter name="State_"/>
-          <template-type-parameter name="Visitor_"/>
-        </template><parameter name="expr_"><paramtype>Expr_ const &amp;</paramtype></parameter><parameter name=""><paramtype>State_ const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor_ &amp;</paramtype></parameter></method><method name="proto_base" cv=""><type>Expr &amp;</type></method><method name="proto_base" cv="const"><type>Expr const &amp;</type></method><method name="operator[]" cv="const"><type>boost::mpl::apply_wrap1&lt; Domain, boost::proto::expr&lt; <classname>boost::proto::tag::subscript</classname>, <classname>boost::proto::args2</classname>&lt; boost::proto::ref_&lt; Derived const &gt;, typename <classname>boost::proto::result_of::as_arg</classname>&lt; A &gt;::type &gt; &gt; &gt;::type const</type><template>
+    </template><typedef name="type"><type>boost::mpl::apply_wrap1&lt; Domain, typename boost::proto::result_of::funop&lt; Sig, Derived &gt;::type &gt;::type</type></typedef></struct><data-member name="expr"><type>Expr</type></data-member><typedef name="proto_base_expr"><type>Expr</type></typedef><typedef name="proto_domain"><type>Domain</type></typedef><typedef name="proto_derived_expr"><type>Derived</type></typedef><typedef name="proto_tag"><type>Expr::proto_tag</type></typedef><typedef name="proto_args"><type>Expr::proto_args</type></typedef><typedef name="proto_arity"><type>Expr::proto_arity</type></typedef><typedef name="proto_is_expr_"><type>void</type></typedef><typedef name="fusion_tag"><type>boost::proto::tag::proto_expr</type></typedef><typedef name="proto_arg0"><type>Expr::proto_arg0</type></typedef><typedef name="proto_arg1"><type>Expr::proto_arg1</type></typedef><typedef name="proto_arg2"><type>Expr::proto_arg2</type></typedef><typedef name="proto_arg3"><type>Expr::proto_arg3</type></typedef><typedef name="proto_arg4"><type>Expr::proto_arg4</type></typedef><method-group name="public member functions"><method name="proto_base" cv=""><type>Expr &amp;</type></method><method name="proto_base" cv="const"><type>Expr const &amp;</type></method><method name="operator[]" cv="const"><type>boost::mpl::apply_wrap1&lt; Domain, boost::proto::expr&lt; <classname>boost::proto::tag::subscript</classname>, <classname>boost::proto::args2</classname>&lt; boost::proto::ref_&lt; Derived const &gt;, typename <classname>boost::proto::result_of::as_arg</classname>&lt; A &gt;::type &gt; &gt; &gt;::type const</type><template>
           <template-type-parameter name="A"/>
         </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator[]" cv="const"><type>boost::mpl::apply_wrap1&lt; Domain, boost::proto::expr&lt; <classname>boost::proto::tag::subscript</classname>, <classname>boost::proto::args2</classname>&lt; boost::proto::ref_&lt; Derived const &gt;, typename <classname>boost::proto::result_of::as_arg</classname>&lt; A const  &gt;::type &gt; &gt; &gt;::type const</type><template>
           <template-type-parameter name="A"/>
@@ -650,16 +645,7 @@
       <template-type-parameter name="Domain"/>
     </template><specialization><template-arg>Expr</template-arg><template-arg>Derived</template-arg><template-arg>Domain</template-arg><template-arg>tag::terminal</template-arg></specialization><purpose>extends&lt;&gt; class template for adding behaviors to a proto expression template </purpose><struct name="result"><template>
       <template-type-parameter name="Sig"/>
-    </template><typedef name="type"><type>boost::mpl::apply_wrap1&lt; Domain, typename boost::proto::result_of::funop&lt; Sig, Derived &gt;::type &gt;::type</type></typedef></struct><struct-specialization name="result"><template>
-      <template-type-parameter name="This"/>
-      <template-type-parameter name="Expr_"/>
-      <template-type-parameter name="State_"/>
-      <template-type-parameter name="Visitor_"/>
-    </template><specialization><template-arg>This(Expr_</template-arg><template-arg>State_</template-arg><template-arg>Visitor_)</template-arg></specialization><typedef name="type"><type>Expr_</type></typedef></struct-specialization><data-member name="expr"><type>Expr</type></data-member><typedef name="proto_base_expr"><type>Expr</type></typedef><typedef name="proto_domain"><type>Domain</type></typedef><typedef name="proto_derived_expr"><type>Derived</type></typedef><typedef name="proto_tag"><type>Expr::proto_tag</type></typedef><typedef name="proto_args"><type>Expr::proto_args</type></typedef><typedef name="proto_arity"><type>Expr::proto_arity</type></typedef><typedef name="proto_is_expr_"><type>void</type></typedef><typedef name="fusion_tag"><type>boost::proto::tag::proto_expr</type></typedef><typedef name="proto_arg0"><type>Expr::proto_arg0</type></typedef><typedef name="proto_arg1"><type>Expr::proto_arg1</type></typedef><typedef name="proto_arg2"><type>Expr::proto_arg2</type></typedef><typedef name="proto_arg3"><type>Expr::proto_arg3</type></typedef><typedef name="proto_arg4"><type>Expr::proto_arg4</type></typedef><method-group name="public member functions"><method name="extends" cv=""><type/></method><method name="extends" cv=""><type/><parameter name="that"><paramtype><classname>extends</classname> const &amp;</paramtype></parameter></method><method name="extends" cv=""><type/><parameter name="expr_"><paramtype>Expr const &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type>Expr_ const &amp;</type><template>
-          <template-type-parameter name="Expr_"/>
-          <template-type-parameter name="State_"/>
-          <template-type-parameter name="Visitor_"/>
-        </template><parameter name="expr_"><paramtype>Expr_ const &amp;</paramtype></parameter><parameter name=""><paramtype>State_ const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor_ &amp;</paramtype></parameter></method><method name="proto_base" cv=""><type>Expr &amp;</type></method><method name="proto_base" cv="const"><type>Expr const &amp;</type></method><method name="operator[]" cv="const"><type>boost::mpl::apply_wrap1&lt; Domain, boost::proto::expr&lt; <classname>boost::proto::tag::subscript</classname>, <classname>boost::proto::args2</classname>&lt; boost::proto::ref_&lt; Derived const &gt;, typename <classname>boost::proto::result_of::as_arg</classname>&lt; A &gt;::type &gt; &gt; &gt;::type const</type><template>
+    </template><typedef name="type"><type>boost::mpl::apply_wrap1&lt; Domain, typename boost::proto::result_of::funop&lt; Sig, Derived &gt;::type &gt;::type</type></typedef></struct><data-member name="expr"><type>Expr</type></data-member><typedef name="proto_base_expr"><type>Expr</type></typedef><typedef name="proto_domain"><type>Domain</type></typedef><typedef name="proto_derived_expr"><type>Derived</type></typedef><typedef name="proto_tag"><type>Expr::proto_tag</type></typedef><typedef name="proto_args"><type>Expr::proto_args</type></typedef><typedef name="proto_arity"><type>Expr::proto_arity</type></typedef><typedef name="proto_is_expr_"><type>void</type></typedef><typedef name="fusion_tag"><type>boost::proto::tag::proto_expr</type></typedef><typedef name="proto_arg0"><type>Expr::proto_arg0</type></typedef><typedef name="proto_arg1"><type>Expr::proto_arg1</type></typedef><typedef name="proto_arg2"><type>Expr::proto_arg2</type></typedef><typedef name="proto_arg3"><type>Expr::proto_arg3</type></typedef><typedef name="proto_arg4"><type>Expr::proto_arg4</type></typedef><method-group name="public member functions"><method name="extends" cv=""><type/></method><method name="extends" cv=""><type/><parameter name="that"><paramtype><classname>extends</classname> const &amp;</paramtype></parameter></method><method name="extends" cv=""><type/><parameter name="expr_"><paramtype>Expr const &amp;</paramtype></parameter></method><method name="proto_base" cv=""><type>Expr &amp;</type></method><method name="proto_base" cv="const"><type>Expr const &amp;</type></method><method name="operator[]" cv="const"><type>boost::mpl::apply_wrap1&lt; Domain, boost::proto::expr&lt; <classname>boost::proto::tag::subscript</classname>, <classname>boost::proto::args2</classname>&lt; boost::proto::ref_&lt; Derived const &gt;, typename <classname>boost::proto::result_of::as_arg</classname>&lt; A &gt;::type &gt; &gt; &gt;::type const</type><template>
           <template-type-parameter name="A"/>
         </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator[]" cv="const"><type>boost::mpl::apply_wrap1&lt; Domain, boost::proto::expr&lt; <classname>boost::proto::tag::subscript</classname>, <classname>boost::proto::args2</classname>&lt; boost::proto::ref_&lt; Derived const &gt;, typename <classname>boost::proto::result_of::as_arg</classname>&lt; A const  &gt;::type &gt; &gt; &gt;::type const</type><template>
           <template-type-parameter name="A"/>
@@ -705,7 +691,9 @@
           <template-type-parameter name="A"/>
         </template><parameter name="a"><paramtype>A const &amp;</paramtype></parameter></copy-assignment><method-group name="public static functions"><method name="make" cv=""><type>static Derived const</type><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/fusion.hpp"><para>Make any Proto expression a valid Fusion sequence </para><namespace name="boost"><namespace name="fusion"><namespace name="extension"><struct name="as_element"><template>
       <template-type-parameter name="Tag"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization></struct-specialization></struct><struct-specialization name="is_view_impl"><template>
@@ -776,7 +764,9 @@
       <template-type-parameter name="Expr"/>
     </template><typedef name="expr_type"><type>Expr</type></typedef><typedef name="proto_tag"><type>Expr::proto_tag</type></typedef><typedef name="category"><type>fusion::forward_traversal_tag</type></typedef><typedef name="fusion_tag"><type>tag::proto_flat_view</type></typedef><data-member name="expr_"><type>Expr &amp;</type></data-member><method-group name="public member functions"/><constructor><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></constructor></struct><struct name="eval_fun"><template>
       <template-type-parameter name="Context"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization><inherit access="public">boost::proto::result_of::eval&lt; boost::remove_reference&lt; Expr &gt;::type, Context &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::type</type><template>
@@ -784,17 +774,23 @@
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method></method-group><constructor><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></constructor></struct><struct-specialization name="is_callable"><template>
     </template><specialization><template-arg>functional::flatten</template-arg></specialization></struct-specialization><struct-specialization name="is_callable"><template>
     </template><specialization><template-arg>functional::pop_front</template-arg></specialization></struct-specialization><struct-specialization name="is_callable"><template>
-    </template><specialization><template-arg>functional::reverse</template-arg></specialization></struct-specialization><namespace name="functional"><struct name="flatten"><struct-specialization name="result"><template>
+    </template><specialization><template-arg>functional::reverse</template-arg></specialization></struct-specialization><namespace name="functional"><struct name="flatten"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization><typedef name="type"><type><classname>flat_view</classname>&lt; typename boost::remove_reference&lt; Expr &gt;::<classname>type</classname> const &gt;</type></typedef></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>flat_view</classname>&lt; Expr const &gt;</type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="pop_front"><struct-specialization name="result"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="pop_front"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>fusion::result_of::pop_front&lt; Expr const &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="reverse"><struct-specialization name="result"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="reverse"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>fusion::result_of::reverse&lt; Expr const &gt;::type</type><template>
@@ -1056,16 +1052,29 @@
       <template-type-parameter name="Grammar"/>
     </template><specialization><template-arg>vararg&lt; Grammar &gt;</template-arg></specialization></struct-specialization><namespace name="control"><struct name="not_"><template>
       <template-type-parameter name="Grammar"/>
-    </template><typedef name="proto_is_callable_"><type>void</type></typedef><typedef name="proto_base_expr"><type><classname>not_</classname></type></typedef></struct><struct name="if_"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
+      <template-type-parameter name="This"/>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="State"/>
+      <template-type-parameter name="Visitor"/>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type>Expr</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>not_</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>Expr const &amp;</type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="if_"><template>
       <template-type-parameter name="If"/>
       <template-type-parameter name="Then"/>
       <template-type-parameter name="Else"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="proto_base_expr"><type><classname>if_</classname></type></typedef></struct><struct name="or_"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="branch"><type>mpl::if_&lt; typename when&lt; _, If &gt;::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type, when&lt; _, Then &gt;, when&lt; _, Else &gt;&gt;::type</type></typedef><typedef name="type"><type>branch::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>if_</classname></type></typedef></struct><struct name="or_"><template>
       <template-type-parameter name="G0"/>
       <template-type-parameter name="G1"/>
       <template-type-parameter name="G2"/>
@@ -1074,12 +1083,14 @@
       <template-type-parameter name="G5"/>
       <template-type-parameter name="G6"/>
       <template-type-parameter name="G7"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="which"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>which::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>or_</classname></type></typedef></struct><struct name="and_"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="which"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>which::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>or_</classname></type></typedef></struct><struct name="and_"><template>
       <template-type-parameter name="G0"/>
       <template-type-parameter name="G1"/>
       <template-type-parameter name="G2"/>
@@ -1088,19 +1099,23 @@
       <template-type-parameter name="G5"/>
       <template-type-parameter name="G6"/>
       <template-type-parameter name="G7"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="which"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>which::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>and_</classname></type></typedef></struct><struct name="switch_"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="which"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>which::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>and_</classname></type></typedef></struct><struct name="switch_"><template>
       <template-type-parameter name="Cases"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="proto_base_expr"><type><classname>switch_</classname></type></typedef></struct><struct name="exact"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type>Cases::template case_&lt; typename Expr::proto_tag &gt;</type></typedef><typedef name="type"><type>impl::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>switch_</classname></type></typedef></struct><struct name="exact"><template>
       <template-type-parameter name="T"/>
     </template></struct><struct name="convertible_to"><template>
       <template-type-parameter name="T"/>
@@ -1109,7 +1124,18 @@
     </template><typedef name="proto_is_vararg_"><type>void</type></typedef></struct></namespace><namespace name="result_of"><struct name="matches"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Grammar"/>
-    </template></struct></namespace><namespace name="wildcardns_"><struct name="_"><typedef name="proto_is_callable_"><type>void</type></typedef><typedef name="proto_base_expr"><type><classname>_</classname></type></typedef></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/operators.hpp"><para>Contains all the overloaded operators that make it possible to build expression templates using proto components </para><namespace name="boost"><namespace name="proto"><struct name="is_extension"><template>
+    </template></struct></namespace><namespace name="wildcardns_"><struct name="_"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
+      <template-type-parameter name="This"/>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="State"/>
+      <template-type-parameter name="Visitor"/>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type>Expr</type></typedef></struct-specialization><typedef name="proto_base_expr"><type><classname>_</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>Expr const &amp;</type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/operators.hpp"><para>Contains all the overloaded operators that make it possible to build expression templates using proto components </para><namespace name="boost"><namespace name="proto"><struct name="is_extension"><template>
       <template-type-parameter name="T"/>
     </template></struct><namespace name="exprns_"><function name="operator+"><type><emphasis>unspecified</emphasis></type><template>
           <template-type-parameter name="Arg"/>
@@ -1515,16 +1541,9 @@
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
           <template-type-parameter name="A2"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><description><para>if_else </para></description></function></namespace></namespace></namespace></header><header name="boost/xpressive/proto/proto.hpp"><para>The proto expression template compiler and supporting utilities. </para></header><header name="boost/xpressive/proto/proto_fwd.hpp"><para>Forward declarations of all of proto's public types and functions. </para><namespace name="boost"><namespace name="proto"><namespace name="context"/><namespace name="control"><data-member name="N"><type>int const</type></data-member></namespace><namespace name="domainns_"/><namespace name="exops"/><namespace name="exprns_"/><namespace name="functional"><typedef name="make_terminal"><type><classname>make_expr</classname>&lt; <classname>tag::terminal</classname> &gt;</type></typedef><typedef name="make_posit"><type><classname>make_expr</classname>&lt; <classname>tag::posit</classname> &gt;</type></typedef><typedef name="make_negate"><type><classname>make_expr</classname>&lt; <classname>tag::negate</classname> &gt;</type></typedef><typedef name="make_dereference"><type><classname>make_expr</classname>&lt; <classname>tag::dereference</classname> &gt;</type></typedef><typedef name="make_complement"><type><classname>make_expr</classname>&lt; <classname>tag::complement</classname> &gt;</type></typedef><typedef name="make_address_of"><type><classname>make_expr</classname>&lt; <classname>tag::address_of</classname> &gt;</type></typedef><typedef name="make_logical_not"><type><classname>make_expr</classname>&lt; <classname>tag::logical_not</classname> &gt;</type></typedef><typedef name="make_pre_inc"><type><classname>make_expr</classname>&lt; <classname>tag::pre_inc</classname> &gt;</type></typedef><typedef name="make_pre_dec"><type><classname>make_expr</classname>&lt; <classname>tag::pre_dec</classname> &gt;</type></typedef><typedef name="make_post_inc"><type><classname>make_expr</classname>&lt; <classname>tag::post_inc</classname> &gt;</type></typedef><typedef name="make_post_dec"><type><classname>make_expr</classname>&lt; <classname>tag::post_dec</classname> &gt;</type></typedef><typedef name="make_shift_left"><type><classname>make_expr</classname>&lt; <classname>tag::shift_left</classname> &gt;</type></typedef><typedef name="make_shift_right"><type><classname>make_expr</classname>&lt; <classname>tag::shift_right</classname> &gt;</type></typedef><typedef name="make_multiplies"><type><classname>make_expr</classname>&lt; <classname>tag::multiplies</classname> &gt;</type></typedef><typedef name="make_divides"><type><classname>make_expr</classname>&lt; <classname>tag::divides</classname> &gt;</type></typedef><typedef name="make_modulus"><type><classname>make_expr</classname>&lt; <classname>tag::modulus</classname> &gt;</type></typedef><typedef name="make_plus"><type><classname>make_expr</classname>&lt; <classname>tag::plus</classname> &gt;</type></typedef><typedef name="make_minus"><type><classname>make_expr</classname>&lt; <classname>tag::minus</classname> &gt;</type></typedef><typedef name="make_less"><type><classname>make_expr</classname>&lt; <classname>tag::less</classname> &gt;</type></typedef><typedef name="make_greater"><type><classname>make_expr</classname>&lt; <classname>tag::greater</classname> &gt;</type></typedef><typedef name="make_less_equal"><type><classname>make_expr</classname>&lt; <classname>tag::less_equal</classname> &gt;</type></typedef><typedef name="make_greater_equal"><type><classname>make_expr</classname>&lt; <classname>tag::greater_equal</classname> &gt;</type></typedef><typedef name="make_equal_to"><type><classname>make_expr</classname>&lt; <classname>tag::equal_to</classname> &gt;</type></typedef><typedef name="make_not_equal_to"><type><classname>make_expr</classname>&lt; <classname>tag::not_equal_to</classname> &gt;</type></typedef><typedef name="make_logical_or"><type><classname>make_expr</classname>&lt; <classname>tag::logical_or</classname> &gt;</type></typedef><typedef name="make_logical_and"><type><classname>make_expr</classname>&lt; <classname>tag::logical_and</classname> &gt;</type></typedef><typedef name="make_bitwise_and"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_and</classname> &gt;</type></typedef><typedef name="make_bitwise_or"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_or</classname> &gt;</type></typedef><typedef name="make_bitwise_xor"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_xor</classname> &gt;</type></typedef><typedef name="make_comma"><type><classname>make_expr</classname>&lt; <classname>tag::comma</classname> &gt;</type></typedef><typedef name="make_mem_ptr"><type><classname>make_expr</classname>&lt; <classname>tag::mem_ptr</classname> &gt;</type></typedef><typedef name="make_assign"><type><classname>make_expr</classname>&lt; <classname>tag::assign</classname> &gt;</type></typedef><typedef name="make_shift_left_assign"><type><classname>make_expr</classname>&lt; <classname>tag::shift_left_assign</classname> &gt;</type></typedef><typedef name="make_shift_right_assign"><type><classname>make_expr</classname>&lt; <classname>tag::shift_right_assign</classname> &gt;</type></typedef><typedef name="make_multiplies_assign"><type><classname>make_expr</classname>&lt; <classname>tag::multiplies_assign</classname> &gt;</type></typedef><typedef name="make_divides_assign"><type><classname>make_expr</classname>&lt; <classname>tag::divides_assign</classname> &gt;</type></typedef><typedef name="make_modulus_assign"><type><classname>make_expr</classname>&lt; <classname>tag::modulus_assign</classname> &gt;</type></typedef><typedef name="make_plus_assign"><type><classname>make_expr</classname>&lt; <classname>tag::plus_assign</classname> &gt;</type></typedef><typedef name="make_minus_assign"><type><classname>make_expr</classname>&lt; <classname>tag::minus_assign</classname> &gt;</type></typedef><typedef name="make_bitwise_and_assign"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_and_assign</classname> &gt;</type></typedef><typedef name="make_bitwise_or_assign"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_or_assign</classname> &gt;</type></typedef><typedef name="make_bitwise_xor_assign"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_xor_assign</classname> &gt;</type></typedef><typedef name="make_subscript"><type><classname>make_expr</classname>&lt; <classname>tag::subscript</classname> &gt;</type></typedef><typedef name="make_if_else"><type><classname>make_expr</classname>&lt; <classname>tag::if_else_</classname> &gt;</type></typedef><typedef name="make_function"><type><classname>make_expr</classname>&lt; <classname>tag::function</classname> &gt;</type></typedef></namespace><namespace name="generatorns_"/><namespace name="has_transformns_"><struct name="has_identity_transform"><struct-specialization name="result"><template>
-      <template-type-parameter name="This"/>
-      <template-type-parameter name="Expr_"/>
-      <template-type-parameter name="State_"/>
-      <template-type-parameter name="Visitor_"/>
-    </template><specialization><template-arg>This(Expr_</template-arg><template-arg>State_</template-arg><template-arg>Visitor_)</template-arg></specialization><typedef name="type"><type>Expr_</type></typedef></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>Expr_ const &amp;</type><template>
-          <template-type-parameter name="Expr_"/>
-          <template-type-parameter name="State_"/>
-          <template-type-parameter name="Visitor_"/>
-        </template><parameter name="expr_"><paramtype>Expr_ const &amp;</paramtype></parameter><parameter name=""><paramtype>State_ const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor_ &amp;</paramtype></parameter></method></method-group></struct></namespace><namespace name="op"/><namespace name="refns_"/><namespace name="result_of"/><namespace name="tag"/><namespace name="transform"><struct name="callable"><typedef name="proto_is_callable_"><type>void</type></typedef></struct><typedef name="arg0"><type><classname>arg_c</classname>&lt; 0 &gt;</type></typedef><typedef name="arg1"><type><classname>arg_c</classname>&lt; 1 &gt;</type></typedef><typedef name="arg2"><type><classname>arg_c</classname>&lt; 2 &gt;</type></typedef><typedef name="arg3"><type><classname>arg_c</classname>&lt; 3 &gt;</type></typedef><typedef name="arg4"><type><classname>arg_c</classname>&lt; 4 &gt;</type></typedef><typedef name="arg5"><type><classname>arg_c</classname>&lt; 5 &gt;</type></typedef><typedef name="arg6"><type><classname>arg_c</classname>&lt; 6 &gt;</type></typedef><typedef name="arg7"><type><classname>arg_c</classname>&lt; 7 &gt;</type></typedef><typedef name="arg8"><type><classname>arg_c</classname>&lt; 8 &gt;</type></typedef><typedef name="arg9"><type><classname>arg_c</classname>&lt; 9 &gt;</type></typedef><typedef name="arg"><type><classname>arg0</classname></type></typedef><typedef name="left"><type><classname>arg0</classname></type></typedef><typedef name="right"><type><classname>arg1</classname></type></typedef></namespace><namespace name="utility"/><namespace name="wildcardns_"/><typedef name="_make_terminal"><type><classname>functional::make_terminal</classname></type></typedef><typedef name="_make_posit"><type><classname>functional::make_posit</classname></type></typedef><typedef name="_make_negate"><type><classname>functional::make_negate</classname></type></typedef><typedef name="_make_dereference"><type><classname>functional::make_dereference</classname></type></typedef><typedef name="_make_complement"><type><classname>functional::make_complement</classname></type></typedef><typedef name="_make_address_of"><type><classname>functional::make_address_of</classname></type></typedef><typedef name="_make_logical_not"><type><classname>functional::make_logical_not</classname></type></typedef><typedef name="_make_pre_inc"><type><classname>functional::make_pre_inc</classname></type></typedef><typedef name="_make_pre_dec"><type><classname>functional::make_pre_dec</classname></type></typedef><typedef name="_make_post_inc"><type><classname>functional::make_post_inc</classname></type></typedef><typedef name="_make_post_dec"><type><classname>functional::make_post_dec</classname></type></typedef><typedef name="_make_shift_left"><type><classname>functional::make_shift_left</classname></type></typedef><typedef name="_make_shift_right"><type><classname>functional::make_shift_right</classname></type></typedef><typedef name="_make_multiplies"><type><classname>functional::make_multiplies</classname></type></typedef><typedef name="_make_divides"><type><classname>functional::make_divides</classname></type></typedef><typedef name="_make_modulus"><type><classname>functional::make_modulus</classname></type></typedef><typedef name="_make_plus"><type><classname>functional::make_plus</classname></type></typedef><typedef name="_make_minus"><type><classname>functional::make_minus</classname></type></typedef><typedef name="_make_less"><type><classname>functional::make_less</classname></type></typedef><typedef name="_make_greater"><type><classname>functional::make_greater</classname></type></typedef><typedef name="_make_less_equal"><type><classname>functional::make_less_equal</classname></type></typedef><typedef name="_make_greater_equal"><type><classname>functional::make_greater_equal</classname></type></typedef><typedef name="_make_equal_to"><type><classname>functional::make_equal_to</classname></type></typedef><typedef name="_make_not_equal_to"><type><classname>functional::make_not_equal_to</classname></type></typedef><typedef name="_make_logical_or"><type><classname>functional::make_logical_or</classname></type></typedef><typedef name="_make_logical_and"><type><classname>functional::make_logical_and</classname></type></typedef><typedef name="_make_bitwise_and"><type><classname>functional::make_bitwise_and</classname></type></typedef><typedef name="_make_bitwise_or"><type><classname>functional::make_bitwise_or</classname></type></typedef><typedef name="_make_bitwise_xor"><type><classname>functional::make_bitwise_xor</classname></type></typedef><typedef name="_make_comma"><type><classname>functional::make_comma</classname></type></typedef><typedef name="_make_mem_ptr"><type><classname>functional::make_mem_ptr</classname></type></typedef><typedef name="_make_assign"><type><classname>functional::make_assign</classname></type></typedef><typedef name="_make_shift_left_assign"><type><classname>functional::make_shift_left_assign</classname></type></typedef><typedef name="_make_shift_right_assign"><type><classname>functional::make_shift_right_assign</classname></type></typedef><typedef name="_make_multiplies_assign"><type><classname>functional::make_multiplies_assign</classname></type></typedef><typedef name="_make_divides_assign"><type><classname>functional::make_divides_assign</classname></type></typedef><typedef name="_make_modulus_assign"><type><classname>functional::make_modulus_assign</classname></type></typedef><typedef name="_make_plus_assign"><type><classname>functional::make_plus_assign</classname></type></typedef><typedef name="_make_minus_assign"><type><classname>functional::make_minus_assign</classname></type></typedef><typedef name="_make_bitwise_and_assign"><type><classname>functional::make_bitwise_and_assign</classname></type></typedef><typedef name="_make_bitwise_or_assign"><type><classname>functional::make_bitwise_or_assign</classname></type></typedef><typedef name="_make_bitwise_xor_assign"><type><classname>functional::make_bitwise_xor_assign</classname></type></typedef><typedef name="_make_subscript"><type><classname>functional::make_subscript</classname></type></typedef><typedef name="_make_if_else"><type><classname>functional::make_if_else</classname></type></typedef><typedef name="_make_function"><type><classname>functional::make_function</classname></type></typedef><typedef name="_flatten"><type><classname>functional::flatten</classname></type></typedef><typedef name="_pop_front"><type><classname>functional::pop_front</classname></type></typedef><typedef name="_reverse"><type><classname>functional::reverse</classname></type></typedef><typedef name="_deep_copy"><type><classname>functional::deep_copy</classname></type></typedef><typedef name="_expr"><type><classname>transform::expr</classname></type></typedef><typedef name="_state"><type><classname>transform::state</classname></type></typedef><typedef name="_visitor"><type><classname>transform::visitor</classname></type></typedef><typedef name="_arg0"><type><classname>transform::arg0</classname></type></typedef><typedef name="_arg1"><type><classname>transform::arg1</classname></type></typedef><typedef name="_arg2"><type><classname>transform::arg2</classname></type></typedef><typedef name="_arg3"><type><classname>transform::arg3</classname></type></typedef><typedef name="_arg4"><type><classname>transform::arg4</classname></type></typedef><typedef name="_arg5"><type><classname>transform::arg5</classname></type></typedef><typedef name="_arg6"><type><classname>transform::arg6</classname></type></typedef><typedef name="_arg7"><type><classname>transform::arg7</classname></type></typedef><typedef name="_arg8"><type><classname>transform::arg8</classname></type></typedef><typedef name="_arg9"><type><classname>transform::arg9</classname></type></typedef><typedef name="_arg"><type><classname>transform::arg</classname></type></typedef><typedef name="_left"><type><classname>transform::left</classname></type></typedef><typedef name="_right"><type><classname>transform::right</classname></type></typedef></namespace></namespace></header><header name="boost/xpressive/proto/ref.hpp"><para>Utility for storing a sub-expr by reference </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="unref"><struct-specialization name="result"><template>
+        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><parameter name="a2"><paramtype>const A2 &amp;</paramtype></parameter><description><para>if_else </para></description></function></namespace></namespace></namespace></header><header name="boost/xpressive/proto/proto.hpp"><para>The proto expression template compiler and supporting utilities. </para></header><header name="boost/xpressive/proto/proto_fwd.hpp"><para>Forward declarations of all of proto's public types and functions. </para><namespace name="boost"><namespace name="proto"><namespace name="context"/><namespace name="control"><data-member name="N"><type>int const</type></data-member></namespace><namespace name="domainns_"/><namespace name="exops"/><namespace name="exprns_"/><namespace name="functional"><typedef name="make_terminal"><type><classname>make_expr</classname>&lt; <classname>tag::terminal</classname> &gt;</type></typedef><typedef name="make_posit"><type><classname>make_expr</classname>&lt; <classname>tag::posit</classname> &gt;</type></typedef><typedef name="make_negate"><type><classname>make_expr</classname>&lt; <classname>tag::negate</classname> &gt;</type></typedef><typedef name="make_dereference"><type><classname>make_expr</classname>&lt; <classname>tag::dereference</classname> &gt;</type></typedef><typedef name="make_complement"><type><classname>make_expr</classname>&lt; <classname>tag::complement</classname> &gt;</type></typedef><typedef name="make_address_of"><type><classname>make_expr</classname>&lt; <classname>tag::address_of</classname> &gt;</type></typedef><typedef name="make_logical_not"><type><classname>make_expr</classname>&lt; <classname>tag::logical_not</classname> &gt;</type></typedef><typedef name="make_pre_inc"><type><classname>make_expr</classname>&lt; <classname>tag::pre_inc</classname> &gt;</type></typedef><typedef name="make_pre_dec"><type><classname>make_expr</classname>&lt; <classname>tag::pre_dec</classname> &gt;</type></typedef><typedef name="make_post_inc"><type><classname>make_expr</classname>&lt; <classname>tag::post_inc</classname> &gt;</type></typedef><typedef name="make_post_dec"><type><classname>make_expr</classname>&lt; <classname>tag::post_dec</classname> &gt;</type></typedef><typedef name="make_shift_left"><type><classname>make_expr</classname>&lt; <classname>tag::shift_left</classname> &gt;</type></typedef><typedef name="make_shift_right"><type><classname>make_expr</classname>&lt; <classname>tag::shift_right</classname> &gt;</type></typedef><typedef name="make_multiplies"><type><classname>make_expr</classname>&lt; <classname>tag::multiplies</classname> &gt;</type></typedef><typedef name="make_divides"><type><classname>make_expr</classname>&lt; <classname>tag::divides</classname> &gt;</type></typedef><typedef name="make_modulus"><type><classname>make_expr</classname>&lt; <classname>tag::modulus</classname> &gt;</type></typedef><typedef name="make_plus"><type><classname>make_expr</classname>&lt; <classname>tag::plus</classname> &gt;</type></typedef><typedef name="make_minus"><type><classname>make_expr</classname>&lt; <classname>tag::minus</classname> &gt;</type></typedef><typedef name="make_less"><type><classname>make_expr</classname>&lt; <classname>tag::less</classname> &gt;</type></typedef><typedef name="make_greater"><type><classname>make_expr</classname>&lt; <classname>tag::greater</classname> &gt;</type></typedef><typedef name="make_less_equal"><type><classname>make_expr</classname>&lt; <classname>tag::less_equal</classname> &gt;</type></typedef><typedef name="make_greater_equal"><type><classname>make_expr</classname>&lt; <classname>tag::greater_equal</classname> &gt;</type></typedef><typedef name="make_equal_to"><type><classname>make_expr</classname>&lt; <classname>tag::equal_to</classname> &gt;</type></typedef><typedef name="make_not_equal_to"><type><classname>make_expr</classname>&lt; <classname>tag::not_equal_to</classname> &gt;</type></typedef><typedef name="make_logical_or"><type><classname>make_expr</classname>&lt; <classname>tag::logical_or</classname> &gt;</type></typedef><typedef name="make_logical_and"><type><classname>make_expr</classname>&lt; <classname>tag::logical_and</classname> &gt;</type></typedef><typedef name="make_bitwise_and"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_and</classname> &gt;</type></typedef><typedef name="make_bitwise_or"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_or</classname> &gt;</type></typedef><typedef name="make_bitwise_xor"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_xor</classname> &gt;</type></typedef><typedef name="make_comma"><type><classname>make_expr</classname>&lt; <classname>tag::comma</classname> &gt;</type></typedef><typedef name="make_mem_ptr"><type><classname>make_expr</classname>&lt; <classname>tag::mem_ptr</classname> &gt;</type></typedef><typedef name="make_assign"><type><classname>make_expr</classname>&lt; <classname>tag::assign</classname> &gt;</type></typedef><typedef name="make_shift_left_assign"><type><classname>make_expr</classname>&lt; <classname>tag::shift_left_assign</classname> &gt;</type></typedef><typedef name="make_shift_right_assign"><type><classname>make_expr</classname>&lt; <classname>tag::shift_right_assign</classname> &gt;</type></typedef><typedef name="make_multiplies_assign"><type><classname>make_expr</classname>&lt; <classname>tag::multiplies_assign</classname> &gt;</type></typedef><typedef name="make_divides_assign"><type><classname>make_expr</classname>&lt; <classname>tag::divides_assign</classname> &gt;</type></typedef><typedef name="make_modulus_assign"><type><classname>make_expr</classname>&lt; <classname>tag::modulus_assign</classname> &gt;</type></typedef><typedef name="make_plus_assign"><type><classname>make_expr</classname>&lt; <classname>tag::plus_assign</classname> &gt;</type></typedef><typedef name="make_minus_assign"><type><classname>make_expr</classname>&lt; <classname>tag::minus_assign</classname> &gt;</type></typedef><typedef name="make_bitwise_and_assign"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_and_assign</classname> &gt;</type></typedef><typedef name="make_bitwise_or_assign"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_or_assign</classname> &gt;</type></typedef><typedef name="make_bitwise_xor_assign"><type><classname>make_expr</classname>&lt; <classname>tag::bitwise_xor_assign</classname> &gt;</type></typedef><typedef name="make_subscript"><type><classname>make_expr</classname>&lt; <classname>tag::subscript</classname> &gt;</type></typedef><typedef name="make_if_else"><type><classname>make_expr</classname>&lt; <classname>tag::if_else_</classname> &gt;</type></typedef><typedef name="make_function"><type><classname>make_expr</classname>&lt; <classname>tag::function</classname> &gt;</type></typedef></namespace><namespace name="generatorns_"/><namespace name="op"/><namespace name="refns_"/><namespace name="result_of"/><namespace name="tag"/><namespace name="transform"><struct name="callable"><typedef name="proto_is_callable_"><type>void</type></typedef></struct><typedef name="arg0"><type><classname>arg_c</classname>&lt; 0 &gt;</type></typedef><typedef name="arg1"><type><classname>arg_c</classname>&lt; 1 &gt;</type></typedef><typedef name="arg2"><type><classname>arg_c</classname>&lt; 2 &gt;</type></typedef><typedef name="arg3"><type><classname>arg_c</classname>&lt; 3 &gt;</type></typedef><typedef name="arg4"><type><classname>arg_c</classname>&lt; 4 &gt;</type></typedef><typedef name="arg5"><type><classname>arg_c</classname>&lt; 5 &gt;</type></typedef><typedef name="arg6"><type><classname>arg_c</classname>&lt; 6 &gt;</type></typedef><typedef name="arg7"><type><classname>arg_c</classname>&lt; 7 &gt;</type></typedef><typedef name="arg8"><type><classname>arg_c</classname>&lt; 8 &gt;</type></typedef><typedef name="arg9"><type><classname>arg_c</classname>&lt; 9 &gt;</type></typedef><typedef name="arg"><type><classname>arg0</classname></type></typedef><typedef name="left"><type><classname>arg0</classname></type></typedef><typedef name="right"><type><classname>arg1</classname></type></typedef></namespace><namespace name="utility"/><namespace name="wildcardns_"/><typedef name="_make_terminal"><type><classname>functional::make_terminal</classname></type></typedef><typedef name="_make_posit"><type><classname>functional::make_posit</classname></type></typedef><typedef name="_make_negate"><type><classname>functional::make_negate</classname></type></typedef><typedef name="_make_dereference"><type><classname>functional::make_dereference</classname></type></typedef><typedef name="_make_complement"><type><classname>functional::make_complement</classname></type></typedef><typedef name="_make_address_of"><type><classname>functional::make_address_of</classname></type></typedef><typedef name="_make_logical_not"><type><classname>functional::make_logical_not</classname></type></typedef><typedef name="_make_pre_inc"><type><classname>functional::make_pre_inc</classname></type></typedef><typedef name="_make_pre_dec"><type><classname>functional::make_pre_dec</classname></type></typedef><typedef name="_make_post_inc"><type><classname>functional::make_post_inc</classname></type></typedef><typedef name="_make_post_dec"><type><classname>functional::make_post_dec</classname></type></typedef><typedef name="_make_shift_left"><type><classname>functional::make_shift_left</classname></type></typedef><typedef name="_make_shift_right"><type><classname>functional::make_shift_right</classname></type></typedef><typedef name="_make_multiplies"><type><classname>functional::make_multiplies</classname></type></typedef><typedef name="_make_divides"><type><classname>functional::make_divides</classname></type></typedef><typedef name="_make_modulus"><type><classname>functional::make_modulus</classname></type></typedef><typedef name="_make_plus"><type><classname>functional::make_plus</classname></type></typedef><typedef name="_make_minus"><type><classname>functional::make_minus</classname></type></typedef><typedef name="_make_less"><type><classname>functional::make_less</classname></type></typedef><typedef name="_make_greater"><type><classname>functional::make_greater</classname></type></typedef><typedef name="_make_less_equal"><type><classname>functional::make_less_equal</classname></type></typedef><typedef name="_make_greater_equal"><type><classname>functional::make_greater_equal</classname></type></typedef><typedef name="_make_equal_to"><type><classname>functional::make_equal_to</classname></type></typedef><typedef name="_make_not_equal_to"><type><classname>functional::make_not_equal_to</classname></type></typedef><typedef name="_make_logical_or"><type><classname>functional::make_logical_or</classname></type></typedef><typedef name="_make_logical_and"><type><classname>functional::make_logical_and</classname></type></typedef><typedef name="_make_bitwise_and"><type><classname>functional::make_bitwise_and</classname></type></typedef><typedef name="_make_bitwise_or"><type><classname>functional::make_bitwise_or</classname></type></typedef><typedef name="_make_bitwise_xor"><type><classname>functional::make_bitwise_xor</classname></type></typedef><typedef name="_make_comma"><type><classname>functional::make_comma</classname></type></typedef><typedef name="_make_mem_ptr"><type><classname>functional::make_mem_ptr</classname></type></typedef><typedef name="_make_assign"><type><classname>functional::make_assign</classname></type></typedef><typedef name="_make_shift_left_assign"><type><classname>functional::make_shift_left_assign</classname></type></typedef><typedef name="_make_shift_right_assign"><type><classname>functional::make_shift_right_assign</classname></type></typedef><typedef name="_make_multiplies_assign"><type><classname>functional::make_multiplies_assign</classname></type></typedef><typedef name="_make_divides_assign"><type><classname>functional::make_divides_assign</classname></type></typedef><typedef name="_make_modulus_assign"><type><classname>functional::make_modulus_assign</classname></type></typedef><typedef name="_make_plus_assign"><type><classname>functional::make_plus_assign</classname></type></typedef><typedef name="_make_minus_assign"><type><classname>functional::make_minus_assign</classname></type></typedef><typedef name="_make_bitwise_and_assign"><type><classname>functional::make_bitwise_and_assign</classname></type></typedef><typedef name="_make_bitwise_or_assign"><type><classname>functional::make_bitwise_or_assign</classname></type></typedef><typedef name="_make_bitwise_xor_assign"><type><classname>functional::make_bitwise_xor_assign</classname></type></typedef><typedef name="_make_subscript"><type><classname>functional::make_subscript</classname></type></typedef><typedef name="_make_if_else"><type><classname>functional::make_if_else</classname></type></typedef><typedef name="_make_function"><type><classname>functional::make_function</classname></type></typedef><typedef name="_flatten"><type><classname>functional::flatten</classname></type></typedef><typedef name="_pop_front"><type><classname>functional::pop_front</classname></type></typedef><typedef name="_reverse"><type><classname>functional::reverse</classname></type></typedef><typedef name="_deep_copy"><type><classname>functional::deep_copy</classname></type></typedef><typedef name="_expr"><type><classname>transform::expr</classname></type></typedef><typedef name="_state"><type><classname>transform::state</classname></type></typedef><typedef name="_visitor"><type><classname>transform::visitor</classname></type></typedef><typedef name="_arg0"><type><classname>transform::arg0</classname></type></typedef><typedef name="_arg1"><type><classname>transform::arg1</classname></type></typedef><typedef name="_arg2"><type><classname>transform::arg2</classname></type></typedef><typedef name="_arg3"><type><classname>transform::arg3</classname></type></typedef><typedef name="_arg4"><type><classname>transform::arg4</classname></type></typedef><typedef name="_arg5"><type><classname>transform::arg5</classname></type></typedef><typedef name="_arg6"><type><classname>transform::arg6</classname></type></typedef><typedef name="_arg7"><type><classname>transform::arg7</classname></type></typedef><typedef name="_arg8"><type><classname>transform::arg8</classname></type></typedef><typedef name="_arg9"><type><classname>transform::arg9</classname></type></typedef><typedef name="_arg"><type><classname>transform::arg</classname></type></typedef><typedef name="_left"><type><classname>transform::left</classname></type></typedef><typedef name="_right"><type><classname>transform::right</classname></type></typedef></namespace></namespace></header><header name="boost/xpressive/proto/ref.hpp"><para>Utility for storing a sub-expr by reference </para><namespace name="boost"><namespace name="proto"><namespace name="functional"><struct name="unref"><struct name="result"><template>
+      <template-type-parameter name="T"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="T"/>
     </template><specialization><template-arg>This(T)</template-arg></specialization><inherit access="public">boost::proto::result_of::unref&lt; T &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>T &amp;</type><template>
@@ -1561,7 +1580,9 @@
       <template-nontype-parameter name="N"><type>long</type></template-nontype-parameter>
     </template><specialization><template-arg>proto::expr&lt; Tag</template-arg><template-arg>Args</template-arg><template-arg>N &gt;</template-arg></specialization></struct-specialization><namespace name="functional"><struct name="as_expr"><template>
       <template-type-parameter name="Domain"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="T"/>
     </template><specialization><template-arg>This(T)</template-arg></specialization><inherit access="public">boost::proto::result_of::as_expr&lt; remove_reference&lt; T &gt;::type, Domain &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::as_expr</classname>&lt; T, Domain &gt;::result_type</type><template>
@@ -1570,7 +1591,9 @@
           <template-type-parameter name="T"/>
         </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></method></method-group></struct><struct name="as_arg"><template>
       <template-type-parameter name="Domain"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="T"/>
     </template><specialization><template-arg>This(T)</template-arg></specialization><inherit access="public">boost::proto::result_of::as_arg&lt; remove_reference&lt; T &gt;::type, Domain &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::as_arg</classname>&lt; T, Domain &gt;::type</type><template>
@@ -1579,7 +1602,9 @@
           <template-type-parameter name="T"/>
         </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></method></method-group></struct><struct name="arg_c"><template>
       <template-nontype-parameter name="N"><type>long</type></template-nontype-parameter>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>result_of::arg_c&lt; Expr, N &gt;::reference</type><template>
@@ -1588,21 +1613,27 @@
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="arg"><template>
       <template-type-parameter name="N"/>
-    </template><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization><inherit access="public">boost::proto::result_of::arg&lt; Expr, N &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::arg</classname>&lt; Expr, N &gt;::reference</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::arg</classname>&lt; Expr, N &gt;::const_reference</type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="left"><struct-specialization name="result"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="left"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization><inherit access="public">boost::proto::result_of::left&lt; Expr &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::left</classname>&lt; Expr &gt;::reference</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::left</classname>&lt; Expr &gt;::const_reference</type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="right"><struct-specialization name="result"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct><struct name="right"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
     </template><specialization><template-arg>This(Expr)</template-arg></specialization><inherit access="public">boost::proto::result_of::right&lt; Expr &gt;</inherit></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::right</classname>&lt; Expr &gt;::reference</type><template>
@@ -1611,7 +1642,18 @@
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct></namespace><namespace name="op"><struct name="terminal"><template>
       <template-type-parameter name="T"/>
-    </template><typedef name="proto_is_callable_"><type>int</type></typedef><typedef name="type"><type>proto::expr&lt; <classname>proto::tag::terminal</classname>, <classname>args0</classname>&lt; T &gt; &gt;</type></typedef><typedef name="proto_base_expr"><type>type</type></typedef><typedef name="proto_tag"><type><classname>proto::tag::terminal</classname></type></typedef><typedef name="proto_arg0"><type>T</type></typedef></struct><struct name="if_else_"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
+      <template-type-parameter name="This"/>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="State"/>
+      <template-type-parameter name="Visitor"/>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type>Expr</type></typedef></struct-specialization><typedef name="type"><type>proto::expr&lt; <classname>proto::tag::terminal</classname>, <classname>args0</classname>&lt; T &gt; &gt;</type></typedef><typedef name="proto_base_expr"><type>type</type></typedef><typedef name="proto_tag"><type><classname>proto::tag::terminal</classname></type></typedef><typedef name="proto_arg0"><type>T</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>Expr const &amp;</type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="if_else_"><template>
       <template-type-parameter name="T"/>
       <template-type-parameter name="U"/>
       <template-type-parameter name="V"/>
@@ -1895,7 +1937,9 @@
     </template><specialization><template-arg>transform::state</template-arg></specialization></struct-specialization><struct-specialization name="is_callable"><template>
     </template><specialization><template-arg>transform::visitor</template-arg></specialization></struct-specialization><struct-specialization name="is_callable"><template>
       <template-nontype-parameter name="I"><type>int</type></template-nontype-parameter>
-    </template><specialization><template-arg>transform::arg_c&lt; I &gt;</template-arg></specialization></struct-specialization><namespace name="transform"><struct name="expr"><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>transform::arg_c&lt; I &gt;</template-arg></specialization></struct-specialization><namespace name="transform"><struct name="expr"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1904,7 +1948,9 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr_"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="state"><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+        </template><parameter name="expr_"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="state"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1913,7 +1959,9 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name=""><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state_"><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="visitor"><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+        </template><parameter name=""><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state_"><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="visitor"><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1924,12 +1972,14 @@
           <template-type-parameter name="Visitor"/>
         </template><parameter name=""><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor_"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct><struct name="arg_c"><template>
       <template-nontype-parameter name="I"><type>int</type></template-nontype-parameter>
-    </template><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>proto::result_of::arg_c&lt; Expr, I &gt;::type</type><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type>proto::result_of::arg_c&lt; Expr, I &gt;::type</type></typedef></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>proto::result_of::arg_c&lt; Expr, I &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
@@ -1937,130 +1987,156 @@
       <template-type-parameter name="Fun"/>
     </template><specialization><template-arg>transform::bind&lt; Fun &gt;</template-arg></specialization></struct-specialization><namespace name="transform"><struct name="bind"><template>
       <template-type-parameter name="Fun"/>
-    </template><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct><struct-specialization name="bind"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><classname>call</classname>&lt; typename <classname>make</classname>&lt; <classname>Fun</classname> &gt;::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type &gt;</type></typedef><typedef name="type"><type>impl::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct><struct-specialization name="bind"><template>
       <template-type-parameter name="Return"/>
-    </template><specialization><template-arg>Return()</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return()</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><classname>call</classname>&lt; typename <classname>make</classname>&lt; Return &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type() &gt;</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
-    </template><specialization><template-arg>Return(A0)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><classname>call</classname>&lt; typename <classname>make</classname>&lt; Return &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type(A0) &gt;</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><classname>call</classname>&lt; typename <classname>make</classname>&lt; Return &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type(A0, A1) &gt;</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><classname>call</classname>&lt; typename <classname>make</classname>&lt; Return &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type(A0, A1, A2) &gt;</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><classname>call</classname>&lt; typename <classname>make</classname>&lt; Return &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type(A0, A1, A2, A3) &gt;</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct-specialization><struct-specialization name="bind"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/call.hpp"><para>Contains definition of the call&lt;&gt; transform. </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><classname>call</classname>&lt; typename <classname>make</classname>&lt; Return &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type(A0, A1, A2, A3, A4) &gt;</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/call.hpp"><para>Contains definition of the call&lt;&gt; transform. </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Fun"/>
     </template><specialization><template-arg>transform::call&lt; Fun &gt;</template-arg></specialization></struct-specialization><namespace name="transform"><struct name="call"><template>
       <template-type-parameter name="Fun"/>
     </template><inherit access="public">Fun</inherit><typedef name="proto_is_callable_"><type>void</type></typedef></struct><struct-specialization name="call"><template>
       <template-type-parameter name="Fun"/>
-    </template><specialization><template-arg>Fun()</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Fun()</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="call"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="call"><template>
       <template-type-parameter name="Fun"/>
       <template-type-parameter name="Arg0"/>
-    </template><specialization><template-arg>Fun(Arg0)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Fun(Arg0)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="call"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="call"><template>
       <template-type-parameter name="Fun"/>
       <template-type-parameter name="Arg0"/>
       <template-type-parameter name="Arg1"/>
-    </template><specialization><template-arg>Fun(Arg0</template-arg><template-arg>Arg1)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Fun(Arg0</template-arg><template-arg>Arg1)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="call"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="call"><template>
       <template-type-parameter name="Fun"/>
       <template-type-parameter name="Arg0"/>
       <template-type-parameter name="Arg1"/>
       <template-type-parameter name="Arg2"/>
-    </template><specialization><template-arg>Fun(Arg0</template-arg><template-arg>Arg1</template-arg><template-arg>Arg2)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Fun(Arg0</template-arg><template-arg>Arg1</template-arg><template-arg>Arg2)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="call"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type>boost::result_of&lt; <classname>Fun</classname>(typename <classname>when</classname>&lt; _, Arg0 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, Arg1 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, Arg2 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type)&gt;::type</type></typedef></struct-specialization></struct-specialization><struct-specialization name="call"><template>
       <template-type-parameter name="Fun"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
-    </template><specialization><template-arg>Fun(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Fun(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="call"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type>boost::result_of&lt; <classname>Fun</classname>(typename <classname>when</classname>&lt; _, A0 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, A1 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, A2 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, A3 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type)&gt;::type</type></typedef></struct-specialization></struct-specialization><struct-specialization name="call"><template>
       <template-type-parameter name="Fun"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>Fun(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Fun(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold.hpp"><para>Contains definition of the fold&lt;&gt; and reverse_fold&lt;&gt; transforms. </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type>boost::result_of&lt; <classname>Fun</classname>(typename <classname>when</classname>&lt; _, A0 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, A1 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, A2 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, A3 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type, typename <classname>when</classname>&lt; _, A4 &gt;::template result&lt; void(Expr, State, Visitor) &gt;::type)&gt;::type</type></typedef></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold.hpp"><para>Contains definition of the fold&lt;&gt; and reverse_fold&lt;&gt; transforms. </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Fun"/>
@@ -2072,32 +2148,38 @@
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State0"/>
       <template-type-parameter name="Fun"/>
-    </template><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct><struct name="reverse_fold"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct><struct name="reverse_fold"><template>
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Fun"/>
     </template><inherit access="public">boost::proto::transform::fold&lt; Sequence, State0, Fun &gt;</inherit></struct><struct-specialization name="fold"><template>
       <template-type-parameter name="State0"/>
       <template-type-parameter name="Fun"/>
-    </template><specialization><template-arg>_</template-arg><template-arg>State0</template-arg><template-arg>Fun</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>_</template-arg><template-arg>State0</template-arg><template-arg>Fun</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="reverse_fold"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="reverse_fold"><template>
       <template-type-parameter name="State0"/>
       <template-type-parameter name="Fun"/>
-    </template><specialization><template-arg>_</template-arg><template-arg>State0</template-arg><template-arg>Fun</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>_</template-arg><template-arg>State0</template-arg><template-arg>Fun</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_tree.hpp"><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_tree.hpp"><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State0"/>
       <template-type-parameter name="Fun"/>
@@ -2109,96 +2191,116 @@
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State0"/>
       <template-type-parameter name="Fun"/>
-    </template><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct><struct name="reverse_fold_tree"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>impl::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct><struct name="reverse_fold_tree"><template>
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State0"/>
       <template-type-parameter name="Fun"/>
-    </template><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/make.hpp"><para>Contains definition of the make&lt;&gt; transform. </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type><emphasis>unspecified</emphasis></type></typedef><typedef name="type"><type>impl::template <classname>result</classname>&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/make.hpp"><para>Contains definition of the make&lt;&gt; transform. </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Fun"/>
     </template><specialization><template-arg>transform::make&lt; Fun &gt;</template-arg></specialization></struct-specialization><namespace name="transform"><struct name="make"><template>
       <template-type-parameter name="Fun"/>
-    </template><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct><struct-specialization name="make"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct><struct-specialization name="make"><template>
       <template-type-parameter name="Return"/>
-    </template><specialization><template-arg>Return()</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return()</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="make"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="make"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
-    </template><specialization><template-arg>Return(A0)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="make"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="make"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="make"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="make"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="make"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="make"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization><struct-specialization name="make"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization><struct-specialization name="make"><template>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/pass_through.hpp"><para>TODO </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/pass_through.hpp"><para>TODO </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Grammar"/>
     </template><specialization><template-arg>transform::pass_through&lt; Grammar &gt;</template-arg></specialization></struct-specialization><namespace name="transform"><struct name="pass_through"><template>
       <template-type-parameter name="Grammar"/>
-    </template><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/when.hpp"><para>Definition of when transform. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="when"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/when.hpp"><para>Definition of when transform. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="when"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Fun"/>
     </template><inherit access="public">Fun</inherit><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct><struct-specialization name="when"><template>
@@ -2209,54 +2311,64 @@
     </template><inherit access="public">boost::proto::transform::when&lt; _, Fun &gt;</inherit></struct><struct-specialization name="when"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Return"/>
-    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return()</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return()</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="when_function_type_"><type>Return</type></typedef><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type>mpl::if_&lt; <classname>is_callable</classname>&lt; Return &gt;, <classname>call</classname>&lt; Return() &gt;, <classname>make</classname>&lt; Return() &gt; &gt;::type</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
-    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="when_function_type_"><type>Return</type></typedef><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type>mpl::if_&lt; <classname>is_callable</classname>&lt; Return &gt;, <classname>call</classname>&lt; Return(A0) &gt;, <classname>make</classname>&lt; Return(A0) &gt; &gt;::type</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
-    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="when_function_type_"><type>Return</type></typedef><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type>mpl::if_&lt; <classname>is_callable</classname>&lt; Return &gt;, <classname>call</classname>&lt; Return(A0, A1) &gt;, <classname>make</classname>&lt; Return(A0, A1) &gt; &gt;::type</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
-    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="when_function_type_"><type>Return</type></typedef><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type>mpl::if_&lt; <classname>is_callable</classname>&lt; Return &gt;, <classname>call</classname>&lt; Return(A0, A1, A2) &gt;, <classname>make</classname>&lt; Return(A0, A1, A2) &gt; &gt;::type</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
-    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="when_function_type_"><type>Return</type></typedef><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type>mpl::if_&lt; <classname>is_callable</classname>&lt; Return &gt;, <classname>call</classname>&lt; Return(A0, A1, A2, A3) &gt;, <classname>make</classname>&lt; Return(A0, A1, A2, A3) &gt; &gt;::type</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization><struct-specialization name="when"><template>
       <template-type-parameter name="Grammar"/>
       <template-type-parameter name="Return"/>
       <template-type-parameter name="A0"/>
@@ -2264,9 +2376,11 @@
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><inherit access="public">boost::proto::transform::callable</inherit><struct-specialization name="result"><template>
+    </template><specialization><template-arg>Grammar</template-arg><template-arg>Return(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization></struct-specialization><typedef name="when_function_type_"><type>Return</type></typedef><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization></namespace></namespace></namespace></header></library-reference>
+    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="impl"><type>mpl::if_&lt; <classname>is_callable</classname>&lt; Return &gt;, <classname>call</classname>&lt; Return(A0, A1, A2, A3, A4) &gt;, <classname>make</classname>&lt; Return(A0, A1, A2, A3, A4) &gt; &gt;::type</type></typedef><typedef name="type"><type>impl::template result&lt; void(Expr, State, Visitor) &gt;::type</type></typedef></struct-specialization><typedef name="proto_base_expr"><type>Grammar::proto_base_expr</type></typedef></struct-specialization></namespace></namespace></namespace></header></library-reference>

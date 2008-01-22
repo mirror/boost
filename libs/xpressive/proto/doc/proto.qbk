@@ -119,7 +119,7 @@ and say a few words about Proto's philosophy.
 
 [endsect]
 
-[xinclude protodoc.xml]
+[xinclude proto.xml]
 
 [section Appendices]
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" standalone="yes"?>
+<library-reference id="reference" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Reference</title>
+    <xi:include href="concepts/PrimitiveTransform.xml"/>
+    <xi:include href="protodoc.xml" xpointer="xpointer(//header)"/>
+</library-reference>
