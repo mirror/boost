@@ -62,6 +62,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <ios>
 #include <string>
 #include <algorithm>
 
