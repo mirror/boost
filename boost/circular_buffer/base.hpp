@@ -909,8 +909,8 @@ public:
                 used).
         \par Complexity
              Constant.
-        \note This constructor has been defined only due to compatibility with the STL container definition. Avoid
-              using it because it may allocate very large amount of memory.
+        \warning This constructor has been defined only due to compatibility with the STL container definition. Avoid
+              using it because it may allocate <b>very large</b> amount of memory.
     */
     explicit circular_buffer(const allocator_type& alloc = allocator_type())
     : m_size(0), m_alloc(alloc) {
@@ -1781,6 +1781,9 @@ public:
              the erased element (towards the beginning).
         \par Complexity
              Linear (in <code>std::distance(begin(), pos)</code>).
+        \note This method is symetric to the <code>erase(iterator)</code> method and is more effective than
+              <code>erase(iterator)</code> if the iterator <code>pos</code> is close to the beginning of the
+              <code>circular_buffer</code>. (See the <i>Complexity</i>.)
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1818,6 +1821,9 @@ public:
              the erased range (towards the beginning).
         \par Complexity
              Linear (in <code>std::distance(begin(), last)</code>).
+        \note This method is symetric to the <code>erase(iterator, iterator)</code> method and is more effective than
+              <code>erase(iterator, iterator)</code> if <code>std::distance(begin(), first)</code> is lower that
+              <code>std::distance(last, end())</code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>clear()</code>
     */

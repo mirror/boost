@@ -534,9 +534,11 @@ void capacity_and_reserve_test() {
     BOOST_CHECK(cb1.reserve() == 0);
     BOOST_CHECK(cb1.full());
     BOOST_CHECK(cb1.empty());
+    BOOST_CHECK(cb1.reserve() == cb1.capacity() - cb1.size());
     BOOST_CHECK(cb2.capacity() == 10);
     BOOST_CHECK(cb2.size() == 0);
     BOOST_CHECK(cb2.reserve() == 10);
+    BOOST_CHECK(cb2.reserve() == cb2.capacity() - cb2.size());
 
     cb1.push_back(1);
     cb2.push_back(2);
@@ -548,9 +550,11 @@ void capacity_and_reserve_test() {
     BOOST_CHECK(cb1.reserve() == 0);
     BOOST_CHECK(cb1.full());
     BOOST_CHECK(cb1.empty());
+    BOOST_CHECK(cb1.reserve() == cb1.capacity() - cb1.size());
     BOOST_CHECK(cb2.capacity() == 10);
     BOOST_CHECK(cb2.size() == 3);
     BOOST_CHECK(cb2.reserve() == 7);
+    BOOST_CHECK(cb2.reserve() == cb2.capacity() - cb2.size());
 
     generic_test(cb1);
     generic_test(cb2);

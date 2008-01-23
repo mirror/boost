@@ -189,7 +189,6 @@ void iterator_comparison_test() {
     BOOST_CHECK(!(end - 1 < it));
 }
 
-// TODO add insert, push_back etc.
 void iterator_invalidation_test() {
 
 #if !defined(NDEBUG) && !defined(BOOST_CB_DISABLE_DEBUG)
