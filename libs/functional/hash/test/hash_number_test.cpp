@@ -150,8 +150,8 @@ int main()
     NUMERIC_TEST(unsigned long, ulong)
 
 #if defined(BOOST_HAS_LONG_LONG)
-    NUMERIC_TEST_NO_LIMITS(long long, hash_longlong)
-    NUMERIC_TEST_NO_LIMITS(unsigned long long, ulonglong)
+    NUMERIC_TEST_NO_LIMITS(boost::long_long_type, long_long)
+    NUMERIC_TEST_NO_LIMITS(boost::ulong_long_type, ulong_long)
 #endif
 
     NUMERIC_TEST(float, float)

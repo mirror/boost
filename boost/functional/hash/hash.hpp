@@ -46,8 +46,8 @@ namespace boost
 #endif
     
 #if defined(BOOST_HAS_LONG_LONG)
-    std::size_t hash_value(long long);
-    std::size_t hash_value(unsigned long long);
+    std::size_t hash_value(boost::long_long_type);
+    std::size_t hash_value(boost::ulong_long_type);
 #endif
 
 #if !BOOST_WORKAROUND(__DMC__, <= 0x848)
@@ -195,12 +195,12 @@ namespace boost
 #endif
 
 #if defined(BOOST_HAS_LONG_LONG)
-    inline std::size_t hash_value(long long v)
+    inline std::size_t hash_value(boost::long_long_type v)
     {
         return hash_detail::hash_value_signed(v);
     }
 
-    inline std::size_t hash_value(unsigned long long v)
+    inline std::size_t hash_value(boost::ulong_long_type v)
     {
         return hash_detail::hash_value_unsigned(v);
     }

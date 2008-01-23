@@ -109,6 +109,18 @@ namespace boost {
         {
             return std::pair<Dst1, Dst2>(Dst1(x.first), Dst2(x.second));
         }
+
+#if !defined(BOOST_NO_STD_DISTANCE)
+        using ::std::distance;
+#else
+        template <class ForwardIterator>
+        inline std::size_t distance(ForwardIterator i, ForwardIterator j) {
+            std::size_t x;
+            std::distance(i, j, x);
+            return x;
+        }
+#endif
+
     }
 }
 

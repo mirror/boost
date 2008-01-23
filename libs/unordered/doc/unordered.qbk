@@ -2,7 +2,7 @@
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
 
-[library Unordered Associative Containers
+[library Boost.Unordered
     [quickbook 1.4]
     [authors [James, Daniel]]
     [copyright 2003 2004 Jeremy B. Maitin-Shepard]

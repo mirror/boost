@@ -100,7 +100,7 @@ namespace test
         : public std::list<BOOST_DEDUCED_TYPENAME X::value_type>
     {
         random_values(int count, test::random_generator const& generator =
-			test::default_generator)
+            test::default_generator)
         {
             static test::unordered_generator<X> gen(generator);
             gen.fill(*this, count);

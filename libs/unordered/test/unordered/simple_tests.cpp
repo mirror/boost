@@ -8,6 +8,7 @@
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <cstdlib>
 #include <algorithm>
 #include "../helpers/equivalent.hpp"
 
@@ -84,8 +85,8 @@ void simple_test(X const& a)
 
 int main()
 {
-  	using namespace std;
-   	srand(14878);
+    using namespace std;
+    srand(14878);
 
     std::cout<<"Test unordered_set.\n";
     boost::unordered_set<int> set;
@@ -99,9 +100,9 @@ int main()
     simple_test(multiset);
     
     for(int i1 = 0; i1 < 1000; ++i1) {
-    	int count = rand() % 10, index = rand();
-    	for(int j = 0; j < count; ++j)
-	    	multiset.insert(index);
+        int count = rand() % 10, index = rand();
+        for(int j = 0; j < count; ++j)
+            multiset.insert(index);
     }
     simple_test(multiset);
     
@@ -109,7 +110,7 @@ int main()
     boost::unordered_map<int, int> map;
 
     for(int i2 = 0; i2 < 1000; ++i2) {
-    	map.insert(std::pair<const int, int>(rand(), rand()));
+        map.insert(std::pair<const int, int>(rand(), rand()));
     }
     simple_test(map);
 
@@ -117,9 +118,9 @@ int main()
     boost::unordered_multimap<int, int> multimap;
 
     for(int i3 = 0; i3 < 1000; ++i3) {
-    	int count = rand() % 10, index = rand();
-    	for(int j = 0; j < count; ++j)
-	    	multimap.insert(std::pair<const int, int>(index, rand()));
+        int count = rand() % 10, index = rand();
+        for(int j = 0; j < count; ++j)
+            multimap.insert(std::pair<const int, int>(index, rand()));
     }
     simple_test(multimap);
 

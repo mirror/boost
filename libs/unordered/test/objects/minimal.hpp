@@ -195,7 +195,8 @@ namespace minimal
             return pointer(static_cast<T*>(::operator new(n * sizeof(T))));
         }
 
-        pointer allocate(size_type n, const_pointer u)
+        template <class Y>
+        pointer allocate(size_type n, const_ptr<Y> u)
         {
             return pointer(static_cast<T*>(::operator new(n * sizeof(T))));
         }

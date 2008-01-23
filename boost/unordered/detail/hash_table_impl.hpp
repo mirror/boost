@@ -1045,7 +1045,7 @@ namespace boost {
                     boost::forward_traversal_tag)
             {
                 // max load factor isn't set yet, but when it is, it'll be 1.0.
-                return (std::max)(static_cast<size_type>(std::distance(i, j)) + 1, n);
+                return (std::max)(static_cast<size_type>(unordered_detail::distance(i, j)) + 1, n);
             }
 
             template <typename I>
@@ -1312,7 +1312,7 @@ namespace boost {
                 // throws - basic:
                 if (need_to_reserve) {
                     rehash_impl(double_to_size_t(floor(
-                    	n / (double) mlf_ * 1.25)) + 1);
+                        n / (double) mlf_ * 1.25)) + 1);
                 }
                 BOOST_ASSERT(n < max_load_ || n > max_size());
                 return need_to_reserve;
@@ -1545,7 +1545,7 @@ namespace boost {
             template <typename I>
             void insert_for_range(I i, I j, forward_traversal_tag)
             {
-                size_type distance = std::distance(i, j);
+                size_type distance = unordered_detail::distance(i, j);
                 if(distance == 1) {
                     insert(*i);
                 }
@@ -1687,7 +1687,7 @@ namespace boost {
             template <typename I>
             size_type insert_size(I i, I j, boost::forward_traversal_tag)
             {
-                return std::distance(i, j);
+                return unordered_detail::distance(i, j);
             }
 
             template <typename I>
