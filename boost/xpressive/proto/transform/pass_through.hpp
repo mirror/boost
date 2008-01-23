@@ -23,19 +23,26 @@
     {
         namespace detail
         {
-            template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::proto_arity::value>
-            struct pass_through_impl {};
+            template<
+                typename Grammar
+              , typename Expr
+              , typename State
+              , typename Visitor
+              , long Arity = Expr::proto_arity::value
+            >
+            struct pass_through_impl
+            {};
 
-            #define BOOST_PROTO_DEFINE_TRANSFORM_TYPE(z, n, data)\
-                typename Grammar::BOOST_PP_CAT(proto_arg, n)::template result<void(\
-                    typename Expr::BOOST_PP_CAT(proto_arg, n)::proto_base_expr\
-                  , State\
-                  , Visitor\
+            #define BOOST_PROTO_DEFINE_TRANSFORM_TYPE(z, n, data)                                   \
+                typename Grammar::BOOST_PP_CAT(proto_arg, n)::template result<void(                 \
+                    typename Expr::BOOST_PP_CAT(proto_arg, n)::proto_base_expr                      \
+                  , State                                                                           \
+                  , Visitor                                                                         \
                 )>::type
 
-            #define BOOST_PROTO_DEFINE_TRANSFORM(z, n, data)\
-                typename Grammar::BOOST_PP_CAT(proto_arg, n)()(\
-                    expr.BOOST_PP_CAT(arg, n).proto_base(), state, visitor\
+            #define BOOST_PROTO_DEFINE_TRANSFORM(z, n, data)                                        \
+                typename Grammar::BOOST_PP_CAT(proto_arg, n)()(                                     \
+                    expr.BOOST_PP_CAT(arg, n).proto_base(), state, visitor                          \
                 )
 
             #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/transform/pass_through.hpp>))

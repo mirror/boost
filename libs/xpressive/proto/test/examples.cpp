@@ -11,8 +11,12 @@
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform.hpp>
 #include <boost/utility/result_of.hpp>
-#include <boost/fusion/include/cons.hpp>
-#include <boost/fusion/include/pop_front.hpp>
+#if BOOST_VERSION < 103500
+# include <boost/spirit/fusion/sequence/cons.hpp>
+#else
+# include <boost/fusion/include/cons.hpp>
+# include <boost/fusion/include/pop_front.hpp>
+#endif
 #include <boost/test/unit_test.hpp>
 
 namespace proto = boost::proto;
@@ -392,9 +396,9 @@ void test_examples()
     BOOST_CHECK_EQUAL(p3.second, 3.14);
 
     NegateInt()(lit(1), i, i);
-#ifndef BOOST_MSVC
+    #ifndef BOOST_MSVC
     SquareAndPromoteInt()(lit(1), i, i);
-#endif
+    #endif
 }
 
 using namespace boost::unit_test;

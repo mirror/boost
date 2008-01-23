@@ -21,6 +21,7 @@
 # include <boost/spirit/fusion/algorithm/for_each.hpp>
 # include <boost/spirit/fusion/algorithm/fold.hpp>
 # include <boost/spirit/fusion/algorithm/any.hpp>
+# include <boost/spirit/fusion/sequence/cons.hpp>
 #else
 # include <boost/fusion/include/for_each.hpp>
 # include <boost/fusion/include/fold.hpp>
@@ -183,11 +184,11 @@ namespace boost { namespace spirit2
         {};
 
         struct CharParser
-          : function<AnyChar, CharLiteral>
+          : proto::function<AnyChar, CharLiteral>
         {};
 
         struct CharRangeParser
-          : function<AnyChar, CharLiteral, CharLiteral>
+          : proto::function<AnyChar, CharLiteral, CharLiteral>
         {};
 
         struct NoCase

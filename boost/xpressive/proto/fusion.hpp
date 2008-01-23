@@ -10,8 +10,10 @@
 #define BOOST_PROTO_FUSION_HPP_EAN_11_04_2006
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/version.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/mpl/long.hpp>
+#if BOOST_VERSION >= 103500
 #include <boost/fusion/include/is_view.hpp>
 #include <boost/fusion/include/tag_of_fwd.hpp>
 #include <boost/fusion/include/category_of.hpp>
@@ -25,6 +27,17 @@
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
 #include <boost/fusion/view/ext_/segmented_iterator.hpp>
+#else
+#include <boost/spirit/fusion/sequence/is_sequence.hpp>
+#include <boost/spirit/fusion/sequence/begin.hpp>
+#include <boost/spirit/fusion/sequence/end.hpp>
+#include <boost/spirit/fusion/sequence/at.hpp>
+#include <boost/spirit/fusion/sequence/value_at.hpp>
+#include <boost/spirit/fusion/sequence/single_view.hpp>
+#include <boost/spirit/fusion/sequence/transform_view.hpp>
+#include <boost/xpressive/proto/detail/reverse.hpp>
+#include <boost/xpressive/proto/detail/pop_front.hpp>
+#endif
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/eval.hpp>
@@ -33,7 +46,7 @@
 namespace boost { namespace proto
 {
 
-/// INTERNAL MACRO
+/// INTERNAL ONLY
 ///
 #define UNREF(x) typename boost::remove_reference<x>::type
 
@@ -46,8 +59,8 @@ namespace boost { namespace proto
         {
             typedef Expr expr_type;
             static long const index = Pos;
-            typedef fusion::random_access_traversal_tag category;
-            typedef tag::proto_expr_iterator fusion_tag;
+            BOOST_PROTO_DEFINE_FUSION_CATEGORY(fusion::random_access_traversal_tag)
+            BOOST_PROTO_DEFINE_FUSION_TAG(tag::proto_expr_iterator)
 
             expr_iterator(Expr const &e)
               : expr(e)
@@ -63,8 +76,8 @@ namespace boost { namespace proto
     {
         typedef Expr expr_type;
         typedef typename Expr::proto_tag proto_tag;
-        typedef fusion::forward_traversal_tag category;
-        typedef tag::proto_flat_view fusion_tag;
+        BOOST_PROTO_DEFINE_FUSION_CATEGORY(fusion::forward_traversal_tag)
+        BOOST_PROTO_DEFINE_FUSION_TAG(tag::proto_flat_view)
 
         explicit flat_view(Expr &expr)
           : expr_(expr)
@@ -100,11 +113,11 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
-              : fusion::result_of::pop_front<UNREF(Expr) const>
+              : fusion::BOOST_PROTO_FUSION_RESULT_OF::pop_front<UNREF(Expr) const>
             {};
 
             template<typename Expr>
-            typename fusion::result_of::pop_front<Expr const>::type
+            typename fusion::BOOST_PROTO_FUSION_RESULT_OF::pop_front<Expr const>::type
             operator ()(Expr const &expr) const
             {
                 return fusion::pop_front(expr);
@@ -118,17 +131,16 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
-              : fusion::result_of::reverse<UNREF(Expr) const>
+              : fusion::BOOST_PROTO_FUSION_RESULT_OF::reverse<UNREF(Expr) const>
             {};
 
             template<typename Expr>
-            typename fusion::result_of::reverse<Expr const>::type
+            typename fusion::BOOST_PROTO_FUSION_RESULT_OF::reverse<Expr const>::type
             operator ()(Expr const &expr) const
             {
                 return fusion::reverse(expr);
             }
         };
-
     }
 
     template<>
@@ -177,8 +189,19 @@ namespace boost { namespace proto
 
 namespace boost { namespace fusion
 {
+    #if BOOST_VERSION < 103500
+    template<typename Tag, typename Args, long Arity>
+    struct is_sequence<proto::expr<Tag, Args, Arity> >
+      : mpl::true_
+    {};
 
-    namespace extension
+    template<typename Tag, typename Args, long Arity>
+    struct is_sequence<proto::expr<Tag, Args, Arity> const>
+      : mpl::true_
+    {};
+    #endif
+
+    namespace BOOST_PROTO_FUSION_EXTENSION
     {
 
         template<typename Tag>
@@ -216,6 +239,16 @@ namespace boost { namespace fusion
                 >
             {};
         };
+
+        #if BOOST_VERSION < 103500
+        template<typename Tag>
+        struct value_impl;
+
+        template<>
+        struct value_impl<proto::tag::proto_expr_iterator>
+          : value_of_impl<proto::tag::proto_expr_iterator>
+        {};
+        #endif
 
         template<typename Tag>
         struct deref_impl;
@@ -299,6 +332,7 @@ namespace boost { namespace fusion
             {};
         };
 
+        #if BOOST_VERSION >= 103500
         template<typename Tag>
         struct category_of_impl;
 
@@ -311,6 +345,7 @@ namespace boost { namespace fusion
                 typedef random_access_traversal_tag type;
             };
         };
+        #endif
 
         template<typename Tag>
         struct size_impl;
@@ -395,6 +430,7 @@ namespace boost { namespace fusion
             };
         };
 
+        #if BOOST_VERSION >= 103500
         template<typename Tag>
         struct is_segmented_impl;
 
@@ -489,6 +525,7 @@ namespace boost { namespace fusion
               : fusion::segmented_size<Sequence>
             {};
         };
+        #endif
 
     }
 

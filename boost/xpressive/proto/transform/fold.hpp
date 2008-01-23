@@ -11,13 +11,17 @@
     #define BOOST_PROTO_TRANSFORM_FOLD_HPP_EAN_11_04_2007
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/version.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/arithmetic/inc.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
     #include <boost/preprocessor/repetition/repeat.hpp>
+    #if BOOST_VERSION >= 103500
     #include <boost/fusion/include/fold.hpp>
-    #include <boost/fusion/include/reverse.hpp>
+    #else
+    #include <boost/spirit/fusion/algorithm/fold.hpp>
+    #endif
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/fusion.hpp>
     #include <boost/xpressive/proto/traits.hpp>
@@ -53,6 +57,11 @@
                         type;
                     };
 
+                    #if BOOST_VERSION < 103500
+                    template<typename Expr, typename State>
+                    struct apply : result<void(Expr, State)> {};
+                    #endif
+
                     template<typename Expr, typename State>
                     typename when<_, Transform>::template result<void(Expr, State, Visitor)>::type
                     operator ()(Expr const &expr, State const &state) const
@@ -63,6 +72,38 @@
                 private:
                     Visitor &v_;
                 };
+
+                #if BOOST_VERSION < 103500
+                template<typename Sequence, typename EnableIf = void>
+                struct as_fusion_sequence_type
+                {
+                    typedef Sequence const type;
+                };
+
+                template<typename Sequence>
+                Sequence const &as_fusion_sequence(Sequence const &sequence, ...)
+                {
+                    return sequence;
+                }
+
+                template<typename Sequence>
+                struct as_fusion_sequence_type<Sequence, typename Sequence::proto_is_expr_>
+                {
+                    typedef typename Sequence::proto_base_expr const type;
+                };
+
+                template<typename Sequence>
+                typename Sequence::proto_base_expr const &as_fusion_sequence(Sequence const &sequence, int)
+                {
+                    return sequence.proto_base();
+                }
+
+                #define BOOST_PROTO_AS_FUSION_SEQUENCE_TYPE(X) typename detail::as_fusion_sequence_type<X>::type
+                #define BOOST_PROTO_AS_FUSION_SEQUENCE(X) detail::as_fusion_sequence(X, 0)
+                #else
+                #define BOOST_PROTO_AS_FUSION_SEQUENCE_TYPE(X) X
+                #define BOOST_PROTO_AS_FUSION_SEQUENCE(X) X
+                #endif
 
                 template<typename Fun, typename Expr, typename State, typename Visitor, long Arity = Expr::proto_arity::value>
                 struct fold_impl
@@ -126,8 +167,12 @@
                 struct result<This(Expr, State, Visitor)>
                 {
                     typedef
-                        typename fusion::result_of::fold<
-                            typename when<_, Sequence>::template result<void(Expr, State, Visitor)>::type
+                        typename when<_, Sequence>::template result<void(Expr, State, Visitor)>::type
+                    sequence;
+
+                    typedef
+                        typename fusion::BOOST_PROTO_FUSION_RESULT_OF::fold<
+                            BOOST_PROTO_AS_FUSION_SEQUENCE_TYPE(sequence)
                           , typename when<_, State0>::template result<void(Expr, State, Visitor)>::type
                           , detail::as_callable<Fun, Visitor>
                         >::type
@@ -138,9 +183,10 @@
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
+                    when<_, Sequence> sequence;
                     detail::as_callable<Fun, Visitor> fun(visitor);
                     return fusion::fold(
-                        when<_, Sequence>()(expr, state, visitor)
+                        BOOST_PROTO_AS_FUSION_SEQUENCE(sequence(expr, state, visitor))
                       , when<_, State0>()(expr, state, visitor)
                       , fun
                     );
