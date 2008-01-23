@@ -1141,6 +1141,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \note Basically there is no difference between <code>erase(iterator)</code> and this method. It is implemented
+              only for consistency with the base <code><a href="circular_buffer.html">circular_buffer</a></code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1171,6 +1173,9 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \note Basically there is no difference between <code>erase(iterator, iterator)</code> and this method. It is
+              implemented only for consistency with the base
+              <code><a href="circular_buffer.html">circular_buffer</a></code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>clear()</code>
     */
@@ -1230,7 +1235,7 @@ private:
         if (new_size > new_capacity) {
             if (new_capacity == 0)
                 new_capacity = 1;
-            for (; new_size > new_capacity; new_capacity *= 2);
+            for (; new_size > new_capacity; new_capacity *= 2) {}
             circular_buffer<T, Alloc>::set_capacity(
                 ensure_reserve(new_capacity, new_size));
         }

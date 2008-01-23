@@ -30,6 +30,11 @@
     <a href="#briefexample">Introductory Example</a><br>
     <a href="#synopsis">Synopsis</a><br>
     <a href="#rationale">Rationale</a><br>
+    - <a href="#threadsafety">Thread-Safety</a><br>
+    - <a href="#overwrite">Overwrite Operation</a><br>
+    - <a href="#fullbuffer">Writing to a Full Buffer</a><br>
+    - <a href="#emptybuffer">Reading/Removing from an Empty Buffer</a><br>
+    - <a href="#iteratorinvalidation">Iterator Invalidation</a><br>
     <a href="#caveats">Caveats</a><br>
     <a href="#debug">Debug Support</a><br>
     <a href="#examples">More Examples</a><br>
@@ -366,9 +371,10 @@ template &lt;class T, class Alloc&gt;
     </h4>
     <p>
       The thread-safety of the <code>circular_buffer</code> is the same as the thread-safety of containers in most STL
-      implementations. This means the <code>circular_buffer</code> is thread-safe only in the sense that simultaneous
-      accesses to distinct instances of the <code>circular_buffer</code> are safe, and simultaneous read accesses to a
-      shared <code>circular_buffer</code> are safe.
+      implementations. This means the <code>circular_buffer</code> is <b>not</b> thread-safe. The thread-safety is
+      guarantied only in the sense that simultaneous accesses to <b>distinct</b> instances of the
+      <code>circular_buffer</code> are safe, and simultaneous read accesses to a shared <code>circular_buffer</code>
+      are safe.
     </p>
     <p>
       If multiple threads access a single <code>circular_buffer</code>, and at least one of the threads may potentially
@@ -378,7 +384,7 @@ template &lt;class T, class Alloc&gt;
       Buffer Example</a>.)
     </p>
     <h4>
-      Overwrite Operation
+      <a name="overwrite" id="overwrite">Overwrite Operation</a>
     </h4>
     <p>
       Overwrite operation occurs when an element is inserted into a full <code>circular_buffer</code> - the old element
@@ -397,7 +403,7 @@ template &lt;class T, class Alloc&gt;
       being shifted (e.g. as a result of insertion into the middle of container).
     </p>
     <h4>
-      Writing to a Full Buffer
+      <a name="fullbuffer" id="fullbuffer">Writing to a Full Buffer</a>
     </h4>
     <p>
       There are several options how to cope with the case if a data source produces more data than can fit in the
@@ -429,7 +435,7 @@ template &lt;class T, class Alloc&gt;
       contrary to <code>std::vector</code>, it bears an overhead for its circular behaviour.
     </p>
     <h4>
-      Reading/Removing from an Empty Buffer
+      <a name="emptybuffer" id="emptybuffer">Reading/Removing from an Empty Buffer</a>
     </h4>
     <p>
       When reading or removing an element from an empty buffer, the buffer should be able to notify the data consumer
@@ -450,7 +456,7 @@ template &lt;class T, class Alloc&gt;
       which throws an exception when the index is out of range.
     </p>
     <h4>
-      Iterator Invalidation
+      <a name="iteratorinvalidation" id="iteratorinvalidation">Iterator Invalidation</a>
     </h4>
     <p>
       An iterator is usually considered to be invalidated if an element, the iterator pointed to, had been removed or
@@ -933,11 +939,11 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
-                <b>Note:</b>
+                <b>Warning:</b>
               </dt>
               <dd>
                 This constructor has been defined only due to compatibility with the STL container definition. Avoid
-                using it because it may allocate very large amount of memory.
+                using it because it may allocate <b>very large</b> amount of memory.
               </dd>
             </dl>
           </td>
@@ -5986,6 +5992,19 @@ template &lt;class T, class Alloc&gt;
             </dl>
             <dl>
               <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                This method is symetric to the <code><a href=
+                "#classboost_1_1circular__buffer_197155de712db1759e1698455b49a0be3">erase(iterator)</a></code> method
+                and is more effective than <code><a href=
+                "#classboost_1_1circular__buffer_197155de712db1759e1698455b49a0be3">erase(iterator)</a></code> if the
+                iterator <code>pos</code> is close to the beginning of the <code>circular_buffer</code>. (See the
+                <i>Complexity</i>.)
+              </dd>
+            </dl>
+            <dl>
+              <dt>
                 <b>See Also:</b>
               </dt>
               <dd>
@@ -6093,6 +6112,21 @@ template &lt;class T, class Alloc&gt;
               <dd>
                 Linear (in <code>std::distance(<a href=
                 "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, last)</code>).
+              </dd>
+            </dl>
+            <dl>
+              <dt>
+                <b>Note:</b>
+              </dt>
+              <dd>
+                This method is symetric to the <code><a href=
+                "#classboost_1_1circular__buffer_1a96415389509a18bd7d7b5d8e4dda9bd">erase(iterator,
+                iterator)</a></code> method and is more effective than <code><a href=
+                "#classboost_1_1circular__buffer_1a96415389509a18bd7d7b5d8e4dda9bd">erase(iterator,
+                iterator)</a></code> if <code>std::distance(<a href=
+                "#classboost_1_1circular__buffer_158d1ede2e85f5d46eda8db3f0c4efef0">begin()</a>, first)</code> is lower
+                that <code>std::distance(last, <a href=
+                "#classboost_1_1circular__buffer_1babfa093dad7801223b80626b598dee1">end()</a>)</code>.
               </dd>
             </dl>
             <dl>
