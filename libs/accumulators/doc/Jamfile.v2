@@ -172,9 +172,6 @@ xml accumulators
         <xsl:param>toc.max.depth=4
         <xsl:param>toc.section.depth=4
         <xsl:param>chunk.section.depth=2
-        <dependency>accdoc
-        <dependency>statsdoc
-        <dependency>opdoc
     ;
 
 boostbook standalone
@@ -185,4 +182,7 @@ boostbook standalone
         <xsl:param>toc.max.depth=4
         <xsl:param>toc.section.depth=4
         <xsl:param>chunk.section.depth=2
+        <dependency>accdoc
+        <dependency>statsdoc
+        <dependency>opdoc
     ;
