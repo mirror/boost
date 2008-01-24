@@ -123,9 +123,6 @@ void mapped_file_source::open( const std::string& path,
 mapped_file_source::size_type mapped_file_source::size() const
 { return pimpl_->size_; }
 
-bool mapped_file_source::is_open() const
-{ return !!pimpl_ && pimpl_->handle_ != 0; }
-
 void mapped_file_source::close() { pimpl_->close(); }
 
 mapped_file_source::operator mapped_file_source::safe_bool() const
@@ -283,6 +280,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
     pimpl_->data_ = reinterpret_cast<char*>(data);
 }
 
+bool mapped_file_source::is_open() const
+{ return !!pimpl_ && pimpl_->handle_ != INVALID_HANDLE_VALUE; }
+
 int mapped_file_source::alignment()
 {
     SYSTEM_INFO info;
@@ -367,6 +367,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
 
     return;
 }
+
+bool mapped_file_source::is_open() const
+{ return !!pimpl_ && pimpl_->handle_ != 0; }
 
 int mapped_file_source::alignment()
 { return static_cast<int>(sysconf(_SC_PAGESIZE)); }

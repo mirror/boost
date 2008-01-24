@@ -27,6 +27,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
+#include <iostream>
 
     // OS-specific headers for low-level i/o.
 

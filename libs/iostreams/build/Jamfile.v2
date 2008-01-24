@@ -125,8 +125,7 @@ if $(z)
 }
 
 local bz2 = [ create-library bzip2 : libbz2 bz2 : 
-    blocksort bzlib compress crctable decompress huffman 
-    mk251 randtable :
+    blocksort bzlib compress crctable decompress huffman randtable :
     <link>shared:<def-file>$(BZIP2_SOURCE)/libbz2.def ] ;
 
 if $(bz2)

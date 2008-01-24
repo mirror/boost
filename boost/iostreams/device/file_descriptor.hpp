@@ -51,7 +51,17 @@ public:
                                   BOOST_IOS::in | BOOST_IOS::out,
                               BOOST_IOS::openmode base_mode =
                                   BOOST_IOS::in | BOOST_IOS::out );
+    explicit file_descriptor( const char* path,
+                              BOOST_IOS::openmode mode =
+                                  BOOST_IOS::in | BOOST_IOS::out,
+                              BOOST_IOS::openmode base_mode =
+                                  BOOST_IOS::in | BOOST_IOS::out );
     void open( const std::string& path,
+               BOOST_IOS::openmode =
+                   BOOST_IOS::in | BOOST_IOS::out,
+               BOOST_IOS::openmode base_mode =
+                   BOOST_IOS::in | BOOST_IOS::out );
+    void open( const char* path,
                BOOST_IOS::openmode =
                    BOOST_IOS::in | BOOST_IOS::out,
                BOOST_IOS::openmode base_mode =
@@ -125,6 +135,10 @@ struct file_descriptor_source : private file_descriptor {
                                      BOOST_IOS::openmode m = BOOST_IOS::in )
         : file_descriptor(path, m & ~BOOST_IOS::out, BOOST_IOS::in)
         { }
+    explicit file_descriptor_source( const char* path,
+                                     BOOST_IOS::openmode m = BOOST_IOS::in )
+        : file_descriptor(path, m & ~BOOST_IOS::out, BOOST_IOS::in)
+        { }
 };
 
 struct file_descriptor_sink : private file_descriptor {
@@ -155,6 +169,10 @@ struct file_descriptor_sink : private file_descriptor {
         { }
 #endif
     explicit file_descriptor_sink( const std::string& path,
+                                   BOOST_IOS::openmode m = BOOST_IOS::out )
+        : file_descriptor(path, m & ~BOOST_IOS::in, BOOST_IOS::out)
+        { }
+    explicit file_descriptor_sink( const char* path,
                                    BOOST_IOS::openmode m = BOOST_IOS::out )
         : file_descriptor(path, m & ~BOOST_IOS::in, BOOST_IOS::out)
         { }

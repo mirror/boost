@@ -56,6 +56,12 @@ file_descriptor::file_descriptor(handle_type fd, bool close_on_exit)
         { }
 #endif
 
+file_descriptor::file_descriptor( const char* path,
+                                  BOOST_IOS::openmode mode,
+                                  BOOST_IOS::openmode base_mode )
+    : pimpl_(new impl)
+{ open(std::string(path), mode, base_mode); }
+
 file_descriptor::file_descriptor( const std::string& path,
                                   BOOST_IOS::openmode mode,
                                   BOOST_IOS::openmode base_mode )
@@ -154,6 +160,11 @@ void file_descriptor::open
     }
 #endif // #ifndef BOOST_IOSTREAMS_WINDOWS //----------------------------------//
 }
+
+void file_descriptor::open
+    ( const char* path, BOOST_IOS::openmode m,
+      BOOST_IOS::openmode base )
+{ open(std::string(path), m, base); }
 
 std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
 {
