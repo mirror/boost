@@ -8,6 +8,7 @@ rule sc-test ( name : extra-sources * )
 
 
 test-suite ptr_container :
+    [ sc-test clone_inserter ]
     [ sc-test ptr_vector ]
     [ sc-test ptr_list ]
     [ sc-test ptr_deque ]
@@ -22,4 +23,6 @@ test-suite ptr_container :
     [ sc-test indirect_fun ]  
     [ sc-test serialization : /boost/serialization//boost_serialization ]  
     [ sc-test no_exceptions ]    
+#    [ sc-test BoostPolymorphicContainerTest ]    
+ 
     ;

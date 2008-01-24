@@ -47,11 +47,11 @@ void test_clone_inserter_helper()
     //
     std::copy( boost::make_transform_iterator( seq.begin().base(), caster_to<int*>() ),
                boost::make_transform_iterator( seq.end().base(), caster_to<int*>() ),
-               boost::clone_back_inserter( seq2 ) );
+               ptr_container::clone_back_inserter( seq2 ) );
 
     std::copy( boost::make_transform_iterator( seq.begin().base(), caster_to<int*>() ),
                boost::make_transform_iterator( seq.end().base(), caster_to<int*>() ),
-               boost::clone_front_inserter( seq2 ) );
+               ptr_container::clone_front_inserter( seq2 ) );
     BOOST_CHECK_EQUAL( seq.size()*2, seq2.size() );
 
     PtrSequence seq3;
@@ -63,7 +63,7 @@ void test_clone_inserter_helper()
     //          is easier to handle.
     //
     std::copy( seq3.begin(), seq3.end(), 
-               boost::clone_inserter( seq, seq.end() ) ); 
+               ptr_container::clone_inserter( seq, seq.end() ) ); 
     BOOST_CHECK_EQUAL( seq.size(), seq2.size() );
 }
 
