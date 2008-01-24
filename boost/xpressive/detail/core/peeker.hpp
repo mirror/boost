@@ -232,6 +232,13 @@ struct xpression_peeker
         return mpl::false_();
     }
 
+    template<typename Xpr>
+    mpl::false_ accept(keeper_matcher<Xpr> const &xpr)
+    {
+        xpr.xpr_.peek(*this);
+        return mpl::false_();
+    }
+
     template<typename Traits>
     void set_traits(Traits const &traits)
     {
