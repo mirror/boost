@@ -360,6 +360,20 @@ struct linear
 /// @endcond
 };
 
+//!This option setter specifies if the list container should
+//!use a linear implementation instead of a circular one.
+template<bool Enabled>
+struct cache_last
+{
+/// @cond
+   template<class Base>
+   struct pack : Base
+   {
+      static const bool cache_last = Enabled;
+   };
+/// @endcond
+};
+
 //!This option setter specifies the bucket traits
 //!class for unordered associative containers. When this option is specified,
 //!instead of using the default bucket traits, a user defined holder will be defined

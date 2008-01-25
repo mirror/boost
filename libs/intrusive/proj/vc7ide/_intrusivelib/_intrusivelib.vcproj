@@ -217,6 +217,9 @@
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\avltree_node.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\common_slist_algorithms.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\config_begin.hpp">
 				</File>
 				<File

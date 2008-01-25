@@ -154,10 +154,9 @@ class circular_list_algorithms
    static void unlink(node_ptr b, node_ptr e)
    {
       if (b != e) {
-         node_ptr prev(NodeTraits::get_previous(b));
-         node_ptr next(NodeTraits::get_next(e));
-         NodeTraits::set_previous(next, prev);
-         NodeTraits::set_next(prev, next);
+         node_ptr prevb(NodeTraits::get_previous(b));
+         NodeTraits::set_previous(e, prevb);
+         NodeTraits::set_next(prevb, e);
       }
    }
 

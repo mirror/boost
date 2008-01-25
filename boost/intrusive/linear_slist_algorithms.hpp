@@ -16,7 +16,9 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
+#include <boost/intrusive/detail/common_slist_algorithms.hpp>
 #include <cstddef>
+#include <utility>
 
 namespace boost {
 namespace intrusive {
@@ -43,11 +45,98 @@ namespace intrusive {
 //! <tt>static void set_next(node_ptr n, node_ptr next);</tt>
 template<class NodeTraits>
 class linear_slist_algorithms
+   /// @cond
+   : public detail::common_slist_algorithms<NodeTraits>
+   /// @endcond
 {
+   /// @cond
+   typedef detail::common_slist_algorithms<NodeTraits> base_t;
+   /// @endcond
    public:
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef NodeTraits                           node_traits;
+
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
+   //! <b>Effects</b>: Constructs an non-used list element, putting the next
+   //!   pointer to null:
+   //!  <tt>NodeTraits::get_next(this_node) == 0
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void init(node_ptr this_node);
+
+   //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
+   //! 
+   //! <b>Effects</b>: Returns true is "this_node" is the only node of a circular list:
+   //!  or it's a not inserted node:
+   //!  <tt>return !NodeTraits::get_next(this_node) || NodeTraits::get_next(this_node) == this_node</tt>
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static bool unique(const_node_ptr this_node);
+
+   //! <b>Effects</b>: Returns true is "this_node" has the same state as if
+   //!  it was inited using "init(node_ptr)"
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static bool inited(const_node_ptr this_node);
+
+   //! <b>Requires</b>: prev_node must be in a circular list or be an empty circular list.
+   //! 
+   //! <b>Effects</b>: Unlinks the next node of prev_node from the circular list.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void unlink_after(node_ptr prev_node);
+
+   //! <b>Requires</b>: prev_node and last_node must be in a circular list
+   //!  or be an empty circular list.
+   //!
+   //! <b>Effects</b>: Unlinks the range (prev_node, last_node) from the linear list.
+   //!
+   //! <b>Complexity</b>: Constant 
+   //!
+   //! <b>Throws</b>: Nothing.
+   static void unlink_after(node_ptr prev_node, node_ptr last_node);
+
+   //! <b>Requires</b>: prev_node must be a node of a linear list.
+   //! 
+   //! <b>Effects</b>: Links this_node after prev_node in the linear list.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void link_after(node_ptr prev_node, node_ptr this_node);
+
+   //! <b>Requires</b>: b and e must be nodes of the same linear list or an empty range.
+   //!   and p must be a node of a different linear list.
+   //! 
+   //! <b>Effects</b>: Removes the nodes from (b, e] range from their linear list and inserts
+   //!   them after p in p's linear list.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void transfer_after(node_ptr p, node_ptr b, node_ptr e);
+
+   #endif   //#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
+   //! <b>Effects</b>: Constructs an empty list, making this_node the only
+   //!   node of the circular list:
+   //!  <tt>NodeTraits::get_next(this_node) == this_node</tt>.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void init_header(node_ptr this_node)
+   {  NodeTraits::set_next(this_node, 0);  }
 
    //! <b>Requires</b>: this_node and prev_init_node must be in the same linear list.
    //! 
@@ -59,60 +148,7 @@ class linear_slist_algorithms
    //! 
    //! <b>Throws</b>: Nothing.
    static node_ptr get_previous_node(node_ptr prev_init_node, node_ptr this_node)
-   {
-      node_ptr p      = prev_init_node;
-      for( node_ptr p_next
-         ; this_node != (p_next = NodeTraits::get_next(p))
-         ; p = p_next){
-         //empty
-      }
-      return p;
-   }
-
-   //! <b>Effects</b>: Constructs an empty list, making this_node the only
-   //!   node of the linear list:
-   //!  <tt>NodeTraits::get_next(this_node) == 0.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void init_header(node_ptr this_node)  
-   {  NodeTraits::set_next(this_node, 0);  }  
-
-   //! <b>Effects</b>: Constructs an non-used list element, putting the next
-   //!   pointer to null:
-   //!  <tt>NodeTraits::get_next(this_node) == 0
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void init(node_ptr this_node)  
-   {  NodeTraits::set_next(this_node, 0);  }  
-
-   //! <b>Requires</b>: this_node must be in a linear list or be an empty linear list.
-   //! 
-   //! <b>Effects</b>: Returns true is "this_node" is the only node of a linear list:
-   //!  <tt>return NodeTraits::get_next(this_node) == this_node</tt>
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static bool unique(const_node_ptr this_node)  
-   {
-      node_ptr next = NodeTraits::get_next(this_node);
-      return !next || next == this_node;
-   }
-
-   //! <b>Requires</b>: this_node must be in a linear list or be an empty linear list.
-   //! 
-   //! <b>Effects</b>: Returns true is "this_node" is the only node of a linear list:
-   //!  <tt>return NodeTraits::get_next(this_node) == this_node</tt>
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static bool inited(const_node_ptr this_node)  
-   {  return !NodeTraits::get_next(this_node);  }
+   {  return base_t::get_previous_node(prev_init_node, this_node);   }
 
    //! <b>Requires</b>: this_node must be in a linear list or be an empty linear list.
    //! 
@@ -133,32 +169,6 @@ class linear_slist_algorithms
       return result;
    }
 
-   //! <b>Requires</b>: prev_node must be in a linear list or be an empty linear list.
-   //! 
-   //! <b>Effects</b>: Unlinks the next node of prev_node from the linear list.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void unlink_after(node_ptr prev_node)
-   {
-      node_ptr this_node(NodeTraits::get_next(prev_node));
-      NodeTraits::set_next(prev_node, NodeTraits::get_next(this_node));
-   }
-
-   //! <b>Requires</b>: prev_node must be a node of a linear list.
-   //! 
-   //! <b>Effects</b>: Links this_node after prev_node in the linear list.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void link_after(node_ptr prev_node, node_ptr this_node)
-   {
-      NodeTraits::set_next(this_node, NodeTraits::get_next(prev_node));
-      NodeTraits::set_next(prev_node, this_node);
-   }
-
    //! <b>Requires</b>: this_node and other_node must be nodes inserted
    //!  in linear lists or be empty linear lists.
    //! 
@@ -176,27 +186,6 @@ class linear_slist_algorithms
       NodeTraits::set_next(other_node, this_nxt);
    }
 
-   //! <b>Requires</b>: b and e must be nodes of the same linear list or an empty range.
-   //!   and p must be a node of a different linear list.
-   //! 
-   //! <b>Effects</b>: Removes the nodes from (b, e] range from their linear list and inserts
-   //!   them after p in p's linear list.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void transfer_after(node_ptr p, node_ptr b, node_ptr e)
-   {
-      if (p != b && p != e) {
-         node_ptr next_b = NodeTraits::get_next(b);
-         node_ptr next_e = NodeTraits::get_next(e);
-         node_ptr next_p = NodeTraits::get_next(p);
-         NodeTraits::set_next(b, next_e);
-         NodeTraits::set_next(e, next_p);
-         NodeTraits::set_next(p, next_b);
-      }
-   }
-
    //! <b>Effects</b>: Reverses the order of elements in the list. 
    //! 
    //! <b>Returns</b>: The new first node of the list. 
@@ -211,7 +200,7 @@ class linear_slist_algorithms
       node_ptr first(p);
       while(i){
          node_ptr nxti(NodeTraits::get_next(i));
-         unlink_after(p);
+         base_t::unlink_after(p);
          NodeTraits::set_next(i, first);
          first = i;
          i = nxti;
@@ -219,16 +208,21 @@ class linear_slist_algorithms
       return first;
    }
 
-   //! <b>Effects</b>: Moves the node p n positions towards the end of the list.
+   //! <b>Effects</b>: Moves the first n nodes starting at p to the end of the list.
+   //!
+   //! <b>Returns</b>: A pair containing the new first and last node of the list or
+   //!   if there has been any movement, a null pair if n leads to no movement.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements plus the number moved positions.
-   static node_ptr move_backwards(node_ptr p, std::size_t n)
+   static std::pair<node_ptr, node_ptr> move_first_n_backwards(node_ptr p, std::size_t n)
    {
+      std::pair<node_ptr, node_ptr> ret(0, 0);
       //Null shift, or count() == 0 or 1, nothing to do
-      if(!n || !p || !NodeTraits::get_next(p))
-         return p;
+      if(!n || !p || !NodeTraits::get_next(p)){
+         return ret;
+      }
 
       node_ptr first = p;
       bool end_found = false;
@@ -245,7 +239,7 @@ class linear_slist_algorithms
          if(first == 0){
             //Shortcut the shift with the modulo of the size of the list
             n %= i;
-            if(!n)   return p;
+            if(!n)   return ret;
             old_last = new_last;
             i = 0;
             //Unlink p and continue the new first node search
@@ -258,25 +252,31 @@ class linear_slist_algorithms
       //If the p has not been found in the previous loop, find it
       //starting in the new first node and unlink it
       if(!end_found){
-         old_last = get_previous_node(first, 0);
+         old_last = base_t::get_previous_node(first, 0);
       }
       
       //Now link p after the new last node
       NodeTraits::set_next(old_last, p);
       NodeTraits::set_next(new_last, 0);
-      return first;
+      ret.first   = first;
+      ret.second  = new_last;
+      return ret;
    }
 
-   //! <b>Effects</b>: Moves the node p n positions towards the beginning of the list.
+   //! <b>Effects</b>: Moves the first n nodes starting at p to the beginning of the list.
+   //!
+   //! <b>Returns</b>: A pair containing the new first and last node of the list or
+   //!   if there has been any movement, a null pair if n leads to no movement.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements plus the number moved positions.
-   static node_ptr move_forward(node_ptr p, std::size_t n)
+   static std::pair<node_ptr, node_ptr> move_first_n_forward(node_ptr p, std::size_t n)
    {
+      std::pair<node_ptr, node_ptr> ret(0, 0);
       //Null shift, or count() == 0 or 1, nothing to do
       if(!n || !p || !NodeTraits::get_next(p))
-         return p;
+         return ret;
 
       node_ptr first  = p;
 
@@ -298,7 +298,7 @@ class linear_slist_algorithms
          std::size_t new_before_last_pos = (distance - (n % distance))% distance;
          //If the shift is a multiple of the size there is nothing to do
          if(!new_before_last_pos)
-            return p;
+            return ret;
          
          for( new_last = p
             ; --new_before_last_pos
@@ -308,11 +308,13 @@ class linear_slist_algorithms
       }
 
       //Get the first new node
-      node_ptr new_first = node_traits::get_next(new_last);
+      node_ptr new_first(node_traits::get_next(new_last));
       //Now put the old beginning after the old end
       NodeTraits::set_next(old_last, p);
       NodeTraits::set_next(new_last, 0);
-      return new_first;
+      ret.first   = new_first;
+      ret.second  = new_last;
+      return ret;
    }
 };
 

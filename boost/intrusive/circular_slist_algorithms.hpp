@@ -16,6 +16,7 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
+#include <boost/intrusive/detail/common_slist_algorithms.hpp>
 #include <boost/intrusive/detail/assert.hpp>
 #include <cstddef>
 
@@ -45,22 +46,98 @@ namespace intrusive {
 //! <tt>static void set_next(node_ptr n, node_ptr next);</tt>
 template<class NodeTraits>
 class circular_slist_algorithms
+   /// @cond
+   : public detail::common_slist_algorithms<NodeTraits>
+   /// @endcond
 {
+   /// @cond
+   typedef detail::common_slist_algorithms<NodeTraits> base_t;
+   /// @endcond
    public:
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef NodeTraits                           node_traits;
 
-   //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
+   //! <b>Effects</b>: Constructs an non-used list element, putting the next
+   //!   pointer to null:
+   //!  <tt>NodeTraits::get_next(this_node) == 0
    //! 
-   //! <b>Effects</b>: Returns the previous node of this_node in the circular list.
-   //! 
-   //! <b>Complexity</b>: Linear to the number of elements in the circular list.
+   //! <b>Complexity</b>: Constant 
    //! 
    //! <b>Throws</b>: Nothing.
-   static node_ptr get_previous_node(node_ptr this_node)
-   {  return get_previous_node(this_node, this_node); }
+   static void init(node_ptr this_node);
 
+   //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
+   //! 
+   //! <b>Effects</b>: Returns true is "this_node" is the only node of a circular list:
+   //!  or it's a not inserted node:
+   //!  <tt>return !NodeTraits::get_next(this_node) || NodeTraits::get_next(this_node) == this_node</tt>
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static bool unique(const_node_ptr this_node);
+
+   //! <b>Effects</b>: Returns true is "this_node" has the same state as
+   //!  if it was inited using "init(node_ptr)"
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static bool inited(const_node_ptr this_node);
+
+   //! <b>Requires</b>: prev_node must be in a circular list or be an empty circular list.
+   //! 
+   //! <b>Effects</b>: Unlinks the next node of prev_node from the circular list.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void unlink_after(node_ptr prev_node);
+
+   //! <b>Requires</b>: prev_node and last_node must be in a circular list
+   //!  or be an empty circular list.
+   //!
+   //! <b>Effects</b>: Unlinks the range (prev_node, last_node) from the circular list.
+   //!
+   //! <b>Complexity</b>: Constant 
+   //!
+   //! <b>Throws</b>: Nothing.
+   static void unlink_after(node_ptr prev_node, node_ptr last_node);
+
+   //! <b>Requires</b>: prev_node must be a node of a circular list.
+   //! 
+   //! <b>Effects</b>: Links this_node after prev_node in the circular list.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void link_after(node_ptr prev_node, node_ptr this_node);
+
+   //! <b>Requires</b>: b and e must be nodes of the same circular list or an empty range.
+   //!   and p must be a node of a different circular list.
+   //! 
+   //! <b>Effects</b>: Removes the nodes from (b, e] range from their circular list and inserts
+   //!   them after p in p's circular list.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void transfer_after(node_ptr p, node_ptr b, node_ptr e);
+
+   #endif   //#ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
+   //! <b>Effects</b>: Constructs an empty list, making this_node the only
+   //!   node of the circular list:
+   //!  <tt>NodeTraits::get_next(this_node) == this_node</tt>.
+   //! 
+   //! <b>Complexity</b>: Constant 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static void init_header(node_ptr this_node)
+   {  NodeTraits::set_next(this_node, this_node);  } 
 
    //! <b>Requires</b>: this_node and prev_init_node must be in the same circular list.
    //! 
@@ -72,17 +149,17 @@ class circular_slist_algorithms
    //! 
    //! <b>Throws</b>: Nothing.
    static node_ptr get_previous_node(node_ptr prev_init_node, node_ptr this_node)
-   {
-      node_ptr p = prev_init_node;
-      for( node_ptr p_next
-         ; this_node != (p_next = NodeTraits::get_next(p))
-         ; p = p_next){
-         //Logic error: possible use of linear lists with
-         //operations only permitted with circular lists
-         BOOST_INTRUSIVE_INVARIANT_ASSERT(p);
-      }
-      return p;
-   }
+   {  return base_t::get_previous_node(prev_init_node, this_node);   }
+
+   //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
+   //! 
+   //! <b>Effects</b>: Returns the previous node of this_node in the circular list.
+   //! 
+   //! <b>Complexity</b>: Linear to the number of elements in the circular list.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static node_ptr get_previous_node(node_ptr this_node)
+   {  return base_t::get_previous_node(this_node, this_node); }
 
    //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
    //! 
@@ -116,49 +193,6 @@ class circular_slist_algorithms
       return p;
    }
 
-   //! <b>Effects</b>: Constructs an empty list, making this_node the only
-   //!   node of the circular list:
-   //!  <tt>NodeTraits::get_next(this_node) == this_node</tt>.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void init_header(node_ptr this_node)  
-   {  NodeTraits::set_next(this_node, this_node);  }  
-
-   //! <b>Effects</b>: Constructs an non-used list element, putting the next
-   //!   pointer to null:
-   //!  <tt>NodeTraits::get_next(this_node) == 0
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void init(node_ptr this_node)  
-   {  NodeTraits::set_next(this_node, 0);  }  
-
-   //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
-   //! 
-   //! <b>Effects</b>: Returns true is "this_node" is the only node of a circular list:
-   //!  or it's a not inserted node:
-   //!  <tt>return !NodeTraits::get_next(this_node) || NodeTraits::get_next(this_node) == this_node</tt> or 
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static bool unique(const_node_ptr this_node)
-   {
-      node_ptr next = NodeTraits::get_next(this_node);
-      return !next || next == this_node;
-   }  
-
-   //! <b>Effects</b>: Returns true is "this_node" has the same state as if it was inited using "init(node_ptr)"
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static bool inited(const_node_ptr this_node)  
-   {  return !NodeTraits::get_next(this_node); }
-
    //! <b>Requires</b>: this_node must be in a circular list or be an empty circular list.
    //! 
    //! <b>Effects</b>: Returns the number of nodes in a circular list. If the circular list
@@ -178,33 +212,6 @@ class circular_slist_algorithms
       return result;
    }
 
-   //! <b>Requires</b>: prev_node must be in a circular list or be an empty circular list.
-   //! 
-   //! <b>Effects</b>: Unlinks the next node of prev_node from the circular list.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void unlink_after(node_ptr prev_node)
-   {
-      node_ptr this_node(NodeTraits::get_next(prev_node));
-      NodeTraits::set_next(prev_node, NodeTraits::get_next(this_node));
-      //NodeTraits::set_next(this_node, this_node);
-   }
-
-   //! <b>Requires</b>: nxt_node must be in a circular list or be an empty circular list.
-   //! 
-   //! <b>Effects</b>: Unlinks the previous node of nxt_node from the circular list.
-   //! 
-   //! <b>Complexity</b>: Linear to the elements in the circular list. 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void unlink_before(node_ptr nxt_node)
-   {
-      node_ptr prev_to_erase(get_previous_previous_node(nxt_node));
-      unlink_after(prev_to_erase);
-   }
-
    //! <b>Requires</b>: this_node must be in a circular list, be an empty circular list or be inited.
    //! 
    //! <b>Effects</b>: Unlinks the node from the circular list.
@@ -215,20 +222,7 @@ class circular_slist_algorithms
    static void unlink(node_ptr this_node)
    {
       if(NodeTraits::get_next(this_node))
-         unlink_after(get_previous_node(this_node));
-   }
-
-   //! <b>Requires</b>: prev_node must be a node of a circular list.
-   //! 
-   //! <b>Effects</b>: Links this_node after prev_node in the circular list.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void link_after(node_ptr prev_node, node_ptr this_node)
-   {
-      NodeTraits::set_next(this_node, NodeTraits::get_next(prev_node));
-      NodeTraits::set_next(prev_node, this_node);
+         base_t::unlink_after(get_previous_node(this_node));
    }
 
    //! <b>Requires</b>: nxt_node must be a node of a circular list.
@@ -239,7 +233,7 @@ class circular_slist_algorithms
    //! 
    //! <b>Throws</b>: Nothing.
    static void link_before (node_ptr nxt_node, node_ptr this_node)
-   {  link_after(get_previous_node(nxt_node), this_node);   }
+   {  base_t::link_after(get_previous_node(nxt_node), this_node);   }
 
    //! <b>Requires</b>: this_node and other_node must be nodes inserted
    //!  in circular lists or be empty circular lists.
@@ -255,17 +249,17 @@ class circular_slist_algorithms
    {
       if (other_node == this_node)
          return;
-      bool this_inited  = inited(this_node);
-      bool other_inited = inited(other_node);
+      bool this_inited  = base_t::inited(this_node);
+      bool other_inited = base_t::inited(other_node);
       if(this_inited){
-         init_header(this_node);
+         base_t::init_header(this_node);
       }
       if(other_inited){
-         init_header(other_node);
+         base_t::init_header(other_node);
       }
 
-      bool empty1 = unique(this_node);
-      bool empty2 = unique(other_node);
+      bool empty1 = base_t::unique(this_node);
+      bool empty2 = base_t::unique(other_node);
       node_ptr prev_this (get_previous_node(this_node));
       node_ptr prev_other(get_previous_node(other_node));
 
@@ -277,31 +271,10 @@ class circular_slist_algorithms
       NodeTraits::set_next(empty2 ? this_node  : prev_other, this_node);
 
       if(this_inited){
-         init(other_node);
+         base_t::init(other_node);
       }
       if(other_inited){
-         init(this_node);
-      }
-   }
-
-   //! <b>Requires</b>: b and e must be nodes of the same circular list or an empty range.
-   //!   and p must be a node of a different circular list.
-   //! 
-   //! <b>Effects</b>: Removes the nodes from (b, e] range from their circular list and inserts
-   //!   them after p in p's circular list.
-   //! 
-   //! <b>Complexity</b>: Constant 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   static void transfer_after(node_ptr p, node_ptr b, node_ptr e)
-   {
-      if (p != b && p != e) {
-         node_ptr next_b = NodeTraits::get_next(b);
-         node_ptr next_e = NodeTraits::get_next(e);
-         node_ptr next_p = NodeTraits::get_next(p);
-         NodeTraits::set_next(b, next_e);
-         NodeTraits::set_next(e, next_p);
-         NodeTraits::set_next(p, next_b);
+         base_t::init(this_node);
       }
    }
 
@@ -317,24 +290,27 @@ class circular_slist_algorithms
          node_ptr nxt(NodeTraits::get_next(i));
          if (nxt == e)
             break;
-         transfer_after(e, i, nxt);
+         base_t::transfer_after(e, i, nxt);
       }
    }
 
    //! <b>Effects</b>: Moves the node p n positions towards the end of the list.
-   //! 
+   //!
+   //! <b>Returns</b>: The previous node of p after the function if there has been any movement,
+   //!   Null if n leads to no movement.
+   //!
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements plus the number moved positions.
-   static void move_backwards(node_ptr p, std::size_t n)
+   static node_ptr move_backwards(node_ptr p, std::size_t n)
    {
       //Null shift, nothing to do
-      if(!n) return;
+      if(!n) return 0;
       node_ptr first  = NodeTraits::get_next(p);
 
       //count() == 1 or 2, nothing to do
       if(NodeTraits::get_next(first) == p)
-         return;
+         return 0;
 
       bool end_found = false;
       node_ptr new_last(0);
@@ -350,11 +326,11 @@ class circular_slist_algorithms
             //Shortcut the shift with the modulo of the size of the list
             n %= i;
             if(!n)
-               return;
+               return 0;
             i = 0;
             //Unlink p and continue the new first node search
             first = NodeTraits::get_next(p);
-            unlink_after(new_last);
+            base_t::unlink_after(new_last);
             end_found = true;
          }
       }
@@ -362,26 +338,30 @@ class circular_slist_algorithms
       //If the p has not been found in the previous loop, find it
       //starting in the new first node and unlink it
       if(!end_found){
-         unlink_after(get_previous_node(first, p));
+         base_t::unlink_after(base_t::get_previous_node(first, p));
       }
 
       //Now link p after the new last node
-      link_after(new_last, p);
+      base_t::link_after(new_last, p);
+      return new_last;
    }
 
    //! <b>Effects</b>: Moves the node p n positions towards the beginning of the list.
    //! 
+   //! <b>Returns</b>: The previous node of p after the function if there has been any movement,
+   //!   Null if n leads equals to no movement.
+   //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Linear to the number of elements plus the number moved positions.
-   static void move_forward(node_ptr p, std::size_t n)
+   static node_ptr move_forward(node_ptr p, std::size_t n)
    {
       //Null shift, nothing to do
-      if(!n) return;
+      if(!n) return 0;
       node_ptr first  = node_traits::get_next(p);
 
       //count() == 1 or 2, nothing to do
-      if(node_traits::get_next(first) == p) return;
+      if(node_traits::get_next(first) == p) return 0;
 
       //Iterate until p is found to know where the current last node is.
       //If the shift count is less than the size of the list, we can also obtain
@@ -400,7 +380,7 @@ class circular_slist_algorithms
          //Shortcut the shift with the modulo of the size of the list
          std::size_t new_before_last_pos = (distance - (n % distance))% distance;
          //If the shift is a multiple of the size there is nothing to do
-         if(!new_before_last_pos)   return;
+         if(!new_before_last_pos)   return 0;
          
          for( new_last = p
             ; new_before_last_pos--
@@ -410,8 +390,9 @@ class circular_slist_algorithms
       }
 
       //Now unlink p and link it after the new last node
-      unlink_after(old_last);
-      link_after(new_last, p);
+      base_t::unlink_after(old_last);
+      base_t::link_after(new_last, p);
+      return new_last;
    }
 };
 
