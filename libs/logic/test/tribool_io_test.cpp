@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <ios>     // for std::boolalpha
 
 #ifndef BOOST_NO_STD_LOCALE
 #  include <locale>
