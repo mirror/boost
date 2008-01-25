@@ -8,7 +8,7 @@ rule sc-test ( name : extra-sources * )
 
 
 test-suite ptr_container :
-    [ sc-test clone_inserter ]
+    [ sc-test ptr_inserter ]
     [ sc-test ptr_vector ]
     [ sc-test ptr_list ]
     [ sc-test ptr_deque ]
