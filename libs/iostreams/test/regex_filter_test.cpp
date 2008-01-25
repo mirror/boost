@@ -144,6 +144,26 @@ void regex_filter_test()
             "failed writing to format-string-based regex_filter in chunks"
         );
     }
+
+    {
+        // Note: the ifstream second is placed in a nested scope because 
+        // closing and reopening a single ifstream failed for CW 9.4 on Windows.
+
+        // Test reading from a regex filter with no matches; this checks that
+        // Ticket #1139 is fixed
+        boost::regex   match_xxx("xxx");
+        test_file      test2; 
+        filtering_istream
+            first(boost::iostreams::regex_filter(match_xxx, replace_lower()));
+        first.push(file_source(test.name(), in_mode));
+        {
+            ifstream second(test2.name().c_str(), in_mode);  
+            BOOST_CHECK_MESSAGE(
+                compare_streams_in_chars(first, second),
+                "failed reading from a regex filter with no matches"
+            );
+        }
+    }
 }
 
 test_suite* init_unit_test_suite(int, char* []) 

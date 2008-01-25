@@ -114,12 +114,12 @@ struct multichar_filter : filter<Mode, Ch> {
 template<typename Mode, typename Ch = wchar_t>
 struct multichar_wfilter : multichar_filter<Mode, Ch> { };
 
-typedef multichar_filter<input>     multichar_input_filter;
-typedef multichar_filter<input>     multichar_input_wfilter;
-typedef multichar_filter<output>    multichar_output_filter;
-typedef multichar_filter<output>    multichar_output_wfilter;
-typedef multichar_filter<dual_use>  multichar_dual_use_filter;
-typedef multichar_filter<dual_use>  multichar_dual_use_wfilter;
+typedef multichar_filter<input>      multichar_input_filter;
+typedef multichar_wfilter<input>     multichar_input_wfilter;
+typedef multichar_filter<output>     multichar_output_filter;
+typedef multichar_wfilter<output>    multichar_output_wfilter;
+typedef multichar_filter<dual_use>   multichar_dual_use_filter;
+typedef multichar_wfilter<dual_use>  multichar_dual_use_wfilter;
 
 //----------------------------------------------------------------------------//
 

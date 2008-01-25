@@ -32,9 +32,8 @@ template<typename Chain, typename Access, typename Mode> class chainbuf;
     using base::setg; using base::gbump; using base::pbase; \
     using base::pptr; using base::epptr; using base::setp; \
     using base::pbump; using base::underflow; using base::pbackfail; \
-    using base::xsgetn; using base::overflow; using base::sputc; \
-    using base::xsputn; using base::sync; using base::seekoff; \
-    using base::seekpos; \
+    using base::xsgetn; using base::overflow; using base::xsputn; \
+    using base::sync; using base::seekoff; using base::seekpos; \
     /**/
 
 template<typename Ch, typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch) >
