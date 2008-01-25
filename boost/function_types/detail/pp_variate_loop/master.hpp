@@ -140,7 +140,7 @@ BOOST_PP_EXPAND(#)   define BOOST_FT_cv const volatile
 #     endif
 #   endif
 BOOST_PP_EXPAND(#)   define BOOST_FT_flags BOOST_PP_SLOT(1)
-BOOST_PP_EXPAND(#)   include BOOST_PP_EXPAND BOOST_PP_EMPTY()(<BOOST_FT_variate_file>)
+BOOST_PP_EXPAND(#)   include BOOST_FT_variate_file
 
 BOOST_PP_EXPAND(#)   undef BOOST_FT_cv
 BOOST_PP_EXPAND(#)   undef BOOST_FT_ell

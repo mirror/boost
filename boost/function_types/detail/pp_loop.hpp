@@ -28,9 +28,9 @@
 #if defined(BOOST_FT_al_path)
 
 #   define BOOST_FT_cc_file \
-        boost/function_types/detail/pp_variate_loop/preprocessed.hpp
+        <boost/function_types/detail/pp_variate_loop/preprocessed.hpp>
 #   define BOOST_FT_variate_file \
-        boost/function_types/detail/pp_arity_loop.hpp
+        <boost/function_types/detail/pp_arity_loop.hpp>
 
 #   ifndef BOOST_FT_type_function
 #   define BOOST_FT_type_function(cc,name) BOOST_FT_SYNTAX( \
