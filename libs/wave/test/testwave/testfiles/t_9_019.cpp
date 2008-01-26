@@ -10,6 +10,6 @@
 //  tests, whether regression causing #include_next to infinitely recurse is
 //  fixed
 
-//E t_9_019.cpp(14): error: could not find include file: t_9_019.hpp
-#include_next "t_9_019.hpp"
+//E t_9_019.hpp(11): error: could not find include file: t_9_019.hpp
+#include "t_9_019.hpp"
 
