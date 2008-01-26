@@ -7,4 +7,5 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-// this file intentionally has been left empty
+// this shouldn't give an recursion
+#include_next "t_9_019.hpp"
