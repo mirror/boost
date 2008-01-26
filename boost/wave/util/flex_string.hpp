@@ -2256,7 +2256,7 @@ public:
     {
         Enforce(pos1 <= size(), (std::out_of_range*)0, "");
         Procust(n1, size() - pos1);
-        const int r = traits_type::compare(data(), s, Min(n1, n2));
+        const int r = traits_type::compare(data()+pos1, s, Min(n1, n2));
         return 
             r != 0 ? r :
             n1 > n2 ? 1 :
