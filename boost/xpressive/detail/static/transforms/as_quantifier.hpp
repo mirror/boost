@@ -88,7 +88,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             typedef typename Expr::proto_tag tag;
 
             xpr_type const &xpr = Grammar()(proto::arg(expr), detail::true_xpression(), visitor);
-            matcher_type matcher(xpr, min_type<tag>(), max_type<tag>(), xpr.get_width().value());
+            matcher_type matcher(xpr, (uint_t)min_type<tag>(), (uint_t)max_type<tag>(), xpr.get_width().value());
             return proto::terminal<matcher_type>::type::make(matcher);
         }
     };
@@ -174,8 +174,8 @@ namespace boost { namespace xpressive { namespace grammar_detail
             int mark_number = proto::arg(proto::left(marked_sub)).mark_number_;
             BOOST_ASSERT(0 != mark_number);
 
-            unsigned min_ = min_type<typename Expr::proto_tag>();
-            unsigned max_ = max_type<typename Expr::proto_tag>();
+            uint_t min_ = (uint_t)min_type<typename Expr::proto_tag>();
+            uint_t max_ = (uint_t)max_type<typename Expr::proto_tag>();
 
             detail::repeat_begin_matcher begin(mark_number);
             detail::repeat_end_matcher<Greedy> end(mark_number, min_, max_);

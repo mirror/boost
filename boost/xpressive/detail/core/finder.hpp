@@ -185,6 +185,28 @@ private:
     bool bits_[256];
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// leading_simple_repeat_finder
+//
+template<typename BidiIter>
+struct leading_simple_repeat_finder
+  : finder<BidiIter>
+{
+    leading_simple_repeat_finder()
+      : finder<BidiIter>()
+    {}
+
+    bool operator ()(match_state<BidiIter> &state) const
+    {
+        state.cur_ = state.next_search_;
+        return true;
+    }
+
+private:
+    leading_simple_repeat_finder(leading_simple_repeat_finder const &);
+    leading_simple_repeat_finder &operator =(leading_simple_repeat_finder const &);
+};
+
 }}}
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)

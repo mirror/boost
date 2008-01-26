@@ -145,6 +145,7 @@ struct xpression_linker
       : back_stack_()
       , traits_(&traits)
       , traits_type_(&typeid(Traits))
+      , has_backrefs_(false)
     {
     }
 
@@ -152,6 +153,24 @@ struct xpression_linker
     void accept(Matcher const &, void const *)
     {
         // no-op
+    }
+
+    template<typename Traits, typename ICase>
+    void accept(mark_matcher<Traits, ICase> const &, void const *)
+    {
+        this->has_backrefs_ = true;
+    }
+
+    template<typename Action>
+    void accept(action_matcher<Action> const &, void const *)
+    {
+        this->has_backrefs_ = true;
+    }
+
+    template<typename Predicate>
+    void accept(predicate_matcher<Predicate> const &, void const *)
+    {
+        this->has_backrefs_ = true;
     }
 
     void accept(repeat_begin_matcher const &, void const *next)
@@ -215,6 +234,12 @@ struct xpression_linker
     void accept(simple_repeat_matcher<Xpr, Greedy> const &matcher, void const *)
     {
         matcher.xpr_.link(*this);
+    }
+
+    // accessors
+    bool has_backrefs() const
+    {
+        return this->has_backrefs_;
     }
 
     // for use by alt_link_pred below
@@ -292,6 +317,7 @@ private:
     std::stack<void const *> back_stack_;
     void const *traits_;
     std::type_info const *traits_type_;
+    bool has_backrefs_;
 };
 
 }}} // namespace boost::xpressive::detail

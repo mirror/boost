@@ -31,28 +31,7 @@ namespace boost { namespace xpressive { namespace detail
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// peek_next
-//   tell whether or not to keep looking for a peek optimization
-template<typename Matcher>
-struct peek_next
-  : mpl::bool_<Matcher::width == 0>
-{
-};
-
-template<>
-struct peek_next<mark_begin_matcher>
-  : mpl::true_
-{
-};
-
-template<>
-struct peek_next<repeat_begin_matcher>
-  : mpl::true_
-{
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// xpression_peeker
+// peeker_string
 //
 template<typename Char>
 struct peeker_string
@@ -91,12 +70,14 @@ template<typename Char>
 struct xpression_peeker
 {
     template<typename Traits>
-    xpression_peeker(hash_peek_bitset<Char> &bset, Traits const &traits)
+    xpression_peeker(hash_peek_bitset<Char> &bset, Traits const &traits, bool has_backrefs = false)
       : bset_(bset)
       , str_()
       , line_start_(false)
       , traits_(0)
       , traits_type_(0)
+      , leading_simple_repeat_(0)
+      , has_backrefs_(has_backrefs)
     {
         this->set_traits(traits);
     }
@@ -113,6 +94,11 @@ struct xpression_peeker
         return this->line_start_;
     }
 
+    bool leading_simple_repeat() const
+    {
+        return 0 < this->leading_simple_repeat_;
+    }
+
     hash_peek_bitset<Char> const &bitset() const
     {
         return this->bset_;
@@ -120,19 +106,31 @@ struct xpression_peeker
 
     ///////////////////////////////////////////////////////////////////////////////
     // modifiers
-    void fail(bool do_fail = true)
+    void fail()
     {
-        if(do_fail)
-        {
-            this->bset_.set_all();
-        }
+        this->bset_.set_all();
     }
 
     template<typename Matcher>
-    peek_next<Matcher> accept(Matcher const &)
+    mpl::false_ accept(Matcher const &)
     {
-        this->fail(!peek_next<Matcher>::value);
-        return peek_next<Matcher>();
+        this->fail();
+        return mpl::false_();
+    }
+
+    mpl::true_ accept(mark_begin_matcher const &)
+    {
+        if(this->has_backrefs_)
+        {
+            --this->leading_simple_repeat_;
+        }
+        return mpl::true_();
+    }
+
+    mpl::true_ accept(repeat_begin_matcher const &)
+    {
+        --this->leading_simple_repeat_;
+        return mpl::true_();
     }
 
     template<typename Traits>
@@ -228,6 +226,11 @@ struct xpression_peeker
     template<typename Xpr, typename Greedy>
     mpl::false_ accept(simple_repeat_matcher<Xpr, Greedy> const &xpr)
     {
+        if(Greedy() && 1U == xpr.width_)
+        {
+            ++this->leading_simple_repeat_;
+            xpr.leading_ = this->leading_simple_repeat();
+        }
         0 != xpr.min_ ? xpr.xpr_.peek(*this) : this->fail(); // could be a union of xpr and next
         return mpl::false_();
     }
@@ -268,6 +271,8 @@ private:
     bool line_start_;
     void const *traits_;
     std::type_info const *traits_type_;
+    int leading_simple_repeat_;
+    bool has_backrefs_;
 };
 
 }}} // namespace boost::xpressive::detail

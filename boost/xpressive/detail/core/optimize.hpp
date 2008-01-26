@@ -39,6 +39,13 @@ intrusive_ptr<finder<BidiIter> > optimize_regex
             new line_start_finder<BidiIter, Traits>(traits)
         );
     }
+    else if(peeker.leading_simple_repeat())
+    {
+        return intrusive_ptr<finder<BidiIter> >
+        (
+            new leading_simple_repeat_finder<BidiIter>()
+        );
+    }
     else if(256 != peeker.bitset().count())
     {
         return intrusive_ptr<finder<BidiIter> >
@@ -96,7 +103,7 @@ void common_compile
 
     // "peek" into the compiled regex to see if there are optimization opportunities
     hash_peek_bitset<char_type> bset;
-    xpression_peeker<char_type> peeker(bset, traits);
+    xpression_peeker<char_type> peeker(bset, traits, linker.has_backrefs());
     regex->peek(peeker);
 
     // optimization: get the peek chars OR the boyer-moore search string

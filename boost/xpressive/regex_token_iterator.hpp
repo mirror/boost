@@ -39,13 +39,14 @@ struct regex_token_iterator_impl
         BidiIter begin
       , BidiIter cur
       , BidiIter end
+      , BidiIter next_search
       , basic_regex<BidiIter> const *rex
       , regex_constants::match_flag_type flags = regex_constants::match_default
       , std::vector<int> subs = std::vector<int>(1, 0)
       , int n = -2
       , bool not_null = false
     )
-      : iter_(begin, cur, end, rex, flags, not_null)
+      : iter_(begin, cur, end, next_search, rex, flags, not_null)
       , result_()
       , n_((-2 == n) ? (int)subs.size() - 1 : n)
       , subs_()
@@ -158,7 +159,7 @@ struct regex_token_iterator
       , BidiIter end
       , basic_regex<BidiIter> const &rex
     )
-      : impl_(new impl_type_(begin, begin, end, &rex))
+      : impl_(new impl_type_(begin, begin, end, begin, &rex))
     {
         this->next_();
     }
@@ -176,7 +177,7 @@ struct regex_token_iterator
       , basic_regex<BidiIter> const &rex
       , detail::let_<LetExpr> const &args
     )
-      : impl_(new impl_type_(begin, begin, end, &rex))
+      : impl_(new impl_type_(begin, begin, end, begin, &rex))
     {
         detail::bind_args(args, this->impl_->iter_.what_);
         this->next_();
@@ -198,7 +199,7 @@ struct regex_token_iterator
       , Subs const &subs
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(subs)))
+      : impl_(new impl_type_(begin, begin, end, begin, &rex, flags, detail::to_vector(subs)))
     {
         this->next_();
     }
@@ -221,7 +222,7 @@ struct regex_token_iterator
       , detail::let_<LetExpr> const &args
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(subs)))
+      : impl_(new impl_type_(begin, begin, end, begin, &rex, flags, detail::to_vector(subs)))
     {
         detail::bind_args(args, this->impl_->iter_.what_);
         this->next_();
@@ -307,6 +308,7 @@ private:
                 this->impl_->iter_.state_.begin_
               , this->impl_->iter_.state_.cur_
               , this->impl_->iter_.state_.end_
+              , this->impl_->iter_.state_.next_search_
               , this->impl_->iter_.rex_
               , this->impl_->iter_.flags_
               , this->impl_->subs_
