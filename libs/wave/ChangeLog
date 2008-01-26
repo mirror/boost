@@ -157,6 +157,7 @@ Boost V1.35.0
 - Applied patch provided by Jens Seidel making sure every header compiles on 
   its own.
 - Updates to the documentation.
+- Fixed a problem in flex_string::compare() (#include_next was non-functional).
 
 Boost V1.34.0
 - Wave Version 1.2.4
