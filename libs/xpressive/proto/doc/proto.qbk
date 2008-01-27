@@ -86,7 +86,7 @@ corresponding to the 5 major parts to Proto:
     [Describes the tools Proto provides for making your expression trees do
      something useful.]]
 [[[link boost_proto.users_guide.expression_introspection Expression Introspection]]
-    [Describes Proto's grammar matching faciities, which make
+    [Describes Proto's grammar matching facilities, which make
      it easy to discover the structure of an expression tree.]]
 [[[link boost_proto.users_guide.expression_transformation Expression Transformation]]
     [Describes how to write expression transforms that turn an expression tree
