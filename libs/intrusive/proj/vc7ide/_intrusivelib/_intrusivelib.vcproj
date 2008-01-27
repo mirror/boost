@@ -136,6 +136,9 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\intrusive_fwd.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\linear_slist_algorithms.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\link_mode.hpp">
 			</File>
 			<File
@@ -212,6 +215,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\avltree_node.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\common_slist_algorithms.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\config_begin.hpp">

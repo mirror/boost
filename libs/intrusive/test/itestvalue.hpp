@@ -237,7 +237,7 @@ struct testvalue
    // have to be handled appropriately when copied:
 
    testvalue & operator= (const testvalue& src)
-   {
+   {/*
       set_base_hook_t::operator=(src);
       set_auto_base_hook_t::operator=(src);
       this->set_node_ = src.set_node_;
@@ -270,7 +270,7 @@ struct testvalue
       slist_auto_base_hook_t::operator=(src);
       this->slist_node_ = src.slist_node_;
       this->slist_auto_node_ = src.slist_auto_node_;
-
+*/
       value_ = src.value_;
       return *this;
    }
@@ -364,6 +364,14 @@ struct even_odd
       else
          return v2.value_ & 1;
    }  
+};
+
+struct is_even
+{
+   template<class VoidPointer, bool constant_time_size>
+   bool operator()
+      (const testvalue<VoidPointer, constant_time_size>& v1) const
+   {  return (v1.value_ & 1) == 0;  }  
 };
 
 }  //namespace boost{

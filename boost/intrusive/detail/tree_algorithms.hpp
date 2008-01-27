@@ -137,9 +137,9 @@ class tree_algorithms
    {  return uncast(header);   }
 
    //! <b>Requires</b>: node is a node of the tree or an node initialized
-   //!   by init(...).
+   //!   by init(...) or init_node.
    //! 
-   //! <b>Effects</b>: Returns true if the node is initialized by init().
+   //! <b>Effects</b>: Returns true if the node is initialized by init() or init_node().
    //! 
    //! <b>Complexity</b>: Constant time.
    //! 

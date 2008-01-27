@@ -747,7 +747,7 @@ class hashtable_impl
             }
             BOOST_INTRUSIVE_CATCH(...){
                this->clear_and_dispose(disposer);
-               BOOST_RETHROW;
+               BOOST_INTRUSIVE_RETHROW;
             }
             BOOST_INTRUSIVE_CATCH_END
          }

@@ -208,7 +208,7 @@ class list_impl
       :  data_(v_traits)
    {  
       this->priv_size_traits().set_size(size_type(0));
-      node_algorithms::init(this->get_root_node());  
+      node_algorithms::init_header(this->get_root_node());  
    }
 
    //! <b>Requires</b>: Dereferencing iterator must yield an lvalue of type value_type.
@@ -224,7 +224,7 @@ class list_impl
       :  data_(v_traits)
    {
       this->priv_size_traits().set_size(size_type(0));
-      node_algorithms::init(this->get_root_node());
+      node_algorithms::init_header(this->get_root_node());
       this->insert(this->end(), b, e);
    }
 
@@ -258,7 +258,7 @@ class list_impl
    {
       node_ptr to_insert = get_real_value_traits().to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::inited(to_insert));
       node_algorithms::link_before(this->get_root_node(), to_insert);
       this->priv_size_traits().increment();
    }
@@ -277,7 +277,7 @@ class list_impl
    {
       node_ptr to_insert = get_real_value_traits().to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::inited(to_insert));
       node_algorithms::link_before(node_traits::get_next(this->get_root_node()), to_insert); 
       this->priv_size_traits().increment();
    }
@@ -290,14 +290,8 @@ class list_impl
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the erased element.
-   void pop_back() 
-   {
-      node_ptr to_erase = node_traits::get_previous(this->get_root_node());
-      node_algorithms::unlink(to_erase);
-      this->priv_size_traits().decrement();
-      if(safemode_or_autounlink)
-         node_algorithms::init(to_erase);
-   }
+   void pop_back()
+   {  return this->pop_back_and_dispose(detail::null_disposer());   }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -329,14 +323,8 @@ class list_impl
    //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the erased element.
-   void pop_front() 
-   { 
-      node_ptr to_erase = node_traits::get_next(this->get_root_node());
-      node_algorithms::unlink(to_erase);
-      this->priv_size_traits().decrement();
-      if(safemode_or_autounlink)
-         node_algorithms::init(to_erase);
-   }
+   void pop_front()
+   {  return this->pop_front_and_dispose(detail::null_disposer());   }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -406,7 +394,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator begin() const 
-   { return cbegin(); }
+   { return this->cbegin(); }
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the list.
    //! 
@@ -430,7 +418,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator end() const 
-   { return cend(); }
+   { return this->cend(); }
 
    //! <b>Effects</b>: Returns a constant iterator to the end of the list.
    //! 
@@ -447,7 +435,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    reverse_iterator rbegin()
-   { return reverse_iterator(end()); }
+   { return reverse_iterator(this->end()); }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
    //! of the reversed list. 
@@ -456,7 +444,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rbegin() const 
-   { return crbegin(); }
+   { return this->crbegin(); }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
    //! of the reversed list. 
@@ -483,7 +471,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rend() const   
-   { return crend(); }
+   { return this->crend(); }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
    //! of the reversed list. 
@@ -492,7 +480,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator crend() const   
-   { return const_reverse_iterator(begin()); }
+   { return const_reverse_iterator(this->begin()); }
 
    //! <b>Precondition</b>: end_iterator must be a valid end iterator
    //!   of list.
@@ -503,7 +491,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    static list_impl &container_from_end_iterator(iterator end_iterator)
-   {  return priv_container_from_end_iterator(end_iterator);   }
+   {  return list_impl::priv_container_from_end_iterator(end_iterator);   }
 
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
    //!   of list.
@@ -514,7 +502,7 @@ class list_impl
    //! 
    //! <b>Complexity</b>: Constant.
    static const list_impl &container_from_end_iterator(const_iterator end_iterator)
-   {  return priv_container_from_end_iterator(end_iterator);   }
+   {  return list_impl::priv_container_from_end_iterator(end_iterator);   }
 
    //! <b>Effects</b>: Returns the number of the elements contained in the list.
    //! 
@@ -540,7 +528,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    bool empty() const
-   { return node_algorithms::unique(this->get_root_node()); }
+   {  return node_algorithms::unique(this->get_root_node());   }
 
    //! <b>Effects</b>: Swaps the elements of x and *this.
    //! 
@@ -569,21 +557,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    void shift_backwards(size_type n = 1)
-   {
-      //Null shift, nothing to do
-      if(!n)   return;
-      node_ptr root  = this->get_root_node();
-      node_ptr last  = node_traits::get_previous(root);
-      //size() == 0 or 1, nothing to do
-      if(last == node_traits::get_next(root))   return;
-
-      node_algorithms::unlink(root);
-      //Now get the new last node
-      while(n--){
-         last = node_traits::get_previous(last);
-      }
-      node_algorithms::link_after(last, root);
-   }
+   {  node_algorithms::move_forward(this->get_root_node(), n);  }
 
    //! <b>Effects</b>: Moves forward all the elements, so that the second
    //!   element becomes the first, the third becomes the second...
@@ -595,20 +569,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    void shift_forward(size_type n = 1)
-   {
-      //Null shift, nothing to do
-      if(!n) return;
-      node_ptr root  = this->get_root_node();
-      node_ptr first  = node_traits::get_next(root);
-      //size() == 0 or 1, nothing to do
-      if(first == node_traits::get_previous(root)) return;
-      node_algorithms::unlink(root);
-      //Now get the new first node
-      while(n--){
-         first = node_traits::get_next(first);
-      }
-      node_algorithms::link_before(first, root);
-   }
+   {  node_algorithms::move_backwards(this->get_root_node(), n);  }
 
    //! <b>Effects</b>: Erases the element pointed by i of the list.
    //!   No destructors are called.
@@ -623,16 +584,7 @@ class list_impl
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the
    //!   erased element.
    iterator erase(iterator i)
-   {
-      iterator erase = i;
-      ++i;
-      node_ptr to_erase = erase.pointed_node();
-      node_algorithms::unlink(to_erase);
-      this->priv_size_traits().decrement();
-      if(safemode_or_autounlink)
-         node_algorithms::init(to_erase);
-      return i;
-   }
+   {  return this->erase_and_dispose(i, detail::null_disposer());  }
 
    //! <b>Requires</b>: first and last must be valid iterator to elements in *this.
    //!
@@ -652,10 +604,7 @@ class list_impl
    iterator erase(iterator b, iterator e)
    {
       if(safemode_or_autounlink || constant_time_size){
-         while(b != e){
-            b = this->erase(b);
-         }
-         return b;
+         return this->erase_and_dispose(b, e, detail::null_disposer());
       }
       else{
          node_algorithms::unlink(b.pointed_node(), e.pointed_node());
@@ -680,14 +629,13 @@ class list_impl
    template <class Disposer>
    iterator erase_and_dispose(iterator i, Disposer disposer)
    {
-      iterator erase = i;
+      node_ptr to_erase(i.pointed_node());
       ++i;
-      node_ptr to_erase = erase.pointed_node();
       node_algorithms::unlink(to_erase);
       this->priv_size_traits().decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
-      disposer(get_real_value_traits().to_value_ptr(to_erase));
+      disposer(this->get_real_value_traits().to_value_ptr(to_erase));
       return i;
    }
 
@@ -708,10 +656,17 @@ class list_impl
    template <class Disposer>
    iterator erase_and_dispose(iterator b, iterator e, Disposer disposer)
    {
-      while(b != e){
-         b = this->erase_and_dispose(b, disposer);
+      node_ptr bp(b.pointed_node()), ep(e.pointed_node());
+      node_algorithms::unlink(bp, ep);
+      while(bp != ep){
+         node_ptr to_erase(bp);
+         bp = node_traits::get_next(bp);
+         if(safemode_or_autounlink)
+            node_algorithms::init(to_erase);
+         disposer(get_real_value_traits().to_value_ptr(to_erase));
+         this->priv_size_traits().decrement();
       }
-      return b;
+      return e;
    }
 
    //! <b>Effects</b>: Erases all the elements of the container.
@@ -726,10 +681,10 @@ class list_impl
    void clear()
    {
       if(safemode_or_autounlink){
-         this->erase(this->begin(), this->end()); 
+         this->clear_and_dispose(detail::null_disposer()); 
       }
       else{
-         node_algorithms::init(this->get_root_node());
+         node_algorithms::init_header(this->get_root_node());
          this->priv_size_traits().set_size(size_type(0));
       }
    }
@@ -747,7 +702,18 @@ class list_impl
    //! <b>Note</b>: Invalidates the iterators to the erased elements.
    template <class Disposer>
    void clear_and_dispose(Disposer disposer)
-   {  this->erase_and_dispose(this->begin(), this->end(), disposer);   }
+   {
+      iterator it(this->begin()), itend(this->end());
+      while(it != itend){
+         node_ptr to_erase(it.pointed_node());
+         ++it;
+         if(safemode_or_autounlink)
+            node_algorithms::init(to_erase);
+         disposer(get_real_value_traits().to_value_ptr(to_erase));
+      }
+      node_algorithms::init_header(this->get_root_node());
+      this->priv_size_traits().set_size(0);
+   }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -792,9 +758,9 @@ class list_impl
    //! <b>Note</b>: Does not affect the validity of iterators and references.
    iterator insert(iterator p, reference value)
    {
-      node_ptr to_insert = get_real_value_traits().to_node_ptr(value);
+      node_ptr to_insert = this->get_real_value_traits().to_node_ptr(value);
       if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(to_insert));
+         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::inited(to_insert));
       node_algorithms::link_before(p.pointed_node(), to_insert);
       this->priv_size_traits().increment();
       return iterator(to_insert, this);
@@ -921,19 +887,10 @@ class list_impl
    //!   list. Iterators of this list and all the references are not invalidated.
    void splice(iterator p, list_impl&x, iterator start, iterator end)
    {
-      if(start != end){
-         if(constant_time_size){
-            size_traits &thist = this->priv_size_traits();
-            size_traits &xt = x.priv_size_traits();
-            size_type increment = std::distance(start, end);
-            node_algorithms::transfer(p.pointed_node(), start.pointed_node(), end.pointed_node());
-            thist.set_size(thist.get_size() + increment);
-            xt.set_size(xt.get_size() - increment);
-         }
-         else{
-            node_algorithms::transfer(p.pointed_node(), start.pointed_node(), end.pointed_node());
-         }
-      }
+      if(constant_time_size)
+         this->splice(p, x, start, end, std::distance(start, end));
+      else
+         this->splice(p, x, start, end, 1);//distance is a dummy value
    }
 
    //! <b>Requires</b>: p must be a valid iterator of *this.
@@ -978,7 +935,7 @@ class list_impl
    //! <b>Complexity</b>: The number of comparisons is approximately N log N, where N
    //!   is the list's size.
    void sort() 
-   {  sort(std::less<value_type>());  }
+   {  this->sort(std::less<value_type>());  }
 
    //! <b>Requires</b>: p must be a comparison function that induces a strict weak ordering
    //! 
@@ -1031,7 +988,7 @@ class list_impl
    //! 
    //! <b>Note</b>: Iterators and references are not invalidated
    void merge(list_impl& x)
-   { merge(x, std::less<value_type>()); }
+   { this->merge(x, std::less<value_type>()); }
 
    //! <b>Requires</b>: p must be a comparison function that induces a strict weak
    //!   ordering and both *this and x must be sorted according to that ordering
@@ -1050,9 +1007,9 @@ class list_impl
    template<class Predicate>
    void merge(list_impl& x, Predicate p)
    {
-      iterator e = this->end();
-      iterator bx = x.begin();
-      iterator ex = x.end();
+      iterator e(this->end());
+      iterator bx(x.begin());
+      iterator ex(x.end());
 
       for (iterator b = this->begin(); b != e; ++b) {
          size_type n(0);
@@ -1087,7 +1044,7 @@ class list_impl
    //! <b>Note</b>: The relative order of elements that are not removed is unchanged,
    //!   and iterators to elements that are not removed remain valid.
    void remove(const_reference value)
-   {  remove_if(detail::equal_to_value<const_reference>(value));  }
+   {  this->remove_if(detail::equal_to_value<const_reference>(value));  }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -1102,7 +1059,7 @@ class list_impl
    //!   and iterators to elements that are not removed remain valid.
    template<class Disposer>
    void remove_and_dispose(const_reference value, Disposer disposer)
-   {  remove_and_dispose_if(detail::equal_to_value<const_reference>(value), disposer);  }
+   {  this->remove_and_dispose_if(detail::equal_to_value<const_reference>(value), disposer);  }
 
    //! <b>Effects</b>: Removes all the elements for which a specified
    //!   predicate is satisfied. No destructors are called.
@@ -1115,7 +1072,7 @@ class list_impl
    //!   and iterators to elements that are not removed remain valid.
    template<class Pred>
    void remove_if(Pred pred)
-   {  remove_and_dispose_if(pred, detail::null_disposer());   }
+   {  this->remove_and_dispose_if(pred, detail::null_disposer());   }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -1132,17 +1089,15 @@ class list_impl
    template<class Pred, class Disposer>
    void remove_and_dispose_if(Pred pred, Disposer disposer)
    {
-      iterator first = begin();
-      iterator last = end();
-      while(first != last) {
-         iterator next = first;
-         ++next;
-         if(pred(*first)){
-            pointer p = first.operator->();
-            this->erase(first);
-            disposer(p);
+      iterator cur(this->begin());
+      iterator last(this->end());
+      while(cur != last) {
+         if(pred(*cur)){
+            cur = this->erase_and_dispose(cur, disposer);
          }
-         first = next;
+         else{
+            ++cur;
+         }
       }
    }
 
@@ -1156,7 +1111,7 @@ class list_impl
    //! <b>Note</b>: The relative order of elements that are not removed is unchanged,
    //!   and iterators to elements that are not removed remain valid.
    void unique()
-   {  unique_and_dispose(std::equal_to<value_type>(), detail::null_disposer());  }
+   {  this->unique_and_dispose(std::equal_to<value_type>(), detail::null_disposer());  }
 
    //! <b>Effects</b>: Removes adjacent duplicate elements or adjacent 
    //!   elements that satisfy some binary predicate from the list.
@@ -1170,7 +1125,7 @@ class list_impl
    //!   and iterators to elements that are not removed remain valid.
    template<class BinaryPredicate>
    void unique(BinaryPredicate pred)
-   {  unique_and_dispose(pred, detail::null_disposer());  }
+   {  this->unique_and_dispose(pred, detail::null_disposer());  }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -1186,7 +1141,7 @@ class list_impl
    //!   and iterators to elements that are not removed remain valid.
    template<class Disposer>
    void unique_and_dispose(Disposer disposer)
-   {  unique_and_dispose(std::equal_to<value_type>(), disposer);  }
+   {  this->unique_and_dispose(std::equal_to<value_type>(), disposer);  }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -1203,18 +1158,19 @@ class list_impl
    template<class BinaryPredicate, class Disposer>
    void unique_and_dispose(BinaryPredicate pred, Disposer disposer)
    {
-      if(!this->empty()){
-         iterator first = begin();
-         iterator after = first;
+      iterator itend(this->end());
+      iterator cur(this->begin());
+
+      if(cur != itend){
+         iterator after(cur);
          ++after;
-         while(after != this->end()){
-            if(pred(*first, *after)){
-               pointer p = after.operator->();
-               after = erase(after);
-               disposer(p);
+         while(after != itend){
+            if(pred(*cur, *after)){
+               after = this->erase_and_dispose(after, disposer);
             }
             else{
-               first = after++;
+               cur = after;
+               ++after;
             }
          }
       }
@@ -1234,7 +1190,7 @@ class list_impl
    static iterator s_iterator_to(reference value)
    {
       BOOST_STATIC_ASSERT((!stateful_value_traits));
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(value)));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(value)));
       return iterator(real_value_traits::to_node_ptr(value), 0);
    }
 
@@ -1252,7 +1208,7 @@ class list_impl
    static const_iterator s_iterator_to(const_reference value) 
    {
       BOOST_STATIC_ASSERT((!stateful_value_traits));
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(const_cast<reference> (value))));
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(const_cast<reference> (value))));
       return const_iterator(real_value_traits::to_node_ptr(const_cast<reference> (value)), 0);
    }
 
@@ -1266,8 +1222,8 @@ class list_impl
    //! 
    //! <b>Note</b>: Iterators and references are not invalidated.
    iterator iterator_to(reference value)
-   { 
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(value)));
+   {
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(value)));
       return iterator(real_value_traits::to_node_ptr(value), this);
    }
 
@@ -1281,8 +1237,8 @@ class list_impl
    //! 
    //! <b>Note</b>: Iterators and references are not invalidated.
    const_iterator iterator_to(const_reference value) const
-   { 
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::unique(real_value_traits::to_node_ptr(const_cast<reference> (value))));
+   {
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(!node_algorithms::inited(real_value_traits::to_node_ptr(const_cast<reference> (value))));
       return const_iterator(real_value_traits::to_node_ptr(const_cast<reference> (value)), this);
    }
 

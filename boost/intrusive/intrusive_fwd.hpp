@@ -69,6 +69,8 @@ template
    , class O1  = none
    , class O2  = none
    , class O3  = none
+   , class O4  = none
+   , class O5  = none
    >
 class slist;
 

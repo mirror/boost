@@ -24,24 +24,28 @@
 
 using namespace boost::intrusive;
 
-template<class ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
 struct test_slist 
 {
    typedef typename ValueTraits::value_type value_type;
-   static void test_all (std::vector<value_type>& values);
-   static void test_front_back (std::vector<value_type>& values);
+   static void test_all(std::vector<value_type>& values);
+   static void test_front(std::vector<value_type>& values);
+   static void test_back(std::vector<value_type>& values, detail::bool_<true>);
+   static void test_back(std::vector<value_type>& values, detail::bool_<false>);
    static void test_sort(std::vector<value_type>& values);
-   static void test_merge (std::vector<value_type>& values);
+   static void test_merge(std::vector<value_type>& values);
+   static void test_remove_unique(std::vector<value_type>& values);
    static void test_insert(std::vector<value_type>& values);
    static void test_shift(std::vector<value_type>& values);
    static void test_swap(std::vector<value_type>& values);
-   static void test_slow_insert (std::vector<value_type>& values);
-   static void test_clone (std::vector<value_type>& values);
-   static void test_container_from_end(std::vector<value_type> &values);
+   static void test_slow_insert(std::vector<value_type>& values);
+   static void test_clone(std::vector<value_type>& values);
+   static void test_container_from_end(std::vector<value_type> &, detail::bool_<true>){}
+   static void test_container_from_end(std::vector<value_type> &values, detail::bool_<false>);
 };
 
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_all (std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -50,6 +54,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    {
       list_type list(values.begin(), values.end());
@@ -58,21 +64,23 @@ void test_slist<ValueTraits>
       list.insert(list.end(), values.begin(), values.end());
       test::test_sequence_container(list, values);
    }
-   test_front_back (values);
+   test_front(values);
+   test_back(values, detail::bool_<CacheLast>());
    test_sort(values);
    test_merge (values);
+   test_remove_unique(values);
    test_insert(values);
    test_shift(values);
    test_slow_insert (values);
    test_swap(values);
    test_clone(values);
-   test_container_from_end(values);
+   test_container_from_end(values, detail::bool_<Linear>());
 }
 
 //test: push_front, pop_front, front, size, empty:
-template<class ValueTraits>
-void test_slist<ValueTraits>
-   ::test_front_back (std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
+   ::test_front(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef slist
@@ -80,6 +88,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    list_type testlist;
    BOOST_TEST (testlist.empty());
@@ -98,11 +108,45 @@ void test_slist<ValueTraits>
      
    testlist.pop_front();
    BOOST_TEST (testlist.empty());
-}  
+}
+
+//test: push_front, pop_front, front, size, empty:
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
+   ::test_back(std::vector<typename ValueTraits::value_type>& values, detail::bool_<true>)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef slist
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
+      > list_type;
+   list_type testlist;
+   BOOST_TEST (testlist.empty());
+
+   testlist.push_back (values[0]);
+   BOOST_TEST (testlist.size() == 1);
+   BOOST_TEST (&testlist.front() == &values[0]);
+   BOOST_TEST (&testlist.back() == &values[0]);
+   testlist.push_back(values[1]);
+   BOOST_TEST(*testlist.previous(testlist.end()) == values[1]);
+   BOOST_TEST (&testlist.front() == &values[0]);
+   BOOST_TEST (&testlist.back() == &values[1]);
+}
+
+//test: push_front, pop_front, front, size, empty:
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
+   ::test_back(std::vector<typename ValueTraits::value_type>&, detail::bool_<false>)
+{}
+
 
 //test: merge due to error in merge implementation:
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_merge (std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -111,6 +155,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    list_type testlist1, testlist2;
    testlist1.push_front (values[0]);
@@ -123,9 +169,42 @@ void test_slist<ValueTraits>
    TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );
 }
 
+//test: merge due to error in merge implementation:
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
+   ::test_remove_unique (std::vector<typename ValueTraits::value_type>& values)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef slist
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
+      > list_type;
+   {
+      list_type list(values.begin(), values.end());
+      list.remove_if(is_even());
+      int init_values [] = { 1, 3, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, list.begin() );
+   }
+   {
+      std::vector<typename ValueTraits::value_type> values2(values);
+      list_type list(values.begin(), values.end());
+      list.insert_after(list.before_begin(), values2.begin(), values2.end());
+      list.sort();
+      int init_values [] = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, list.begin() );
+      list.unique();
+      int init_values2 [] = { 1, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values2, list.begin() );
+   }
+}
+
 //test: constructor, iterator, sort, reverse:
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_sort(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -134,6 +213,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    list_type testlist (values.begin(), values.end());
 
@@ -145,13 +226,13 @@ void test_slist<ValueTraits>
       TEST_INTRUSIVE_SEQUENCE( init_values, testlist.begin() );  }
 
    testlist.reverse();
-   {  int init_values [] = { 5, 3, 1, 4, 2, };
+   {  int init_values [] = { 5, 3, 1, 4, 2 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testlist.begin() );  }
 }  
   
 //test: assign, insert_after, const_iterator, erase_after, s_iterator_to, previous:
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_insert(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -160,6 +241,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    list_type testlist;
    testlist.assign (&values[0] + 2, &values[0] + 5);
@@ -189,8 +272,8 @@ void test_slist<ValueTraits>
 }
 
 //test: insert, const_iterator, erase, siterator_to:
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_slow_insert (std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -199,6 +282,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    list_type testlist;
    testlist.push_front (values[4]);
@@ -232,8 +317,8 @@ void test_slist<ValueTraits>
    BOOST_TEST (testlist.front().value_ == 3);
 }  
 
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_shift(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -242,6 +327,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    list_type testlist;
 
@@ -249,33 +336,36 @@ void test_slist<ValueTraits>
    std::vector<int> expected_values(num_values);
 
    //Shift forward all possible positions 3 times
-   for(int i = 0; i < num_values*3; ++i){
-      testlist.assign(values.begin(), values.end());
-      testlist.shift_forward(i);
-      for(int j = 0; j < num_values; ++j){
-         expected_values[(j + num_values - i%num_values) % num_values] = (j + 1);
+   for(int s = 1; s <= num_values; ++s){
+      expected_values.resize(s);
+      for(int i = 0; i < s*3; ++i){
+         testlist.insert_after(testlist.before_begin(), &values[0], &values[0] + s);
+         testlist.shift_forward(i);
+         for(int j = 0; j < s; ++j){
+            expected_values[(j + s - i%s) % s] = (j + 1);
+         }
+
+         TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin())
+         testlist.clear();
       }
 
-      TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin())
-      testlist.clear();
-   }
+      //Shift backwards all possible positions
+      for(int i = 0; i < s*3; ++i){
+         testlist.insert_after(testlist.before_begin(), &values[0], &values[0] + s);
+         testlist.shift_backwards(i);
+         for(int j = 0; j < s; ++j){
+            expected_values[(j + i) % s] = (j + 1);
+         }
 
-   //Shift backwards all possible positions
-   for(int i = 0; i < num_values*3; ++i){
-      testlist.assign(values.begin(), values.end());
-      testlist.shift_backwards(i);
-      for(int j = 0; j < num_values; ++j){
-         expected_values[(j + i) % num_values] = (j + 1);
+         TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin())
+         testlist.clear();
       }
-
-      TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin())
-      testlist.clear();
    }
 }  
 
 //test: insert_after (seq-version), swap, splice_after:
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_swap(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -284,11 +374,13 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    {
       list_type testlist1 (&values[0], &values[0] + 2);
       list_type testlist2;
-      testlist2.insert_after (testlist2.end(), &values[0] + 2, &values[0] + 5);
+      testlist2.insert_after (testlist2.before_begin(), &values[0] + 2, &values[0] + 5);
       testlist1.swap(testlist2);
       {  int init_values [] = { 3, 4, 5 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
@@ -299,19 +391,20 @@ void test_slist<ValueTraits>
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
       BOOST_TEST (testlist1.empty());
 
-      testlist1.splice_after (testlist1.end(), testlist2, ++testlist2.begin());
+      testlist1.splice_after (testlist1.before_begin(), testlist2, ++testlist2.begin());
       {  int init_values [] = { 4 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
       {  int init_values [] = { 1, 3, 5, 2 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
 
       testlist1.splice_after (testlist1.begin(), testlist2, 
-                              testlist2.end(), ++++testlist2.begin());
+                              testlist2.before_begin(), ++++testlist2.begin());
       {  int init_values [] = { 4, 1, 3, 5 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
       {  int init_values [] = { 2 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
    }
+   if(!list_type::linear)
    {
       list_type testlist1 (&values[0], &values[0] + 2);
       list_type testlist2 (&values[0] + 3, &values[0] + 5);
@@ -326,10 +419,32 @@ void test_slist<ValueTraits>
       {  int init_values [] = { 4, 3 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
    }
+   if(!list_type::linear)
+   {
+      list_type testlist1 (&values[0], &values[1]);
+
+      {  int init_values [] = { 1 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+
+      values[1].swap_nodes(values[2]);
+
+      {  int init_values [] = { 1 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+
+      values[0].swap_nodes(values[2]);
+
+      {  int init_values [] = { 3 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+
+      values[0].swap_nodes(values[2]);
+
+      {  int init_values [] = { 1 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+   }
 }  
 
-template<class ValueTraits>
-void test_slist<ValueTraits>
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
    ::test_clone(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -338,6 +453,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
 
       list_type testlist1 (&values[0], &values[0] + values.size());
@@ -349,9 +466,10 @@ void test_slist<ValueTraits>
       BOOST_TEST (testlist2.empty());
 }
 
-template<class ValueTraits>
-void test_slist<ValueTraits>
-   ::test_container_from_end(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool Linear, bool CacheLast>
+void test_slist<ValueTraits, Linear, CacheLast>
+   ::test_container_from_end(std::vector<typename ValueTraits::value_type>& values
+                            ,detail::bool_<false>)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef slist
@@ -359,6 +477,8 @@ void test_slist<ValueTraits>
       , value_traits<ValueTraits>
       , size_type<std::size_t>
       , constant_time_size<value_type::constant_time_size>
+      , linear<Linear>
+      , cache_last<CacheLast>
       > list_type;
    list_type testlist1 (&values[0], &values[0] + values.size());
    BOOST_TEST (testlist1 == list_type::container_from_end_iterator(testlist1.end()));
@@ -380,6 +500,8 @@ class test_main_template
                   < value_type
                   , typename value_type::slist_base_hook_t
                   >::type
+                 , false
+                 , false
                 >::test_all(data);
       test_slist < typename detail::get_member_value_traits
                   < value_type
@@ -388,8 +510,68 @@ class test_main_template
                                , &value_type::slist_node_
                                >
                   >::type
+                 , false
+                 , false
                 >::test_all(data);
 
+      //Now linear slists
+      test_slist < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::slist_base_hook_t
+                  >::type
+                 , true
+                 , false
+                >::test_all(data);
+
+      test_slist < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::slist_member_hook_t
+                               , &value_type::slist_node_
+                               >
+                  >::type
+                 , true
+                 , false
+                >::test_all(data);
+
+      //Now the same but caching the last node
+      test_slist < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::slist_base_hook_t
+                  >::type
+                 , false
+                 , true
+                >::test_all(data);
+      test_slist < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::slist_member_hook_t
+                               , &value_type::slist_node_
+                               >
+                  >::type
+                 , false
+                 , true
+                >::test_all(data);
+
+      //Now linear slists
+      test_slist < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::slist_base_hook_t
+                  >::type
+                 , true
+                 , true
+                >::test_all(data);
+
+      test_slist < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::slist_member_hook_t
+                               , &value_type::slist_node_
+                               >
+                  >::type
+                 , true
+                 , true
+                >::test_all(data);
       return 0;
    }
 };
@@ -409,6 +591,8 @@ class test_main_template<VoidPointer, false>
                   < value_type
                   , typename value_type::slist_base_hook_t
                   >::type
+                 , false
+                 , false
                 >::test_all(data);
 
       test_slist < typename detail::get_member_value_traits
@@ -418,12 +602,16 @@ class test_main_template<VoidPointer, false>
                                , &value_type::slist_node_
                                >
                   >::type
+                 , false
+                 , false
                 >::test_all(data);
 
       test_slist < typename detail::get_base_value_traits
                   < value_type
                   , typename value_type::slist_auto_base_hook_t
                   >::type
+                 , false
+                 , false
                 >::test_all(data);
 
       test_slist < typename detail::get_member_value_traits
@@ -433,6 +621,66 @@ class test_main_template<VoidPointer, false>
                                , &value_type::slist_auto_node_
                                >
                   >::type
+                 , false
+                 , false
+                >::test_all(data);
+
+      test_slist < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::slist_base_hook_t
+                  >::type
+                 , true
+                 , false
+                >::test_all(data);
+
+      test_slist < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::slist_member_hook_t
+                               , &value_type::slist_node_
+                               >
+                  >::type
+                 , true
+                 , false
+                >::test_all(data);
+
+      //Now cache last
+      test_slist < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::slist_base_hook_t
+                  >::type
+                 , false
+                 , true
+                >::test_all(data);
+
+      test_slist < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::slist_member_hook_t
+                               , &value_type::slist_node_
+                               >
+                  >::type
+                 , false
+                 , true
+                >::test_all(data);
+
+      test_slist < typename detail::get_base_value_traits
+                  < value_type
+                  , typename value_type::slist_base_hook_t
+                  >::type
+                 , true
+                 , true
+                >::test_all(data);
+
+      test_slist < typename detail::get_member_value_traits
+                  < value_type
+                  , member_hook< value_type
+                               , typename value_type::slist_member_hook_t
+                               , &value_type::slist_node_
+                               >
+                  >::type
+                 , true
+                 , true
                 >::test_all(data);
       return 0;
    }

@@ -31,6 +31,8 @@ struct test_list
    static void test_all(std::vector<value_type>& values);
    static void test_front_back(std::vector<value_type>& values);
    static void test_sort(std::vector<value_type>& values);
+   static void test_merge(std::vector<value_type>& values);
+   static void test_remove_unique(std::vector<value_type>& values);
    static void test_insert(std::vector<value_type>& values);
    static void test_shift(std::vector<value_type>& values);
    static void test_swap(std::vector<value_type>& values);
@@ -58,19 +60,13 @@ void test_list<ValueTraits>::test_all(std::vector<typename ValueTraits::value_ty
 
    test_front_back(values);
    test_sort(values);
+   test_merge(values);
+   test_remove_unique(values);
    test_insert(values);
    test_shift(values);
    test_swap(values);
    test_clone(values);
    test_container_from_end(values);
-/*
-   const char *list_name = typeid(list_type).name();
-   std::cout << list_name << std::endl << strlen(list_name) << std::endl;
-   const char *value_t = typeid(typename list_type::value_traits).name();
-   std::cout << value_t << std::endl << strlen(value_t) << std::endl;
-   const char *list_it_name = typeid(typename list_type::iterator).name();
-   std::cout << list_it_name  << std::endl << strlen(list_it_name ) << std::endl;
-*/
 }
 
 //test: push_front, pop_front, push_back, pop_back, front, back, size, empty:
@@ -134,6 +130,60 @@ void test_list<ValueTraits>
    {  int init_values [] = { 5, 3, 1, 4, 2 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testlist.begin() );  }
 }
+
+//test: merge due to error in merge implementation:
+template<class ValueTraits>
+void test_list<ValueTraits>
+   ::test_remove_unique (std::vector<typename ValueTraits::value_type>& values)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
+      > list_type;
+   {
+      list_type list(values.begin(), values.end());
+      list.remove_if(is_even());
+      int init_values [] = { 1, 3, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, list.begin() );
+   }
+   {
+      std::vector<typename ValueTraits::value_type> values2(values);
+      list_type list(values.begin(), values.end());
+      list.insert(list.end(), values2.begin(), values2.end());
+      list.sort();
+      int init_values [] = { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, list.begin() );
+      list.unique();
+      int init_values2 [] = { 1, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values2, list.begin() );
+   }
+}
+
+//test: merge due to error in merge implementation:
+template<class ValueTraits>
+void test_list<ValueTraits>
+   ::test_merge (std::vector<typename ValueTraits::value_type>& values)
+{
+   typedef typename ValueTraits::value_type value_type;
+   typedef list
+      < value_type
+      , value_traits<ValueTraits>
+      , size_type<std::size_t>
+      , constant_time_size<value_type::constant_time_size>
+      > list_type;
+   list_type testlist1, testlist2;
+   testlist1.push_front (values[0]);
+   testlist2.push_front (values[4]);
+   testlist2.push_front (values[3]);
+   testlist2.push_front (values[2]);
+   testlist1.merge (testlist2);
+
+   int init_values [] = { 1, 3, 4, 5 };
+   TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );
+}
   
 //test: assign, insert, const_iterator, const_reverse_iterator, erase, s_iterator_to:
 template<class ValueTraits>
@@ -194,26 +244,29 @@ void test_list<ValueTraits>
    const int num_values = (int)values.size();
    std::vector<int> expected_values(num_values);
 
-   //Shift forward all possible positions 3 times
-   for(int i = 0; i < num_values*3; ++i){
-      testlist.assign(values.begin(), values.end());
-      testlist.shift_forward(i);
-      for(int j = 0; j < num_values; ++j){
-         expected_values[(j + num_values - i%num_values) % num_values] = (j + 1);
+   for(int s = 1; s <= num_values; ++s){
+      expected_values.resize(s);
+      //Shift forward all possible positions 3 times
+      for(int i = 0; i < s*3; ++i){
+         testlist.insert(testlist.begin(), &values[0], &values[0] + s);
+         testlist.shift_forward(i);
+         for(int j = 0; j < s; ++j){
+            expected_values[(j + s - i%s) % s] = (j + 1);
+         }
+         TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin());
+         testlist.clear();
       }
-      TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin());
-      testlist.clear();
-   }
 
-   //Shift backwards all possible positions
-   for(int i = 0; i < num_values*3; ++i){
-      testlist.assign(values.begin(), values.end());
-      testlist.shift_backwards(i);
-      for(int j = 0; j < num_values; ++j){
-         expected_values[(j + i) % num_values] = (j + 1);
+      //Shift backwards all possible positions
+      for(int i = 0; i < s*3; ++i){
+         testlist.insert(testlist.begin(), &values[0], &values[0] + s);
+         testlist.shift_backwards(i);
+         for(int j = 0; j < s; ++j){
+            expected_values[(j + i) % s] = (j + 1);
+         }
+         TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin());
+         testlist.clear();
       }
-      TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin());
-      testlist.clear();
    }
 } 
 
@@ -278,6 +331,28 @@ void test_list<ValueTraits>
       {  int init_values [] = { 4, 3 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
    }
+   {
+      list_type testlist1 (&values[0], &values[1]);
+
+      {  int init_values [] = { 1 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+
+      values[1].swap_nodes(values[2]);
+
+      {  int init_values [] = { 1 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+
+      values[0].swap_nodes(values[2]);
+
+      {  int init_values [] = { 3 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+
+      values[0].swap_nodes(values[2]);
+
+      {  int init_values [] = { 1 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+   }
+
 }
 
 template<class ValueTraits>
