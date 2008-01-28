@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<concept name="PrimitiveTransform" category="utility">
+<concept name="Transform" category="utility">
   <!--
   Copyright 2008 Eric Niebler
 
@@ -7,7 +7,7 @@
   Software License, Version 1.0. (See accompanying
   file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   -->
-  <param name="Fn" role="primitive-transform-type" />
+  <param name="Tn" role="transform-type" />
   <param name="Expr" role="expression-type" />
   <param name="State" role="state-type" />
   <param name="Visitor" role="visitor-type" />
@@ -17,18 +17,11 @@
   </models-sentence>
 
   <description>
-    <para>A PrimitiveTransform is class type that
-    has an overloaded function call operator and 
-    uses a narrow subset of the TR1.ResultOf protocol
-    for return type calculation. It takes three
-    parameters: expression, state and visitor.</para>
+    <para>
+      A Transform is a PrimitiveTransform, a CallableTransform
+      or an ObjectTransform.
+    </para>
   </description>
-
-  <notation variables="fn">
-    <sample-value>
-      <type name="Fn" />
-    </sample-value>
-  </notation>
 
   <notation variables="expr">
     <sample-value>
@@ -50,21 +43,17 @@
 
   <associated-type name="result_type">
     <get-member-type name="type">
-      <apply-template name="typename Fn::template result">
-        <apply-function name="Fn">
-          <type name="Expr"/>
-          <type name="State"/>
-          <type name="Visitor"/>
-        </apply-function>
+      <apply-template name="boost::result_of">
+        <type name="when&lt; _, Tn &gt;(Expr, State, Visitor)"/>
       </apply-template>
     </get-member-type>
     <description>
-      <simpara>The return type of the overloaded function call operator.</simpara>
+      <simpara>The result of applying the Transform.</simpara>
     </description>
   </associated-type>
 
-  <valid-expression name="Function Call">
-    <apply-function name="fn">
+  <valid-expression name="Apply Transform">
+    <apply-function name="when&lt; _, Tn &gt;()">
       <sample-value>
         <type name="Expr" />
       </sample-value>
@@ -84,7 +73,7 @@
   </valid-expression>
 
   <example-model>
-    <type name="boost::proto::transform::arg_c&lt; 0 &gt;" />
+    <type name="boost::proto::transform::arg(boost::proto::transform::left)" />
   </example-model>
 
 </concept>

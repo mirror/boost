@@ -40,14 +40,14 @@ essentially calls `proto::arg()` on the current expression.
 to be constructing a temporary object in place. In fact, it is a 
 /function type/. Since `terminal<long>::type` and `_arg` are types,
 `terminal<long>::type(_arg)` is actually the type of a function that takes 
-`_arg` as a parameter as returns `terminal<long>::type`. That is immaterial;
+`_arg` as a parameter and returns `terminal<long>::type`. That is immaterial;
 there is no such function in reality. Rather, Proto interprets this function
 type as a transform, the effect of which is described above. The resemblance
 to an in-place construction of a temporary object is intentional. It is a
 concise and natural notation for specifying transforms. Proto transforms use
 function types extensively, as we'll see.]
 
-A grammar decorated with transforms is a function object which takes three
+A grammar decorated with transforms is a function object that takes three
 parameters:
 
 * `expr`    -- the Proto expression to transform

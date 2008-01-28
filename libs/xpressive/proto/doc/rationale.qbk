@@ -24,4 +24,48 @@ misused that way.
 
 [endsect]
 
+[section:result_of Proto Transforms and the Restricted ResultOf Protocol]
+
+All Proto primitive transforms make use of a variant of the TR1 ResultOf
+protocol for computing the type of the transform's return value. Such
+transforms must have a nested `result<>` template (not a nested `result_type`
+typedef) which takes exactly three parameter types. That is, it must be
+defined as:
+
+    template<typename Sig> struct result {};
+    
+    template<typename This, typename Expr, typename State, typename Visitor>
+    struct result<This(Expr, State, Visitor)>
+    {
+        typedef ... type;
+    };
+
+In the above, `Expr`, `State`, and `Visitor` are assumed by Proto to be
+non-cv-qualified non-reference types. The implication is that for some
+Proto transform `Tr`, some `result_of<>` instantiations work while others
+don't. See below.
+
+    // ERROR, doesn't work:
+    boost::result_of<Tr(Expr const &, State const &, Visitor &)>::type
+    
+    // OK, works:
+    boost::result_of<Tr(Expr, State, Visitor)>::type
+
+The reason it is done this way is for mostly compile-time performance. Full
+compliance with the TR1 ResultOf protocol incurs a not insigninficant penalty
+at compile time. Metaprogramming tricks are needed to first detect a nested
+`result_type` typedef if it exists. And each nested `result<>` template
+would need to be coded specially to handle references and cv-qualifiers, which
+incurs many instantiations of `remove_reference<>` and `remove_cv<>`. In 
+private testing, this was found to have a measurable impact on compile-time 
+performance in the order of 10-15%, which was deemed unacceptable.
+
+The restricted protocol improves compile times while remaiming largely
+compatible with TR1's `result_of<>`. As a side benefit, it makes
+Proto's primitive transforms easier to implement, since the user need not
+worry about stripping references and cv-qualification in their nested
+`result<>` templates.
+
+[endsect]
+
 [endsect]
