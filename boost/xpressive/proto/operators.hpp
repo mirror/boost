@@ -119,7 +119,7 @@ namespace boost { namespace proto
         template<typename Domain, typename Trait, typename Arg, typename Expr>
         struct enable_unary
           : boost::enable_if<
-                boost::mpl::and_<Trait, boost::proto::matches<Expr, typename Domain::grammar> >
+                boost::mpl::and_<Trait, boost::proto::matches<Expr, typename Domain::proto_grammar> >
               , Expr
             >
         {};
@@ -129,7 +129,7 @@ namespace boost { namespace proto
           : boost::enable_if<
                 boost::mpl::and_<
                     Trait
-                  , boost::proto::matches<Expr, typename domain_of<Arg>::type::grammar>
+                  , boost::proto::matches<Expr, typename domain_of<Arg>::type::proto_grammar>
                 >
               , Expr
             >
@@ -145,7 +145,7 @@ namespace boost { namespace proto
           : boost::enable_if<
                 boost::mpl::and_<
                     mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
-                  , boost::proto::matches<Expr, typename Domain::grammar>
+                  , boost::proto::matches<Expr, typename Domain::proto_grammar>
                 >
               , Expr
             >
@@ -156,7 +156,7 @@ namespace boost { namespace proto
           : boost::enable_if<
                 boost::mpl::and_<
                     mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
-                  , boost::proto::matches<Expr, typename deduce_domain_<typename domain_of<Arg1>::type, Arg2>::type::grammar>
+                  , boost::proto::matches<Expr, typename deduce_domain_<typename domain_of<Arg1>::type, Arg2>::type::proto_grammar>
                 >
               , Expr
             >

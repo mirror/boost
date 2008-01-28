@@ -324,8 +324,8 @@ public:
         return *this;
     }
 
-    /// Returns one plus the number of marked sub-expressions in the regular 
-    /// expression that was matched if *this represents the result of a 
+    /// Returns one plus the number of marked sub-expressions in the regular
+    /// expression that was matched if *this represents the result of a
     /// successful match. Otherwise returns 0.
     size_type size() const
     {

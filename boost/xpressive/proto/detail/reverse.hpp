@@ -2,7 +2,7 @@
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2008 Eric Niebler
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PROTO_DETAIL_FUSION_REVERSE_EAH_01_22_2008
@@ -72,7 +72,7 @@ namespace boost { namespace fusion
                         >::type
                     >::type
                 type;
-    
+
                 static type
                 call(Iterator const& i)
                 {
@@ -91,9 +91,9 @@ namespace boost { namespace fusion
                 typedef typename next_impl<typename first_type::tag>::
                     template apply<first_type>
                 wrapped;
-    
+
                 typedef reverse_view_iterator<typename wrapped::type> type;
-    
+
                 static type
                 call(Iterator const& i)
                 {
@@ -112,9 +112,9 @@ namespace boost { namespace fusion
                 typedef typename prior_impl<typename first_type::tag>::
                     template apply<first_type>
                 wrapped;
-    
+
                 typedef reverse_view_iterator<typename wrapped::type> type;
-    
+
                 static type
                 call(Iterator const& i)
                 {
@@ -146,7 +146,7 @@ namespace boost { namespace fusion
             struct apply
             {
                 typedef reverse_view_iterator<typename Sequence::last_type> type;
-    
+
                 static type
                 call(Sequence const& s)
                 {
@@ -162,7 +162,7 @@ namespace boost { namespace fusion
             struct apply
             {
                 typedef reverse_view_iterator<typename Sequence::first_type> type;
-    
+
                 static type
                 call(Sequence const& s)
                 {

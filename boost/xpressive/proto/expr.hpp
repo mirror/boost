@@ -41,39 +41,40 @@
 
     namespace boost { namespace proto
     {
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_ARG(z, n, data)\
-        typedef typename Args::BOOST_PP_CAT(arg, n) BOOST_PP_CAT(proto_arg, n);\
-        BOOST_PP_CAT(proto_arg, n) BOOST_PP_CAT(arg, n);\
-        /**/
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_VOID(z, n, data)\
-        typedef void BOOST_PP_CAT(proto_arg, n);\
-        /**/
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_AS_OP(z, n, data)\
-        proto::as_arg(BOOST_PP_CAT(a,n))\
-        /**/
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_UNREF_ARG_TYPE(z, n, data)\
-        typename result_of::unref<typename Args::BOOST_PP_CAT(arg, n)>::const_reference\
-        /**/
-
-    /// INTERNAL ONLY
-    ///
-    #define BOOST_PROTO_UNREF_ARG(z, n, data)\
-        proto::unref(this->BOOST_PP_CAT(arg, n))\
-        /**/
 
         namespace detail
         {
+        /// INTERNAL ONLY
+        ///
+        #define BOOST_PROTO_ARG(z, n, data)                                                         \
+            typedef typename Args::BOOST_PP_CAT(arg, n) BOOST_PP_CAT(proto_arg, n);                 \
+            BOOST_PP_CAT(proto_arg, n) BOOST_PP_CAT(arg, n);                                        \
+            /**/
+
+        /// INTERNAL ONLY
+        ///
+        #define BOOST_PROTO_VOID(z, n, data)                                                        \
+            typedef void BOOST_PP_CAT(proto_arg, n);                                                \
+            /**/
+
+        /// INTERNAL ONLY
+        ///
+        #define BOOST_PROTO_AS_OP(z, n, data)                                                       \
+            proto::as_arg(BOOST_PP_CAT(a,n))                                                        \
+            /**/
+
+        /// INTERNAL ONLY
+        ///
+        #define BOOST_PROTO_UNREF_ARG_TYPE(z, n, data)                                              \
+            typename result_of::unref<typename Args::BOOST_PP_CAT(arg, n)>::const_reference         \
+            /**/
+
+        /// INTERNAL ONLY
+        ///
+        #define BOOST_PROTO_UNREF_ARG(z, n, data)                                                   \
+            proto::unref(this->BOOST_PP_CAT(arg, n))                                                \
+            /**/
+
             template<typename Tag, typename Arg>
             struct address_of_hack
             {
@@ -108,6 +109,8 @@
 
         namespace result_of
         {
+            /// \brief A helper metafunction for computing the
+            /// return type of \c proto::expr\<\>::operator().
             template<typename Sig, typename This>
             struct funop;
 
@@ -117,15 +120,15 @@
 
         namespace exprns_
         {
-    #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
-    #include BOOST_PP_ITERATE()
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
+        #include BOOST_PP_ITERATE()
         }
 
-    #undef BOOST_PROTO_ARG
-    #undef BOOST_PROTO_VOID
-    #undef BOOST_PROTO_AS_OP
-    #undef BOOST_PROTO_UNREF_ARG_TYPE
-    #undef BOOST_PROTO_UNREF_ARG
+        #undef BOOST_PROTO_ARG
+        #undef BOOST_PROTO_VOID
+        #undef BOOST_PROTO_AS_OP
+        #undef BOOST_PROTO_UNREF_ARG_TYPE
+        #undef BOOST_PROTO_UNREF_ARG
     }}
 
     #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -140,11 +143,11 @@
     #define IS_TERMINAL 0 == BOOST_PP_ITERATION()
 
         /// \brief Representation of a node in an expression tree.
-        /// 
+        ///
         /// \c proto::expr\<\> is a node in an expression template tree. It
         /// is a container for its children sub-trees. It also serves as
         /// the terminal nodes of the tree.
-        /// 
+        ///
         /// \c Tag is type that represents the operation encoded by
         ///             this expression. It is typically one of the structs
         ///             in the \c boost::proto::tag namespace, but it doesn't
@@ -154,12 +157,15 @@
         ///
         /// \c Args is a type list representing the type of the children
         ///             of this expression. It is an instantiation of one
-        ///             of \c proto::args1\<\>, \c proto::args2\<\>, etc. The 
+        ///             of \c proto::args1\<\>, \c proto::args2\<\>, etc. The
         ///             children types must all themselves be either \c expr\<\>
         ///             or \c proto::ref_\<proto::expr\<\>\>, unless the \c Tag
         ///             type is \c boost::proto::tag::terminal, in which case
-        ///             \c Args must be \c proto::args1\<T\>, where \c T can be any
+        ///             \c Args must be \c proto::args0\<T\>, where \c T can be any
         ///             type.
+        ///
+        /// \c proto::expr\<\> is a valid Fusion random-access sequence, where
+        /// the elements of the sequence are the children expressions.
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {

@@ -2,7 +2,7 @@
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2008 Eric Niebler
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PROTO_DETAIL_FUSION_POP_FRONT_EAH_01_22_2008
@@ -20,13 +20,13 @@ namespace boost { namespace fusion
         template <typename Sequence>
         struct pop_front
         {
-            typedef 
+            typedef
                 range<
                     typename next<
                         typename begin<Sequence>::type
                     >::type
                   , typename end<Sequence>::type
-                > 
+                >
             type;
         };
     }

@@ -74,7 +74,7 @@
 
             void operator ()(Expr &expr, Context &ctx) const
             {
-                BOOST_PP_REPEAT(N, BOOST_PROTO_EVAL_N, ~)                
+                BOOST_PP_REPEAT(N, BOOST_PROTO_EVAL_N, ~)
             }
         };
 

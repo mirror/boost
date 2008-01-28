@@ -148,7 +148,7 @@ namespace boost { namespace xpressive { namespace detail
       : proto::or_<
             proto::terminal<proto::_>
           , proto::comma<proto::_, proto::_>
-          , proto::subscript<proto::terminal<set_initializer>, proto::_> 
+          , proto::subscript<proto::terminal<set_initializer>, proto::_>
           , proto::assign<proto::terminal<set_initializer>, proto::_>
           , proto::assign<proto::terminal<attribute_placeholder<proto::_> >, proto::_>
           , proto::complement<Primitives>

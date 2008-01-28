@@ -68,10 +68,10 @@ namespace boost { namespace proto
 
         struct dont_care;
 
-        template<typename T>
-        struct remove_cv_ref
-          : remove_const<typename remove_reference<T>::type>
-        {};
+        /// INTERNAL ONLY
+        ///
+        #define BOOST_PROTO_UNCVREF(X)                                                              \
+            typename boost::remove_const<typename boost::remove_reference<X>::type>::type
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -422,6 +422,7 @@ namespace boost { namespace proto
         struct left;
         struct right;
         struct unref;
+        struct eval;
         struct deep_copy;
 
         template<typename Domain = default_domain>
@@ -447,7 +448,7 @@ namespace boost { namespace proto
 
         template<typename Tag, typename Domain = deduce_domain>
         struct unfused_expr;
-    
+
         typedef make_expr<tag::terminal>            make_terminal;
         typedef make_expr<tag::posit>               make_posit;
         typedef make_expr<tag::negate>              make_negate;
@@ -640,6 +641,7 @@ namespace boost { namespace proto
     typedef functional::flatten     _flatten;
     typedef functional::pop_front   _pop_front;
     typedef functional::reverse     _reverse;
+    typedef functional::deep_copy   _eval;
     typedef functional::deep_copy   _deep_copy;
 
     template<typename T>

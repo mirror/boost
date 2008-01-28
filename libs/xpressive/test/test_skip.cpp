@@ -25,7 +25,7 @@ void test1()
              (s1= as_xpr('b')) >>
              as_xpr('b') >>
             *as_xpr('c')    // causes backtracking
-        ) >> 
+        ) >>
         "c c";
 
     smatch what;

@@ -368,7 +368,7 @@
             BOOST_PROTO_BINARY_GENERATOR(bitwise_or_assign)
             BOOST_PROTO_BINARY_GENERATOR(bitwise_xor_assign)
             BOOST_PROTO_BINARY_GENERATOR(subscript)
-        
+
         } // namespace op
 
         #undef BOOST_PROTO_UNARY_GENERATOR
@@ -473,7 +473,7 @@
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::arg_c<typename detail::remove_cv_ref<Expr>::type, N>
+                  : result_of::arg_c<BOOST_PROTO_UNCVREF(Expr), N>
                 {};
 
                 template<typename Expr>
@@ -497,7 +497,7 @@
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::arg<typename detail::remove_cv_ref<Expr>::type, N>
+                  : result_of::arg<BOOST_PROTO_UNCVREF(Expr), N>
                 {};
 
                 template<typename Expr>
@@ -520,7 +520,7 @@
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::left<typename detail::remove_cv_ref<Expr>::type>
+                  : result_of::left<BOOST_PROTO_UNCVREF(Expr)>
                 {};
 
                 template<typename Expr>
@@ -543,7 +543,7 @@
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::right<typename detail::remove_cv_ref<Expr>::type>
+                  : result_of::right<BOOST_PROTO_UNCVREF(Expr)>
                 {};
 
                 template<typename Expr>

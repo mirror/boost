@@ -122,7 +122,7 @@ namespace boost { namespace xpressive { namespace detail
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
             // Predicate is check(assertion), where assertion can be
-            // a lambda or a function object. 
+            // a lambda or a function object.
             return this->match_(state, next, proto::matches<Predicate, AssertionFunctor>());
         }
 

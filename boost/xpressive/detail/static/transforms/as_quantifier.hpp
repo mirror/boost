@@ -261,7 +261,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
     struct as_optional
       : or_<
             when<IsMarkerOrRepeater, as_mark_optional<Grammar, Greedy> >
-          , otherwise<as_default_optional<Grammar, Greedy> > 
+          , otherwise<as_default_optional<Grammar, Greedy> >
         >
     {};
 

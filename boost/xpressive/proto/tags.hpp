@@ -20,7 +20,7 @@ namespace boost { namespace proto { namespace tag
     struct terminal {};
 
     /// Tag type for the unary + operator.
-    struct posit {};        
+    struct posit {};
 
     /// Tag type for the unary - operator.
     struct negate {};

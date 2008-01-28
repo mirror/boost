@@ -106,7 +106,7 @@ struct regex_compiler
     ///         represented by the character range.
     /// \pre    InputIter is a model of the InputIterator concept.
     /// \pre    [begin,end) is a valid range.
-    /// \pre    The range of characters specified by [begin,end) contains a 
+    /// \pre    The range of characters specified by [begin,end) contains a
     ///         valid string-based representation of a regular expression.
     /// \throw  regex_error when the range of characters has invalid regular
     ///         expression syntax.

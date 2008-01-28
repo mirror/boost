@@ -152,7 +152,7 @@ public:
     /// \return A basic_regex object corresponding to the regular expression
     ///         represented by the character range.
     /// \pre    [begin,end) is a valid range.
-    /// \pre    The range of characters specified by [begin,end) contains a 
+    /// \pre    The range of characters specified by [begin,end) contains a
     ///         valid string-based representation of a regular expression.
     /// \throw  regex_error when the range of characters has invalid regular
     ///         expression syntax.

@@ -18,6 +18,13 @@ namespace boost { namespace proto
 
     namespace result_of
     {
+        /// \brief A metafunction for calculating the return type
+        /// of \c proto::eval() given a certain \c Expr and \c Context
+        /// types.
+        ///
+        /// \note The types \c Expr and \c Context should not be
+        /// reference types. They may be cv-qualified, but the
+        /// cv-qualification on the \c Context parameter is ignored.
         template<typename Expr, typename Context>
         struct eval
         {
@@ -27,19 +34,34 @@ namespace boost { namespace proto
 
     namespace functional
     {
+        /// \brief A PolymorphicFunctionObject type for
+        /// evaluating a given Proto expression with a given
+        /// context.
         struct eval
         {
+            BOOST_PROTO_CALLABLE()
+
             template<typename Sig>
             struct result {};
 
             template<typename This, typename Expr, typename Context>
             struct result<This(Expr, Context)>
-              : proto::result_of::eval<
-                    typename remove_reference<Expr>::type
-                  , typename remove_reference<Context>::type
-                >
-            {};
+            {
+                typedef
+                    typename proto::result_of::eval<
+                        typename remove_reference<Expr>::type
+                      , typename remove_reference<Context>::type
+                    >::type
+                type;
+            };
 
+            /// \brief Evaluate a given Proto expression with a given
+            /// context.
+            /// \param The Proto expression to evaluate
+            /// \param The context in which the expression should be
+            ///     evaluated.
+            /// \note This function is equivalent to
+            ///     <tt>typename Context::template eval<Expr>()(expr, context)</tt>.
             template<typename Expr, typename Context>
             typename proto::result_of::eval<Expr, Context>::type
             operator ()(Expr &expr, Context &context) const
@@ -47,6 +69,8 @@ namespace boost { namespace proto
                 return typename Context::template eval<Expr>()(expr, context);
             }
 
+            /// \overload
+            ///
             template<typename Expr, typename Context>
             typename proto::result_of::eval<Expr, Context>::type
             operator ()(Expr &expr, Context const &context) const
@@ -56,6 +80,11 @@ namespace boost { namespace proto
         };
     }
 
+    /// \brief A PolymorphicFunctionObject for
+    /// evaluating a given Proto expression with
+    /// a given context.
+    ///
+    /// \sa proto::functional::eval.
     functional::eval const eval = {};
 }}
 

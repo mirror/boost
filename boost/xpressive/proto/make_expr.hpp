@@ -576,7 +576,7 @@
                   : result_of::unpack_expr<
                         Tag
                       , Domain
-                      , typename detail::remove_cv_ref<Sequence>::type
+                      , BOOST_PROTO_UNCVREF(Sequence)
                     >
                 {};
 

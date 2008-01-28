@@ -10,6 +10,8 @@
 #error Do not include this file directly
 #endif
 
+    /// \brief A helper metafunction for computing the
+    /// return type of \c proto::expr\<\>::operator().
     template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A)>
     struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     {
@@ -38,6 +40,8 @@
         }
     };
 
+    /// \brief A helper metafunction for computing the
+    /// return type of \c proto::expr\<\>::operator().
     template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A), typename This>
     struct funop<Expr(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), A)), This>
       : BOOST_PP_CAT(funop, BOOST_PP_ITERATION())<
@@ -50,6 +54,8 @@
         >
     {};
 
+    /// \brief A helper metafunction for computing the
+    /// return type of \c proto::expr\<\>::operator().
     template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A), typename This>
     struct funop<Expr const(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), A)), This>
       : BOOST_PP_CAT(funop, BOOST_PP_ITERATION())<

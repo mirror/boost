@@ -43,6 +43,14 @@
 
         namespace result_of
         {
+            /// \brief A metafunction for calculating the return type
+            /// of \c proto::deep_copy().
+            ///
+            /// A metafunction for calculating the return type
+            /// of \c proto::deep_copy(). The type parameter \c Expr
+            /// should be the type of a Proto expression tree.
+            /// It should not be a reference type, nor should it
+            /// be cv-qualified.
             template<typename Expr>
             struct deep_copy
               : detail::deep_copy_impl<Expr>
@@ -51,6 +59,16 @@
 
         namespace functional
         {
+            /// \brief A PolymorphicFunctionObject type for deep-copying
+            /// Proto expression trees.
+            ///
+            /// A PolymorphicFunctionObject type for deep-copying
+            /// Proto expression trees. When a tree is deep-copied,
+            /// all internal nodes and most terminals held by reference
+            /// are instead held by value.
+            ///
+            /// \attention Terminals of reference-to-array type and of
+            /// reference-to-function type are left unchanged.
             struct deep_copy
             {
                 BOOST_PROTO_CALLABLE()
@@ -60,7 +78,7 @@
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::deep_copy<typename detail::remove_cv_ref<Expr>::type>
+                  : result_of::deep_copy<BOOST_PROTO_UNCVREF(Expr)>
                 {};
 
                 template<typename Expr>
@@ -72,6 +90,18 @@
             };
         }
 
+        /// \brief A PolymorphicFunctionObject for deep-copying
+        /// Proto expression trees.
+        ///
+        /// A PolymorphicFunctionObject for deep-copying
+        /// Proto expression trees. When a tree is deep-copied,
+        /// all internal nodes and most terminals held by reference
+        /// are instead held by value.
+        ///
+        /// \attention Terminals of reference-to-array type and of
+        /// reference-to-function type are left unchanged.
+        ///
+        /// \sa proto::functional::deep_copy.
         functional::deep_copy const deep_copy = {};
 
         namespace detail

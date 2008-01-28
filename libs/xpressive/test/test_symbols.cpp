@@ -60,7 +60,7 @@ void test2()
     map1["foobaz"] = "4";
     map1["foobazbaz"] = "5";
 
-    sregex rx = (a1=map1)[ xp::ref(result) = a1 ] 
+    sregex rx = (a1=map1)[ xp::ref(result) = a1 ]
 		>> *((a1=map1)[ xp::ref(result) += ',', xp::ref(result) += a1 ]);
 
     if(!regex_match(str, rx))
@@ -89,10 +89,10 @@ void test3()
     map1["bop"] = 7890;
 
 #if BOOST_VERSION >= 103500
-    sregex rx = (a1=map1)[ xp::ref(result)->*push_back( a1 ) ] 
+    sregex rx = (a1=map1)[ xp::ref(result)->*push_back( a1 ) ]
         >> *(' ' >> (a1=map1)[ xp::ref(result)->*push_back( a1 ) ]);
 #else
-    sregex rx = (a1=map1)[ push_back(xp::ref(result), a1 ) ] 
+    sregex rx = (a1=map1)[ push_back(xp::ref(result), a1 ) ]
         >> *(' ' >> (a1=map1)[ push_back(xp::ref(result), a1 ) ]);
 #endif
 
@@ -176,15 +176,15 @@ void test5()
     map8["h"] = 8;
     map9["i"] = 9;
 
-    sregex rx = 
+    sregex rx =
            (a1=map1)[ xp::ref(result) += a1 ]
         >> (a2=map2)[ xp::ref(result) += a2 ]
-        >> (a3=map3)[ xp::ref(result) += a3 ] 
-        >> (a4=map4)[ xp::ref(result) += a4 ] 
-        >> (a5=map5)[ xp::ref(result) += a5 ] 
-        >> (a6=map6)[ xp::ref(result) += a6 ] 
-        >> (a7=map7)[ xp::ref(result) += a7 ] 
-        >> (a8=map8)[ xp::ref(result) += a8 ] 
+        >> (a3=map3)[ xp::ref(result) += a3 ]
+        >> (a4=map4)[ xp::ref(result) += a4 ]
+        >> (a5=map5)[ xp::ref(result) += a5 ]
+        >> (a6=map6)[ xp::ref(result) += a6 ]
+        >> (a7=map7)[ xp::ref(result) += a7 ]
+        >> (a8=map8)[ xp::ref(result) += a8 ]
         >> (a9=map9)[ xp::ref(result) += a9 ];
 
     if(!regex_match(str, rx))
@@ -211,7 +211,7 @@ void test6()
     map1["b"] = "3";
     map1["B"] = "4";
     std::string str("a A b B a A b B");
-    sregex rx = icase(a1= map1) [ xp::ref(result) = a1 ] 
+    sregex rx = icase(a1= map1) [ xp::ref(result) = a1 ]
         >> repeat<3>( (' ' >> icase(a1= map1) [ xp::ref(result) += ',', xp::ref(result) += a1 ]) )
         >> repeat<4>( (' ' >>      (a1= map1) [ xp::ref(result) += ',', xp::ref(result) += a1 ]) );
     if(!regex_match(str, rx))

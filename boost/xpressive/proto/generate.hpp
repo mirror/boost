@@ -29,7 +29,7 @@
             template<typename Domain, typename Expr>
             struct generate_if
               : lazy_enable_if<
-                    matches<Expr, typename Domain::grammar>
+                    matches<Expr, typename Domain::proto_grammar>
                   , typename Domain::template apply<Expr>
                 >
             {};

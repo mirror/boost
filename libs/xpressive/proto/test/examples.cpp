@@ -269,7 +269,7 @@ struct MakePair
         function<terminal<make_pair_tag>, terminal<_>, terminal<_> >
       /*<< Return `std::pair<F,S>(f,s)` where `f` and `s` are the
       first and second arguments to the lazy `make_pair_()` function.
-      (This uses `proto:::make<>` under the covers to evaluate the 
+      (This uses `proto:::make<>` under the covers to evaluate the
       transform.)>>*/
       , std::pair<_arg(_arg1), _arg(_arg2)>(_arg(_arg1), _arg(_arg2))
     >
@@ -289,7 +289,7 @@ namespace lazy_make_pair2
     struct make_pair : proto::callable
     {
         template<typename Sig> struct result;
-        
+
         template<typename This, typename First, typename Second>
         struct result<This(First, Second)>
         {
@@ -313,7 +313,7 @@ namespace lazy_make_pair2
             function<terminal<make_pair_tag>, terminal<_>, terminal<_> >
           /*<< Return `make_pair()(f,s)` where `f` and `s` are the
           first and second arguments to the lazy `make_pair_()` function.
-          (This uses `proto:::call<>` under the covers  to evaluate the 
+          (This uses `proto:::call<>` under the covers  to evaluate the
           transform.)>>*/
           , make_pair(_arg(_arg1), _arg(_arg2))
         >

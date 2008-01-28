@@ -50,8 +50,8 @@
                     {
                         typedef
                             typename when<_, Transform>::template result<void(
-                                typename proto::detail::remove_cv_ref<Expr>::type
-                              , typename proto::detail::remove_cv_ref<State>::type
+                                BOOST_PROTO_UNCVREF(Expr)
+                              , BOOST_PROTO_UNCVREF(State)
                               , Visitor
                             )>::type
                         type;
@@ -198,8 +198,11 @@
               : fold<_reverse(Sequence), State, Fun>
             {};
 
-            // A fold transform that transforms the left sub-tree and
-            // uses the result as state while transforming the right.
+            /// This specialization is only for improved compile-time performance
+            /// in the commom case when the Sequence transform is \c proto::_.
+            ///
+            /// INTERNAL ONLY
+            ///
             template<typename State0, typename Fun>
             struct fold<_, State0, Fun> : proto::callable
             {
@@ -239,8 +242,11 @@
                 }
             };
 
-            // A reverse_fold compiler that compiles the right sub-tree and
-            // uses the result as state while compiling the left.
+            /// This specialization is only for improved compile-time performance
+            /// in the commom case when the Sequence transform is \c proto::_.
+            ///
+            /// INTERNAL ONLY
+            ///
             template<typename State0, typename Fun>
             struct reverse_fold<_, State0, Fun> : proto::callable
             {

@@ -53,7 +53,7 @@ void test3()
 
     mark_tag month(1), day(2);
     // find a valid date of the form month/day/year.
-    sregex date = 
+    sregex date =
         (
             // Month must be between 1 and 12 inclusive
             (month= _d >> !_d)     [ check(as<int>(_) >= 1

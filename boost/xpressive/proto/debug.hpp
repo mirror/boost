@@ -20,7 +20,7 @@
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #else
-/// INTERNAL <> ONLY
+/// INTERNAL ONLY
 /// Needed to work around doxygen bug
 struct a_dummy_global;
 #endif
@@ -60,11 +60,11 @@ namespace boost { namespace proto
             return hidden_detail_::printable_tag<Tag>::call();
         }
 
-    #define BOOST_PROTO_DEFINE_TAG_NAME(Tag)\
-        inline char const *proto_tag_name(tag::Tag)\
-        {\
-            return #Tag;\
-        }\
+    #define BOOST_PROTO_DEFINE_TAG_NAME(Tag)                                    \
+        inline char const *proto_tag_name(tag::Tag)                             \
+        {                                                                       \
+            return #Tag;                                                        \
+        }                                                                       \
         /**/
 
         BOOST_PROTO_DEFINE_TAG_NAME(posit)
@@ -117,15 +117,28 @@ namespace boost { namespace proto
 
     namespace functional
     {
-        // Display a proto expression tree
+        /// \brief Pretty-print a proto expression tree.
+        ///
+        /// A PolymorphicFunctionObject which accepts a Proto expression
+        /// tree and pretty-prints it to an \c ostream for debugging
+        /// purposes.
         struct display_expr
         {
+            typedef void result_type;
+
+            /// \param depth The starting indentation depth for this node.
+            ///              Children nodes will be displayed at a starting
+            ///              depth of <tt>depth+4</tt>.
+            /// \param sout  The \c ostream to which the expression tree
+            ///              will be written.
             display_expr(int depth = 0, std::ostream &sout = std::cout)
               : depth_(depth)
               , first_(true)
               , sout_(sout)
             {}
 
+            /// \brief Pretty-print the current node in a Proto expression
+            /// tree.
             template<typename Args>
             void operator()(proto::expr<tag::terminal, Args, 0> const &expr) const
             {
@@ -139,8 +152,9 @@ namespace boost { namespace proto
             /**/
 
         #define BOOST_PP_LOCAL_MACRO(N)                                                             \
+            /** \overload */                                                                        \
             template<typename Tag, typename Args>                                                   \
-            void operator()(proto::expr<Tag, Args, N> const &expr) const                                   \
+            void operator()(proto::expr<Tag, Args, N> const &expr) const                            \
             {                                                                                       \
                 using namespace tag;                                                                \
                 this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")                 \
@@ -156,6 +170,8 @@ namespace boost { namespace proto
         #include BOOST_PP_LOCAL_ITERATE()
         #undef BOOST_PROTO_ARG
 
+            /// \overload
+            ///
             template<typename T>
             void operator()(T const &t) const
             {
@@ -169,16 +185,24 @@ namespace boost { namespace proto
         };
     }
 
-    template<typename Expr>
-    void display_expr(Expr const &expr)
-    {
-        functional::display_expr()(expr);
-    }
-
+    /// \brief Pretty-print a Proto expression tree.
+    ///
+    /// \note Equivalent to <tt>functional::display_expr(0, sout)(expr)</tt>
+    /// \param expr The Proto expression tree to pretty-print
+    /// \param sout The \c ostream to which the output should be
+    ///             written.
     template<typename Expr>
     void display_expr(Expr const &expr, std::ostream &sout)
     {
         functional::display_expr(0, sout)(expr);
+    }
+
+    /// \overload
+    ///
+    template<typename Expr>
+    void display_expr(Expr const &expr)
+    {
+        functional::display_expr()(expr);
     }
 
 }}

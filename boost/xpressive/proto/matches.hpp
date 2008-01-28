@@ -42,7 +42,7 @@
     // Some compilers (like GCC) need extra help figuring out a template's arity.
     // I use MPL's BOOST_MPL_AUX_LAMBDA_ARITY_PARAM() macro to disambiguate, which
     // which is controlled by the BOOST_MPL_LIMIT_METAFUNCTION_ARITY macro. If
-    // You define BOOST_PROTO_MAX_ARITY to be greater than 
+    // You define BOOST_PROTO_MAX_ARITY to be greater than
     // BOOST_MPL_LIMIT_METAFUNCTION_ARITY on these compilers, things don't work.
     // You must define BOOST_MPL_LIMIT_METAFUNCTION_ARITY to be greater.
     #ifdef BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
@@ -197,7 +197,7 @@
             template<
                 typename T
               , typename U
-              , bool B = is_array<typename remove_cv_ref<T>::type>::value
+              , bool B = is_array<BOOST_PROTO_UNCVREF(T)>::value
             >
             struct terminal_array_matches
               : mpl::false_
@@ -225,8 +225,8 @@
                     mpl::and_<
                         is_cv_ref_compatible<T, U>
                       , lambda_matches<
-                            typename remove_cv_ref<T>::type
-                          , typename remove_cv_ref<U>::type
+                            BOOST_PROTO_UNCVREF(T)
+                          , BOOST_PROTO_UNCVREF(U)
                         >
                     >
                   , terminal_array_matches<T, U>
@@ -239,8 +239,8 @@
               : mpl::and_<
                     is_cv_ref_compatible<T, U>
                   , lambda_matches<
-                        typename remove_cv_ref<T>::type
-                      , typename remove_cv_ref<U>::type
+                        BOOST_PROTO_UNCVREF(T)
+                      , BOOST_PROTO_UNCVREF(U)
                     >
                 >
             {};
