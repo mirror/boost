@@ -13,7 +13,8 @@ expert advice during the early states of xpressive's development. Much of
 static xpressive's syntax is owes a large debt to _spirit_, including the
 syntax for xpressive's semantic actions. I am thankful for 
 [@http://boost.org/people/john_maddock.htm John Maddock]'s excellent work on
-his proposal to add regular expressions to the standard library. I'd also like
+his proposal to add regular expressions to the standard library, and for
+various ideas borrowed liberally from his regex implementation. I'd also like
 to thank [@http://moderncppdesign.com/ Andrei Alexandrescu] for his input
 regarding the behavior of nested regex objects, and 
 [@http://boost.org/people/dave_abrahams.htm Dave Abrahams] for his suggestions
