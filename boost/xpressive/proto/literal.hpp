@@ -11,6 +11,7 @@
 #define BOOST_PROTO_LITERAL_HPP_EAN_01_03_2007
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/config.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
@@ -21,13 +22,24 @@ namespace boost { namespace proto
 {
     namespace utility
     {
+        /// \brief A simple wrapper for a terminal, provided for
+        /// ease of use.
+        ///
+        /// A simple wrapper for a terminal, provided for
+        /// ease of use. In all cases, <tt>literal\<X\> l(x);</tt>
+        /// is equivalent to <tt>terminal\<X\>::type l = {x};</tt>.
+        ///
+        /// The \c Domain template parameter defaults to
+        /// \c proto::default_domain.
         template<typename T, typename Domain>
         struct literal
           : extends<typename terminal<T>::type, literal<T, Domain>, Domain>
         {
+        private:
             typedef typename terminal<T>::type terminal_type;
             typedef extends<terminal_type, literal<T, Domain>, Domain> base_type;
 
+        public:
             template<typename U>
             literal(U &u)
               : base_type(terminal_type::make(u))
@@ -47,8 +59,11 @@ namespace boost { namespace proto
         };
     }
 
-    /// lit
-    ///
+    /// \brief A helper function for creating a \c literal\<\> wrapper.
+    /// \param t The object to wrap.
+    /// \return literal\<T &\>(t)
+    /// \attention The returned value holds the argument by reference.
+    /// \throw nothrow
     template<typename T>
     inline literal<T &> lit(T &t)
     {
@@ -60,14 +75,14 @@ namespace boost { namespace proto
     template<typename T>
     inline literal<T const &> lit(T const &t)
     {
-        #ifdef _MSC_VER
+        #ifdef BOOST_MSVC
         #pragma warning(push)
         #pragma warning(disable: 4180) // warning C4180: qualifier applied to function type has no meaning; ignored
         #endif
 
         return literal<T const &>(t);
 
-        #ifdef _MSC_VER
+        #ifdef BOOST_MSVC
         #pragma warning(pop)
         #endif
     }

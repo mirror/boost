@@ -14,7 +14,7 @@
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/call_traits.hpp>
+    #include <boost/type_traits/is_function.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/expr.hpp>
     #include <boost/xpressive/proto/generate.hpp>
@@ -30,7 +30,16 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, 0>
             {
-                typedef typename terminal<typename result_of::arg<Expr>::type>::type expr_type;
+                typedef BOOST_PROTO_UNCVREF(typename Expr::proto_arg0) raw_terminal_type;
+                // can't store a function type in a terminal.
+                typedef
+                    typename mpl::if_<
+                        is_function<raw_terminal_type>
+                      , typename Expr::proto_arg0
+                      , raw_terminal_type
+                    >::type
+                actual_terminal_type;
+                typedef typename terminal<actual_terminal_type>::type expr_type;
                 typedef typename Expr::proto_domain::template apply<expr_type>::type type;
 
                 template<typename Expr2>
@@ -68,8 +77,10 @@
             /// all internal nodes and most terminals held by reference
             /// are instead held by value.
             ///
-            /// \attention Terminals of reference-to-array type and of
-            /// reference-to-function type are left unchanged.
+            /// \attention Terminals of reference-to-function type are
+            /// left unchanged. Terminals of reference-to-array type are
+            /// stored by value, which can cause a large amount of data
+            /// to be passed by value and stored on the stack.
             struct deep_copy
             {
                 BOOST_PROTO_CALLABLE()

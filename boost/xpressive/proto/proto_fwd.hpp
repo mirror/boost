@@ -50,11 +50,13 @@
 #define BOOST_PROTO_DEFINE_FUSION_CATEGORY(X)
 #define BOOST_PROTO_FUSION_RESULT_OF            meta
 #define BOOST_PROTO_FUSION_EXTENSION            meta
+#define BOOST_PROTO_FUSION_AT_C(N, X)           at<N>(X)
 #else
 #define BOOST_PROTO_DEFINE_FUSION_TAG(X)        typedef X fusion_tag;
 #define BOOST_PROTO_DEFINE_FUSION_CATEGORY(X)   typedef X category;
 #define BOOST_PROTO_FUSION_RESULT_OF            result_of
 #define BOOST_PROTO_FUSION_EXTENSION            extension
+#define BOOST_PROTO_FUSION_AT_C(N, X)           at_c<N>(X)
 #endif
 
 #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include

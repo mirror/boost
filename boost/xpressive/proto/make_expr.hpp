@@ -49,6 +49,7 @@
     #include <boost/mpl/apply_wrap.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/type_traits/is_same.hpp>
+    #include <boost/type_traits/add_const.hpp>
     #include <boost/type_traits/add_reference.hpp>
     #include <boost/type_traits/remove_reference.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -59,22 +60,10 @@
     # include <boost/fusion/include/at.hpp>
     # include <boost/fusion/include/value_at.hpp>
     # include <boost/fusion/include/size.hpp>
-    namespace boost { namespace proto { namespace detail
-    {
-        namespace fusion_ = fusion;
-    }}}
     #else
     # include <boost/spirit/fusion/sequence/at.hpp>
     # include <boost/spirit/fusion/sequence/value_at.hpp>
     # include <boost/spirit/fusion/sequence/size.hpp>
-    namespace boost { namespace proto { namespace detail { namespace fusion_
-    {
-        namespace result_of = fusion::meta;
-        template<int N, typename Seq>
-        typename result_of::at_c<Seq, N>::type at_c(Seq &seq) { return fusion::at<N>(seq); }
-        template<int N, typename Seq>
-        typename result_of::at_c<Seq const, N>::type at_c(Seq const &seq) { return fusion::at<N>(seq); }
-    }}}}
     #endif
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
@@ -107,14 +96,19 @@
     ///
     # define BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                        \
         typename remove_reference<                                                                  \
-            typename detail::fusion_::result_of::value_at_c<BOOST_PP_TUPLE_ELEM(2, 0, DATA), N >::type       \
+            typename add_const<                                                                     \
+                typename fusion::BOOST_PROTO_FUSION_RESULT_OF::value_at_c<                          \
+                    BOOST_PP_TUPLE_ELEM(2, 0, DATA)                                                 \
+                  , N                                                                               \
+                >::type                                                                             \
+            >::type                                                                                 \
         >::type                                                                                     \
         /**/
 
     /// INTERNAL ONLY
     ///
     # define BOOST_PROTO_AT(Z, N, DATA)                                                             \
-        detail::fusion_::at_c<N >(BOOST_PP_TUPLE_ELEM(2, 0, DATA))                                           \
+        fusion::BOOST_PROTO_FUSION_AT_C(N, BOOST_PP_TUPLE_ELEM(2, 0, DATA))                         \
         /**/
 
     /// INTERNAL ONLY
@@ -382,14 +376,23 @@
             {
                 typedef proto::expr<
                     tag::terminal
-                  , args0<typename fusion_::result_of::value_at_c<Sequence, 0>::type>
+                  , args0<
+                        typename add_reference<
+                            typename add_const<
+                                typename fusion::BOOST_PROTO_FUSION_RESULT_OF::value_at_c<
+                                    Sequence
+                                  , 0
+                                >::type
+                            >::type
+                        >::type
+                    >
                 > expr_type;
 
                 typedef typename Domain::template apply<expr_type>::type type;
 
                 static type const call(Sequence const &sequence)
                 {
-                    expr_type that = {fusion_::at_c<0>(sequence)};
+                    expr_type that = {fusion::BOOST_PROTO_FUSION_AT_C(0, sequence)};
                     return Domain::make(that);
                 }
             };
@@ -442,7 +445,7 @@
                     Tag
                   , deduce_domain
                   , Sequence
-                  , detail::fusion_::result_of::size<Sequence>::type::value
+                  , fusion::BOOST_PROTO_FUSION_RESULT_OF::size<Sequence>::type::value
                 >
             {};
 
@@ -452,7 +455,7 @@
                     Tag
                   , Domain
                   , Sequence
-                  , detail::fusion_::result_of::size<Sequence>::type::value
+                  , fusion::BOOST_PROTO_FUSION_RESULT_OF::size<Sequence>::type::value
                 >
             {};
 
@@ -522,7 +525,7 @@
 
                 template<typename A>
                 typename result_of::make_expr<Tag, Domain, A>::type const
-                operator ()(A &a) const
+                operator ()(A &a BOOST_PROTO_DISABLE_IF_IS_CONST(A)) const
                 {
                     return result_of::make_expr<Tag, Domain, A>::call(a);
                 }
@@ -545,18 +548,19 @@
 
                 template<typename This, typename A>
                 struct result<This(A)>
-                  : result_of::make_expr<tag::terminal, Domain, A>
-                {};
+                {
+                    typedef typename result_of::make_expr<tag::terminal, Domain, A>::type type;
+                };
 
                 template<typename A>
-                typename result_of::make_expr<tag::terminal, Domain, A>::type
-                operator ()(A &a) const
+                typename result_of::make_expr<tag::terminal, Domain, A>::type const
+                operator ()(A &a BOOST_PROTO_DISABLE_IF_IS_CONST(A)) const
                 {
                     return result_of::make_expr<tag::terminal, Domain, A>::call(a);
                 }
 
                 template<typename A>
-                typename result_of::make_expr<tag::terminal, Domain, A const>::type
+                typename result_of::make_expr<tag::terminal, Domain, A const>::type const
                 operator ()(A const &a) const
                 {
                     return result_of::make_expr<tag::terminal, Domain, A const>::call(a);
@@ -574,18 +578,28 @@
 
                 template<typename This, typename Sequence>
                 struct result<This(Sequence)>
-                  : result_of::unpack_expr<
-                        Tag
-                      , Domain
-                      , BOOST_PROTO_UNCVREF(Sequence)
-                    >
-                {};
+                {
+                    typedef
+                        typename result_of::unpack_expr<
+                            Tag
+                          , Domain
+                          , typename remove_reference<Sequence>::type
+                        >::type
+                    type;
+                };
 
                 template<typename Sequence>
-                typename result_of::unpack_expr<Tag, Domain, Sequence>::type
-                operator ()(Sequence const &sequence) const
+                typename result_of::unpack_expr<Tag, Domain, Sequence>::type const
+                operator ()(Sequence &sequence BOOST_PROTO_DISABLE_IF_IS_CONST(Sequence)) const
                 {
                     return result_of::unpack_expr<Tag, Domain, Sequence>::call(sequence);
+                }
+
+                template<typename Sequence>
+                typename result_of::unpack_expr<Tag, Domain, Sequence const>::type const
+                operator ()(Sequence const &sequence) const
+                {
+                    return result_of::unpack_expr<Tag, Domain, Sequence const>::call(sequence);
                 }
             };
 
@@ -594,16 +608,33 @@
             {
                 BOOST_PROTO_CALLABLE()
 
-                template<typename Sequence>
-                struct result
-                  : result_of::unpack_expr<Tag, Domain, Sequence>
-                {};
+                template<typename Sig>
+                struct result {};
+
+                template<typename This, typename Sequence>
+                struct result<This(Sequence)>
+                {
+                    typedef
+                        typename result_of::unpack_expr<
+                            Tag
+                          , Domain
+                          , typename remove_reference<Sequence>::type
+                        >::type
+                    type;
+                };
 
                 template<typename Sequence>
                 typename proto::result_of::unpack_expr<Tag, Domain, Sequence>::type
-                operator ()(Sequence const &sequence) const
+                operator ()(Sequence &sequence BOOST_PROTO_DISABLE_IF_IS_CONST(Sequence)) const
                 {
                     return result_of::unpack_expr<Tag, Domain, Sequence>::call(sequence);
+                }
+
+                template<typename Sequence>
+                typename proto::result_of::unpack_expr<Tag, Domain, Sequence const>::type const
+                operator ()(Sequence const &sequence) const
+                {
+                    return result_of::unpack_expr<Tag, Domain, Sequence const>::call(sequence);
                 }
             };
 
@@ -622,18 +653,35 @@
             is_domain<Sequence>
           , result_of::unpack_expr<Tag, Sequence>
         >::type const
-        unpack_expr(Sequence const &sequence)
+        unpack_expr(Sequence &sequence BOOST_PROTO_DISABLE_IF_IS_CONST(Sequence))
         {
             return result_of::unpack_expr<Tag, Sequence>::call(sequence);
+        }
+
+        template<typename Tag, typename Sequence>
+        typename lazy_disable_if<
+            is_domain<Sequence>
+          , result_of::unpack_expr<Tag, Sequence const>
+        >::type const
+        unpack_expr(Sequence const &sequence)
+        {
+            return result_of::unpack_expr<Tag, Sequence const>::call(sequence);
         }
 
         /// \overload
         ///
         template<typename Tag, typename Domain, typename Sequence2>
         typename result_of::unpack_expr<Tag, Domain, Sequence2>::type const
-        unpack_expr(Sequence2 const &sequence2)
+        unpack_expr(Sequence2 &sequence2 BOOST_PROTO_DISABLE_IF_IS_CONST(Sequence2))
         {
             return result_of::unpack_expr<Tag, Domain, Sequence2>::call(sequence2);
+        }
+
+        template<typename Tag, typename Domain, typename Sequence2>
+        typename result_of::unpack_expr<Tag, Domain, Sequence2 const>::type const
+        unpack_expr(Sequence2 const &sequence2)
+        {
+            return result_of::unpack_expr<Tag, Domain, Sequence2 const>::call(sequence2);
         }
 
         /// make_expr
@@ -718,7 +766,7 @@
             typedef proto::expr<
                 Tag
               , BOOST_PP_CAT(args, N)<
-                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT_TYPE, (Sequence const, Domain))
+                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT_TYPE, (Sequence, Domain))
                 >
             > expr_type;
 
@@ -758,16 +806,19 @@
 
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-          : result_of::make_expr<
-                Tag
-              , Domain
-                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                    N
-                  , typename remove_reference<A
-                  , >::type BOOST_PP_INTERCEPT
-                )
-            >
-        {};
+        {
+            typedef
+                typename result_of::make_expr<
+                    Tag
+                  , Domain
+                    BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
+                        N
+                      , typename remove_reference<A
+                      , >::type BOOST_PP_INTERCEPT
+                    )
+                >::type
+            type;
+        };
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
         typename result_of::make_expr<
