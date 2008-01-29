@@ -4,7 +4,7 @@
 /// defining domains with a generator and a grammar for controlling
 /// operator overloading.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -49,6 +49,31 @@ namespace boost { namespace proto
         /// parameter defaults to the wildcard, \c proto::_, which
         /// makes all expressions valid within the domain.
         ///
+        /// Example:
+        /// \code
+        /// template<typename Expr>
+        /// struct MyExpr;
+        ///
+        /// struct MyGrammar
+        ///   : or_< terminal<_>, plus<MyGrammar, MyGrammar> >
+        /// {};
+        ///
+        /// // Define MyDomain, in which all expressions are
+        /// // wrapped in MyExpr<> and only expressions that
+        /// // conform to MyGrammar are allowed.
+        /// struct MyDomain
+        ///   : domain<generator<MyExpr>, MyGrammar>
+        /// {};
+        ///
+        /// // Use MyDomain to define MyExpr
+        /// template<typename Expr>
+        /// struct MyExpr
+        ///   : extends<Expr, MyExpr<Expr>, MyDomain>
+        /// {
+        ///     // ...
+        /// };
+        /// \endcode
+        ///
         template<typename Generator, typename Grammar>
         struct domain
           : Generator
@@ -83,7 +108,7 @@ namespace boost { namespace proto
     namespace result_of
     {
         /// A metafunction that returns \c mpl::true_
-        /// if the type \c T is the type of a Prot domain;
+        /// if the type \c T is the type of a Proto domain;
         /// \c mpl::false_ otherwise. If \c T inherits from
         /// \c proto::domain\<\>, \c is_domain\<T\> is
         /// \c mpl::true_.

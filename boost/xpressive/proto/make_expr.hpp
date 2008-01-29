@@ -1,10 +1,11 @@
 #ifndef BOOST_PP_IS_ITERATING
     ///////////////////////////////////////////////////////////////////////////////
     /// \file make_expr.hpp
-    /// Given a Fusion sequence of arguments and the type of a proto Expression,
-    /// unpacks the sequence into the Expression.
+    /// Definition of the \c make_expr() and \c unpack_expr() utilities for
+    /// building Proto expression nodes from children nodes or from a Fusion
+    /// sequence of children nodes, respectively.
     //
-    //  Copyright 2007 Eric Niebler. Distributed under the Boost
+    //  Copyright 2008 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
     //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 

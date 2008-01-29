@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file debug.hpp
-/// Utilities for debugging proto expression trees
+/// Utilities for debugging Proto expression trees
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -54,6 +54,7 @@ namespace boost { namespace proto
             {};
         }
 
+        /// INTERNAL ONLY
         template<typename Tag>
         inline typename hidden_detail_::printable_tag<Tag>::type proto_tag_name(Tag)
         {
@@ -61,6 +62,7 @@ namespace boost { namespace proto
         }
 
     #define BOOST_PROTO_DEFINE_TAG_NAME(Tag)                                    \
+        /** \brief INTERNAL ONLY */                                             \
         inline char const *proto_tag_name(tag::Tag)                             \
         {                                                                       \
             return #Tag;                                                        \
@@ -117,7 +119,7 @@ namespace boost { namespace proto
 
     namespace functional
     {
-        /// \brief Pretty-print a proto expression tree.
+        /// \brief Pretty-print a Proto expression tree.
         ///
         /// A PolymorphicFunctionObject which accepts a Proto expression
         /// tree and pretty-prints it to an \c ostream for debugging

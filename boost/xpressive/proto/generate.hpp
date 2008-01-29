@@ -4,7 +4,7 @@
     /// Contains definition of generate\<\> class template, which end users can
     /// specialize for generating domain-specific expression wrappers.
     //
-    //  Copyright 2007 Eric Niebler. Distributed under the Boost
+    //  Copyright 2008 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
     //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -42,36 +42,21 @@
             };
 
             template<typename Expr>
-            struct arity_;
+            struct expr_traits;
 
             template<typename Tag, typename Args, long N>
-            struct arity_<proto::expr<Tag, Args, N> >
-              : mpl::long_<N>
-            {};
-
-            template<typename Expr>
-            struct tag_;
-
-            template<typename Tag, typename Args, long N>
-            struct tag_<proto::expr<Tag, Args, N> >
+            struct expr_traits<proto::expr<Tag, Args, N> >
             {
-                typedef Tag type;
+                typedef Tag tag;
+                typedef Args args;
+                BOOST_STATIC_CONSTANT(long, arity = N);
             };
 
-            template<typename Expr>
-            struct args_;
-
-            template<typename Tag, typename Args, long N>
-            struct args_<proto::expr<Tag, Args, N> >
-            {
-                typedef Args type;
-            };
-
-            template<typename Expr, long Arity = detail::arity_<Expr>::value>
+            template<typename Expr, long Arity = expr_traits<Expr>::arity>
             struct by_value_generator_;
 
         #define BOOST_PROTO_DEFINE_BY_VALUE_TYPE(Z, N, Expr)\
-            typename result_of::unref<typename args_<Expr>::type::BOOST_PP_CAT(arg, N) >::type
+            typename result_of::unref<typename expr_traits<Expr>::args::BOOST_PP_CAT(arg, N) >::type
 
         #define BOOST_PROTO_DEFINE_BY_VALUE(Z, N, expr)\
             proto::unref(expr.BOOST_PP_CAT(arg, N))
@@ -86,6 +71,14 @@
 
         namespace generatorns_
         {
+            /// \brief A simple generator that passes an expression
+            /// through unchanged.
+            ///
+            /// Generators are intended for use as the first template parameter
+            /// to the \c domain\<\> class template and control if and how
+            /// expressions within that domain are to be customized.
+            /// The \c default_generator makes no modifications to the expressions
+            /// passed to it.
             struct default_generator
             {
                 template<typename Expr>
@@ -94,6 +87,8 @@
                     typedef Expr type;
                 };
 
+                /// \param expr A Proto expression
+                /// \return expr
                 template<typename Expr>
                 static Expr const &make(Expr const &expr)
                 {
@@ -101,6 +96,14 @@
                 }
             };
 
+            /// \brief A generator that wraps expressions passed
+            /// to it in the specified extension wrapper.
+            ///
+            /// Generators are intended for use as the first template parameter
+            /// to the \c domain\<\> class template and control if and how
+            /// expressions within that domain are to be customized.
+            /// \c generator\<\> wraps each expression passed to it in
+            /// the \c Extends\<\> wrapper.
             template<template<typename> class Extends>
             struct generator
             {
@@ -110,6 +113,8 @@
                     typedef Extends<Expr> type;
                 };
 
+                /// \param expr A Proto expression
+                /// \return Extends<Expr>(expr)
                 template<typename Expr>
                 static Extends<Expr> make(Expr const &expr)
                 {
@@ -117,6 +122,16 @@
                 }
             };
 
+            /// \brief A generator that wraps expressions passed
+            /// to it in the specified extension wrapper and uses
+            /// aggregate initialization for the wrapper.
+            ///
+            /// Generators are intended for use as the first template parameter
+            /// to the \c domain\<\> class template and control if and how
+            /// expressions within that domain are to be customized.
+            /// \c pod_generator\<\> wraps each expression passed to it in
+            /// the \c Extends\<\> wrapper, and uses aggregate initialzation
+            /// for the wrapped object.
             template<template<typename> class Extends>
             struct pod_generator
             {
@@ -126,6 +141,8 @@
                     typedef Extends<Expr> type;
                 };
 
+                /// \param expr The expression to wrap
+                /// \return Extends<Expr> that = {expr}; return that;
                 template<typename Expr>
                 static Extends<Expr> make(Expr const &expr)
                 {
@@ -134,16 +151,32 @@
                 }
             };
 
+            /// \brief A composite generator that first replaces
+            /// child nodes held by reference with ones held by value
+            /// and then forwards the result on to another generator.
+            ///
+            /// Generators are intended for use as the first template parameter
+            /// to the \c domain\<\> class template and control if and how
+            /// expressions within that domain are to be customized.
+            /// \c by_value_generator\<\> ensures all children nodes are
+            /// held by value before forwarding the expression on to
+            /// another generator for further processing. The \c Generator
+            /// parameter defaults to \c default_generator.
             template<typename Generator>
             struct by_value_generator
             {
                 template<typename Expr>
                 struct apply
-                  : Generator::template apply<
-                        typename detail::by_value_generator_<Expr>::type
-                    >
-                {};
+                {
+                    typedef
+                        typename Generator::template apply<
+                            typename detail::by_value_generator_<Expr>::type
+                        >::type
+                    type;
+                };
 
+                /// \param expr The expression to modify.
+                /// \return Generator::make(deep_copy(expr))
                 template<typename Expr>
                 static typename apply<Expr>::type make(Expr const &expr)
                 {
@@ -164,9 +197,9 @@
             struct by_value_generator_<Expr, N>
             {
                 typedef proto::expr<
-                    typename tag_<Expr>::type
+                    typename expr_traits<Expr>::tag
                   , BOOST_PP_CAT(args, N)<
-                        // typename result_of::unref<typename args_<Expr>::type::arg0>::type, ...
+                        // typename result_of::unref<typename expr_traits<Expr>::args::arg0>::type, ...
                         BOOST_PP_ENUM(BOOST_PP_MAX(N, 1), BOOST_PROTO_DEFINE_BY_VALUE_TYPE, Expr)
                     >
                 > type;

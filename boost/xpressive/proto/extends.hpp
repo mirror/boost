@@ -2,7 +2,7 @@
 /// \file extends.hpp
 /// Macros and a base class for defining end-user expression types
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -340,7 +340,7 @@ namespace boost { namespace proto
         struct is_proto_expr
         {};
 
-        /// \brief extends\<\> class template for adding behaviors to a proto expression template
+        /// \brief extends\<\> class template for adding behaviors to a Proto expression template
         ///
         template<typename Expr, typename Derived, typename Domain, typename Tag>
         struct extends
@@ -378,7 +378,7 @@ namespace boost { namespace proto
         #include BOOST_PP_LOCAL_ITERATE()
         };
 
-        /// \brief extends\<\> class template for adding behaviors to a proto expression template
+        /// \brief extends\<\> class template for adding behaviors to a Proto expression template
         ///
         template<typename Expr, typename Derived, typename Domain>
         struct extends<Expr, Derived, Domain, tag::terminal>

@@ -3,7 +3,7 @@
     /// \file deep_copy.hpp
     /// Replace all nodes stored by reference by nodes stored by value.
     //
-    //  Copyright 2007 Eric Niebler. Distributed under the Boost
+    //  Copyright 2008 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
     //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -53,8 +53,9 @@
             /// be cv-qualified.
             template<typename Expr>
             struct deep_copy
-              : detail::deep_copy_impl<Expr>
-            {};
+            {
+                typedef typename detail::deep_copy_impl<Expr>::type type;
+            };
         }
 
         namespace functional
@@ -78,14 +79,20 @@
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::deep_copy<BOOST_PROTO_UNCVREF(Expr)>
-                {};
+                {
+                    typedef
+                        typename result_of::deep_copy<BOOST_PROTO_UNCVREF(Expr)>::type
+                    type;
+                };
 
+                /// \brief Deep-copies a Proto expression tree, turning all
+                /// nodes and terminals held by reference into ones held by
+                /// value.
                 template<typename Expr>
                 typename result_of::deep_copy<Expr>::type
                 operator()(Expr const &expr) const
                 {
-                    return result_of::deep_copy<Expr>::call(expr);
+                    return proto::detail::deep_copy_impl<Expr>::call(expr);
                 }
             };
         }
@@ -130,9 +137,15 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, N>
             {
-                typedef proto::expr<typename Expr::proto_tag, BOOST_PP_CAT(args, N)<
-                    BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
-                > > expr_type;
+                typedef
+                    proto::expr<
+                        typename Expr::proto_tag
+                      , BOOST_PP_CAT(args, N)<
+                            BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
+                        >
+                    >
+                expr_type;
+                
                 typedef typename Expr::proto_domain::template apply<expr_type>::type type;
 
                 template<typename Expr2>
@@ -141,6 +154,7 @@
                     expr_type that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
+
                     return Expr::proto_domain::make(that);
                 }
             };

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_symbols.cpp
 //
-//  Copyright 2007 David Jenkins.
-//  Copyright 2007 Eric Niebler.
+//  Copyright 2008 David Jenkins.
+//  Copyright 2008 Eric Niebler.
 //
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at

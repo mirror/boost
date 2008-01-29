@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_typeof2.cpp
 //
-//  Copyright 2007 David Jenkins. Distributed under the Boost
+//  Copyright 2008 David Jenkins. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 

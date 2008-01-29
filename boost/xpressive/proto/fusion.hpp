@@ -2,7 +2,7 @@
 /// \file fusion.hpp
 /// Make any Proto expression a valid Fusion sequence
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -69,52 +69,104 @@ namespace boost { namespace proto
             Expr const &expr;
         };
 
-    }
+        template<typename Expr>
+        struct flat_view
+        {
+            typedef Expr expr_type;
+            typedef typename Expr::proto_tag proto_tag;
+            BOOST_PROTO_DEFINE_FUSION_CATEGORY(fusion::forward_traversal_tag)
+            BOOST_PROTO_DEFINE_FUSION_TAG(tag::proto_flat_view)
 
-    template<typename Expr>
-    struct flat_view
-    {
-        typedef Expr expr_type;
-        typedef typename Expr::proto_tag proto_tag;
-        BOOST_PROTO_DEFINE_FUSION_CATEGORY(fusion::forward_traversal_tag)
-        BOOST_PROTO_DEFINE_FUSION_TAG(tag::proto_flat_view)
+            explicit flat_view(Expr &expr)
+              : expr_(expr)
+            {}
 
-        explicit flat_view(Expr &expr)
-          : expr_(expr)
-        {}
+            Expr &expr_;
+        };
 
-        Expr &expr_;
-    };
-
-    namespace functional
-    {
-        struct flatten
+        template<typename Tag>
+        struct as_element
         {
             template<typename Sig>
             struct result {};
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
-            {
-                typedef flat_view<UNREF(Expr) const> type;
-            };
+              : mpl::if_<
+                    is_same<Tag, UNREF(Expr)::proto_tag>
+                  , flat_view<UNREF(Expr) const>
+                  , fusion::single_view<UNREF(Expr) const &>
+                >
+            {};
 
             template<typename Expr>
-            flat_view<Expr const> operator ()(Expr const &expr) const
+            typename result<as_element(Expr const &)>::type
+            operator ()(Expr const &expr) const
             {
-                return flat_view<Expr const>(expr);
+                return typename result<as_element(Expr const &)>::type(expr);
             }
         };
 
-        struct pop_front
+    }
+
+    namespace functional
+    {
+        /// \brief A PolymorphicFunctionObject type that returns a "flattened"
+        /// view of a Proto expression tree.
+        ///
+        /// A PolymorphicFunctionObject type that returns a "flattened"
+        /// view of a Proto expression tree. For a tree with a top-most node
+        /// tag of type \c T, the elements of the flattened sequence are
+        /// determined by recursing into each child node with the same
+        /// tag type and returning those nodes of different type. So for
+        /// instance, the Proto expression tree corresponding to the
+        /// expression <tt>a | b | c</tt> has a flattened view with elements
+        /// [a, b, c], even though the tree is grouped as
+        /// <tt>((a | b) | c)</tt>.
+        struct flatten
         {
+            BOOST_PROTO_CALLABLE()
+
             template<typename Sig>
             struct result {};
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
-              : fusion::BOOST_PROTO_FUSION_RESULT_OF::pop_front<UNREF(Expr) const>
-            {};
+            {
+                typedef proto::detail::flat_view<UNREF(Expr) const> type;
+            };
+
+            template<typename Expr>
+            proto::detail::flat_view<Expr const> operator ()(Expr const &expr) const
+            {
+                return proto::detail::flat_view<Expr const>(expr);
+            }
+        };
+
+        /// \brief A PolymorphicFunctionObject type that invokes the
+        /// \c fusion::pop_front() algorithm on its argument.
+        ///
+        /// A PolymorphicFunctionObject type that invokes the
+        /// \c fusion::pop_front() algorithm on its argument. This is
+        /// useful for defining a CallableTransform like \c pop_front(_)
+        /// which removes the first child from a Proto expression node.
+        /// Such a transform might be used as the first argument to the
+        /// \c proto::transform::fold\<\> transform; that is, fold all but
+        /// the first child.
+        struct pop_front
+        {
+            BOOST_PROTO_CALLABLE()
+
+            template<typename Sig>
+            struct result {};
+
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
+            {
+                typedef
+                    typename fusion::BOOST_PROTO_FUSION_RESULT_OF::pop_front<UNREF(Expr) const>::type
+                type;
+            };
 
             template<typename Expr>
             typename fusion::BOOST_PROTO_FUSION_RESULT_OF::pop_front<Expr const>::type
@@ -124,15 +176,28 @@ namespace boost { namespace proto
             }
         };
 
+        /// \brief A PolymorphicFunctionObject type that invokes the
+        /// \c fusion::reverse() algorithm on its argument.
+        ///
+        /// A PolymorphicFunctionObject type that invokes the
+        /// \c fusion::reverse() algorithm on its argument. This is
+        /// useful for defining a CallableTransform like \c reverse(_)
+        /// which reverses the order of the children of a Proto
+        /// expression node.
         struct reverse
         {
+            BOOST_PROTO_CALLABLE()
+
             template<typename Sig>
             struct result {};
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
-              : fusion::BOOST_PROTO_FUSION_RESULT_OF::reverse<UNREF(Expr) const>
-            {};
+            {
+                typedef
+                    typename fusion::BOOST_PROTO_FUSION_RESULT_OF::reverse<UNREF(Expr) const>::type
+                type;
+            };
 
             template<typename Expr>
             typename fusion::BOOST_PROTO_FUSION_RESULT_OF::reverse<Expr const>::type
@@ -142,6 +207,12 @@ namespace boost { namespace proto
             }
         };
     }
+
+    /// \brief A PolymorphicFunctionObject type that returns a "flattened"
+    /// view of a Proto expression tree.
+    ///
+    /// \sa boost::proto::functional::flatten
+    functional::flatten const flatten = {};
 
     template<>
     struct is_callable<functional::flatten>
@@ -158,8 +229,8 @@ namespace boost { namespace proto
       : mpl::true_
     {};
 
-    functional::flatten const flatten = {};
-
+    /// INTERNAL ONLY
+    ///
     template<typename Context>
     struct eval_fun
     {
@@ -172,8 +243,11 @@ namespace boost { namespace proto
 
         template<typename This, typename Expr>
         struct result<This(Expr)>
-          : proto::result_of::eval<UNREF(Expr), Context>
-        {};
+        {
+            typedef
+                typename proto::result_of::eval<UNREF(Expr), Context>::type
+            type;
+        };
 
         template<typename Expr>
         typename proto::result_of::eval<Expr, Context>::type
@@ -186,6 +260,11 @@ namespace boost { namespace proto
         Context &ctx_;
     };
 }}
+
+// Don't bother emitting all this into the Doxygen-generated
+// reference section. It's enough to say that Proto expressions
+// are valid Fusion sequence without showing all this gunk.
+#ifndef BOOST_PROTO_DOXYGEN_INVOKED
 
 namespace boost { namespace fusion
 {
@@ -444,29 +523,6 @@ namespace boost { namespace fusion
         };
 
         template<typename Tag>
-        struct as_element
-        {
-            template<typename Sig>
-            struct result {};
-
-            template<typename This, typename Expr>
-            struct result<This(Expr)>
-              : mpl::if_<
-                    is_same<Tag, UNREF(Expr)::proto_tag>
-                  , proto::flat_view<UNREF(Expr) const>
-                  , fusion::single_view<UNREF(Expr) const &>
-                >
-            {};
-
-            template<typename Expr>
-            typename result<as_element(Expr const &)>::type
-            operator ()(Expr const &expr) const
-            {
-                return typename result<as_element(Expr const &)>::type(expr);
-            }
-        };
-
-        template<typename Tag>
         struct segments_impl;
 
         template<>
@@ -479,12 +535,12 @@ namespace boost { namespace fusion
 
                 typedef fusion::transform_view<
                     typename Sequence::expr_type
-                  , as_element<proto_tag>
+                  , proto::detail::as_element<proto_tag>
                 > type;
 
                 static type call(Sequence &sequence)
                 {
-                    return type(sequence.expr_, as_element<proto_tag>());
+                    return type(sequence.expr_, proto::detail::as_element<proto_tag>());
                 }
             };
         };
@@ -530,6 +586,8 @@ namespace boost { namespace fusion
     }
 
 }}
+
+#endif // BOOST_PROTO_DOXYGEN_INVOKED
 
 #undef UNREF
 
