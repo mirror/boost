@@ -756,7 +756,7 @@ proto::terminal<detail::attribute_placeholder<mpl::int_<9> > >::type const a9 = 
 ///                        >> *set[_s | punct];
 /// \endcode
 ///
-/// \attention Skipping does not affect how nested regexes are handles because
+/// \attention Skipping does not affect how nested regexes are handled because
 /// they are treated atomically. String literals are also treated
 /// atomically; that is, no skipping is done within a string literal. So
 /// <tt>skip(_s)("this that")</tt> is not the same as
