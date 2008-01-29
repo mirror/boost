@@ -86,7 +86,7 @@ namespace boost { namespace proto
             };
 
             template<typename Expr, typename State, typename Visitor>
-            typename proto::result_of::arg_c<Expr, I>::type
+            typename proto::result_of::arg_c<Expr, I>::const_reference
             operator ()(Expr const &expr, State const &, Visitor &) const
             {
                 return proto::arg_c<I>(expr);

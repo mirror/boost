@@ -40,7 +40,7 @@ void test_make_expr()
     BOOST_CHECK_EQUAL(proto::arg(proto::arg(p3)), 42);
 
     ewrap<plus<
-        proto::ref_<ewrap<posit<ewrap<terminal<int &>::type> >::type> const> // BUGBUG the const is an error here
+        proto::ref_<ewrap<posit<ewrap<terminal<int &>::type> >::type> >
       , ewrap<terminal<int const &>::type>
     >::type> p4 = make_expr<tag::plus>(p3, 0);
     BOOST_CHECK_EQUAL(proto::arg(proto::arg(proto::left(p4))), 42);
@@ -59,7 +59,7 @@ void test_make_expr2()
     BOOST_CHECK_EQUAL(proto::arg(proto::arg(p3)), 42);
 
     ewrap<plus<
-        proto::ref_<ewrap<posit<ewrap<terminal<int &>::type> >::type> const> // BUGBUG the const is an error here
+        proto::ref_<ewrap<posit<ewrap<terminal<int &>::type> >::type> >
       , ewrap<terminal<int const &>::type>
     >::type> p4 = functional::make_expr<tag::plus, mydomain>()(p3, 0);
     BOOST_CHECK_EQUAL(proto::arg(proto::arg(proto::left(p4))), 42);

@@ -40,7 +40,7 @@
 # include <boost/utility/enable_if.hpp>
 # include <boost/type_traits/is_const.hpp>
 # define BOOST_PROTO_DISABLE_IF_IS_CONST(T)\
-    , typename boost::disable_if<boost::is_const<T> >::type * = 0
+    , typename boost::disable_if<boost::is_const<T>, boost::proto::detail::undefined>::type * = 0
 #else
 # define BOOST_PROTO_DISABLE_IF_IS_CONST(T)
 #endif
@@ -69,6 +69,7 @@ namespace boost { namespace proto
         typedef char (&no_type)[2];
 
         struct dont_care;
+        struct undefined; // leave this undefined
 
         /// INTERNAL ONLY
         ///

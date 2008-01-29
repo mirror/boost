@@ -742,11 +742,11 @@
     </template><specialization><template-arg>This(Expr)</template-arg></specialization><typedef name="type"><type>fusion::result_of::reverse&lt; typename boost::remove_reference&lt; Expr &gt;::type const  &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>fusion::result_of::reverse&lt; Expr const &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group></struct></namespace><data-member name="flatten"><type><classname>functional::flatten</classname> const</type><purpose>A PolymorphicFunctionObject type that returns a "flattened" view of a Proto expression tree. </purpose><description><para><para>boost::proto::functional::flatten </para>
-</para></description></data-member></namespace></namespace></header><header name="boost/xpressive/proto/generate.hpp"><para>Contains definition of generate&lt;&gt; class template, which end users can specialize for generating domain-specific expression wrappers. </para><namespace name="boost"><namespace name="proto"><namespace name="generatorns_"><struct name="default_generator"><purpose>A simple generator that simply passes an expression through unchanged. </purpose><description><para>Generators are intended for use as the first template parameter to the <computeroutput>domain&lt;&gt;</computeroutput> class template and control if and how expressions within that domain are to be customized. The <computeroutput>default_generator</computeroutput> makes no modifications to the expressions passed to it. </para></description><struct name="apply"><template>
+</para></description></data-member></namespace></namespace></header><header name="boost/xpressive/proto/generate.hpp"><para>Contains definition of generate&lt;&gt; class template, which end users can specialize for generating domain-specific expression wrappers. </para><namespace name="boost"><namespace name="proto"><namespace name="generatorns_"><struct name="default_generator"><purpose>A simple generator that passes an expression through unchanged. </purpose><description><para>Generators are intended for use as the first template parameter to the <computeroutput>domain&lt;&gt;</computeroutput> class template and control if and how expressions within that domain are to be customized. The <computeroutput>default_generator</computeroutput> makes no modifications to the expressions passed to it. </para></description><struct name="apply"><template>
       <template-type-parameter name="Expr"/>
     </template><typedef name="type"><type>Expr</type></typedef></struct><method-group name="public static functions"><method name="make" cv=""><type>static Expr const &amp;</type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>The expression </para></description></parameter><description><para>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>A Proto expression </para></description></parameter><description><para>
 
 </para></description><returns><para>expr </para></returns></method></method-group></struct><struct name="generator"><template>
       <template-nontype-parameter name="Extends"><type>template&lt; typename &gt; class</type></template-nontype-parameter>
@@ -754,7 +754,7 @@
       <template-type-parameter name="Expr"/>
     </template><typedef name="type"><type>Extends&lt; Expr &gt;</type></typedef></struct><method-group name="public static functions"><method name="make" cv=""><type>static Extends&lt; Expr &gt;</type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>The expression to wrap </para></description></parameter><description><para>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>A Proto expression </para></description></parameter><description><para>
 
 </para></description><returns><para>Extends&lt;Expr&gt;(expr) </para></returns></method></method-group></struct><struct name="pod_generator"><template>
       <template-nontype-parameter name="Extends"><type>template&lt; typename &gt; class</type></template-nontype-parameter>
@@ -775,7 +775,7 @@
 </para></description><returns><para>Generator::make(deep_copy(expr)) </para></returns></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/literal.hpp"><para>The literal&lt;&gt; terminal wrapper, and the proto::lit() function for creating literal&lt;&gt; wrappers. </para><namespace name="boost"><namespace name="proto"><namespace name="utility"><struct name="literal"><template>
       <template-type-parameter name="T"/>
       <template-type-parameter name="Domain"/>
-    </template><typedef name="terminal_type"><type><classname>terminal</classname>&lt; T &gt;::type</type></typedef><typedef name="base_type"><type>extends&lt; terminal_type, <classname>literal</classname>&lt; T, Domain &gt;, Domain &gt;</type></typedef><method-group name="public member functions"/><constructor><template>
+    </template><purpose>A simple wrapper for a terminal, provided for ease of use. </purpose><description><para>A simple wrapper for a terminal, provided for ease of use. In all cases, <computeroutput>literal&lt;X&gt; l(x);</computeroutput> is equivalent to <computeroutput>terminal&lt;X&gt;type l = {x};</computeroutput>.</para><para>The <computeroutput>Domain</computeroutput> template parameter defaults to <computeroutput>proto::default_domain</computeroutput>. </para></description><method-group name="public member functions"/><constructor><template>
           <template-type-parameter name="U"/>
         </template><parameter name="u"><paramtype>U &amp;</paramtype></parameter></constructor><constructor><template>
           <template-type-parameter name="U"/>
@@ -783,9 +783,13 @@
           <template-type-parameter name="U"/>
         </template><parameter name="u"><paramtype><classname>literal</classname>&lt; U, Domain &gt; const &amp;</paramtype></parameter></constructor></struct></namespace><overloaded-function name="lit"><signature><type>literal&lt; T &amp; &gt;</type><template>
           <template-type-parameter name="T"/>
-        </template><parameter name="t"><paramtype>T &amp;</paramtype></parameter></signature><signature><type>literal&lt; T const &amp; &gt;</type><template>
+        </template><parameter name="t"><paramtype>T &amp;</paramtype><description><para>The object to wrap. </para></description></parameter></signature><signature><type>literal&lt; T const &amp; &gt;</type><template>
           <template-type-parameter name="T"/>
-        </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></signature><description><para>lit </para></description></overloaded-function></namespace></namespace></header><header name="boost/xpressive/proto/make_expr.hpp"><para>Definition of the <computeroutput>make_expr()</computeroutput> and <computeroutput>unpack_expr()</computeroutput> utilities for building Proto expression nodes from children nodes or from a Fusion sequence of children nodes, respectively. </para><namespace name="boost"><namespace name="fusion"/><namespace name="proto"><struct-specialization name="is_callable"><template>
+        </template><parameter name="t"><paramtype>T const &amp;</paramtype></parameter></signature><purpose>A helper function for creating a <computeroutput>literal&lt;&gt;</computeroutput> wrapper. </purpose><description><para>
+
+
+
+</para></description><returns><para>literal&lt;T &amp;&gt;(t) </para></returns><throws><simpara>Will not throw.</simpara></throws><notes><para>The returned value holds the argument by reference. </para></notes></overloaded-function></namespace></namespace></header><header name="boost/xpressive/proto/make_expr.hpp"><para>Definition of the <computeroutput>make_expr()</computeroutput> and <computeroutput>unpack_expr()</computeroutput> utilities for building Proto expression nodes from children nodes or from a Fusion sequence of children nodes, respectively. </para><namespace name="boost"><namespace name="fusion"/><namespace name="proto"><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Domain"/>
     </template><specialization><template-arg>functional::make_expr&lt; Tag</template-arg><template-arg>Domain &gt;</template-arg></specialization></struct-specialization><struct-specialization name="is_callable"><template>
@@ -802,29 +806,29 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
-    </template><specialization><template-arg>This(A0)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, Domain, remove_reference&lt; A0 &gt;::type &gt;</inherit></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, Domain, remove_reference&lt; A0 &gt;::type, remove_reference&lt; A1 &gt;::type &gt;</inherit></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, Domain, remove_reference&lt; A0 &gt;::type, remove_reference&lt; A1 &gt;::type, remove_reference&lt; A2 &gt;::type &gt;</inherit></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type, typename remove_reference&lt; A2 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, Domain, remove_reference&lt; A0 &gt;::type, remove_reference&lt; A1 &gt;::type, remove_reference&lt; A2 &gt;::type, remove_reference&lt; A3 &gt;::type &gt;</inherit></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type, typename remove_reference&lt; A2 &gt;::type, typename remove_reference&lt; A3 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, Domain, remove_reference&lt; A0 &gt;::type, remove_reference&lt; A1 &gt;::type, remove_reference&lt; A2 &gt;::type, remove_reference&lt; A3 &gt;::type, remove_reference&lt; A4 &gt;::type &gt;</inherit></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A &gt;::type const</type><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type, typename remove_reference&lt; A2 &gt;::type, typename remove_reference&lt; A3 &gt;::type, typename remove_reference&lt; A4 &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A &gt;::type const</type><template>
           <template-type-parameter name="A"/>
         </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0 &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
@@ -854,14 +858,21 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Sequence"/>
-    </template><specialization><template-arg>This(Sequence)</template-arg></specialization><inherit access="public">boost::proto::result_of::unpack_expr&lt; Tag, Domain, boost::remove_const &lt; boost::remove_reference&lt; Sequence &gt;::type &gt;::type &gt;</inherit></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type</type><template>
+    </template><specialization><template-arg>This(Sequence)</template-arg></specialization><typedef name="type"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; Sequence &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type const</type><template>
+          <template-type-parameter name="Sequence"/>
+        </template><parameter name="sequence"><paramtype>Sequence &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence const  &gt;::type const</type><template>
           <template-type-parameter name="Sequence"/>
         </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></method></method-group></struct><struct name="unfused_expr_fun"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Domain"/>
     </template><struct name="result"><template>
+      <template-type-parameter name="Sig"/>
+    </template></struct><struct-specialization name="result"><template>
+      <template-type-parameter name="This"/>
       <template-type-parameter name="Sequence"/>
-    </template><inherit access="public">boost::proto::result_of::unpack_expr&lt; Tag, Domain, Sequence &gt;</inherit></struct><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type</type><template>
+    </template><specialization><template-arg>This(Sequence)</template-arg></specialization><typedef name="type"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; Sequence &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type</type><template>
+          <template-type-parameter name="Sequence"/>
+        </template><parameter name="sequence"><paramtype>Sequence &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>proto::result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence const  &gt;::type const</type><template>
           <template-type-parameter name="Sequence"/>
         </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></method></method-group></struct><struct name="unfused_expr"><template>
       <template-type-parameter name="Tag"/>
@@ -873,9 +884,9 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A"/>
-    </template><specialization><template-arg>This(A)</template-arg></specialization><inherit access="public">boost::proto::result_of::make_expr&lt; Tag, A0, A1, A2, A3, A4,, &gt;</inherit></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A &gt;::type</type><template>
+    </template><specialization><template-arg>This(A)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A &gt;::type const</type><template>
           <template-type-parameter name="A"/>
-        </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A const &gt;::type</type><template>
+        </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A const &gt;::type const</type><template>
           <template-type-parameter name="A"/>
         </template><parameter name="a"><paramtype>A const &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace><namespace name="result_of"><struct name="unpack_expr"><template>
       <template-type-parameter name="Tag"/>
@@ -910,14 +921,21 @@
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>Tag</template-arg><template-arg>Domain</template-arg><template-arg>A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4</template-arg><template-arg>typename Domain::proto_is_domain_</template-arg></specialization></struct-specialization></namespace><overloaded-function name="unpack_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence &gt;&gt;::type const</type><template>
+    </template><specialization><template-arg>Tag</template-arg><template-arg>Domain</template-arg><template-arg>A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4</template-arg><template-arg>typename Domain::proto_is_domain_</template-arg></specialization></struct-specialization></namespace><function name="unpack_expr"><type>lazy_disable_if&lt; is_domain&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence &gt;&gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Sequence"/>
+        </template><parameter name="sequence"><paramtype>Sequence &amp;</paramtype></parameter><description><para>unpack_expr </para></description></function><overloaded-function name="unpack_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence const  &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="Sequence"/>
         </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></signature><signature><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence2 &gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="Domain"/>
           <template-type-parameter name="Sequence2"/>
-        </template><parameter name="sequence2"><paramtype>Sequence2 const &amp;</paramtype></parameter></signature><description><para>unpack_expr </para></description></overloaded-function><overloaded-function name="make_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0 &gt;&gt;::type const</type><template>
+        </template><parameter name="sequence2"><paramtype>Sequence2 &amp;</paramtype></parameter></signature></overloaded-function><function name="unpack_expr"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence2 const &gt;::type const</type><template>
+          <template-type-parameter name="Tag"/>
+          <template-type-parameter name="Domain"/>
+          <template-type-parameter name="Sequence2"/>
+        </template><parameter name="sequence2"><paramtype>Sequence2 const &amp;</paramtype></parameter></function><overloaded-function name="make_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0 &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
         </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, B0 &gt;::type const</type><template>
