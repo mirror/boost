@@ -55,61 +55,55 @@ void example1()
     // temp stores intermediate values
     local<long> temp(0);
 
-    // delimiters between words must be spaces, end-of-sequence, or punctuation
-    sregex delim =
-        +_s | eos | +punct;
-
     // initialize the regular expressions for named numbers
-    sregex ones_rx =
-        ( a1 = ones_map ) [ n += a1 ] >> delim;
-
     sregex tens_rx =
-            ones_rx
-        |
+        // use skip directive to skip whitespace between words
+        skip(_s)
         (
-            ( a1 = tens_map ) [ n += a1 ] >> delim
-            >> !ones_rx
+            ( a3 = teens_map )
+            |
+            ( a2 = tens_map ) >> !( a1 = ones_map )
+            |
+            ( a1 = ones_map )
         )
-        |
-        (   ( a1 = teens_map ) [ n += a1 ] >> delim
-        );
+        [ n += (a3|0) + (a2|0) + (a1|0) ];
 
     sregex hundreds_rx =
-        (   ( tens_rx >> "hundred"  >> delim )
-            [ n *= 100 ]
-            >> !tens_rx
+        skip(_s)
+        (
+            tens_rx >>
+            !(
+                as_xpr("hundred")  [ n *= 100 ]
+                >> !tens_rx
+             )
         )
-        | tens_rx;
-
-    sregex thousands_rx =
-        (   ( hundreds_rx >> "thousand" >> delim )
-            [ temp += n * 1000, n = 0 ]
-            >> !hundreds_rx
-        )
-        | hundreds_rx
         ;
 
-    sregex millions_rx =
-        (   ( hundreds_rx >> "million" >> delim )
-            [ temp += n * 1000000, n = 0 ]
-            >> !thousands_rx
+    sregex specials_rx =    // regex for special number names like dozen
+        skip(_s)
+        (
+            // Note: this uses two attribues, a1 and a2, and it uses
+            // a default attribute value of 1 for a1.
+            ( !( a1 = ones_map ) >> ( a2 = specials_map ) )
+                [ n = (a1|1) * a2 ]
+            >> !( "and" >> tens_rx )
         )
-        | thousands_rx;
-
-    // Note: this uses two attribues, a1 and a2, and it uses
-    // a default attribute value of 1 for a1.
-    sregex specials_rx =
-        ( !((a1 = ones_map) >> delim) >> (a2 = specials_map) )
-            [ n = (a1 | 1) * a2 ]
-        >> delim
-        >> !("and" >> +_s >> ones_rx);
+        ;
 
     sregex number_rx =
         bow
         >>
-        (   specials_rx
-        |
-            millions_rx
+        skip(_s|punct)
+        (
+            specials_rx // special numbers
+            |
+            (   // normal numbers
+                !( hundreds_rx >> "million" ) [ temp += n * 1000000, n = 0 ]
+                >>
+                !( hundreds_rx >> "thousand" ) [ temp += n * 1000, n = 0 ]
+                >>
+                !hundreds_rx
+            )
             [n += temp, temp = 0 ]
         );
 
@@ -120,11 +114,11 @@ void example1()
         "sixty five hundred ten "
         "two million eight hundred sixty three thousand ninety five "
         "zero sixty five hundred thousand "
-        "extra stuff -- skip me "
+        "extra stuff "
         "two dozen "
-        "four score and seven ");
+        "four score and seven");
 
-    // the results of iterating through the string are:
+    // the MATCHING results of iterating through the string are:
     //      one  = 1
     //      two  = 2
     //      three  = 3
@@ -144,10 +138,20 @@ void example1()
 
     for( ; cur != end; ++cur )
     {
-        std::cout << *cur << " = " << n.get() << '\n';
+        if ((*cur).length() > 0)
+            std::cout << *cur << " = " << n.get() << '\n';
         n.get() = 0;
     }
     std::cout << '\n';
+    // the NON-MATCHING results of iterating through the string are:
+    //      extra = unmatched
+    //      stuff = unmatched
+    sregex_token_iterator cur2( str.begin(), str.end(), number_rx, -1 );
+    for( ; cur2 != end; ++cur2 )
+    {
+        if ((*cur2).length() > 0)
+            std::cout << *cur2 << " = unmatched" << '\n';
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
