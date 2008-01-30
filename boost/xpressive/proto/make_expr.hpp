@@ -338,18 +338,6 @@
         )                                                                                           \
         /**/
 
-        namespace utility
-        {
-            template<typename T>
-            struct static_
-            {
-                static T const value;
-            };
-
-            template<typename T>
-            T const static_<T>::value = T();
-        }
-
         namespace detail
         {
             template<typename T, typename Domain>
@@ -667,7 +655,7 @@
                         typename result_of::make_expr<
                             tag::terminal
                           , Domain
-                          , typename remove_reference<A>::type
+                          , A
                         >::type
                     type;
                 };
@@ -1142,11 +1130,7 @@
                 typename result_of::make_expr<
                     Tag
                   , Domain
-                    BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                        N
-                      , typename remove_reference<A
-                      , >::type BOOST_PP_INTERCEPT
-                    )
+                    BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
                 >::type
             type;
         };
