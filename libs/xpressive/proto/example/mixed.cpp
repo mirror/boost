@@ -246,11 +246,10 @@ namespace VectorOps
         proto::tag::function
       , MixedDomain
       , sin_ const
-      , A const
+      , A const &
     >::type sin(A const &a)
     {
-        static sin_ const s = {};
-        return proto::make_expr<proto::tag::function, MixedDomain>(s, a);
+        return proto::make_expr<proto::tag::function, MixedDomain>(sin_(), boost::ref(a));
     }
 
     template<typename FwdIter, typename Expr, typename Op>

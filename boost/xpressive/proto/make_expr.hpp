@@ -47,6 +47,8 @@
     #include <boost/preprocessor/seq/push_front.hpp>
     #include <boost/preprocessor/list/for_each_i.hpp>
     #include <boost/ref.hpp>
+    #include <boost/mpl/if.hpp>
+    #include <boost/mpl/eval_if.hpp>
     #include <boost/mpl/apply_wrap.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/type_traits/is_same.hpp>
@@ -79,29 +81,28 @@
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_AS_ARG_TYPE(Z, N, DATA)                                                     \
-        typename boost::proto::result_of::as_arg<                                                   \
-            BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2, 0, DATA), N)                                        \
-          , BOOST_PP_TUPLE_ELEM(2, 1, DATA)                                                         \
+        typename boost::proto::detail::protoify_<                                                   \
+            BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 0, DATA), N)                                        \
+          , BOOST_PP_TUPLE_ELEM(3, 2, DATA)                                                         \
         >::type                                                                                     \
         /**/
 
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_AS_ARG(Z, N, DATA)                                                          \
-        boost::proto::as_arg<BOOST_PP_TUPLE_ELEM(2, 1, DATA) >(                                     \
-            BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2, 0, DATA), N)                                        \
-        )                                                                                           \
+        boost::proto::detail::protoify_<                                                            \
+            BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 0, DATA), N)                                        \
+          , BOOST_PP_TUPLE_ELEM(3, 2, DATA)                                                         \
+        >::call(BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(3, 1, DATA), N))                                   \
         /**/
 
     /// INTERNAL ONLY
     ///
     # define BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                        \
-        typename remove_reference<                                                                  \
-            typename add_const<                                                                     \
-                typename fusion::BOOST_PROTO_FUSION_RESULT_OF::value_at_c<                          \
-                    BOOST_PP_TUPLE_ELEM(2, 0, DATA)                                                 \
-                  , N                                                                               \
-                >::type                                                                             \
+        typename add_const<                                                                         \
+            typename fusion::BOOST_PROTO_FUSION_RESULT_OF::value_at_c<                              \
+                BOOST_PP_TUPLE_ELEM(3, 0, DATA)                                                     \
+              , N                                                                                   \
             >::type                                                                                 \
         >::type                                                                                     \
         /**/
@@ -109,24 +110,25 @@
     /// INTERNAL ONLY
     ///
     # define BOOST_PROTO_AT(Z, N, DATA)                                                             \
-        fusion::BOOST_PROTO_FUSION_AT_C(N, BOOST_PP_TUPLE_ELEM(2, 0, DATA))                         \
+        fusion::BOOST_PROTO_FUSION_AT_C(N, BOOST_PP_TUPLE_ELEM(3, 1, DATA))                         \
         /**/
 
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_AS_ARG_AT_TYPE(Z, N, DATA)                                                  \
-        typename boost::proto::result_of::as_arg<                                                   \
+        typename boost::proto::detail::protoify_<                                                   \
             BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                         \
-          , BOOST_PP_TUPLE_ELEM(2, 1, DATA)                                                         \
+          , BOOST_PP_TUPLE_ELEM(3, 2, DATA)                                                         \
         >::type                                                                                     \
         /**/
 
     /// INTERNAL ONLY
     ///
     #define BOOST_PROTO_AS_ARG_AT(Z, N, DATA)                                                       \
-        boost::proto::as_arg<BOOST_PP_TUPLE_ELEM(2, 1, DATA) >(                                     \
-            BOOST_PROTO_AT(Z, N, DATA)                                                              \
-        )                                                                                           \
+        boost::proto::detail::protoify_<                                                            \
+            BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                         \
+          , BOOST_PP_TUPLE_ELEM(3, 2, DATA)                                                         \
+        >::call(BOOST_PROTO_AT(Z, N, DATA))                                                         \
         /**/
 
     /// INTERNAL ONLY
@@ -210,14 +212,14 @@
     #define BOOST_PROTO_VARARG_AS_EXPR_(R, DATA, I, ELEM)                                           \
         BOOST_PP_EXPR_IF(                                                                           \
             BOOST_PP_GREATER(I, 1)                                                                  \
-          , ((boost::proto::utility::static_<                                                       \
+          , ((                                                                                      \
                 BOOST_PP_SEQ_HEAD(ELEM)                                                             \
                 BOOST_PP_IF(                                                                        \
                     BOOST_PP_DEC(BOOST_PP_SEQ_SIZE(ELEM))                                           \
                   , BOOST_PROTO_TEMPLATE_PARAMS_YES_                                                \
                   , BOOST_PROTO_TEMPLATE_PARAMS_NO_                                                 \
-                )(R, DATA, I, ELEM)                                                                 \
-            >::value))                                                                              \
+                )(R, DATA, I, ELEM)()                                                               \
+            ))                                                                                      \
         )                                                                                           \
         /**/
 
@@ -268,13 +270,9 @@
                   , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                                 \
                 )                                                                                   \
             )                                                                                       \
-            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(                                                   \
-                N                                                                                   \
-              , typename boost::proto::utility::remref<const A                                      \
-              , >::type BOOST_PP_INTERCEPT                                                          \
-            )                                                                                       \
+            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(Z, N, A, const & BOOST_PP_INTERCEPT)             \
         >::type const                                                                               \
-        BOOST_PP_TUPLE_ELEM(4, 0, DATA)(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, const A, &a))           \
+        BOOST_PP_TUPLE_ELEM(4, 0, DATA)(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, const &a))           \
         {                                                                                           \
             return boost::proto::detail::make_expr_<                                                \
                 BOOST_PP_SEQ_FOR_EACH_I(                                                            \
@@ -287,11 +285,7 @@
                       , BOOST_PP_TUPLE_ELEM(4, 1, DATA)                                             \
                     )                                                                               \
                 )                                                                                   \
-                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(                                               \
-                    N                                                                               \
-                  , typename boost::proto::utility::remref<const A                                  \
-                  , >::type BOOST_PP_INTERCEPT                                                      \
-                )                                                                                   \
+                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(Z, N, A, const & BOOST_PP_INTERCEPT)         \
             >::call(                                                                                \
                 BOOST_PP_SEQ_ENUM(                                                                  \
                     BOOST_PP_SEQ_FOR_EACH_I(                                                        \
@@ -347,38 +341,6 @@
         namespace utility
         {
             template<typename T>
-            struct addref
-            {
-                typedef 
-                    typename boost::unwrap_reference<T>::type &
-                type;
-            };
-
-            template<typename T>
-            struct addref<T &>
-            {
-                typedef 
-                    typename boost::unwrap_reference<T>::type &
-                type;
-            };
-
-            template<typename T>
-            struct remref
-            {
-                typedef
-                    typename boost::unwrap_reference<T>::type
-                type;
-            };
-
-            template<typename T>
-            struct remref<T &>
-            {
-                typedef
-                    typename boost::unwrap_reference<T>::type
-                type;
-            };
-
-            template<typename T>
             struct static_
             {
                 static T const value;
@@ -390,6 +352,45 @@
 
         namespace detail
         {
+            template<typename T, typename Domain>
+            struct protoify_
+            {
+                typedef
+                    typename mpl::eval_if<
+                        boost::is_reference_wrapper<T>
+                      , proto::result_of::as_arg<typename boost::unwrap_reference<T>::type, Domain>
+                      , proto::result_of::as_expr<T, Domain>
+                    >::type
+                type;
+
+                static type call(T &t)
+                {
+                    return typename mpl::if_<
+                        is_reference_wrapper<T>
+                      , functional::as_arg<Domain>
+                      , functional::as_expr<Domain>
+                    >::type()(static_cast<typename boost::unwrap_reference<T>::type &>(t));
+                }
+            };
+
+            template<typename T, typename Domain>
+            struct protoify_<T &, Domain>
+            {
+                typedef
+                    typename proto::result_of::as_arg<
+                        typename boost::unwrap_reference<T>::type
+                      , Domain
+                    >::type
+                type;
+
+                static type call(T &t)
+                {
+                    return functional::as_arg<Domain>()(
+                        static_cast<typename boost::unwrap_reference<T>::type &>(t)
+                    );
+                }
+            };
+
             template<
                 typename Domain
                 BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
@@ -427,26 +428,25 @@
             template<typename Domain, typename Sequence>
             struct unpack_expr_<tag::terminal, Domain, Sequence, 1u>
             {
-                typedef proto::expr<
-                    tag::terminal
-                  , args0<
-                        typename add_reference<
-                            typename add_const<
-                                typename fusion::BOOST_PROTO_FUSION_RESULT_OF::value_at_c<
-                                    Sequence
-                                  , 0
-                                >::type
-                            >::type
+                typedef
+                    typename add_const<
+                        typename fusion::BOOST_PROTO_FUSION_RESULT_OF::value_at_c<
+                            Sequence
+                          , 0
                         >::type
-                    >
-                > expr_type;
+                    >::type
+                terminal_type;
 
-                typedef typename Domain::template apply<expr_type>::type type;
+                typedef
+                    typename proto::detail::protoify_<
+                        terminal_type
+                      , Domain
+                    >::type
+                type;
 
                 static type const call(Sequence const &sequence)
                 {
-                    expr_type that = {fusion::BOOST_PROTO_FUSION_AT_C(0, sequence)};
-                    return Domain::make(that);
+                    return proto::detail::protoify_<terminal_type, Domain>::call(fusion::BOOST_PROTO_FUSION_AT_C(0, sequence));
                 }
             };
 
@@ -472,14 +472,11 @@
             struct make_expr_<tag::terminal, Domain, A
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, void BOOST_PP_INTERCEPT)>
             {
-                typedef typename utility::addref<A>::type reference;
-                typedef proto::expr<tag::terminal, args0<reference> > expr_type;
-                typedef typename Domain::template apply<expr_type>::type type;
+                typedef typename proto::detail::protoify_<A, Domain>::type type;
 
-                static type const call(reference a)
+                static type const call(typename add_reference<A>::type a)
                 {
-                    expr_type that = {a};
-                    return Domain::make(that);
+                    return proto::detail::protoify_<A, Domain>::call(a);
                 }
             };
 
@@ -579,14 +576,14 @@
                 typename result_of::make_expr<
                     Tag
                   , Domain
-                  , typename utility::remref<A0>::type
+                  , A0
                 >::type const
                 operator ()(A0 &a0 BOOST_PROTO_DISABLE_IF_IS_CONST(A0)) const
                 {
                     return proto::detail::make_expr_<
                         Tag
                       , Domain
-                      , typename utility::remref<A0>::type
+                      , A0
                     >::call(a0);
                 }
 
@@ -596,16 +593,16 @@
                 typename result_of::make_expr<
                     Tag
                   , Domain
-                  , typename utility::remref<A0>::type
-                  , typename utility::remref<A1>::type
+                  , A0
+                  , A1
                 >::type const
                 operator ()(A0 &a0, A1 &a1 BOOST_PROTO_DISABLE_IF_IS_CONST(A0) BOOST_PROTO_DISABLE_IF_IS_CONST(A1)) const
                 {
                     return proto::detail::make_expr_<
                         Tag
                       , Domain
-                      , typename utility::remref<A0>::type
-                      , typename utility::remref<A1>::type
+                      , A0
+                      , A1
                     >::call(a0, a1);
                 }
 
@@ -615,16 +612,16 @@
                 typename result_of::make_expr<
                     Tag
                   , Domain
-                  , typename utility::remref<A0>::type
-                  , typename utility::remref<A1 const>::type
+                  , A0
+                  , A1 const
                 >::type const
                 operator ()(A0 &a0, A1 const &a1 BOOST_PROTO_DISABLE_IF_IS_CONST(A0)) const
                 {
                     return proto::detail::make_expr_<
                         Tag
                       , Domain
-                      , typename utility::remref<A0>::type
-                      , typename utility::remref<A1 const>::type
+                      , A0
+                      , A1 const
                     >::call(a0, a1);
                 }
 
@@ -634,16 +631,16 @@
                 typename result_of::make_expr<
                     Tag
                   , Domain
-                  , typename utility::remref<A0 const>::type
-                  , typename utility::remref<A1>::type
+                  , A0 const
+                  , A1
                 >::type const
                 operator ()(A0 const &a0, A1 &a1 BOOST_PROTO_DISABLE_IF_IS_CONST(A1)) const
                 {
                     return proto::detail::make_expr_<
                         Tag
                       , Domain
-                      , typename utility::remref<A0 const>::type
-                      , typename utility::remref<A1>::type
+                      , A0 const
+                      , A1
                     >::call(a0, a1);
                 }
 
@@ -670,7 +667,7 @@
                         typename result_of::make_expr<
                             tag::terminal
                           , Domain
-                          , typename utility::remref<A>::type
+                          , typename remove_reference<A>::type
                         >::type
                     type;
                 };
@@ -679,14 +676,14 @@
                 typename result_of::make_expr<
                     tag::terminal
                   , Domain
-                  , typename utility::remref<A>::type
+                  , A
                 >::type const
                 operator ()(A &a BOOST_PROTO_DISABLE_IF_IS_CONST(A)) const
                 {
                     return proto::detail::make_expr_<
                         tag::terminal
                       , Domain
-                      , typename utility::remref<A>::type
+                      , A
                     >::call(a);
                 }
 
@@ -694,14 +691,14 @@
                 typename result_of::make_expr<
                     tag::terminal
                   , Domain
-                  , typename utility::remref<A const>::type
+                  , A const
                 >::type const
                 operator ()(A const &a) const
                 {
                     return proto::detail::make_expr_<
                         tag::terminal
                       , Domain
-                      , typename utility::remref<A const>::type
+                      , A const
                     >::call(a);
                 }
             };
@@ -874,7 +871,7 @@
             is_domain<A0>
           , result_of::make_expr<
                 Tag
-              , typename utility::remref<A0>::type
+              , A0
             >
         >::type const
         make_expr(A0 &a0 BOOST_PROTO_DISABLE_IF_IS_CONST(A0))
@@ -882,19 +879,19 @@
             return proto::detail::make_expr_<
                 Tag
               , deduce_domain 
-              , typename utility::remref<A0>::type
+              , A0
             >::call(a0);
         }
 
-        /// \ovoerload
+        /// \overload
         ///
         template<typename Tag, typename A0, typename A1>
         typename lazy_disable_if<
             is_domain<A0>
           , result_of::make_expr<
                 Tag
-              , typename utility::remref<A0>::type
-              , typename utility::remref<A1>::type
+              , A0
+              , A1
             >
         >::type const
         make_expr(A0 &a0, A1 &a1 BOOST_PROTO_DISABLE_IF_IS_CONST(A0) BOOST_PROTO_DISABLE_IF_IS_CONST(A1))
@@ -902,20 +899,20 @@
             return proto::detail::make_expr_<
                 Tag
               , deduce_domain 
-              , typename utility::remref<A0>::type
-              , typename utility::remref<A1>::type
+              , A0
+              , A1
             >::call(a0, a1);
         }
 
-        /// \ovoerload
+        /// \overload
         ///
         template<typename Tag, typename A0, typename A1>
         typename lazy_disable_if<
             is_domain<A0>
           , result_of::make_expr<
                 Tag
-              , typename utility::remref<A0>::type
-              , typename utility::remref<A1 const>::type
+              , A0
+              , A1 const
             >
         >::type const
         make_expr(A0 &a0, A1 const &a1 BOOST_PROTO_DISABLE_IF_IS_CONST(A0))
@@ -923,20 +920,20 @@
             return proto::detail::make_expr_<
                 Tag
               , deduce_domain 
-              , typename utility::remref<A0>::type
-              , typename utility::remref<A1 const>::type
+              , A0
+              , A1 const
             >::call(a0, a1);
         }
 
-        /// \ovoerload
+        /// \overload
         ///
         template<typename Tag, typename A0, typename A1>
         typename lazy_disable_if<
             is_domain<A0>
           , result_of::make_expr<
                 Tag
-              , typename utility::remref<A0 const>::type
-              , typename utility::remref<A1>::type
+              , A0 const
+              , A1
             >
         >::type const
         make_expr(A0 const &a0, A1 &a1 BOOST_PROTO_DISABLE_IF_IS_CONST(A1))
@@ -944,8 +941,8 @@
             return proto::detail::make_expr_<
                 Tag
               , deduce_domain 
-              , typename utility::remref<A0 const>::type
-              , typename utility::remref<A1>::type
+              , A0 const
+              , A1
             >::call(a0, a1);
         }
 
@@ -955,14 +952,14 @@
         typename result_of::make_expr<
             Tag
           , Domain
-          , typename utility::remref<B0>::type
+          , B0
         >::type const
         make_expr(B0 &b0 BOOST_PROTO_DISABLE_IF_IS_CONST(B0))
         {
             return proto::detail::make_expr_<
                 Tag
               , Domain
-              , typename utility::remref<B0>::type
+              , B0
             >::call(b0);
         }
 
@@ -972,16 +969,16 @@
         typename result_of::make_expr<
             Tag
           , Domain
-          , typename utility::remref<B0>::type
-          , typename utility::remref<B1>::type
+          , B0
+          , B1
         >::type const
         make_expr(B0 &b0, B1 &b1 BOOST_PROTO_DISABLE_IF_IS_CONST(B0) BOOST_PROTO_DISABLE_IF_IS_CONST(B1))
         {
             return proto::detail::make_expr_<
                 Tag
               , Domain
-              , typename utility::remref<B0>::type
-              , typename utility::remref<B1>::type
+              , B0
+              , B1
             >::call(b0, b1);
         }
 
@@ -991,16 +988,16 @@
         typename result_of::make_expr<
             Tag
           , Domain
-          , typename utility::remref<B0>::type
-          , typename utility::remref<B1 const>::type
+          , B0
+          , B1 const
         >::type const
         make_expr(B0 &b0, B1 const &b1 BOOST_PROTO_DISABLE_IF_IS_CONST(B0))
         {
             return proto::detail::make_expr_<
                 Tag
               , Domain
-              , typename utility::remref<B0>::type
-              , typename utility::remref<B1 const>::type
+              , B0
+              , B1 const
             >::call(b0, b1);
         }
 
@@ -1010,16 +1007,16 @@
         typename result_of::make_expr<
             Tag
           , Domain
-          , typename utility::remref<B0 const>::type
-          , typename utility::remref<B1>::type
+          , B0 const
+          , B1
         >::type const
         make_expr(B0 const &b0, B1 &b1 BOOST_PROTO_DISABLE_IF_IS_CONST(B1))
         {
             return proto::detail::make_expr_<
                 Tag
               , Domain
-              , typename utility::remref<B0 const>::type
-              , typename utility::remref<B1>::type
+              , B0 const
+              , B1
             >::call(b0, b1);
         }
 
@@ -1064,15 +1061,15 @@
         {
             typedef proto::expr<
                 Tag
-              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_TYPE, (A, Domain)) >
+              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_TYPE, (A, ~, Domain)) >
             > expr_type;
 
             typedef typename Domain::template apply<expr_type>::type type;
 
-            static type const call(BOOST_PP_ENUM_BINARY_PARAMS(N, A, &a))
+            static type const call(BOOST_PP_ENUM_BINARY_PARAMS(N, typename add_reference<A, >::type a))
             {
                 expr_type that = {
-                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG, (a, Domain))
+                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG, (A, a, Domain))
                 };
                 return Domain::make(that);
             }
@@ -1100,7 +1097,7 @@
             typedef proto::expr<
                 Tag
               , BOOST_PP_CAT(args, N)<
-                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT_TYPE, (Sequence, Domain))
+                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT_TYPE, (Sequence const, ~, Domain))
                 >
             > expr_type;
 
@@ -1109,7 +1106,7 @@
             static type const call(Sequence const &sequence)
             {
                 expr_type that = {
-                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT, (sequence, Domain))
+                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT, (Sequence const, sequence, Domain))
                 };
                 return Domain::make(that);
             }
@@ -1121,10 +1118,10 @@
                 Tag
               , typename detail::deduce_domain_<
                     typename domain_of<
-                        BOOST_PROTO_AT_TYPE(~, 0, (Sequence const, ~))
+                        BOOST_PROTO_AT_TYPE(~, 0, (Sequence const, ~, ~))
                     >::type
                     BOOST_PP_COMMA_IF(BOOST_PP_DEC(N))
-                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_AT_TYPE, (Sequence const, ~))
+                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_AT_TYPE, (Sequence const, ~, ~))
                 >::type
               , Sequence
               , N
@@ -1147,7 +1144,7 @@
                   , Domain
                     BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
                         N
-                      , typename utility::remref<A
+                      , typename remove_reference<A
                       , >::type BOOST_PP_INTERCEPT
                     )
                 >::type
@@ -1160,22 +1157,14 @@
         typename result_of::make_expr<
             Tag
           , Domain
-            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                N
-              , typename utility::remref<const A
-              , >::type BOOST_PP_INTERCEPT
-            )
+            BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)
         >::type const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, const A, &a)) const
         {
             return proto::detail::make_expr_<
                 Tag
               , Domain
-                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                    N
-                  , typename utility::remref<const A
-                  , >::type BOOST_PP_INTERCEPT
-                )
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)
             >::call(BOOST_PP_ENUM_PARAMS(N, a));
         }
 
@@ -1192,11 +1181,7 @@
             is_domain<A0>
           , result_of::make_expr<
                 Tag
-                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                    N
-                  , typename utility::remref<const A
-                  , >::type BOOST_PP_INTERCEPT
-                )
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)
             >
         >::type const
         make_expr(BOOST_PP_ENUM_BINARY_PARAMS(N, const A, &a))
@@ -1204,11 +1189,7 @@
             return proto::detail::make_expr_<
                 Tag
               , deduce_domain 
-                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                    N
-                  , typename utility::remref<const A
-                  , >::type BOOST_PP_INTERCEPT
-                )
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)
             >::call(BOOST_PP_ENUM_PARAMS(N, a));
         }
 
@@ -1218,22 +1199,14 @@
         typename result_of::make_expr<
             Tag
           , Domain
-            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                N
-              , typename utility::remref<const B
-              , >::type BOOST_PP_INTERCEPT
-            )
+            BOOST_PP_ENUM_TRAILING_PARAMS(N, const B)
         >::type const
         make_expr(BOOST_PP_ENUM_BINARY_PARAMS(N, const B, &b))
         {
             return proto::detail::make_expr_<
                 Tag
               , Domain
-                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
-                    N
-                  , typename utility::remref<const B
-                  , >::type BOOST_PP_INTERCEPT
-                )
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, const B)
             >::call(BOOST_PP_ENUM_PARAMS(N, b));
         }
 

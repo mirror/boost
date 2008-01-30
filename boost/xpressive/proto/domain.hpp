@@ -142,6 +142,30 @@ namespace boost { namespace proto
         {
             typedef typename T::proto_domain type;
         };
+
+        /// INTERNAL ONLY
+        ///
+        template<typename T>
+        struct domain_of<T &, void>
+        {
+            typedef typename domain_of<T>::type type;
+        };
+
+        /// INTERNAL ONLY
+        ///
+        template<typename T>
+        struct domain_of<boost::reference_wrapper<T>, void>
+        {
+            typedef typename domain_of<T>::type type;
+        };
+
+        /// INTERNAL ONLY
+        ///
+        template<typename T>
+        struct domain_of<boost::reference_wrapper<T> const, void>
+        {
+            typedef typename domain_of<T>::type type;
+        };
     }
 }}
 

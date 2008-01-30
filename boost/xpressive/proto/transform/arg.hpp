@@ -92,6 +92,37 @@ namespace boost { namespace proto
                 return proto::arg_c<I>(expr);
             }
         };
+
+        struct _ref : proto::callable
+        {
+            template<typename Sig> struct result {};
+
+            template<typename This, typename T>
+            struct result<This(T)>
+            {
+                typedef boost::reference_wrapper<T const> type;
+            };
+
+            template<typename This, typename T>
+            struct result<This(T &)>
+            {
+                typedef boost::reference_wrapper<T> type;
+            };
+
+            template<typename T>
+            boost::reference_wrapper<T>
+            operator ()(T &t) const
+            {
+                return boost::reference_wrapper<T>(t);
+            }
+
+            template<typename T>
+            boost::reference_wrapper<T const>
+            operator ()(T const &t) const
+            {
+                return boost::reference_wrapper<T const>(t);
+            }
+        };
     }
 
     template<int I>
@@ -121,6 +152,11 @@ namespace boost { namespace proto
 
     template<int I>
     struct is_callable<_arg_c<I> >
+      : mpl::true_
+    {};
+
+    template<>
+    struct is_callable<transform::_ref>
       : mpl::true_
     {};
 

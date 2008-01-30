@@ -7,8 +7,8 @@
 
 [section Preface]
 
-[:Something witty.]
-[:[*['-- Someone Famous]]]
+[:["There are more things in heaven and earth, Horatio, than are dreamt of in your philosophy.]]
+[:[*['-- William Shakespear]]]
 
 [heading Description]
 
@@ -63,5 +63,12 @@ with Fusion's iterators and algorithms.
 The syntax for the grammar-matching features of `proto::matches<>` is inspired
 by MPL's lambda expressions, and by Aleksey Gurtovoy's 
 [@http://lists.boost.org/Archives/boost/2002/11/39718.php "round" lambda] notation.
+
+[heading Further Reading]
+
+A technical paper about an earlier version of Proto was accepted into the 
+[@http://lcsd.cs.tamu.edu/2007/ ACM SIGPLAN Symposium on Library-Centric Software Design LCSD'07],
+and can be found at [@http://lcsd.cs.tamu.edu/2007/final/1/1_Paper.pdf]. The
+tree transforms described in that paper differ from what exists today.
 
 [endsect]
