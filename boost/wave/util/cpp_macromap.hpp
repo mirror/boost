@@ -162,10 +162,18 @@ protected:
         bool expand_operator_defined);
 
 //  Collect all arguments supplied to a macro invocation
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     template <typename IteratorT, typename ContainerT, typename SizeT>
     typename std::vector<ContainerT>::size_type collect_arguments (
         token_type const curr_token, std::vector<ContainerT> &arguments, 
         IteratorT &next, IteratorT const &end, SizeT const &parameter_count);
+#else
+    template <typename IteratorT, typename ContainerT, typename SizeT>
+    typename std::vector<ContainerT>::size_type collect_arguments (
+        token_type const curr_token, std::vector<ContainerT> &arguments, 
+        IteratorT &next, IteratorT &endparen, IteratorT const &end, 
+        SizeT const &parameter_count);
+#endif
 
 //  Expand a single macro name
     template <typename IteratorT, typename ContainerT>
@@ -688,12 +696,21 @@ macromap<ContextT>::expand_tokensequence_worker(
 //      return the number of successfully detected non-empty arguments
 //
 ///////////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
 template <typename ContextT>
 template <typename IteratorT, typename ContainerT, typename SizeT>
 inline typename std::vector<ContainerT>::size_type 
 macromap<ContextT>::collect_arguments (token_type const curr_token, 
-    std::vector<ContainerT> &arguments, IteratorT &next, IteratorT const &end, 
-    SizeT const &parameter_count)
+    std::vector<ContainerT> &arguments, IteratorT &next, 
+    IteratorT const &end, SizeT const &parameter_count)
+#else
+template <typename ContextT>
+template <typename IteratorT, typename ContainerT, typename SizeT>
+inline typename std::vector<ContainerT>::size_type 
+macromap<ContextT>::collect_arguments (token_type const curr_token, 
+    std::vector<ContainerT> &arguments, IteratorT &next, IteratorT &endparen,
+    IteratorT const &end, SizeT const &parameter_count)
+#endif
 {
     using namespace boost::wave;
 
@@ -734,6 +751,9 @@ token_type startof_argument_list = *next;
                 else {
                 // found closing parenthesis
 //                    trim_sequence(argument);
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
+                    endparen = next;
+#endif
                     if (parameter_count > 0) {
                         if (argument->empty() || 
                             impl::is_whitespace_only(*argument)) 
@@ -1186,6 +1206,7 @@ ContainerT replacement_list;
         
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
         IteratorT seqstart = first;
+        IteratorT seqend = first;
 #endif
 
         if (macro_def.is_functionlike) {
@@ -1193,9 +1214,15 @@ ContainerT replacement_list;
         
         // collect the arguments
         std::vector<ContainerT> arguments;
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
         typename std::vector<ContainerT>::size_type count_args = 
             collect_arguments (curr_token, arguments, first, last, 
                 macro_def.macroparameters.size());
+#else
+        typename std::vector<ContainerT>::size_type count_args = 
+            collect_arguments (curr_token, arguments, first, seqend, last, 
+                macro_def.macroparameters.size());
+#endif
 
         // verify the parameter count
             if (count_args < macro_def.macroparameters.size() ||
@@ -1240,7 +1267,7 @@ ContainerT replacement_list;
             if (ctx.get_hooks().expanding_function_like_macro(
                     ctx, macro_def.macroname, macro_def.macroparameters, 
                     macro_def.macrodefinition, curr_token, arguments,
-                    seqstart, first))
+                    seqend, first))
             {
                 // do not expand this macro, just copy the whole sequence 
                 std::copy(seqstart, first, 
@@ -1477,8 +1504,14 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
     }
     
     std::vector<ContainerT> arguments;
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     typename std::vector<ContainerT>::size_type count_args = 
         collect_arguments (pragma_token, arguments, first, last, 1);
+#else
+    IteratorT endparen = first;
+    typename std::vector<ContainerT>::size_type count_args = 
+        collect_arguments (pragma_token, arguments, first, endparen, last, 1);
+#endif
 
 // verify the parameter count
     if (pragma_token.get_position().get_file().empty())

@@ -158,7 +158,10 @@ Boost V1.35.0
   its own.
 - Updates to the documentation.
 - Fixed a problem in flex_string::compare() (#include_next was non-functional).
-
+- Fixed a bug in the pp hook expanding_function_like_macro(), where the seqend
+  parameter was set to the first token after the closing parenthesis instead of
+  pointing at it.
+  
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
