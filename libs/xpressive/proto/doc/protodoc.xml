@@ -789,16 +789,13 @@
 
 
 
-</para></description><returns><para>literal&lt;T &amp;&gt;(t) </para></returns><throws><simpara>Will not throw.</simpara></throws><notes><para>The returned value holds the argument by reference. </para></notes></overloaded-function></namespace></namespace></header><header name="boost/xpressive/proto/make_expr.hpp"><para>Definition of the <computeroutput>make_expr()</computeroutput> and <computeroutput>unpack_expr()</computeroutput> utilities for building Proto expression nodes from children nodes or from a Fusion sequence of children nodes, respectively. </para><namespace name="boost"><namespace name="fusion"/><namespace name="proto"><struct-specialization name="is_callable"><template>
+</para></description><returns><para>literal&lt;T &amp;&gt;(t) </para></returns><throws><simpara>Will not throw.</simpara></throws><notes><para>The returned value holds the argument by reference. </para></notes></overloaded-function></namespace></namespace></header><header name="boost/xpressive/proto/make_expr.hpp"><para>Definition of the <computeroutput>make_expr()</computeroutput> and <computeroutput>unpack_expr()</computeroutput> utilities for building Proto expression nodes from children nodes or from a Fusion sequence of children nodes, respectively. </para><namespace name="boost"><namespace name="proto"><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Domain"/>
     </template><specialization><template-arg>functional::make_expr&lt; Tag</template-arg><template-arg>Domain &gt;</template-arg></specialization><inherit access="public">boost::mpl::true_</inherit></struct-specialization><struct-specialization name="is_callable"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Domain"/>
-    </template><specialization><template-arg>functional::unpack_expr&lt; Tag</template-arg><template-arg>Domain &gt;</template-arg></specialization><inherit access="public">boost::mpl::true_</inherit></struct-specialization><struct-specialization name="is_callable"><template>
-      <template-type-parameter name="Tag"/>
-      <template-type-parameter name="Domain"/>
-    </template><specialization><template-arg>functional::unfused_expr&lt; Tag</template-arg><template-arg>Domain &gt;</template-arg></specialization><inherit access="public">boost::mpl::true_</inherit></struct-specialization><namespace name="functional"><struct name="make_expr"><template>
+    </template><specialization><template-arg>functional::unpack_expr&lt; Tag</template-arg><template-arg>Domain &gt;</template-arg></specialization><inherit access="public">boost::mpl::true_</inherit></struct-specialization><namespace name="functional"><struct name="make_expr"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Domain"/>
     </template><struct name="result"><template>
@@ -806,42 +803,31 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
-    </template><specialization><template-arg>This(A0)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0 &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0, A1 &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type, typename remove_reference&lt; A2 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0, A1, A2 &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type, typename remove_reference&lt; A2 &gt;::type, typename remove_reference&lt; A3 &gt;::type &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0, A1, A2, A3 &gt;::type</type></typedef></struct-specialization><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="A0"/>
       <template-type-parameter name="A1"/>
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; A0 &gt;::type, typename remove_reference&lt; A1 &gt;::type, typename remove_reference&lt; A2 &gt;::type, typename remove_reference&lt; A3 &gt;::type, typename remove_reference&lt; A4 &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0 &gt;::type const</type><template>
+    </template><specialization><template-arg>This(A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0, A1, A2, A3, A4 &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0 const &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
-        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter><description><para>Construct an expression node with tag type <computeroutput>Tag</computeroutput> and in the domain <computeroutput>Domain</computeroutput>. </para></description></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0, A1 &gt;::type const</type><template>
-          <template-type-parameter name="A0"/>
-          <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>A1 &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0, A1 const  &gt;::type const</type><template>
-          <template-type-parameter name="A0"/>
-          <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>A1 const &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, A0 const, A1 &gt;::type const</type><template>
-          <template-type-parameter name="A0"/>
-          <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>A0 const &amp;</paramtype></parameter><parameter name="a1"><paramtype>A1 &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0 &gt;::type const</type><template>
-          <template-type-parameter name="A0"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1 &gt;::type const</type><template>
+        </template><parameter name="a0"><paramtype>A0 const &amp;</paramtype></parameter><description><para>Construct an expression node with tag type <computeroutput>Tag</computeroutput> and in the domain <computeroutput>Domain</computeroutput>. </para></description></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1 &gt;::type const</type><template>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>
         </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>const A1 &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const A0, const A1, const A2 &gt;::type const</type><template>
@@ -867,37 +853,9 @@
     </template></struct><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Sequence"/>
-    </template><specialization><template-arg>This(Sequence)</template-arg></specialization><typedef name="type"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; Sequence &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type const</type><template>
+    </template><specialization><template-arg>This(Sequence)</template-arg></specialization><typedef name="type"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; Sequence &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence const  &gt;::type const</type><template>
           <template-type-parameter name="Sequence"/>
-        </template><parameter name="sequence"><paramtype>Sequence &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence const  &gt;::type const</type><template>
-          <template-type-parameter name="Sequence"/>
-        </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></method></method-group></struct><struct name="unfused_expr_fun"><template>
-      <template-type-parameter name="Tag"/>
-      <template-type-parameter name="Domain"/>
-    </template><struct name="result"><template>
-      <template-type-parameter name="Sig"/>
-    </template></struct><struct-specialization name="result"><template>
-      <template-type-parameter name="This"/>
-      <template-type-parameter name="Sequence"/>
-    </template><specialization><template-arg>This(Sequence)</template-arg></specialization><typedef name="type"><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, typename remove_reference&lt; Sequence &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence &gt;::type</type><template>
-          <template-type-parameter name="Sequence"/>
-        </template><parameter name="sequence"><paramtype>Sequence &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>proto::result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence const  &gt;::type const</type><template>
-          <template-type-parameter name="Sequence"/>
-        </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></method></method-group></struct><struct name="unfused_expr"><template>
-      <template-type-parameter name="Tag"/>
-      <template-type-parameter name="Domain"/>
-    </template><typedef name="proto_is_callable_"><type>void</type></typedef></struct><struct-specialization name="make_expr"><template>
-      <template-type-parameter name="Domain"/>
-    </template><specialization><template-arg>tag::terminal</template-arg><template-arg>Domain</template-arg></specialization><struct name="result"><template>
-      <template-type-parameter name="Sig"/>
-    </template></struct><struct-specialization name="result"><template>
-      <template-type-parameter name="This"/>
-      <template-type-parameter name="A"/>
-    </template><specialization><template-arg>This(A)</template-arg></specialization><typedef name="type"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, typename remove_reference&lt; A &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A &gt;::type const</type><template>
-          <template-type-parameter name="A"/>
-        </template><parameter name="a"><paramtype>A &amp;</paramtype></parameter></method><method name="operator()" cv="const"><type><classname>result_of::make_expr</classname>&lt; <classname>tag::terminal</classname>, Domain, A const &gt;::type const</type><template>
-          <template-type-parameter name="A"/>
-        </template><parameter name="a"><paramtype>A const &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace><namespace name="result_of"><struct name="unpack_expr"><template>
+        </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></method></method-group></struct></namespace><namespace name="result_of"><struct name="unpack_expr"><template>
       <template-type-parameter name="Tag"/>
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="EnableIf1"/>
@@ -923,64 +881,21 @@
       <template-type-parameter name="A2"/>
       <template-type-parameter name="A3"/>
       <template-type-parameter name="A4"/>
-    </template><specialization><template-arg>Tag</template-arg><template-arg>Domain</template-arg><template-arg>A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4</template-arg><template-arg>typename Domain::proto_is_domain_</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></namespace><namespace name="utility"><struct name="static_"><template>
-      <template-type-parameter name="T"/>
-    </template><data-member name="value" specifiers="static"><type>T const</type></data-member></struct></namespace><overloaded-function name="unpack_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence &gt;&gt;::type const</type><template>
+    </template><specialization><template-arg>Tag</template-arg><template-arg>Domain</template-arg><template-arg>A0</template-arg><template-arg>A1</template-arg><template-arg>A2</template-arg><template-arg>A3</template-arg><template-arg>A4</template-arg><template-arg>typename Domain::proto_is_domain_</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization></namespace><overloaded-function name="unpack_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence const  &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="Sequence"/>
-        </template><parameter name="sequence"><paramtype>Sequence &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; is_domain&lt; Sequence &gt;, <classname>result_of::unpack_expr</classname>&lt; Tag, Sequence const  &gt;&gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="Sequence"/>
-        </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></signature><signature><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence2 &gt;::type const</type><template>
+        </template><parameter name="sequence"><paramtype>Sequence const &amp;</paramtype></parameter></signature><signature><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence2 const &gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="Domain"/>
           <template-type-parameter name="Sequence2"/>
-        </template><parameter name="sequence2"><paramtype>Sequence2 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::unpack_expr</classname>&lt; Tag, Domain, Sequence2 const &gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="Domain"/>
-          <template-type-parameter name="Sequence2"/>
-        </template><parameter name="sequence2"><paramtype>Sequence2 const &amp;</paramtype></parameter></signature><description><para>unpack_expr </para></description></overloaded-function><overloaded-function name="make_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0 &gt;&gt;::type const</type><template>
+        </template><parameter name="sequence2"><paramtype>Sequence2 const &amp;</paramtype></parameter></signature><description><para>unpack_expr </para></description></overloaded-function><overloaded-function name="make_expr"><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0 const  &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
-        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0, A1 &gt;&gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="A0"/>
-          <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>A1 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0, A1 const &gt;&gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="A0"/>
-          <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>A0 &amp;</paramtype></parameter><parameter name="a1"><paramtype>A1 const &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, A0 const, A1 &gt;&gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="A0"/>
-          <template-type-parameter name="A1"/>
-        </template><parameter name="a0"><paramtype>A0 const &amp;</paramtype></parameter><parameter name="a1"><paramtype>A1 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, B0 &gt;::type const</type><template>
+        </template><parameter name="a0"><paramtype>A0 const &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, B0 const &gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="Domain"/>
           <template-type-parameter name="B0"/>
-        </template><parameter name="b0"><paramtype>B0 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, B0, B1 &gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="Domain"/>
-          <template-type-parameter name="B0"/>
-          <template-type-parameter name="B1"/>
-        </template><parameter name="b0"><paramtype>B0 &amp;</paramtype></parameter><parameter name="b1"><paramtype>B1 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, B0, B1 const  &gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="Domain"/>
-          <template-type-parameter name="B0"/>
-          <template-type-parameter name="B1"/>
-        </template><parameter name="b0"><paramtype>B0 &amp;</paramtype></parameter><parameter name="b1"><paramtype>B1 const &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, B0 const, B1 &gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="Domain"/>
-          <template-type-parameter name="B0"/>
-          <template-type-parameter name="B1"/>
-        </template><parameter name="b0"><paramtype>B0 const &amp;</paramtype></parameter><parameter name="b1"><paramtype>B1 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0 &gt;&gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="A0"/>
-        </template><parameter name="a0"><paramtype>const A0 &amp;</paramtype></parameter></signature><signature><type><classname>result_of::make_expr</classname>&lt; Tag, Domain, const B0 &gt;::type const</type><template>
-          <template-type-parameter name="Tag"/>
-          <template-type-parameter name="Domain"/>
-          <template-type-parameter name="B0"/>
-        </template><parameter name="b0"><paramtype>const B0 &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1 &gt;&gt;::type const</type><template>
+        </template><parameter name="b0"><paramtype>B0 const &amp;</paramtype></parameter></signature><signature><type>lazy_disable_if&lt; is_domain&lt; A0 &gt;, <classname>result_of::make_expr</classname>&lt; Tag, const A0, const A1 &gt;&gt;::type const</type><template>
           <template-type-parameter name="Tag"/>
           <template-type-parameter name="A0"/>
           <template-type-parameter name="A1"/>

@@ -31,7 +31,7 @@ Currently, Boost.Proto is known to work on the following compilers:
 
 * Visual C++ 7.1 and higher
 * GNU C++ 3.4 and higher
-* Intel on Linun 8.1 and higher
+* Intel on Linux 8.1 and higher
 * Intel on Windows 9.1 and higher
 
 [note Please send any questions, comments and bug reports to eric <at> boost-consulting <dot> com.]

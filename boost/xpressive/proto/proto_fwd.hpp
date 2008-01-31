@@ -76,6 +76,16 @@ namespace boost
         ///
         struct false_ {};
     }
+
+    /// INTERNAL ONLY
+    ///
+    namespace fusion
+    {
+        /// INTERNAL ONLY
+        ///
+        template<typename Function>
+        class unfused_generic {};
+    }
 }
 #endif
 

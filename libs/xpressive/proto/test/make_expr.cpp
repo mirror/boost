@@ -165,7 +165,7 @@ struct ByRef
     >
 {};
 
-// turn all plus noded to minus nodes:
+// turn all plus nodes to minus nodes:
 struct Minus
   : or_<
         when<terminal<_> >
