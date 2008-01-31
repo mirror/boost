@@ -602,7 +602,50 @@ domain-specific wrapper. In the example below, expressions within the
         unpack_expr(Sequence const &sequence);
     }
 
-TODO document unpack_expr
+Once you understand `make_expr()`, understanding `unpack_expr()` is
+simple. It behaves exactly the same way, except that rather than
+passing children individually, you pass the children as a Fusion
+sequence. So for instance, the following are equivalent:
+
+    // Build an expression with make_expr():
+    int i = 0;
+    proto::make_expr<Tag>(i, 'a');
+
+    // Build the same expression with unpack_expr():
+    proto::unpack_expr<Tag>(fusion::make_tuple(i, 'a'));
+
+    // Also the same as the above:
+    fusion::tuple<int, char> args(i, 'a');
+    proto::unpack_expr<Tag>(args);
+
+If you would like the arguments to be stored by reference, you can
+use `boost::ref()`, just as with `make_expr()`.
+
+    // Hold one argument by reference:
+    int i = 0;
+    proto::unpack_expr<Tag>(fusion::make_tuple(boost::ref(i), 'a'));
+
+    // Also the same as the above:
+    fusion::tuple<int &, char> args(i, 'a');
+    proto::unpack_expr<Tag>(args);
+
+As with `make_expr()`, `unpack_expr()` has a corresponding metafunction
+in the `proto::result_of` namespace for calculating its return type, as
+well as a callable function object form in the `proto::functional`
+namespace.
+
+One last interesting point about `unpack_expr()`: Proto expression
+nodes are themselves valid Fusion sequences. Here, for instance, is
+a clever way to use `unpack_expr()` to turn a binary plus node into
+a binary minus node:
+
+    // Use unpack_expr() to turn an addition into a subtraction
+    proto::literal<int> i(8), j(42);
+    proto::unpack_expr<proto::tag::minus>( i + j );
+
+The expression `i + j` creates an expression tree which `unpack_expr()`
+interprets as a sequence of its children `i` and `j`. The result is a
+new node with the `tag::minus` tag and `i` and `j` as children.
 
 [/=====================================================]
 [heading Generating Custom Expression Factory Functions]
@@ -610,11 +653,193 @@ TODO document unpack_expr
 
 [:[*Synopsys:]]
 
-    #define BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(NAME, DOMAIN, TAG, BOUNDARGS) \
-        /* ... */
+    // Generate BOOST_PROTO_MAX_ARITY overloads of a
+    // function template named NAME within a particular
+    // DOMAIN that generates expressions with a given
+    // TAG and optionally has some arguments bound.
+    #define BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(    \
+        NAME                                                \
+      , DOMAIN                                              \
+      , TAG                                                 \
+      , BOUNDARGS                                           \
+    )
 
-TODO document BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE
+The `proto::functional::make_expr<>` function object makes it very simple
+to create something that behaves like an expression factory function. For
+instance, the following defines a factory named `invert()` that 
+"complements" its argument; that is, it builds a new node with type 
+`tag::complement` as if Proto's `operator~` had been applied:
 
+    // invert(x) is now a synonym for ~proto::as_expr(x)
+    proto::functional::make_expr<proto::tag::complement> const invert = {};
+
+Such named "operators" are very important for domain-specific embedded
+languages. What's more, when defined as above, the `invert()` factory can
+accept up to `BOOST_PROTO_MAX_ARITY` arguments, although in this case
+that wouldn't be particularly meaningful.
+
+But imagine if you have a custom tag type `foo_tag<>` that is a template.
+You would like to define a `foo()` factory function that itself was a template,
+like this:
+
+    template<typename T, typename A0>
+    typename proto::result_of::make_expr<
+        foo_tag<T>
+      , A0 const &
+    >::type foo(A0 const &a0)
+    {
+        return proto::make_expr<foo_tag<T> >(boost::ref(a0));
+    }
+
+Now, users of your function can invoke it like this: `foo<int>("foo!")`. If
+you want to seamlessly handle up to /N/ argument, you have to write all /N/
+overloads yourself --- `functional::make_expr<>` can't help you. For this
+situation, Proto provides the `BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()`
+macro. You can invoke it as follows:
+
+    // Generate overloads of the foo() function template
+    // like the one above
+    BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(            \
+        foo                                                 \
+      , proto::default_domain                               \
+      , (foo_tag)(typename)                                 \
+      , BOOST_PP_SEQ_NIL                                    \
+    )
+
+The first macro parameter specified the name of the function template, `foo`.
+The second parameter is the domain of the resulting expression. The third
+parameter is the tag type, specified as a Boost.Preprocessor sequence. A
+tag template like `foo_tag<typename>` is represented as a PP sequence like
+`(foo_tag)(typename)`. Had `foo_tag<>` been defined instead as 
+`template<typename, int> struct foo_tag`, that would be a PP sequence like
+`(foo_tag)(typename)(int)`.
+
+The last macro parammeter, `BOOST_PP_SEQ_NIL`, is used for specifying any
+additional implicit arguments. There are none in this case, so 
+`BOOST_PP_SEQ_NIL` is used to represent an empty sequence.
+
+As another example, consider a DSEL like the Boost Lambda Library, for 
+which you might want a function named `construct()` for doing deferred 
+construction of objects. You might want users to be able to use it like
+this:
+
+    std::vector<S> buffer;
+
+    // Use a lambda to construct S objects using two
+    // sequences as constructor arguments:
+    std::transform(
+        sequence1.begin()
+      , sequence1.end()
+      , sequence2.begin()
+      , std::back_inserter(buffer)
+      , construct<S>(_1, _2)    // From a hypothetical lambda DSEL
+    );
+
+How might the `construct()` function be defined? We would like it to return
+a lazy function invocation that, when evaluated with two arguments, causes
+`S` objects to be constructed. Lazy functions in Proto look like this:
+
+    // The type of a Proto lazy function
+    proto::function<
+        TheFunctionToCall
+      , Argument1
+      , Argument2
+      , ...
+    >::type
+
+In the above, `TheFunctionToCall` might be an ordinary function object, so
+let's define a `construct_<>` function object that constructs an object.
+
+    template<typename T>
+    struct construct_
+    {
+        typedef T result_type; // for TR1 result_of
+        
+        T operator()() const { return T(); }
+        
+        template<typename A0>
+        T operator()(A0 const &a0) const { return T(a0); }
+        
+        // ... other overloads ...
+    };
+
+With such a function object, we can say `construct_<S>()(1, 'a')` to
+immediately construct an `S` object using `1` and `'a'` as constructor
+arguments. We want this to be lazy, so we can wrap `construct_<S>` in
+a Proto terminal.
+
+    // A lazy S constructor
+    terminal<construct_<S> >::type const construct_S = {{}};
+    
+    // OK, make a lazy function invocation but don't call it.
+    construct_S(1, 'a');
+
+    // Calls the lazy function and constructs an S
+    proto::default_context ctx;
+    S s = proto::eval( construct_S(1, 'a'), ctx );
+
+We're closer, but this is not the syntax we want. Recall that we want
+users to create objects lazily with `construct<S>(_1, _2)`. We can
+get that syntax with the following:
+
+    // Define the construct() function template that
+    // constructs an object lazily.
+    template<typename T, typename A0, typename A1>
+    typename proto::make_expr<
+        proto::tag::function
+      , construct_<T> const
+      , A0 const &
+      , A1 const &
+    >::type const
+    construct(A0 const &a0, A0 const &a1)
+    {
+        return proto::make_expr<proto::tag::function>(
+            construct_<T>()
+          , boost::ref(a0)
+          , boost::ref(a1)
+        );
+    }
+
+Now users can say `construct<S>(_1, _2)` and get the lazy object
+construction they want. (Making it work with `std::transform()`
+takes a little more effort, but that's covered in the Calc3 example.)
+Now we need /N/ overloads to handle up to /N/ arguments. That's a lot
+of boiler plate, so we can use the `BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()`
+macro to simplify our job.
+
+    // Generate BOOST_PROTO_MAX_ARITY-1 overloads of the
+    // construct function template like the one defined above.
+    BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE(            \
+        construct                                           \
+      , MyLambdaDomain                                      \
+      , (proto::tag::function)                              \
+      , ((construct_)(typename))                            \
+    )
+
+What is new in this case is the fourth macro argument, which specifies
+that there is an implicit first argument to `construct()` of type 
+`construct_<X>`, where `X` is a template parameter of the function. 
+The fourth argument to the macro is actually a PP sequence of PP 
+sequences. Each sequence describes one implicit argument.
+
+[note [*Ugly Macros]
+
+You may find this use of the preprocessor distasteful and decide to
+write out the overloads yourself. That's fine, but there are some good
+reasons to consider the macro.
+
+1) You may not be able to anticipate the maximum number of arguments
+   your users will require. If users decide to increase 
+   `BOOST_PROTO_MAX_ARITY`, the macro will automatically generate
+   the additional overloads for you.
+
+2) On compilers that support variadic templates, you'd rather this
+   generated just one variadic function instead of /N/ overloads,
+   but you'd like your code to be portable to compilers that don't
+   support variadic templates. This is possible if you use the macro, 
+   but not otherwise. (Proto doesn't yet support variadic templates
+   but it will in the future.)
+]
 
 [endsect]
 

@@ -51,7 +51,7 @@ don't. See below.
     // OK, works:
     boost::result_of<Tr(Expr, State, Visitor)>::type
 
-The reason it is done this way is for mostly compile-time performance. Full
+It is done this way largely for compile-time performance. Full
 compliance with the TR1 ResultOf protocol incurs a not insigninficant penalty
 at compile time. Metaprogramming tricks are needed to first detect a nested
 `result_type` typedef if it exists. And each nested `result<>` template
@@ -60,7 +60,7 @@ incurs many instantiations of `remove_reference<>` and `remove_cv<>`. In
 private testing, this was found to have a measurable impact on compile-time 
 performance in the order of 10-15%, which was deemed unacceptable.
 
-The restricted protocol improves compile times while remaiming largely
+The restricted protocol improves compile times while remaining largely
 compatible with TR1's `result_of<>`. As a side benefit, it makes
 Proto's primitive transforms easier to implement, since the user need not
 worry about stripping references and cv-qualification in their nested
