@@ -236,14 +236,22 @@ namespace boost { namespace proto
         template<
             typename Grammar0
           , typename Grammar1
-          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
+          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
+                BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2)
+              , typename G
+              , void
+            )
         >
         struct or_;
 
         template<
             typename Grammar0
           , typename Grammar1
-          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
+          , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
+                BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2)
+              , typename G
+              , void
+            )
         >
         struct and_;
 
@@ -343,17 +351,17 @@ namespace boost { namespace proto
 
         template<
             typename Tag
+          , typename DomainOrA0
             BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
                 BOOST_PROTO_MAX_ARITY
               , typename A
               , = void BOOST_PP_INTERCEPT
             )
-          , typename _1 = void
-          , typename _2 = void
+          , typename EnableIf = void
         >
         struct make_expr;
 
-        template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename _ = void>
+        template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename EnableIf = void>
         struct unpack_expr;
 
         template<typename T, typename EnableIf = void>

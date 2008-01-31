@@ -785,14 +785,22 @@
         {
             template<typename Expr>
             struct arg_c<Expr, N>
-              : unref<typename Expr::BOOST_PP_CAT(proto_arg, N)>
             {
-                static typename arg_c<Expr, N>::reference call(Expr &expr)
+                typedef typename Expr::BOOST_PP_CAT(proto_arg, N) wrapped_type;
+                typedef typename unref<wrapped_type>::type type;
+                typedef typename unref<wrapped_type>::reference reference;
+                typedef typename unref<wrapped_type>::const_reference const_reference;
+
+                /// INTERNAL ONLY
+                ///
+                static reference call(Expr &expr)
                 {
                     return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }
 
-                static typename arg_c<Expr, N>::const_reference call(Expr const &expr)
+                /// INTERNAL ONLY
+                ///
+                static const_reference call(Expr const &expr)
                 {
                     return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }

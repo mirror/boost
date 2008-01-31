@@ -660,18 +660,6 @@
                 };
 
                 template<typename Sequence>
-                typename proto::result_of::unpack_expr<Tag, Domain, Sequence>::type
-                operator ()(Sequence &sequence BOOST_PROTO_DISABLE_IF_IS_CONST(Sequence)) const
-                {
-                    return proto::detail::unpack_expr_<
-                        Tag
-                      , Domain
-                      , Sequence
-                      , fusion::BOOST_PROTO_FUSION_RESULT_OF::size<Sequence>::type::value
-                    >::call(sequence);
-                }
-
-                template<typename Sequence>
                 typename proto::result_of::unpack_expr<Tag, Domain, Sequence const>::type const
                 operator ()(Sequence const &sequence) const
                 {
