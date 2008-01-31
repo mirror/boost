@@ -131,6 +131,21 @@ even if these do not have the <span class="literal">'ll'</span> suffix.</p>
     </p>
       </td>
   </tr>
+    <tr>
+        <td class="table_cells">
+            <code>BOOST_WAVE_SUPPORT_THREADING</code></td>
+        <td class="table_cells">
+            <p>This preprocessor constant allows to configer whether the Wave library will be built
+                with threading support enabled or not. This value (if defined) should be set to
+                zero ('0') if threading needs to be disabled and to a numerical value not equal
+                to zero, if threading should be enabled explicitely.
+            </p>
+            <p>
+                If this constant is not defined, the Wave library will be built using the threading
+                as picked up from the Boost build environment (see <code>BOOST_HAS_THREADS</code> in the Boost
+                    configuration dosumentation).</p>
+        </td>
+    </tr>
 </table>
 <P dir="ltr"><b><a name="using_custom_lexer"></a>Using a different token type or lexer type in conjunction with Wave </b></P>
 <P dir="ltr">It is possible to use the <tt>Wave</tt> library while using your own token and/or lexer types. This may be achieved by providing your lexer type as the second template parameter while instantiating the <tt>boost::wave::context&lt;&gt;</tt> object. The token type used by the library is derived from the <tt>token_type</tt> typedef to be provided by the lexer type. If you want to provide your own token type only, you may use the <tt>boost::wave::lex_iterator&lt;&gt;</tt> type contained with the library. This type needs to be parametrized with the token type to use. </P>
@@ -229,7 +244,7 @@ even if these do not have the <span class="literal">'ll'</span> suffix.</p>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, July 4, 2007  13:21<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, January 31, 2008  16:50<!-- #EndDate -->
 </span></p>
 </body>
 </html>

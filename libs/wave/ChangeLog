@@ -25,7 +25,11 @@ TODO (known issues):
 CHANGELOG
 
 - Wave Version 1.4
-
+- Added the BOOST_WAVE_SUPPORT_THREADING allowing to explicitelz control 
+  whether the Wave library is built with threading support enabled. If not 
+  defined the build settings will be picked up from the Boost build environment
+  (BOOST_HAS_THREADS).
+  
 Boost V1.35.0
 - Wave Version 1.3
 - Changed the return value of the 'evaluated_conditional_expression()' pp hook
