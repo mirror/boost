@@ -15,70 +15,131 @@
 [import ../example/tarray.cpp]
 [import ../example/vec3.cpp]
 [import ../example/vector.cpp]
+[import ../example/futures.cpp]
 
+[/===============]
 [section Examples]
+[/===============]
 
-[section Hello World]
+A code example is worth a thousand words ...
 
-blah blah blah
+[/==============================]
+[section:hello_world Hello World]
+[/==============================]
+
+A trivial example which builds and expression template
+and evaluates it.
 
 [HelloWorld]
 
-blah blah blah
-
 [endsect]
 
-[section Calc1]
+[/==================]
+[section:calc1 Calc1]
+[/==================]
+
+A simple example which builds a miniature domain-specific 
+embedded language for lazy arithmetic expressions, with
+TR1 bind-style argument placeholders.
 
 [Calc1]
 
 [endsect]
 
-[section Calc2]
+[/==================]
+[section:calc2 Calc2]
+[/==================]
+
+An extension of the Calc1 example that uses _extends_ to
+make calculator expressions valid function objects that
+can be used with STL algorithms.
 
 [Calc2]
 
 [endsect]
 
-[section Calc3]
+[/==================]
+[section:calc3 Calc3]
+[/==================]
+
+An extension of the Calc2 example that uses a Proto transform
+to calculate the arity of a calculator expression and statically
+assert that the correct number of argument are passed.
 
 [Calc3]
 
 [endsect]
 
-[section Lazy Vector]
+[/==============================]
+[section:lazy_vector Lazy Vector]
+[/==============================]
+
+TODO
 
 [LazyVector]
 
 [endsect]
 
-[section RGB]
+[/==============]
+[section:rgb RGB]
+[/==============]
+
+TODO
 
 [RGB]
 
 [endsect]
 
-[section TArray]
+[/====================]
+[section:tarray TArray]
+[/====================]
+
+TODO
 
 [TArray]
 
 [endsect]
 
-[section Vec3]
+[/================]
+[section:vec3 Vec3]
+[/================]
+
+TODO
 
 [Vec3]
 
 [endsect]
 
-[section Vector]
+[/====================]
+[section:vector Vector]
+[/====================]
+
+TODO
 
 [Vector]
 
 [endsect]
 
-[section Mixed]
+[/==================]
+[section:mixed Mixed]
+[/==================]
+
+TODO
 
 [Mixed]
+
+[endsect]
+
+[/================================]
+[section:future_group Future Group]
+[/================================]
+
+An advanced example of a Proto transform that implements
+Howard Hinnant's design for /future groups/ that block
+for all or some asynchronous operations to complete and
+returns their results in a tuple of the appropriate type.
+
+[FutureGroup]
 
 [endsect]
 

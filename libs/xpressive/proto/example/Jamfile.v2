@@ -53,3 +53,8 @@ exe mixed
         mixed.cpp
     ;
 
+exe futures
+    :
+        futures.cpp
+    ;
+

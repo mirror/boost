@@ -351,16 +351,16 @@ that manipulate the structure of the expression tree, as we'll see.
 Below are the tools and a brief description of each.
 
 [variablelist
-[ [`make_expr()`]
+[ [_make_expr_]
   [A function that takes a tag type and children nodes and
    builds a parent node of the requested type.]]
-[ [`unpack_expr()`]
-  [A function that does the same as `make_expr()` except
+[ [_unpack_expr_]
+  [A function that does the same as _make_expr_ except
    the children nodes are specified as a Fusion sequence.]]
 [ [`BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()`]
   [A macro that generates a number of overloads of a
    user-specified function template that behaves like
-   `make_expr()`.]]
+   _make_expr_.]]
 ]
 
 [/====================================================]
@@ -412,7 +412,7 @@ Below are the tools and a brief description of each.
         make_expr(A const &... a);
     }
 
-You can use the `make_expr()` function to build an expression tree node with
+You can use the _make_expr_ function to build an expression tree node with
 a specified tag type, as follows.
 
     // Some user-defined tag type
@@ -476,7 +476,7 @@ reference in the resulting tree node, you can use `boost::ref()`:
 
 In the return type calculation, we can specify by-ref with 
 `int &`, but we need `boost::ref()` in the actual function invocation.
-That's because the `make_expr()` function can't tell from the function
+That's because the _make_expr_ function can't tell from the function
 arguments whether you want to store the arguments by value or by
 reference.
 
@@ -509,10 +509,10 @@ reference as follows:
     posit_ref_type p3 = +expr;
 
 The application of unary `operator+` on the last line is equivalent to
-the by-ref invocation of `make_expr()` because Proto's operator overloads
+the by-ref invocation of _make_expr_ because Proto's operator overloads
 always build trees by holding nodes by reference.
 
-If you specify a domain when invoking `make_expr()`, then `make_expr()`
+If you specify a domain when invoking _make_expr_, then _make_expr_
 will use that domain's generator to wrap the resulting node in a
 domain-specific wrapper. In the example below, expressions within the
 `MyDomain` domain are wrapped in a `MyExpr<>` wrapper. 
@@ -602,7 +602,7 @@ domain-specific wrapper. In the example below, expressions within the
         unpack_expr(Sequence const &sequence);
     }
 
-Once you understand `make_expr()`, understanding `unpack_expr()` is
+Once you understand _make_expr_, understanding _unpack_expr_ is
 simple. It behaves exactly the same way, except that rather than
 passing children individually, you pass the children as a Fusion
 sequence. So for instance, the following are equivalent:
@@ -619,7 +619,7 @@ sequence. So for instance, the following are equivalent:
     proto::unpack_expr<Tag>(args);
 
 If you would like the arguments to be stored by reference, you can
-use `boost::ref()`, just as with `make_expr()`.
+use `boost::ref()`, just as with _make_expr_.
 
     // Hold one argument by reference:
     int i = 0;
@@ -629,21 +629,21 @@ use `boost::ref()`, just as with `make_expr()`.
     fusion::tuple<int &, char> args(i, 'a');
     proto::unpack_expr<Tag>(args);
 
-As with `make_expr()`, `unpack_expr()` has a corresponding metafunction
+As with _make_expr_, _unpack_expr_ has a corresponding metafunction
 in the `proto::result_of` namespace for calculating its return type, as
 well as a callable function object form in the `proto::functional`
 namespace.
 
-One last interesting point about `unpack_expr()`: Proto expression
+One last interesting point about _unpack_expr_: Proto expression
 nodes are themselves valid Fusion sequences. Here, for instance, is
-a clever way to use `unpack_expr()` to turn a binary plus node into
+a clever way to use _unpack_expr_ to turn a binary plus node into
 a binary minus node:
 
     // Use unpack_expr() to turn an addition into a subtraction
     proto::literal<int> i(8), j(42);
     proto::unpack_expr<proto::tag::minus>( i + j );
 
-The expression `i + j` creates an expression tree which `unpack_expr()`
+The expression `i + j` creates an expression tree which _unpack_expr_
 interprets as a sequence of its children `i` and `j`. The result is a
 new node with the `tag::minus` tag and `i` and `j` as children.
 
@@ -802,7 +802,8 @@ get that syntax with the following:
 
 Now users can say `construct<S>(_1, _2)` and get the lazy object
 construction they want. (Making it work with `std::transform()`
-takes a little more effort, but that's covered in the Calc3 example.)
+takes a little more effort, but that's covered in the 
+[link boost_proto.users_guide.examples.calc2 Calc2] example.)
 Now we need /N/ overloads to handle up to /N/ arguments. That's a lot
 of boiler plate, so we can use the `BOOST_PROTO_DEFINE_VARARG_FUNCTION_TEMPLATE()`
 macro to simplify our job.
@@ -822,7 +823,7 @@ that there is an implicit first argument to `construct()` of type
 The fourth argument to the macro is actually a PP sequence of PP 
 sequences. Each sequence describes one implicit argument.
 
-[note [*Ugly Macros]
+[blurb [*Ugly Macros]
 
 You may find this use of the preprocessor distasteful and decide to
 write out the overloads yourself. That's fine, but there are some good

@@ -19,7 +19,7 @@ placeholders for values to be passed in when the expression is evaluated.
 [heading Defining Terminals]
 
 The first order of business is to define the placeholders `_1` and `_2`. For
-that, we'll use the _terminal_ expression generator.
+that, we'll use the _terminal_ metafuntion.
 
     // Define some placeholder types
     struct placeholder1 {};

@@ -20,10 +20,13 @@ your build scripts or link to any separate lib file to use it. All you need
 to do is `#include <boost/xpressive/proto/proto.hpp>`. This will include the
 core of Proto. If you want to use any transforms, you must include the
 appropriate header from the [^boost\/xpressive\/proto\/transform\/] directory.
+Likewise for any evaluation contexts, which live in the
+[^boost\/xpressive\/proto\/context\/] directory.
 
 [heading Requirements]
 
-Proto depends on Boost. You must use the version in SVN HEAD.
+Proto depends on Boost. You must use either Boost version 1.34.1 or the
+version in SVN trunk.
 
 [heading Supported Compilers]
 
