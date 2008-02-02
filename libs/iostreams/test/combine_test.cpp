@@ -10,8 +10,9 @@
  *
  * File:        libs/iostreams/test/combine_test.cpp
  * Date:        Sun Jan 06 01:37:37 MST 2008
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  */
 
 #include <boost/iostreams/chain.hpp>

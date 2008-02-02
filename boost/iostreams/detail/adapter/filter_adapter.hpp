@@ -4,8 +4,9 @@
  *
  * File:        boost/iostreams/detail/adapter/filter_adapter.hpp
  * Date:        Mon Nov 26 14:35:48 MST 2007
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  *
  * Distributed under the Boost Software License, Version 1.0.(See accompanying 
  * file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)

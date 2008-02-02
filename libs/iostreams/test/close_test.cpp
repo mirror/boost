@@ -10,8 +10,9 @@
  *
  * File:        libs/iostreams/test/close_test.cpp
  * Date:        Sun Dec 09 16:12:23 MST 2007
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  */
 
 #include <boost/iostreams/chain.hpp>

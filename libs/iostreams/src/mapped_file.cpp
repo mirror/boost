@@ -1,5 +1,6 @@
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2004-2007 Jonathan Turkanis
 // (C) Copyright Craig Henderson 2002 'boost/memmap.hpp' from sandbox
-// (C) Copyright Jonathan Turkanis 2004.
 // (C) Copyright Jonathan Graehl 2004.
 
 // Distributed under the Boost Software License, Version 1.0. (See accompanying

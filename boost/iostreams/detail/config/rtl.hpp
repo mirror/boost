@@ -11,8 +11,9 @@
  * File:        boost/iostreams/detail/config/rtl.hpp
  * Date:        Wed Dec 26 11:58:11 MST 2007
  * 
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  */
 
 #ifndef BOOST_IOSTREAMS_DETAIL_CONFIG_RTL_HPP_INCLUDED

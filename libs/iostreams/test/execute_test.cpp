@@ -9,8 +9,9 @@
  *
  * File:        libs/iostreams/test/execute_test.cpp
  * Date:        Thu Dec 06 13:21:54 MST 2007
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  */
 
 #include <boost/iostreams/detail/execute.hpp>
