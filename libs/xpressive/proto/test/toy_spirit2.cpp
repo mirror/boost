@@ -260,69 +260,81 @@ namespace boost { namespace spirit2
     // Globals
     NoCase::type const no_case = {{}};
 
-    // Parser
-    template<typename Iterator, typename Derived>
-    struct with_reset
+    template<typename Iterator>
+    struct parser;
+
+    template<typename Iterator>
+    struct fold_alternate
     {
-        with_reset(Iterator begin, Iterator end)
-          : first(begin), second(end)
+        parser<Iterator> const &parse;
+
+        explicit fold_alternate(parser<Iterator> const &p)
+          : parse(p)
         {}
 
         template<typename T>
         bool operator ()(T const &t) const
         {
-            Iterator tmp = this->first;
-            if((*static_cast<Derived const *>(this))(t))
+            Iterator tmp = this->parse.first;
+            if(this->parse(t))
                 return true;
-            this->first = tmp;
+            this->parse.first = tmp;
             return false;
         }
+    };
+
+    template<typename Iterator>
+    struct fold_sequence
+    {
+        parser<Iterator> const &parse;
+
+        explicit fold_sequence(parser<Iterator> const &p)
+          : parse(p)
+        {}
+
+        #if BOOST_VERSION < 103500
+        template<typename, typename>
+        struct apply
+        {
+            typedef bool type;
+        };
+        #else
+        typedef bool result_type;
+        #endif
+
+        template<typename T>
+        bool operator ()(T const &t, bool success) const
+        {
+            return success && this->parse(t);
+        }
+    };
+
+    template<typename Iterator>
+    struct parser
+    {
+        mutable Iterator first;
+        Iterator second;
+
+        parser(Iterator begin, Iterator end)
+          : first(begin)
+          , second(end)
+        {}
 
         bool done() const
         {
             return this->first == this->second;
         }
 
-        mutable Iterator first;
-        Iterator second;
-    };
-
-    template<typename Iterator>
-    struct parser
-      : spirit2::with_reset<Iterator, parser<Iterator> >
-    {
-        typedef spirit2::with_reset<Iterator, parser<Iterator> > with_reset;
-
-        parser(Iterator begin, Iterator end)
-          : with_reset(begin, end)
-        {}
-
-        #if BOOST_VERSION < 103500
-        template<typename, typename> // used by fusion::fold
-        struct apply
-        {
-            typedef bool type;
-        };
-        #else
-        typedef bool result_type;   // used by fusion::fold
-        #endif
-
-        template<typename T>
-        bool operator ()(T const &t, bool success) const // used by fusion::fold
-        {
-            return success && (*this)(t);
-        }
-
         template<typename List>
         bool operator ()(alternate<List> const &alternates) const
         {
-            return fusion::any(alternates.elems, *static_cast<with_reset const *>(this));
+            return fusion::any(alternates.elems, fold_alternate<Iterator>(*this));
         }
 
         template<typename List>
         bool operator ()(sequence<List> const &sequence) const
         {
-            return fusion::fold(sequence.elems, true, *this);
+            return fusion::fold(sequence.elems, true, fold_sequence<Iterator>(*this));
         }
 
         bool operator ()(char_tag ch) const
@@ -440,6 +452,19 @@ void test_toy_spirit3()
           | char_ >> no_case[char_('B') >> "C" >> char_('D','Z')]
           , hello.begin()
           , hello.end()
+        )
+    );
+
+    std::string nest_alt_input("abd");    
+    BOOST_CHECK(
+        boost::spirit2::parse(
+            char_('a')
+          >> ( char_('b')
+             | char_('c')
+             )
+          >>  char_('d')
+          , nest_alt_input.begin()
+          , nest_alt_input.end()
         )
     );
 }
