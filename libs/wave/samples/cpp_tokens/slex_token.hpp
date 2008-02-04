@@ -82,11 +82,13 @@ public:
     {
         using namespace std;
         using namespace boost::wave;
-        stream << setw(16) << left << boost::wave::get_token_name(id) << " ("
+        
+        stream << std::setw(16) 
+            << std::left << boost::wave::get_token_name(id) << " ("
             << "#" << token_id(ID_FROM_TOKEN(*this)) 
             << ") at " << get_position().get_file() << " (" 
-            << setw(3) << right << get_position().get_line() << "/" 
-            << setw(2) << right << get_position().get_column() 
+            << std::setw(3) << std::right << get_position().get_line() << "/" 
+            << std::setw(2) << std::right << get_position().get_column() 
             << "): >";
             
         for (std::size_t i = 0; i < value.size(); ++i) {
