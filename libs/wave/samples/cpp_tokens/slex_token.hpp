@@ -14,6 +14,7 @@
 #define SLEX_TOKEN_HPP_53A13BD2_FBAA_444B_9B8B_FCB225C2BBA8_INCLUDED
 
 #include <iomanip>
+#include <ios>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>  
