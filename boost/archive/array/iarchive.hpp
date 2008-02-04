@@ -65,18 +65,18 @@ public:
   }
 
   // the optimized implementation for vector uses serialization::array
-  template<class U, class Allocator>
-  void load_optimized(
-    std::vector<U, Allocator> &t, unsigned int version, mpl::true_)
-  {
-    t.clear();
-    // retrieve number of elements
-    serialization::collection_size_type count;
-    *this->This() >> BOOST_SERIALIZATION_NVP(count);
-    t.resize(count);
-    if (!t.empty())
-      * this->This() >> serialization::make_array(serialization::detail::get_data(t),t.size());
-  }
+//  template<class U, class Allocator>
+//  void load_optimized(
+//    std::vector<U, Allocator> &t, unsigned int version, mpl::true_)
+//  {
+//    t.clear();
+//    // retrieve number of elements
+//    serialization::collection_size_type count;
+//    *this->This() >> BOOST_SERIALIZATION_NVP(count);
+//    t.resize(count);
+//    if (!t.empty())
+//      * this->This() >> serialization::make_array(serialization::detail::get_data(t),t.size());
+//  }
 
   // the optimized implementation for serialization::array uses save_array
   template<class ValueType>
@@ -91,17 +91,17 @@ public:
   // if the value type is trivially constructable or an optimized array save exists, 
   // then we can use the optimized version
 
-  template<class ValueType, class Allocator>
-  void load_override(std::vector<ValueType,Allocator> &x, unsigned int version)
-  {
-    typedef typename mpl::and_<
-      mpl::not_<is_same<ValueType,bool> >,
-      mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , ValueType>
-    >::type use_optimized;
-    load_optimized(x,version, use_optimized() );   
-  }
+//  template<class ValueType, class Allocator>
+//  void load_override(std::vector<ValueType,Allocator> &x, unsigned int version)
+//  {
+//    typedef typename mpl::and_<
+//      mpl::not_<is_same<ValueType,bool> >,
+//      mpl::apply1<
+//        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
+//      , ValueType>
+//    >::type use_optimized;
+//    load_optimized(x,version, use_optimized() );   
+//  }
   
   
   // dispatch loading of arrays to the optimized version where supported

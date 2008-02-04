@@ -65,15 +65,15 @@ public:
 
 
   // the optimized implementation for vector uses serialization::array
-  template<class ValueType, class Allocator>
-  void save_optimized(
-    const std::vector<ValueType, Allocator> &t, unsigned int, mpl::true_)
-  {
-    const serialization::collection_size_type count(t.size());
-    * this->This() << BOOST_SERIALIZATION_NVP(count);
-    if (!t.empty())
-      * this->This() << serialization::make_array(serialization::detail::get_data(t),t.size());
-  }
+//  template<class ValueType, class Allocator>
+//  void save_optimized(
+//    const std::vector<ValueType, Allocator> &t, unsigned int, mpl::true_)
+//  {
+//    const serialization::collection_size_type count(t.size());
+//    * this->This() << BOOST_SERIALIZATION_NVP(count);
+//    if (!t.empty())
+//      * this->This() << serialization::make_array(serialization::detail::get_data(t),t.size());
+//  }
 
   // the optimized implementation for serialization::array uses save_array
   template<class ValueType>
@@ -88,18 +88,18 @@ public:
   // if the value type is trivially constructable or an optimized array save exists, 
   // then we can use the optimized version
 
-  template<class ValueType, class Allocator>
-  void save_override(std::vector<ValueType,Allocator> const &x, unsigned int version)
-  {
-    typedef BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type value_type;
-    typedef typename mpl::and_<
-      mpl::not_<is_same<value_type,bool> >,
-      mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , value_type>
-    >::type use_optimized;
-    save_optimized(x,version,use_optimized() );   
-  }
+//  template<class ValueType, class Allocator>
+//  void save_override(std::vector<ValueType,Allocator> const &x, unsigned int version)
+//  {
+//    typedef BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type value_type;
+//    typedef typename mpl::and_<
+//      mpl::not_<is_same<value_type,bool> >,
+//      mpl::apply1<
+//        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
+//      , value_type>
+//    >::type use_optimized;
+//    save_optimized(x,version,use_optimized() );   
+//  }
 
   
   
