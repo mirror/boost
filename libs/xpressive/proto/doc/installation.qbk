@@ -9,8 +9,10 @@
 
 [heading Getting Proto]
 
-Currently the only way to get Proto is through SVN via the boost project on
-SourceForge.net. Just go to [@http://svn.boost.org/trac/boost/wiki/BoostSubversion]
+You can get Proto by downloading [^proto.zip] from
+[@http://www.boost-consulting.com/vault/index.php?directory=Template%20Metaprogramming]
+or by accessing Boost's SVN repository on SourceForge.net. Just go to
+[@http://svn.boost.org/trac/boost/wiki/BoostSubversion]
 and follow the instructions there for anonymous SVN access.
 
 [heading Building with Proto]

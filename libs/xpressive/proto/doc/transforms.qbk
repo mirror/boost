@@ -457,6 +457,179 @@ Example:
 
 [endsect]
 
+[section:if [^if_<>]]
+
+    namespace boost { namespace proto 
+    {
+        namespace control
+        {
+            template<
+                typename If
+              , typename Then = _
+              , typename Else = not_<_> 
+            >
+            struct if_;
+        }
+
+        using control::if_;
+    }}
+
+We've already seen the _if_ template in the context of grammars, but
+_if_ can also be used as a transform. It can be used to conditionally
+apply one transform or another based on some condition. The three
+template parameters are Proto transforms. The result of applying the
+first transform should be a compile-time Boolean. If it is true, then
+the first transform is applied. The second is applied otherwise.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [``control::if_<If, Then, Else>
+    ::result<void(Expr, State, Visitor)>::type``]
+        [``typedef
+    mpl::if_<
+        when<_, If>::result<void(Expr, State, Visitor)>::type
+      , when<_, Then>
+      , when<_, Else>
+    >::type
+branch;
+
+typedef branch::result<void(Expr, State, Visitor)>::type type;``]
+    ]
+    [   [`control::if_<If, Then, Else>()(expr, state, visitor)`]
+        [``typedef ... branch; // Same as above
+branch()(expr, state, visitor);``]
+    ]
+]
+
+Example:
+
+    // Match a terminal. If size of the terminal
+    // argument is less than or equal to 4, make
+    // a new terminal that stores the argument by
+    // value. Otherwise, store the argument by
+    // reference.
+    struct ByValOrRef
+      : when<
+            terminal<_>
+          , if_<
+                mpl::less_equal<
+                    mpl::sizeof_<_arg>
+                  , mpl::size_t<4>
+                >()
+              , _make_terminal(_arg)
+              , _make_terminal(_ref(_arg))
+            >
+        >
+    {};
+
+[endsect]
+
+[section:and_or_not [^and_<>], [^or_<>], and [^not_<>]]
+
+    namespace boost { namespace proto 
+    {
+        namespace control
+        {
+            template<typename... T>
+            struct and_;
+
+            template<typename... T>
+            struct or_;
+
+            template<typename T>
+            struct not_;
+        }
+
+        using control::and_;
+        using control::or_;
+        using control::not_;
+    }}
+
+As with _if_, the grammar elements _and_, _or_, and _not_ can
+also be used as transforms. At a high level, here is what the
+transforms do:
+
+[variablelist
+[ [`and_<T0,T1,...,Tn>`]
+  [Apply the transform `Tn`.] ]
+[ [`or_<T0,T1,...,Tn>`]
+  [Apply the transform `Tx` where `x` is the lowest number
+   such that `matches<Expr,Tx>::value` is `true`.] ]
+[ [`not_<T>`] [Return the current expression unchanged.] ]
+]
+
+The following table specifies the behaviors described above more
+precisely.
+
+[table
+    [   [Expression]
+        [Returns]
+    ]
+    [   [``control::and_<A,B,C>
+    ::result<void(Expr, State, Visitor)>::type``]
+        [`C::result<void(Expr, State, Visitor)>::type`]
+    ]
+    [   [`control::and_<A,B,C>()(expr, state, visitor)`]
+        [`C()(expr, state, visitor)`]
+    ]
+    [   [``control::or_<A,B,C>
+    ::result<void(Expr, State, Visitor)>::type``]
+        [``typedef mpl::if_<
+    matches<Expr, A>
+  , A
+  , mpl::if_<
+        matches<Expr, B>
+      , B
+      , C
+    >::type
+>::type which;
+
+typedef which::result<void(Expr, State, Visitor)>::type type;``]
+    ]
+    [   [`control::or_<A,B,C>()(expr, state, visitor)`]
+        [``typedef ... which; // Same as above
+which()(expr, state, visitor);``]
+    ]
+    [   [``control::not_<A>
+    ::result<void(Expr, State, Visitor)>::type``]
+        [`Expr`]
+    ]
+    [   [`control::not_<A>()(expr, state, visitor)`]
+        [`expr`]
+    ]
+]
+
+Example:
+
+    // A transform that matches any expression and
+    // unwraps any reference_wrapped terminals it
+    // finds.
+    struct UnwrapReference
+      : or_<
+            // Pass through terminals that are not
+            // reference_wrappers unchanged:
+            and_<
+                terminal<_>
+              , not_<if_<is_reference_wrapper<_arg>()> >
+            >
+            // For other terminals (i.e., reference_wrapper
+            // terminals), unwrap the reference:
+          , when<
+                terminal<_>
+              , terminal<unwrap_reference<_arg> >(_arg)
+            >
+            // Otherwise, match non-terminals and
+            // recurse.
+          , when<
+                nary_expr<_, vararg<UnwrapReference> >
+            >
+        >
+    {};
+
+[endsect]
+
 [section:call [^call<>]]
 
     namespace boost { namespace proto
@@ -1065,7 +1238,7 @@ Here, for example, is how Proto defines the `arg_c<>` transform:
             // Function call operator that actually
             // executes the transform.
             template<typename Expr, typename State, typename Visitor>
-            typename proto::result_of::arg_c<Expr, I>::type
+            typename proto::result_of::arg_c<Expr, I>::const_reference
             operator ()(Expr const &expr, State const &, Visitor &) const
             {
                 return proto::arg_c<I>(expr);

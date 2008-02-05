@@ -303,7 +303,7 @@
           <template-type-parameter name="Context"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><purpose>Evaluate a given Proto expression with a given context. </purpose><description><para>
 
-</para></description><notes><para>This function is equivalent to <computeroutput>typename Context::template eval&lt;Expr&gt;()(expr, context)</computeroutput>. </para></notes></method><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::type</type><template>
+</para></description><returns><para><computeroutput>typename Context::template eval&lt;Expr&gt;()(expr, context)</computeroutput> </para></returns></method><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="Context"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context const &amp;</paramtype></parameter><description><para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para></description></method></method-group></struct></namespace><namespace name="result_of"><struct name="eval"><template>
