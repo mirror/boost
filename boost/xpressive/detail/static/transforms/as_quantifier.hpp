@@ -79,7 +79,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
-        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             typedef result<void(Expr, State, Visitor)> result_;
             typedef typename result_::arg_type arg_type;
@@ -115,7 +115,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
-        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             // we're inserting a hidden mark ... so grab the next hidden mark number.
             int mark_nbr = visitor.get_hidden_mark();
@@ -210,7 +210,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
-        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             return typename result<void(Expr, State, Visitor)>::type(
                 Grammar()(expr, detail::alternate_end_xpression(), visitor)
@@ -236,7 +236,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
-        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+        operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             int mark_number = proto::arg(proto::left(expr)).mark_number_;
             return typename result<void(Expr, State, Visitor)>::type(
@@ -280,7 +280,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
 
         template<typename Expr, typename State, typename Visitor>
         typename unary_expr<optional_tag<Greedy>, Expr>::type
-        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+        operator ()(Expr const &expr, State const &, Visitor &) const
         {
             typename unary_expr<optional_tag<Greedy>, Expr>::type that = {expr};
             return that;

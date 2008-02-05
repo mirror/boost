@@ -16,6 +16,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <boost/version.hpp>
 #include <boost/ref.hpp>
 #include <boost/assert.hpp>
@@ -37,6 +38,13 @@
 # include <boost/fusion/include/invoke.hpp>
 # include <boost/fusion/include/push_front.hpp>
 # include <boost/fusion/include/pop_front.hpp>
+#endif
+
+#if BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4510) // default constructor could not be generated
+#pragma warning(disable : 4512) // assignment operator could not be generated
+#pragma warning(disable : 4610) // can never be instantiated - user defined constructor required
 #endif
 
 namespace boost { namespace xpressive { namespace detail
@@ -473,5 +481,9 @@ namespace boost { namespace xpressive { namespace detail
     };
 
 }}}
+
+#if BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif

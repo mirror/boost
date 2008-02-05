@@ -178,7 +178,7 @@
 
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
-                operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+                operator ()(Expr const &, State const &, Visitor &) const
                 {
                     typedef typename result<void(Expr, State, Visitor)>::type result_type;
                     return result_type();

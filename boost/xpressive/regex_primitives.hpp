@@ -136,7 +136,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
-        operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+        operator ()(Expr const &expr, State const &state, Visitor &) const
         {
             typedef typename result<void(Expr, State, Visitor)>::type type;
             type that = {{{state}}, expr};

@@ -181,6 +181,7 @@ namespace boost { namespace proto
             }
 
         private:
+            diaply_expr &operator =(display_expr const &);
             int depth_;
             mutable bool first_;
             std::ostream &sout_;

@@ -10,6 +10,7 @@
 #define BOOST_PROTO_FUSION_HPP_EAN_11_04_2006
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/config.hpp>
 #include <boost/version.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/mpl/long.hpp>
@@ -42,6 +43,13 @@
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/eval.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
+
+#if BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4510) // default constructor could not be generated
+#pragma warning(disable : 4512) // assignment operator could not be generated
+#pragma warning(disable : 4610) // can never be instantiated - user defined constructor required
+#endif
 
 namespace boost { namespace proto
 {
@@ -631,5 +639,9 @@ namespace boost { namespace fusion
 #endif // BOOST_PROTO_DOXYGEN_INVOKED
 
 #undef UNREF
+
+#if BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif

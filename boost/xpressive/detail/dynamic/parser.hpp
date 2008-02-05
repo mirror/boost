@@ -21,6 +21,7 @@
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/xpressive/detail/dynamic/dynamic.hpp>
 
 // The Regular Expression grammar, in pseudo BNF:
@@ -171,6 +172,7 @@ inline void merge_charset
   , Traits const &traits
 )
 {
+    detail::ignore_unused(traits);
     if(0 != compound.posix_yes())
     {
         typename Traits::char_class_type mask = compound.posix_yes();

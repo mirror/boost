@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -95,6 +96,7 @@ namespace boost { namespace xpressive { namespace detail
 
         bool is_word(Traits const &traits, char_type ch) const
         {
+            detail::ignore_unused(traits);
             return traits.isctype(traits.translate(ch), this->word_);
         }
 

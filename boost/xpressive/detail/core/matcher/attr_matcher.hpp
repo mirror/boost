@@ -41,6 +41,8 @@ namespace boost { namespace xpressive { namespace detail
         {
             return this->traits_.translate(ch1);
         }
+    private:
+        char_translate &operator =(char_translate const &);
     };
 
     ///////////////////////////////////////////////////////////////////////////////

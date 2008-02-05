@@ -60,8 +60,7 @@ namespace boost { namespace proto
             /// \param The Proto expression to evaluate
             /// \param The context in which the expression should be
             ///     evaluated.
-            /// \note This function is equivalent to
-            ///     <tt>typename Context::template eval<Expr>()(expr, context)</tt>.
+            /// \return <tt>typename Context::template eval<Expr>()(expr, context)</tt>
             template<typename Expr, typename Context>
             typename proto::result_of::eval<Expr, Context>::type
             operator ()(Expr &expr, Context &context) const

@@ -61,6 +61,8 @@ struct char_sink
 
     hash_peek_bitset<char_type> &bset_;
     Traits const &traits_;
+private:
+    char_sink &operator =(char_sink const &);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -257,6 +259,8 @@ struct xpression_peeker
     }
 
 private:
+    xpression_peeker(xpression_peeker const &);
+    xpression_peeker &operator =(xpression_peeker const &);
 
     template<typename Traits>
     Traits const &get_traits_() const

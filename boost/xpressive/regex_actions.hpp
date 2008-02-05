@@ -14,6 +14,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
@@ -51,6 +52,13 @@
 /// INTERNAL ONLY
 ///
 #define UNCVREF(x)  typename remove_cv<typename remove_reference<x>::type>::type
+
+#if BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4510) // default constructor could not be generated
+#pragma warning(disable : 4512) // assignment operator could not be generated
+#pragma warning(disable : 4610) // can never be instantiated - user defined constructor required
+#endif
 
 namespace boost { namespace xpressive
 {
@@ -817,5 +825,9 @@ namespace boost { namespace xpressive
 
 #undef UNREF
 #undef UNCVREF
+
+#if BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_XPRESSIVE_ACTIONS_HPP_EAN_03_22_2007
