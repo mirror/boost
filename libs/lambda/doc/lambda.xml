@@ -3191,7 +3191,7 @@ to extend the library with new features.
 
 
 
-<appendix>
+<section>
 <title>Rationale for some of the design decisions</title>
 
 <section id="lambda.why_weak_arity">
@@ -3256,7 +3256,7 @@ was dropped.
 
 </section>
 
-</appendix>
+</section>
 
 
 
