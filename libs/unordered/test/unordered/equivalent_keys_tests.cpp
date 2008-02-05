@@ -8,7 +8,7 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 #include <map>
-#include <deque>
+#include <list>
 #include "../helpers/tracker.hpp"
 #include "../helpers/invariants.hpp"
 
@@ -57,7 +57,7 @@ void set_tests()
 
 void map_tests()
 {
-    typedef std::deque<std::pair<int const, int> > values_type;
+    typedef std::list<std::pair<int const, int> > values_type;
     values_type v[5];
     v[0].push_back(std::pair<int const, int>(1,1));
     v[1].push_back(std::pair<int const, int>(28,34));
