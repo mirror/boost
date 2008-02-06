@@ -61,7 +61,7 @@ void test2()
     map1["foobazbaz"] = "5";
 
     sregex rx = (a1=map1)[ xp::ref(result) = a1 ] 
-		>> *((a1=map1)[ xp::ref(result) += ',', xp::ref(result) += a1 ]);
+        >> *((a1=map1)[ xp::ref(result) += ',', xp::ref(result) += a1 ]);
 
     if(!regex_match(str, rx))
     {
