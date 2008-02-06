@@ -40,6 +40,10 @@ namespace boost { namespace proto
             typedef extends<terminal_type, literal<T, Domain>, Domain> base_type;
 
         public:
+            typedef typename proto::result_of::arg<terminal_type>::type value_type;
+            typedef typename proto::result_of::arg<terminal_type>::reference reference;
+            typedef typename proto::result_of::arg<terminal_type>::const_reference const_reference;
+
             template<typename U>
             literal(U &u)
               : base_type(terminal_type::make(u))
@@ -56,6 +60,16 @@ namespace boost { namespace proto
             {}
 
             using base_type::operator =;
+
+            reference get()
+            {
+                return proto::arg(*this);
+            }
+
+            const_reference get() const
+            {
+                return proto::arg(*this);
+            }
         };
     }
 
