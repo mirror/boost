@@ -102,7 +102,7 @@ void test_symbols()
     std::map<std::string,std::string> map10;
     TYPEOF_TEST((a1=map10)[ xp::ref(result) = a1 ] >> *(' ' >> (a1=map10)[ xp::ref(result) += ',' + a1 ]));
     TYPEOF_TEST((a1=map10)[ xp::ref(result) = a1 ]
-		>> *((a1=map10)[ xp::ref(result) += ',', xp::ref(result) += a1 ]));
+        >> *((a1=map10)[ xp::ref(result) += ',', xp::ref(result) += a1 ]));
     std::list<int> result12;
     std::map<std::string,int> map12;
     TYPEOF_TEST((a1=map12)[ xp::ref(result12)->*push_back( a1 ) ]
