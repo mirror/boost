@@ -10,6 +10,8 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/range/detail/implementation_help.hpp>
+#include <boost/test/test_tools.hpp>
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 #  pragma warn -8091 // supress warning in Boost.Test
@@ -30,7 +32,6 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/test/test_tools.hpp>
 #include <iostream>
 #include <vector>
 
@@ -91,6 +92,11 @@ void check_partial_workaround()
 
 void check_partial_workaround()
 {
+    //
+    // test if warnings are generated
+    //
+    std::size_t s = boost::range_detail::array_size( "foo" );
+    BOOST_CHECK_EQUAL( s,  4u );
 }
 
 #endif
