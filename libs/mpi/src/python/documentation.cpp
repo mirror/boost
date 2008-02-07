@@ -132,10 +132,10 @@ const char* module_docstring =
   "\n"
   "  Once you have registered your C++ data structures, you can extract\n"
   "  the skeleton for an instance of that data structure with skeleton().\n"
-  "  The resulting skeleton_proxy can be transmitted via the normal send\n"
+  "  The resulting SkeletonProxy can be transmitted via the normal send\n"
   "  routine, e.g.,\n\n"
   "    mpi.world.send(1, 0, skeleton(my_data_structure))\n\n"
-  "  skeleton_proxy objects can be received on the other end via recv(),\n"
+  "  SkeletonProxy objects can be received on the other end via recv(),\n"
   "  which stores a newly-created instance of your data structure with the\n"
   "  same `shape' as the sender in its `object' attribute:\n\n"
   "    shape = mpi.world.recv(0, 0)\n"
@@ -210,6 +210,86 @@ const char* environment_initialized_docstring =
 
 const char* environment_finalized_docstring = 
   "Determine if the MPI environment has already been finalized.\n";
+
+/***********************************************************
+ * nonblocking documentation                               *
+ ***********************************************************/
+const char* request_list_init_docstring=
+  "Without arguments, constructs an empty RequestList.\n"
+  "With one argument `iterable', copies request objects from this\n"
+  "iterable to the new RequestList.\n";
+
+const char* nonblocking_wait_any_docstring =
+  "Waits until any of the given requests has been completed. It provides\n"
+  "functionality equivalent to MPI_Waitany.\n"
+  "\n"
+  "requests must be a RequestList instance.\n"
+  "\n"
+  "Returns a triple (value, status, index) consisting of received value\n"
+  "(or None), the Status object for the completed request, and its index\n"
+  "in the RequestList.\n";
+
+const char* nonblocking_test_any_docstring =
+  "Tests if any of the given requests have been completed, but does not wait\n"
+  "for completion. It provides functionality equivalent to MPI_Testany.\n"
+  "\n"
+  "requests must be a RequestList instance.\n"
+  "\n"
+  "Returns a triple (value, status, index) like wait_any or None if no request\n"
+  "is complete.\n";
+
+const char* nonblocking_wait_all_docstring =
+  "Waits until all of the given requests have been completed. It provides\n"
+  "functionality equivalent to MPI_Waitall.\n"
+  "\n"
+  "requests must be a RequestList instance.\n"
+  "\n"
+  "If the second parameter `callable' is provided, it is called with each\n"
+  "completed request's received value (or None) and it s Status object as\n"
+  "its arguments. The calls occur in the order given by the `requests' list.\n";
+
+const char* nonblocking_test_all_docstring =
+  "Tests if all of the given requests have been completed. It provides\n"
+  "functionality equivalent to MPI_Testall.\n"
+  "\n"
+  "Returns True if all requests have been completed.\n"
+  "\n"
+  "requests must be a RequestList instance.\n"
+  "\n"
+  "If the second parameter `callable' is provided, it is called with each\n"
+  "completed request's received value (or None) and it s Status object as\n"
+  "its arguments. The calls occur in the order given by the `requests' list.\n";
+
+const char* nonblocking_wait_some_docstring =
+  "Waits until at least one of the given requests has completed. It\n"
+  "then completes all of the requests it can, partitioning the input\n"
+  "sequence into pending requests followed by completed requests.\n"
+  "\n"
+  "This routine provides functionality equivalent to MPI_Waitsome.\n"
+  "\n"
+  "Returns the index of the first completed request."
+  "\n"
+  "requests must be a RequestList instance.\n"
+  "\n"
+  "If the second parameter `callable' is provided, it is called with each\n"
+  "completed request's received value (or None) and it s Status object as\n"
+  "its arguments. The calls occur in the order given by the `requests' list.\n";
+
+const char* nonblocking_test_some_docstring =
+  "Tests to see if any of the given requests has completed. It completes\n"
+  "all of the requests it can, partitioning the input sequence into pending\n"
+  "requests followed by completed requests. This routine is similar to\n"
+  "wait_some, but does not wait until any requests have completed.\n"
+  "\n"
+  "This routine provides functionality equivalent to MPI_Testsome.\n"
+  "\n"
+  "Returns the index of the first completed request."
+  "\n"
+  "requests must be a RequestList instance.\n"
+  "\n"
+  "If the second parameter `callable' is provided, it is called with each\n"
+  "completed request's received value (or None) and it s Status object as\n"
+  "its arguments. The calls occur in the order given by the `requests' list.\n";
 
 /***********************************************************
  * exception documentation                                 *
@@ -310,14 +390,14 @@ const char* scatter_docstring =
  * communicator documentation                              *
  ***********************************************************/
 const char* communicator_docstring =
- "The communicator class abstracts a set of communicating\n"
+ "The Communicator class abstracts a set of communicating\n"
  "processes in MPI. All of the processes that belong to a certain\n"
  "communicator can determine the size of the communicator, their rank\n"
  "within the communicator, and communicate with any other processes\n"
  "in the communicator.\n";
 
 const char* communicator_default_constructor_docstring =
-  "Build a new Boost.MPI communicator for MPI_COMM_WORLD.\n";
+  "Build a new Boost.MPI Communicator instance for MPI_COMM_WORLD.\n";
 
 const char* communicator_rank_docstring =
   "Returns the rank of the process in the communicator, which will be a\n"
@@ -335,10 +415,10 @@ const char* communicator_send_docstring =
   "  - For C++ objects registered via register_serialized(), the value\n"
   "    will be serialized and transmitted.\n"
   "\n"
-  "  - For skeleton_proxy objects, the skeleton of the object will be\n"
+  "  - For SkeletonProxy objects, the skeleton of the object will be\n"
   "    serialized and transmitted.\n"
   "\n"
-  "  - For content objects, the content will be transmitted directly.\n"
+  "  - For Content objects, the content will be transmitted directly.\n"
   "    This content can be received by a matching recv/irecv call that\n"
   "    provides a suitable `buffer' argument.\n"
   "\n"
@@ -351,12 +431,12 @@ const char* communicator_recv_docstring =
   "the message can be received from any process. Likewise, if the tag\n"
   "parameter is not specified, a message with any tag can be received.\n"
   "If return_status is True, returns a tuple containing the received\n"
-  "object followed by a status object describing the communication.\n"
+  "object followed by a Status object describing the communication.\n"
   "Otherwise, recv() returns just the received object.\n"
   "\n"
   "When receiving the content of a data type that has been sent separately\n"
   "from its skeleton, user code must provide a value for the `buffer'\n"
-  "argument. This value should be the content object returned from\n"
+  "argument. This value should be the Content object returned from\n"
   "get_content().\n";
 
 const char* communicator_isend_docstring =
@@ -364,7 +444,7 @@ const char* communicator_isend_docstring =
   "tag to the process with rank dest. It can be received by the\n"
   "destination process with a matching recv call. The value will be\n"
   "transmitted in the same way as with send().\n"
-  "This routine returns a request object, which can be used to query\n"
+  "This routine returns a Request object, which can be used to query\n"
   "when the transmission has completed, wait for its completion, or\n"
   "cancel the transmission.\n";
 
@@ -373,15 +453,15 @@ const char* communicator_irecv_docstring =
   "source with the given tag. If the source parameter is not specified,\n"
   "the message can be received from any process. Likewise, if the tag\n"
   "parameter is not specified, a message with any tag can be received.\n"
-  "This routine returns a request object, which can be used to query\n"
+  "This routine returns a Request object, which can be used to query\n"
   "when the transmission has completed, wait for its completion, or\n"
   "cancel the transmission. The received value be accessible\n"
-  "through the `value' attribute of the request object once transmission\n"
+  "through the `value' attribute of the Request object once transmission\n"
   "has completed.\n"
   "\n"
   "As with the recv() routine, when receiving the content of a data type\n"
   "that has been sent separately from its skeleton, user code must provide\n"
-  "a value for the `buffer' argument. This value should be the content\n"
+  "a value for the `buffer' argument. This value should be the Content\n"
   "object returned from get_content().\n"; 
 
  const char* communicator_probe_docstring =
@@ -389,7 +469,7 @@ const char* communicator_irecv_docstring =
   "is available to be received. It then returns information about\n"
   "that message. If source is omitted, a message from any process\n"
   "will match. If tag is omitted, a message with any tag will match.\n"
-  "The actual source and tag can be retrieved from the returned status\n"
+  "The actual source and tag can be retrieved from the returned Status\n"
   "object. To check if a message is available without blocking, use\n"
   "iprobe.\n";
 
@@ -399,7 +479,7 @@ const char* communicator_iprobe_docstring =
   "message; otherwise, it returns None. If source is omitted, a message\n"
   "from any process will match. If tag is omitted, a message with any\n"
   "tag will match. The actual source and tag can be retrieved from the\n"
-  "returned status object. To wait for a message to become available, use\n"
+  "returned Status object. To wait for a message to become available, use\n"
   "probe.\n";
 
 const char* communicator_barrier_docstring = 
@@ -418,8 +498,8 @@ const char* communicator_split_docstring =
   "the ordering of processes with the same color in the resulting\n"
   "communicator. If omitted, the key will default to the rank of\n"
   "the process in the current communicator.\n\n"
-  "Returns a new communicator containing all of the processes in\n"
-  "this communicator that have the same color.\n";
+  "Returns a new Communicator instance containing all of the \n"
+  "processes in this communicator that have the same color.\n";
 
 const char* communicator_abort_docstring = 
   "Makes a \"best attempt\" to abort all of the tasks in the group of\n"
@@ -435,36 +515,46 @@ const char* communicator_abort_docstring =
  * request documentation                                   *
  ***********************************************************/
 const char* request_docstring = 
-  "The request class contains information about a non-blocking send\n"
+  "The Request class contains information about a non-blocking send\n"
   "or receive and will be returned from isend or irecv, respectively.\n"
-  "When a request object represents a completed irecv, the `value' \n"
+  "When a Request object represents a completed irecv, the `value' \n"
   "attribute will contain the received value.\n";
+
+const char* request_with_value_docstring = 
+  "This class is an implementation detail. Any call that accepts a\n"
+  "Request also accepts a RequestWithValue, and vice versa.\n";
 
 const char* request_wait_docstring =
   "Wait until the communication associated with this request has\n"
   "completed. For a request that is associated with an isend(), returns\n"
-  "a status object describing the communication. For an irecv()\n"
+  "a Status object describing the communication. For an irecv()\n"
   "operation, returns the received value by default. However, when\n"
-  "return_status=True, a (value, status) pair is returned by a.\n"
+  "return_status=True, a (value, status) pair is returned by a\n"
   "completed irecv request.\n";
 
 const char* request_test_docstring =
   "Determine whether the communication associated with this request\n"
-  "has completed successfully. If so, returns the status object\n"
+  "has completed successfully. If so, returns the Status object\n"
   "describing the communication (for an isend request) or a tuple\n"
-  "containing the received value and a status object (for an irecv\n"
-  "request). Note that once test() returns a status object, the\n"
+  "containing the received value and a Status object (for an irecv\n"
+  "request). Note that once test() returns a Status object, the\n"
   "request has completed and wait() should not be called.\n";
 
 const char* request_cancel_docstring =
   "Cancel a pending communication, assuming it has not already been\n"
   "completed.\n";
 
+const char* request_value_docstring =
+  "If this request originated in an irecv(), this property makes the"
+  "sent value accessible once the request completes.\n"
+  "\n"
+  "If no value is available, ValueError is raised.\n";
+
 /***********************************************************
  * skeleton/content documentation                          *
  ***********************************************************/
 const char* object_without_skeleton_docstring = 
-  "The object_without_skeleton class is an exception class used only\n"
+  "The ObjectWithoutSkeleton class is an exception class used only\n"
   "when the skeleton() or get_content() function is called with an\n"
   "object that is not supported by the skeleton/content mechanism.\n"
   "All C++ types for which skeletons and content can be transmitted\n"
@@ -475,13 +565,13 @@ const char* object_without_skeleton_object_docstring =
   "The object on which skeleton() or get_content() was invoked.\n";
 
 const char* skeleton_proxy_docstring = 
-  "The skeleton_proxy class is used to represent the skeleton of an\n"
-  "object. The skeleton_proxy can be used as the value parameter of\n"
+  "The SkeletonProxy class is used to represent the skeleton of an\n"
+  "object. The SkeletonProxy can be used as the value parameter of\n"
   "send() or isend() operations, but instead of transmitting the\n"
   "entire object, only its skeleton (\"shape\") will be sent, without\n"
   "the actual data. Its content can then be transmitted, separately.\n"
   "\n"
-  "User code cannot generate skeleton_proxy instances directly. To\n"
+  "User code cannot generate SkeletonProxy instances directly. To\n"
   "refer to the skeleton of an object, use skeleton(object). Skeletons\n"
   "can also be received with the recv() and irecv() methods.\n"
   "\n"
@@ -503,7 +593,7 @@ const char* content_docstring =
   "skeleton/content mechanism.\n";
 
 const char* skeleton_docstring = 
-  "The skeleton function retrieves the skeleton_proxy for its object\n"
+  "The skeleton function retrieves the SkeletonProxy for its object\n"
   "parameter, allowing the transmission of the skeleton (or \"shape\")\n"
   "of the object separately from its data. The skeleton/content mechanism\n"
   "is useful when a large data structure remains structurally the same\n"
@@ -534,7 +624,7 @@ const char* get_content_docstring =
  * status documentation                                    *
  ***********************************************************/
 const char* status_docstring = 
-  "The status class stores information about a given message, including\n"
+  "The Status class stores information about a given message, including\n"
   "its source, tag, and whether the message transmission was cancelled\n"
   "or resulted in an error.\n";
 
@@ -554,7 +644,7 @@ const char* status_cancelled_docstring =
  * timer documentation                                     *
  ***********************************************************/
 const char* timer_docstring =
-  "The timer class is a simple wrapper around the MPI timing facilities.\n";
+  "The Timer class is a simple wrapper around the MPI timing facilities.\n";
 
 const char* timer_default_constructor_docstring =
   "Initializes the timer. After this call, elapsed == 0.\n";

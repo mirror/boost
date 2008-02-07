@@ -16,6 +16,7 @@
 #include <typeinfo>
 #include <list>
 #include "utility.hpp"
+#include "request_with_value.hpp"
 
 using namespace boost::python;
 using namespace boost::mpi;
@@ -114,14 +115,12 @@ communicator_recv_content(const communicator& comm, int source, int tag,
 /// Receive the content of a Python object. The request object's value
 /// attribute will reference the object whose content is being
 /// received, not the content wrapper.
-object 
+request_with_value
 communicator_irecv_content(const communicator& comm, int source, int tag,
-                           const content& c)
+                           content& c)
 {
-  using boost::python::make_tuple;
-
-  object req(comm.irecv(source, tag, c.base()));
-  req.attr("value") = c.object;
+  request_with_value req(comm.irecv(source, tag, c.base()));
+  req.m_external_value = &c.object;
   return req;
 }
 
@@ -140,7 +139,7 @@ void export_skeleton_and_content(class_<communicator>& comm)
   // Expose the object_without_skeleton exception
   object type = 
     class_<object_without_skeleton>
-      ("object_without_skeleton", object_without_skeleton_docstring, no_init)
+      ("ObjectWithoutSkeleton", object_without_skeleton_docstring, no_init)
       .def_readonly("object", &object_without_skeleton::value,
                     object_without_skeleton_object_docstring)
       .def("__str__", &object_without_skeleton_str)
@@ -150,11 +149,11 @@ void export_skeleton_and_content(class_<communicator>& comm)
   // Expose the Python variants of "skeleton_proxy" and "content", and
   // their generator functions.
   detail::skeleton_proxy_base_type = 
-    class_<skeleton_proxy_base>("skeleton_proxy", skeleton_proxy_docstring, 
+    class_<skeleton_proxy_base>("SkeletonProxy", skeleton_proxy_docstring, 
                                 no_init)
       .def_readonly("object", &skeleton_proxy_base::object,
                     skeleton_proxy_object_docstring);
-  class_<content>("content", content_docstring, no_init);
+  class_<content>("Content", content_docstring, no_init);
   def("skeleton", &skeleton, arg("object"), skeleton_docstring);
   def("get_content", &get_content, arg("object"), get_content_docstring);
 
@@ -166,7 +165,9 @@ void export_skeleton_and_content(class_<communicator>& comm)
          (arg("source") = any_source, arg("tag") = any_tag, arg("buffer"), 
           arg("return_status") = false))
     .def("irecv", communicator_irecv_content,
-         (arg("source") = any_source, arg("tag") = any_tag, arg("buffer")));
+         (arg("source") = any_source, arg("tag") = any_tag, arg("buffer")),
+         with_custodian_and_ward_postcall<0, 4>()
+         );
 }
 
 } } } // end namespace boost::mpi::python

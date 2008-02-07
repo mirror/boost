@@ -30,7 +30,7 @@ void export_status()
   using boost::python::arg;
   using boost::python::object;
   
-  class_<status>("status", status_docstring, no_init)
+  class_<status>("Status", status_docstring, no_init)
     .add_property("source", &status::source, status_source_docstring)
     .add_property("tag", &status::tag, status_tag_docstring)
     .add_property("error", &status::error, status_error_docstring)
