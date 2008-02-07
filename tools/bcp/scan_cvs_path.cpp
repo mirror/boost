@@ -136,9 +136,9 @@ void bcp_implementation::scan_svn_path(const fs::path& p)
                {
                   scan_svn_path(fpath); // recursion for directory entries
                }
-               // 	   else
-               // 	     std::cerr << "WARNING: unknown entry kind for entry " << name 
-               // 		       << "in " << entries << std::endl;  
+               //       else
+               //         std::cerr << "WARNING: unknown entry kind for entry " << name 
+               //              << "in " << entries << std::endl;  
             }
          }
          ++i;
