@@ -50,6 +50,7 @@ along with suitable workarounds when available.
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
   <li><a href="#va_90">IBM VisualAge C++ V9.0 for AIX</a></li>
   <li><a href="#intel_81_lin">Intel C++ Compiler for Linux 8.1 and later</a></li>
+  <li><a href="#intel_91_mac">Intel C++ Compiler for Mac OS 9.1 and later</a></li>
   <li><a href="#intel_7x_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></li>
   <li><a href="#intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></li>
   <li><a href="#intel_100_win64">Intel C++ Compiler for Windows 64-bit 10.0</a></li>
@@ -137,12 +138,13 @@ starting from 3.2. The following versions have been explicitly tested:
   <li>GCC 3.4.3 under Linux x86-64,</li>
   <li>GCC 3.4.4 under Linux, (cygming special) under Cygwin 1.5.22,</li>
   <li>GCC 3.4.5 (mingw special) under Win32,</li>
-  <li>GCC 3.4.6 under Linux x86-64,</li>
-  <li>GCC 4.0.1 under Linux x86-64, (Apple builds 5363 and 5367) under Mac OS,</li>
+  <li>GCC 3.4.6 under Linux x86-64 and Solaris,</li>
+  <li>GCC 4.0.1 under Linux x86-64, (Apple builds 5363, 5367 and 5465) under Mac OS,</li>
   <li>GCC 4.1.1 under Linux x86-64,</li>
   <li>GCC 4.1.2 (OpenPKG-CURRENT) under Solaris,</li>
   <li>GCC 4.2.1 under HP-UX IA64 and Linux x86-64, (mingw32-2) under Win32,</li>
-  <li>GCC 4.2.2 under Linux.</li>
+  <li>GCC 4.2.2 under Linux and Linux x86-64,</li>
+  <li>GCC 4.3.0 20080206 (experimental) under Linux.</li>
 </ul>
 Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
 </p>
@@ -242,7 +244,14 @@ Other than this, Boost.MultiIndex works without problems.
 
 <p>
 No problems have been detected with this compiler.
-Tested from version 8.1 to 9.1.
+Tested from version 8.1 to 10.1.
+</p>
+
+<h2><a name="intel_91_mac">Intel C++ Compiler for Mac OS 9.1 and later</a></h2>
+
+<p>
+No problems have been detected with this compiler.
+Last tested for versions 9.1 and 10.0.
 </p>
 
 <h2><a name="intel_7x_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></h2>
@@ -444,7 +453,7 @@ This problem is a recurrent bug of the compiler, and has been reported in
 other unrelated libraries, like the
 <a href="../../../libs/graph/doc/table_of_contents.html">Boost Graph Library</a>,
 <a href="../../../libs/multi_array/doc/index.html">Boost.MultiArray</a>,
-<a href="../../../libs/regex/doc/index.html">Boost.Regex</a>,
+<a href="../../../libs/regex/index.html">Boost.Regex</a>,
 <a href="http://www.cgal.org/">CGAL</a> and
 <a href="http://www.mysql.com/downloads/api-mysql++.html">MySQL++</a>.
 The error is triggered, though not in a systematic manner, by the use
@@ -469,7 +478,7 @@ with equivalent operations:
 <p>
 The second workaround has not been confirmed by the author, but it is given
 on the Internet in connection with this error appearing in other libraries.
-Replace line 84 of <code>&lt;xlocnum></code>
+Replace line 84 of <code>&lt;xlocnum&gt;</code>
 
 <blockquote><pre>
  <span class=preprocessor>#define</span> <span class=identifier>_VIRTUAL</span>	<span class=keyword>virtual</span>
@@ -675,7 +684,6 @@ No problems have been detected with this compiler.
 
 <p>
 No problems have been detected with this compiler.
-The Beta 2 version of this product was used for the testing. 
 </p>
 
 <h2><a name="sun_10">Sun Studio 10 for Solaris and later</a></h2>
@@ -1113,9 +1121,9 @@ Performance
 
 <br>
 
-<p>Revised November 6th 2007</p>
+<p>Revised February 7th 2008</p>
 
-<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
