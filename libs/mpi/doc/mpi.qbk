@@ -2025,6 +2025,9 @@ performance.
 
 [section:history Revision History]
 
+* *Boost 1.36.0*: 
+  * Support for non-blocking operations in Python, from Andreas Klöckner
+
 * *Boost 1.35.0*: Initial release, containing the following post-review changes 
   * Support for arrays in all collective operations
   * Support default-construction of [classref boost::mpi::environment environment]
