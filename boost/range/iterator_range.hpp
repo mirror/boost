@@ -11,6 +11,11 @@
 #ifndef BOOST_RANGE_ITERATOR_RANGE_HPP
 #define BOOST_RANGE_ITERATOR_RANGE_HPP
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500) 
+    #pragma warning( push )
+    #pragma warning( disable : 4996 )
+#endif
+
 // From boost/dynamic_bitset.hpp; thanks to Matthias Troyer for Cray X1 patch.
 #include <boost/config.hpp> // Define __STL_CONFIG_H, if appropriate.
 #ifndef BOOST_OLD_IOSTREAMS 
@@ -37,10 +42,6 @@
 # endif
 #endif // _STLP_NO_IOSTREAMS
 #include <cstddef>
-
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || BOOST_WORKAROUND(BOOST_MSVC, == 1400) 
-    #pragma warning( disable : 4996 )
-#endif
 
 /*! \file
     Defines the \c iterator_class and related functions. 
@@ -638,6 +639,10 @@ namespace boost
 } // namespace 'boost'
 
 #undef BOOST_OLD_IOSTREAMS
+
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500) 
+    #pragma warning( pop )
+#endif
 
 #endif
 
