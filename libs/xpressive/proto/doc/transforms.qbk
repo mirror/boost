@@ -628,6 +628,23 @@ Example:
         >
     {};
 
+The above transform serves to illustrate the behaviors of the _and_,
+_or_, and _not_ transforms, but it is admittedly contrived. The
+transform is more easily written as follows:
+
+    // Functionally identical to the UnwrapReference
+    // transform above:
+    struct UnwrapReference
+      : or_<
+            when<
+                terminal<reference_wrapper<_> >
+              , terminal<unwrap_reference<_arg> >(_arg)
+            >
+          , terminal<_>
+          , nary_expr<_, vararg<UnwrapReference> >
+        >
+    {};
+
 [endsect]
 
 [section:call [^call<>]]
