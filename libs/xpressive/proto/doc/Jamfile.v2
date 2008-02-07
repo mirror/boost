@@ -6,7 +6,7 @@ import path ;
 import doxygen ;
 import quickbook ;
 
-#wave-command = [ path.native ../../../../dist/bin/wave ] ;
+wave-command = [ path.native ../../../../dist/bin/wave ] ;
 
 # Generate reference section using Doxygen
 doxygen protodoc
@@ -47,15 +47,15 @@ doxygen protodoc
         <doxygen:param>EXTRACT_ALL=YES
         <doxygen:param>HIDE_UNDOC_MEMBERS=NO
         # Use Boost.Wave to preprocess Proto's source
-        <doxygen:param>INPUT_FILTER=./wave.sh
-#        <doxygen:param>"INPUT_FILTER=\"$(wave-command) \\
-#                                        -S ../../../.. \\
-#                                        -S \\\"C:\\Program Files\\Microsoft Visual Studio .NET 2003\\vc7\\include\\\" \\
-#                                        -D _WIN32 \\
-#                                        -D BOOST_PROTO_DOXYGEN_INVOKED \\
-#                                        -p 1 \""
-#        # This ensures that Wave is actually built before we try to execute it
-#        <dependency>../../../../tools/wave/build release
+#        <doxygen:param>INPUT_FILTER=./wave.sh
+        <doxygen:param>"INPUT_FILTER=\"$(wave-command) \\
+                                        -S ../../../.. \\
+                                        -S \\\"C:\\Program Files\\Microsoft Visual Studio .NET 2003\\vc7\\include\\\" \\
+                                        -D _WIN32 \\
+                                        -D BOOST_PROTO_DOXYGEN_INVOKED \\
+                                        -p 1 \""
+        # This ensures that Wave is actually built before we try to execute it
+        <dependency>../../../../tools/wave/build release
     ;
 
 xml proto
@@ -104,5 +104,5 @@ boostbook standalone
         # better use SVG's instead:
         # <xsl:param>admon.graphics.extension=".svg"
 
-        <dependency>protodoc
+#        <dependency>protodoc
     ;

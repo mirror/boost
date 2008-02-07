@@ -186,7 +186,8 @@
             template<typename Fun>
             struct call<Fun()> : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -221,7 +222,8 @@
             template<typename Fun, typename Arg0>
             struct call<Fun(Arg0)> : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -260,7 +262,8 @@
             template<typename Fun, typename Arg0, typename Arg1>
             struct call<Fun(Arg0, Arg1)> : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -299,7 +302,8 @@
             template<typename Fun, typename Arg0, typename Arg1, typename Arg2>
             struct call<Fun(Arg0, Arg1, Arg2)> : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -334,6 +338,8 @@
             #endif
         }
 
+        /// INTERNAL ONLY
+        ///
         template<typename Fun>
         struct is_callable<transform::call<Fun> >
           : mpl::true_
@@ -350,7 +356,8 @@
         template<typename Fun BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct call<Fun(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>

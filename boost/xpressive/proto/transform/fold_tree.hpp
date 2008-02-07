@@ -26,7 +26,8 @@ namespace boost { namespace proto
             template<typename Tag>
             struct is_tag : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -49,7 +50,8 @@ namespace boost { namespace proto
         struct fold_tree
           : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -81,7 +83,8 @@ namespace boost { namespace proto
         struct reverse_fold_tree
           : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -110,11 +113,15 @@ namespace boost { namespace proto
         };
     }
 
+    /// INTERNAL ONLY
+    ///
     template<typename Sequence, typename State0, typename Fun>
     struct is_callable<transform::fold_tree<Sequence, State0, Fun> >
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<typename Sequence, typename State0, typename Fun>
     struct is_callable<transform::reverse_fold_tree<Sequence, State0, Fun> >
       : mpl::true_

@@ -60,7 +60,8 @@
         {
             typedef typename Grammar::proto_base_expr proto_base_expr;
 
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>

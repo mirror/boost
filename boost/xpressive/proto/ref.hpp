@@ -136,7 +136,7 @@ namespace boost { namespace proto
         struct unref
         {
             template<typename T>
-            struct result {};
+            struct result;
 
             template<typename This, typename T>
             struct result<This(T)>

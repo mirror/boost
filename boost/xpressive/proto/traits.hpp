@@ -83,11 +83,15 @@
           : proto::detail::is_callable_<T>
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<>
         struct is_callable<proto::_>
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<>
         struct is_callable<proto::callable>
           : mpl::false_
@@ -243,7 +247,8 @@
             template<typename T>
             struct terminal
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -401,7 +406,7 @@
             struct as_expr
             {
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename T>
                 struct result<This(T)>
@@ -443,7 +448,7 @@
             struct as_arg
             {
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename T>
                 struct result<This(T)>
@@ -469,7 +474,7 @@
             struct arg_c
             {
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -493,7 +498,7 @@
             struct arg
             {
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -516,7 +521,7 @@
             struct left
             {
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -539,7 +544,7 @@
             struct right
             {
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>

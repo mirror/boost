@@ -86,7 +86,7 @@
                 BOOST_PROTO_CALLABLE()
 
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>

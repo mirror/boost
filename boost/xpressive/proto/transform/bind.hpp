@@ -27,7 +27,8 @@
             template<typename Fun>
             struct bind : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -49,6 +50,8 @@
 
         }
 
+        /// INTERNAL ONLY
+        ///
         template<typename Fun>
         struct is_callable<transform::bind<Fun> >
           : mpl::true_
@@ -65,7 +68,8 @@
             template<typename Return BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
             struct bind<Return(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>

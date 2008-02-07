@@ -96,7 +96,7 @@ namespace boost { namespace proto
         struct as_element
         {
             template<typename Sig>
-            struct result {};
+            struct result;
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
@@ -136,7 +136,7 @@ namespace boost { namespace proto
             BOOST_PROTO_CALLABLE()
 
             template<typename Sig>
-            struct result {};
+            struct result;
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
@@ -166,7 +166,7 @@ namespace boost { namespace proto
             BOOST_PROTO_CALLABLE()
 
             template<typename Sig>
-            struct result {};
+            struct result;
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
@@ -197,7 +197,7 @@ namespace boost { namespace proto
             BOOST_PROTO_CALLABLE()
 
             template<typename Sig>
-            struct result {};
+            struct result;
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
@@ -222,16 +222,22 @@ namespace boost { namespace proto
     /// \sa boost::proto::functional::flatten
     functional::flatten const flatten = {};
 
+    /// INTERNAL ONLY
+    ///
     template<>
     struct is_callable<functional::flatten>
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<>
     struct is_callable<functional::pop_front>
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<>
     struct is_callable<functional::reverse>
       : mpl::true_
@@ -247,7 +253,7 @@ namespace boost { namespace proto
         {}
 
         template<typename Sig>
-        struct result {};
+        struct result;
 
         template<typename This, typename Expr>
         struct result<This(Expr)>

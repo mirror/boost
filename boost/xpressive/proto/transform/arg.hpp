@@ -22,7 +22,8 @@ namespace boost { namespace proto
 
         struct expr : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -40,7 +41,8 @@ namespace boost { namespace proto
 
         struct state : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -58,7 +60,8 @@ namespace boost { namespace proto
 
         struct visitor : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -77,7 +80,8 @@ namespace boost { namespace proto
         template<int I>
         struct arg_c : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -95,7 +99,8 @@ namespace boost { namespace proto
 
         struct _ref : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename T>
             struct result<This(T)>
@@ -130,31 +135,43 @@ namespace boost { namespace proto
       : transform::arg_c<I>
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<>
     struct is_callable<transform::expr>
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<>
     struct is_callable<transform::state>
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<>
     struct is_callable<transform::visitor>
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<int I>
     struct is_callable<transform::arg_c<I> >
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<int I>
     struct is_callable<_arg_c<I> >
       : mpl::true_
     {};
 
+    /// INTERNAL ONLY
+    ///
     template<>
     struct is_callable<transform::_ref>
       : mpl::true_

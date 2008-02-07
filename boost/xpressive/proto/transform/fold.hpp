@@ -43,7 +43,8 @@
                       : v_(v)
                     {}
 
-                    template<typename Sig> struct result {};
+                    template<typename Sig>
+                    struct result;
 
                     template<typename This, typename Expr, typename State>
                     struct result<This(Expr, State)>
@@ -161,7 +162,8 @@
             template<typename Sequence, typename State0, typename Fun>
             struct fold : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -206,7 +208,8 @@
             template<typename State0, typename Fun>
             struct fold<_, State0, Fun> : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -250,7 +253,8 @@
             template<typename State0, typename Fun>
             struct reverse_fold<_, State0, Fun> : proto::callable
             {
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -287,11 +291,15 @@
             };
         }
 
+        /// INTERNAL ONLY
+        ///
         template<typename Sequence, typename State, typename Fun>
         struct is_callable<transform::fold<Sequence, State, Fun> >
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<typename Sequence, typename State, typename Fun>
         struct is_callable<transform::reverse_fold<Sequence, State, Fun> >
           : mpl::true_

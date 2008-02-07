@@ -566,7 +566,7 @@
                 BOOST_PROTO_CALLABLE()
 
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename A0>
                 struct result<This(A0)>
@@ -648,7 +648,7 @@
                 BOOST_PROTO_CALLABLE()
 
                 template<typename Sig>
-                struct result {};
+                struct result;
 
                 template<typename This, typename Sequence>
                 struct result<This(Sequence)>
@@ -760,11 +760,15 @@
 
     #include BOOST_PP_ITERATE()
 
+        /// INTERNAL ONLY
+        ///
         template<typename Tag, typename Domain>
         struct is_callable<functional::make_expr<Tag, Domain> >
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<typename Tag, typename Domain>
         struct is_callable<functional::unpack_expr<Tag, Domain> >
           : mpl::true_

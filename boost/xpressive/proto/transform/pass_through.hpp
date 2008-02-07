@@ -66,7 +66,8 @@
         template<typename Grammar>
         struct pass_through : proto::callable
         {
-            template<typename Sig> struct result {};
+            template<typename Sig>
+            struct result;
 
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
@@ -102,6 +103,8 @@
 
     } // namespace transform
 
+    /// INTERNAL ONLY
+    ///
     template<typename Grammar>
     struct is_callable<transform::pass_through<Grammar> >
       : mpl::true_

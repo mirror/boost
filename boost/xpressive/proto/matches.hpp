@@ -392,9 +392,76 @@
 
         namespace result_of
         {
+            /// \brief A Boolean metafunction that evaluates whether a given
+            /// expression type matches a grammar.
+            ///
+            /// <tt>matches\<Expr,Grammar\></tt> inherits (indirectly) from
+            /// \c mpl::true_ if <tt>Expr::proto_base_expr</tt> matches
+            /// <tt>Grammar::proto_base_expr</tt>, and from \c mpl::false_
+            /// otherwise.
+            ///
+            /// Non-terminal expressions are matched against a grammar
+            /// according to the following rules:
+            ///
+            /// \li The wildcard pattern, \c _, matches any expression.
+            /// \li An expression <tt>expr\<AT, argsN\<A0,A1,...An\> \></tt>
+            ///     matches a grammar <tt>expr\<BT, argsN\<B0,B1,...Bn\> \></tt>
+            ///     if \c BT is \c _ or \c AT, and if \c Ax matches \c Bx for
+            ///     each \c x in <tt>[0,n)</tt>.
+            /// \li An expression <tt>expr\<AT, argsN\<A0,...An,U0,...Um\> \></tt>
+            ///     matches a grammar <tt>expr\<BT, argsM\<B0,...Bn,vararg\<V\> \> \></tt>
+            ///     if \c BT is \c _ or \c AT, and if \c Ax matches \c Bx
+            ///     for each \c x in <tt>[0,n)</tt> and if \c Ux matches \c V
+            ///     for each \c x in <tt>[0,m)</tt>.
+            /// \li An expression \c E matches <tt>or_\<B0,B1,...Bn\></tt> if \c E
+            ///     matches some \c Bx for \c x in <tt>[0,n)</tt>.
+            /// \li An expression \c E matches <tt>and_\<B0,B1,...Bn\></tt> if \c E
+            ///     matches all \c Bx for \c x in <tt>[0,n)</tt>.
+            /// \li An expression \c E matches <tt>if_\<T\></tt> if
+            ///     <tt>when\<_,T\>::result\<void(E,int,int)\>::type::value</tt>
+            ///     is \c true.
+            /// \li An expression \c E matches <tt>if_\<T,U,V\></tt> if
+            ///     <tt>when\<_,T\>::result\<void(E,int,int)\>::type::value</tt>
+            ///     is \c true and \E matches \c U; or, if
+            ///     <tt>when\<_,T\>::result\<void(E,int,int)\>::type::value</tt>
+            ///     is \c false and \E matches \c V.
+            /// \li An expression \c E matches <tt>not_\<T\></tt> if \c E does
+            ///     not match \c T.
+            /// \li An expression \c E matches <tt>switch_\<C\></tt> if
+            ///     \c E matches <tt>C::case_\<E::proto_tag\></tt>.
+            ///
+            /// A terminal expression <tt>expr\<tag::terminal,args0\<A\> \></tt> matches
+            /// a grammar <tt>expr\<BT,args0\<B\> \></tt> if \c BT is \c _ or
+            /// \c tag::terminal and one of the following is true:
+            ///
+            /// \li \c B is the wildcard pattern, \c _
+            /// \li \c A is \c B
+            /// \li \c A is <tt>B &</tt>
+            /// \li \c A is <tt>B const &</tt>
+            /// \li \c B is <tt>exact\<A\></tt>
+            /// \li \c B is <tt>convertible_to\<X\></tt> and
+            ///     <tt>is_convertible\<A,X\>::value</tt> is \c true.
+            /// \li \c A is <tt>X[M]</tt> or <tt>X(&)[M]</tt> and
+            ///     \c B is <tt>X[proto::N]</tt>.
+            /// \li \c A is <tt>X(&)[M]</tt> and \c B is <tt>X(&)[proto::N]</tt>.
+            /// \li \c A is <tt>X[M]</tt> or <tt>X(&)[M]</tt> and
+            ///     \c B is <tt>X*</tt>.
+            /// \li \c B lambda-matches \c A (see below).
+            ///
+            /// A type \c B lambda-matches \c A if one of the following is true:
+            ///
+            /// \li \c B is \c A
+            /// \li \c B is the wildcard pattern, \c _
+            /// \li \c B is <tt>T\<B0,B1,...Bn\></tt> and \c A is
+            ///     <tt>T\<A0,A1,...An\></tt> and for each \c x in
+            ///     <tt>[0,n)</tt>, \c Ax and \c Bx are types
+            ///     such that \c Ax lambda-matches \c Bx 
             template<typename Expr, typename Grammar>
             struct matches
-              : detail::matches_<typename Expr::proto_base_expr, typename Grammar::proto_base_expr>
+              : detail::matches_<
+                    typename Expr::proto_base_expr
+                  , typename Grammar::proto_base_expr
+                >
             {};
         }
 
@@ -404,7 +471,8 @@
             {
                 typedef _ proto_base_expr;
 
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -412,6 +480,8 @@
                     typedef Expr type;
                 };
 
+                /// \param expr An expression
+                /// \return expr
                 template<typename Expr, typename State, typename Visitor>
                 Expr const &operator ()(Expr const &expr, State const &, Visitor &) const
                 {
@@ -428,7 +498,8 @@
             {
                 typedef not_ proto_base_expr;
 
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -436,6 +507,8 @@
                     typedef Expr type;
                 };
 
+                /// \param expr An expression
+                /// \return expr
                 template<typename Expr, typename State, typename Visitor>
                 Expr const &operator ()(Expr const &expr, State const &, Visitor &) const
                 {
@@ -449,35 +522,40 @@
             {
                 typedef if_ proto_base_expr;
 
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
                 {
                     typedef
+                        typename when<_, If>::template result<void(Expr, State, Visitor)>::type
+                    condition;
+
+                    typedef
                         typename mpl::if_<
-                            typename when<_, If>::template result<void(Expr, State, Visitor)>::type
+                            condition
                           , when<_, Then>
                           , when<_, Else>
                         >::type
-                    branch;
+                    which;
 
-                    typedef typename branch::template result<void(Expr, State, Visitor)>::type type;
+                    typedef typename which::template result<void(Expr, State, Visitor)>::type type;
                 };
 
+                /// \param expr An expression
+                /// \param state The current state
+                /// \param visitor A visitor of arbitrary type
+                /// \return <tt>result\<void(Expr, State, Visitor)\>::which()(expr, state, visitor)</tt>
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
                     typedef
-                        typename mpl::if_<
-                            typename when<_, If>::template result<void(Expr, State, Visitor)>::type
-                          , when<_, Then>
-                          , when<_, Else>
-                        >::type
-                    branch;
+                        typename result<void(Expr, State, Visitor)>::which
+                    which;
 
-                    return branch()(expr, state, visitor);
+                    return which()(expr, state, visitor);
                 }
             };
 
@@ -487,7 +565,8 @@
             {
                 typedef or_ proto_base_expr;
 
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -496,6 +575,10 @@
                     typedef typename which::template result<void(Expr, State, Visitor)>::type type;
                 };
 
+                /// \param expr An expression
+                /// \param state The current state
+                /// \param visitor A visitor of arbitrary type
+                /// \return <tt>result\<void(Expr, State, Visitor)\>::which()(expr, state, visitor)</tt>
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
@@ -511,7 +594,8 @@
             {
                 typedef and_ proto_base_expr;
 
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
@@ -520,6 +604,10 @@
                     typedef typename which::template result<void(Expr, State, Visitor)>::type type;
                 };
 
+                /// \param expr An expression
+                /// \param state The current state
+                /// \param visitor A visitor of arbitrary type
+                /// \return <tt>result\<void(Expr, State, Visitor)\>::which()(expr, state, visitor)</tt>
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
@@ -535,21 +623,26 @@
             {
                 typedef switch_ proto_base_expr;
 
-                template<typename Sig> struct result {};
+                template<typename Sig>
+                struct result;
 
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
                 {
-                    typedef typename Cases::template case_<typename Expr::proto_tag> impl;
-                    typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
+                    typedef typename Cases::template case_<typename Expr::proto_tag> which;
+                    typedef typename which::template result<void(Expr, State, Visitor)>::type type;
                 };
 
+                /// \param expr An expression
+                /// \param state The current state
+                /// \param visitor A visitor of arbitrary type
+                /// \return <tt>result\<void(Expr, State, Visitor)\>::which()(expr, state, visitor)</tt>
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    typedef typename Cases::template case_<typename Expr::proto_tag> impl;
-                    return impl()(expr, state, visitor);
+                    typedef typename Cases::template case_<typename Expr::proto_tag> which;
+                    return which()(expr, state, visitor);
                 }
             };
 
@@ -569,26 +662,36 @@
             };
         }
 
+        /// INTERNAL ONLY
+        ///
         template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
         struct is_callable<or_<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, G)> >
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, typename G)>
         struct is_callable<and_<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_LOGICAL_ARITY, G)> >
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<typename Grammar>
         struct is_callable<not_<Grammar> >
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<typename If, typename Then, typename Else>
         struct is_callable<if_<If, Then, Else> >
           : mpl::true_
         {};
 
+        /// INTERNAL ONLY
+        ///
         template<typename Grammar>
         struct is_callable<vararg<Grammar> >
           : mpl::true_

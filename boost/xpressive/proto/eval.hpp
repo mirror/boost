@@ -43,7 +43,7 @@ namespace boost { namespace proto
             BOOST_PROTO_CALLABLE()
 
             template<typename Sig>
-            struct result {};
+            struct result;
 
             template<typename This, typename Expr, typename Context>
             struct result<This(Expr, Context)>
