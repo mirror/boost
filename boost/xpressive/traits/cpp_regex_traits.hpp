@@ -119,6 +119,8 @@ namespace detail
     // Reserve some bits for the implementation
     #if defined(__GLIBCXX__)
     umaskex_t const std_ctype_reserved = 0x8000;
+    #elif defined(_CPPLIB_VER) && defined(BOOST_WINDOWS)
+    umaskex_t const std_ctype_reserved = 0x8200;
     #else
     umaskex_t const std_ctype_reserved = 0;
     #endif
