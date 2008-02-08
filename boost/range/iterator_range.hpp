@@ -11,7 +11,7 @@
 #ifndef BOOST_RANGE_ITERATOR_RANGE_HPP
 #define BOOST_RANGE_ITERATOR_RANGE_HPP
 
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500) 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500))
     #pragma warning( push )
     #pragma warning( disable : 4996 )
 #endif
@@ -640,7 +640,7 @@ namespace boost
 
 #undef BOOST_OLD_IOSTREAMS
 
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500) 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500)) 
     #pragma warning( pop )
 #endif
 
