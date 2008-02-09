@@ -71,6 +71,7 @@
 [def _callable_context_     [classref  boost::proto::context::callable_context `callable_context<>`]]
 [def _null_context_         [classref  boost::proto::context::null_context `null_context<>`]]
 [def _when_                 [classref  boost::proto::transform::when `when<>`]]
+[def _flatten_              [funcref   boost::proto::flatten `flatten()`]]
 
 [include preface.qbk]
 

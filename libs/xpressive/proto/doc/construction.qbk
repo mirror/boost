@@ -141,7 +141,179 @@ with them.]
 [section:left_right_arg Accessing Children Nodes]
 [/==============================================]
 
-// TODO describe tag_of, arg, arg_c, left and right. Also Fusion compatibility.
+After assembling an expression into a tree, you'll naturally want to be
+able to do the reverse, and access its children.
+You may even want to be able to iterate over the children with algorithms
+from the Boost.Fusion library. This section shows how.
+
+[heading [^tag_of<>]]
+
+A node in an expression tree is nothing more than a collection of children
+nodes and a tag type. You can access the tag type of any Proto expression type
+`Expr` directly as `typename Expr::proto_tag`, or you can use the _tag_of_
+metafunction, as shown below:
+
+    template<typename Expr>
+    typename proto::result_of::tag_of<Expr>::type
+    get_tag_of(Expr const &)
+    {
+        // Tag types are required to be default-constructible
+        return typename proto::result_of::tag_of<Expr>::type();
+    }
+
+    proto::terminal<int>::type const i = {0};
+
+    // Addition nodes have the "plus" tag type:
+    proto::tag::plus plus_tag = get_tag_of( i + 2 );
+
+[heading [^arg_c()]]
+
+Each node in an expression tree corresponds to an operator in an expression,
+and the children correspond to the operands, or arguments of the operator.
+To access them, you can use the _arg_c_ function template, as demonstrated
+below:
+
+    proto::terminal<int>::type i = {0};
+
+    // Get the 0-th operand of an addition operation:
+    proto::terminal<int>::type &ri = proto::arg_c<0>( i + 2 );
+
+    // Assert that we got back what we put in:    
+    assert( &i == &ri );
+
+You can use the `result_of::arg_c<>` metafunction to get the type of the Nth
+child of an expression node. The nested `::type` of the `arg_c<>` metafunction
+gives you the type after references and cv-qualifiers have been stripped from
+the child's type.
+
+    template<typename Expr>
+    void test_result_of_arg_c(Expr const &expr)
+    {
+        typedef typename proto::result_of::arg_c<Expr, 0>::type type;
+        
+        // ::type is a non-cv qualified, non-reference
+        BOOST_MPL_ASSERT((is_same< type, terminal<int>::type>));
+    }
+    
+    // ...    
+    terminal<int>::type i = {0};
+    test_result_of_arg_c( i + 2 );
+
+Why does the `arg_c<>` metafunction strip cv-qualifiers and references? The
+reason is one of practicality. Because expression trees are most typically
+built by holding references to temporary objects, lifetime management of these
+children nodes can be problematic. If `arg_c<>::type` were a reference, it
+would be very simple to create dangling references. Avoiding dangling
+references results in tedious and verbose applications of `remove_reference<>`
+and `remove_const<>`. This is especially problematic when building transforms
+that operate on ephemeral constelations of temporary objects. The current
+behavior of the `arg_c<>` metafunction makes it much simpler to write correct
+code.
+
+If you would like to know exactly the type of the Nth argument, including
+references and cv-qualifiers, you can use
+`fusion::result_of::value_at<Expr, N>::type`. This way, you can tell whether
+a child is stored by value or by reference. And if you would like to know
+the exact type that _arg_c_ returns, you can use 
+`fusion::result_of::at_c<Expr, N>::type`. It will always be a reference type,
+and its cv-qualification depends on the cv-qualification of `Expr` and
+whether the child is stored by reference or not.
+
+[heading [^arg()], [^left()], and [^right()]]
+
+Most operators in C++ are unary or binary. For that reason, accesing the
+only operand, or the left and right operands, are very common operations. For
+this reason, Proto provides the _arg_, _left_, and _right_ functions. _arg_
+and _left_ are synonomous with `arg_c<0>()`, and _right_ is synonomous with
+`arg_c<1>()`.
+
+There are also `result_of::arg<>`, `result_of::left<>`, and `result_of::right<>`
+metafunctions that merely forward to their `result_of::arg_c<>` counterparts.
+
+[heading Expression Nodes as Fusion Sequences]
+
+Proto expression nodes are valid Fusion random-access sequences of their
+children nodes. That means you can apply Fusion algorithms to them,
+transform them, apply Fusion filters and views to them, and access their
+elements using `fusion::at()`. The things Fusion can do to heterogeneous
+sequences is beyond the scope of this users' guide, but here is an example:
+
+    struct display
+    {
+        template<typename T>
+        void operator()(T const &t) const
+        {
+            std::cout << t << std::endl;
+        }
+    };
+
+    struct fun_t {};
+    terminal<fun_t>::type const fun = {{}};
+
+    // ...
+    fusion::for_each(
+        fusion::transform(
+            // pop_front() removes the "fun" child
+            fusion::pop_front(fun(1,2,3,4))
+            // Extract the ints from the terminal nodes
+          , functional::arg<>()
+        )
+      , display()
+    );
+
+The above invocation of `fusion::for_each()` displays the following:
+
+[pre
+1
+2
+3
+4
+]
+
+[heading Flattening Proto Expression Tress]
+
+Imagine a slight variation of the above example where, instead of iterating
+over the arguments of a lazy function invocation, we would like to iterate
+over the terminals in an addition expression:
+
+    terminal<int>::type const _1 = {1};
+
+    // ERROR: this doesn't work! Why?
+    fusion::for_each(
+        fusion::transform(
+            _1 + 2 + 3 + 4
+          , functional::arg<>()
+        )
+      , display()
+    );
+
+The reason this doesn't work is because the expression `_1 + 2 + 3 + 4` does
+not describe a flat sequence of terminals --- it describes a binary tree. We
+can treat it as a flat sequence of terminals, however, using Proto's _flatten_
+function. _flatten_ returns a view which makes a tree appear as a flat Fusion
+sequence. If the top-most node has a tag type `T`, then the elements of the
+flattened sequence are the children nodes that do *not* have tag type `T`. This
+process is evaluated recursively. So the above can correctly be written as:
+
+    terminal<int>::type const _1 = {1};
+
+    // OK, iterate over a flattened view
+    fusion::for_each(
+        fusion::transform(
+            proto::flatten(_1 + 2 + 3 + 4)
+          , functional::arg<>()
+        )
+      , display()
+    );
+
+The above invocation of `fusion::for_each()` displays the following:
+
+[pre
+1
+2
+3
+4
+]
 
 [endsect]
 

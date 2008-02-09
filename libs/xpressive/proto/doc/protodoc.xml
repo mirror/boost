@@ -297,7 +297,7 @@
     </template><specialization><template-arg>This(Expr</template-arg><template-arg>Context)</template-arg></specialization><typedef name="type"><type><classname>proto::result_of::eval</classname>&lt; typename remove_reference&lt; Expr &gt;::type, typename remove_reference&lt; Context &gt;::type &gt;::type</type></typedef></struct-specialization><typedef name="proto_is_callable_"><type>void</type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="Context"/>
-        </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="context"><paramtype>Context &amp;</paramtype></parameter><purpose>Evaluate a given Proto expression with a given context. </purpose><description><para>
+        </template><parameter name="expr"><paramtype>Expr &amp;</paramtype><description><para>The Proto expression to evaluate </para></description></parameter><parameter name="context"><paramtype>Context &amp;</paramtype><description><para>The context in which the expression should be evaluated. </para></description></parameter><purpose>Evaluate a given Proto expression with a given context. </purpose><description><para>
 
 </para></description><returns><para><computeroutput>typename Context::template eval&lt;Expr&gt;()(expr, context)</computeroutput> </para></returns></method><method name="operator()" cv="const"><type><classname>proto::result_of::eval</classname>&lt; Expr, Context &gt;::type</type><template>
           <template-type-parameter name="Expr"/>
@@ -924,7 +924,7 @@
           <template-type-parameter name="B4"/>
         </template><parameter name="b0"><paramtype>const B0 &amp;</paramtype></parameter><parameter name="b1"><paramtype>const B1 &amp;</paramtype></parameter><parameter name="b2"><paramtype>const B2 &amp;</paramtype></parameter><parameter name="b3"><paramtype>const B3 &amp;</paramtype></parameter><parameter name="b4"><paramtype>const B4 &amp;</paramtype></parameter></signature><description><para>make_expr </para></description></overloaded-function></namespace></namespace></header><header name="boost/xpressive/proto/matches.hpp"><para>Contains definition of matches&lt;&gt; metafunction for determining if a given expression matches a given pattern. </para><namespace name="boost"><namespace name="proto"><namespace name="control"><struct name="not_"><template>
       <template-type-parameter name="Grammar"/>
-    </template><struct-specialization name="result"><template>
+    </template><purpose>Inverts the set of expressions matched by a grammar. When used as a transform, <computeroutput>not_&lt;&gt;</computeroutput> returns the current expression unchanged. </purpose><description><para>If an expression type <computeroutput>E</computeroutput> does not match a grammar <computeroutput>G</computeroutput>, then <computeroutput>E</computeroutput> does match <computeroutput>not_&lt;G&gt;</computeroutput>. For example, <computeroutput>not_&lt;terminal&lt;_&gt; &gt;</computeroutput> will match any non-terminal. </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -935,11 +935,32 @@
           <template-type-parameter name="Visitor"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>An expression </para></description></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter><description><para>
 
-</para></description><returns><para>expr </para></returns></method></method-group></struct><struct name="if_"><template>
+
+</para></description><requires><para><computeroutput>matches&lt;Expr,not_&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para></requires><returns><para><computeroutput>expr</computeroutput> </para></returns></method></method-group></struct><struct name="if_"><template>
       <template-type-parameter name="If"/>
       <template-type-parameter name="Then"/>
       <template-type-parameter name="Else"/>
-    </template><struct-specialization name="result"><template>
+    </template><purpose>Used to select one grammar or another based on the result of a compile-time Boolean. When used as a transform, <computeroutput>if_&lt;&gt;</computeroutput> selects between two transforms based on a compile-time Boolean. </purpose><description><para>When <computeroutput>if_&lt;If,Then,Else&gt;</computeroutput> is used as a grammar, <computeroutput>If</computeroutput> must be a Proto transform and <computeroutput>Then</computeroutput> and <computeroutput>Else</computeroutput> must be grammars. An expression type <computeroutput>E</computeroutput> matches <computeroutput>if_&lt;If,Then,Else&gt;</computeroutput> if <computeroutput>when&lt;_,If&gt;::result&lt;void(E,int,int)&gt;::type::value</computeroutput> is <computeroutput>true</computeroutput> and <computeroutput>E</computeroutput> matches <computeroutput>U</computeroutput>; or, if <computeroutput>when&lt;_,If&gt;::result&lt;void(E,int,int)&gt;::type::value</computeroutput> is <computeroutput>false</computeroutput> and <computeroutput>E</computeroutput> matches <computeroutput>V</computeroutput>.</para><para>The template parameter <computeroutput>Then</computeroutput> defaults to <computeroutput>_</computeroutput> and <computeroutput>Else</computeroutput> defaults to <computeroutput>not&lt;_&gt;</computeroutput>, so an expression type <computeroutput>E</computeroutput> will match <computeroutput>if_&lt;If&gt;</computeroutput> if and only if <computeroutput>when&lt;_,If&gt;::result&lt;void(E,int,int)&gt;::type::value</computeroutput> is <computeroutput>true</computeroutput>.</para><para><programlisting> // A grammar that only matches integral terminals,
+ // using is_integral&lt;&gt; from Boost.Type_traits.
+ struct IsIntegral
+   : and_&lt;
+         terminal&lt;_&gt;
+       , if_&lt; is_integral&lt;_arg&gt;() &gt;
+     &gt;
+ {};
+</programlisting></para><para>When <computeroutput>if_&lt;If,Then,Else&gt;</computeroutput> is used as a transform, <computeroutput>If</computeroutput>, <computeroutput>Then</computeroutput> and <computeroutput>Else</computeroutput> must be Proto transforms. When applying the transform to an expression <computeroutput>E</computeroutput>, state <computeroutput>S</computeroutput> and visitor <computeroutput>V</computeroutput>, if <computeroutput>when&lt;_,If&gt;::result&lt;void(E,S,V)&gt;::type::value</computeroutput> is <computeroutput>true</computeroutput> then the <computeroutput>Then</computeroutput> transform is applied; otherwise the <computeroutput>Else</computeroutput> transform is applied.</para><para><programlisting> // Match a terminal. If the terminal is integral, return
+ // mpl::true_; otherwise, return mpl::false_.
+ struct IsIntegral2
+   : when&lt;
+         terminal&lt;_&gt;
+       , if_&lt;
+             is_integral&lt;_arg&gt;()
+           , mpl::true_()
+           , mpl::false_()
+         &gt;
+     &gt;
+ {};
+</programlisting> </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -950,7 +971,7 @@
           <template-type-parameter name="Visitor"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>An expression </para></description></parameter><parameter name="state"><paramtype>State const &amp;</paramtype><description><para>The current state </para></description></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype><description><para>A visitor of arbitrary type </para></description></parameter><description><para>
 
-</para></description><returns><para>result&lt;void(Expr, State, Visitor)&gt;which()(expr, state, visitor) </para></returns></method></method-group></struct><struct name="or_"><template>
+</para></description><returns><para><computeroutput>result&lt;void(Expr, State, Visitor)&gt;::which()(expr, state, visitor)</computeroutput> </para></returns></method></method-group></struct><struct name="or_"><template>
       <template-type-parameter name="G0"/>
       <template-type-parameter name="G1"/>
       <template-type-parameter name="G2"/>
@@ -959,7 +980,7 @@
       <template-type-parameter name="G5"/>
       <template-type-parameter name="G6"/>
       <template-type-parameter name="G7"/>
-    </template><struct-specialization name="result"><template>
+    </template><purpose>For matching one of a set of alternate grammars. Alternates tried in order to avoid ambiguity. When used as a transform, <computeroutput>or_&lt;&gt;</computeroutput> applies the transform associated with the first grammar that matches the expression. </purpose><description><para>An expression type <computeroutput>E</computeroutput> matches <computeroutput>or_&lt;B0,B1,...Bn&gt;</computeroutput> if <computeroutput>E</computeroutput> matches any <computeroutput>Bx</computeroutput> for <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput>.</para><para>When applying <computeroutput>or_&lt;B0,B1,...Bn&gt;</computeroutput> as a transform with an expression <computeroutput>e</computeroutput> of type <computeroutput>E</computeroutput>, state <computeroutput>s</computeroutput> and visitor <computeroutput>v</computeroutput>, it is equivalent to <computeroutput>Bx()(e, s, v)</computeroutput>, where <computeroutput>x</computeroutput> is the lowest number such that <computeroutput>matches&lt;E,Bx&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -970,7 +991,8 @@
           <template-type-parameter name="Visitor"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>An expression </para></description></parameter><parameter name="state"><paramtype>State const &amp;</paramtype><description><para>The current state </para></description></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype><description><para>A visitor of arbitrary type </para></description></parameter><description><para>
 
-</para></description><returns><para>result&lt;void(Expr, State, Visitor)&gt;which()(expr, state, visitor) </para></returns></method></method-group></struct><struct name="and_"><template>
+
+</para></description><requires><para><computeroutput>matches&lt;Expr,or_&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para></requires><returns><para><computeroutput>result&lt;void(Expr, State, Visitor)&gt;::which()(expr, state, visitor)</computeroutput> </para></returns></method></method-group></struct><struct name="and_"><template>
       <template-type-parameter name="G0"/>
       <template-type-parameter name="G1"/>
       <template-type-parameter name="G2"/>
@@ -979,7 +1001,7 @@
       <template-type-parameter name="G5"/>
       <template-type-parameter name="G6"/>
       <template-type-parameter name="G7"/>
-    </template><struct-specialization name="result"><template>
+    </template><purpose>For matching all of a set of grammars. When used as a transform, <computeroutput>and_&lt;&gt;</computeroutput> applies the transform associated with the last grammar in the set. </purpose><description><para>An expression type <computeroutput>E</computeroutput> matches <computeroutput>and_&lt;B0,B1,...Bn&gt;</computeroutput> if <computeroutput>E</computeroutput> matches all <computeroutput>Bx</computeroutput> for <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput>.</para><para>When applying <computeroutput>and_&lt;B0,B1,...Bn&gt;</computeroutput> as a transform with an expression <computeroutput>e</computeroutput>, state <computeroutput>s</computeroutput> and visitor <computeroutput>v</computeroutput>, it is equivalent to <computeroutput>Bn()(e, s, v)</computeroutput>. </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -990,9 +1012,11 @@
           <template-type-parameter name="Visitor"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>An expression </para></description></parameter><parameter name="state"><paramtype>State const &amp;</paramtype><description><para>The current state </para></description></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype><description><para>A visitor of arbitrary type </para></description></parameter><description><para>
 
-</para></description><returns><para>result&lt;void(Expr, State, Visitor)&gt;which()(expr, state, visitor) </para></returns></method></method-group></struct><struct name="switch_"><template>
+
+</para></description><requires><para><computeroutput>matches&lt;Expr,and_&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para></requires><returns><para><computeroutput>result&lt;void(Expr, State, Visitor)&gt;::which()(expr, state, visitor)</computeroutput> </para></returns></method></method-group></struct><struct name="switch_"><template>
       <template-type-parameter name="Cases"/>
-    </template><struct-specialization name="result"><template>
+    </template><purpose>For matching one of a set of alternate grammars, which are looked up based on an expression's tag type. When used as a transform, <computeroutput>switch_&lt;&gt;</computeroutput> applies the transform associated with the grammar that matches the expression. </purpose><description><para>
+An expression type <computeroutput>E</computeroutput> matches <computeroutput>switch_&lt;C&gt;</computeroutput> if <computeroutput>E</computeroutput> matches <computeroutput>C::case_&lt;E::proto_tag&gt;</computeroutput>.</para><para>When applying <computeroutput>switch_&lt;C&gt;</computeroutput> as a transform with an expression <computeroutput>e</computeroutput> of type <computeroutput>E</computeroutput>, state <computeroutput>s</computeroutput> and visitor <computeroutput>v</computeroutput>, it is equivalent to <computeroutput>C::case_&lt;E::proto_tag&gt;()(e, s, v)</computeroutput>. </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1003,23 +1027,29 @@
           <template-type-parameter name="Visitor"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>An expression </para></description></parameter><parameter name="state"><paramtype>State const &amp;</paramtype><description><para>The current state </para></description></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype><description><para>A visitor of arbitrary type </para></description></parameter><description><para>
 
-</para></description><returns><para>result&lt;void(Expr, State, Visitor)&gt;which()(expr, state, visitor) </para></returns></method></method-group></struct><struct name="exact"><template>
+
+</para></description><requires><para><computeroutput>matches&lt;Expr,switch_&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para></requires><returns><para><computeroutput>result&lt;void(Expr, State, Visitor)&gt;::which()(expr, state, visitor)</computeroutput> </para></returns></method></method-group></struct><struct name="exact"><template>
       <template-type-parameter name="T"/>
-    </template></struct><struct name="convertible_to"><template>
+    </template><purpose>For forcing exact matches of terminal types. </purpose><description><para>By default, matching terminals ignores references and cv-qualifiers. For instance, a terminal expression of type <computeroutput>terminal&lt;int const &amp;&gt;type</computeroutput> will match the grammar <computeroutput>terminal&lt;int&gt;</computeroutput>. If that is not desired, you can force an exact match with <computeroutput>terminal&lt;exact&lt;int&gt; &gt;</computeroutput>. This will only match integer terminals where the terminal is held by value. </para></description></struct><struct name="convertible_to"><template>
       <template-type-parameter name="T"/>
-    </template></struct><struct name="vararg"><template>
+    </template><purpose>For matching terminals that are convertible to a type. </purpose><description><para>Use <computeroutput>convertible_to&lt;&gt;</computeroutput> to match a terminal that is convertible to some type. For example, the grammar <computeroutput>terminal&lt;convertible_to&lt;int&gt; &gt;</computeroutput> will match any terminal whose argument is convertible to an integer.</para><para>
+</para></description></struct><struct name="vararg"><template>
       <template-type-parameter name="Grammar"/>
-    </template><typedef name="proto_is_vararg_"><type>void</type></typedef></struct></namespace><namespace name="result_of"><struct name="matches"><template>
+    </template><purpose>For matching a Grammar to a variable number of sub-expressions. </purpose><description><para>An expression type <computeroutput>expr&lt;AT, argsN&lt;A0,...An,U0,...Um&gt; &gt;</computeroutput> matches a grammar <computeroutput>expr&lt;BT, argsM&lt;B0,...Bn,vararg&lt;V&gt; &gt; &gt;</computeroutput> if <computeroutput>BT</computeroutput> is <computeroutput>_</computeroutput> or <computeroutput>AT</computeroutput>, and if <computeroutput>Ax</computeroutput> matches <computeroutput>Bx</computeroutput> for each <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput> and if <computeroutput>Ux</computeroutput> matches <computeroutput>V</computeroutput> for each <computeroutput>x</computeroutput> in <computeroutput>[0,m)</computeroutput>.</para><para>For example:</para><para><programlisting> // Match any function call expression, irregardless
+ // of the number of function arguments:
+ struct Function
+   : function&lt; vararg&lt;_&gt; &gt;
+ {};
+</programlisting></para><para>When used as a transform, <computeroutput>vararg&lt;G&gt;</computeroutput> applies <computeroutput>G</computeroutput>'s transform. </para></description><typedef name="proto_is_vararg_"><type>void</type></typedef></struct></namespace><namespace name="result_of"><struct name="matches"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Grammar"/>
-    </template><purpose>A Boolean metafunction that evaluates whether a given expression type matches a a grammar. </purpose><description><para><computeroutput>matches&lt;Expr,Grammar&gt;</computeroutput> inherits (indirectly) from <computeroutput>mpl::true_</computeroutput> if <computeroutput>Expr::proto_base_expr</computeroutput> matches <computeroutput>Grammar::proto_base_expr</computeroutput>, and from <computeroutput>mpl::false_</computeroutput> otherwise.</para><para>Non-terminal expressions are matched against a grammar according to the following rules:</para><para><itemizedlist>
+    </template><purpose>A Boolean metafunction that evaluates whether a given expression type matches a grammar. </purpose><description><para><computeroutput>matches&lt;Expr,Grammar&gt;</computeroutput> inherits (indirectly) from <computeroutput>mpl::true_</computeroutput> if <computeroutput>Expr::proto_base_expr</computeroutput> matches <computeroutput>Grammar::proto_base_expr</computeroutput>, and from <computeroutput>mpl::false_</computeroutput> otherwise.</para><para>Non-terminal expressions are matched against a grammar according to the following rules:</para><para><itemizedlist>
 <listitem><para>The wildcard pattern, <computeroutput>_</computeroutput>, matches any expression. </para></listitem>
 <listitem><para>An expression <computeroutput>expr&lt;AT, argsN&lt;A0,A1,...An&gt; &gt;</computeroutput> matches a grammar <computeroutput>expr&lt;BT, argsN&lt;B0,B1,...Bn&gt; &gt;</computeroutput> if <computeroutput>BT</computeroutput> is <computeroutput>_</computeroutput> or <computeroutput>AT</computeroutput>, and if <computeroutput>Ax</computeroutput> matches <computeroutput>Bx</computeroutput> for each <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput>. </para></listitem>
 <listitem><para>An expression <computeroutput>expr&lt;AT, argsN&lt;A0,...An,U0,...Um&gt; &gt;</computeroutput> matches a grammar <computeroutput>expr&lt;BT, argsM&lt;B0,...Bn,vararg&lt;V&gt; &gt; &gt;</computeroutput> if <computeroutput>BT</computeroutput> is <computeroutput>_</computeroutput> or <computeroutput>AT</computeroutput>, and if <computeroutput>Ax</computeroutput> matches <computeroutput>Bx</computeroutput> for each <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput> and if <computeroutput>Ux</computeroutput> matches <computeroutput>V</computeroutput> for each <computeroutput>x</computeroutput> in <computeroutput>[0,m)</computeroutput>. </para></listitem>
 <listitem><para>An expression <computeroutput>E</computeroutput> matches <computeroutput>or_&lt;B0,B1,...Bn&gt;</computeroutput> if <computeroutput>E</computeroutput> matches some <computeroutput>Bx</computeroutput> for <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput>. </para></listitem>
 <listitem><para>An expression <computeroutput>E</computeroutput> matches <computeroutput>and_&lt;B0,B1,...Bn&gt;</computeroutput> if <computeroutput>E</computeroutput> matches all <computeroutput>Bx</computeroutput> for <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput>. </para></listitem>
-<listitem><para>An expression <computeroutput>E</computeroutput> matches <computeroutput>if_&lt;T&gt;</computeroutput> if <computeroutput>when&lt;_,T&gt;result&lt;void(E,int,int)&gt;type::value</computeroutput> is <computeroutput>true</computeroutput>. </para></listitem>
-<listitem><para>An expression <computeroutput>E</computeroutput> matches <computeroutput>if_&lt;T,U,V&gt;</computeroutput> if <computeroutput>when&lt;_,T&gt;result&lt;void(E,int,int)&gt;type::value</computeroutput> is <computeroutput>true</computeroutput> and  matches <computeroutput>U</computeroutput>; or, if <computeroutput>when&lt;_,T&gt;result&lt;void(E,int,int)&gt;type::value</computeroutput> is <computeroutput>false</computeroutput> and  matches <computeroutput>V</computeroutput>. </para></listitem>
+<listitem><para>An expression <computeroutput>E</computeroutput> matches <computeroutput>if_&lt;T,U,V&gt;</computeroutput> if <computeroutput>when&lt;_,T&gt;::result&lt;void(E,int,int)&gt;::type::value</computeroutput> is <computeroutput>true</computeroutput> and <computeroutput>E</computeroutput> matches <computeroutput>U</computeroutput>; or, if <computeroutput>when&lt;_,T&gt;::result&lt;void(E,int,int)&gt;::type::value</computeroutput> is <computeroutput>false</computeroutput> and <computeroutput>E</computeroutput> matches <computeroutput>V</computeroutput>. (Note: <computeroutput>U</computeroutput> defaults to <computeroutput>_</computeroutput> and <computeroutput>V</computeroutput> defaults to <computeroutput>not&lt;_&gt;</computeroutput>.) </para></listitem>
 <listitem><para>An expression <computeroutput>E</computeroutput> matches <computeroutput>not_&lt;T&gt;</computeroutput> if <computeroutput>E</computeroutput> does not match <computeroutput>T</computeroutput>. </para></listitem>
 <listitem><para>An expression <computeroutput>E</computeroutput> matches <computeroutput>switch_&lt;C&gt;</computeroutput> if <computeroutput>E</computeroutput> matches <computeroutput>C::case_&lt;E::proto_tag&gt;</computeroutput>.</para></listitem>
 </itemizedlist>
@@ -1029,18 +1059,38 @@ A terminal expression <computeroutput>expr&lt;tag::terminal,args0&lt;A&gt; &gt;<
 <listitem><para><computeroutput>A</computeroutput> is <computeroutput>B &amp;</computeroutput> </para></listitem>
 <listitem><para><computeroutput>A</computeroutput> is <computeroutput>B const &amp;</computeroutput> </para></listitem>
 <listitem><para><computeroutput>B</computeroutput> is <computeroutput>exact&lt;A&gt;</computeroutput> </para></listitem>
-<listitem><para><computeroutput>B</computeroutput> is <computeroutput>convertible_to&lt;X&gt;</computeroutput> and <computeroutput>is_convertible&lt;A,X&gt;value</computeroutput> is <computeroutput>true</computeroutput>. </para></listitem>
+<listitem><para><computeroutput>B</computeroutput> is <computeroutput>convertible_to&lt;X&gt;</computeroutput> and <computeroutput>is_convertible&lt;A,X&gt;::value</computeroutput> is <computeroutput>true</computeroutput>. </para></listitem>
 <listitem><para><computeroutput>A</computeroutput> is <computeroutput>X[M]</computeroutput> or <computeroutput>X(&amp;)[M]</computeroutput> and <computeroutput>B</computeroutput> is <computeroutput>X[proto::N]</computeroutput>. </para></listitem>
 <listitem><para><computeroutput>A</computeroutput> is <computeroutput>X(&amp;)[M]</computeroutput> and <computeroutput>B</computeroutput> is <computeroutput>X(&amp;)[proto::N]</computeroutput>. </para></listitem>
 <listitem><para><computeroutput>A</computeroutput> is <computeroutput>X[M]</computeroutput> or <computeroutput>X(&amp;)[M]</computeroutput> and <computeroutput>B</computeroutput> is <computeroutput>X*</computeroutput>. </para></listitem>
 <listitem><para><computeroutput>B</computeroutput> lambda-matches <computeroutput>A</computeroutput> (see below).</para></listitem>
 </itemizedlist>
-A type <computeroutput>B</computeroutput> lambda-matches <computeroutput>A</computeroutput> one of the following is true:</para><para><itemizedlist>
+A type <computeroutput>B</computeroutput> lambda-matches <computeroutput>A</computeroutput> if one of the following is true:</para><para><itemizedlist>
 <listitem><para><computeroutput>B</computeroutput> is <computeroutput>A</computeroutput> </para></listitem>
 <listitem><para><computeroutput>B</computeroutput> is the wildcard pattern, <computeroutput>_</computeroutput> </para></listitem>
 <listitem><para><computeroutput>B</computeroutput> is <computeroutput>T&lt;B0,B1,...Bn&gt;</computeroutput> and <computeroutput>A</computeroutput> is <computeroutput>T&lt;A0,A1,...An&gt;</computeroutput> and for each <computeroutput>x</computeroutput> in <computeroutput>[0,n)</computeroutput>, <computeroutput>Ax</computeroutput> and <computeroutput>Bx</computeroutput> are types such that <computeroutput>Ax</computeroutput> lambda-matches <computeroutput>Bx</computeroutput> </para></listitem>
 </itemizedlist>
-</para></description></struct></namespace><namespace name="wildcardns_"><struct name="_"><struct-specialization name="result"><template>
+</para></description></struct></namespace><namespace name="wildcardns_"><struct name="_"><purpose>A wildcard grammar element that matches any expression, and a transform that returns the current expression unchanged. </purpose><description><para>The wildcard type, <computeroutput>_</computeroutput>, is a grammar element such that <computeroutput>matches&lt;E,_&gt;::value</computeroutput> is <computeroutput>true</computeroutput> for any expression type <computeroutput>E</computeroutput>.</para><para>The wildcard can also be used as a stand-in for a template argument when matching terminals. For instance, the following is a grammar that will match any <computeroutput>std::complex&lt;&gt;</computeroutput> terminal:</para><para><programlisting> BOOST_MPL_ASSERT((
+     matches&lt;
+         terminal&lt;std::complex&lt;double&gt; &gt;::type
+       , terminal&lt;std::complex&lt; _ &gt; &gt;
+     &gt;
+ ));
+</programlisting></para><para>When used as a transform, <computeroutput>_</computeroutput> returns the current expression unchanged. For instance, in the following, <computeroutput>_</computeroutput> is used with the <computeroutput>fold&lt;&gt;</computeroutput> transform to fold the children of a node:</para><para><programlisting> struct CountChildren
+   : or_&lt;
+         // Terminals have no children
+         when&lt;terminal&lt;_&gt;, mpl::int_&lt;0&gt;()&gt;
+         // Use fold&lt;&gt; to count the children of non-terminals
+       , otherwise&lt;
+             fold&lt;
+                 _ // &lt;-- fold the current expression
+               , mpl::int_&lt;0&gt;()
+               , mpl::plus&lt;_state, mpl::int_&lt;1&gt; &gt;()
+             &gt;
+         &gt;
+     &gt;
+ {};
+</programlisting> </para></description><struct-specialization name="result"><template>
       <template-type-parameter name="This"/>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="State"/>
@@ -1051,7 +1101,7 @@ A type <computeroutput>B</computeroutput> lambda-matches <computeroutput>A</comp
           <template-type-parameter name="Visitor"/>
         </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype><description><para>An expression </para></description></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name=""><paramtype>Visitor &amp;</paramtype></parameter><description><para>
 
-</para></description><returns><para>expr </para></returns></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/operators.hpp"><para>Contains all the overloaded operators that make it possible to build Proto expression trees. </para><namespace name="boost"><namespace name="proto"><struct name="is_extension"><template>
+</para></description><returns><para><computeroutput>expr</computeroutput> </para></returns></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/operators.hpp"><para>Contains all the overloaded operators that make it possible to build Proto expression trees. </para><namespace name="boost"><namespace name="proto"><struct name="is_extension"><template>
       <template-type-parameter name="T"/>
     </template><inherit access="public">boost::mpl::false_</inherit></struct><namespace name="exprns_"><function name="operator+"><type><emphasis>unspecified</emphasis></type><template>
           <template-type-parameter name="Arg"/>
@@ -2068,31 +2118,7 @@ A type <computeroutput>B</computeroutput> lambda-matches <computeroutput>A</comp
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State"/>
       <template-type-parameter name="Fun"/>
-    </template><inherit access="public">boost::proto::transform::fold&lt; Sequence, State0, Fun &gt;</inherit></struct><struct-specialization name="fold"><template>
-      <template-type-parameter name="State0"/>
-      <template-type-parameter name="Fun"/>
-    </template><specialization><template-arg>_</template-arg><template-arg>State0</template-arg><template-arg>Fun</template-arg></specialization><description><para>This specialization is only for improved compile-time performance in the commom case when the Sequence transform is <computeroutput>proto::_</computeroutput>.</para><para>INTERNAL ONLY </para></description><struct-specialization name="result"><template>
-      <template-type-parameter name="This"/>
-      <template-type-parameter name="Expr"/>
-      <template-type-parameter name="State"/>
-      <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>result&lt; void(Expr, State, Visitor) &gt;::type</type><template>
-          <template-type-parameter name="Expr"/>
-          <template-type-parameter name="State"/>
-          <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="reverse_fold"><template>
-      <template-type-parameter name="State0"/>
-      <template-type-parameter name="Fun"/>
-    </template><specialization><template-arg>_</template-arg><template-arg>State0</template-arg><template-arg>Fun</template-arg></specialization><description><para>This specialization is only for improved compile-time performance in the commom case when the Sequence transform is <computeroutput>proto::_</computeroutput>.</para><para>INTERNAL ONLY </para></description><struct-specialization name="result"><template>
-      <template-type-parameter name="This"/>
-      <template-type-parameter name="Expr"/>
-      <template-type-parameter name="State"/>
-      <template-type-parameter name="Visitor"/>
-    </template><specialization><template-arg>This(Expr</template-arg><template-arg>State</template-arg><template-arg>Visitor)</template-arg></specialization><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct-specialization><method-group name="public member functions"><method name="operator()" cv="const"><type>result&lt; void(Expr, State, Visitor) &gt;::type</type><template>
-          <template-type-parameter name="Expr"/>
-          <template-type-parameter name="State"/>
-          <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct-specialization></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_tree.hpp"><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="fold_tree"><template>
+    </template><inherit access="public">boost::proto::transform::fold&lt; Sequence, State0, Fun &gt;</inherit></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/fold_tree.hpp"><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="fold_tree"><template>
       <template-type-parameter name="Sequence"/>
       <template-type-parameter name="State0"/>
       <template-type-parameter name="Fun"/>
