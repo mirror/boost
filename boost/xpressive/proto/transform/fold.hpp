@@ -200,9 +200,9 @@
               : fold<_reverse(Sequence), State, Fun>
             {};
 
-            /// This specialization is only for improved compile-time performance
-            /// in the commom case when the Sequence transform is \c proto::_.
-            ///
+            // This specialization is only for improved compile-time performance
+            // in the commom case when the Sequence transform is \c proto::_.
+            //
             /// INTERNAL ONLY
             ///
             template<typename State0, typename Fun>
@@ -245,9 +245,9 @@
                 }
             };
 
-            /// This specialization is only for improved compile-time performance
-            /// in the commom case when the Sequence transform is \c proto::_.
-            ///
+            // This specialization is only for improved compile-time performance
+            // in the commom case when the Sequence transform is \c proto::_.
+            //
             /// INTERNAL ONLY
             ///
             template<typename State0, typename Fun>

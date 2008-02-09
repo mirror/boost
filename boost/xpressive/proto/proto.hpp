@@ -18,6 +18,7 @@
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/domain.hpp>
+#include <boost/xpressive/proto/fusion.hpp>
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/extends.hpp>
 #include <boost/xpressive/proto/literal.hpp>

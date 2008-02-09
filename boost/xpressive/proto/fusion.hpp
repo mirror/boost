@@ -554,6 +554,22 @@ namespace boost { namespace fusion
                     typename proto::result_of::arg_c<
                         Sequence
                       , Index::value
+                    >::reference
+                type;
+
+                static type call(Sequence &seq)
+                {
+                    return proto::arg_c<Index::value>(seq);
+                }
+            };
+
+            template<typename Sequence, typename Index>
+            struct apply<Sequence const, Index>
+            {
+                typedef
+                    typename proto::result_of::arg_c<
+                        Sequence
+                      , Index::value
                     >::const_reference
                 type;
 
