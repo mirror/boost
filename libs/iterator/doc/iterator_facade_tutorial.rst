@@ -8,7 +8,7 @@ example of a linked list of polymorphic objects.  This example was
 inspired by a `posting`__ by Keith Macdonald on the `Boost-Users`_
 mailing list.
 
-.. _`Boost-Users`: ../../../more/mailing_lists.htm#users
+.. _`Boost-Users`: http://www.boost.org/more/mailing_lists.htm#users
 
 __ http://thread.gmane.org/gmane.comp.lib.boost.user/5100
 

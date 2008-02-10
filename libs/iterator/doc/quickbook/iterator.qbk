@@ -32,7 +32,7 @@
 
 [section:intro Introduction]
 
-[def _concepts_ [@../../more/generic_programming.html#concept concepts]]
+[def _concepts_ [@http://www.boost.org/more/generic_programming.html#concept concepts]]
 
 The Boost Iterator Library contains two parts. The first
 is a system of _concepts_ which extend the C++ standard
@@ -203,7 +203,7 @@ templates.
 
 [section:upgrading Upgrading from the old Boost Iterator Adaptor Library]
 
-[def _type_generator_ [@../../more/generic_programming.html#type_generator type generator]]
+[def _type_generator_ [@http://www.boost.org/more/generic_programming.html#type_generator type generator]]
 
 If you have been using the old Boost Iterator Adaptor library to
 implement iterators, you probably wrote a `Policies` class which

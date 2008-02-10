@@ -170,7 +170,7 @@ compiler supports this.
 
 People have complained about the name _foreach_. It's too long. `ALL CAPS` can
 get tiresome to look at. That may be true, but _foreach_ is merely following
-the [@../../../more/lib_guide.htm Boost Naming Convention]. That
+the [@http://www.boost.org/more/lib_guide.htm Boost Naming Convention]. That
 doesn't mean you're stuck with it, though. If you would like to use a different
 identifier (`foreach`, perhaps), you can simply do:
 
