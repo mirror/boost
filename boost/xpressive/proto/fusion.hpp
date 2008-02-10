@@ -573,7 +573,7 @@ namespace boost { namespace fusion
                     >::const_reference
                 type;
 
-                static type call(Sequence &seq)
+                static type call(Sequence const &seq)
                 {
                     return proto::arg_c<Index::value>(seq);
                 }
