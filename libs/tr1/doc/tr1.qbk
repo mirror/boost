@@ -448,7 +448,7 @@ arguments and returning a floating-point value) through which some
 arbitrary code may be called. However a polymorphic function wrapper can call
 any callable object with a compatible call signature, this could be a function 
 pointer, or it could be a function object produced by std::tr1::bind, or some
-other mechanism.  For more information see the [@../../doc/html/function.html"
+other mechanism.  For more information see the [@../../doc/html/function.html
 Boost.Function documentation].
 
    
@@ -1697,7 +1697,7 @@ standard library header
 forward on to your existing standard library header in one of two ways: for
 gcc it uses `#include_next`, and for other compilers it uses the
 macro `BOOST_TR1_STD_HEADER(header)` (defined in 
-[@../../boost/tr1/detail/config.hpp" boost/tr1/detail/config.hpp])
+[@../../boost/tr1/detail/config.hpp boost/tr1/detail/config.hpp])
 which evaluates to `#include <../include/header>`.  This
 should work "straight out the box" for most compilers, but does mean that
 these headers should [*never] be placed inside a 
