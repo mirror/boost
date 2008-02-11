@@ -11,13 +11,15 @@
 #ifndef BOOST_RANGE_ITERATOR_RANGE_HPP
 #define BOOST_RANGE_ITERATOR_RANGE_HPP
 
+#include <boost/config.hpp> // Define __STL_CONFIG_H, if appropriate.
+#include <boost/detail/workaround.hpp>
+
 #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500))
     #pragma warning( push )
     #pragma warning( disable : 4996 )
 #endif
 
 // From boost/dynamic_bitset.hpp; thanks to Matthias Troyer for Cray X1 patch.
-#include <boost/config.hpp> // Define __STL_CONFIG_H, if appropriate.
 #ifndef BOOST_OLD_IOSTREAMS 
 # if defined(__STL_CONFIG_H) && \
     !defined (__STL_USE_NEW_IOSTREAMS) && !defined(__crayx1) \
@@ -26,7 +28,6 @@
 # endif
 #endif // #ifndef BOOST_OLD_IOSTREAMS
 
-#include <boost/detail/workaround.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/iterator.hpp>
 #include <boost/range/difference_type.hpp>
