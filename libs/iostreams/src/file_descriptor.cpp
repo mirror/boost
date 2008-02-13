@@ -173,7 +173,7 @@ std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
     DWORD result;
     if (!::ReadFile(pimpl_->handle_, s, n, &result, NULL))
         throw detail::bad_read();
-    return static_cast<std::streamsize>(result);
+    return result == 0 ? -1 : static_cast<std::streamsize>(result);
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS
     errno = 0;
     std::streamsize result = BOOST_IOSTREAMS_FD_READ(pimpl_->handle_, s, n);
