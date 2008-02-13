@@ -69,7 +69,13 @@ inline BOOST_IOSTREAMS_FAILURE system_failure(const char* msg)
     return BOOST_IOSTREAMS_FAILURE(result);
 }
 
+inline BOOST_IOSTREAMS_FAILURE system_failure(const std::string& msg)
+{ return system_failure(msg.c_str()); }
+
 inline void throw_system_failure(const char* msg)
+{ throw system_failure(msg); }
+
+inline void throw_system_failure(const std::string& msg)
 { throw system_failure(msg); }
 
 } } } // End namespaces detail, iostreams, boost.

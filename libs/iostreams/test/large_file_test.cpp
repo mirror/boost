@@ -70,11 +70,11 @@ const int offset_list[] =
       0, 8, 0 };                                      // Seek by 8GB
 const int offset_list_length = sizeof(offset_list) / sizeof(int);
 #ifdef LARGE_FILE_TEMP
-    const char* file_name = BOOST_STRINGIZE(LARGE_FILE_TEMP);
-    const bool keep_file = false;
+# define BOOST_FILE_NAME BOOST_STRINGIZE(LARGE_FILE_TEMP)
+# define BOOST_KEEP_FILE false
 #else
-    const char* file_name = BOOST_STRINGIZE(LARGE_FILE_KEEP);
-    const bool keep_file = true;
+# define BOOST_FILE_NAME BOOST_STRINGIZE(LARGE_FILE_KEEP)
+# define BOOST_KEEP_FILE true
 #endif
 
 //------------------Definition of remove_large_file---------------------------//
@@ -83,9 +83,9 @@ const int offset_list_length = sizeof(offset_list) / sizeof(int);
 void remove_large_file()
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    DeleteFile(TEXT(file_name));
+    DeleteFile(TEXT(BOOST_FILE_NAME));
 #else
-    unlink(file_name);
+    unlink(BOOST_FILE_NAME);
 #endif
 }
 
@@ -103,7 +103,7 @@ bool large_file_exists()
 
     // Check existence
     WIN32_FIND_DATA info;
-    HANDLE hnd = FindFirstFile(TEXT(file_name), &info);
+    HANDLE hnd = FindFirstFile(TEXT(BOOST_FILE_NAME), &info);
     if (hnd == INVALID_HANDLE_VALUE) 
         return false;
 
@@ -137,7 +137,7 @@ bool large_file_exists()
 
     // Check existence
     struct BOOST_IOSTREAMS_FD_STAT info;
-    if (BOOST_IOSTREAMS_FD_STAT(file_name, &info))
+    if (BOOST_IOSTREAMS_FD_STAT(BOOST_FILE_NAME, &info))
         return false;
 
     // Check size
@@ -187,7 +187,7 @@ bool map_large_file()
     for (stream_offset z = 0; z <= 8; ++z) {
         try {
             mapped_file_params params;
-            params.path = file_name;
+            params.path = BOOST_FILE_NAME;
             params.offset = z * gigabyte;
             params.length = 1;
             params.mode = BOOST_IOS::out;
@@ -216,7 +216,7 @@ bool map_large_file()
 bool create_large_file()
 {
     // If file exists, has correct size, and is recent, we're done
-    if (keep_file && large_file_exists())
+    if (BOOST_KEEP_FILE && large_file_exists())
         return true;
 
 #ifdef BOOST_IOSTREAMS_WINDOWS
@@ -224,7 +224,7 @@ bool create_large_file()
     // Create file
     HANDLE hnd =
         CreateFile(
-            TEXT(file_name),
+            TEXT(BOOST_FILE_NAME),
             GENERIC_WRITE,
             0,
             NULL,
@@ -306,7 +306,7 @@ bool create_large_file()
         S_IRUSR | S_IWUSR |
         S_IRGRP | S_IWGRP |
         S_IROTH | S_IWOTH;
-    int fd = BOOST_IOSTREAMS_FD_OPEN(file_name, oflag, pmode);
+    int fd = BOOST_IOSTREAMS_FD_OPEN(BOOST_FILE_NAME, oflag, pmode);
     if (fd == -1)
         return false;
 
@@ -363,9 +363,9 @@ bool create_large_file()
 class large_file {
 public:
     large_file() { exists_ = create_large_file(); }
-    ~large_file() { if (!keep_file) remove_large_file(); }
+    ~large_file() { if (!BOOST_KEEP_FILE) remove_large_file(); }
     bool exists() const { return exists_; }
-    const char* path() const { return file_name; }
+    const char* path() const { return BOOST_FILE_NAME; }
 private:
     bool exists_;
 };
@@ -396,7 +396,9 @@ void large_file_test()
     // Prepare file and file descriptor
     large_file              large;
     file_descriptor_source  file;
-    BOOST_REQUIRE_MESSAGE(large.exists(), "failed creating file");
+    BOOST_REQUIRE_MESSAGE(
+        large.exists(), "failed creating file \"" << BOOST_FILE_NAME << '"'
+    );
     BOOST_CHECK_NO_THROW(file.open(large.path(), BOOST_IOS::binary));
 
     // Test seeking using ios_base::beg

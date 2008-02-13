@@ -14,6 +14,9 @@
 #define BOOST_IOSTREAMS_SOURCE
 
 #include <cassert>
+#ifndef NDEBUG
+# include <boost/iostreams/detail/absolute_path.hpp>
+#endif
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure.
@@ -56,6 +59,9 @@ struct mapped_file_impl {
     #else
         handle_ = 0;
     #endif
+    #ifndef NDEBUG
+        path_.erase();
+    #endif
     }
     void close()
     {
@@ -78,8 +84,16 @@ struct mapped_file_impl {
         data_ = 0;
         size_ = 0;
         mode_ = BOOST_IOS::openmode();
-        if (error)
-            throw_system_failure("error closing mapped file");
+        if (error) {
+            std::string msg("error closing mapped file");
+            #ifndef NDEBUG
+                msg += std::string(" (\"") + path_ + "\")";
+            #endif
+            throw_system_failure(msg);
+        }
+    #ifndef NDEBUG
+        path_.erase();
+    #endif
     }
     char*                data_;
     std::size_t          size_;
@@ -90,6 +104,9 @@ struct mapped_file_impl {
     HANDLE               mapped_handle_;
 #else
     int                  handle_;
+#endif
+#ifndef NDEBUG
+    std::string          path_;
 #endif
 };
 
@@ -147,8 +164,11 @@ const char* mapped_file_source::end() const { return data() + size(); }
 
 namespace detail {
 
-void cleanup_and_throw(detail::mapped_file_impl& impl, const char* msg)
+void cleanup_and_throw(detail::mapped_file_impl& impl, std::string msg)
 {
+    #ifndef NDEBUG
+        msg += std::string(" (\"") + impl.path_ + "\")";
+    #endif
     if (impl.mapped_handle_ != INVALID_HANDLE_VALUE)
         ::CloseHandle(impl.mapped_handle_);
     if (impl.handle_ != NULL)
@@ -171,6 +191,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
         pimpl_->clear(false);
     bool readonly = (p.mode & BOOST_IOS::out) == 0;
     pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
+    #ifndef NDEBUG
+        pimpl_->path_ = detail::absolute_path(p.path);
+    #endif
 
     //--------------Open underlying file--------------------------------------//
 
@@ -187,8 +210,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
                            FILE_ATTRIBUTE_TEMPORARY,
                        NULL );
 
-    if (pimpl_->handle_ == INVALID_HANDLE_VALUE)
+    if (pimpl_->handle_ == INVALID_HANDLE_VALUE) {
         detail::cleanup_and_throw(*pimpl_, "failed opening file");
+    }
 
     //--------------Set file size---------------------------------------------//
 
@@ -295,8 +319,11 @@ int mapped_file_source::alignment()
 
 namespace detail {
 
-void cleanup_and_throw(detail::mapped_file_impl& impl, const char* msg)
+    void cleanup_and_throw(detail::mapped_file_impl& impl, std::string msg)
 {
+    #ifndef NDEBUG
+        msg += std::string(" (\"") + impl.path_ + "\")";
+    #endif
     if (impl.handle_ != 0)
         ::close(impl.handle_);
     impl.clear(true);
@@ -318,6 +345,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
         pimpl_->clear(false);
     bool readonly = (p.mode & BOOST_IOS::out) == 0;
     pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
+    #ifndef NDEBUG
+        pimpl_->path_ = detail::absolute_path(p.path);
+    #endif
 
     //--------------Open underlying file--------------------------------------//
 
