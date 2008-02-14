@@ -260,6 +260,8 @@ public:
                 return false;   // no insertion between parens/brackets/braces
 
             default:
+                if (IS_CATEGORY(prev, OperatorTokenType))
+                    return false;
                 break;
             }        
             break;
@@ -281,6 +283,8 @@ public:
             case T_QUESTION_MARK:
                 if (T_QUESTION_MARK == beforeprev)
                     return true;
+                if (IS_CATEGORY(prev, OperatorTokenType))
+                    return false;
                 break;
                 
             default:
@@ -290,6 +294,8 @@ public:
                             
         case T_MINUS:
         case T_MINUSMINUS:
+        case T_PLUS:
+        case T_PLUSPLUS:
         case T_LESS:
         case T_EQUAL:
         case T_ASSIGN:
@@ -300,8 +306,27 @@ public:
         case T_NOTEQUAL:
         case T_DIVIDEASSIGN:
         case T_MINUSASSIGN:
-            if (T_QUESTION_MARK == prev && T_QUESTION_MARK == beforeprev)
-                return true;    // ??{op}
+            switch (static_cast<unsigned int>(prev)) {
+            case T_LEFTPAREN:
+            case T_RIGHTPAREN:
+            case T_LEFTBRACKET:
+            case T_RIGHTBRACKET:
+            case T_LEFTBRACE:
+            case T_RIGHTBRACE:
+            case T_SEMICOLON:
+            case T_COMMA:
+            case T_COLON:
+                // no insertion between parens/brackets/braces and operators
+                return false;   
+
+            case T_QUESTION_MARK:
+                if (T_QUESTION_MARK == beforeprev)
+                    return true;
+                break;
+                
+            default:
+                break;
+            }
             break;
 
         case T_COMPL_ALT:
@@ -313,9 +338,30 @@ public:
         case T_ORASSIGN_ALT:
         case T_XORASSIGN_ALT:
         case T_NOTEQUAL_ALT:
-            if (T_IDENTIFIER == prev || T_NONREPLACABLE_IDENTIFIER == prev ||
-                IS_CATEGORY(prev, KeywordTokenType))
-                return true;
+            switch (static_cast<unsigned int>(prev)) {
+            case T_LEFTPAREN:
+            case T_RIGHTPAREN:
+            case T_LEFTBRACKET:
+            case T_RIGHTBRACKET:
+            case T_LEFTBRACE:
+            case T_RIGHTBRACE:
+            case T_SEMICOLON:
+            case T_COMMA:
+            case T_COLON:
+                // no insertion between parens/brackets/braces and operators
+                return false;   
+
+            case T_IDENTIFIER:
+                if (T_NONREPLACABLE_IDENTIFIER == prev ||
+                    IS_CATEGORY(prev, KeywordTokenType))
+                {
+                    return true;
+                }
+                break;
+                
+            default:
+                break;
+            }
             break;
             
         case T_STAR:
@@ -325,8 +371,7 @@ public:
         }
 
     // else, handle operators separately
-        if (T_COMMA != current && T_COMMA != prev &&
-            IS_CATEGORY(current, OperatorTokenType) && 
+        if (IS_CATEGORY(current, OperatorTokenType) && 
             IS_CATEGORY(prev, OperatorTokenType))
         {
             return true;    // operators must be delimited always
