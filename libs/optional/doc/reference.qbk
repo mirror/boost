@@ -126,6 +126,7 @@
 Because `T` might be of reference type, in the sequel, those entries whose
 semantic depends on `T` being of reference type or not will be distinguished
 using the following convention:
+
 * If the entry reads: `optional<T`['(not a ref)]`>`, the description
 corresponds only to the case where `T` is not of reference type.
 * If the entry reads: `optional<T&>`, the description corresponds only to

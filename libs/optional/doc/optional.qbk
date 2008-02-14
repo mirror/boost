@@ -40,11 +40,6 @@ Distributed under the Boost Software License, Version 1.0.
 
 [/ Icons ]
 
-[def __NOTE__ [$images/note.png]]
-[def __ALERT__ [$images/caution.png]]
-[def __DETAIL__ [$images/note.png]]
-[def __TIP__ [$images/tip.png]]
-[def __QUESTION_MARK__ [$images/question.png]]
 [def __SPACE__ [$images/space.png]]
 [def __GO_TO__ [$images/callouts/R.png]]
 
