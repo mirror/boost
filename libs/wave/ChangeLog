@@ -24,8 +24,6 @@ TODO (known issues):
 
 CHANGELOG
 
-- Wave Version 1.4
-
 Boost V1.35.0
 - Wave Version 1.3
 - Changed the return value of the 'evaluated_conditional_expression()' pp hook
@@ -321,6 +319,10 @@ Boost V1.34.0
 - Worked around a linker issue for the True64/CXX compiler, complaining about
   multiple defined symbols when using the flex_string class.
 - Added missing documentation for the context::get_macro_definition function.
+- Added the BOOST_WAVE_SUPPORT_THREADING allowing to explicitely control 
+  whether the Wave library is built with threading support enabled. If not 
+  defined the build settings will be picked up from the Boost build environment
+  (BOOST_HAS_THREADS).
 
 Sat Feb 18 2005
 - Version 1.2.3

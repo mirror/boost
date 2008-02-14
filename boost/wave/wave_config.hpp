@@ -388,9 +388,22 @@ namespace boost { namespace wave
 }}
 
 ///////////////////////////////////////////////////////////////////////////////
-//  configure Boost.Spirit thread support, Boost.Pool is configured
-//  automatically 
+//  Configure Wave thread support, Boost.Spirit and Boost.Pool are configured 
+//  based on these settings automatically
+//
+//  If BOOST_WAVE_SUPPORT_THREADING is not defined, Wave will use the global 
+//  Boost build settings (BOOST_HAS_THREADS), if it is defined its value
+//  defines, whether threading will be enabled or not (should be set to '0' 
+//  or '1').
+#if !defined(BOOST_WAVE_SUPPORT_THREADING)
 #if defined(BOOST_HAS_THREADS)
+#define BOOST_WAVE_SUPPORT_THREADING 1
+#else
+#define BOOST_WAVE_SUPPORT_THREADING 0
+#endif
+#endif
+
+#if BOOST_WAVE_SUPPORT_THREADING != 0 
 #define BOOST_SPIRIT_THREADSAFE 1
 #define PHOENIX_THREADSAFE 1
 #else
