@@ -325,7 +325,8 @@ public:
         }
 
     // else, handle operators separately
-        if (IS_CATEGORY(current, OperatorTokenType) && 
+        if (T_COMMA != current && T_COMMA != prev &&
+            IS_CATEGORY(current, OperatorTokenType) && 
             IS_CATEGORY(prev, OperatorTokenType))
         {
             return true;    // operators must be delimited always
