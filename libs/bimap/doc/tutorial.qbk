@@ -962,10 +962,10 @@ The possibles way to use the first parameter are:
 * Left collection type:     `set_of< Type >`
 * Left tag:                 `member_at::left`
 
-    bimap< `['CollectionType]`_of< Type >, R >
+    bimap< {CollectionType}_of< Type >, R >
 
 * Left type:                `Type`
-* Left collection type:     ['CollectionType]`_of< LeftType >`
+* Left collection type:     `{CollectionType}_of< LeftType >`
 * Left tag:                 `member_at::left`
 
     bimap< tagged< Type, Tag >, R >
@@ -974,10 +974,10 @@ The possibles way to use the first parameter are:
 * Left collection type:     `set_of< LeftType >`
 * Left tag:                 `Tag`
 
-    bimap< `['CollectionType]`_of< tagged< Type, Tag > >, R >
+    bimap< {CollectionType}_of< tagged< Type, Tag > >, R >
 
 * Left type:                `Type`
-* Left collection type:     ['CollectionType]`_of< LeftType >`
+* Left collection type:     `{CollectionType}_of< LeftType >`
 * Left tag:                 `Tag`
 
 The same options are available for the second parameter.

@@ -97,7 +97,7 @@ void tagged_version()
 
     typedef bimap
     <
-					 tagged< int        , id   >  ,
+                     tagged< int        , id   >  ,
         multiset_of< tagged< std::string, name > >
 
     > People;
