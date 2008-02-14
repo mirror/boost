@@ -21,7 +21,6 @@ Distributed under the Boost Software License, Version 1.0.
 [/ Logos ]
 
 [def __BOOST_BIMAP_LOGO__ [$images/bimap/boost.bimap.logo.png]]
-[def __BOOST_BLADE_LOGO__ [$images/extern/boost.blade.logo.png]]
 [def __GOOGLE_SOC_2006__ [$images/extern/googlesoc.png]]
 
 [/ Helpers ]

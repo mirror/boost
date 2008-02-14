@@ -32,17 +32,8 @@ Special acknowledgements to the developers of the Boost libraries that
 Boost.Bimap has abused. See the dependencies section for a complete list.
 
 I want to thank the open-source developers who wrote the tools I used
-during this project. The library was coded using Blade, a full
-open-source development environment composed, in my opinion, of the best
-tools for software building. The list of names is infinitely long, so I
+during this project. The list of names is infinitely long, so I
 give a general huge thanks here.
-
-__BOOST_BLADE_LOGO__
-
-The icons in the TOC of the main page are from [@http://www.kde-look.org/kde-look.org kde-look.org].
-I want to thank them for their effort in making the open-source world a beautiful
-place. When I find time, I will look for the authors' names. Please
-forgive me for omitting them for the moment.
 
 Thanks to Paul Giaccone for proof-reading this documentation. (He has
 not finished yet -- the remaining typos and spelling errors are mine and
