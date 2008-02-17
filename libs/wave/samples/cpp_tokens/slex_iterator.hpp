@@ -56,7 +56,7 @@ public:
             boost::wave::language_support language)
     :   functor_ptr(slex_input_interface<TokenT>
             ::new_lexer(first, last, pos, language)) 
-#if 0 != __DECCXX_VER || BOOST_WORKAROUND(BOOST_INTEL_LINUX, == 910)
+#if 0 != __DECCXX_VER || BOOST_WORKAROUND(BOOST_INTEL_LINUX, == 1010)
       , eof()
 #endif // 0 != __DECCXX_VER
     {}
