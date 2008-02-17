@@ -77,17 +77,16 @@
                 typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
             };
 
-            /// Function call operator
-            ///
+            /// \param expr The current expression
+            /// \param state The current state
+            /// \param visitor An arbitrary visitor
+            /// \pre <tt>matches\<Expr, Grammar\>::::value</tt> is \c true
+            /// \return <tt>result\<void(Expr, State, Visitor)\>::::impl()(expr, state, visitor)</tt>
             template<typename Expr, typename State, typename Visitor>
             typename result<void(Expr, State, Visitor)>::type
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
-                return typename mpl::if_<
-                    is_callable<Return>
-                  , call<Return(BOOST_PP_ENUM_PARAMS(N, A))>
-                  , make<Return(BOOST_PP_ENUM_PARAMS(N, A))>
-                >::type()(expr, state, visitor);
+                return typename result<void(Expr, State, Visitor)>::impl()(expr, state, visitor);
             }
         };
 

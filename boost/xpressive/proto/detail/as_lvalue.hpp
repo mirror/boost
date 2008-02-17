@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file as_lvalue.hpp
-/// Contains definition of the call<> transform.
+/// Contains definition the as_lvalue() and uncv() functions.
 //
 //  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

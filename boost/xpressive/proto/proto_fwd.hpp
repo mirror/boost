@@ -87,6 +87,9 @@ namespace boost
         class unfused_generic {};
     }
 }
+#define BOOST_PROTO_FOR_DOXYGEN_ONLY(x) x
+#else
+#define BOOST_PROTO_FOR_DOXYGEN_ONLY(x)
 #endif
 
 namespace boost { namespace proto

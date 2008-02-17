@@ -20,6 +20,8 @@ namespace boost { namespace proto
     namespace transform
     {
 
+        /// \brief A PrimitiveTransform that returns the current expression
+        /// unmodified
         struct expr : proto::callable
         {
             template<typename Sig>
@@ -31,6 +33,9 @@ namespace boost { namespace proto
                 typedef Expr type;
             };
 
+            /// \param expr_ The current expression.
+            /// \return \c expr_
+            /// \throw nothrow
             template<typename Expr, typename State, typename Visitor>
             Expr const &
             operator ()(Expr const &expr_, State const &, Visitor &) const
@@ -39,6 +44,8 @@ namespace boost { namespace proto
             }
         };
 
+        /// \brief A PrimitiveTransform that returns the current state
+        /// unmodified
         struct state : proto::callable
         {
             template<typename Sig>
@@ -50,6 +57,9 @@ namespace boost { namespace proto
                 typedef State type;
             };
 
+            /// \param state_ The current state.
+            /// \return \c state_
+            /// \throw nothrow
             template<typename Expr, typename State, typename Visitor>
             State const &
             operator ()(Expr const &, State const &state_, Visitor &) const
@@ -58,6 +68,8 @@ namespace boost { namespace proto
             }
         };
 
+        /// \brief A PrimitiveTransform that returns the current visitor
+        /// unmodified
         struct visitor : proto::callable
         {
             template<typename Sig>
@@ -69,6 +81,9 @@ namespace boost { namespace proto
                 typedef Visitor type;
             };
 
+            /// \param visitor_ The current visitor
+            /// \return \c visitor_
+            /// \throw nothrow
             template<typename Expr, typename State, typename Visitor>
             Visitor &
             operator ()(Expr const &, State const &, Visitor &visitor_) const
@@ -77,6 +92,8 @@ namespace boost { namespace proto
             }
         };
 
+        /// \brief A PrimitiveTransform that returns I-th child of the current
+        /// expression.
         template<int I>
         struct arg_c : proto::callable
         {
@@ -89,6 +106,9 @@ namespace boost { namespace proto
                 typedef typename proto::result_of::arg_c<Expr, I>::type type;
             };
 
+            /// \param expr The current expression.
+            /// \return <tt>proto::arg_c\<I\>(expr)</tt>
+            /// \throw nothrow
             template<typename Expr, typename State, typename Visitor>
             typename proto::result_of::arg_c<Expr, I>::const_reference
             operator ()(Expr const &expr, State const &, Visitor &) const
@@ -97,6 +117,8 @@ namespace boost { namespace proto
             }
         };
 
+        /// \brief A unary CallableTransform that wraps its argument
+        /// in a \c boost::reference_wrapper\<\>.
         struct _ref : proto::callable
         {
             template<typename Sig>
@@ -114,6 +136,9 @@ namespace boost { namespace proto
                 typedef boost::reference_wrapper<T> type;
             };
 
+            /// \param t The object to wrap
+            /// \return <tt>boost::ref(t)</tt>
+            /// \throw nothrow
             template<typename T>
             boost::reference_wrapper<T>
             operator ()(T &t) const
@@ -121,6 +146,8 @@ namespace boost { namespace proto
                 return boost::reference_wrapper<T>(t);
             }
 
+            /// \overload
+            ///
             template<typename T>
             boost::reference_wrapper<T const>
             operator ()(T const &t) const
@@ -130,6 +157,8 @@ namespace boost { namespace proto
         };
     }
 
+    /// \brief A PrimitiveTransform that returns I-th child of the current
+    /// expression.
     template<int I>
     struct _arg_c
       : transform::arg_c<I>

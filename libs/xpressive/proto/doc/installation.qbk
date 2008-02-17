@@ -21,9 +21,9 @@ Proto is a header-only template library, which means you don't need to alter
 your build scripts or link to any separate lib file to use it. All you need
 to do is `#include <boost/xpressive/proto/proto.hpp>`. This will include the
 core of Proto. If you want to use any transforms, you must include the
-appropriate header from the [^boost\/xpressive\/proto\/transform\/] directory.
+appropriate header from the [^boost\/proto\/transform\/] directory.
 Likewise for any evaluation contexts, which live in the
-[^boost\/xpressive\/proto\/context\/] directory.
+[^boost\/proto\/context\/] directory.
 
 [heading Requirements]
 

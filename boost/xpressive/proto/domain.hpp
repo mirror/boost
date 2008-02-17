@@ -74,14 +74,14 @@ namespace boost { namespace proto
         /// };
         /// \endcode
         ///
-        template<typename Generator, typename Grammar>
+        template<
+            typename Generator BOOST_PROTO_FOR_DOXYGEN_ONLY(= default_generator)
+          , typename Grammar   BOOST_PROTO_FOR_DOXYGEN_ONLY(= proto::_)
+        >
         struct domain
           : Generator
         {
             typedef Grammar proto_grammar;
-
-            /// INTERNAL ONLY
-            ///
             typedef void proto_is_domain_;
         };
 

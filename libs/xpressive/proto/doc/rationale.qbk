@@ -56,7 +56,7 @@ don't. See below.
     boost::result_of<Tr(Expr, State, Visitor)>::type
 
 It is done this way largely for compile-time performance. Full
-compliance with the TR1 ResultOf protocol incurs a not insigninficant penalty
+compliance with the TR1 ResultOf protocol incurs a not insignificant penalty
 at compile time. Metaprogramming tricks are needed to first detect a nested
 `result_type` typedef if it exists. And each nested `result<>` template
 would need to be coded specially to handle references and cv-qualifiers, which
@@ -79,7 +79,7 @@ worry about stripping references and cv-qualification in their nested
 Anyone who has peeked at Proto's source code has probably wondered,
 "Why all the dirty preprocessor gunk? Couldn't this have been all
 implemented cleanly on top of libraries like MPL and Fusion?" The 
-answer is that Proto could have been implement this way, and in fact
+answer is that Proto could have been implemented this way, and in fact
 was at one point. The problem is that template metaprogramming (TMP)
 makes for very long compile times. As a foundation upon which other 
 TMP-heavy libraries will be built, Proto itself should be as lightweight

@@ -162,7 +162,7 @@
             /// held by value before forwarding the expression on to
             /// another generator for further processing. The \c Generator
             /// parameter defaults to \c default_generator.
-            template<typename Generator>
+            template<typename Generator BOOST_PROTO_FOR_DOXYGEN_ONLY(= default_generator)>
             struct by_value_generator
             {
                 template<typename Expr>

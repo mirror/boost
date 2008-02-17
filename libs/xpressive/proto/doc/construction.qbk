@@ -221,7 +221,7 @@ whether the child is stored by reference or not.
 
 [heading [^arg()], [^left()], and [^right()]]
 
-Most operators in C++ are unary or binary. For that reason, accesing the
+Most operators in C++ are unary or binary. For that reason, accessing the
 only operand, or the left and right operands, are very common operations. For
 this reason, Proto provides the _arg_, _left_, and _right_ functions. _arg_
 and _left_ are synonomous with `arg_c<0>()`, and _right_ is synonomous with
@@ -236,7 +236,9 @@ Proto expression nodes are valid Fusion random-access sequences of their
 children nodes. That means you can apply Fusion algorithms to them,
 transform them, apply Fusion filters and views to them, and access their
 elements using `fusion::at()`. The things Fusion can do to heterogeneous
-sequences is beyond the scope of this users' guide, but here is an example:
+sequences is beyond the scope of this users' guide, but below is a simple
+example. It takes a lazy function invocation like `fun(1,2,3,4)` and uses
+Fusion to print the function arguments in order.
 
     struct display
     {
