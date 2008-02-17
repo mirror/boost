@@ -15,5 +15,5 @@
 
 ID( MACRO(*) )
 //R #line 19 "t_1_011.cpp"
-//R XMACRO( * )
+//R XMACRO(*)
 CAT( MACRO(*) )

@@ -24,7 +24,7 @@ STRINGIZE( X()2 )             //R "12"
 X() 2                         //R 1 2 
 STRINGIZE( X() 2 )            //R "1 2" 
 //R 
-PLUS()MINUS()                 //R + - 
+PLUS()MINUS()                 //R +- 
 STRINGIZE( PLUS()MINUS() )    //R "+-" 
 //R 
 PLUS()PLUS()                  //R + + 
