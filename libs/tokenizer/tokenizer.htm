@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Language" content="en-us">
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+  <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
   <meta name="ProgId" content="FrontPage.Editor.Document">
 
   <title>Boost Tokenizer Class</title>
@@ -16,8 +16,7 @@
   "86"><br></p>
 
   <h1 align="center">Tokenizer Class</h1>
-  <pre>
-  template &lt;
+  <pre>  template &lt;
         class TokenizerFunc = char_delimiters_separator&lt;char&gt;, 
         class Iterator = std::string::const_iterator,
         class Type = std::string
@@ -33,8 +32,7 @@
   iterator provided by begin.</p>
 
   <h2>Example</h2>
-  <pre>
-// simple_example_1.cpp
+  <pre>// simple_example_1.cpp
 #include&lt;iostream&gt;
 #include&lt;boost/tokenizer.hpp&gt;
 #include&lt;string&gt;
@@ -50,7 +48,16 @@ int main(){
 }
 </pre>
 
-  <p>&nbsp;</p>
+  <p>The output from simple_example_1 is:</p>
+
+  <blockquote>
+
+  <p><code>This<br>
+  is<br>
+  a<br>
+  test</code></p>
+
+  </blockquote>
 
   <h3>Template Parameters</h3>
 
@@ -156,8 +163,7 @@ int main(){
   <p>&nbsp;</p>
 
   <h2>Construction and Member Functions</h2>
-  <pre>
-tokenizer(Iterator first, Iterator last,const TokenizerFunc&amp; f = TokenizerFunc()) 
+  <pre>tokenizer(Iterator first, Iterator last,const TokenizerFunc&amp; f = TokenizerFunc()) 
 
 template&lt;class Container&gt;
 tokenizer(const Container&amp; c,const TokenizerFunc&amp; f = TokenizerFunc())
@@ -226,7 +232,7 @@ iterator end() const
   height="31" width="88"></a></p>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38518" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 February, 2008<!--webbot bot="Timestamp" endspan i-checksum="40414" --></p>
 
   <p><i>Copyright &copy; 2001 John R. Bandela</i></p>
 
