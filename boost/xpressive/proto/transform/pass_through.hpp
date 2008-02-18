@@ -61,6 +61,7 @@
                     return expr;
                 }
             };
+
         } // namespace detail
 
         template<typename Grammar>
@@ -73,21 +74,6 @@
             struct result<This(Expr, State, Visitor)>
             {
                 typedef
-                    typename transform::detail::pass_through_impl<
-                        Grammar
-                      , typename Expr::proto_base_expr
-                      , State
-                      , Visitor
-                      , Expr::proto_arity::value
-                    >::type
-                type;
-            };
-
-            template<typename Expr, typename State, typename Visitor>
-            typename result<void(Expr, State, Visitor)>::type
-            operator ()(Expr const &expr, State const &state, Visitor &visitor) const
-            {
-                typedef
                     transform::detail::pass_through_impl<
                         Grammar
                       , typename Expr::proto_base_expr
@@ -97,7 +83,15 @@
                     >
                 impl;
 
-                return impl::call(expr.proto_base(), state, visitor);
+                typedef typename impl::type type;
+            };
+
+            template<typename Expr, typename State, typename Visitor>
+            typename result<void(Expr, State, Visitor)>::type
+            operator ()(Expr const &expr, State const &state, Visitor &visitor) const
+            {
+                return result<void(Expr, State, Visitor)>::impl
+                    ::call(expr.proto_base(), state, visitor);
             }
         };
 
