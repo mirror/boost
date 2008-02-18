@@ -5,7 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
-// 30 Jan 2008 (Worked around compiler bugs, added initialized_value) Fernando Cacciola, Niels Dekker
+// 18 Feb 2008 (Worked around compiler bugs, added initialized_value) Fernando Cacciola, Niels Dekker
 //
 #ifndef BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 #define BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
@@ -18,6 +18,7 @@
 
 #include <boost/aligned_storage.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/cv_traits.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <cstring>
@@ -75,7 +76,9 @@ class value_initialized
 
     value_initialized & operator=(value_initialized const & arg)
     {
-      this->data() = static_cast<T const &>( arg.data() );
+      // Assignment is only allowed when T is non-const.
+      BOOST_STATIC_ASSERT( ! is_const<T>::value );
+      *wrapper_address() = static_cast<wrapper const &>(*(arg.wrapper_address()));
       return *this;
     }
 
