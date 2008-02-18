@@ -20,7 +20,7 @@
 //                  >::type selection;
 //
 // Here case1, case2, ... are models of MPL::IntegralConstant with value type
-// bool, and n <= 10.
+// bool, and n <= 12.
 
 #ifndef BOOST_IOSTREAMS_SELECT_HPP_INCLUDED
 #define BOOST_IOSTREAMS_SELECT_HPP_INCLUDED   
@@ -58,7 +58,11 @@ template< typename Case1 = mpl::true_,
           typename Case9 = mpl::true_,
           typename Type9 = mpl::void_,
           typename Case10 = mpl::true_,
-          typename Type10 = mpl::void_ >
+          typename Type10 = mpl::void_,
+          typename Case11 = mpl::true_,
+          typename Type11 = mpl::void_,
+          typename Case12 = mpl::true_,
+          typename Type12 = mpl::void_ >
 struct select {
     typedef typename
             mpl::eval_if<
@@ -70,8 +74,10 @@ struct select {
                 Case6, mpl::identity<Type6>, mpl::eval_if<
                 Case7, mpl::identity<Type7>, mpl::eval_if<
                 Case8, mpl::identity<Type8>, mpl::eval_if<
-                Case9, mpl::identity<Type9>, mpl::if_<
-                Case10, Type10, mpl::void_ > > > > > > > > >
+                Case9, mpl::identity<Type9>, mpl::eval_if<
+                Case10, mpl::identity<Type10>, mpl::eval_if<
+                Case11, mpl::identity<Type11>, mpl::if_<
+                Case12, Type12, mpl::void_ > > > > > > > > > > >
             >::type type;
 };
 

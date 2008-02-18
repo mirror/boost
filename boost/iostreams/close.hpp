@@ -18,6 +18,7 @@
 #include <boost/iostreams/flush.hpp>
 #include <boost/iostreams/detail/adapter/non_blocking_adapter.hpp>
 #include <boost/iostreams/detail/ios.hpp> // BOOST_IOS
+#include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/operations_fwd.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -124,21 +125,36 @@ namespace detail {
 
 //------------------Definition of close_impl----------------------------------//
 
+struct close_boost_stream { };
+struct close_filtering_stream { };
+
 template<typename T>
 struct close_tag {
-    typedef typename category_of<T>::type category;
+    typedef typename category_of<T>::type             category;
+    typedef typename detail::unwrapped_type<T>::type  unwrapped;
     typedef typename
-            mpl::eval_if<
-                is_convertible<category, closable_tag>,
-                mpl::if_<
-                    mpl::or_<
-                        is_convertible<category, two_sequence>,
-                        is_convertible<category, dual_use>
-                    >,
-                    two_sequence,
-                    closable_tag
+            iostreams::select<
+                mpl::not_< is_convertible<category, closable_tag> >,
+                any_tag,
+                is_std_string_device<unwrapped>,
+                stringstream_tag,
+                mpl::or_<
+                    is_boost_stream<unwrapped>,
+                    is_boost_stream_buffer<unwrapped>
                 >,
-                mpl::identity<any_tag>
+                close_boost_stream,
+                mpl::or_<
+                    is_filtering_stream<unwrapped>,
+                    is_filtering_streambuf<unwrapped>
+                >,
+                close_filtering_stream,
+                mpl::or_<
+                    is_convertible<category, two_sequence>,
+                    is_convertible<category, dual_use>
+                >,
+                two_sequence,
+                else_,
+                closable_tag
             >::type type;
 };
 
@@ -167,6 +183,51 @@ struct close_impl<any_tag> {
             non_blocking_adapter<Sink> nb(snk);
             iostreams::flush(t, nb);
         }
+    }
+};
+
+template<>
+struct close_impl<stringstream_tag> {
+    template<typename T>
+    static void close(T& t)
+    {
+        t.str("");
+    }
+    template<typename T>
+    static void close(T& t, BOOST_IOS::openmode which)
+    {
+        if (which == BOOST_IOS::out)
+            t.str("");
+    }
+};
+
+template<>
+struct close_impl<close_boost_stream> {
+    template<typename T>
+    static void close(T& t)
+    {
+        t.close();
+    }
+    template<typename T>
+    static void close(T& t, BOOST_IOS::openmode which)
+    {
+        if (which == BOOST_IOS::out)
+            t.close();
+    }
+};
+
+template<>
+struct close_impl<close_filtering_stream> {
+    template<typename T>
+    static void close(T& t)
+    {
+        t.pop();
+    }
+    template<typename T>
+    static void close(T& t, BOOST_IOS::openmode which)
+    {
+        if (which == BOOST_IOS::out)
+            t.pop();
     }
 };
 

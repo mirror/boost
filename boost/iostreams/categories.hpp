@@ -100,43 +100,79 @@ struct multichar_dual_use_filter_tag
 
 struct std_io_tag : virtual localizable_tag { };
 struct istream_tag
-    : virtual input_seekable,
-      virtual device_tag,
+    : virtual device_tag,
       virtual peekable_tag,
       virtual std_io_tag
     { };
 struct ostream_tag
-    : virtual output_seekable,
-      virtual device_tag,
-      virtual peekable_tag,
+    : virtual device_tag,
       virtual std_io_tag
     { };
 struct iostream_tag
-    : seekable_device_tag,
-      istream_tag,
+    : istream_tag,
       ostream_tag
     { };
 struct streambuf_tag
-    : seekable_device_tag,
+    : device_tag,
       peekable_tag,
       std_io_tag
     { };
+struct ifstream_tag
+    : input_seekable,
+      closable_tag,
+      istream_tag
+    { };
+struct ofstream_tag
+    : output_seekable,
+      closable_tag,
+      ostream_tag
+    { };
+struct fstream_tag
+    : seekable,
+      closable_tag,
+      iostream_tag
+    { };
+struct filebuf_tag
+    : seekable,
+      closable_tag,
+      streambuf_tag
+    { };
+struct istringstream_tag
+    : input_seekable,
+      closable_tag,
+      istream_tag
+    { };
+struct ostringstream_tag
+    : output_seekable,
+      closable_tag,
+      ostream_tag
+    { };
 struct stringstream_tag
     : dual_seekable,
-      device_tag,
-      std_io_tag
+      closable_tag,
+      iostream_tag
     { };
 struct stringbuf_tag
     : dual_seekable,
-      device_tag,
-      std_io_tag
+      closable_tag,
+      streambuf_tag
     { };
-
-namespace detail {
-
-struct linked_tag : streambuf_tag { };
-
-} // End namespace detail.
+struct generic_istream_tag 
+    : input_seekable,
+      istream_tag
+    { };
+struct generic_ostream_tag 
+    : output_seekable,
+      ostream_tag
+    { };
+struct generic_iostream_tag 
+    : seekable,
+      iostream_tag
+    { };
+struct generic_streambuf_tag 
+    : seekable,
+      streambuf_tag
+    { };
 
 } } // End namespaces iostreams, boost.
 

@@ -24,12 +24,17 @@ template< typename Device,
 struct stream : detail::stream_base<Device, Tr, Alloc> {
 public:
     typedef typename char_type_of<Device>::type  char_type;
+    struct category 
+        : mode_of<Device>::type,
+          closable_tag,
+          detail::stream_traits<Device, Tr>::stream_tag
+        { };
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef typename
             detail::stream_traits<
                 Device, Tr
-            >::type                              stream_type;
+            >::stream_type                       stream_type;
     typedef Device                               policy_type;
 public:
     stream() { }

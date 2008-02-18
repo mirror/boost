@@ -217,7 +217,6 @@ void read_newline_checker()
     in.push(io::newline_checker(io::newline::posix));
     in.push(string_source(::posix));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
-    in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
     BOOST_CHECK(!checker->is_dos());
@@ -237,7 +236,6 @@ void read_newline_checker()
             false, "failed checking for dos line endings"
         );
     }
-    in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
     BOOST_CHECK(checker->is_dos());
@@ -251,7 +249,6 @@ void read_newline_checker()
     in.push(io::newline_checker(io::newline::mac));
     in.push(string_source(::mac));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
-    in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
     BOOST_CHECK(!checker->is_dos());
@@ -265,7 +262,6 @@ void read_newline_checker()
     in.push(io::newline_checker(io::newline::posix));
     in.push(string_source(::no_final_newline));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
-    in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
     BOOST_CHECK(!checker->is_dos());
@@ -279,7 +275,6 @@ void read_newline_checker()
     in.push(io::newline_checker());
     in.push(string_source(::mixed));
     BOOST_CHECK_NO_THROW(io::copy(in, io::null_sink()));
-    in.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(in, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
     BOOST_CHECK(!checker->is_dos());
@@ -345,7 +340,6 @@ void write_newline_checker()
     out.push(io::newline_checker(io::newline::posix));
     out.push(io::null_sink());
     BOOST_CHECK_NO_THROW(io::copy(string_source(::posix), out))
-    out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
     BOOST_CHECK(!checker->is_dos());
@@ -359,7 +353,6 @@ void write_newline_checker()
     out.push(io::newline_checker(io::newline::dos));
     out.push(io::null_sink());
     BOOST_CHECK_NO_THROW(io::copy(string_source(::dos), out))
-    out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
     BOOST_CHECK(checker->is_dos());
@@ -373,7 +366,6 @@ void write_newline_checker()
     out.push(io::newline_checker(io::newline::mac));
     out.push(io::null_sink());
     BOOST_CHECK_NO_THROW(io::copy(string_source(::mac), out))
-    out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
     BOOST_CHECK(!checker->is_dos());
@@ -387,7 +379,6 @@ void write_newline_checker()
     out.push(io::newline_checker(io::newline::posix));
     out.push(io::null_sink());
     BOOST_CHECK_NO_THROW(io::copy(string_source(::no_final_newline), out))
-    out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(checker->is_posix());
     BOOST_CHECK(!checker->is_dos());
@@ -401,7 +392,6 @@ void write_newline_checker()
     out.push(io::newline_checker());
     out.push(io::null_sink());
     BOOST_CHECK_NO_THROW(io::copy(string_source(::mixed), out))
-    out.pop(); // pop source.
     checker = BOOST_IOSTREAMS_COMPONENT(out, 0, io::newline_checker);
     BOOST_CHECK(!checker->is_posix());
     BOOST_CHECK(!checker->is_dos());

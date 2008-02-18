@@ -35,15 +35,20 @@ namespace boost { namespace iostreams {
 //          public_ or protected_; defaults to public_.
 //
 #define BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(name_, chain_type_, default_char_) \
-    template< typename Mode, typename Ch = default_char_, \
+    template< typename Mode, \
+              typename Ch = default_char_, \
               typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch), \
-              typename Alloc = std::allocator<Ch>, typename Access = public_ > \
+              typename Alloc = std::allocator<Ch>, \
+              typename Access = public_ > \
     class name_ : public boost::iostreams::detail::chainbuf< \
                              chain_type_<Mode, Ch, Tr, Alloc>, Mode, Access \
                          > \
     { \
     public: \
         typedef Ch                                             char_type; \
+        struct category \
+            : Mode, closable_tag, streambuf_tag \
+            { }; \
         BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr) \
         typedef Mode                                           mode; \
         typedef chain_type_<Mode, Ch, Tr, Alloc>               chain_type; \

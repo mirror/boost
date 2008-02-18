@@ -38,6 +38,11 @@ private:
     typedef T                                 policy_type;
 public:
     typedef typename char_type_of<T>::type    char_type;
+    struct category 
+        : Mode,
+          closable_tag,
+          streambuf_tag
+        { };
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
     stream_buffer() { }
     ~stream_buffer()
