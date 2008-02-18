@@ -34,7 +34,7 @@
 [def _boost_                 [@http://www.boost.org Boost]]
 [def _mpl_                   [@../../libs/mpl MPL]]
 [def _mpl_lambda_expression_ [@../../libs/mpl/doc/refmanual/lambda-expression.html MPL Lambda Expression]]
-[def _parameters_            [@../../libs/parameters Boost.Parameters]]
+[def _parameter_             [@../../libs/parameter Boost.Parameter]]
 [def _accumulator_set_       [classref boost::accumulators::accumulator_set `accumulator_set<>`]]
 [def _accumulator_base_      [classref boost::accumulators::accumulator_base `accumulator_base`]]
 [def _depends_on_            [classref boost::accumulators::depends_on `depends_on<>`]]
@@ -342,7 +342,7 @@ extractors with names that don't conflict with the macros, like this:
 
 Some accumulators need initialization parameters. In addition, perhaps some auxiliary
 information needs to be passed into the _accumulator_set_ along with each sample.
-Boost.Accumulators handles these cases with named parameters from the _parameters_
+Boost.Accumulators handles these cases with named parameters from the _parameter_
 library.
 
 For example, consider the _tail_ and _tail_variate_ features. _tail_ keeps
@@ -524,7 +524,7 @@ the values of all samples passed into it.
     }}}
 
 Much of the above should be pretty self-explanitory, except for the use of argument packs
-which may be confusing if you have never used the _parameters_ library before. An argument
+which may be confusing if you have never used the _parameter_ library before. An argument
 pack is a cluster of values, each of which can be accessed with a key. So `args[sample]`
 extracts from the pack the value associated with the `sample` key. And the cryptic
 `args[sample | Sample()]` evaluates to the value associated with the `sample` key if it
@@ -538,10 +538,6 @@ other optional member functions that have special meaning. In particular:
                              dropped. See the section on
                              [link accumulators.user_s_guide.the_accumulators_framework.extending_the_accumulators_framework.defining_a_new_accumulator.droppable_accumulators
                               Droppable Accumulators].]]
-[[[^post_construct(Args)]]  [An action to be executed after all accumulators in the
-                             accumulator set have been constructed. This is useful when the
-                             successful initialization of one accumulator depends on another
-                             accumulator.]]
 ]
 
 [h3 Accessing Other Accumulators in the Set]
@@ -578,12 +574,9 @@ extractors defined for those features: `sum` and `count`.
  accumulators like `mean_accumulator` above need not define one.]
 
 All the member functions that accept an argument pack have access to the enclosing 
-_accumulator_set_ via the `accumulator` key, with one exception: the constructor. The
-order in which accumulators within the set are constructed is unspecified. As a result,
-it would not be safe for one accumulator to access another during construction. If there are
-initialization dependencies between accumulators in the set, those can be managed with
-`post_construct(Args)`. The _accumulator_set_ post-constructs all its contained accumulators,
-in an order that satisfies the dependency relationships between them.
+_accumulator_set_ via the `accumulator` key, including the constructor. The
+accumulators within the set are constructed in an order determined by their interdependencies.
+As a result, it is safe for an accumulator to access one on which it depends during construction.
 
 [h3 Infix Notation and the Numeric Operators Sub-Library]
 
@@ -822,7 +815,7 @@ TODO
 [h2 Accumulator Concept]
 
 In the following table, `Acc` is the type of an accumulator, `acc` and `acc2` are objects of type
-`Acc`, and `args` is the name of an argument pack from the _parameters_ library.
+`Acc`, and `args` is the name of an argument pack from the _parameter_ library.
 
 [table Accumulator Requirements
     [[[*Expression]]                 [[*Return type]]       [[*Assertion / Note /
@@ -830,13 +823,11 @@ In the following table, `Acc` is the type of an accumulator, `acc` and `acc2` ar
     [[`Acc::result_type`]            [['implementation
                                        defined]]            [The type returned by `Acc::result()`.]]
     [[`Acc acc(args)`]               [none]                 [Construct from an argument pack.]]
-    [[`Acc acc(acc2)`]               [none]                 [Pre: `acc2` has been post-constructed.
-                                                             Post: `acc.result(args)` is equivalent
+    [[`Acc acc(acc2)`]               [none]                 [Post: `acc.result(args)` is equivalent
                                                              to `acc2.result(args)`]]
-    [[`acc(args)`]                   [['unspecified]]       [Pre: `acc` has been post-constructed.]]
-    [[`acc.post_construct(args)`]    [['unspecified]]       [Run `acc`'s post-constructor.]]
-    [[`acc.on_drop(args)`]           [['unspecified]]       [Pre: `acc` has been post-constructed.]]
-    [[`acc.result(args)`]            [`Acc::result_type`]   [Pre: `acc` has been post-constructed.]]
+    [[`acc(args)`]                   [['unspecified]]       []]
+    [[`acc.on_drop(args)`]           [['unspecified]]       []]
+    [[`acc.result(args)`]            [`Acc::result_type`]   []]
 ]
 
 [h2 Feature Concept]
