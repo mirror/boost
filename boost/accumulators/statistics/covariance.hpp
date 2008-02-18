@@ -18,7 +18,6 @@
 #include <boost/range.hpp>
 #include <boost/parameter/keyword.hpp>
 #include <boost/mpl/placeholders.hpp>
-#include <boost/lambda/lambda.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/type_traits/is_scalar.hpp>

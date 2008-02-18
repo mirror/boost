@@ -97,7 +97,10 @@ namespace boost { namespace numeric
         };                                                                                      \
         template<typename Arg, typename EnableIf>                                               \
         struct Name ## _base                                                                    \
-          : std::unary_function<Arg, typename result_of_ ## Name<Arg>::type>                    \
+          : std::unary_function<                                                                \
+                typename remove_const<Arg>::type                                                \
+              , typename result_of_ ## Name<Arg>::type                                          \
+            >                                                                                   \
         {                                                                                       \
             typename result_of_ ## Name<Arg>::type operator ()(Arg &arg) const                  \
             {                                                                                   \
@@ -133,7 +136,11 @@ namespace boost { namespace numeric
         };                                                                                      \
         template<typename Left, typename Right, typename EnableIf>                              \
         struct Name ## _base                                                                    \
-          : std::binary_function<Left, Right, typename result_of_ ## Name<Left, Right>::type>   \
+          : std::binary_function<                                                               \
+                typename remove_const<Left>::type                                               \
+              , typename remove_const<Right>::type                                              \
+              , typename result_of_ ## Name<Left, Right>::type                                  \
+            >                                                                                   \
         {                                                                                       \
             typename result_of_ ## Name<Left, Right>::type                                      \
             operator ()(Left &left, Right &right) const                                         \

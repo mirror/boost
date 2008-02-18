@@ -17,7 +17,6 @@
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/placeholders.hpp>
-#include <boost/lambda/lambda.hpp>
 #include <boost/accumulators/framework/accumulator_base.hpp>
 #include <boost/accumulators/framework/extractor.hpp>
 #include <boost/accumulators/numeric/functional.hpp>
@@ -55,7 +54,7 @@ namespace impl
         typedef float_type result_type;
 
         pot_quantile_impl(dont_care)
-         : sign_((is_same<LeftRight, left>::value) ? -1 : 1)
+          : sign_((is_same<LeftRight, left>::value) ? -1 : 1)
         {
         }
 
@@ -76,10 +75,10 @@ namespace impl
             float_type beta_bar = some_peaks_over_threshold(args).template get<1>();
             float_type xi_hat   = some_peaks_over_threshold(args).template get<2>();
 
-                return this->sign_*(u_bar + beta_bar/xi_hat * ( std::pow(
-                        is_same<LeftRight, left>::value ? args[quantile_probability] : 1. - args[quantile_probability]
-                    , -xi_hat
-                  ) - 1.));
+            return this->sign_ * (u_bar + beta_bar/xi_hat * ( std::pow(
+                    is_same<LeftRight, left>::value ? args[quantile_probability] : 1. - args[quantile_probability]
+                , -xi_hat
+              ) - 1.));
         }
 
     private:

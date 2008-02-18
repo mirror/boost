@@ -15,7 +15,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <boost/throw_exception.hpp>
-#include <boost/lambda/lambda.hpp>
 #include <boost/parameter/keyword.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -161,13 +160,11 @@ namespace impl
 
             float_type factor = sum * ( (is_same<Impl, relative>::value) ? non_coherent_weighted_tail_mean(args) : 1. );
 
-            using boost::lambda::_1;
-
             std::transform(
                 this->tail_means_.begin()
               , this->tail_means_.end()
               , this->tail_means_.begin()
-              , _1 / factor
+              , std::bind2nd(numeric::functional::divides<typename array_type::value_type const, float_type const>(), factor)
             );
 
             return make_iterator_range(this->tail_means_);
