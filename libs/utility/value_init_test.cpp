@@ -7,7 +7,7 @@
 // Test program for "boost/utility/value_init.hpp"
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
-// 19 Jan 2008 (Added tests regarding compiler issues and initialized_value) Fernando Cacciola, Niels Dekker
+// 18 Feb 2008 (Added tests regarding compiler issues and initialized_value) Fernando Cacciola, Niels Dekker
 
 #include <cstring>  // For memcmp.
 #include <iostream>
@@ -304,6 +304,10 @@ int test_main(int, char **)
   ArrayOfBytes zeroInitializedArrayOfBytes = { 0 };
   boost::value_initialized<ArrayOfBytes> valueInitializedArrayOfBytes;
   BOOST_CHECK (std::memcmp(get(valueInitializedArrayOfBytes), zeroInitializedArrayOfBytes, sizeof(ArrayOfBytes)) == 0);
+
+  boost::value_initialized<ArrayOfBytes> valueInitializedArrayOfBytes2;
+  valueInitializedArrayOfBytes2 = valueInitializedArrayOfBytes;
+  BOOST_CHECK (std::memcmp(get(valueInitializedArrayOfBytes), get(valueInitializedArrayOfBytes2), sizeof(ArrayOfBytes)) == 0);
 
   boost::value_initialized<CopyFunctionCallTester> copyFunctionCallTester1;
   BOOST_CHECK ( ! get(copyFunctionCallTester1).is_copy_constructed);
