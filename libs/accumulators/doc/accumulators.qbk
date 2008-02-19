@@ -614,7 +614,7 @@ as follows:
     // add more data
     acc(3.0);
     
-    // This will display "3" and "1.5"
+    // This will display "6" and "1.5"
     std::cout << sum(acc) << '\n' << mean(acc);    
 
 Dropping an accumulator essentially freezes it in its current state. It no longer gets
@@ -636,9 +636,7 @@ specialization of _droppable_accumulator_:
     {
         template<typename Args>
         droppable_accumulator(Args const & args)
-          : droppable_accumulator_base<
-                with_cached_result<impl::mean_accumulator<Sample> >
-            >(args)
+          : droppable_accumulator::base(args)
         {
         }
     };

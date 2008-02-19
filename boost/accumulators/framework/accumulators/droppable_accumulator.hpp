@@ -102,6 +102,7 @@ namespace boost { namespace accumulators
     struct droppable_accumulator_base
       : Accumulator
     {
+        typedef droppable_accumulator_base base;
         typedef mpl::true_ is_droppable;
         typedef typename Accumulator::result_type result_type;
 
@@ -156,7 +157,7 @@ namespace boost { namespace accumulators
     {
         template<typename Args>
         droppable_accumulator(Args const &args)
-          : droppable_accumulator_base<Accumulator>(args)
+          : droppable_accumulator::base(args)
         {
         }
     };

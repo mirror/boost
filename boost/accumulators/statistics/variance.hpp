@@ -208,27 +208,24 @@ struct feature_of<tag::immediate_weighted_variance>
 {
 };
 
-
-////////////////////////////////////////////////////////////////////////////
-//// droppable_accumulator<variance_impl>
-////  need to specialize droppable lazy variance to cache the result at the
-////  point the accumulator is dropped.
-///// INTERNAL ONLY
-/////
-//template<typename Sample, typename MeanFeature>
-//struct droppable_accumulator<impl::variance_impl<Sample, MeanFeature> >
-//  : droppable_accumulator_base<
-//        with_cached_result<impl::variance_impl<Sample, MeanFeature> >
-//    >
-//{
-//    template<typename Args>
-//    droppable_accumulator(Args const &args)
-//      : droppable_accumulator_base<
-//            with_cached_result<impl::variance_impl<Sample, MeanFeature> >
-//        >(args)
-//    {
-//    }
-//};
+//////////////////////////////////////////////////////////////////////////
+// droppable_accumulator<variance_impl>
+//  need to specialize droppable lazy variance to cache the result at the
+//  point the accumulator is dropped.
+/// INTERNAL ONLY
+///
+template<typename Sample, typename MeanFeature>
+struct droppable_accumulator<impl::variance_impl<Sample, MeanFeature> >
+  : droppable_accumulator_base<
+        with_cached_result<impl::variance_impl<Sample, MeanFeature> >
+    >
+{
+    template<typename Args>
+    droppable_accumulator(Args const &args)
+      : droppable_accumulator::base(args)
+    {
+    }
+};
 
 }} // namespace boost::accumulators
 
