@@ -188,6 +188,27 @@ bind(std::less&lt;int&gt;(), _1, 9)(x);	// x &lt; 9
 </pre>
 		<p>[Note: the ability to omit the return type is not available on all compilers.]
 		</p>
+		<P>By default, <STRONG>bind</STRONG> makes a copy of the provided function object. <code>
+				boost::ref</code> and <code>boost::cref</code> can be used to make it store 
+			a reference to the function object, rather than a copy. This can be useful when 
+			the function object is noncopyable, expensive to copy, or contains state; of 
+			course, in this case the programmer is expected to ensure that the function 
+			object is not destroyed while it's still being used.</P>
+		<pre>struct F2
+{
+    int s;
+
+    typedef void result_type;
+    void operator()( int x ) { s += x; }
+};
+
+F2 f2 = { 0 };
+int a[] = { 1, 2, 3 };
+
+std::for_each( a, a+3, bind( ref(f2), _1 ) );
+
+assert( f2.s == 6 );
+</pre>
 		<h3><a name="with_member_pointers">Using bind with pointers to members</a></h3>
 		<p>Pointers to member functions and pointers to data members are not function 
 			objects, because they do not support <tt>operator()</tt>. For convenience, <b>bind</b>
@@ -859,7 +880,7 @@ namespace
 			by Jaakko Järvi;
 			<li>
 				The <a href="../lambda/index.html">Lambda Library</a>
-			(now part of Boost) by Jaakko Järvi and Gary Powell (the successor to the
+			(now part of Boost) by Jaakko Järvi and Gary Powell (the successor to the 
 			Binder Library);
 			<li>
 				<a href="http://more.sourceforge.net/">Extensions to the STL</a> by Petter 
@@ -890,7 +911,7 @@ namespace
 			<br>
 			<br>
 			<small>Copyright © 2001, 2002 by Peter Dimov and Multi Media Ltd. Copyright 
-				2003-2005 Peter Dimov. Distributed under the Boost Software License, Version 
+				2003-2008 Peter Dimov. Distributed under the Boost Software License, Version 
 				1.0. See accompanying file <A href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or 
 				copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>.</small></p>
 	</body>
