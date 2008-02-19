@@ -306,13 +306,13 @@ std::for_each(v.begin(), v.end(), bind(apply&lt;void&gt;(), _1, 5));
 			evaluation, use <tt>protect(bind(f, ...))</tt>.</P>
 		<h3><a name="operators">Overloaded operators</a> (new in Boost 1.33)</h3>
 		<p>For convenience, the function objects produced by <tt>bind</tt> overload the 
-			logical not operator <STRONG>!</STRONG> and the relational operators <STRONG>==</STRONG>,
-			<STRONG>!=</STRONG>, <STRONG>&lt;</STRONG>, <STRONG>&lt;=</STRONG>, <STRONG>&gt;</STRONG>,
-			<STRONG>&gt;=</STRONG>.</p>
+			logical not operator <code>!</code> and the relational and logical operators <code>==</code>,
+			<code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>,
+			<code>&gt;=</code>, <code>&amp;&amp;</code>, <code>||</code>.</p>
 		<P><tt>!bind(f, ...)</tt> is equivalent to <tt>bind( <EM>logical_not</EM>(), bind(f, 
 				...) )</tt>, where <tt><EM>logical_not</EM></tt> is a function object that 
 			takes one argument <tt>x</tt> and returns <tt>!x</tt>.</P>
-		<P><tt>bind(f, ...) <EM>op</EM> x</tt>, where <EM>op</EM> is a relational operator, 
+		<P><tt>bind(f, ...) <EM>op</EM> x</tt>, where <EM>op</EM> is a relational or logical operator, 
 			is equivalent to <tt>bind( <EM>relation</EM>(), bind(f, ...), x )</tt>, where <em>relation</em>
 			is a function object that takes two arguments <tt>a</tt> and <tt>b</tt> and 
 			returns <tt>a <EM>op</EM> b</tt>.</P>
@@ -320,7 +320,8 @@ std::for_each(v.begin(), v.end(), bind(apply&lt;void&gt;(), _1, 5));
 		<P><tt>std::remove_if( first, last, !bind( &amp;X::visible, _1 ) ); // remove invisible 
 				objects</tt></P>
 		<P>and compare the result of <tt>bind</tt> against a value:</P>
-		<P><tt>std::find_if( first, last, bind( &amp;X::name, _1 ) == "peter" );</tt></P>
+		<P><tt>std::find_if( first, last, bind( &amp;X::name, _1 ) == "Peter" );</tt></P>
+		<P><tt>std::find_if( first, last, bind( &amp;X::name, _1 ) == "Peter" || bind( &amp;X::name, _1 ) == "Paul" );</tt></P>
 		<P>against a placeholder:</P>
 		<P><tt>bind( &amp;X::name, _1 ) == _2</tt></P>
 		<P>or against another <tt>bind</tt> expression:</P>
