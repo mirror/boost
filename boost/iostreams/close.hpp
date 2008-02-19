@@ -136,8 +136,6 @@ struct close_tag {
             iostreams::select<
                 mpl::not_< is_convertible<category, closable_tag> >,
                 any_tag,
-                is_std_string_device<unwrapped>,
-                stringstream_tag,
                 mpl::or_<
                     is_boost_stream<unwrapped>,
                     is_boost_stream_buffer<unwrapped>
@@ -183,21 +181,6 @@ struct close_impl<any_tag> {
             non_blocking_adapter<Sink> nb(snk);
             iostreams::flush(t, nb);
         }
-    }
-};
-
-template<>
-struct close_impl<stringstream_tag> {
-    template<typename T>
-    static void close(T& t)
-    {
-        t.str("");
-    }
-    template<typename T>
-    static void close(T& t, BOOST_IOS::openmode which)
-    {
-        if (which == BOOST_IOS::out)
-            t.str("");
     }
 };
 

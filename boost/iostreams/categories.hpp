@@ -139,22 +139,18 @@ struct filebuf_tag
     { };
 struct istringstream_tag
     : input_seekable,
-      closable_tag,
       istream_tag
     { };
 struct ostringstream_tag
     : output_seekable,
-      closable_tag,
       ostream_tag
     { };
 struct stringstream_tag
     : dual_seekable,
-      closable_tag,
       iostream_tag
     { };
 struct stringbuf_tag
     : dual_seekable,
-      closable_tag,
       streambuf_tag
     { };
 struct generic_istream_tag 
