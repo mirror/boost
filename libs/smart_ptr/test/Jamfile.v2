@@ -33,5 +33,7 @@ import testing ;
           [ run shared_ptr_move_test.cpp ]
           [ compile-fail shared_ptr_pv_fail.cpp ]
           [ run sp_unary_addr_test.cpp ]
+          [ compile-fail scoped_ptr_eq_fail.cpp ]
+          [ compile-fail scoped_array_eq_fail.cpp ]
         ;
 }
