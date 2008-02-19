@@ -26,9 +26,9 @@
     {
         // Simple transform, takes a raw transform and
         // applies it directly.
-        template<typename Grammar, typename Fun>
+        template<typename Grammar, typename PrimitiveTransform BOOST_PROTO_FOR_DOXYGEN_ONLY(= Grammar)>
         struct when
-          : Fun
+          : PrimitiveTransform
         {
             typedef typename Grammar::proto_base_expr proto_base_expr;
         };

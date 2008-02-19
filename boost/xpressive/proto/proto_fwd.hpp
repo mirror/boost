@@ -325,10 +325,10 @@ namespace boost { namespace proto
 
     namespace result_of
     {
-        template<typename T, typename Domain = default_domain, typename EnableIf = void>
+        template<typename T, typename Domain = default_domain, typename Void = void>
         struct as_expr;
 
-        template<typename T, typename Domain = default_domain, typename EnableIf = void>
+        template<typename T, typename Domain = default_domain, typename Void = void>
         struct as_arg;
 
         template<typename Expr, typename N = mpl::long_<0> >
@@ -360,26 +360,26 @@ namespace boost { namespace proto
               , typename A
               , = void BOOST_PP_INTERCEPT
             )
-          , typename EnableIf = void
+          , typename Void = void
         >
         struct make_expr;
 
-        template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename EnableIf = void>
+        template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename Void = void>
         struct unpack_expr;
 
-        template<typename T, typename EnableIf = void>
+        template<typename T, typename Void = void>
         struct is_ref;
 
-        template<typename T, typename EnableIf = void>
+        template<typename T, typename Void = void>
         struct is_expr;
 
-        template<typename T, typename EnableIf = void>
+        template<typename T, typename Void = void>
         struct is_domain;
 
         template<typename Expr>
         struct tag_of;
 
-        template<typename T, typename EnableIf = void>
+        template<typename T, typename Void = void>
         struct domain_of;
 
         template<typename Expr, typename Grammar>
@@ -603,7 +603,6 @@ namespace boost { namespace proto
     namespace transform
     {
         #define BOOST_PROTO_CALLABLE() typedef void proto_is_callable_;
-        #define BOOST_PROTO_NOT_CALLABLE() typedef int proto_is_callable_;
 
         struct callable
         {

@@ -132,7 +132,12 @@
 
         namespace context
         {
-            template<typename Expr, typename Context, typename Tag, long Arity>
+            template<
+                typename Expr
+              , typename Context
+              , typename Tag        BOOST_PROTO_FOR_DOXYGEN_ONLY(= typename Expr::proto_tag)
+              , long Arity          BOOST_PROTO_FOR_DOXYGEN_ONLY(= Expr::proto_arity::value)
+            >
             struct default_eval
             {};
 

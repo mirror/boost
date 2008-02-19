@@ -342,7 +342,12 @@ namespace boost { namespace proto
 
         /// \brief extends\<\> class template for adding behaviors to a Proto expression template
         ///
-        template<typename Expr, typename Derived, typename Domain, typename Tag>
+        template<
+            typename Expr
+          , typename Derived
+          , typename Domain     BOOST_PROTO_FOR_DOXYGEN_ONLY(= default_domain)
+          , typename Tag        BOOST_PROTO_FOR_DOXYGEN_ONLY(= typename Expr::proto_tag)
+        >
         struct extends
         {
             extends()

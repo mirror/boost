@@ -60,7 +60,7 @@
                     typedef T type;
                 };
 
-                template<typename T, typename Args, typename EnableIf = void>
+                template<typename T, typename Args, typename Void = void>
                 struct nested_type_if
                   : nested_type<T>
                 {};

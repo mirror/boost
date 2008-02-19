@@ -75,7 +75,7 @@
                 };
 
                 #if BOOST_VERSION < 103500
-                template<typename Sequence, typename EnableIf = void>
+                template<typename Sequence, typename Void = void>
                 struct as_fusion_sequence_type
                 {
                     typedef Sequence const type;

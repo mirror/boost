@@ -57,13 +57,20 @@
         {
             /// callable_eval
             ///
-            template<typename Expr, typename Context, long Arity>
+            template<
+                typename Expr
+              , typename Context
+              , long Arity          BOOST_PROTO_FOR_DOXYGEN_ONLY(= Expr::proto_arity::value)
+            >
             struct callable_eval
             {};
 
             /// callable_context
             ///
-            template<typename Context, typename DefaultCtx>
+            template<
+                typename Context
+              , typename DefaultCtx BOOST_PROTO_FOR_DOXYGEN_ONLY(= default_context)
+            >
             struct callable_context
             {
                 /// callable_context::eval

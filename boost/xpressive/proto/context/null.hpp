@@ -23,7 +23,11 @@
     namespace boost { namespace proto { namespace context
     {
 
-        template<typename Expr, typename Context, long Arity>
+        template<
+            typename Expr
+          , typename Context
+          , long Arity          BOOST_PROTO_FOR_DOXYGEN_ONLY(= Expr::proto_arity::value)
+        >
         struct null_eval
         {};
 

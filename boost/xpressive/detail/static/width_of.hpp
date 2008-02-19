@@ -147,7 +147,7 @@ namespace boost { namespace xpressive { namespace detail
     // either (s1 = ...) or (a1 = ...) or (set = ...)
     template<typename Expr, typename Char>
     struct width_of<Expr, Char, proto::tag::assign>
-      : width_of_assign<Expr, Char, typename proto::result_of::arg<typename Expr::proto_arg0>::type>
+      : width_of_assign<Expr, Char, typename proto::result_of::arg<typename Expr::proto_arg0::proto_base_expr>::type>
     {};
 
     template<typename Expr, typename Char>

@@ -142,7 +142,7 @@
             struct vararg_matches_impl;
 
             // vararg_matches
-            template<typename Args1, typename Args2, typename Back, bool Can, bool Zero, typename EnableIf = void>
+            template<typename Args1, typename Args2, typename Back, bool Can, bool Zero, typename Void = void>
             struct vararg_matches
               : mpl::false_
             {};
@@ -612,7 +612,11 @@
             ///     >
             /// {};
             /// \endcode
-            template<typename If, typename Then, typename Else>
+            template<
+                typename If
+              , typename Then   BOOST_PROTO_FOR_DOXYGEN_ONLY(= _)
+              , typename Else   BOOST_PROTO_FOR_DOXYGEN_ONLY(= not_<_>)
+            >
             struct if_ : proto::callable
             {
                 typedef if_ proto_base_expr;

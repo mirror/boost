@@ -112,7 +112,7 @@ namespace boost { namespace proto
         /// \c mpl::false_ otherwise. If \c T inherits from
         /// \c proto::domain\<\>, \c is_domain\<T\> is
         /// \c mpl::true_.
-        template<typename T, typename EnableIf>
+        template<typename T, typename Void  BOOST_PROTO_FOR_DOXYGEN_ONLY(= void)>
         struct is_domain
           : mpl::false_
         {};
@@ -129,7 +129,7 @@ namespace boost { namespace proto
         /// type, it returns that expression's associated
         /// domain. If not, it returns
         /// \c proto::default_domain.
-        template<typename T, typename EnableIf>
+        template<typename T, typename Void  BOOST_PROTO_FOR_DOXYGEN_ONLY(= void)>
         struct domain_of
         {
             typedef default_domain type;

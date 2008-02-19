@@ -62,7 +62,7 @@
     {
         namespace detail
         {
-            template<typename T, typename EnableIf = void>
+            template<typename T, typename Void = void>
             struct if_vararg
             {};
 
@@ -71,7 +71,7 @@
               : T
             {};
 
-            template<typename T, typename EnableIf = void>
+            template<typename T, typename Void = void>
             struct is_callable2_
               : mpl::false_
             {};
@@ -322,7 +322,7 @@
             };
 
             /// \brief A metafunction that returns the type of the Nth child
-            /// of a Proto expression, where N is an Integral Constant type.
+            /// of a Proto expression, where N is an MPL Integral Constant.
             ///
             /// <tt>result_of::arg\<Expr, N\></tt> is equivalent to
             /// <tt>result_of::arg_c\<Expr, N::value\></tt>.
@@ -2114,17 +2114,27 @@
 
         namespace functional
         {
-            template<typename Domain>
+            /// \brief A callable PolymorphicFunctionObject that is
+            /// equivalent to the \c as_expr() function.
+            template<typename Domain    BOOST_PROTO_FOR_DOXYGEN_ONLY(= default_domain)>
             struct as_expr
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result;
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                  : result_of::as_expr<typename remove_reference<T>::type, Domain>
-                {};
+                {
+                    typedef typename remove_reference<T>::type unref_type;
+                    typedef typename result_of::as_expr<unref_type, Domain>::type type;
+                };
 
+                /// \brief Wrap an object in a Proto terminal if it isn't a
+                /// Proto expression already.
+                /// \param t The object to wrap.
+                /// \return <tt>proto::as_expr\<Domain\>(t)</tt>
                 template<typename T>
                 typename result_of::as_expr<T, Domain>::reference
                 operator ()(T &t) const
@@ -2132,6 +2142,8 @@
                     return result_of::as_expr<T, Domain>::call(t);
                 }
 
+                /// \overload
+                ///
                 template<typename T>
                 typename result_of::as_expr<T const, Domain>::reference
                 operator ()(T const &t) const
@@ -2156,17 +2168,27 @@
                 #endif
             };
 
-            template<typename Domain>
+            /// \brief A callable PolymorphicFunctionObject that is
+            /// equivalent to the \c as_arg() function.
+            template<typename Domain    BOOST_PROTO_FOR_DOXYGEN_ONLY(= default_domain)>
             struct as_arg
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result;
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                  : result_of::as_arg<typename remove_reference<T>::type, Domain>
-                {};
+                {
+                    typedef typename remove_reference<T>::type unref_type;
+                    typedef typename result_of::as_arg<unref_type, Domain>::type type;
+                };
 
+                /// \brief Wrap an object in a Proto terminal if it isn't a
+                /// Proto expression already.
+                /// \param t The object to wrap.
+                /// \return <tt>proto::as_arg\<Domain\>(t)</tt>
                 template<typename T>
                 typename result_of::as_arg<T, Domain>::type
                 operator ()(T &t) const
@@ -2174,6 +2196,8 @@
                     return result_of::as_arg<T, Domain>::call(t);
                 }
 
+                /// \overload
+                ///
                 template<typename T>
                 typename result_of::as_arg<T const, Domain>::type
                 operator ()(T const &t) const
@@ -2182,47 +2206,82 @@
                 }
             };
 
+            /// \brief A callable PolymorphicFunctionObject that is
+            /// equivalent to the \c arg_c() function.
             template<long N>
             struct arg_c
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::arg_c<BOOST_PROTO_UNCVREF(Expr), N>
-                {};
+                {
+                    typedef BOOST_PROTO_UNCVREF(Expr) uncvref_type;
+                    typedef typename result_of::arg_c<uncvref_type, N>::type type;
+                };
 
+                /// \brief Return the Nth child of the given expression.
+                /// \param expr The expression node.
+                /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true
+                /// \pre <tt>N == 0 || N \< Expr::proto_arity::value</tt>
+                /// \return <tt>proto::arg_c\<N\>(expr)</tt>
+                /// \throw nothrow
                 template<typename Expr>
-                typename result_of::arg_c<Expr, N>::reference operator ()(Expr &expr) const
+                typename result_of::arg_c<Expr, N>::reference
+                operator ()(Expr &expr) const
                 {
                     return result_of::arg_c<Expr, N>::call(expr);
                 }
 
+                /// \overload
+                ///
                 template<typename Expr>
-                typename result_of::arg_c<Expr, N>::const_reference operator ()(Expr const &expr) const
+                typename result_of::arg_c<Expr, N>::const_reference
+                operator ()(Expr const &expr) const
                 {
                     return result_of::arg_c<Expr, N>::call(expr);
                 }
             };
 
-            template<typename N>
+            /// \brief A callable PolymorphicFunctionObject that is
+            /// equivalent to the \c arg() function.
+            ///
+            /// A callable PolymorphicFunctionObject that is
+            /// equivalent to the \c arg() function. \c N is required
+            /// to be an MPL Integral Constant.
+            template<typename N BOOST_PROTO_FOR_DOXYGEN_ONLY(= mpl::long_<0>) >
             struct arg
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::arg<BOOST_PROTO_UNCVREF(Expr), N>
-                {};
+                {
+                    typedef BOOST_PROTO_UNCVREF(Expr) uncvref_type;
+                    typedef typename result_of::arg<uncvref_type, N>::type type;
+                };
 
+                /// \brief Return the Nth child of the given expression.
+                /// \param expr The expression node.
+                /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true
+                /// \pre <tt>N::value == 0 || N::value \< Expr::proto_arity::value</tt>
+                /// \return <tt>proto::arg\<N\>(expr)</tt>
+                /// \throw nothrow
                 template<typename Expr>
-                typename result_of::arg<Expr, N>::reference operator ()(Expr &expr) const
+                typename result_of::arg<Expr, N>::reference
+                operator ()(Expr &expr) const
                 {
                     return result_of::arg<Expr, N>::call(expr);
                 }
 
+                /// \overload
+                ///
                 template<typename Expr>
                 typename result_of::arg<Expr, N>::const_reference operator ()(Expr const &expr) const
                 {
@@ -2230,47 +2289,77 @@
                 }
             };
 
+            /// \brief A callable PolymorphicFunctionObject that is
+            /// equivalent to the \c left() function.
             struct left
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::left<BOOST_PROTO_UNCVREF(Expr)>
-                {};
+                {
+                    typedef BOOST_PROTO_UNCVREF(Expr) uncvref_type;
+                    typedef typename result_of::left<uncvref_type>::type type;
+                };
 
+                /// \brief Return the left child of the given binary expression.
+                /// \param expr The expression node.
+                /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true
+                /// \pre <tt>2 == Expr::proto_arity::value</tt>
+                /// \return <tt>proto::left(expr)</tt>
+                /// \throw nothrow
                 template<typename Expr>
-                typename result_of::left<Expr>::reference operator ()(Expr &expr) const
+                typename result_of::left<Expr>::reference
+                operator ()(Expr &expr) const
                 {
                     return proto::unref(expr.proto_base().arg0);
                 }
 
+                /// \overload
+                ///
                 template<typename Expr>
-                typename result_of::left<Expr>::const_reference operator ()(Expr const &expr) const
+                typename result_of::left<Expr>::const_reference
+                operator ()(Expr const &expr) const
                 {
                     return proto::unref(expr.proto_base().arg0);
                 }
             };
 
+            /// \brief A callable PolymorphicFunctionObject that is
+            /// equivalent to the \c right() function.
             struct right
             {
+                BOOST_PROTO_CALLABLE()
+
                 template<typename Sig>
                 struct result;
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : result_of::right<BOOST_PROTO_UNCVREF(Expr)>
-                {};
+                {
+                    typedef BOOST_PROTO_UNCVREF(Expr) uncvref_type;
+                    typedef typename result_of::right<uncvref_type>::type type;
+                };
 
+                /// \brief Return the right child of the given binary expression.
+                /// \param expr The expression node.
+                /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true
+                /// \pre <tt>2 == Expr::proto_arity::value</tt>
+                /// \return <tt>proto::right(expr)</tt>
+                /// \throw nothrow
                 template<typename Expr>
-                typename result_of::right<Expr>::reference operator ()(Expr &expr) const
+                typename result_of::right<Expr>::reference
+                operator ()(Expr &expr) const
                 {
                     return proto::unref(expr.proto_base().arg1);
                 }
 
                 template<typename Expr>
-                typename result_of::right<Expr>::const_reference operator ()(Expr const &expr) const
+                typename result_of::right<Expr>::const_reference
+                operator ()(Expr const &expr) const
                 {
                     return proto::unref(expr.proto_base().arg1);
                 }
@@ -2278,11 +2367,28 @@
 
         }
 
-        functional::left const left = {};
-        functional::right const right = {};
-
-        /// as_expr
+        /// \brief A function that wraps non-Proto expression types in Proto
+        /// terminals and leaves Proto expression types alone.
         ///
+        /// The <tt>as_expr()</tt> function turns objects into Proto terminals if
+        /// they are not Proto expression types already. Non-Proto types are
+        /// held by value, if possible. Types which are already Proto types are
+        /// left alone and returned by reference.
+        ///
+        /// This function can be called either with an explicitly specified
+        /// \c Domain parameter (i.e., <tt>as_expr\<Domain\>(t)</tt>), or 
+        /// without (i.e., <tt>as_expr(t)</tt>). If no domain is
+        /// specified, \c default_domain is assumed.
+        ///
+        /// If <tt>is_expr\<T\>::::value</tt> is \c true, then the argument is
+        /// returned unmodified, by reference. Otherwise, the argument is wrapped
+        /// in a Proto terminal expression node according to the following rules.
+        /// If \c T is an array type or a function type, let \c A be <tt>T &</tt>.
+        /// Otherwise, let \c A be the type \c T stripped of cv-qualifiers.
+        /// Then, \c as_expr() returns
+        /// <tt>Domain::make(terminal\<A\>::::type::make(t))</tt>.
+        ///
+        /// \param t The object to wrap.
         template<typename T>
         typename result_of::as_expr<T>::reference
         as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
@@ -2317,8 +2423,26 @@
             return result_of::as_expr<T const, Domain>::call(t);
         }
 
-        /// as_arg
+        /// \brief A function that wraps non-Proto expression types in Proto
+        /// terminals (by reference) and wraps Proto expression types in
+        /// <tt>ref_\<\></tt>.
         ///
+        /// The <tt>as_arg()</tt> function turns objects into Proto terminals if
+        /// they are not Proto expression types already. Non-Proto types are
+        /// held by reference. Types which are already Proto types are wrapped
+        /// in <tt>ref_\<\></tt>.
+        ///
+        /// This function can be called either with an explicitly specified
+        /// \c Domain parameter (i.e., <tt>as_arg\<Domain\>(t)</tt>), or 
+        /// without (i.e., <tt>as_arg(t)</tt>). If no domain is
+        /// specified, \c default_domain is assumed.
+        ///
+        /// If <tt>is_expr\<T\>::::value</tt> is \c true, then the argument is
+        /// wrapped in <tt>ref_\<\></tt>, which holds the argument by reference.
+        /// Otherwise, \c as_arg() returns
+        /// <tt>Domain::make(terminal\<T &\>::::type::make(t))</tt>.
+        ///
+        /// \param t The object to wrap.
         template<typename T>
         typename result_of::as_arg<T>::type
         as_arg(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
@@ -2353,26 +2477,20 @@
             return result_of::as_arg<T const, Domain>::call(t);
         }
 
-        /// arg
+        /// \brief Return the Nth child of the specified Proto expression.
+        /// 
+        /// Return the Nth child of the specified Proto expression. If
+        /// \c N is not specified, as in \c arg(expr), then \c N is assumed
+        /// to be <tt>mpl::long_\<0\></tt>. The child is returned by
+        /// reference. If the expression is holding the child in a
+        /// <tt>ref_\<\></tt> wrapper, it is unwrapped before it is returned.
         ///
-        template<typename Expr>
-        typename result_of::unref<typename Expr::proto_base_expr::proto_arg0>::reference
-        arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
-        {
-            return proto::unref(expr.proto_base().arg0);
-        }
-
-        /// \overload
-        ///
-        template<typename Expr>
-        typename result_of::unref<typename Expr::proto_base_expr::proto_arg0>::const_reference
-        arg(Expr const &expr)
-        {
-            return proto::unref(expr.proto_base().arg0);
-        }
-
-        /// \overload
-        ///
+        /// \param expr The Proto expression.
+        /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true.
+        /// \pre \c N is an MPL Integral Constant.
+        /// \pre <tt>N::value == 0 || N::value \< Expr::proto_arity::value</tt>
+        /// \throw nothrow
+        /// \return A reference to the Nth child
         template<typename N, typename Expr>
         typename result_of::arg<Expr, N>::reference
         arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
@@ -2389,8 +2507,35 @@
             return result_of::arg<Expr, N>::call(expr);
         }
 
-        /// arg_c
+        /// \overload
         ///
+        template<typename Expr2>
+        typename result_of::unref<typename Expr2::proto_base_expr::proto_arg0>::reference
+        arg(Expr2 &expr2 BOOST_PROTO_DISABLE_IF_IS_CONST(Expr2))
+        {
+            return proto::unref(expr2.proto_base().arg0);
+        }
+
+        /// \overload
+        ///
+        template<typename Expr2>
+        typename result_of::unref<typename Expr2::proto_base_expr::proto_arg0>::const_reference
+        arg(Expr2 const &expr2)
+        {
+            return proto::unref(expr2.proto_base().arg0);
+        }
+
+        /// \brief Return the Nth child of the specified Proto expression.
+        /// 
+        /// Return the Nth child of the specified Proto expression. The child
+        /// is returned by reference. If the expression is holding the child in
+        /// a <tt>ref_\<\></tt> wrapper, it is unwrapped before it is returned.
+        ///
+        /// \param expr The Proto expression.
+        /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true.
+        /// \pre <tt>N == 0 || N \< Expr::proto_arity::value</tt>
+        /// \throw nothrow
+        /// \return A reference to the Nth child
         template<long N, typename Expr>
         typename result_of::arg_c<Expr, N>::reference
         arg_c(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
@@ -2401,10 +2546,97 @@
         /// \overload
         ///
         template<long N, typename Expr>
-        typename result_of::arg_c<Expr, N>::const_reference arg_c(Expr const &expr)
+        typename result_of::arg_c<Expr, N>::const_reference
+        arg_c(Expr const &expr)
         {
             return result_of::arg_c<Expr, N>::call(expr);
         }
+
+        /// \brief Return the left child of the specified binary Proto
+        /// expression.
+        /// 
+        /// Return the left child of the specified binary Proto expression. The
+        /// child is returned by reference. If the expression is holding the
+        /// child in a <tt>ref_\<\></tt> wrapper, it is unwrapped before it is
+        /// returned.
+        ///
+        /// \param expr The Proto expression.
+        /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true.
+        /// \pre <tt>2 == Expr::proto_arity::value</tt>
+        /// \throw nothrow
+        /// \return A reference to the left child
+        template<typename Expr>
+        typename result_of::left<Expr>::reference
+        left(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        {
+            return proto::unref(expr.proto_base().arg0);
+        }
+
+        /// \overload
+        ///
+        template<typename Expr>
+        typename result_of::left<Expr>::const_reference
+        left(Expr const &expr)
+        {
+            return proto::unref(expr.proto_base().arg0);
+        }
+
+        /// \brief Return the right child of the specified binary Proto
+        /// expression.
+        /// 
+        /// Return the right child of the specified binary Proto expression. The
+        /// child is returned by reference. If the expression is holding the
+        /// child in a <tt>ref_\<\></tt> wrapper, it is unwrapped before it is
+        /// returned.
+        ///
+        /// \param expr The Proto expression.
+        /// \pre <tt>is_expr\<Expr\>::::value</tt> is \c true.
+        /// \pre <tt>2 == Expr::proto_arity::value</tt>
+        /// \throw nothrow
+        /// \return A reference to the right child
+        template<typename Expr>
+        typename result_of::right<Expr>::reference
+        right(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        {
+            return proto::unref(expr.proto_base().arg1);
+        }
+
+        /// \overload
+        ///
+        template<typename Expr>
+        typename result_of::right<Expr>::const_reference
+        right(Expr const &expr)
+        {
+            return proto::unref(expr.proto_base().arg1);
+        }
+
+        /// INTERNAL ONLY
+        ///
+        template<typename Domain>
+        struct is_callable<functional::as_expr<Domain> >
+          : mpl::true_
+        {};
+
+        /// INTERNAL ONLY
+        ///
+        template<typename Domain>
+        struct is_callable<functional::as_arg<Domain> >
+          : mpl::true_
+        {};
+
+        /// INTERNAL ONLY
+        ///
+        template<long N>
+        struct is_callable<functional::arg_c<N> >
+          : mpl::true_
+        {};
+
+        /// INTERNAL ONLY
+        ///
+        template<typename N>
+        struct is_callable<functional::arg<N> >
+          : mpl::true_
+        {};
 
     }}
 
@@ -2553,33 +2785,70 @@
 
         namespace result_of
         {
+            /// \brief A metafunction that returns the type of the Nth child
+            /// of a Proto expression.
+            ///
+            /// A metafunction that returns the type of the Nth child
+            /// of a Proto expression. \c N must be 0 or less than
+            /// \c Expr::proto_arity::value.
             template<typename Expr>
             struct arg_c<Expr, N>
             {
+                /// The raw type of the Nth child as it is stored within
+                /// \c Expr. This may be a value, a reference, or a Proto 
+                /// <tt>ref_\<\></tt> wrapper.
                 typedef typename Expr::BOOST_PP_CAT(proto_arg, N) wrapped_type;
+
+                /// The "value" type of the child, suitable for return by value,
+                /// computed as follows:
+                /// \li <tt>ref_\<T const\></tt> becomes <tt>T</tt>
+                /// \li <tt>ref_\<T\></tt> becomes <tt>T</tt>
+                /// \li <tt>T const(&)[N]</tt> becomes <tt>T const(&)[N]</tt>
+                /// \li <tt>T(&)[N]</tt> becomes <tt>T(&)[N]</tt>
+                /// \li <tt>R(&)(A0,...)</tt> becomes <tt>R(&)(A0,...)</tt>
+                /// \li <tt>T const &</tt> becomes <tt>T</tt>
+                /// \li <tt>T &</tt> becomes <tt>T</tt>
+                /// \li <tt>T</tt> becomes <tt>T</tt>
                 typedef typename unref<wrapped_type>::type type;
+
+                /// The "reference" type of the child, suitable for return by
+                /// reference, computed as follows:
+                /// \li <tt>ref_\<T const\></tt> becomes <tt>T const &</tt>
+                /// \li <tt>ref_\<T\></tt> becomes <tt>T &</tt>
+                /// \li <tt>T const(&)[N]</tt> becomes <tt>T const(&)[N]</tt>
+                /// \li <tt>T(&)[N]</tt> becomes <tt>T(&)[N]</tt>
+                /// \li <tt>R(&)(A0,...)</tt> becomes <tt>R(&)(A0,...)</tt>
+                /// \li <tt>T const &</tt> becomes <tt>T const &</tt>
+                /// \li <tt>T &</tt> becomes <tt>T &</tt>
+                /// \li <tt>T</tt> becomes <tt>T &</tt>
                 typedef typename unref<wrapped_type>::reference reference;
+
+                /// The "const reference" type of the child, suitable for return by
+                /// const reference, computed as follows:
+                /// \li <tt>ref_\<T const\></tt> becomes <tt>T const &</tt>
+                /// \li <tt>ref_\<T\></tt> becomes <tt>T &</tt>
+                /// \li <tt>T const(&)[N]</tt> becomes <tt>T const(&)[N]</tt>
+                /// \li <tt>T(&)[N]</tt> becomes <tt>T(&)[N]</tt>
+                /// \li <tt>R(&)(A0,...)</tt> becomes <tt>R(&)(A0,...)</tt>
+                /// \li <tt>T const &</tt> becomes <tt>T const &</tt>
+                /// \li <tt>T &</tt> becomes <tt>T &</tt>
+                /// \li <tt>T</tt> becomes <tt>T const &</tt>
                 typedef typename unref<wrapped_type>::const_reference const_reference;
 
                 /// INTERNAL ONLY
                 ///
-                static reference call(Expr &expr)
+                static reference call(typename Expr::proto_derived_expr &expr)
                 {
                     return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }
 
                 /// INTERNAL ONLY
                 ///
-                static const_reference call(Expr const &expr)
+                static const_reference call(typename Expr::proto_derived_expr const &expr)
                 {
                     return proto::unref(expr.proto_base().BOOST_PP_CAT(arg, N));
                 }
             };
-
-            template<typename Expr>
-            struct arg_c<Expr const, N>
-              : arg_c<Expr, N>
-            {};
         }
 
     #undef N

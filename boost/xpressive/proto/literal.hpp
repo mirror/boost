@@ -31,7 +31,10 @@ namespace boost { namespace proto
         ///
         /// The \c Domain template parameter defaults to
         /// \c proto::default_domain.
-        template<typename T, typename Domain>
+        template<
+            typename T
+          , typename Domain BOOST_PROTO_FOR_DOXYGEN_ONLY(= default_domain)
+        >
         struct literal
           : extends<typename terminal<T>::type, literal<T, Domain>, Domain>
         {
