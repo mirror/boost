@@ -271,24 +271,24 @@ struct feature_of<tag::immediate_weighted_mean_of_variates<VariateType, VariateT
 {
 };
 
-//////////////////////////////////////////////////////////////////////////
-// droppable_accumulator<mean_impl>
-//  need to specialize droppable lazy mean to cache the result at the
-//  point the accumulator is dropped.
-/// INTERNAL ONLY
-///
-template<typename Sample, typename SumFeature>
-struct droppable_accumulator<impl::mean_impl<Sample, SumFeature> >
-  : droppable_accumulator_base<
-        with_cached_result<impl::mean_impl<Sample, SumFeature> >
-    >
-{
-    template<typename Args>
-    droppable_accumulator(Args const &args)
-      : droppable_accumulator::base(args)
-    {
-    }
-};
+////////////////////////////////////////////////////////////////////////////
+//// droppable_accumulator<mean_impl>
+////  need to specialize droppable lazy mean to cache the result at the
+////  point the accumulator is dropped.
+///// INTERNAL ONLY
+/////
+//template<typename Sample, typename SumFeature>
+//struct droppable_accumulator<impl::mean_impl<Sample, SumFeature> >
+//  : droppable_accumulator_base<
+//        with_cached_result<impl::mean_impl<Sample, SumFeature> >
+//    >
+//{
+//    template<typename Args>
+//    droppable_accumulator(Args const &args)
+//      : droppable_accumulator::base(args)
+//    {
+//    }
+//};
 
 }} // namespace boost::accumulators
 
