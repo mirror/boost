@@ -28,11 +28,13 @@
 # endif
 #endif // #ifndef BOOST_OLD_IOSTREAMS
 
+#include <boost/assert.hpp>
+#include <boost/iterator/iterator_traits.hpp>    
+#include <boost/type_traits/is_abstract.hpp>
 #include <boost/range/functions.hpp>
 #include <boost/range/iterator.hpp>
 #include <boost/range/difference_type.hpp>
-#include <boost/iterator/iterator_traits.hpp>    
-#include <boost/assert.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <iterator>
 #include <algorithm>
 #ifndef _STLP_NO_IOSTREAMS
@@ -165,6 +167,12 @@ namespace boost
             //! iterator type
             typedef IteratorT iterator;
 
+        private: // for return value of operator()()
+            typedef BOOST_DEDUCED_TYPENAME 
+                boost::mpl::if_< boost::is_abstract<value_type>,
+                                 reference, value_type >::type abstract_value_type;
+
+        public:
             iterator_range() : m_Begin( iterator() ), m_End( iterator() )
                 #ifndef NDEBUG
             , singular( true )
@@ -352,8 +360,8 @@ namespace boost
            // When storing transform iterators, operator[]()
            // fails because it returns by reference. Therefore
            // operator()() is provided for these cases.
-           //
-           value_type operator()( difference_type at ) const
+           // 
+           abstract_value_type operator()( difference_type at ) const                              
            {
                BOOST_ASSERT( at >= 0 && at < size() );
                return m_Begin[at];               
