@@ -78,8 +78,8 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying fil
         .add("Views", "guide/views.html").parent()
         .add("Exceptions", "guide/exceptions.html").parent()
         .add("Buffering", "guide/buffering.html");
-    tree.add("Reference", "reference.html")
-        .add("Concepts", "concepts/concepts.html", true)
+    var ref = tree.add("Reference", "reference.html");
+    ref.add("Concepts", "concepts/concepts.html", true)
             .add("Devices", "concepts/concepts.html#devices")
                 .add("BidirectionalDevice", "concepts/bidirectional_device.html").parent()
                 .add("Blocking", "concepts/blocking.html").parent()
@@ -103,9 +103,9 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying fil
                 .add("Flushable", "concepts/flushable.html").parent()
                 .add("Localizable", "concepts/localizable.html").parent()
                 .add("OptimallyBuffered", "concepts/optimally_buffered.html").parent()
-                .add("SymmetricFilter", "concepts/symmetric_filter.html").parent().parent().parent()
-        .add("Classes", "classes/classes.html", true)
-            .add("A", "classes/classes.html#a")
+                .add("SymmetricFilter", "concepts/symmetric_filter.html");
+    var classes = ref.add("Classes", "classes/classes.html", true);
+    classes.add("A", "classes/classes.html#a")
                 .add("<CODE>aggregate_filter</CODE>", "classes/aggregate.html").parent()
                 .add("<CODE>array</CODE>", "classes/array.html#array").parent()
                 .add("<CODE>array_sink</CODE>", "classes/array.html#array_sink").parent()
@@ -166,8 +166,8 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying fil
             .add("I", "classes/classes.html#i")
   				.add("<CODE>input_filter</CODE>", "classes/filter.html#reference").parent()
   				.add("<CODE>input_wfilter</CODE>", "classes/filter.html#reference").parent()
-  				.add("<CODE>inverse</CODE>", "classes/../functions/invert.html#inverse").parent().parent()
-            .add("L", "classes/classes.html#l")
+  				.add("<CODE>inverse</CODE>", "classes/../functions/invert.html#inverse");
+    classes.add("L", "classes/classes.html#l")
   				.add("<CODE>line_filter</CODE>", "classes/line_filter.html#reference").parent().parent()
             .add("M", "classes/classes.html#m")
   				.add("<CODE>mapped_file</CODE>", "classes/mapped_file.html#mapped_file").parent()
@@ -226,8 +226,8 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying fil
   				.add("<CODE>zlib_compressor</CODE>", "classes/zlib.html#basic_zlib_compressor").parent()
   				.add("<CODE>zlib_decompressor</CODE>", "classes/zlib.html#basic_zlib_decompressor").parent()
   				.add("<CODE>zlib_error</CODE>", "classes/zlib.html#zlib_error").parent()
-  				.add("<CODE>zlib_params</CODE>", "classes/zlib.html#zlib_params").parent().parent().parent()
-        .add("Functions", "functions/functions.html", true)
+  				.add("<CODE>zlib_params</CODE>", "classes/zlib.html#zlib_params");
+    ref.add("Functions", "functions/functions.html", true)
             .add("<CODE>back_inserter</CODE>", "classes/back_inserter.html#back_inserter").parent()
             .add("<CODE>close</CODE>", "functions/close.html").parent()
             .add("<CODE>combine</CODE>", "functions/combine.html").parent()
@@ -249,8 +249,8 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying fil
             .add("<CODE>test_filter_pair</CODE>", "functions/filter_test.html#test_pair").parent()
             .add("<CODE>test_input_filter</CODE>", "functions/filter_test.html#test_input").parent()
             .add("<CODE>test_output_filter</CODE>", "functions/filter_test.html#test_output").parent()
-            .add("<CODE>write</CODE>", "functions/write.html").parent().parent()
-        .add("Macros", "macros/macros.html", true)
+            .add("<CODE>write</CODE>", "functions/write.html");
+    ref.add("Macros", "macros/macros.html", true)
             .add("<CODE>IOS</CODE>", "macros/workarounds.html#ios").parent()
             .add("<CODE>BASIC_ISTREAM</CODE>", "macros/workarounds.html#streams").parent()
             .add("<CODE>BASIC_IOS</CODE>", "macros/workarounds.html#ios").parent()
@@ -358,3 +358,4 @@ Distributed under the Boost Software License, Version 1.0. (See accompanying fil
 
 </body>
 </html>
+
