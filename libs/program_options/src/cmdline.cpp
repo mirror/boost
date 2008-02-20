@@ -98,10 +98,10 @@ namespace boost { namespace program_options { namespace detail {
     {
 #if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
         vector<string> args;
-        copy(argv+1, argv+argc, inserter(args, args.end()));
+        copy(argv+1, argv+argc+!argc, inserter(args, args.end()));
         init(args);
 #else
-        init(vector<string>(argv+1, argv+argc));
+        init(vector<string>(argv+1, argv+argc+!argc));
 #endif
     }
 
