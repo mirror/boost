@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -258,8 +258,7 @@
                 The compiler fails to compile a nested class that has a dependent
                 base class: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">foo</span> <span class="special">:</span> <span class="special">{</span>
    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">U</span><span class="special">&gt;</span>
    <span class="keyword">struct</span> <span class="identifier">bar</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">U</span> <span class="special">{};</span>
@@ -285,8 +284,7 @@
                 Template value parameters cannot have a dependent type, for example:
                 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span> 
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span> 
 <span class="keyword">class</span> <span class="identifier">X</span> <span class="special">{</span> <span class="special">...</span> <span class="special">};</span>
 </pre>
 <p>
@@ -367,8 +365,7 @@
                 The compiler does not perform function template ordering or its function
                 template ordering is incorrect. 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="comment">// #1
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="comment">// #1
 </span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
 
 <span class="comment">// #2
@@ -1138,8 +1135,7 @@
                 The compiler does not allow a void function to return the result
                 of calling another void function. 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">void</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">{}</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">void</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">{}</span>
 <span class="keyword">void</span> <span class="identifier">g</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">f</span><span class="special">();</span> <span class="special">}</span>
 </pre>
 <p>
@@ -2280,16 +2276,14 @@
                 us a convenient way to declare such constants. For example instead
                 of: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">value</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
                 use: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{</span>
    <span class="identifier">BOOST_STATIC_CONSTANT</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">value</span> <span class="special">=</span> <span class="number">2</span><span class="special">);</span>
 <span class="special">};</span>
 </pre>
@@ -2322,8 +2316,7 @@
                 instantiations if some of the template parameters don't appear in
                 the function parameter list. For instance: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">ostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">typeinfo</span><span class="special">&gt;</span>
 
@@ -2347,8 +2340,7 @@
                 problem without effects on the calling syntax. For instance, in the
                 case above write: 
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">BOOST_EXPLICIT_TEMPLATE_NON_TYPE</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">n</span><span class="special">))</span> <span class="special">{</span> <span class="special">...</span> <span class="special">}</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -2742,8 +2734,7 @@
 <p>
           <span class="bold"><strong>my_library.hpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#ifndef</span> <span class="identifier">MY_INCLUDE_GUARD</span>
+<pre class="programlisting"><span class="preprocessor">#ifndef</span> <span class="identifier">MY_INCLUDE_GUARD</span>
 <span class="preprocessor">#define</span> <span class="identifier">MY_INCLUDE_GUARD</span>
 
 <span class="comment">// all includes go here:
@@ -2765,8 +2756,7 @@
 <p>
           <span class="bold"><strong>my_library.cpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="special">...</span>
+<pre class="programlisting"><span class="special">...</span>
 <span class="comment">// nothing special need be done in the implementation file
 </span><span class="special">...</span>
 </pre>
@@ -2831,8 +2821,7 @@
 <p>
           <span class="bold"><strong>my_library.hpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="special">...</span>
+<pre class="programlisting"><span class="special">...</span>
 <span class="comment">//
 </span><span class="comment">// Don't include auto-linking code if the user has disabled it by
 </span><span class="comment">// defining BOOST_ALL_NO_LIB, or BOOST_MY_LIBRARY_NO_LIB, or if this 
@@ -2850,8 +2839,7 @@
 <p>
           <span class="bold"><strong>my_library.cpp</strong></span>
         </p>
-<pre class="programlisting">
-<span class="comment">// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
+<pre class="programlisting"><span class="comment">// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
 </span><span class="comment">// library is being built (possibly exporting rather than importing code)
 </span><span class="comment">//
 </span><span class="preprocessor">#define</span> <span class="identifier">BOOST_MY_LIBRARY_SOURCE</span>
@@ -2864,10 +2852,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock<p>
+<td align="right"><div class="copyright-footer">Copyright © 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
