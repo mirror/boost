@@ -1,6 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file proto.hpp
-/// The proto expression template compiler and supporting utilities.
+/// Includes the core of Proto. Not included are the contexts, transforms and
+/// debugging utilities.
 //
 //  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

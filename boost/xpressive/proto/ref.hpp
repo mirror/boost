@@ -27,14 +27,24 @@
 namespace boost { namespace proto
 {
 
-#define BOOST_PROTO_ARG(z, n, data)\
-    typedef\
-        typename Expr::BOOST_PP_CAT(proto_arg, n)\
-    BOOST_PP_CAT(proto_arg, n);\
+#define BOOST_PROTO_ARG(z, n, data)                                                                 \
+    typedef                                                                                         \
+        typename Expr::BOOST_PP_CAT(proto_arg, n)                                                   \
+    BOOST_PP_CAT(proto_arg, n);                                                                     \
     /**/
 
     namespace refns_
     {
+        /// \brief A simple reference wrapper for a Proto expression type,
+        /// used by <tt>expr\<\></tt> to hold children expressions by reference.
+        ///
+        /// <tt>ref_\<\></tt> is used by <tt>expr\<\></tt> to hold children
+        /// expression types by reference. It forwards enough of the child
+        /// expression's interface so that <tt>expr\<\></tt> can handle children
+        /// uniformly regardless of whether it is stored by reference or by
+        /// value.
+        ///
+        /// This type is largely an implementation detail.
         template<typename Expr>
         struct ref_
         {
@@ -65,6 +75,7 @@ namespace boost { namespace proto
         };
 
         // ref_-to-ref_ is not allowed. this will cause a compile error.
+        /// INTERNAL ONLY
         template<typename Expr>
         struct ref_<ref_<Expr> >
         {};
@@ -74,93 +85,125 @@ namespace boost { namespace proto
 
     namespace result_of
     {
+        /// \brief Trait for stripping top-level references
+        /// and reference wrappers.
         template<typename T>
         struct unref
         {
-            typedef T type;
-            typedef T &reference;
-            typedef T const &const_reference;
+            typedef T type;                     ///< Suitable for return by value
+            typedef T &reference;               ///< Suitable for return by reference
+            typedef T const &const_reference;   ///< Suitable for return by const reference
         };
 
+        /// \brief Trait for stripping top-level references
+        /// and reference wrappers.
         template<typename T>
         struct unref<ref_<T> >
         {
-            typedef T type;
-            typedef T &reference;
-            typedef T &const_reference;
+            typedef T type;                     ///< Suitable for return by value
+            typedef T &reference;               ///< Suitable for return by reference
+            typedef T &const_reference;         ///< Suitable for return by const reference
         };
 
+        /// \brief Trait for stripping top-level references
+        /// and reference wrappers.
         template<typename T>
         struct unref<ref_<T const> >
         {
-            typedef T type;
-            typedef T const &reference;
-            typedef T const &const_reference;
+            typedef T type;                     ///< Suitable for return by value
+            typedef T const &reference;         ///< Suitable for return by reference
+            typedef T const &const_reference;   ///< Suitable for return by const reference
         };
 
+        /// \brief Trait for stripping top-level references
+        /// and reference wrappers.
         template<typename T>
         struct unref<T &>
         {
-            typedef T type;
-            typedef T &reference;
-            typedef T &const_reference;
+            typedef T type;                     ///< Suitable for return by value
+            typedef T &reference;               ///< Suitable for return by reference
+            typedef T &const_reference;         ///< Suitable for return by const reference
         };
 
+        /// \brief Trait for stripping top-level references
+        /// and reference wrappers.
         template<typename T>
         struct unref<T const &>
         {
-            typedef T type;
-            typedef T const &reference;
-            typedef T const &const_reference;
+            typedef T type;                     ///< Suitable for return by value
+            typedef T const &reference;         ///< Suitable for return by reference
+            typedef T const &const_reference;   ///< Suitable for return by const reference
         };
 
+        /// \brief Trait for stripping top-level references
+        /// and reference wrappers.
         template<typename T, std::size_t N>
         struct unref<T (&)[N]>
         {
-            typedef T (&type)[N];
-            typedef T (&reference)[N];
-            typedef T (&const_reference)[N];
+            typedef T (&type)[N];               ///< Suitable for return by value
+            typedef T (&reference)[N];          ///< Suitable for return by reference
+            typedef T (&const_reference)[N];    ///< Suitable for return by const reference
         };
 
+        /// \brief Trait for stripping top-level references
+        /// and reference wrappers.
         template<typename T, std::size_t N>
         struct unref<T const (&)[N]>
         {
-            typedef T const (&type)[N];
-            typedef T const (&reference)[N];
-            typedef T const (&const_reference)[N];
+            typedef T const (&type)[N];             ///< Suitable for return by value
+            typedef T const (&reference)[N];        ///< Suitable for return by reference
+            typedef T const (&const_reference)[N];  ///< Suitable for return by const reference
         };
     }
 
     namespace functional
     {
+        /// \brief A callable PolymorphicFunctionObject equivalent
+        /// to the <tt>proto::unref()</tt> function that removes
+        /// top-level reference wrappers.
         struct unref
         {
+            BOOST_PROTO_CALLABLE()
+
             template<typename T>
             struct result;
 
             template<typename This, typename T>
             struct result<This(T)>
-              : result_of::unref<BOOST_PROTO_UNCVREF(T)>
-            {};
+            {
+                typedef BOOST_PROTO_UNCVREF(T) uncvref_type;
+                typedef typename result_of::unref<uncvref_type>::type type;
+            };
 
+            /// \brief Remove a top-level <tt>ref_\<\></tt> reference wrapper,
+            /// if it exists.
+            /// \param t The object to unwrap
+            /// \return If \c T t is a <tt>ref_\<\></tt>, return <tt>t.expr</tt>.
+            /// Otherwise, return \c t.
             template<typename T>
             T &operator()(T &t) const
             {
                 return t;
             }
 
+            /// \overload
+            ///
             template<typename T>
             T const &operator()(T const &t) const
             {
                 return t;
             }
 
+            /// \overload
+            ///
             template<typename T>
             T &operator()(ref_<T> &t) const
             {
                 return t.expr;
             }
 
+            /// \overload
+            ///
             template<typename T>
             T &operator()(ref_<T> const &t) const
             {
@@ -169,7 +212,41 @@ namespace boost { namespace proto
         };
     }
 
-    functional::unref const unref = {};
+    /// \brief Remove a top-level <tt>ref_\<\></tt> reference wrapper, if
+    /// it exists.
+    /// \param t The object to unwrap
+    /// \throw nothrow
+    /// \return If \c T t is a <tt>ref_\<\></tt>, return <tt>t.expr</tt>.
+    /// Otherwise, return \c t.
+    template<typename T>
+    T &unref(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+    {
+        return t;
+    }
+
+    /// \overload
+    ///
+    template<typename T>
+    T const &unref(T const &t)
+    {
+        return t;
+    }
+
+    /// \overload
+    ///
+    template<typename T>
+    T &unref(ref_<T> &t)
+    {
+        return t.expr;
+    }
+
+    /// \overload
+    ///
+    template<typename T>
+    T &unref(ref_<T> const &t)
+    {
+        return t.expr;
+    }
 }}
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)

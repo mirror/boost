@@ -25,11 +25,11 @@
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/fusion.hpp>
     #include <boost/xpressive/proto/traits.hpp>
+    #include <boost/xpressive/proto/transform/call.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
     {
-
         namespace transform
         {
 
@@ -159,6 +159,8 @@
 
             } // namespace detail
 
+            /// \brief A PrimitiveTransform that invokes the <tt>fusion::fold\<\></tt>
+            /// algorithm to accumulate 
             template<typename Sequence, typename State0, typename Fun>
             struct fold : proto::callable
             {
@@ -168,19 +170,39 @@
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
                 {
+                    /// \brief A Fusion sequence.
                     typedef
                         typename when<_, Sequence>::template result<void(Expr, State, Visitor)>::type
                     sequence;
 
+                    /// \brief An initial state for the fold.
+                    typedef
+                        typename when<_, State0>::template result<void(Expr, State, Visitor)>::type
+                    state0;
+
+                    /// \brief <tt>fun(v)(e,s) == when\<_,Fun\>()(e,s,v)</tt>
+                    typedef
+                        detail::as_callable<Fun, Visitor>
+                    fun;
+
                     typedef
                         typename fusion::BOOST_PROTO_FUSION_RESULT_OF::fold<
                             BOOST_PROTO_AS_FUSION_SEQUENCE_TYPE(sequence)
-                          , typename when<_, State0>::template result<void(Expr, State, Visitor)>::type
-                          , detail::as_callable<Fun, Visitor>
+                          , state0
+                          , fun
                         >::type
                     type;
                 };
 
+                /// Let \c seq be <tt>when\<_, Sequence\>()(expr, state, visitor)</tt>, let
+                /// \c state0 be <tt>when\<_, State0\>()(expr, state, visitor)</tt>, and
+                /// let \c fun(visitor) be an object such that <tt>fun(visitor)(expr, state)</tt>
+                /// is equivalent to <tt>when\<_, Fun\>()(expr, state, visitor)</tt>. Then, this
+                /// function returns <tt>fusion::fold(seq, state0, fun(visitor))</tt>.
+                ///
+                /// \param expr The current expression
+                /// \param state The current state
+                /// \param visitor An arbitrary visitor
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
@@ -195,9 +217,15 @@
                 }
             };
 
-            template<typename Sequence, typename State, typename Fun>
+            /// \brief A PrimitiveTransform that is the same as the
+            /// <tt>fold\<\></tt> transform, except that it folds
+            /// back-to-front instead of front-to-back. It uses
+            /// the \c _reverse callable PolymorphicFunctionObject
+            /// to create a <tt>fusion::reverse_view\<\></tt> of the
+            /// sequence before invoking <tt>fusion::fold\<\></tt>.
+            template<typename Sequence, typename State0, typename Fun>
             struct reverse_fold
-              : fold<_reverse(Sequence), State, Fun>
+              : fold<call<_reverse(Sequence)>, State0, Fun>
             {};
 
             // This specialization is only for improved compile-time performance

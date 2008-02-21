@@ -165,7 +165,37 @@
                 #undef TMP
             }
 
-            template<typename Fun>
+            /// \brief A PrimitiveTransform which computes a type by evaluating any
+            /// nested transforms and then constructs an object of that type.
+            ///
+            /// The <tt>make\<\></tt> transform checks to see if \c Object is a template.
+            /// If it is, the template type is disassembled to find nested transforms.
+            /// Proto considers the following types to represent transforms:
+            ///
+            /// \li Function types
+            /// \li Function pointer types
+            /// \li Types for which <tt>proto::is_callable\< type \>::::value</tt> is \c true
+            ///
+            /// <tt>make\<T\<X0,X1,...\> \>::::result\<void(Expr, State, Visitor)\>::::type</tt>
+            /// is evaluated as follows. For each \c X in <tt>X0,X1,...</tt>, do:
+            ///
+            /// \li If \c X is a template like <tt>U\<Y0,Y1,...\></tt>, then let <tt>X'</tt>
+            ///     be <tt>make\<U\<Y0,Y1,...\> \>::::result\<void(Expr, State, Visitor)\>::::type</tt>
+            ///     (which evaluates this procedure recursively). Note whether any
+            ///     substitutions took place during this operation.
+            /// \li Otherwise, if \c X is a transform, then let <tt>X'</tt> be
+            ///     <tt>when\<_, X\>::::result\<void(Expr, State, Visitor)\>::::type</tt>.
+            ///     Note that a substitution took place.
+            /// \li Otherwise, let <tt>X'</tt> be \c X, and note that no substitution
+            ///     took place.
+            /// \li If any substitutions took place in any of the above steps and
+            ///     <tt>T\<X0',X1',...\></tt> has a nested <tt>::type</tt> typedef,
+            ///     the result type is <tt>T\<X0',X1',...\>::::type</tt>.
+            /// \li Otherwise, the result type is <tt>T\<X0',X1',...\></tt>.
+            ///
+            /// Note that <tt>when\<\></tt> is implemented in terms of <tt>call\<\></tt>
+            /// and <tt>make\<\></tt>, so the above procedure is evaluated recursively.
+            template<typename Object>
             struct make : proto::callable
             {
                 template<typename Sig>
@@ -174,9 +204,13 @@
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
                 {
-                    typedef typename detail::make_<Fun, Expr, State, Visitor>::type type;
+                    typedef typename detail::make_<Object, Expr, State, Visitor>::type type;
                 };
 
+                /// \param expr The current expression
+                /// \param state The current state
+                /// \param visitor An arbitrary visitor
+                /// \return <tt>result\<void(Expr, State, Visitor)\>::::type()</tt>
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &, State const &, Visitor &) const
@@ -192,8 +226,8 @@
 
         /// INTERNAL ONLY
         ///
-        template<typename Fun>
-        struct is_callable<transform::make<Fun> >
+        template<typename Object>
+        struct is_callable<transform::make<Object> >
           : mpl::true_
         {};
 
@@ -273,8 +307,12 @@
             };
         }
 
-        template<typename Return BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct make<Return(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
+        /// \brief A PrimitiveTransform which computes a type by evaluating any
+        /// nested transforms and then constructs an object of that type with the
+        /// current expression, state and visitor, transformed according
+        /// to \c A0 through \c AN.
+        template<typename Object BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct make<Object(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
         {
             template<typename Sig>
             struct result;
@@ -282,9 +320,18 @@
             template<typename This, typename Expr, typename State, typename Visitor>
             struct result<This(Expr, State, Visitor)>
             {
-                typedef typename detail::make_<Return, Expr, State, Visitor>::type type;
+                /// \brief <tt>make\<Object\>::::result\<void(Expr, State, Visitor)\>::::type</tt>
+                typedef typename detail::make_<Object, Expr, State, Visitor>::type type;
             };
 
+            /// Let \c ax be <tt>when\<_, Ax\>()(expr, state, visitor)</tt>
+            /// for each \c x in <tt>[0,N]</tt>.
+            /// Let \c T be <tt>result\<void(Expr, State, Visitor)\>::::type</tt>.
+            /// Return <tt>T(a0, a1,... aN)</tt>.
+            ///
+            /// \param expr The current expression
+            /// \param state The current state
+            /// \param visitor An arbitrary visitor
             template<typename Expr, typename State, typename Visitor>
             typename result<void(Expr, State, Visitor)>::type
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const

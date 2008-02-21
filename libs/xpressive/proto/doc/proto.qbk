@@ -35,6 +35,7 @@
 
 [/  Links   ]
 
+[def _PETE_                 [@http://www.codesourcery.com/pooma/download.html PETE]]
 [def _spirit_fx_            [@http://spirit.sourceforge.net Spirit Parser Framework]]
 [def _spirit_               [@http://spirit.sourceforge.net Spirit]]
 [def _xpressive_            [@../../../libs/xpressive/doc/index.html Boost.Xpressive]]
@@ -71,6 +72,8 @@
 [def _callable_context_     [classref  boost::proto::context::callable_context `callable_context<>`]]
 [def _null_context_         [classref  boost::proto::context::null_context `null_context<>`]]
 [def _when_                 [classref  boost::proto::transform::when `when<>`]]
+[def _call_                 [classref  boost::proto::transform::call `call<>`]]
+[def _make_                 [classref  boost::proto::transform::make `make<>`]]
 [def _flatten_              [funcref   boost::proto::flatten `flatten()`]]
 
 [include preface.qbk]
