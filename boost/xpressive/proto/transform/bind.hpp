@@ -32,7 +32,7 @@
             /// transformation. The invocation of the <tt>make\<\></tt> transform
             /// evaluates any nested transforms, and the resulting type is treated
             /// as a CallableTransform, which is evaluated with <tt>call\<\></tt>.
-            template<typename Fun>
+            template<typename Object>
             struct bind : proto::callable
             {
                 template<typename Sig>
@@ -41,22 +41,23 @@
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
                 {
-                    typedef typename make<Fun>::template result<void(Expr, State, Visitor)>::type make_;
-                    typedef call<make_> call_;
-                    typedef typename call_::template result<void(Expr, State, Visitor)>::type type;
+                    typedef typename make<Object>::template result<void(Expr, State, Visitor)>::type fun;
+                    typedef call<fun> impl;
+                    typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
                 };
 
-                /// \brief Build a CallableTransform by applying <tt>make\<\></tt>
+                /// Build a CallableTransform by applying <tt>make\<\></tt>
                 /// and evaluate it with <tt>call\<\></tt>
+                ///
                 /// \param expr The current expression
                 /// \param state The current state
                 /// \param visitor An arbitrary visitor
-                /// \return <tt>result\<void(Expr, State, Visitor)\>::::call_()(expr, state, visitor)</tt>
+                /// \return <tt>result\<void(Expr, State, Visitor)\>::::impl()(expr, state, visitor)</tt>
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return typename result<void(Expr, State, Visitor)>::call_()(expr, state, visitor);
+                    return typename result<void(Expr, State, Visitor)>::impl()(expr, state, visitor);
                 }
             };
 
@@ -67,8 +68,8 @@
 
         /// INTERNAL ONLY
         ///
-        template<typename Fun>
-        struct is_callable<transform::bind<Fun> >
+        template<typename Object>
+        struct is_callable<transform::bind<Object> >
           : mpl::true_
         {};
 
@@ -88,8 +89,8 @@
             /// transformation. The invocation of the <tt>make\<\></tt> transform
             /// evaluates any nested transforms, and the resulting type is treated
             /// as a CallableTransform, which is evaluated with <tt>call\<\></tt>.
-            template<typename Return BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-            struct bind<Return(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
+            template<typename Object BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+            struct bind<Object(BOOST_PP_ENUM_PARAMS(N, A))> : proto::callable
             {
                 template<typename Sig>
                 struct result;
@@ -97,22 +98,23 @@
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
                 {
-                    typedef typename make<Return>::template result<void(Expr, State, Visitor)>::type make_;
-                    typedef call<make_(BOOST_PP_ENUM_PARAMS(N, A))> call_;
-                    typedef typename call_::template result<void(Expr, State, Visitor)>::type type;
+                    typedef typename make<Object>::template result<void(Expr, State, Visitor)>::type fun;
+                    typedef call<fun(BOOST_PP_ENUM_PARAMS(N, A))> impl;
+                    typedef typename impl::template result<void(Expr, State, Visitor)>::type type;
                 };
 
-                /// \brief Build a CallableTransform by applying <tt>make\<\></tt>
+                /// Build a CallableTransform by applying <tt>make\<\></tt>
                 /// and evaluate it with <tt>call\<\></tt>
+                ///
                 /// \param expr The current expression
                 /// \param state The current state
                 /// \param visitor An arbitrary visitor
-                /// \return <tt>result\<void(Expr, State, Visitor)\>::::call_()(expr, state, visitor)</tt>
+                /// \return <tt>result\<void(Expr, State, Visitor)\>::::impl()(expr, state, visitor)</tt>
                 template<typename Expr, typename State, typename Visitor>
                 typename result<void(Expr, State, Visitor)>::type
                 operator ()(Expr const &expr, State const &state, Visitor &visitor) const
                 {
-                    return typename result<void(Expr, State, Visitor)>::call_()(expr, state, visitor);
+                    return typename result<void(Expr, State, Visitor)>::impl()(expr, state, visitor);
                 }
             };
 
