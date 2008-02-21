@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -36,8 +36,7 @@
 <p>
         <span class="bold"><strong>Synopsis:</strong></span>
       </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <a href="../reference/add_const.html" title="add_const">add_const</a><span class="special">;</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -92,7 +91,7 @@
 <span class="keyword">struct</span> <a href="../reference/remove_volatile.html" title="remove_volatile">remove_volatile</a><span class="special">;</span>
 </pre>
 <a name="boost_typetraits.category.transform.broken_compiler_workarounds_"></a><h5>
-<a name="id496340"></a>
+<a name="id496203"></a>
         <a href="transform.html#boost_typetraits.category.transform.broken_compiler_workarounds_">Broken
         Compiler Workarounds:</a>
       </h5>
@@ -117,8 +116,7 @@
 <p>
         The first part guarantees the successful compilation of something like this:
       </p>
-<pre class="programlisting">
-<span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">((</span><span class="identifier">is_same</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">));</span>
+<pre class="programlisting"><span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">((</span><span class="identifier">is_same</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">));</span>
 <span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">((</span><span class="identifier">is_same</span><span class="special">&lt;</span><span class="keyword">char</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="keyword">char</span> <span class="keyword">const</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">));</span>
 <span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">((</span><span class="identifier">is_same</span><span class="special">&lt;</span><span class="keyword">char</span> <span class="keyword">volatile</span><span class="special">,</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="keyword">char</span> <span class="keyword">volatile</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">));</span>
 <span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">((</span><span class="identifier">is_same</span><span class="special">&lt;</span><span class="keyword">char</span> <span class="keyword">const</span> <span class="keyword">volatile</span><span class="special">,</span> <span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="keyword">char</span> <span class="keyword">const</span> <span class="keyword">volatile</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">));</span>
@@ -133,8 +131,7 @@
         <code class="computeroutput"><span class="keyword">int</span></code> or other built-in type,
         but for their own types as well:
       </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">myspace</span><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">myspace</span><span class="special">{</span>
    <span class="keyword">struct</span> <span class="identifier">MyClass</span> <span class="special">{};</span>
 <span class="special">}</span>
 <span class="comment">// declare this at global scope:
@@ -152,13 +149,14 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer">Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
       Ramey and Jeremy Siek<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

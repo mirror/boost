@@ -39,7 +39,7 @@ boostbook standalone
         
         # PDF Options:
         # TOC Generation: this is needed for FOP-0.9 and later:
-        # <xsl:param>fop1.extensions=1
+        <xsl:param>fop1.extensions=0
         <xsl:param>xep.extensions=1
         # TOC generation: this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
         <xsl:param>fop.extensions=0
@@ -62,6 +62,7 @@ boostbook standalone
 
 #install html : ../../../doc/html/boostbook.css ;
 #install ../ : ../../../boost.png ;
+
 
 
 
