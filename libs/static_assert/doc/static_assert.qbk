@@ -15,6 +15,10 @@
     [last-revision $Date$]
 ]
 
+This manual is also available in 
+[@http:svn.boost.org/svn/boost/sandbox/pdf/static_assert/release/static_assert.pdf 
+printer friendly PDF format].
+
 [section:intro Overview and Tutorial]
 
 The header `<boost/static_assert.hpp>` supplies a single macro `BOOST_STATIC_ASSERT(x)`, 
@@ -94,12 +98,17 @@ the user that the template is being misused.
    #include <boost/type_traits.hpp>
 
    template <class RandomAccessIterator >
-   RandomAccessIterator foo(RandomAccessIterator from, RandomAccessIterator to)
+   RandomAccessIterator foo(RandomAccessIterator from, 
+                            RandomAccessIterator to)
    {
       // this template can only be used with
       // random access iterators...
-      typedef typename std::iterator_traits< RandomAccessIterator >::iterator_category cat;
-      BOOST_STATIC_ASSERT((boost::is_convertible<cat, const std::random_access_iterator_tag&>::value));
+      typedef typename std::iterator_traits< 
+            RandomAccessIterator >::iterator_category cat;
+      BOOST_STATIC_ASSERT(
+         (boost::is_convertible<
+            cat, 
+            const std::random_access_iterator_tag&>::value));
       //
       // detail goes here...
       return from;
