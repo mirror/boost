@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -56,7 +56,7 @@
       method available to them.
     </p>
 <a name="boost_typetraits.background.type_traits"></a><h5>
-<a name="id437803"></a>
+<a name="id436266"></a>
       <a href="background.html#boost_typetraits.background.type_traits">Type Traits</a>
     </h5>
 <p>
@@ -84,7 +84,7 @@
       given.
     </p>
 <a name="boost_typetraits.background.implementation"></a><h5>
-<a name="id437920"></a>
+<a name="id436376"></a>
       <a href="background.html#boost_typetraits.background.implementation">Implementation</a>
     </h5>
 <p>
@@ -97,8 +97,7 @@
       from <code class="computeroutput"><a href="reference/integral_constant.html" title="integral_constant">true_type</a></code>
       only if <code class="computeroutput"><span class="identifier">T</span></code> is <code class="computeroutput"><span class="keyword">void</span></code>.
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
 <span class="keyword">struct</span> <a href="reference/is_void.html" title="is_void">is_void</a> <span class="special">:</span> <span class="keyword">public</span> <a href="reference/integral_constant.html" title="integral_constant">false_type</a><span class="special">{};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;&gt;</span> 
@@ -116,8 +115,7 @@
       a pointer, and a partial specialization to handle all the cases where T is
       a pointer:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
 <span class="keyword">struct</span> <a href="reference/is_pointer.html" title="is_pointer">is_pointer</a> <span class="special">:</span> <span class="keyword">public</span> <a href="reference/integral_constant.html" title="integral_constant">false_type</a><span class="special">{};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
@@ -134,15 +132,13 @@
       but as a rule of thumb if you can legally write two function overloads of the
       form:
     </p>
-<pre class="programlisting">
-<span class="keyword">void</span> <span class="identifier">foo</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">foo</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
 <span class="keyword">void</span> <span class="identifier">foo</span><span class="special">(</span><span class="identifier">U</span><span class="special">);</span>
 </pre>
 <p>
       Then you can also write a partial specialization of the form:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">c</span><span class="special">{</span> <span class="comment">/*details*/</span> <span class="special">};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -158,8 +154,7 @@
       that is the same type as T but with any top-level array bounds removed; this
       is an example of a traits class that performs a transformation on a type:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
 <span class="keyword">struct</span> <a href="reference/remove_extent.html" title="remove_extent">remove_extent</a>
 <span class="special">{</span> <span class="keyword">typedef</span> <span class="identifier">T</span> <span class="identifier">type</span><span class="special">;</span> <span class="special">};</span>
 
@@ -179,15 +174,14 @@
       in the default template.
     </p>
 <a name="boost_typetraits.background.optimized_copy"></a><h5>
-<a name="id490307"></a>
+<a name="id490295"></a>
       <a href="background.html#boost_typetraits.background.optimized_copy">Optimized copy</a>
     </h5>
 <p>
       As an example of how the type traits classes can be used, consider the standard
       library algorithm copy:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iter1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Iter2</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iter1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Iter2</span><span class="special">&gt;</span>
 <span class="identifier">Iter2</span> <span class="identifier">copy</span><span class="special">(</span><span class="identifier">Iter1</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">Iter1</span> <span class="identifier">last</span><span class="special">,</span> <span class="identifier">Iter2</span> <span class="identifier">out</span><span class="special">);</span>
 </pre>
 <p>
@@ -253,7 +247,7 @@
       otherwise it will call the "slow but safe version".
     </p>
 <a name="boost_typetraits.background.was_it_worth_it_"></a><h5>
-<a name="id490852"></a>
+<a name="id490840"></a>
       <a href="background.html#boost_typetraits.background.was_it_worth_it_">Was it worth it?</a>
     </h5>
 <p>
@@ -286,7 +280,7 @@
       </li>
 </ul></div>
 <div class="table">
-<a name="id490923"></a><p class="title"><b>Table 1.1. Time taken to copy 1000 elements using `copy&lt;const
+<a name="id490911"></a><p class="title"><b>Table 1.1. Time taken to copy 1000 elements using `copy&lt;const
     T*, T*&gt;` (times in micro-seconds)</b></p>
 <div class="table-contents"><table class="table" summary="Time taken to copy 1000 elements using `copy&lt;const
     T*, T*&gt;` (times in micro-seconds)">
@@ -385,7 +379,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="boost_typetraits.background.pair_of_references"></a><h5>
-<a name="id491080"></a>
+<a name="id491068"></a>
       <a href="background.html#boost_typetraits.background.pair_of_references">Pair of References</a>
     </h5>
 <p>
@@ -401,8 +395,7 @@
       the comparison operators, default constructor, and template copy constructor
       for simplicity:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
 <span class="keyword">struct</span> <span class="identifier">pair</span> 
 <span class="special">{</span>
 <span class="keyword">typedef</span> <span class="identifier">T1</span> <span class="identifier">first_type</span><span class="special">;</span>
@@ -423,7 +416,7 @@
       to hold non-reference types, references, and constant references:
     </p>
 <div class="table">
-<a name="id491443"></a><p class="title"><b>Table 1.2. Required Constructor Argument Types</b></p>
+<a name="id491430"></a><p class="title"><b>Table 1.2. Required Constructor Argument Types</b></p>
 <div class="table-contents"><table class="table" summary="Required Constructor Argument Types">
 <colgroup>
 <col>
@@ -488,7 +481,7 @@
       adds a reference to its type, unless it is already a reference.
     </p>
 <div class="table">
-<a name="id491567"></a><p class="title"><b>Table 1.3. Using add_reference to synthesize the correct constructor
+<a name="id491554"></a><p class="title"><b>Table 1.3. Using add_reference to synthesize the correct constructor
     type</b></p>
 <div class="table-contents"><table class="table" summary="Using add_reference to synthesize the correct constructor
     type">
@@ -574,8 +567,7 @@
       that can contain non-reference types, reference types, and constant reference
       types:
     </p>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
 <span class="keyword">struct</span> <span class="identifier">pair</span> 
 <span class="special">{</span>
 <span class="keyword">typedef</span> <span class="identifier">T1</span> <span class="identifier">first_type</span><span class="special">;</span>
@@ -606,7 +598,7 @@
       easier to maintain and easier to understand.
     </p>
 <a name="boost_typetraits.background.conclusion"></a><h5>
-<a name="id492190"></a>
+<a name="id492176"></a>
       <a href="background.html#boost_typetraits.background.conclusion">Conclusion</a>
     </h5>
 <p>
@@ -619,7 +611,7 @@
       can be optimal as well as generic.
     </p>
 <a name="boost_typetraits.background.acknowledgements"></a><h5>
-<a name="id492491"></a>
+<a name="id492222"></a>
       <a href="background.html#boost_typetraits.background.acknowledgements">Acknowledgements</a>
     </h5>
 <p>
@@ -627,7 +619,7 @@
       comments when preparing this article.
     </p>
 <a name="background.references"></a><a name="boost_typetraits.background.references"></a><h5>
-<a name="id492525"></a>
+<a name="id492256"></a>
       <a href="background.html#boost_typetraits.background.references">References</a>
     </h5>
 <div class="orderedlist"><ol type="1">
@@ -677,13 +669,14 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer">Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
       Ramey and Jeremy Siek<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

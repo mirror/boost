@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -26,8 +26,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_typetraits.reference.is_convertible"></a><a href="is_convertible.html" title="is_convertible"> is_convertible</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">From</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">To</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">From</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">To</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">is_convertible</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
@@ -59,8 +58,7 @@
         This template will also produce compiler errors if the conversion is ambiguous,
         for example:
       </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">A</span> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">A</span> <span class="special">{};</span>
 <span class="keyword">struct</span> <span class="identifier">B</span> <span class="special">:</span> <span class="identifier">A</span> <span class="special">{};</span>
 <span class="keyword">struct</span> <span class="identifier">C</span> <span class="special">:</span> <span class="identifier">A</span> <span class="special">{};</span>
 <span class="keyword">struct</span> <span class="identifier">D</span> <span class="special">:</span> <span class="identifier">B</span><span class="special">,</span> <span class="identifier">C</span> <span class="special">{};</span>
@@ -159,13 +157,14 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer"><small>Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
+<td align="right"><div class="copyright-footer">Copyright © 2000, 2006 Adobe Systems Inc, David Abrahams,
       Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat
       Marcus, Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen, Robert
       Ramey and Jeremy Siek<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></small></div></td>
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
