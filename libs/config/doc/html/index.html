@@ -12,8 +12,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
 <td align="center"><a href="../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <div><p class="copyright">Copyright © 2001 -2007 Beman Dawes, Vesa Karvonen, John Maddock</p></div>
 <div><div class="legalnotice">
-<a name="id489908"></a><p>
+<a name="id435855"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -139,8 +139,7 @@
 <p>
         Boost library implementations access configuration macros via
       </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <a href="../../../../boost/config.hpp" target="_top">&lt;boost/config.hpp&gt;</a>
+<pre class="programlisting"><span class="preprocessor">#include</span> <a href="../../../../boost/config.hpp" target="_top">&lt;boost/config.hpp&gt;</a>
 </pre>
 <p>
         While Boost library users are not required to include that file directly,
@@ -275,8 +274,7 @@
         For example to run the configure script with HP aCC, you might use something
         like:
       </p>
-<pre class="programlisting">
-<span class="keyword">export</span> <span class="identifier">CXX</span><span class="special">=</span><span class="string">"aCC"</span>
+<pre class="programlisting"><span class="keyword">export</span> <span class="identifier">CXX</span><span class="special">=</span><span class="string">"aCC"</span>
 <span class="keyword">export</span> <span class="identifier">CXXFLAGS</span><span class="special">=</span><span class="string">"-Aa -DAportable -D__HPACC_THREAD_SAFE_RB_TREE \
    -DRWSTD_MULTI_THREAD -DRW_MULTI_THREAD -D_REENTRANT -D_THREAD_SAFE"</span>
 <span class="keyword">export</span> <span class="identifier">LDFLAGS</span><span class="special">=</span><span class="string">"-DAportable"</span>
@@ -743,8 +741,7 @@
           there. Finally, open up <a href="../../../../boost/config/user.hpp" target="_top">&lt;boost/config/user.hpp&gt;</a>
           and edit the following defines:
         </p>
-<pre class="programlisting">
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_COMPILER_CONFIG</span> <span class="string">"boost/config/mysetup/visualc.hpp"</span>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_COMPILER_CONFIG</span> <span class="string">"boost/config/mysetup/visualc.hpp"</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_STDLIB_CONFIG</span> <span class="string">"boost/config/mysetup/stlport.hpp"</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_USER_CONFIG</span> <span class="string">"boost/config/mysetup/win32.hpp"</span>
 </pre>
@@ -930,7 +927,7 @@
         to help you out:
       </p>
 <p>
-        If you have built the <a href="../../../../more/regression.html" target="_top">boost
+        If you have built the <a href="../../../../tools/regression/doc/index.html" target="_top">boost
         regression test driver</a>, then you can use this to produce a nice html
         formatted report of the results using the supplied test file.
       </p>
@@ -961,8 +958,8 @@
   </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: November 07, 2007 at 17:16:43 GMT</small></p></td>
-<td align="right"><div class="copyright-footer"><small></small></div></td>
+<td align="left"><p><small>Last revised: February 21, 2008 at 16:56:38 GMT</small></p></td>
+<td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav"><a accesskey="n" href="boost_config/boost_macro_reference.html"><img src="../../../../doc/html/images/next.png" alt="Next"></a></div>
