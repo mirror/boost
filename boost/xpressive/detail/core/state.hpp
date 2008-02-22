@@ -316,6 +316,7 @@ struct memento
 {
     sub_match_impl<BidiIter> *old_sub_matches_;
     std::size_t nested_results_count_;
+    actionable const *action_list_head_;
     actionable const **action_list_tail_;
     attr_context attr_context_;
 };
@@ -330,11 +331,25 @@ inline memento<BidiIter> save_sub_matches(match_state<BidiIter> &state)
     {
         state.extras_->sub_match_stack_.push_sequence(state.mark_count_, no_fill)
       , state.context_.results_ptr_->nested_results().size()
+      , state.action_list_.next
       , state.action_list_tail_
       , state.attr_context_
     };
+    state.action_list_.next = 0;
+    state.action_list_tail_ = &state.action_list_.next;
     std::copy(state.sub_matches_, state.sub_matches_ + state.mark_count_, mem.old_sub_matches_);
     return mem;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// restore_action_queue
+//
+template<typename BidiIter>
+inline void restore_action_queue(memento<BidiIter> const &mem, match_state<BidiIter> &state)
+{
+    state.action_list_.next = mem.action_list_head_;
+    state.action_list_tail_ = mem.action_list_tail_;
+    *state.action_list_tail_ = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -350,8 +365,6 @@ inline void restore_sub_matches(memento<BidiIter> const &mem, match_state<BidiIt
     std::copy(mem.old_sub_matches_, mem.old_sub_matches_ + state.mark_count_, state.sub_matches_);
     state.extras_->sub_match_stack_.unwind_to(mem.old_sub_matches_);
     state.attr_context_ = mem.attr_context_;
-    state.action_list_tail_ = mem.action_list_tail_;
-    *state.action_list_tail_ = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -371,8 +384,6 @@ inline void reclaim_sub_matches(memento<BidiIter> const &mem, match_state<BidiIt
     if(!success)
     {
         state.attr_context_ = mem.attr_context_;
-        state.action_list_tail_ = mem.action_list_tail_;
-        *state.action_list_tail_ = 0;
     }
 }
 

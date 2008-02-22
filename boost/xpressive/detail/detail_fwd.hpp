@@ -69,6 +69,8 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct end_matcher;
 
+    struct independent_end_matcher;
+
     struct assert_bos_matcher;
 
     struct assert_eos_matcher;
@@ -263,6 +265,8 @@ namespace boost { namespace xpressive { namespace detail
     typedef static_xpression<end_matcher, no_next> end_xpression;
 
     typedef static_xpression<alternate_end_matcher, no_next> alternate_end_xpression;
+
+    typedef static_xpression<independent_end_matcher, no_next> independent_end_xpression;
 
     typedef static_xpression<true_matcher, no_next> true_xpression;
 

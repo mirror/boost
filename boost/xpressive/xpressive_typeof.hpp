@@ -72,6 +72,7 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::attribute_placeholder, 
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::epsilon_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::true_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::end_matcher)
+BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::independent_end_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::any_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::assert_bos_matcher)
 BOOST_TYPEOF_REGISTER_TYPE(boost::xpressive::detail::assert_eos_matcher)

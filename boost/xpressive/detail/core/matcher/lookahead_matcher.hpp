@@ -106,11 +106,13 @@ namespace boost { namespace xpressive { namespace detail
 
                 if(this->xpr_.match(state))
                 {
+                    restore_action_queue(mem, state);
                     restore_sub_matches(mem, state);
                     state.cur_ = tmp;
                     return false;
                 }
-                else if(next.match(state))
+                restore_action_queue(mem, state);
+                if(next.match(state))
                 {
                     reclaim_sub_matches(mem, state, true);
                     return true;
@@ -121,10 +123,12 @@ namespace boost { namespace xpressive { namespace detail
             {
                 if(!this->xpr_.match(state))
                 {
+                    restore_action_queue(mem, state);
                     reclaim_sub_matches(mem, state, false);
                     return false;
                 }
                 state.cur_ = tmp;
+                restore_action_queue(mem, state);
                 if(next.match(state))
                 {
                     reclaim_sub_matches(mem, state, true);
