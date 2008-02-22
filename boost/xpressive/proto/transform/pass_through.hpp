@@ -64,6 +64,56 @@
 
         } // namespace detail
 
+        /// \brief A PrimitiveTransform that transforms the children expressions
+        /// of an expression node according to the corresponding children of
+        /// a Grammar.
+        ///
+        /// Given a Grammar such as <tt>posit\<T0, T1\></tt>, an expression type
+        /// that matches the grammar such as <tt>posit\<E0, E1\>::::type</tt>, a
+        /// state \c S and a visitor \c V, the result of applying the
+        /// <tt>pass_through\<posit\<T0, T1\> \></tt> transform is:
+        ///
+        /// \code
+        /// posit<
+        ///     T0::result<void(E0, S, V)>::::type
+        ///   , T1::result<void(E1, S, V)>::::type
+        /// >::type
+        /// \endcode
+        ///
+        /// The above demonstrates how children transforms and children expressions
+        /// are applied pairwise, and how the results are reassembled into a new
+        /// expression node with the same tag type as the original.
+        ///
+        /// The explicit use of <tt>pass_through\<\></tt> is not usually needed,
+        /// since the expression generator metafunctions such as
+        /// <tt>posit\<\></tt> have <tt>pass_through\<\></tt> as their default
+        /// transform. So, for instance, these are equivalent:
+        ///
+        /// \code
+        /// // Within a grammar definition, these are equivalent:
+        /// when< posit<X, Y>, pass_through< posit<X, Y> > >
+        /// when< posit<X, Y>, posit<X, Y> >
+        /// when< posit<X, Y> > // because of when<class X, class Y=X>
+        /// posit<X, Y>         // because posit<> is both a
+        ///                     //   grammar and a transform
+        /// \endcode
+        ///
+        /// For example, consider the following transform that promotes all
+        /// \c float terminals in an expression to \c double.
+        ///
+        /// \code
+        /// // This transform finds all float terminals in an expression and promotes
+        /// // them to doubles.
+        /// struct Promote
+        ///  : or_<
+        ///         when<terminal<float>, terminal<double>::type(_arg) >
+        ///         // terminal<>'s default transform is a no-op:
+        ///       , terminal<_>
+        ///         // nary_expr<> has a pass_through<> transform:
+        ///       , nary_expr<_, vararg<Promote> >
+        ///     >
+        /// {};
+        /// \code
         template<typename Grammar>
         struct pass_through : proto::callable
         {
@@ -86,6 +136,10 @@
                 typedef typename impl::type type;
             };
 
+            /// \param expr The current expression
+            /// \param state The current state
+            /// \param visitor An arbitrary visitor
+            /// \pre <tt>matches\<Expr, Grammar\>::::value</tt> is \c true.
             template<typename Expr, typename State, typename Visitor>
             typename result<void(Expr, State, Visitor)>::type
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const
