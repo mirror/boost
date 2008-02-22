@@ -107,7 +107,7 @@
    <xsl:template name = "header.navdata-horiz">
       <xsl:variable name="home_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.root, '/index.htm' )"/>
+            <xsl:with-param name="target" select="concat( $boost.root, '/index.html' )"/>
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="libraries_link">
