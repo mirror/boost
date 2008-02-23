@@ -202,14 +202,12 @@ struct close_impl<close_boost_stream> {
 template<>
 struct close_impl<close_filtering_stream> {
     template<typename T>
-    static void close(T& t)
-    {
-        t.pop();
-    }
-    template<typename T>
     static void close(T& t, BOOST_IOS::openmode which)
     {
-        if (which == BOOST_IOS::out)
+        typedef typename category_of<T>::type category;
+        const bool in =  is_convertible<category, input>::value &&
+                        !is_convertible<category, output>::value;
+        if (in == (which == BOOST_IOS::in))
             t.pop();
     }
 };
