@@ -1,4 +1,5 @@
-// (C) Copyright Jonathan Turkanis 2004
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2004-2007 Jonathan Turkanis
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -46,7 +47,19 @@ struct filtering_stream_traits {
                 BOOST_IOSTREAMS_BASIC_ISTREAM(Ch, Tr),
                 else_,        
                 BOOST_IOSTREAMS_BASIC_OSTREAM(Ch, Tr)
-            >::type type;
+            >::type stream_type;
+    typedef typename
+            iostreams::select< // Dismbiguation required for Tru64.
+                mpl::and_<
+                    is_convertible<Mode, input>,
+                    is_convertible<Mode, output>
+                >,
+                iostream_tag,
+                is_convertible<Mode, input>,
+                istream_tag,
+                else_,
+                ostream_tag
+            >::type stream_tag;
 };
 
 template<typename Chain, typename Access>
@@ -59,7 +72,7 @@ class filtering_stream_base
                  typename Chain::mode, 
                  typename Chain::char_type, 
                  typename Chain::traits_type
-             >::type
+             >::stream_type
 {
 public:
     typedef Chain                                         chain_type;
@@ -73,7 +86,7 @@ protected:
                  typename Chain::mode, 
                  typename Chain::char_type, 
                  typename Chain::traits_type
-            >::type                                       stream_type;
+            >::stream_type                                stream_type;
     filtering_stream_base() : stream_type(0) { this->set_chain(&chain_); }
 private:
     void notify() { this->rdbuf(chain_.empty() ? 0 : &chain_.front()); }
@@ -110,6 +123,11 @@ private:
     { \
     public: \
         typedef Ch                                char_type; \
+        struct category \
+            : Mode, \
+              closable_tag, \
+              detail::filtering_stream_traits<Mode, Ch, Tr>::stream_tag \
+            { }; \
         BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr) \
         typedef Mode                              mode; \
         typedef chain_type_<Mode, Ch, Tr, Alloc>  chain_type; \
@@ -132,7 +150,7 @@ private:
     }; \
     /**/    
 BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(filtering_stream, boost::iostreams::chain, char)
-BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(wfiltering_stream, boost::iostreams::chain, wchar_t)  
+BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(wfiltering_stream, boost::iostreams::chain, wchar_t)
 
 typedef filtering_stream<input>    filtering_istream;
 typedef filtering_stream<output>   filtering_ostream;

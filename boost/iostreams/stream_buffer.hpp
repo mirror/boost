@@ -1,4 +1,5 @@
-// (C) Copyright Jonathan Turkanis 2003.
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2003-2007 Jonathan Turkanis
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -75,6 +76,11 @@ private:
     typedef T                                 policy_type;
 public:
     typedef typename char_type_of<T>::type    char_type;
+    struct category 
+        : Mode,
+          closable_tag,
+          streambuf_tag
+        { };
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 public:
     stream_buffer() { }

@@ -6,8 +6,9 @@
 
  * File:        test/slice_test.hpp
  * Date:        Sun Jan 06 12:57:30 MST 2008
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  *
  * Tests the overloaded function template boost::iostreams::slice.
  */

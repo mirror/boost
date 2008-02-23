@@ -1,4 +1,5 @@
-// (C) Copyright Jonathan Turkanis 2003-2007.
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2003-2007 Jonathan Turkanis
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -55,6 +56,12 @@ file_descriptor::file_descriptor(handle_type fd, bool close_on_exit)
         : pimpl_(new impl(int_to_handle(fd), close_on_exit))
         { }
 #endif
+
+file_descriptor::file_descriptor( const char* path,
+                                  BOOST_IOS::openmode mode,
+                                  BOOST_IOS::openmode base_mode )
+    : pimpl_(new impl)
+{ open(std::string(path), mode, base_mode); }
 
 file_descriptor::file_descriptor( const std::string& path,
                                   BOOST_IOS::openmode mode,
@@ -155,13 +162,18 @@ void file_descriptor::open
 #endif // #ifndef BOOST_IOSTREAMS_WINDOWS //----------------------------------//
 }
 
+void file_descriptor::open
+    ( const char* path, BOOST_IOS::openmode m,
+      BOOST_IOS::openmode base )
+{ open(std::string(path), m, base); }
+
 std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
     DWORD result;
     if (!::ReadFile(pimpl_->handle_, s, n, &result, NULL))
         throw detail::bad_read();
-    return static_cast<std::streamsize>(result);
+    return result == 0 ? -1 : static_cast<std::streamsize>(result);
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS
     errno = 0;
     std::streamsize result = BOOST_IOSTREAMS_FD_READ(pimpl_->handle_, s, n);

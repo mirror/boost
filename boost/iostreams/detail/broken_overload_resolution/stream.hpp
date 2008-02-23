@@ -1,4 +1,5 @@
-// (C) Copyright Jonathan Turkanis 2003.
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2003-2007 Jonathan Turkanis
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -23,12 +24,17 @@ template< typename Device,
 struct stream : detail::stream_base<Device, Tr, Alloc> {
 public:
     typedef typename char_type_of<Device>::type  char_type;
+    struct category 
+        : mode_of<Device>::type,
+          closable_tag,
+          detail::stream_traits<Device, Tr>::stream_tag
+        { };
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef typename
             detail::stream_traits<
                 Device, Tr
-            >::type                              stream_type;
+            >::stream_type                       stream_type;
     typedef Device                               policy_type;
 public:
     stream() { }

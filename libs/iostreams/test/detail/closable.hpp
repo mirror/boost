@@ -11,8 +11,9 @@
  *
  * File:        libs/iostreams/test/detail/closable.hpp
  * Date:        Sun Dec 09 16:12:23 MST 2007
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  */
 
 #ifndef BOOST_IOSTREAMS_TEST_CLOSABLE_HPP_INCLUDED

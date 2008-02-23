@@ -6,8 +6,9 @@
 
  * File:        libs/iostreams/test/stream_offset_32bit_test.cpp
  * Date:        Sun Dec 23 21:11:23 MST 2007
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  *
  * Tests the functions defined in the header "boost/iostreams/positioning.hpp"
  * with small (32-bit) file offsets.

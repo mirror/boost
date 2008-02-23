@@ -52,7 +52,7 @@
 
 #include <locale>
 #include <cstddef> // size_t
-#include <wchar.h> // mbstate_t
+#include <cwchar>  // mbstate_t
 #include <boost/integer_traits.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/codecvt_helper.hpp>

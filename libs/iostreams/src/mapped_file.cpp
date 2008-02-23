@@ -1,5 +1,6 @@
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2004-2007 Jonathan Turkanis
 // (C) Copyright Craig Henderson 2002 'boost/memmap.hpp' from sandbox
-// (C) Copyright Jonathan Turkanis 2004.
 // (C) Copyright Jonathan Graehl 2004.
 
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -13,6 +14,9 @@
 #define BOOST_IOSTREAMS_SOURCE
 
 #include <cassert>
+#ifndef NDEBUG
+# include <boost/iostreams/detail/absolute_path.hpp>
+#endif
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure.
@@ -55,6 +59,9 @@ struct mapped_file_impl {
     #else
         handle_ = 0;
     #endif
+    #ifndef NDEBUG
+        path_.erase();
+    #endif
     }
     void close()
     {
@@ -77,8 +84,16 @@ struct mapped_file_impl {
         data_ = 0;
         size_ = 0;
         mode_ = BOOST_IOS::openmode();
-        if (error)
-            throw_system_failure("error closing mapped file");
+        if (error) {
+            std::string msg("error closing mapped file");
+            #ifndef NDEBUG
+                msg += std::string(" (\"") + path_ + "\")";
+            #endif
+            throw_system_failure(msg);
+        }
+    #ifndef NDEBUG
+        path_.erase();
+    #endif
     }
     char*                data_;
     std::size_t          size_;
@@ -89,6 +104,9 @@ struct mapped_file_impl {
     HANDLE               mapped_handle_;
 #else
     int                  handle_;
+#endif
+#ifndef NDEBUG
+    std::string          path_;
 #endif
 };
 
@@ -123,9 +141,6 @@ void mapped_file_source::open( const std::string& path,
 mapped_file_source::size_type mapped_file_source::size() const
 { return pimpl_->size_; }
 
-bool mapped_file_source::is_open() const
-{ return !!pimpl_ && pimpl_->handle_ != 0; }
-
 void mapped_file_source::close() { pimpl_->close(); }
 
 mapped_file_source::operator mapped_file_source::safe_bool() const
@@ -149,8 +164,11 @@ const char* mapped_file_source::end() const { return data() + size(); }
 
 namespace detail {
 
-void cleanup_and_throw(detail::mapped_file_impl& impl, const char* msg)
+void cleanup_and_throw(detail::mapped_file_impl& impl, std::string msg)
 {
+    #ifndef NDEBUG
+        msg += std::string(" (\"") + impl.path_ + "\")";
+    #endif
     if (impl.mapped_handle_ != INVALID_HANDLE_VALUE)
         ::CloseHandle(impl.mapped_handle_);
     if (impl.handle_ != NULL)
@@ -173,6 +191,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
         pimpl_->clear(false);
     bool readonly = (p.mode & BOOST_IOS::out) == 0;
     pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
+    #ifndef NDEBUG
+        pimpl_->path_ = detail::absolute_path(p.path);
+    #endif
 
     //--------------Open underlying file--------------------------------------//
 
@@ -189,8 +210,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
                            FILE_ATTRIBUTE_TEMPORARY,
                        NULL );
 
-    if (pimpl_->handle_ == INVALID_HANDLE_VALUE)
+    if (pimpl_->handle_ == INVALID_HANDLE_VALUE) {
         detail::cleanup_and_throw(*pimpl_, "failed opening file");
+    }
 
     //--------------Set file size---------------------------------------------//
 
@@ -283,6 +305,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
     pimpl_->data_ = reinterpret_cast<char*>(data);
 }
 
+bool mapped_file_source::is_open() const
+{ return !!pimpl_ && pimpl_->handle_ != INVALID_HANDLE_VALUE; }
+
 int mapped_file_source::alignment()
 {
     SYSTEM_INFO info;
@@ -294,8 +319,11 @@ int mapped_file_source::alignment()
 
 namespace detail {
 
-void cleanup_and_throw(detail::mapped_file_impl& impl, const char* msg)
+    void cleanup_and_throw(detail::mapped_file_impl& impl, std::string msg)
 {
+    #ifndef NDEBUG
+        msg += std::string(" (\"") + impl.path_ + "\")";
+    #endif
     if (impl.handle_ != 0)
         ::close(impl.handle_);
     impl.clear(true);
@@ -317,6 +345,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
         pimpl_->clear(false);
     bool readonly = (p.mode & BOOST_IOS::out) == 0;
     pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
+    #ifndef NDEBUG
+        pimpl_->path_ = detail::absolute_path(p.path);
+    #endif
 
     //--------------Open underlying file--------------------------------------//
 
@@ -367,6 +398,9 @@ void mapped_file_source::open_impl(mapped_file_params p)
 
     return;
 }
+
+bool mapped_file_source::is_open() const
+{ return !!pimpl_ && pimpl_->handle_ != 0; }
 
 int mapped_file_source::alignment()
 { return static_cast<int>(sysconf(_SC_PAGESIZE)); }

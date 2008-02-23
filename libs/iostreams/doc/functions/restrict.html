@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
-    <TITLE>Class Template chain</TITLE>
+    <TITLE>Function Template restrict</TITLE>
     <LINK REL="stylesheet" HREF="../../../../boost.css">
     <LINK REL="stylesheet" HREF="../theme/iostreams.css">
 </HEAD>
@@ -31,6 +31,10 @@
 
 <P>
     The <A HREF='../guide/modes.html'>mode</A> of a <CODE>resriction</CODE> is the same as that of the underlying component. A <CODE>resriction</CODE> is <A HREF='../concepts/closable.html'>Closable</A>, <A HREF='../concepts/flushable.html'>Flushable</A>, <A HREF='../concepts/localizable.html'>Localizable</A> and <A HREF='../concepts/optimally_buffered.html'>OptimallyBuffered</A>.
+</P>
+
+<P>
+    The function template <a href="slice.html"><code>slice</code></a> is available as an alias of <code>restrict</code>, for platforms that treat <code>restrict</code> as a keyword.
 </P>
 
 <A NAME="headers"></A>
@@ -153,13 +157,9 @@ restrict( [<SPAN CLASS='keyword'>const</SPAN>] Component& component,
 <!-- Begin Footer -->
 
 <HR>
-<P CLASS="copyright">Revised
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
-20 May, 2004
-<!--webbot bot="Timestamp" endspan i-checksum="38504" -->
-</P>
+<P CLASS="copyright">Revised 02 Feb 2008</P>
 
-<P CLASS="copyright">&copy; Copyright <A HREF="http://www.kangaroologic.com" TARGET="_top">Jonathan Turkanis</A>, 2004</P>
+<P CLASS="copyright">&copy; Copyright 2008 <a href="http://www.coderage.com/" target="_top">CodeRage, LLC</a><br/>&copy; Copyright 2004-2007 <a href="http://www.coderage.com/turkanis/" target="_top">Jonathan Turkanis</a></P>
 <P CLASS="copyright"> 
     Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <A HREF="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)
 </P>

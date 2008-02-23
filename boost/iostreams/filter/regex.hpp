@@ -1,4 +1,5 @@
-// (C) Copyright Jonathan Turkanis 2003.
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2003-2007 Jonathan Turkanis
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -57,7 +58,7 @@ private:
                 return;
             iterator first(&src[0], &src[0] + src.size(), re_, flags_);
             iterator last;
-            const Ch* suffix = 0; // Prevent GCC 2.95 warning.
+            const Ch* suffix = 0;
             for (; first != last; ++first) {
                 dest.insert( dest.end(), 
                              first->prefix().first,
@@ -68,7 +69,11 @@ private:
                              replacement.end() );
                 suffix = first->suffix().first;
             }
-            dest.insert(dest.end(), suffix, &src[0] + src.size());
+            if (suffix) {
+                dest.insert(dest.end(), suffix, &src[0] + src.size());
+            } else {
+                dest.insert(dest.end(), &src[0], &src[0] + src.size());
+            }
         }
     struct simple_formatter {
         simple_formatter(const string_type& fmt, flag_type fmt_flags) 

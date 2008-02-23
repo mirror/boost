@@ -6,8 +6,9 @@
 
  * File:        boost/iostreams/detail/restrict_impl.hpp
  * Date:        Sun Jan 06 12:57:30 MST 2008
- * Copyright:   2007 CodeRage
+ * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
+ * Contact:     turkanis at coderage dot com
  *
  * If included with the macro BOOST_IOSTREAMS_RESTRICT undefined, defines the 
  * class template boost::iostreams::restriction. If included with the macro

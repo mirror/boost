@@ -1,5 +1,6 @@
+// (C) Copyright 2008 CodeRage, LLC (turkanis at coderage dot com)
+// (C) Copyright 2005-2007 Jonathan Turkanis
 // (C) Copyright Jonathan Graehl 2004.
-// (C) Copyright Jonathan Turkanis 2005.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
 
@@ -68,7 +69,13 @@ inline BOOST_IOSTREAMS_FAILURE system_failure(const char* msg)
     return BOOST_IOSTREAMS_FAILURE(result);
 }
 
+inline BOOST_IOSTREAMS_FAILURE system_failure(const std::string& msg)
+{ return system_failure(msg.c_str()); }
+
 inline void throw_system_failure(const char* msg)
+{ throw system_failure(msg); }
+
+inline void throw_system_failure(const std::string& msg)
 { throw system_failure(msg); }
 
 } } } // End namespaces detail, iostreams, boost.
