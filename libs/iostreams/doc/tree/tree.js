@@ -106,10 +106,10 @@ function html_list_item(content)
 }
 function html_anchor(content, cl, href, target)
 { 
-    return "<A class='" + cl + "' onfocus='blur_tree()" + 
+    return "<a class='" + cl + "' onfocus='blur_tree()" + 
            "' href='" +  href + "'" + 
            (target ? " target='" + target + "'" : "") +
-           ">" + content + "</A>"; 
+           ">" + content + "</a>"; 
 }
 
 //--------------Definition of class tree_node---------------------------------//

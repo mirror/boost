@@ -25,8 +25,19 @@
 <A NAME="description"></A>
 <H2>Description</H2>
 
-<P>
-    The two overloads of the function template <CODE>close</CODE> are invoked automatically by the Iostreams library to indicate to <A HREF="../guide/concepts.html#filter_concepts">Filters</A> and <A HREF="../guide/concepts.html#device_concepts">Devices</A> that a sequence of data is about to end. This gives Filters and Devices an opportunity to free resources or to reset their states in preparation for a new character sequence. Filters and Devices which perform output can use the opportunity to write additional data to the end of a stream.
+<P>The Iostreams library provides three overloads of the function template <CODE>close</CODE>.</P>
+
+<P>The first overload of <CODE>close</CODE> takes a single Device argument. It allows a user to close a Device without worrying whether the Device controls a single sequence or two sequences:</P>
+
+<PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
+              
+<SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>&gt;     
+<SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_device">close</A>(T& t);
+
+} } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
+
+
+<P>The other two overloads of <CODE>close</CODE> should rarely be called by library users; they are invoked automatically by the library to indicate to <A HREF="../guide/concepts.html#filter_concepts">Filters</A> and <A HREF="../guide/concepts.html#device_concepts">Devices</A> that a sequence of data is about to end. This gives Filters and Devices an opportunity to free resources or to reset their states in preparation for a new character sequence. Filters and Devices which perform output can use the opportunity to write additional data to the end of a stream.
 </P>
 
 <P>The details regarding when and how <CODE>close</CODE> is invoked are a bit messy:</P>
@@ -68,8 +79,14 @@
     boost::iostreams::close(f<SUB>n-1</SUB>, buf<SUB>n</SUB>,<SPAN STYLE="visibility:hidden"><SUB>n-</SUB></SPAN> ios_base::out);
     boost::iostreams::close(d,<SPAN STYLE="visibility:hidden"><SUB>n-1</SUB>, buf<SUB>n-1</SUB></SPAN> ios_base::out);</PRE>
 </P>
-<P>The effect is that with input streams, the elements of a chain are closed in reverse order; with output streams, they are closed in forward order; and with streams controlling separate input and output sequences, each element receives two closure notifications, the first with argument <CODE>ios_base::in</CODE> and the second with argument <CODE>ios_base::out</CODE>. (<I>See</I> the semantics of <CODE>close</CODE> for <A HREF="#close_filter">Filter</A> and <A HREF="#close_device">Device</A> types, below.)
-</P>
+<P>This implies</P>
+<UL>
+<LI>For filter chains consisting of read-only components, the elements of the chain are closed in reverse order</LI>
+<LI>For filter chains consisting of write-only components, the elements of the chain are closed in forward order</LI>
+<LI>Filters and Devices controlling separate input and output sequences receive two closure notifications, the first with argument <CODE>ios_base::in</CODE> and the second with argument <CODE>ios_base::out</CODE>. 
+</UL>
+
+<P>(<I>See</I> the semantics of <CODE>close</CODE> for <A HREF="#close_filter">Filter</A> and <A HREF="#close_device">Device</A> types, below.)</P>
 
 <A NAME="headers"></A>
 <H2>Headers</H2>
@@ -88,6 +105,9 @@
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">namespace</SPAN> boost { <SPAN CLASS="keyword">namespace</SPAN> iostreams {
               
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>&gt;     
+<SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_convenience">close</A>(T& t);
+              
+<SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>&gt;     
 <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_device">close</A>(T& t, std::ios_base::openmode which);
 
 <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">T</A>, <SPAN CLASS="keyword">typename</SPAN> <A CLASS="documented" HREF="#template_params">Device</A>&gt;
@@ -95,8 +115,30 @@
 
 } } <SPAN CLASS="comment">// End namespace boost::io</SPAN></PRE>
 
+
+<A NAME="close_convenience"></A>
+<H3>Function Template <CODE>close</CODE> &#8212; Convenience Function</H3>
+
+<A NAME="template_params"></A>
+<H4>Template Parameters</H4>
+
+<TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
+<TR>
+    <TR>
+        <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
+        <TD>A model of one of the <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts.
+    </TR>
+</TABLE>
+
+<H4>Semantics</H4>
+
+<PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;     
+<SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_device">close</A>(T& t);</PRE>
+
+<P>This overload of <CODE>close</CODE> calls <CODE>close(t, std::ios_base::in)</CODE> followed by <CODE>close(t, std::ios_base::out)</CODE>. It ensures that <CODE>t</CODE> is closed properly, regardless of the <A HREF="../guide/modes.html">mode</A> or <CODE>t</CODE>.
+
 <A NAME="close_device"></A>
-<H3>Function Template <CODE>close</CODE> &#8212; Device Types</H3>
+<H3>Function Template <CODE>close</CODE> &#8212; Closure Notification for Devices</H3>
 
 <A NAME="template_params"></A>
 <H4>Template Parameters</H4>
@@ -114,13 +156,27 @@
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;     
 <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_device">close</A>(T& t, std::ios_base::openmode which);</PRE>
 
-<P>The semantics of <CODE>close</CODE> for a Device type <CODE>T</CODE> depends on its <A HREF="../guide/traits.html#category">category</A> as follows:</P>
+<P>If <CODE>t</CODE> is a <A HREF="../guide/filtering_streams.html">filtering stream or stream buffer</A>, <CODE>close</CODE> calls <A HREF="../classes/filtering_stream.html#pop"><CODE>pop</CODE></A>. The semantics depends on its <A HREF="../guide/traits.html#category">category</A> as follows:</P>
+
+<TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
+    <TR><TH><CODE>category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
+    <TR>
+        <TD VALIGN="top">convertible to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
+        <TD>calls <CODE>t.pop()</CODE> if <CODE>which == ios_base::in</CODE></TD>
+    </TR>
+    <TR>
+        <TD VALIGN="top">otherwise</TD>
+        <TD>calls <CODE>t.pop()</CODE> if <CODE>which == ios_base::out</CODE></TD>
+    </TR>
+</TABLE>
+
+<P>The semantics of <CODE>close</CODE> for a device <CODE>T</CODE> other than a filtering stream or stream buffer depends on its <A HREF="../guide/traits.html#category">category</A> as follows:</P>
 
 <TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
     <TR><TH><CODE>category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">not convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A></TD>
-        <TD>no-op</TD>
+        <TD>calls <A HREF="flush.html"><CODE>flush</CODE></A></TD>
     </TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></A></TD>
@@ -128,25 +184,31 @@
     </TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
-        <TD>calls <CODE>t.close()</CODE> if <CODE>(which & ios_base::in) != 0</CODE></TD>
+        <TD>calls <CODE>t.close()</CODE> if <CODE>which == ios_base::in</CODE></TD>
     </TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../guide/modes.html#input"><CODE>output</CODE></A> but not to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
-        <TD>calls <CODE>t.close()</CODE> if <CODE>(which & ios_base::out) != 0</CODE></TD>
+        <TD>calls <CODE>t.close()</CODE> if <CODE>which == ios_base::out</CODE></TD>
     </TR>
 </TABLE>
 
 <P>In short:
 <UL>
-    <LI CLASS="square">If <CODE>T</CODE> is not <A HREF="../concepts/closable.html">Closable</A>, <CODE>close</CODE> does nothing.
+    <LI CLASS="square">If <CODE>T</CODE> is not <A HREF="../concepts/closable.html">Closable</A>, <CODE>close</CODE> calls <A HREF="flush.html"><CODE>flush</CODE></A>.
     <LI CLASS="square">If <CODE>T</CODE> is <A HREF="../concepts/closable.html">Closable</A> and controls two separate sequences, <CODE>close</CODE> delegates to a member function <CODE>close</CODE> taking a single <CODE>openmode</CODE> parameter.
     <LI CLASS="square">Otherwise, <CODE>close</CODE> delegates to a member function <CODE>close</CODE> taking no parameters, but only if its <CODE>openmode</CODE> parameter is consistent with the mode of <CODE>T</CODE>. 
 </UL>
 
 <P>The last condition prevents a Device controlling a single sequence from being closed twice in succession.</P>
 
+<P><B>NOTE:</B> Starting with Boost 1.35, the invocation of this function with an <CODE>openmode</CODE> other than <CODE>std::ios_base::in</CODE> or
+    <CODE>std::ios_base::out</CODE> is <B>deprecated</B>. To close both sequences at once, use
+<PRE>close(t)</PRE> 
+instead of 
+<PRE>close(t, std::ios_base::in | std::ios_base::out)</PRE></P>
+
 <A NAME="close_filter"></A>
-<H3>Function Template <CODE>close</CODE> &#8212; Filter Types</H3>
+<H3>Function Template <CODE>close</CODE> &#8212; Closure Notification for Filters</H3>
 
 <A NAME="template_params"></A>
 <H4>Template Parameters</H4>
@@ -174,7 +236,7 @@
     <TR><TH><CODE>category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">not convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A></TD>
-        <TD>no-op</TD>
+        <TD>calls <A HREF="flush.html"><CODE>flush</CODE></A></TD>
     </TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></A></TD>
@@ -182,22 +244,25 @@
     </TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
-        <TD>calls <CODE>t.close(next)</CODE> if <CODE>(which & ios_base::in) != 0</CODE></TD>
+        <TD>calls <CODE>t.close(next)</CODE> if <CODE>which == ios_base::in</CODE></TD>
     </TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../guide/traits.html#category_tags"><CODE>closable_tag</CODE></A> and to <A HREF="../guide/modes.html#input"><CODE>output</CODE></A> but not to <A HREF="../guide/modes.html#bidirectional"><CODE>bidirectional</CODE></A></TD>
-        <TD>calls <CODE>t.close(next)</CODE> if <CODE>(which & ios_base::out) != 0</CODE></TD>
+        <TD>calls <CODE>t.close(next)</CODE> if <CODE>which == ios_base::out</CODE></TD>
     </TR>
 </TABLE>
 
 <P>In short:
 <UL>
-    <LI CLASS="square">If <CODE>T</CODE> is not <A HREF="../concepts/closable.html">Closable</A>, <CODE>close</CODE> does nothing.
+    <LI CLASS="square">If <CODE>T</CODE> is not <A HREF="../concepts/closable.html">Closable</A>, <CODE>close</CODE> calls <A HREF="flush.html"><CODE>flush</CODE></A>.
     <LI CLASS="square">If <CODE>T</CODE> is <A HREF="../concepts/closable.html">Closable</A> and controls two separate sequences, <CODE>close</CODE> delegates to a member function <CODE>close</CODE> taking <CODE>openmode</CODE> and stream buffer parameters.
     <LI CLASS="square">Otherwise, <CODE>close</CODE> delegates to a member function <CODE>close</CODE> taking a single stream buffer parameter, but only if its <CODE>openmode</CODE> parameter is consistent with the mode of <CODE>T</CODE>. 
 </UL>
 
 <P>The last condition prevents a Filter controlling a single sequence from being closed twice in succession.</P>
+
+<P><B>NOTE:</B> Starting with Boost 1.35, the invocation of this function with an <CODE>openmode</CODE> other than <CODE>std::ios_base::in</CODE> or
+    <CODE>std::ios_base::out</CODE> is <B>deprecated</B>.</P>
 
 <!-- End Footnotes -->
 

@@ -32,10 +32,10 @@
 <H4>Closure Notifications</H4>
     
 <P>
-    The Iostreams library sends closure notifications by invoking the function <A HREF="../functions/close.html"><CODE>close</CODE></A>. For a Closable Filter or Device, <CODE>close</CODE> delegates to a member function <CODE>close</CODE>; for other Devices, it does nothing. The <A HREF="../functions/close.html#when">details</A> regarding when and how <CODE>close</CODE> is invoked are complicated. However, defining a Filter or Device which receives closure notifications is easy:
+    The Iostreams library sends closure notifications by invoking the function <A HREF="../functions/close.html"><CODE>close</CODE></A>. For most Closable Filter or Device, <CODE>close</CODE> delegates to a member function <CODE>close</CODE>; for non-Closable Devices, <CODE>close</CODE> calls <A HREF="../functions/flush.html"><CODE>flush</CODE></A>. The <A HREF="../functions/close.html#when">details</A> regarding when and how <CODE>close</CODE> is invoked are complicated. However, defining a Filter or Device which receives closure notifications is easy, as illustrated in the following sections.
 </P>
 
-<H2>Examples</H2>
+<H4>Single-Sequence Devices</H4>
 
 <P>
     If a Device controls a single sequence of characters, it can be made Closable simply by specifying a <A HREF="../guide/traits.html#category_tags">category tag</A> which is convertible to <CODE>closable_tag</CODE> and by adding a member function <CODE>close</CODE>, like so:
@@ -44,13 +44,34 @@
 <P>
     Filters and Devices which derive from the <A HREF="../guide/concepts.html#convenience">convenience templates and <CODE>typedef</CODE>s</A> have category tags convertible to <CODE>closable_tag</CODE> provided automatically.
 </P>
+
+<H4>Single-Sequence Filters</H4>
+
 <P>For Filters controlling a single sequence, the signature of <CODE>close</CODE> is:</P>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Device&gt;
-    <SPAN CLASS="keyword">void</SPAN> close(Device&amp;) { <SPAN CLASS="omitted"> ... </SPAN> }</PRE>
+    <SPAN CLASS="keyword">void</SPAN> close(Device&amp;);</PRE>
+
+<H4>Two-Sequence Devices</H4>
+
 <P>
-    For Filters and Devices controlling separate input and output sequences, the above signatures should be modified by adding a <CODE>std::ios_base::openmode</CODE> parameter at the end of the parameter list. This function will be called twice: first with argument <CODE>std::ios_base::in</CODE>, to signal the closing of the input sequence, and later with argument <CODE>std::ios_base::out</CODE>, to signal the closing of the output sequence.
-</P>
-    
+    If a Device controls separate input and output sequences, the signature of <CODE>close</CODE> is:</P>
+    <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">void</SPAN> close(std::ios_base::openmode);</PRE>
+<P>This function will be called twice: first with argument <CODE>std::ios_base::in</CODE>, to signal the closing of the input sequence, and later with argument <CODE>std::ios_base::out</CODE>, to signal the closing of the output sequence. </P>
+
+<H4>Two-Sequence Filters</H4>
+
+<P>
+    If a Filter controls separate input and output sequences, the signature of <CODE>close</CODE> is:</P>
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Device&gt;
+    <SPAN CLASS="keyword">void</SPAN> close(Device&amp;, std::ios_base::openmode);</PRE>
+<P>This function will be called twice: first with argument <CODE>std::ios_base::in</CODE>, to signal the closing of the input sequence, and later with argument <CODE>std::ios_base::out</CODE>, to signal the closing of the output sequence.</P>
+
+<H4>Dual-Use Filters</H4>
+
+<P>The signature of  <CODE>close</CODE> for <A HREF="dual_use_filter.html">DualUserFilters</A> is the same as that for two-sequence Filters:</P>
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Device&gt;
+    <SPAN CLASS="keyword">void</SPAN> close(Device&amp;, std::ios_base::openmode);</PRE>
+<P>This function will be called only once, depending on whether the filter is being used for input or output.</P>
 
 <H2>Refinement of</H2>
 
@@ -112,7 +133,11 @@
 
 <H2>Models</H2>
 
-<P>Many of the Filters and Devices provided by the Iostreams library are Closable, but this is an implementation detail.</P>
+<UL>
+    <LI><A HREF="../guide/generic_streams.html">Generic Streams and Stream Buffers</A>.
+    <LI><A HREF="../guide/filtering_streams.html">Filtering Streams and Stream Buffers</A>.
+    <LI>Standard file streams and stream buffers.</A>
+</UL>
 
 <!-- Begin Footer -->
 
