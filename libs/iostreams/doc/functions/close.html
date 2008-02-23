@@ -156,17 +156,17 @@
 <PRE CLASS="broken_ie"><SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;     
 <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#close_device">close</A>(T& t, std::ios_base::openmode which);</PRE>
 
-<P>If <CODE>t</CODE> is a <A HREF="../guide/filtering_streams.html">filtering stream or stream buffer</A>, <CODE>close</CODE> calls <A HREF="../classes/filtering_stream.html#pop"><CODE>pop</CODE></A>. The semantics depends on its <A HREF="../guide/traits.html#category">category</A> as follows:</P>
+<P>If <CODE>t</CODE> is a <A HREF="../guide/filtering_streams.html">filtering stream or stream buffer</A>, <CODE>close</CODE> calls <A HREF="../classes/filtering_stream.html#pop"><CODE>pop</CODE></A> if <CODE>t</CODE> is <A HREF="../classes/filtering_streambuf.html#is_complete">complete</A>. The semantics depends on its <A HREF="../guide/traits.html#category">category</A> as follows:</P>
 
 <TABLE STYLE="margin-left:2em" BORDER=1 CELLPADDING=4>
     <TR><TH><CODE>category&lt;T&gt;::type</CODE></TH><TH>semantics</TH></TR>
     <TR>
         <TD VALIGN="top">convertible to <A HREF="../guide/modes.html#input"><CODE>input</CODE></A> but not to <A HREF="../guide/modes.html#output"><CODE>output</CODE></A></TD>
-        <TD>calls <CODE>t.pop()</CODE> if <CODE>which == ios_base::in</CODE></TD>
+        <TD>calls <CODE>t.pop()</CODE> if <code>t</CODE> is complete and which == ios_base::in</CODE></TD>
     </TR>
     <TR>
         <TD VALIGN="top">otherwise</TD>
-        <TD>calls <CODE>t.pop()</CODE> if <CODE>which == ios_base::out</CODE></TD>
+        <TD>calls <CODE>t.pop()</CODE> if <code>t</CODE> is complete and <CODE>which == ios_base::out</CODE></TD>
     </TR>
 </TABLE>
 

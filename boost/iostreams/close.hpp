@@ -207,7 +207,7 @@ struct close_impl<close_filtering_stream> {
         typedef typename category_of<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
-        if (in == (which == BOOST_IOS::in))
+        if (in == (which == BOOST_IOS::in) && t.is_complete())
             t.pop();
     }
 };
