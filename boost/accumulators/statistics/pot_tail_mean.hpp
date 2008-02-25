@@ -83,8 +83,8 @@ namespace impl
             extractor<peaks_over_threshold_tag> const some_peaks_over_threshold = {};
             extractor<pot_quantile_tag> const some_pot_quantile = {};
 
-            float_type beta_bar = some_peaks_over_threshold(args).get<1>();
-            float_type xi_hat   = some_peaks_over_threshold(args).get<2>();
+            float_type beta_bar = some_peaks_over_threshold(args).template get<1>();
+            float_type xi_hat   = some_peaks_over_threshold(args).template get<2>();
 
             return some_pot_quantile(args) - this->sign_ * beta_bar/( xi_hat - 1. ) * std::pow(
                 is_same<LeftRight, left>::value ? args[quantile_probability] : 1. - args[quantile_probability]
