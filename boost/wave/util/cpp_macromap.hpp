@@ -1267,7 +1267,7 @@ ContainerT replacement_list;
             if (ctx.get_hooks().expanding_function_like_macro(
                     ctx, macro_def.macroname, macro_def.macroparameters, 
                     macro_def.macrodefinition, curr_token, arguments,
-                    seqend, first))
+                    seqstart, seqend))
             {
                 // do not expand this macro, just copy the whole sequence 
                 std::copy(seqstart, first, 
