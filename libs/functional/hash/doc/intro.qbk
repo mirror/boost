@@ -17,8 +17,7 @@
     Boost Multi-Index Containers Library]]
 [def __multi-index-short__ [@../../libs/multi_index/doc/index.html
     Boost.MultiIndex]]
-[def __bimap__ [@../../libs/bimap/doc/index.html
-    Boost.Bimap]]
+[def __bimap__ [@../../libs/bimap/index.html Boost.Bimap]]
 [def __issues__
     [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1837.pdf
     Library Extension Technical Report Issues List]]
