@@ -90,11 +90,13 @@ struct intlit_grammar :
         definition(intlit_grammar const &self)
         {
             using namespace boost::spirit;
-            using namespace phoenix;
+            using phoenix::var;
+            using phoenix::arg1;
+ 
             
             int_lit = (
                     sub_int_lit = 
-                        (    ch_p('0')[self.val = 0] >> (hex_lit | oct_lit)
+                        (   ch_p('0')[self.val = 0] >> (hex_lit | oct_lit)
                         |   dec_lit
                         )
                         >> !as_lower_d[

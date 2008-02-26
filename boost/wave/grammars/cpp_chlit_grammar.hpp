@@ -161,7 +161,9 @@ struct chlit_grammar :
         definition(chlit_grammar const &self)
         {
             using namespace boost::spirit;
-            using namespace phoenix;
+            using phoenix::var;
+            using phoenix::val;
+            using phoenix::arg1;
             
             // special parsers for '\x..' and L'\x....'
             typedef uint_parser<
