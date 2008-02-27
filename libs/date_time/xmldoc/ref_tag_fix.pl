@@ -5,7 +5,7 @@
 #############################################################################
 #  Copyright (c) 2001-2005 CrystalClear Software, Inc.                      #
 #  Subject to the Boost Software License, Version 1.0.                      #
-#  (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0) #
+#  (See accompanying file LICENSE_1_0.txt or  http://www.boost.org/LICENSE_1_0.txt) #
 #############################################################################
 
 use strict;
@@ -81,7 +81,7 @@ sub rewrite_tags {
     print OTP <<EO_LIC;
 <!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
-     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+     (See accompanying file LICENSE_1_0.txt or  http://www.boost.org/LICENSE_1_0.txt)
 -->
 <!-- date source directory processed: $year-$month-$day -->
 EO_LIC
