@@ -1,7 +1,10 @@
 #ifndef BOOST_PP_IS_ITERATING
     ///////////////////////////////////////////////////////////////////////////////
     /// \file pass_through.hpp
-    /// TODO
+    ///
+    /// Definition of the pass_through transform, which is the default transform
+    /// of all of the expression generator metafunctions such as posit<>, plus<>
+    /// and nary_expr<>.
     //
     //  Copyright 2008 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
@@ -14,7 +17,7 @@
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/mpl/if.hpp>
+    #include <boost/mpl/bool.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/args.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
@@ -75,8 +78,8 @@
         ///
         /// \code
         /// posit<
-        ///     T0::result<void(E0, S, V)>::::type
-        ///   , T1::result<void(E1, S, V)>::::type
+        ///     T0::result<void(E0, S, V)>::type
+        ///   , T1::result<void(E1, S, V)>::type
         /// >::type
         /// \endcode
         ///
@@ -113,9 +116,10 @@
         ///       , nary_expr<_, vararg<Promote> >
         ///     >
         /// {};
-        /// \code
+        /// \endcode
         template<typename Grammar>
-        struct pass_through : proto::callable
+        struct pass_through
+          : proto::callable
         {
             template<typename Sig>
             struct result;

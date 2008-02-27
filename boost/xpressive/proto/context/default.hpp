@@ -220,6 +220,9 @@
             BOOST_PROTO_BINARY_OP_RESULT(|=, proto::tag::bitwise_or_assign)
             BOOST_PROTO_BINARY_OP_RESULT(^=, proto::tag::bitwise_xor_assign)
 
+        #undef BOOST_PROTO_UNARY_OP_RESULT
+        #undef BOOST_PROTO_BINARY_OP_RESULT
+
             template<typename Expr, typename Context>
             struct default_eval<Expr, Context, proto::tag::terminal, 0>
             {

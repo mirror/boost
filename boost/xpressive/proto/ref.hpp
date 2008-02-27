@@ -59,7 +59,11 @@ namespace boost { namespace proto
 
             BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
 
-            typename mpl::if_<is_const<Expr>, proto_base_expr const &, proto_base_expr &>::type
+            typename mpl::if_c<
+                is_const<Expr>::value
+              , proto_base_expr const &
+              , proto_base_expr &
+            >::type
             proto_base() const
             {
                 return this->expr.proto_base();

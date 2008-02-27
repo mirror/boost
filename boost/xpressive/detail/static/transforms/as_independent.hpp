@@ -43,17 +43,29 @@ namespace boost { namespace xpressive { namespace grammar_detail
         struct result<This(Expr, State, Visitor)>
         {
             typedef typename proto::result_of::arg<Expr>::type arg_type;
-            typedef detail::lookahead_matcher<
-                typename Grammar::template result<void(arg_type, detail::independent_end_xpression, Visitor)>::type
-            > type;
+            typedef
+                typename Grammar::template result<void(
+                    arg_type
+                  //, detail::independent_end_xpression
+                  , detail::true_xpression
+                  , Visitor
+                )>::type
+            xpr_type;
+            typedef detail::lookahead_matcher<xpr_type> type;
         };
 
         template<typename Expr, typename State, typename Visitor>
         typename result<void(Expr, State, Visitor)>::type
         operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
-            return typename result<void(Expr, State, Visitor)>::type(
-                Grammar()(proto::arg(expr), detail::independent_end_xpression(), visitor)
+            typedef result<void(Expr, State, Visitor)> result_type;
+            return typename result_type::type(
+                Grammar()(
+                    proto::arg(expr)
+                  //, detail::independent_end_xpression()
+                  , detail::true_xpression()
+                  , visitor
+                )
               , false
             );
         }
@@ -68,7 +80,14 @@ namespace boost { namespace xpressive { namespace grammar_detail
         struct result<This(Expr, State, Visitor)>
         {
             typedef typename proto::result_of::arg<Expr>::type arg_type;
-            typedef typename Grammar::template result<void(arg_type, detail::independent_end_xpression, Visitor)>::type xpr_type;
+            typedef
+                typename Grammar::template result<void(
+                    arg_type
+                  //, detail::independent_end_xpression
+                  , detail::true_xpression
+                  , Visitor
+                )>::type
+            xpr_type;
             typedef detail::lookbehind_matcher<xpr_type> type;
         };
 
@@ -77,7 +96,12 @@ namespace boost { namespace xpressive { namespace grammar_detail
         operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             typedef typename result<void(Expr, State, Visitor)>::xpr_type xpr_type;
-            xpr_type const &expr2 = Grammar()(proto::arg(expr), detail::independent_end_xpression(), visitor);
+            xpr_type const &expr2 = Grammar()(
+                proto::arg(expr)
+              //, detail::independent_end_xpression()
+              , detail::true_xpression()
+              , visitor
+            );
             std::size_t width = expr2.get_width().value();
             return detail::lookbehind_matcher<xpr_type>(expr2, width, false);
         }
@@ -93,7 +117,12 @@ namespace boost { namespace xpressive { namespace grammar_detail
         {
             typedef typename proto::result_of::arg<Expr>::type arg_type;
             typedef detail::keeper_matcher<
-                typename Grammar::template result<void(arg_type, detail::independent_end_xpression, Visitor)>::type
+                typename Grammar::template result<void(
+                    arg_type
+                  //, detail::independent_end_xpression
+                  , detail::true_xpression
+                  , Visitor
+                )>::type
             > type;
         };
 
@@ -102,7 +131,12 @@ namespace boost { namespace xpressive { namespace grammar_detail
         operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             return typename result<void(Expr, State, Visitor)>::type(
-                Grammar()(proto::arg(expr), detail::independent_end_xpression(), visitor)
+                Grammar()(
+                    proto::arg(expr)
+                  //, detail::independent_end_xpression()
+                  , detail::true_xpression()
+                  , visitor
+                )
             );
         }
     };
