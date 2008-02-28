@@ -125,6 +125,13 @@ boost::iterator_range<xpr_test_case<BidiIterT> const *> get_test_cases()
           , regex_type(bos >> L('b') >> *_ >> L("ar"))
           , no_match
         )
+      , xpr_test_case
+        (
+            "test15.1"
+          , L("fOo")
+          , regex_type(!icase(L('f') >> *as_xpr(L('o'))))
+          , backrefs(L("fOo"), nilbr)
+        )
     };
 
     return boost::make_iterator_range(test_cases);
