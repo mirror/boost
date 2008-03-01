@@ -120,7 +120,7 @@ int main()
     tuple<A, B, C>          t1 = (a && b && c).get();
     tuple<A, C>             t2 = ((a || a) && c).get();
     tuple<A, B, C>          t3 = ((a && b || a && b) && c).get();
-    tuple<tuple<A, B>, C>   t4 = (( ab || ab) && c).get();
+    tuple<tuple<A, B>, C>   t4 = ((ab || ab) && c).get();
 
     return 0;
 }

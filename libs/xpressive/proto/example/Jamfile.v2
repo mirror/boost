@@ -58,3 +58,8 @@ exe futures
         futures.cpp
     ;
 
+exe map_assign
+    :
+        map_assign.cpp
+    ;
+
