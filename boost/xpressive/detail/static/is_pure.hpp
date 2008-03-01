@@ -110,7 +110,7 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, modifier_tag>
-      : use_simple_repeat_<typename Expr::proto_arg0::proto_base_expr, Char>
+      : use_simple_repeat_<typename Expr::proto_arg1::proto_base_expr, Char>
     {};
 
     template<typename Expr, typename Char>
