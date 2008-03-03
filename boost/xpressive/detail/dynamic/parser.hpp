@@ -335,6 +335,22 @@ inline sequence<BidiIter> make_assert_word(Cond, Traits const &traits)
     );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// make_independent_end_xpression
+//
+template<typename BidiIter>
+inline sequence<BidiIter> make_independent_end_xpression(bool pure)
+{
+    if(pure)
+    {
+        return detail::make_dynamic<BidiIter>(detail::true_matcher());
+    }
+    else
+    {
+        return detail::make_dynamic<BidiIter>(detail::independent_end_matcher());
+    }
+}
+
 }}} // namespace boost::xpressive::detail
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
