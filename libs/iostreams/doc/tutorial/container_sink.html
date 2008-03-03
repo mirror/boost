@@ -66,7 +66,7 @@
 
 <P>Here <A HREF="../classes/device.html#synopsis"><CODE>sink</CODE></A> is a convenience base class which provides the member types <CODE>char_type</CODE> and <CODE>category</CODE>, as well as no-op implementations of member functions <CODE>close</CODE> and <CODE>imbue</CODE>, not needed here.
 
-<P>You're now ready to write your <CODE>container_source</CODE>.</P>
+<P>You're now ready to write your <CODE>container_sink</CODE>.</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;algorithm&gt;</SPAN>                       <SPAN CLASS='comment'>// copy, min</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;iosfwd&gt;</SPAN>                          <SPAN CLASS='comment'>// streamsize</SPAN>
@@ -96,7 +96,7 @@
 <UL>
 <LI>The member type <CODE>char_type</CODE> is defined to be equal to the containers's <CODE>value_type</CODE>;
 <LI>The member type <CODE>category</CODE> tells the Iostreams library that <CODE>container_sink</CODE> is a model of <A HREF="../concepts/sink.html">Sink</A>;
-<LI>A <CODE>container_source</CODE> can be constructed from a instance of <CODE>Container</CODE>, which is passed and stored by reference, and accessible <I>via</I> the member function <CODE>container()</CODE>; and
+<LI>A <CODE>container_sink</CODE> can be constructed from a instance of <CODE>Container</CODE>, which is passed and stored by reference, and accessible <I>via</I> the member function <CODE>container()</CODE>; and
 <LI>The implementation of <CODE>write()</CODE> simply appends the characters in the specified buffer to the underlying container using the container's <CODE>insert</CODE> funcion,
 </UL>
 
@@ -105,7 +105,7 @@
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;cassert&gt;</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <SPAN CLASS='literal'>&lt;string&gt;</SPAN>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../../../boost/iostreams/stream.hpp"><SPAN CLASS='literal'>&lt;boost/iostreams/stream.hpp&gt;</SPAN></A>
-<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../example/container_device.hpp"><SPAN CLASS='literal'>&lt;libs/iostreams/example/container_device.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// container_source</SPAN>
+<SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS="HEADER" HREF="../../example/container_device.hpp"><SPAN CLASS='literal'>&lt;libs/iostreams/example/container_device.hpp&gt;</SPAN></A> <SPAN CLASS='comment'>// container_sink</SPAN>
 
 <SPAN CLASS='keyword'>namespace</SPAN> io = boost::iostreams;
 <SPAN CLASS='keyword'>namespace</SPAN> ex = boost::iostreams::example;

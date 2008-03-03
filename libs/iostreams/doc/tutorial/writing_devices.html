@@ -51,8 +51,8 @@
 
 <SPAN CLASS='keyword'>int</SPAN> main()
 {
-    io::stream_buffer&lt;file_sink&gt; buf(<SPAN CLASS='literal'>"log.txt"</SPAN>);
-    std::ostream                 out(&buf);
+    io::stream_buffer&lt;io::file_sink&gt; buf(<SPAN CLASS='literal'>"log.txt"</SPAN>);
+    std::ostream                     out(&buf);
     <SPAN CLASS='comment'>// out writes to log.txt</SPAN>
 }</PRE>
 
