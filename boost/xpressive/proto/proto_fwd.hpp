@@ -705,6 +705,10 @@ namespace boost { namespace proto
     namespace exops
     {}
 
+    typedef void ignore_();
+    inline void ignore()
+    {}
+
 }} // namespace boost::proto
 
 #endif

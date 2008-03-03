@@ -320,7 +320,8 @@ private:
             negative = true; // fall-through
         case token_positive_lookahead:
             lookahead = true;
-            //seq_end = detail::make_dynamic<BidiIter>(detail::independent_end_matcher());
+            // If we ever support actions in dynamic regexes, then this should 
+            // be independent_end_matcher:
             seq_end = detail::make_dynamic<BidiIter>(detail::true_matcher());
             break;
 
@@ -328,13 +329,15 @@ private:
             negative = true; // fall-through
         case token_positive_lookbehind:
             lookbehind = true;
-            //seq_end = detail::make_dynamic<BidiIter>(detail::independent_end_matcher());
+            // If we ever support actions in dynamic regexes, then this should 
+            // be independent_end_matcher:
             seq_end = detail::make_dynamic<BidiIter>(detail::true_matcher());
             break;
 
         case token_independent_sub_expression:
             keeper = true;
-            //seq_end = detail::make_dynamic<BidiIter>(detail::independent_end_matcher());
+            // If we ever support actions in dynamic regexes, then this should 
+            // be independent_end_matcher:
             seq_end = detail::make_dynamic<BidiIter>(detail::true_matcher());
             break;
 

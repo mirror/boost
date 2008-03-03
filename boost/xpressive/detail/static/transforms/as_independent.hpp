@@ -33,6 +33,61 @@ namespace boost { namespace xpressive { namespace detail
 
 namespace boost { namespace xpressive { namespace grammar_detail
 {
+    // A grammar that only accepts static regexes that
+    // don't have semantic actions.
+    struct NotHasAction
+      : proto::switch_<struct NotHasActionCases>
+    {};
+
+    struct NotHasActionCases
+    {
+        template<typename Tag, int Dummy = 0>
+        struct case_
+          : proto::nary_expr<Tag, proto::vararg<NotHasAction> >
+        {};
+
+        template<int Dummy>
+        struct case_<proto::tag::terminal, Dummy>
+          : proto::_
+        {};
+
+        template<int Dummy>
+        struct case_<proto::tag::comma, Dummy>
+          : proto::_    // because (set='a','b') can't contain an action
+        {};
+
+        template<int Dummy>
+        struct case_<proto::tag::complement, Dummy>
+          : proto::_    // because in ~X, X can't contain an unscoped action
+        {};
+
+        template<int Dummy>
+        struct case_<detail::lookahead_tag, Dummy>
+          : proto::_    // because actions in lookaheads are scoped
+        {};
+
+        template<int Dummy>
+        struct case_<detail::lookbehind_tag, Dummy>
+          : proto::_    // because actions in lookbehinds are scoped
+        {};
+
+        template<int Dummy>
+        struct case_<detail::keeper_tag, Dummy>
+          : proto::_    // because actions in keepers are scoped
+        {};
+
+        template<int Dummy>
+        struct case_<proto::tag::subscript, Dummy>
+          : proto::subscript<detail::set_initializer_type, _>
+        {}; // only accept set[...], not actions!
+    };
+
+    struct IndependentEndXpression
+      : or_<
+            when<NotHasAction, detail::true_xpression()>
+          , otherwise<detail::independent_end_xpression()>
+        >
+    {};
 
     template<typename Grammar>
     struct as_lookahead : proto::callable
@@ -43,11 +98,11 @@ namespace boost { namespace xpressive { namespace grammar_detail
         struct result<This(Expr, State, Visitor)>
         {
             typedef typename proto::result_of::arg<Expr>::type arg_type;
+            
             typedef
                 typename Grammar::template result<void(
                     arg_type
-                  //, detail::independent_end_xpression
-                  , detail::true_xpression
+                  , typename IndependentEndXpression::result<void(arg_type, proto::ignore_, proto::ignore_)>::type
                   , Visitor
                 )>::type
             xpr_type;
@@ -62,8 +117,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             return typename result_type::type(
                 Grammar()(
                     proto::arg(expr)
-                  //, detail::independent_end_xpression()
-                  , detail::true_xpression()
+                  , IndependentEndXpression()(proto::arg(expr), proto::ignore, proto::ignore)
                   , visitor
                 )
               , false
@@ -83,8 +137,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             typedef
                 typename Grammar::template result<void(
                     arg_type
-                  //, detail::independent_end_xpression
-                  , detail::true_xpression
+                  , typename IndependentEndXpression::result<void(arg_type, proto::ignore_, proto::ignore_)>::type
                   , Visitor
                 )>::type
             xpr_type;
@@ -98,8 +151,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             typedef typename result<void(Expr, State, Visitor)>::xpr_type xpr_type;
             xpr_type const &expr2 = Grammar()(
                 proto::arg(expr)
-              //, detail::independent_end_xpression()
-              , detail::true_xpression()
+              , IndependentEndXpression()(proto::arg(expr), proto::ignore, proto::ignore)
               , visitor
             );
             std::size_t width = expr2.get_width().value();
@@ -119,8 +171,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             typedef detail::keeper_matcher<
                 typename Grammar::template result<void(
                     arg_type
-                  //, detail::independent_end_xpression
-                  , detail::true_xpression
+                  , typename IndependentEndXpression::result<void(arg_type, proto::ignore_, proto::ignore_)>::type
                   , Visitor
                 )>::type
             > type;
@@ -133,8 +184,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             return typename result<void(Expr, State, Visitor)>::type(
                 Grammar()(
                     proto::arg(expr)
-                  //, detail::independent_end_xpression()
-                  , detail::true_xpression()
+                  , IndependentEndXpression()(proto::arg(expr), proto::ignore, proto::ignore)
                   , visitor
                 )
             );

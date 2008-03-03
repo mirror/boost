@@ -31,6 +31,7 @@
     #include <boost/xpressive/proto/traits.hpp>
     #include <boost/xpressive/proto/args.hpp>
     #include <boost/xpressive/proto/detail/as_lvalue.hpp>
+    #include <boost/xpressive/proto/detail/ignore_unused.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
@@ -337,6 +338,9 @@
             operator ()(Expr const &expr, State const &state, Visitor &visitor) const
             {
                 typedef typename result<void(Expr, State, Visitor)>::type result_type;
+                proto::detail::ignore_unused(expr);
+                proto::detail::ignore_unused(state);
+                proto::detail::ignore_unused(visitor);
                 return detail::construct<result_type>(
                     #define TMP(Z, M, DATA) detail::as_lvalue(when<_, BOOST_PP_CAT(A, M)>()(expr, state, visitor))
                     BOOST_PP_ENUM(N, TMP, DATA)

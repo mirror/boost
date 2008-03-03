@@ -74,34 +74,24 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    /////////////////////////////////////////////////////////////////////////////////
-    //// independent_end_matcher
-    ////
-    //struct independent_end_matcher
-    //  : quant_style_assertion
-    //{
-    //    explicit independent_end_matcher(bool pure)
-    //      : pure_(pure)
-    //    {}
-    //    
-    //    template<typename BidiIter, typename Next>
-    //    bool match(match_state<BidiIter> &state, Next const &) const
-    //    {
-    //        if(!this->pure_)
-    //        {
-    //            // Now execute any actions that have been queued
-    //            for(actionable const *actor = state.action_list_.next; 0 != actor; actor = actor->next)
-    //            {
-    //                actor->execute(state.action_args_);
-    //            }
-    //        }
-    //                    
-    //        return true;
-    //    }
-
-    //private:
-    //    bool pure_;
-    //};
+    ///////////////////////////////////////////////////////////////////////////////
+    // independent_end_matcher
+    //
+    struct independent_end_matcher
+      : quant_style_assertion
+    {
+        template<typename BidiIter, typename Next>
+        bool match(match_state<BidiIter> &state, Next const &) const
+        {
+            // Now execute any actions that have been queued
+            for(actionable const *actor = state.action_list_.next; 0 != actor; actor = actor->next)
+            {
+                actor->execute(state.action_args_);
+            }
+                        
+            return true;
+        }
+    };
 
 }}}
 
