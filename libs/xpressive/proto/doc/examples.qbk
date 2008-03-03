@@ -15,6 +15,7 @@
 [import ../example/tarray.cpp]
 [import ../example/vec3.cpp]
 [import ../example/vector.cpp]
+[import ../example/map_assign.cpp]
 [import ../example/futures.cpp]
 
 [/===============]
@@ -146,6 +147,19 @@ expressions using `std::vector<>` and `std::list<>`, non-Proto types. It is a
 port of the Mixed example from _PETE_.
 
 [Mixed]
+
+[endsect]
+
+[/=======================================================]
+[section:map_assign Map Assign: An Intermediate Transform]
+[/=======================================================]
+
+A demonstration of how to implement `map_list_of()` from the Boost.Assign
+library using Proto. `map_list_assign()` is used to conveniently initialize a
+`std::map<>`. By using Proto, we can avoid any dynamic allocation while
+building the intermediate representation.
+
+[MapAssign]
 
 [endsect]
 
