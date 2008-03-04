@@ -31,6 +31,11 @@
 #include <boost/accumulators/statistics/weighted_extended_p_square.hpp>
 #include <boost/accumulators/statistics/times2_iterator.hpp>
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace accumulators
 {
 
@@ -301,5 +306,9 @@ struct feature_of<tag::weighted_extended_p_square_quantile_quadratic>
 };
 
 }} // namespace boost::accumulators
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
 
 #endif

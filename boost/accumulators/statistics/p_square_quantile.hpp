@@ -185,8 +185,7 @@ namespace impl
             }
         }
 
-        template<typename Args>
-        result_type result(Args const &args) const
+        result_type result(dont_care) const
         {
             return this->heights[2];
         }

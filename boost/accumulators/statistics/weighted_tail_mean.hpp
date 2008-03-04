@@ -27,6 +27,11 @@
 #include <boost/accumulators/statistics/tail_mean.hpp>
 #include <boost/accumulators/statistics/parameters/quantile_probability.hpp>
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace accumulators
 {
 
@@ -154,5 +159,9 @@ namespace extract
 using extract::non_coherent_weighted_tail_mean;
 
 }} // namespace boost::accumulators
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
 
 #endif

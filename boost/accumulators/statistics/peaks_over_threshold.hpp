@@ -32,6 +32,11 @@
 #include <boost/accumulators/statistics/count.hpp>
 #include <boost/accumulators/statistics/tail.hpp>
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace accumulators
 {
 
@@ -386,5 +391,9 @@ struct feature_of<tag::weighted_peaks_over_threshold_prob<LeftRight> >
 {};
 
 }} // namespace boost::accumulators
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
 
 #endif

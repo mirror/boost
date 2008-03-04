@@ -133,8 +133,7 @@ namespace impl
         // for boost::result_of
         typedef float_type result_type;
 
-        template<typename Args>
-        with_p_square_cumulative_distribution_weighted_median_impl(Args const &args)
+        with_p_square_cumulative_distribution_weighted_median_impl(dont_care)
           : is_dirty(true)
         {
         }

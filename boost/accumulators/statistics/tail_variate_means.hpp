@@ -28,6 +28,11 @@
 #include <boost/accumulators/statistics/tail_mean.hpp>
 #include <boost/accumulators/statistics/parameters/quantile_probability.hpp>
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace accumulators
 {
 
@@ -242,5 +247,9 @@ struct feature_of<tag::relative_weighted_tail_variate_means<LeftRight, VariateTy
 };
 
 }} // namespace boost::accumulators
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
 
 #endif

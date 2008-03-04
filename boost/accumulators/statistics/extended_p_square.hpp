@@ -222,8 +222,7 @@ namespace impl
             }
         }
 
-        template<typename Args>
-        result_type result(Args const &args) const
+        result_type result(dont_care) const
         {
             // for i in [1,probabilities.size()], return heights[i * 2]
             detail::times2_iterator idx_begin = detail::make_times2_iterator(1);

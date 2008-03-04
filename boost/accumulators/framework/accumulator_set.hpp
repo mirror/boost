@@ -54,6 +54,7 @@ namespace detail
         }
 
     private:
+        accumulator_visitor &operator =(accumulator_visitor const &);
         Args const &args;
     };
 

@@ -28,6 +28,11 @@
 #include <boost/accumulators/statistics/tail_quantile.hpp>
 #include <boost/accumulators/statistics/parameters/quantile_probability.hpp>
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace accumulators
 {
 
@@ -230,5 +235,9 @@ struct feature_of<tag::non_coherent_weighted_tail_mean<LeftRight> >
 // non-continuous distributions) non_coherent_tail_mean is a different measure!
 
 }} // namespace boost::accumulators
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
 
 #endif

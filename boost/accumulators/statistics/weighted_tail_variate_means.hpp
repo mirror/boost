@@ -29,6 +29,11 @@
 #include <boost/accumulators/statistics/weighted_tail_mean.hpp>
 #include <boost/accumulators/statistics/parameters/quantile_probability.hpp>
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost
 {
     // for _BinaryOperatrion2 in std::inner_product below
@@ -226,5 +231,9 @@ struct as_feature<tag::weighted_tail_variate_means<LeftRight, VariateType, Varia
 };
 
 }} // namespace boost::accumulators
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
 
 #endif

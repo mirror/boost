@@ -49,6 +49,7 @@ namespace boost { namespace accumulators
             }
 
         private:
+            add_ref_visitor &operator =(add_ref_visitor const &);
             Args const &args_;
         };
 
@@ -86,6 +87,7 @@ namespace boost { namespace accumulators
             }
 
         private:
+            drop_visitor &operator =(drop_visitor const &);
             Args const &args_;
         };
 
@@ -123,7 +125,7 @@ namespace boost { namespace accumulators
         }
 
         template<typename Args>
-        void add_ref(Args const &args)
+        void add_ref(Args const &)
         {
             ++this->ref_count_;
         }
