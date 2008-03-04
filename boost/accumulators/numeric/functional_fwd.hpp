@@ -202,7 +202,7 @@ namespace boost { namespace numeric
     promote(From const &from);
 
     template<typename T>
-    struct empty;
+    struct default_;
 
     template<typename T>
     struct one;
@@ -211,10 +211,10 @@ namespace boost { namespace numeric
     struct zero;
 
     template<typename T>
-    struct one_or_empty;
+    struct one_or_default;
 
     template<typename T>
-    struct zero_or_empty;
+    struct zero_or_default;
 
 }} // namespace boost::numeric
 
