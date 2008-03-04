@@ -202,15 +202,6 @@ namespace foreach_detail_
 ///////////////////////////////////////////////////////////////////////////////
 // Define some utilities for assessing the properties of expressions
 //
-typedef char yes_type;
-typedef char (&no_type)[2];
-yes_type is_true(boost::mpl::true_ *);
-no_type is_true(boost::mpl::false_ *);
-
-// Extracts the desired property from the expression without evaluating it
-#define BOOST_FOREACH_PROTECT(expr)                                                             \
-    (static_cast<boost::mpl::bool_<1 == sizeof(boost::foreach_detail_::is_true(expr))> *>(0))
-
 template<typename Bool1, typename Bool2>
 inline boost::mpl::and_<Bool1, Bool2> *and_(Bool1 *, Bool2 *) { return 0; }
 
@@ -441,17 +432,20 @@ struct rvalue_probe
     typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
         boost::mpl::or_<boost::is_abstract<T>, boost::is_array<T> >, private_type_, T
     >::type value_type;
-    operator value_type();
-    operator T &() const;
+    operator value_type() { return *reinterpret_cast<value_type *>(this); } // never called
+    operator T &() const { return *reinterpret_cast<T *>(const_cast<rvalue_probe *>(this)); } // never called
 };
 
 template<typename T>
-rvalue_probe<T> const make_probe(T const &t);
+rvalue_probe<T> const make_probe(T const &t)
+{
+    return rvalue_probe<T>();
+}
 
 # define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
     boost::foreach_detail_::and_(                                                               \
         boost::foreach_detail_::not_(boost::foreach_detail_::is_array_(COL))                    \
-      , BOOST_FOREACH_PROTECT(boost::foreach_detail_::is_rvalue_(                               \
+      , (true ? 0 : boost::foreach_detail_::is_rvalue_(                                         \
             (true ? boost::foreach_detail_::make_probe(COL) : (COL)), 0)))
 
 #elif defined(BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION)
