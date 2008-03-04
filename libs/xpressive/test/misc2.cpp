@@ -5,11 +5,11 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <iostream>
+#include <string>
 #include <boost/xpressive/xpressive.hpp>
+#include <boost/xpressive/regex_actions.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace boost::unit_test;
 using namespace boost::xpressive;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,6 +26,23 @@ void test_complement()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+//
+void test_static_actions_in_dynamic_keep()
+{
+    std::string result;
+    std::string str("foo");
+
+    sregex_compiler compiler;
+    compiler["rx0"] = (s1="foo")[ ref(result) = s1 ];
+    sregex rx = compiler.compile( "(?>(?$rx0))");
+
+    bool ok = regex_match(str, rx);
+    BOOST_CHECK(ok);
+    BOOST_CHECK_EQUAL(result, "foo");
+}
+
+using namespace boost::unit_test;
+///////////////////////////////////////////////////////////////////////////////
 // init_unit_test_suite
 //
 test_suite* init_unit_test_suite( int argc, char* argv[] )
@@ -33,6 +50,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test_suite *test = BOOST_TEST_SUITE("miscelaneous tests");
 
     test->add(BOOST_TEST_CASE(&test_complement));
+    test->add(BOOST_TEST_CASE(&test_static_actions_in_dynamic_keep));
 
     return test;
 }
