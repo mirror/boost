@@ -422,7 +422,7 @@
             ///     is \c true and \c E matches \c U; or, if
             ///     <tt>when\<_,T\>::::result\<void(E,int,int)\>::::type::value</tt>
             ///     is \c false and \c E matches \c V. (Note: \c U defaults to \c _
-            ///     and \c V defaults to \c not\<_\>.)
+            ///     and \c V defaults to \c not_\<_\>.)
             /// \li An expression \c E matches <tt>not_\<T\></tt> if \c E does
             ///     not match \c T.
             /// \li An expression \c E matches <tt>switch_\<C\></tt> if
