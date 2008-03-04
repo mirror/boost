@@ -1,0 +1,20 @@
+# Boost Exception Library test Jamfile
+#
+# Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc.
+#
+# Distributed under the Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+import testing ;
+
+run cloning_test.cpp ;
+run unknown_exception_test.cpp ;
+run to_string_test.cpp ;
+run exception_test.cpp ;
+run boost_error_info_test.cpp ;
+run enable_error_info_test.cpp helper1.cpp ;
+run throw_exception_test.cpp helper2.cpp ;
+run errno_test.cpp ;
+run error_info_test.cpp ;
+run what_test.cpp ;
+compile-fail exception_fail.cpp ;

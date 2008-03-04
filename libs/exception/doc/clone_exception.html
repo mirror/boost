@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN'
+'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+	<title>clone_exception</title>
+	<link href='reno.css' type='text/css' rel='stylesheet'/>
+</head>
+<body>
+<div class="body-0">
+<div class="body-1">
+<div class="body-2">
+<div>
+<div id="boost_logo">
+<a href="http://www.boost.org"><img style="border:0" src="http://www.boost.org/boost.png" alt="Boost" width="277" height="86"/></a>
+</div>
+<h1>Boost Exception</h1>
+</div>
+<div class="RenoIncludeDIV"><h3>clone_exception()</h3>
+<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception/cloning.hpp</a></span>&gt;</tt></p>
+<pre>namespace
+boost
+    {
+<span class="RenoIncludeSPAN">    template &lt;class T&gt;
+    <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> <span class="RenoLink"><a href="clone_exception.html">clone_exception</a></span>( T const &amp; e );</span>
+    }</pre>
+</div><h4>Requirements:</h4>
+<p><tt>T</tt> must be polymorphic.</p>
+<h4>Returns:</h4>
+<div><ul><li> If <tt><span class="RenoLink"><a href="enable_exception_cloning.html">enable_exception_cloning</a></span>()</tt> was not used at the time the exception object was passed to <tt>throw</tt>, the returned <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> refers to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>. In this case, if the original exception object derives from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>, then the <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> sub-object of the <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt> object is initialized by the <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> copy constructor;</li>
+<li> Otherwise, if the attempt to clone the exception results in a <tt>std::bad_alloc</tt> exception, the returned <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> refers to an instance of <tt>std::bad_alloc</tt>;</li>
+<li> Otherwise, the returned <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> refers to a copy of <tt>e</tt>.</li>
+</ul></div>
+<h4>Note:</h4>
+<p>It is unspecified whether the return values of two successive calls to <tt><span class="RenoLink"><a href="clone_exception.html">clone_exception</a></span>()</tt> refer to the same exception object.</p>
+</div><h3>See also:</h3>
+<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="enable_exception_cloning.html">enable_exception_cloning<br/>
+</a><a href="unknown_exception.html">unknown_exception<br/>
+</a></div>
+<div id="footer">
+<p>&nbsp;</p>
+<hr/>
+<p>
+<a class="logo" href="http://jigsaw.w3.org/css-validator/validator?uri=http://revergestudios.com/boost-exception/reno.css"><img class="logo_pic" src="valid-css.png" alt="Valid CSS" height="31" width="88"/></a>
+<a class="logo" href="http://validator.w3.org/check?uri=referer"><img class="logo_pic" src="valid-xhtml.png" alt="Valid XHTML 1.0" height="31" width="88"/></a>
+<small>Copyright (c) 2006-2008 by Emil Dotchevski and Reverge Studios, Inc.<br/>
+Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt">Boost Software License, Version 1.0</a>.</small>
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
