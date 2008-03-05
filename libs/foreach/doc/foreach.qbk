@@ -162,6 +162,14 @@ Iterate over an expression that returns a sequence by value (i.e. an rvalue):
         // Note: get_vector_float() will be called exactly once
     }    
 
+Iterate in reverse:
+
+    std::list<int> list_int( /*...*/ );
+    BOOST_REVERSE_FOREACH( int i, list_int )
+    {
+        // do something with i
+    }
+
 Iterating over rvalues doesn't work on some older compilers. Check the 
 [link foreach.portability Portability] section to see whether your
 compiler supports this.
@@ -174,7 +182,8 @@ the [@http://www.boost.org/more/lib_guide.htm Boost Naming Convention]. That
 doesn't mean you're stuck with it, though. If you would like to use a different
 identifier (`foreach`, perhaps), you can simply do:
 
-    #define foreach BOOST_FOREACH
+    #define foreach         BOOST_FOREACH
+    #define reverse_foreach BOOST_REVERSE_FOREACH
 
 Only do this if you are sure that the identifier you choose will not cause
 name conflicts in your code.

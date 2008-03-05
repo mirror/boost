@@ -69,7 +69,10 @@
 #include <boost/noncopyable.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/begin.hpp>
+#include <boost/range/rend.hpp>
+#include <boost/range/rbegin.hpp>
 #include <boost/range/iterator.hpp>
+#include <boost/range/reverse_iterator.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_abstract.hpp>
@@ -356,6 +359,37 @@ struct foreach_iterator
         C
       , range_const_iterator<container>
       , range_mutable_iterator<container>
+    >::type type;
+};
+
+
+template<typename T, typename C = boost::mpl::false_>
+struct foreach_reverse_iterator
+{
+    // **** READ THIS IF YOUR COMPILE BREAKS HERE ****
+    //
+    // There is an ambiguity about how to iterate over arrays of char and wchar_t. 
+    // Should the last array element be treated as a null terminator to be skipped, or
+    // is it just like any other element in the array? To fix the problem, you must
+    // say which behavior you want.
+    //
+    // To treat the container as a null-terminated string, merely cast it to a
+    // char const *, as in BOOST_FOREACH( char ch, (char const *)"hello" ) ...
+    //
+    // To treat the container as an array, use boost::as_array() in <boost/range/as_array.hpp>,
+    // as in BOOST_FOREACH( char ch, boost::as_array("hello") ) ...
+    #if BOOST_MSVC > 1300
+    BOOST_MPL_ASSERT_MSG( (!is_char_array<T>::value), IS_THIS_AN_ARRAY_OR_A_NULL_TERMINATED_STRING, (T) );
+    #endif
+
+    // If the type is a pointer to a null terminated string (as opposed 
+    // to an array type), there is no ambiguity.
+    typedef BOOST_DEDUCED_TYPENAME wrap_cstr<T>::type container;
+
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<
+        C
+      , range_reverse_iterator<container const>
+      , range_reverse_iterator<container>
     >::type type;
 };
 
@@ -711,6 +745,114 @@ deref(auto_any_t cur, type2type<T, C> *)
     return *auto_any_cast<iter_t, boost::mpl::false_>(cur);
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// rbegin
+//
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rbegin(auto_any_t col, type2type<T, C> *, boost::mpl::true_ *) // rvalue
+{
+    return boost::rbegin(auto_any_cast<T, C>(col));
+}
+
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rbegin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
+{
+    typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iterator;
+    return iterator(boost::rbegin(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
+}
+
+#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
+template<typename T>
+auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, const_>::type>
+rbegin(auto_any_t col, type2type<T, const_> *, bool *)
+{
+    return boost::rbegin(*auto_any_cast<simple_variant<T>, boost::mpl::false_>(col).get());
+}
+#endif
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+template<typename T, typename C>
+inline auto_any<reverse_iterator<T *> >
+rbegin(auto_any_t col, type2type<T *, C> *, boost::mpl::true_ *) // null-terminated C-style strings
+{
+    T *p = auto_any_cast<T *, boost::mpl::false_>(col);
+    while(0 != *p)
+        ++p;
+    return reverse_iterator<T *>(p);
+}
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// rend
+//
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rend(auto_any_t col, type2type<T, C> *, boost::mpl::true_ *) // rvalue
+{
+    return boost::rend(auto_any_cast<T, C>(col));
+}
+
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rend(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
+{
+    typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iterator;
+    return iterator(boost::rend(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
+}
+
+#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
+template<typename T>
+auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, const_>::type>
+rend(auto_any_t col, type2type<T, const_> *, bool *)
+{
+    return boost::rend(*auto_any_cast<simple_variant<T>, boost::mpl::false_>(col).get());
+}
+#endif
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+template<typename T, typename C>
+inline auto_any<reverse_iterator<T *> >
+rend(auto_any_t col, type2type<T *, C> *, boost::mpl::true_ *) // null-terminated C-style strings
+{
+    return reverse_iterator<T *>(auto_any_cast<T *, boost::mpl::false_>(col));
+}
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// rdone
+//
+template<typename T, typename C>
+inline bool rdone(auto_any_t cur, auto_any_t end, type2type<T, C> *)
+{
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iter_t;
+    return auto_any_cast<iter_t, boost::mpl::false_>(cur) == auto_any_cast<iter_t, boost::mpl::false_>(end);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// rnext
+//
+template<typename T, typename C>
+inline void rnext(auto_any_t cur, type2type<T, C> *)
+{
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iter_t;
+    ++auto_any_cast<iter_t, boost::mpl::false_>(cur);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// rderef
+//
+template<typename T, typename C>
+inline BOOST_DEDUCED_TYPENAME foreach_reference<T, C>::type
+rderef(auto_any_t cur, type2type<T, C> *)
+{
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iter_t;
+    return *auto_any_cast<iter_t, boost::mpl::false_>(cur);
+}
+
 } // namespace foreach_detail_
 } // namespace boost
 
@@ -847,6 +989,34 @@ deref(auto_any_t cur, type2type<T, C> *)
         _foreach_cur                                                                            \
       , BOOST_FOREACH_TYPEOF(COL))
 
+#define BOOST_FOREACH_RBEGIN(COL)                                                               \
+    boost::foreach_detail_::rbegin(                                                             \
+        _foreach_col                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL)                                                               \
+      , BOOST_FOREACH_SHOULD_COPY(COL))
+
+#define BOOST_FOREACH_REND(COL)                                                                 \
+    boost::foreach_detail_::rend(                                                               \
+        _foreach_col                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL)                                                               \
+      , BOOST_FOREACH_SHOULD_COPY(COL))
+
+#define BOOST_FOREACH_RDONE(COL)                                                                \
+    boost::foreach_detail_::rdone(                                                              \
+        _foreach_cur                                                                            \
+      , _foreach_end                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL))
+
+#define BOOST_FOREACH_RNEXT(COL)                                                                \
+    boost::foreach_detail_::rnext(                                                              \
+        _foreach_cur                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL))
+
+#define BOOST_FOREACH_RDEREF(COL)                                                               \
+    boost::foreach_detail_::rderef(                                                             \
+        _foreach_cur                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL))
+
 ///////////////////////////////////////////////////////////////////////////////
 // BOOST_FOREACH
 //
@@ -883,5 +1053,23 @@ deref(auto_any_t cur, type2type<T, C> *)
               _foreach_continue ? BOOST_FOREACH_NEXT(COL) : (void)0)                            \
         if  (boost::foreach_detail_::set_false(_foreach_continue)) {} else                      \
         for (VAR = BOOST_FOREACH_DEREF(COL); !_foreach_continue; _foreach_continue = true)
+
+///////////////////////////////////////////////////////////////////////////////
+// BOOST_REVERSE_FOREACH
+//
+//   For iterating over collections in reverse order. In
+//   all other respects, BOOST_REVERSE_FOREACH is like
+//   BOOST_FOREACH.
+//
+#define BOOST_REVERSE_FOREACH(VAR, COL)                                                         \
+    BOOST_FOREACH_PREAMBLE()                                                                    \
+    if (boost::foreach_detail_::auto_any_t _foreach_col = BOOST_FOREACH_CONTAIN(COL)) {} else   \
+    if (boost::foreach_detail_::auto_any_t _foreach_cur = BOOST_FOREACH_RBEGIN(COL)) {} else    \
+    if (boost::foreach_detail_::auto_any_t _foreach_end = BOOST_FOREACH_REND(COL)) {} else      \
+    for (bool _foreach_continue = true;                                                         \
+              _foreach_continue && !BOOST_FOREACH_RDONE(COL);                                   \
+              _foreach_continue ? BOOST_FOREACH_RNEXT(COL) : (void)0)                           \
+        if  (boost::foreach_detail_::set_false(_foreach_continue)) {} else                      \
+        for (VAR = BOOST_FOREACH_RDEREF(COL); !_foreach_continue; _foreach_continue = true)
 
 #endif
