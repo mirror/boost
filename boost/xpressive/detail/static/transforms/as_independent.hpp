@@ -102,7 +102,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             typedef
                 typename Grammar::template result<void(
                     arg_type
-                  , typename IndependentEndXpression::result<void(arg_type, proto::ignore_, proto::ignore_)>::type
+                  , typename IndependentEndXpression::result<void(arg_type, int, int)>::type
                   , Visitor
                 )>::type
             xpr_type;
@@ -114,10 +114,11 @@ namespace boost { namespace xpressive { namespace grammar_detail
         operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             typedef result<void(Expr, State, Visitor)> result_type;
+            int i = 0;
             return typename result_type::type(
                 Grammar()(
                     proto::arg(expr)
-                  , IndependentEndXpression()(proto::arg(expr), proto::ignore, proto::ignore)
+                  , IndependentEndXpression()(proto::arg(expr), i, i)
                   , visitor
                 )
               , false
@@ -137,7 +138,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             typedef
                 typename Grammar::template result<void(
                     arg_type
-                  , typename IndependentEndXpression::result<void(arg_type, proto::ignore_, proto::ignore_)>::type
+                  , typename IndependentEndXpression::result<void(arg_type, int, int)>::type
                   , Visitor
                 )>::type
             xpr_type;
@@ -149,9 +150,10 @@ namespace boost { namespace xpressive { namespace grammar_detail
         operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
             typedef typename result<void(Expr, State, Visitor)>::xpr_type xpr_type;
+            int i = 0;
             xpr_type const &expr2 = Grammar()(
                 proto::arg(expr)
-              , IndependentEndXpression()(proto::arg(expr), proto::ignore, proto::ignore)
+              , IndependentEndXpression()(proto::arg(expr), i, i)
               , visitor
             );
             std::size_t width = expr2.get_width().value();
@@ -171,7 +173,7 @@ namespace boost { namespace xpressive { namespace grammar_detail
             typedef detail::keeper_matcher<
                 typename Grammar::template result<void(
                     arg_type
-                  , typename IndependentEndXpression::result<void(arg_type, proto::ignore_, proto::ignore_)>::type
+                  , typename IndependentEndXpression::result<void(arg_type, int, int)>::type
                   , Visitor
                 )>::type
             > type;
@@ -181,10 +183,11 @@ namespace boost { namespace xpressive { namespace grammar_detail
         typename result<void(Expr, State, Visitor)>::type
         operator ()(Expr const &expr, State const &, Visitor &visitor) const
         {
+            int i = 0;
             return typename result<void(Expr, State, Visitor)>::type(
                 Grammar()(
                     proto::arg(expr)
-                  , IndependentEndXpression()(proto::arg(expr), proto::ignore, proto::ignore)
+                  , IndependentEndXpression()(proto::arg(expr), i, i)
                   , visitor
                 )
             );
