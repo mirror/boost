@@ -411,7 +411,11 @@ inline type2type<T, const_> *encode_type(T const &, boost::mpl::true_ *) { retur
 ///////////////////////////////////////////////////////////////////////////////
 // set_false
 //
-inline bool set_false(bool &b) { return b = false; }
+inline bool set_false(bool &b)
+{
+    b = false;
+    return false;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // to_ptr
@@ -471,7 +475,7 @@ struct rvalue_probe
 };
 
 template<typename T>
-rvalue_probe<T> const make_probe(T const &t)
+rvalue_probe<T> const make_probe(T const &)
 {
     return rvalue_probe<T>();
 }
