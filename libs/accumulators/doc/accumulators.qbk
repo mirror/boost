@@ -247,34 +247,8 @@ Notice how we must assign the return value of `std::for_each` back to the _accum
 This works, but some accumulators are not cheap to copy. For
 example, the _tail_ and _tail_variate_ accumulators must store a `std::vector<>`, so copying
 these accumulators involves a dynamic allocation. We might be better off in this
-case to define a wrapper that stores a reference to an _accumulator_set_ and forwards the
-function call operator to it. See below:
-
-    template< typename Sample, typename Features, typename Weight >
-    struct accumulator_set_wrapper
-      : std::unary_function< Sample, void >
-    {
-        accumulator_set_wrapper( accumulator_set< Sample, Features, Weight > & acc )
-          : acc_(acc)
-        {
-        }
-        
-        void operator()( Sample const & sample )
-        {
-            this->acc_( sample );
-        }
-    private:
-        accumulator_set< Sample, Features, Weight > & acc_;
-    };
-
-    template< typename Sample, typename Features, typename Weight >
-    accumulator_set_wrapper< typename Sample, typename Features, typename Weight >
-    make_accumulator_set_wrapper( accumulator_set< Sample, Features, Weight > & acc )
-    {
-        return acc;
-    }
-
-You might use such an `accumulator_set_wrapper<>` as follows:
+case passing the accumulator by reference, with the help of `boost::bind()` and
+`boost::ref()`. See below:
 
     // The data for which we wish to calculate statistical properties:
     std::vector< double > data( /* stuff */ );
@@ -284,10 +258,13 @@ You might use such an `accumulator_set_wrapper<>` as follows:
         tag::tail<left>::cache_size = 4 );
 
     // Use std::for_each to accumulate the statistical properties:
-    std::for_each( data.begin(), data.end(), make_accumulator_set_wrapper( acc ) );
+    std::for_each( data.begin(), data.end(), bind<void>( ref(acc), _1 ) );
 
-Notice now that we don't care about the return value of `std::for_each` anymore because
-`std::for_each` is modifying `acc` directly.
+Notice now that we don't care about the return value of `std::for_each()` anymore because
+`std::for_each()` is modifying `acc` directly.
+
+[note To use `boost::bind()` and `boost::ref()`, you must `#include` [^<boost/bind.hpp>]
+and [^<boost/ref.hpp>]]
 
 [endsect]
 
@@ -598,54 +575,106 @@ to put your accumulators there.
 [h3 Droppable Accumulators]
 
 The term "droppable" refers to an accumulator that can be removed from the _accumulator_set_.
-You can request that an accumulator be made droppable by using the _droppable_ class template,
-as follows:
+You can request that an accumulator be made droppable by using the _droppable_ class template.
 
-    // calculate sum and mean, make mean droppable
+    // calculate sum and count, make sum droppable:
+    accumulator_set< double, features< tag::count, droppable<tag::sum> > > acc;
+
+    // add some data
+    acc(3.0);
+    acc(2.0);
+
+    // drop the sum (sum is 5 here)
+    acc.drop<tag::sum>();
+    
+    // add more data
+    acc(1.0);
+    
+    // This will display "3" and "5"
+    std::cout << count(acc) << ' ' << sum(acc);    
+
+Any accumulators that get added to an accumulator set in order to satisfy
+dependencies on droppable accumulators are themselves droppable. Consider
+the following accumulator:
+
+    // Sum is not droppable. Mean is droppable. Count, brought in to 
+    // satisfy mean's dependencies, is implicitly droppable, too.
+    accumulator_set< double, features< tag::sum, droppable<tag::mean> > > acc;
+
+`mean` depends on `sum` and `count`. Since `mean` is droppable, so too is `count`.
+However, we have explictitly requested that `sum` be not droppable, so it isn't. Had
+we left `tag::sum` out of the above declaration, the `sum` accumulator would have
+been implicitly droppable.
+
+A droppable accumulator is reference counted, and is only really dropped after all the
+accumulators that depend on it have been dropped. This can lead to some surprising
+behavior in some situations. 
+    
+    // calculate sum and mean, make mean droppable. 
     accumulator_set< double, features< tag::sum, droppable<tag::mean> > > acc;
     
     // add some data
     acc(1.0);
     acc(2.0);
-
-    // drop the mean (mean is 1.5 here)
+    
+    // drop the mean. mean's reference count
+    // drops to 0, so it's really dropped. So
+    // too, count's reference count drops to 0
+    // and is really dropped.
     acc.drop<tag::mean>();
     
-    // add more data
+    // add more data. Sum continues to accumulate!
     acc(3.0);
     
-    // This will display "6" and "1.5"
-    std::cout << sum(acc) << '\n' << mean(acc);    
+    // This will display "6 2 3"
+    std::cout << sum(acc) << ' '
+              << count(acc) << ' '    
+              << mean(acc);
 
-Dropping an accumulator essentially freezes it in its current state. It no longer gets
-updates. For many accumulators, not receiving updates is sufficient to freeze their
-states. But for the `mean_accumulator` defined above, that's not the case. Its
-result depends on the `sum` and `count` accumulators, which are not frozen. Instead,
-it needs to save its result at the point it is dropped. The Accumulators Framework
-provides some utilities to make this simple. Simply create the following
-specialization of _droppable_accumulator_:
+Note that at the point at which `mean` is dropped, `sum` is 3, `count` is 2, and
+therefore `mean` is 1.5. But since `sum` continues to accumulate even after `mean`
+has been dropped, the value of `mean` continues to change. If you want to remember
+the value of `mean` at the point it is dropped, you should save its value into
+a local variable.
 
-    namespace boost { namespace accumulators {
-    
-    // cache the result at the point the accumulator is dropped.
-    template<typename Sample>
-    struct droppable_accumulator<impl::mean_accumulator<Sample> >
-      : droppable_accumulator_base<
-            with_cached_result<impl::mean_accumulator<Sample> >
-        >
-    {
-        template<typename Args>
-        droppable_accumulator(Args const & args)
-          : droppable_accumulator::base(args)
-        {
-        }
-    };
-    
-    }}
+The following rules more precisely specify how droppable and non-droppable
+accumulators behave within an accumulator set.
 
-This specialization will get used whenever `mean_accumulator<>` is made droppable.
-The `with_cached_result<>` utility causes the result to be cached at the point
-the accumulator is dropped by implementing `on_drop(Args)` appropriately.
+* There are two types of accumulators: droppable and non-droppable.
+  The default is non-droppable.
+* For any feature `X`, both `X` and `droppable<X>` satisfy the `X` dependency.
+* If feature `X` depends on `Y` and `Z`, then `droppable<X>` depends on
+  `droppable<Y>` and `droppable<Z>`.
+* All accumulators have `add_ref()` and `drop()` member functions.
+* For non-droppable accumulators, `drop()` is a no-op, and `add_ref()`
+  invokes `add_ref()` on all accumulators corresponding to the features
+  upon which the current accumulator depends.
+* Droppable accumulators have a reference count and define `add_ref()`
+  and `drop()` to manipulate the reference count.
+* For droppable accumulators, `add_ref()` increments the accumulator's
+  reference count, and also `add_ref()`'s the accumulators corresponding
+  to the features upon which the current accumulator depends.
+* For droppable accumulators, `drop()` decrements the accumulator's
+  reference count, and also `drop()`'s the accumulators corresponding to
+  the features upon which the current accumulator depends.
+* The accumulator_set constructor walks the list of *user-specified*
+  features and `add_ref()`'s the accumulator that corresponds to each of
+  them. (Note: that means that an accumulator that is not user-specified
+  but in the set merely to satisfy a dependency will be dropped as soon
+  as all its dependencies have been dropped. Ones that have been user
+  specified are not dropped until their dependencies have been
+  dropped *and* the user has explicitly dropped the accumulator.)
+* Droppable accumulators check their reference count in their
+  accumulate member function. If the reference count is 0, the function
+  is a no-op.
+* Users are not allowed to drop a feature that is not user-specified and
+  marked as droppable.
+
+And as an optimization:
+
+* If the user specifies the non-droppable feature `X`, which depends on `Y`
+  and `Z`, then the accumulators for `Y` and `Z` can be safely made
+  non-droppable, as well as any accumulators on which they depend.
 
 [endsect]
 
