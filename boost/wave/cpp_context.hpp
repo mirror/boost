@@ -332,10 +332,10 @@ protected:
     template <typename IteratorT2>
     token_type expand_tokensequence(IteratorT2 &first_, IteratorT2 const &last_, 
         token_sequence_type &pending, token_sequence_type &expanded, 
-        bool expand_undefined = false)
+        bool& seen_newline, bool expand_undefined = false)
     {
         return macros.expand_tokensequence(first_, last_, pending, expanded, 
-            expand_undefined);
+            seen_newline, expand_undefined);
     }
 
     template <typename IteratorT2>

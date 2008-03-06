@@ -167,6 +167,8 @@ Boost V1.35.0
   (BOOST_HAS_THREADS).
 - Fixed a whitespace insertion glitch, where whitespace got inserted 
   unconditionally between two operators even if one of these was a comma.
+- Fixed #line directive after a macro invocation containing newlines to 
+  correctly reference the line number.
   
 Boost V1.34.0
 - Wave Version 1.2.4
