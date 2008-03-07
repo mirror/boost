@@ -860,6 +860,13 @@ rderef(auto_any_t cur, type2type<T, C> *)
 } // namespace foreach_detail_
 } // namespace boost
 
+// Suppress a bogus code analysis warning on vc8+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+# define BOOST_FOREACH_SUPPRESS_WARNINGS() __pragma(warning(suppress:6001))
+#else
+# define BOOST_FOREACH_SUPPRESS_WARNINGS()
+#endif
+
 // A sneaky way to get the type of the collection without evaluating the expression
 #define BOOST_FOREACH_TYPEOF(COL)                                                               \
     (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const_(COL)))
@@ -885,7 +892,7 @@ rderef(auto_any_t cur, type2type<T, C> *)
 
 // No variable is needed to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
-    /**/
+    BOOST_FOREACH_SUPPRESS_WARNINGS()
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
@@ -903,6 +910,7 @@ rderef(auto_any_t cur, type2type<T, C> *)
 
 // Declare a variable to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
+    BOOST_FOREACH_SUPPRESS_WARNINGS()                                                           \
     if (bool _foreach_is_rvalue = false) {} else
 
 // Evaluate the collection expression, and detect if it is an lvalue or and rvalue
@@ -928,7 +936,7 @@ rderef(auto_any_t cur, type2type<T, C> *)
 
 // No variable is needed to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
-    /**/
+    BOOST_FOREACH_SUPPRESS_WARNINGS()
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
