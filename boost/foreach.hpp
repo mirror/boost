@@ -956,7 +956,7 @@ rderef(auto_any_t cur, type2type<T, C> *)
 
 // No variable is needed to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
-    /**/
+    BOOST_FOREACH_SUPPRESS_WARNINGS()
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
