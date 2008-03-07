@@ -61,7 +61,7 @@ public:
             position_type const &pos, boost::wave::language_support language)
     :   functor_ptr(lex_input_interface_generator<TokenT>
             ::new_lexer(first, last, pos, language)) 
-#if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION > 900
+#if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION > 900 || defined(__PGI)
       , eof()
 #endif // 0 != __DECCXX_VER
     {}

@@ -18,7 +18,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/detail/workaround.hpp>
 #include <boost/spirit/iterator/multi_pass.hpp>
 
 #include <boost/wave/language_support.hpp>
@@ -56,7 +55,7 @@ public:
             boost::wave::language_support language)
     :   functor_ptr(slex_input_interface<TokenT>
             ::new_lexer(first, last, pos, language)) 
-#if 0 != __DECCXX_VER || BOOST_WORKAROUND(BOOST_INTEL_LINUX, == 1010)
+#if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION > 900 || defined(__PGI)
       , eof()
 #endif // 0 != __DECCXX_VER
     {}
