@@ -121,7 +121,7 @@ public:
     template <typename IteratorT, typename ContainerT>
     token_type const &expand_tokensequence(IteratorT &first, 
         IteratorT const &last, ContainerT &pending, ContainerT &expanded, 
-        bool expand_operator_defined);
+        bool& seen_newline, bool expand_operator_defined);
 
 //  Expand all macros inside the given token sequence
     template <typename IteratorT, typename ContainerT>
@@ -159,27 +159,29 @@ protected:
     token_type const &expand_tokensequence_worker(ContainerT &pending, 
         unput_queue_iterator<IteratorT, token_type, ContainerT> &first, 
         unput_queue_iterator<IteratorT, token_type, ContainerT> const &last, 
-        bool expand_operator_defined);
+        bool& seen_newline, bool expand_operator_defined);
 
 //  Collect all arguments supplied to a macro invocation
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     template <typename IteratorT, typename ContainerT, typename SizeT>
     typename std::vector<ContainerT>::size_type collect_arguments (
         token_type const curr_token, std::vector<ContainerT> &arguments, 
-        IteratorT &next, IteratorT const &end, SizeT const &parameter_count);
+        IteratorT &next, IteratorT const &end, SizeT const &parameter_count,
+        bool& seen_newline);
 #else
     template <typename IteratorT, typename ContainerT, typename SizeT>
     typename std::vector<ContainerT>::size_type collect_arguments (
         token_type const curr_token, std::vector<ContainerT> &arguments, 
         IteratorT &next, IteratorT &endparen, IteratorT const &end, 
-        SizeT const &parameter_count);
+        SizeT const &parameter_count, bool& seen_newline);
 #endif
 
 //  Expand a single macro name
     template <typename IteratorT, typename ContainerT>
     bool expand_macro(ContainerT &pending, token_type const &name, 
         typename defined_macros_type::iterator it, 
-        IteratorT &first, IteratorT const &last, bool expand_operator_defined,
+        IteratorT &first, IteratorT const &last, 
+        bool& seen_newline, bool expand_operator_defined,
         defined_macros_type *scope = 0, ContainerT *queue_symbol = 0);
 
 //  Expand a predefined macro (__LINE__, __FILE__ and __INCLUDE_LEVEL__)
@@ -216,7 +218,7 @@ protected:
 //  Resolve operator _Pragma or the #pragma directive
     template <typename IteratorT, typename ContainerT>
     bool resolve_operator_pragma(IteratorT &first, 
-        IteratorT const &last, ContainerT &expanded);
+        IteratorT const &last, ContainerT &expanded, bool& seen_newline);
 
 //  Handle the concatenation operator '##' 
     template <typename ContainerT>
@@ -530,7 +532,7 @@ template <typename IteratorT, typename ContainerT>
 inline typename ContextT::token_type const &
 macromap<ContextT>::expand_tokensequence(IteratorT &first, 
     IteratorT const &last, ContainerT &pending, ContainerT &expanded, 
-    bool expand_operator_defined)
+    bool& seen_newline, bool expand_operator_defined)
 {
     typedef impl::gen_unput_queue_iterator<IteratorT, token_type, ContainerT> 
         gen_type;
@@ -542,7 +544,7 @@ macromap<ContextT>::expand_tokensequence(IteratorT &first,
 on_exit::assign<IteratorT, iterator_type> on_exit(first, first_it);
 
     return expand_tokensequence_worker(pending, first_it, last_it, 
-        expand_operator_defined);
+        seen_newline, expand_operator_defined);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -564,7 +566,7 @@ macromap<ContextT>::expand_tokensequence_worker(
     ContainerT &pending, 
     unput_queue_iterator<IteratorT, token_type, ContainerT> &first, 
     unput_queue_iterator<IteratorT, token_type, ContainerT> const &last, 
-    bool expand_operator_defined)
+    bool& seen_newline, bool expand_operator_defined)
 {
 // if there exist pending tokens (tokens, which are already preprocessed), then
 // return the next one from there
@@ -607,7 +609,7 @@ macromap<ContextT>::expand_tokensequence_worker(
             // in C99 mode only: resolve the operator _Pragma
             token_type curr_token = *first;
             
-                if (!resolve_operator_pragma(first, last, pending) ||
+                if (!resolve_operator_pragma(first, last, pending, seen_newline) ||
                     pending.size() > 0) 
                 {
                 // unknown to us pragma or supplied replacement, return the 
@@ -629,7 +631,7 @@ macromap<ContextT>::expand_tokensequence_worker(
             // the current token contains an identifier, which is currently 
             // defined as a macro
                 if (expand_macro(pending, name_token, it, first, last, 
-                    expand_operator_defined)) 
+                      seen_newline, expand_operator_defined)) 
                 {
                 // the tokens returned by expand_macro should be rescanned
                 // beginning at the last token of the returned replacement list
@@ -657,7 +659,7 @@ macromap<ContextT>::expand_tokensequence_worker(
 
             // return the next preprocessed token
                 return expand_tokensequence_worker(pending, first, last, 
-                    expand_operator_defined);
+                    seen_newline, expand_operator_defined);
             }
 //            else if (expand_operator_defined) {
 //            // in preprocessing conditionals undefined identifiers and keywords 
@@ -702,14 +704,14 @@ template <typename IteratorT, typename ContainerT, typename SizeT>
 inline typename std::vector<ContainerT>::size_type 
 macromap<ContextT>::collect_arguments (token_type const curr_token, 
     std::vector<ContainerT> &arguments, IteratorT &next, 
-    IteratorT const &end, SizeT const &parameter_count)
+    IteratorT const &end, SizeT const &parameter_count, bool& seen_newline)
 #else
 template <typename ContextT>
 template <typename IteratorT, typename ContainerT, typename SizeT>
 inline typename std::vector<ContainerT>::size_type 
 macromap<ContextT>::collect_arguments (token_type const curr_token, 
     std::vector<ContainerT> &arguments, IteratorT &next, IteratorT &endparen,
-    IteratorT const &end, SizeT const &parameter_count)
+    IteratorT const &end, SizeT const &parameter_count, bool& seen_newline)
 #endif
 {
     using namespace boost::wave;
@@ -805,10 +807,12 @@ token_type startof_argument_list = *next;
             was_whitespace = false;
             break;
 
+        case T_NEWLINE:
+            seen_newline = true;
+            /* fall through */
         case T_SPACE:
         case T_SPACE2:
         case T_CCOMMENT:
-        case T_NEWLINE:
             if (!was_whitespace) 
                 argument->push_back(token_type(T_SPACE, " ", (*next).get_position()));
             was_whitespace = true;
@@ -863,10 +867,11 @@ iterator_type last_it = gen_type::generate(last);
 
 on_exit::assign<IteratorT, iterator_type> on_exit(first, first_it);
 ContainerT pending_queue;
+bool seen_newline;
     
     while (!pending_queue.empty() || first_it != last_it) {
         token_type t = expand_tokensequence_worker(pending_queue, first_it, 
-                    last_it, expand_operator_defined);
+                    last_it, seen_newline, expand_operator_defined);
 
         expanded.push_back(t);
     }
@@ -1146,8 +1151,8 @@ inline bool
 macromap<ContextT>::expand_macro(ContainerT &expanded, 
     token_type const &curr_token, typename defined_macros_type::iterator it, 
     IteratorT &first, IteratorT const &last, 
-    bool expand_operator_defined, defined_macros_type *scope, 
-    ContainerT *queue_symbol) 
+    bool& seen_newline, bool expand_operator_defined, 
+    defined_macros_type *scope, ContainerT *queue_symbol) 
 {
     using namespace boost::wave;
     
@@ -1202,7 +1207,7 @@ ContainerT replacement_list;
 
     if (T_LEFTPAREN == impl::next_token<IteratorT>::peek(first, last)) {
     // called as a function-like macro 
-        impl::skip_to_token(first, last, T_LEFTPAREN);
+        impl::skip_to_token(first, last, T_LEFTPAREN, seen_newline);
         
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
         IteratorT seqstart = first;
@@ -1217,11 +1222,11 @@ ContainerT replacement_list;
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
         typename std::vector<ContainerT>::size_type count_args = 
             collect_arguments (curr_token, arguments, first, last, 
-                macro_def.macroparameters.size());
+                macro_def.macroparameters.size(), seen_newline);
 #else
         typename std::vector<ContainerT>::size_type count_args = 
             collect_arguments (curr_token, arguments, first, seqend, last, 
-                macro_def.macroparameters.size());
+                macro_def.macroparameters.size(), seen_newline);
 #endif
 
         // verify the parameter count
@@ -1267,7 +1272,7 @@ ContainerT replacement_list;
             if (ctx.get_hooks().expanding_function_like_macro(
                     ctx, macro_def.macroname, macro_def.macroparameters, 
                     macro_def.macrodefinition, curr_token, arguments,
-                    seqend, first))
+                    seqstart, seqend))
             {
                 // do not expand this macro, just copy the whole sequence 
                 std::copy(seqstart, first, 
@@ -1491,12 +1496,12 @@ template <typename ContextT>
 template <typename IteratorT, typename ContainerT>
 inline bool
 macromap<ContextT>::resolve_operator_pragma(IteratorT &first, 
-    IteratorT const &last, ContainerT &pending) 
+    IteratorT const &last, ContainerT &pending, bool& seen_newline) 
 {
 // isolate the parameter of the operator _Pragma
     token_type pragma_token = *first;
     
-    if (!impl::skip_to_token(first, last, T_LEFTPAREN)) {
+    if (!impl::skip_to_token(first, last, T_LEFTPAREN, seen_newline)) {
     // illformed operator _Pragma
         BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, ill_formed_expression, 
             "operator _Pragma()", pragma_token.get_position());
@@ -1506,11 +1511,12 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
     std::vector<ContainerT> arguments;
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     typename std::vector<ContainerT>::size_type count_args = 
-        collect_arguments (pragma_token, arguments, first, last, 1);
+        collect_arguments (pragma_token, arguments, first, last, 1, seen_newline);
 #else
     IteratorT endparen = first;
     typename std::vector<ContainerT>::size_type count_args = 
-        collect_arguments (pragma_token, arguments, first, endparen, last, 1);
+        collect_arguments (pragma_token, arguments, first, endparen, last, 1, 
+            seen_newline);
 #endif
 
 // verify the parameter count

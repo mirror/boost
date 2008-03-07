@@ -24,6 +24,7 @@ exe wave
     /boost//thread
     /boost//date_time
     :
+    <threading>multi
 #   <debug-symbols>on
     :
     release

@@ -438,7 +438,8 @@ is_whitespace_only (ContainerT const &argument)
 ///////////////////////////////////////////////////////////////////////////////
 template <typename IteratorT>
 inline bool 
-skip_to_token(IteratorT &it, IteratorT const &end, token_id id)
+skip_to_token(IteratorT &it, IteratorT const &end, token_id id, 
+    bool& seen_newline)
 {
     using namespace boost::wave;
     if (token_id(*it) == id) 
@@ -447,8 +448,10 @@ skip_to_token(IteratorT &it, IteratorT const &end, token_id id)
         return false;
 
     while (IS_CATEGORY(*it, WhiteSpaceTokenType) || 
-            T_NEWLINE == token_id(*it)) 
+           T_NEWLINE == token_id(*it)) 
     {
+        if (T_NEWLINE == token_id(*it))
+            seen_newline = true;
         if (++it == end)
             return false;
     }

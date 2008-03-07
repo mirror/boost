@@ -284,7 +284,7 @@ protected:
     
 protected:
     result_type const &get_next_token();
-    result_type const &pp_token(bool consider_emitting_line_directive = false);
+    result_type const &pp_token();
 
     bool pp_directive();
     template <typename IteratorT>
@@ -340,6 +340,7 @@ private:
     boost::shared_ptr<base_iteration_context_type> iter_ctx;
     
     bool seen_newline;              // needed for recognizing begin of line
+    bool skipped_newline;           // a newline has been skipped since last one
     bool must_emit_line_directive;  // must emit a line directive
     result_type act_token;          // current token
     typename result_type::position_type &act_pos;   // current fileposition (references the macromap)
@@ -463,14 +464,13 @@ pp_iterator_functor<ContextT>::operator()()
     ctx.init_context();
     
     // loop over skip able whitespace until something significant is found
-    bool skipped_newline = false;
     bool was_seen_newline = seen_newline;
     token_id id = T_UNKNOWN;
         
     try {   // catch lexer exceptions
         do {
         // get_next_token assigns result to act_token member
-            if (!seen_newline && skipped_newline)
+            if (skipped_newline)
                 seen_newline = true;
             get_next_token();
 
@@ -553,7 +553,7 @@ pp_iterator_functor<ContextT>::operator()()
 
     default:    // make sure whitespace at line begin keeps seen_newline status
         if (IS_CATEGORY(id, WhiteSpaceTokenType))
-            seen_newline = skipped_newline;
+            seen_newline = was_seen_newline;
         break;
     }
 
@@ -657,7 +657,7 @@ bool returned_from_include_file = returned_from_include();
             else if (ctx.get_if_block_status()) {
             // preprocess this token, eat up more, if appropriate, return 
             // the next preprocessed token
-                return pp_token(was_seen_newline);
+                return pp_token();
             }
             else {
             // compilation condition is false: if the current token is a 
@@ -785,7 +785,7 @@ typename ContextT::position_type pos = act_token.get_position();
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT> 
 inline typename pp_iterator_functor<ContextT>::result_type const &
-pp_iterator_functor<ContextT>::pp_token(bool consider_emitting_line_directive)
+pp_iterator_functor<ContextT>::pp_token()
 {
     using namespace boost::wave;
 
@@ -809,7 +809,7 @@ token_id id = token_id(*iter_ctx->first);
         //  call the lexer, preprocess the required number of tokens, put them
         //  into the unput queue
             act_token = ctx.expand_tokensequence(iter_ctx->first, 
-                iter_ctx->last, pending_queue, unput_queue);
+                iter_ctx->last, pending_queue, unput_queue, skipped_newline);
         }
         else {
         // simply return the next token
