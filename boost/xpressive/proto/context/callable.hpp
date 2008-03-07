@@ -23,6 +23,7 @@
     #include <boost/preprocessor/repetition/repeat.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/arithmetic/inc.hpp>
     #include <boost/preprocessor/selection/max.hpp>
     #include <boost/mpl/if.hpp>
@@ -261,7 +262,7 @@
                     typename boost::result_of<
                         Context(
                             typename Expr::proto_tag
-                            BOOST_PP_ENUM_PARAMS(ARG_COUNT, arg)
+                            BOOST_PP_ENUM_TRAILING_PARAMS(ARG_COUNT, arg)
                         )
                     >::type
                 result_type;
