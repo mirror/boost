@@ -283,8 +283,8 @@ protected:
         bool include_next);
     
 protected:
-    result_type const &get_next_token(bool& skipped_newline);
-    result_type const &pp_token(bool& skipped_newline);
+    result_type const &get_next_token();
+    result_type const &pp_token();
 
     bool pp_directive();
     template <typename IteratorT>
@@ -472,7 +472,7 @@ pp_iterator_functor<ContextT>::operator()()
         // get_next_token assigns result to act_token member
             if (skipped_newline)
                 seen_newline = true;
-            get_next_token(skipped_newline);
+            get_next_token();
 
         // if comments shouldn't be preserved replace them with newlines
             id = token_id(act_token);
@@ -573,14 +573,14 @@ pp_iterator_functor<ContextT>::operator()()
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT> 
 inline typename pp_iterator_functor<ContextT>::result_type const &
-pp_iterator_functor<ContextT>::get_next_token(bool& skipped_newline)
+pp_iterator_functor<ContextT>::get_next_token()
 {
     using namespace boost::wave;
     
 // if there is something in the unput_queue, then return the next token from
 // there (all tokens in the queue are preprocessed already)
     if (!pending_queue.empty() || !unput_queue.empty()) 
-        return pp_token(skipped_newline);      // return next token
+        return pp_token();      // return next token
     
 // test for EOF, if there is a pending input context, pop it back and continue
 // parsing with it
@@ -657,7 +657,7 @@ bool returned_from_include_file = returned_from_include();
             else if (ctx.get_if_block_status()) {
             // preprocess this token, eat up more, if appropriate, return 
             // the next preprocessed token
-                return pp_token(skipped_newline);
+                return pp_token();
             }
             else {
             // compilation condition is false: if the current token is a 
@@ -785,7 +785,7 @@ typename ContextT::position_type pos = act_token.get_position();
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT> 
 inline typename pp_iterator_functor<ContextT>::result_type const &
-pp_iterator_functor<ContextT>::pp_token(bool& skipped_newline)
+pp_iterator_functor<ContextT>::pp_token()
 {
     using namespace boost::wave;
 
