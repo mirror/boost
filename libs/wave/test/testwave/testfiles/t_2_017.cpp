@@ -22,3 +22,15 @@
 //R #line 24 "t_2_017.cpp"
 //R file t_2_017.cpp
 file t_2_017.cpp
+
+//H 10: t_2_017.cpp(13): #if
+//H 11: t_2_017.cpp(13): #if !defined(FILE_002_017_CPP)    : 1
+//H 10: t_2_017.cpp(14): #define
+//H 08: t_2_017.cpp(14): FILE_002_017_CPP=
+//H 10: t_2_017.cpp(16): #include 
+//H 04: "$P(t_2_017.cpp)"
+//H 05: $B(t_2_017.cpp) ($B(t_2_017.cpp))
+//H 10: t_2_017.cpp(13): #if
+//H 11: t_2_017.cpp(13): #if !defined(FILE_002_017_CPP)    : 0
+//H 06: 
+//H 10: t_2_017.cpp(18): #endif

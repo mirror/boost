@@ -169,7 +169,10 @@ Boost V1.35.0
   unconditionally between two operators even if one of these was a comma.
 - Fixed #line directive after a macro invocation containing newlines to 
   correctly reference the line number.
-  
+- Positions of macros defined on the command line now get properly reported as 
+  "<command line>":1:...
+- Added testing of the preprocessor hooks.
+
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 

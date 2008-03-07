@@ -23,3 +23,16 @@
 //R #line 25 "t_2_006.cpp"
 //R #pragma STDC preprocessed pragma body
 #pragma STDC PRAGMA_BODY
+
+//H 10: t_2_006.cpp(12): #define
+//H 08: t_2_006.cpp(12): PRAGMA_BODY=preprocessed pragma body
+//H 10: t_2_006.cpp(16): #pragma
+//H 10: t_2_006.cpp(19): #pragma
+//H 01: t_2_006.cpp(12): PRAGMA_BODY
+//H 02: preprocessed pragma body
+//H 03: preprocessed pragma body
+//H 10: t_2_006.cpp(22): #pragma
+//H 10: t_2_006.cpp(25): #pragma
+//H 01: t_2_006.cpp(12): PRAGMA_BODY
+//H 02: preprocessed pragma body
+//H 03: preprocessed pragma body

@@ -17,3 +17,13 @@
 TEST1()
 //E t_1_010.cpp(19): error: ill formed preprocessing operator: concat ('##')
 TEST2()    // error
+
+//H 10: t_1_010.cpp(12): #define
+//H 08: t_1_010.cpp(12): TEST1()=A ## B
+//H 10: t_1_010.cpp(13): #define
+//H 08: t_1_010.cpp(13): TEST2()=A ##
+//H 00: t_1_010.cpp(17): TEST1(), [t_1_010.cpp(12): TEST1()=A ## B]
+//H 02: AB
+//H 03: AB
+//H 00: t_1_010.cpp(19): TEST2(), [t_1_010.cpp(13): TEST2()=A ##]
+//H 18: boost::wave::preprocess_exception

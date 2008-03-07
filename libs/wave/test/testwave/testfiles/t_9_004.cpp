@@ -19,3 +19,10 @@
 #define \u0061 weird // 0x61 == 'a'
 
 \u0061
+
+//H 10: t_9_004.cpp(12): #define
+//H 08: t_9_004.cpp(12): \u00ff=...
+//H 01: t_9_004.cpp(12): \u00ff
+//H 02: ...
+//H 03: ...
+//H 18: boost::wave::lexing_exception

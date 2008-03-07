@@ -17,3 +17,16 @@ ID( MACRO(*) )
 //R #line 19 "t_1_011.cpp"
 //R XMACRO(*)
 CAT( MACRO(*) )
+
+//H 10: t_1_011.cpp(12): #define
+//H 08: t_1_011.cpp(12): MACRO()=
+//H 10: t_1_011.cpp(13): #define
+//H 08: t_1_011.cpp(13): ID(x)=
+//H 10: t_1_011.cpp(14): #define
+//H 08: t_1_011.cpp(14): CAT(x)=X ## x
+//H 00: t_1_011.cpp(16): ID( MACRO(*) ), [t_1_011.cpp(13): ID(x)=]
+//H 02: 
+//H 03: _
+//H 00: t_1_011.cpp(19): CAT( MACRO(*) ), [t_1_011.cpp(14): CAT(x)=X ## x]
+//H 02: XMACRO(*)
+//H 03: XMACRO(*)

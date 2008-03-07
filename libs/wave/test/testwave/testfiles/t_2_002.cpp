@@ -14,3 +14,9 @@
 //R
 //E a_nonexisting_file.cpp(8): fatal error: encountered #error directive or #pragma wave stop(): This error should occur at line 8 of "a_nonexisting_file.cpp"
 #error This error should occur at line 8 of "a_nonexisting_file.cpp"
+
+//H 10: t_2_002.cpp(12): #line
+//H 17: 5 "a_nonexisting_file.cpp" (5, "a_nonexisting_file.cpp")
+//H 10: a_nonexisting_file.cpp(8): #error
+//H 16: This error should occur at line 8 of "a_nonexisting_file.cpp"
+//H 18: boost::wave::preprocess_exception

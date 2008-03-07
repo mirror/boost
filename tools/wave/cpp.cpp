@@ -568,7 +568,7 @@ namespace {
             
             if (ctx.get_macro_definition(*it, has_pars, predef, pos, pars, def))
             {
-                macronames_out << *it;
+                macronames_out << (predef ? "-P" : "-D") << *it;
                 if (has_pars) {
                 // list the parameter names for function style macros
                     macronames_out << "(";
@@ -592,10 +592,6 @@ namespace {
                     macronames_out << (*dit).get_value();
                 }
 
-            // predefined macros get a 'P' appended
-                if (predef) 
-                    macronames_out << " (P)";
-                    
                 macronames_out << std::endl;
             }
         }

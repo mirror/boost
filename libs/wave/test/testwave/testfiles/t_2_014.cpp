@@ -81,3 +81,31 @@ true
 #else
 false
 #endif
+
+//H 10: t_2_014.cpp(15): #if
+//H 11: t_2_014.cpp(15): #if compl 1: 1
+//H 10: t_2_014.cpp(17): #else
+//H 10: t_2_014.cpp(23): #if
+//H 11: t_2_014.cpp(23): #if not 1: 0
+//H 10: t_2_014.cpp(27): #endif
+//H 10: t_2_014.cpp(31): #if
+//H 11: t_2_014.cpp(31): #if 1 or 2: 1
+//H 10: t_2_014.cpp(33): #else
+//H 10: t_2_014.cpp(39): #if
+//H 11: t_2_014.cpp(39): #if 1 and 2: 1
+//H 10: t_2_014.cpp(41): #else
+//H 10: t_2_014.cpp(47): #if
+//H 11: t_2_014.cpp(47): #if not 1: 0
+//H 10: t_2_014.cpp(51): #endif
+//H 10: t_2_014.cpp(55): #if
+//H 11: t_2_014.cpp(55): #if 1 xor 2: 1
+//H 10: t_2_014.cpp(57): #else
+//H 10: t_2_014.cpp(63): #if
+//H 11: t_2_014.cpp(63): #if 1 bitand 2: 0
+//H 10: t_2_014.cpp(67): #endif
+//H 10: t_2_014.cpp(71): #if
+//H 11: t_2_014.cpp(71): #if 1 bitor 2: 1
+//H 10: t_2_014.cpp(73): #else
+//H 10: t_2_014.cpp(79): #if
+//H 11: t_2_014.cpp(79): #if 1 not_eq 2: 1
+//H 10: t_2_014.cpp(81): #else

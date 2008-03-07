@@ -30,3 +30,59 @@ CONCAT(CONCAT_, INDIRECT())(1, 2)
 //R #line 32 "t_1_004.cpp"
 //R 1 CONCAT(2, 3)
 CONCAT(1, CONCAT(2, 3))
+
+//H 10: t_1_004.cpp(15): #define
+//H 08: t_1_004.cpp(15): CONCAT(a, b)=a ## b
+//H 10: t_1_004.cpp(16): #define
+//H 08: t_1_004.cpp(16): CONCAT_INDIRECT()=CONCAT
+//H 00: t_1_004.cpp(20): CONCAT(CON, CAT), [t_1_004.cpp(15): CONCAT(a, b)=a ## b]
+//H 02: CONCAT
+//H 03: CONCAT
+//H 00: t_1_004.cpp(23): CONCAT(CON, CAT(1, 2)), [t_1_004.cpp(15): CONCAT(a, b)=a ## b]
+//H 02: CONCAT(1, 2)
+//H 03: CONCAT(1, 2)
+//H 00: t_1_004.cpp(26): CONCAT(CONCAT_, INDIRECT), [t_1_004.cpp(15): CONCAT(a, b)=a ## b]
+//H 02: CONCAT_INDIRECT
+//H 03: CONCAT_INDIRECT
+//H 00: t_1_004.cpp(26): CONCAT_INDIRECT(), [t_1_004.cpp(16): CONCAT_INDIRECT()=CONCAT]
+//H 02: CONCAT
+//H 03: CONCAT
+//H 00: t_1_004.cpp(16): CONCAT(1, 2), [t_1_004.cpp(15): CONCAT(a, b)=a ## b]
+//H 02: 12
+//H 03: 12
+//H 00: t_1_004.cpp(29): CONCAT(CONCAT_, INDIRECT()), [t_1_004.cpp(15): CONCAT(a, b)=a ## b]
+//H 02: CONCAT_INDIRECT()
+//H 00: t_1_004.cpp(29): CONCAT_INDIRECT(), [t_1_004.cpp(16): CONCAT_INDIRECT()=CONCAT]
+//H 02: CONCAT
+//H 03: CONCAT
+//H 03: CONCAT
+//H 00: t_1_004.cpp(32): CONCAT(1, CONCAT(2, 3)), [t_1_004.cpp(15): CONCAT(a, b)=a ## b]
+//H 02: 1CONCAT(2, 3)
+//H 03: 1CONCAT(2, 3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

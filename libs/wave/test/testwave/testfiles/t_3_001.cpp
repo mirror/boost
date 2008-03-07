@@ -12,3 +12,6 @@
 //R
 //E t_3_001.cpp(14): warning: #undef may not be used on this predefined name: __cplusplus
 #undef __cplusplus     // should emit a warning
+
+//H 10: t_3_001.cpp(14): #undef
+//H 18: boost::wave::preprocess_exception

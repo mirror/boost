@@ -14,3 +14,9 @@
 //R
 //E t_2_003.cpp(8): fatal error: encountered #error directive or #pragma wave stop(): This error should occur at line 8 of "t_2_003.cpp"
 #error This error should occur at line 8 of "t_2_003.cpp"
+
+//H 10: t_2_003.cpp(12): #line
+//H 17: 5  (5, "")
+//H 10: t_2_003.cpp(8): #error
+//H 16: This error should occur at line 8 of "t_2_003.cpp"
+//H 18: boost::wave::preprocess_exception

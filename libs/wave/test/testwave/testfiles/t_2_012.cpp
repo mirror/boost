@@ -12,3 +12,6 @@
 //E t_2_012.cpp(13): error: the #if for this directive is missing: #else
 #else
 #endif
+
+//H 10: t_2_012.cpp(13): #else
+//H 18: boost::wave::preprocess_exception

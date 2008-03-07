@@ -37,6 +37,8 @@ namespace fs = boost::filesystem;
 //  level 3:    prints the expected and real result for failed tests
 //  level 4:    prints the outcome of every test
 //  level 5:    prints the real result even for succeeded tests
+//  level 6:    prints the real hooks information recorded, even for succeeded 
+//              tests
 //
 //  level 9:    prints information about almost everything
 //

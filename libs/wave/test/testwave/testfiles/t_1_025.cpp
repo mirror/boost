@@ -18,3 +18,18 @@
 //R #line 19 "t_1_025.cpp"
 SCAN(BUG) 1 2 3 4 5   //R 1 2 3 4 5 
 
+//H 10: t_1_025.cpp(13): #define
+//H 08: t_1_025.cpp(13): SCAN(x)=x
+//H 10: t_1_025.cpp(15): #define
+//H 08: t_1_025.cpp(15): BUG=BUG_2
+//H 10: t_1_025.cpp(16): #define
+//H 08: t_1_025.cpp(16): BUG_2=
+//H 00: t_1_025.cpp(19): SCAN(BUG), [t_1_025.cpp(13): SCAN(x)=x]
+//H 01: t_1_025.cpp(15): BUG
+//H 02: BUG_2
+//H 01: t_1_025.cpp(16): BUG_2
+//H 02: 
+//H 03: _
+//H 03: _
+//H 02: 
+//H 03: _

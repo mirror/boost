@@ -35,3 +35,18 @@ STRINGIZE( MINUS()MINUS() )   //R "--"
 //R 
 DOT()DOT()DOT()               //R .. . 
 STRINGIZE( DOT()DOT()DOT() )  //R "..." 
+
+// the following are regressions reported by Stefan Seefeld
+#define COMMA() ,
+#define AND() &
+#define CHAR() char
+#define STAR() *
+
+// Make sure no whitespace gets inserted in between the operator symbols
+//R #line 47 "t_9_003.cpp"
+void foo(char&, char)               //R void foo(char&, char) 
+void foo(char *)                    //R void foo(char *) 
+void foo(char *&)                   //R void foo(char *&) 
+void foo(CHAR()AND()COMMA() CHAR()) //R void foo(char&, char) 
+void foo(CHAR() STAR())             //R void foo(char *) 
+void foo(CHAR() STAR()AND())        //R void foo(char *&) 

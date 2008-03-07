@@ -17,3 +17,12 @@
 #if !C
 true
 #endif
+
+//H 10: t_4_002.cpp(13): #define
+//H 08: t_4_002.cpp(13): C=C
+//H 10: t_4_002.cpp(17): #if
+//H 01: t_4_002.cpp(13): C
+//H 02: C
+//H 03: C
+//H 11: t_4_002.cpp(17): #if !C: 1
+//H 10: t_4_002.cpp(19): #endif
