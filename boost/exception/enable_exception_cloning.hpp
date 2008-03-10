@@ -10,7 +10,7 @@
 #include <boost/exception/detail/cloning_base.hpp>
 #include <boost/detail/atomic_count.hpp>
 #include <boost/assert.hpp>
-#include <stdexcept>
+#include <new>
 
 namespace
 boost
