@@ -34,7 +34,22 @@ void test_static_actions_in_dynamic_keep()
 
     sregex_compiler compiler;
     compiler["rx0"] = (s1="foo")[ ref(result) = s1 ];
-    sregex rx = compiler.compile( "(?>(?$rx0))");
+    sregex rx = compiler.compile("(?>(?$rx0))");
+
+    bool ok = regex_match(str, rx);
+    BOOST_CHECK(ok);
+    BOOST_CHECK_EQUAL(result, "foo");
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+void test_static_actions_in_static_keep()
+{
+    std::string result;
+    std::string str("foo");
+
+    sregex rx0 = (s1="foo")[ ref(result) = s1 ];
+    sregex rx = keep(rx0);
 
     bool ok = regex_match(str, rx);
     BOOST_CHECK(ok);
@@ -51,6 +66,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 
     test->add(BOOST_TEST_CASE(&test_complement));
     test->add(BOOST_TEST_CASE(&test_static_actions_in_dynamic_keep));
+    test->add(BOOST_TEST_CASE(&test_static_actions_in_static_keep));
 
     return test;
 }
