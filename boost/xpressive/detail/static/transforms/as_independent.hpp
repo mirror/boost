@@ -48,7 +48,10 @@ namespace boost { namespace xpressive { namespace grammar_detail
 
         template<int Dummy>
         struct case_<proto::tag::terminal, Dummy>
-          : proto::_
+          : not_< or_<
+                proto::terminal<detail::tracking_ptr<detail::regex_impl<_> > >,
+                proto::terminal<reference_wrapper<_> >
+            > >
         {};
 
         template<int Dummy>
