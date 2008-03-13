@@ -17,6 +17,7 @@
 [import ../example/vector.cpp]
 [import ../example/map_assign.cpp]
 [import ../example/futures.cpp]
+[import ../example/lambda.cpp]
 
 [/===============]
 [section Examples]
@@ -173,6 +174,18 @@ for all or some asynchronous operations to complete and
 returns their results in a tuple of the appropriate type.
 
 [FutureGroup]
+
+[endsect]
+
+[/========================================================]
+[section:lambda Lambda: A Simple Lambda Library with Proto]
+[/========================================================]
+
+This is an advanced example that shows how to implement a simple
+lambda DSEL with Proto, like the Boost.Lambda_library. It uses
+contexts, transforms and expression extension.
+
+[Lambda]
 
 [endsect]
 

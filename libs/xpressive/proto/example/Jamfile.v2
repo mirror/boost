@@ -63,3 +63,8 @@ exe map_assign
         map_assign.cpp
     ;
 
+exe lambda
+    :
+        lambda.cpp
+    ;
+
