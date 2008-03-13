@@ -222,6 +222,7 @@
             {
                 static callable_context_wrapper<Context, ARG_COUNT> &sctx_;
                 static Expr &sexpr_;
+                static typename Expr::proto_tag &stag_;
 
                 BOOST_STATIC_CONSTANT(bool, value =
                 (
@@ -229,7 +230,7 @@
                     sizeof(
                         detail::check_is_expr_handled(
                             (sctx_(
-                                typename Expr::proto_tag()
+                                stag_
                                 BOOST_PP_ENUM_TRAILING(ARG_COUNT, BOOST_PROTO_ARG_N, sexpr_)
                             ), 0)
                         )
