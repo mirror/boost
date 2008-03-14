@@ -1,4 +1,4 @@
-// (C) 2003, Fernando Luis Cacciola Carballal.
+// (C) Copyright 2003, Fernando Luis Cacciola Carballal.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
