@@ -41,7 +41,7 @@ The following traits classes are dependent on one or more of the above:
 * __is_stateless
 
 The hooks for compiler-intrinsic support are defined in 
-[@../../boost/type_traits/intrinsics.hpp boost/type_traits/intrinsics.hpp], adding support for new compilers is simply
+[@../../../../boost/type_traits/intrinsics.hpp boost/type_traits/intrinsics.hpp], adding support for new compilers is simply
 a matter of defining one of more of the following macros:
 
 [table Macros for Compiler Intrinsics

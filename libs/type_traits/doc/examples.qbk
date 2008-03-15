@@ -11,7 +11,7 @@
 
 Demonstrates a version of `std::copy` that uses `__has_trivial_assign` to
 determine whether to use `memcpy` to optimise the copy operation 
-(see [@../../libs/type_traits/examples/copy_example.cpp copy_example.cpp]):
+(see [@../../examples/copy_example.cpp copy_example.cpp]):
 
    //
    // opt::copy
@@ -62,7 +62,7 @@ determine whether to use `memcpy` to optimise the copy operation
 
 Demonstrates a version of `std::fill` that uses `__has_trivial_assign` to
 determine whether to use `memset` to optimise the fill operation 
-(see [@../../libs/type_traits/examples/fill_example.cpp fill_example.cpp]):
+(see [@../../examples/fill_example.cpp fill_example.cpp]):
 
    //
    // fill
@@ -107,7 +107,7 @@ determine whether to use `memset` to optimise the fill operation
 
 Demonstrates a simple algorithm that uses `__has_trivial_destruct` to
 determine whether to destructors need to be called 
-(see [@../../libs/type_traits/examples/trivial_destructor_example.cpp trivial_destructor_example.cpp]):
+(see [@../../examples/trivial_destructor_example.cpp trivial_destructor_example.cpp]):
 
    //
    // algorithm destroy_array:
@@ -153,7 +153,7 @@ same as `std::iter_swap` does), however if they are proxying iterators
 then takes special care over the swap to ensure that the algorithm
 works correctly for both proxying iterators, and even iterators of
 different types 
-(see [@../../libs/type_traits/examples/iter_swap_example.cpp iter_swap_example.cpp]):
+(see [@../../examples/iter_swap_example.cpp iter_swap_example.cpp]):
 
    //
    // iter_swap:
@@ -203,7 +203,8 @@ different types
 [section:to_double Convert Numeric Types and Enums to double]
 
 Demonstrates a conversion of
-[@../../libs/numeric/conversion/doc/definitions.html#numtypes Numeric Types]
+[@../../../../libs/numeric/conversion/doc/html/boost_numericconversion/definitions.html#boost_numericconversion.definitions.numeric_types
+Numeric Types]
 and enum types to double:
 
     template<class T>
