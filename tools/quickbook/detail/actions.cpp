@@ -1096,6 +1096,21 @@ namespace quickbook
             << "      </author>\n";
     }
 
+    void xml_copyright::operator()(std::pair<std::vector<std::string>, std::string> const& copyright) const
+    {
+        out << "\n" << "    <copyright>\n";
+
+        for_each(
+            copyright.first.begin()
+          , copyright.first.end()
+          , xml_year(out));
+
+        out << "      <holder>" << copyright.second << "</holder>\n"
+            << "    </copyright>\n"
+            << "\n"
+        ;
+    }
+
     void xml_year::operator()(std::string const &year) const
     {
         out << "      <year>" << year << "</year>\n";
@@ -1170,19 +1185,12 @@ namespace quickbook
             out << "    </authorgroup>\n";
         }
 
-        if (!actions.doc_copyright_holder.empty())
+        if (!actions.doc_copyrights.empty())
         {
-            out << "\n" << "    <copyright>\n";
-
             for_each(
-                actions.doc_copyright_years.begin()
-              , actions.doc_copyright_years.end()
-              , xml_year(out));
-
-            out << "      <holder>" << actions.doc_copyright_holder << "</holder>\n"
-                << "    </copyright>\n"
-                << "\n"
-            ;
+                actions.doc_copyrights.begin()
+              , actions.doc_copyrights.end()
+              , xml_copyright(out));
         }
 
         if (qbk_version_n < 103)

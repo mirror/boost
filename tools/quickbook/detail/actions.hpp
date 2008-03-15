@@ -743,6 +743,18 @@ namespace quickbook
         collector& out;
     };
 
+    struct xml_copyright
+    {
+        // Handles xml copyright
+
+        xml_copyright(collector& out)
+            : out(out) {}
+
+        void operator()(std::pair<std::vector<std::string>, std::string> const &copyright) const;
+
+        collector& out;
+    };
+
     void pre(collector& out, quickbook::actions& actions, bool ignore_docinfo = false);
     void post(collector& out, quickbook::actions& actions, bool ignore_docinfo = false);
 

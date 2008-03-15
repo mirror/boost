@@ -66,7 +66,7 @@ namespace quickbook
                               doc_version
                             | doc_id
                             | doc_dirname
-                            | doc_copyright
+                            | doc_copyright         [push_back_a(actions.doc_copyrights, copyright)]
                             | doc_purpose           [actions.extract_doc_purpose]
                             | doc_category
                             | doc_authors
@@ -103,12 +103,12 @@ namespace quickbook
                     ;
 
                 doc_copyright =
-                        "copyright" >> hard_space
-                    >> +( repeat_p(4)[digit_p]      [push_back_a(actions.doc_copyright_years)]
+                        "copyright" >> hard_space   [clear_a(copyright.first)]
+                    >> +( repeat_p(4)[digit_p]      [push_back_a(copyright.first)]
                           >> space
                         )
                     >> space
-                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_copyright_holder)]
+                    >> (*(anychar_p - ']'))         [assign_a(copyright.second)]
                     ;
 
                 doc_purpose =
@@ -178,6 +178,7 @@ namespace quickbook
 
             bool unused;
             std::pair<std::string, std::string> name;
+            std::pair<std::vector<std::string>, std::string> copyright;
             rule<Scanner>   doc_info, doc_title, doc_version, doc_id, doc_dirname,
                             doc_copyright, doc_purpose,doc_category, doc_authors,
                             doc_author, comment, space, hard_space, doc_license,
