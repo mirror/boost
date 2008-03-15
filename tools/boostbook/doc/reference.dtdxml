@@ -2513,6 +2513,8 @@
 <content-model-expanded>
   <sequence-group>
     <element-name name="default" occurrence="?"/>
+    <element-name name="purpose" occurrence="?"/>
+    <element-name name="description" occurrence="?"/>
   </sequence-group>
 </content-model-expanded>
 <content-model>

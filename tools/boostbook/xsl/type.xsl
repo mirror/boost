@@ -33,6 +33,13 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="class-specialization|struct-specialization|union-specialization" mode="generate.id">
+    <xsl:call-template name="fully-qualified-name">
+      <xsl:with-param name="node" select="."/>
+      <xsl:with-param name="separator" select="'.'"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="typedef" mode="generate.id">
     <xsl:call-template name="fully-qualified-name">
       <xsl:with-param name="node" select="."/>
@@ -54,6 +61,15 @@
     </xsl:call-template>
     <xsl:text>.</xsl:text>
     <xsl:value-of select="@name"/>
+  </xsl:template>
+
+  <xsl:template match="function | overloaded-function" mode="generate.id">
+    <xsl:call-template name="fully-qualified-name">
+      <xsl:with-param name="node" select="."/>
+      <xsl:with-param name="separator" select="'.'"/>
+    </xsl:call-template>
+    <xsl:text>_</xsl:text>
+    <xsl:value-of select="generate-id(.)"/>
   </xsl:template>
 
   <!-- Display the full name of the current node, e.g., "Class
@@ -317,8 +333,16 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:value-of select="substring($type-padding, 1,
                                             $max-type-length - $type-length)"/>
             <xsl:text> </xsl:text>
-            <xsl:value-of select="substring(concat(@name, ';', $name-padding),
-                                            1, $max-name-length)"/>
+            <xsl:variable name="truncated-typedef-name" select="substring(@name,
+              1, $max-name-length)"/>
+            <xsl:call-template name="link-or-anchor">
+              <xsl:with-param name="to" select="$link-to"/>
+              <xsl:with-param name="text" select="$truncated-typedef-name"/>
+              <xsl:with-param name="link-type" select="$link-type"/>
+              <xsl:with-param name="highlight" select="true()"/>
+            </xsl:call-template>
+            <xsl:value-of select="substring(concat(';', $name-padding),
+              1, $max-name-length - string-length($truncated-typedef-name))"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text> </xsl:text>
@@ -349,6 +373,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:param name="indentation"/>
     <xsl:param name="max-type-length" select="0"/>
     <xsl:param name="max-name-length" select="0"/>
+    <xsl:param name="allow-anchor" select="true()"/>
 
     <!-- True if we should compact this typedef -->
     <xsl:variable name="compact"
@@ -364,7 +389,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:call-template name="type.typedef.display.aligned">
           <xsl:with-param name="compact" select="$compact"/>
           <xsl:with-param name="indentation" select="$indentation"/>
-          <xsl:with-param name="is-reference" select="true()"/>
+          <xsl:with-param name="is-reference" select="$allow-anchor"/>
           <xsl:with-param name="max-type-length" select="$max-type-length"/>
           <xsl:with-param name="max-name-length" select="$max-name-length"/>
         </xsl:call-template>
@@ -445,11 +470,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:with-param name="text" select="'static const '"/>
     </xsl:call-template>
 
-    <xsl:call-template name="source-highlight">
-      <xsl:with-param name="text">
-        <xsl:apply-templates select="type/*|type/text()"/>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:apply-templates select="type" mode="highlight"/>
 
     <xsl:if test="not(@name = '')">
       <xsl:text> </xsl:text>
@@ -518,6 +539,10 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:apply-templates select="type/*|type/text()" mode="annotation"/>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>Warning: missing 'type' element inside 'inherit'</xsl:text>
+          </xsl:message>
+          <xsl:call-template name="print.warning.context"/>
           <xsl:apply-templates mode="annotation"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -540,8 +565,8 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:call-template name="highlight-comment">
           <xsl:with-param name="text">
             <xsl:text>// </xsl:text>
-            <xsl:apply-templates select="purpose/*|purpose/text()"
-              mode="annotation"/>
+            <xsl:apply-templates select="purpose"
+              mode="comment"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
@@ -712,6 +737,8 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
   <xsl:template name="class-members-synopsis">
     <xsl:param name="indentation" select="0"/>
+    <!-- Used to suppress anchors in nested synopsis, so we don't get multiple anchors -->
+    <xsl:param name="allow-synopsis-anchors" select="false()"/>
 
     <!-- Typedefs -->
     <xsl:if test="typedef">
@@ -754,6 +781,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           select="$max-type-length"/>
         <xsl:with-param name="max-name-length"
           select="$max-name-length"/>
+        <xsl:with-param name="allow-anchor" select="$allow-synopsis-anchors"/>
       </xsl:apply-templates>
     </xsl:if>
 
@@ -808,6 +836,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
   <xsl:template name="print-access-specification">
     <xsl:param name="indentation" select="0"/>
     <xsl:param name="specification" select="'public'"/>
+
     <xsl:text>&#10;</xsl:text>
     <xsl:call-template name="indent">
       <xsl:with-param name="indentation" select="$indentation"/>
@@ -820,17 +849,21 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
   <xsl:template match="access" mode="synopsis">
     <xsl:param name="indentation" select="0"/>
+    <xsl:param name="allow-synopsis-anchors" select="false()"/>
+
     <xsl:call-template name="print-access-specification">
       <xsl:with-param name="indentation" select="$indentation"/>
       <xsl:with-param name="specification" select="@name"/>
     </xsl:call-template>
     <xsl:call-template name="class-members-synopsis">
       <xsl:with-param name="indentation" select="$indentation"/>
+      <xsl:with-param name="allow-synopsis-anchors" select="$allow-synopsis-anchors"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="class-type-synopsis">
     <xsl:param name="indentation" select="0"/>
+    <xsl:param name="allow-synopsis-anchors" select="false()"/>
 
     <!-- The keyword used to declare this class type, e.g., class,
          struct, or union. -->
@@ -841,11 +874,12 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:if test="ancestor::class|ancestor::class-specialization|
                   ancestor::struct|ancestor::struct-specialization|
                   ancestor::union|ancestor::union-specialization">
-      <xsl:text>&#10;&#10;</xsl:text>
+      <xsl:text>&#10;</xsl:text>
 
       <!-- If this nested class has a "purpose" element, use it as a
            comment. -->
       <xsl:if test="purpose">
+        <xsl:text>&#10;</xsl:text>
         <xsl:call-template name="indent">
           <xsl:with-param name="indentation" select="$indentation"/>
         </xsl:call-template>
@@ -855,7 +889,6 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:apply-templates select="purpose" mode="comment"/>
           </xsl:with-param>
         </xsl:call-template>
-        <xsl:text>&#10;</xsl:text>
       </xsl:if>
     </xsl:if>
 
@@ -878,7 +911,19 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:with-param name="keyword" select="$class-key"/>
     </xsl:call-template>
     <xsl:text> </xsl:text>
-    <xsl:value-of select="@name"/>
+
+    <!--  Make the class name a link to the class reference page (useful for nested classes) -->
+    <xsl:call-template name="internal-link">
+      <xsl:with-param name="to">
+        <xsl:call-template name="generate.id">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+      </xsl:with-param>
+      <xsl:with-param name="text">
+        <xsl:value-of select="@name"/>
+      </xsl:with-param>
+    </xsl:call-template>
+
     <xsl:apply-templates select="specialization"/>
 
     <xsl:choose>
@@ -913,10 +958,12 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
     <xsl:call-template name="class-members-synopsis">
       <xsl:with-param name="indentation" select="$indentation"/>
+      <xsl:with-param name="allow-synopsis-anchors" select="$allow-synopsis-anchors"/>
     </xsl:call-template>
 
     <xsl:apply-templates select="access" mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation"/>
+      <xsl:with-param name="allow-synopsis-anchors" select="$allow-synopsis-anchors"/>
     </xsl:apply-templates>
 
     <!-- Closing brace -->
@@ -1022,6 +1069,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:with-param name="synopsis">
         <xsl:call-template name="class-type-synopsis">
           <xsl:with-param name="indentation" select="$indentation"/>
+          <xsl:with-param name="allow-synopsis-anchors" select="true()"/>
         </xsl:call-template>
         <!-- Associated free functions -->
         <xsl:apply-templates select="ancestor-or-self::*/free-function-group"
@@ -1098,7 +1146,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
     <!-- Spacing -->
     <xsl:if
-      test="not(local-name(preceding-sibling::*[position()=1])=local-name(.))">
+      test="not(local-name(preceding-sibling::*[position()=1])=local-name(.)) and (position() &gt; 1)">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
 
@@ -1115,7 +1163,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:text> </xsl:text>
     </xsl:if>
 
-    <xsl:apply-templates select="type/*|type/text()" mode="annotation"/>
+    <xsl:apply-templates select="type" mode="highlight"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>;</xsl:text>
@@ -1190,7 +1238,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:call-template name="highlight-comment">
             <xsl:with-param name="text">
               <xsl:text>// </xsl:text>
-              <xsl:apply-templates select="purpose/*|purpose/text()" mode="annotation"/>
+              <xsl:apply-templates select="purpose" mode="comment"/>
             </xsl:with-param>
           </xsl:call-template>
 
@@ -1415,10 +1463,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           </xsl:call-template>
         </term>
         <listitem>
-          <xsl:apply-templates
-            select="purpose/*|purpose/text()|
-                    description/*|description/text()"
-            mode="annotation"/>
+          <xsl:apply-templates select="purpose|description" mode="comment"/>
         </listitem>
       </varlistentry>
     </xsl:if>

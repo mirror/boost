@@ -210,7 +210,7 @@
     name     CDATA  #REQUIRED
     %boost.common.attrib;>
 
-<!ELEMENT enumvalue (default?)>
+<!ELEMENT enumvalue (default?, purpose?, description?)>
 <!ATTLIST enumvalue
     name     CDATA  #REQUIRED
     %boost.common.attrib;>

@@ -14,15 +14,13 @@
   <!-- Generate an ID for the entity referenced -->
   <xsl:template name="generate.id">
     <xsl:param name="node" select="."/>
-    <xsl:choose>
-      <xsl:when test="ancestor::class-specialization|ancestor::struct-specialization|ancestor::union-specialization">
-        <xsl:value-of select="generate-id(.)"/>
-        <xsl:text>-bb</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="$node" mode="generate.id"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$node" mode="generate.id"/>
+    <xsl:if test="$node/ancestor-or-self::class-specialization|
+      $node/ancestor-or-self::struct-specialization|
+      $node/ancestor-or-self::union-specialization">
+      <xsl:text>_</xsl:text>
+      <xsl:value-of select="generate-id($node)"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="*" mode="generate.id">

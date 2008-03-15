@@ -27,7 +27,8 @@
     <xsl:variable name="basename" select="substring-before( $their, $html.ext )"/>
     <xsl:choose>
         <xsl:when test="not($recursive)">
-            <xsl:value-of select="translate( $basename, '.', '/' )"/>
+            <!-- translate dots into directory separators, and replace illegal file path characters with underscores -->
+            <xsl:value-of select="translate( $basename, '.&lt;&gt;\:*?&quot;|', '/_______' )"/>
             <xsl:value-of select="$html.ext"/>
         </xsl:when>
         <xsl:otherwise>

@@ -2102,7 +2102,7 @@
       <refpurpose>A single value of an enumeration</refpurpose>
     </refnamediv>
     <refsynopsisdiv>enumvalue ::= 
-  (<link linkend="boostbook.dtd.default">default</link>?)
+  (<link linkend="boostbook.dtd.default">default</link>?, <link linkend="boostbook.dtd.purpose">purpose</link>?, <link linkend="boostbook.dtd.description">description</link>?)
 </refsynopsisdiv>
     <refsection>
       <title>Attributes</title>
