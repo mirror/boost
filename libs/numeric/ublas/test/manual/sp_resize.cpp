@@ -15,7 +15,7 @@ template <class V>
 void printV(const V& v) {
   std::cout << "size: " << v.size() << " nnz_capacity: " << v.nnz_capacity() << " nnz: " << v.nnz() << std::endl;
   for (typename V::const_iterator i = v.begin(); i != v.end(); i++) {
-	std::cout << i.index() << ":" << (*i) << "  ";
+    std::cout << i.index() << ":" << (*i) << "  ";
   }
   std::cout << std::endl;
 }
