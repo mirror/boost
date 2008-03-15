@@ -30,6 +30,7 @@ xglue(HIGH, LOW)
 //R #line 22 "t_1_013.cpp"
 //R printf("x" "1" "= %d, x" "2" "= %s", x1, x2);
 //R fputs("strncmp(\"abc\\0d\?\", \"abc\", '\\4', \"\\u1234\") == 0" ": @\n", s);
+//R
 //R "vers2.hpp"
 //R "hello";
 //R "hello" ", world"
