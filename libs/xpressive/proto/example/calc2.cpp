@@ -15,7 +15,7 @@
 using namespace boost;
 
 // Will be used to define the placeholders _1 and _2
-template<typename I> struct arg {};
+template<int I> struct placeholder {};
 
 // For expressions in the calculator domain, operator ()
 // will be special; it will evaluate the expression.
@@ -39,10 +39,10 @@ struct calculator_context
     }
 
     // Handle the evaluation of the placeholder terminals
-    template<typename I>
-    double operator ()(proto::tag::terminal, arg<I>) const
+    template<int I>
+    double operator ()(proto::tag::terminal, placeholder<I>) const
     {
-        return d[ I() - 1 ];
+        return d[ I - 1 ];
     }
 };
 
@@ -88,8 +88,8 @@ struct calculator_domain
 {};
 
 // Define some placeholders (notice they're wrapped in calculator_expression<>)
-calculator_expression<proto::terminal< arg< mpl::int_<1> > >::type> const _1;
-calculator_expression<proto::terminal< arg< mpl::int_<2> > >::type> const _2;
+calculator_expression<proto::terminal< placeholder< 1 > >::type> const _1;
+calculator_expression<proto::terminal< placeholder< 2 > >::type> const _2;
 
 // Now, our arithmetic expressions are immediately executable function objects:
 int main()

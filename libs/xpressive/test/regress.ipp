@@ -272,11 +272,26 @@ void run_test_impl(xpr_test_case<Char> const &test)
         typedef typename std::basic_string<Char>::const_iterator iterator;
         basic_regex<iterator> rx = basic_regex<iterator>::compile(test.pat, test.syntax_flags);
 
+        // Build the same regex for use with C strings
+        basic_regex<Char const *> c_rx = basic_regex<Char const *>::compile(test.pat, test.syntax_flags);
+
         if(!test.res.empty())
         {
             // test regex_replace
             std::basic_string<Char> res = regex_replace(test.str, rx, test.sub, test.match_flags);
             BOOST_CHECK_MESSAGE(res == test.res, case_ << res << " != " << test.res );
+
+            // test regex_replace with NTBS format string
+            std::basic_string<Char> res2 = regex_replace(test.str, rx, test.sub.c_str(), test.match_flags);
+            BOOST_CHECK_MESSAGE(res2 == test.res, case_ << res2 << " != " << test.res );
+
+            // test regex_replace with NTBS input string
+            std::basic_string<Char> res3 = regex_replace(test.str.c_str(), c_rx, test.sub, test.match_flags);
+            BOOST_CHECK_MESSAGE(res3 == test.res, case_ << res3 << " != " << test.res );
+
+            // test regex_replace with NTBS input string and NTBS format string
+            std::basic_string<Char> res4 = regex_replace(test.str.c_str(), c_rx, test.sub.c_str(), test.match_flags);
+            BOOST_CHECK_MESSAGE(res4 == test.res, case_ << res4 << " != " << test.res );
         }
 
         if(0 == (test.match_flags & regex_constants::format_first_only))

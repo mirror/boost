@@ -13,6 +13,7 @@
 #include <boost/config.hpp>
 #include <boost/version.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/long.hpp>
 #if BOOST_VERSION >= 103500
 #include <boost/fusion/include/is_view.hpp>
@@ -303,7 +304,7 @@ namespace boost { namespace fusion
         template<>
         struct is_view_impl<proto::tag::proto_flat_view>
         {
-            template<typename Iterator>
+            template<typename Sequence>
             struct apply
               : mpl::true_
             {};
@@ -312,7 +313,7 @@ namespace boost { namespace fusion
         template<>
         struct is_view_impl<proto::tag::proto_expr>
         {
-            template<typename Iterator>
+            template<typename Sequence>
             struct apply
               : mpl::false_
             {};
@@ -338,12 +339,6 @@ namespace boost { namespace fusion
 
             template<typename Iterator, typename Expr>
             struct apply<Iterator, proto::ref_<Expr> >
-            {
-                typedef Expr &type;
-            };
-
-            template<typename Iterator, typename Expr>
-            struct apply<Iterator, Expr &>
             {
                 typedef Expr &type;
             };

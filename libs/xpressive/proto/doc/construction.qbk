@@ -922,10 +922,10 @@ a lazy function invocation that, when evaluated with two arguments, causes
     >::type
 
 In the above, `TheFunctionToCall` might be an ordinary function object, so
-let's define a `construct_<>` function object that constructs an object.
+let's define a `construct_helper<>` function object that constructs an object.
 
     template<typename T>
-    struct construct_
+    struct construct_helper
     {
         typedef T result_type; // for TR1 result_of
         
@@ -937,13 +937,13 @@ let's define a `construct_<>` function object that constructs an object.
         // ... other overloads ...
     };
 
-With such a function object, we can say `construct_<S>()(1, 'a')` to
+With such a function object, we can say `construct_helper<S>()(1, 'a')` to
 immediately construct an `S` object using `1` and `'a'` as constructor
-arguments. We want this to be lazy, so we can wrap `construct_<S>` in
+arguments. We want this to be lazy, so we can wrap `construct_helper<S>` in
 a Proto terminal.
 
     // A lazy S constructor
-    terminal<construct_<S> >::type const construct_S = {{}};
+    terminal<construct_helper<S> >::type const construct_S = {{}};
     
     // OK, make a lazy function invocation but don't call it.
     construct_S(1, 'a');
@@ -961,14 +961,14 @@ get that syntax with the following:
     template<typename T, typename A0, typename A1>
     typename proto::result_of::make_expr<
         proto::tag::function
-      , construct_<T> const
+      , construct_helper<T> const
       , A0 const &
       , A1 const &
     >::type const
     construct(A0 const &a0, A1 const &a1)
     {
         return proto::make_expr<proto::tag::function>(
-            construct_<T>()
+            construct_helper<T>()
           , boost::ref(a0)
           , boost::ref(a1)
         );
@@ -988,12 +988,12 @@ macro to simplify our job.
         construct                                           \
       , MyLambdaDomain                                      \
       , (proto::tag::function)                              \
-      , ((construct_)(typename))                            \
+      , ((construct_helper)(typename))                      \
     )
 
 What is new in this case is the fourth macro argument, which specifies
 that there is an implicit first argument to `construct()` of type 
-`construct_<X>`, where `X` is a template parameter of the function. 
+`construct_helper<X>`, where `X` is a template parameter of the function. 
 The fourth argument to the macro is actually a PP sequence of PP 
 sequences. Each sequence describes one implicit argument.
 

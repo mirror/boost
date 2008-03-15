@@ -71,13 +71,13 @@
         /// of an expression node according to the corresponding children of
         /// a Grammar.
         ///
-        /// Given a Grammar such as <tt>posit\<T0, T1\></tt>, an expression type
-        /// that matches the grammar such as <tt>posit\<E0, E1\>::::type</tt>, a
+        /// Given a Grammar such as <tt>plus\<T0, T1\></tt>, an expression type
+        /// that matches the grammar such as <tt>plus\<E0, E1\>::::type</tt>, a
         /// state \c S and a visitor \c V, the result of applying the
-        /// <tt>pass_through\<posit\<T0, T1\> \></tt> transform is:
+        /// <tt>pass_through\<plus\<T0, T1\> \></tt> transform is:
         ///
         /// \code
-        /// posit<
+        /// plus<
         ///     T0::result<void(E0, S, V)>::type
         ///   , T1::result<void(E1, S, V)>::type
         /// >::type
@@ -89,16 +89,16 @@
         ///
         /// The explicit use of <tt>pass_through\<\></tt> is not usually needed,
         /// since the expression generator metafunctions such as
-        /// <tt>posit\<\></tt> have <tt>pass_through\<\></tt> as their default
+        /// <tt>plus\<\></tt> have <tt>pass_through\<\></tt> as their default
         /// transform. So, for instance, these are equivalent:
         ///
         /// \code
         /// // Within a grammar definition, these are equivalent:
-        /// when< posit<X, Y>, pass_through< posit<X, Y> > >
-        /// when< posit<X, Y>, posit<X, Y> >
-        /// when< posit<X, Y> > // because of when<class X, class Y=X>
-        /// posit<X, Y>         // because posit<> is both a
-        ///                     //   grammar and a transform
+        /// when< plus<X, Y>, pass_through< plus<X, Y> > >
+        /// when< plus<X, Y>, plus<X, Y> >
+        /// when< plus<X, Y> > // because of when<class X, class Y=X>
+        /// plus<X, Y>         // because plus<> is both a
+        ///                    //   grammar and a transform
         /// \endcode
         ///
         /// For example, consider the following transform that promotes all

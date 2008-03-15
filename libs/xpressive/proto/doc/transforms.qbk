@@ -900,7 +900,7 @@ the same as `bind<Object(_expr, _state, _visitor)>`.
 `when<>` associates a grammar rule with a transform. It can be used
 in a grammar in place of the rule; that is, it behaves as a grammar
 rule. Expression tree nodes that match the grammar rule are processed
-with the associated transform; that it, `when<>` also behaves like
+with the associated transform; that is, `when<>` also behaves like
 a transform.
 
 When no transform is specified, as with `when< posit<Calculator> >`,

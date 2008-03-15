@@ -441,30 +441,26 @@ public:
     OutputIterator format
     (
         OutputIterator out
-      , const string_type &fmt
+      , string_type const &fmt
       , regex_constants::match_flag_type flags = regex_constants::format_default
     ) const
     {
-        typename string_type::const_iterator cur = fmt.begin(), end = fmt.end();
+        char_type const *cur = &*fmt.begin(), *end = &*fmt.begin() + fmt.size();
+        return this->format_(out, cur, end, flags);
+    }
 
-        if(0 != (regex_constants::format_literal & flags))
-        {
-            return std::copy(cur, end, out);
-        }
-        else if(0 != (regex_constants::format_perl & flags))
-        {
-            return this->format_perl_(cur, end, out);
-        }
-        else if(0 != (regex_constants::format_sed & flags))
-        {
-            return this->format_sed_(cur, end, out);
-        }
-        else if(0 != (regex_constants::format_all & flags))
-        {
-            return this->format_all_(cur, end, out);
-        }
-
-        return this->format_ecma_262_(cur, end, out);
+    /// \overload
+    ///
+    template<typename OutputIterator>
+    OutputIterator format
+    (
+        OutputIterator out
+      , char_type const *fmt
+      , regex_constants::match_flag_type flags = regex_constants::format_default
+    ) const
+    {
+        char_type const *end = fmt + std::char_traits<char_type>::length(fmt);
+        return this->format_(out, fmt, end, flags);
     }
 
     /// Returns a copy of the string fmt. For each format specifier or escape sequence in fmt,
@@ -472,10 +468,27 @@ public:
     /// *this to which it refers. The bitmasks specified in flags determines what format specifiers
     /// or escape sequences are recognized, by default this is the format used by ECMA-262,
     /// ECMAScript Language Specification, Chapter 15 part 5.4.11 String.prototype.replace.
-    string_type format(string_type const &fmt, regex_constants::match_flag_type flags = regex_constants::format_default) const
+    string_type format
+    (
+        string_type const &fmt
+      , regex_constants::match_flag_type flags = regex_constants::format_default
+    ) const
     {
         string_type result;
         result.reserve(fmt.length() * 2);
+        this->format(std::back_inserter(result), fmt, flags);
+        return result;
+    }
+
+    /// \overload
+    ///
+    string_type format
+    (
+        char_type const *fmt
+      , regex_constants::match_flag_type flags = regex_constants::format_default
+    ) const
+    {
+        string_type result;
         this->format(std::back_inserter(result), fmt, flags);
         return result;
     }
@@ -655,8 +668,39 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename ForwardIterator, typename OutputIterator>
-    OutputIterator format_ecma_262_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    template<typename OutputIterator>
+    OutputIterator format_
+    (
+        OutputIterator out
+      , char_type const *cur
+      , char_type const *end
+      , regex_constants::match_flag_type flags = regex_constants::format_default
+    ) const
+    {
+        if(0 != (regex_constants::format_literal & flags))
+        {
+            return std::copy(cur, end, out);
+        }
+        else if(0 != (regex_constants::format_perl & flags))
+        {
+            return this->format_perl_(cur, end, out);
+        }
+        else if(0 != (regex_constants::format_sed & flags))
+        {
+            return this->format_sed_(cur, end, out);
+        }
+        else if(0 != (regex_constants::format_all & flags))
+        {
+            return this->format_all_(cur, end, out);
+        }
+
+        return this->format_ecma_262_(cur, end, out);
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator>
+    OutputIterator format_ecma_262_(char_type const *cur, char_type const *end, OutputIterator out) const
     {
         while(cur != end)
         {
@@ -677,8 +721,8 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename ForwardIterator, typename OutputIterator>
-    OutputIterator format_sed_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    template<typename OutputIterator>
+    OutputIterator format_sed_(char_type const *cur, char_type const *end, OutputIterator out) const
     {
         while(cur != end)
         {
@@ -704,8 +748,8 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename ForwardIterator, typename OutputIterator>
-    OutputIterator format_perl_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    template<typename OutputIterator>
+    OutputIterator format_perl_(char_type const *cur, char_type const *end, OutputIterator out) const
     {
         detail::case_converting_iterator<OutputIterator, char_type> iout(out, this->traits_.get());
 
@@ -739,8 +783,8 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename ForwardIterator, typename OutputIterator>
-    OutputIterator format_all_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    template<typename OutputIterator>
+    OutputIterator format_all_(char_type const *cur, char_type const *end, OutputIterator out) const
     {
         detail::case_converting_iterator<OutputIterator, char_type> iout(out, this->traits_.get());
         iout = this->format_all_impl_(cur, end, iout);
@@ -751,8 +795,8 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename ForwardIterator, typename OutputIterator>
-    OutputIterator format_all_impl_(ForwardIterator &cur, ForwardIterator end, OutputIterator out, bool metacolon = false) const
+    template<typename OutputIterator>
+    OutputIterator format_all_impl_(char_type const *&cur, char_type const *end, OutputIterator out, bool metacolon = false) const
     {
         int max = 0, sub = 0;
         detail::noop_output_iterator<char_type> noop;
@@ -825,8 +869,8 @@ private:
     template<typename OutputIterator>
     OutputIterator format_backref_
     (
-        typename string_type::const_iterator &cur
-      , typename string_type::const_iterator end
+        char_type const *&cur
+      , char_type const *end
       , OutputIterator out
     ) const
     {
@@ -875,13 +919,13 @@ private:
     template<typename OutputIterator>
     OutputIterator format_escape_
     (
-        typename string_type::const_iterator &cur
-      , typename string_type::const_iterator end
+        char_type const *&cur
+      , char_type const *end
       , OutputIterator out
     ) const
     {
         using namespace regex_constants;
-        typename string_type::const_iterator tmp;
+        char_type const *tmp = 0;
         // define an unsigned type the same size as char_type
         typedef typename boost::uint_t<CHAR_BIT * sizeof(char_type)>::least uchar_t;
         BOOST_MPL_ASSERT_RELATION(sizeof(uchar_t), ==, sizeof(char_type));
@@ -1016,15 +1060,15 @@ private:
     template<typename OutputIterator>
     OutputIterator format_named_backref_
     (
-        typename string_type::const_iterator &cur
-      , typename string_type::const_iterator end
+        char_type const *&cur
+      , char_type const *end
       , OutputIterator out
     ) const
     {
         using namespace regex_constants;
         detail::ensure(cur != end && BOOST_XPR_CHAR_(char_type, '<') == *cur++
             , error_badmark, "invalid named back-reference");
-        typename string_type::const_iterator begin = cur;
+        char_type const *begin = cur;
         for(; cur != end && BOOST_XPR_CHAR_(char_type, '>') != *cur; ++cur)
         {}
         detail::ensure(cur != begin && cur != end && BOOST_XPR_CHAR_(char_type, '>') == *cur

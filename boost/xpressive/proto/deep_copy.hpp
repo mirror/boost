@@ -14,10 +14,10 @@
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/mpl/if.hpp>
     #include <boost/type_traits/is_function.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/expr.hpp>
-    #include <boost/xpressive/proto/generate.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto

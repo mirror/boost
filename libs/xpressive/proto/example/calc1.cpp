@@ -12,11 +12,11 @@
 #include <boost/xpressive/proto/context.hpp>
 using namespace boost;
 
-template<typename I> struct arg {};
+template<int I> struct placeholder {};
 
 // Define some placeholders
-proto::terminal< arg< mpl::int_<1> > >::type const _1 = {{}};
-proto::terminal< arg< mpl::int_<2> > >::type const _2 = {{}};
+proto::terminal< placeholder< 1 > >::type const _1 = {{}};
+proto::terminal< placeholder< 2 > >::type const _2 = {{}};
 
 // Define a calculator context, for evaluating arithmetic expressions
 struct calculator_context
@@ -35,10 +35,10 @@ struct calculator_context
     }
 
     // Handle the evaluation of the placeholder terminals
-    template<typename I>
-    double operator ()(proto::tag::terminal, arg<I>) const
+    template<int I>
+    double operator ()(proto::tag::terminal, placeholder<I>) const
     {
-        return d[ I() - 1 ];
+        return d[ I - 1 ];
     }
 };
 

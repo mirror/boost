@@ -158,14 +158,14 @@ template<typename T>
 struct construct_helper
 {
     typedef T result_type; // for TR1 result_of
-    
+
     T operator()() const
     { return T(); }
-    
+
     template<typename A0>
     T operator()(A0 const &a0) const
     { return T(a0); }
-    
+
     template<typename A0, typename A1>
     T operator()(A0 const &a0, A1 const &a1) const
     { return T(a0, a1); }
@@ -194,11 +194,11 @@ int main()
     // Create some lambda objects and immediately
     // invoke them by applying their operator():
     int i = ( (_1 + 2) / 4 )(42);
-    std::cout << i << std::endl; // prints -11
-    
+    std::cout << i << std::endl; // prints 11
+
     int j = ( (-(_1 + 2)) / 4 )(42);
     std::cout << j << std::endl; // prints -11
-    
+
     double d = ( (4 - _2) * 3 )(42, 3.14);
     std::cout << d << std::endl; // prints 2.58
 
@@ -209,7 +209,7 @@ int main()
     // "Nullary" lambdas work too
     int k = (val(1) + val(2))();
     std::cout << k << std::endl; // prints 3
-    
+
     // check array indexing for kicks
     int integers[5] = {0};
     (var(integers)[2] = 2)();

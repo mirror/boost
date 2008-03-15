@@ -193,7 +193,8 @@ namespace boost { namespace proto
     /// \note Equivalent to <tt>functional::display_expr(0, sout)(expr)</tt>
     /// \param expr The Proto expression tree to pretty-print
     /// \param sout The \c ostream to which the output should be
-    ///             written.
+    ///             written. If not specified, defaults to
+    ///             <tt>std::cout</tt>.
     template<typename Expr>
     void display_expr(Expr const &expr, std::ostream &sout)
     {

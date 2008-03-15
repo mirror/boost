@@ -76,14 +76,14 @@ struct Begin
 // terminals.
 struct DereferenceCtx
 {
-    // Unless this is a vector terminal, use the
+    // Unless this is an iterator terminal, use the
     // default evaluation context
     template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
     struct eval
       : proto::default_eval<Expr, DereferenceCtx const>
     {};
 
-    // Index vector terminals with our subscript.
+    // Dereference iterator terminals.
     template<typename Expr, typename Iter>
     struct eval<Expr, iterator_wrapper<Iter> >
     {
@@ -100,14 +100,14 @@ struct DereferenceCtx
 // terminals.
 struct IncrementCtx
 {
-    // Unless this is a vector terminal, use the
+    // Unless this is an iterator terminal, use the
     // default evaluation context
     template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
     struct eval
       : proto::null_eval<Expr, IncrementCtx const>
     {};
 
-    // Index vector terminals with our subscript.
+    // advance iterator terminals.
     template<typename Expr, typename Iter>
     struct eval<Expr, iterator_wrapper<Iter> >
     {
@@ -191,7 +191,7 @@ struct IsMixed<std::vector<T, A> >
   : mpl::true_
 {};
 
-namespace VectorOps
+namespace MixedOps
 {
     // This defines all the overloads to make expressions involving
     // std::vector to build expression templates.
@@ -317,7 +317,7 @@ namespace VectorOps
 
 int main()
 {
-    using namespace VectorOps;
+    using namespace MixedOps;
 
     int n = 10;
     std::vector<int> a,b,c,d;
@@ -335,11 +335,11 @@ int main()
         f.push_back(std::complex<double>(1.0, 1.0));
     }
 
-    VectorOps::assign(b, 2);
-    VectorOps::assign(d, a + b * c);
+    MixedOps::assign(b, 2);
+    MixedOps::assign(d, a + b * c);
     a += if_else(d < 30, b, c);
 
-    VectorOps::assign(e, c);
+    MixedOps::assign(e, c);
     e += e - 4 / (c + 1);
 
     f -= sin(0.1 * e * std::complex<double>(0.2, 1.2));

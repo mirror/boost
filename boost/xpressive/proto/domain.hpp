@@ -12,6 +12,7 @@
 #define BOOST_PROTO_DOMAIN_HPP_EAN_02_13_2007
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/ref.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/generate.hpp>

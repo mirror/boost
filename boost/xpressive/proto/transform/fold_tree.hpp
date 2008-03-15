@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// \file fold.hpp
+/// \file fold_tree.hpp
 /// Contains definition of the fold_tree<> and reverse_fold_tree<> transforms.
 //
 //  Copyright 2008 Eric Niebler. Distributed under the Boost

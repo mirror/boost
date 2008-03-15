@@ -15,10 +15,12 @@
 #endif
 
 #include <iterator>
+#include <boost/mpl/or.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -486,39 +488,18 @@ inline bool regex_search
 // regex_replace
 ///////////////////////////////////////////////////////////////////////////////
 
-
-/// \brief Build an output sequence given an input sequence, a regex, and a format string.
-///
-/// Constructs a regex_iterator object: regex_iterator\< BidiIter \> i(begin, end, re, flags),
-/// and uses i to enumerate through all of the matches m of type match_results\< BidiIter \> that
-/// occur within the sequence [begin, end). If no such matches are found and !(flags \& format_no_copy)
-/// then calls std::copy(begin, end, out). Otherwise, for each match found, if !(flags \& format_no_copy)
-/// calls std::copy(m.prefix().first, m.prefix().second, out), and then calls m.format(out, fmt, flags).
-/// Finally if !(flags \& format_no_copy) calls std::copy(last_m.suffix().first, last_m.suffix().second, out)
-/// where last_m is a copy of the last match found. If flags \& format_first_only is non-zero then only
-/// the first match found is replaced.
-///
-/// \pre Types BidiIter and OtherBidiIter meet the requirements of a Bidirectional Iterator (24.1.4).
-/// \pre Type OutIter meets the requirements of an Output Iterator (24.1.2).
-/// \pre OtherBidiIter is convertible to BidiIter.
-/// \pre [begin,end) denotes a valid iterator range.
-///
-/// \param out An output iterator into which the output sequence is written.
-/// \param begin The beginning of the input sequence.
-/// \param end The end of the input sequence.
-/// \param re The regular expression object to use.
-/// \param fmt The format string used to format the replacement sequence.
-/// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
-/// \return The value of the output iterator after the output sequence has been written to it.
-/// \throw regex_error on stack exhaustion or invalid format string.
-template<typename OutIter, typename OtherBidiIter, typename BidiIter>
-inline OutIter regex_replace
+namespace detail
+{
+///////////////////////////////////////////////////////////////////////////////
+// regex_replace_impl
+template<typename OutIter, typename BidiIter, typename ForwardRangeOrNTBS>
+inline OutIter regex_replace_impl
 (
     OutIter out
-  , OtherBidiIter begin
-  , OtherBidiIter end
+  , BidiIter begin
+  , BidiIter end
   , basic_regex<BidiIter> const &re
-  , std::basic_string<typename iterator_value<BidiIter>::type> const &fmt
+  , ForwardRangeOrNTBS const &format
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
@@ -537,7 +518,7 @@ inline OutIter regex_replace
             out = std::copy(cur, what[0].first, out);
         }
 
-        out = what.format(out, fmt, flags);
+        out = what.format(out, format, flags);
         cur = state.cur_ = state.next_search_ = what[0].second;
 
         if(0 == (flags & format_first_only))
@@ -552,7 +533,7 @@ inline OutIter regex_replace
                 }
 
                 access::set_prefix_suffix(what, begin, end);
-                out = what.format(out, fmt, flags);
+                out = what.format(out, format, flags);
                 cur = state.cur_ = state.next_search_ = what[0].second;
                 not_null = (0 == what.length());
                 state.reset(what, *access::get_regex_impl(re));
@@ -562,26 +543,185 @@ inline OutIter regex_replace
 
     if(yes_copy)
     {
-        out = std::copy(cur, static_cast<BidiIter>(end), out);
+        out = std::copy(cur, end, out);
     }
 
     return out;
+}
+} // namespace detail
+
+/// \brief Build an output sequence given an input sequence, a regex, and a format string.
+///
+/// Constructs a regex_iterator object: regex_iterator\< BidiIter \> i(begin, end, re, flags),
+/// and uses i to enumerate through all of the matches m of type match_results\< BidiIter \> that
+/// occur within the sequence [begin, end). If no such matches are found and !(flags \& format_no_copy)
+/// then calls std::copy(begin, end, out). Otherwise, for each match found, if !(flags \& format_no_copy)
+/// calls std::copy(m.prefix().first, m.prefix().second, out), and then calls m.format(out, format, flags).
+/// Finally if !(flags \& format_no_copy) calls std::copy(last_m.suffix().first, last_m.suffix().second, out)
+/// where last_m is a copy of the last match found. If flags \& format_first_only is non-zero then only
+/// the first match found is replaced.
+///
+/// \pre Types BidiIter and OtherBidiIter meet the requirements of a Bidirectional Iterator (24.1.4).
+/// \pre Type OutIter meets the requirements of an Output Iterator (24.1.2).
+/// \pre OtherBidiIter is convertible to BidiIter.
+/// \pre [begin,end) denotes a valid iterator range.
+///
+/// \param out An output iterator into which the output sequence is written.
+/// \param begin The beginning of the input sequence.
+/// \param end The end of the input sequence.
+/// \param re The regular expression object to use.
+/// \param format The format string used to format the replacement sequence.
+/// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
+/// \return The value of the output iterator after the output sequence has been written to it.
+/// \throw regex_error on stack exhaustion or invalid format string.
+template<typename OutIter, typename OtherBidiIter, typename BidiIter, typename ForwardRange>
+inline OutIter regex_replace
+(
+    OutIter out
+  , OtherBidiIter begin
+  , OtherBidiIter end
+  , basic_regex<BidiIter> const &re
+  , ForwardRange const &format
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<ForwardRange> >::type * = 0
+)
+{
+    BidiIter begin_ = begin, end_ = end;
+    return detail::regex_replace_impl(out, begin_, end_, re, format, flags);
+}
+
+/// \overload
+///
+template<typename OutIter, typename OtherBidiIter, typename BidiIter>
+inline OutIter regex_replace
+(
+    OutIter out
+  , OtherBidiIter begin
+  , OtherBidiIter end
+  , basic_regex<BidiIter> const &re
+  , typename iterator_value<BidiIter>::type const *format
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+)
+{
+    BidiIter begin_ = begin, end_ = end;
+    return detail::regex_replace_impl(out, begin_, end_, re, format, flags);
+}
+
+/// \overload
+///
+template<typename BidiContainer, typename BidiIter, typename ForwardRange>
+inline BidiContainer regex_replace
+(
+    BidiContainer &str
+  , basic_regex<BidiIter> const &re
+  , ForwardRange const &format
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<mpl::or_<is_pointer<BidiContainer>, is_pointer<ForwardRange> > >::type * = 0
+)
+{
+    BidiContainer result;
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(str), end = boost::end(str);
+    regex_replace(std::back_inserter(result), begin, end, re, format, flags);
+    return result;
+}
+
+/// \overload
+///
+template<typename BidiContainer, typename BidiIter, typename ForwardRange>
+inline BidiContainer regex_replace
+(
+    BidiContainer const &str
+  , basic_regex<BidiIter> const &re
+  , ForwardRange const &format
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<mpl::or_<is_pointer<BidiContainer>, is_pointer<ForwardRange> > >::type * = 0
+)
+{
+    BidiContainer result;
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(str), end = boost::end(str);
+    regex_replace(std::back_inserter(result), begin, end, re, format, flags);
+    return result;
+}
+
+/// \overload
+///
+template<typename Char, typename ForwardRange>
+inline std::basic_string<typename remove_const<Char>::type> regex_replace
+(
+    BOOST_XPR_NONDEDUCED_TYPE_(Char) *str
+  , basic_regex<Char *> const &re
+  , ForwardRange const &format
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<ForwardRange> >::type * = 0
+)
+{
+    typedef typename remove_const<Char>::type char_type;
+    std::basic_string<char_type> result;
+    result.reserve(boost::size(format) * 2);
+    Char *end = str + std::char_traits<char_type>::length(str);
+    regex_replace(std::back_inserter(result), str, end, re, format, flags);
+    return result;
+}
+
+/// \overload
+///
+template<typename BidiContainer, typename BidiIter>
+inline BidiContainer regex_replace
+(
+    BidiContainer &str
+  , basic_regex<BidiIter> const &re
+  , typename iterator_value<BidiIter>::type const *format
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiContainer> >::type * = 0
+)
+{
+    BidiContainer result;
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(str), end = boost::end(str);
+    regex_replace(std::back_inserter(result), begin, end, re, format, flags);
+    return result;
+}
+
+/// \overload
+///
+template<typename BidiContainer, typename BidiIter>
+inline BidiContainer regex_replace
+(
+    BidiContainer const &str
+  , basic_regex<BidiIter> const &re
+  , typename iterator_value<BidiIter>::type const *format
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiContainer> >::type * = 0
+)
+{
+    BidiContainer result;
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(str), end = boost::end(str);
+    regex_replace(std::back_inserter(result), begin, end, re, format, flags);
+    return result;
 }
 
 /// \overload
 ///
 template<typename Char>
-inline std::basic_string<Char> regex_replace
+inline std::basic_string<typename remove_const<Char>::type> regex_replace
 (
-    std::basic_string<Char> const &str
-  , basic_regex<typename std::basic_string<Char>::const_iterator> const &re
-  , std::basic_string<BOOST_XPR_NONDEDUCED_TYPE_(Char)> const &fmt
+    BOOST_XPR_NONDEDUCED_TYPE_(Char) *str
+  , basic_regex<Char *> const &re
+  , typename add_const<Char>::type *format
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
-    std::basic_string<Char> result;
-    result.reserve(fmt.length() * 2);
-    regex_replace(std::back_inserter(result), str.begin(), str.end(), re, fmt, flags);
+    typedef typename remove_const<Char>::type char_type;
+    std::basic_string<char_type> result;
+    Char *end = str + std::char_traits<char_type>::length(str);
+    regex_replace(std::back_inserter(result), str, end, re, format, flags);
     return result;
 }
 

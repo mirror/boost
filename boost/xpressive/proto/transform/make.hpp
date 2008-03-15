@@ -141,21 +141,6 @@
                     #undef TMP
                 };
 
-                template<typename T, typename A, long N>
-                struct construct_<proto::expr<T, A, N>, true>
-                {
-                    typedef proto::expr<T, A, N> result_type;
-
-                    #define TMP(Z, N, DATA)                                                             \
-                    template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>                                  \
-                    result_type operator ()(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, &a)) const           \
-                    {                                                                                   \
-                        return result_type::make(BOOST_PP_ENUM_PARAMS_Z(Z, N, a));          \
-                    }
-                    BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), TMP, ~)
-                    #undef TMP
-                };
-
                 #define TMP(Z, N, DATA)                                                                 \
                 template<typename Type BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, typename A)>               \
                 Type construct(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, &a))                              \

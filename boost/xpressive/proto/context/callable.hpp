@@ -67,7 +67,7 @@
             /// tag and children as expressions, as follows:
             ///
             /// \code
-            /// context(Expr::proto_tag(), arg_c\<0\>(expr), arg_c\<1\>(expr), ...)
+            /// context(Expr::proto_tag(), arg_c<0>(expr), arg_c<1>(expr), ...)
             /// \endcode
             template<
                 typename Expr
