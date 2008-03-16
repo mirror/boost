@@ -61,11 +61,13 @@ main(int argc, char *argv[])
             ("copyright,c", "print out the copyright statement")
             ("config-file", po::value<std::vector<std::string> >()->composing(), 
                 "specify a config file (alternatively: @arg)")
+            ("hooks", po::value<bool>()->default_value(true), 
+                "test preprocessing hooks")
             ("debug,d", po::value<int>(), "set the debug level (0...9)")
         ;
 
     // Hidden options, will be used in in config file analysis to allow to
-    // recognise positional arguments, will not be shown to the user.
+    // recognize positional arguments, will not be shown to the user.
         po::options_description desc_hidden("Hidden options");
         desc_hidden.add_options()
             ("input", po::value<std::vector<std::string> >()->composing(), 
@@ -174,7 +176,7 @@ main(int argc, char *argv[])
                     for (std::vector<std::string>::const_iterator iit = infiles.begin(); 
                          iit != iend; ++iit)
                     {
-                    // correct the file name (prepend the cfg file path)
+                    // correct the file name (pre-pend the config file path)
                         fs::path cfgpath = fs::complete(
                             fs::path(*cit, fs::native), fs::current_path());
                         fs::path filepath = 

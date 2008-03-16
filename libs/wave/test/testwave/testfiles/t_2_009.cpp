@@ -43,7 +43,7 @@ including "t_2_009.cpp"
 //H 02: <t_2_009.cpp>
 //H 03: <t_2_009.cpp>
 //H 04: <t_2_009.cpp>
-//H 05: ./t_2_009.cpp (C:/CVS/wave/libs/wave/test/testwave/testfiles/t_2_009.cpp)
+//H 05: $B(t_2_009.cpp) ($B(t_2_009.cpp))
 //H 10: t_2_009.cpp(15): #if
 //H 11: t_2_009.cpp(15): #if !defined(FILE_002_009_CPP)    : 0
 //H 06: 

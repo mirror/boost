@@ -47,10 +47,10 @@ String handle_filepath(String const &name)
 
 ///////////////////////////////////////////////////////////////////////////////
 template <typename String>
-inline std::string repr(boost::wave::util::file_position<String> const& pos)
+inline String repr(boost::wave::util::file_position<String> const& pos)
 {
-    return handle_filepath(pos.get_file()) + String("(") +
-        boost::lexical_cast<String>(pos.get_line()) + ")";
+    std::string linenum = boost::lexical_cast<std::string>(pos.get_line());
+    return handle_filepath(pos.get_file()) + String("(") + linenum.c_str() + ")";
 }
 
 ///////////////////////////////////////////////////////////////////////////////

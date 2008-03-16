@@ -16,8 +16,10 @@
 #define PLUS() +
 #define MINUS() -
 #define DOT() .
+#define GREATER() >
+#define LESS() <
 
-//R #line 21 "t_9_003.cpp"
+//R #line 23 "t_9_003.cpp"
 X()2                          //R 1 2 
 STRINGIZE( X()2 )             //R "12" 
 //R 
@@ -37,13 +39,20 @@ DOT()DOT()DOT()               //R .. .
 STRINGIZE( DOT()DOT()DOT() )  //R "..." 
 
 // the following are regressions reported by Stefan Seefeld
+//R #line 43 "t_9_003.cpp"
+GREATER()GREATER()            //R > > 
+STRINGIZE( GREATER()GREATER() ) //R ">>" 
+//R
+LESS()LESS()                  //R < < 
+STRINGIZE( LESS()LESS() )     //R "<<" 
+
 #define COMMA() ,
 #define AND() &
 #define CHAR() char
 #define STAR() *
 
 // Make sure no whitespace gets inserted in between the operator symbols
-//R #line 47 "t_9_003.cpp"
+//R #line 56 "t_9_003.cpp"
 void foo(char&, char)               //R void foo(char&, char) 
 void foo(char *)                    //R void foo(char *) 
 void foo(char *&)                   //R void foo(char *&) 

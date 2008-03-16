@@ -97,6 +97,24 @@ namespace {
         result = result + name.c_str();
         return true;
     }
+
+    template <typename T>
+    inline T const&
+    variables_map_as(po::variable_value const& v, T*)
+    {
+#if (__GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)) || \
+    BOOST_WORKAROUND(__MWERKS__, < 0x3200)
+// gcc 3.2.x and  3.3.x choke on vm[...].as<...>()
+// CW 8.3 has problems with the v.as<T>() below
+        T const* r = boost::any_cast<T>(&v.value());
+        if (!r)
+            boost::throw_exception(boost::bad_any_cast());
+        return *r;
+#else
+        return v.as<T>();
+#endif
+    }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -274,6 +292,10 @@ testwave_app::test_a_file(std::string filename)
     if (!read_file(filename, instr)) 
         return false;     // error was reported already
 
+    bool test_hooks = true;
+    if (global_vm.count("hooks"))
+        test_hooks = variables_map_as(global_vm["hooks"], (bool *)NULL);
+    
 // extract expected output, preprocess the data and compare results
     std::string expected, expected_hooks;
     if (extract_expected_output(filename, instr, expected, expected_hooks)) {
@@ -325,7 +347,7 @@ testwave_app::test_a_file(std::string filename)
             }
             else {
             // preprocessing succeeded, check hook information, if appropriate
-                if (!expected_hooks.empty() &&
+                if (test_hooks && !expected_hooks.empty() &&
                     !got_expected_result(filename, hooks, expected_hooks)) 
                 {
                     if (debuglevel > 2) {
@@ -744,26 +766,6 @@ testwave_app::extract_options(std::string const& filename,
     }
 
     return true;
-}
-
-namespace {
-
-    template <typename T>
-    inline T const&
-    variables_map_as(po::variable_value const& v, T*)
-    {
-#if (__GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)) || \
-    BOOST_WORKAROUND(__MWERKS__, < 0x3200)
-// gcc 3.2.x and  3.3.x choke on vm[...].as<...>()
-// CW 8.3 has problems with the v.as<T>() below
-        T const* r = boost::any_cast<T>(&v.value());
-        if (!r)
-            boost::throw_exception(boost::bad_any_cast());
-        return *r;
-#else
-        return v.as<T>();
-#endif
-    }
 }
 
 template <typename Context>
