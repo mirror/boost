@@ -557,7 +557,7 @@ class unordered_set_impl
    //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
    //! 
    //! <b>Throws</b>: If hash_func or equal_func throw.
-   template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
+   template<class KeyType, class KeyHasher, class KeyValueEqual>
    size_type count(const KeyType& key, KeyHasher hash_func, KeyValueEqual equal_func) const
    {  return table_.find(key, hash_func, equal_func) != end();  }
 
@@ -1488,7 +1488,7 @@ class unordered_multiset_impl
    //! <b>Complexity</b>: Average case O(1), worst case O(this->size()).
    //! 
    //! <b>Throws</b>: If the internal hasher or the equality functor throws.
-   template<class KeyType, class KeyHasher, class KeyValueEqual, class Disposer>
+   template<class KeyType, class KeyHasher, class KeyValueEqual>
    size_type count(const KeyType& key, KeyHasher hash_func, KeyValueEqual equal_func) const
    {  return table_.count(key, hash_func, equal_func);  }
 
