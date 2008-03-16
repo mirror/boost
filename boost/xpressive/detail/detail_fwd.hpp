@@ -39,6 +39,11 @@ namespace boost { namespace xpressive { namespace detail
     struct type_info_less;
 
     typedef std::map<std::type_info const *, void *, type_info_less> action_args_type;
+    
+    struct action_context;
+
+    template<typename BidiIter>
+    struct replacement_context;
 
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders

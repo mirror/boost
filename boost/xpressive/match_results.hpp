@@ -55,6 +55,8 @@
 #include <boost/xpressive/detail/utility/literals.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
+#include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/proto/eval.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -282,7 +284,7 @@ struct formatter_wrapper<Formatter *, false>
     operator Formatter *();
 };
 
-template<typename Formatter, typename What, typename Out>
+template<typename Formatter, typename What, typename Out, typename Void = void>
 struct formatter_arity
 {
     static formatter_wrapper<Formatter> &formatter;
@@ -300,6 +302,11 @@ struct formatter_arity
     );
     typedef mpl::size_t<value> type;
 };
+
+template<typename Formatter, typename What, typename Out>
+struct formatter_arity<Formatter, What, Out, typename Formatter::proto_is_expr_>
+  : mpl::size_t<4>
+{};
 
 template<typename T>
 struct is_char_ptr
@@ -841,11 +848,11 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename OutputIterator, typename ForwardRange>
+    template<typename OutputIterator, typename Callable1>
     OutputIterator format_
     (
         OutputIterator out
-      , ForwardRange const &format
+      , Callable1 const &format
       , regex_constants::match_flag_type
       , mpl::size_t<1>
     ) const
@@ -855,11 +862,11 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename OutputIterator, typename ForwardRange>
+    template<typename OutputIterator, typename Callable2>
     OutputIterator format_
     (
         OutputIterator out
-      , ForwardRange const &format
+      , Callable2 const &format
       , regex_constants::match_flag_type
       , mpl::size_t<2>
     ) const
@@ -869,16 +876,31 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename OutputIterator, typename ForwardRange>
+    template<typename OutputIterator, typename Callable3>
     OutputIterator format_
     (
         OutputIterator out
-      , ForwardRange const &format
+      , Callable3 const &format
       , regex_constants::match_flag_type flags
       , mpl::size_t<3>
     ) const
     {
         return format(*this, out, flags);
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator, typename Expr>
+    OutputIterator format_
+    (
+        OutputIterator out
+      , Expr const &format
+      , regex_constants::match_flag_type flags
+      , mpl::size_t<4>
+    ) const
+    {
+        detail::replacement_context<BidiIter> ctx(*this);
+        return this->format2_(out, proto::eval(format, ctx));
     }
 
     /// INTERNAL ONLY

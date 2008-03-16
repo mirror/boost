@@ -139,6 +139,54 @@ namespace boost { namespace xpressive
         {
             BindArgs()(args, 0, what);
         }
+
+        template<typename BidiIter>
+        struct replacement_context
+          : proto::callable_context<replacement_context<BidiIter> const>
+        {
+            replacement_context(match_results<BidiIter> const &what)
+              : what_(what)
+            {}
+
+            template<typename Sig>
+            struct result;
+
+            template<typename This>
+            struct result<This(proto::tag::terminal, mark_placeholder const &)>
+            {
+                typedef sub_match<BidiIter> const &type;
+            };
+
+            template<typename This>
+            struct result<This(proto::tag::terminal, any_matcher const &)>
+            {
+                typedef sub_match<BidiIter> const &type;
+            };
+
+            template<typename This, typename T>
+            struct result<This(proto::tag::terminal, reference_wrapper<T> const &)>
+            {
+                typedef T &type;
+            };
+
+            sub_match<BidiIter> const &operator ()(proto::tag::terminal, mark_placeholder m) const
+            {
+                return this->what_[m.mark_number_];
+            }
+
+            sub_match<BidiIter> const &operator ()(proto::tag::terminal, any_matcher) const
+            {
+                return this->what_[0];
+            }
+
+            template<typename T>
+            T &operator ()(proto::tag::terminal, reference_wrapper<T> r) const
+            {
+                return r;
+            }
+        private:
+            match_results<BidiIter> const &what_;
+        };
     }
 
     namespace op
