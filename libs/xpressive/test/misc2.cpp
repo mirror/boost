@@ -5,6 +5,7 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <map>
 #include <string>
 #include <boost/xpressive/xpressive.hpp>
 #include <boost/xpressive/regex_actions.hpp>
@@ -56,6 +57,22 @@ void test_static_actions_in_static_keep()
     BOOST_CHECK_EQUAL(result, "foo");
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+void test_replace_with_lambda()
+{
+    std::map<std::string, std::string> replacements;
+    replacements["X"] = "this";
+    replacements["Y"] = "that";
+
+    std::string input("\"$(X)\" has the value \"$(Y)\""), output;
+    std::string expected("\"this\" has the value \"that\"");
+    sregex rx = "$(" >> (s1= +~as_xpr(')')) >> ')';
+
+    output = regex_replace(input, rx, ref(replacements)[s1]);
+    BOOST_CHECK_EQUAL(output, expected);
+}
+
 using namespace boost::unit_test;
 ///////////////////////////////////////////////////////////////////////////////
 // init_unit_test_suite
@@ -67,6 +84,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test->add(BOOST_TEST_CASE(&test_complement));
     test->add(BOOST_TEST_CASE(&test_static_actions_in_dynamic_keep));
     test->add(BOOST_TEST_CASE(&test_static_actions_in_static_keep));
+    test->add(BOOST_TEST_CASE(&test_replace_with_lambda));
 
     return test;
 }

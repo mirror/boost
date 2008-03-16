@@ -80,6 +80,12 @@ void test_dynamic()
         BOOST_CHECK_EQUAL(3, what.position());
         BOOST_CHECK_EQUAL(3, what.length());
     }
+
+    // test for range-based regex_replace
+    std::vector<UChar> output = regex_replace(str, urx, pattern_);
+    std::string output_(output.begin(), output.end());
+    std::string expected("foob.*rboo");
+    BOOST_CHECK_EQUAL(output_, expected);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
