@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Guidelines for Boost Authors</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="boost_macro_reference.html" title="Boost Macro Reference">
@@ -12,7 +12,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
 <td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_config.guidelines_for_boost_authors"></a><a href="guidelines_for_boost_authors.html" title="Guidelines for Boost Authors">Guidelines for
+<a name="boost_config.guidelines_for_boost_authors"></a><a class="link" href="guidelines_for_boost_authors.html" title="Guidelines for Boost Authors">Guidelines for
     Boost Authors</a>
 </h2></div></div></div>
 <div class="toc"><dl>
@@ -103,7 +103,7 @@
 </ul></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.adding_new_defect_macros"></a><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros" title="Adding New Defect Macros">Adding
+<a name="boost_config.guidelines_for_boost_authors.adding_new_defect_macros"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros" title="Adding New Defect Macros">Adding
       New Defect Macros</a>
 </h3></div></div></div>
 <p>
@@ -125,7 +125,8 @@
         the test case in a <code class="computeroutput"><span class="special">.</span><span class="identifier">ipp</span></code>
         file with the following comments near the top:
       </p>
-<pre class="programlisting"><span class="comment">//  MACRO:         BOOST_NO_FOO
+<pre class="programlisting">
+<span class="comment">//  MACRO:         BOOST_NO_FOO
 </span><span class="comment">//  TITLE:         foo
 </span><span class="comment">//  DESCRIPTION:   If the compiler fails to support foo
 </span></pre>
@@ -138,7 +139,8 @@
         the same name as the macro, but in all lower case, and which returns zero
         on success:
       </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost_no_foo</span> <span class="special">{</span>
+<pre class="programlisting">
+<span class="keyword">namespace</span> <span class="identifier">boost_no_foo</span> <span class="special">{</span>
 
 <span class="keyword">int</span> <span class="identifier">test</span><span class="special">()</span>
 <span class="special">{</span>
@@ -203,7 +205,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros"></a><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros" title="Adding New Feature Test Macros">Adding
+<a name="boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros" title="Adding New Feature Test Macros">Adding
       New Feature Test Macros</a>
 </h3></div></div></div>
 <p>
@@ -227,7 +229,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers"></a><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers" title="Modifying the Boost Configuration Headers">Modifying
+<a name="boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers" title="Modifying the Boost Configuration Headers">Modifying
       the Boost Configuration Headers</a>
 </h3></div></div></div>
 <p>

@@ -1,21 +1,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Unconstrained
-      Sets</title>
+<title>Unconstrained Sets</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.Bimap">
 <link rel="up" href="../the_tutorial.html" title="The tutorial">
-<link rel="prev" href="bimaps_with_user_defined_names.html" title="Bimaps
-      with user defined names">
-<link rel="next" href="additional_information.html" title="Additional
-      information">
+<link rel="prev" href="bimaps_with_user_defined_names.html" title="Bimaps with user defined names">
+<link rel="next" href="additional_information.html" title="Additional information">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
 <td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
@@ -27,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_bimap.the_tutorial.unconstrained_sets"></a><a href="unconstrained_sets.html" title="Unconstrained
-      Sets">Unconstrained
+<a name="boost_bimap.the_tutorial.unconstrained_sets"></a><a class="link" href="unconstrained_sets.html" title="Unconstrained Sets">Unconstrained
       Sets</a>
 </h3></div></div></div>
 <p>
@@ -106,7 +102,7 @@
 
 <span class="keyword">for</span><span class="special">(</span> <span class="identifier">map_type</span><span class="special">::</span><span class="identifier">iterator</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">iend</span> <span class="special">=</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">end</span><span class="special">();</span> <span class="identifier">i</span> <span class="special">!=</span> <span class="identifier">iend</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span> <span class="special">)</span>
 <span class="special">{</span>
-    <span class="line_callout_bug"><a name="boost_bimap14co" href="unconstrained_sets.html#boost_bimap14"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="special">++(</span><span class="identifier">i</span><span class="special">-&gt;</span><span class="identifier">second</span><span class="special">);</span>
+    <span class="line_callout_bug"><a class="co" name="boost_bimap14co" href="unconstrained_sets.html#boost_bimap14"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="special">++(</span><span class="identifier">i</span><span class="special">-&gt;</span><span class="identifier">second</span><span class="special">);</span>
 <span class="special">}</span>
 
 <span class="identifier">m</span><span class="special">.</span><span class="identifier">erase</span><span class="special">(</span><span class="string">"one"</span><span class="special">);</span>
@@ -118,8 +114,7 @@
 <p>
           </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
-<td width="5%" valign="top" align="left">
-<a name="boost_bimap14"></a><a href="#boost_bimap14co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </td>
+<td width="5%" valign="top" align="left"><p><a name="boost_bimap14"></a><a href="#boost_bimap14co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p> The right collection of the bimap is mutable so its elements can be modified
           using iterators. </p></td>
 </tr></table></div>
@@ -139,7 +134,7 @@
 <span class="keyword">typedef</span> <span class="identifier">map_type</span><span class="special">::</span><span class="identifier">const_iterator</span> <span class="identifier">const_iterator</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span><span class="identifier">const_iterator</span><span class="special">&gt;</span> <span class="identifier">const_range</span><span class="special">;</span>
 
-<span class="line_callout_bug"><a name="boost_bimap15co" href="unconstrained_sets.html#boost_bimap15"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">const_range</span> <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="string">"one"</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;=</span> <span class="string">"two"</span> <span class="special">);</span>
+<span class="line_callout_bug"><a class="co" name="boost_bimap15co" href="unconstrained_sets.html#boost_bimap15"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">const_range</span> <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">m</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="string">"one"</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;=</span> <span class="string">"two"</span> <span class="special">);</span>
 <span class="keyword">for</span><span class="special">(</span> <span class="identifier">const_iterator</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">!=</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span> <span class="special">)</span>
 <span class="special">{</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">i</span><span class="special">-&gt;</span><span class="identifier">first</span> <span class="special">&lt;&lt;</span> <span class="string">"--&gt;"</span> <span class="special">&lt;&lt;</span> <span class="identifier">i</span><span class="special">-&gt;</span><span class="identifier">second</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
@@ -154,8 +149,7 @@
 <p>
           </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
-<td width="5%" valign="top" align="left">
-<a name="boost_bimap15"></a><a href="#boost_bimap15co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </td>
+<td width="5%" valign="top" align="left"><p><a name="boost_bimap15"></a><a href="#boost_bimap15co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </p></td>
 <td valign="top" align="left"><p> This range is a model of BidirectionalRange, read the docs of Boost.Range
           for more information. </p></td>
 </tr></table></div>
