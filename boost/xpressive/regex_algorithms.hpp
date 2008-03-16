@@ -14,6 +14,7 @@
 # pragma once
 #endif
 
+#include <string>
 #include <iterator>
 #include <boost/mpl/or.hpp>
 #include <boost/range/end.hpp>
@@ -23,6 +24,7 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/xpressive/match_results.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/utility/save_restore.hpp>
@@ -550,7 +552,8 @@ inline OutIter regex_replace_impl
 }
 } // namespace detail
 
-/// \brief Build an output sequence given an input sequence, a regex, and a format string.
+/// \brief Build an output sequence given an input sequence, a regex, and a format string or
+/// a formatter object or function.
 ///
 /// Constructs a regex_iterator object: regex_iterator\< BidiIter \> i(begin, end, re, flags),
 /// and uses i to enumerate through all of the matches m of type match_results\< BidiIter \> that
@@ -570,7 +573,8 @@ inline OutIter regex_replace_impl
 /// \param begin The beginning of the input sequence.
 /// \param end The end of the input sequence.
 /// \param re The regular expression object to use.
-/// \param format The format string used to format the replacement sequence.
+/// \param format The format string used to format the replacement sequence,
+///        or a formatter function or function object.
 /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
 /// \return The value of the output iterator after the output sequence has been written to it.
 /// \throw regex_error on stack exhaustion or invalid format string.
@@ -583,7 +587,7 @@ inline OutIter regex_replace
   , basic_regex<BidiIter> const &re
   , ForwardRange const &format
   , regex_constants::match_flag_type flags = regex_constants::match_default
-  , typename disable_if<is_pointer<ForwardRange> >::type * = 0
+  , typename disable_if<detail::is_char_ptr<ForwardRange> >::type * = 0
 )
 {
     BidiIter begin_ = begin, end_ = end;
@@ -616,7 +620,7 @@ inline BidiContainer regex_replace
   , basic_regex<BidiIter> const &re
   , ForwardRange const &format
   , regex_constants::match_flag_type flags = regex_constants::match_default
-  , typename disable_if<mpl::or_<is_pointer<BidiContainer>, is_pointer<ForwardRange> > >::type * = 0
+  , typename disable_if<mpl::or_<is_pointer<BidiContainer>, detail::is_char_ptr<ForwardRange> > >::type * = 0
 )
 {
     BidiContainer result;
@@ -636,7 +640,7 @@ inline BidiContainer regex_replace
   , basic_regex<BidiIter> const &re
   , ForwardRange const &format
   , regex_constants::match_flag_type flags = regex_constants::match_default
-  , typename disable_if<mpl::or_<is_pointer<BidiContainer>, is_pointer<ForwardRange> > >::type * = 0
+  , typename disable_if<mpl::or_<is_pointer<BidiContainer>, detail::is_char_ptr<ForwardRange> > >::type * = 0
 )
 {
     BidiContainer result;
@@ -656,12 +660,11 @@ inline std::basic_string<typename remove_const<Char>::type> regex_replace
   , basic_regex<Char *> const &re
   , ForwardRange const &format
   , regex_constants::match_flag_type flags = regex_constants::match_default
-  , typename disable_if<is_pointer<ForwardRange> >::type * = 0
+  , typename disable_if<detail::is_char_ptr<ForwardRange> >::type * = 0
 )
 {
     typedef typename remove_const<Char>::type char_type;
     std::basic_string<char_type> result;
-    result.reserve(boost::size(format) * 2);
     Char *end = str + std::char_traits<char_type>::length(str);
     regex_replace(std::back_inserter(result), str, end, re, format, flags);
     return result;
