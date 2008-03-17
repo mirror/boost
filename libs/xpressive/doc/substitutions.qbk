@@ -7,8 +7,8 @@
 
 [section String Substitutions]
 
-Regular expressions are not only good for searching text; they're good at ['manipulating] it. And one of the most
-common text manipulation tasks is search-and-replace. xpressive provides the _regex_replace_ algorithm for
+Regular expressions are not only good for searching text; they're good at ['manipulating] it. And one of the
+most common text manipulation tasks is search-and-replace. xpressive provides the _regex_replace_ algorithm for
 searching and replacing.
 
 [h2 regex_replace()]
@@ -40,19 +40,40 @@ Ther is her face
 
 Notice that ['all] the occurrences of `"his"` have been replaced with `"her"`.
 
-Click [link boost_xpressive.user_s_guide.examples.replace_all_sub_strings_that_match_a_regex here] to see a complete
-example program that shows how to use _regex_replace_. And check the _regex_replace_ reference
+Click [link boost_xpressive.user_s_guide.examples.replace_all_sub_strings_that_match_a_regex here] to see
+a complete example program that shows how to use _regex_replace_. And check the _regex_replace_ reference
 to see a complete list of the available overloads.
 
-[h2 The Format String]
+[h2 Replace Options]
 
-As with Perl, you can refer to sub-matches in the format string. The table below shows the escape sequences
-xpressive recognizes in the format string.
+The _regex_replace_ algorithm takes an optional bitmask parameter to control the formatting. The
+possible values of the bitmask are:
+
+[table Format Flags
+    [[Flag]                     [Meaning]]
+    [[`format_default`]         [Recognize the ECMA-262 format sequences (see below).]]
+    [[`format_first_only`]      [Only replace the first match, not all of them.]]
+    [[`format_no_copy`]         [Don't copy the parts of the input sequence that didn't match the regex
+                                 to the output sequence.]]
+    [[`format_literal`]         [Treat the format string as a literal; that is, don't recognize any
+                                 escape sequences.]]
+    [[`format_perl`]            [Recognize the Perl format sequences (see below).]]
+    [[`format_sed`]             [Recognize the sed format sequences (see below).]]
+    [[`format_all`]             [In addition to the Perl format sequences, recognize some
+                                 Boost-specific format sequences.]]
+]
+
+These flags live in the `regex_constants` namespace.
+
+[h2 The ECMA-262 Format Sequences]
+
+When you haven't specified a substitution string dialect with one of the format flags above, 
+you get the dialect defined by ECMA-262, the standard for ECMAScript. The table below shows
+the escape sequences recognized in ECMA-262 mode.
 
 [table Format Escape Sequences
     [[Escape Sequence]      [Meaning]]
-    [[[^$1]]                [the first sub-match]]
-    [[[^$2]]                [the second sub-match (etc.)]]
+    [[[^$1], [^$2], etc.]   [the corresponding sub-match]]
     [[[^$&]]                [the full match]]
     [[[^$\`]]               [the match prefix]]
     [[[^$']]                [the match suffix]]
@@ -62,18 +83,71 @@ xpressive recognizes in the format string.
 Any other sequence beginning with `'$'` simply represents itself. For example, if the format string were
 `"$a"` then `"$a"` would be inserted into the output sequence.
 
-[h2 Replace Options]
+[h2 The Sed Format Sequences]
 
-The _regex_replace_ algorithm takes an optional bitmask parameter to control the formatting. The
-possible values of the bitmask are:
+When specifying the `format_sed` flag to _regex_replace_, the following escape sequences
+are recognized:
 
-[table Format Flags
-    [[Flag]                     [Meaning]]
-    [[`format_first_only`]      [Only replace the first match, not all of them.]]
-    [[`format_no_copy`]         [Don't copy the parts of the input sequence that didn't match the regex to the output sequence.]]
-    [[`format_literal`]         [Treat the format string as a literal; that is, don't recognize any escape sequences.]]
+[table Sed Format Escape Sequences
+    [[Escape Sequence]      [Meaning]]
+    [[[^\\1], [^\\2], etc.] [The corresponding sub-match]]
+    [[[^&]]                 [the full match]]
+    [[[^\\a]]               [A literal `'\a'`]]
+    [[[^\\e]]               [A literal `char_type(27)`]]
+    [[[^\\f]]               [A literal `'\f'`]]
+    [[[^\\n]]               [A literal `'\n'`]]
+    [[[^\\r]]               [A literal `'\r'`]]
+    [[[^\\t]]               [A literal `'\t'`]]
+    [[[^\\v]]               [A literal `'\v'`]]
+    [[[^\\xFF]]             [A literal `char_type(0xFF)`, where [^['F]] is any hex digit]]
+    [[[^\\x{FFFF}]]         [A literal `char_type(0xFFFF)`, where [^['F]] is any hex digit]]
+    [[[^\\cX]]              [The control character [^['X]]]]
 ]
 
-These flags live in the `regex_constants` namespace.
+[h2 The Perl Format Sequences]
+
+When specifying the `format_perl` flag to _regex_replace_, the following escape sequences
+are recognized:
+
+[table Perl Format Escape Sequences
+    [[Escape Sequence]      [Meaning]]
+    [[[^$1], [^$2], etc.]   [the corresponding sub-match]]
+    [[[^$&]]                [the full match]]
+    [[[^$\`]]               [the match prefix]]
+    [[[^$']]                [the match suffix]]
+    [[[^$$]]                [a literal `'$'` character]]
+    [[[^\\a]]               [A literal `'\a'`]]
+    [[[^\\e]]               [A literal `char_type(27)`]]
+    [[[^\\f]]               [A literal `'\f'`]]
+    [[[^\\n]]               [A literal `'\n'`]]
+    [[[^\\r]]               [A literal `'\r'`]]
+    [[[^\\t]]               [A literal `'\t'`]]
+    [[[^\\v]]               [A literal `'\v'`]]
+    [[[^\\xFF]]             [A literal `char_type(0xFF)`, where [^['F]] is any hex digit]]
+    [[[^\\x{FFFF}]]         [A literal `char_type(0xFFFF)`, where [^['F]] is any hex digit]]
+    [[[^\\cX]]              [The control character [^['X]]]]
+    [[[^\\l]]               [Make the next character lowercase]]
+    [[[^\\L]]               [Make the rest of the substitution lowercase until the next [^\\E]]]
+    [[[^\\u]]               [Make the next character uppercase]]
+    [[[^\\U]]               [Make the rest of the substitution uppercase until the next [^\\E]]]
+    [[[^\\E]]               [Terminate [^\\L] or [^\\U]]]
+    [[[^\\1], [^\\2], etc.] [The corresponding sub-match]]
+    [[[^\\g<name>]]         [The named backref /name/]]
+]
+
+[h2 The Boost-Specific Format Sequences]
+
+When specifying the `format_all` flag to _regex_replace_, the escape sequences
+recognized are the same as those above for `format_perl`. In addition, conditional
+expressions of the following form are recognized:
+
+[pre
+?Ntrue-expression:false-expression
+]
+
+where /N/ is a decimal digit representing a sub-match. If the corresponding sub-match
+participated in the full match, then the substitution is /true-expression/. Otherwise,
+it is /false-expression/. In this mode, you can use parens [^()] for grouping. If you
+want a literal paren, you must escape it as [^\\(].
 
 [endsect]
