@@ -81,14 +81,16 @@ BOOST_PP_EXPAND(#) include BOOST_FT_AL_PREPROCESSED
 #         include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #     endif
 
+#     define BOOST_FT_AL_INCLUDE_FILE <BOOST_FT_al_path/master.hpp>
+
 #     define BOOST_FT_ARITY_LOOP_PREFIX 1
-#     include BOOST_PP_EXPAND(<BOOST_FT_al_path/master.hpp>)
+#     include BOOST_FT_AL_INCLUDE_FILE
 #     undef  BOOST_FT_ARITY_LOOP_PREFIX
 
 #     if !BOOST_PP_IS_ITERATING
-#       define BOOST_PP_FILENAME_1 <BOOST_FT_al_path/master.hpp>
+#       define BOOST_PP_FILENAME_1 BOOST_FT_AL_INCLUDE_FILE
 #     elif BOOST_PP_ITERATION_DEPTH() == 1
-#       define BOOST_PP_FILENAME_2 <BOOST_FT_al_path/master.hpp>
+#       define BOOST_PP_FILENAME_2 BOOST_FT_AL_INCLUDE_FILE
 #     else
 #       error "loops nested too deeply"
 #     endif
@@ -133,8 +135,10 @@ BOOST_PP_EXPAND(#) include BOOST_FT_AL_PREPROCESSED
 #     undef BOOST_FT_type
 
 #     define BOOST_FT_ARITY_LOOP_SUFFIX 1
-#     include BOOST_PP_EXPAND(<BOOST_FT_al_path/master.hpp>)
+#     include BOOST_FT_AL_INCLUDE_FILE
 #     undef  BOOST_FT_ARITY_LOOP_SUFFIX
+
+#     undef BOOST_FT_AL_INCLUDE_FILE
 #   endif
 
 #   undef BOOST_FT_FROM_ARITY

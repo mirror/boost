@@ -42,7 +42,7 @@
 #     define BOOST_FT_cc_name implicit_cc
 #     define BOOST_FT_cc BOOST_PP_EMPTY
 #     define BOOST_FT_cond callable_builtin
-#     include BOOST_PP_EXPAND ( <BOOST_FT_cc_file> )
+#     include BOOST_FT_cc_file
 #     undef BOOST_FT_cond
 #     undef BOOST_FT_cc_name
 #     undef BOOST_FT_cc
@@ -54,7 +54,7 @@ BOOST_PP_EXPAND(#)   define BOOST_FT_cc_name implicit_cc
 BOOST_PP_EXPAND(#)   define BOOST_FT_cc BOOST_PP_EMPTY
 BOOST_PP_EXPAND(#)   define BOOST_FT_cond callable_builtin
 #define _()
-BOOST_PP_EXPAND(#)   include BOOST_PP_EXPAND _()( <BOOST_FT_cc_file> )
+BOOST_PP_EXPAND(#)   include BOOST_FT_cc_file
 #undef _
 BOOST_PP_EXPAND(#)   undef BOOST_FT_cond
 BOOST_PP_EXPAND(#)   undef BOOST_FT_cc_name
@@ -85,7 +85,7 @@ BOOST_PP_EXPAND(#) endif
 
 #   if BOOST_FT_cond
 #     define BOOST_FT_config_valid 1
-#     include BOOST_PP_EXPAND(<BOOST_FT_cc_file>)
+#     include BOOST_FT_cc_file
 #   endif
 
 #   undef BOOST_FT_cond
@@ -121,7 +121,7 @@ BOOST_PP_EXPAND(#) define BOOST_FT_cond BOOST_FT_cc_cond_v
 BOOST_PP_EXPAND(#) if BOOST_FT_cond
 BOOST_PP_EXPAND(#)   define BOOST_FT_config_valid 1
 #define _()
-BOOST_PP_EXPAND(#)   include BOOST_PP_EXPAND _()(<BOOST_FT_cc_file>)
+BOOST_PP_EXPAND(#)   include BOOST_FT_cc_file
 #undef _
 BOOST_PP_EXPAND(#) endif
 

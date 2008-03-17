@@ -24,10 +24,10 @@ namespace boost
         < function_types::components<T>
         , detail::member_object_pointer_tag >
     { 
-      BOOST_MPL_AUX_LAMBDA_SUPPORT(2,is_member_object_pointer,(T,Tag))
+      BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_member_object_pointer,(T))
     };
   }
-  BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(2,function_types::is_member_object_pointer)
+  BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,function_types::is_member_object_pointer)
 } 
 
 #endif 

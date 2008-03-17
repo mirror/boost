@@ -14,7 +14,7 @@
 #include <boost/function_types/is_callable_builtin.hpp>
 
 #ifndef BOOST_FT_CC_STDCALL
-#   error "test not supported with this compiler"
+#   error "test not supported with this compiler/platform"
 #endif
 
 namespace ft = boost::function_types;

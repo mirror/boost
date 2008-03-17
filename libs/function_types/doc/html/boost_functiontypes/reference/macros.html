@@ -1,21 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Macros</title>
-<link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<title> Macros</title>
+<link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.FunctionTypes 2.5">
-<link rel="up" href="../reference.html" title="Reference">
-<link rel="prev" href="tag_types.html" title="Tag Types">
-<link rel="next" href="../rationale.html" title="Rationale">
+<link rel="up" href="../reference.html" title=" Reference">
+<link rel="prev" href="tag_types.html" title=" Tag Types">
+<link rel="next" href="../rationale.html" title=" Rationale">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_functiontypes.reference.macros"></a><a class="link" href="macros.html" title="Macros"> Macros</a>
-</h3></div></div></div>
+<a name="boost_functiontypes.reference.macros"></a><a href="macros.html" title=" Macros"> Macros</a></h3></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_MAX_ARITY">
         BOOST_FT_MAX_ARITY</a></span></dt>
@@ -48,9 +47,9 @@
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_MAX_ARITY"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_MAX_ARITY" title="BOOST_FT_MAX_ARITY">
-        BOOST_FT_MAX_ARITY</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_MAX_ARITY"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_MAX_ARITY" title="
+        BOOST_FT_MAX_ARITY">
+        BOOST_FT_MAX_ARITY</a></h4></div></div></div>
 <p>
           Expands to a numeric value that describes the maximum function arity supported
           by the library.
@@ -67,16 +66,17 @@
       </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="BOOST_FT_CC_NAMES">
-        BOOST_FT_CC_NAMES</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="
+        BOOST_FT_CC_NAMES">
+        BOOST_FT_CC_NAMES</a></h4></div></div></div>
 <p>
           Expands to a <a href="../../../../../preprocessor/doc/data/sequences.html" target="_top">sequence</a>
           of ternary <a href="../../../../../preprocessor/doc/data/tuples.html" target="_top">tuples</a>
           (these data types are defined in the <a href="../../../../../preprocessor/doc/index.html" target="_top">documentation
           of the Boost Preprocessor library</a>). Each sequence element describes
           one calling convention specifier. The first element in each tuple is the
-          macro suffix for <a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC" title="BOOST_FT_CC_*"><code class="literal">BOOST_FT_CC_*</code></a>,
+          macro suffix for <a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC" title="
+        BOOST_FT_CC_*"><code class="literal">BOOST_FT_CC_*</code></a>,
           the second element is the name of the tag that describes the calling convention
           and the third is the name of the specifier. The specifier is allowed to
           be an empty string, so the third tuple element is either <a href="../../../../../preprocessor/doc/ref/empty.html" target="_top"><code class="literal">BOOST_PP_EMPTY</code></a>
@@ -106,13 +106,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_CC"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC" title="BOOST_FT_CC_*">
-        BOOST_FT_CC_*</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_CC"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC" title="
+        BOOST_FT_CC_*">
+        BOOST_FT_CC_*</a></h4></div></div></div>
 <p>
           Enables a specific calling convention. * dentoes the macro suffix, as defined
-          by <a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="BOOST_FT_CC_NAMES"><code class="literal">BOOST_FT_CC_NAMES</code></a>
-          or <a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="BOOST_FT_CC_NAMES"><code class="literal">BOOST_FT_BUILTIN_CC_NAMES</code></a>.
+          by <a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="
+        BOOST_FT_CC_NAMES"><code class="literal">BOOST_FT_CC_NAMES</code></a>
+          or <a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="
+        BOOST_FT_CC_NAMES"><code class="literal">BOOST_FT_BUILTIN_CC_NAMES</code></a>.
         </p>
 <p>
           The macro expands to a list of restrictions, separated by the <code class="literal">|</code>
@@ -147,9 +149,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_COMMON_X86_CCs"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_COMMON_X86_CCs" title="BOOST_FT_COMMON_X86_CCs">
-        BOOST_FT_COMMON_X86_CCs</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_COMMON_X86_CCs"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_COMMON_X86_CCs" title="
+        BOOST_FT_COMMON_X86_CCs">
+        BOOST_FT_COMMON_X86_CCs</a></h4></div></div></div>
 <p>
           Defining this macro causes the following macros to be defined, if not defined
           already:
@@ -162,9 +164,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_SYNTAX"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_SYNTAX" title="BOOST_FT_SYNTAX">
-        BOOST_FT_SYNTAX</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_SYNTAX"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_SYNTAX" title="
+        BOOST_FT_SYNTAX">
+        BOOST_FT_SYNTAX</a></h4></div></div></div>
 <p>
           This macro allows to change the syntax of callable builtin types. It is
           useful to handle the compiler specific placement of the calling convention
@@ -180,9 +182,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_NULLARY_PARAM"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_NULLARY_PARAM" title="BOOST_FT_NULLARY_PARAM">
-        BOOST_FT_NULLARY_PARAM</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_NULLARY_PARAM"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_NULLARY_PARAM" title="
+        BOOST_FT_NULLARY_PARAM">
+        BOOST_FT_NULLARY_PARAM</a></h4></div></div></div>
 <p>
           Set to <code class="literal">void</code> for compilers that insist on a <code class="literal">void</code>
           parameter for nullary function types, empty by default.
@@ -190,9 +192,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_NO_CV_FUNC_SUPPORT"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_NO_CV_FUNC_SUPPORT" title="BOOST_FT_NO_CV_FUNC_SUPPORT">
-        BOOST_FT_NO_CV_FUNC_SUPPORT</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_NO_CV_FUNC_SUPPORT"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_NO_CV_FUNC_SUPPORT" title="
+        BOOST_FT_NO_CV_FUNC_SUPPORT">
+        BOOST_FT_NO_CV_FUNC_SUPPORT</a></h4></div></div></div>
 <p>
           Disables support for cv-qualified function types. Cv-qualified function
           types are illegal by the current standard version, but there is a pending
@@ -207,9 +209,9 @@
       </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_PREPROCESSING_MODE"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_PREPROCESSING_MODE" title="BOOST_FT_PREPROCESSING_MODE">
-        BOOST_FT_PREPROCESSING_MODE</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_PREPROCESSING_MODE"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_PREPROCESSING_MODE" title="
+        BOOST_FT_PREPROCESSING_MODE">
+        BOOST_FT_PREPROCESSING_MODE</a></h4></div></div></div>
 <p>
           Makes the compiler preprocess as much as possible of the library code (rather
           than loading already-preprocessed header files) if defined.
@@ -217,27 +219,24 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_functiontypes.reference.macros.BOOST_FT_CC_PREPROCESSING"></a><a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_PREPROCESSING" title="BOOST_FT_CC_PREPROCESSING">
-        BOOST_FT_CC_PREPROCESSING</a>
-</h4></div></div></div>
+<a name="boost_functiontypes.reference.macros.BOOST_FT_CC_PREPROCESSING"></a><a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_PREPROCESSING" title="
+        BOOST_FT_CC_PREPROCESSING">
+        BOOST_FT_CC_PREPROCESSING</a></h4></div></div></div>
 <p>
           Makes the compiler preprocess the loop over possible names for custom calling
           conventions (rather than loading an already-preprocessed header file) if
           defined.
         </p>
 <p>
-          This macro is defined automatically if <a class="link" href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="BOOST_FT_CC_NAMES"><code class="literal">BOOST_FT_CC_NAMES</code></a>
+          This macro is defined automatically if <a href="macros.html#boost_functiontypes.reference.macros.BOOST_FT_CC_NAMES" title="
+        BOOST_FT_CC_NAMES"><code class="literal">BOOST_FT_CC_NAMES</code></a>
           has been defined.
         </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2004 -2007 Tobias Schwinger<p>
-        Distributed under the Boost Software License, Version 1.0. (See accompanying
-        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p>
-</div></td>
+<td align="right"><small>Copyright © 2004 -2007 Tobias Schwinger</small></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

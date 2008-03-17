@@ -120,13 +120,14 @@ namespace boost
     template
     < typename Components
     , typename IfTagged
-    , typename ThenTag 
+    , typename ThenTag
+    , typename DefaultBase = components_non_func_base
     >
     struct retagged_if
       : mpl::if_
         < detail::represents_impl<Components, IfTagged>
         , detail::changed_tag<Components,IfTagged,ThenTag>
-        , components_non_func_base
+        , DefaultBase
         >::type
     { };
 
@@ -213,14 +214,71 @@ namespace boost
       : components_impl<T,L>
     { };
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x565))
+
+    template<typename T, class C>
+    struct member_obj_ptr_result
+    { typedef T & type; };
+
+    template<typename T, class C>
+    struct member_obj_ptr_result<T, C const>
+    { typedef T const & type; };
+
+    template<typename T, class C>
+    struct member_obj_ptr_result<T, C volatile>
+    { typedef T volatile & type; };
+
+    template<typename T, class C>
+    struct member_obj_ptr_result<T, C const volatile>
+    { typedef T const volatile & type; };
+
+    template<typename T, class C>
+    struct member_obj_ptr_result<T &, C>
+    { typedef T & type; };
+
+    template<typename T, class C>
+    struct member_obj_ptr_result<T &, C const>
+    { typedef T & type; };
+
+    template<typename T, class C>
+    struct member_obj_ptr_result<T &, C volatile>
+    { typedef T & type; };
+
+    template<typename T, class C>
+    struct member_obj_ptr_result<T &, C const volatile>
+    { typedef T & type; };
+
+    template<typename T, class C, typename L>
+    struct member_obj_ptr_components
+      : member_object_pointer_base
+    {
+      typedef function_types::components<T C::*, L> type;
+      typedef components_mpl_sequence_tag tag;
+
+      typedef mpl::integral_c<std::size_t,1> function_arity;
+
+      typedef mpl::vector2< typename detail::member_obj_ptr_result<T,C>::type,
+          typename detail::class_transform<C,L>::type > types;
+    };
+
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x565))
+#   define BOOST_FT_variations BOOST_FT_pointer|BOOST_FT_member_pointer
+
+    template<typename T, class C, typename L>
+    struct components_impl<T C::*, L>
+      : member_obj_ptr_components<T,C,L>
+    { };
+
+#else  
+#   define BOOST_FT_variations BOOST_FT_pointer
+
     // This workaround removes the member pointer from the type to allow 
     // detection of member function pointers with BCC. 
     template<typename T, typename C, typename L>
     struct components_impl<T C::*, L>
       : detail::retagged_if
         < detail::components_impl<typename boost::remove_cv<T>::type *, L>
-        , pointer_tag, /* --> */ member_pointer_tag >
+        , pointer_tag, /* --> */ member_function_pointer_tag
+        , member_obj_ptr_components<T,C,L> >
     { };
 
     // BCC lets us test the cv-qualification of a function type by template 
@@ -349,65 +407,13 @@ namespace boost
     struct components_bcc
       : mpl::if_
         < detail::represents_impl< detail::components_impl<T,L>
-                                 , member_pointer_tag>
+                                 , member_function_pointer_tag>
         , detail::mfp_components<detail::components_impl<T,L>,T,OrigT,L>
         , detail::components_impl<T,L>
         >::type
     { };
 
-// TODO: add data member support for Borland
-
-#   define BOOST_FT_variations BOOST_FT_pointer
-#else // end of BORLAND WORKAROUND
-#   define BOOST_FT_variations BOOST_FT_pointer|BOOST_FT_member_pointer
-
-    template<typename T, class C>
-    struct member_obj_ptr_result
-    { typedef T & type; };
-
-    template<typename T, class C>
-    struct member_obj_ptr_result<T, C const>
-    { typedef T const & type; };
-
-    template<typename T, class C>
-    struct member_obj_ptr_result<T, C volatile>
-    { typedef T volatile & type; };
-
-    template<typename T, class C>
-    struct member_obj_ptr_result<T, C const volatile>
-    { typedef T const volatile & type; };
-
-    template<typename T, class C>
-    struct member_obj_ptr_result<T &, C>
-    { typedef T & type; };
-
-    template<typename T, class C>
-    struct member_obj_ptr_result<T &, C const>
-    { typedef T & type; };
-
-    template<typename T, class C>
-    struct member_obj_ptr_result<T &, C volatile>
-    { typedef T & type; };
-
-    template<typename T, class C>
-    struct member_obj_ptr_result<T &, C const volatile>
-    { typedef T & type; };
-
-
-    template<typename T, class C, typename L>
-    struct components_impl<T C::*, L>
-        : member_object_pointer_base
-    {
-      typedef function_types::components<T C::*, L> type;
-      typedef components_mpl_sequence_tag tag;
-
-      typedef mpl::integral_c<std::size_t,1> function_arity;
-
-      typedef mpl::vector2< typename detail::member_obj_ptr_result<T,C>::type,
-          typename detail::class_transform<C,L>::type > types;
-    };
-
-#endif 
+#endif // end of BORLAND WORKAROUND
 
 #define BOOST_FT_al_path boost/function_types/detail/components_impl
 #include <boost/function_types/detail/pp_loop.hpp>

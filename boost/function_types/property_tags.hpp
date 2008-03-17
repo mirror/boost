@@ -141,7 +141,7 @@ template<class Tag, class QueryTag> struct extract
 #include <boost/function_types/detail/pp_tags/preprocessed.hpp>
 
 namespace boost { namespace function_types {
-#define BOOST_FT_cc_file boost/function_types/detail/pp_tags/cc_tag.hpp
+#define BOOST_FT_cc_file <boost/function_types/detail/pp_tags/cc_tag.hpp>
 #include <boost/function_types/detail/pp_loop.hpp>
 } } // namespace boost::function_types
 
