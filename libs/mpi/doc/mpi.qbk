@@ -2040,7 +2040,8 @@ performance.
 Boost.MPI was developed with support from Zurcher Kantonalbank. Daniel
 Egloff and Michael Gauckler contributed many ideas to Boost.MPI's
 design, particularly in the design of its abstractions for
-MPI data types. Prabhanjan (Anju) Kambadur developed the predecessor to
+MPI data types and the novel skeleton/context mechanism for large data
+structures. Prabhanjan (Anju) Kambadur developed the predecessor to
 Boost.MPI that proved the usefulness of the Serialization library in
 an MPI setting and the performance benefits of specialization in a C++
 abstraction layer for MPI. Jeremy Siek managed the formal review of Boost.MPI.
