@@ -26,6 +26,7 @@
 namespace boost {
 namespace archive {
 
+#if 0
 BOOST_WARCHIVE_DECL(std::wostream &)
 operator<<(std::wostream &os, const char *t){
     for(;;){
@@ -53,6 +54,7 @@ operator<<(std::wostream &os, const char t){
     os.put(wc);
     return os;
 }
+#endif
 
 template class basic_xml_oarchive<xml_woarchive> ;
 template class xml_woarchive_impl<xml_woarchive> ;

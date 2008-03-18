@@ -35,6 +35,7 @@ namespace std{
 
 // simple test of untracked value
 #include "A.hpp"
+#include "A.ipp"
 
 void test1(){
     std::stringstream ss;
@@ -74,7 +75,7 @@ public:
     {}
 };
 
-BOOST_TEST_DONT_PRINT_LOG_VALUE( B )
+//BOOST_TEST_DONT_PRINT_LOG_VALUE( B )
 
 void test2(){
     std::stringstream ss;
@@ -118,7 +119,7 @@ public:
     D(){}
 };
 
-BOOST_TEST_DONT_PRINT_LOG_VALUE( D )
+//BOOST_TEST_DONT_PRINT_LOG_VALUE( D )
 
 void test3(){
     std::stringstream ss;
@@ -162,7 +163,7 @@ public:
         m_i(rhs.m_i)
     {}
 };
-BOOST_TEST_DONT_PRINT_LOG_VALUE( E )
+//BOOST_TEST_DONT_PRINT_LOG_VALUE( E )
 
 // check that moves don't move stuff pointed to
 class F {
@@ -191,7 +192,7 @@ public:
     }
 };
 
-BOOST_TEST_DONT_PRINT_LOG_VALUE( F )
+//BOOST_TEST_DONT_PRINT_LOG_VALUE( F )
 
 void test4(){
     std::stringstream ss;
@@ -257,7 +258,7 @@ public:
     ~G(){}
 };
 
-BOOST_TEST_DONT_PRINT_LOG_VALUE( G )
+//BOOST_TEST_DONT_PRINT_LOG_VALUE( G )
 
 void test5(){
     std::stringstream ss;

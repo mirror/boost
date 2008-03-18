@@ -29,6 +29,7 @@
 #include <boost/io/ios_state.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/archive/impl/basic_xml_grammar.hpp>
+#include <boost/archive/xml_archive_exception.hpp>
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/iterators/xml_unescape.hpp>
 
@@ -269,7 +270,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     // refactoring to workaround template depth on darwin
-    CharDataChars = *(anychar_p - chset_p(L"&<"));
+    CharDataChars = +(anychar_p - chset_p(L"&<"));
     CharData =  
         CharDataChars [
             xml::append_string<
@@ -305,7 +306,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 
     content = 
         L"<" // should be end_p
-        | (Reference | CharData) >> content
+        | +(Reference | CharData) >> L"<"
     ;
 
     ClassIDAttribute = 
@@ -368,7 +369,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         Name
         >> Eq
         >> L'"'
-        >> CharData
+        >> !CharData
         >> L'"'
     ;
 

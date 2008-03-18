@@ -23,29 +23,29 @@ namespace std{
 } // namespace std
 #endif
 
-#define BOOST_ARCHIVE_SOURCE
-#include <boost/archive/detail/auto_link_archive.hpp>
-
 #include <boost/limits.hpp>
 #include <boost/state_saver.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/serialization/tracking.hpp>
 
+#include <boost/archive/archive_exception.hpp>
+
+#define BOOST_ARCHIVE_SOURCE
+#define BOOST_SERIALIZATION_SOURCE
+
+#include <boost/archive/detail/decl.hpp>
+#include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
 #include <boost/archive/detail/basic_iarchive.hpp>
-#include <boost/archive/archive_exception.hpp>
 
-#include <boost/serialization/tracking.hpp>
-#include <boost/serialization/extended_type_info.hpp>
+#include <boost/archive/detail/auto_link_archive.hpp>
 
 using namespace boost::serialization;
 
 namespace boost {
 namespace archive {
 namespace detail {
-
-class basic_iserializer;
-class basic_pointer_iserializer;
 
 class basic_iarchive_impl {
     friend class basic_iarchive;
@@ -166,6 +166,7 @@ class basic_iarchive_impl {
         m_flags(flags),
         moveable_objects_start(0),
         moveable_objects_end(0),
+        moveable_objects_recent(0),
         pending_object(NULL),
         pending_bis(NULL),
         pending_version(0)
@@ -274,8 +275,10 @@ basic_iarchive_impl::delete_created_pointers()
         ++i
     ){
         if(i->loaded_as_pointer){
-            const unsigned int j = i->class_id;
+            // borland complains without this minor hack
+            const int j = i->class_id;
             const cobject_id & co = cobject_id_vector[j];
+            //const cobject_id & co = cobject_id_vector[i->class_id];
             // with the appropriate input serializer, 
             // delete the indicated object
             co.bis_ptr->destroy(i->address);
@@ -358,7 +361,8 @@ basic_iarchive_impl::load_object(
     }
 
     const class_id_type cid = register_type(bis);
-    cobject_id & co = cobject_id_vector[cid];
+    const int i = cid;
+    cobject_id & co = cobject_id_vector[i];
 
     load_preamble(ar, co);
 
@@ -482,8 +486,15 @@ basic_iarchive_impl::load_pointer(
     return bpis_ptr;
 }
 
+} // namespace detail
+} // namespace archive
+} // namespace boost
+
 //////////////////////////////////////////////////////////////////////
 // implementation of basic_iarchive functions
+namespace boost {
+namespace archive {
+namespace detail {
 
 BOOST_ARCHIVE_DECL(void)
 basic_iarchive::next_object_pointer(void *t){

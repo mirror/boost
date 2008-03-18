@@ -20,23 +20,18 @@ namespace std{
 
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/type_info_implementation.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
-class polymorphic_base
-{
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & /* ar */, const unsigned int /* file_version */){
-    }
-public:
-    virtual ~polymorphic_base(){};
-};
+#include "base.hpp"
 
-BOOST_IS_ABSTRACT(polymorphic_base)
+template<class Archive>
+void polymorphic_base::serialize(
+    Archive &ar,
+    const unsigned int /* file_version */){
+}
 
 class polymorphic_derived1 : public polymorphic_base
 {
@@ -46,7 +41,7 @@ class polymorphic_derived1 : public polymorphic_base
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
     }
 public:
-    virtual ~polymorphic_derived1(){}
+    ~polymorphic_derived1(){}
 };
 
 BOOST_CLASS_EXPORT(polymorphic_derived1)
@@ -54,27 +49,22 @@ BOOST_CLASS_EXPORT(polymorphic_derived1)
 // MWerks users can do this to make their code work
 BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived1)
 
-class polymorphic_derived2 : public polymorphic_base
-{
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int /* file_version */){
-        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
-    }
-public:
-    virtual ~polymorphic_derived2(){}
-};
+#include "derived2.hpp"
 
+template<class Archive>
+void polymorphic_derived2::serialize(
+    Archive &ar, 
+    const unsigned int /* file_version */
+){
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
+}
 BOOST_CLASS_EXPORT(polymorphic_derived2)
-
-// MWerks users can do this to make their code work
-BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)
 
 // save exported polymorphic class
 void save_exported(const char *testfile)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
 
     polymorphic_base *rb1 = new polymorphic_derived1;
     polymorphic_base *rb2 = new polymorphic_derived2;
@@ -92,7 +82,7 @@ void save_exported(const char *testfile)
 void load_exported(const char *testfile)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
 
     polymorphic_base *rb1 = NULL;
     polymorphic_base *rb2 = NULL;
@@ -102,18 +92,20 @@ void load_exported(const char *testfile)
     ia >> BOOST_SERIALIZATION_NVP(rb1);
     BOOST_CHECK_MESSAGE(
         boost::serialization::type_info_implementation<polymorphic_derived1>
-            ::type::get_instance()
-        == boost::serialization::type_info_implementation<polymorphic_base>
-            ::type::get_derived_extended_type_info(*rb1),
+            ::type::get_const_instance()
+        == 
+        * boost::serialization::type_info_implementation<polymorphic_base>
+            ::type::get_const_instance().get_derived_extended_type_info(*rb1),
         "restored pointer b1 not of correct type"
     );
 
     ia >> BOOST_SERIALIZATION_NVP(rb2);
     BOOST_CHECK_MESSAGE(
         boost::serialization::type_info_implementation<polymorphic_derived2>
-            ::type::get_instance()
-        == boost::serialization::type_info_implementation<polymorphic_base>
-            ::type::get_derived_extended_type_info(*rb2),
+            ::type::get_const_instance()
+        == 
+        * boost::serialization::type_info_implementation<polymorphic_base>
+            ::type::get_const_instance().get_derived_extended_type_info(*rb2),
         "restored pointer b2 not of correct type"
     );
 

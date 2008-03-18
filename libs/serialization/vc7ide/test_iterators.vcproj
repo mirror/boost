@@ -13,7 +13,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/debug/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/debug/threading-multi&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1">
 			<Tool
@@ -66,8 +66,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/release/runtime-link-static/threading-multi/&quot;"
-			IntermediateDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/release/runtime-link-static/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/release/threading-multi/link-static&quot;"
+			IntermediateDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/release/threading-multi/link-static&quot;"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -123,8 +123,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/release/runtime-link-static/&quot;"
-			IntermediateDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/release/runtime-link-static/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/release/link-static/&quot;"
+			IntermediateDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/release/link-static/&quot;"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -180,8 +180,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/release/threading-multi/&quot;"
-			IntermediateDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/release/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/release/threading-multi&quot;"
+			IntermediateDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/release/threading-multi&quot;"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -237,8 +237,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/debug/runtime-link-static/&quot;"
-			IntermediateDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/debug/runtime-link-static/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/debug/link-static/&quot;"
+			IntermediateDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/debug/link-static/&quot;"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -290,8 +290,61 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/debug/runtime-link-static/threading-multi&quot;"
-			IntermediateDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/test/$(ProjectName).test/vc-7_1/debug/runtime-link-static/threading-multi&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/debug/threading-multi/link-static&quot;"
+			IntermediateDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/test/$(ProjectName).test/msvc-7.1/debug/threading-multi/link-static&quot;"
+			ConfigurationType="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\&quot;"
+				RuntimeLibrary="1"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="TRUE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="1"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
+				GenerateDebugInformation="TRUE"
+				SubSystem="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug runtime-dynamic threading-multi|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -345,9 +398,9 @@
 	<References>
 	</References>
 	<Files>
-              <File
-                     RelativePath="..\test\test_iterators.cpp">
-              </File>
+		<File
+			RelativePath="..\test\test_iterators.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

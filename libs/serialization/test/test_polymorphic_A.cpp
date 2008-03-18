@@ -8,7 +8,9 @@
 
 #include "test_polymorphic_A.hpp"
 #include <boost/serialization/nvp.hpp>
+
 #include "A.hpp"
+#include "A.ipp"
 
 data::data() :
     a(new A)

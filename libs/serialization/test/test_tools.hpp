@@ -16,8 +16,12 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
 #include <cstdio> // remove, tmpnam
+#ifndef BOOST_NO_EXCEPTION_STD_NAMESPACE
+    #include <exception>
+#endif
+#include <boost/config.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 #if defined(UNDER_CE)
 
@@ -68,25 +72,33 @@ namespace std{
 
 namespace boost {
 namespace archive {
-    char * tmpnam(char * buffer){
-        char old_dir[256];
-        _getcwd(old_dir, sizeof(old_dir) - 1);
-
-        char * temp_dir = boost::archive::tmpdir();
-        chdir(temp_dir);
-
-        char temp_name[256];
-        std::tmpnam(temp_name);
-
-        chdir(old_dir);
+    char * test_filename(char * dir = NULL, char *fname = NULL){
         static char ibuffer [512];
 
-        if(NULL == buffer)
-            buffer = ibuffer;
+        if(NULL == dir)
+            dir = boost::archive::tmpdir();
 
-        STRCPY(buffer, temp_dir);
-        std::strcat(buffer, temp_name);
-        return buffer;
+        if(NULL == fname){
+            char old_dir[256];
+            _getcwd(old_dir, sizeof(old_dir) - 1);
+            chdir(dir);
+
+            std::tmpnam(ibuffer);
+            chdir(old_dir);
+        }
+        else{
+            STRCPY(ibuffer, dir);
+            std::strcat(ibuffer, "/");
+            std::strcat(ibuffer, fname);
+        }
+        return ibuffer;
+    }
+    char * tmpnam(char * buffer){
+        char * name = test_filename(NULL, NULL);
+        if(NULL != buffer){
+            STRCPY(buffer, name);
+        }
+        return name;
     }
 } // archive
 } // boost
@@ -119,12 +131,6 @@ namespace archive {
 #endif // defined(__hpux)
 #endif // defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 
-/////////////////////////////////////////////
-// invoke header for a custom archive test.
-#if ! defined(BOOST_ARCHIVE_TEST)
-#define BOOST_ARCHIVE_TEST text_archive.hpp
-#endif
-
 //#include <boost/test/test_tools.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -154,16 +160,35 @@ inline void msg_impl(char const * msg, char const * file, int line, char const *
 #define BOOST_CHECKPOINT( M ) \
     BOOST_WARN_MESSAGE( true , (M) )
 
-#define BOOST_TEST_DONT_PRINT_LOG_VALUE( T ) 
+//#define BOOST_TEST_DONT_PRINT_LOG_VALUE( T ) 
 
 #define BOOST_FAIL( M ) BOOST_REQUIRE_MESSAGE( false, (M) )
 #define EXIT_SUCCESS 0
 
 int test_main(int argc, char * argv[]);
 
+#include <boost/serialization/singleton.hpp>
+
 int
 main(int argc, char * argv[]){
-    test_main(argc, argv);
+    
+    boost::serialization::singleton_module::lock();
+
+    BOOST_TRY{
+        test_main(argc, argv);
+    }
+    #ifndef BOOST_NO_EXCEPTION_STD_NAMESPACE
+        BOOST_CATCH(const std::exception & e){
+            BOOST_ERROR(e.what());
+        }
+    #endif
+    BOOST_CATCH(...){
+        BOOST_ERROR("failed with uncaught exception:");
+    }
+    BOOST_CATCH_END
+
+    boost::serialization::singleton_module::unlock();
+
     return boost::report_errors();
 }
 
@@ -175,6 +200,36 @@ main(int argc, char * argv[]){
 #include "binary_archive.hpp"
 #include "xml_archive.hpp"
 #include "xml_warchive.hpp"
+#include "portable_le_binary_archive.hpp"
+#include "portable_be_binary_archive.hpp"
 */
+
+/////////////////////////////////////////////
+// invoke header for a custom archive test.
+
+/////////////////////////////////////////////
+// invoke header for a custom archive test.
+#if ! defined(BOOST_ARCHIVE_TEST)
+#define BOOST_ARCHIVE_TEST text_archive.hpp
+#endif
+
+#include <boost/preprocessor/stringize.hpp>
+#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+
+#ifndef TEST_STREAM_FLAGS
+    #define TEST_STREAM_FLAGS (std::ios_base::openmode)0
+#endif
+
+#ifndef TEST_ARCHIVE_FLAGS
+    #define TEST_ARCHIVE_FLAGS 0
+#endif
+
+#ifndef TEST_DIRECTORY
+#define TEST_DIRECTORY
+#else
+#define __x__ TEST_DIRECTORY
+#undef TEST_DIRECTORY
+#define TEST_DIRECTORY BOOST_PP_STRINGIZE(__x__)
+#endif
 
 #endif // BOOST_SERIALIZATION_TEST_TOOLS_HPP

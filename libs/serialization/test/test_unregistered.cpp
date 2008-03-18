@@ -19,11 +19,10 @@ namespace std{
 #endif
 
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/archive/archive_exception.hpp>
 #include <boost/serialization/base_object.hpp>
+#include <boost/serialization/type_info_implementation.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 
 class polymorphic_base
@@ -58,7 +57,7 @@ class polymorphic_derived2 : public polymorphic_base
 void save_unregistered1(const char *testfile)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
 
     polymorphic_base *rb1 =  new polymorphic_derived1;
     
@@ -113,7 +112,7 @@ void load_unregistered1(const char *testfile)
 void save_unregistered2(const char *testfile)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
 
     polymorphic_derived1 *rd1 = new polymorphic_derived1;
     
@@ -139,7 +138,7 @@ void save_unregistered2(const char *testfile)
 void load_unregistered2(const char *testfile)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
 
     polymorphic_derived1 *rd1 = NULL;
     
@@ -166,7 +165,7 @@ void load_unregistered2(const char *testfile)
 void save_registered(const char *testfile)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
 
     polymorphic_base *rb1 = new polymorphic_derived1;
     polymorphic_base *rb2 = new polymorphic_derived2;
@@ -186,7 +185,7 @@ void save_registered(const char *testfile)
 void load_registered(const char *testfile)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
 
     polymorphic_base *rb1 = NULL;
     polymorphic_base *rb2 = NULL;
@@ -200,20 +199,26 @@ void load_registered(const char *testfile)
 
     BOOST_CHECK_MESSAGE(NULL != rb1, "Load resulted in NULL pointer");
     BOOST_CHECK_MESSAGE(
-        boost::serialization::type_info_implementation<polymorphic_derived1>
-            ::type::get_instance()
-        == boost::serialization::type_info_implementation<polymorphic_base>
-            ::type::get_derived_extended_type_info(*rb1),
+        boost::serialization::type_info_implementation<
+            polymorphic_derived1
+        >::type::get_const_instance()
+        == 
+        * boost::serialization::type_info_implementation<
+            polymorphic_base
+        >::type::get_const_instance().get_derived_extended_type_info(*rb1),
         "restored pointer b1 not of correct type"
     );
 
     ia >> BOOST_SERIALIZATION_NVP(rb2);
     BOOST_CHECK_MESSAGE(NULL != rb2, "Load resulted in NULL pointer");
     BOOST_CHECK_MESSAGE(
-        boost::serialization::type_info_implementation<polymorphic_derived2>
-            ::type::get_instance()
-        == boost::serialization::type_info_implementation<polymorphic_base>
-            ::type::get_derived_extended_type_info(*rb2),
+        boost::serialization::type_info_implementation<
+            polymorphic_derived2
+        >::type::get_const_instance()
+        == 
+        * boost::serialization::type_info_implementation<
+            polymorphic_base
+        >::type::get_const_instance().get_derived_extended_type_info(*rb2),
         "restored pointer b2 not of correct type"
     );
 

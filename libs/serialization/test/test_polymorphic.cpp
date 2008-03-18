@@ -18,12 +18,6 @@ namespace std{
 }
 #endif
 
-#include "test_tools.hpp"
-
-#if !defined(BOOST_ARCHIVE_TEST)
-#define BOOST_ARCHIVE_TEST polymorphic_text_archive.hpp
-#endif
-
 // the following is to ensure that when one of the libraries changes
 // BJAM rebuilds and relinks the test.
 /*
@@ -32,10 +26,11 @@ namespace std{
 #include "polymorphic_binary_archive.hpp"
 #include "polymorphic_xml_archive.hpp"
 #include "polymorphic_xml_warchive.hpp"
+#include "polymorphic_portable_le_binary_archive.hpp"
+#include "polymorphic_portable_be_binary_archive.hpp"
 */
 
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
+#include "test_tools.hpp"
 
 #include <boost/archive/polymorphic_oarchive.hpp>
 #include <boost/archive/polymorphic_iarchive.hpp>
@@ -52,13 +47,13 @@ int test_main(int /* argc */, char * /* argv */ [])
     // test using using polymorphic interface
     {
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa_implementation(os);
+        test_oarchive oa_implementation(os, TEST_ARCHIVE_FLAGS);
         boost::archive::polymorphic_oarchive & oa_interface = oa_implementation;
         oa_interface << BOOST_SERIALIZATION_NVP(d);
     }
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive  ia_implementation(is);
+        test_iarchive  ia_implementation(is, TEST_ARCHIVE_FLAGS);
         boost::archive::polymorphic_iarchive & ia_interface = ia_implementation;
         ia_interface >> BOOST_SERIALIZATION_NVP(d1);
     }
@@ -68,12 +63,12 @@ int test_main(int /* argc */, char * /* argv */ [])
     // test using using polymorphic implementation.
     {
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa_implementation(os);
+        test_oarchive oa_implementation(os, TEST_ARCHIVE_FLAGS);
         oa_implementation << BOOST_SERIALIZATION_NVP(d);
     }
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive  ia_implementation(is);
+        test_iarchive  ia_implementation(is, TEST_ARCHIVE_FLAGS);
         ia_implementation >> BOOST_SERIALIZATION_NVP(d1);
     }
     BOOST_CHECK(d == d1);
@@ -83,14 +78,14 @@ int test_main(int /* argc */, char * /* argv */ [])
     {
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_oarchive * oa_implementation 
-            = new test_oarchive(os);
+            = new test_oarchive(os, TEST_ARCHIVE_FLAGS);
         *oa_implementation << BOOST_SERIALIZATION_NVP(d);
         delete oa_implementation;
     }
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         boost::archive::polymorphic_iarchive * ia_implementation
-            = new test_iarchive(is);
+            = new test_iarchive(is, TEST_ARCHIVE_FLAGS);
         *ia_implementation >> BOOST_SERIALIZATION_NVP(d1);
         delete ia_implementation;
     }

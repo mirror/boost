@@ -21,8 +21,6 @@ namespace std{
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -44,6 +42,7 @@ public:
     virtual ~A(){--count;}   // default destructor
 };
 
+BOOST_CLASS_EXPORT(A)
 
 // B is a subclass of A
 class B : public A
@@ -61,7 +60,6 @@ public:
     virtual ~B() {};
 };
 
-BOOST_CLASS_EXPORT(A)
 BOOST_CLASS_EXPORT(B)
 
 int A::count = 0;

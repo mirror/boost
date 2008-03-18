@@ -44,8 +44,8 @@ They are declared in the namespace
 template&lt;class Derived, class Base&gt;
 const void_cast_detail::void_caster &
 void_cast_register(
-    const Derived * derived = NULL, 
-    const Base * base = NULL
+    Derived const * derived = NULL, 
+    Base * const base = NULL
 )
 </code></pre></h4></dt>
 <dd>

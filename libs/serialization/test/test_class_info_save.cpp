@@ -16,8 +16,6 @@
 #include <boost/archive/tmpdir.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/version.hpp>
@@ -69,7 +67,7 @@ BOOST_CLASS_TRACKING(B, boost::serialization::track_always)
 void out(const char *testfile, const A & a, const B & b)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
     // write object twice to check tracking
     oa << BOOST_SERIALIZATION_NVP(a);
     oa << BOOST_SERIALIZATION_NVP(a);

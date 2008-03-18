@@ -20,10 +20,9 @@ namespace std{
 
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/base_object.hpp>
+#include <boost/serialization/type_info_implementation.hpp>
 
 class base
 {
@@ -55,7 +54,7 @@ class derived2 : public base
 void save_derived(const char *testfile)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
 
     // registration not necessary when serializing the most derived pointer
     derived1 *d1 = new derived1;
@@ -70,15 +69,15 @@ void save_derived(const char *testfile)
     // Warning, the current type id system does not yield true
     // type id for non-polymorphic types
     const boost::serialization::extended_type_info & this_type
-        = * boost::serialization::type_info_implementation<base>::type
-            ::get_instance();
+        = boost::serialization::type_info_implementation<base>::type
+            ::get_const_instance();
     // retrieve the true type of the object pointed to
-    const boost::serialization::extended_type_info & true_type 
+    const boost::serialization::extended_type_info & true_type
         = * boost::serialization::type_info_implementation<base>::type
-            ::get_derived_extended_type_info(*b1);
+            ::get_const_instance().get_derived_extended_type_info(*b1);
 
     BOOST_WARN_MESSAGE(
-        (this_type != true_type), 
+        !(this_type == true_type), 
         "current type id system does not support non-polymorphic types"
     );
 
@@ -93,7 +92,7 @@ void save_derived(const char *testfile)
 void load_derived(const char *testfile)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
 
     // registration not necessary when serializing the most derived pointer
     derived1 *d1 = NULL;
@@ -108,15 +107,15 @@ void load_derived(const char *testfile)
     // Warning, the current type id system does not yield true
     // type id for non-polymorphic types
     const boost::serialization::extended_type_info & this_type
-        = * boost::serialization::type_info_implementation<base>::type
-            ::get_instance();
+        = boost::serialization::type_info_implementation<base>::type
+            ::get_const_instance();
     // retrieve the true type of the object pointed to
-    const boost::serialization::extended_type_info & true_type 
+    const boost::serialization::extended_type_info & true_type
         = * boost::serialization::type_info_implementation<base>::type
-            ::get_derived_extended_type_info(*b1);
+            ::get_const_instance().get_derived_extended_type_info(*b1);
             
     BOOST_WARN_MESSAGE(
-        this_type != true_type, 
+        ! (this_type == true_type), 
         "current type id system does fails for non-polymorphic types"
     );
 

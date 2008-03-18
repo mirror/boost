@@ -19,8 +19,6 @@ namespace std{
 #endif
 
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/shared_ptr_132.hpp>
 #include <boost/serialization/shared_ptr.hpp>
@@ -93,7 +91,7 @@ template<class T>
 void save(const char * testfile, const T & spa)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
     oa << BOOST_SERIALIZATION_NVP(spa);
 }
 
@@ -101,7 +99,7 @@ template<class T>
 void load(const char * testfile, T & spa)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
     ia >> BOOST_SERIALIZATION_NVP(spa);
 }
 
@@ -133,7 +131,7 @@ void save2(
     const T & second
 ){
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
     oa << BOOST_SERIALIZATION_NVP(first);
     oa << BOOST_SERIALIZATION_NVP(second);
 }
@@ -145,7 +143,7 @@ void load2(
     T & second)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
     ia >> BOOST_SERIALIZATION_NVP(first);
     ia >> BOOST_SERIALIZATION_NVP(second);
 }
@@ -180,7 +178,7 @@ void save3(
     const T & third
 ){
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
     oa << BOOST_SERIALIZATION_NVP(third);
     oa << BOOST_SERIALIZATION_NVP(first);
     oa << BOOST_SERIALIZATION_NVP(second);
@@ -194,7 +192,7 @@ void load3(
     T & third
 ){
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
     // note that we serialize the weak pointer first
     ia >> BOOST_SERIALIZATION_NVP(third);
     // inorder to test that a temporarily solitary weak pointer

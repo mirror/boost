@@ -27,7 +27,6 @@ http://www.boost.org/LICENSE_1_0.txt)
 <hr>
 <dl class="page-index">
   <dt><a href="#objecttracking">Object Tracking</a>
-  <dt><a href="#export">Exporting Class Serialization</a>
   <dt><a href="#classinfo">Class Information</a>
   <dt><a href="#portability">Archive Portability</a>
   <dl class="page-index">
@@ -36,7 +35,9 @@ http://www.boost.org/LICENSE_1_0.txt)
   </dl>
   <dt><a href="#binary_archives">Binary Archives</a>
   <dt><a href="#xml_archives">XML Archives</a>
+  <dt><a href="#export">Exporting Class Serialization</a>
   <dt><a href="#dlls">DLLS - Serialization and Runtime Linking</a>
+  <dt><a href="#plugins">Plugins</a>
   <dt><a href="#multi_threading">Multi-Threading</a>
   <dt><a href="#optimizations">Optimizations</a>
   <dt><a href="exceptions.html">Archive Exceptions</a>
@@ -153,55 +154,6 @@ redundant save/load operations.
 BOOST_CLASS_TRACKING(my_virtual_base_class, boost::serialization::track_always)
 </code></pre>
 
-<h3><a name="export">Exporting Class Serialization</a></h3>
-<a target="detail" href="traits.html#export">Elsewhere</a> in this manual, we have described 
-<code style="white-space: normal">BOOST_CLASS_EXPORT</code>. This is used to make the serialization library aware
-that code should be instantiated for serialization of a given class even though the
-class hasn't been otherwise referred to by the program.  This functionality
-is necessary to implement serialization of pointers through a virtual base
-class pointer.  That is, a polymorphic pointer.
-<p>
-This macro specifies a "<b>G</b>lobally <b>U</b>nique <b>ID</b>entifier".  
-This is an string which identifies the class to be created when data is loaded.
-Generally a text representation of the class name is sufficient for this purpose, 
-but in certain cases it maybe necessary to specify a different string by using 
-<code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> 
-rather than a simple 
-<code style="white-space: normal">BOOST_CLASS_EXPORT</code>.
-
-<p>
-<code style="white-space: normal">BOOST_CLASS_EXPORT</code> would usually 
-be specified in the same header file as the class declaration to which it 
-corresponds.  That is, <code style="white-space: normal">BOOST_CLASS_EXPORT(T)</code>
-is a "trait" of the class T. So a program using this class will look 
-something like:
-
-<pre><code>
-#include &lt;boost/archive/xml_oarchive.hpp&gt;
-.... // any other archive classes
-#include "my_class.hpp"  // which contains BOOST_CLASS_EXPORT(my_class)
-</code></pre>
-
-These headers can be in any order.  (In boost versions 1.34
-and earlier, the archive headers had to go before any headers which
-contain <code style="white-space: normal">BOOST_CLASS_EXPORT</code>.)
-Any code required to serialize types specified
-by <code style="white-space: normal">BOOST_CLASS_EXPORT</code> will be
-instantiated for each archive whose header is included.  (note that the code 
-is instantiated regardless of whether or not it is actually invoked.) 
-If no archive headers are included - no code should be instantiated. 
-This will permit <code style="white-space: normal">BOOST_CLASS_EXPORT</code> 
-to be a permanent part of the <code style="white-space: normal">my_class.hpp</code> .
-
-<p>
-Note that the implementation of this functionality depends upon vendor
-specific extensions to the C++ language.  So, there is no guarenteed portability
-of programs which use this facility.  However, all C++ compilers which
-are tested with boost provide the required extensions.  The library
-includes the extra declarations required by each of these compilers.
-It's reasonable to expect that future C++ compilers will support
-these extensions or something equivalent.
-
 <h3><a name="classinfo">Class Information</a></h3>
 By default, for each class serialized, class information is written to the archive.
 This information includes version number, implementation level and tracking
@@ -286,7 +238,7 @@ struct my_wrapper {
 class my_class {
     wchar_t a;
     short unsigned b;
-    template<&lt;class Archive&gt;
+    template&lt;class Archive&gt;
     Archive & serialize(Archive & ar, unsigned int version){
         ar & my_wrapper(a);
         ar & my_wrapper(b);
@@ -345,13 +297,105 @@ just the value portion of the data is serialized. The name portion is discarded 
 So by always using <a target="detail" href="wrappers.html#nvp">name-value pairs</a>, it will
 be guarenteed that all data can be serialized to all archive classes with maximum efficiency.
 
+<h3><a name="export">Exporting Class Serialization</a></h3>
+<a target="detail" href="traits.html#export">Elsewhere</a> in this manual, we have described 
+<code style="white-space: normal">BOOST_CLASS_EXPORT</code>. 
+Export implies two things:
+<ul>
+<li>Instantiates code which is not otherwise referred to.
+<li>Associates an external identifier with the class to be serialized.
+The fact that the class isn't explicitly referred to implies this
+requirement.
+</ul>
+In C++, usage of code not explicitly referred to is implemented via
+virtual functions.  Hence, the need for export is implied by the 
+usage of a derived class that is manipulated via a pointer or
+reference to it's base class.
+
+<p>
+<code style="white-space: normal">BOOST_CLASS_EXPORT</code> in the same
+source module that includes any of the archive class headers will
+instantiate code required to serialize polymorphic pointers of
+the indicated type to the all those archive classes. If no
+archive class headers are included, then no code will be instantiated.
+
+<p>
+Note that the implemenation of this functionality requires
+that the <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+macro appear <b>after</b> and the inclusion of any archive
+class headers for which code is to be instantiated.
+So, code that uses <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+will look like the following:
+<pre><code>
+#include &lt;boost/archive/text_oarchive.hpp&gt;
+#include &lt;boost/archive/text_oarchive.hpp&gt;
+... // other archives
+
+#include "a.hpp" // header declaration for class a
+BOOST_CLASS_EXPORT(a)
+... // other class headers and exports
+</code></pre>
+This will be true regardless of whether the is part
+of a stand alone executable, a static library or
+a dyanmic or shared library.  
+<p>
+Note that including
+<code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+in the "a.hpp" header itself as one would do with
+other serialization traits will make it difficult
+or impossible to follow the rule above regarding
+inclusion of archive headers before
+<code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+is invoked.  This is different than other serialization
+traits which would normally be included in same file
+as the class declaration.
+
+<p>
+This system has certain implications for placing code in static or shared
+libraries.  Placing <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+in library code will have no effect unless archive class headers are
+also included.  So when building a library, one should include all headers
+for all the archive classes which he anticipates using. Alternatively,
+one can include headers for just the
+<a href="archive_reference.html#polymorphic">Polymoprhic Archives</a>.
+Also, when making shared libraries, there is currently a restriction
+that only one such library can use <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+for any given type. All this will most likely make it inconvenient
+to include <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+as part of the header of the class to be serialized. So, <b>the 
+best way to use <code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+is to include it in the same module which implements the class</b>.
+
+<p>
+Strictly speaking, export should not be necessary if all pointer serialization
+occurs through the most derived class.  However, in order to detect
+what would be catastophic error, the library traps ALL serializations through
+a pointer to a polymorphic which are not exported or otherwise registered.
+So, in practice, be prepared to register or export all classes with one
+or more virtual functions which are serialized through a pointer. 
+
+<p>
+Note that the implementation of this functionality depends upon vendor
+specific extensions to the C++ language.  So, there is no guarenteed portability
+of programs which use this facility.  However, all C++ compilers which
+are tested with boost provide the required extensions.  The library
+includes the extra declarations required by each of these compilers.
+It's reasonable to expect that future C++ compilers will support
+these extensions or something equivalent.
+
 <h3><a name="dlls">DLLS - Serialization and Runtime Linking</a></h3>
 Serialization code can be placed in libraries to be linked at runtime.  That is,
-code can be placed in DLLS(Windows) or Shared Libraries(*nix).  
-Along with the "export" facility, this
-permits a program to written without knowledge of the actual types to be serialized.
-This package doesn't include an example of this technique - but coding would be
-very similar to the example 
+code can be placed in DLLS(Windows) Shared Libraries(*nix), or static libraries
+as well as the main executable.  As long as
+
+<a target="detail" href="serialization.html#export">
+<code style="white-space: normal">BOOST_CLASS_EXPORT</code>
+</a>
+
+is not used, The serialization library imposes no special requirements
+that need be taken into account when distributing code among various modules.
+<p>
+For static libraries, this is illustrated by
 <a href = "../example/demo_pimpl.cpp" target="demo_pimpl">
 <code style="white-space: normal">demo_pimpl.cpp</code>
 </a>,
@@ -362,52 +406,91 @@ and
 <a href = "../example/demo_pimpl_A.hpp" target="demo_pimpl">
 <code style="white-space: normal">demo_pimpl_A.hpp</code>
 </a>
-where implementation of serializaton is completely separate
-from the main program.
+where implementation of serializaton is in a static library 
+completely separate from the main program.
+
+<p>
+For runtime linked libraries this is illustrated by one of the tests:
+
+<a href = "../test/test_dll_simple.cpp" target="test_dll_simple">
+<code style="white-space: normal">test_dll_simple</code>
+</a>,
+and
+<a href = "../test/dll_A.cpp" target="dll_A">
+<code style="white-space: normal">dll_A.cpp</code>
+</a>
+where implementation of serializaton is also completely separate
+from the main program but the code is loaded at runtime.  In this
+example, this code is loaded automatically when the program which
+uses it starts up, but it could just as well be loaded and unloaded 
+with an OS dependent API call.
+
+<h3><a name="plugins">Plugins</a></h3>
+In order to implement the library, various facilities for runtime
+manipulation of types are runtime were required.  These
+are <a target="detail" href="extended_type_info.html"><code>extended_type_info</code></a>
+for associating classes with external identifying strings (<b>GUID</b>)
+and <a target="detail" href="void_cast.html"><code>void_cast</code></a>
+for casting between pointers of related types.
+
+To complete the functionality of 
+<a target="detail" href="extended_type_info.html"><code>extended_type_info</code></a>
+the ability to construct and destroy corresponding types has been
+added.  In order to use this functionality, one must specify
+how each type is created.  This should be done at the time
+a class is exported.  So, a more complete example of the code above would be:
+
+<pre><code>
+#include &lt;boost/archive/text_oarchive.hpp&gt;
+#include &lt;boost/archive/text_oarchive.hpp&gt;
+... // other archives
+
+#include "a.hpp" // header declaration for class a
+
+// this class has a default constructor
+BOOST_SERIALIZATION_FACTORY_0(a)
+// as well as one that takes one integer argument
+BOOST_SERIALIZATION_FACTORY_1(a, int)
+
+// specify the GUID for this class
+BOOST_CLASS_EXPORT(a)
+... // other class headers and exports
+</code></pre>
+
+With this in place, one can construct, serialize and destroy
+about which only is know the <b>GUID</b> and a base class.
+
 
 <h3><a name="multi_threading">Multi-Threading</a></h3>
-The nature of serialization would conflict with multiple thread concurrently
-writing/reading from/to a single open archive.  Since each archive is
-independent from ever other one, there should be no problem
-in having multiple open archives from one or more threads.
+The fundamental purpose of serialization would conflict with multiple 
+thread concurrently writing/reading from/to a single open archive instance.
+The library implementation presumes that the application avoids such an situtation.
 <p>
-Well, not quite.
+However, Writing/Reading different archives simultaneously
+in different tasks is permitted as each archive instance is (almost) 
+completely independent from any other archive instance.  The only shared 
+information are some type tables which have been implemented using a 
+lock-free thread-safe 
+<a target="detail" href="singleton.html">
+<code style="white-space: normal">singleton</code>
+</a>
+described elsewhere in this documentation.
 <p>
-There are a couple of global data structures for holding
-information of serializable types.  These structures are
-used to dispatch to correct code to handle each pair
-of serializable types and archive types.  Since this
-information is shared among all archives, there is 
-potential for problems.  This has been addressed
-carefully implementing the library so that these 
-structures are all initialized before 
-<code style="white-space: normal">main(...)</code>
-is called.  From then on they are never altered.  So
-there SHOULD be no problem having mulitple archives
-open simultaneously - be it from the same or different
-threads.
-<p>
-Well, almost.
-<p>
-With dynamically loaded code - DLLS or Shared Libraries, 
-these global data structures can be altered when a library
-is loaded or unloaded.  That is, in this case, these
-globa data structures can be altered after 
-<code style="white-space: normal">main(...)</code>
-is called.  So if a thread is dynamically loading/unloading
-modules which contain serialization code while an 
-archive is open there could be problems.  Also, if
-such loading/unloading is happening concurrently
-in different threads, there could also be problems.
-<p>
-It might not be easy to control this.  Is possible that
-some systems may not actually load modules until they
-are actually needed.  So even though we think that
-there is not dynamic loading/unloading of such code
-it could be occurring as "help" to manage resources.
-On such systems, access to archive code would have 
-to be syncronized with some multi-threading construct
-in order to be functional.
+This singleton implementation guarentees that all of this shared
+information is initialized when the code module which contains
+them is loaded.  The serialization library takes care to
+ensure that these data structures are not subsequently
+modified. The only time there could be a problem would
+be if code is loaded/unloaded while another task is
+serializing data.  This could only occur for types whose 
+serialization is implemented in a dynamically loaded/unload DLL
+or shared library.  So if the following is avoided:
+<ul>
+    <li>Accessing the same archive instance from different tasks.
+    <li>Loading/Unloading DLLS or shared libraries while any archive
+    instances are open.
+</ul>
+The library should be thread safe.
 
 <h3><a name="optimizations">Optimizations</a></h3>
 In performance critical applications that serialize large sets of contiguous data of homogeneous

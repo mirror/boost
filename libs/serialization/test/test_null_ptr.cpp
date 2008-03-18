@@ -19,8 +19,6 @@ namespace std{
 #endif
 
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 #include <boost/serialization/base_object.hpp>
 
 class polymorphic_base
@@ -46,7 +44,7 @@ class polymorphic_derived1 : public polymorphic_base
 void save(const char *testfile)
 {
     test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
+    test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
 
     polymorphic_base *rb1 =  NULL;
     polymorphic_derived1 *rd1 = NULL;
@@ -59,7 +57,7 @@ void save(const char *testfile)
 void load(const char *testfile)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
 
     polymorphic_base *rb1 = (polymorphic_base *)0xfffffff;
     polymorphic_derived1 *rd1 = (polymorphic_derived1 *)0xffffffff;

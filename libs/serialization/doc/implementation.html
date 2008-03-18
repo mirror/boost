@@ -207,10 +207,10 @@ the syntax described above.
     is added with STLPort, all tests complete successfully.
     <li>This compiler generates long warning messages related to the usage of
     non virtual destructors in polymorphic classes.  These warnings have been
-    carfully considered and the code that generates these warning has been 
+    carefully considered and the code that generates these warning has been 
     unchanged.  In this case the warning should should be ignored as in certain
     usages of the library, making the destructors virtual could lead to problems.
-    As an alternative, base class destructors have been make "protected" to
+    As an alternative, base class destructors have been made "protected" to
     address the concerns that motivate these warning messages.  When building
     the serialization library and tests with bjam, these warnings are suppressed. 
     When building one's own applications, these warnings can be suppressed by
@@ -223,7 +223,8 @@ the syntax described above.
 <h4><a name="gcc295">GCC 2.95</a></h4>
 All of the above plus:<br>
 <ul>
-    <li>The serialization library depends on the templeted stream implemention
+    <li>The serialization library depends on the templated stream 
+    implementation to function properly.
     to function properly.  So STLPort must be used to build the library.
     <li>Polymorphic archive tests fail.
     <li>XML serialization only works with version 1.6x of spirit. In order to build 
@@ -245,7 +246,7 @@ line by including the following switch:
 
 <h4><a name="vc71">Visual C++ 7.1</a></h4>
 Derivation from an archive class defined in a DLL as described in ... will not work.
-This is due to the way that VC++ handles templeted code with __decl(dllexport) and
+This is due to the way that VC++ handles templated code with __decl(dllexport) and
 __decl(dllimport) specifications.  Basically, this compiler requires that all the
 instantiations have the same specification - even though they have different
 template arguments. The example <code style="white-space: normal">
@@ -255,15 +256,14 @@ similar to the pre-defined archives in order to function.
 This compiler does not have RTTI or exception handling turned on by default.  Although
 they are not strictly necessary to use the serialization package, the example and test
 program presume that they are enabled.  So be sure your command line or IDE settings 
-enable these features if you want
-these switches are enabled if you want to build and run these programs.
+enable these features if you want to build and run these programs.
 <p>
 This compiler can treat <code style="white-space: normal">wchar_t</code> as either
 a short integer or an intrinsic type.
 If <code style="white-space: normal">/Zc:wchar_t</code> is specified on the
 compile command line, <code style="white-space: normal">wchar_t</code> will be 
 considered an intrinsic type - otherwise
-it will be treated as a synonym for a 16 bit integer.  The libary can be used
+it will be treated as a synonym for a 16 bit integer.  The library can be used
 either way - <strong>BUT</strong> - both the libray <strong>AND</strong> the application 
 must be  compiled with the same switch settings.  Note that <code style="white-space: normal">BJAM</code>
 includes this switch by default.  So if want to use the libraries that
@@ -356,11 +356,11 @@ all the above issues for Visual C++ 7.0 plus:
         without a base class.)
     </ul>
     Working around this in the implementation of the library for this compiler
-    entailed a ridiculous amount of effort.  Even so, the effort wasn't entirely succesful.
+    entailed a ridiculous amount of effort.  Even so, the effort wasn't entirely successful.
     With this compiler, this message will still appear under the following conditions:
     <ul>
         <li>When serializing a class with multiple base classes.  This problem causes two 
-        failure in the test suite.  I have been unable to divise a way to work around this.
+        failure in the test suite.  I have been unable to devise a way to work around this.
         <li>Using more than one kind of archive in the same code module. This should be easy 
         to work around in practice.
     </ul>
@@ -372,11 +372,11 @@ all the above issues for Visual C++ 7.0 plus:
 <ul>
     <li><code style="white-space: normal">enum</code> data members cannot be serialized.
     Conversion to/from integers will work around the problem.
-    <li>If class serialize functions are not accessable either by making them public or by
+    <li>If class serialize functions are not accessible either by making them public or by
     including <code style="white-space: normal">friend</code> declarations as described in 
     <a href="serialization.html#member">Class Serialization - Member Function</a>, the
     will compile but fail at runtime.
-    <li>Tests using custom extended type which doesn't use rtti fails. (5.64 only !).
+    <li>Tests using custom extended type which doesn't use RTTI fails. (5.64 only !).
     <li>Tests built in release mode fail. This seems to be an issue with the boost test system
     with this compiler.
     <li>XML serialization only works with version 1.6x of spirit. In order to build 
@@ -428,7 +428,7 @@ These platforms have several issues:
     <li>when built to use dynamic linking versions of C++ runtime code (<runtime-link>dynamic)
     all tests fail to link.  This is due to a missing symbol in the stlport library related
     to custom codecvt facets.
-    <li>the test_set fails to run correctly. It seems the hashed set interator doesn't
+    <li>the test_set fails to run correctly. It seems the hashed set iterator doesn't
     implement the ++ operator correctly.  This causes the test to fail by consuming all available
     memory.  Given this, this test is commented out.
 </ul>

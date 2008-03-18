@@ -20,7 +20,7 @@ basic_iserializer::basic_iserializer(
     const boost::serialization::extended_type_info & eti
 ) :
     basic_serializer(eti), 
-    bpis(NULL)
+    m_bpis(NULL)
 {}
 
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 

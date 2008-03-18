@@ -19,12 +19,11 @@ namespace std{
 #endif
 
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/vector.hpp>
 
 #include "A.hpp"
+#include "A.ipp"
 
 template <class T>
 int test_vector(T)
@@ -38,13 +37,13 @@ int test_vector(T)
     avector.push_back(T());
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << boost::serialization::make_nvp("avector", avector);
     }
     std::vector<T> avector1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("avector", avector1);
     }
     BOOST_CHECK(avector == avector1);

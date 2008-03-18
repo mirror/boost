@@ -15,8 +15,6 @@
 #include <boost/archive/tmpdir.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/static_assert.hpp>
 #include <boost/serialization/level.hpp>
@@ -65,7 +63,7 @@ BOOST_CLASS_VERSION(B, 4)
 void in(const char *testfile, A & a, B & b)
 {
     test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
+    test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
     ia >> BOOST_SERIALIZATION_NVP(a);
     ia >> BOOST_SERIALIZATION_NVP(a);
     BOOST_CHECK(a.count == 2);  // no tracking => redundant loads

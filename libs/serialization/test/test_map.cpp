@@ -25,13 +25,12 @@ namespace std{
 #endif
 
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/map.hpp>
 
 #include "A.hpp"
+#include "A.ipp"
 
 ///////////////////////////////////////////////////////
 // a key value initialized with a random value for use
@@ -72,13 +71,13 @@ test_map(){
     amap.insert(std::make_pair(random_key(), A()));
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << boost::serialization::make_nvp("amap", amap);
     }
     std::map<random_key, A> amap1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("amap", amap1);
     }
     BOOST_CHECK(amap == amap1);
@@ -100,7 +99,7 @@ test_map_2(){
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         std::pair<int, int> * const pa = &a;
         std::map<int, int> * const pb = &b;
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << BOOST_SERIALIZATION_NVP(pb);
         oa << BOOST_SERIALIZATION_NVP(pa);
     }
@@ -108,7 +107,7 @@ test_map_2(){
         test_istream is(testfile, TEST_STREAM_FLAGS);
         std::pair<int, int> *pa = 0;
         std::map<int, int> *pb = 0;
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> BOOST_SERIALIZATION_NVP(pb);
         ia >> BOOST_SERIALIZATION_NVP(pa);
         delete pa;
@@ -128,13 +127,13 @@ test_multimap(){
     amultimap.insert(std::make_pair(random_key(), A()));
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << boost::serialization::make_nvp("amultimap", amultimap);
     }
     std::multimap<random_key, A> amultimap1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("amultimap", amultimap1);
     }
     BOOST_CHECK(amultimap == amultimap1);
@@ -165,31 +164,23 @@ test_hash_map(){
     ahash_map.insert(std::make_pair(random_key(), A()));
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << boost::serialization::make_nvp("ahashmap",ahash_map);
     }
     BOOST_STD_EXTENSION_NAMESPACE::hash_map<random_key, A> ahash_map1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("ahashmap",ahash_map1);
     }
 
-    // at least one library - MSL notes: it doesn't make much sense
-    // to implement the == operator for hash collections - but goes ahead
-    // does it anyway even though it doesn't seem to work.  So sort into
-    // vectors and then compare. Currently, it seems that STLPort versions
-    // greater than 5.0 don't support the == operator on hashed sets
-    #if ! defined(__SGI_STL_PORT) || (__SGI_STL_PORT < 0x500)
-    BOOST_CHECK(ahash_map == ahash_map1);
-    #else
-        std::vector< std::pair<random_key, A> > tvec, tvec1;
-        std::copy(ahash_map.begin(), ahash_map.end(), std::back_inserter(tvec));
-        std::sort(tvec.begin(), tvec.end());
-        std::copy(ahash_map1.begin(), ahash_map1.end(), std::back_inserter(tvec1));
-        std::sort(tvec1.begin(), tvec1.end());
-        BOOST_CHECK(tvec == tvec1);
-    #endif
+    std::vector< std::pair<random_key, A> > tvec, tvec1;
+    std::copy(ahash_map.begin(), ahash_map.end(), std::back_inserter(tvec));
+    std::sort(tvec.begin(), tvec.end());
+    std::copy(ahash_map1.begin(), ahash_map1.end(), std::back_inserter(tvec1));
+    std::sort(tvec1.begin(), tvec1.end());
+    BOOST_CHECK(tvec == tvec1);
+
     std::remove(testfile);
 }
 
@@ -204,27 +195,23 @@ test_hash_multimap(){
     ahash_multimap.insert(std::make_pair(random_key(), A()));
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << boost::serialization::make_nvp("ahash_multimap", ahash_multimap);
     }
     BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<random_key, A> ahash_multimap1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("ahash_multimap", ahash_multimap1);
     }
-    #if ! defined(__SGI_STL_PORT) || (__SGI_STL_PORT < 0x500)
-    BOOST_CHECK(ahash_multimap == ahash_multimap1);
-    #else
-        std::vector< std::pair<random_key, A> > tvec, tvec1;
-        tvec.clear();
-        tvec1.clear();
-        std::copy(ahash_multimap.begin(), ahash_multimap.end(), std::back_inserter(tvec));
-        std::sort(tvec.begin(), tvec.end());
-        std::copy(ahash_multimap1.begin(), ahash_multimap1.end(), std::back_inserter(tvec1));
-        std::sort(tvec1.begin(), tvec1.end());
-        BOOST_CHECK(tvec == tvec1);
-    #endif
+    std::vector< std::pair<random_key, A> > tvec, tvec1;
+    tvec.clear();
+    tvec1.clear();
+    std::copy(ahash_multimap.begin(), ahash_multimap.end(), std::back_inserter(tvec));
+    std::sort(tvec.begin(), tvec.end());
+    std::copy(ahash_multimap1.begin(), ahash_multimap1.end(), std::back_inserter(tvec1));
+    std::sort(tvec1.begin(), tvec1.end());
+    BOOST_CHECK(tvec == tvec1);
     std::remove(testfile);
 }
 #endif

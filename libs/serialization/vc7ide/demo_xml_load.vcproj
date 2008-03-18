@@ -13,7 +13,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/debug/runtime-link-static/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/example/$(ProjectName).exe/msvc-7.1/debug/link-static/&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1"
 			CharacterSet="0">
@@ -45,7 +45,7 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=""
-				DelayLoadDLLs="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-static"
+				DelayLoadDLLs="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -74,7 +74,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/debug/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/example/$(ProjectName).exe/msvc-7.1/debug/threading-multi&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1"
 			CharacterSet="0">
@@ -105,7 +105,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/threading-multi&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/boost_serialization.dll/vc-7_1/debug/threading-multi&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multi&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -134,7 +134,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/debug/runtime-link-static/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/example/$(ProjectName).exe/msvc-7.1/debug/threading-multi/link-static&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1"
 			CharacterSet="0">
@@ -166,7 +166,7 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=""
-				DelayLoadDLLs="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-static/threading-multi"
+				DelayLoadDLLs="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multi/link-static"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -195,7 +195,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/runtime-link-static/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/example/$(ProjectName).exe/msvc-7.1/release/link-static/&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1"
 			CharacterSet="0">
@@ -230,7 +230,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-static&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/link-static&quot;"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="1"
@@ -261,7 +261,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/runtime-link-static/threading-multi&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/example/$(ProjectName).exe/msvc-7.1/release/threading-multi/link-static&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="1"
 			CharacterSet="0">
@@ -296,7 +296,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-static/threading-multi&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi/link-static&quot;"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="1"
@@ -327,8 +327,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/threading-multi/&quot;"
-			IntermediateDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/example/$(ProjectName).exe/vc-7_1/release/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/example/$(ProjectName).exe/msvc-7.1/release/threading-multi&quot;"
+			IntermediateDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/example/$(ProjectName).exe/msvc-7.1/release/threading-multi&quot;"
 			ConfigurationType="1"
 			CharacterSet="0">
 			<Tool
@@ -358,9 +358,70 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/threading-multi&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/boost_serialization.dll/vc-7_1/release/threading-multi&quot;"
-				DelayLoadDLLs="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-dynamic"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi&quot;;&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi&quot;"
+				DelayLoadDLLs="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/link-dynamic"
 				GenerateDebugInformation="FALSE"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="run $(TargetName) with $(ConfigurationName)"
+				CommandLine="&quot;$(TargetDir)/$(TargetName).exe&quot;"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug runtime-dynamic threading-multi|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800 /Ob0"
+				Optimization="0"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="1"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="FALSE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="1"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories=""
+				DelayLoadDLLs="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multi/link-static"
+				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool

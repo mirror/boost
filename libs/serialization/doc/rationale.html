@@ -228,7 +228,7 @@ its discovered
   After a lot of investigation, it's discovered what the source of the problem
   and class construct_from is marked "track_never" by including:
 <code style="white-space: normal"><pre>
-BOOST_SERIALIZATION_TRACKING(construct_from, track_never) 
+BOOST_CLASS_TRACKING(construct_from, track_never) 
 </pre></code>
   <li>Now everything works again. Or - so it seems.
   <p>
@@ -298,7 +298,7 @@ ar &lt;&lt; x
       might not even be written yet). OK, I'll add the following to my 
       construct_from.hpp to solve the problem. 
 <code style="white-space: normal"><pre>
-BOOST_SERIALIZATION_TRACKING(construct_from, track_never) 
+BOOST_CLASS_TRACKING(construct_from, track_never) 
 </pre></code>
     </ol>
   </ul>
@@ -311,7 +311,7 @@ BOOST_SERIALIZATION_TRACKING(construct_from, track_never)
   <li>But now he gets another trap - trying to save an object of a 
   class marked "track_never" through a pointer. So he goes back to 
   construct_from.hpp and comments out the 
-  <code style="white-space: normal">BOOST_SERIALIZATION_TRACKING</code> that 
+  <code style="white-space: normal">BOOST_CLASS_TRACKING</code> that 
   was inserted. Now the second trap is avoided, But damn - the first trap is 
   popping up again. Eventually, after some code restructuring, the differing
   requirements of serializating <code style="white-space: normal">construct_from</code>

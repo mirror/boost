@@ -123,7 +123,7 @@ int main() {
     gps_position newg;
     {
         // create and open an archive for input
-        std::ifstream ifs("filename", std::ios::binary);
+        std::ifstream ifs("filename");
         boost::archive::text_iarchive ia(ifs);
         // read class state from archive
         ia &gt;&gt; newg;

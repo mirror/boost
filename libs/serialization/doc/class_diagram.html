@@ -52,14 +52,14 @@ common_iarchive&lt;text_iarchive&gt; <a href="../../../boost/archive/detail/comm
       |     /                                                |
       |   /                                                  |
       | /                                                    |
-<font color="blue">text_iarchive_impl&lt;text_iarchive&gt;</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>                 <font color="red">polymorphic_iarchive</font> <a href="../../../boost/archive/polymorphic_iarchive.hpp">-></a>
+<font color="blue">text_iarchive_impl&lt;text_iarchive&gt;</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>              polymorphic_iarchive_impl <a href="../../../boost/archive/polymorphic_iarchive.hpp">-></a>
       | \                                                    |
       |   \                                                  |
-      |     \_____________________________________           |
+      |     \_____________________________________    <font color="red">polymorphic_iarchive</font> <a href="../../../boost/archive/polymorphic_iarchive.hpp">-></a>
       |                                           \         /
       |                                             \     /
       |                                               \ /  
-<font color="red">text_iarchive</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>                 polymorphic_iarchive_dispatch&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt; <a href="../../../boost/archive/detail/polymorphic_iarchive_dispatch.hpp">-></a>
+<font color="red">text_iarchive</font> <a href="../../../boost/archive/text_iarchive.hpp">-></a>                 polymorphic_iarchive_route&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt; <a href="../../../boost/archive/detail/polymorphic_iarchive_route.hpp">-></a>
                                                        |
                                                        |
                                                        |
@@ -68,7 +68,7 @@ common_iarchive&lt;text_iarchive&gt; <a href="../../../boost/archive/detail/comm
 
 </code></pre>
 This diagram shows the relationship between the various classes that implement loading (input
-serialization) for text files.  The hierachy and organization is identical for saving and for
+serialization) for text files.  The hierachy and organization is similar for saving and for
 other types of archives as well.  In the diagram, classes written in <font color="blue">blue</font> 
 implement loading for a given archive type. (in this case its text archives).
 Users include classes in <font color="red">red</font> to load their data from a partcular
@@ -146,11 +146,11 @@ never change.  They are in <code>namespace boost::archive::detail</code>
   for all archives present and future.
   
   <p><dt><code>
-  <a href="../../../boost/archive/detail/polymorphic_iarchive_dispatch.hpp">polymorphic_iarchive_dispatch&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt;</a>
+  <a href="../../../boost/archive/detail/polymorphic_iarchive_route.hpp">polymorphic_iarchive_route&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt;</a>
   </code></dt>
   <dd><p>
   This class implements the <code style="white-space: normal">polymorphic_iarchive</code> in terms of a specific 
-  concrete class.  Virtual function calls are forwarded to the implementing class.  In this example, 
+  concrete class.  Virtual function calls are routed to the implementing class.  In this example, 
   that implementing class would be text_iarchive_impl.
   
   <p><dt><code>
@@ -158,7 +158,7 @@ never change.  They are in <code>namespace boost::archive::detail</code>
   </code></dt>
   <dd>
   this is just a typedef so we can write polymorphic_text_archive rather than
-  <code style="white-space: normal">polymorphic_iarchive_dispatch&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt;</code>
+  <code style="white-space: normal">polymorphic_iarchive_route&lt;text_iarchive_impl&lt;text_iarchive&gt; &gt;</code>
   
 </dl>
 <hr>

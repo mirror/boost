@@ -24,8 +24,6 @@ namespace std{
 
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
-#include <boost/preprocessor/stringize.hpp>
-#include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/list.hpp>
 #ifdef BOOST_HAS_SLIST
@@ -34,6 +32,7 @@ namespace std{
 #include <boost/serialization/nvp.hpp>
 
 #include "A.hpp"
+#include "A.ipp"
 
 template<class T>
 struct ptr_equal_to : public std::binary_function<T, T, bool> 
@@ -57,7 +56,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     std::list<A *> alist;
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         A * free_a_ptr = new A;
         alist.push_back(free_a_ptr);
         alist.push_back(new A);
@@ -69,7 +68,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     std::list<A *> alist1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         A * free_a_ptr1;
         ia >> boost::serialization::make_nvp("alist", alist1);
         ia >> boost::serialization::make_nvp("free_a_ptr", free_a_ptr1);
@@ -98,7 +97,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         aslist.push_back(new A);
         aslist.push_back(new A);
         test_ostream os(testfile, TEST_STREAM_FLAGS);
-        test_oarchive oa(os);
+        test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         aslist.push_back(new A);
         aslist.push_back(new A);
         oa << boost::serialization::make_nvp("aslist", aslist);
@@ -106,7 +105,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     std::list<A *> aslist1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
-        test_iarchive ia(is);
+        test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("aslist", aslist1);
         BOOST_CHECK(aslist.size() == aslist1.size() &&
             std::equal(aslist.begin(),aslist.end(),aslist1.begin(),ptr_equal_to<A *>())

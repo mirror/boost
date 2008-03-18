@@ -20,7 +20,7 @@ http://www.boost.org/LICENSE_1_0.txt)
     </td>
     <td valign="top"> 
       <h1 align="center">Serialization</h1>
-      <h2 align="center"><code style="white-space: normal">shared_ptr&lt;class T&gt;</code> Revisted</h2>
+      <h2 align="center"><code style="white-space: normal">shared_ptr&lt;class T&gt;</code> Revisited</h2>
     </td>
   </tr>
 </table>
@@ -32,7 +32,7 @@ Unfortunately, this way of doing it suffered from some undesirable features
   <li>It was dependent on the Boost implementation of <code style="white-space: normal">shared_ptr</code>.
   The <code style="white-space: normal">shared_ptr</code> interface has been included
   in <code style="white-space: normal">std::tr1</code> and may someday be included in the standard
-  C++ library. An implementation which depends only on the public interface can be guarenteed to
+  C++ library. An implementation which depends only on the public interface can be guaranteed to
   function with any other future implementation of <code style="white-space: normal">shared_ptr</code>.
   <li>It required extra macros for export.
 </ul>
@@ -45,7 +45,7 @@ inline void save(
     const unsigned int /* file_version */
 ){
     const T * t_ptr = t.get();
-    // just seriailize the underlying raw pointer
+    // just serialize the underlying raw pointer
     ar &lt;&lt: boost::serialization::make_nvp("px", t_ptr);
 }
 
@@ -56,7 +56,7 @@ inline void load(
     const unsigned int file_version
 ){
     T* r;
-    // recover the underlying raw poiter
+    // recover the underlying raw pointer
     ar >> boost::serialization::make_nvp("px", r);
 
     // To Do - match up with other shared pointers which 
@@ -65,13 +65,13 @@ inline void load(
 }
 </code></pre>
 
-In priniciple this is very much simpler than the original implementation.  Completion of
+In principle, this is very much simpler than the original implementation.  Completion of
 this code requires:
 
 <ol>
   <li>Filling in the "To Do".  This required making an extra map for
   <code style="white-space: normal">shared_ptr</code> instances.
-  <li>A method for identifing pointers to the same objects from pointers to their base classes.
+  <li>A method for identifying pointers to the same objects from pointers to their base classes.
   <li>Backward compatibility with pointers serialized by the previous method.  This exploits
   the serialization class versioning.
   <li>Proper handling of <code style="white-space: normal">weak_ptr</code>.

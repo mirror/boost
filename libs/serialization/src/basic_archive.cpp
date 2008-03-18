@@ -17,7 +17,7 @@
 //      [
 //          exported key - class name*
 //          tracking level - always/never
-//          file version
+//          class version
 //      ]
 //
 //      if tracking
