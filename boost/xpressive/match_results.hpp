@@ -30,6 +30,7 @@
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/integer.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/size_t.hpp>
 #include <boost/mpl/assert.hpp>
@@ -37,6 +38,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/numeric/conversion/converter.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/begin.hpp>
@@ -318,6 +320,7 @@ struct is_char_ptr<T *>
   : mpl::not_<is_function<T> >
 {};
 
+#if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
 // work around gcc-4.0.1 compiler bug wrt function references
 template<typename T>
 typename mpl::if_<is_function<T>, T *, T const &>::type
@@ -325,6 +328,7 @@ as_callable(T const &t)
 {
     return t;
 }
+#endif
 
 } // detail
 
@@ -865,7 +869,11 @@ private:
       , mpl::size_t<1>
     ) const
     {
+        #if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
         return this->format2_(out, detail::as_callable(format)(*this));
+        #else
+        return this->format2_(out, format(*this));
+        #endif
     }
 
     /// INTERNAL ONLY
@@ -879,7 +887,11 @@ private:
       , mpl::size_t<2>
     ) const
     {
+        #if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
         return detail::as_callable(format)(*this, out);
+        #else
+        return format(*this, out);
+        #endif
     }
 
     /// INTERNAL ONLY
@@ -893,7 +905,11 @@ private:
       , mpl::size_t<3>
     ) const
     {
+        #if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
         return detail::as_callable(format)(*this, out, flags);
+        #else
+        return format(*this, out, flags);
+        #endif
     }
 
     /// INTERNAL ONLY
