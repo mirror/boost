@@ -38,7 +38,7 @@ namespace serialization {
 namespace boost {                                     \
 namespace serialization {                             \
 template<>                                            \
-struct is_abstract< T > : mpl::true_ {};              \
+struct is_abstract<const T > : mpl::true_ {};         \
 }}                                                    \
 /**/
 

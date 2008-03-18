@@ -76,8 +76,6 @@ struct is_wrapper<binary_object>
  : public mpl::true_
 {};
 
-
-
 } // namespace serialization
 } // boost
 

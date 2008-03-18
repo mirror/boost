@@ -25,17 +25,23 @@
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/static_warning.hpp>
 #include <boost/preprocessor/stringize.hpp>
+#include <boost/type_traits/is_polymorphic.hpp>
 
-#include <boost/archive/detail/dynamically_initialized.hpp>
+#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
+    #include <boost/serialization/extended_type_info_typeid.hpp>   
+#endif 
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/is_abstract.hpp>
 #include <boost/serialization/force_include.hpp>
+#include <boost/serialization/singleton.hpp>
 
 #include <boost/archive/detail/register_archive.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
+#include <boost/mpl/bool.hpp>
 
 #include <iostream>
 
@@ -56,50 +62,20 @@ struct export_impl
 {
     static const basic_pointer_iserializer &
     enable_load(mpl::true_){
-        return pointer_iserializer<Archive, Serializable>::get_instance();
+        return boost::serialization::singleton<
+            pointer_iserializer<Archive, Serializable> 
+        >::get_const_instance();
     }
 
     static const basic_pointer_oserializer &
     enable_save(mpl::true_){
-        return pointer_oserializer<Archive, Serializable>::get_instance();
+        return boost::serialization::singleton<
+            pointer_oserializer<Archive, Serializable> 
+        >::get_const_instance();
     }
-
     inline static void enable_load(mpl::false_) {}
     inline static void enable_save(mpl::false_) {}
 };
-
-template<class T>
-struct guid_initializer
-{
-    typedef typename
-    boost::serialization::type_info_implementation<T>::type eti_type;
-    
-    static void export_register(const char *key)
-    {
-        eti_type::export_register(key);
-    }
-    
-    static const guid_initializer& get_instance(char const* key)
-    {
-        static guid_initializer const instance(key);
-        return instance;
-    }
-    
-    BOOST_DLLEXPORT guid_initializer(const char *key = 0) BOOST_USED ;
-};
-
-
-template<class T>
-BOOST_DLLEXPORT guid_initializer<T>::guid_initializer(const char *key)
-{
-    if(0 != key)
-        export_register(key);
-
-    // generates the statically-initialized objects whose constructors
-    // register the information allowing serialization of T objects
-    // through pointers to their base classes.
-    instantiate_ptr_serialization((T*)0, 0);
-}
 
 // On many platforms, naming a specialization of this template is
 // enough to cause its argument to be instantiated.
@@ -130,14 +106,42 @@ struct ptr_serialization_support
 template <class Archive, class Serializable>
 BOOST_DLLEXPORT void ptr_serialization_support<Archive,Serializable>::instantiate()
 {
-    typedef mpl::not_<serialization::is_abstract<Serializable> > concrete;
-    
     export_impl<Archive,Serializable>::enable_save(
-        mpl::and_<concrete, BOOST_DEDUCED_TYPENAME Archive::is_saving>());
+        BOOST_DEDUCED_TYPENAME Archive::is_saving()
+    );
 
     export_impl<Archive,Serializable>::enable_load(
-        mpl::and_<concrete, BOOST_DEDUCED_TYPENAME Archive::is_loading>());
+        BOOST_DEDUCED_TYPENAME Archive::is_loading()
+    );
 }
+
+template<class T>
+struct guid_initializer
+{  
+    const guid_initializer & export_guid(char const* key, mpl::false_){
+        // generates the statically-initialized objects whose constructors
+        // register the information allowing serialization of T objects
+        // through pointers to their base classes.
+        instantiate_ptr_serialization((T*)0, 0);
+        return *this;
+    }
+    const guid_initializer & export_guid(char const* key, mpl::true_){
+        return *this;
+    }
+    const guid_initializer & export_guid(char const* key){
+        BOOST_STATIC_WARNING(boost::is_polymorphic<T>::value);
+        assert(NULL != key);
+        boost::serialization::singleton<
+            BOOST_DEDUCED_TYPENAME 
+            boost::serialization::type_info_implementation<T>::type
+        >::get_mutable_instance().key_register(key);
+        // note: exporting an abstract base class will have no effect
+        // and cannot be used to instantitiate serialization code
+        // (one might be using this in a DLL to instantiate code)
+        //BOOST_STATIC_WARNING(! boost::is_abstract<T>::value);
+        return export_guid(key, serialization::is_abstract<T>());
+    }
+};
 
 } // namespace detail
 } // namespace archive
@@ -146,9 +150,11 @@ BOOST_DLLEXPORT void ptr_serialization_support<Archive,Serializable>::instantiat
 #define BOOST_CLASS_EXPORT_GUID(T, K)                                               \
 namespace                                                                           \
 {                                                                                   \
-    ::boost::archive::detail::guid_initializer< T > const&                          \
+    ::boost::archive::detail::guid_initializer< T > const &                         \
         BOOST_PP_CAT(boost_serialization_guid_initializer_, __LINE__)               \
-          = ::boost::archive::detail::guid_initializer< T >::get_instance(K);       \
+        = ::boost::serialization::singleton<                                        \
+            ::boost::archive::detail::guid_initializer< T >                         \
+          >::get_mutable_instance().export_guid(K);                                 \
 }
 
 // the following is solely to support de-serialization of pointers serialized
@@ -156,9 +162,13 @@ namespace                                                                       
 #define BOOST_CLASS_EXPORT_GUID_1(T, K)                                             \
 namespace                                                                           \
 {                                                                                   \
-    ::boost::archive::detail::guid_initializer< T > const&                          \
-    BOOST_PP_CAT(boost_serialization_guid_initializer_, __LINE__ ## _1)             \
-          = ::boost::archive::detail::guid_initializer< T >::get_instance(K);       \
+    ::boost::archive::detail::guid_initializer< T > const &                         \
+    BOOST_PP_CAT(                                                                   \
+        boost_serialization_guid_initializer_,                                      \
+        BOOST_PP_CAT(__LINE__,_1)                                                   \
+    ) = ::boost::serialization::singleton<                                          \
+            ::boost::archive::detail::guid_initializer< T >                         \
+        >::get_mutable_instance().export_guid(K);                                   \
 }
 
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))
@@ -188,8 +198,7 @@ namespace                                                                       
 // need to export it.
 #define BOOST_CLASS_EXPORT_CHECK(T)                              \
     BOOST_STATIC_WARNING(                                        \
-        boost::serialization::type_info_implementation< T >      \
-            ::type::is_polymorphic::value                        \
+        boost::is_polymorphic<U>::value                          \
     );                                                           \
     /**/
 
