@@ -8,17 +8,16 @@
 
 
 #include <boost/archive/basic_archive.hpp>
-#include <boost/archive/archive_exception.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
-#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
+#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/detail/get_data.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/pfto.hpp>
-
+//#include <boost/archive/archive_exception.hpp>
 
 namespace boost { namespace archive { namespace array {
 
@@ -51,8 +50,8 @@ public:
   {}
 
 
-  // save_override for std::vector and serialization::array dispatches to 
-  // save_optimized with an additional argument.
+  // load_override for std::vector and serialization::array dispatches to 
+  // load_optimized with an additional argument.
   // 
   // If that argument is of type mpl::true_, an optimized serialization is provided
   // If it is false, we just forward to the default serialization in the base class
@@ -65,9 +64,9 @@ public:
   }
 
   // the optimized implementation for vector uses serialization::array
-  template<class U, class Allocator>
+  template<class ValueType, class Allocator>
   void load_optimized(
-    std::vector<U, Allocator> &t, unsigned int version, mpl::true_)
+    std::vector<ValueType, Allocator> &t, unsigned int version, mpl::true_)
   {
     t.clear();
     // retrieve number of elements
@@ -86,7 +85,6 @@ public:
     this->This()->load_array(t,version);
   }
 
-
   // to load a vector:
   // if the value type is trivially constructable or an optimized array save exists, 
   // then we can use the optimized version
@@ -102,7 +100,6 @@ public:
     >::type use_optimized;
     load_optimized(x,version, use_optimized() );   
   }
-  
   
   // dispatch loading of arrays to the optimized version where supported
   template<class ValueType>
@@ -123,10 +120,7 @@ public:
   }
 };
 
-
 } } } // end namespace boost::archive::array
-
-
 
 #endif // BOOST_ARCHIVE_ARRAY_OARCHIVE_HPP
 

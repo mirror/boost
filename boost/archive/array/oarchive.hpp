@@ -13,11 +13,11 @@
 #include <boost/serialization/collection_size_type.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/detail/get_data.hpp>
-#include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/pfto.hpp>
+#include <boost/type_traits/remove_const.hpp>
 
 namespace boost { namespace archive { namespace array {
 
@@ -63,7 +63,6 @@ public:
     Base::save_override(t, version);
   }
 
-
   // the optimized implementation for vector uses serialization::array
   template<class ValueType, class Allocator>
   void save_optimized(
@@ -83,7 +82,6 @@ public:
     this->This()->save_array(t,version);
   }
 
-
   // to save a vector:
   // if the value type is trivially constructable or an optimized array save exists, 
   // then we can use the optimized version
@@ -100,8 +98,6 @@ public:
     >::type use_optimized;
     save_optimized(x,version,use_optimized() );   
   }
-
-  
   
   // dispatch saving of arrays to the optimized version where supported
   template<class ValueType>
@@ -125,6 +121,4 @@ public:
 
 } } } // end namespace boost::archive::array
 
-
 #endif // BOOST_ARCHIVE_ARRAY_OARCHIVE_HPP
-
