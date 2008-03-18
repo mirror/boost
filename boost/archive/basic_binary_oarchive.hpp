@@ -61,12 +61,14 @@ public:
     typedef array::oarchive<Archive> array_oarchive;
     template<class T>
     void save_override(const T & t, BOOST_PFTO int){
-        this->array_oarchive::save_override(t, 0);
+        this->array_oarchive::save_override(t, 0L);
     }
+    /*
     template<class T>
     void save_override(T & t, BOOST_PFTO int){
-        this->save_override(const_cast<const T &>(t), 0);
+        this->save_override(const_cast<const T &>(t), 0L);
     }
+    */
     // binary files don't include the optional information 
     void save_override(const class_id_optional_type & /* t */, int){}
 

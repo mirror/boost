@@ -32,7 +32,7 @@ namespace std{
 
 #include <boost/detail/no_exceptions_support.hpp>
 
-#include <boost/archive/archive_exception.hpp>
+#include <boost/archive/xml_archive_exception.hpp>
 #include <boost/archive/iterators/dataflow_exception.hpp>
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/xml_iarchive.hpp>

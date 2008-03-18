@@ -18,6 +18,7 @@ namespace std{
 
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/basic_xml_oarchive.hpp>
+#include <boost/archive/xml_archive_exception.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 
 namespace boost {
@@ -78,7 +79,7 @@ basic_xml_oarchive<Archive>::write_attribute(
     this->This()->put(' ');
     this->This()->put(attribute_name);
     this->This()->put("=\"");
-    this->This()->put(key);
+    this->This()->save(key);
     this->This()->put('"');
 }
 
@@ -174,7 +175,9 @@ template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(const object_id_type & t, int)
 {
-    write_attribute(OBJECT_ID(), t, "=\"_");
+    // borland doesn't do conversion of STRONG_TYPEDEFs very well
+    const unsigned int i = t;
+    write_attribute(OBJECT_ID(), i, "=\"_");
 }
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
@@ -182,13 +185,15 @@ basic_xml_oarchive<Archive>::save_override(
     const object_reference_type & t,
     int
 ){
-    write_attribute(OBJECT_REFERENCE(), t, "=\"_");
+    const unsigned int i = t;
+    write_attribute(OBJECT_REFERENCE(), i, "=\"_");
 }
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_oarchive<Archive>::save_override(const version_type & t, int)
 {
-    write_attribute(VERSION(), t);
+    const unsigned int i = t;
+    write_attribute(VERSION(), i);
 }
 
 template<class Archive>

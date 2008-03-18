@@ -4,8 +4,6 @@
 #ifndef BOOST_ARCHIVE_DETAIL_REGISTER_ARCHIVE_DWA2006521_HPP
 # define BOOST_ARCHIVE_DETAIL_REGISTER_ARCHIVE_DWA2006521_HPP
 
-# include <boost/type_traits/add_pointer.hpp>
-
 namespace boost { namespace archive { namespace detail { 
 
 template <class Archive, class Serializable>

@@ -6,6 +6,10 @@
 # pragma once
 #endif
 
+#if defined(_MSC_VER)
+#pragma warning( disable : 4800 )
+#endif
+
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_binary_iprimitive.hpp
 //
@@ -72,8 +76,11 @@ public:
     Archive * This(){
         return static_cast<Archive *>(this);
     }
+
+    #ifndef BOOST_NO_STD_LOCALE
     boost::scoped_ptr<std::locale> archive_locale;
     basic_streambuf_locale_saver<Elem, Tr> locale_saver;
+    #endif
 
     // main template for serilization of primitive types
     template<class T>
@@ -158,7 +165,7 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
             boost::throw_exception(
                 archive_exception(archive_exception::stream_error)
             );
-        std::memcpy(address, &t, s);
+        std::memcpy(static_cast<char*>(address) + (count - s), &t, s);
     }
 }
 

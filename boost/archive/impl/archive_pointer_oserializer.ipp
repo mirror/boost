@@ -8,6 +8,9 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <utility>
+#include <cassert>
+
 #include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
 
 #include <boost/archive/detail/archive_pointer_oserializer.hpp>
@@ -17,12 +20,11 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-template<class Archive>
-basic_serializer_map *
-oserializer_map(){
-    static bool deleted = false;
-    static basic_serializer_map map(deleted);
-    return deleted ? NULL : & map;
+namespace { // anon
+    template<class Archive>
+    class serializer_map : public basic_serializer_map 
+    {
+    };
 }
 
 template<class Archive>
@@ -32,9 +34,14 @@ archive_pointer_oserializer<Archive>::archive_pointer_oserializer(
 ) :
     basic_pointer_oserializer(eti)
 {
-    basic_serializer_map *mp = oserializer_map<Archive>();
-    assert(NULL != mp);
-    mp->insert(this);
+    std::pair<
+        BOOST_DEDUCED_TYPENAME serializer_map<Archive>::iterator, 
+        bool
+    > result;
+    result = serialization::singleton<
+            serializer_map<Archive>
+        >::get_mutable_instance().insert(this);
+    assert(result.second);
 }
 
 template<class Archive>
@@ -42,9 +49,19 @@ BOOST_ARCHIVE_OR_WARCHIVE_DECL(const basic_pointer_oserializer *)
 archive_pointer_oserializer<Archive>::find(
     const boost::serialization::extended_type_info & eti
 ){
-    basic_serializer_map *mp = oserializer_map<Archive>();
-    assert(NULL != mp);
-    return static_cast<const basic_pointer_oserializer *>(mp->tfind(eti));
+    const basic_serializer_arg bs(eti);
+    basic_serializer_map::const_iterator it;
+    it =  boost::serialization::singleton<
+            serializer_map<Archive>
+        >::get_const_instance().find(& bs);
+    assert(
+        it 
+        != 
+        boost::serialization::singleton<
+                serializer_map<Archive>
+            >::get_const_instance().end()
+    );
+    return static_cast<const basic_pointer_oserializer *>(*it);
 }
 
 template<class Archive>
@@ -52,10 +69,11 @@ BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_oserializer<Archive>::~archive_pointer_oserializer(){
     // note: we need to check that the map still exists as we can't depend
     // on static variables being constructed in a specific sequence
-    basic_serializer_map *mp = oserializer_map<Archive>();
-    if(NULL == mp)
-        return;
-    mp->erase(this);
+    unsigned int count;
+    count = serialization::singleton<
+            serializer_map<Archive>
+        >::get_mutable_instance().erase(this);
+    assert(count);
 }
 
 } // namespace detail

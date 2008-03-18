@@ -34,7 +34,9 @@ protected:
         const boost::serialization::extended_type_info & eti
     ) : 
         m_eti(eti)
-    {}
+    {
+        assert(NULL != & eti);
+    }
 public:
     const boost::serialization::extended_type_info & get_eti() const {
         return m_eti;
@@ -42,6 +44,13 @@ public:
     bool operator<(const basic_serializer & rhs) const {
         return & m_eti < & rhs.get_eti();
     }
+};
+
+class basic_serializer_arg : public basic_serializer {
+public:
+    basic_serializer_arg(const serialization::extended_type_info & eti) :
+        basic_serializer(eti)
+    {}
 };
 
 } // namespace detail

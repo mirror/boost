@@ -28,9 +28,6 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
-template<class T>
-class shared_ptr;
-
 namespace serialization {
     class extended_type_info;
 } // namespace serialization

@@ -123,7 +123,7 @@ public:
         load_end(t.name());
     }
 protected:
-    virtual ~polymorphic_iarchive_impl(){}
+    virtual ~polymorphic_iarchive_impl(){};
 public:
     // utility function implemented by all legal archives
     virtual void set_library_version(unsigned int archive_library_version) = 0;
@@ -166,7 +166,10 @@ namespace archive {
 class polymorphic_iarchive : 
     public polymorphic_iarchive_impl,
     public detail::shared_ptr_helper
-{};
+{
+public:
+    virtual ~polymorphic_iarchive(){};
+};
 
 } // namespace archive
 } // namespace boost
