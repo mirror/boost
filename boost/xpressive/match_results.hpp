@@ -318,6 +318,14 @@ struct is_char_ptr<T *>
   : mpl::not_<is_function<T> >
 {};
 
+// work around gcc-4.0.1 compiler bug wrt function references
+template<typename T>
+typename mpl::if_<is_function<T>, T *, T const &>::type
+as_callable(T const &t)
+{
+    return t;
+}
+
 } // detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -857,7 +865,7 @@ private:
       , mpl::size_t<1>
     ) const
     {
-        return this->format2_(out, format(*this));
+        return this->format2_(out, detail::as_callable(format)(*this));
     }
 
     /// INTERNAL ONLY
@@ -871,7 +879,7 @@ private:
       , mpl::size_t<2>
     ) const
     {
-        return format(*this, out);
+        return detail::as_callable(format)(*this, out);
     }
 
     /// INTERNAL ONLY
@@ -885,7 +893,7 @@ private:
       , mpl::size_t<3>
     ) const
     {
-        return format(*this, out, flags);
+        return detail::as_callable(format)(*this, out, flags);
     }
 
     /// INTERNAL ONLY
