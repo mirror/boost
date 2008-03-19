@@ -943,7 +943,8 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 This constructor has been defined only due to compatibility with the STL container definition. Avoid
-                using it because it may allocate <b>very large</b> amount of memory.
+                using it because it may allocate <b>very large</b> amount of memory (depending on allocator's
+                max_size()).
               </dd>
             </dl>
           </td>
@@ -3187,7 +3188,8 @@ template &lt;class T, class Alloc&gt;
                 <code><a href=
                 "#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size()</a></code>,
                 <code><a href="#classboost_1_1circular__buffer_17e144e8c7acd8e30c08bfb03391a2338">reserve()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize()</a></code>
+                <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize(size_type,
+                const_reference)</a></code>
               </dd>
             </dl>
           </td>
@@ -3199,7 +3201,8 @@ template &lt;class T, class Alloc&gt;
             "#classboost_1_1circular__buffer_19ba12c0142a21a7d960877c22fa3ea00">size_type</a> max_size()
             const;</b></code><br>
             <br>
-            Get the largest possible size or capacity of the <code>circular_buffer</code>.
+            Get the largest possible size or capacity of the <code>circular_buffer</code>. (It depends on allocator's
+            max_size()).
             <dl>
               <dt>
                 <b>Returns:</b>
@@ -3490,7 +3493,7 @@ template &lt;class T, class Alloc&gt;
                 <code><a href=
                 "#classboost_1_1circular__buffer_195158ed4d4b03794068e259f85291995">max_size()</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity()</a></code>
+                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>
               </dd>
             </dl>
           </td>
@@ -3579,8 +3582,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href=
-                "#classboost_1_1circular__buffer_1477715e9d31d2cc5b02ad8ecf3c68c46">rset_capacity()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize()</a></code>
+                "#classboost_1_1circular__buffer_1477715e9d31d2cc5b02ad8ecf3c68c46">rset_capacity(capacity_type)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize(size_type,
+                const_reference)</a></code>
               </dd>
             </dl>
           </td>
@@ -3685,9 +3689,9 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483">rresize()</a></code>,
-                <code><a href=
-                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity()</a></code>
+                <code><a href="#classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483">rresize(size_type,
+                const_reference)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>
               </dd>
             </dl>
           </td>
@@ -3776,8 +3780,9 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href=
-                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity()</a></code>,
-                <code><a href="#classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483">rresize()</a></code>
+                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity(capacity_type)</a></code>,
+                <code><a href="#classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483">rresize(size_type,
+                const_reference)</a></code>
               </dd>
             </dl>
           </td>
@@ -3882,9 +3887,9 @@ template &lt;class T, class Alloc&gt;
                 <b>See Also:</b>
               </dt>
               <dd>
-                <code><a href="#classboost_1_1circular__buffer_144ecd9ec5f54a2d61c7d132e445d3483">rresize()</a></code>,
-                <code><a href=
-                "#classboost_1_1circular__buffer_161714204ef5172d156e2c7eccd04998f">set_capacity()</a></code>
+                <code><a href="#classboost_1_1circular__buffer_180c2e2e66a8fa9d0b7adc1b54921a8c3">resize(size_type,
+                const_reference)</a></code>, <code><a href=
+                "#classboost_1_1circular__buffer_1477715e9d31d2cc5b02ad8ecf3c68c46">rset_capacity(capacity_type)</a></code>
               </dd>
             </dl>
           </td>
@@ -4594,7 +4599,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href=
-                "#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front()</a></code>,
+                "#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front(const_reference)</a></code>,
                 <code><a href=
                 "#classboost_1_1circular__buffer_1df0da00cb501bea75afbbfab9f546a07">pop_back()</a></code>,
                 <code><a href=
@@ -4676,7 +4681,7 @@ template &lt;class T, class Alloc&gt;
               </dt>
               <dd>
                 <code><a href=
-                "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back()</a></code>,
+                "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back(const_reference)</a></code>,
                 <code><a href=
                 "#classboost_1_1circular__buffer_1df0da00cb501bea75afbbfab9f546a07">pop_back()</a></code>,
                 <code><a href=
@@ -4748,9 +4753,9 @@ template &lt;class T, class Alloc&gt;
                 <code><a href=
                 "#classboost_1_1circular__buffer_18ac972dc24ef7236faa1875de92b9dd8">pop_front()</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back()</a></code>,
+                "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back(const_reference)</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front()</a></code>
+                "#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front(const_reference)</a></code>
               </dd>
             </dl>
           </td>
@@ -4818,9 +4823,9 @@ template &lt;class T, class Alloc&gt;
                 <code><a href=
                 "#classboost_1_1circular__buffer_1df0da00cb501bea75afbbfab9f546a07">pop_back()</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back()</a></code>,
+                "#classboost_1_1circular__buffer_1aa35dd7ef8eb1d04508494d1835cc82e">push_back(const_reference)</a></code>,
                 <code><a href=
-                "#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front()</a></code>
+                "#classboost_1_1circular__buffer_10ef57e73c193682a649d8eb4a1096dce">push_front(const_reference)</a></code>
               </dd>
             </dl>
           </td>

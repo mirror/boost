@@ -679,12 +679,13 @@ public:
              Does not invalidate any iterators.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
-        \sa <code>capacity()</code>, <code>max_size()</code>, <code>reserve()</code>, <code>resize()</code>
+        \sa <code>capacity()</code>, <code>max_size()</code>, <code>reserve()</code>,
+            <code>\link resize() resize(size_type, const_reference)\endlink</code>
     */
     size_type size() const { return m_size; }
 
-    //! Get the largest possible size or capacity of the <code>circular_buffer</code>.
-    /*!
+    /*! \brief Get the largest possible size or capacity of the <code>circular_buffer</code>. (It depends on
+               allocator's %max_size()).
         \return The maximum size/capacity the <code>circular_buffer</code> can be set to.
         \throws Nothing.
         \par Exception Safety
@@ -753,7 +754,8 @@ public:
              Does not invalidate any iterators.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
-        \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>, <code>set_capacity()</code>
+        \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>,
+            <code>set_capacity(capacity_type)</code>
     */
     capacity_type capacity() const { return m_end - m_buff; }
 
@@ -774,7 +776,8 @@ public:
              <code>end()</code>) if the new capacity is different from the original.
         \par Complexity
              Linear (in <code>min[size(), new_capacity]</code>).
-        \sa <code>rset_capacity()</code>, <code>resize()</code>
+        \sa <code>rset_capacity(capacity_type)</code>,
+            <code>\link resize() resize(size_type, const_reference)\endlink</code>
     */
     void set_capacity(capacity_type new_capacity) {
         if (new_capacity == capacity())
@@ -816,7 +819,8 @@ public:
              any iterator.
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
-        \sa <code>rresize()</code>, <code>set_capacity()</code>
+        \sa <code>\link rresize() rresize(size_type, const_reference)\endlink</code>,
+            <code>set_capacity(capacity_type)</code>
     */
     void resize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
@@ -846,7 +850,8 @@ public:
              <code>end()</code>) if the new capacity is different from the original.
         \par Complexity
              Linear (in <code>min[size(), new_capacity]</code>).
-        \sa <code>set_capacity()</code>, <code>rresize()</code>
+        \sa <code>set_capacity(capacity_type)</code>,
+            <code>\link rresize() rresize(size_type, const_reference)\endlink</code>
     */
     void rset_capacity(capacity_type new_capacity) {
         if (new_capacity == capacity())
@@ -887,7 +892,8 @@ public:
              any iterator.
         \par Complexity
              Linear (in the new size of the <code>circular_buffer</code>).
-        \sa <code>rresize()</code>, <code>set_capacity()</code>
+        \sa <code>\link resize() resize(size_type, const_reference)\endlink</code>,
+            <code>rset_capacity(capacity_type)</code>
     */
     void rresize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
@@ -910,7 +916,8 @@ public:
         \par Complexity
              Constant.
         \warning This constructor has been defined only due to compatibility with the STL container definition. Avoid
-              using it because it may allocate <b>very large</b> amount of memory.
+                 using it because it may allocate <b>very large</b> amount of memory (depending on allocator's
+                 %max_size()).
     */
     explicit circular_buffer(const allocator_type& alloc = allocator_type())
     : m_size(0), m_alloc(alloc) {
@@ -1296,7 +1303,8 @@ public:
              Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
-        \sa <code>push_front()</code>, <code>pop_back()</code>, <code>pop_front()</code>
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>,
+            <code>pop_back()</code>, <code>pop_front()</code>
     */
     void push_back(param_value_type item = value_type()) {
         if (full()) {
@@ -1325,7 +1333,8 @@ public:
              Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
-        \sa <code>push_back()</code>, <code>pop_back()</code>, <code>pop_front()</code>
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>pop_back()</code>, <code>pop_front()</code>
     */
     void push_front(param_value_type item = value_type()) {
         BOOST_TRY {
@@ -1358,7 +1367,8 @@ public:
              Invalidates only iterators pointing to the removed element.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
-        \sa <code>pop_front()</code>, <code>push_back()</code>, <code>push_front()</code>
+        \sa <code>pop_front()</code>, <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>\link push_front() push_front(const_reference)\endlink</code>
     */
     void pop_back() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
@@ -1378,7 +1388,8 @@ public:
              Invalidates only iterators pointing to the removed element.
         \par Complexity
              Constant (in the size of the <code>circular_buffer</code>).
-        \sa <code>pop_back()</code>, <code>push_back()</code>, <code>push_front()</code>
+        \sa <code>pop_back()</code>, <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>\link push_front() push_front(const_reference)\endlink</code>
     */
     void pop_front() {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
