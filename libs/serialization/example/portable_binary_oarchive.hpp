@@ -52,7 +52,7 @@ public:
     friend class boost::archive::basic_binary_oarchive<portable_binary_oarchive>;
     friend class boost::archive::save_access;
 #endif
-    void save_impl(const long l){
+    void save_impl(long l){
         long ll = l;
         char size = 0;
         if(l < 0){
