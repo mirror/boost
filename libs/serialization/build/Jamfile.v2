@@ -9,7 +9,6 @@
 project boost/serialization
     : source-location ../src
     : requirements <dependency>../../config/test//BOOST_NO_STD_LOCALE
-    : usage-requirements <dependency>../../config/test//BOOST_NO_STD_LOCALE
 ;
 
 SPIRIT_ROOT = [ modules.peek : SPIRIT_ROOT ] ;
