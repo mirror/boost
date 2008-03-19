@@ -35,5 +35,6 @@ import testing ;
           [ run sp_unary_addr_test.cpp ]
           [ compile-fail scoped_ptr_eq_fail.cpp ]
           [ compile-fail scoped_array_eq_fail.cpp ]
+          [ run esft_regtest.cpp ]
         ;
 }
