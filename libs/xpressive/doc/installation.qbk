@@ -35,6 +35,9 @@ regexes, you can improve compile times by only including `xpressive_static.hpp`.
 Likewise, you can include `xpressive_dynamic.hpp` if you only plan on using
 dynamic regexes.
 
+If you would also like to use semantic actions or custom assertions with your
+static regexes, you will need to additionally include `regex_actions.hpp`.
+
 [h2 Requirements]
 
 Xpressive requires Boost version 1.34.1 or higher.
