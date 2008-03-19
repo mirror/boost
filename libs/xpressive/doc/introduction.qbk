@@ -9,16 +9,18 @@
 
 [h2 What is xpressive?]
 
-xpressive is an object-oriented regular expression library. Regular expressions
+xpressive is a regular expression template library. Regular expressions
 (regexes) can be written as strings that are parsed dynamically at runtime
-(dynamic regexes), or as expression templates that are parsed at compile-time
-(static regexes). Dynamic regexes have the advantage that they can be accepted
-from the user as input at runtime or read from an initialization file. Static
-regexes have several advantages. Since they are C++ expressions instead of
-strings, they can be syntax-checked at compile-time. Also, they can refer to
-other regexes and to themselves, giving static regexes the power
-of context-free grammars. Finally, since they are statically bound,
-the compiler can generate faster code for static regexes.
+(dynamic regexes), or as ['expression templates][footnote See
+[@http://www.osl.iu.edu/~tveldhui/papers/Expression-Templates/exprtmpl.html
+Expression Templates]] that are parsed at compile-time (static regexes).
+Dynamic regexes have the advantage that they can be accepted from the user
+as input at runtime or read from an initialization file. Static regexes 
+have several advantages. Since they are C++ expressions instead of
+strings, they can be syntax-checked at compile-time. Also, they can naturally
+refer to code and data elsewhere in your program, giving you the ability to call
+back into your code from within a regex match. Finally, since they are statically
+bound, the compiler can generate faster code for static regexes.
 
 xpressive's dual nature is unique and powerful. Static xpressive is a bit
 like the _spirit_fx_. Like _spirit_, you can build grammars with
@@ -28,9 +30,9 @@ pattern.) Dynamic xpressive is a bit like _regexpp_. In fact,
 xpressive's interface should be familiar to anyone who has used _regexpp_.
 xpressive's innovation comes from allowing you to mix and match static and
 dynamic regexes in the same program, and even in the same expression! You
-can embed a dynamic regex in a static regex, and the dynamic regex will
-participate fully in the search, back-tracking as needed to make the match
-succeed.
+can embed a dynamic regex in a static regex, or /vice versa/, and the embedded
+regex will participate fully in the search, back-tracking as needed to make
+the match succeed.
 
 [h2 Hello, world!]
 

@@ -36,6 +36,11 @@ struct boyer_moore_finder
     {
     }
 
+    bool ok_for_partial_matches() const
+    {
+        return false;
+    }
+
     bool operator ()(match_state<BidiIter> &state) const
     {
         Traits const &traits = traits_cast<Traits>(state);

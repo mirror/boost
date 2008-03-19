@@ -81,7 +81,8 @@ inline bool regex_match
         // handle partial matches
         else if(state.found_partial_match_ && 0 != (flags & regex_constants::match_partial))
         {
-            return state.set_partial_match(), true;
+            state.set_partial_match();
+            return true;
         }
     }
 
@@ -256,7 +257,7 @@ inline bool regex_search_impl
         }
 
         // If we have a finder, use it to find where a potential match can start
-        else if(impl.finder_)
+        else if(impl.finder_ && (!partial_ok || impl.finder_->ok_for_partial_matches()))
         {
             finder<BidiIter> const &find = *impl.finder_;
             if(find(state))

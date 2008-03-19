@@ -66,6 +66,9 @@ square brackets: `[ ref(result)[s1] = as<int>(s2) ]`. It says to take sub-match
 one and use it to index into the `results` map, and assign to it the result of
 converting sub-match 2 to an integer.
 
+[note To use semantic actions with your static regexes, you must
+`#include <boost/xpressive/regex_actions.hpp>`]
+
 How does this work? Just as the rest of the static regular expression, the part
 between brackets is an expression template. It encodes the action and executes
 it later. The expression `ref(result)` creates a lazy reference to the `result`
@@ -202,7 +205,7 @@ that returns the `first` member of a `std::pair<>` or _sub_match_:
 
     // OK, use as first(s1) to get the begin iterator
     // of the sub-match referred to by s1.    
-    function<first_impl> const first = {{}};
+    function<first_impl>::type const first = {{}};
 
 [h3 Referring to Local Variables]
 

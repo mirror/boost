@@ -19,7 +19,7 @@ over their string-based brethren. In particular, static regexes:
 * are syntax-checked at compile-time; they will never fail at run-time due to
   a syntax error.
 * can naturally refer to other C++ data and code, including other regexes,
-  making it possible to build grammars out of regular expressions and bind
+  making it simple to build grammars out of regular expressions and bind
   user-defined actions that execute when parts of your regex match.
 * are statically bound for better inlining and optimization. Static regexes
   require no state tables, virtual functions, byte-code or calls through
