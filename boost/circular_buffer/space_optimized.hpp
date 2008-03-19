@@ -150,7 +150,8 @@ public:
              Does not invalidate any iterators.
         \par Complexity
              Constant (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>, <code>set_capacity()</code>
+        \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>,
+            <code>set_capacity(const capacity_type&)</code>
     */
     const capacity_type& capacity() const { return m_capacity_ctrl; }
 
@@ -191,7 +192,8 @@ public:
               boost::%circular_buffer_space_optimized\<int\>(cb).swap(cb);</code><br><br>
               For more information about the shrink-to-fit technique in STL see
               <a href="http://www.gotw.ca/gotw/054.htm">http://www.gotw.ca/gotw/054.htm</a>.
-        \sa <code>rset_capacity()</code>, <code>resize()</code>
+        \sa <code>rset_capacity(const capacity_type&)</code>,
+            <code>\link resize() resize(size_type, const_reference)\endlink</code>
     */
     void set_capacity(const capacity_type& capacity_ctrl) {
         m_capacity_ctrl = capacity_ctrl;
@@ -226,7 +228,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>rresize()</code>, <code>set_capacity()</code>
+        \sa <code>\link rresize() rresize(size_type, const_reference)\endlink</code>,
+            <code>set_capacity(const capacity_type&)</code>
     */
     void resize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
@@ -260,7 +263,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in <code>min[size(), capacity_ctrl.%capacity()]</code>).
-        \sa <code>set_capacity()</code>, <code>rresize()</code>
+        \sa <code>set_capacity(const capacity_type&)</code>,
+            <code>\link rresize() rresize(size_type, const_reference)\endlink</code>
     */
     void rset_capacity(const capacity_type& capacity_ctrl) {
         m_capacity_ctrl = capacity_ctrl;
@@ -295,7 +299,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the new size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>rresize()</code>, <code>set_capacity()</code>
+        \sa <code>\link resize() resize(size_type, const_reference)\endlink</code>,
+            <code>rset_capacity(const capacity_type&)</code>
     */
     void rresize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
@@ -717,7 +722,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>push_front()</code>, <code>pop_back()</code>, <code>pop_front()</code>
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
     */
     void push_back(param_value_type item = value_type()) {
         check_low_capacity();
@@ -741,7 +747,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>push_back()</code>, <code>pop_back()</code>, <code>pop_front()</code>
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
     */
     void push_front(param_value_type item = value_type()) {
         check_low_capacity();
@@ -762,7 +769,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>pop_front()</code>, <code>push_back()</code>, <code>push_front()</code>
+        \sa <code>pop_front()</code>, <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>\link push_front() push_front(const_reference)\endlink</code>
     */
     void pop_back() {
         circular_buffer<T, Alloc>::pop_back();
@@ -783,7 +791,8 @@ public:
              equal to <code>end()</code>).
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
-        \sa <code>pop_back()</code>, <code>push_back()</code>, <code>push_front()</code>
+        \sa <code>pop_back()</code>, <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>\link push_front() push_front(const_reference)\endlink</code>
     */
     void pop_front() {
         circular_buffer<T, Alloc>::pop_front();
