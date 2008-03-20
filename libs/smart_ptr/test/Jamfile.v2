@@ -36,5 +36,6 @@ import testing ;
           [ compile-fail scoped_ptr_eq_fail.cpp ]
           [ compile-fail scoped_array_eq_fail.cpp ]
           [ run esft_regtest.cpp ]
+          [ run esft_constructor_test.cpp ]
         ;
 }
