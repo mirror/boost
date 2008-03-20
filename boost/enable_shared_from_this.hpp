@@ -45,6 +45,7 @@ template<class T> class enable_shared_from_this
     mutable shared_ptr<_internal_element_type> _internal_shared_this;
     mutable weak_ptr<_internal_element_type> _internal_weak_this;
     mutable bool _owned;
+
 protected:
 
     enable_shared_from_this():
@@ -52,7 +53,8 @@ protected:
     {
     }
 
-    enable_shared_from_this(enable_shared_from_this const &)
+    enable_shared_from_this(enable_shared_from_this const &):
+      _owned(false)
     {
     }
 
