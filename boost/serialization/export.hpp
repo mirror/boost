@@ -85,21 +85,18 @@ struct instantiate_function {};
 template <class Archive, class Serializable>
 struct ptr_serialization_support
 {
-# ifdef BOOST_MSVC
+# if defined(BOOST_MSVC)
     virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
-    
-# elif defined(__BORLANDC__)
-    
+# elif defined(__INTEL_COMPILER)
+    virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
+# elif defined(__BORLANDC__)   
     static void instantiate();
     enum { x = sizeof(instantiate(),3) };
-    
 # else
-    
     static void instantiate();
     typedef instantiate_function<
         &ptr_serialization_support::instantiate
     > x;
-
 # endif
 };
 
