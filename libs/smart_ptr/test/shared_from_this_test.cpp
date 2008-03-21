@@ -133,7 +133,8 @@ void test3()
     try
     {
         boost::shared_ptr<V> r = v2.shared_from_this();
-        BOOST_ERROR("v2.shared_from_this() failed to throw");
+        BOOST_TEST( p < r || r < p );
+        BOOST_TEST( r.get() == &v2 );
     }
     catch(boost::bad_weak_ptr const &)
     {
