@@ -16,7 +16,7 @@ namespace
 {
   boost::regex url_regex(
     "<\\s*[^>]*\\s+(?:HREF|SRC)" // HREF or SRC
-    "\\s*=\\s*\"([^\"]*)\"",
+    "\\s*=\\s*(['\"])(.*?)\\1",
     boost::regbase::normal | boost::regbase::icase);
 
 } // unnamed namespace
@@ -66,8 +66,8 @@ namespace boost
       while( boost::regex_search( start, end, what, url_regex, flags) )
       {
         // what[0] contains the whole string iterators.
-        // what[1] contains the URL iterators.
-        do_url( string( what[1].first, what[1].second ),
+        // what[2] contains the URL iterators.
+        do_url( string( what[2].first, what[2].second ),
           library_name, full_path, no_link_errors );
 
         start = what[0].second; // update search position
