@@ -663,7 +663,9 @@ template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
     if(del == 0)
     {
         detail::sp_deleter_wrapper *del_wrapper = detail::basic_get_deleter<detail::sp_deleter_wrapper>(p);
-        if(del_wrapper) del = del_wrapper->get_deleter<D>();
+// The following get_deleter method call is fully qualified because
+// older versions of gcc (2.95, 3.2.3) fail to compile it when written del_wrapper->get_deleter<D>()
+        if(del_wrapper) del = del_wrapper->::boost::detail::sp_deleter_wrapper::get_deleter<D>();
     }
     return del;
 }
