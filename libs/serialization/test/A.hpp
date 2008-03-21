@@ -17,8 +17,8 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstddef> // size_t
-
 #include <string>
+#include <ostream> // for friend output operators
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
