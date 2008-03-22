@@ -15,19 +15,15 @@ SPIRIT_ROOT = [ modules.peek : SPIRIT_ROOT ] ;
 rule include-spirit ( properties * )
 {
     local result ;
-    for local tset in borland { # vc iw
-        if ( <toolset>$(tset) in $(properties) ) {
-            if ( $(SPIRIT_ROOT) ) {
-                # note - we can't use <include>$(SPIRIT_ROOT) because 
-                # it puts -I$(SPIRIT_ROOT) AFTER the "../../.." in the command line.
-                # so use these instead 
-                result = <cxxflags>-I$(SPIRIT_ROOT) ;
-            }
-            else {
-                echo **** spirit 1.6x required to build library with this compiler **** ;
-                result = <build>no ;
-            }
-        }
+    if ( $(SPIRIT_ROOT) ) {
+        # note - we can't use <include>$(SPIRIT_ROOT) because 
+        # it puts -I$(SPIRIT_ROOT) AFTER the "../../.." in the command line.
+        # so use these instead 
+        result = <cxxflags>-I$(SPIRIT_ROOT) ;
+    }
+    else {
+        echo **** spirit 1.6x required to build library with this compiler **** ;
+        result = <build>no ;
     }
 }
 
@@ -62,8 +58,6 @@ SOURCES =
 WSOURCES = 
     basic_text_wiprimitive
     basic_text_woprimitive
-    binary_wiarchive
-    binary_woarchive
     text_wiarchive
     text_woarchive
     utf8_codecvt_facet
@@ -76,23 +70,23 @@ WSOURCES =
 
 lib boost_serialization 
     : $(SOURCES).cpp
-	: 
-	    <toolset>msvc:<cxxflags>/Gy
-        <toolset>msvc-6.5:<conditional>@include-spirit
-        <toolset>msvc-7.0:<conditional>@include-spirit
-        <toolset>borland:<conditional>@include-spirit
-  	    <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
-	;
+    : 
+    <toolset>msvc:<cxxflags>/Gy
+    <toolset>msvc-6.5:<conditional>@include-spirit
+    <toolset>msvc-7.0:<conditional>@include-spirit
+    <toolset>borland:<conditional>@include-spirit
+    <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
+    ;
 
 lib boost_wserialization 
-        : $(WSOURCES).cpp boost_serialization 
-        :	  
-        <toolset>msvc:<cxxflags>/Gy 
-        <toolset>msvc-6.5:<conditional>@include-spirit
-        <toolset>msvc-7.0:<conditional>@include-spirit
-        <toolset>borland:<conditional>@include-spirit
-        <dependency>../../config/test//BOOST_NO_STD_WSTREAMBUF
-        <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
-	;
+    : $(WSOURCES).cpp boost_serialization 
+    :	  
+    <toolset>msvc:<cxxflags>/Gy 
+    <toolset>msvc-6.5:<conditional>@include-spirit
+    <toolset>msvc-7.0:<conditional>@include-spirit
+    <toolset>borland:<conditional>@include-spirit
+    <dependency>../../config/test//BOOST_NO_STD_WSTREAMBUF
+    <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
+    ;
 
 boost-install boost_serialization boost_wserialization ;
