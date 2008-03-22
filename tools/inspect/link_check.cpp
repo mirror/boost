@@ -9,6 +9,7 @@
 #include "link_check.hpp"
 #include "boost/regex.hpp"
 #include "boost/filesystem/operations.hpp"
+#include <cstdlib>
 
 namespace fs = boost::filesystem;
 
@@ -16,8 +17,46 @@ namespace
 {
   boost::regex url_regex(
     "<\\s*[^>]*\\s+(?:HREF|SRC)" // HREF or SRC
-    "\\s*=\\s*\"([^\"]*)\"",
+    "\\s*=\\s*(['\"])(.*?)\\1",
     boost::regbase::normal | boost::regbase::icase);
+
+  // Decode percent encoded characters and html escapsed ampersands,
+  // returns an empty string if there's an error.
+  // The urls should really be fully HTML decoded at the beginning.
+  std::string decode_url(std::string const& path) {
+    std::string::size_type pos = 0, next;
+    std::string result;
+    result.reserve(path.length());
+
+    while((next = path.find_first_of("&%", pos)) != std::string::npos) {
+      result.append(path, pos, next - pos);
+      pos = next;
+      switch(path[pos]) {
+        case '%': {
+          if(path.length() - next < 3) return "";
+          char hex[3] = { path[next + 1], path[next + 2], '\0' };
+          char* end_ptr;
+          result += (char) std::strtol(hex, &end_ptr, 16);
+          if(*end_ptr) return "";
+          pos = next + 3;
+          break;
+        }
+        case '&': {
+          if(path.substr(pos, 5) == "&amp;") {
+            result += '&'; pos += 5;
+          }
+          else {
+            result += '&'; pos += 1;
+          }
+          break;
+        }
+      }
+    }
+
+    result.append(path, pos, path.length());
+
+    return result;
+  }
 
 } // unnamed namespace
 
@@ -66,8 +105,8 @@ namespace boost
       while( boost::regex_search( start, end, what, url_regex, flags) )
       {
         // what[0] contains the whole string iterators.
-        // what[1] contains the URL iterators.
-        do_url( string( what[1].first, what[1].second ),
+        // what[2] contains the URL iterators.
+        do_url( string( what[2].first, what[2].second ),
           library_name, full_path, no_link_errors );
 
         start = what[0].second; // update search position
@@ -121,13 +160,22 @@ namespace boost
         }
       }
 
+      string decoded_url = decode_url(plain_url);
+      if(decoded_url.empty()) {
+        if(!no_link_errors) {
+          ++m_invalid_errors;
+          error( library_name, source_path, string(name()) + " invalid URL: " + url );
+        }
+        return;
+      }
+
       // strip url of references to current dir
-      if ( plain_url[0]=='.' && plain_url[1]=='/' ) plain_url.erase( 0, 2 );
+      if ( decoded_url[0]=='.' && decoded_url[1]=='/' ) decoded_url.erase( 0, 2 );
 
       // url is relative source_path.branch()
       // convert to target_path, which is_complete()
       path target_path;
-      try { target_path = source_path.branch_path() /= path( plain_url, fs::no_check ); }
+      try { target_path = source_path.branch_path() /= path( decoded_url, fs::no_check ); }
       catch ( const fs::filesystem_error & )
       {
         if(!no_link_errors) {
