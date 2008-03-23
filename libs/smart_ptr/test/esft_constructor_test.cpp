@@ -75,6 +75,9 @@ bool are_shared_owners(const boost::shared_ptr<T> &a, const boost::shared_ptr<U>
     return a && !(a < b) && !(b < a);
 }
 
+struct Y: public boost::enable_shared_from_this<Y>
+{};
+
 int main()
 {
     BOOST_TEST( X::instances == 0 );
@@ -121,6 +124,14 @@ int main()
         early_px.reset();
         BOOST_TEST( px.use_count() == 1 );
         BOOST_TEST( X::instances == 1 );
+        px.reset();
+        try
+        {
+            x.shared_from_this();
+            BOOST_ERROR("x did not throw bad_weak_ptr");
+        }
+        catch( const boost::bad_weak_ptr &err)
+        {}
     }
 
     BOOST_TEST( X::instances == 0 );
@@ -140,5 +151,19 @@ int main()
 
     BOOST_TEST( X::instances == 0 );
 
+    {
+        boost::shared_ptr<Y> px(new Y());
+        Y y(*px);
+        px.reset();
+        try
+        {
+            y.shared_from_this();
+        }
+        catch( const boost::bad_weak_ptr &err)
+        {
+            BOOST_ERROR("y threw bad_weak_ptr");
+        }
+    }
+    
     return boost::report_errors();
 }
