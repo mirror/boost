@@ -19,11 +19,10 @@ namespace std{
 #endif
 
 #include <boost/serialization/base_object.hpp>
-#include <boost/serialization/export.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
-
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
+#include <boost/serialization/export.hpp>
 
 #include "base.hpp"
 
