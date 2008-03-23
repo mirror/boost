@@ -85,9 +85,7 @@ public:
     get_derived_extended_type_info(const T & t) const {
         // note: this implementation - based on usage of typeid (rtti)
         // only does something if the class has at least one virtual function.
-        BOOST_STATIC_WARNING(
-            static_cast<bool>(boost::is_polymorphic<T>::value)
-        );
+        BOOST_STATIC_WARNING(boost::is_polymorphic<T>::value);
         return 
             detail::extended_type_info_typeid_0::get_extended_type_info(
                 typeid(t)
