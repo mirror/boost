@@ -7,7 +7,6 @@
 
 // note: this is a compile only test.
 
-#include "test_tools.hpp"
 #include <boost/static_warning.hpp>
 
 #pragma warning(disable:4094)
@@ -25,7 +24,7 @@ void warnings() {
     BOOST_STATIC_WARNING(sizeof(a1) == sizeof(a2)); // Warn.
 }                               
 
-int test_main(int /* argc */, char * /* argv */[]){
+int main(int /* argc */, char * /* argv */[]){
     warnings();
     return EXIT_SUCCESS;
 }
