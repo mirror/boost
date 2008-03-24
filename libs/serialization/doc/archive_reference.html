@@ -67,7 +67,7 @@ functions <strong>must</strong> be declared:
 <dt><h4><code>void load(T &t);</code></h4></dt>
 <dd>
 This function must be implemented for all primitive data types.  This can be
-accomplished through the use of a member template or explict declarations
+accomplished through the use of a member template or explicit declarations
 for all primitive types.
 </dd>
 
@@ -153,7 +153,7 @@ by XML archive to inject "&lt;/name&gt;" after data.
 <dd>
 <strong>Default</strong>:Does nothing.<br>
 <strong>Purpose</strong>:Called <strong>each time</strong> user data is saved. 
-Its not called when archive book keeping data is saved.  This is used by XML archives 
+It's not called when archive book keeping data is saved.  This is used by XML archives 
 to determine  when to inject a "&gt;" character at end of XML header. XML output archives 
 keep their own internal flag indicating that data being written is header data. This
 internal flag is reset when an object start tag is written. When 
