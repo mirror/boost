@@ -26,5 +26,5 @@ void warnings() {
 
 int main(int /* argc */, char * /* argv */[]){
     warnings();
-    return EXIT_SUCCESS;
+    return 0;
 }
