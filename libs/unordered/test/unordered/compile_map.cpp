@@ -9,11 +9,11 @@
 #include <boost/unordered_map.hpp>
 
 #include <iostream>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include "../objects/minimal.hpp"
 #include "./compile_tests.hpp"
 
-void test0()
+UNORDERED_AUTO_TEST(test0)
 {
     typedef std::pair<test::minimal::assignable const,
             test::minimal::copy_constructible> value_type;
@@ -42,8 +42,7 @@ void test0()
     container_test(multimap, value);
 }
 
-void test1()
-{
+UNORDERED_AUTO_TEST(test1) {
     boost::hash<int> hash;
     std::equal_to<int> equal_to;
     int value = 0;
@@ -67,7 +66,7 @@ void test1()
     unordered_test(multimap, value, map_value, hash, equal_to);
 }
 
-void test2()
+UNORDERED_AUTO_TEST(test2)
 {
     test::minimal::assignable assignable
         = test::minimal::assignable::create();
@@ -121,11 +120,4 @@ void test2()
     unordered_test(multimap, assignable, map_value, hash, equal_to);
 }
 
-int main()
-{
-    test0();
-    test1();
-    test2();
-
-    return boost::report_errors();
-}
+RUN_TESTS()

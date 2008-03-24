@@ -6,32 +6,35 @@
 
 While the associative containers use an ordering relation to specify how the
 elements are stored, the unordered associative containers use an equality
-predicate and a hash function. For example, [classref boost::unordered_set]
+predicate and a hash function. For example, [classref boost::unordered_map]
 is declared as:
 
-    template<typename Value,
-           typename Hash = ``[classref boost::hash]``<Value>, 
-           typename Pred = std::equal_to<Value>, 
-           typename Alloc = std::allocator<Value> > 
-    class ``[classref boost::unordered_set unordered_set]``;
+        template <
+            class Key, class Mapped,
+            class Hash = ``[classref boost::hash]``<Key>,
+            class Pred = std::equal_to<Key>,
+            class Alloc = std::allocator<Key> >
+        class ``[classref boost::unordered_map unordered_map]``;
 
 The hash function comes first as you might want to change the hash function
-but not the equality predicate, while if you were to change the behavior
-of the equality predicate you would have to change the hash function to match
-it.  So, if you wanted to use the
+but not the equality predicate. For example, if you wanted to use the
 [@http://www.isthe.com/chongo/tech/comp/fnv/ FNV-1 hash] you could write:
 
-    ``[classref boost::unordered_set]``<std::string, hash::fnv_1> words;
+[import src_code/dictionary.cpp]
+[case_sensitive_dictionary_fnv]
 
 An example implementation of FNV-1, and some other hash functions are supplied
 in the examples directory.
 
-Alternatively, you might wish to use a different equality function. If you do
-this you will need to use a hash function that matches it. So to implement a
-case-insensitive dictionary:
+If you wish to use a different equality function,
+you will also need to use a matching hash function. For
+example, to implement a case insensitive dictionary you need to define a
+case insensitive equality predicate and hash function:
 
-[import src_code/insensitive.cpp]
 [case_insensitive_functions]
+
+Which you can then use in a case insensitive dictionary:
+
 [case_insensitive_dictionary]
 
 This is a simplified version of the example at
@@ -45,8 +48,9 @@ Similarly, a custom hash function can be used for custom types:
 [import src_code/point1.cpp]
 [point_example1]
 
-Although, [link hash.custom extending boost::hash to support the type] is
-probably a better solution:
+Since the default hash function is [link hash Boost.Hash],
+we can [link hash.custom extend it to support the type]
+so that the hash function doesn't need to be explicitly given:
 
 [import src_code/point2.cpp]
 [point_example2]

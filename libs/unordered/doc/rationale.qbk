@@ -10,7 +10,7 @@
     N2345, 'Placement Insert for Containers']]
 [def __n2369__
     [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2007/n2369.pdf
-    the August 2008 version of the working draft standard]]
+    the August 2007 version of the working draft standard]]
 
 [section:rationale Implementation Rationale]
 

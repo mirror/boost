@@ -5,11 +5,13 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include <algorithm>
 #include "../objects/test.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/helpers.hpp"
+
+namespace bucket_tests {
 
 test::seed_t seed(54635);
 
@@ -48,12 +50,13 @@ void bucket_tests(X* = 0)
     }
 }
 
-int main()
-{
-    bucket_tests((boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    bucket_tests((boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    bucket_tests((boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
-    bucket_tests((boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >*) 0);
+boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    return boost::report_errors();
+UNORDERED_TEST(bucket_tests, ((test_set)(test_multiset)(test_map)(test_multimap)))
+
 }
+
+RUN_TESTS()

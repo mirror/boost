@@ -5,7 +5,7 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 
 #include <iostream>
 
@@ -39,7 +39,7 @@ namespace insert_stable
     }
 }
 
-void stable_insert_test1() {
+UNORDERED_AUTO_TEST(stable_insert_test1) {
     boost::unordered_multiset<insert_stable::member> x;
 
     x.insert(insert_stable::member(1,1));
@@ -56,7 +56,7 @@ void stable_insert_test1() {
     BOOST_TEST(it == end);
 }
 
-void stable_insert_test2() {
+UNORDERED_AUTO_TEST(stable_insert_test2) {
     boost::unordered_multimap<insert_stable::member, int> x;
     typedef boost::unordered_multimap<insert_stable::member, int>::const_iterator iterator;
 
@@ -75,10 +75,4 @@ void stable_insert_test2() {
     BOOST_TEST(it == end);
 }
 
-int main()
-{
-    stable_insert_test1();
-    stable_insert_test2();
-
-    return boost::report_errors();
-}
+RUN_TESTS()

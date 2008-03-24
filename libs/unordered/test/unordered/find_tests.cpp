@@ -5,11 +5,14 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include "../objects/test.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
 #include "../helpers/helpers.hpp"
+
+namespace find_tests
+{
 
 test::seed_t seed(78937);
 
@@ -78,22 +81,19 @@ void find_tests1(X*, test::random_generator generator = test::default_generator)
     }
 }
 
-int main()
-{
-    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    find_tests1(test_set);
-    find_tests1(test_multiset);
-    find_tests1(test_map);
-    find_tests1(test_multimap);
+using test::default_generator;
+using test::generate_collisions;
 
-    find_tests1(test_set, test::generate_collisions);
-    find_tests1(test_multiset, test::generate_collisions);
-    find_tests1(test_map, test::generate_collisions);
-    find_tests1(test_multimap, test::generate_collisions);
+UNORDERED_TEST(find_tests1,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    return 0;
 }
+
+RUN_TESTS()

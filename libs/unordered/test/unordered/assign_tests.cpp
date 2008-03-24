@@ -5,13 +5,15 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include "../objects/test.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
 #include "../helpers/equivalent.hpp"
 
 #include <iostream>
+
+namespace assign_tests {
 
 test::seed_t seed(96785);
 
@@ -83,32 +85,24 @@ void assign_tests2(T*, test::random_generator generator = test::default_generato
     }
 }
 
-int main()
-{
-    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    assign_tests1(test_set);
-    assign_tests1(test_multiset);
-    assign_tests1(test_map);
-    assign_tests1(test_multimap);
+using test::default_generator;
+using test::generate_collisions;
 
-    assign_tests1(test_set, test::generate_collisions);
-    assign_tests1(test_multiset, test::generate_collisions);
-    assign_tests1(test_map, test::generate_collisions);
-    assign_tests1(test_multimap, test::generate_collisions);
+UNORDERED_TEST(assign_tests1,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    assign_tests2(test_set);
-    assign_tests2(test_multiset);
-    assign_tests2(test_map);
-    assign_tests2(test_multimap);
+UNORDERED_TEST(assign_tests2,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    assign_tests2(test_set, test::generate_collisions);
-    assign_tests2(test_multiset, test::generate_collisions);
-    assign_tests2(test_map, test::generate_collisions);
-    assign_tests2(test_multimap, test::generate_collisions);
-
-    return boost::report_errors();
 }
+
+RUN_TESTS()

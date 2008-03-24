@@ -84,32 +84,18 @@ When using Boost.TR1, these classes are included from `<unordered_set>` and
 The containers are used in a similar manner to the normal associative
 containers:
 
-    #include <``[headerref boost/unordered_map.hpp]``>
-    #include <cassert>
-
-    int main()
-    {
-        boost::unordered_map<std::string, int> x;
-        x["one"] = 1;
-        x["two"] = 2;
-        x["three"] = 3;
-
-        assert(x["one"] == 1);
-        assert(x["missing"] == 0);
-    }
+[import src_code/intro.cpp]
+[intro_example1_2]
 
 But since the elements aren't ordered, the output of:
 
-    BOOST_FOREACH(map::value_type i, x) {
-        std::cout<<i.first<<","<<i.second<<"\n";
-    }
+[intro_example1_3]
 
 can be in any order. For example, it might be:
 
     two,2
     one,1
     three,3
-    missing,0
 
 To store an object in an unordered associative container requires both an
 key equality function and a hash function. The default function objects in

@@ -9,11 +9,11 @@
 #include <boost/unordered_set.hpp>
 
 #include <iostream>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include "../objects/minimal.hpp"
 #include "./compile_tests.hpp"
 
-void test0()
+UNORDERED_AUTO_TEST(test0)
 {
     test::minimal::assignable assignable = test::minimal::assignable::create();
 
@@ -36,7 +36,7 @@ void test0()
     container_test(multiset, assignable);
 }
 
-void test1()
+UNORDERED_AUTO_TEST(test1)
 {
     boost::hash<int> hash;
     std::equal_to<int> equal_to;
@@ -59,7 +59,7 @@ void test1()
     unordered_test(multiset, value, value, hash, equal_to);
 }
 
-void test2()
+UNORDERED_AUTO_TEST(test2)
 {
     test::minimal::assignable assignable
         = test::minimal::assignable::create();
@@ -95,10 +95,4 @@ void test2()
     unordered_test(multiset, assignable, assignable, hash, equal_to);
 }
 
-int main() {
-    test0();
-    test1();
-    test2();
-
-    return boost::report_errors();
-}
+RUN_TESTS()

@@ -12,4 +12,15 @@ boostbook standalone : unordered :
     <xsl:param>chunk.section.depth=2
     <xsl:param>generate.section.toc.level=2
     <xsl:param>toc.section.depth=1
-    <xsl:param>toc.max.depth=1 ;
+    <xsl:param>toc.max.depth=1
+
+    <dependency>css
+    <dependency>images
+    ;
+
+install css : [ glob $(BOOST_ROOT)/doc/src/*.css ]
+    : <location>html ;
+install images : [ glob $(BOOST_ROOT)/doc/src/images/*.png ]
+    : <location>html/images ;
+explicit css ;
+explicit images ;

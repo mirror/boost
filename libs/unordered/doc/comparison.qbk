@@ -83,7 +83,7 @@
     ]
     [
         [`erase` never throws an exception]
-        [The containers hash or predicate function can throw exceptions
+        [The containers' hash or predicate function can throw exceptions
             from `erase`]
     ]
 ]

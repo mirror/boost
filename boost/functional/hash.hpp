@@ -8,3 +8,4 @@
 //  issue 6.18. 
 
 #include <boost/functional/hash/hash.hpp>
+

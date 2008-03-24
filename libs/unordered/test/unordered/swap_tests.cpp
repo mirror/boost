@@ -8,11 +8,14 @@
 #include <iterator>
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include "../objects/test.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
 #include "../helpers/invariants.hpp"
+
+namespace swap_tests
+{
 
 test::seed_t seed(783472);
 
@@ -114,22 +117,18 @@ void swap_tests2(X* ptr = 0)
 #endif
 }
 
-int main()
-{
-    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    swap_tests1(test_set);
-    swap_tests1(test_multiset);
-    swap_tests1(test_map);
-    swap_tests1(test_multimap);
+UNORDERED_TEST(swap_tests1,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+)
 
-    swap_tests2(test_set);
-    swap_tests2(test_multiset);
-    swap_tests2(test_map);
-    swap_tests2(test_multimap);
+UNORDERED_TEST(swap_tests2,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+)
 
-    return boost::report_errors();
 }
+RUN_TESTS()

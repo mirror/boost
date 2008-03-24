@@ -5,7 +5,7 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include "../objects/test.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
@@ -14,6 +14,8 @@
 #include "../helpers/invariants.hpp"
 
 #include <iostream>
+
+namespace constructor_tests {
 
 test::seed_t seed(356730);
 
@@ -255,53 +257,28 @@ void map_constructor_test(T* = 0)
     test::check_equivalent_keys(x);
 }
 
-int main()
-{
-    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    std::cerr<<"Test1 test_set\n";
-    constructor_tests1(test_set);
-    std::cerr<<"Test1 test_multiset\n";
-    constructor_tests1(test_multiset);
-    std::cerr<<"Test1 test_map\n";
-    constructor_tests1(test_map);
-    std::cerr<<"Test1 test_multimap\n";
-    constructor_tests1(test_multimap);
+using test::default_generator;
+using test::generate_collisions;
 
-    std::cerr<<"Test1 test_set, collisions\n";
-    constructor_tests1(test_set, test::generate_collisions);
-    std::cerr<<"Test1 test_multiset, collisions\n";
-    constructor_tests1(test_multiset, test::generate_collisions);
-    std::cerr<<"Test1 test_map, collisions\n";
-    constructor_tests1(test_map, test::generate_collisions);
-    std::cerr<<"Test1 test_multimap, collisions\n";
-    constructor_tests1(test_multimap, test::generate_collisions);
+UNORDERED_TEST(constructor_tests1,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    std::cerr<<"Test2 test_set\n";
-    constructor_tests2(test_set);
-    std::cerr<<"Test2 test_multiset\n";
-    constructor_tests2(test_multiset);
-    std::cerr<<"Test2 test_map\n";
-    constructor_tests2(test_map);
-    std::cerr<<"Test2 test_multimap\n";
-    constructor_tests2(test_multimap);
+UNORDERED_TEST(constructor_tests2,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    std::cerr<<"Test2 test_set, collisions\n";
-    constructor_tests2(test_set, test::generate_collisions);
-    std::cerr<<"Test2 test_multiset, collisions\n";
-    constructor_tests2(test_multiset, test::generate_collisions);
-    std::cerr<<"Test2 test_map, collisions\n";
-    constructor_tests2(test_map, test::generate_collisions);
-    std::cerr<<"Test2 test_multimap, collisions\n";
-    constructor_tests2(test_multimap, test::generate_collisions);
+UNORDERED_TEST(map_constructor_test,
+    ((test_map)(test_multimap))
+)
 
-    std::cerr<<"Map Test unordered_map<test::object, test::object>\n";
-    map_constructor_test(test_map);
-    std::cerr<<"Map Test unordered_multimap<test::object, test::object>\n";
-    map_constructor_test(test_multimap);
-
-    return boost::report_errors();
 }
+
+RUN_TESTS()

@@ -4,10 +4,12 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include <string>
 
-int main() {
+namespace at_tests {
+
+UNORDERED_AUTO_TEST(at_tests) {
     boost::unordered_map<std::string, int> x;
     typedef boost::unordered_map<std::string, int>::iterator iterator;
 
@@ -23,6 +25,8 @@ int main() {
     }
     catch(std::out_of_range) {
     }
-
-    return boost::report_errors();
 }
+
+}
+
+RUN_TESTS()

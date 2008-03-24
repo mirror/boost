@@ -19,30 +19,28 @@
 #include <boost/preprocessor/cat.hpp>
 
 #if defined(BOOST_UNORDERED_USE_TEST)
-#   define UNORDERED_EXCEPTION_TEST_PREFIX
 #   define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
-        BOOST_AUTO_TEST_CASE(name) \
+        UNORDERED_AUTO_TEST(name) \
         { \
             test_func< type > fixture; \
             ::test::exception_safety(fixture, BOOST_STRINGIZE(test_func<type>)); \
         }
-#    define UNORDERED_EXCEPTION_TEST_POSTFIX
 #    define UNORDERED_EPOINT_IMPL BOOST_ITEST_EPOINT
 #else
-#    define UNORDERED_EXCEPTION_TEST_PREFIX int main() {
-#    define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
+#   define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
+        UNORDERED_AUTO_TEST(name) \
         { \
             test_func< type > fixture; \
             ::test::lightweight::exception_safety(fixture, BOOST_STRINGIZE(test_func<type>)); \
         }
-#    define UNORDERED_EXCEPTION_TEST_POSTFIX return boost::report_errors(); }
 #    define UNORDERED_EPOINT_IMPL ::test::lightweight::epoint
 #endif
 
+#define UNORDERED_EXCEPTION_TEST_POSTFIX RUN_TESTS()
+
 #define RUN_EXCEPTION_TESTS(test_seq, param_seq) \
-    UNORDERED_EXCEPTION_TEST_PREFIX \
     BOOST_PP_SEQ_FOR_EACH_PRODUCT(RUN_EXCEPTION_TESTS_OP, (test_seq)(param_seq)) \
-    UNORDERED_EXCEPTION_TEST_POSTFIX
+    RUN_TESTS()
 
 #define RUN_EXCEPTION_TESTS_OP(r, product) \
     UNORDERED_EXCEPTION_TEST_CASE( \

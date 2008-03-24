@@ -5,7 +5,7 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include <boost/limits.hpp>
 #include "../helpers/random_values.hpp"
 
@@ -13,6 +13,9 @@
 #pragma warning(push)
 #pragma warning(disable:4127) // conditional expression is constant
 #endif
+
+namespace load_factor_tests
+{
 
 test::seed_t seed(783656);
 
@@ -63,20 +66,22 @@ void load_factor_insert_tests(X* ptr = 0)
         insert_test(ptr, std::numeric_limits<float>::infinity());
 }
 
-int main()
-{
-    load_factor_tests((boost::unordered_set<int>*) 0);
-    load_factor_tests((boost::unordered_multiset<int>*) 0);
-    load_factor_tests((boost::unordered_map<int, int>*) 0);
-    load_factor_tests((boost::unordered_multimap<int, int>*) 0);
+boost::unordered_set<int>* int_set_ptr;
+boost::unordered_multiset<int>* int_multiset_ptr;
+boost::unordered_map<int, int>* int_map_ptr;
+boost::unordered_multimap<int, int>* int_multimap_ptr;
 
-    load_factor_insert_tests((boost::unordered_set<int>*) 0);
-    load_factor_insert_tests((boost::unordered_multiset<int>*) 0);
-    load_factor_insert_tests((boost::unordered_map<int, int>*) 0);
-    load_factor_insert_tests((boost::unordered_multimap<int, int>*) 0);
+UNORDERED_TEST(load_factor_tests,
+    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+)
 
-    return boost::report_errors();
+UNORDERED_TEST(load_factor_insert_tests,
+    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+)
+
 }
+
+RUN_TESTS()
 
 #if defined(BOOST_MSVC)
 #pragma warning(pop)

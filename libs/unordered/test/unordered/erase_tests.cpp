@@ -5,7 +5,7 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include <boost/next_prior.hpp>
 #include "../objects/test.hpp"
 #include "../helpers/random_values.hpp"
@@ -14,6 +14,9 @@
 #include "../helpers/helpers.hpp"
 
 #include <iostream>
+
+namespace erase_tests
+{
 
 test::seed_t seed(85638);
 
@@ -119,30 +122,19 @@ void erase_tests1(Container*, test::random_generator generator = test::default_g
     std::cerr<<"\n";
 }
 
-int main()
-{
-    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    std::cerr<<"Erase test_set.\n";
-    erase_tests1(test_set);
-    std::cerr<<"Erase test_multiset.\n";
-    erase_tests1(test_multiset);
-    std::cerr<<"Erase test_map.\n";
-    erase_tests1(test_map);
-    std::cerr<<"Erase test_multimap.\n";
-    erase_tests1(test_multimap);
+using test::default_generator;
+using test::generate_collisions;
 
-    std::cerr<<"Erase test_set, collisions.\n";
-    erase_tests1(test_set, test::generate_collisions);
-    std::cerr<<"Erase test_multiset, collisions.\n";
-    erase_tests1(test_multiset, test::generate_collisions);
-    std::cerr<<"Erase test_map, collisions.\n";
-    erase_tests1(test_map, test::generate_collisions);
-    std::cerr<<"Erase test_multimap, collisions.\n";
-    erase_tests1(test_multimap, test::generate_collisions);
+UNORDERED_TEST(erase_tests1,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    return boost::report_errors();
 }
+
+RUN_TESTS()

@@ -5,9 +5,10 @@
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 
-namespace test {
+namespace unnecessary_copy_tests
+{
     struct count_copies
     {
         static int count;
@@ -17,22 +18,24 @@ namespace test {
        count_copies& operator=(count_copies const&);
     };
 
-    bool operator==(test::count_copies const&, test::count_copies const&) {
+    bool operator==(count_copies const&, count_copies const&) {
         return true;
     }
 }
 
 #if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-namespace boost {
+namespace boost
 #else
-namespace test {
+namespace unnecessary_copy_tests
 #endif
-    std::size_t hash_value(test::count_copies const&) {
+{
+    std::size_t hash_value(unnecessary_copy_tests::count_copies const&) {
         return 0;
     }
 }
 
-namespace test {
+namespace unnecessary_copy_tests
+{
     int count_copies::count;
 
     template <class T>
@@ -45,14 +48,13 @@ namespace test {
         x.insert(a);
         BOOST_TEST(count_copies::count == 2);
     }
+
+    boost::unordered_set<count_copies>* set;
+    boost::unordered_multiset<count_copies>* multiset;
+    boost::unordered_map<int, count_copies>* map;
+    boost::unordered_multimap<int, count_copies>* multimap;
+
+    UNORDERED_TEST(unnecessary_copy_test, ((set)(multiset)(map)(multimap)))
 }
 
-int main()
-{
-    test::unnecessary_copy_test((boost::unordered_set<test::count_copies>*) 0);
-    test::unnecessary_copy_test((boost::unordered_multiset<test::count_copies>*) 0);
-    test::unnecessary_copy_test((boost::unordered_map<int, test::count_copies>*) 0);
-    test::unnecessary_copy_test((boost::unordered_multimap<int, test::count_copies>*) 0);
-
-    return boost::report_errors();
-}
+RUN_TESTS()

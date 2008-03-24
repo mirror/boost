@@ -7,7 +7,7 @@
 // hairy with several tricky edge cases - so explicitly test each one.
 
 #include <boost/unordered_map.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include "../helpers/test.hpp"
 #include <list>
 #include <set>
 #include <iostream>
@@ -52,8 +52,7 @@ typedef boost::unordered_multimap<int, int,
 typedef collide_map::value_type collide_value;
 typedef std::list<collide_value> collide_list;
 
-
-void empty_range_tests()
+UNORDERED_AUTO_TEST(empty_range_tests)
 {
     collide_map x;
     x.erase(x.begin(), x.end());
@@ -61,7 +60,7 @@ void empty_range_tests()
     x.erase(x.end(), x.end());
 }
 
-void single_item_tests()
+UNORDERED_AUTO_TEST(single_item_tests)
 {
     collide_list init;
     init.push_back(collide_value(1,1));
@@ -75,7 +74,7 @@ void single_item_tests()
     BOOST_TEST(x.count(1) == 0 && x.size() == 0);
 }
 
-void two_equivalent_item_tests()
+UNORDERED_AUTO_TEST(two_equivalent_item_tests)
 {
     collide_list init;
     init.push_back(collide_value(1,1));
@@ -172,7 +171,7 @@ void exhaustive_erase_tests(Container* x, int num_values,
     }
 }
 
-void exhaustive_collide_tests() 
+UNORDERED_AUTO_TEST(exhaustive_collide_tests) 
 {
     std::cout<<"exhaustive_collide_tests:\n";
     collide_map m;
@@ -180,20 +179,11 @@ void exhaustive_collide_tests()
     std::cout<<"\n";
 }
 
-void exhaustive_collide2_tests() 
+UNORDERED_AUTO_TEST(exhaustive_collide2_tests)
 {
     std::cout<<"exhaustive_collide2_tests:\n";
     exhaustive_erase_tests((collide_map2*) 0, 8, 4);
     std::cout<<"\n";
 }
 
-int main()
-{
-    empty_range_tests();
-    single_item_tests();
-    two_equivalent_item_tests();
-    exhaustive_collide_tests();
-    exhaustive_collide2_tests();
-
-    return boost::report_errors();
-}
+RUN_TESTS()

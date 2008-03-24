@@ -7,7 +7,7 @@ namespace hash
     template <std::size_t FnvPrime, std::size_t OffsetBias>
     struct basic_fnv_1
     {
-        std::size_t operator()(std::string const& text)
+        std::size_t operator()(std::string const& text) const
         {
             std::size_t hash = OffsetBias;
             for(std::string::const_iterator it = text.begin(), end = text.end();
@@ -24,7 +24,7 @@ namespace hash
     template <std::size_t FnvPrime, std::size_t OffsetBias>
     struct basic_fnv_1a
     {
-        std::size_t operator()(std::string const& text)
+        std::size_t operator()(std::string const& text) const
         {
             std::size_t hash = OffsetBias;
             for(std::string::const_iterator it = text.begin(), end = text.end();

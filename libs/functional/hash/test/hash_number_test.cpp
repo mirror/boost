@@ -31,7 +31,7 @@
 template <class T>
 void numeric_test(T*)
 {
-    typedef std::numeric_limits<T> limits;
+    typedef boost::hash_detail::limits<T> limits;
 
     compile_time_tests((T*) 0);
 
@@ -55,7 +55,7 @@ void numeric_test(T*)
 
     if (limits::is_integer)
     {
-        if(limits::is_signed || limits::digits <= std::numeric_limits<std::size_t>::digits)
+        if(limits::is_signed || limits::digits <= boost::hash_detail::limits<std::size_t>::digits)
             BOOST_TEST(HASH_NAMESPACE::hash_value(T(-5)) == (std::size_t)T(-5));
         BOOST_TEST(HASH_NAMESPACE::hash_value(T(0)) == (std::size_t)T(0u));
         BOOST_TEST(HASH_NAMESPACE::hash_value(T(10)) == (std::size_t)T(10u));
@@ -67,7 +67,7 @@ void numeric_test(T*)
 template <class T>
 void limits_test(T*)
 {
-    typedef std::numeric_limits<T> limits;
+    typedef boost::hash_detail::limits<T> limits;
 
     if(limits::is_specialized)
     {
@@ -98,7 +98,7 @@ void limits_test(T*)
 template <class T>
 void poor_quality_tests(T*)
 {
-    typedef std::numeric_limits<T> limits;
+    typedef boost::hash_detail::limits<T> limits;
 
     HASH_NAMESPACE::hash<T> x1;
     HASH_NAMESPACE::hash<T> x2;
