@@ -16,6 +16,7 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <memory>
+#include <string>
 
 class X: public boost::enable_shared_from_this< X >
 {
@@ -65,7 +66,7 @@ public:
 
 int X::instances = 0;
 
-int main()
+void test()
 {
     BOOST_TEST( X::instances == 0 );
 
@@ -131,6 +132,41 @@ int main()
     }
 
     BOOST_TEST( X::instances == 0 );
+}
+
+struct V: public boost::enable_shared_from_this<V>
+{
+    virtual ~V() {}
+    std::string m_;
+};
+
+struct V2
+{
+    virtual ~V2() {}
+    std::string m2_;
+};
+
+struct W: V2, V
+{
+};
+
+void test2()
+{
+    boost::shared_ptr<W> p( new W );
+}
+
+void test3()
+{
+    V * p = new W;
+    boost::shared_ptr<void> pv( p );
+    BOOST_TEST( pv.get() == p );
+}
+
+int main()
+{
+    test();
+    test2();
+    test3();
 
     return boost::report_errors();
 }

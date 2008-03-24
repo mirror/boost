@@ -95,7 +95,7 @@ public:
     {
         init_internal_shared_once();
         get_deleter<detail::sp_deleter_wrapper>(_internal_shared_this)->set_deleter(owner);
-        owner = dynamic_pointer_cast<U>(_internal_shared_this);
+        owner.reset( _internal_shared_this, owner.get() );
         _internal_shared_this.reset();
         _owned = true;
     }
