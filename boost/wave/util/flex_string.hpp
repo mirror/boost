@@ -705,8 +705,8 @@ public:
 
         if (capacity() < neededCapacity)
         {
-            typedef std::less_equal<const E*> le_type;
-            BOOST_ASSERT(!(le_type()(begin(), &*b) && le_type()(&*b, end())));
+//             typedef std::less_equal<const E*> le_type;
+//             BOOST_ASSERT(!(le_type()(begin(), &*b) && le_type()(&*b, end())));
             reserve(neededCapacity);
         }
         std::copy(b, e, end());
