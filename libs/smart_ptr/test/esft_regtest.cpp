@@ -162,11 +162,23 @@ void test3()
     BOOST_TEST( pv.get() == p );
 }
 
+struct null_deleter
+{
+    void operator()( void const* ) const {}
+};
+
+void test4()
+{
+    boost::shared_ptr<V> pv( new V );
+    boost::shared_ptr<V> pv2( pv.get(), null_deleter() );
+}
+
 int main()
 {
     test();
     test2();
     test3();
+    test4();
 
     return boost::report_errors();
 }
