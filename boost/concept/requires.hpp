@@ -4,6 +4,7 @@
 #ifndef BOOST_CONCEPT_REQUIRES_DWA2006430_HPP
 # define BOOST_CONCEPT_REQUIRES_DWA2006430_HPP
 
+# include <boost/config.hpp>
 # include <boost/parameter/aux_/parenthesized_type.hpp>
 # include <boost/concept/assert.hpp>
 # include <boost/preprocessor/seq/for_each.hpp>
@@ -38,8 +39,11 @@ struct Requires_ : ::boost::parameter::aux::unaryfunptr_arg_type<Result>
 # endif 
 };
 
-
-#define BOOST_CONCEPT_REQUIRES_(r,data,t) + (::boost::_requires_<void(*)t>::value)
+# if BOOST_WORKAROUND(BOOST_INTEL_WIN, BOOST_TESTED_AT(1010))
+#  define BOOST_CONCEPT_REQUIRES_(r,data,t) | (::boost::_requires_<void(*)t>::value)
+# else 
+#  define BOOST_CONCEPT_REQUIRES_(r,data,t) + (::boost::_requires_<void(*)t>::value)
+# endif
 
 #if defined(NDEBUG) || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
