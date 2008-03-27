@@ -40,10 +40,6 @@ rule run-template ( test-name : sources * : requirements * ) {
             # toolset optimizations
             <toolset>gcc:<cxxflags>"-ftemplate-depth-255"
             <toolset>msvc:<cxxflags>"-Gy"
-            # toolset shared library support
-            <toolset>como,<runtime-link>shared:<build>no
-            <toolset>msvc,<stdlib>stlport,<runtime-link>shared:<build>no
-            <toolset>cw,<runtime-link>static:<build>no
             $(requirements)
         : # test name
             $(test-name)
