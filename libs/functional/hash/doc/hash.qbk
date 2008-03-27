@@ -1,7 +1,7 @@
 [library Boost.Functional/Hash
     [quickbook 1.4]
     [authors [James, Daniel]]
-    [copyright 2005 2006 2007 Daniel James]
+    [copyright 2005 2006 2007 2008 Daniel James]
     [purpose A TR1 hash function object that can be extended to hash user
         defined types]
     [category higher-order]
