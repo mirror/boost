@@ -76,9 +76,10 @@
 # endif
 
 //------------------Configure-------------------------------------------------//
-
 # if defined(__BORLANDC__) && (__BORLANDC__ >= 0x600)
 #  define BOOST_HAS_DESCRIPTIVE_UNREFERENCED_VARIABLE_WARNING
+# elif defined(__PGI)
+#  define BOOST_HAS_DESCRIPTIVE_DIVIDE_BY_ZERO_WARNING
 # elif defined(__GNUC__) && !defined(BOOST_INTEL) // && (__GNUC__ * 100 + __GNUC_MINOR__ <= 302)
 #  define BOOST_HAS_DESCRIPTIVE_DIVIDE_BY_ZERO_WARNING
 # elif  defined(__DECCXX) // for Tru64
@@ -87,7 +88,7 @@
 #  define BOOST_HAS_DESCRIPTIVE_RETURNING_ADDRESS_OF_TEMPORARY_WARNING
 # elif defined(BOOST_MSVC) // && (BOOST_MSVC < 1300)
 #  define BOOST_NO_PREDEFINED_LINE_MACRO
-#  pragma warning(disable:4094) // C4094: untagged 'stuct' declared no symbols
+#  pragma warning(disable:4094) // C4094: untagged 'struct' declared no symbols
 #endif
 
 //------------------Helper templates------------------------------------------//
