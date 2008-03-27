@@ -261,7 +261,7 @@ public:
 
 // constructor that doesn't trigger enable_shared_from_this code, needed
 // for enable_shared_from_this internal implementation
-    template<class Y, class D> shared_ptr(Y * p, D d, detail::ignore_enable_shared_from_this_tag tag):
+    template<class Y, class D> shared_ptr(Y * p, D d, detail::ignore_enable_shared_from_this_tag):
       px(p), pn(p, d)
     {}
 
