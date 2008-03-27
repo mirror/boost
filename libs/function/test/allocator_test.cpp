@@ -27,6 +27,14 @@ struct counting_allocator : public std::allocator<T>
     typedef counting_allocator<U> other;
   };
 
+  counting_allocator()
+  {
+  }
+
+  template<typename U>
+  counting_allocator( counting_allocator<U> )
+  {
+  }
 
   T* allocate(std::size_t n)
   {
@@ -41,20 +49,27 @@ struct counting_allocator : public std::allocator<T>
   }
 };
 
-struct plus_int
+struct enable_small_object_optimization
+{
+};
+
+struct disable_small_object_optimization
+{
+  int unused_state_data[32];
+};
+
+template <typename base>
+struct plus_int: base
 {
   int operator()(int x, int y) const { return x + y; }
-
-  int unused_state_data[32];
 };
 
 static int do_minus(int x, int y) { return x-y; }
 
-struct DoNothing
+template <typename base>
+struct DoNothing: base
 {
   void operator()() const {}
-
-  int unused_state_data[32];
 };
 
 static void do_nothing() {}
@@ -62,33 +77,57 @@ static void do_nothing() {}
 int
 test_main(int, char*[])
 {
-  function2<int, int, int, counting_allocator<int> > f;
-  f = plus_int();
+  function2<int, int, int> f;
+  f.assign( plus_int<disable_small_object_optimization>(), counting_allocator<int>() );
   f.clear();
   BOOST_CHECK(alloc_count == 1);
   BOOST_CHECK(dealloc_count == 1);
-
   alloc_count = 0;
   dealloc_count = 0;
-  f = &do_minus;
+  f.assign( plus_int<enable_small_object_optimization>(), counting_allocator<int>() );
   f.clear();
   BOOST_CHECK(alloc_count == 0);
   BOOST_CHECK(dealloc_count == 0);
+  f.assign( plus_int<disable_small_object_optimization>(), std::allocator<int>() );
+  f.clear();
+  f.assign( plus_int<enable_small_object_optimization>(), std::allocator<int>() );
+  f.clear();
 
-  function0<void, counting_allocator<int> > fv;
   alloc_count = 0;
   dealloc_count = 0;
-  fv = DoNothing();
+  f.assign( &do_minus, counting_allocator<int>() );
+  f.clear();
+  BOOST_CHECK(alloc_count == 0);
+  BOOST_CHECK(dealloc_count == 0);
+  f.assign( &do_minus, std::allocator<int>() );
+  f.clear();
+
+  function0<void> fv;
+  alloc_count = 0;
+  dealloc_count = 0;
+  fv.assign( DoNothing<disable_small_object_optimization>(), counting_allocator<int>() );
   fv.clear();
   BOOST_CHECK(alloc_count == 1);
   BOOST_CHECK(dealloc_count == 1);
-
   alloc_count = 0;
   dealloc_count = 0;
-  fv = &do_nothing;
+  fv.assign( DoNothing<enable_small_object_optimization>(), counting_allocator<int>() );
   fv.clear();
   BOOST_CHECK(alloc_count == 0);
   BOOST_CHECK(dealloc_count == 0);
+  fv.assign( DoNothing<disable_small_object_optimization>(), std::allocator<int>() );
+  fv.clear();
+  fv.assign( DoNothing<enable_small_object_optimization>(), std::allocator<int>() );
+  fv.clear();
+
+  alloc_count = 0;
+  dealloc_count = 0;
+  fv.assign( &do_nothing, counting_allocator<int>() );
+  fv.clear();
+  BOOST_CHECK(alloc_count == 0);
+  BOOST_CHECK(dealloc_count == 0);
+  fv.assign( &do_nothing, std::allocator<int>() );
+  fv.clear();
 
   return 0;
 }
