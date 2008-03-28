@@ -45,7 +45,7 @@ namespace detail
   extern "C" void __stdcall Sleep( unsigned ms );
 #endif
 
-void yield( unsigned k )
+inline void yield( unsigned k )
 {
     if( k < 4 )
     {
@@ -81,7 +81,7 @@ namespace boost
 namespace detail
 {
 
-void yield( unsigned k )
+inline void yield( unsigned k )
 {
     if( k < 4 )
     {
