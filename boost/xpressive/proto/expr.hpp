@@ -111,7 +111,7 @@
             template<typename Sig, typename This>
             struct funop;
 
-        #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/detail/funop.hpp>))
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY), <boost/xpressive/proto/detail/funop.hpp>))
         #include BOOST_PP_ITERATE()
         }
 
@@ -369,7 +369,7 @@
             }
         #endif
 
-    #define BOOST_PP_ITERATION_PARAMS_2 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/expr.hpp>))
+    #define BOOST_PP_ITERATION_PARAMS_2 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY), <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
         };
 

@@ -285,7 +285,7 @@ namespace boost { namespace proto
         BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)                                        \
         BOOST_PP_REPEAT_FROM_TO(                                                                    \
             0                                                                                       \
-          , BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY)                                                     \
+          , BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY)                                       \
           , BOOST_PROTO_DEFINE_FUN_OP_CONST                                                         \
           , (Expr, Derived, Domain)                                                                 \
         )                                                                                           \
@@ -295,7 +295,7 @@ namespace boost { namespace proto
         BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)                                        \
         BOOST_PP_REPEAT_FROM_TO(                                                                    \
             0                                                                                       \
-          , BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY)                                                     \
+          , BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY)                                       \
           , BOOST_PROTO_DEFINE_FUN_OP_NON_CONST                                                     \
           , (Expr, Derived, Domain)                                                                 \
         )                                                                                           \
@@ -305,7 +305,7 @@ namespace boost { namespace proto
         BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)                                        \
         BOOST_PP_REPEAT_FROM_TO(                                                                    \
             0                                                                                       \
-          , BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY)                                                     \
+          , BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY)                                       \
           , BOOST_PROTO_DEFINE_FUN_OP                                                               \
           , (Expr, Derived, Domain)                                                                 \
         )                                                                                           \
@@ -380,7 +380,7 @@ namespace boost { namespace proto
 
             /// INTERNAL ONLY
             ///
-        #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
+        #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY))
         #include BOOST_PP_LOCAL_ITERATE()
         };
 
@@ -418,7 +418,7 @@ namespace boost { namespace proto
 
             /// INTERNAL ONLY
             ///
-        #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
+        #define BOOST_PP_LOCAL_LIMITS (0, BOOST_PP_DEC(BOOST_PROTO_MAX_FUNCTION_CALL_ARITY))
         #include BOOST_PP_LOCAL_ITERATE()
         };
 
