@@ -83,6 +83,11 @@
 #  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #endif
 
+#if _MSC_VER == 1500  // 1500 == VC++ 9.0
+   // A bug in VC9:
+#  define BOOST_NO_ADL_BARRIER
+#endif
+
 #ifndef _NATIVE_WCHAR_T_DEFINED
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif

@@ -67,6 +67,7 @@
 #    endif
 #    if (__SUNPRO_CC <= 0x580) 
 #      define BOOST_NO_IS_ABSTRACT
+#      define BOOST_NO_ADL_BARRIER
 #    endif
 
 //

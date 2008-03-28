@@ -1,4 +1,4 @@
-//  This file was automatically generated on Fri Oct 19 13:34:11 2007
+//  This file was automatically generated on Fri Mar 28 16:52:14 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -22,6 +22,11 @@
 
 int error_count = 0;
 
+#ifndef BOOST_NO_ADL_BARRIER
+#include "boost_no_adl_barrier.ipp"
+#else
+namespace boost_no_adl_barrier = empty_boost;
+#endif
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #include "boost_no_arg_dep_lookup.ipp"
 #else
@@ -839,6 +844,11 @@ int main( int, char *[] )
    if(0 != boost_has_winthreads::test())
    {
       std::cerr << "Failed test for BOOST_HAS_WINTHREADS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_adl_barrier::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_ADL_BARRIER at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_argument_dependent_lookup::test())
