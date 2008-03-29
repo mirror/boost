@@ -190,7 +190,7 @@
                 template<typename This, typename Expr, typename State, typename Visitor>
                 struct result<This(Expr, State, Visitor)>
                 {
-                    typedef typename detail::make_<Object, Expr, State, Visitor>::type type;
+                    typedef typename detail::make_if_<Object, Expr, State, Visitor>::type type;
                 };
 
                 /// \param expr The current expression
@@ -307,7 +307,7 @@
             struct result<This(Expr, State, Visitor)>
             {
                 /// \brief <tt>make\<Object\>::::result\<void(Expr, State, Visitor)\>::::type</tt>
-                typedef typename detail::make_<Object, Expr, State, Visitor>::type type;
+                typedef typename detail::make_if_<Object, Expr, State, Visitor>::type type;
             };
 
             /// Let \c ax be <tt>when\<_, Ax\>()(expr, state, visitor)</tt>
