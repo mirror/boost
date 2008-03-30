@@ -232,6 +232,29 @@ BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a16,true)
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a32,true)
 }
 #endif
+#if defined(BOOST_MSVC) || (defined(BOOST_INTEL) && defined(_MSC_VER))
+namespace align {
+struct __declspec(align(8)) a8 { char m[8]; };
+struct __declspec(align(16)) a16 { char m[16]; };
+struct __declspec(align(32)) a32 { char m[32]; };
+struct __declspec(align(64)) a64 { char m[64]; };
+struct __declspec(align(128)) a128 { char m[128]; };
+}
+
+template<> class type_with_alignment<8>  { public: typedef align::a8 type; };
+template<> class type_with_alignment<16> { public: typedef align::a16 type; };
+template<> class type_with_alignment<32> { public: typedef align::a32 type; };
+template<> class type_with_alignment<64> { public: typedef align::a64 type; };
+template<> class type_with_alignment<128> { public: typedef align::a128 type; };
+
+namespace detail {
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a8,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a16,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a32,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a64,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a128,true)
+}
+#endif
 
 #else
 

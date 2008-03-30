@@ -14,6 +14,17 @@
 #  include <boost/type_traits/is_pod.hpp>
 #endif
 
+#if defined(BOOST_MSVC) || (defined(BOOST_INTEL) && defined(_MSC_VER))
+#if _MSC_VER >= 1400
+#include <xmmintrin.h>
+#endif
+struct __declspec(align(8)) a8 { char m[8]; };
+struct __declspec(align(16)) a16 { char m[16]; };
+struct __declspec(align(32)) a32 { char m[32]; };
+struct __declspec(align(64)) a64 { char m[64]; };
+struct __declspec(align(128)) a128 { char m[128]; };
+#endif
+
 TT_TEST_BEGIN(type_with_alignment)
 
 BOOST_MESSAGE(typeid(::tt::type_with_alignment<
@@ -68,6 +79,40 @@ BOOST_CHECK(::tt::alignment_of<
                   ::tt::alignment_of<__int64>::value
                >::type
             >::value == ::boost::alignment_of<__int64>::value);
+#endif
+#if defined(BOOST_MSVC) || (defined(BOOST_INTEL) && defined(_MSC_VER))
+#if _MSC_VER >= 1400
+BOOST_CHECK(::tt::alignment_of<
+               ::tt::type_with_alignment<
+                  ::tt::alignment_of<__m128>::value
+               >::type
+            >::value == ::boost::alignment_of<__m128>::value);
+BOOST_CHECK(::tt::alignment_of<
+               ::tt::type_with_alignment<
+                  ::tt::alignment_of<__m64>::value
+               >::type
+            >::value == ::boost::alignment_of<__m64>::value);
+#endif
+BOOST_CHECK(::tt::alignment_of<
+               ::tt::type_with_alignment<
+                  ::tt::alignment_of<a8>::value
+               >::type
+            >::value == ::boost::alignment_of<a8>::value);
+BOOST_CHECK(::tt::alignment_of<
+               ::tt::type_with_alignment<
+                  ::tt::alignment_of<a16>::value
+               >::type
+            >::value == ::boost::alignment_of<a16>::value);
+BOOST_CHECK(::tt::alignment_of<
+               ::tt::type_with_alignment<
+                  ::tt::alignment_of<a32>::value
+               >::type
+            >::value == ::boost::alignment_of<a32>::value);
+BOOST_CHECK(::tt::alignment_of<
+               ::tt::type_with_alignment<
+                  ::tt::alignment_of<a64>::value
+               >::type
+            >::value == ::boost::alignment_of<a64>::value);
 #endif
 BOOST_CHECK(::tt::alignment_of<
                ::tt::type_with_alignment<

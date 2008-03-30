@@ -30,6 +30,10 @@ template <typename T> struct alignment_of;
 // get the alignment of some arbitrary type:
 namespace detail {
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4324) // structure was padded due to __declspec(align())
+#endif
 template <typename T>
 struct alignment_of_hack
 {
@@ -37,7 +41,9 @@ struct alignment_of_hack
     T t;
     alignment_of_hack();
 };
-
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 template <unsigned A, unsigned S>
 struct alignment_logic
