@@ -119,7 +119,7 @@ struct guid_initializer
         // generates the statically-initialized objects whose constructors
         // register the information allowing serialization of T objects
         // through pointers to their base classes.
-        instantiate_ptr_serialization((T*)0, 0);
+        instantiate_ptr_serialization((T*)0, 0, adl_tag());
         return *this;
     }
     const guid_initializer & export_guid(char const* key, mpl::true_){
