@@ -26,8 +26,6 @@ namespace std{
 #include "polymorphic_binary_archive.hpp"
 #include "polymorphic_xml_archive.hpp"
 #include "polymorphic_xml_warchive.hpp"
-#include "polymorphic_portable_le_binary_archive.hpp"
-#include "polymorphic_portable_be_binary_archive.hpp"
 */
 
 #include "test_tools.hpp"
