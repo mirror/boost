@@ -39,11 +39,13 @@ namespace std{
 // if there is no 64 bit int or if its the same as a long
 // we shouldn't define separate functions for int64 data types.
 #if defined(BOOST_NO_INT64_T)
+    #define BOOST_NO_INTRINSIC_INT64_T
+#else 
     #if defined(ULONG_MAX)
         #if(ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615u) // 2**64 - 1
             #define BOOST_NO_INTRINSIC_INT64_T
         #endif
-    #else
+    #else 
         #define BOOST_NO_INTRINSIC_INT64_T
     #endif
 #endif
