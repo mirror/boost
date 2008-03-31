@@ -23,7 +23,7 @@ namespace detail {
 
 namespace { // anon
     template<class Archive>
-    class serializer_map : public basic_serializer_map 
+    class iserializer_map : public basic_serializer_map 
     {
     };
 }
@@ -35,9 +35,9 @@ archive_pointer_iserializer<Archive>::archive_pointer_iserializer(
 ) :
     basic_pointer_iserializer(eti)
 {
-    std::pair<BOOST_DEDUCED_TYPENAME  serializer_map<Archive>::iterator, bool> result;
+    std::pair<BOOST_DEDUCED_TYPENAME  iserializer_map<Archive>::iterator, bool> result;
     result = serialization::singleton<
-            serializer_map<Archive> 
+            iserializer_map<Archive> 
         >::get_mutable_instance().insert(this);
     assert(result.second);
 }
@@ -48,15 +48,15 @@ archive_pointer_iserializer<Archive>::find(
     const boost::serialization::extended_type_info & eti
 ){
     const basic_serializer_arg bs(eti);
-    BOOST_DEDUCED_TYPENAME serializer_map<Archive>::const_iterator it;
+    BOOST_DEDUCED_TYPENAME iserializer_map<Archive>::const_iterator it;
     it = boost::serialization::singleton<
-            serializer_map<Archive> 
+            iserializer_map<Archive> 
          >::get_const_instance().find(& bs);
     assert(
         it 
         != 
         boost::serialization::singleton<
-                serializer_map<Archive> 
+                iserializer_map<Archive> 
             >::get_const_instance().end()
     );
     return static_cast<const basic_pointer_iserializer *>(*it);
@@ -69,7 +69,7 @@ archive_pointer_iserializer<Archive>::~archive_pointer_iserializer(){
     // on static variables being constructed in a specific sequence
     unsigned int count;
     count = serialization::singleton<
-            serializer_map<Archive> 
+            iserializer_map<Archive> 
         >::get_mutable_instance().erase(this);
     assert(count);
 }
