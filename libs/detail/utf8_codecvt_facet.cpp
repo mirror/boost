@@ -1,7 +1,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // utf8_codecvt_facet.cpp
 
-// Copyright © 2001 Ronald Garcia, Indiana University (garcia@osl.iu.edu)
+// Copyright (c) 2001 Ronald Garcia, Indiana University (garcia@osl.iu.edu)
 // Andrew Lumsdaine, Indiana University (lums@osl.iu.edu). 
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
