@@ -20,7 +20,7 @@
 //  formulation
 //
 
-#include "sp_typeinfo.hpp"
+#include <boost/detail/sp_typeinfo.hpp>
 #include <atomic.h>
 
 namespace boost
