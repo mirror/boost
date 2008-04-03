@@ -59,10 +59,16 @@ namespace boost{
       BOOST_CHECK_MESSAGE(true, "Validating Integral Constant Expression: \"" << BOOST_STRINGIZE(expression) << "\"");\
    }\
    if(!::boost::detail::tt_compare((int)expression, expected_value))\
+   {\
       if(!::boost::detail::tt_compare((int)expression, alternate_value))\
+      {\
          BOOST_CHECK_MESSAGE(false, "The expression: \"" << BOOST_STRINGIZE(expression) << "\" had an invalid value (found " << ::boost::detail::integral_constant<(int)(expression)>::value() << ", expected " << expected_value << ")" );\
+      }\
       else\
-         BOOST_WARN_MESSAGE(false, "<note>The expression: \"" << BOOST_STRINGIZE(expression) << "\" did not have the value we wish it to have (found " << ::boost::detail::integral_constant<(int)(expression)>::value() << ", expected " << expected_value << ")</note>" )
+      {\
+         BOOST_WARN_MESSAGE(false, "<note>The expression: \"" << BOOST_STRINGIZE(expression) << "\" did not have the value we wish it to have (found " << ::boost::detail::integral_constant<(int)(expression)>::value() << ", expected " << expected_value << ")</note>" );\
+      }\
+    }
 
 
    }//detail

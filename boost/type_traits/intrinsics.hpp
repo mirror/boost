@@ -31,6 +31,16 @@
 // BOOST_HAS_NOTHROW_COPY(T) should evaluate to true if T(t) can not throw
 // BOOST_HAS_NOTHROW_ASSIGN(T) should evaluate to true if t = u can not throw
 // BOOST_HAS_VIRTUAL_DESTRUCTOR(T) should evaluate to true T has a virtual destructor
+//
+// The following can also be defined: when detected our implementation is greatly simplified.
+// Note that unlike the macros above these do not have default definitions, so we can use
+// #ifdef MACRONAME to detect when these are available.
+//
+// BOOST_IS_ABSTRACT(T) true if T is an abstract type
+// BOOST_IS_BASE_OF(T,U) true if T is a base class of U
+// BOOST_IS_CLASS(T) true if T is a class type
+// BOOST_IS_ENUM(T) true is T is an enum
+// BOOST_IS_POLYMORPHIC(T) true if T is a polymorphic type
 
 #ifdef BOOST_HAS_SGI_TYPE_TRAITS
     // Hook into SGI's __type_traits class, this will pick up user supplied
@@ -99,6 +109,30 @@
 #   define BOOST_HAS_NOTHROW_ASSIGN(T) (__typeinfo(T) & 0x200)
 #   define BOOST_HAS_VIRTUAL_DESTRUCTOR(T) (__typeinfo(T) & 0x4)
 #   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
+#endif
+
+#if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)))
+#   include <boost/type_traits/is_same.hpp>
+#   include <boost/type_traits/is_reference.hpp>
+#   include <boost/type_traits/is_volatile.hpp>
+
+#   define BOOST_IS_UNION(T) __is_union(T)
+#   define BOOST_IS_POD(T) __is_pod(T)
+#   define BOOST_IS_EMPTY(T) __is_empty(T)
+#   define BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) __has_trivial_constructor(T)
+#   define BOOST_HAS_TRIVIAL_COPY(T) (__has_trivial_copy(T) && !is_reference<T>::value)
+#   define BOOST_HAS_TRIVIAL_ASSIGN(T) __has_trivial_assign(T)
+#   define BOOST_HAS_TRIVIAL_DESTRUCTOR(T) __has_trivial_destructor(T)
+#   define BOOST_HAS_NOTHROW_CONSTRUCTOR(T) __has_nothrow_constructor(T)
+#   define BOOST_HAS_NOTHROW_COPY(T) (__has_nothrow_copy(T) && !is_volatile<T>::value && !is_reference<T>::value)
+#   define BOOST_HAS_NOTHROW_ASSIGN(T) (__has_nothrow_assign(T) && !is_volatile<T>::value)
+#   define BOOST_HAS_VIRTUAL_DESTRUCTOR(T) __has_virtual_destructor(T)
+
+#   define BOOST_IS_ABSTRACT(T) __is_abstract(T)
+#   define BOOST_IS_BASE_OF(T,U) (__is_base_of(T,U) && !is_same<T,U>::value)
+#   define BOOST_IS_CLASS(T) __is_class(T)
+#   define BOOST_IS_ENUM(T) __is_enum(T)
+#   define BOOST_IS_POLYMORPHIC(T) __is_polymorphic(T)
 #endif
 
 #ifndef BOOST_IS_UNION
