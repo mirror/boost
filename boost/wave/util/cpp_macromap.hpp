@@ -373,7 +373,7 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
         (*p.first).second->macroparameters, 
         (*p.first).second->macrodefinition, is_predefined);
 #else
-    ctx.get_hooks().defined_macro(ctx, name, has_parameters, 
+    ctx.get_hooks().defined_macro(ctx.derived(), name, has_parameters, 
         (*p.first).second->macroparameters, 
         (*p.first).second->macrodefinition, is_predefined);
 #endif
@@ -504,7 +504,7 @@ macromap<ContextT>::remove_macro(token_type const &token,
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
         ctx.get_hooks().undefined_macro(token);
 #else
-        ctx.get_hooks().undefined_macro(ctx, token);
+        ctx.get_hooks().undefined_macro(ctx.derived(), token);
 #endif
         return true;
     }
@@ -870,10 +870,10 @@ ContainerT pending_queue;
 bool seen_newline;
     
     while (!pending_queue.empty() || first_it != last_it) {
-        token_type t = expand_tokensequence_worker(pending_queue, first_it, 
-                    last_it, seen_newline, expand_operator_defined);
-
-        expanded.push_back(t);
+        expanded.push_back(
+            expand_tokensequence_worker(pending_queue, first_it, 
+                    last_it, seen_newline, expand_operator_defined)
+        );
     }
 
 // should have returned all expanded tokens
@@ -1269,8 +1269,8 @@ ContainerT replacement_list;
                 macro_def.macroname, macro_def.macroparameters, 
                 macro_def.macrodefinition, curr_token, arguments);
 #else
-            if (ctx.get_hooks().expanding_function_like_macro(
-                    ctx, macro_def.macroname, macro_def.macroparameters, 
+            if (ctx.get_hooks().expanding_function_like_macro(ctx.derived(), 
+                    macro_def.macroname, macro_def.macroparameters, 
                     macro_def.macrodefinition, curr_token, arguments,
                     seqstart, seqend))
             {
@@ -1291,9 +1291,8 @@ ContainerT replacement_list;
             ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
 #else
-            if (ctx.get_hooks().expanding_object_like_macro(
-                    ctx, macro_def.macroname, macro_def.macrodefinition, 
-                    curr_token))
+            if (ctx.get_hooks().expanding_object_like_macro(ctx.derived(), 
+                  macro_def.macroname, macro_def.macrodefinition, curr_token))
             {
                 // do not expand this macro, just copy the whole sequence 
                 replacement_list.push_back(curr_token);
@@ -1335,9 +1334,8 @@ ContainerT replacement_list;
             ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
 #else
-            if (ctx.get_hooks().expanding_object_like_macro(
-                    ctx, macro_def.macroname, macro_def.macrodefinition, 
-                    curr_token))
+            if (ctx.get_hooks().expanding_object_like_macro(ctx.derived(), 
+                  macro_def.macroname, macro_def.macrodefinition, curr_token))
             {
                 // do not expand this macro, just copy the whole sequence 
                 replacement_list.push_back(curr_token);
@@ -1368,7 +1366,7 @@ ContainerT expanded_list;
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().expanded_macro(replacement_list);
 #else
-    ctx.get_hooks().expanded_macro(ctx, replacement_list);
+    ctx.get_hooks().expanded_macro(ctx.derived(), replacement_list);
 #endif
     
     rescan_replacement_list(curr_token, macro_def, replacement_list, 
@@ -1377,7 +1375,7 @@ ContainerT expanded_list;
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().rescanned_macro(expanded_list);  
 #else
-    ctx.get_hooks().rescanned_macro(ctx, expanded_list);  
+    ctx.get_hooks().rescanned_macro(ctx.derived(), expanded_list);  
 #endif
     expanded.splice(expanded.end(), expanded_list);
     return true;        // rescan is required
@@ -1387,7 +1385,7 @@ ContainerT expanded_list;
 //
 //  If the token under inspection points to a certain predefined macro it will 
 //  be expanded, otherwise false is returned.
-//  (only __FILE__, __LINE__ and __INCLUDE_LEVEL__ macros are expaned here)
+//  (only __FILE__, __LINE__ and __INCLUDE_LEVEL__ macros are expanded here)
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT>

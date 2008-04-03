@@ -19,6 +19,8 @@
 #include <boost/concept_check.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #if BOOST_WAVE_SERIALIZATION != 0
@@ -72,14 +74,22 @@ namespace wave {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+struct this_type {};
+
 template <
     typename IteratorT,
     typename LexIteratorT, 
     typename InputPolicyT = iteration_context_policies::load_file_to_string,
-    typename HooksT = context_policies::eat_whitespace<typename LexIteratorT::token_type>
+    typename HooksT = context_policies::eat_whitespace<typename LexIteratorT::token_type>,
+    typename DerivedT = this_type
 >
 class context : private boost::noncopyable
 {
+private:
+    typedef typename mpl::if_<
+            is_same<DerivedT, this_type>, context, DerivedT
+        >::type actual_context_type;
+
 public:
 
 // concept checks
@@ -88,12 +98,10 @@ public:
     
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
-    typedef context<IteratorT, LexIteratorT, InputPolicyT, HooksT> 
-        self_type;
     
     typedef IteratorT                               target_iterator_type;
     typedef LexIteratorT                            lexer_type;
-    typedef pp_iterator<self_type>                  iterator_type;
+    typedef pp_iterator<context>                    iterator_type;
 
     typedef InputPolicyT                            input_policy_type;
     typedef typename token_type::position_type      position_type;
@@ -217,7 +225,7 @@ public:
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
-    typedef boost::wave::util::macromap<self_type> macromap_type;
+    typedef boost::wave::util::macromap<context> macromap_type;
     typedef typename macromap_type::name_iterator name_iterator;
     typedef typename macromap_type::const_name_iterator const_name_iterator;
     
@@ -256,6 +264,12 @@ public:
 
 // access the policies
     hook_policy_type &get_hooks() { return hooks; }
+
+// return type of actually used context type (might be the derived type)
+    actual_context_type& derived() 
+        { return *static_cast<actual_context_type*>(this); } 
+    actual_context_type const& derived() const
+        { return *static_cast<actual_context_type const*>(this); } 
 
 // return the directory of the currently preprocessed file
     boost::filesystem::path get_current_directory() const
@@ -438,7 +452,7 @@ private:
         }
         catch (boost::wave::preprocess_exception const& e) {
         // catch version mismatch exceptions and call error handler
-            get_hooks().throw_exception(*this, e); 
+            get_hooks().throw_exception(derived(), e); 
         }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()

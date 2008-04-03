@@ -145,10 +145,10 @@ struct defined_grammar :
 template <typename LexIteratorT>
 BOOST_WAVE_DEFINED_GRAMMAR_GEN_INLINE 
 boost::spirit::parse_info<
-    typename defined_grammar_gen<LexIteratorT>::iterator1_t
+    typename defined_grammar_gen<LexIteratorT>::iterator1_type
 >
 defined_grammar_gen<LexIteratorT>::parse_operator_defined (
-    iterator1_t const &first, iterator1_t const &last,
+    iterator1_type const &first, iterator1_type const &last,
     token_sequence_type &found_qualified_name)
 {
     using namespace boost::spirit;
@@ -162,10 +162,10 @@ defined_grammar_gen<LexIteratorT>::parse_operator_defined (
 template <typename LexIteratorT>
 BOOST_WAVE_DEFINED_GRAMMAR_GEN_INLINE 
 boost::spirit::parse_info<
-    typename defined_grammar_gen<LexIteratorT>::iterator2_t
+    typename defined_grammar_gen<LexIteratorT>::iterator2_type
 >
 defined_grammar_gen<LexIteratorT>::parse_operator_defined (
-    iterator2_t const &first, iterator2_t const &last,
+    iterator2_type const &first, iterator2_type const &last,
     token_sequence_type &found_qualified_name)
 {
     using namespace boost::spirit;

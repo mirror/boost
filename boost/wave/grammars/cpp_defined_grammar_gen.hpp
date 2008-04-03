@@ -52,20 +52,20 @@ struct BOOST_WAVE_DECL defined_grammar_gen
 
     typedef boost::wave::util::unput_queue_iterator<
             typename token_sequence_type::iterator, token_type, token_sequence_type>
-        iterator1_t;
+        iterator1_type;
 
     typedef boost::wave::util::unput_queue_iterator<
             LexIteratorT, token_type, token_sequence_type>
-        iterator2_t;
+        iterator2_type;
         
 //  parse the operator defined and return the found qualified name
-    static boost::spirit::parse_info<iterator1_t> 
-    parse_operator_defined (iterator1_t const &first, iterator1_t const &last,
-        token_sequence_type &found_qualified_name);
+    static boost::spirit::parse_info<iterator1_type> 
+    parse_operator_defined (iterator1_type const &first, 
+        iterator1_type const &last, token_sequence_type &found_qualified_name);
 
-    static boost::spirit::parse_info<iterator2_t> 
-    parse_operator_defined (iterator2_t const &first, iterator2_t const &last,
-        token_sequence_type &found_qualified_name);
+    static boost::spirit::parse_info<iterator2_type> 
+    parse_operator_defined (iterator2_type const &first, 
+        iterator2_type const &last, token_sequence_type &found_qualified_name);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

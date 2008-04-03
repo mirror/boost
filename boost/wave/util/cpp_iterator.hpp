@@ -393,7 +393,7 @@ pp_iterator_functor<ContextT>::returned_from_include()
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
         ctx.get_hooks().returning_from_include_file();
 #else
-        ctx.get_hooks().returning_from_include_file(ctx);
+        ctx.get_hooks().returning_from_include_file(ctx.derived());
 #endif
 
     // restore the previous iteration context after finishing the preprocessing 
@@ -498,11 +498,11 @@ pp_iterator_functor<ContextT>::operator()()
                 act_token.set_value("\n");
             }
             
-        } while (ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline));
+        } while (ctx.get_hooks().may_skip_whitespace(ctx.derived(), act_token, skipped_newline));
     }
     catch (boost::wave::cpplexer::lexing_exception const& e) {
     // dispatch any lexer exceptions to the context hook function
-        ctx.get_hooks().throw_exception(ctx, e);
+        ctx.get_hooks().throw_exception(ctx.derived(), e);
         return act_token;
     }
         
@@ -514,7 +514,7 @@ pp_iterator_functor<ContextT>::operator()()
         if (need_emit_line_directives(ctx.get_language()) && emit_line_directive()) 
         {
             skipped_newline = false;
-            ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline);     // feed ws eater FSM
+            ctx.get_hooks().may_skip_whitespace(ctx.derived(), act_token, skipped_newline);     // feed ws eater FSM
             id = token_id(act_token);
         }
     }
@@ -582,7 +582,7 @@ pp_iterator_functor<ContextT>::operator()()
             act_token.get_position());
     }
     whitespace.shift_tokens(id);
-    return ctx.get_hooks().generated_token(ctx, act_token);
+    return ctx.get_hooks().generated_token(ctx.derived(), act_token);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -652,7 +652,7 @@ bool returned_from_include_file = returned_from_include();
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
                     ctx.get_hooks().skipped_token(act_token);
 #else
-                    ctx.get_hooks().skipped_token(ctx, act_token);
+                    ctx.get_hooks().skipped_token(ctx.derived(), act_token);
 #endif
                     continue;
                 }
@@ -687,7 +687,7 @@ bool returned_from_include_file = returned_from_include();
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
                 ctx.get_hooks().skipped_token(act_token);
 #else
-                ctx.get_hooks().skipped_token(ctx, act_token);
+                ctx.get_hooks().skipped_token(ctx.derived(), act_token);
 #endif
                 ++iter_ctx->first;
             }
@@ -861,7 +861,7 @@ namespace impl {
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
             ctx.get_hooks().skipped_token(*it);   
 #else
-            ctx.get_hooks().skipped_token(ctx, *it);
+            ctx.get_hooks().skipped_token(ctx.derived(), *it);
 #endif
         }
         BOOST_ASSERT(it == end || id != T_UNKNOWN);
@@ -876,7 +876,7 @@ namespace impl {
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
         ctx.get_hooks().skipped_token(*it);
 #else
-        ctx.get_hooks().skipped_token(ctx, *it);
+        ctx.get_hooks().skipped_token(ctx.derived(), *it);
 #endif
 
         for (++it; it != end; ++it) {
@@ -887,7 +887,7 @@ namespace impl {
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
                 ctx.get_hooks().skipped_token(*it);
 #else
-                ctx.get_hooks().skipped_token(ctx, *it);
+                ctx.get_hooks().skipped_token(ctx.derived(), *it);
 #endif
                 ++it;           // skip eol/C/C++ comment
                 return true;    // no more significant tokens on this line
@@ -900,7 +900,7 @@ namespace impl {
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
             ctx.get_hooks().skipped_token(*it);
 #else
-            ctx.get_hooks().skipped_token(ctx, *it);
+            ctx.get_hooks().skipped_token(ctx.derived(), *it);
 #endif
         }
         return false;
@@ -917,7 +917,7 @@ namespace impl {
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
             ctx.get_hooks().skipped_token(*it);
 #else
-            ctx.get_hooks().skipped_token(ctx, *it);
+            ctx.get_hooks().skipped_token(ctx.derived(), *it);
 #endif
             if (T_CPPCOMMENT == id || T_NEWLINE == id ||
                 context_policies::util::ccomment_has_newline(*it)) 
@@ -999,7 +999,9 @@ pp_iterator_functor<ContextT>::can_ignore_pp_directive(IteratorT &it)
 // start over with the next line, if only possible
     if (can_exit) {
         string_type value ((*it).get_value());
-        if (!impl::skip_to_eol(ctx, it, iter_ctx->last)) {
+        if (!impl::skip_to_eol(ctx, it, iter_ctx->last) &&
+            !need_single_line(ctx.get_language())) 
+        {
         // The line doesn't end with an eol but eof token.
             seen_newline = true;    // allow to resume after warning
             iter_ctx->first = it;
@@ -1077,7 +1079,7 @@ tree_parse_info_type hit = cpp_grammar_type::parse_cpp_grammar(
     // the found pp directive
     bool result = dispatch_directive (hit, found_directive, found_eoltokens);
     
-        if (found_eof) {
+        if (found_eof && !need_single_line(ctx.get_language())) {
         // The line was terminated with an end of file token.
         // So trigger a warning, that the last line was not terminated with a 
         // newline.
@@ -1133,7 +1135,7 @@ token_id id = token_id(found_directive);
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().found_directive(found_directive);     
 #else
-    if (ctx.get_hooks().found_directive(ctx, found_directive))
+    if (ctx.get_hooks().found_directive(ctx.derived(), found_directive))
         return true;    // skip this directive and return newline only
 #endif
     
@@ -1293,7 +1295,7 @@ char const *current_name = 0;   // never try to match current file name
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().found_include_directive(f, include_next);
 #else
-    if (ctx.get_hooks().found_include_directive(ctx, f, include_next))
+    if (ctx.get_hooks().found_include_directive(ctx.derived(), f, include_next))
         return true;    // client returned false: skip file to include 
 #endif
 
@@ -1330,7 +1332,7 @@ fs::path native_path(file_path, fs::native);
         ctx.get_hooks().opened_include_file(dir_path, file_path,
             ctx.get_iteration_depth(), is_system);
 #else
-        ctx.get_hooks().opened_include_file(ctx, dir_path, file_path,
+        ctx.get_hooks().opened_include_file(ctx.derived(), dir_path, file_path,
             is_system);
 #endif
 
@@ -1568,7 +1570,7 @@ bool is_defined = false;
 #else
     do {
         is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
-    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, 
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx.derived(), 
              found_directive, toexpand, is_defined));
 #endif
     ctx.enter_if_block(is_defined);
@@ -1601,7 +1603,7 @@ bool is_defined = false;
 #else
     do {
         is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
-    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, 
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx.derived(), 
              found_directive, toexpand, is_defined));
 #endif
     ctx.enter_if_block(!is_defined);
@@ -1711,7 +1713,7 @@ token_sequence_type expanded;
         }
         catch (boost::wave::preprocess_exception const& e) {
         // any errors occurred have to be dispatched to the context hooks
-            ctx.get_hooks().throw_exception(ctx, e);
+            ctx.get_hooks().throw_exception(ctx.derived(), e);
             break;
         }
                         
@@ -1719,7 +1721,7 @@ token_sequence_type expanded;
         ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
     } while (false);
 #else
-    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, 
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx.derived(), 
                 found_directive, toexpand, if_status) 
              && status == grammars::error_noerror);
 #endif
@@ -1815,14 +1817,14 @@ token_sequence_type expanded;
         }
         catch (boost::wave::preprocess_exception const& e) {
         // any errors occurred have to be dispatched to the context hooks
-            ctx.get_hooks().throw_exception(ctx, e);
+            ctx.get_hooks().throw_exception(ctx.derived(), e);
         }
                 
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
         ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
     } while (false);
 #else
-    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, 
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx.derived(), 
                 found_directive, toexpand, if_status) 
              && status == grammars::error_noerror);
 #endif
@@ -1980,12 +1982,12 @@ token_sequence_type toexpand;
         }
 
     // call the corresponding pp hook function
-        ctx.get_hooks().found_line_directive(ctx, expanded, line, 
+        ctx.get_hooks().found_line_directive(ctx.derived(), expanded, line, 
             file_name.c_str());
     }
     else {
     // call the corresponding pp hook function
-        ctx.get_hooks().found_line_directive(ctx, toexpand, line, 
+        ctx.get_hooks().found_line_directive(ctx.derived(), toexpand, line, 
             file_name.c_str());
     }
     
@@ -2044,13 +2046,13 @@ token_sequence_type toexpand;
     typename token_sequence_type::iterator begin2 = toexpand.begin();
     ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded, 
         false);
-    if (!ctx.get_hooks().found_error_directive(ctx, toexpand))
+    if (!ctx.get_hooks().found_error_directive(ctx.derived(), toexpand))
 #else
 // simply copy the body of this #error message to the issued diagnostic
 // message
     std::copy(first, make_ref_transform_iterator(end, get_value), 
         std::inserter(expanded, expanded.end()));
-    if (!ctx.get_hooks().found_error_directive(ctx, expanded))
+    if (!ctx.get_hooks().found_error_directive(ctx.derived(), expanded))
 #endif 
     {
     // report the corresponding error
@@ -2092,13 +2094,13 @@ token_sequence_type toexpand;
     typename token_sequence_type::iterator begin2 = toexpand.begin();
     ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded, 
         false);
-    if (!ctx.get_hooks().found_warning_directive(ctx, toexpand))
+    if (!ctx.get_hooks().found_warning_directive(ctx.derived(), toexpand))
 #else
 // simply copy the body of this #warning message to the issued diagnostic
 // message
     std::copy(first, make_ref_transform_iterator(end, get_value), 
         std::inserter(expanded, expanded.end()));
-    if (!ctx.get_hooks().found_warning_directive(ctx, expanded))
+    if (!ctx.get_hooks().found_warning_directive(ctx.derived(), expanded))
 #endif 
     {
     // report the corresponding error
@@ -2208,7 +2210,8 @@ pp_iterator_functor<ContextT>::interpret_pragma(
     if (it == end)      // eof reached
         return false;
 
-    return boost::wave::util::interpret_pragma(ctx, act_token, it, end, result);
+    return boost::wave::util::interpret_pragma(
+        ctx.derived(), act_token, it, end, result);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

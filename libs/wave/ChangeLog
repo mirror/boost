@@ -24,8 +24,18 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.36
 - Wave Version 1.4
-  
+- Added an additional template parameter to the context object, allowing to 
+  specify any possibly derived type. This change propagates to the preprocessing
+  hooks, which now get passed the most derived context type as its first 
+  argument allowing to access protected members in the original context type.
+- Fixed a problem during parsing of #pragma wave directive, where the value 
+  sequence contained a closing parenthesis. This caused a premature end of the
+  pragma value parsing.
+- Fixed handling of support_option_single_line, which was ignored under certain 
+  circumstances.
+
 Boost V1.35.0
 - Wave Version 1.3
 - Changed the return value of the 'evaluated_conditional_expression()' pp hook

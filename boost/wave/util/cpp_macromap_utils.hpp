@@ -100,7 +100,8 @@ namespace on_exit {
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename IteratorT, typename UnputIteratorT>
-    class assign {
+    class assign
+    {
     public:
         assign(IteratorT &it_, UnputIteratorT const &uit_) 
         :   it(it_), uit(uit_) {}

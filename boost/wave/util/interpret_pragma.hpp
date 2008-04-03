@@ -19,6 +19,7 @@
 #include <boost/spirit/actor/assign_actor.hpp>
 #include <boost/spirit/actor/push_back_actor.hpp>
 #endif // SPIRIT_VERSION >= 0x1700
+#include <boost/spirit/utility/confix.hpp>
 
 #include <boost/wave/wave_config.hpp>
 
@@ -105,12 +106,10 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                                     spirit_assign_actor(option)
                                 ] 
                             )
-                        >> !(   ch_p(T_LEFTPAREN) 
-                            >>  lexeme_d[
-                                    *(anychar_p[spirit_append_actor(values)] - ch_p(T_RIGHTPAREN))
-                                ]
-                            >>  ch_p(T_RIGHTPAREN)
-                            ),
+                        >> !comment_nest_p(
+                                ch_p(T_LEFTPAREN),
+                                ch_p(T_RIGHTPAREN)
+                            )[spirit_assign_actor(values)],
                     pattern_p(WhiteSpaceTokenType, TokenTypeMask)).hit)
             {
                 BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
@@ -120,16 +119,17 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                 return false;
             }
         
-        // remove the falsely matched closing parenthesis
-            if (values.size() > 0) {
-                BOOST_ASSERT(T_RIGHTPAREN == values.back());
+        // remove the falsely matched surrounding parenthesis's
+            if (values.size() >= 2) {
+                BOOST_ASSERT(T_LEFTPAREN == values.front() && T_RIGHTPAREN == values.back());
+                values.erase(values.begin());
                 typename ContainerT::reverse_iterator rit = values.rbegin();
                 values.erase((++rit).base());
             }
             
         // decode the option (call the context_policy hook)
             if (!ctx.get_hooks().interpret_pragma(
-                  ctx, pending, option, values, act_token)) 
+                  ctx.derived(), pending, option, values, act_token)) 
             {
             // unknown #pragma option 
             string_type option_str ((*it).get_value());
