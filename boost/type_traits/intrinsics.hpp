@@ -39,6 +39,7 @@
 // BOOST_IS_ABSTRACT(T) true if T is an abstract type
 // BOOST_IS_BASE_OF(T,U) true if T is a base class of U
 // BOOST_IS_CLASS(T) true if T is a class type
+// BOOST_IS_CONVERTIBLE(T,U) true if T is convertible to U
 // BOOST_IS_ENUM(T) true is T is an enum
 // BOOST_IS_POLYMORPHIC(T) true if T is a polymorphic type
 
@@ -81,6 +82,8 @@
 #endif
 
 #if defined(BOOST_MSVC) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >=140050215)
+#   include <boost/type_traits/is_same.hpp>
+
 #   define BOOST_IS_UNION(T) __is_union(T)
 #   define BOOST_IS_POD(T) (__is_pod(T) && __has_trivial_constructor(T))
 #   define BOOST_IS_EMPTY(T) __is_empty(T)
@@ -92,6 +95,16 @@
 #   define BOOST_HAS_NOTHROW_COPY(T) __has_nothrow_copy(T)
 #   define BOOST_HAS_NOTHROW_ASSIGN(T) __has_nothrow_assign(T)
 #   define BOOST_HAS_VIRTUAL_DESTRUCTOR(T) __has_virtual_destructor(T)
+
+#   define BOOST_IS_ABSTRACT(T) __is_abstract(T)
+#   define BOOST_IS_BASE_OF(T,U) (__is_base_of(T,U) && !is_same<T,U>::value)
+#   define BOOST_IS_CLASS(T) __is_class(T)
+//  This one doesn't quite always do the right thing:
+//  #   define BOOST_IS_CONVERTIBLE(T,U) __is_convertible_to(T,U)
+#   define BOOST_IS_ENUM(T) __is_enum(T)
+//  This one doesn't quite always do the right thing:
+//  #   define BOOST_IS_POLYMORPHIC(T) __is_polymorphic(T)
+
 #   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif
 
@@ -133,6 +146,8 @@
 #   define BOOST_IS_CLASS(T) __is_class(T)
 #   define BOOST_IS_ENUM(T) __is_enum(T)
 #   define BOOST_IS_POLYMORPHIC(T) __is_polymorphic(T)
+
+#   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif
 
 #ifndef BOOST_IS_UNION

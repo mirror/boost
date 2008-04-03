@@ -9,7 +9,8 @@
 
 There are some traits that can not be implemented within the current C++ language:
 to make these traits "just work" with user defined types, some kind of additional
-help from the compiler is required.  Currently (May 2005) MWCW 9 and Visual C++ 8
+help from the compiler is required.  Currently (April 2008) Visual C++ 8 and 9,
+GNU GCC 4.3 and MWCW 9
 provide the necessary intrinsics, and other compilers will no doubt follow in due 
 course.  
 
