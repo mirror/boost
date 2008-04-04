@@ -30,11 +30,16 @@ Boost V1.36
   specify any possibly derived type. This change propagates to the preprocessing
   hooks, which now get passed the most derived context type as its first 
   argument allowing to access protected members in the original context type.
+  This fixes ticket #1752.
 - Fixed a problem during parsing of #pragma wave directive, where the value 
   sequence contained a closing parenthesis. This caused a premature end of the
   pragma value parsing.
 - Fixed handling of support_option_single_line, which was ignored under certain 
   circumstances.
+- Fixed ticket #1766: Wrong evaluation of conditional preprocessor directives 
+  with predefined macros __FILE__, __LINE__ and __INCLUDE_LEVEL__. This bug 
+  triggered an error in constructs like #ifndef __FILE__. Thanks to Daniel 
+  Wadehn for reporting and supplying a patch.
 
 Boost V1.35.0
 - Wave Version 1.3

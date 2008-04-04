@@ -426,7 +426,7 @@ token_id id = token_id(*begin);
 
 IteratorT it = begin;
 string_type name ((*it).get_value());
-typename defined_macros_type::iterator cit(current_macros -> find(name));
+typename defined_macros_type::iterator cit;
 
     if (++it != end) {
     // there should be only one token as the inspected name
@@ -434,7 +434,7 @@ typename defined_macros_type::iterator cit(current_macros -> find(name));
             impl::get_full_name(begin, end).c_str(), main_pos);
         return false;
     }
-    return cit != current_macros -> end();
+    return is_defined(name, cit, 0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -444,10 +444,9 @@ template<typename StringT>
 inline bool 
 macromap<ContextT>::is_defined(StringT const &str) const
 {
-string_type name (str.c_str());
-typename defined_macros_type::iterator cit(current_macros -> find(name));
-
-    return cit != current_macros -> end();
+    string_type name(str.c_str());
+    typename defined_macros_type::iterator cit;
+    return is_defined(name, cit, 0); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
