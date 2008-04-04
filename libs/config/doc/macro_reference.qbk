@@ -40,7 +40,7 @@ Borland specific.
 ]]
 [[`BOOST_NO_ADL_BARRIER`][Compiler][
 The compiler locates and searches namespaces that it should /*not*/ in fact 
-search when performing argument dependent lookup.]
+search when performing argument dependent lookup.
 ]]
 [[`BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP`][Compiler][
 Compiler does not implement argument-dependent lookup (also named

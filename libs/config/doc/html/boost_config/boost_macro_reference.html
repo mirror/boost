@@ -134,55 +134,256 @@
               </p>
               </td>
 </tr>
-</tbody>
-</table></div>
-<p>
-        [[<code class="computeroutput"><span class="identifier">BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP</span></code>][Compiler][
-        Compiler does not implement argument-dependent lookup (also named Koenig
-        lookup); see std::3.4.2 [basic.koenig.lookup] ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_PTR</span></code>][Standard
-        library][ If the compiler / library supplies non-standard or broken <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">auto_ptr</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_CTYPE_FUNCTIONS</span></code>][Platform][
-        The Platform does not provide functions for the character-classifying operations
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">ctype</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>
-        and <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cctype</span><span class="special">&gt;</span></code>, only macros. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_CV_SPECIALIZATIONS</span></code>][Compiler][
-        If template specialisations for cv-qualified types conflict with a specialisation
-        for a cv-unqualififed type. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_CV_VOID_SPECIALIZATIONS</span></code>][Compiler][
-        If template specialisations for cv-void types conflict with a specialisation
-        for void. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_CWCHAR</span></code>][Platform][
-        The Platform does not provide <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">wchar</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code> and
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cwchar</span><span class="special">&gt;</span></code>. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_CWCTYPE</span></code>][Platform][
-        The Platform does not provide <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">wctype</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code> and
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cwctype</span><span class="special">&gt;</span></code>. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_DEPENDENT_NESTED_DERIVATIONS</span></code>][Compiler][
-        The compiler fails to compile a nested class that has a dependent base class:
-        
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler does not implement argument-dependent lookup (also named
+                Koenig lookup); see std::3.4.2 [basic.koenig.lookup]
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_PTR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                If the compiler / library supplies non-standard or broken <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">auto_ptr</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CTYPE_FUNCTIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Platform
+              </p>
+              </td>
+<td>
+              <p>
+                The Platform does not provide functions for the character-classifying
+                operations <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">ctype</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code> and <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cctype</span><span class="special">&gt;</span></code>,
+                only macros.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CV_SPECIALIZATIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                If template specialisations for cv-qualified types conflict with
+                a specialisation for a cv-unqualififed type.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CV_VOID_SPECIALIZATIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                If template specialisations for cv-void types conflict with a specialisation
+                for void.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CWCHAR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Platform
+              </p>
+              </td>
+<td>
+              <p>
+                The Platform does not provide <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">wchar</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>
+                and <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cwchar</span><span class="special">&gt;</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CWCTYPE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Platform
+              </p>
+              </td>
+<td>
+              <p>
+                The Platform does not provide <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">wctype</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>
+                and <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cwctype</span><span class="special">&gt;</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_DEPENDENT_NESTED_DERIVATIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler fails to compile a nested class that has a dependent
+                base class: 
 </p>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">foo</span> <span class="special">:</span> <span class="special">{</span>
    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">U</span><span class="special">&gt;</span>
    <span class="keyword">struct</span> <span class="identifier">bar</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">U</span> <span class="special">{};</span>
 </pre>
 <p>
-        }; ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS</span></code>][Compiler][
-        Template value parameters cannot have a dependent type, for example: 
+                };
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Template value parameters cannot have a dependent type, for example:
+                
 </p>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span> 
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">::</span><span class="identifier">type</span> <span class="identifier">value</span><span class="special">&gt;</span> 
 <span class="keyword">class</span> <span class="identifier">X</span> <span class="special">{</span> <span class="special">...</span> <span class="special">};</span>
 </pre>
 <p>
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_EXCEPTION_STD_NAMESPACE</span></code>][Standard
-        Library][ The standard library does not put some or all of the contents of
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">exception</span><span class="special">&gt;</span></code> in namespace std. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_EXCEPTIONS</span></code>][Compiler][ The compiler
-        does not support exception handling (this setting is typically required by
-        many C++ compilers for embedded platforms). Note that there is no requirement
-        for boost libraries to honor this configuration setting - indeed doing so
-        may be impossible in some cases. Those libraries that do honor this will
-        typically abort if a critical error occurs - you have been warned! ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS</span></code>][Compiler][
-        Can only use deduced template arguments when calling function template instantiations.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_FUNCTION_TEMPLATE_ORDERING</span></code>][Compiler][
-        The compiler does not perform function template ordering or its function
-        template ordering is incorrect. 
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_EXCEPTION_STD_NAMESPACE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard Library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not put some or all of the contents of
+                <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">exception</span><span class="special">&gt;</span></code> in namespace std.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_EXCEPTIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support exception handling (this setting is
+                typically required by many C++ compilers for embedded platforms).
+                Note that there is no requirement for boost libraries to honor this
+                configuration setting - indeed doing so may be impossible in some
+                cases. Those libraries that do honor this will typically abort if
+                a critical error occurs - you have been warned!
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Can only use deduced template arguments when calling function template
+                instantiations.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_FUNCTION_TEMPLATE_ORDERING</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not perform function template ordering or its function
+                template ordering is incorrect. 
 </p>
-<pre class="programlisting"><span class="comment">// #1
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="comment">// #1
 </span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span><span class="special">);</span>
 
 <span class="comment">// #2
@@ -193,114 +394,774 @@
 <span class="identifier">f</span><span class="special">(&amp;</span><span class="identifier">bar</span><span class="special">);</span> <span class="comment">// should choose #2.
 </span></pre>
 <p>
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_INCLASS_MEMBER_INITIALIZATION</span></code>][Compiler][
-        Compiler violates std::9.4.2/4. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_INTRINSIC_WCHAR_T</span></code>][Compiler][
-        The C++ implementation does not provide <code class="computeroutput"><span class="keyword">wchar_t</span></code>,
-        or it is really a synonym for another integral type. Use this symbol to decide
-        whether it is appropriate to explicitly specialize a template on <code class="computeroutput"><span class="keyword">wchar_t</span></code> if there is already a specialization
-        for other integer types. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_IOSFWD</span></code>][std
-        lib][ The standard library lacks <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">iosfwd</span><span class="special">&gt;</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_IOSTREAM</span></code>][std
-        lib][ The standard library lacks <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span></code>,
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">istream</span><span class="special">&gt;</span></code> or <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">ostream</span><span class="special">&gt;</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_IS_ABSTRACT</span></code>][Compiler][
-        The C++ compiler does not support SFINAE with abstract types, this is covered
-        by <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#337" target="_top">Core
-        Language DR337</a>, but is not part of the current standard. Fortunately
-        most compilers that support SFINAE also support this DR. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_LIMITS</span></code>][Standard library][ The
-        C++ implementation does not provide the <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">limits</span><span class="special">&gt;</span></code>
-        header. Never check for this symbol in library code; always include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">limits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>,
-        which guarantees to provide <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS</span></code>][Standard
-        library][ Constants such as <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">is_signed</span></code> are not available for use at
-        compile-time. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_LONG_LONG_NUMERIC_LIMITS</span></code>][Standard
-        library][ There is no specialization for <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">long</span><span class="special">&gt;</span></code> and
-        <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span><span class="special">&gt;</span></code>.
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">limits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-        will then add these specializations as a standard library "fix"
-        only if the compiler supports the <code class="computeroutput"><span class="keyword">long</span>
-        <span class="keyword">long</span></code> datatype. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS</span></code>][Compiler][
-        The compiler does not support the specialization of individual member functions
-        of template classes. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_TEMPLATE_KEYWORD</span></code>][Compiler][
-        If the compiler supports member templates, but not the template keyword when
-        accessing member template classes. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_TEMPLATE_FRIENDS</span></code>][Compiler][
-        Member template friend syntax (<code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">P</span><span class="special">&gt;</span> <span class="keyword">friend</span> <span class="keyword">class</span> <span class="identifier">frd</span><span class="special">;</span></code>) described
-        in the C++ Standard, 14.5.3, not supported. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_TEMPLATES</span></code>][Compiler][
-        Member template functions not fully supported. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_MS_INT64_NUMERIC_LIMITS</span></code>][Standard
-        library][ There is no specialization for <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">__int64</span><span class="special">&gt;</span></code> and <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="identifier">__int64</span><span class="special">&gt;</span></code>.
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">limits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-        will then add these specializations as a standard library "fix",
-        only if the compiler supports the <code class="computeroutput"><span class="identifier">__int64</span></code>
-        datatype. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_OPERATORS_IN_NAMESPACE</span></code>][Compiler][
-        Compiler requires inherited operator friend functions to be defined at namespace
-        scope, then using'ed to boost. Probably GCC specific. See <a href="../../../../../boost/operators.hpp" target="_top"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">operators</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a>
-        for example. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_POINTER_TO_MEMBER_CONST</span></code>][Compiler][
-        The compiler does not correctly handle pointers to const member functions,
-        preventing use of these in overloaded function templates. See <a href="../../../../../boost/functional.hpp" target="_top"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">functional</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a>
-        for example. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</span></code>][Compiler][
-        Pointers to members don't work when used as template parameters. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_PRIVATE_IN_AGGREGATE</span></code>][Compiler][
-        The compiler misreads 8.5.1, treating classes as non-aggregate if they contain
-        private or protected member functions. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_SFINAE</span></code>][Compiler][
-        The compiler does not support the "Substitution Failure Is Not An Error"
-        meta-programming idiom. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_ALLOCATOR</span></code>][Standard
-        library][ The C++ standard library does not provide a standards conforming
-        <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">allocator</span></code>. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_DISTANCE</span></code>][Standard
-        library][ The platform does not have a conforming version of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">distance</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_ITERATOR</span></code>][Standard
-        library][ The C++ implementation fails to provide the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator</span></code>
-        class. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_ITERATOR_TRAITS</span></code>][Standard
-        library][ The compiler does not provide a standard compliant implementation
-        of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span></code>. Note that the compiler
-        may still have a non-standard implementation. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_LOCALE</span></code>][Standard
-        library][ The standard library lacks <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_MESSAGES</span></code>][Standard
-        library][ The standard library lacks a conforming <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">messages</span></code>
-        facet. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_MIN_MAX</span></code>][Standard
-        library][ The C++ standard library does not provide the <code class="computeroutput"><span class="identifier">min</span><span class="special">()</span></code> and <code class="computeroutput"><span class="identifier">max</span><span class="special">()</span></code> template functions that should be in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">algorithm</span><span class="special">&gt;</span></code>. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN</span></code>][Standard
-        library][ Defined if the standard library's output iterators are not assignable.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_TYPEINFO</span></code>][Standard
-        library][ The &lt;typeinfo&gt; header declares <code class="computeroutput"><span class="identifier">type_info</span></code>
-        in the global namespace instead of namespace std. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_USE_FACET</span></code>][Standard
-        library][ The standard library lacks a conforming <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">use_facet</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_WSTREAMBUF</span></code>][Standard
-        library][ The standard library's implementation of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_streambuf</span><span class="special">&lt;</span><span class="keyword">wchar_t</span><span class="special">&gt;</span></code> is either missing, incomplete, or buggy.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STD_WSTRING</span></code>][Standard
-        library][ The standard library lacks <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">wstring</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STDC_NAMESPACE</span></code>][Compiler,
-        Platform][ The contents of C++ standard headers for C library functions (the
-        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">c</span><span class="special">...&gt;</span></code> headers) have not been placed in namespace
-        std. This test is difficult - some libraries "fake" the std C functions
-        by adding using declarations to import them into namespace std, unfortunately
-        they don't necessarily catch all of them... ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_STRINGSTREAM</span></code>][Standard
-        library][ The C++ implementation does not provide the <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">sstream</span><span class="special">&gt;</span></code>
-        header. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_SWPRINTF</span></code>][Platform][
-        The platform does not have a conforming version of <code class="computeroutput"><span class="identifier">swprintf</span></code>.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION</span></code>][Compiler][
-        Class template partial specialization (14.5.4 [temp.class.spec]) not supported.
-        ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS</span></code>][Standard
-        library][ The standard library does not provide templated iterator constructors
-        for its containers. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_TEMPLATES</span></code>][Compiler][
-        The compiler does not support template template parameters. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_TYPEID</span></code>][Compiler][ The compiler
-        does not support the typeid operator at all. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_UNREACHABLE_RETURN_DETECTION</span></code>][Compiler][
-        If a return is unreachable, then no return statement should be required,
-        however some compilers insist on it, while other issue a bunch of warnings
-        if it is in fact present. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE</span></code>][Compiler][
-        The compiler will not accept a using declaration that brings a function from
-        a typename used as a base class into a derived class if functions of the
-        same name are present in the derived class. ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_USING_TEMPLATE</span></code>][Compiler][
-        The compiler will not accept a using declaration that imports a template
-        class or function from another namespace. Originally a Borland specific problem
-        with imports to/from the global namespace, extended to MSVC6 which has a
-        specific issue with importing template classes (but not functions). ]] [[<code class="computeroutput"><span class="identifier">BOOST_NO_VOID_RETURNS</span></code>][Compiler][ The compiler
-        does not allow a void function to return the result of calling another void
-        function. 
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_INCLASS_MEMBER_INITIALIZATION</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler violates std::9.4.2/4.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_INTRINSIC_WCHAR_T</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The C++ implementation does not provide <code class="computeroutput"><span class="keyword">wchar_t</span></code>,
+                or it is really a synonym for another integral type. Use this symbol
+                to decide whether it is appropriate to explicitly specialize a template
+                on <code class="computeroutput"><span class="keyword">wchar_t</span></code> if there
+                is already a specialization for other integer types.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_IOSFWD</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                std lib
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">iosfwd</span><span class="special">&gt;</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_IOSTREAM</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                std lib
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span></code>,
+                <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">istream</span><span class="special">&gt;</span></code> or <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">ostream</span><span class="special">&gt;</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_IS_ABSTRACT</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The C++ compiler does not support SFINAE with abstract types, this
+                is covered by <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#337" target="_top">Core
+                Language DR337</a>, but is not part of the current standard.
+                Fortunately most compilers that support SFINAE also support this
+                DR.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_LIMITS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The C++ implementation does not provide the <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">limits</span><span class="special">&gt;</span></code>
+                header. Never check for this symbol in library code; always include
+                <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">limits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>, which guarantees to provide
+                <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                Constants such as <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">is_signed</span></code>
+                are not available for use at compile-time.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_LONG_LONG_NUMERIC_LIMITS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                There is no specialization for <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">long</span>
+                <span class="keyword">long</span><span class="special">&gt;</span></code>
+                and <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">unsigned</span>
+                <span class="keyword">long</span> <span class="keyword">long</span><span class="special">&gt;</span></code>. <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">limits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+                will then add these specializations as a standard library "fix"
+                only if the compiler supports the <code class="computeroutput"><span class="keyword">long</span>
+                <span class="keyword">long</span></code> datatype.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support the specialization of individual member
+                functions of template classes.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_TEMPLATE_KEYWORD</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                If the compiler supports member templates, but not the template keyword
+                when accessing member template classes.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_TEMPLATE_FRIENDS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Member template friend syntax (<code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span>
+                <span class="identifier">P</span><span class="special">&gt;</span>
+                <span class="keyword">friend</span> <span class="keyword">class</span>
+                <span class="identifier">frd</span><span class="special">;</span></code>)
+                described in the C++ Standard, 14.5.3, not supported.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_MEMBER_TEMPLATES</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Member template functions not fully supported.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_MS_INT64_NUMERIC_LIMITS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                There is no specialization for <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">__int64</span><span class="special">&gt;</span></code> and <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">unsigned</span>
+                <span class="identifier">__int64</span><span class="special">&gt;</span></code>.
+                <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">limits</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> will then add these specializations
+                as a standard library "fix", only if the compiler supports
+                the <code class="computeroutput"><span class="identifier">__int64</span></code> datatype.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_OPERATORS_IN_NAMESPACE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler requires inherited operator friend functions to be defined
+                at namespace scope, then using'ed to boost. Probably GCC specific.
+                See <a href="../../../../../boost/operators.hpp" target="_top"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">operators</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a>
+                for example.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_POINTER_TO_MEMBER_CONST</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not correctly handle pointers to const member functions,
+                preventing use of these in overloaded function templates. See <a href="../../../../../boost/functional.hpp" target="_top"><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">functional</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code></a>
+                for example.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Pointers to members don't work when used as template parameters.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_PRIVATE_IN_AGGREGATE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler misreads 8.5.1, treating classes as non-aggregate if
+                they contain private or protected member functions.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_SFINAE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support the "Substitution Failure Is Not
+                An Error" meta-programming idiom.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_ALLOCATOR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The C++ standard library does not provide a standards conforming
+                <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">allocator</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_DISTANCE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The platform does not have a conforming version of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">distance</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_ITERATOR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The C++ implementation fails to provide the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator</span></code>
+                class.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_ITERATOR_TRAITS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not provide a standard compliant implementation
+                of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span></code>. Note that the
+                compiler may still have a non-standard implementation.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_LOCALE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_MESSAGES</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks a conforming <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">messages</span></code>
+                facet.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_MIN_MAX</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The C++ standard library does not provide the <code class="computeroutput"><span class="identifier">min</span><span class="special">()</span></code> and <code class="computeroutput"><span class="identifier">max</span><span class="special">()</span></code> template functions that should
+                be in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">algorithm</span><span class="special">&gt;</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                Defined if the standard library's output iterators are not assignable.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_TYPEINFO</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The &lt;typeinfo&gt; header declares <code class="computeroutput"><span class="identifier">type_info</span></code>
+                in the global namespace instead of namespace std.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_USE_FACET</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks a conforming <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">use_facet</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_WSTREAMBUF</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library's implementation of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_streambuf</span><span class="special">&lt;</span><span class="keyword">wchar_t</span><span class="special">&gt;</span></code> is either missing, incomplete,
+                or buggy.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STD_WSTRING</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library lacks <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">wstring</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STDC_NAMESPACE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler, Platform
+              </p>
+              </td>
+<td>
+              <p>
+                The contents of C++ standard headers for C library functions (the
+                <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">c</span><span class="special">...&gt;</span></code> headers) have not been placed
+                in namespace std. This test is difficult - some libraries "fake"
+                the std C functions by adding using declarations to import them into
+                namespace std, unfortunately they don't necessarily catch all of
+                them...
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STRINGSTREAM</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The C++ implementation does not provide the <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">sstream</span><span class="special">&gt;</span></code>
+                header.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_SWPRINTF</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Platform
+              </p>
+              </td>
+<td>
+              <p>
+                The platform does not have a conforming version of <code class="computeroutput"><span class="identifier">swprintf</span></code>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                Class template partial specialization (14.5.4 [temp.class.spec])
+                not supported.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Standard library
+              </p>
+              </td>
+<td>
+              <p>
+                The standard library does not provide templated iterator constructors
+                for its containers.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_TEMPLATES</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support template template parameters.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_TYPEID</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support the typeid operator at all.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_UNREACHABLE_RETURN_DETECTION</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                If a return is unreachable, then no return statement should be required,
+                however some compilers insist on it, while other issue a bunch of
+                warnings if it is in fact present.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler will not accept a using declaration that brings a function
+                from a typename used as a base class into a derived class if functions
+                of the same name are present in the derived class.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_USING_TEMPLATE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler will not accept a using declaration that imports a template
+                class or function from another namespace. Originally a Borland specific
+                problem with imports to/from the global namespace, extended to MSVC6
+                which has a specific issue with importing template classes (but not
+                functions).
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_VOID_RETURNS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                Compiler
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not allow a void function to return the result
+                of calling another void function. 
 </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">{}</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">void</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">{}</span>
 <span class="keyword">void</span> <span class="identifier">g</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">f</span><span class="special">();</span> <span class="special">}</span>
 </pre>
 <p>
-        ]] ]
-      </p>
+              </p>
+              </td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <a name="config_features"></a><p>
     </p>
