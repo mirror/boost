@@ -22,4 +22,5 @@
 #  include <boost/preprocessor/cat.hpp>
 #  include <boost/preprocessor/repeat.hpp>
 #  include <boost/preprocessor/inc.hpp>
+#  include <boost/type_traits/is_void.hpp>
 #endif // BOOST_FUNCTION_PROLOGUE_HPP
