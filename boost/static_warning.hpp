@@ -128,13 +128,13 @@ struct static_warning_impl<true> {
 //------------------Definition of BOOST_STATIC_WARNING------------------------//
 
 #if defined(BOOST_HAS_DESCRIPTIVE_UNREFERENCED_VARIABLE_WARNING)
-#    define BOOST_STATIC_WARNING_IMPL(B)                   \
-     struct BOOST_JOIN(STATIC_WARNING, __LINE__) {         \
-       void f() {                                          \
-           ::boost::static_warning_impl<(bool)( B )>::type \
-           STATIC_WARNING;                                 \
-       }                                                   \
-     }                                                     \
+#    define BOOST_STATIC_WARNING_IMPL(B)                        \
+     struct BOOST_JOIN(STATIC_WARNING, __LINE__) {              \
+       void f() {                                               \
+           ::boost::static_warning_impl<(bool)( B )>::type      \
+           STATIC_WARNING;                                      \
+       }                                                        \
+     }                                                          \
      /**/
 #elif defined(BOOST_HAS_DESCRIPTIVE_RETURNING_ADDRESS_OF_TEMPORARY_WARNING)
 #    define BOOST_STATIC_WARNING_IMPL(B)                        \
@@ -147,12 +147,13 @@ struct static_warning_impl<true> {
      }                                                          \
      /**/
 #elif defined(BOOST_HAS_DESCRIPTIVE_DIVIDE_BY_ZERO_WARNING)
-#    define BOOST_STATIC_WARNING_IMPL(B)                             \
-     struct BOOST_JOIN(STATIC_WARNING, __LINE__) {                   \
-         int f() { int STATIC_WARNING = 1;                           \
-                   return STATIC_WARNING /                           \
-                   boost::static_warning_impl<(bool)( B )>::value; } \
-     }                                                               \
+#    define BOOST_STATIC_WARNING_IMPL(B)                        \
+     struct BOOST_JOIN(STATIC_WARNING, __LINE__) {              \
+         int f() {                                              \
+            int STATIC_WARNING = 1;                             \
+            return STATIC_WARNING /                             \
+                boost::static_warning_impl<(bool)( B )>::value; } \
+     }                                                          \
      /**/
 #elif defined(BOOST_NO_PREDEFINED_LINE_MACRO) 
      // VC6; __LINE__ macro broken when -ZI is used see Q199057, so 
@@ -166,7 +167,7 @@ struct static_warning_impl<true> {
      }                                                         \
      /**/
 #else // Deletion of pointer to incomplete type.
-#    define BOOST_STATIC_WARNING_IMPL(B)                     \
+#    define BOOST_STATIC_WARNING_IMPL(B)                                           \
      struct BOOST_JOIN(STATIC_WARNING, __LINE__) {           \
          ::boost::static_warning_impl<(bool)( B )>::type* p; \
          void f() { delete p; }                              \
