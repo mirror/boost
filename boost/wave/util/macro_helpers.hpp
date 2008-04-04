@@ -63,13 +63,21 @@ namespace impl {
         typename StringT::size_type pos1 = value.find_first_of ("\\", 0);
         if (StringT::npos != pos1) {
             do {
-                if ('\\' == value[pos1+1] || '\"' == value[pos1+1] || 
-                    '?' == value[pos1+1])
-                {
+                switch (value[pos1+1]) {
+                case '\\':
+                case '\"':
+                case '?':
                     result = result + value.substr(pos, pos1-pos);
                     pos1 = value.find_first_of ("\\", (pos = pos1+1)+1);
-                }
-                else {
+                    break;
+                    
+                case 'n':
+                    result = result + value.substr(pos, pos1-pos) + "\n";
+                    pos1 = value.find_first_of ("\\", pos = pos1+1);
+                    ++pos;
+                    break;
+                    
+                default:
                     result = result + value.substr(pos, pos1-pos+1);
                     pos1 = value.find_first_of ("\\", pos = pos1+1);
                 }

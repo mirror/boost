@@ -13,6 +13,41 @@
 #if !defined(BOOST_WAVE_SAMPLE_PREPROCESS_PRAGMA_OUTPUT_APR_03_2008_0813AM)
 #define BOOST_WAVE_SAMPLE_PREPROCESS_PRAGMA_OUTPUT_APR_03_2008_0813AM
 
+template <typename String, typename Iterator>
+inline String
+as_unescaped_string(Iterator it, Iterator const& end)
+{
+    using namespace boost::wave;
+    
+    String result;
+    for (/**/; it != end; ++it) 
+    {
+        switch (token_id(*it)) {
+        case T_STRINGLIT:
+            {
+                string val (util::impl::unescape_lit((*it).get_value()).c_str());
+                val.erase(val.size()-1);
+                val.erase(0, 1);
+                result += val;
+            }
+            break;
+
+        default:    // just skip everything else (hey it's a sample)
+            break;
+        }
+    }
+    return result;
+}
+
+// return the string representation of a token sequence
+template <typename String, typename Container>
+inline String
+as_unescaped_string(Container const &token_sequence)
+{
+    return as_unescaped_string<String>(token_sequence.begin(), 
+        token_sequence.end());
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //  
 //  The preprocess_pragma_output_hooks policy class is used implement a special
@@ -83,19 +118,25 @@ public:
         typedef typename Context::token_type token_type;
         typedef typename Context::iterator_type iterator_type;
 
-        if (option.get_value() == "pp") 
-        {
+        if (option.get_value() == "pp")  {
+        // Concatenate the string(s) passed as the options to this pragma, 
+        // preprocess the result using the current context and insert the 
+        // generated token sequence in place of the pragma directive into the 
+        // output stream.
+         
             try {
             //  We're explicitly using a std::string here since the type of the
             //  iterators passed to the ctx.begin() below must match the types
             //  of the iterator the original context instance has been created 
             //  with.
-                std::string s (boost::wave::util::impl::as_string(values).c_str()); 
+                std::string s (as_unescaped_string<std::string>(values)); 
                 reset_language_support<Context> lang(ctx);
                 
-                using boost::wave::token_id;
-                using boost::wave::T_EOF;
-                
+                using namespace boost::wave;
+
+            // The expanded token sequence is stored in the 'pragma' container
+            // to ensure consistency in the output in the case of an error 
+            // while preprocessing the pragma option strings.
                 Container pragma;
                 iterator_type end = ctx.end();
                 for (iterator_type it = ctx.begin(s.begin(), s.end()); 
@@ -109,7 +150,7 @@ public:
             // container
                 pending.splice(pending.begin(), pragma);
             }
-            catch (boost::wave::preprocess_exception const& e) {
+            catch (boost::wave::preprocess_exception const& /*e*/) {
             // the library will report an 'ill_formed_pragma_option' for us
                 return false;
             }

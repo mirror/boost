@@ -11,13 +11,14 @@
 =============================================================================*/
 
 ///////////////////////////////////////////////////////////////////////////////
-//  This special pragma will be analyzed by the corresponding hook function
-//  implemented in the preprocess_pragma_output_hooks policy class. This 
+//  This special pragma is implemented by the interpret_pragma hook function
+//  provided in the preprocess_pragma_output_hooks policy class. This 
 //  #pragma preprocesses the provided arguments in the current context.
 #pragma wave pp (                                                             \
-        #define M() "some text"                                               \
+        "#define A() \"some text\" and more\n"                                         \
+        "#define B() 1.0\n"                                                   \
     )                                                                         \
     /**/
     
-M() // this should produce: "some text"
-
+A()   // this should produce: "some text" and more
+B()   // and this expands to 1.0
