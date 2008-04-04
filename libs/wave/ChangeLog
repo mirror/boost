@@ -39,7 +39,8 @@ Boost V1.36
 - Fixed ticket #1766: Wrong evaluation of conditional preprocessor directives 
   with predefined macros __FILE__, __LINE__ and __INCLUDE_LEVEL__. This bug 
   triggered an error in constructs like #ifndef __FILE__. Thanks to Daniel 
-  Wadehn for reporting and supplying a patch.
+  Wadehn for reporting and supplying a patch. Added corresponding regression
+  test: t_2_018.cpp.
 
 Boost V1.35.0
 - Wave Version 1.3
