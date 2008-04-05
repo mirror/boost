@@ -25,15 +25,27 @@
 
 #include <boost/config.hpp>
 
+// BOOST_SMT_PAUSE
+
+#if defined(_MSC_VER) && _MSC_VER >= 1310 && ( defined(_M_IX86) || defined(_M_X64) )
+
+extern "C" void _mm_pause();
+#pragma intrinsic( _mm_pause )
+
+#define BOOST_SMT_PAUSE _mm_pause();
+
+#elif defined(__GNUC__) && ( defined(__i386__) || defined(__x86_64__) )
+
+#define BOOST_SMT_PAUSE __asm__ __volatile__( "rep; nop" ::: "memory" );
+
+#endif
+
+//
+
 #if defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) || defined( __CYGWIN__ )
 
 #if defined( BOOST_USE_WINDOWS_H )
 # include <windows.h>
-#endif
-
-#if defined(_MSC_VER) && _MSC_VER >= 1310
-  extern "C" void _mm_pause();
-# pragma intrinsic( _mm_pause )
 #endif
 
 namespace boost
@@ -51,10 +63,10 @@ inline void yield( unsigned k )
     if( k < 4 )
     {
     }
-#if defined(_MSC_VER) && _MSC_VER >= 1310
+#if defined( BOOST_SMT_PAUSE )
     else if( k < 16 )
     {
-        _mm_pause();
+        BOOST_SMT_PAUSE
     }
 #endif
     else if( k < 32 )
@@ -87,10 +99,10 @@ inline void yield( unsigned k )
     if( k < 4 )
     {
     }
-#if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
+#if defined( BOOST_SMT_PAUSE )
     else if( k < 16 )
     {
-        __asm__ __volatile__( "rep; nop" ::: "memory" );
+        BOOST_SMT_PAUSE
     }
 #endif
     else if( k < 32 || k & 1 )
