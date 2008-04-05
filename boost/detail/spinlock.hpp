@@ -32,10 +32,12 @@
 
 #if defined(__GNUC__) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 )
 #  include <boost/detail/spinlock_sync.hpp>
-#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
 #  include <boost/detail/spinlock_w32.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
 #  include <boost/detail/spinlock_pt.hpp>
+#elif !defined(BOOST_HAS_THREADS)
+#  include <boost/detail/spinlock_nt.hpp>
 #else
 #  error Unrecognized threading platform
 #endif

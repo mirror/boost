@@ -39,5 +39,6 @@ import testing ;
           [ run esft_constructor_test.cpp ]
           [ run yield_k_test.cpp ]
           [ run spinlock_test.cpp ]
+          [ run spinlock_try_test.cpp ]
         ;
 }

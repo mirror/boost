@@ -25,7 +25,7 @@
 
 #include <boost/config.hpp>
 
-#if defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
+#if defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) || defined( __CYGWIN__ )
 
 #if defined( BOOST_USE_WINDOWS_H )
 # include <windows.h>
@@ -33,6 +33,7 @@
 
 #if defined(_MSC_VER) && _MSC_VER >= 1310
   extern "C" void _mm_pause();
+# pragma intrinsic( _mm_pause )
 #endif
 
 namespace boost
