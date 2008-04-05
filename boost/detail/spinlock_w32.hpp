@@ -18,10 +18,30 @@
 #include <boost/detail/interlocked.hpp>
 #include <boost/detail/yield_k.hpp>
 
-#if defined( _MSC_VER ) && _MSC_VER >= 1310
-  extern "C" void _ReadWriteBarrier();
-# pragma intrinsic( _ReadWriteBarrier )
+// BOOST_COMPILER_FENCE
+
+#if defined(__INTEL_COMPILER)
+
+#define BOOST_COMPILER_FENCE __memory_barrier();
+
+#elif defined( _MSC_VER ) && _MSC_VER >= 1310
+
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic( _ReadWriteBarrier )
+
+#define BOOST_COMPILER_FENCE _ReadWriteBarrier();
+
+#elif defined(__GNUC__)
+
+#define BOOST_COMPILER_FENCE __asm__ __volatile__( "" ::: "memory" );
+
+#else
+
+#define BOOST_COMPILER_FENCE
+
 #endif
+
+//
 
 namespace boost
 {
@@ -41,9 +61,7 @@ public:
     {
         long r = BOOST_INTERLOCKED_EXCHANGE( &v_, 1 );
 
-#if defined( _MSC_VER ) && _MSC_VER >= 1310
-        _ReadWriteBarrier();
-#endif
+        BOOST_COMPILER_FENCE
 
         return r == 0;
     }
@@ -58,10 +76,7 @@ public:
 
     void unlock()
     {
-#if defined( _MSC_VER ) && _MSC_VER >= 1310
-        _ReadWriteBarrier();
-#endif
-
+        BOOST_COMPILER_FENCE
         *const_cast< long volatile* >( &v_ ) = 0;
     }
 
