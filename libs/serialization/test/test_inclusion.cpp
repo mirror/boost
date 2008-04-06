@@ -9,7 +9,6 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
-#include <boost/serialization/is_abstract.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/level_enum.hpp>
 #include <boost/serialization/nvp.hpp>
