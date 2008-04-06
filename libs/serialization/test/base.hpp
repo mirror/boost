@@ -32,6 +32,6 @@ public:
     virtual ~polymorphic_base(){};
 };
 
-//BOOST_IS_ABSTRACT(polymorphic_base)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(polymorphic_base)
 
 #endif // BOOST_SERIALIZATION_TEST_BASE_HPP
