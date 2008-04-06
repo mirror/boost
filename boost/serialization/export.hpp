@@ -135,8 +135,8 @@ struct guid_initializer
         // note: exporting an abstract base class will have no effect
         // and cannot be used to instantitiate serialization code
         // (one might be using this in a DLL to instantiate code)
-        //BOOST_STATIC_WARNING(! boost::is_abstract<T>::value);
-        return export_guid(key, serialization::is_abstract<T>());
+        //BOOST_STATIC_WARNING(! boost::serialization::is_abstract<T>::value);
+        return export_guid(key, boost::serialization::is_abstract<T>());
     }
 };
 

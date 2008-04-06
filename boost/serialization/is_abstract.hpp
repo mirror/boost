@@ -9,37 +9,49 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // is_abstract_class.hpp:
 
-// (C) Copyright 2002 Rani Sharoni (rani_sharoni@hotmail.com) and Robert Ramey
+// (C) Copyright 2008 Robert Ramey
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
-#include <boost/mpl/bool.hpp>
+// this is useful for compilers which don't support the boost::is_abstract
+
 #include <boost/type_traits/is_abstract.hpp>
+
+#ifndef BOOST_NO_IS_ABSTRACT
+
+// if there is an intrinsic is_abstract defined, we don't have to do anything
+#define BOOST_SERIALIZATION_ASSUME_ABSTRACT(T)
+
+// but forward to the "official" is_abstract
+namespace boost {
+namespace serialization {
+    template<class T>
+    struct is_abstract : boost::is_abstract<T> {} ;
+} // namespace serialization
+} // namespace boost
+
+#else
+// we have to "make" one
 
 namespace boost {
 namespace serialization {
     template<class T>
-    struct is_abstract
-#ifdef BOOST_NO_IS_ABSTRACT
-      : mpl::false_
-#else
-      : boost::is_abstract<T>
-#endif 
-    {};
+    struct is_abstract : boost::false_type {};
 } // namespace serialization
 } // namespace boost
 
 // define a macro to make explicit designation of this more transparent
-#define BOOST_IS_ABSTRACT(T)                          \
+#define BOOST_SERIALIZATION_ASSUME_ABSTRACT(T)        \
 namespace boost {                                     \
 namespace serialization {                             \
 template<>                                            \
-struct is_abstract<const T > : mpl::true_ {};         \
+struct is_abstract<const T > : boost::true_type {};   \
 }}                                                    \
 /**/
+
+#endif // BOOST_NO_IS_ABSTRACT
 
 #endif //BOOST_SERIALIZATION_IS_ABSTRACT_CLASS_HPP

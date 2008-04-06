@@ -33,7 +33,7 @@
 #include <boost/serialization/void_cast.hpp>
 
 // mark base class as an (uncreatable) base class
-BOOST_IS_ABSTRACT(boost_132::detail::sp_counted_base)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(boost_132::detail::sp_counted_base)
 
 /////////////////////////////////////////////////////////////
 // Maintain a couple of lists of loaded shared pointers of the old previous
