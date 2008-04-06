@@ -67,7 +67,7 @@ class fifo_worker : noncopyable
     {
     }
 
-    typedef function0< void, Allocator > work_item;
+    typedef function0< void > work_item;
 
     // We take a non-const reference so that we can move (i.e. swap) the item
     // into the queue, what avoids copying the (possibly heap-allocated)
