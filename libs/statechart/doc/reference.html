@@ -2997,6 +2997,8 @@ namespace statechart
     public:
       static void * <a href=
 "#event::operatornew">operator new</a>( std::size_t size );
+      static void * <a href=
+"#event::operatornew2">operator new</a>( std::size_t size, void * p );
       static void <a href=
 "#event::operatordelete">operator delete</a>( void * pEvent );
 
@@ -3041,6 +3043,13 @@ static void * <a name="event::operatornew" id=
   );</code><br>
   <b>Returns</b>: The return value of the above call<br>
   <b>Throws</b>: Whatever the above call throws</p>
+  <pre>
+static void * <a name="event::operatornew2" id=
+"event::operatornew2">operator new</a>( std::size_t size, void * p );
+</pre>
+
+  <p><b>Effects</b>: None<br>
+  <b>Returns</b>: <code>p</code></p>
   <pre>
 static void <a name="event::operatordelete" id=
 "event::operatordelete">operator delete</a>( void * pEvent );
