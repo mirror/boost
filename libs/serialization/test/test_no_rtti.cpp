@@ -49,7 +49,7 @@ public:
     virtual ~polymorphic_base(){};
 };
 
-BOOST_IS_ABSTRACT(polymorphic_base)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(polymorphic_base)
 BOOST_CLASS_TYPE_INFO(
     polymorphic_base,
     extended_type_info_no_rtti<polymorphic_base>
