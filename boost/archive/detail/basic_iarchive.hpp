@@ -20,6 +20,7 @@
 // #include <boost/scoped_ptr.hpp>
 
 #include <boost/config.hpp>
+#include <boost/type_traits/broken_compiler_spec.hpp>
 #include <boost/serialization/tracking_enum.hpp>
 #include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/decl.hpp>
@@ -98,9 +99,9 @@ public:
 
 // required by smart_cast for compilers not implementing 
 // partial template specialization
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(
-    boost::archive::detail::basic_iarchive
-)
+BOOST_TT_BROKEN_COMPILER_SPEC(
+    boost::archive::detail::basic_iarchive  
+) 
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
