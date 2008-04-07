@@ -9,6 +9,7 @@
 #include <boost/exception/enable_exception_cloning.hpp>
 #include <boost/exception/exception.hpp>
 #include <boost/exception/detail/cloning_base.hpp>
+#include <exception>
 
 namespace
 boost

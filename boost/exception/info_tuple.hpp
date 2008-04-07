@@ -23,7 +23,7 @@ boost
 			error_info<Tag1,T1>,
 			error_info<Tag2,T2> > const & v )
 		{
-		return x << v.get<0>() << v.get<1>();
+		return x << v.template get<0>() << v.template get<1>();
 		}
 
 	template <
@@ -39,7 +39,7 @@ boost
 			error_info<Tag2,T2>,
 			error_info<Tag3,T3> > const & v )
 		{
-		return x << v.get<0>() << v.get<1>() << v.get<2>();
+		return x << v.template get<0>() << v.template get<1>() << v.template get<2>();
 		}
 
 	template <
@@ -57,7 +57,7 @@ boost
 			error_info<Tag3,T3>,
 			error_info<Tag4,T4> > const & v )
 		{
-		return x << v.get<0>() << v.get<1>() << v.get<2>() << v.get<3>();
+		return x << v.template get<0>() << v.template get<1>() << v.template get<2>() << v.template get<3>();
 		}
 	}
 
