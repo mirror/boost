@@ -12,60 +12,60 @@ typedef boost::error_info<struct tag_test_int,int> test_int;
 
 void
 throw_fwd( void (*thrower)(int) )
-	{
-	try
-		{
-		thrower(42);
-		}
-	catch(
-	boost::exception & x )
-		{
-		x << test_int(42);
-		throw;
-		}
-	}
+    {
+    try
+        {
+        thrower(42);
+        }
+    catch(
+    boost::exception & x )
+        {
+        x << test_int(42);
+        throw;
+        }
+    }
 
 template <class T>
 void
 tester()
-	{
-	try
-		{
-		throw_fwd( &boost::exception_test::throw_test_exception<T> );
-		BOOST_ASSERT(false);
-		}
-	catch(
-	std::exception & x )
-		{
-		boost::exception_ptr p = boost::clone_exception(x);
-		try
-			{
-			rethrow_exception(p);
-			BOOST_TEST(false);
-			}
-		catch(
-		T & y )
-			{
-			BOOST_TEST(*boost::get_error_info<test_int>(y)==42);
-			BOOST_TEST(y.x_==42);
-			}
-		catch(
-		... )
-			{
-			BOOST_TEST(false);
-			}
-		}
-	catch(
-	... )
-		{
-		BOOST_TEST(false);
-		}
-	}
+    {
+    try
+        {
+        throw_fwd( &boost::exception_test::throw_test_exception<T> );
+        BOOST_ASSERT(false);
+        }
+    catch(
+    std::exception & x )
+        {
+        boost::exception_ptr p = boost::clone_exception(x);
+        try
+            {
+            rethrow_exception(p);
+            BOOST_TEST(false);
+            }
+        catch(
+        T & y )
+            {
+            BOOST_TEST(*boost::get_error_info<test_int>(y)==42);
+            BOOST_TEST(y.x_==42);
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
+        }
+    }
 
 int
 main()
-	{
-	tester<boost::exception_test::some_boost_exception>();
-	tester<boost::exception_test::some_std_exception>();
-	return boost::report_errors();
-	}
+    {
+    tester<boost::exception_test::some_boost_exception>();
+    tester<boost::exception_test::some_std_exception>();
+    return boost::report_errors();
+    }

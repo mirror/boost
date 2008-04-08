@@ -8,12 +8,12 @@
 
 namespace
 boost
-	{
-	namespace
-	exception_test
-		{
-		void throw_length_error();
-		}
-	}
+    {
+    namespace
+    exception_test
+        {
+        void throw_length_error();
+        }
+    }
 
 #endif

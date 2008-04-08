@@ -5,17 +5,18 @@
 
 #include <boost/exception/enable_error_info.hpp>
 #include <stdexcept>
+#include <string>
 
 namespace
 boost
-	{
-	namespace
-	exception_test
-		{
-		void
-		throw_length_error()
-			{
-			throw enable_error_info( std::length_error("my length error") );
-			}
-		}
-	}
+    {
+    namespace
+    exception_test
+        {
+        void
+        throw_length_error()
+            {
+            throw enable_error_info( std::length_error("my length error") );
+            }
+        }
+    }

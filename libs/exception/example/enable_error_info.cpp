@@ -17,19 +17,19 @@ typedef boost::error_info<struct tag_std_range_index,size_t> std_range_index;
 template <class T>
 class
 my_container
-	{
-	public:
+    {
+    public:
 
-	size_t size() const;
+    size_t size() const;
 
     T const &
-	operator[]( size_t i ) const
-		{
+    operator[]( size_t i ) const
+        {
         if( i > size() )
             throw boost::enable_error_info(std::range_error("Index out of range")) <<
                 std_range_min(0) <<
                 std_range_max(size()) <<
                 std_range_index(i);
-		//....
-		}
-	};
+        //....
+        }
+    };

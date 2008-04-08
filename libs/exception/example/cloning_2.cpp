@@ -13,27 +13,27 @@ void do_work(); //throws cloning-enabled boost::exceptions
 
 void
 worker_thread( boost::exception_ptr & error )
-	{
-	try
-		{
+    {
+    try
+        {
         do_work();
         error = boost::exception_ptr();
-		}
+        }
     catch(
-	boost::exception & e )
-		{
+    boost::exception & e )
+        {
         error = boost::clone_exception(e);
-		}
-	}
+        }
+    }
 
 //
 
 void
 work()
-	{
+    {
     boost::exception_ptr error;
     boost::thread t( boost::bind(worker_thread,boost::ref(error)) );
     t.join();
     if( error )
         boost::rethrow_exception(error);
-	}
+    }

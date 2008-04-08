@@ -9,89 +9,89 @@
 
 namespace
 n1
-	{
-	class
-	c1
-		{
-		};
+    {
+    class
+    c1
+        {
+        };
 
-	std::string
-	to_string( c1 const & )
-		{
-		return "c1";
-		}			
-	}
+    std::string
+    to_string( c1 const & )
+        {
+        return "c1";
+        }           
+    }
 
 namespace
 n2
-	{
-	class
-	c2
-		{
-		};
+    {
+    class
+    c2
+        {
+        };
 
-	std::ostream &
-	operator<<( std::ostream & s, c2 const & )
-		{
-		s << "c2";
-		return s;
-		}			
-	}
+    std::ostream &
+    operator<<( std::ostream & s, c2 const & )
+        {
+        s << "c2";
+        return s;
+        }           
+    }
 
 namespace
 n3
-	{
-	class
-	c3
-		{
-		};
+    {
+    class
+    c3
+        {
+        };
 
-	std::ostream &
-	operator<<( std::ostream & s, c3 const & )
-		{
-		s << "bad";
-		return s;
-		}			
+    std::ostream &
+    operator<<( std::ostream & s, c3 const & )
+        {
+        s << "bad";
+        return s;
+        }           
 
-	std::string
-	to_string( c3 const & )
-		{
-		return "c3";
-		}			
-	}
+    std::string
+    to_string( c3 const & )
+        {
+        return "c3";
+        }           
+    }
 
 namespace
 boost
-	{
-	class
-	to_string_tester
-		{
-		};
-	}
+    {
+    class
+    to_string_tester
+        {
+        };
+    }
 
 template <class T>
 struct
 my_stub
-	{
-	std::string
-	operator()( T const & )
-		{
-		return "stub";
-		}
-	};
+    {
+    std::string
+    operator()( T const & )
+        {
+        return "stub";
+        }
+    };
 
 int
 main()
-	{
-	using namespace boost;
-	BOOST_TEST( to_string(5)=="5" );
-	BOOST_TEST( to_string(n1::c1())=="c1" );
-	BOOST_TEST( to_string(n2::c2())=="c2" );
-	BOOST_TEST( to_string(n3::c3())=="c3" );
-	BOOST_TEST( to_string_stub(5)=="5" );
-	BOOST_TEST( to_string_stub(n1::c1())=="c1" );
-	BOOST_TEST( to_string_stub(n2::c2())=="c2" );
-	BOOST_TEST( to_string_stub(n3::c3())=="c3" );
-	BOOST_TEST( to_string_stub(to_string_tester(),my_stub<to_string_tester>())=="stub" );
-	return boost::report_errors();
-	}
+    {
+    using namespace boost;
+    BOOST_TEST( to_string(5)=="5" );
+    BOOST_TEST( to_string(n1::c1())=="c1" );
+    BOOST_TEST( to_string(n2::c2())=="c2" );
+    BOOST_TEST( to_string(n3::c3())=="c3" );
+    BOOST_TEST( to_string_stub(5)=="5" );
+    BOOST_TEST( to_string_stub(n1::c1())=="c1" );
+    BOOST_TEST( to_string_stub(n2::c2())=="c2" );
+    BOOST_TEST( to_string_stub(n3::c3())=="c3" );
+    BOOST_TEST( to_string_stub(to_string_tester(),my_stub<to_string_tester>())=="stub" );
+    return boost::report_errors();
+    }

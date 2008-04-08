@@ -8,28 +8,28 @@
 
 class
 test_exception:
-	public boost::exception
-	{
-	};
+    public boost::exception
+    {
+    };
 
 void
 test_throw()
-	{
-	throw test_exception();
-	}
+    {
+    throw test_exception();
+    }
 
 int
 main()
-	{
-	try
-		{
-		test_throw();
-		BOOST_TEST(false);
-		}
-	catch(
-	test_exception & )
-		{
-		BOOST_TEST(true);
-		}
-	return boost::report_errors();
-	}
+    {
+    try
+        {
+        test_throw();
+        BOOST_TEST(false);
+        }
+    catch(
+    test_exception & )
+        {
+        BOOST_TEST(true);
+        }
+    return boost::report_errors();
+    }

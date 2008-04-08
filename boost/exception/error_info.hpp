@@ -8,9 +8,9 @@
 
 namespace
 boost
-	{
-	template <class Tag,class T>
-	class error_info;
-	}
+    {
+    template <class Tag,class T>
+    class error_info;
+    }
 
 #endif

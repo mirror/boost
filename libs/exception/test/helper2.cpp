@@ -8,46 +8,46 @@
 
 namespace
 boost
-	{
-	namespace
-	exception_test
-		{
-		inline
-		some_boost_exception::
-		some_boost_exception( int x ):
-			x_(x)
-			{
-			}
+    {
+    namespace
+    exception_test
+        {
+        inline
+        some_boost_exception::
+        some_boost_exception( int x ):
+            x_(x)
+            {
+            }
 
-		some_boost_exception::
-		~some_boost_exception() throw()
-			{
-			}
+        some_boost_exception::
+        ~some_boost_exception() throw()
+            {
+            }
 
-		inline
-		some_std_exception::
-		some_std_exception( int x ):
-			x_(x)
-			{
-			}
+        inline
+        some_std_exception::
+        some_std_exception( int x ):
+            x_(x)
+            {
+            }
 
-		some_std_exception::
-		~some_std_exception() throw()
-			{
-			}
+        some_std_exception::
+        ~some_std_exception() throw()
+            {
+            }
 
-		template <>
-		void
-		throw_test_exception<some_boost_exception>( int x )
-			{
-			boost::throw_exception( some_boost_exception(x) );
-			}
+        template <>
+        void
+        throw_test_exception<some_boost_exception>( int x )
+            {
+            boost::throw_exception( some_boost_exception(x) );
+            }
 
-		template <>
-		void
-		throw_test_exception<some_std_exception>( int x )
-			{
-			boost::throw_exception( some_std_exception(x) );
-			}
-		}
-	}
+        template <>
+        void
+        throw_test_exception<some_std_exception>( int x )
+            {
+            boost::throw_exception( some_std_exception(x) );
+            }
+        }
+    }

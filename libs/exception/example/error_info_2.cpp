@@ -18,10 +18,10 @@ class file_read_error: public boost::exception { };
 
 void
 file_read( FILE * f, void * buffer, size_t size )
-	{
+    {
     if( size!=fread(buffer,1,size,f) )
         throw file_read_error() << errno_info(errno);
-	}
+    }
 
 //
 
@@ -32,18 +32,18 @@ void file_read( FILE * f, void * buffer, size_t size );
 
 void
 parse_file( char const * file_name )
-	{
+    {
     boost::shared_ptr<FILE> f = file_open(file_name,"rb");
     assert(f);
     try
-		{
-		char buf[1024];
+        {
+        char buf[1024];
         file_read( f.get(), buf, sizeof(buf) );
-		}
+        }
     catch(
-	boost::exception & e )
-		{
+    boost::exception & e )
+        {
         e << file_name_info(file_name);
         throw;
-		}
-	}
+        }
+    }

@@ -16,21 +16,21 @@ class my_error: public boost::exception, public std::exception { }; //(2)
 
 void
 f()
-	{
+    {
     throw my_error() << errno_info(errno); //(3)
-	}
-				 
+    }
+                 
 void
 g()
-	{
+    {
     try
-		{
+        {
         f();
-	    }
+        }
     catch(
-	my_error & x )
-		{
-		if( boost::shared_ptr<int const> err=boost::get_error_info<errno_info>(x) )
+    my_error & x )
+        {
+        if( boost::shared_ptr<int const> err=boost::get_error_info<errno_info>(x) )
             std::cerr << "Error code: " << *err;
-		}
-	}
+        }
+    }

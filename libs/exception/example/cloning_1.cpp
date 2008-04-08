@@ -16,7 +16,7 @@ class file_read_error: public boost::exception { };
 
 void
 file_read( FILE * f, void * buffer, size_t size )
-	{
+    {
     if( size!=fread(buffer,1,size,f) )
         throw boost::enable_exception_cloning(file_read_error()) << errno_info(errno);
-	}
+    }

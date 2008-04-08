@@ -7,6 +7,6 @@
 
 void
 tester( boost::exception & x )
-	{
-	throw x; //must not compile.
-	}
+    {
+    throw x; //must not compile.
+    }

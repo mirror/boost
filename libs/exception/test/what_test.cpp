@@ -10,18 +10,18 @@ typedef boost::error_info<struct tag_test,int> test;
 
 class
 my_exception:
-	public boost::exception
-	{
-	};
+    public boost::exception
+    {
+    };
 
 int
 main()
-	{
-	my_exception x;
-	x << test(1);
-	std::string w1 = x.what();
-	x << test(2);
-	std::string w2 = x.what();
-	BOOST_TEST( w1!=w2 );
-	return boost::report_errors();
-	}
+    {
+    my_exception x;
+    x << test(1);
+    std::string w1 = x.what();
+    x << test(2);
+    std::string w2 = x.what();
+    BOOST_TEST( w1!=w2 );
+    return boost::report_errors();
+    }

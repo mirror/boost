@@ -8,35 +8,35 @@
 
 struct
 test_exception:
-	std::exception
-	{
-	};
+    std::exception
+    {
+    };
 
 int
 main()
-	{
-	try
-		{
-		throw boost::enable_exception_cloning(test_exception());
-		}
-	catch(
-	std::exception & x )
-		{
-		boost::exception_ptr p = boost::clone_exception(x);
-		try
-			{
-			rethrow_exception(p);
-			BOOST_TEST(false);
-			}
-		catch(
-		test_exception & )
-			{
-			}
-		catch(
-		... )
-			{
-			BOOST_TEST(false);
-			}
-		}
-	return boost::report_errors();
-	}
+    {
+    try
+        {
+        throw boost::enable_exception_cloning(test_exception());
+        }
+    catch(
+    std::exception & x )
+        {
+        boost::exception_ptr p = boost::clone_exception(x);
+        try
+            {
+            rethrow_exception(p);
+            BOOST_TEST(false);
+            }
+        catch(
+        test_exception & )
+            {
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
+        }
+    return boost::report_errors();
+    }

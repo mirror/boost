@@ -13,47 +13,47 @@
 
 namespace
 boost
-	{
-	class
-	unknown_exception:
-		public exception,
-		public std::exception
-		{
-		public:
+    {
+    class
+    unknown_exception:
+        public exception,
+        public std::exception
+        {
+        public:
 
-		explicit
-		unknown_exception()
-			{
-			}
+        explicit
+        unknown_exception()
+            {
+            }
 
-		explicit
-		unknown_exception( boost::exception const & x ):
-			boost::exception(x)
-			{
-			}
-		};
+        explicit
+        unknown_exception( boost::exception const & x ):
+            boost::exception(x)
+            {
+            }
+        };
 
-	typedef intrusive_ptr<exception_detail::clone_base const> exception_ptr;
+    typedef intrusive_ptr<exception_detail::clone_base const> exception_ptr;
 
-	template <class T>
-	exception_ptr
-	clone_exception( T const & e )
-		{
-		if( boost::exception_detail::cloning_base const * cb = dynamic_cast<boost::exception_detail::cloning_base const *>(&e) )
-			if( exception_detail::clone_base const * c = cb->clone() )
-				return exception_ptr(c);
-		if( boost::exception const * be = dynamic_cast<boost::exception const *>(&e) )
-			return exception_ptr(exception_detail::make_clone(unknown_exception(*be)));
-		else
-			return exception_ptr(exception_detail::make_clone(unknown_exception()));
-		}
+    template <class T>
+    exception_ptr
+    clone_exception( T const & e )
+        {
+        if( boost::exception_detail::cloning_base const * cb = dynamic_cast<boost::exception_detail::cloning_base const *>(&e) )
+            if( exception_detail::clone_base const * c = cb->clone() )
+                return exception_ptr(c);
+        if( boost::exception const * be = dynamic_cast<boost::exception const *>(&e) )
+            return exception_ptr(exception_detail::make_clone(unknown_exception(*be)));
+        else
+            return exception_ptr(exception_detail::make_clone(unknown_exception()));
+        }
 
-	inline
-	void
-	rethrow_exception( exception_ptr const & p )
-		{
-		p->rethrow();
-		}
-	}
+    inline
+    void
+    rethrow_exception( exception_ptr const & p )
+        {
+        p->rethrow();
+        }
+    }
 
 #endif

@@ -8,20 +8,20 @@
 
 namespace
 boost
-	{
-	namespace
-	exception_detail
-		{
-		class clone_base;
+    {
+    namespace
+    exception_detail
+        {
+        class clone_base;
 
-		class
-		cloning_base
-			{
-			public:
+        class
+        cloning_base
+            {
+            public:
 
-			virtual clone_base const * clone() const = 0;
-			};
-		}
-	}
+            virtual clone_base const * clone() const = 0;
+            };
+        }
+    }
 
 #endif

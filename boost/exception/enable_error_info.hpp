@@ -10,60 +10,60 @@
 
 namespace
 boost
-	{
-	namespace
-	exception_detail
-		{
-		template <class T>
-		struct
-		error_info_injector:
-			public T,
-			public exception
-			{
-			explicit
-			error_info_injector( T const & x ):
-				T(x)
-				{
-				}
-			};
+    {
+    namespace
+    exception_detail
+        {
+        template <class T>
+        struct
+        error_info_injector:
+            public T,
+            public exception
+            {
+            explicit
+            error_info_injector( T const & x ):
+                T(x)
+                {
+                }
+            };
 
-		struct large_size { char c[256]; };
-		large_size dispatch( exception * );
+        struct large_size { char c[256]; };
+        large_size dispatch( exception * );
 
-		struct small_size { };
-		small_size dispatch( void * );
+        struct small_size { };
+        small_size dispatch( void * );
 
-		template <class,size_t>
-		struct enable_error_info_helper;
+        template <class,size_t>
+        struct enable_error_info_helper;
 
-		template <class T>
-		struct
-		enable_error_info_helper<T,sizeof(large_size)>
-			{
-			typedef T type;
-			};
+        template <class T>
+        struct
+        enable_error_info_helper<T,sizeof(large_size)>
+            {
+            typedef T type;
+            };
 
-		template <class T>
-		struct
-		enable_error_info_helper<T,sizeof(small_size)>
-			{
-			typedef error_info_injector<T> type;
-			};
+        template <class T>
+        struct
+        enable_error_info_helper<T,sizeof(small_size)>
+            {
+            typedef error_info_injector<T> type;
+            };
 
-		template <class T>
-		struct
-		enable_error_info_return_type
-			{
-			typedef typename enable_error_info_helper<T,sizeof(dispatch((T*)0))>::type type;
-			};
-		}
+        template <class T>
+        struct
+        enable_error_info_return_type
+            {
+            typedef typename enable_error_info_helper<T,sizeof(dispatch((T*)0))>::type type;
+            };
+        }
 
-	template <class T>
-	typename exception_detail::enable_error_info_return_type<T>::type
-	enable_error_info( T const & x )
-		{
-		return typename exception_detail::enable_error_info_return_type<T>::type(x);
-		}
-	}
+    template <class T>
+    typename exception_detail::enable_error_info_return_type<T>::type
+    enable_error_info( T const & x )
+        {
+        return typename exception_detail::enable_error_info_return_type<T>::type(x);
+        }
+    }
 
 #endif

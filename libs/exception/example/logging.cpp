@@ -12,14 +12,14 @@ void f(); //throws unknown types that derive from boost::exception.
 
 void
 g()
-	{
+    {
     try
-		{
+        {
         f();
-		}
+        }
     catch(
-	boost::exception & e )
-		{
+    boost::exception & e )
+        {
         std::cerr << e.what();
-		}
-	}
+        }
+    }

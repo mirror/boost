@@ -8,31 +8,31 @@
 
 namespace
 boost
-	{
-	namespace
-	exception_detail
-		{
-		class
-		counted_base
-			{
-			friend
-			void
-			intrusive_ptr_add_ref( counted_base const * c )
-				{
-				c->add_ref();
-				}
+    {
+    namespace
+    exception_detail
+        {
+        class
+        counted_base
+            {
+            friend
+            void
+            intrusive_ptr_add_ref( counted_base const * c )
+                {
+                c->add_ref();
+                }
 
-			friend
-			void
-			intrusive_ptr_release( counted_base const * c )
-				{
-				c->release();
-				}
+            friend
+            void
+            intrusive_ptr_release( counted_base const * c )
+                {
+                c->release();
+                }
 
-			virtual void add_ref() const=0;
-			virtual void release() const=0;
-			};
-		}
-	}
+            virtual void add_ref() const=0;
+            virtual void release() const=0;
+            };
+        }
+    }
 
 #endif

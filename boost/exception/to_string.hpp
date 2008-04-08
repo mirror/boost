@@ -10,18 +10,18 @@
 
 namespace
 boost
-	{
-	namespace
-		{
-		template <class T>
-		std::string
-		to_string( T const & x )
-			{
-			std::ostringstream out;
-			out << x;
-			return out.str();
-			}
-		}
-	}
+    {
+    namespace
+        {
+        template <class T>
+        std::string
+        to_string( T const & x )
+            {
+            std::ostringstream out;
+            out << x;
+            return out.str();
+            }
+        }
+    }
 
 #endif

@@ -10,38 +10,38 @@
 
 namespace
 boost
-	{
-	namespace
-	exception_test
-		{
-		struct
-		some_boost_exception:
-			public boost::exception,
-			public std::exception
-			{
-			explicit some_boost_exception( int x );
-			virtual ~some_boost_exception() throw();
-			int x_;
-			};
+    {
+    namespace
+    exception_test
+        {
+        struct
+        some_boost_exception:
+            public boost::exception,
+            public std::exception
+            {
+            explicit some_boost_exception( int x );
+            virtual ~some_boost_exception() throw();
+            int x_;
+            };
 
-		struct
-		some_std_exception:
-			public std::exception
-			{
-			explicit some_std_exception( int x );
-			virtual ~some_std_exception() throw();
-			int x_;
-			};
+        struct
+        some_std_exception:
+            public std::exception
+            {
+            explicit some_std_exception( int x );
+            virtual ~some_std_exception() throw();
+            int x_;
+            };
 
-		template <class>
-		void throw_test_exception( int );
+        template <class>
+        void throw_test_exception( int );
 
-		template <>
-		void throw_test_exception<some_boost_exception>( int );
+        template <>
+        void throw_test_exception<some_boost_exception>( int );
 
-		template <>
-		void throw_test_exception<some_std_exception>( int );
-		}
-	}
+        template <>
+        void throw_test_exception<some_std_exception>( int );
+        }
+    }
 
 #endif
