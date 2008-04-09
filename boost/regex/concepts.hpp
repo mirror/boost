@@ -368,8 +368,6 @@ struct BaseRegexConcept
 
       // access:
       const Regex ce;
-      bool b = ce.empty();
-      ignore_unused_variable_warning(b);
       unsigned i = ce.mark_count();
       ignore_unused_variable_warning(i);
       m_flags = ce.flags();
@@ -805,6 +803,8 @@ struct BoostRegexConcept
       int i2 = ce.compare(ce2);
       ignore_unused_variable_warning(i2);
       bool b = ce == ce2;
+      ignore_unused_variable_warning(b);
+      b = ce.empty();
       ignore_unused_variable_warning(b);
       b = ce != ce2;
       ignore_unused_variable_warning(b);
