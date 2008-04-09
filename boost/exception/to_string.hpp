@@ -7,6 +7,7 @@
 #define UUID_7E48761AD92811DC9011477D56D89593
 
 #include <sstream>
+#include <string>
 
 namespace
 boost
