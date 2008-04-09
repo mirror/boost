@@ -1,21 +1,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Rationale</title>
+<title>Rationale</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.FunctionTypes 2.5">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.FunctionTypes 2.5">
-<link rel="prev" href="reference/macros.html" title=" Macros">
-<link rel="next" href="acknowledgements.html" title=" Acknowledgements">
+<link rel="prev" href="reference/macros.html" title="Macros">
+<link rel="next" href="acknowledgements.html" title="Acknowledgements">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="../../../../../people/people.htm">People</a></td>
-<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
+<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,12 +24,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_functiontypes.rationale"></a><a href="rationale.html" title=" Rationale"> Rationale</a></h2></div></div></div>
-<a name="boost_functiontypes.rationale.error_handling_rationale"></a><h3>
-<a name="id932133"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.error_handling_rationale">Error
+<a name="boost_functiontypes.rationale"></a><a class="link" href="rationale.html" title="Rationale"> Rationale</a>
+</h2></div></div></div>
+<a name="boost_functiontypes.rationale.error_handling_rationale"></a><h4>
+<a name="id2644279"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.error_handling_rationale">Error
       handling rationale</a>
-    </h3>
+    </h4>
 <p>
       The library does not define the required members of class templates in case
       of an error. This technique causes the compiler to stop displaying diagnostics
@@ -40,10 +41,10 @@
       The library's components have limited error conditions, so problematic input
       can be spotted easily.
     </p>
-<a name="boost_functiontypes.rationale.why_mpl_sequences_"></a><h3>
-<a name="id932170"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.why_mpl_sequences_">Why MPL Sequences?</a>
-    </h3>
+<a name="boost_functiontypes.rationale.why_mpl_sequences_"></a><h4>
+<a name="id2644312"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.why_mpl_sequences_">Why MPL Sequences?</a>
+    </h4>
 <p>
       MPL provides algorithms on Sequences, so transformations (such as turning by-value
       parameter types into const references for optimized forwarding or computing
@@ -53,20 +54,20 @@
       other Boost libraries (most importantly <a href="../../../../fusion/index.html" target="_top">Fusion</a>),
       so another reason is interoperability.
     </p>
-<a name="boost_functiontypes.rationale.pointer_to_member_object_types"></a><h3>
-<a name="id932228"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.pointer_to_member_object_types">Pointer
+<a name="boost_functiontypes.rationale.pointer_to_member_object_types"></a><h4>
+<a name="id2644363"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.pointer_to_member_object_types">Pointer
       to member object types</a>
-    </h3>
+    </h4>
 <p>
       Despite their syntax, pointer to member object types can be seen as dereferencing
       functionals.
     </p>
-<a name="boost_functiontypes.rationale.the_classtransform_template_parameter"></a><h3>
-<a name="id932259"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.the_classtransform_template_parameter">The
+<a name="boost_functiontypes.rationale.the_classtransform_template_parameter"></a><h4>
+<a name="id2644388"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.the_classtransform_template_parameter">The
       ClassTransform template parameter</a>
-    </h3>
+    </h4>
 <p>
       <code class="literal">This</code>-pointer, <code class="literal">this</code>-reference or just
       the object (or maybe even a smart pointer to the object) plus adjustments of
@@ -79,10 +80,10 @@
       client to adjust the class type before the sequence is formed and then treat
       all parameters uniformly.
     </p>
-<a name="boost_functiontypes.rationale.why_tag_types_"></a><h3>
-<a name="id932315"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.why_tag_types_">Why tag types?</a>
-    </h3>
+<a name="boost_functiontypes.rationale.why_tag_types_"></a><h4>
+<a name="id2644439"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.why_tag_types_">Why tag types?</a>
+    </h4>
 <p>
       Let's consider the alternatives.
     </p>
@@ -98,12 +99,12 @@
       parameters do not work within MPL lambda expressions and can cause problems
       with older compilers.
     </p>
-<a name="boost_functiontypes.rationale.is_it_safe_to_have_the_synthesis_templates_take_a_callable__builtin_type_or_an_mpl_sequence_as_the_first_template_argument_"></a><h3>
-<a name="id932365"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.is_it_safe_to_have_the_synthesis_templates_take_a_callable__builtin_type_or_an_mpl_sequence_as_the_first_template_argument_">Is
+<a name="boost_functiontypes.rationale.is_it_safe_to_have_the_synthesis_templates_take_a_callable__builtin_type_or_an_mpl_sequence_as_the_first_template_argument_"></a><h4>
+<a name="id2644479"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.is_it_safe_to_have_the_synthesis_templates_take_a_callable__builtin_type_or_an_mpl_sequence_as_the_first_template_argument_">Is
       it safe to have the synthesis templates take a callable builtin type or an
       MPL sequence as the first template argument?</a>
-    </h3>
+    </h4>
 <p>
       Yes, but it isn't immediately obvious as the set of possible MPL sequences
       isn't inherently disjoint from the set of callable builtin types.
@@ -113,25 +114,23 @@
       idea, because builtin types are accessible before the headers that make the
       type a sequence have been included, which can easily violate the ODR.
     </p>
-<a name="boost_functiontypes.rationale.why_does_the_hidden__literal_this__literal__parameter_count_for_the__function_arity_of_member_functions_"></a><h3>
-<a name="id932413"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.why_does_the_hidden__literal_this__literal__parameter_count_for_the__function_arity_of_member_functions_">Why
+<a name="boost_functiontypes.rationale.why_does_the_hidden__literal_this__literal__parameter_count_for_the__function_arity_of_member_functions_"></a><h4>
+<a name="id2644521"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.why_does_the_hidden__literal_this__literal__parameter_count_for_the__function_arity_of_member_functions_">Why
       does the hidden <code class="literal">this</code> parameter count for the function arity
       of member functions?</a>
-    </h3>
+    </h4>
 <p>
       It was found preferable that the following condition holds:
     </p>
 <pre class="programlisting">
-<span class="identifier">mpl</span><span class="special">::</span><span class="identifier">size</span><span class="special">&lt;</span> <a href="reference/decomposition.html#boost_functiontypes.reference.decomposition.parameter_types" title="
-        parameter_types">parameter_types</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">==</span> <a href="reference/decomposition.html#boost_functiontypes.reference.decomposition.function_arity" title="
-        function_arity">function_arity</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span>
+<span class="identifier">mpl</span><span class="special">::</span><span class="identifier">size</span><span class="special">&lt;</span> <a class="link" href="reference/decomposition.html#boost_functiontypes.reference.decomposition.parameter_types" title="parameter_types">parameter_types</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">==</span> <a class="link" href="reference/decomposition.html#boost_functiontypes.reference.decomposition.function_arity" title="function_arity">function_arity</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span>
 </pre>
-<a name="boost_functiontypes.rationale.why_ignore_top_level_cv_qualifiers_on_pointers_"></a><h3>
-<a name="id932540"></a>
-      <a href="rationale.html#boost_functiontypes.rationale.why_ignore_top_level_cv_qualifiers_on_pointers_">Why
+<a name="boost_functiontypes.rationale.why_ignore_top_level_cv_qualifiers_on_pointers_"></a><h4>
+<a name="id2644638"></a>
+      <a class="link" href="rationale.html#boost_functiontypes.rationale.why_ignore_top_level_cv_qualifiers_on_pointers_">Why
       ignore top-level cv-qualifiers on pointers?</a>
-    </h3>
+    </h4>
 <p>
       A cv-qualified pointer is still a pointer. It usually doesn't matter and even
       if it does, it's a job for <a href="../../../../type_traits/index.html" target="_top">Boost.TypeTraits</a>.
@@ -139,7 +138,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2004 -2007 Tobias Schwinger</small></td>
+<td align="right"><div class="copyright-footer">Copyright © 2004 -2007 Tobias Schwinger<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
