@@ -128,9 +128,11 @@ void write_jamfile_v2()
       "# the template defined in options_v2.jam.\n#\n"
       "path-constant DOT : . ;\n"
       "include $(DOT)/options_v2.jam ;\n\n"
-      "run config_info.cpp ;\n"
+      "run config_info.cpp  : : : <threading>single <toolset>msvc:<runtime-link>static <toolset>msvc:<link>static ;\n"
+      "run config_info.cpp  : : : <threading>multi : config_info_threaded ;\n"
       "run math_info.cpp : : : <toolset>borland:<runtime-link>static <toolset>borland:<link>static ;\n"
-      "run config_test.cpp ;\n"
+      "run config_test.cpp : : : <threading>single <toolset>msvc:<runtime-link>static <toolset>msvc:<link>static ;\n"
+      "run config_test.cpp : : : <threading>multi : config_test_threaded ;\n"
       "run limits_test.cpp ../../test/build//boost_test_exec_monitor ;\n"
       "run abi/abi_test.cpp abi/main.cpp  ;\n\n";
    ofs << jamfile_v2.str() << std::endl;
