@@ -15,6 +15,8 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <boost/assert.hpp>
+
 namespace boost
 {
 
@@ -25,17 +27,33 @@ class spinlock
 {
 public:
 
+    bool locked_;
+
+public:
+
     inline bool try_lock()
     {
-        return true;
+        if( locked_ )
+        {
+            return false;
+        }
+        else
+        {
+            locked_ = true;
+            return true;
+        }
     }
 
     inline void lock()
     {
+        BOOST_ASSERT( !locked_ );
+        locked_ = true;
     }
 
     inline void unlock()
     {
+        BOOST_ASSERT( locked_ );
+        locked_ = false;
     }
 
 public:
@@ -44,17 +62,21 @@ public:
     {
     private:
 
+        spinlock & sp_;
+
         scoped_lock( scoped_lock const & );
         scoped_lock & operator=( scoped_lock const & );
 
     public:
 
-        explicit scoped_lock( spinlock & /*sp*/ )
+        explicit scoped_lock( spinlock & sp ): sp_( sp )
         {
+            sp.lock();
         }
 
         ~scoped_lock()
         {
+            sp_.unlock();
         }
     };
 };
@@ -62,6 +84,6 @@ public:
 } // namespace detail
 } // namespace boost
 
-#define BOOST_DETAIL_SPINLOCK_INIT {}
+#define BOOST_DETAIL_SPINLOCK_INIT { false }
 
 #endif // #ifndef BOOST_DETAIL_SPINLOCK_NT_HPP_INCLUDED
