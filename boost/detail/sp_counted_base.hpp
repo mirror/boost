@@ -23,6 +23,10 @@
 
 # include <boost/detail/sp_counted_base_nt.hpp>
 
+#elif defined( BOOST_SP_USE_SPINLOCK )
+
+# include <boost/detail/sp_counted_base_spin.hpp>
+
 #elif defined( BOOST_SP_USE_PTHREADS )
 
 # include <boost/detail/sp_counted_base_pt.hpp>
