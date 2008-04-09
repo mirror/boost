@@ -31,7 +31,7 @@ public:
 
         __asm__ __volatile__(
             "swp %0, %1, [%2]":
-            "=r"( r ): // outputs
+            "=&r"( r ): // outputs
             "r"( 1 ), "r"( &v_ ): // inputs
             "memory", "cc" );
 
