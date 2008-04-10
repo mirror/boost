@@ -383,7 +383,7 @@ struct BaseRegexConcept
       typedef typename sub_match_type::iterator sub_iter_type;
       BOOST_STATIC_ASSERT((::boost::is_same<sub_value_type, value_type>::value));
       BOOST_STATIC_ASSERT((::boost::is_same<sub_iter_type, BidiIterator>::value));
-      b = m_sub.matched;
+      bool b = m_sub.matched;
       ignore_unused_variable_warning(b);
       BidiIterator bi = m_sub.first;
       ignore_unused_variable_warning(bi);
