@@ -7,6 +7,7 @@
 //  See http://www.boost.org/libs/utility for documentation.
 
 //  Revision History
+//  03 Apr 08 Added convertible_to_bool (Daniel Frey)
 //  01 Oct 01 Added tests for "left" operators
 //            and new grouped operators. (Helmut Zeisel)
 //  20 May 01 Output progress messages.  Added tests for new operator
@@ -43,6 +44,23 @@ namespace
     unsigned char true_value(unsigned char x) { return x; }
     unsigned short true_value(unsigned short x) { return x; }
 
+    // verify the minimum requirements for some operators
+    class convertible_to_bool
+    {
+    private:
+        bool _value;
+
+        typedef bool convertible_to_bool::*unspecified_bool_type;
+
+        void operator!() const;
+
+    public:
+        convertible_to_bool( const bool value ) : _value( value ) {}
+
+        operator unspecified_bool_type() const
+          { return _value ? &convertible_to_bool::_value : 0; }
+    };
+
     // The use of operators<> here tended to obscure
     // interactions with certain compiler bugs
     template <class T>
@@ -54,8 +72,10 @@ namespace
         explicit Wrapped1( T v = T() ) : _value(v) {}
         T value() const { return _value; }
 
-        bool operator<(const Wrapped1& x) const { return _value < x._value; }
-        bool operator==(const Wrapped1& x) const { return _value == x._value; }
+        convertible_to_bool operator<(const Wrapped1& x) const
+          { return _value < x._value; }
+        convertible_to_bool operator==(const Wrapped1& x) const
+          { return _value == x._value; }
         
         Wrapped1& operator+=(const Wrapped1& x)
           { _value += x._value; return *this; }
@@ -97,8 +117,10 @@ namespace
         explicit Wrapped2( T v = T() ) : _value(v) {}
         T value() const { return _value; }
 
-        bool operator<(const Wrapped2& x) const { return _value < x._value; }
-        bool operator==(const Wrapped2& x) const { return _value == x._value; }
+        convertible_to_bool operator<(const Wrapped2& x) const
+          { return _value < x._value; }
+        convertible_to_bool operator==(const Wrapped2& x) const
+          { return _value == x._value; }
         
         Wrapped2& operator+=(const Wrapped2& x)
           { _value += x._value; return *this; }
@@ -123,9 +145,13 @@ namespace
         Wrapped2& operator++()                { ++_value; return *this; }
         Wrapped2& operator--()                { --_value; return *this; }
          
-        bool operator<(U u) const { return _value < u; }
-        bool operator>(U u) const { return _value > u; }
-        bool operator==(U u) const { return _value == u; }
+        convertible_to_bool operator<(U u) const
+          { return _value < u; }
+        convertible_to_bool operator>(U u) const
+          { return _value > u; }
+        convertible_to_bool operator==(U u) const
+          { return _value == u; }
+
         Wrapped2& operator+=(U u) { _value += u; return *this; }
         Wrapped2& operator-=(U u) { _value -= u; return *this; }
         Wrapped2& operator*=(U u) { _value *= u; return *this; }
@@ -153,7 +179,8 @@ namespace
         explicit Wrapped3( T v = T() ) : _value(v) {}
         T value() const { return _value; }
 
-        bool operator<(const Wrapped3& x) const { return _value < x._value; }
+        convertible_to_bool operator<(const Wrapped3& x) const
+          { return _value < x._value; }
         
     private:
         T _value;
@@ -174,10 +201,13 @@ namespace
         explicit Wrapped4( T v = T() ) : _value(v) {}
         T value() const { return _value; }
 
-        bool operator<(const Wrapped4& x) const { return _value < x._value; }
+        convertible_to_bool operator<(const Wrapped4& x) const
+          { return _value < x._value; }
          
-        bool operator<(U u) const { return _value < u; }
-        bool operator>(U u) const { return _value > u; }
+        convertible_to_bool operator<(U u) const
+          { return _value < u; }
+        convertible_to_bool operator>(U u) const
+          { return _value > u; }
 
     private:
         T _value;
@@ -198,11 +228,18 @@ namespace
         Wrapped5(U u) : _value(u) {}
 
         T value() const { return _value; }
-        bool operator<(const Wrapped5& x) const { return _value < x._value; }
-        bool operator<(U u) const { return _value < u; }
-        bool operator>(U u) const { return _value > u; }
-        bool operator==(const Wrapped5& u) const { return _value == u._value; }
-        bool operator==(U u) const { return _value == u; }
+
+        convertible_to_bool operator<(const Wrapped5& x) const
+          { return _value < x._value; }
+        convertible_to_bool operator<(U u) const
+          { return _value < u; }
+        convertible_to_bool operator>(U u) const
+          { return _value > u; }
+        convertible_to_bool operator==(const Wrapped5& u) const
+          { return _value == u._value; }
+        convertible_to_bool operator==(U u) const
+          { return _value == u; }
+
         Wrapped5& operator/=(const Wrapped5& u) { _value /= u._value; return *this;}
         Wrapped5& operator/=(U u) { _value /= u; return *this;}
         Wrapped5& operator*=(const Wrapped5& u) { _value *= u._value; return *this;}
@@ -231,11 +268,18 @@ namespace
         Wrapped6(U u) : _value(u) {}
 
         T value() const { return _value; }
-        bool operator<(const Wrapped6& x) const { return _value < x._value; }
-        bool operator<(U u) const { return _value < u; }
-        bool operator>(U u) const { return _value > u; }
-        bool operator==(const Wrapped6& u) const { return _value == u._value; }
-        bool operator==(U u) const { return _value == u; }
+
+        convertible_to_bool operator<(const Wrapped6& x) const
+          { return _value < x._value; }
+        convertible_to_bool operator<(U u) const
+          { return _value < u; }
+        convertible_to_bool operator>(U u) const
+          { return _value > u; }
+        convertible_to_bool operator==(const Wrapped6& u) const
+          { return _value == u._value; }
+        convertible_to_bool operator==(U u) const
+          { return _value == u; }
+
         Wrapped6& operator%=(const Wrapped6& u) { _value %= u._value; return *this;}
         Wrapped6& operator%=(U u) { _value %= u; return *this;}
         Wrapped6& operator/=(const Wrapped6& u) { _value /= u._value; return *this;}
@@ -276,10 +320,10 @@ namespace
     template <class X1, class Y1, class X2, class Y2>
     void test_less_than_comparable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_CHECK( (x1 < y1) == (x2 < y2) );
-        BOOST_CHECK( (x1 <= y1) == (x2 <= y2) );
-        BOOST_CHECK( (x1 >= y1) == (x2 >= y2) );
-        BOOST_CHECK( (x1 > y1) == (x2 > y2) );
+        BOOST_CHECK( static_cast<bool>(x1 < y1) == static_cast<bool>(x2 < y2) );
+        BOOST_CHECK( static_cast<bool>(x1 <= y1) == static_cast<bool>(x2 <= y2) );
+        BOOST_CHECK( static_cast<bool>(x1 >= y1) == static_cast<bool>(x2 >= y2) );
+        BOOST_CHECK( static_cast<bool>(x1 > y1) == static_cast<bool>(x2 > y2) );
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -293,8 +337,8 @@ namespace
     template <class X1, class Y1, class X2, class Y2>
     void test_equality_comparable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_CHECK( (x1 == y1) == (x2 == y2) );
-        BOOST_CHECK( (x1 != y1) == (x2 != y2) );
+        BOOST_CHECK( static_cast<bool>(x1 == y1) == static_cast<bool>(x2 == y2) );
+        BOOST_CHECK( static_cast<bool>(x1 != y1) == static_cast<bool>(x2 != y2) );
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -614,14 +658,14 @@ test_main( int , char * [] )
 
     PRIVATE_EXPR_TEST( (i = i2), (i.value() == 2) );
 
-    BOOST_CHECK( i2 == i );
-    BOOST_CHECK( i1 != i2 );
-    BOOST_CHECK( i1 <  i2 );
-    BOOST_CHECK( i1 <= i2 );
-    BOOST_CHECK( i <= i2 );
-    BOOST_CHECK( i2 >  i1 );
-    BOOST_CHECK( i2 >= i1 );
-    BOOST_CHECK( i2 >= i );
+    BOOST_CHECK( static_cast<bool>(i2 == i) );
+    BOOST_CHECK( static_cast<bool>(i1 != i2) );
+    BOOST_CHECK( static_cast<bool>(i1 <  i2) );
+    BOOST_CHECK( static_cast<bool>(i1 <= i2) );
+    BOOST_CHECK( static_cast<bool>(i <= i2) );
+    BOOST_CHECK( static_cast<bool>(i2 >  i1) );
+    BOOST_CHECK( static_cast<bool>(i2 >= i1) );
+    BOOST_CHECK( static_cast<bool>(i2 >= i) );
 
     PRIVATE_EXPR_TEST( (i = i1 + i2), (i.value() == 3) );
     PRIVATE_EXPR_TEST( (i = i + i2), (i.value() == 5) );
@@ -653,78 +697,78 @@ test_main( int , char * [] )
 
     PRIVATE_EXPR_TEST( (j = j2), (j.value() == 2) );
     
-    BOOST_CHECK( j2 == j );
-    BOOST_CHECK( 2 == j );
-    BOOST_CHECK( j2 == 2 );    
-    BOOST_CHECK( j == j2 );
-    BOOST_CHECK( j1 != j2 );
-    BOOST_CHECK( j1 != 2 );
-    BOOST_CHECK( 1 != j2 );
-    BOOST_CHECK( j1 <  j2 );
-    BOOST_CHECK( 1 <  j2 );
-    BOOST_CHECK( j1 <  2 );
-    BOOST_CHECK( j1 <= j2 );
-    BOOST_CHECK( 1 <= j2 );
-    BOOST_CHECK( j1 <= j );
-    BOOST_CHECK( j <= j2 );
-    BOOST_CHECK( 2 <= j2 );
-    BOOST_CHECK( j <= 2 );
-    BOOST_CHECK( j2 >  j1 );
-    BOOST_CHECK( 2 >  j1 );
-    BOOST_CHECK( j2 >  1 );
-    BOOST_CHECK( j2 >= j1 );
-    BOOST_CHECK( 2 >= j1 );
-    BOOST_CHECK( j2 >= 1 );
-    BOOST_CHECK( j2 >= j );
-    BOOST_CHECK( 2 >= j );
-    BOOST_CHECK( j2 >= 2 );
+    BOOST_CHECK( static_cast<bool>(j2 == j) );
+    BOOST_CHECK( static_cast<bool>(2 == j) );
+    BOOST_CHECK( static_cast<bool>(j2 == 2) );
+    BOOST_CHECK( static_cast<bool>(j == j2) );
+    BOOST_CHECK( static_cast<bool>(j1 != j2) );
+    BOOST_CHECK( static_cast<bool>(j1 != 2) );
+    BOOST_CHECK( static_cast<bool>(1 != j2) );
+    BOOST_CHECK( static_cast<bool>(j1 <  j2) );
+    BOOST_CHECK( static_cast<bool>(1 <  j2) );
+    BOOST_CHECK( static_cast<bool>(j1 <  2) );
+    BOOST_CHECK( static_cast<bool>(j1 <= j2) );
+    BOOST_CHECK( static_cast<bool>(1 <= j2) );
+    BOOST_CHECK( static_cast<bool>(j1 <= j) );
+    BOOST_CHECK( static_cast<bool>(j <= j2) );
+    BOOST_CHECK( static_cast<bool>(2 <= j2) );
+    BOOST_CHECK( static_cast<bool>(j <= 2) );
+    BOOST_CHECK( static_cast<bool>(j2 >  j1) );
+    BOOST_CHECK( static_cast<bool>(2 >  j1) );
+    BOOST_CHECK( static_cast<bool>(j2 >  1) );
+    BOOST_CHECK( static_cast<bool>(j2 >= j1) );
+    BOOST_CHECK( static_cast<bool>(2 >= j1) );
+    BOOST_CHECK( static_cast<bool>(j2 >= 1) );
+    BOOST_CHECK( static_cast<bool>(j2 >= j) );
+    BOOST_CHECK( static_cast<bool>(2 >= j) );
+    BOOST_CHECK( static_cast<bool>(j2 >= 2) );
 
-    BOOST_CHECK( (j1 + 2) == 3 );
-    BOOST_CHECK( (1 + j2) == 3 );
+    BOOST_CHECK( static_cast<bool>((j1 + 2) == 3) );
+    BOOST_CHECK( static_cast<bool>((1 + j2) == 3) );
     PRIVATE_EXPR_TEST( (j = j1 + j2), (j.value() == 3) );
     
-    BOOST_CHECK( (j + 2) == 5 );
-    BOOST_CHECK( (3 + j2) == 5 );
+    BOOST_CHECK( static_cast<bool>((j + 2) == 5) );
+    BOOST_CHECK( static_cast<bool>((3 + j2) == 5) );
     PRIVATE_EXPR_TEST( (j = j + j2), (j.value() == 5) );
     
-    BOOST_CHECK( (j - 1) == 4 );
+    BOOST_CHECK( static_cast<bool>((j - 1) == 4) );
     PRIVATE_EXPR_TEST( (j = j - j1), (j.value() == 4) );
     
-    BOOST_CHECK( (j * 2) == 8 );
-    BOOST_CHECK( (4 * j2) == 8 );
+    BOOST_CHECK( static_cast<bool>((j * 2) == 8) );
+    BOOST_CHECK( static_cast<bool>((4 * j2) == 8) );
     PRIVATE_EXPR_TEST( (j = j * j2), (j.value() == 8) );
     
-    BOOST_CHECK( (j / 2) == 4 );
+    BOOST_CHECK( static_cast<bool>((j / 2) == 4) );
     PRIVATE_EXPR_TEST( (j = j / j2), (j.value() == 4) );
     
-    BOOST_CHECK( (j % 3) == 1 );
+    BOOST_CHECK( static_cast<bool>((j % 3) == 1) );
     PRIVATE_EXPR_TEST( (j = j % ( j - j1 )), (j.value() == 1) );
     
     PRIVATE_EXPR_TEST( (j = j2 + j2), (j.value() == 4) );
     
-    BOOST_CHECK( (1 | j2 | j) == 7 );
-    BOOST_CHECK( (j1 | 2 | j) == 7 );
-    BOOST_CHECK( (j1 | j2 | 4) == 7 );
+    BOOST_CHECK( static_cast<bool>((1 | j2 | j) == 7) );
+    BOOST_CHECK( static_cast<bool>((j1 | 2 | j) == 7) );
+    BOOST_CHECK( static_cast<bool>((j1 | j2 | 4) == 7) );
     PRIVATE_EXPR_TEST( (j = j1 | j2 | j), (j.value() == 7) );
     
-    BOOST_CHECK( (7 & j2) == 2 );
-    BOOST_CHECK( (j & 2) == 2 );
+    BOOST_CHECK( static_cast<bool>((7 & j2) == 2) );
+    BOOST_CHECK( static_cast<bool>((j & 2) == 2) );
     PRIVATE_EXPR_TEST( (j = j & j2), (j.value() == 2) );
     
     PRIVATE_EXPR_TEST( (j = j | j1), (j.value() == 3) );
     
-    BOOST_CHECK( (3 ^ j1) == 2 );
-    BOOST_CHECK( (j ^ 1) == 2 );
+    BOOST_CHECK( static_cast<bool>((3 ^ j1) == 2) );
+    BOOST_CHECK( static_cast<bool>((j ^ 1) == 2) );
     PRIVATE_EXPR_TEST( (j = j ^ j1), (j.value() == 2) );
     
     PRIVATE_EXPR_TEST( (j = ( j + j1 ) * ( j2 | j1 )), (j.value() == 9) );
 
-    BOOST_CHECK( (j1 << 2) == 4 );
-    BOOST_CHECK( (j2 << 1) == 4 );
+    BOOST_CHECK( static_cast<bool>((j1 << 2) == 4) );
+    BOOST_CHECK( static_cast<bool>((j2 << 1) == 4) );
     PRIVATE_EXPR_TEST( (j = j1 << j2), (j.value() == 4) );
 
-    BOOST_CHECK( (j >> 2) == 1 );
-    BOOST_CHECK( (j2 >> 1) == 1 );
+    BOOST_CHECK( static_cast<bool>((j >> 2) == 1) );
+    BOOST_CHECK( static_cast<bool>((j2 >> 1) == 1) );
     PRIVATE_EXPR_TEST( (j = j2 >> j1), (j.value() == 1) );
     
     cout << "Performed tests on MyLong objects.\n";
@@ -741,14 +785,14 @@ test_main( int , char * [] )
 
     PRIVATE_EXPR_TEST( (k = k2), (k.value() == 2) );
 
-    BOOST_CHECK( k2 == k );
-    BOOST_CHECK( k1 != k2 );
-    BOOST_CHECK( k1 <  k2 );
-    BOOST_CHECK( k1 <= k2 );
-    BOOST_CHECK( k <= k2 );
-    BOOST_CHECK( k2 >  k1 );
-    BOOST_CHECK( k2 >= k1 );
-    BOOST_CHECK( k2 >= k );
+    BOOST_CHECK( static_cast<bool>(k2 == k) );
+    BOOST_CHECK( static_cast<bool>(k1 != k2) );
+    BOOST_CHECK( static_cast<bool>(k1 <  k2) );
+    BOOST_CHECK( static_cast<bool>(k1 <= k2) );
+    BOOST_CHECK( static_cast<bool>(k <= k2) );
+    BOOST_CHECK( static_cast<bool>(k2 >  k1) );
+    BOOST_CHECK( static_cast<bool>(k2 >= k1) );
+    BOOST_CHECK( static_cast<bool>(k2 >= k) );
     
     cout << "Performed tests on MyChar objects.\n";
 
@@ -764,31 +808,31 @@ test_main( int , char * [] )
 
     PRIVATE_EXPR_TEST( (l = l2), (l.value() == 2) );
     
-    BOOST_CHECK( l2 == l );
-    BOOST_CHECK( 2 == l );
-    BOOST_CHECK( l2 == 2 );    
-    BOOST_CHECK( l == l2 );
-    BOOST_CHECK( l1 != l2 );
-    BOOST_CHECK( l1 != 2 );
-    BOOST_CHECK( 1 != l2 );
-    BOOST_CHECK( l1 <  l2 );
-    BOOST_CHECK( 1 <  l2 );
-    BOOST_CHECK( l1 <  2 );
-    BOOST_CHECK( l1 <= l2 );
-    BOOST_CHECK( 1 <= l2 );
-    BOOST_CHECK( l1 <= l );
-    BOOST_CHECK( l <= l2 );
-    BOOST_CHECK( 2 <= l2 );
-    BOOST_CHECK( l <= 2 );
-    BOOST_CHECK( l2 >  l1 );
-    BOOST_CHECK( 2 >  l1 );
-    BOOST_CHECK( l2 >  1 );
-    BOOST_CHECK( l2 >= l1 );
-    BOOST_CHECK( 2 >= l1 );
-    BOOST_CHECK( l2 >= 1 );
-    BOOST_CHECK( l2 >= l );
-    BOOST_CHECK( 2 >= l );
-    BOOST_CHECK( l2 >= 2 );
+    BOOST_CHECK( static_cast<bool>(l2 == l) );
+    BOOST_CHECK( static_cast<bool>(2 == l) );
+    BOOST_CHECK( static_cast<bool>(l2 == 2) );
+    BOOST_CHECK( static_cast<bool>(l == l2) );
+    BOOST_CHECK( static_cast<bool>(l1 != l2) );
+    BOOST_CHECK( static_cast<bool>(l1 != 2) );
+    BOOST_CHECK( static_cast<bool>(1 != l2) );
+    BOOST_CHECK( static_cast<bool>(l1 <  l2) );
+    BOOST_CHECK( static_cast<bool>(1 <  l2) );
+    BOOST_CHECK( static_cast<bool>(l1 <  2) );
+    BOOST_CHECK( static_cast<bool>(l1 <= l2) );
+    BOOST_CHECK( static_cast<bool>(1 <= l2) );
+    BOOST_CHECK( static_cast<bool>(l1 <= l) );
+    BOOST_CHECK( static_cast<bool>(l <= l2) );
+    BOOST_CHECK( static_cast<bool>(2 <= l2) );
+    BOOST_CHECK( static_cast<bool>(l <= 2) );
+    BOOST_CHECK( static_cast<bool>(l2 >  l1) );
+    BOOST_CHECK( static_cast<bool>(2 >  l1) );
+    BOOST_CHECK( static_cast<bool>(l2 >  1) );
+    BOOST_CHECK( static_cast<bool>(l2 >= l1) );
+    BOOST_CHECK( static_cast<bool>(2 >= l1) );
+    BOOST_CHECK( static_cast<bool>(l2 >= 1) );
+    BOOST_CHECK( static_cast<bool>(l2 >= l) );
+    BOOST_CHECK( static_cast<bool>(2 >= l) );
+    BOOST_CHECK( static_cast<bool>(l2 >= 2) );
     
     cout << "Performed tests on MyShort objects.\n";
     
@@ -807,37 +851,37 @@ test_main( int , char * [] )
 
     PRIVATE_EXPR_TEST( (di = di2), (di.value() == 2) );
     
-    BOOST_CHECK( di2 == di );
-    BOOST_CHECK( 2 == di );
-    BOOST_CHECK( di == 2 );
-    BOOST_CHECK( di1 < di2 );
-    BOOST_CHECK( 1 < di2 );
-    BOOST_CHECK( di1 <= di2 );
-    BOOST_CHECK( 1 <= di2 );
-    BOOST_CHECK( di2 > di1 );
-    BOOST_CHECK( di2 > 1 );
-    BOOST_CHECK( di2 >= di1 );
-    BOOST_CHECK( di2 >= 1 );
-    BOOST_CHECK( di1 / di2 == half );
-    BOOST_CHECK( di1 / 2 == half );
-    BOOST_CHECK( 1 / di2 == half );
-    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp/=2) == half) );
-    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp/=di2) == half) );
-    BOOST_CHECK( di1 * di2 == di2 );
-    BOOST_CHECK( di1 * 2 == di2 );
-    BOOST_CHECK( 1 * di2 == di2 );
-    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp*=2) == di2) );
-    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp*=di2) == di2) );
-    BOOST_CHECK( di2 - di1 == di1 );
-    BOOST_CHECK( di2 - 1 == di1 );
-    BOOST_CHECK( 2 - di1 == di1 );
-    PRIVATE_EXPR_TEST( (tmp=di2), ((tmp-=1) == di1) );
-    PRIVATE_EXPR_TEST( (tmp=di2), ((tmp-=di1) == di1) );
-    BOOST_CHECK( di1 + di1 == di2 );
-    BOOST_CHECK( di1 + 1 == di2 );
-    BOOST_CHECK( 1 + di1 == di2 );
-    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp+=1) == di2) );
-    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp+=di1) == di2) );
+    BOOST_CHECK( static_cast<bool>(di2 == di) );
+    BOOST_CHECK( static_cast<bool>(2 == di) );
+    BOOST_CHECK( static_cast<bool>(di == 2) );
+    BOOST_CHECK( static_cast<bool>(di1 < di2) );
+    BOOST_CHECK( static_cast<bool>(1 < di2) );
+    BOOST_CHECK( static_cast<bool>(di1 <= di2) );
+    BOOST_CHECK( static_cast<bool>(1 <= di2) );
+    BOOST_CHECK( static_cast<bool>(di2 > di1) );
+    BOOST_CHECK( static_cast<bool>(di2 > 1) );
+    BOOST_CHECK( static_cast<bool>(di2 >= di1) );
+    BOOST_CHECK( static_cast<bool>(di2 >= 1) );
+    BOOST_CHECK( static_cast<bool>(di1 / di2 == half) );
+    BOOST_CHECK( static_cast<bool>(di1 / 2 == half) );
+    BOOST_CHECK( static_cast<bool>(1 / di2 == half) );
+    PRIVATE_EXPR_TEST( (tmp=di1), static_cast<bool>((tmp/=2) == half) );
+    PRIVATE_EXPR_TEST( (tmp=di1), static_cast<bool>((tmp/=di2) == half) );
+    BOOST_CHECK( static_cast<bool>(di1 * di2 == di2) );
+    BOOST_CHECK( static_cast<bool>(di1 * 2 == di2) );
+    BOOST_CHECK( static_cast<bool>(1 * di2 == di2) );
+    PRIVATE_EXPR_TEST( (tmp=di1), static_cast<bool>((tmp*=2) == di2) );
+    PRIVATE_EXPR_TEST( (tmp=di1), static_cast<bool>((tmp*=di2) == di2) );
+    BOOST_CHECK( static_cast<bool>(di2 - di1 == di1) );
+    BOOST_CHECK( static_cast<bool>(di2 - 1 == di1) );
+    BOOST_CHECK( static_cast<bool>(2 - di1 == di1) );
+    PRIVATE_EXPR_TEST( (tmp=di2), static_cast<bool>((tmp-=1) == di1) );
+    PRIVATE_EXPR_TEST( (tmp=di2), static_cast<bool>((tmp-=di1) == di1) );
+    BOOST_CHECK( static_cast<bool>(di1 + di1 == di2) );
+    BOOST_CHECK( static_cast<bool>(di1 + 1 == di2) );
+    BOOST_CHECK( static_cast<bool>(1 + di1 == di2) );
+    PRIVATE_EXPR_TEST( (tmp=di1), static_cast<bool>((tmp+=1) == di2) );
+    PRIVATE_EXPR_TEST( (tmp=di1), static_cast<bool>((tmp+=di1) == di2) );
 
     cout << "Performed tests on MyDoubleInt objects.\n";
 
@@ -854,42 +898,42 @@ test_main( int , char * [] )
 
     PRIVATE_EXPR_TEST( (li = li2), (li.value() == 2) );
     
-    BOOST_CHECK( li2 == li );
-    BOOST_CHECK( 2 == li );
-    BOOST_CHECK( li == 2 );
-    BOOST_CHECK( li1 < li2 );
-    BOOST_CHECK( 1 < li2 );
-    BOOST_CHECK( li1 <= li2 );
-    BOOST_CHECK( 1 <= li2 );
-    BOOST_CHECK( li2 > li1 );
-    BOOST_CHECK( li2 > 1 );
-    BOOST_CHECK( li2 >= li1 );
-    BOOST_CHECK( li2 >= 1 );
-    BOOST_CHECK( li1 % li2 == li1 );
-    BOOST_CHECK( li1 % 2 == li1 );
-    BOOST_CHECK( 1 % li2 == li1 );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2%=2) == li1) );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2%=li2) == li1) );
-    BOOST_CHECK( li1 / li2 == 0 );
-    BOOST_CHECK( li1 / 2 == 0 );
-    BOOST_CHECK( 1 / li2 == 0 );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2/=2) == 0) );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2/=li2) == 0) );
-    BOOST_CHECK( li1 * li2 == li2 );
-    BOOST_CHECK( li1 * 2 == li2 );
-    BOOST_CHECK( 1 * li2 == li2 );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2*=2) == li2) );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2*=li2) == li2) );
-    BOOST_CHECK( li2 - li1 == li1 );
-    BOOST_CHECK( li2 - 1 == li1 );
-    BOOST_CHECK( 2 - li1 == li1 );
-    PRIVATE_EXPR_TEST( (tmp2=li2), ((tmp2-=1) == li1) );
-    PRIVATE_EXPR_TEST( (tmp2=li2), ((tmp2-=li1) == li1) );
-    BOOST_CHECK( li1 + li1 == li2 );
-    BOOST_CHECK( li1 + 1 == li2 );
-    BOOST_CHECK( 1 + li1 == li2 );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2+=1) == li2) );
-    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2+=li1) == li2) );
+    BOOST_CHECK( static_cast<bool>(li2 == li) );
+    BOOST_CHECK( static_cast<bool>(2 == li) );
+    BOOST_CHECK( static_cast<bool>(li == 2) );
+    BOOST_CHECK( static_cast<bool>(li1 < li2) );
+    BOOST_CHECK( static_cast<bool>(1 < li2) );
+    BOOST_CHECK( static_cast<bool>(li1 <= li2) );
+    BOOST_CHECK( static_cast<bool>(1 <= li2) );
+    BOOST_CHECK( static_cast<bool>(li2 > li1) );
+    BOOST_CHECK( static_cast<bool>(li2 > 1) );
+    BOOST_CHECK( static_cast<bool>(li2 >= li1) );
+    BOOST_CHECK( static_cast<bool>(li2 >= 1) );
+    BOOST_CHECK( static_cast<bool>(li1 % li2 == li1) );
+    BOOST_CHECK( static_cast<bool>(li1 % 2 == li1) );
+    BOOST_CHECK( static_cast<bool>(1 % li2 == li1) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2%=2) == li1) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2%=li2) == li1) );
+    BOOST_CHECK( static_cast<bool>(li1 / li2 == 0) );
+    BOOST_CHECK( static_cast<bool>(li1 / 2 == 0) );
+    BOOST_CHECK( static_cast<bool>(1 / li2 == 0) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2/=2) == 0) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2/=li2) == 0) );
+    BOOST_CHECK( static_cast<bool>(li1 * li2 == li2) );
+    BOOST_CHECK( static_cast<bool>(li1 * 2 == li2) );
+    BOOST_CHECK( static_cast<bool>(1 * li2 == li2) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2*=2) == li2) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2*=li2) == li2) );
+    BOOST_CHECK( static_cast<bool>(li2 - li1 == li1) );
+    BOOST_CHECK( static_cast<bool>(li2 - 1 == li1) );
+    BOOST_CHECK( static_cast<bool>(2 - li1 == li1) );
+    PRIVATE_EXPR_TEST( (tmp2=li2), static_cast<bool>((tmp2-=1) == li1) );
+    PRIVATE_EXPR_TEST( (tmp2=li2), static_cast<bool>((tmp2-=li1) == li1) );
+    BOOST_CHECK( static_cast<bool>(li1 + li1 == li2) );
+    BOOST_CHECK( static_cast<bool>(li1 + 1 == li2) );
+    BOOST_CHECK( static_cast<bool>(1 + li1 == li2) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2+=1) == li2) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), static_cast<bool>((tmp2+=li1) == li2) );
 
     cout << "Performed tests on MyLongInt objects.\n";
 
