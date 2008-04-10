@@ -182,7 +182,7 @@ struct is_mpi_datatype
 template<typename T> MPI_Datatype get_mpi_datatype(const T& x)
 {
   BOOST_MPL_ASSERT((is_mpi_datatype<T>));
-  return detail::mpi_datatype_cache.datatype(x);
+  return detail::mpi_datatype_cache().datatype(x);
 }
 
 // Don't parse this part when we're generating Doxygen documentation.
