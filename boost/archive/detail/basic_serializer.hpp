@@ -41,10 +41,12 @@ public:
     const boost::serialization::extended_type_info & get_eti() const {
         return m_eti;
     }
-    bool operator<(const basic_serializer & rhs) const {
-        return & m_eti < & rhs.get_eti();
-    }
 };
+
+inline bool 
+operator<(const basic_serializer & lhs, const basic_serializer & rhs)  {
+  return & lhs.get_eti() < & rhs.get_eti();
+}
 
 class basic_serializer_arg : public basic_serializer {
 public:

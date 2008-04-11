@@ -15,6 +15,7 @@
 
 #include <boost/archive/detail/archive_pointer_oserializer.hpp>
 #include <boost/archive/detail/basic_serializer_map.hpp>
+#include <boost/serialization/singleton.hpp>
 
 namespace boost { 
 namespace archive {
