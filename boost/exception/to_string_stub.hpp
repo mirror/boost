@@ -16,53 +16,6 @@ boost
     namespace
     exception_detail
         {
-        template <bool ShiftLeftAvailable>
-        struct shift_left_dispatcher;
-
-        template <>
-        struct
-        shift_left_dispatcher<true>
-            {
-            template <class T,class CharT,class Traits,class Stub>
-            static
-            void
-            convert( std::basic_ostream<CharT,Traits> & out, T const & x, Stub )
-                {
-                out << x;
-                }
-            };
-
-        template <>
-        struct
-        shift_left_dispatcher<false>
-            {
-            template <class T,class CharT,class Traits,class Stub>
-            static
-            void
-            convert( std::basic_ostream<CharT,Traits> & out, T const & x, Stub s )
-                {
-                out << s(x);
-                }
-            };
-
-        namespace
-        shift_left_dispatch
-            {
-            template <class T,class CharT,class Traits>
-            char operator<<( std::basic_ostream<CharT,Traits> &, T );
-
-            template <class T,class CharT,class Traits,class Stub>
-            void
-            dispatch( std::basic_ostream<CharT,Traits> & out, T const & x, Stub s )
-                {
-                shift_left_dispatcher<1!=sizeof(out<<x)>::convert(out,x,s);
-                }
-            }
-        }
-
-    namespace
-    exception_detail
-        {
         template <bool ToStringAvailable>
         struct
         to_string_dispatcher
@@ -82,26 +35,21 @@ boost
             {
             template <class T,class Stub>
             static
-            std::string
+			std::string
             convert( T const & x, Stub s )
                 {
-                std::ostringstream out;
-                shift_left_dispatch::dispatch(out,x,s);
-                return out.str();
+                return s(x);
                 }
             };
 
         namespace
         to_string_dispatch
             {
-            template <class T>
-            char to_string( T );
-
             template <class T,class Stub>
             std::string
             dispatch( T const & x, Stub s )
                 {
-                return to_string_dispatcher<1!=sizeof(to_string(x))>::convert(x,s);
+				return to_string_dispatcher<has_to_string<T>::value>::convert(x,s);
                 }
             }
 

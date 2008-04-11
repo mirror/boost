@@ -7,9 +7,15 @@
 
 import testing ;
 
+#to_string
+run is_output_streamable_test.cpp ;
+run to_string_test.cpp ;
+run to_string_stub_test.cpp ;
+compile-fail to_string_fail.cpp ;
+
+#exception
 run cloning_test.cpp ;
 run unknown_exception_test.cpp ;
-run to_string_test.cpp ;
 run exception_test.cpp ;
 run boost_error_info_test.cpp ;
 run enable_error_info_test.cpp helper1.cpp ;
