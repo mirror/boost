@@ -12,7 +12,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
 <td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
@@ -28,7 +28,7 @@
       Syntax</a>
 </h3></div></div></div>
 <a name="boost_regex.syntax.perl_syntax.synopsis"></a><h4>
-<a name="id497765"></a>
+<a name="id497764"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.synopsis">Synopsis</a>
       </h4>
 <p>
@@ -45,7 +45,7 @@
 </span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span> <span class="identifier">e2</span><span class="special">(</span><span class="identifier">my_expression</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">perl</span><span class="special">|</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">::</span><span class="identifier">icase</span><span class="special">);</span>
 </pre>
 <a name="boost_regex.syntax.perl_syntax.perl_regular_expression_syntax"></a><h4>
-<a name="id497986"></a>
+<a name="id497985"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.perl_regular_expression_syntax">Perl
         Regular Expression Syntax</a>
       </h4>
@@ -55,7 +55,7 @@
       </p>
 <pre class="programlisting">.[{()\*+?|^$</pre>
 <a name="boost_regex.syntax.perl_syntax.wildcard"></a><h5>
-<a name="id498024"></a>
+<a name="id498023"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.wildcard">Wildcard</a>
       </h5>
 <p>
@@ -65,7 +65,7 @@
 <div class="itemizedlist"><ul type="disc">
 <li>
           The NULL character when the <a href="../ref/match_flag_type.html" title="match_flag_type">flag
-          <code class="computeroutput"><span class="identifier">match_no_dot_null</span></code></a>
+          <code class="computeroutput"><span class="identifier">match_not_dot_null</span></code></a>
           is passed to the matching algorithms.
         </li>
 <li>
@@ -75,7 +75,7 @@
         </li>
 </ul></div>
 <a name="boost_regex.syntax.perl_syntax.anchors"></a><h5>
-<a name="id498105"></a>
+<a name="id498104"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.anchors">Anchors</a>
       </h5>
 <p>
@@ -85,7 +85,7 @@
         A '$' character shall match the end of a line.
       </p>
 <a name="boost_regex.syntax.perl_syntax.marked_sub_expressions"></a><h5>
-<a name="id498139"></a>
+<a name="id498138"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.marked_sub_expressions">Marked
         sub-expressions</a>
       </h5>
@@ -97,7 +97,7 @@
         to by a back-reference.
       </p>
 <a name="boost_regex.syntax.perl_syntax.non_marking_grouping"></a><h5>
-<a name="id498194"></a>
+<a name="id498193"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_marking_grouping">Non-marking
         grouping</a>
       </h5>
@@ -111,7 +111,7 @@
         out any separate sub-expressions.
       </p>
 <a name="boost_regex.syntax.perl_syntax.repeats"></a><h5>
-<a name="id498283"></a>
+<a name="id498282"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.repeats">Repeats</a>
       </h5>
 <p>
@@ -197,7 +197,7 @@
         operator to be applied to.
       </p>
 <a name="boost_regex.syntax.perl_syntax.non_greedy_repeats"></a><h5>
-<a name="id498756"></a>
+<a name="id498755"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.non_greedy_repeats">Non greedy
         repeats</a>
       </h5>
@@ -228,7 +228,7 @@
         input as possible.
       </p>
 <a name="boost_regex.syntax.perl_syntax.back_references"></a><h5>
-<a name="id498897"></a>
+<a name="id498900"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.back_references">Back references</a>
       </h5>
 <p>
@@ -248,7 +248,7 @@
 <pre class="programlisting"><span class="identifier">aaabba</span>
 </pre>
 <a name="boost_regex.syntax.perl_syntax.alternation"></a><h5>
-<a name="id498980"></a>
+<a name="id498983"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.alternation">Alternation</a>
       </h5>
 <p>
@@ -277,7 +277,7 @@
         <code class="computeroutput"><span class="special">(?:</span><span class="identifier">abc</span><span class="special">)??</span></code> has exactly the same effect.
       </p>
 <a name="boost_regex.syntax.perl_syntax.character_sets"></a><h5>
-<a name="id499168"></a>
+<a name="id499172"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_sets">Character sets</a>
       </h5>
 <p>
@@ -290,7 +290,7 @@
         A bracket expression may contain any combination of the following:
       </p>
 <a name="boost_regex.syntax.perl_syntax.single_characters"></a><h6>
-<a name="id499227"></a>
+<a name="id499230"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.single_characters">Single characters</a>
       </h6>
 <p>
@@ -298,7 +298,7 @@
         or 'c'.
       </p>
 <a name="boost_regex.syntax.perl_syntax.character_ranges"></a><h6>
-<a name="id499277"></a>
+<a name="id499281"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_ranges">Character
         ranges</a>
       </h6>
@@ -311,7 +311,7 @@
         regular expression, then ranges are locale sensitive.
       </p>
 <a name="boost_regex.syntax.perl_syntax.negation"></a><h6>
-<a name="id499358"></a>
+<a name="id499361"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.negation">Negation</a>
       </h6>
 <p>
@@ -320,7 +320,7 @@
         range <code class="computeroutput"><span class="identifier">a</span><span class="special">-</span><span class="identifier">c</span></code>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.character_classes"></a><h6>
-<a name="id499440"></a>
+<a name="id499444"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.character_classes">Character
         classes</a>
       </h6>
@@ -330,7 +330,7 @@
         <a href="character_classes.html" title="Character Class Names">character class names</a>.
       </p>
 <a name="boost_regex.syntax.perl_syntax.collating_elements"></a><h6>
-<a name="id499523"></a>
+<a name="id499527"></a>
         <a href="perl_syntax.html#boost_regex.syntax.perl_syntax.collating_elements">Collating
         Elements</a>
       </h6>

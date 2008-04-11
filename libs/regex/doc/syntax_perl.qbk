@@ -34,7 +34,7 @@ The single character '.' when used outside of a character set will match
 any single character except:
 
 * The NULL character when the [link boost_regex.ref.match_flag_type flag 
-   `match_no_dot_null`] is passed to the matching algorithms.
+   `match_not_dot_null`] is passed to the matching algorithms.
 * The newline character when the [link boost_regex.ref.match_flag_type 
    flag `match_not_dot_newline`] is passed to 
    the matching algorithms.
