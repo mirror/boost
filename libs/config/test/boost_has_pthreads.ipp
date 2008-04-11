@@ -14,17 +14,36 @@
 
 namespace boost_has_pthreads{
 
+void* thread_proc(void* arg)
+{
+   return arg;
+}
+
 int test()
 {
    pthread_mutex_t mut;
    int result = pthread_mutex_init(&mut, 0);
    if(0 == result)
    {
-      pthread_mutex_lock(&mut);
-      pthread_mutex_unlock(&mut);
-      pthread_mutex_destroy(&mut);
+      result |= pthread_mutex_lock(&mut);
+      result |= pthread_mutex_unlock(&mut);
+      result |= pthread_mutex_trylock(&mut);
+      result |= pthread_mutex_unlock(&mut);
+      result |= pthread_mutex_destroy(&mut);
+      //
+      // Check that we can actually create a thread:
+      //
+      pthread_t t;
+      int r = pthread_create(&t, 0, &thread_proc, 0);
+      result |= r;
+      if(r == 0)
+      {
+         void* arg;
+         r = pthread_join(t, &arg);
+         result |= r;
+      }
    }
-   return 0;
+   return result;
 }
 
 }
