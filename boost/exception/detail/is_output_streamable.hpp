@@ -12,7 +12,7 @@ namespace
 boost
     {
 	namespace
-	exception_detail
+	to_string_detail
 		{
 		template <bool>
 		struct
@@ -43,7 +43,7 @@ boost
     struct
 	is_output_streamable
 		{
-		enum e { value=exception_detail::is_output_streamable_impl<T,CharT,Traits>::value };
+		enum e { value=to_string_detail::is_output_streamable_impl<T,CharT,Traits>::value };
 		};
     }
 

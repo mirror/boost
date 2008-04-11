@@ -14,55 +14,44 @@ namespace
 boost
     {
 	namespace
-	exception_detail
+	to_string_detail
 		{
-		template <bool>
-		struct
-		has_to_string_dispatch
+        template <class T>
+        typename disable_if<is_output_streamable<T>,char>::type to_string( T const & );
+
+		template <class,bool IsOutputStreamable>
+        struct has_to_string_impl;
+
+		template <class T>
+        struct
+		has_to_string_impl<T,true>
 			{
 			enum e { value=1 };
 			};
 
-		template <>
-		struct
-		has_to_string_dispatch<false>
-			{
-			enum e { value=0 };
-			};
-
-		template <class T>
-		std::string
-		to_string( T const & x, typename enable_if< is_output_streamable<T> >::type * = 0 )
-			{
-			std::ostringstream out;
-			out << x;
-			return out.str();
-			}
-
-        template <class T>
-        char to_string( T const &, typename disable_if< is_output_streamable<T> >::type * = 0 );
-
 		template <class T>
         struct
-		has_to_string_impl
+		has_to_string_impl<T,false>
 			{
-			enum e { value=has_to_string_dispatch<1!=sizeof(to_string(*(T*)0))>::value };
+			enum e { value=1!=sizeof(to_string(*(T*)0)) };
 			};
+		}
+
+	template <class T>
+	typename enable_if<is_output_streamable<T>,std::string>::type
+	to_string( T const & x )
+		{
+		std::ostringstream out;
+		out << x;
+		return out.str();
 		}
 
 	template <class T>
     struct
 	has_to_string
 		{
-		enum e { value=exception_detail::has_to_string_impl<T>::value };
+		enum e { value=to_string_detail::has_to_string_impl<T,is_output_streamable<T>::value>::value };
 		};
-
-	template <class T>
-    std::string
-	to_string( T const & x, typename enable_if< is_output_streamable<T> >::type * = 0 )
-        {
-		return exception_detail::to_string(x);
-        }
     }
 
 #endif

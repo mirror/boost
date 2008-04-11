@@ -49,8 +49,9 @@ int
 main()
     {
 	using namespace boost;
-	BOOST_TEST( "c2"==to_string(n2::c2()) );
-	BOOST_TEST( "c3"==to_string(n3::c3()) );
-	BOOST_TEST( "42"==to_string(42) );
+	BOOST_TEST( !has_to_string<n1::c1>::value );
+	BOOST_TEST( has_to_string<n2::c2>::value );
+	BOOST_TEST( has_to_string<n3::c3>::value );
+	BOOST_TEST( has_to_string<int>::value );
     return boost::report_errors();
     }
