@@ -34,8 +34,8 @@ n2
 int
 main()
     {
-	BOOST_TEST( !boost::is_output_streamable<n1::c1>::value );
-	BOOST_TEST( boost::is_output_streamable<n2::c2>::value );
-	BOOST_TEST( boost::is_output_streamable<int>::value );
+    BOOST_TEST( !boost::is_output_streamable<n1::c1>::value );
+    BOOST_TEST( boost::is_output_streamable<n2::c2>::value );
+    BOOST_TEST( boost::is_output_streamable<int>::value );
     return boost::report_errors();
     }

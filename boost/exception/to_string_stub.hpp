@@ -35,7 +35,7 @@ boost
             {
             template <class T,class Stub>
             static
-			std::string
+            std::string
             convert( T const & x, Stub s )
                 {
                 return s(x);
@@ -49,7 +49,7 @@ boost
             std::string
             dispatch( T const & x, Stub s )
                 {
-				return to_string_dispatcher<has_to_string<T>::value>::convert(x,s);
+                return to_string_dispatcher<has_to_string<T>::value>::convert(x,s);
                 }
             }
 

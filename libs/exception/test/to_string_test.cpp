@@ -23,7 +23,7 @@ n2
         {
         };
 
-	std::string
+    std::string
     to_string( c2 const & )
         {
         return "c2";
@@ -38,8 +38,8 @@ n3
         {
         };
 
-	std::ostream &
-	operator<<( std::ostream & s, c3 const & )
+    std::ostream &
+    operator<<( std::ostream & s, c3 const & )
         {
         return s << "c3";
         }           
@@ -48,9 +48,9 @@ n3
 int
 main()
     {
-	using namespace boost;
-	BOOST_TEST( "c2"==to_string(n2::c2()) );
-	BOOST_TEST( "c3"==to_string(n3::c3()) );
-	BOOST_TEST( "42"==to_string(42) );
+    using namespace boost;
+    BOOST_TEST( "c2"==to_string(n2::c2()) );
+    BOOST_TEST( "c3"==to_string(n3::c3()) );
+    BOOST_TEST( "42"==to_string(42) );
     return boost::report_errors();
     }

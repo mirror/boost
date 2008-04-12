@@ -17,7 +17,7 @@ n1
 int
 tester()
     {
-	using namespace boost;
-	(void) to_string(n1::c1());
-	return 1;
+    using namespace boost;
+    (void) to_string(n1::c1());
+    return 1;
     }
