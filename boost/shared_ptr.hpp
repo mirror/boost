@@ -50,7 +50,6 @@ namespace boost
 
 template<class T> class shared_ptr;
 template<class T> class weak_ptr;
-template<class T> class enable_shared_from_this;
 
 namespace detail
 {
@@ -89,48 +88,6 @@ template<> struct shared_ptr_traits<void const volatile>
 
 #endif
 
-// enable_shared_from_this support
-
-struct ignore_enable_shared_from_this_tag {};
-
-template<class T, class Y> void sp_enable_shared_from_this( boost::shared_ptr<Y> * ptr, boost::enable_shared_from_this<T> const * pe )
-{
-    if(pe != 0)
-    {
-        pe->_internal_accept_owner(*ptr);
-    }
-}
-
-#ifdef _MANAGED
-
-// Avoid C4793, ... causes native code generation
-
-struct sp_any_pointer
-{
-    template<class T> sp_any_pointer( T* ) {}
-};
-
-inline void sp_enable_shared_from_this( sp_any_pointer, sp_any_pointer )
-{
-}
-
-#else // _MANAGED
-
-#ifdef sgi
-// Turn off: the last argument of the varargs function "sp_enable_shared_from_this" is unnamed
-# pragma set woff 3506
-#endif
-
-inline void sp_enable_shared_from_this( ... )
-{
-}
-
-#ifdef sgi
-# pragma reset woff 3506
-#endif
-
-#endif // _MANAGED
-
 #if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION ) && !defined( BOOST_NO_AUTO_PTR )
 
 // rvalue auto_ptr support based on a technique by Dave Abrahams
@@ -148,6 +105,32 @@ template< class T, class R > struct sp_enable_if_auto_ptr< std::auto_ptr< T >, R
 
 } // namespace detail
 
+// sp_accept_owner
+
+#ifdef _MANAGED
+
+// Avoid C4793, ... causes native code generation
+
+struct sp_any_pointer
+{
+    template<class T> sp_any_pointer( T* ) {}
+};
+
+inline void sp_accept_owner( sp_any_pointer, sp_any_pointer )
+{
+}
+
+inline void sp_accept_owner( sp_any_pointer, sp_any_pointer, sp_any_pointer )
+{
+}
+
+#else // _MANAGED
+
+inline void sp_accept_owner( ... )
+{
+}
+
+#endif // _MANAGED
 
 //
 //  shared_ptr
@@ -178,7 +161,7 @@ public:
     template<class Y>
     explicit shared_ptr( Y * p ): px( p ), pn( p ) // Y must be complete
     {
-        boost::detail::sp_enable_shared_from_this( this, p );
+        sp_accept_owner( this, p );
     }
 
     //
@@ -187,16 +170,18 @@ public:
     // shared_ptr will release p by calling d(p)
     //
 
-    template<class Y, class D> shared_ptr(Y * p, D d): px(p), pn(p, d)
+    template<class Y, class D> shared_ptr( Y * p, D d ): px( p ), pn( p, d )
     {
-        boost::detail::sp_enable_shared_from_this( this, p );
+        D * pd = static_cast<D *>( pn.get_deleter( BOOST_SP_TYPEID(D) ) );
+        sp_accept_owner( this, p, pd );
     }
 
     // As above, but with allocator. A's copy constructor shall not throw.
 
     template<class Y, class D, class A> shared_ptr( Y * p, D d, A a ): px( p ), pn( p, d, a )
     {
-        boost::detail::sp_enable_shared_from_this( this, p );
+        D * pd = static_cast<D *>( pn.get_deleter( BOOST_SP_TYPEID(D) ) );
+        sp_accept_owner( this, p, pd );
     }
 
 //  generated copy constructor, assignment, destructor are fine...
@@ -268,12 +253,6 @@ public:
         }
     }
 
-// constructor that doesn't trigger enable_shared_from_this code, needed
-// for enable_shared_from_this internal implementation
-    template<class Y, class D> shared_ptr(Y * p, D d, detail::ignore_enable_shared_from_this_tag):
-      px(p), pn(p, d)
-    {}
-
 #ifndef BOOST_NO_AUTO_PTR
 
     template<class Y>
@@ -281,7 +260,8 @@ public:
     {
         Y * tmp = r.get();
         pn = boost::detail::shared_count(r);
-        boost::detail::sp_enable_shared_from_this( this, tmp );
+
+        sp_accept_owner( this, tmp );
     }
 
 #if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
@@ -291,7 +271,8 @@ public:
     {
         typename Ap::element_type * tmp = r.get();
         pn = boost::detail::shared_count( r );
-        boost::detail::sp_enable_shared_from_this( this, tmp );
+
+        sp_accept_owner( this, tmp );
     }
 
 

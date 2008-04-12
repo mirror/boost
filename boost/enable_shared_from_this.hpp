@@ -27,10 +27,10 @@ template<class T> class enable_shared_from_this
 // to use lazy initialization
     void init_internal_shared_once() const
     {
-        if(owned() == false && _internal_shared_this == 0)
+        if( !owned() && _internal_shared_this.get() == 0 )
         {
-            _internal_shared_this = shared_ptr<T>(dynamic_cast<T *>(const_cast<enable_shared_from_this*>(this)),
-                detail::sp_deleter_wrapper(), detail::ignore_enable_shared_from_this_tag());
+            T * p = dynamic_cast<T *>(const_cast<enable_shared_from_this*>(this));
+            _internal_shared_this = shared_ptr<T>( p, detail::sp_deleter_wrapper() );
             BOOST_ASSERT(_internal_shared_this.get() == this);
             _internal_weak_this = _internal_shared_this;
         }
@@ -108,6 +108,26 @@ public:
         }
     }
 };
+
+template< class T, class Y > inline void sp_accept_owner( boost::shared_ptr<Y> * ptr, boost::enable_shared_from_this<T> const * pe )
+{
+    if( pe != 0 )
+    {
+        pe->_internal_accept_owner( *ptr );
+    }
+}
+
+template< class T, class Y > inline void sp_accept_owner( boost::shared_ptr<Y> * ptr, boost::enable_shared_from_this<T> const * pe, void * /*pd*/ )
+{
+    if( pe != 0 )
+    {
+        pe->_internal_accept_owner( *ptr );
+    }
+}
+
+template< class T, class Y > inline void sp_accept_owner( boost::shared_ptr<Y> * /*ptr*/, boost::enable_shared_from_this<T> const * /*pe*/, boost::detail::sp_deleter_wrapper * /*pd*/ )
+{
+}
 
 } // namespace boost
 

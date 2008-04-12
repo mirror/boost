@@ -72,7 +72,7 @@ int X::instances = 0;
 template<typename T, typename U>
 bool are_shared_owners(const boost::shared_ptr<T> &a, const boost::shared_ptr<U> &b)
 {
-    return a && !(a < b) && !(b < a);
+    return !(a < b) && !(b < a);
 }
 
 struct Y: public boost::enable_shared_from_this<Y>
