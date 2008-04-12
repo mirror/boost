@@ -213,7 +213,8 @@ class type_with_alignment_imp
 }
 
 template <std::size_t Align>
-class type_with_alignment : public detail::type_with_alignment_imp<Align>
+class type_with_alignment 
+  : public ::boost::detail::type_with_alignment_imp<Align>
 {
 };
 
