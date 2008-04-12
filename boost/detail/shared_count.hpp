@@ -46,6 +46,8 @@ int const   weak_count_id = 0x298C38A4;
 
 #endif
 
+struct sp_nothrow_tag {};
+
 class weak_count;
 
 class shared_count
@@ -216,6 +218,7 @@ public:
     }
 
     explicit shared_count(weak_count const & r); // throws bad_weak_ptr when r.use_count() == 0
+    shared_count( weak_count const & r, sp_nothrow_tag ); // constructs an empty *this when r.use_count() == 0
 
     shared_count & operator= (shared_count const & r) // nothrow
     {
@@ -246,6 +249,11 @@ public:
     bool unique() const // nothrow
     {
         return use_count() == 1;
+    }
+
+    bool empty() const // nothrow
+    {
+        return pi_ == 0;
     }
 
     friend inline bool operator==(shared_count const & a, shared_count const & b)
@@ -361,6 +369,17 @@ inline shared_count::shared_count( weak_count const & r ): pi_( r.pi_ )
     if( pi_ == 0 || !pi_->add_ref_lock() )
     {
         boost::throw_exception( boost::bad_weak_ptr() );
+    }
+}
+
+inline shared_count::shared_count( weak_count const & r, sp_nothrow_tag ): pi_( r.pi_ )
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
+{
+    if( pi_ != 0 && !pi_->add_ref_lock() )
+    {
+        pi_ = 0;
     }
 }
 

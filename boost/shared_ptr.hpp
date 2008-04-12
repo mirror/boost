@@ -221,6 +221,15 @@ public:
     }
 
     template<class Y>
+    shared_ptr( weak_ptr<Y> const & r, boost::detail::sp_nothrow_tag ): px( 0 ), pn( r.pn, boost::detail::sp_nothrow_tag() ) // never throws
+    {
+        if( !pn.empty() )
+        {
+            px = r.px;
+        }
+    }
+
+    template<class Y>
     shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
     {
     }
