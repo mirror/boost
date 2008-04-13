@@ -151,6 +151,6 @@ test-suite statechart
     [ statechart-st-compile-example Handcrafted : Handcrafted : Handcrafted ]
     [ statechart-st-compile-example Keyboard : Keyboard : Keyboard : ]
     [ statechart-st-compile-example Performance : Performance : Performance ]
-    [ statechart-st-compile-example PingPong : PingPong : PingPong ]
+    [ statechart-st-compile-example PingPong : PingPong : PingPong Player ]
     [ statechart-st-compile-example StopWatch : StopWatch : StopWatch ]
     [ statechart-st-compile-example StopWatch2 : StopWatch : StopWatch2 ] ;

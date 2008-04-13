@@ -59,11 +59,11 @@ stage run
     [ statechart-st-example-build KeyboardNative
         : Keyboard : Keyboard : $(native) ]
     [ statechart-st-example-build PingPongSingle
-        : PingPong : PingPong : $(custom) ]
+        : PingPong : PingPong Player : $(custom) ]
     [ statechart-mt-example-build PingPongMulti1
-        : PingPong : PingPong : $(custom) ]
+        : PingPong : PingPong Player : $(custom) ]
     [ statechart-mt-example-build PingPongMulti2
-        : PingPong : PingPong : $(custom) <define>USE_TWO_THREADS ]
+        : PingPong : PingPong Player : $(custom) <define>USE_TWO_THREADS ]
     [ statechart-st-example-build StopWatch : StopWatch : StopWatch ]
     [ statechart-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
     [ statechart-st-example-build PerformanceNormal
