@@ -100,13 +100,12 @@ public:
         typename defined_macros_type::iterator &it, 
         defined_macros_type *scope = 0) const;
         
-    // expects a token sequence as its parameters
+// expects a token sequence as its parameters
     template <typename IteratorT>
     bool is_defined(IteratorT const &begin, IteratorT const &end) const;
     
-    // expects an arbitrary string as its parameter
-    template<typename StringT>
-    bool is_defined(StringT const &str) const;
+// expects an arbitrary string as its parameter
+    bool is_defined(string_type const &str) const;
 
 //  Get the macro definition for the given macro scope
     bool get_macro(string_type const &name, bool &has_parameters, 
@@ -116,7 +115,8 @@ public:
         defined_macros_type *scope = 0) const;
         
 //  Remove a macro name from the given macro scope
-    bool remove_macro(token_type const &token, bool even_predefined = false);
+    bool remove_macro(string_type const &name, position_type const& pos, 
+        bool even_predefined = false);
     
     template <typename IteratorT, typename ContainerT>
     token_type const &expand_tokensequence(IteratorT &first, 
@@ -309,9 +309,10 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
 
     if (it != current_scope->end()) {
     // redefinition, should not be different
-        if ((*it).second->is_functionlike != has_parameters ||
-            !impl::parameters_equal((*it).second->macroparameters, parameters) ||
-            !impl::definition_equals((*it).second->macrodefinition, definition))
+        macro_definition_type* macrodef = (*it).second.get();
+        if (macrodef->is_functionlike != has_parameters ||
+            !impl::parameters_equal(macrodef->macroparameters, parameters) ||
+            !impl::definition_equals(macrodef->macrodefinition, definition))
         {
             BOOST_WAVE_THROW_NAME_CTX(ctx, macro_handling_exception, 
                 macro_redefinition, name.get_value().c_str(), main_pos, 
@@ -440,13 +441,11 @@ typename defined_macros_type::iterator cit;
 ///////////////////////////////////////////////////////////////////////////////
 //  same as above, only takes an arbitrary string type as its parameter
 template <typename ContextT>
-template<typename StringT>
 inline bool 
-macromap<ContextT>::is_defined(StringT const &str) const
+macromap<ContextT>::is_defined(string_type const &str) const
 {
-    string_type name(str.c_str());
     typename defined_macros_type::iterator cit;
-    return is_defined(name, cit, 0); 
+    return is_defined(str, cit, 0); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -483,10 +482,9 @@ macro_definition_type &macro_def = *(*it).second.get();
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT>
 inline bool 
-macromap<ContextT>::remove_macro(token_type const &token, 
-    bool even_predefined)
+macromap<ContextT>::remove_macro(string_type const &name, 
+    position_type const& pos, bool even_predefined)
 {
-    string_type name (token.get_value());
     typename defined_macros_type::iterator it = current_macros->find(name);
     
     if (it != current_macros->end()) {
@@ -500,16 +498,18 @@ macromap<ContextT>::remove_macro(token_type const &token,
         current_macros->erase(it);
         
     // call the context supplied preprocessing hook function
+    token_type tok(T_IDENTIFIER, name, pos);
+
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
-        ctx.get_hooks().undefined_macro(token);
+        ctx.get_hooks().undefined_macro(tok);
 #else
-        ctx.get_hooks().undefined_macro(ctx.derived(), token);
+        ctx.get_hooks().undefined_macro(ctx.derived(), tok);
 #endif
         return true;
     }
     else if (impl::is_special_macroname(name)) {
         BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, bad_undefine_statement, 
-            name.c_str(), main_pos);
+            name.c_str(), pos);
     }
     return false;       // macro was not defined
 }
@@ -1451,7 +1451,7 @@ macromap<ContextT>::resolve_defined(IteratorT &first,
 
 ContainerT result;
 IteratorT start = first;
-boost::spirit::parse_info<IteratorT> hit = 
+boost::spirit::classic::parse_info<IteratorT> hit = 
     defined_grammar_gen<typename ContextT::lexer_type>::
         parse_operator_defined(start, last, result);
     

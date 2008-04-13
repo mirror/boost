@@ -18,8 +18,8 @@
 #include <string>
 #include <vector>
 
-#include <boost/spirit/tree/ast.hpp>
-#include <boost/spirit/tree/tree_to_xml.hpp>
+#include <boost/spirit/include/classic_ast.hpp>
+#include <boost/spirit/include/classic_tree_to_xml.hpp>
 #include <boost/program_options.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -244,20 +244,20 @@ boost::wave::util::file_position_type current_position;
     translation_unit_skipper s; 
 
 #if HANNIBAL_DUMP_PARSE_TREE != 0
-    typedef boost::spirit::tree_parse_info<context_type::iterator_type> 
+    typedef boost::spirit::classic::tree_parse_info<context_type::iterator_type> 
         result_type;
     translation_unit_grammar::rule_map_type rule_map;
     translation_unit_grammar g(&rule_map);
 
     // parse the input file
-    result_type pi = boost::spirit::ast_parse(first, last, g, s);
+    result_type pi = boost::spirit::classic::ast_parse(first, last, g, s);
 #else
-    typedef boost::spirit::parse_info<context_type::iterator_type> 
+    typedef boost::spirit::classic::parse_info<context_type::iterator_type> 
         result_type;
     translation_unit_grammar g;
 
     // parse the input file
-    result_type pi = boost::spirit::parse(first, last, g, s);
+    result_type pi = boost::spirit::classic::parse(first, last, g, s);
 #endif
 
         if (pi.full) {
@@ -266,7 +266,7 @@ boost::wave::util::file_position_type current_position;
 
 #if HANNIBAL_DUMP_PARSE_TREE != 0
             // generate xml dump from parse tree, if requested
-            boost::spirit::tree_to_xml(std::cerr, pi.trees, "", rule_map, 
+            boost::spirit::classic::tree_to_xml(std::cerr, pi.trees, "", rule_map, 
                 &get_token_id, &get_token_value);
 #endif
         }

@@ -13,28 +13,21 @@
 
 #include <boost/wave/wave_config.hpp>
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/attribute/closure.hpp>
-#if SPIRIT_VERSION >= 0x1700
-#include <boost/spirit/actor/assign_actor.hpp>
-#include <boost/spirit/actor/push_back_actor.hpp>
-#endif // SPIRIT_VERSION >= 0x1700
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_closure.hpp>
+#include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_push_back_actor.hpp>
 
-#include <boost/spirit/phoenix/operators.hpp>
-#include <boost/spirit/phoenix/primitives.hpp>
-#include <boost/spirit/phoenix/statements.hpp>
+#include <boost/spirit/include/phoenix1_operators.hpp>
+#include <boost/spirit/include/phoenix1_primitives.hpp>
+#include <boost/spirit/include/phoenix1_statements.hpp>
 
 #include <boost/wave/cpp_exceptions.hpp>
 #include <boost/wave/grammars/cpp_literal_grammar_gen.hpp>
 
 #if !defined(spirit_append_actor)
-#if SPIRIT_VERSION >= 0x1700
-#define spirit_append_actor(actor) boost::spirit::push_back_a(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign_a(actor)
-#else
-#define spirit_append_actor(actor) boost::spirit::append(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign(actor)
-#endif // SPIRIT_VERSION >= 0x1700
+#define spirit_append_actor(actor) boost::spirit::classic::push_back_a(actor)
+#define spirit_assign_actor(actor) boost::spirit::classic::assign_a(actor)
 #endif // !defined(spirit_append_actor)
 
 // this must occur after all of the includes and before any code appears
@@ -55,7 +48,7 @@ namespace grammars {
 namespace closures {
 
     struct intlit_closure 
-    :   boost::spirit::closure<intlit_closure, uint_literal_type> 
+    :   boost::spirit::classic::closure<intlit_closure, uint_literal_type> 
     {
         member1 val;
     };
@@ -68,7 +61,7 @@ namespace closures {
     /**/
 
 struct intlit_grammar :
-    boost::spirit::grammar<intlit_grammar, closures::intlit_closure::context_t>
+    boost::spirit::classic::grammar<intlit_grammar, closures::intlit_closure::context_t>
 {
     intlit_grammar(bool &is_unsigned_) : is_unsigned(is_unsigned_)
     {
@@ -79,17 +72,17 @@ struct intlit_grammar :
     template <typename ScannerT>
     struct definition
     {
-        typedef boost::spirit::rule<ScannerT> rule_t;
+        typedef boost::spirit::classic::rule<ScannerT> rule_t;
 
         rule_t int_lit;
-        boost::spirit::subrule<0> sub_int_lit;
-        boost::spirit::subrule<1> oct_lit;
-        boost::spirit::subrule<2> hex_lit;
-        boost::spirit::subrule<3> dec_lit;
+        boost::spirit::classic::subrule<0> sub_int_lit;
+        boost::spirit::classic::subrule<1> oct_lit;
+        boost::spirit::classic::subrule<2> hex_lit;
+        boost::spirit::classic::subrule<3> dec_lit;
 
         definition(intlit_grammar const &self)
         {
-            using namespace boost::spirit;
+            using namespace boost::spirit::classic;
             using phoenix::var;
             using phoenix::arg1;
  
@@ -166,7 +159,7 @@ uint_literal_type
 intlit_grammar_gen<TokenT>::evaluate(TokenT const &token, 
     bool &is_unsigned)
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     
 intlit_grammar g(is_unsigned);
 uint_literal_type result = 0;

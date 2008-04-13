@@ -21,6 +21,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/pool/pool_alloc.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #if BOOST_WAVE_SERIALIZATION != 0
@@ -71,6 +72,10 @@ namespace wave {
 //                      defaults to the
 //                          context_policies::default_preprocessing_hooks
 //                      type.
+//      DerivedT        The type of the type being derived from the context
+//                      type (if any). This template parameter is optional and
+//                      defaults to 'this_type', which means that the context 
+//                      type will be used assuming no derived type exists.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -98,6 +103,7 @@ public:
     
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
+    typedef typename token_type::string_type        string_type;
     
     typedef IteratorT                               target_iterator_type;
     typedef LexIteratorT                            lexer_type;
@@ -106,11 +112,10 @@ public:
     typedef InputPolicyT                            input_policy_type;
     typedef typename token_type::position_type      position_type;
 
-    
 // type of a token sequence
     typedef std::list<token_type, boost::fast_pool_allocator<token_type> > 
         token_sequence_type;
-// types of the policies
+// type of the policies
     typedef HooksT                                  hook_policy_type;
     
 private:
@@ -190,41 +195,54 @@ public:
 
 // maintain defined macros
 #if BOOST_WAVE_ENABLE_COMMANDLINE_MACROS != 0
-    bool add_macro_definition(std::string macrostring, 
-            bool is_predefined = false)
-        { return boost::wave::util::add_macro_definition(*this, macrostring, 
-            is_predefined, get_language()); }
+    template <typename StringT>
+    bool add_macro_definition(StringT macrostring, bool is_predefined = false)
+    { 
+        return boost::wave::util::add_macro_definition(*this, 
+            util::to_string<std::string>(macrostring), is_predefined, 
+            get_language()); 
+    }
 #endif 
-    bool add_macro_definition(token_type const &name, bool has_params,
-            std::vector<token_type> &parameters, token_sequence_type &definition,
-            bool is_predefined = false)
-        { return macros.add_macro(name, has_params, parameters, definition, 
-            is_predefined); }
+// Define and undefine macros, macro introspection
+    template <typename StringT>
+    bool add_macro_definition(StringT const &name, position_type const& pos, 
+        bool has_params, std::vector<token_type> &parameters, 
+        token_sequence_type &definition, bool is_predefined = false)
+    { 
+        return macros.add_macro(
+            token_type(T_IDENTIFIER, util::to_string<string_type>(name), pos), 
+            has_params, parameters, definition, is_predefined); 
+    }
     template <typename StringT>
     bool is_defined_macro(StringT const &str) const
-        { return macros.is_defined(str); }
-    bool get_macro_definition(typename token_type::string_type const &name, 
+    { 
+        return macros.is_defined(util::to_string<string_type>(str)); 
+    }
+    template <typename StringT>
+    bool get_macro_definition(StringT const &name, 
             bool &has_params, bool &is_predefined, position_type &pos,
             std::vector<token_type> &parameters, 
             token_sequence_type &definition) const
         { 
-            return macros.get_macro(name, has_params, is_predefined, pos,
-                parameters, definition); 
+        return macros.get_macro(util::to_string<string_type>(name), 
+            has_params, is_predefined, pos, parameters, definition); 
         }
-    bool remove_macro_definition(typename token_type::string_type const &name, 
+    template <typename StringT>
+    bool remove_macro_definition(StringT const &name, 
             bool even_predefined = false)
         { 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
             // ensure this gets removed from the list of include guards as well
-            includes.remove_pragma_once_header(std::string(name.c_str()));
+        includes.remove_pragma_once_header(
+            util::to_string<std::string>(name));
 #endif
-            return macros.remove_macro(
-                token_type(T_IDENTIFIER, name, macros.get_main_pos()), 
-                even_predefined); 
+        return macros.remove_macro(util::to_string<string_type>(name), 
+            macros.get_main_pos(), even_predefined); 
         }
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
+// Iterate over names of defined macros
     typedef boost::wave::util::macromap<context> macromap_type;
     typedef typename macromap_type::name_iterator name_iterator;
     typedef typename macromap_type::const_name_iterator const_name_iterator;
@@ -234,16 +252,26 @@ public:
     const_name_iterator macro_names_begin() const { return macros.begin(); }
     const_name_iterator macro_names_end() const { return macros.end(); }
 
+// This version now is used internally mainly, but since it was a documented
+// API function we leave it in the public interface.
+    bool add_macro_definition(token_type const &name, bool has_params,
+        std::vector<token_type> &parameters, token_sequence_type &definition,
+        bool is_predefined = false)
+    { 
+        return macros.add_macro(name, has_params, parameters, definition, 
+            is_predefined); 
+    }
+        
 // get the Wave version information 
     static std::string get_version()  
     { 
         boost::wave::util::predefined_macros p; 
-        return p.get_fullversion().c_str(); 
+        return util::to_string<std::string>(p.get_fullversion()); 
     }
     static std::string get_version_string()  
     {   
         boost::wave::util::predefined_macros p;
-        return p.get_versionstr().c_str(); 
+        return util::to_string<std::string>(p.get_versionstr()); 
     }
 
 // access current language options
@@ -277,10 +305,8 @@ public:
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
-    friend class boost::wave::pp_iterator<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
-    friend class boost::wave::impl::pp_iterator_functor<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
+    friend class boost::wave::pp_iterator<context>;
+    friend class boost::wave::impl::pp_iterator_functor<context>;
 #endif
 
 // make sure the context has been initialized    
@@ -391,7 +417,6 @@ private:
     void save(Archive & ar, const unsigned int version) const
     {
         using namespace boost::serialization;
-        typedef typename token_type::string_type string_type;
         
         string_type cfg(BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG));
         string_type kwd(BOOST_WAVE_PRAGMA_KEYWORD);
@@ -416,7 +441,6 @@ private:
         }
         
         // check compatibility of the stored information
-        typedef typename token_type::string_type string_type;
         string_type config, pragma_keyword, string_type_str;
         
         // BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG)

@@ -34,7 +34,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// if you want to use your own token type the following line must be adjusted
 typedef boost::wave::cpplexer::lex_token<> token_type;
+
+// no need to change anything below
 typedef boost::wave::cpplexer::lex_iterator<token_type> lexer_type;
 typedef std::list<token_type, boost::fast_pool_allocator<token_type> > 
     token_sequence_type;

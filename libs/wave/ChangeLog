@@ -25,7 +25,7 @@ TODO (known issues):
 CHANGELOG
 
 Boost V1.36
-- Wave Version 1.4
+- Wave Version 2.0
 - Added an additional template parameter to the context object, allowing to 
   specify any possibly derived type. This change propagates to the preprocessing
   hooks, which now get passed the most derived context type as its first 
@@ -41,6 +41,12 @@ Boost V1.36
   triggered an error in constructs like #ifndef __FILE__. Thanks to Daniel 
   Wadehn for reporting and supplying a patch. Added corresponding regression
   test: t_2_018.cpp.
+- Fixed a bug which reported a valid macro definition as invalid if the macro
+  replacement text referred to a second or higher parameter of this macro.
+- Fixed a problem in the wave tool to allow two errors to occur while 
+  preprocessing two consecutive tokens.
+- Adjusted Spirit header includes to point to conform to the new directory 
+  structure, removed support for Spirit versions earlier than V1.7.
 
 Boost V1.35.0
 - Wave Version 1.3

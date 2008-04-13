@@ -19,7 +19,7 @@
 #endif // defined(BOOST_SPIRIT_DEBUG)
 
 #include <boost/assert.hpp>
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/language_support.hpp>
@@ -60,7 +60,7 @@ namespace lexer {
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
-//  encapsulation of the boost::spirit::slex based cpp lexer
+//  encapsulation of the boost::spirit::classic::slex based cpp lexer
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -69,14 +69,14 @@ namespace lexer {
 //  bug (at least up to CW V9.5).
 template <typename IteratorT, typename PositionT>
 class lexer_base 
-:   public boost::spirit::lexer<
+:   public boost::spirit::classic::lexer<
         boost::wave::util::position_iterator<IteratorT, PositionT> >
 {
 protected:
     typedef boost::wave::util::position_iterator<IteratorT, PositionT> 
         iterator_type;
     typedef typename std::iterator_traits<IteratorT>::value_type  char_type;
-    typedef boost::spirit::lexer<iterator_type>                   base_type;
+    typedef boost::spirit::classic::lexer<iterator_type> base_type;
 
     lexer_base();
     

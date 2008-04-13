@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
 boost::wave::util::file_position_type current_position;
 
     try {
+//[quick_start_main
+    //  The following preprocesses the given input file (given by argv[1]).
     //  Open and read in the specified input file.
     std::ifstream instream(argv[1]);
     std::string instring;
@@ -47,12 +49,14 @@ boost::wave::util::file_position_type current_position;
         instring = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
                                 std::istreambuf_iterator<char>());
             
-    //  The template boost::wave::cpplexer::lex_token<> is the token type to be 
-    //  used by the Wave library.
+    //  This token type is one of the central types used throughout the library, 
+    //  because it is a template parameter to some of the public classes and  
+    //  instances of this type are returned from the iterators.
         typedef boost::wave::cpplexer::lex_token<> token_type;
     
     //  The template boost::wave::cpplexer::lex_iterator<> is the lexer type to
-    //  be used by the Wave library.
+    //  to use as the token source for the preprocessing engine. It is 
+    //  parametrized with the token type.
         typedef boost::wave::cpplexer::lex_iterator<token_type> lex_iterator_type;
         
     //  This is the resulting context type to use. The first template parameter
@@ -70,15 +74,20 @@ boost::wave::util::file_position_type current_position;
     // scenes during iteration over the context_type::iterator_type stream.
     context_type ctx (instring.begin(), instring.end(), argv[1]);
 
-    // analyze the input file
+    //  Get the preprocessor iterators and use them to generate 
+    //  the token sequence.
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
         
+
+    //  The input stream is preprocessed for you while iterating over the range
+    //  [first, last)
         while (first != last) {
             current_position = (*first).get_position();
             std::cout << (*first).get_value();
             ++first;
         }
+//]
     }
     catch (boost::wave::cpp_exception const& e) {
     // some preprocessing error

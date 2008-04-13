@@ -124,7 +124,7 @@ namespace {
 //      $E: to the result of preprocessing the given expression
 //      $F: to the passed full filepath 
 //      $P: to the full path
-//      $B: to the full path (but using forward slahs '/' on Windows)
+//      $B: to the full path (same as $P, but using forward slash '/' on Windows)
 //      $V: to the current Boost version number
 //
 ///////////////////////////////////////////////////////////////////////////

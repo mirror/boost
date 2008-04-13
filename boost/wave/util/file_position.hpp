@@ -17,8 +17,8 @@
 #include <ostream>
 
 #include <boost/assert.hpp>
-#include <boost/spirit/version.hpp>
-#include <boost/spirit/iterator/position_iterator.hpp>
+#include <boost/spirit/include/classic_version.hpp>
+#include <boost/spirit/include/classic_position_iterator.hpp>
 #include <boost/wave/wave_config.hpp>
 #if BOOST_WAVE_SERIALIZATION != 0
 #include <boost/serialization/serialization.hpp>
@@ -144,16 +144,16 @@ typedef file_position<BOOST_WAVE_STRINGTYPE> file_position_type;
 //
 //  The position_iterator used by Wave is now based on the corresponding Spirit 
 //  type. This type is used with our own file_position though. The needed
-//  specialization of the boost::spirit::position_policy class is provided 
-//  below.
+//  specialization of the boost::spirit::classic::position_policy class is 
+//  provided below.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename IteratorT, typename PositionT>
 struct position_iterator 
-:   boost::spirit::position_iterator<IteratorT, PositionT>
+:   boost::spirit::classic::position_iterator<IteratorT, PositionT>
 {
-    typedef boost::spirit::position_iterator<IteratorT, PositionT> base_type;
+    typedef boost::spirit::classic::position_iterator<IteratorT, PositionT> base_type;
     
     position_iterator()
     {
@@ -172,13 +172,11 @@ struct position_iterator
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#if SPIRIT_VERSION >= 0x1700
-
-namespace spirit { 
+namespace spirit { namespace classic {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  The boost::spirit::position_policy has to be specialized for our 
+//  The boost::spirit::classic::position_policy has to be specialized for our 
 //  file_position class
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,9 +216,7 @@ namespace spirit {
     };
 
 ///////////////////////////////////////////////////////////////////////////////
-}   // namespace spirit 
-
-#endif // SPIRIT_VERSION >= 0x1700
+}}   // namespace spirit::classic
 
 }   // namespace boost 
 

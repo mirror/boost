@@ -36,6 +36,7 @@
 
 typedef boost::wave::cpplexer::lex_token<> token_type;
 
+// no need to change anything below
 template struct boost::wave::grammars::intlit_grammar_gen<token_type>;
 template struct boost::wave::grammars::chlit_grammar_gen<token_type>;
 

@@ -411,40 +411,6 @@ namespace impl {
         }
     };
 
-    // Skip all whitespace characters and queue the skipped characters into the
-    // given container
-    template <typename IteratorT>
-    inline boost::wave::token_id 
-    skip_whitespace(IteratorT &first, IteratorT const &last)
-    {
-        token_id id = next_token<IteratorT>::peek(first, last, false);
-        if (IS_CATEGORY(id, WhiteSpaceTokenType)) {
-            do {
-                ++first;
-                id = next_token<IteratorT>::peek(first, last, false);
-            } while (IS_CATEGORY(id, WhiteSpaceTokenType));
-        }
-        ++first;
-        return id;
-    }
-    
-    template <typename IteratorT, typename ContainerT>
-    inline boost::wave::token_id 
-    skip_whitespace(IteratorT &first, IteratorT const &last, ContainerT &queue)
-    {
-        queue.push_back (*first);       // queue up the current token
-        
-        token_id id = next_token<IteratorT>::peek(first, last, false);
-        if (IS_CATEGORY(id, WhiteSpaceTokenType)) {
-            do {
-                queue.push_back(*++first);  // queue up the next whitespace 
-                id = next_token<IteratorT>::peek(first, last, false);
-            } while (IS_CATEGORY(id, WhiteSpaceTokenType));
-        }
-        ++first;
-        return id;
-    }
-
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl
 

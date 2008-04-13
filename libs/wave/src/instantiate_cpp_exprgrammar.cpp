@@ -34,8 +34,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// if you want to use your own token type the following line must be adjusted
 typedef boost::wave::cpplexer::lex_token<> token_type;
 
+// no need to change anything below
 template struct boost::wave::grammars::expression_grammar_gen<token_type>;
 
 // the suffix header occurs after all of the code

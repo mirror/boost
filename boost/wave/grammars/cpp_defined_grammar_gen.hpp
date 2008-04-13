@@ -15,7 +15,7 @@
 
 #include <list>
 
-#include <boost/spirit/core/parser.hpp>
+#include <boost/spirit/include/classic_parser.hpp>
 #include <boost/pool/pool_alloc.hpp>
 
 #include <boost/wave/util/unput_queue_iterator.hpp>
@@ -59,11 +59,11 @@ struct BOOST_WAVE_DECL defined_grammar_gen
         iterator2_type;
         
 //  parse the operator defined and return the found qualified name
-    static boost::spirit::parse_info<iterator1_type> 
+    static boost::spirit::classic::parse_info<iterator1_type> 
     parse_operator_defined (iterator1_type const &first, 
         iterator1_type const &last, token_sequence_type &found_qualified_name);
 
-    static boost::spirit::parse_info<iterator2_type> 
+    static boost::spirit::classic::parse_info<iterator2_type> 
     parse_operator_defined (iterator2_type const &first, 
         iterator2_type const &last, token_sequence_type &found_qualified_name);
 };

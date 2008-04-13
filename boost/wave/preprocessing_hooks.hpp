@@ -263,9 +263,9 @@ struct default_preprocessing_hooks
 
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'interpret_pragma' is called, whenever a #pragma command 
+    //  The function 'interpret_pragma' is called, whenever a '#pragma command' 
     //  directive is found which isn't known to the core Wave library, where
-    //  command is the value defined as the BOOST_WAVE_PRAGMA_KEYWORD constant
+    //  'command' is the value defined as the BOOST_WAVE_PRAGMA_KEYWORD constant
     //  which defaults to "wave".
     //
     //  The parameter 'ctx' is a reference to the context object used for 

@@ -13,7 +13,7 @@
 #if !defined(BOOST_SPIRIT_PATTERN_PARSER_HPP)
 #define BOOST_SPIRIT_PATTERN_PARSER_HPP
 
-#include <boost/spirit/core/primitives/primitives.hpp>
+#include <boost/spirit/include/classic_primitives.hpp>
 #include <boost/wave/wave_config.hpp>
 
 // this must occur after all of the includes and before any code appears
@@ -32,7 +32,8 @@ namespace util {
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename CharT = char>
-    struct pattern_and : public boost::spirit::char_parser<pattern_and<CharT> >
+    struct pattern_and 
+      : public boost::spirit::classic::char_parser<pattern_and<CharT> >
     {
         pattern_and(CharT pattern_, unsigned long pattern_mask_ = 0UL)
         :   pattern(pattern_), 

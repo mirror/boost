@@ -76,7 +76,7 @@ typedef boost::archive::text_oarchive oarchive;
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Import required names
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 
 using std::string;
 using std::pair;
@@ -862,7 +862,7 @@ int error_count = 0;
             for (vector<string>::const_iterator cit = undefmacros.begin(); 
                  cit != end; ++cit)
             {
-                ctx.remove_macro_definition((*cit).c_str(), true);
+                ctx.remove_macro_definition(*cit, true);
             }
         }
 
@@ -977,8 +977,15 @@ int error_count = 0;
                 first = ctx.begin(instring.begin(), instring.end());
             }
             
+        bool need_to_advanve = false;
+        
             do {
                 try {
+                    if (need_to_advanve) {
+                        ++first;
+                        need_to_advanve = false;
+                    }
+                        
                     while (first != last) {
                     // store the last known good token position
                         current_position = (*first).get_position();
@@ -1006,7 +1013,7 @@ int error_count = 0;
                 // some preprocessing error
                     if (is_interactive || boost::wave::is_recoverable(e)) {
                         error_count += report_error_message(ctx, e);
-                        ++first;    // advance to the next token
+                        need_to_advanve = true;   // advance to the next token
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors
@@ -1018,7 +1025,7 @@ int error_count = 0;
                         boost::wave::cpplexer::is_recoverable(e)) 
                     {
                         error_count += report_error_message(e);
-                        ++first;    // advance to the next token
+                        need_to_advanve = true;   // advance to the next token
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors

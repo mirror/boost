@@ -14,7 +14,7 @@
 #include <map>
 
 #include <boost/wave/wave_config.hpp>
-#include <boost/shared_ptr.hpp> 
+#include <boost/intrusive_ptr.hpp> 
 
 #if BOOST_WAVE_SERIALIZATION != 0
 #include <boost/serialization/serialization.hpp>
@@ -41,9 +41,9 @@ namespace util {
 
 template <typename StringT, typename MacroDefT>
 struct symbol_table 
-:   public std::map<StringT, boost::shared_ptr<MacroDefT> > 
+:   public std::map<StringT, boost::intrusive_ptr<MacroDefT> > 
 {
-    typedef std::map<StringT, boost::shared_ptr<MacroDefT> > base_type;
+    typedef std::map<StringT, boost::intrusive_ptr<MacroDefT> > base_type;
     typedef typename base_type::iterator iterator_type;
     typedef typename base_type::const_iterator const_iterator_type;
     

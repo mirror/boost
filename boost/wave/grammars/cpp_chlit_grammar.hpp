@@ -19,30 +19,23 @@
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/attribute/closure.hpp>
-#include <boost/spirit/dynamic/if.hpp>
-#if SPIRIT_VERSION >= 0x1700
-#include <boost/spirit/actor/assign_actor.hpp>
-#include <boost/spirit/actor/push_back_actor.hpp>
-#endif // SPIRIT_VERSION >= 0x1700
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_closure.hpp>
+#include <boost/spirit/include/classic_if.hpp>
+#include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_push_back_actor.hpp>
 
-#include <boost/spirit/phoenix/operators.hpp>
-#include <boost/spirit/phoenix/primitives.hpp>
-#include <boost/spirit/phoenix/statements.hpp>
-#include <boost/spirit/phoenix/functions.hpp>
+#include <boost/spirit/include/phoenix1_operators.hpp>
+#include <boost/spirit/include/phoenix1_primitives.hpp>
+#include <boost/spirit/include/phoenix1_statements.hpp>
+#include <boost/spirit/include/phoenix1_functions.hpp>
 
 #include <boost/wave/cpp_exceptions.hpp>   
 #include <boost/wave/grammars/cpp_literal_grammar_gen.hpp>
 
 #if !defined(spirit_append_actor)
-#if SPIRIT_VERSION >= 0x1700
-#define spirit_append_actor(actor) boost::spirit::push_back_a(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign_a(actor)
-#else
-#define spirit_append_actor(actor) boost::spirit::append(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign(actor)
-#endif // SPIRIT_VERSION >= 0x1700
+#define spirit_append_actor(actor) boost::spirit::classic::push_back_a(actor)
+#define spirit_assign_actor(actor) boost::spirit::classic::assign_a(actor)
 #endif // !defined(spirit_append_actor)
 
 // this must occur after all of the includes and before any code appears
@@ -62,7 +55,7 @@ namespace grammars {
 namespace closures {
 
     struct chlit_closure 
-    :   boost::spirit::closure<chlit_closure, boost::uint32_t, bool> 
+    :   boost::spirit::classic::closure<chlit_closure, boost::uint32_t, bool> 
     {
         member1 value;
         member2 long_lit;
@@ -135,7 +128,7 @@ namespace impl {
     /**/
 
 struct chlit_grammar :
-    public boost::spirit::grammar<chlit_grammar, 
+    public boost::spirit::classic::grammar<chlit_grammar, 
         closures::chlit_closure::context_t>
 {
     chlit_grammar()
@@ -152,15 +145,15 @@ struct chlit_grammar :
     template <typename ScannerT>
     struct definition
     {
-        typedef 
-            boost::spirit::rule<ScannerT, closures::chlit_closure::context_t> 
+        typedef boost::spirit::classic::rule<
+                ScannerT, closures::chlit_closure::context_t> 
             rule_t;
 
         rule_t ch_lit;
 
         definition(chlit_grammar const &self)
         {
-            using namespace boost::spirit;
+            using namespace boost::spirit::classic;
             using phoenix::var;
             using phoenix::val;
             using phoenix::arg1;
@@ -312,7 +305,7 @@ BOOST_WAVE_CHLITGRAMMAR_GEN_INLINE
 unsigned int
 chlit_grammar_gen<TokenT>::evaluate(TokenT const &token, value_error &status)
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     
 chlit_grammar g;
 boost::uint32_t result = 0;

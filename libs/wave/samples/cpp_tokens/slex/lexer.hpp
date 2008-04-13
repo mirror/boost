@@ -42,10 +42,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <boost/throw_exception.hpp>
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/symbols/symbols.hpp>
-#include <boost/spirit/utility/chset.hpp>
-#include <boost/spirit/utility/escape_char.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_symbols.hpp>
+#include <boost/spirit/include/classic_chset.hpp>
+#include <boost/spirit/include/classic_escape_char.hpp>
 
 #include <set>
 #include <map>
@@ -57,10 +57,6 @@
 #include <boost/assert.hpp>
 #include <boost/limits.hpp>
 
-#if SPIRIT_VERSION < 0x1700 && defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
-#include <boost/spirit/core/impl/msvc.hpp>
-#endif
-
 #if defined(BOOST_NO_STD_ITERATOR_TRAITS)
 #define BOOST_SPIRIT_IT_NS impl
 #else
@@ -70,6 +66,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace spirit {
+namespace classic {
 
 typedef unsigned char uchar;
 typedef unsigned int node_id_t;
@@ -1887,7 +1884,7 @@ public:
 //      lexeme definitions passed to lexer::register_regex.
 //
 ///////////////////////////////////////////////////////////////////////////////
-class lexer_grammar : public boost::spirit::grammar<lexer_grammar>
+class lexer_grammar : public boost::spirit::classic::grammar<lexer_grammar>
 {
 public:
     lexer_grammar(std::stack<node*> &node_stack_)
@@ -2890,6 +2887,7 @@ lexer_control<TokenT>::ignore_current_token_set()
     return m_ignore_current_token;
 }
 
+}   // namespace classic
 }   // namespace spirit
 }   // namespace boost
 

@@ -22,7 +22,7 @@
 #include <boost/wave/cpp_exceptions.hpp>
 #include <boost/wave/language_support.hpp>
 #include <boost/wave/util/file_position.hpp>
-#include <boost/spirit/iterator/multi_pass.hpp> // make_multi_pass 
+// #include <boost/spirit/include/iterator/classic_multi_pass.hpp> // make_multi_pass 
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -60,10 +60,11 @@ namespace iteration_context_policies {
             template <typename PositionT>
             static 
             void init_iterators(IterContextT &iter_ctx, 
-                PositionT const &act_pos)
+                PositionT const &act_pos, language_support language)
             {
                 typedef typename IterContextT::iterator_type iterator_type;
                 
+                // read in the file
                 std::ifstream instream(iter_ctx.filename.c_str());
                 if (!instream.is_open()) {
                     BOOST_WAVE_THROW_CTX(iter_ctx.ctx, preprocess_exception, 
@@ -72,20 +73,13 @@ namespace iteration_context_policies {
                 }
                 instream.unsetf(std::ios::skipws);
                 
-#if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-            // this is known to be very slow for large files on some systems
-                std::copy (istream_iterator<char>(instream),
-                    istream_iterator<char>(), 
-                    std::inserter(iter_ctx.instring, iter_ctx.instring.end()));
-#else
-                iter_ctx.instring = std::string(
+                iter_ctx.instring.assign(
                     std::istreambuf_iterator<char>(instream.rdbuf()),
                     std::istreambuf_iterator<char>());
-#endif // defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
 
-                iter_ctx.first = iterator_type(iter_ctx.instring.begin(), 
-                    iter_ctx.instring.end(), PositionT(iter_ctx.filename),
-                    iter_ctx.language);
+                iter_ctx.first = iterator_type(
+                    iter_ctx.instring.begin(), iter_ctx.instring.end(), 
+                    PositionT(iter_ctx.filename), language);
                 iter_ctx.last = iterator_type();
             }
 
@@ -113,7 +107,7 @@ namespace iteration_context_policies {
             template <typename PositionT>
             static 
             void init_iterators(IterContextT &iter_ctx, 
-                PositionT const &act_pos)
+                PositionT const &act_pos, language_support language)
             {
                 typedef typename IterContextT::iterator_type iterator_type;
                 
@@ -125,12 +119,12 @@ namespace iteration_context_policies {
                 }
                 iter_ctx.instream.unsetf(std::ios::skipws);
 
-                using boost::spirit::make_multi_pass;
+                using boost::spirit::classic::make_multi_pass;
                 iter_ctx.first = iterator_type(
-                    make_multi_pass(std::istreambuf_iterator<char>(
+                    /*make_multi_pass*/(std::istreambuf_iterator<char>(
                         iter_ctx.instream.rdbuf())),
-                    make_multi_pass(std::istreambuf_iterator<char>()),
-                    PositionT(iter_ctx.filename), iter_ctx.language);
+                    /*make_multi_pass*/(std::istreambuf_iterator<char>()),
+                    PositionT(iter_ctx.filename), language);
                 iter_ctx.last = iterator_type();
             }
 
@@ -189,13 +183,11 @@ struct iteration_context
     iteration_context(ContextT& ctx, BOOST_WAVE_STRINGTYPE const &fname, 
             position_type const &act_pos, 
             boost::wave::language_support language_) 
-    :   base_iteration_context<ContextT, IteratorT>(ctx, fname), 
-        language(language_)
+    :   base_iteration_context<ContextT, IteratorT>(ctx, fname)
     {
-        InputPolicyT::template inner<self_type>::init_iterators(*this, act_pos);
+        InputPolicyT::template inner<self_type>::init_iterators(
+            *this, act_pos, language_);
     }
-    
-    boost::wave::language_support language;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

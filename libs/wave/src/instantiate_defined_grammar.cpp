@@ -33,9 +33,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef boost::wave::cpplexer::lex_iterator<
-        boost::wave::cpplexer::lex_token<> >
-    lexer_type;
+// if you want to use your own token type the following line must be adjusted
+typedef boost::wave::cpplexer::lex_token<> token_type;
+
+// no need to change anything below
+typedef boost::wave::cpplexer::lex_iterator<token_type> lexer_type;
 template struct boost::wave::grammars::defined_grammar_gen<lexer_type>;
 
 // the suffix header occurs after all of the code

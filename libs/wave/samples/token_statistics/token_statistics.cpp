@@ -28,7 +28,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  import required names
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 
 using std::string;
 using std::vector;
