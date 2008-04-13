@@ -35,7 +35,9 @@ boost
         struct
         is_output_streamable_impl
             {
-            enum e { value=is_output_streamable_dispatch<1!=sizeof((*(std::basic_ostream<CharT,Traits>*)0)<<(*(T*)0))>::value };
+            static std::basic_ostream<CharT,Traits> & f();
+            static T const & g();
+            enum e { value=is_output_streamable_dispatch<1!=sizeof(f()<<g())>::value };
             };
         }
 
