@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Apr 09 16:30:14 2008
+//  This file was automatically generated on Mon Apr 14 17:10:09 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 

@@ -84,11 +84,11 @@ if ! $(BOOST_ARCHIVE_LIST) {
         
         [ test-bsl-run-no-lib test_utf8_codecvt 
             : ../src/utf8_codecvt_facet
-            : <dependency>../../config/test//BOOST_NO_STD_WSTREAMBUF
+            : <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
         ]
         [ test-bsl-run-no-lib test_codecvt_null 
             : ../src/codecvt_null 
-            : <dependency>../../config/test//BOOST_NO_STD_WSTREAMBUF
+            : <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
         ]
 
         # should fail compilation
