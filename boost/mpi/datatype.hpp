@@ -263,24 +263,37 @@ struct is_mpi_datatype<std::pair<T,U> >
 {
 };
 
-
-#if 0
-#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+// Define wchar_t specialization of is_mpi_datatype, if possible.
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T) && \
+  (defined(MPI_WCHAR) || (defined(MPI_VERSION) && MPI_VERSION >= 2))
 BOOST_MPI_DATATYPE(wchar_t, MPI_WCHAR, builtin);
 #endif
 
-#ifdef BOOST_HAS_LONG_LONG
+// Define long long or __int64 specialization of is_mpi_datatype, if possible.
+#if defined(BOOST_HAS_LONG_LONG) && \
+  (defined(MPI_LONG_LONG_INT) || (defined(MPI_VERSION) && MPI_VERSION >= 2))
 BOOST_MPI_DATATYPE(long long, MPI_LONG_LONG_INT, builtin);
-BOOST_MPI_DATATYPE(unsigned long long, MPI_UNSIGNED_LONG_LONG, builtin);
+#elif defined(BOOST_HAS_MS_INT64) && \
+  (defined(MPI_LONG_LONG_INT) || (defined(MPI_VERSION) && MPI_VERSION >= 2))
+BOOST_MPI_DATATYPE(__int64, MPI_LONG_LONG_INT, builtin); 
 #endif
+
+// Define unsigned long long or unsigned __int64 specialization of
+// is_mpi_datatype, if possible. We separate this from the check for
+// the (signed) long long/__int64 because some MPI implementations
+// (e.g., MPICH-MX) have MPI_LONG_LONG_INT but not
+// MPI_UNSIGNED_LONG_LONG.
+#if defined(BOOST_HAS_LONG_LONG) && \
+  (defined(MPI_UNSIGNED_LONG_LONG) \
+   || (defined(MPI_VERSION) && MPI_VERSION >= 2))
+BOOST_MPI_DATATYPE(unsigned long long, MPI_UNSIGNED_LONG_LONG, builtin);
+#elif defined(BOOST_HAS_MS_INT64) && \
+  (defined(MPI_UNSIGNED_LONG_LONG) \
+   || (defined(MPI_VERSION) && MPI_VERSION >= 2))
+BOOST_MPI_DATATYPE(unsigned __int64, MPI_UNSIGNED_LONG_LONG, builtin); 
 #endif
 
 #endif // Doxygen
-
-#if defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN)
-BOOST_MPI_DATATYPE(__int64, MPI_LONG_LONG_INT, builtin); 
-BOOST_MPI_DATATYPE(unsigned __int64, MPI_UNSIGNED_LONG_LONG, builtin); 
-#endif
 
 namespace detail {
   inline MPI_Datatype build_mpi_datatype_for_bool()
