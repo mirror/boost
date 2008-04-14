@@ -136,6 +136,17 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
+
+    std::cerr<<"Construct 11\n";
+    {
+        test::random_values<T> v(1000, generator);
+        T x(al);
+        BOOST_TEST(x.empty());
+        BOOST_TEST(test::equivalent(x.hash_function(), hf));
+        BOOST_TEST(test::equivalent(x.key_eq(), eq));
+        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        test::check_equivalent_keys(x);
+    }
 }
 
 template <class T>

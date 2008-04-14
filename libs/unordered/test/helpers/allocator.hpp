@@ -70,7 +70,7 @@ namespace test
             using namespace std;
             T* ptr = static_cast<T*>(malloc(n * sizeof(char)));
             if(!ptr) throw std::bad_alloc();
-            return ptr;
+            return (char*) ptr;
         }
 #endif
     };

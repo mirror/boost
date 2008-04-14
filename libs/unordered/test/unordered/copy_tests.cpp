@@ -70,6 +70,7 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
     BOOST_DEDUCED_TYPENAME T::hasher hf(1);
     BOOST_DEDUCED_TYPENAME T::key_equal eq(1);
     BOOST_DEDUCED_TYPENAME T::allocator_type al(1);
+    BOOST_DEDUCED_TYPENAME T::allocator_type al2(2);
 
     {
         T x(10000, hf, eq, al);
@@ -83,6 +84,17 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
     }
 
     {
+        T x(1000, hf, eq, al);
+        T y(x, al2);
+        BOOST_TEST(y.empty());
+        BOOST_TEST(test::equivalent(y.hash_function(), hf));
+        BOOST_TEST(test::equivalent(y.key_eq(), eq));
+        BOOST_TEST(test::equivalent(y.get_allocator(), al2));
+        BOOST_TEST(x.max_load_factor() == y.max_load_factor());
+        test::check_equivalent_keys(y);
+    }
+
+    {
         test::random_values<T> v(1000);
 
         T x(v.begin(), v.end(), 0, hf, eq, al);
@@ -90,6 +102,18 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
         test::unordered_equivalence_tester<T> equivalent(x);
         equivalent(y);
         test::check_equivalent_keys(y);
+        BOOST_TEST(test::equivalent(y.get_allocator(), al));
+    }
+
+    {
+        test::random_values<T> v(500);
+
+        T x(v.begin(), v.end(), 0, hf, eq, al);
+        T y(x, al2);
+        test::unordered_equivalence_tester<T> equivalent(x);
+        equivalent(y);
+        test::check_equivalent_keys(y);
+        BOOST_TEST(test::equivalent(y.get_allocator(), al2));
     }
 }
 

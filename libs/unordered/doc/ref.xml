@@ -2,20 +2,9 @@
 Copyright Daniel James 2006-2008
 Distributed under the Boost Software License, Version 1.0. (See accompanying
 file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
--->
-
-  <library-reference>
-    <!--
-      Header: <boost/unordered_set.hpp>
-      -->
-    
+--><library-reference>
     <header name="boost/unordered_set.hpp">
       <namespace name="boost">
-
-        <!--
-          boost::unordered_set
-          -->
-        
         <class name="unordered_set">
           <template>
             <template-type-parameter name="Value">
@@ -30,10 +19,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::allocator&lt;Value&gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>An unordered associative container that stores unique values.
+          <purpose>
+            An unordered associative container that stores unique values.
           </purpose>
           <description>
-            <para>For the normative reference see chapter 23 of 
+            <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2461.pdf">the working draft of the C++ standard [n2461].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
@@ -48,7 +38,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Value</code>.
-                        A binary function object that induces an equivalence relation on values of type Key. 
+                        A binary function object that induces an equivalence relation on values of type Key.
                         It takes two arguments of type Key and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
@@ -189,6 +179,25 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </parameter>
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
+            </description>
+          </constructor>
+          <constructor>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an empty container, using allocator <code>a</code>.</para>
+            </description>
+          </constructor>
+          <constructor>
+            <parameter name="x">
+              <paramtype>unordered_set const&amp;</paramtype>
+            </parameter>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an container, copying <code>x</code>'s contained elements, hash function, predicate, maximum load factor, but using allocator <code>a</code>.</para>
             </description>
           </constructor>
           <destructor>
@@ -391,7 +400,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </method>
@@ -620,17 +629,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </function>
           </free-function-group>
         </class>
-
-        <!--
-          boost::unordered_multiset
-          -->
-        
         <class name="unordered_multiset">
           <template>
             <template-type-parameter name="Value">
@@ -645,10 +649,11 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <default><type>std::allocator&lt;Value&gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>An unordered associative container that stores  values. The same key can be stored multiple times. 
+          <purpose>
+            An unordered associative container that stores  values. The same key can be stored multiple times.
           </purpose>
           <description>
-            <para>For the normative reference see chapter 23 of 
+            <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2461.pdf">the working draft of the C++ standard [n2461].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
@@ -663,7 +668,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Value</code>.
-                        A binary function object that induces an equivalence relation on values of type Key. 
+                        A binary function object that induces an equivalence relation on values of type Key.
                         It takes two arguments of type Key and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
@@ -806,6 +811,25 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
           </constructor>
+          <constructor>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an empty container, using allocator <code>a</code>.</para>
+            </description>
+          </constructor>
+          <constructor>
+            <parameter name="x">
+              <paramtype>unordered_multiset const&amp;</paramtype>
+            </parameter>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an container, copying <code>x</code>'s contained elements, hash function, predicate, maximum load factor, but using allocator <code>a</code>.</para>
+            </description>
+          </constructor>
           <destructor>
           </destructor>
           <method name="operator=">
@@ -924,7 +948,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>void</type>
               <description>
-                <para>Inserts a range of elements into the container. </para>
+                <para>Inserts a range of elements into the container.</para>
               </description>
               <throws>
                 <para>When inserting a single element, if an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
@@ -1005,7 +1029,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </method>
@@ -1234,7 +1258,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </function>
@@ -1242,17 +1266,8 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         </class>
       </namespace>
     </header>
-    <!--
-      Header: <boost/unordered_map.hpp>
-      -->
-    
     <header name="boost/unordered_map.hpp">
       <namespace name="boost">
-
-        <!--
-          boost::unordered_map
-          -->
-        
         <class name="unordered_map">
           <template>
             <template-type-parameter name="Key">
@@ -1260,19 +1275,20 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <template-type-parameter name="Mapped">
             </template-type-parameter>
             <template-type-parameter name="Hash">
-              <default><type>boost::hash&lt;Value&gt;</type></default>
+              <default><type>boost::hash&lt;Key&gt;</type></default>
             </template-type-parameter>
             <template-type-parameter name="Pred">
-              <default><type>std::equal_to&lt;Value&gt;</type></default>
+              <default><type>std::equal_to&lt;Key&gt;</type></default>
             </template-type-parameter>
             <template-type-parameter name="Alloc">
-              <default><type>std::allocator&lt;std::pair&lt;const Key, Mapped&gt; &gt;</type></default>
+              <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt; &gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>An unordered associative container that associates unique keys with another value.
+          <purpose>
+            An unordered associative container that associates unique keys with another value.
           </purpose>
           <description>
-            <para>For the normative reference see chapter 23 of 
+            <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2461.pdf">the working draft of the C++ standard [n2461].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
@@ -1290,7 +1306,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Key</code>.
-                        A binary function object that induces an equivalence relation on values of type Key. 
+                        A binary function object that induces an equivalence relation on values of type Key.
                         It takes two arguments of type Key and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
@@ -1302,7 +1318,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type>Key</type>
           </typedef>
           <typedef name="value_type">
-            <type>std::pair&lt;Key const, Value&gt;</type>
+            <type>std::pair&lt;Key const, Mapped&gt;</type>
           </typedef>
           <typedef name="mapped_type">
             <type>Mapped</type>
@@ -1434,6 +1450,25 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </parameter>
             <description>
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
+            </description>
+          </constructor>
+          <constructor>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an empty container, using allocator <code>a</code>.</para>
+            </description>
+          </constructor>
+          <constructor>
+            <parameter name="x">
+              <paramtype>unordered_map const&amp;</paramtype>
+            </parameter>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an container, copying <code>x</code>'s contained elements, hash function, predicate, maximum load factor, but using allocator <code>a</code>.</para>
             </description>
           </constructor>
           <destructor>
@@ -1636,7 +1671,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </method>
@@ -1731,7 +1766,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>An exception object of type <code>std::out_of_range</code> if no such element is present.</para>
               </throws>
               <notes>
-                <para>This is not specified in the draft standard, but that is probably an oversight. The issue has been raised in 
+                <para>This is not specified in the draft standard, but that is probably an oversight. The issue has been raised in
                   <ulink url="http://groups.google.com/group/comp.std.c++/browse_thread/thread/ab7c22a868fd370b">comp.std.c++</ulink>.</para>
               </notes>
             </overloaded-method>
@@ -1902,17 +1937,12 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </function>
           </free-function-group>
         </class>
-
-        <!--
-          boost::unordered_multimap
-          -->
-        
         <class name="unordered_multimap">
           <template>
             <template-type-parameter name="Key">
@@ -1920,19 +1950,20 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <template-type-parameter name="Mapped">
             </template-type-parameter>
             <template-type-parameter name="Hash">
-              <default><type>boost::hash&lt;Value&gt;</type></default>
+              <default><type>boost::hash&lt;Key&gt;</type></default>
             </template-type-parameter>
             <template-type-parameter name="Pred">
-              <default><type>std::equal_to&lt;Value&gt;</type></default>
+              <default><type>std::equal_to&lt;Key&gt;</type></default>
             </template-type-parameter>
             <template-type-parameter name="Alloc">
-              <default><type>std::allocator&lt;std::pair&lt;const Key, Mapped&gt; &gt;</type></default>
+              <default><type>std::allocator&lt;std::pair&lt;Key const, Mapped&gt; &gt;</type></default>
             </template-type-parameter>
           </template>
-          <purpose>An unordered associative container that associates  keys with another value. The same key can be stored multiple times. 
+          <purpose>
+            An unordered associative container that associates  keys with another value. The same key can be stored multiple times.
           </purpose>
           <description>
-            <para>For the normative reference see chapter 23 of 
+            <para>For the normative reference see chapter 23 of
               <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2461.pdf">the working draft of the C++ standard [n2461].</ulink></para>
             <para><emphasis role="bold">Template Parameters</emphasis>
               <informaltable>
@@ -1950,7 +1981,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                     <row>
                       <entry><emphasis>Pred</emphasis></entry>
                       <entry>A binary function object that implements an equivalence relation on values of type <code>Key</code>.
-                        A binary function object that induces an equivalence relation on values of type Key. 
+                        A binary function object that induces an equivalence relation on values of type Key.
                         It takes two arguments of type Key and returns a value of type bool.</entry></row>
                     <row>
                       <entry><emphasis>Alloc</emphasis></entry>
@@ -1962,7 +1993,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             <type>Key</type>
           </typedef>
           <typedef name="value_type">
-            <type>std::pair&lt;Key const, Value&gt;</type>
+            <type>std::pair&lt;Key const, Mapped&gt;</type>
           </typedef>
           <typedef name="mapped_type">
             <type>Mapped</type>
@@ -2096,6 +2127,25 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
           </constructor>
+          <constructor>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an empty container, using allocator <code>a</code>.</para>
+            </description>
+          </constructor>
+          <constructor>
+            <parameter name="x">
+              <paramtype>unordered_multimap const&amp;</paramtype>
+            </parameter>
+            <parameter name="a">
+              <paramtype>Allocator const&amp;</paramtype>
+            </parameter>
+            <description>
+                <para>Constructs an container, copying <code>x</code>'s contained elements, hash function, predicate, maximum load factor, but using allocator <code>a</code>.</para>
+            </description>
+          </constructor>
           <destructor>
           </destructor>
           <method name="operator=">
@@ -2214,7 +2264,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </parameter>
               <type>void</type>
               <description>
-                <para>Inserts a range of elements into the container. </para>
+                <para>Inserts a range of elements into the container.</para>
               </description>
               <throws>
                 <para>When inserting a single element, if an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
@@ -2295,7 +2345,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>key_equal</code> or <code>hasher</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </method>
@@ -2526,7 +2576,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                 <para>If the allocators are equal, doesn't throw an exception unless it is thrown by the copy constructor or copy assignment operator of <code>Hash</code> or <code>Pred</code>.</para>
               </throws>
               <notes>
-                <para>For a discussion of the behavior when allocators aren't equal see 
+                <para>For a discussion of the behavior when allocators aren't equal see
                   <link linkend="unordered.rationale.swapping_containers_with_unequal_allocators">the implementation details</link>.</para>
               </notes>
             </function>

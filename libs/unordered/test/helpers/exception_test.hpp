@@ -163,6 +163,7 @@ namespace test {
         test_runner(Test const& t) : test_(t) {}
         void operator()() const {
             DISABLE_EXCEPTIONS;
+            test::scope = "";
             BOOST_DEDUCED_TYPENAME Test::data_type x(test_.init());
             BOOST_DEDUCED_TYPENAME Test::strong_type strong;
             strong.store(x);
@@ -223,9 +224,15 @@ namespace test {
                     success = true;
                 }
                 catch(test_failure) {
+                    BOOST_ERROR("test_failure caught.");
                     break;
                 }
+                catch(test_exception) {
+                    continue;
+                }
                 catch(...) {
+                    BOOST_ERROR("Unexpected exception.");
+                    break;
                 }
             } while(!success);
         }

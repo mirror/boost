@@ -69,6 +69,18 @@ namespace boost
         {
         }
 
+        // TODO: Should this be explicit?
+        unordered_set(allocator_type const& a)
+            : base(boost::unordered_detail::default_initial_bucket_count,
+                hasher(), key_equal(), a)
+        {
+        }
+
+        unordered_set(unordered_set const& other, allocator_type const& a)
+            : base(other.base, a)
+        {
+        }
+
         template <class InputIterator>
         unordered_set(InputIterator f, InputIterator l)
             : base(f, l, boost::unordered_detail::default_initial_bucket_count,
@@ -121,32 +133,32 @@ namespace boost
 
         iterator begin()
         {
-            return iterator(base.begin());
+            return iterator(base.data_.begin());
         }
 
         const_iterator begin() const
         {
-            return const_iterator(base.begin());
+            return const_iterator(base.data_.begin());
         }
 
         iterator end()
         {
-            return iterator(base.end());
+            return iterator(base.data_.end());
         }
 
         const_iterator end() const
         {
-            return const_iterator(base.end());
+            return const_iterator(base.data_.end());
         }
 
         const_iterator cbegin() const
         {
-            return const_iterator(base.begin());
+            return const_iterator(base.data_.begin());
         }
 
         const_iterator cend() const
         {
-            return const_iterator(base.end());
+            return const_iterator(base.data_.end());
         }
 
         // modifiers
@@ -185,7 +197,7 @@ namespace boost
 
         void clear()
         {
-            base.clear();
+            base.data_.clear();
         }
 
         void swap(unordered_set& other)
@@ -238,7 +250,7 @@ namespace boost
 
         size_type bucket_size(size_type n) const
         {
-            return base.bucket_size(n);
+            return base.data_.bucket_size(n);
         }
 
         size_type bucket(const key_type& k) const
@@ -248,32 +260,32 @@ namespace boost
 
         local_iterator begin(size_type n)
         {
-            return local_iterator(base.begin(n));
+            return local_iterator(base.data_.begin(n));
         }
 
         const_local_iterator begin(size_type n) const
         {
-            return const_local_iterator(base.begin(n));
+            return const_local_iterator(base.data_.begin(n));
         }
 
         local_iterator end(size_type n)
         {
-            return local_iterator(base.end(n));
+            return local_iterator(base.data_.end(n));
         }
 
         const_local_iterator end(size_type n) const
         {
-            return const_local_iterator(base.end(n));
+            return const_local_iterator(base.data_.end(n));
         }
 
         const_local_iterator cbegin(size_type n) const
         {
-            return const_local_iterator(base.begin(n));
+            return const_local_iterator(base.data_.begin(n));
         }
 
         const_local_iterator cend(size_type n) const
         {
-            return const_local_iterator(base.end(n));
+            return const_local_iterator(base.data_.end(n));
         }
 
         // hash policy
@@ -352,6 +364,18 @@ namespace boost
         {
         }
 
+        // TODO: Should this be explicit?
+        unordered_multiset(allocator_type const& a)
+            : base(boost::unordered_detail::default_initial_bucket_count,
+                hasher(), key_equal(), a)
+        {
+        }
+
+        unordered_multiset(unordered_multiset const& other, allocator_type const& a)
+            : base(other.base, a)
+        {
+        }
+
         template <class InputIterator>
         unordered_multiset(InputIterator f, InputIterator l)
             : base(f, l, boost::unordered_detail::default_initial_bucket_count,
@@ -404,32 +428,32 @@ namespace boost
 
         iterator begin()
         {
-            return iterator(base.begin());
+            return iterator(base.data_.begin());
         }
 
         const_iterator begin() const
         {
-            return const_iterator(base.begin());
+            return const_iterator(base.data_.begin());
         }
 
         iterator end()
         {
-            return iterator(base.end());
+            return iterator(base.data_.end());
         }
 
         const_iterator end() const
         {
-            return const_iterator(base.end());
+            return const_iterator(base.data_.end());
         }
 
         const_iterator cbegin() const
         {
-            return const_iterator(base.begin());
+            return const_iterator(base.data_.begin());
         }
 
         const_iterator cend() const
         {
-            return const_iterator(base.end());
+            return const_iterator(base.data_.end());
         }
 
         // modifiers
@@ -467,7 +491,7 @@ namespace boost
 
         void clear()
         {
-            base.clear();
+            base.data_.clear();
         }
 
         void swap(unordered_multiset& other)
@@ -520,7 +544,7 @@ namespace boost
 
         size_type bucket_size(size_type n) const
         {
-            return base.bucket_size(n);
+            return base.data_.bucket_size(n);
         }
 
         size_type bucket(const key_type& k) const
@@ -530,32 +554,32 @@ namespace boost
 
         local_iterator begin(size_type n)
         {
-            return local_iterator(base.begin(n));
+            return local_iterator(base.data_.begin(n));
         }
 
         const_local_iterator begin(size_type n) const
         {
-            return const_local_iterator(base.begin(n));
+            return const_local_iterator(base.data_.begin(n));
         }
 
         local_iterator end(size_type n)
         {
-            return local_iterator(base.end(n));
+            return local_iterator(base.data_.end(n));
         }
 
         const_local_iterator end(size_type n) const
         {
-            return const_local_iterator(base.end(n));
+            return const_local_iterator(base.data_.end(n));
         }
 
         const_local_iterator cbegin(size_type n) const
         {
-            return const_local_iterator(base.begin(n));
+            return const_local_iterator(base.data_.begin(n));
         }
 
         const_local_iterator cend(size_type n) const
         {
-            return const_local_iterator(base.end(n));
+            return const_local_iterator(base.data_.end(n));
         }
 
         // hash policy

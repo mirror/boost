@@ -44,6 +44,20 @@ struct copy_test3 : public test::exception_base
     }
 };
 
+template <class T>
+struct copy_with_allocator_test : public test::exception_base
+{
+    test::random_values<T> values;
+    T x;
+    test::exception::allocator<test::exception::object> allocator;
+
+    copy_with_allocator_test() : values(100), x(values.begin(), values.end()) {}
+
+    void run() const {
+        T y(x, allocator);
+    }
+};
+
 RUN_EXCEPTION_TESTS(
-    (copy_test1)(copy_test2)(copy_test3),
+    (copy_test1)(copy_test2)(copy_test3)(copy_with_allocator_test),
     CONTAINER_SEQ)

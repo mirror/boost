@@ -9,7 +9,7 @@ project unordered-test/unordered
     : requirements
         <toolset>intel-linux:"<cxxflags>-strict_ansi -cxxlib-icc"
         <toolset>gcc:<cxxflags>-Wsign-promo
-        <toolset>msvc:<cxxflags>/W4
+        #<toolset>msvc:<cxxflags>/W4
     ;
 
 test-suite unordered
