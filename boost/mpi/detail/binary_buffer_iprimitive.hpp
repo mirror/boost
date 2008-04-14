@@ -20,6 +20,7 @@
 #include <boost/serialization/is_bitwise_serializable.hpp>
 #include <vector>
 #include <boost/mpi/allocator.hpp>
+#include <cstring> // for memcpy
 
 namespace boost { namespace mpi {
 
