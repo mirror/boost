@@ -33,7 +33,8 @@ boost
         struct
         has_to_string_impl<T,false>
             {
-            enum e { value=1!=sizeof(to_string(*(T*)0)) };
+            static T const & f();
+            enum e { value=1!=sizeof(to_string(f())) };
             };
         }
 
