@@ -14,20 +14,6 @@ boost
     namespace
     to_string_detail
         {
-        template <bool>
-        struct
-        is_output_streamable_dispatch
-            {
-            enum e { value=1 };
-            };
-
-        template <>
-        struct
-        is_output_streamable_dispatch<false>
-            {
-            enum e { value=0 };
-            };
-
         template <class T,class CharT,class Traits>
         char operator<<( std::basic_ostream<CharT,Traits> &, T const & );
 
@@ -37,7 +23,7 @@ boost
             {
             static std::basic_ostream<CharT,Traits> & f();
             static T const & g();
-            enum e { value=is_output_streamable_dispatch<1!=sizeof(f()<<g())>::value };
+            enum e { value=1!=(sizeof(f()<<g())) };
             };
         }
 
