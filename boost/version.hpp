@@ -19,7 +19,7 @@
 //  BOOST_VERSION / 100 % 1000 is the minor version
 //  BOOST_VERSION / 100000 is the major version
 
-#define BOOST_VERSION 103500
+#define BOOST_VERSION 103501
 
 //
 //  BOOST_LIB_VERSION must be defined to be the same as BOOST_VERSION
@@ -27,7 +27,7 @@
 //  number and y is the minor version number.  This is used by
 //  <config/auto_link.hpp> to select which library version to link to.
 
-#define BOOST_LIB_VERSION "1_35"
+#define BOOST_LIB_VERSION "1_35_1"
 
 #endif
 
