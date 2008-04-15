@@ -14,7 +14,7 @@
 
 namespace boost_has_pthreads{
 
-void* thread_proc(void* arg)
+extern "C" void* thread_proc(void* arg)
 {
    return arg;
 }
