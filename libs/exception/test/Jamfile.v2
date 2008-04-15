@@ -16,6 +16,7 @@ compile-fail to_string_fail.cpp ;
 
 #exception
 run cloning_test.cpp ;
+run copy_exception_test.cpp ;
 run unknown_exception_test.cpp ;
 run exception_test.cpp ;
 run boost_error_info_test.cpp ;

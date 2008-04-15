@@ -6,10 +6,10 @@
 #ifndef UUID_FA5836A2CADA11DC8CD47C8555D89593
 #define UUID_FA5836A2CADA11DC8CD47C8555D89593
 
-#include <boost/exception/enable_exception_cloning.hpp>
+#include <boost/exception/enable_current_exception.hpp>
 #include <boost/exception/exception.hpp>
 #include <boost/exception/detail/cloning_base.hpp>
-#include <exception>
+#include <stdexcept>
 
 namespace
 boost
@@ -21,31 +21,165 @@ boost
         {
         public:
 
-        explicit
         unknown_exception()
             {
             }
 
         explicit
-        unknown_exception( boost::exception const & x ):
-            boost::exception(x)
+        unknown_exception( boost::exception const & e ):
+            boost::exception(e)
             {
             }
         };
 
     typedef intrusive_ptr<exception_detail::clone_base const> exception_ptr;
 
+    namespace
+    exception_detail
+        {
+        template <class T>
+        class
+        current_exception_std_exception_wrapper:
+            public T,
+            public boost::exception
+            {
+            public:
+
+            explicit
+            current_exception_std_exception_wrapper( T const & e1 ):
+                T(e1)
+                {
+                }
+
+            current_exception_std_exception_wrapper( T const & e1, boost::exception const & e2 ):
+                T(e1),
+                boost::exception(e2)
+                {
+                }
+            };
+
+        template <class T>
+        exception_ptr
+        current_exception_std_exception( T const & e1 )
+            {
+            if( boost::exception const * e2 = dynamic_cast<boost::exception const *>(&e1) )
+                return exception_ptr(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1,*e2)));
+            else
+                return exception_ptr(exception_detail::make_clone(current_exception_std_exception_wrapper<T>(e1)));
+            }
+
+        inline
+        exception_ptr
+        current_exception_unknown_exception()
+            {
+            return exception_ptr(exception_detail::make_clone(unknown_exception()));
+            }
+
+        inline
+        exception_ptr
+        current_exception_unknown_std_exception( std::exception const & e )
+            {
+            if( boost::exception const * be = dynamic_cast<boost::exception const *>(&e) )
+                return exception_ptr(exception_detail::make_clone(unknown_exception(*be)));
+            else
+                return current_exception_unknown_exception();
+            }
+
+        inline
+        exception_ptr
+        current_exception_unknown_boost_exception( boost::exception const & e )
+            {
+            return exception_ptr(exception_detail::make_clone(unknown_exception(e)));
+            }
+        }
+
+    inline
+    exception_ptr
+    current_exception()
+        {
+        try
+            {
+            throw;
+            }
+        catch(
+        exception_detail::cloning_base & e )
+            {
+            exception_detail::clone_base const * c = e.clone();
+            BOOST_ASSERT(c!=0);
+            return exception_ptr(c);
+            }
+        catch(
+        ... )
+            {
+            }
+        try
+            {
+            throw;
+            }
+        catch(
+        std::invalid_argument & e )
+            {
+            return exception_detail::current_exception_std_exception(e);
+            }
+        catch(
+        std::out_of_range & e )
+            {
+            return exception_detail::current_exception_std_exception(e);
+            }
+        catch(
+        std::logic_error & e )
+            {
+            return exception_detail::current_exception_std_exception(e);
+            }
+        catch(
+        std::bad_alloc & e )
+            {
+            return exception_detail::current_exception_std_exception(e);
+            }
+        catch(
+        std::bad_cast & e )
+            {
+            return exception_detail::current_exception_std_exception(e);
+            }
+        catch(
+        std::bad_typeid & e )
+            {
+            return exception_detail::current_exception_std_exception(e);
+            }
+        catch(
+        std::bad_exception & e )
+            {
+            return exception_detail::current_exception_std_exception(e);
+            }
+        catch(
+        std::exception & e )
+            {
+            return exception_detail::current_exception_unknown_std_exception(e);
+            }
+        catch(
+        boost::exception & e )
+            {
+            return exception_detail::current_exception_unknown_boost_exception(e);
+            }
+        catch(
+        ... )
+            {
+            return exception_detail::current_exception_unknown_exception();
+            }
+        }
+
     template <class T>
     exception_ptr
-    clone_exception( T const & e )
+    copy_exception( T const & e )
         {
-        if( boost::exception_detail::cloning_base const * cb = dynamic_cast<boost::exception_detail::cloning_base const *>(&e) )
-            if( exception_detail::clone_base const * c = cb->clone() )
-                return exception_ptr(c);
-        if( boost::exception const * be = dynamic_cast<boost::exception const *>(&e) )
-            return exception_ptr(exception_detail::make_clone(unknown_exception(*be)));
-        else
-            return exception_ptr(exception_detail::make_clone(unknown_exception()));
+        try
+            {
+            throw enable_current_exception(e);
+            }
+        catch( ... )
+            {
+            return current_exception();
+            }
         }
 
     inline

@@ -139,7 +139,7 @@ boost
 
     template <class T>
     exception_detail::clone_impl<T>
-    enable_exception_cloning( T const & x )
+    enable_current_exception( T const & x )
         {
         return exception_detail::clone_impl<T>(x);
         }

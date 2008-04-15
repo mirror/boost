@@ -5,7 +5,7 @@
 
 //This example shows how to enable cloning when throwing a boost::exception.
 
-#include <boost/exception/enable_exception_cloning.hpp>
+#include <boost/exception/enable_current_exception.hpp>
 #include <boost/exception/info.hpp>
 #include <stdio.h>
 #include <errno.h>
@@ -18,5 +18,6 @@ void
 file_read( FILE * f, void * buffer, size_t size )
     {
     if( size!=fread(buffer,1,size,f) )
-        throw boost::enable_exception_cloning(file_read_error()) << errno_info(errno);
+        throw boost::enable_current_exception(file_read_error()) <<
+            errno_info(errno);
     }

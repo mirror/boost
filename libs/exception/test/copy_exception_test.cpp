@@ -15,28 +15,20 @@ test_exception:
 int
 main()
     {
+    boost::exception_ptr p = boost::copy_exception(test_exception());
     try
         {
-        throw boost::enable_current_exception(test_exception());
+        rethrow_exception(p);
+        BOOST_TEST(false);
+        }
+    catch(
+    test_exception & )
+        {
         }
     catch(
     ... )
         {
-        boost::exception_ptr p = boost::current_exception();
-        try
-            {
-            rethrow_exception(p);
-            BOOST_TEST(false);
-            }
-        catch(
-        test_exception & )
-            {
-            }
-        catch(
-        ... )
-            {
-            BOOST_TEST(false);
-            }
+        BOOST_TEST(false);
         }
     return boost::report_errors();
     }

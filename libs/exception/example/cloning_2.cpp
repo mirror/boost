@@ -20,13 +20,13 @@ worker_thread( boost::exception_ptr & error )
         error = boost::exception_ptr();
         }
     catch(
-    boost::exception & e )
+    ... )
         {
-        error = boost::clone_exception(e);
+        error = boost::current_exception();
         }
     }
 
-//
+// ...continued
 
 void
 work()

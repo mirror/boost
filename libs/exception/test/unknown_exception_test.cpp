@@ -40,9 +40,9 @@ main()
         throw_boost_exception();
         }
     catch(
-    boost::exception & x )
+    ... )
         {
-        boost::exception_ptr ep=boost::clone_exception(x);
+        boost::exception_ptr ep=boost::current_exception();
         try
             {
             rethrow_exception(ep);
@@ -57,21 +57,48 @@ main()
             {
             BOOST_TEST(false);
             }
+        try
+            {
+            rethrow_exception(ep);
+            }
+        catch(
+        boost::exception & x )
+            {
+            BOOST_TEST( 42==*boost::get_error_info<test>(x) );
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
         }
     try
         {
         throw_unknown_exception();
         }
     catch(
-    std::exception & x )
+    ... )
         {
-        boost::exception_ptr ep=boost::clone_exception(x);
+        boost::exception_ptr ep=boost::current_exception();
         try
             {
             rethrow_exception(ep);
             }
         catch(
         boost::unknown_exception & )
+            {
+            }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
+        try
+            {
+            rethrow_exception(ep);
+            }
+        catch(
+        boost::exception & )
             {
             }
         catch(

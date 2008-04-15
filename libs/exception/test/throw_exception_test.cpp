@@ -35,9 +35,9 @@ tester()
         BOOST_ASSERT(false);
         }
     catch(
-    std::exception & x )
+    ... )
         {
-        boost::exception_ptr p = boost::clone_exception(x);
+        boost::exception_ptr p = boost::current_exception();
         try
             {
             rethrow_exception(p);
@@ -54,11 +54,6 @@ tester()
             {
             BOOST_TEST(false);
             }
-        }
-    catch(
-    ... )
-        {
-        BOOST_TEST(false);
         }
     }
 
