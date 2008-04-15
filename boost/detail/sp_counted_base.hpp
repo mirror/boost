@@ -51,7 +51,7 @@
 
 # include <boost/detail/sp_counted_base_gcc_ppc.hpp>
 
-#elif defined(__GNUC__) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 )
+#elif defined(__GNUC__) && ( __GNUC__ * 100 + __GNUC_MINOR__ >= 401 ) && !defined(__arm__) && !defined(__hppa)
 
 # include <boost/detail/sp_counted_base_sync.hpp>
 
