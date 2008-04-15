@@ -109,14 +109,6 @@ boost
             return exception_ptr(c);
             }
         catch(
-        ... )
-            {
-            }
-        try
-            {
-            throw;
-            }
-        catch(
         std::invalid_argument & e )
             {
             return exception_detail::current_exception_std_exception(e);

@@ -5,7 +5,7 @@
 
 #include "helper2.hpp"
 #include <boost/exception/info.hpp>
-#include <boost/exception/cloning.hpp>
+#include <boost/exception_ptr.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 typedef boost::error_info<struct tag_test_int,int> test_int;
