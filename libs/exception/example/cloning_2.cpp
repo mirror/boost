@@ -5,7 +5,7 @@
 
 //This example shows how to transport cloning-enabled boost::exceptions between threads.
 
-#include <boost/exception/cloning.hpp>
+#include <boost/exception_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
