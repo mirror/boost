@@ -38,7 +38,7 @@ worker_thread( boost::<span class="RenoLink"><a href="exception_ptr.html">except
         error = boost::<span class="RenoLink"><a href="current_exception.html">current_exception</a></span>();
         }
     }</pre>
-<p>In the above example, note that <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> captures the original type of the exception object, even though <tt>e</tt> refers to the base type <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>. This original type can be thrown again using the <tt><span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>()</tt> function:</p>
+<p>In the above example, note that <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> captures the original type of the exception object. The exception can be thrown again using the <tt><span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>()</tt> function:</p>
 <pre>// ...continued
 
 void
@@ -50,9 +50,9 @@ work()
     if( error )
         boost::<span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>(error);
     }</pre>
-<p><tt><span class="RenoLink"><a href="current_exception.html">Clone_exception</a></span>()</tt> could fail to copy the original exception object in the following cases:</p>
+<p><tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> could fail to copy the original exception object in the following cases:</p>
 <div><ul><li> if there is not enough memory, in which case the returned <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> points to an instance of <tt>std::bad_alloc</tt>, or</li>
-<li> if <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> was not used in the throw-expression passed to the original <tt>throw</tt> statement, in which case the returned <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> points to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>.</li>
+<li> if <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> was not used in the throw-expression passed to the original <tt>throw</tt> statement and the current implementation does not have the necessary compiler-specific support to copy the exception automatically, in which case the returned <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> points to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>.</li>
 </ul></div>
 <p>Regardless, the use of <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> and <tt><span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>()</tt> in the above examples is well-formed.</p>
 </div><h3>See also:</h3>
