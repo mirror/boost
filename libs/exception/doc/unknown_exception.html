@@ -17,7 +17,7 @@
 <h1>Boost Exception</h1>
 </div>
 <div class="RenoIncludeDIV"><h3>unknown_exception</h3>
-<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception/cloning.hpp</a></span>&gt;</tt></p>
+<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span>&gt;</tt></p>
 <pre>namespace
 boost
     {
@@ -29,12 +29,11 @@ boost
         ---unspecified---
         };</span>
     }</pre>
-</div><p>This type is used by the <span class="RenoLink"><a href="cloning.html">cloning</a></span> support in Boost Exception.</p>
-<p>To allow an exception to be cloned, <tt><span class="RenoLink"><a href="enable_exception_cloning.html">enable_exception_cloning</a></span>()</tt> must be used at the time the exception object is passed to <tt>throw</tt>. Otherwise, calling <tt><span class="RenoLink"><a href="clone_exception.html">clone_exception</a></span>()</tt> returns an <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> which refers to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>.</p>
+</div><p>This type is used by the <span class="RenoLink"><a href="cloning.html">cloning</a></span> support in Boost Exception. Please see <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt>.</p>
 </div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="clone_exception.html">clone_exception<br/>
-</a><a href="enable_exception_cloning.html">enable_exception_cloning<br/>
+</a><a href="current_exception.html">current_exception<br/>
+</a><a href="enable_current_exception.html">enable_current_exception<br/>
 </a></div>
 <div id="footer">
 <p>&nbsp;</p>

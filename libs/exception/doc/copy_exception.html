@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>rethrow_exception</title>
+	<title>copy_exception</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -16,19 +16,19 @@
 </div>
 <h1>Boost Exception</h1>
 </div>
-<div class="RenoIncludeDIV"><h3>rethrow_exception()</h3>
+<div class="RenoIncludeDIV"><h3>copy_exception()</h3>
 <div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span>&gt;</tt></p>
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    void <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>( <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> const &amp; ep );</span>
+<span class="RenoIncludeSPAN">    template &lt;class T&gt;
+    <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> <span class="RenoLink"><a href="copy_exception.html">copy_exception</a></span>( T const &amp; e );</span>
     }</pre>
-</div><h4>Precondition:</h4>
-<p><tt>ep</tt> shall not be null.</p>
-<h4>Throws:</h4>
-<p>The exception to which <tt>ep</tt> refers.</p>
+</div><h4>Effects:</h4>
+<p>As if <tt>try { throw e; } catch( ... ) { return <span class="RenoLink"><a href="current_exception.html">current_exception</a></span>(); }</tt></p>
 </div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="exception_ptr.html">exception_ptr<br/>
 </a></div>
 <div id="footer">
 <p>&nbsp;</p>

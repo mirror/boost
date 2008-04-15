@@ -29,12 +29,12 @@ boost
 #endif</span>
     }</pre>
 </div><h4>Effects:</h4>
-<div><ul><li> If <tt>BOOST_NO_EXCEPTIONS</tt> is not defined, <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw boost::<span class="RenoLink"><a href="enable_exception_cloning.html">enable_exception_cloning</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e))</tt>, unless <tt>BOOST_EXCEPTION_DISABLE</tt> is defined, in which case <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw e;</tt></li>
+<div><ul><li> If <tt>BOOST_NO_EXCEPTIONS</tt> is not defined, <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e))</tt>, unless <tt>BOOST_EXCEPTION_DISABLE</tt> is defined, in which case <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw e;</tt></li>
 <li> If <tt>BOOST_NO_EXCEPTIONS</tt> is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <tt>throw_exception</tt> are allowed to assume that the function never returns; therefore, if the user-defined <tt>throw_exception</tt> returns, the behavior is undefined.</li>
 </ul></div>
 </div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="enable_exception_cloning.html">enable_exception_cloning<br/>
+</a><a href="enable_current_exception.html">enable_current_exception<br/>
 </a><a href="cloning.html">Tutorial: Transporting of Exceptions between Threads<br/>
 </a></div>
 <div id="footer">

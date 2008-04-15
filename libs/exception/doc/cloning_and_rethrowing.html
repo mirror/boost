@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>Tutorial: Transporting of Exceptions between Threads</title>
+	<title>Tutorial: Cloning and Re-throwing an Exception</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -16,29 +16,7 @@
 </div>
 <h1>Boost Exception</h1>
 </div>
-<div class="RenoIncludeDIV"><h2>Transporting of Exceptions between Threads</h2>
-<p>Boost Exception supports transporting of exception objects between threads through cloning. This system is similar to <span class="RenoLink"><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2179.html">N2179</a></span>, but because Boost Exception can not rely on language support, the use of <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> at the time of the throw is required in order to use cloning.</p>
-<h4>Note:</h4>
-<p>All exceptions emitted by the familiar function <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>()</tt> are guaranteed to derive from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> and to support cloning.</p>
-<div class="RenoIncludeDIV"><h3>Using enable_current_exception() at the Time of the Throw</h3>
-<p>Here is how cloning can be enabled in a throw-expression (15.1):</p>
-<pre>#include &lt;<span class="RenoLink"><a href="exception_enable_exception_cloning_hpp.html">boost/exception/enable_current_exception.hpp</a></span>&gt;
-#include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;
-#include &lt;stdio.h&gt;
-#include &lt;errno.h&gt;
-
-typedef boost::error_info&lt;struct tag_errno,int&gt; errno_info;
-
-class file_read_error: public boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
-
-void
-file_read( FILE * f, void * buffer, size_t size )
-    {
-    if( size!=fread(buffer,1,size,f) )
-        throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(file_read_error()) &lt;&lt;
-            errno_info(errno);
-    }</pre>
-</div><div class="RenoIncludeDIV"><h3>Cloning and Re-throwing an Exception</h3>
+<div class="RenoIncludeDIV"><h3>Cloning and Re-throwing an Exception</h3>
 <p>When you catch a <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>, you can call <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> to get an <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> object:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span>&gt;
 #include &lt;boost/thread.hpp&gt;
@@ -77,9 +55,8 @@ work()
 <li> if <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> was not used in the throw-expression passed to the original <tt>throw</tt> statement, in which case the returned <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> points to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>.</li>
 </ul></div>
 <p>Regardless, the use of <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> and <tt><span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>()</tt> in the above examples is well-formed.</p>
-</div></div><h3>See also:</h3>
-<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="unknown_exception.html">unknown_exception<br/>
+</div><h3>See also:</h3>
+<div class="RenoPageList"><a href="cloning.html">Tutorial: Transporting of Exceptions between Threads<br/>
 </a></div>
 <div id="footer">
 <p>&nbsp;</p>

@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>rethrow_exception</title>
+	<title>Tutorial: Using enable_current_exception() at the Time of the Throw</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -16,19 +16,26 @@
 </div>
 <h1>Boost Exception</h1>
 </div>
-<div class="RenoIncludeDIV"><h3>rethrow_exception()</h3>
-<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span>&gt;</tt></p>
-<pre>namespace
-boost
+<div class="RenoIncludeDIV"><h3>Using enable_current_exception() at the Time of the Throw</h3>
+<p>Here is how cloning can be enabled in a throw-expression (15.1):</p>
+<pre>#include &lt;<span class="RenoLink"><a href="exception_enable_exception_cloning_hpp.html">boost/exception/enable_current_exception.hpp</a></span>&gt;
+#include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;
+#include &lt;stdio.h&gt;
+#include &lt;errno.h&gt;
+
+typedef boost::error_info&lt;struct tag_errno,int&gt; errno_info;
+
+class file_read_error: public boost::<span class="RenoLink"><a href="exception.html">exception</a></span> { };
+
+void
+file_read( FILE * f, void * buffer, size_t size )
     {
-<span class="RenoIncludeSPAN">    void <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>( <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> const &amp; ep );</span>
+    if( size!=fread(buffer,1,size,f) )
+        throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(file_read_error()) &lt;&lt;
+            errno_info(errno);
     }</pre>
-</div><h4>Precondition:</h4>
-<p><tt>ep</tt> shall not be null.</p>
-<h4>Throws:</h4>
-<p>The exception to which <tt>ep</tt> refers.</p>
 </div><h3>See also:</h3>
-<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+<div class="RenoPageList"><a href="cloning.html">Tutorial: Transporting of Exceptions between Threads<br/>
 </a></div>
 <div id="footer">
 <p>&nbsp;</p>

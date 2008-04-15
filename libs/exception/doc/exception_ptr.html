@@ -17,21 +17,23 @@
 <h1>Boost Exception</h1>
 </div>
 <div class="RenoIncludeDIV"><h3>exception_ptr</h3>
-<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception/cloning.hpp</a></span>&gt;</tt></p>
+<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span>&gt;</tt></p>
 <pre>namespace
 boost
     {
 <span class="RenoIncludeSPAN">    typedef ---unspecified--- <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span>;</span>
     }</pre>
-</div><p>The <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> type can be used to refer to a copy of a <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> object. It is Default Constructible, Copy Constructible, Assignable and Equality Comparable; <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt>'s operations do not throw.</p>
+</div><p>The <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> type can be used to refer to a copy of an exception object. It is Default Constructible, Copy Constructible, Assignable and Equality Comparable; <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt>'s operations do not throw.</p>
 <p>Two instances of <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> are equivalent and compare equal if and only if they refer to the same exception.</p>
 <p>The default constructor of <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> produces the null value of the type. The null value is equivalent only to itself.</p>
+<h4>Note:</h4>
+<p><tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> objects are returned by <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> and <tt><span class="RenoLink"><a href="copy_exception.html">copy_exception</a></span>()</tt>.</p>
 </div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="clone_exception.html">clone_exception<br/>
-</a><a href="enable_exception_cloning.html">enable_exception_cloning<br/>
+</a><a href="copy_exception.html">copy_exception<br/>
+</a><a href="current_exception.html">current_exception<br/>
+</a><a href="enable_current_exception.html">enable_current_exception<br/>
 </a><a href="rethrow_exception.html">rethrow_exception<br/>
-</a><a href="unknown_exception.html">unknown_exception<br/>
 </a></div>
 <div id="footer">
 <p>&nbsp;</p>
