@@ -25,6 +25,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/make_unsigned.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
@@ -461,36 +462,16 @@ namespace boost
 // C4146: unary minus operator applied to unsigned type, result still unsigned
 # pragma warning( disable : 4146 )
 #endif
-
-        inline unsigned int lcast_to_unsigned(int value)
+        template<class T>
+        inline
+        BOOST_DEDUCED_TYPENAME make_unsigned<T>::type lcast_to_unsigned(T value)
         {
-            unsigned int uval = value;
-            return value < 0 ? -uval : uval;
+            typedef BOOST_DEDUCED_TYPENAME make_unsigned<T>::type result_type;
+            result_type uvalue = static_cast<result_type>(value);
+            return value < 0 ? -uvalue : uvalue;
         }
-
-        inline unsigned long lcast_to_unsigned(long value)
-        {
-            unsigned long uval = value;
-            return value < 0 ? -uval : uval;
-        }
-
-#if defined(BOOST_HAS_LONG_LONG)
-        inline boost::ulong_long_type lcast_to_unsigned(boost::long_long_type v)
-        {
-            boost::ulong_long_type uval = v;
-            return v < 0 ? -uval : uval;
-        }
-#elif defined(BOOST_HAS_MS_INT64)
-        inline unsigned __int64 lcast_to_unsigned(__int64 value)
-        {
-            unsigned __int64 uval = value;
-            return value < 0 ? -uval : uval;
-        }
-#endif
-
 #if (defined _MSC_VER)
-# pragma warning( pop ) // C4146: unary minus operator applied to unsigned type,
-                        // result still unsigned
+# pragma warning( pop )
 #endif
     }
 
@@ -502,22 +483,14 @@ namespace boost
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
             BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
 #endif
-            CharT thousands_sep = 0;
 
-#ifdef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
-            char const* grouping = "";
-            std::size_t const grouping_size = 0;
-#else
+#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
             std::locale loc;
             typedef std::numpunct<CharT> numpunct;
             numpunct const& np = BOOST_USE_FACET(numpunct, loc);
             std::string const& grouping = np.grouping();
             std::string::size_type const grouping_size = grouping.size();
-
-            if(grouping_size)
-                thousands_sep = np.thousands_sep();
-#endif
-
+            CharT thousands_sep = grouping_size ? np.thousands_sep() : 0;
             std::string::size_type group = 0; // current group number
             char last_grp_size = grouping[0] <= 0 ? CHAR_MAX : grouping[0];
             // a) Since grouping is const, grouping[grouping.size()] returns 0.
@@ -526,14 +499,17 @@ namespace boost
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
             BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
 #endif
+
+            char left = last_grp_size;
+#endif
+
             typedef typename Traits::int_type int_type;
             CharT const czero = lcast_char_constants<CharT>::zero;
             int_type const zero = Traits::to_int_type(czero);
 
-            char left = last_grp_size;
-
             do
             {
+#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
                 if(left == 0)
                 {
                     ++group;
@@ -549,6 +525,8 @@ namespace boost
                 }
 
                 --left;
+#endif
+
                 --finish;
                 int_type const digit = static_cast<int_type>(n % 10U);
                 Traits::assign(*finish, Traits::to_char_type(zero + digit));
@@ -907,7 +885,7 @@ namespace boost
         inline bool lexical_stream_limited_src<CharT,Base,Traits>::operator<<(
                 unsigned short n)
         {
-            start = lcast_put_unsigned<Traits>(lcast_to_unsigned(n), finish);
+            start = lcast_put_unsigned<Traits>(n, finish);
             return true;
         }
 
