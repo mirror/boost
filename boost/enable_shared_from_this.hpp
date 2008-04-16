@@ -93,17 +93,21 @@ public:
     template<typename U>
     void _internal_accept_owner(shared_ptr<U> &owner) const
     {
-        init_internal_shared_once();
-
         if( !_owned )
         {
-            detail::sp_deleter_wrapper * pd = get_deleter<detail::sp_deleter_wrapper>(_internal_shared_this);
-            BOOST_ASSERT( pd != 0 );
-            pd->set_deleter(owner);
+            if( !_internal_shared_this )
+            {
+                T * p = dynamic_cast<T *>(const_cast<enable_shared_from_this*>(this));
+                _internal_weak_this = shared_ptr<T>(owner, p);
+            }else
+            {
+                detail::sp_deleter_wrapper * pd = get_deleter<detail::sp_deleter_wrapper>(_internal_shared_this);
+                BOOST_ASSERT( pd != 0 );
+                pd->set_deleter(owner);
 
-            owner.reset( _internal_shared_this, owner.get() );
-            _internal_shared_this.reset();
-
+                owner.reset( _internal_shared_this, owner.get() );
+                _internal_shared_this.reset();
+            }
             _owned = true;
         }
     }
