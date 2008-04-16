@@ -58,7 +58,7 @@ class lex_iterator_functor_shim
 public:
     lex_iterator_functor_shim() 
 #if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION > 900 || defined(__PGI)
-      , eof()
+      : eof()
 #endif
     {}
 
