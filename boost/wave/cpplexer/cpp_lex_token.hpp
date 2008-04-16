@@ -183,7 +183,7 @@ class lex_token
 public:
     typedef BOOST_WAVE_STRINGTYPE   string_type;
     typedef PositionT               position_type;
-    
+
 private:
     typedef impl::token_data<string_type, position_type> data_type;
     
@@ -196,7 +196,7 @@ public:
     :   data(rhs.data)
     {
         if (0 != data) 
-        data->addref();
+            data->addref();
     }
 
     lex_token(token_id id_, string_type const &value_, PositionT const &pos_)
@@ -218,7 +218,7 @@ public:
             
             data = rhs.data;
             if (0 != data) 
-            data->addref();
+                data->addref();
         }
         return *this;
     }

@@ -324,7 +324,7 @@ class lex_functor
     >
 {    
 public:
-    typedef typename lexer<IteratorT, PositionT>::token_type   token_type;
+    typedef typename lexer<IteratorT, PositionT>::token_type token_type;
     
     lex_functor(IteratorT const &first, IteratorT const &last, 
             PositionT const &pos, boost::wave::language_support language)
