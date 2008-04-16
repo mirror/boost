@@ -21,6 +21,7 @@
 #include "boost/shared_ptr.hpp"
 
 #ifdef BOOST_HAS_FTIME
+#define NOMINMAX
 #include <windows.h>
 #endif
 
