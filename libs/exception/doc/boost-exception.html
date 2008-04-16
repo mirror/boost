@@ -16,6 +16,9 @@
 </div>
 <h1>Boost Exception</h1>
 </div>
+<!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
+<!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <h2>Abstract</h2>
 <p>The purpose of Boost Exception is to ease the design of exception class hierarchies and to help write exception handling and error reporting code.</p>
 <p>It supports transporting of arbitrary data to the catch site, which is otherwise tricky due to the no-throw requirements (15.5.1) for exception classes. Data can be added to any exception object, either directly in the throw-expression (15.1), or at a later time as the exception object propagates up the call stack.</p>
@@ -333,7 +336,7 @@ my_exception:
 
 ....
 throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(my_exception());</pre>
-<p>Unless <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> is called at the time an exception object is used in a throw-expression, any attempt to copy it using <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> returns an <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> which refers to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>.</p>
+<p>Unless <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> is called at the time an exception object is used in a throw-expression, an attempt to copy it using <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> may return an <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> which refers to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>. See <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> for details.</p>
 <h4>Note:</h4>
 <p>Instead of using the <tt>throw</tt> keyword directly, it is preferable to call <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>()</tt>. This is guaranteed to throw an exception that derives from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> and supports cloning.</p>
 </div><div class="RenoIncludeDIV"><h3>current_exception()</h3>
@@ -405,7 +408,10 @@ boost
 <div><ul><li> If <tt>BOOST_NO_EXCEPTIONS</tt> is not defined, <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e))</tt>, unless <tt>BOOST_EXCEPTION_DISABLE</tt> is defined, in which case <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw e;</tt></li>
 <li> If <tt>BOOST_NO_EXCEPTIONS</tt> is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <tt>throw_exception</tt> are allowed to assume that the function never returns; therefore, if the user-defined <tt>throw_exception</tt> returns, the behavior is undefined.</li>
 </ul></div>
-</div><div id="footer">
+</div><!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
+<!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
+<div id="footer">
 <p>&nbsp;</p>
 <hr/>
 <p>

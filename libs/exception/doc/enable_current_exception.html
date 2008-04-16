@@ -16,6 +16,9 @@
 </div>
 <h1>Boost Exception</h1>
 </div>
+<!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
+<!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div class="RenoIncludeDIV"><h3>enable_current_exception()</h3>
 <div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_enable_exception_cloning_hpp.html">boost/exception/enable_current_exception.hpp</a></span>&gt;</tt></p>
 <pre>namespace
@@ -38,7 +41,7 @@ my_exception:
 
 ....
 throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(my_exception());</pre>
-<p>Unless <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> is called at the time an exception object is used in a throw-expression, any attempt to copy it using <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> returns an <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> which refers to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>.</p>
+<p>Unless <tt><span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>()</tt> is called at the time an exception object is used in a throw-expression, an attempt to copy it using <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> may return an <tt><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span></tt> which refers to an instance of <tt><span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span></tt>. See <tt><span class="RenoLink"><a href="current_exception.html">current_exception</a></span>()</tt> for details.</p>
 <h4>Note:</h4>
 <p>Instead of using the <tt>throw</tt> keyword directly, it is preferable to call <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>()</tt>. This is guaranteed to throw an exception that derives from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> and supports cloning.</p>
 </div><h3>See also:</h3>
@@ -47,6 +50,9 @@ throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enab
 </a><a href="cloning.html">Tutorial: Transporting of Exceptions between Threads<br/>
 </a><a href="throw_exception.html">throw_exception<br/>
 </a></div>
+<!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
+<!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div id="footer">
 <p>&nbsp;</p>
 <hr/>
