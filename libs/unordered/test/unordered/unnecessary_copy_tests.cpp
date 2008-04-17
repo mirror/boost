@@ -45,8 +45,13 @@ namespace unnecessary_copy_tests
         T x;
         BOOST_DEDUCED_TYPENAME T::value_type a;
         BOOST_CHECK(count_copies::count == 1);
+        if(count_copies::count != 1)
+            std::cerr<<count_copies::count<<" copies.\n";
+
         x.insert(a);
         BOOST_CHECK(count_copies::count == 2);
+        if(count_copies::count != 1)
+            std::cerr<<count_copies::count<<" copies.\n";
     }
 
     boost::unordered_set<count_copies>* set;

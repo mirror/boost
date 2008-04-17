@@ -127,6 +127,11 @@ void container_test(X& r, T&)
     test::check_return_type<size_type>::equals(a.size());
     test::check_return_type<size_type>::equals(a.max_size());
     test::check_return_type<bool>::convertible(a.empty());
+
+    // Allocator
+
+    typedef BOOST_DEDUCED_TYPENAME X::allocator_type allocator_type;
+    test::check_return_type<allocator_type>::equals(a_const.get_allocator());
 }
 
 template <class X, class Key>

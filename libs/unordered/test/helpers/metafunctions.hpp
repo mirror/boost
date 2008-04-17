@@ -8,11 +8,7 @@
 
 #include <boost/config.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/identity.hpp>
 #include <boost/mpl/not.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/apply.hpp>
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -82,7 +78,8 @@ namespace test
 
     // Non Const Value Type
 
-    struct map_non_const_value_type
+    template <bool IsMap>
+    struct non_const_value_type_impl
     {
         template <class Container>
         struct apply {
@@ -92,7 +89,8 @@ namespace test
         };
     };
 
-    struct set_non_const_value_type
+    template<>
+    struct non_const_value_type_impl<false>
     {
         template <class Container>
         struct apply {
@@ -102,9 +100,8 @@ namespace test
     
     template <class Container>
     struct non_const_value_type
-        : boost::mpl::apply1<
-            BOOST_DEDUCED_TYPENAME boost::mpl::if_<is_map<Container>, map_non_const_value_type, set_non_const_value_type>::type,
-            Container>
+        : non_const_value_type_impl< ::test::is_map<Container>::value>::
+            BOOST_NESTED_TEMPLATE apply<Container>
     {
     };
 }
