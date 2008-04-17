@@ -57,7 +57,7 @@ main(int argc, char *argv[])
             boost::wave::support_option_long_long);
         lexer_type end = lexer_type();
 
-        // verify the correct outcome of the tokenisation
+        // verify the correct outcome of the tokenization
 #if defined(TESTLEXERS_VERBOSE)
         std::cerr << boost::wave::get_token_name(data->id) << std::endl;
 #endif
