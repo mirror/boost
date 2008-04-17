@@ -101,6 +101,7 @@ public:
                 _internal_weak_this = shared_ptr<T>(owner, p);
             }else
             {
+                BOOST_ASSERT(owner.unique()); // no weak_ptrs to owner should exist either, but there's no way to check that
                 detail::sp_deleter_wrapper * pd = get_deleter<detail::sp_deleter_wrapper>(_internal_shared_this);
                 BOOST_ASSERT( pd != 0 );
                 pd->set_deleter(owner);
