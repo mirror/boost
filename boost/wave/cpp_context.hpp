@@ -104,7 +104,7 @@ public:
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
     typedef typename token_type::string_type        string_type;
-    
+
     typedef IteratorT                               target_iterator_type;
     typedef LexIteratorT                            lexer_type;
     typedef pp_iterator<context>                    iterator_type;
@@ -220,25 +220,25 @@ public:
     }
     template <typename StringT>
     bool get_macro_definition(StringT const &name, 
-            bool &has_params, bool &is_predefined, position_type &pos,
-            std::vector<token_type> &parameters, 
-            token_sequence_type &definition) const
-        { 
+        bool &has_params, bool &is_predefined, position_type &pos,
+        std::vector<token_type> &parameters, 
+        token_sequence_type &definition) const
+    { 
         return macros.get_macro(util::to_string<string_type>(name), 
             has_params, is_predefined, pos, parameters, definition); 
-        }
+    }
     template <typename StringT>
     bool remove_macro_definition(StringT const &name, 
             bool even_predefined = false)
-        { 
+    { 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-            // ensure this gets removed from the list of include guards as well
+        // ensure this gets removed from the list of include guards as well
         includes.remove_pragma_once_header(
             util::to_string<std::string>(name));
 #endif
         return macros.remove_macro(util::to_string<string_type>(name), 
             macros.get_main_pos(), even_predefined); 
-        }
+    }
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 

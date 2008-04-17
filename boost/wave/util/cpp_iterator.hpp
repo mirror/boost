@@ -913,7 +913,7 @@ namespace impl {
             call_skipped_token_hook(ctx, *it);
 
         for (++it; it != end; ++it) {
-            token_id id = token_id(*it);
+        token_id id = token_id(*it);
 
             if (T_CPPCOMMENT == id || T_NEWLINE == id ||
                 context_policies::util::ccomment_has_newline(*it)) 
@@ -984,9 +984,9 @@ string_type str(util::impl::as_string<string_type>(iter_ctx->first, it));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-template <typename ContextT> 
+template <typename ContextT>
 template <typename IteratorT>
-inline bool
+inline bool 
 pp_iterator_functor<ContextT>::ensure_is_last_on_line(IteratorT& it)
 {
     if (!impl::pp_is_last_on_line(ctx, it, iter_ctx->last, false)) 
@@ -1057,37 +1057,37 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
     token_id id = token_id(*it);
     bool can_exit = true;
     if (!ctx.get_if_block_status()) {
-    if (IS_EXTCATEGORY(*it, PPConditionalTokenType)) {
-    // simulate the if block hierarchy
+        if (IS_EXTCATEGORY(*it, PPConditionalTokenType)) {
+        // simulate the if block hierarchy
             switch (static_cast<unsigned int>(id)) {
-        case T_PP_IFDEF:        // #ifdef
-        case T_PP_IFNDEF:       // #ifndef
-        case T_PP_IF:           // #if
-            ctx.enter_if_block(false);
-            break;
+            case T_PP_IFDEF:        // #ifdef
+            case T_PP_IFNDEF:       // #ifndef
+            case T_PP_IF:           // #if
+                ctx.enter_if_block(false);
+                break;
 
-        case T_PP_ELIF:         // #elif
-            if (!ctx.get_enclosing_if_block_status()) {
-                if (!ctx.enter_elif_block(false)) { 
-                // #else without matching #if
-                    BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
-                        missing_matching_if, "#elif", act_pos);
-                    return true;  // do not analyze this directive any further
+            case T_PP_ELIF:         // #elif
+                if (!ctx.get_enclosing_if_block_status()) {
+                    if (!ctx.enter_elif_block(false)) { 
+                    // #else without matching #if
+                        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                            missing_matching_if, "#elif", act_pos);
+                        return true;  // do not analyze this directive any further
+                    }
                 }
-            }
-            else {
-                can_exit = false;   // #elif is not always safe to skip
-            }
-            break;
+                else {
+                    can_exit = false;   // #elif is not always safe to skip
+                }
+                break;
 
-        case T_PP_ELSE:         // #else
-        case T_PP_ENDIF:        // #endif
-            {
-            // handle this directive
-                if (T_PP_ELSE == token_id(*it))
-                    on_else();
-                else
-                    on_endif();
+            case T_PP_ELSE:         // #else
+            case T_PP_ENDIF:        // #endif
+                {
+                // handle this directive
+                    if (T_PP_ELSE == token_id(*it))
+                        on_else();
+                    else
+                        on_endif();
 
                 // make sure, there are no (non-whitespace) tokens left on 
                 // this line
@@ -1098,11 +1098,11 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
                     iter_ctx->first = it;
                 }
                 return true;
-                
+
             default:                // #something else
                 on_illformed((*it).get_value());
-                    break;
-                }
+                break;
+            }
         }
     }
     else {
@@ -1144,11 +1144,11 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
             // this line
                 if (ensure_is_last_on_line(it))
                 {
-                seen_newline = true;
-                iter_ctx->first = it;
+                    seen_newline = true;
+                    iter_ctx->first = it;
                     on_include (dir, true, include_next);
-            }
-            return true;
+                }
+                return true;
             }
             break;
 
@@ -1165,7 +1165,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
             // make sure, there are no (non-whitespace) tokens left on 
             // this line
                 ensure_is_last_on_line(it);
-              
+
             // we skipped to the end of this line already
                 seen_newline = true;
                 iter_ctx->first = it;
@@ -1188,7 +1188,7 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
                 extract_identifier(it)) 
             {
                 on_undefine(it);
-        }
+            }
             break;
 
         case T_PP_IFDEF:                // #ifdef
@@ -1196,13 +1196,13 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
                 extract_identifier(it)) 
             {
                 on_ifdef(directive, it);
-    }
+            }
             break;
 
         case T_PP_IFNDEF:               // #ifndef
             if (!impl::call_found_directive_hook(ctx, *it) && 
                 extract_identifier(it)) 
-        {
+            {
                 on_ifndef(directive, it);
             }
             break;
@@ -1214,12 +1214,12 @@ pp_iterator_functor<ContextT>::handle_pp_directive(IteratorT &it)
 //         case T_MSEXT_PP_ENDREGION:      // #endregion 
 //             break;
 #endif
-            
+
         default:
             can_exit = false;
             break;
         }
-        }
+    }
 
 // start over with the next line, if only possible
     if (can_exit) {
@@ -1345,7 +1345,7 @@ token_id id = token_id(found_directive);
     // call preprocessing hook
     if (impl::call_found_directive_hook(ctx, found_directive)) 
         return true;    // skip this directive and return newline only
-    
+
     switch (static_cast<unsigned int>(id)) {
 //     case T_PP_QHEADER:      // #include "..."
 // #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
@@ -1804,7 +1804,6 @@ pp_iterator_functor<ContextT>::on_ifndef(
 //     std::copy(make_ref_transform_iterator((*begin).children.begin(), get_value), 
 //         make_ref_transform_iterator((*begin).children.end(), get_value),
 //         std::inserter(toexpand, toexpand.end()));
-
 
 bool is_defined = false;
 token_sequence_type directive;

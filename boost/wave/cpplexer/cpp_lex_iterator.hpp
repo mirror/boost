@@ -78,9 +78,9 @@ public:
     // this will be called whenever the last reference to a multi_pass will
     // be released
     template <typename MultiPass>
-    static void destroy(MultiPass& mp_shared)
+    static void destroy(MultiPass& mp)
     {
-        delete mp_shared->ftor; 
+        delete mp.shared->ftor; 
     }
 
     template <typename MultiPass>
