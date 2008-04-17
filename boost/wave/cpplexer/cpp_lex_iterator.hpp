@@ -79,7 +79,7 @@ public:
     // be released
     template <typename MultiPass>
     static void destroy(MultiPass& mp)
-    {
+    { 
         delete mp.shared->ftor; 
     }
 

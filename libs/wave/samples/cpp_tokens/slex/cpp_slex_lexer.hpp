@@ -578,10 +578,8 @@ public:
     virtual ~slex_functor() {}
 
 // get the next token from the input stream
-    token_type get()
+    token_type& get(token_type& result)
     {
-        token_type token;
-
         if (!at_eof) {
             do {
             // generate and return the next token
@@ -673,17 +671,18 @@ public:
                         break;
                     }
                     
+                    result = token_type(id, token_val, pos);
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-                    return guards.detect_guard(token_type(id, token_val, pos));
+                    return guards.detect_guard(result);
 #else
-                    return token_type(id, token_val, pos);
+                    return result;
 #endif
                 }
             
             // skip the T_CONTLINE token
             } while (true);
         }
-        return token;   // return T_EOI
+        return result = token_type();   // return T_EOI
     }
     
     void set_position(PositionT const &pos) 
