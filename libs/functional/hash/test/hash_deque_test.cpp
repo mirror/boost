@@ -13,7 +13,7 @@
 #  endif
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -25,11 +25,11 @@ using std::deque;
 
 #endif // TEST_EXTENSIONS
 
-int main()
+int test_main(int, char**)
 {
 #ifdef TEST_EXTENSIONS
     deque_tests::deque_hash_integer_tests();
 #endif
 
-    return boost::report_errors();
+    return 0;
 }

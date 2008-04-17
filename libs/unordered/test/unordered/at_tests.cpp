@@ -16,8 +16,8 @@ UNORDERED_AUTO_TEST(at_tests) {
     x["one"] = 1;
     x["two"] = 2;
 
-    BOOST_TEST(x.at("one") == 1);
-    BOOST_TEST(x.at("two") == 2);
+    BOOST_CHECK(x.at("one") == 1);
+    BOOST_CHECK(x.at("two") == 2);
 
     try {
         x.at("three");

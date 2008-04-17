@@ -27,9 +27,9 @@ void assign_tests1(T*, test::random_generator generator = test::default_generato
     {
         T x;
         x = x;
-        BOOST_TEST(x.empty());
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
     }
 
     std::cerr<<"assign_tests1.2\n";
@@ -47,7 +47,7 @@ void assign_tests1(T*, test::random_generator generator = test::default_generato
         y.max_load_factor(x.max_load_factor() / 20);
         y = x;
         tracker.compare(y);
-        BOOST_TEST(x.max_load_factor() == y.max_load_factor());
+        BOOST_CHECK(x.max_load_factor() == y.max_load_factor());
     }
 }
 
@@ -67,8 +67,8 @@ void assign_tests2(T*, test::random_generator generator = test::default_generato
         T x1(v.begin(), v.end(), 0, hf1, eq1);
         T x2(0, hf2, eq2);
         x2 = x1;
-        BOOST_TEST(test::equivalent(x2.hash_function(), hf1));
-        BOOST_TEST(test::equivalent(x2.key_eq(), eq1));
+        BOOST_CHECK(test::equivalent(x2.hash_function(), hf1));
+        BOOST_CHECK(test::equivalent(x2.key_eq(), eq1));
         test::check_container(x2, v);
     }
 
@@ -78,9 +78,9 @@ void assign_tests2(T*, test::random_generator generator = test::default_generato
         T x1(v1.begin(), v1.end(), 0, hf1, eq1, al1);
         T x2(v2.begin(), v2.end(), 0, hf2, eq2, al2);
         x2 = x1;
-        BOOST_TEST(test::equivalent(x2.hash_function(), hf1));
-        BOOST_TEST(test::equivalent(x2.key_eq(), eq1));
-        BOOST_TEST(test::equivalent(x2.get_allocator(), al2));
+        BOOST_CHECK(test::equivalent(x2.hash_function(), hf1));
+        BOOST_CHECK(test::equivalent(x2.key_eq(), eq1));
+        BOOST_CHECK(test::equivalent(x2.get_allocator(), al2));
         test::check_container(x2, v1);
     }
 }

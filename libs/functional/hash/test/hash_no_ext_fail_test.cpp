@@ -12,7 +12,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/functional/hash.hpp>
 
-int main()
+int test_main(int, char**)
 {
     HASH_NAMESPACE::hash< int[10] > hasher;
     return 0;

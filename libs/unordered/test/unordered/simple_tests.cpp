@@ -19,67 +19,67 @@ void simple_test(X const& a)
 
     {
         X u;
-        BOOST_TEST(u.size() == 0);
-        BOOST_TEST(X().size() == 0);
+        BOOST_CHECK(u.size() == 0);
+        BOOST_CHECK(X().size() == 0);
     }
 
     {
-        BOOST_TEST(equivalent(X(a)));
+        BOOST_CHECK(equivalent(X(a)));
     }
 
     {
         X u(a);
-        BOOST_TEST(equivalent(u));
+        BOOST_CHECK(equivalent(u));
     }
 
     {
         X u = a;
-        BOOST_TEST(equivalent(u));
+        BOOST_CHECK(equivalent(u));
     }
 
     {
         X b(a);
-        BOOST_TEST(b.begin() == const_cast<X const&>(b).cbegin());
-        BOOST_TEST(b.end() == const_cast<X const&>(b).cend());
+        BOOST_CHECK(b.begin() == const_cast<X const&>(b).cbegin());
+        BOOST_CHECK(b.end() == const_cast<X const&>(b).cend());
     }
 
     {
         X b(a);
         X c;
-        BOOST_TEST(equivalent(b));
-        BOOST_TEST(c.empty());
+        BOOST_CHECK(equivalent(b));
+        BOOST_CHECK(c.empty());
         b.swap(c);
-        BOOST_TEST(b.empty());
-        BOOST_TEST(equivalent(c));
+        BOOST_CHECK(b.empty());
+        BOOST_CHECK(equivalent(c));
         b.swap(c);
-        BOOST_TEST(c.empty());
-        BOOST_TEST(equivalent(b));
+        BOOST_CHECK(c.empty());
+        BOOST_CHECK(equivalent(b));
     }
 
     {
         X u;
         X& r = u;
-        BOOST_TEST(&(r = r) == &r);
-        BOOST_TEST(r.empty());
-        BOOST_TEST(&(r = a) == &r);
-        BOOST_TEST(equivalent(r));
-        BOOST_TEST(&(r = r) == &r);
-        BOOST_TEST(equivalent(r));
+        BOOST_CHECK(&(r = r) == &r);
+        BOOST_CHECK(r.empty());
+        BOOST_CHECK(&(r = a) == &r);
+        BOOST_CHECK(equivalent(r));
+        BOOST_CHECK(&(r = r) == &r);
+        BOOST_CHECK(equivalent(r));
     }
 
     {
-        BOOST_TEST(a.size() ==
+        BOOST_CHECK(a.size() ==
                 (BOOST_DEDUCED_TYPENAME X::size_type) std::distance(a.begin(), a.end()));
     }
 
     {
-        BOOST_TEST(a.empty() == (a.size() == 0));
+        BOOST_CHECK(a.empty() == (a.size() == 0));
     }
 
     {
-        BOOST_TEST(a.empty() == (a.begin() == a.end()));
+        BOOST_CHECK(a.empty() == (a.begin() == a.end()));
         X u;
-        BOOST_TEST(u.begin() == u.end());
+        BOOST_CHECK(u.begin() == u.end());
     }
 }
 

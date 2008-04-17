@@ -8,7 +8,7 @@
 
 #include "./test.hpp"
 
-#if defined(BOOST_UNORDERED_USE_TEST)
+#if defined(BOOST_UNORDERED_FULL_TEST)
 #   define BOOST_TEST_MAIN
 #   include <boost/test/exception_safety.hpp>
 #   include <boost/test/unit_test.hpp>
@@ -18,7 +18,7 @@
 #include <boost/preprocessor/seq/elem.hpp>
 #include <boost/preprocessor/cat.hpp>
 
-#if defined(BOOST_UNORDERED_USE_TEST)
+#if defined(BOOST_UNORDERED_FULL_TEST)
 #   define UNORDERED_EXCEPTION_TEST_CASE(name, test_func, type) \
         UNORDERED_AUTO_TEST(name) \
         { \
@@ -181,7 +181,7 @@ namespace test {
     
     
 
-#if defined(BOOST_UNORDERED_USE_TEST)
+#if defined(BOOST_UNORDERED_FULL_TEST)
     template <class Test>
     void exception_safety(Test const& f, char const* name) {
         test_runner<Test> runner(f);

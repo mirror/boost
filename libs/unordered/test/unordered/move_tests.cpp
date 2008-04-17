@@ -52,11 +52,11 @@ namespace move_tests
 
         {
             T y(empty(ptr));
-            BOOST_TEST(y.empty());
-            BOOST_TEST(test::equivalent(y.hash_function(), hf));
-            BOOST_TEST(test::equivalent(y.key_eq(), eq));
-            BOOST_TEST(test::equivalent(y.get_allocator(), al));
-            BOOST_TEST(y.max_load_factor() == 1.0);
+            BOOST_CHECK(y.empty());
+            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
+            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
+            BOOST_CHECK(test::equivalent(y.get_allocator(), al));
+            BOOST_CHECK(y.max_load_factor() == 1.0);
             test::check_equivalent_keys(y);
         }
 
@@ -64,7 +64,7 @@ namespace move_tests
             test::random_values<T> v(1000);
             BOOST_DEDUCED_TYPENAME T::value_type const* first = 0;
             T y(create(v, first));
-            BOOST_TEST(first == &*y.begin());
+            BOOST_CHECK(first == &*y.begin());
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -78,7 +78,7 @@ namespace move_tests
             BOOST_DEDUCED_TYPENAME T::value_type const* first = 0;
             T y;
             y = create(v, first);
-            BOOST_TEST(first == &*y.begin());
+            BOOST_CHECK(first == &*y.begin());
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -100,12 +100,12 @@ namespace move_tests
         {
             test::random_values<T> v(500);
             T y(create(v, first, hf, eq, al, 0.5));
-            BOOST_TEST(first == &*y.begin());
+            BOOST_CHECK(first == &*y.begin());
             test::check_container(y, v);
-            BOOST_TEST(test::equivalent(y.hash_function(), hf));
-            BOOST_TEST(test::equivalent(y.key_eq(), eq));
-            BOOST_TEST(test::equivalent(y.get_allocator(), al));
-            BOOST_TEST(y.max_load_factor() == 0.5); // Not necessarily required.
+            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
+            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
+            BOOST_CHECK(test::equivalent(y.get_allocator(), al));
+            BOOST_CHECK(y.max_load_factor() == 0.5); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
 
@@ -113,24 +113,24 @@ namespace move_tests
             // TODO: To do this correctly requires the fancy new allocator stuff.
             test::random_values<T> v(500);
             T y(create(v, first, hf, eq, al, 2.0), al2);
-            BOOST_TEST(first != &*y.begin());
+            BOOST_CHECK(first != &*y.begin());
             test::check_container(y, v);
-            BOOST_TEST(test::equivalent(y.hash_function(), hf));
-            BOOST_TEST(test::equivalent(y.key_eq(), eq));
-            BOOST_TEST(test::equivalent(y.get_allocator(), al2));
-            BOOST_TEST(y.max_load_factor() == 2.0); // Not necessarily required.
+            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
+            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
+            BOOST_CHECK(test::equivalent(y.get_allocator(), al2));
+            BOOST_CHECK(y.max_load_factor() == 2.0); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
 
         {
             test::random_values<T> v(25);
             T y(create(v, first, hf, eq, al, 1.0), al);
-            BOOST_TEST(first == &*y.begin());
+            BOOST_CHECK(first == &*y.begin());
             test::check_container(y, v);
-            BOOST_TEST(test::equivalent(y.hash_function(), hf));
-            BOOST_TEST(test::equivalent(y.key_eq(), eq));
-            BOOST_TEST(test::equivalent(y.get_allocator(), al));
-            BOOST_TEST(y.max_load_factor() == 1.0); // Not necessarily required.
+            BOOST_CHECK(test::equivalent(y.hash_function(), hf));
+            BOOST_CHECK(test::equivalent(y.key_eq(), eq));
+            BOOST_CHECK(test::equivalent(y.get_allocator(), al));
+            BOOST_CHECK(y.max_load_factor() == 1.0); // Not necessarily required.
             test::check_equivalent_keys(y);
         }
     }

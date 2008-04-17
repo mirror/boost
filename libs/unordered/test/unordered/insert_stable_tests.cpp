@@ -47,13 +47,13 @@ UNORDERED_AUTO_TEST(stable_insert_test1) {
     x.insert(insert_stable::member(1,3));
 
     boost::unordered_multiset<insert_stable::member>::const_iterator it = x.begin(), end = x.end();
-    BOOST_TEST(it != end);
-    if(it != end) { BOOST_TEST(it->tag2_ == 1); ++it; }
-    BOOST_TEST(it != end);
-    if(it != end) { BOOST_TEST(it->tag2_ == 2); ++it; }
-    BOOST_TEST(it != end);
-    if(it != end) { BOOST_TEST(it->tag2_ == 3); ++it; }
-    BOOST_TEST(it == end);
+    BOOST_CHECK(it != end);
+    if(it != end) { BOOST_CHECK(it->tag2_ == 1); ++it; }
+    BOOST_CHECK(it != end);
+    if(it != end) { BOOST_CHECK(it->tag2_ == 2); ++it; }
+    BOOST_CHECK(it != end);
+    if(it != end) { BOOST_CHECK(it->tag2_ == 3); ++it; }
+    BOOST_CHECK(it == end);
 }
 
 UNORDERED_AUTO_TEST(stable_insert_test2) {
@@ -66,13 +66,13 @@ UNORDERED_AUTO_TEST(stable_insert_test2) {
 
     it = x.begin();
     iterator end = x.end();
-    BOOST_TEST(it != end);
-    if(it != end) { BOOST_TEST(it->first.tag2_ == 1 && it->second == 1); ++it; }
-    BOOST_TEST(it != end);
-    if(it != end) { BOOST_TEST(it->first.tag2_ == 2 && it->second == 2); ++it; }
-    BOOST_TEST(it != end);
-    if(it != end) { BOOST_TEST(it->first.tag2_ == 3 && it->second == 3); ++it; }
-    BOOST_TEST(it == end);
+    BOOST_CHECK(it != end);
+    if(it != end) { BOOST_CHECK(it->first.tag2_ == 1 && it->second == 1); ++it; }
+    BOOST_CHECK(it != end);
+    if(it != end) { BOOST_CHECK(it->first.tag2_ == 2 && it->second == 2); ++it; }
+    BOOST_CHECK(it != end);
+    if(it != end) { BOOST_CHECK(it->first.tag2_ == 3 && it->second == 3); ++it; }
+    BOOST_CHECK(it == end);
 }
 
 RUN_TESTS()

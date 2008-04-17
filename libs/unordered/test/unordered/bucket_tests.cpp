@@ -24,7 +24,7 @@ void bucket_tests(X* = 0)
 
     X x(v.begin(), v.end());
 
-    BOOST_TEST(x.bucket_count() < x.max_bucket_count());
+    BOOST_CHECK(x.bucket_count() < x.max_bucket_count());
     std::cerr<<x.bucket_count()<<"<"<<x.max_bucket_count()<<"\n";
 
     for(BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator
@@ -32,21 +32,21 @@ void bucket_tests(X* = 0)
     {
         size_type bucket = x.bucket(test::get_key<X>(*it));
 
-        BOOST_TEST(bucket < x.bucket_count());
+        BOOST_CHECK(bucket < x.bucket_count());
         if(bucket < x.max_bucket_count()) {
             // lit? lend?? I need a new naming scheme.
             const_local_iterator lit = x.begin(bucket), lend = x.end(bucket);
             while(lit != lend && test::get_key<X>(*it) != test::get_key<X>(*lit)) ++lit;
-            BOOST_TEST(lit != lend);
+            BOOST_CHECK(lit != lend);
         }
     }
 
     for(size_type i = 0; i < x.bucket_count(); ++i) {
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x.begin(i), x.end(i)));
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x.cbegin(i), x.cend(i)));
+        BOOST_CHECK(x.bucket_size(i) == (size_type) std::distance(x.begin(i), x.end(i)));
+        BOOST_CHECK(x.bucket_size(i) == (size_type) std::distance(x.cbegin(i), x.cend(i)));
         X const& x_ref = x;
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x_ref.begin(i), x_ref.end(i)));
-        BOOST_TEST(x.bucket_size(i) == (size_type) std::distance(x_ref.cbegin(i), x_ref.cend(i)));
+        BOOST_CHECK(x.bucket_size(i) == (size_type) std::distance(x_ref.begin(i), x_ref.end(i)));
+        BOOST_CHECK(x.bucket_size(i) == (size_type) std::distance(x_ref.cbegin(i), x_ref.cend(i)));
     }
 }
 

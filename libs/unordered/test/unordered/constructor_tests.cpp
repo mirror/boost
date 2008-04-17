@@ -29,42 +29,42 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     std::cerr<<"Construct 1\n";
     {
         T x(0, hf, eq);
-        BOOST_TEST(x.empty());
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 
     std::cerr<<"Construct 2\n";
     {
         T x(100, hf);
-        BOOST_TEST(x.empty());
-        BOOST_TEST(x.bucket_count() >= 100);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(x.bucket_count() >= 100);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 
     std::cerr<<"Construct 3\n";
     {
         T x(2000);
-        BOOST_TEST(x.empty());
-        BOOST_TEST(x.bucket_count() >= 2000);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(x.bucket_count() >= 2000);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 
     std::cerr<<"Construct 4\n";
     {
         T x;
-        BOOST_TEST(x.empty());
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 
@@ -72,10 +72,10 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     {
         test::random_values<T> v(1000, generator);
         T x(v.begin(), v.end(), 10000, hf, eq);
-        BOOST_TEST(x.bucket_count() >= 10000);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.bucket_count() >= 10000);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
@@ -84,10 +84,10 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     {
         test::random_values<T> v(10, generator);
         T x(v.begin(), v.end(), 10000, hf);
-        BOOST_TEST(x.bucket_count() >= 10000);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.bucket_count() >= 10000);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
@@ -96,10 +96,10 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     {
         test::random_values<T> v(100, generator);
         T x(v.begin(), v.end(), 100);
-        BOOST_TEST(x.bucket_count() >= 100);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.bucket_count() >= 100);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
@@ -108,9 +108,9 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     {
         test::random_values<T> v(1, generator);
         T x(v.begin(), v.end());
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
@@ -118,10 +118,10 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     std::cerr<<"Construct 9\n";
     {
         T x(0, hf, eq, al);
-        BOOST_TEST(x.empty());
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 
@@ -129,10 +129,10 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     {
         test::random_values<T> v(1000, generator);
         T x(v.begin(), v.end(), 10000, hf, eq, al);
-        BOOST_TEST(x.bucket_count() >= 10000);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.bucket_count() >= 10000);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
@@ -141,10 +141,10 @@ void constructor_tests1(T*, test::random_generator generator = test::default_gen
     {
         test::random_values<T> v(1000, generator);
         T x(al);
-        BOOST_TEST(x.empty());
-        BOOST_TEST(test::equivalent(x.hash_function(), hf));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 }
@@ -165,21 +165,21 @@ void constructor_tests2(T*, test::random_generator const& generator = test::defa
     std::cerr<<"Construct 1\n";
     {
         T x(10000, hf1, eq1);
-        BOOST_TEST(x.bucket_count() >= 10000);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf1));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq1));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.bucket_count() >= 10000);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf1));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq1));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 
     std::cerr<<"Construct 2\n";
     {
         T x(100, hf1);
-        BOOST_TEST(x.empty());
-        BOOST_TEST(x.bucket_count() >= 100);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf1));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.empty());
+        BOOST_CHECK(x.bucket_count() >= 100);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf1));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_equivalent_keys(x);
     }
 
@@ -187,9 +187,9 @@ void constructor_tests2(T*, test::random_generator const& generator = test::defa
     {
         test::random_values<T> v(100, generator);
         T x(v.begin(), v.end(), 0, hf1, eq1);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf1));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq1));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf1));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq1));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }
@@ -198,10 +198,10 @@ void constructor_tests2(T*, test::random_generator const& generator = test::defa
     {
         test::random_values<T> v(5, generator);
         T x(v.begin(), v.end(), 1000, hf1);
-        BOOST_TEST(x.bucket_count() >= 1000);
-        BOOST_TEST(test::equivalent(x.hash_function(), hf1));
-        BOOST_TEST(test::equivalent(x.key_eq(), eq));
-        BOOST_TEST(test::equivalent(x.get_allocator(), al));
+        BOOST_CHECK(x.bucket_count() >= 1000);
+        BOOST_CHECK(test::equivalent(x.hash_function(), hf1));
+        BOOST_CHECK(test::equivalent(x.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(x.get_allocator(), al));
         test::check_container(x, v);
         test::check_equivalent_keys(x);
     }

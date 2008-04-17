@@ -6,21 +6,17 @@
 #if !defined(BOOST_UNORDERED_TEST_TEST_HEADER)
 #define BOOST_UNORDERED_TEST_TEST_HEADER
 
-#if defined(BOOST_UNORDERED_USE_TEST)
+#if defined(BOOST_UNORDERED_FULL_TEST)
 
 #include <boost/test/test_tools.hpp>
-#define UNORDERED_CHECK(x) BOOST_CHECK(x)
-#define UNORDERED_REQUIRE(x) BOOST_REQUIRE(x)
 #define UNORDERED_AUTO_TEST(x) BOOST_AUTO_TEST_CASE(x)
 #define RUN_TESTS()
 
 #else
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 #include <boost/preprocessor/cat.hpp>
 
-#define UNORDERED_CHECK(x) BOOST_TEST(x)
-#define UNORDERED_REQUIRE(x) if(!(x)) { BOOST_ERROR(BOOST_STRINGIZE(x)); throw ::test::lightweight::test_failure(); }
 #define UNORDERED_AUTO_TEST(x) \
     struct BOOST_PP_CAT(x, _type) : public ::test::registered_test_base { \
         BOOST_PP_CAT(x, _type)() { \
@@ -30,7 +26,7 @@
     }; \
     BOOST_PP_CAT(x, _type) x; \
     void BOOST_PP_CAT(x, _type)::run()
-#define RUN_TESTS() int main() { ::test::test_list::run_tests(); return boost::report_errors(); }
+#define RUN_TESTS() int test_main(int, char**) { ::test::test_list::run_tests(); return 0; }
 
 namespace test {
     struct registered_test_base {

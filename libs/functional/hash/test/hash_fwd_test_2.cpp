@@ -8,7 +8,7 @@
 
 #include "./hash_fwd_test.hpp"
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 
 template <class T> void unused(T const&) {}
 
@@ -31,9 +31,9 @@ void fwd_test()
 }
 
 
-int main()
+int test_main(int, char**)
 {
     fwd_test();
-    return boost::report_errors();
+    return 0;
 }
 

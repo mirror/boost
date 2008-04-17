@@ -24,13 +24,13 @@ void load_factor_tests(X* = 0)
 {
     X x;
 
-    BOOST_TEST(x.max_load_factor() == 1.0);
-    BOOST_TEST(x.load_factor() == 0);
+    BOOST_CHECK(x.max_load_factor() == 1.0);
+    BOOST_CHECK(x.load_factor() == 0);
 
     // A valid implementation could fail these tests, but I think they're
     // reasonable.
-    x.max_load_factor(2.0); BOOST_TEST(x.max_load_factor() == 2.0);
-    x.max_load_factor(0.5); BOOST_TEST(x.max_load_factor() == 0.5);
+    x.max_load_factor(2.0); BOOST_CHECK(x.max_load_factor() == 2.0);
+    x.max_load_factor(0.5); BOOST_CHECK(x.max_load_factor() == 0.5);
 }
 
 template <class X>
@@ -49,7 +49,7 @@ void insert_test(X*, float mlf)
                  old_bucket_count = x.bucket_count();
         x.insert(*it);
         if(old_size + 1 < b * old_bucket_count)
-            BOOST_TEST(x.bucket_count() == old_bucket_count);
+            BOOST_CHECK(x.bucket_count() == old_bucket_count);
     }
 }
 

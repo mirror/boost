@@ -103,7 +103,7 @@ namespace test
 
             void allocator_unref()
             {
-                UNORDERED_CHECK(count_allocators > 0);
+                BOOST_CHECK(count_allocators > 0);
                 if(count_allocators > 0) {
                     --count_allocators;
                     if(count_allocators == 0) {
@@ -116,9 +116,9 @@ namespace test
                         count_constructions = 0;
                         allocated_memory.clear();
 
-                        UNORDERED_CHECK(no_allocations_left);
-                        UNORDERED_CHECK(no_constructions_left);
-                        UNORDERED_CHECK(allocated_memory_empty);
+                        BOOST_CHECK(no_allocations_left);
+                        BOOST_CHECK(no_constructions_left);
+                        BOOST_CHECK(allocated_memory_empty);
                     }
                 }
             }
@@ -144,12 +144,12 @@ namespace test
                 if(pos == allocated_memory.end()) {
                     BOOST_ERROR("Deallocating unknown pointer.");
                 } else {
-                    UNORDERED_CHECK(pos->first.start == ptr);
-                    UNORDERED_CHECK(pos->first.end == (char*) ptr + n * size);
-                    UNORDERED_CHECK(pos->second.tag_ == tag);
+                    BOOST_CHECK(pos->first.start == ptr);
+                    BOOST_CHECK(pos->first.end == (char*) ptr + n * size);
+                    BOOST_CHECK(pos->second.tag_ == tag);
                     allocated_memory.erase(pos);
                 }
-                UNORDERED_CHECK(count_allocations > 0);
+                BOOST_CHECK(count_allocations > 0);
                 if(count_allocations > 0) --count_allocations;
             }
 
@@ -160,7 +160,7 @@ namespace test
 
             void track_destroy(void* ptr, std::size_t /*size*/, int tag)
             {
-                UNORDERED_CHECK(count_constructions > 0);
+                BOOST_CHECK(count_constructions > 0);
                 if(count_constructions > 0) --count_constructions;
             }
         };

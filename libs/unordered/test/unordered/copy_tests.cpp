@@ -27,11 +27,11 @@ void copy_construct_tests1(T*, test::random_generator const& generator = test::d
     {
         T x;
         T y(x);
-        BOOST_TEST(y.empty());
-        BOOST_TEST(test::equivalent(y.hash_function(), hf));
-        BOOST_TEST(test::equivalent(y.key_eq(), eq));
-        BOOST_TEST(test::equivalent(y.get_allocator(), al));
-        BOOST_TEST(x.max_load_factor() == y.max_load_factor());
+        BOOST_CHECK(y.empty());
+        BOOST_CHECK(test::equivalent(y.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(y.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(y.get_allocator(), al));
+        BOOST_CHECK(x.max_load_factor() == y.max_load_factor());
         test::check_equivalent_keys(y);
     }
 
@@ -57,7 +57,7 @@ void copy_construct_tests1(T*, test::random_generator const& generator = test::d
         test::unordered_equivalence_tester<T> equivalent(x);
         equivalent(y);
         // This isn't guaranteed:
-        BOOST_TEST(y.load_factor() < y.max_load_factor());
+        BOOST_CHECK(y.load_factor() < y.max_load_factor());
         test::check_equivalent_keys(y);
     }
 }
@@ -75,22 +75,22 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
     {
         T x(10000, hf, eq, al);
         T y(x);
-        BOOST_TEST(y.empty());
-        BOOST_TEST(test::equivalent(y.hash_function(), hf));
-        BOOST_TEST(test::equivalent(y.key_eq(), eq));
-        BOOST_TEST(test::equivalent(y.get_allocator(), al));
-        BOOST_TEST(x.max_load_factor() == y.max_load_factor());
+        BOOST_CHECK(y.empty());
+        BOOST_CHECK(test::equivalent(y.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(y.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(y.get_allocator(), al));
+        BOOST_CHECK(x.max_load_factor() == y.max_load_factor());
         test::check_equivalent_keys(y);
     }
 
     {
         T x(1000, hf, eq, al);
         T y(x, al2);
-        BOOST_TEST(y.empty());
-        BOOST_TEST(test::equivalent(y.hash_function(), hf));
-        BOOST_TEST(test::equivalent(y.key_eq(), eq));
-        BOOST_TEST(test::equivalent(y.get_allocator(), al2));
-        BOOST_TEST(x.max_load_factor() == y.max_load_factor());
+        BOOST_CHECK(y.empty());
+        BOOST_CHECK(test::equivalent(y.hash_function(), hf));
+        BOOST_CHECK(test::equivalent(y.key_eq(), eq));
+        BOOST_CHECK(test::equivalent(y.get_allocator(), al2));
+        BOOST_CHECK(x.max_load_factor() == y.max_load_factor());
         test::check_equivalent_keys(y);
     }
 
@@ -102,7 +102,7 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
         test::unordered_equivalence_tester<T> equivalent(x);
         equivalent(y);
         test::check_equivalent_keys(y);
-        BOOST_TEST(test::equivalent(y.get_allocator(), al));
+        BOOST_CHECK(test::equivalent(y.get_allocator(), al));
     }
 
     {
@@ -113,7 +113,7 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
         test::unordered_equivalence_tester<T> equivalent(x);
         equivalent(y);
         test::check_equivalent_keys(y);
-        BOOST_TEST(test::equivalent(y.get_allocator(), al2));
+        BOOST_CHECK(test::equivalent(y.get_allocator(), al2));
     }
 }
 

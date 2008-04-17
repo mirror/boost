@@ -13,7 +13,7 @@
 #  endif
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -29,12 +29,12 @@ using std::multiset;
 
 #endif
 
-int main()
+int test_main(int, char**)
 {
 #ifdef TEST_EXTENSIONS
     set_tests::set_hash_integer_tests();
     multiset_tests::multiset_hash_integer_tests();
 #endif
 
-    return boost::report_errors();
+    return 0;
 }

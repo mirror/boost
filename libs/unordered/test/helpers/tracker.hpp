@@ -51,7 +51,7 @@ namespace test
         std::copy(x2.begin(), x2.end(), std::back_inserter(values2));
         std::sort(values1.begin(), values1.end());
         std::sort(values2.begin(), values2.end());
-        BOOST_TEST(values1.size() == values2.size() &&
+        BOOST_CHECK(values1.size() == values2.size() &&
                 std::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
     }
 
@@ -65,7 +65,7 @@ namespace test
         std::copy(x2.first, x2.second, std::back_inserter(values2));
         std::sort(values1.begin(), values1.end());
         std::sort(values2.begin(), values2.end());
-        BOOST_TEST(values1.size() == values2.size() &&
+        BOOST_CHECK(values1.size() == values2.size() &&
                 std::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
     }
 

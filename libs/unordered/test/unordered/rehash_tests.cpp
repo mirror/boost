@@ -26,10 +26,10 @@ void rehash_empty_test1(X* = 0)
     X x;
 
     x.rehash(10000);
-    BOOST_TEST(postcondition(x, 10000));
+    BOOST_CHECK(postcondition(x, 10000));
 
     x.rehash(0);
-    BOOST_TEST(postcondition(x, 0));
+    BOOST_CHECK(postcondition(x, 0));
 }
 
 template <class X>
@@ -40,18 +40,18 @@ void rehash_test1(X* = 0)
     tracker.insert_range(v.begin(), v.end());
     X x(v.begin(), v.end());
 
-    x.rehash(0); BOOST_TEST(postcondition(x, 0));
+    x.rehash(0); BOOST_CHECK(postcondition(x, 0));
     tracker.compare(x);
 
     x.max_load_factor(0.25);
-    x.rehash(0); BOOST_TEST(postcondition(x, 0));
+    x.rehash(0); BOOST_CHECK(postcondition(x, 0));
     tracker.compare(x);
 
     x.max_load_factor(50.0);
-    x.rehash(0); BOOST_TEST(postcondition(x, 0));
+    x.rehash(0); BOOST_CHECK(postcondition(x, 0));
     tracker.compare(x);
 
-    x.rehash(1000); BOOST_TEST(postcondition(x, 1000));
+    x.rehash(1000); BOOST_CHECK(postcondition(x, 1000));
     tracker.compare(x);
 }
 

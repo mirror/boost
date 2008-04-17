@@ -15,6 +15,8 @@
 #include "../helpers/input_iterator.hpp"
 
 #include <iostream>
+
+namespace insert_tests {
     
 test::seed_t seed(243432);
 
@@ -41,13 +43,13 @@ void unique_insert_tests1(X*, test::random_generator generator = test::default_g
         std::pair<iterator, bool> r1 = x.insert(*it);
         std::pair<BOOST_DEDUCED_TYPENAME ordered::iterator, bool> r2 = tracker.insert(*it);
 
-        BOOST_TEST(r1.second == r2.second);
-        BOOST_TEST(*r1.first == *r2.first);
+        BOOST_CHECK(r1.second == r2.second);
+        BOOST_CHECK(*r1.first == *r2.first);
 
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_TEST(x.bucket_count() == old_bucket_count);
+            BOOST_CHECK(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);
@@ -71,12 +73,12 @@ void equivalent_insert_tests1(X*, test::random_generator generator = test::defau
         BOOST_DEDUCED_TYPENAME X::iterator r1 = x.insert(*it);
         BOOST_DEDUCED_TYPENAME test::ordered<X>::iterator r2 = tracker.insert(*it);
 
-        BOOST_TEST(*r1 == *r2);
+        BOOST_CHECK(*r1 == *r2);
 
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_TEST(x.bucket_count() == old_bucket_count);
+            BOOST_CHECK(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);
@@ -105,11 +107,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
 
             iterator r1 = x.insert(x.begin(), *it);
             tracker_iterator r2 = tracker.insert(tracker.begin(), *it);
-            BOOST_TEST(*r1 == *r2);
+            BOOST_CHECK(*r1 == *r2);
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_TEST(x.bucket_count() == old_bucket_count);
+                BOOST_CHECK(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -131,11 +133,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
 
             const_iterator r1 = x.insert(x_const.end(), *it);
             tracker_iterator r2 = tracker.insert(tracker.end(), *it);
-            BOOST_TEST(*r1 == *r2);
+            BOOST_CHECK(*r1 == *r2);
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_TEST(x.bucket_count() == old_bucket_count);
+                BOOST_CHECK(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -157,11 +159,11 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
 
             pos = x.insert(pos, *it);
             tracker_iterator r2 = tracker.insert(tracker.begin(), *it);
-            BOOST_TEST(*pos == *r2);
+            BOOST_CHECK(*pos == *r2);
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_TEST(x.bucket_count() == old_bucket_count);
+                BOOST_CHECK(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -185,7 +187,7 @@ void insert_tests2(X*, test::random_generator generator = test::default_generato
             tracker.compare_key(x, *it);
 
             if(x.size() < b * old_bucket_count)
-                BOOST_TEST(x.bucket_count() == old_bucket_count);
+                BOOST_CHECK(x.bucket_count() == old_bucket_count);
         }
 
         test::check_equivalent_keys(x);
@@ -237,7 +239,7 @@ void map_tests(X*, test::random_generator generator = test::default_generator)
         tracker.compare_key(x, *it);
 
         if(x.size() < b * old_bucket_count)
-            BOOST_TEST(x.bucket_count() == old_bucket_count);
+            BOOST_CHECK(x.bucket_count() == old_bucket_count);
     }
 
     test::check_equivalent_keys(x);   
@@ -258,40 +260,39 @@ void associative_insert_range_test(X*, test::random_generator generator = test::
     test::check_equivalent_keys(x);
 }
 
-int main()
-{
-    boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
-    boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
-    boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
-    boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
+boost::unordered_set<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_set;
+boost::unordered_multiset<test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-    unique_insert_tests1(test_set);
-    equivalent_insert_tests1(test_multiset);
-    unique_insert_tests1(test_map);
-    equivalent_insert_tests1(test_multimap);
+using test::default_generator;
+using test::generate_collisions;
 
-    unique_insert_tests1(test_set, test::generate_collisions);
-    equivalent_insert_tests1(test_multiset, test::generate_collisions);
-    unique_insert_tests1(test_map, test::generate_collisions);
-    equivalent_insert_tests1(test_multimap, test::generate_collisions);
+UNORDERED_TEST(unique_insert_tests1,
+    ((test_set)(test_map))
+    ((default_generator)(generate_collisions))
+)
 
-    insert_tests2(test_set);
-    insert_tests2(test_multiset);
-    insert_tests2(test_map);
-    insert_tests2(test_multimap);
+UNORDERED_TEST(equivalent_insert_tests1,
+    ((test_multiset)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    insert_tests2(test_set, test::generate_collisions);
-    insert_tests2(test_multiset, test::generate_collisions);
-    insert_tests2(test_map, test::generate_collisions);
-    insert_tests2(test_multimap, test::generate_collisions);
+UNORDERED_TEST(insert_tests2,
+    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    map_tests(test_map);
-    map_tests(test_map, test::generate_collisions);
+UNORDERED_TEST(map_tests,
+    ((test_map))
+    ((default_generator)(generate_collisions))
+)
 
-    associative_insert_range_test(test_map);
-    associative_insert_range_test(test_map, test::generate_collisions);
-    associative_insert_range_test(test_multimap);
-    associative_insert_range_test(test_multimap, test::generate_collisions);
+UNORDERED_TEST(associative_insert_range_test,
+    ((test_map)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
-    return boost::report_errors();
 }
+
+RUN_TESTS()

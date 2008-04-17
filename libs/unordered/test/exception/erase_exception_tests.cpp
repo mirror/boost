@@ -25,7 +25,7 @@ struct erase_test_base : public test::exception_base
     void check(T const& x) const {
         std::string scope(test::scope);
 
-        UNORDERED_CHECK(scope.find("hash::") != std::string::npos ||
+        BOOST_CHECK(scope.find("hash::") != std::string::npos ||
                 scope.find("equal_to::") != std::string::npos ||
                 scope == "operator==(object, object)");
 

@@ -109,10 +109,10 @@ struct insert_test_rehash1 : public insert_test_base<T>
         size_type bucket_count = x.bucket_count();
         size_type initial_elements = static_cast<size_type>(
             ceil(bucket_count * (double) x.max_load_factor()) - 1);
-        UNORDERED_REQUIRE(initial_elements < this->values.size());
+        BOOST_REQUIRE(initial_elements < this->values.size());
         x.insert(this->values.begin(),
                 boost::next(this->values.begin(), initial_elements));
-        UNORDERED_REQUIRE(bucket_count == x.bucket_count());
+        BOOST_REQUIRE(bucket_count == x.bucket_count());
         return x;
     }
 
@@ -131,7 +131,7 @@ struct insert_test_rehash1 : public insert_test_base<T>
 
         // This isn't actually a failure, but it means the test isn't doing its
         // job.
-        UNORDERED_REQUIRE(x.bucket_count() != bucket_count);
+        BOOST_REQUIRE(x.bucket_count() != bucket_count);
     }
 };
 
@@ -154,7 +154,7 @@ struct insert_test_rehash2 : public insert_test_rehash1<T>
 
         // This isn't actually a failure, but it means the test isn't doing its
         // job.
-        UNORDERED_REQUIRE(x.bucket_count() != bucket_count);
+        BOOST_REQUIRE(x.bucket_count() != bucket_count);
     }
 };
 
@@ -178,10 +178,10 @@ struct insert_test_rehash3 : public insert_test_base<T>
 
         size_type initial_elements = rehash_bucket_count - 5;
 
-        UNORDERED_REQUIRE(initial_elements < this->values.size());
+        BOOST_REQUIRE(initial_elements < this->values.size());
         x.insert(this->values.begin(),
                 boost::next(this->values.begin(), initial_elements));
-        UNORDERED_REQUIRE(original_bucket_count == x.bucket_count());
+        BOOST_REQUIRE(original_bucket_count == x.bucket_count());
         return x;
     }
 
@@ -193,7 +193,7 @@ struct insert_test_rehash3 : public insert_test_base<T>
 
         // This isn't actually a failure, but it means the test isn't doing its
         // job.
-        UNORDERED_REQUIRE(x.bucket_count() != bucket_count);
+        BOOST_REQUIRE(x.bucket_count() != bucket_count);
     }
 
     void check(T const& x) const {
