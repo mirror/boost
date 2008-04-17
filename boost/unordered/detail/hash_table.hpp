@@ -122,6 +122,69 @@ namespace boost {
 #endif
 
         struct move_tag {};
+
+        // Both hasher and key_equal's copy/assign can throw so double
+        // buffering is used to copy them.
+
+        template <typename Hash, typename Pred>
+        struct buffered_functions
+        {
+            typedef Hash hasher;
+            typedef Pred key_equal;
+
+            class functions
+            {
+                std::pair<hasher, key_equal> functions_;
+
+            public:
+
+                functions(hasher const& h, key_equal const& k)
+                    : functions_(h, k) {}
+
+                hasher const& hash_function() const
+                {
+                    return functions_.first;
+                }
+
+                key_equal const& key_eq() const
+                {
+                    return functions_.second;
+                }
+            };
+
+            typedef functions buffered_functions::*functions_ptr;
+
+            buffered_functions(hasher const& h, key_equal const& k)
+                : func1_(h, k), func2_(h, k), func_(&buffered_functions::func1_) {}
+
+            // This copies the given function objects into the currently unused
+            // function objects and returns a pointer, that func_ can later be
+            // set to, to commit the change.
+            //
+            // Strong exception safety (since only usued function objects are
+            // changed).
+            functions_ptr buffer(buffered_functions const& x) {
+                functions_ptr ptr = func_ == &buffered_functions::func1_
+                    ? &buffered_functions::func2_ : &buffered_functions::func1_;
+                this->*ptr = x.current();
+                return ptr;
+            }
+
+            void set(functions_ptr ptr) {
+                BOOST_ASSERT(ptr != func_);
+                func_ = ptr;
+            }
+
+            functions const& current() const {
+                return this->*func_;
+            }
+
+        private:
+            functions func1_;
+            functions func2_;
+            functions_ptr func_; // The currently active functions.
+        };
+
     }
 }
 

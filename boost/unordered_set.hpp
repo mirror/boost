@@ -204,28 +204,28 @@ namespace boost
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.insert(get(hint), obj));
+            return iterator(base.insert_hint(get(hint), obj));
         }
 
         template <class InputIterator>
             void insert(InputIterator first, InputIterator last)
         {
-            base.insert(first, last);
+            base.insert_range(first, last);
         }
 
         iterator erase(const_iterator position)
         {
-            return iterator(base.erase(get(position)));
+            return iterator(base.data_.erase(get(position)));
         }
 
         size_type erase(const key_type& k)
         {
-            return base.erase(k);
+            return base.erase_key(k);
         }
 
         iterator erase(const_iterator first, const_iterator last)
         {
-            return iterator(base.erase(get(first), get(last)));
+            return iterator(base.data_.erase_range(get(first), get(last)));
         }
 
         void clear()
@@ -527,28 +527,28 @@ namespace boost
 
         iterator insert(const_iterator hint, const value_type& obj)
         {
-            return iterator(base.insert(get(hint), obj));
+            return iterator(base.insert_hint(get(hint), obj));
         }
 
         template <class InputIterator>
             void insert(InputIterator first, InputIterator last)
         {
-            base.insert(first, last);
+            base.insert_range(first, last);
         }
 
         iterator erase(const_iterator position)
         {
-            return iterator(base.erase(get(position)));
+            return iterator(base.data_.erase(get(position)));
         }
 
         size_type erase(const key_type& k)
         {
-            return base.erase(k);
+            return base.erase_key(k);
         }
 
         iterator erase(const_iterator first, const_iterator last)
         {
-            return iterator(base.erase(get(first), get(last)));
+            return iterator(base.data_.erase_range(get(first), get(last)));
         }
 
         void clear()
