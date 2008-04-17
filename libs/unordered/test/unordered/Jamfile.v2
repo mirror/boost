@@ -21,6 +21,7 @@ test-suite unordered
         [ run equivalent_keys_tests.cpp ]
         [ run constructor_tests.cpp ]
         [ run copy_tests.cpp ]
+        [ run move_tests.cpp ]
         [ run assign_tests.cpp ]
         [ run insert_tests.cpp ]
         [ run insert_stable_tests.cpp ]

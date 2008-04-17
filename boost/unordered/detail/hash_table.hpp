@@ -121,6 +121,7 @@ namespace boost {
         }
 #endif
 
+        struct move_tag {};
     }
 }
 

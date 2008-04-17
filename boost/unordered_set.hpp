@@ -21,6 +21,10 @@
 #include <boost/unordered/detail/hash_table.hpp>
 #include <boost/functional/hash.hpp>
 
+#if !defined(BOOST_HAS_RVALUE_REFS)
+#include <boost/unordered/detail/move.hpp>
+#endif
+
 namespace boost
 {
     template <class Value,
@@ -96,6 +100,35 @@ namespace boost
             : base(f, l, n, hf, eql, a)
         {
         }
+
+#if defined(BOOST_HAS_RVALUE_REFS)
+        unordered_set(unordered_set&& other)
+            : base(other.base, boost::unordered_detail::move_tag())
+        {
+        }
+
+        unordered_set(unordered_set&& other, allocator_type const& a)
+            : base(other.base, a, boost::unordered_detail::move_tag())
+        {
+        }
+
+        unordered_set& operator=(unordered_set&& x)
+        {
+            base.move(x.base);
+            return *this;
+        }
+#else
+        unordered_set(boost::unordered_detail::move_from<unordered_set> other)
+            : base(other.base, boost::unordered_detail::move_tag())
+        {
+        }
+
+        unordered_set& operator=(unordered_set x)
+        {
+            base.move(x.base);
+            return *this;
+        }
+#endif
 
     private:
 
@@ -391,6 +424,35 @@ namespace boost
           : base(f, l, n, hf, eql, a)
         {
         }
+
+#if defined(BOOST_HAS_RVALUE_REFS)
+        unordered_multiset(unordered_multiset&& other)
+            : base(other.base, boost::unordered_detail::move_tag())
+        {
+        }
+
+        unordered_multiset(unordered_multiset&& other, allocator_type const& a)
+            : base(other.base, a, boost::unordered_detail::move_tag())
+        {
+        }
+
+        unordered_multiset& operator=(unordered_multiset&& x)
+        {
+            base.move(x.base);
+            return *this;
+        }
+#else
+        unordered_multiset(boost::unordered_detail::move_from<unordered_multiset> other)
+            : base(other.base, boost::unordered_detail::move_tag())
+        {
+        }
+
+        unordered_multiset& operator=(unordered_multiset x)
+        {
+            base.move(x.base);
+            return *this;
+        }
+#endif
 
     private:
 

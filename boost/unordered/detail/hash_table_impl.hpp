@@ -323,6 +323,53 @@ namespace boost {
                 buckets_(), bucket_count_(next_prime(n)),
                 cached_begin_bucket_(), size_(0)
             {
+                BOOST_UNORDERED_MSVC_RESET_PTR(buckets_);
+                create_buckets();
+            }
+
+            BOOST_UNORDERED_TABLE_DATA(BOOST_UNORDERED_TABLE_DATA const& x, size_type n)
+              : allocators_(x.allocators_),
+                buckets_(), bucket_count_(next_prime(n)),
+                cached_begin_bucket_(), size_(0)
+            {
+                BOOST_UNORDERED_MSVC_RESET_PTR(buckets_);
+                create_buckets();
+            }
+
+            BOOST_UNORDERED_TABLE_DATA(BOOST_UNORDERED_TABLE_DATA& x, move_tag)
+                : allocators_(x.allocators_),
+                buckets_(x.buckets_), bucket_count_(x.bucket_count_),
+                cached_begin_bucket_(x.cached_begin_bucket_), size_(x.size_)
+            {
+                unordered_detail::reset(x.buckets_);
+            }
+
+            BOOST_UNORDERED_TABLE_DATA(BOOST_UNORDERED_TABLE_DATA& x,
+                    value_allocator const& a, size_type n, move_tag)
+                : allocators_(a), buckets_(), bucket_count_(),
+                cached_begin_bucket_(), size_(0)
+            {
+                if(allocators_ == x.allocators_) {
+                    buckets_ = x.buckets_;
+                    bucket_count_ = x.bucket_count_;
+                    cached_begin_bucket_ = x.cached_begin_bucket_;
+                    size_ = x.size_;
+                    unordered_detail::reset(x.buckets_);
+                }
+                else {
+                    BOOST_UNORDERED_MSVC_RESET_PTR(buckets_);
+                    bucket_count_ = next_prime(n);
+                    create_buckets();
+                }
+            }
+
+            // no throw
+            ~BOOST_UNORDERED_TABLE_DATA()
+            {
+                delete_buckets();
+            }
+
+            void create_buckets() {
                 // The array constructor will clean up in the event of an
                 // exception.
                 allocator_array_constructor<bucket_allocator>
@@ -341,31 +388,8 @@ namespace boost {
                 buckets_ = constructor.release();
             }
 
-            BOOST_UNORDERED_TABLE_DATA(BOOST_UNORDERED_TABLE_DATA const& x, size_type n)
-              : allocators_(x.allocators_),
-                buckets_(), bucket_count_(next_prime(n)),
-                cached_begin_bucket_(), size_(0)
-            {
-                // The array constructor will clean up in the event of an
-                // exception.
-                allocator_array_constructor<bucket_allocator>
-                    constructor(allocators_.bucket_alloc_);
-
-                // Creates an extra bucket to act as a sentinel.
-                constructor.construct(bucket(), bucket_count_ + 1);
-
-                cached_begin_bucket_ = constructor.get() + static_cast<difference_type>(bucket_count_);
-
-                // Set up the sentinel
-                cached_begin_bucket_->next_ = link_ptr(cached_begin_bucket_);
-
-                // Only release the buckets once everything is successfully
-                // done.
-                buckets_ = constructor.release();
-            }
-
             // no throw
-            ~BOOST_UNORDERED_TABLE_DATA()
+            void delete_buckets()
             {
                 if(buckets_) {
                     bucket_ptr begin = cached_begin_bucket_;
@@ -398,6 +422,17 @@ namespace boost {
                 std::swap(bucket_count_, other.bucket_count_);
                 std::swap(cached_begin_bucket_, other.cached_begin_bucket_);
                 std::swap(size_, other.size_);
+            }
+
+            // no throw
+            void move(BOOST_UNORDERED_TABLE_DATA& other)
+            {
+                delete_buckets();
+                buckets_ = other.buckets_;
+                unordered_detail::reset(other.buckets_);
+                bucket_count_ = other.bucket_count_;
+                cached_begin_bucket_ = other.cached_begin_bucket_;
+                size_ = other.size_;
             }
 
             // Return the bucket for a hashed value.
@@ -1114,6 +1149,36 @@ namespace boost {
                 copy_buckets(x.data_, data_, current_functions());
             }
 
+            // Move Construct
+
+            BOOST_UNORDERED_TABLE(BOOST_UNORDERED_TABLE& x, move_tag m)
+                : func1_(x.current_functions()), // throws
+                func2_(x.current_functions()), // throws
+                func_(&BOOST_UNORDERED_TABLE::func1_), // no throw
+                mlf_(x.mlf_), // no throw
+                data_(x.data_, m)  // throws
+            {
+                calculate_max_load(); // no throw
+            }
+
+            BOOST_UNORDERED_TABLE(BOOST_UNORDERED_TABLE& x,
+                    value_allocator const& a, move_tag m)
+                : func1_(x.current_functions()), // throws
+                func2_(x.current_functions()), // throws
+                func_(&BOOST_UNORDERED_TABLE::func1_), // no throw
+                mlf_(x.mlf_), // no throw
+                data_(x.data_, a,
+                        x.min_buckets_for_size(x.size()), m)  // throws
+            {
+                calculate_max_load(); // no throw
+
+                if(x.data_.buckets_) {
+                    // This can throw, but BOOST_UNORDERED_TABLE_DATA's destructor will clean
+                    // up.
+                    copy_buckets(x.data_, data_, current_functions());
+                }
+            }
+
             // Assign
             //
             // basic exception safety, if copy_functions of reserver throws
@@ -1183,6 +1248,41 @@ namespace boost {
 
                 calculate_max_load();
                 x.calculate_max_load();
+            }
+
+            // Move
+            //
+            // ----------------------------------------------------------------
+            //
+            // Strong exception safety (might change unused function objects)
+            //
+            // Can throw if hash or predicate object's copy constructor throws
+            // or if allocators are unequal.
+
+            void move(BOOST_UNORDERED_TABLE& x)
+            {
+                // This only effects the function objects that aren't in use
+                // so it is strongly exception safe, via. double buffering.
+                functions_ptr new_func_this = copy_functions(x);       // throws
+
+                if(data_.allocators_ == x.data_.allocators_) {
+                    data_.move(x.data_); // no throw
+                }
+                else {
+                    // Create new buckets in separate HASH_TABLE_DATA objects
+                    // which will clean up if anything throws an exception.
+                    // (all can throw, but with no effect as these are new objects).
+                    data new_this(data_, x.min_buckets_for_size(x.data_.size_));
+                    copy_buckets(x.data_, new_this, this->*new_func_this);
+
+                    // Start updating the data here, no throw from now on.
+                    data_.move(new_this);
+                }
+
+                // We've made it, the rest is no throw.
+                mlf_ = x.mlf_;
+                func_ = new_func_this;
+                calculate_max_load();
             }
 
         private:
