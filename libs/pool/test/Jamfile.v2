@@ -11,4 +11,5 @@ import testing ;
 
 test-suite pool :
     [ run test_pool_alloc.cpp ]
+    [ run pool_msvc_compiler_bug_test.cpp ]
     ;
