@@ -52,7 +52,7 @@ class slex_iterator_functor_shim
 
 public:
     slex_iterator_functor_shim()
-#if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION > 900 || defined(__PGI)
+#if 0 != __DECCXX_VER || defined(__PGI)
       : eof()
 #endif // 0 != __DECCXX_VER
     {}

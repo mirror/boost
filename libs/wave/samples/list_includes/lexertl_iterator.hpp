@@ -25,7 +25,7 @@
 
 #include "lexertl_interface.hpp"
 
-#if 0 != __COMO_VERSION__
+#if 0 != __COMO_VERSION__ || !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 #define BOOST_WAVE_EOF_PREFIX static
 #else
 #define BOOST_WAVE_EOF_PREFIX 
@@ -54,7 +54,7 @@ public:
             wave::language_support language)
     :   functor_ptr(lexertl_input_interface<TokenT>
             ::new_lexer(first, last, pos, language)) 
-#if 0 != __DECCXX_VER
+#if 0 != __DECCXX_VER || defined(__PGI)
       , eof()
 #endif // 0 != __DECCXX_VER
     {}
@@ -88,7 +88,7 @@ private:
     boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
 };
 
-#if 0 != __COMO_VERSION__
+#if 0 != __COMO_VERSION__ || !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 ///////////////////////////////////////////////////////////////////////////////
 //  eof token
 template <typename TokenT>
