@@ -21,7 +21,7 @@ SOURCES_DYNAMIC = testwave_dll testwave_app_dll
 SOURCES = $(SOURCE_STATIC) $(SOURCES_DYNAMIC)
     ;
     
-path-constant TESTWAVE_DIR : ../testwave/testfiles 
+path-constant TESTWAVE_DIR : $(BOOST_ROOT)/libs/wave/test/testwave/testfiles 
     ;
 
 #
