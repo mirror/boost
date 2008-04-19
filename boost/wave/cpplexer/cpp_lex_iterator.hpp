@@ -62,6 +62,11 @@ public:
 #endif
     {}
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+    lex_iterator_functor_shim& operator= (lex_iterator_functor_shim const& rhs)
+        { return *this; }   // nothing to do here
+#endif
+
 // interface to the multi_pass_policies::split_functor_input policy
     typedef TokenT result_type;
     typedef lex_iterator_functor_shim unique;
