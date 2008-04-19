@@ -20,7 +20,11 @@
 #include <boost/detail/shared_ptr_nmt.hpp>
 #else
 
-#include <memory>               // for std::auto_ptr
+// In order to avoid circular dependencies with Boost.TR1
+// we make sure that our include of <memory> doesn't try to
+// pull in the TR1 headers: that's why we use this header 
+// rather than including <memory> directly:
+#include <boost/config/no_tr1/memory.hpp>  // std::auto_ptr
 
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
