@@ -17,6 +17,7 @@
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
+#include <boost/wave/util/unput_queue_iterator.hpp>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
