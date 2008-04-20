@@ -59,6 +59,32 @@ at that.
 majority of compilers, such as namespaces, exceptions, RTTI, or templates.
 
 
+[section:warnings Disabling Compiler Warings]
+
+The header `<boost/config/warning_disable.hpp>` can be used to disable
+certain compiler warings that are hard or impossible to otherwise remove.
+
+Note that:
+
+* This header [*['should never be included by another Boost header]], it should
+only ever be used by a library source file or a test case.
+* The header should be included [*['before you include any other header]].
+* This header only disables warnings that are hard or impossible to otherwise
+ deal with, and which are typically emitted by one compiler only, or
+ in one compilers own standard library headers.
+ 
+Currently it disables the following warnings:
+
+[table
+[[Compiler][Warning]]
+[[Visual C++ 8 and later][[@http://msdn2.microsoft.com/en-us/library/ttcz0bys(VS.80).aspx C4996]: Error 'function': was declared deprecated]]
+[[Intel C++][Warning 1786: relates to the use of "deprecated" standard 
+   library functions rather like C4996 in Visual C++.]]
+]
+
+[endsect]
+
+
 [section Adding New Defect Macros]
 
 When you need to add a new defect macro -either to fix a problem with an
