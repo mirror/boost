@@ -158,7 +158,7 @@ struct make_multi_pass
     typedef boost::spirit::multi_pass_policies::split_std_deque storage_policy;
     
     typedef boost::spirit::multi_pass_policies::default_policy<
-            input_policy, ownership_policy, check_policy, storage_policy>
+            ownership_policy, check_policy, input_policy, storage_policy>
         policy_type;
     typedef boost::spirit::multi_pass<functor_data_type, policy_type> type;
 };
