@@ -10,7 +10,7 @@
 #include <map>
 #include <boost/mpl/apply.hpp>
 #include <boost/assert.hpp>
-#include <boost/unordered/detail/allocator.hpp>
+#include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/mpl/aux_/config/eti.hpp>
 #include "../helpers/test.hpp"
 
