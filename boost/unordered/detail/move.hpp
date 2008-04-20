@@ -69,14 +69,14 @@ class test_can_convert_anything { };
 /*************************************************************************************************/
 
 /*
-	REVISIT (sparent@adobe.com): This is a work around for Boost 1.34.1 and VC++ 2008 where
-	boost::is_convertible<T, T> fails to compile.
+    REVISIT (sparent@adobe.com): This is a work around for Boost 1.34.1 and VC++ 2008 where
+    boost::is_convertible<T, T> fails to compile.
 */
 
 template <typename T, typename U>
 struct is_convertible : boost::mpl::or_<
-	boost::is_same<T, U>,
-	boost::is_convertible<T, U>
+    boost::is_same<T, U>,
+    boost::is_convertible<T, U>
 > { };
 
 /*************************************************************************************************/
