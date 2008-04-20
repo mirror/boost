@@ -44,5 +44,6 @@ import testing ;
           [ run spinlock_try_test.cpp : : : <threading>multi : spinlock_try_test.mt ]
           [ run spinlock_pool_test.cpp ]
           [ run sp_accept_owner_test.cpp ]
+          [ run sp_atomic_test.cpp ]
         ;
 }
