@@ -694,7 +694,7 @@ namespace boost {
                 BOOST_ASSERT(base == end.bucket_);
 
                 split_group(end.node_);
-            
+
                 link_ptr ptr(base->next_);
                 base->next_ = end.node_;
 
@@ -1147,7 +1147,7 @@ namespace boost {
             //
             // Swap's behaviour when allocators aren't equal is in dispute, for
             // details see:
-            // 
+            //
             // http://unordered.nfshost.com/doc/html/unordered/rationale.html#swapping_containers_with_unequal_allocators
             //
             // ----------------------------------------------------------------
@@ -1159,6 +1159,13 @@ namespace boost {
 
             void swap(BOOST_UNORDERED_TABLE& x)
             {
+                // The swap code can work when swapping a container with itself
+                // but it triggers an assertion in buffered_functions.
+                // At the moment, I'd rather leave that assertion in and add a
+                // check here, rather than remove the assertion. I might change
+                // this at a later date.
+                if(this == &x) return;
+
                 // These can throw, but they only affect the function objects
                 // that aren't in use so it is strongly exception safe, via.
                 // double buffering.
@@ -1669,7 +1676,7 @@ namespace boost {
                 size_type hash_value = hash_function()(k);
                 bucket_ptr bucket = data_.bucket_from_hash(hash_value);
                 link_ptr pos = find_iterator(bucket, k);
-                
+
                 if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
                     // Found an existing key, return it (no throw).
                     return std::pair<iterator_base, bool>(
@@ -1744,7 +1751,7 @@ namespace boost {
                     size_type hash_value = hash_function()(extract_key(*i));
                     bucket_ptr bucket = data_.bucket_from_hash(hash_value);
                     link_ptr pos = find_iterator(bucket, extract_key(*i));
-                    
+
                     if (!BOOST_UNORDERED_BORLAND_BOOL(pos)) {
                         // Doesn't already exist, add to bucket.
                         // Side effects only in this block.
@@ -1871,7 +1878,7 @@ namespace boost {
         };
 
         // Iterators
-        
+
         template <typename Alloc> class BOOST_UNORDERED_ITERATOR;
         template <typename Alloc> class BOOST_UNORDERED_CONST_ITERATOR;
         template <typename Alloc> class BOOST_UNORDERED_LOCAL_ITERATOR;
