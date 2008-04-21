@@ -54,7 +54,7 @@ namespace boost { namespace fusion {
     namespace result_of
     {
         template< BOOST_PP_ENUM_PARAMS(ZIP_ITERATION, typename T) >
-#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+#if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
         #define TEXT(z, n, text) , text
         struct zip< BOOST_PP_ENUM_PARAMS(ZIP_ITERATION, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(ZIP_ITERATION), FUSION_MAX_ZIP_SEQUENCES, TEXT, void_) >
         #undef TEXT

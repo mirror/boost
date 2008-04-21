@@ -10,7 +10,7 @@
 
 #include <boost/fusion/support/tag_of_fwd.hpp>
 
-#include <utility>
+#include <boost/config/no_tr1/utility.hpp>
 
 namespace boost { namespace fusion {
 

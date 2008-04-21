@@ -53,7 +53,7 @@
 #endif
 
 // Some versions of the compiler have issues with default arguments on partial specializations
-#define BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS
+#define BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS
 
 
 

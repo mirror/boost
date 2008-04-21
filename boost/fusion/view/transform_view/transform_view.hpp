@@ -73,7 +73,7 @@ namespace boost { namespace fusion
 
     // Unary Version
     template <typename Sequence, typename F>
-#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+#if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
     struct transform_view<Sequence, F, void_> : sequence_base<transform_view<Sequence, F, void_> >
 #else
     struct transform_view<Sequence, F> : sequence_base<transform_view<Sequence, F> >

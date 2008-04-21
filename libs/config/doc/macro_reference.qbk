@@ -176,6 +176,10 @@ Compiler requires inherited operator friend functions to be defined at
 namespace scope, then using'ed to boost. Probably GCC specific. See
 [@../../../../boost/operators.hpp `<boost/operators.hpp>`] for example.
 ]]
+[[`BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS`][Compiler][
+The compiler does not correctly handle partial specializations
+which depend upon default arguments in the primary template.
+]]
 [[`BOOST_NO_POINTER_TO_MEMBER_CONST`][Compiler][
 The compiler does not correctly handle pointers to const member functions,
 preventing use of these in overloaded function templates. See

@@ -27,7 +27,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/mpl/int.hpp>
-#include <utility>
+#include <boost/config/no_tr1/utility.hpp>
 
 #define BOOST_FUSION_ADAPT_STRUCT(name, bseq)                                   \
     BOOST_FUSION_ADAPT_STRUCT_I(                                                \

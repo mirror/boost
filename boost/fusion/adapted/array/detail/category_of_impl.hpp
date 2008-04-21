@@ -8,7 +8,7 @@
 #if !defined(BOOST_FUSION_CATEGORY_OF_IMPL_27122005_1044)
 #define BOOST_FUSION_CATEGORY_OF_IMPL_27122005_1044
 
-#include <utility>
+#include <boost/config/no_tr1/utility.hpp>
 
 namespace boost { namespace fusion { 
 

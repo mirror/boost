@@ -1,4 +1,4 @@
-//  This file was automatically generated on Mon Apr 21 10:10:52 2008
+//  This file was automatically generated on Mon Apr 21 12:40:41 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -196,6 +196,11 @@ namespace boost_no_operators_in_namespace = empty_boost;
 #include "boost_no_partial_spec.ipp"
 #else
 namespace boost_no_template_partial_specialization = empty_boost;
+#endif
+#ifndef BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS
+#include "boost_no_part_spec_def_args.ipp"
+#else
+namespace boost_no_partial_specialization_implicit_default_args = empty_boost;
 #endif
 #ifndef BOOST_NO_PRIVATE_IN_AGGREGATE
 #include "boost_no_priv_aggregate.ipp"
@@ -1024,6 +1029,11 @@ int main( int, char *[] )
    if(0 != boost_no_template_partial_specialization::test())
    {
       std::cerr << "Failed test for BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_partial_specialization_implicit_default_args::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_private_in_aggregate::test())
