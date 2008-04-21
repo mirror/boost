@@ -7,6 +7,13 @@
 
 import testing ;
 
+project :
+    requirements
+        <link>static
+        <runtime-link>static
+        <toolset>msvc:<cxxflags>/Za
+    ;
+
 #to_string
 run is_output_streamable_test.cpp ;
 run has_to_string_test.cpp ;

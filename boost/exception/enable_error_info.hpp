@@ -25,6 +25,10 @@ boost
                 T(x)
                 {
                 }
+
+            ~error_info_injector() throw()
+                {
+                }
             };
 
         struct large_size { char c[256]; };

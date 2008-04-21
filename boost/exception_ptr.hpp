@@ -30,6 +30,10 @@ boost
             boost::exception(e)
             {
             }
+
+		~unknown_exception() throw()
+			{
+			}
         };
 
     typedef intrusive_ptr<exception_detail::clone_base const> exception_ptr;
@@ -56,6 +60,10 @@ boost
                 boost::exception(e2)
                 {
                 }
+
+			~current_exception_std_exception_wrapper() throw()
+				{
+				}
             };
 
         template <class T>
