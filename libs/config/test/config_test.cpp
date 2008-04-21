@@ -1,4 +1,4 @@
-//  This file was automatically generated on Mon Apr 14 17:10:09 2008
+//  This file was automatically generated on Mon Apr 21 10:10:52 2008
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -291,6 +291,11 @@ namespace boost_no_std_wstring = empty_boost;
 #include "boost_no_swprintf.ipp"
 #else
 namespace boost_no_swprintf = empty_boost;
+#endif
+#ifndef BOOST_NO_TEMPLATED_IOSTREAMS
+#include "boost_no_template_streams.ipp"
+#else
+namespace boost_no_templated_iostreams = empty_boost;
 #endif
 #ifndef BOOST_NO_TEMPLATE_TEMPLATES
 #include "boost_no_template_template.ipp"
@@ -1114,6 +1119,11 @@ int main( int, char *[] )
    if(0 != boost_no_swprintf::test())
    {
       std::cerr << "Failed test for BOOST_NO_SWPRINTF at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_templated_iostreams::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_TEMPLATED_IOSTREAMS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_template_templates::test())

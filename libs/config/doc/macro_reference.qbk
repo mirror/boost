@@ -250,6 +250,9 @@ The platform does not have a conforming version of `swprintf`.
 Class template partial specialization (14.5.4 \[temp.class.spec\]) not
 supported.
 ]]
+[[`BOOST_NO_TEMPLATED_IOSTREAMS`][Standard library][
+The standard library does not provide templated iostream classes.
+]]
 [[`BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS`][Standard library][
 The standard library does not provide templated iterator constructors
 for its containers.
