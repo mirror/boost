@@ -220,6 +220,18 @@ public:
         if( pi_ != 0 ) pi_->add_ref_copy();
     }
 
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+    shared_count(shared_count && r): pi_(r.pi_) // nothrow
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
+    {
+        r.pi_ = 0;
+    }
+
+#endif
+
     explicit shared_count(weak_count const & r); // throws bad_weak_ptr when r.use_count() == 0
     shared_count( weak_count const & r, sp_nothrow_tag ); // constructs an empty *this when r.use_count() == 0
 

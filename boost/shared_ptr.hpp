@@ -228,6 +228,11 @@ public:
     {
     }
 
+    template<class Y>
+    shared_ptr(detail::shared_count const & c, Y * p): px(p), pn(c) // never throws
+    {
+    }
+
     // aliasing
     template< class Y >
     shared_ptr( shared_ptr<Y> const & r, T * p ): px( p ), pn( r.pn ) // never throws
@@ -339,6 +344,11 @@ public:
     {
         pn.swap( r.pn );
         r.px = 0;
+    }
+
+    template<class Y>
+    shared_ptr(detail::shared_count && c, Y * p): px(p), pn( static_cast< detail::shared_count && >( c ) ) // never throws
+    {
     }
 
     shared_ptr & operator=( shared_ptr && r ) // never throws
@@ -465,6 +475,11 @@ public:
     {
         std::swap(px, other.px);
         pn.swap(other.pn);
+    }
+
+    detail::shared_count const & get_shared_count() const // never throws
+    {
+        return pn;
     }
 
     template<class Y> bool _internal_less(shared_ptr<Y> const & rhs) const

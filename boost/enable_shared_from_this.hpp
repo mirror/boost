@@ -13,7 +13,7 @@
 //  http://www.boost.org/libs/smart_ptr/enable_shared_from_this.html
 //
 
-#include <boost/weak_ptr.hpp>
+#include <boost/detail/shared_count.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
@@ -32,7 +32,7 @@ template<class T> class enable_shared_from_this
             T * p = dynamic_cast<T *>(const_cast<enable_shared_from_this*>(this));
             _internal_shared_this = shared_ptr<T>( p, detail::sp_deleter_wrapper() );
             BOOST_ASSERT(_internal_shared_this.get() == this);
-            _internal_weak_this = _internal_shared_this;
+            _internal_weak_count = _internal_shared_this.get_shared_count();
         }
     }
 
@@ -43,7 +43,7 @@ template<class T> class enable_shared_from_this
 
     typedef T _internal_element_type; // for bcc 5.5.1
     mutable shared_ptr<_internal_element_type> _internal_shared_this;
-    mutable weak_ptr<_internal_element_type> _internal_weak_this;
+    mutable detail::weak_count _internal_weak_count;
     mutable bool _owned;
 
 protected:
@@ -77,17 +77,15 @@ public:
     shared_ptr<T> shared_from_this()
     {
         init_internal_shared_once();
-        shared_ptr<T> p(_internal_weak_this);
-        BOOST_ASSERT(p.get() == this);
-        return p;
+        T * p = dynamic_cast<T *>(this);
+        return shared_ptr<T>( detail::shared_count( _internal_weak_count ), p );
     }
 
     shared_ptr<T const> shared_from_this() const
     {
         init_internal_shared_once();
-        shared_ptr<T const> p(_internal_weak_this);
-        BOOST_ASSERT(p.get() == this);
-        return p;
+        T const * p = dynamic_cast<T const *>(this);
+        return shared_ptr<T const>( detail::shared_count( _internal_weak_count ), p );
     }
 
     template<typename U>
@@ -97,8 +95,7 @@ public:
         {
             if( !_internal_shared_this )
             {
-                T * p = dynamic_cast<T *>(const_cast<enable_shared_from_this*>(this));
-                _internal_weak_this = shared_ptr<T>(owner, p);
+                _internal_weak_count = owner.get_shared_count();
             }else
             {
                 BOOST_ASSERT(owner.unique()); // no weak_ptrs to owner should exist either, but there's no way to check that
