@@ -9,8 +9,8 @@ import testing ;
 
 project :
     requirements
-        <link>static
-        <runtime-link>static
+#       <link>static
+#       <runtime-link>static
         <toolset>msvc:<cxxflags>/Za
     ;
 
