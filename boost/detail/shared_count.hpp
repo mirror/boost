@@ -324,9 +324,13 @@ public:
     weak_count & operator= (shared_count const & r) // nothrow
     {
         sp_counted_base * tmp = r.pi_;
-        if(tmp != 0) tmp->weak_add_ref();
-        if(pi_ != 0) pi_->weak_release();
-        pi_ = tmp;
+
+        if( tmp != pi_ )
+        {
+            if(tmp != 0) tmp->weak_add_ref();
+            if(pi_ != 0) pi_->weak_release();
+            pi_ = tmp;
+        }
 
         return *this;
     }
@@ -334,9 +338,13 @@ public:
     weak_count & operator= (weak_count const & r) // nothrow
     {
         sp_counted_base * tmp = r.pi_;
-        if(tmp != 0) tmp->weak_add_ref();
-        if(pi_ != 0) pi_->weak_release();
-        pi_ = tmp;
+
+        if( tmp != pi_ )
+        {
+            if(tmp != 0) tmp->weak_add_ref();
+            if(pi_ != 0) pi_->weak_release();
+            pi_ = tmp;
+        }
 
         return *this;
     }
