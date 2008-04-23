@@ -111,7 +111,11 @@ inline void yield( unsigned k )
     }
     else
     {
-        struct timespec rqtp = { 0 };
+        // g++ -Wextra warns on {} or {0}
+        struct timespec rqtp = { 0, 0 };
+
+        // POSIX says that timespec has tv_sec and tv_nsec
+        // But it doesn't guarantee order or placement
 
         rqtp.tv_sec = 0;
         rqtp.tv_nsec = 1000;
