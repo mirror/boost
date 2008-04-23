@@ -196,6 +196,22 @@ namespace boost
 
         // modifiers
 
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+        template <class... Args>
+        std::pair<iterator, bool> emplace(Args&&... args)
+        {
+            return boost::unordered_detail::pair_cast<iterator, bool>(
+                base.insert(std::forward<Args>(args)...));
+        }
+
+        template <class... Args>
+        iterator emplace(const_iterator hint, Args&&... args)
+        {
+            return iterator(
+                base.insert_hint(get(hint), std::forward<Args>(args)...));
+        }
+#endif
+
         std::pair<iterator, bool> insert(const value_type& obj)
         {
             return boost::unordered_detail::pair_cast<iterator, bool>(
@@ -519,6 +535,20 @@ namespace boost
         }
 
         // modifiers
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+        template <class... Args>
+        iterator emplace(Args&&... args)
+        {
+            return iterator(base.insert(std::forward<Args>(args)...));
+        }
+
+        template <class... Args>
+        iterator emplace(const_iterator hint, Args&&... args)
+        {
+            return iterator(base.insert_hint(get(hint), std::forward<Args>(args)...));
+        }
+#endif
 
         iterator insert(const value_type& obj)
         {

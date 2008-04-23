@@ -262,6 +262,60 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </method>
           </method-group>
           <method-group name="modifiers">
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>std::pair&lt;iterator, bool&gt;</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container if and only if there is no element in the container with an equivalent value.</para>
+              </description>
+              <returns>
+                <para>The bool component of the return type is true if an insert took place.</para>
+                <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent value.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="hint">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container if and only if there is no element in the container with an equivalent value.</para>
+                <para>hint is a suggestion to where the element should be inserted.</para>
+              </description>
+              <returns>
+                <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent value.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same value. </para>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
             <method name="insert">
               <parameter name="obj">
                 <paramtype>value_type const&amp;</paramtype>
@@ -892,6 +946,59 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </method>
           </method-group>
           <method-group name="modifiers">
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container.</para>
+              </description>
+              <returns>
+                <para>An iterator pointing to the inserted element.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="hint">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container.</para>
+                <para>hint is a suggestion to where the element should be inserted.</para>
+              </description>
+              <returns>
+                <para>An iterator pointing to the inserted element.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same value. </para>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
             <method name="insert">
               <parameter name="obj">
                 <paramtype>value_type const&amp;</paramtype>
@@ -1533,6 +1640,60 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </method>
           </method-group>
           <method-group name="modifiers">
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>std::pair&lt;iterator, bool&gt;</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container if and only if there is no element in the container with an equivalent key.</para>
+              </description>
+              <returns>
+                <para>The bool component of the return type is true if an insert took place.</para>
+                <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent key.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="hint">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container if and only if there is no element in the container with an equivalent key.</para>
+                <para>hint is a suggestion to where the element should be inserted.</para>
+              </description>
+              <returns>
+                <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent key.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same key. </para>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
             <method name="insert">
               <parameter name="obj">
                 <paramtype>value_type const&amp;</paramtype>
@@ -2208,6 +2369,59 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
             </method>
           </method-group>
           <method-group name="modifiers">
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container.</para>
+              </description>
+              <returns>
+                <para>An iterator pointing to the inserted element.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
+            <method name="emplace">
+              <template>
+                <template-type-parameter name="Args">
+                </template-type-parameter>
+                <template-varargs></template-varargs>
+              </template>
+              <parameter name="hint">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <parameter name="args">
+                <paramtype>Args&amp;&amp;...</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+                <para>Inserts an object, constructed with the arguments <code>args</code>, in the container.</para>
+                <para>hint is a suggestion to where the element should be inserted.</para>
+              </description>
+              <returns>
+                <para>An iterator pointing to the inserted element.</para>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same key. </para>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
             <method name="insert">
               <parameter name="obj">
                 <paramtype>value_type const&amp;</paramtype>

@@ -24,6 +24,7 @@ namespace minimal
     class copy_constructible;
     class default_copy_constructible;
     class assignable;
+
     template <class T> class hash;
     template <class T> class equal_to;
     template <class T> class ptr;
@@ -207,6 +208,13 @@ namespace minimal
         }
 
         void construct(pointer p, T const& t) { new((void*)p.ptr_) T(t); }
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+        template<class... Args> void construct(pointer p, Args&&... args) {
+            new((void*)p.ptr_) T(std::forward<Args>(args)...);
+        }
+#endif
+
         void destroy(pointer p) { ((T*)p.ptr_)->~T(); }
 
         size_type max_size() const { return 1000; }

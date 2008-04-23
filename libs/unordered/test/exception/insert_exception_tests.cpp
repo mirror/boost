@@ -36,6 +36,25 @@ struct insert_test_base : public test::exception_base
     }
 };
 
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+
+template <class T>
+struct emplace_test1 : public insert_test_base<T>
+{
+    typedef BOOST_DEDUCED_TYPENAME insert_test_base<T>::strong_type strong_type;
+
+    void run(T& x, strong_type& strong) const {
+        for(BOOST_DEDUCED_TYPENAME test::random_values<T>::const_iterator
+                it = this->values.begin(), end = this->values.end(); it != end; ++it)
+        {
+            strong.store(x);
+            x.emplace(*it);
+        }
+    }
+};
+
+#endif
+
 template <class T>
 struct insert_test1 : public insert_test_base<T>
 {
@@ -204,7 +223,15 @@ struct insert_test_rehash3 : public insert_test_base<T>
     }
 };
 
-RUN_EXCEPTION_TESTS(
-    (insert_test1)(insert_test2)(insert_test3)(insert_test4)
-    (insert_test_rehash1)(insert_test_rehash2)(insert_test_rehash3),
-    CONTAINER_SEQ)
+#define BASIC_TESTS \
+    (insert_test1)(insert_test2)(insert_test3)(insert_test4) \
+    (insert_test_rehash1)(insert_test_rehash2)(insert_test_rehash3)
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#define ALL_TESTS (emplace_test1)BASIC_TESTS
+#else
+#define ALL_TESTS BASIC_TESTS
+#endif
+
+
+RUN_EXCEPTION_TESTS(ALL_TESTS, CONTAINER_SEQ)

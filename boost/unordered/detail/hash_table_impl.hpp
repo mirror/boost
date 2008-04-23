@@ -108,14 +108,113 @@ namespace boost {
             struct node : node_base
             {
             public:
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+                template <typename... Args>
+                node(Args&&... args)
+                    : node_base(), value_(std::forward<Args>(args)...) {}
+#else
                 node(value_type const& v) : node_base(), value_(v) {}
+#endif
 
                 value_type value_;
+            };
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+
+            // allocators
+            //
+            // Stores all the allocators that we're going to need.
+
+            struct allocators
+            {
+                node_allocator node_alloc_;
+                bucket_allocator bucket_alloc_;
+
+                allocators(value_allocator const& a)
+                    : node_alloc_(a), bucket_alloc_(a)
+                {}
+
+                void destroy(link_ptr ptr)
+                {
+                    node_ptr n(node_alloc_.address(*static_cast<node*>(&*ptr)));
+                    node_alloc_.destroy(n);
+                    node_alloc_.deallocate(n, 1);
+                }
+
+                void swap(allocators& x)
+                {
+                    unordered_detail::hash_swap(node_alloc_, x.node_alloc_);
+                    unordered_detail::hash_swap(bucket_alloc_, x.bucket_alloc_);
+                }
+
+                bool operator==(allocators const& x)
+                {
+                    return node_alloc_ == x.node_alloc_;
+                }
             };
 
             // node_constructor
             //
             // Used to construct nodes in an exception safe manner.
+
+            class node_constructor
+            {
+                allocators& allocators_;
+
+                node_ptr node_;
+                bool node_constructed_;
+
+            public:
+
+                node_constructor(allocators& a)
+                    : allocators_(a),
+                    node_(), node_constructed_(false)
+                {
+                }
+
+                ~node_constructor()
+                {
+                    if (node_) {
+                        if (node_constructed_)
+                            allocators_.node_alloc_.destroy(node_);
+                        allocators_.node_alloc_.deallocate(node_, 1);
+                    }
+                }
+
+                template <typename... Args>
+                void construct(Args&&... args)
+                {
+                    BOOST_ASSERT(!node_);
+                    node_constructed_ = false;
+
+                    node_ = allocators_.node_alloc_.allocate(1);
+                    allocators_.node_alloc_.construct(node_, std::forward<Args>(args)...);
+                    node_constructed_ = true;
+                }
+
+                node_ptr get() const
+                {
+                    BOOST_ASSERT(node_);
+                    return node_;
+                }
+
+                // no throw
+                link_ptr release()
+                {
+                    node_ptr p = node_;
+                    unordered_detail::reset(node_);
+                    return link_ptr(allocators_.bucket_alloc_.address(*p));
+                }
+
+            private:
+                node_constructor(node_constructor const&);
+                node_constructor& operator=(node_constructor const&);
+            };
+#else
+
+            // allocators
+            //
+            // Stores all the allocators that we're going to need.
 
             struct allocators
             {
@@ -150,6 +249,10 @@ namespace boost {
                     return value_alloc_ == x.value_alloc_;
                 }
             };
+
+            // node_constructor
+            //
+            // Used to construct nodes in an exception safe manner.
 
             class node_constructor
             {
@@ -201,6 +304,27 @@ namespace boost {
                     value_constructed_ = true;
                 }
 
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+                template <typename... Args>
+                void construct(Args&&... args)
+                {
+                    BOOST_ASSERT(!node_);
+                    value_constructed_ = false;
+                    node_base_constructed_ = false;
+
+                    node_ = allocators_.node_alloc_.allocate(1);
+
+                    allocators_.node_base_alloc_.construct(
+                            allocators_.node_base_alloc_.address(*node_),
+                            node_base());
+                    node_base_constructed_ = true;
+
+                    allocators_.value_alloc_.construct(
+                            allocators_.value_alloc_.address(node_->value_), std::forward<Args>(args)...);
+                    value_constructed_ = true;
+                }
+#endif
+
                 node_ptr get() const
                 {
                     BOOST_ASSERT(node_);
@@ -219,6 +343,7 @@ namespace boost {
                 node_constructor(node_constructor const&);
                 node_constructor& operator=(node_constructor const&);
             };
+#endif
 
             // Methods for navigating groups of elements with equal keys.
 
@@ -1251,9 +1376,9 @@ namespace boost {
             // accessors
 
             // no throw
-            value_allocator get_allocator() const
+            node_allocator get_allocator() const
             {
-                return data_.allocators_.value_alloc_;
+                return data_.allocators_.node_alloc_;
             }
 
             // no throw
@@ -1356,26 +1481,6 @@ namespace boost {
                 return need_to_reserve;
             }
 
-            // basic exception safety
-            //
-            // This version of reserve is called when inserting a range
-            // into a container with equivalent keys, it creates more buckets
-            // if the resulting load factor would be over 80% of the load
-            // factor. This is to try to avoid excessive rehashes.
-            bool reserve_extra(size_type n)
-            {
-                using namespace std;
-
-                bool need_to_reserve = n >= max_load_;
-                // throws - basic:
-                if (need_to_reserve) {
-                    rehash_impl(double_to_size_t(floor(
-                        n / (double) mlf_ * 1.25)) + 1);
-                }
-                BOOST_ASSERT(n < max_load_ || n > max_size());
-                return need_to_reserve;
-            }
-
         public:
 
             // no throw
@@ -1421,6 +1526,41 @@ namespace boost {
             {
                 return v.first;
             }
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+            struct no_key {};
+
+            template <typename Arg1, typename... Args>
+            static typename boost::enable_if<
+                boost::mpl::and_<
+                    boost::mpl::not_<boost::is_same<key_type, value_type> >,
+                    boost::is_same<Arg1, key_type>
+                >,
+                key_type>::type const& extract_key(Arg1 const& k, Args const&...)
+            {
+                return k;
+            }
+
+            template <typename First, typename Second>
+            static typename boost::enable_if<
+                boost::mpl::and_<
+                    boost::mpl::not_<boost::is_same<key_type, value_type> >,
+                    boost::is_same<key_type,
+                        typename boost::remove_const<
+                            typename boost::remove_reference<First>::type
+                        >::type>
+                >,
+                key_type>::type const& extract_key(std::pair<First, Second> const& v)
+            {
+                return v.first;
+            }
+
+            template <typename... Args>
+            static no_key extract_key(Args const&...)
+            {
+                return no_key();
+            }
+#endif
 
         public:
 
@@ -1526,15 +1666,69 @@ namespace boost {
             // strong otherwise
             iterator_base insert(value_type const& v)
             {
-                key_type const& k = extract_key(v);
-                size_type hash_value = hash_function()(k);
-                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
-                link_ptr position = find_iterator(bucket, k);
-
                 // Create the node before rehashing in case it throws an
                 // exception (need strong safety in such a case).
                 node_constructor a(data_.allocators_);
                 a.construct(v);
+
+                return insert_impl(a);
+            }
+
+            // Insert (equivalent key containers)
+
+            // if hash function throws, basic exception safety
+            // strong otherwise
+            iterator_base insert_hint(iterator_base const& it, value_type const& v)
+            {
+                // Create the node before rehashing in case it throws an
+                // exception (need strong safety in such a case).
+                node_constructor a(data_.allocators_);
+                a.construct(v);
+
+                return insert_hint_impl(it, a);
+            }
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+            // Insert (equivalent key containers)
+            // (I'm using an overloaded insert for both 'insert' and 'emplace')
+
+            // if hash function throws, basic exception safety
+            // strong otherwise
+            template <class... Args>
+            iterator_base insert(Args&&... args)
+            {
+                // Create the node before rehashing in case it throws an
+                // exception (need strong safety in such a case).
+                node_constructor a(data_.allocators_);
+                a.construct(std::forward<Args>(args)...);
+
+                return insert_impl(a);
+            }
+
+            // Insert (equivalent key containers)
+            // (I'm using an overloaded insert for both 'insert' and 'emplace')
+
+            // if hash function throws, basic exception safety
+            // strong otherwise
+            template <class... Args>
+            iterator_base insert_hint(iterator_base const& it, Args&&... args)
+            {
+                // Create the node before rehashing in case it throws an
+                // exception (need strong safety in such a case).
+                node_constructor a(data_.allocators_);
+                a.construct(std::forward<Args>(args)...);
+
+                return insert_hint_impl(it, a);
+            }
+
+#endif
+
+            iterator_base insert_impl(node_constructor& a)
+            {
+                key_type const& k = extract_key(a.get()->value_);
+                size_type hash_value = hash_function()(k);
+                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
+                link_ptr position = find_iterator(bucket, k);
 
                 // reserve has basic exception safety if the hash function
                 // throws, strong otherwise.
@@ -1550,17 +1744,13 @@ namespace boost {
                 );
             }
 
-            // Insert (equivalent key containers)
-
-            // if hash function throws, basic exception safety
-            // strong otherwise
-            iterator_base insert_hint(iterator_base const& it, value_type const& v)
+            iterator_base insert_hint_impl(iterator_base const& it, node_constructor& a)
             {
                 // equal can throw, but with no effects
-                if (it == data_.end() || !equal(extract_key(v), *it)) {
+                if (it == data_.end() || !equal(extract_key(a.get()->value_), *it)) {
                     // Use the standard insert if the iterator doesn't point
                     // to a matching key.
-                    return insert(v);
+                    return insert_impl(a);
                 }
                 else {
                     // Find the first node in the group - so that the node
@@ -1570,15 +1760,10 @@ namespace boost {
                     while(data_.prev_in_group(start)->next_ == start)
                         start = data_.prev_in_group(start);
 
-                    // Create the node before rehashing in case it throws an
-                    // exception (need strong safety in such a case).
-                    node_constructor a(data_.allocators_);
-                    a.construct(v);
-
                     // reserve has basic exception safety if the hash function
                     // throws, strong otherwise.
                     bucket_ptr base = reserve(size() + 1) ?
-                        get_bucket(extract_key(v)) : it.bucket_;
+                        get_bucket(extract_key(a.get()->value_)) : it.bucket_;
 
                     // Nothing after this point can throw
 
@@ -1602,7 +1787,7 @@ namespace boost {
                 }
                 else {
                     // Only require basic exception safety here
-                    reserve_extra(size() + distance);
+                    reserve(size() + distance);
                     node_constructor a(data_.allocators_);
 
                     for (; i != j; ++i) {
@@ -1728,6 +1913,104 @@ namespace boost {
                 else
                     return insert(v).first;
             }
+
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+            // Insert (unique keys)
+            // (I'm using an overloaded insert for both 'insert' and 'emplace')
+            //
+            // TODO:
+            // For sets: create a local key without creating the node?
+            // For maps: use the first argument as the key.
+
+            // if hash function throws, basic exception safety
+            // strong otherwise
+            template<typename... Args>
+            std::pair<iterator_base, bool> insert(Args&&... args)
+            {
+                return insert_impl(
+                    extract_key(std::forward<Args>(args)...),
+                    std::forward<Args>(args)...);
+            }
+
+            template<typename... Args>
+            std::pair<iterator_base, bool> insert_impl(key_type const& k, Args&&... args)
+            {
+                // No side effects in this initial code
+                size_type hash_value = hash_function()(k);
+                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
+                link_ptr pos = find_iterator(bucket, k);
+
+                if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+                    // Found an existing key, return it (no throw).
+                    return std::pair<iterator_base, bool>(
+                        iterator_base(bucket, pos), false);
+
+                } else {
+                    // Doesn't already exist, add to bucket.
+                    // Side effects only in this block.
+
+                    // Create the node before rehashing in case it throws an
+                    // exception (need strong safety in such a case).
+                    node_constructor a(data_.allocators_);
+                    a.construct(std::forward<Args>(args)...);
+
+                    // reserve has basic exception safety if the hash function
+                    // throws, strong otherwise.
+                    if(reserve(size() + 1))
+                        bucket = data_.bucket_ptr_from_hash(hash_value);
+
+                    // Nothing after this point can throw.
+
+                    link_ptr n = data_.link_node_in_bucket(a, bucket);
+
+                    return std::pair<iterator_base, bool>(
+                        iterator_base(bucket, n), true);
+                }
+            }
+
+            template<typename... Args>
+            std::pair<iterator_base, bool> insert_impl(no_key, Args&&... args)
+            {
+                // Construct the node regardless - in order to get the key.
+                // It will be discarded if it isn't used
+                node_constructor a(data_.allocators_);
+                a.construct(std::forward<Args>(args)...);
+
+                // No side effects in this initial code
+                key_type const& k = extract_key(a.get()->value_);
+                size_type hash_value = hash_function()(k);
+                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
+                link_ptr pos = find_iterator(bucket, k);
+                
+                if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+                    // Found an existing key, return it (no throw).
+                    return std::pair<iterator_base, bool>(
+                        iterator_base(bucket, pos), false);
+                } else {
+                    // reserve has basic exception safety if the hash function
+                    // throws, strong otherwise.
+                    if(reserve(size() + 1))
+                        bucket = data_.bucket_ptr_from_hash(hash_value);
+
+                    // Nothing after this point can throw.
+
+                    return std::pair<iterator_base, bool>(iterator_base(bucket,
+                        data_.link_node_in_bucket(a, bucket)), true);
+                }
+            }
+
+            // Insert (unique keys)
+            // (I'm using an overloaded insert for both 'insert' and 'emplace')
+
+            // if hash function throws, basic exception safety
+            // strong otherwise
+            template<typename... Args>
+            iterator_base insert_hint(iterator_base const& it, Args&&... args)
+            {
+                // Life is complicated - just call the normal implementation.
+                return insert(std::forward<Args>(args)...).first;
+            }
+#endif
 
             // Insert from iterators (unique keys)
 

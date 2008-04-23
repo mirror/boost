@@ -347,6 +347,16 @@ namespace exception
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
         }
 
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+        template<class... Args> void construct(pointer p, Args&&... args) {
+            UNORDERED_SCOPE(allocator::construct(pointer, Args&&...)) {
+                UNORDERED_EPOINT("Mock allocator construct function.");
+                new(p) T(std::forward<Args>(args)...);
+            }
+            detail::tracker.track_construct((void*) p, sizeof(T), tag_);
+        }
+#endif
+
         void destroy(pointer p) {
             detail::tracker.track_destroy((void*) p, sizeof(T), tag_);
             p->~T();
