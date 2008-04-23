@@ -27,12 +27,11 @@ template<class T> class enable_shared_from_this
 // to use lazy initialization
     void init_internal_shared_once() const
     {
-        if( !owned() && _internal_shared_this.get() == 0 )
+        if( !owned() && _internal_shared_count.empty() )
         {
             T * p = dynamic_cast<T *>(const_cast<enable_shared_from_this*>(this));
-            _internal_shared_this = shared_ptr<T>( p, detail::sp_deleter_wrapper() );
-            BOOST_ASSERT(_internal_shared_this.get() == this);
-            _internal_weak_count = _internal_shared_this.get_shared_count();
+            detail::shared_count( p, detail::sp_deleter_wrapper() ).swap(_internal_shared_count);
+            _internal_weak_count = _internal_shared_count;
         }
     }
 
@@ -41,8 +40,7 @@ template<class T> class enable_shared_from_this
         return _owned;
     }
 
-    typedef T _internal_element_type; // for bcc 5.5.1
-    mutable shared_ptr<_internal_element_type> _internal_shared_this;
+    mutable detail::shared_count _internal_shared_count;
     mutable detail::weak_count _internal_weak_count;
     mutable bool _owned;
 
@@ -69,7 +67,7 @@ protected:
 // make sure no dangling shared_ptr objects were created by the
 // user calling shared_from_this() but never passing ownership of the object
 // to a shared_ptr.
-        BOOST_ASSERT(owned() || _internal_shared_this.use_count() <= 1);
+        BOOST_ASSERT(owned() || _internal_shared_count.use_count() <= 1);
     }
 
 public:
@@ -93,18 +91,19 @@ public:
     {
         if( !_owned )
         {
-            if( !_internal_shared_this )
+            if( _internal_shared_count.empty() )
             {
                 _internal_weak_count = owner.get_shared_count();
             }else
             {
                 BOOST_ASSERT(owner.unique()); // no weak_ptrs to owner should exist either, but there's no way to check that
-                detail::sp_deleter_wrapper * pd = get_deleter<detail::sp_deleter_wrapper>(_internal_shared_this);
+                typedef detail::sp_deleter_wrapper D;
+                D * pd = static_cast<D *>(_internal_shared_count.get_deleter(BOOST_SP_TYPEID(D)));
                 BOOST_ASSERT( pd != 0 );
                 pd->set_deleter(owner);
 
-                owner.reset( _internal_shared_this, owner.get() );
-                _internal_shared_this.reset();
+                shared_ptr<U>( _internal_shared_count, owner.get() ).swap( owner );
+                detail::shared_count().swap(_internal_shared_count);
             }
             _owned = true;
         }
