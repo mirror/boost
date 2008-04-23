@@ -23,14 +23,11 @@ namespace boost
 
 template<class T> class enable_shared_from_this
 {
-// dynamic cast to template type doesn't work in constructor, so we have
-// to use lazy initialization
     void init_internal_shared_once() const
     {
         if( !owned() && _internal_shared_count.empty() )
         {
-            T * p = dynamic_cast<T *>(const_cast<enable_shared_from_this*>(this));
-            detail::shared_count( p, detail::sp_deleter_wrapper() ).swap(_internal_shared_count);
+            detail::shared_count( (void*)0, detail::sp_deleter_wrapper() ).swap(_internal_shared_count);
             _internal_weak_count = _internal_shared_count;
         }
     }
