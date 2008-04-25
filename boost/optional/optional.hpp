@@ -1,4 +1,4 @@
-// Copyright (C) 2003, Fernando Luis Cacciola Carballal.
+// Copyright (C) 2003, 2008 Fernando Luis Cacciola Carballal.
 //
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,6 +9,9 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
+// Revisions:
+// 25 Apr 2008 (improved swap) Fernando Cacciola, Niels Dekker, Thorsten Ottosen
+// 
 #ifndef BOOST_OPTIONAL_OPTIONAL_FLC_19NOV2002_HPP
 #define BOOST_OPTIONAL_OPTIONAL_FLC_19NOV2002_HPP
 
@@ -19,6 +22,7 @@
 #include "boost/assert.hpp"
 #include "boost/type.hpp"
 #include "boost/type_traits/alignment_of.hpp"
+#include "boost/type_traits/has_nothrow_constructor.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
 #include "boost/type_traits/remove_reference.hpp"
 #include "boost/type_traits/is_reference.hpp"
@@ -28,6 +32,7 @@
 #include "boost/detail/reference_content.hpp"
 #include "boost/none.hpp"
 #include "boost/utility/compare_pointees.hpp"
+#include "boost/utility/in_place_factory.hpp"
 
 #include "boost/optional/optional_fwd.hpp"
 
@@ -571,6 +576,14 @@ class optional : public optional_detail::optional_base<T>
         return *this ;
       }
 
+    void swap( optional & arg )
+      {
+        // allow for Koenig lookup
+        using std::swap ;
+        swap(*this, arg);
+      }
+
+
     // Returns a reference to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
@@ -878,43 +891,76 @@ namespace optional_detail {
 #define BOOST_OPTIONAL_STD_SWAP_INTRODUCED_AT_NS_SCOPE
 #endif
 
-// optional's swap:
-// If both are initialized, calls swap(T&, T&). If this swap throws, both will remain initialized but their values are now unspecified.
-// If only one is initialized, calls U.reset(*I), THEN I.reset().
-// If U.reset(*I) throws, both are left UNCHANGED (U is kept uinitialized and I is never reset)
-// If both are uninitialized, do nothing (no-throw)
-template<class T>
-inline
-void optional_swap ( optional<T>& x, optional<T>& y )
-{
-  if ( !x && !!y )
+  template<bool use_default_constructor> struct swap_selector;
+
+  template<>
+  struct swap_selector<true>
   {
-    x.reset(*y);
-    y.reset();
-  }
-  else if ( !!x && !y )
-  {
-    y.reset(*x);
-    x.reset();
-  }
-  else if ( !!x && !!y )
-  {
-// GCC > 3.2 and all other compilers have the using declaration at function scope (FLC)
+    template<class T>
+    static void optional_swap ( optional<T>& x, optional<T>& y )
+    {
+     bool hasX = x;
+     bool hasY = y;
+
+     if ( !hasX && !hasY )
+       return;
+
+     if( !hasX )
+         x = boost::in_place();
+     else if ( !hasY )
+         y = boost::in_place();
+
+   // GCC > 3.2 and all other compilers have the using declaration at function scope (FLC)
 #ifndef BOOST_OPTIONAL_STD_SWAP_INTRODUCED_AT_NS_SCOPE
-    // allow for Koenig lookup
-    using std::swap ;
+     // allow for Koenig lookup
+     using std::swap ;
 #endif
-    swap(*x,*y);
-  }
-}
+     swap(*x,*y);
+
+     if( !hasX )
+         y = boost::none ;
+     else if( !hasY )
+         x = boost::none ;
+    }
+  };
+
+  template<>
+  struct swap_selector<false>
+  {
+    template<class T>
+    static void optional_swap ( optional<T>& x, optional<T>& y )
+    {
+      if ( !x && !!y )
+      {
+        x = *y;
+        y = boost::none ;
+      }
+      else if ( !!x && !y )
+      {
+        y = *x ;
+        x = boost::none ;
+      }
+      else if ( !!x && !!y )
+      {
+    // GCC > 3.2 and all other compilers have the using declaration at function scope (FLC)
+    #ifndef BOOST_OPTIONAL_STD_SWAP_INTRODUCED_AT_NS_SCOPE
+        // allow for Koenig lookup
+        using std::swap ;
+    #endif
+        swap(*x,*y);
+      }
+    }
+  };
 
 } // namespace optional_detail
 
+template<class T>
+struct optional_swap_should_use_default_constructor : has_nothrow_default_constructor<T> {} ;
+
 template<class T> inline void swap ( optional<T>& x, optional<T>& y )
 {
-  optional_detail::optional_swap(x,y);
+  optional_detail::swap_selector<optional_swap_should_use_default_constructor<T>::value>::optional_swap(x, y);
 }
-
 
 } // namespace boost
 
