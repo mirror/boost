@@ -228,8 +228,7 @@ public:
     {
     }
 
-    template<class Y>
-    shared_ptr(detail::shared_count const & c, Y * p): px(p), pn(c) // never throws
+    shared_ptr(detail::shared_count const & c, T * p): px(p), pn(c) // never throws
     {
     }
 
@@ -346,8 +345,7 @@ public:
         r.px = 0;
     }
 
-    template<class Y>
-    shared_ptr(detail::shared_count && c, Y * p): px(p), pn( static_cast< detail::shared_count && >( c ) ) // never throws
+    shared_ptr(detail::shared_count && c, T * p): px(p), pn( static_cast< detail::shared_count && >( c ) ) // never throws
     {
     }
 
