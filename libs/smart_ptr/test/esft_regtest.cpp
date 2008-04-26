@@ -160,6 +160,7 @@ void test3()
     V * p = new W;
     boost::shared_ptr<void> pv( p );
     BOOST_TEST( pv.get() == p );
+    BOOST_TEST( pv.use_count() == 1 );
 }
 
 struct null_deleter
@@ -171,6 +172,41 @@ void test4()
 {
     boost::shared_ptr<V> pv( new V );
     boost::shared_ptr<V> pv2( pv.get(), null_deleter() );
+    BOOST_TEST( pv2.get() == pv.get() );
+    BOOST_TEST( pv2.use_count() == 1 );
+}
+
+void test5()
+{
+    V v;
+
+    boost::shared_ptr<V> p1( &v, null_deleter() );
+    BOOST_TEST( p1.get() == &v );
+    BOOST_TEST( p1.use_count() == 1 );
+
+    try
+    {
+        p1->shared_from_this();
+    }
+    catch( ... )
+    {
+        BOOST_ERROR( "p1->shared_from_this() failed" );
+    }
+
+    p1.reset();
+
+    boost::shared_ptr<V> p2( &v, null_deleter() );
+    BOOST_TEST( p2.get() == &v );
+    BOOST_TEST( p2.use_count() == 1 );
+
+    try
+    {
+        p2->shared_from_this();
+    }
+    catch( ... )
+    {
+        BOOST_ERROR( "p2->shared_from_this() failed" );
+    }
 }
 
 int main()
@@ -179,6 +215,7 @@ int main()
     test2();
     test3();
     test4();
+    test5();
 
     return boost::report_errors();
 }
