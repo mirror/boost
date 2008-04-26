@@ -373,6 +373,11 @@ public:
         return pi_ != 0? pi_->use_count(): 0;
     }
 
+    bool empty() const // nothrow
+    {
+        return pi_ == 0;
+    }
+
     friend inline bool operator==(weak_count const & a, weak_count const & b)
     {
         return a.pi_ == b.pi_;
