@@ -390,6 +390,18 @@ public:
         this_type( r, p ).swap( *this );
     }
 
+    void reset( detail::shared_count const & c, T * p )
+    {
+        this_type( c, p ).swap( *this );
+    }
+
+#if defined( BOOST_HAS_RVALUE_REFS )
+    void reset( detail::shared_count && c, T * p )
+    {
+        this_type( static_cast< detail::shared_count && >( c ), p ).swap( *this );
+    }
+#endif
+
     reference operator* () const // never throws
     {
         BOOST_ASSERT(px != 0);
