@@ -3011,7 +3011,7 @@ and also derives from `test_class`.
 `test_list` objects to funtion objects taking pointers to them.
 
 You can find the full test code code in the 
-[@../../perf/perf_list.cpp perf_list.cpp] source file.
+[@../../libs/intrusive/perf/perf_list.cpp perf_list.cpp] source file.
 
 [section:performance_results_push_back Back insertion and destruction]
 
