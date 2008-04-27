@@ -32,7 +32,8 @@ struct list_node
 {
    typedef typename boost::pointer_to_other
       <VoidPointer, list_node>::type   node_ptr;
-   node_ptr prev_, next_;
+   node_ptr next_;
+   node_ptr prev_;
 };
 
 template<class VoidPointer>
@@ -85,7 +86,7 @@ class list_iterator
    typedef value_type * pointer;
 
    list_iterator()
-      : members_ (0, 0)
+      : members_ (node_ptr(0), 0)
    {}
 
    explicit list_iterator(node_ptr node, const Container *cont_ptr)

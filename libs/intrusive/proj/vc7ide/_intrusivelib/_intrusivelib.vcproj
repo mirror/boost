@@ -154,10 +154,7 @@
 				RelativePath="..\..\..\..\..\boost\intrusive\options.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_2_bits.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_bit.hpp">
+				RelativePath="..\..\..\..\..\boost\intrusive\pointer_plus_bits.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\rbtree.hpp">
@@ -239,9 +236,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\mpl.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\boost\intrusive\detail\no_exceptions_support.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\parent_from_member.hpp">

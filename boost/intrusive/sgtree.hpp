@@ -527,6 +527,28 @@ class sgtree_impl
    static const sgtree_impl &container_from_end_iterator(const_iterator end_iterator)
    {  return priv_container_from_end_iterator(end_iterator);   }
 
+   //! <b>Precondition</b>: it must be a valid iterator
+   //!   of rbtree.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the tree associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static sgtree_impl &container_from_iterator(iterator it)
+   {  return priv_container_from_iterator(it);   }
+
+   //! <b>Precondition</b>: it must be a valid end const_iterator
+   //!   of rbtree.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the tree associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const sgtree_impl &container_from_iterator(const_iterator it)
+   {  return priv_container_from_iterator(it);   }
+
    //! <b>Effects</b>: Returns the value_compare object used by the tree.
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1442,6 +1464,9 @@ class sgtree_impl
       sgtree_impl *scapegoat  = detail::parent_from_member<sgtree_impl, data_t>(d, &sgtree_impl::data_);
       return *scapegoat;
    }
+
+   static sgtree_impl &priv_container_from_iterator(const const_iterator &it)
+   {  return priv_container_from_end_iterator(it.end_iterator_from_it());   }
 };
 
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED

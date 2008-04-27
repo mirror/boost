@@ -283,8 +283,7 @@ template
    >
 class bs_set_member_hook;
 
-//hash/unordered
-//rbtree/set/multiset
+//hashtable/unordered_set/unordered_multiset
 template
    < class T
    , class O1  = none
@@ -294,6 +293,7 @@ template
    , class O5  = none
    , class O6  = none
    , class O7  = none
+   , class O8  = none
    >
 class hashtable;
 
@@ -306,6 +306,7 @@ template
    , class O5  = none
    , class O6  = none
    , class O7  = none
+   , class O8  = none
    >
 class unordered_set;
 
@@ -318,6 +319,7 @@ template
    , class O5  = none
    , class O6  = none
    , class O7  = none
+   , class O8  = none
    >
 class unordered_multiset;
 

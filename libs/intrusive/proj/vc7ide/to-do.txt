@@ -1,0 +1,11 @@
+Add resize() to list
+Implement incremental hashing
+Add invariants to slist and test them after every operation
+Create a generic hook that will work with all containers
+Take advantage of store_hash in lookups: Instead of comparing objects, just
+   compare hashes. This will improve equality for expensive objects.
+
+Improve the use of cache_begin to unordered containers:
+-> Speed up rehash
+
+

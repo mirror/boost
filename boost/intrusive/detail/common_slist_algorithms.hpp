@@ -47,7 +47,7 @@ class common_slist_algorithms
    {  NodeTraits::set_next(this_node, this_node);  }  
 
    static void init(node_ptr this_node)  
-   {  NodeTraits::set_next(this_node, 0);  }  
+   {  NodeTraits::set_next(this_node, node_ptr(0));  }  
 
    static bool unique(const_node_ptr this_node)
    {

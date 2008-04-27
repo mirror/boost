@@ -22,7 +22,6 @@
 #include <cstddef>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/assert.hpp>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
 #include <boost/intrusive/detail/tree_algorithms.hpp>
 
@@ -639,6 +638,16 @@ class sgtree_algorithms
    //! <b>Complexity</b>: Linear.
    static node_ptr rebalance_subtree(node_ptr old_root)
    {  return tree_algorithms::rebalance_subtree(old_root); }
+
+   //! <b>Requires</b>: "n" must be a node inserted in a tree.
+   //!
+   //! <b>Effects</b>: Returns a pointer to the header node of the tree.
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static node_ptr get_header(node_ptr n)
+   {  return tree_algorithms::get_header(n);   }
 
    /// @cond
    private:

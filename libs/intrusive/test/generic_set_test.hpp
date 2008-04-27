@@ -35,6 +35,7 @@ struct test_generic_set
    static void test_impl();
 };
 
+
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
 void test_generic_set<ValueTraits, ContainerDefiner>::test_all()
 {

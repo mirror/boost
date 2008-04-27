@@ -406,6 +406,24 @@ struct store_hash
 /// @endcond
 };
 
+//!This option setter specifies if the unordered hook
+//!should offer room to store another link to another node
+//!with the same key.
+//!Storing this link will speed up lookups and insertions on
+//!unordered_multiset containers with a great number of elements
+//!with the same key.
+template<bool Enabled>
+struct optimize_multikey
+{
+/// @cond
+    template<class Base>
+    struct pack : Base
+    {
+        static const bool optimize_multikey = Enabled;
+    };
+/// @endcond
+};
+
 //!This option setter specifies if the bucket array will be always power of two.
 //!This allows using masks instead of the default modulo operation to determine
 //!the bucket number from the hash value, leading to better performance.
@@ -419,6 +437,22 @@ struct power_2_buckets
    struct pack : Base
    {
       static const bool power_2_buckets = Enabled;
+   };
+/// @endcond
+};
+
+//!This option setter specifies if the container will cache a pointer to the first
+//!non-empty bucket so that begin() is always constant-time.
+//!This is specially helpful when we can have containers with a few elements
+//!but with big bucket arrays (that is, hashtables with low load factors).
+template<bool Enabled>
+struct cache_begin
+{
+/// @cond
+   template<class Base>
+   struct pack : Base
+   {
+      static const bool cache_begin = Enabled;
    };
 /// @endcond
 };
@@ -500,6 +534,7 @@ struct hook_defaults
       , optimize_size<false>
       , store_hash<false>
       , linear<false>
+      , optimize_multikey<false>
       >::type
 {};
 

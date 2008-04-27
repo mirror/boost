@@ -108,7 +108,6 @@ class test_main_template<VoidPointer, false>
 
 int main( int, char* [] ) 
 {
-   
    test_main_template<void*, false>()();
    test_main_template<boost::intrusive::smart_ptr<void>, false>()();
    test_main_template<void*, true>()();

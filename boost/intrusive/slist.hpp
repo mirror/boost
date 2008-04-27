@@ -16,7 +16,6 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/slist_hook.hpp>
@@ -25,6 +24,7 @@
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/options.hpp>
+#include <boost/intrusive/detail/utilities.hpp>
 #include <iterator>
 #include <functional>
 #include <algorithm>
@@ -183,10 +183,12 @@ class slist_impl
    BOOST_STATIC_ASSERT(!(cache_last && ((int)real_value_traits::link_mode == (int)auto_unlink)));
 
    node_ptr get_end_node()
-   {  return node_ptr(linear ? 0 : this->get_root_node());  }
+   {  return node_ptr(linear ? node_ptr(0) : this->get_root_node());  }
 
    const_node_ptr get_end_node() const
-   {  return const_node_ptr(linear ? 0 : this->get_root_node());  }
+   {
+      return const_node_ptr
+         (linear ? const_node_ptr(0) : this->get_root_node());  }
 
    node_ptr get_root_node()
    {  return node_ptr(&data_.root_plus_size_.root_);  }
@@ -203,13 +205,10 @@ class slist_impl
    void set_last_node(node_ptr n)
    {  return this->set_last_node(n, detail::bool_<cache_last>());  }
 
-   node_ptr get_last_node(detail::bool_<false>)
+   static node_ptr get_last_node(detail::bool_<false>)
    {  return node_ptr(0);  }
 
-   const_node_ptr get_last_node(detail::bool_<false>) const
-   {  return const_node_ptr(0);  }
-
-   void set_last_node(node_ptr, detail::bool_<false>)
+   static void set_last_node(node_ptr, detail::bool_<false>)
    {}
 
    node_ptr get_last_node(detail::bool_<true>)
@@ -667,18 +666,14 @@ class slist_impl
    void clone_from(const slist_impl &src, Cloner cloner, Disposer disposer)
    {
       this->clear_and_dispose(disposer);
-      BOOST_INTRUSIVE_TRY{
-         iterator prev(this->before_begin());
-         const_iterator b(src.begin()), e(src.end());
-         for(; b != e; ++b){
-            prev = this->insert_after(prev, *cloner(*b));
-         }
+      detail::exception_disposer<slist_impl, Disposer>
+         rollback(*this, disposer);
+      iterator prev(this->before_begin());
+      const_iterator b(src.begin()), e(src.end());
+      for(; b != e; ++b){
+         prev = this->insert_after(prev, *cloner(*b));
       }
-      BOOST_INTRUSIVE_CATCH(...){
-         this->clear_and_dispose(disposer);
-         BOOST_INTRUSIVE_RETHROW;
-      }
-      BOOST_INTRUSIVE_CATCH_END
+      rollback.release();
    }
 
    //! <b>Requires</b>: value must be an lvalue and prev_p must point to an element
@@ -849,12 +844,35 @@ class slist_impl
       if(cache_last && (to_erase == this->get_last_node())){
          this->set_last_node(prev_n);
       }
-      this->priv_size_traits().decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
       disposer(get_real_value_traits().to_value_ptr(to_erase));
+      this->priv_size_traits().decrement();
       return it;
    }
+
+   /// @cond
+
+   template<class Disposer>
+   static iterator s_erase_after_and_dispose(iterator prev, Disposer disposer)
+   {
+      BOOST_STATIC_ASSERT(((!cache_last)&&(!constant_time_size)&&(!stateful_value_traits)));
+      iterator it(prev);
+      ++it;
+      node_ptr to_erase(it.pointed_node());
+      ++it;
+      node_ptr prev_n(prev.pointed_node());
+      node_algorithms::unlink_after(prev_n);
+      if(safemode_or_autounlink)
+         node_algorithms::init(to_erase);
+      disposer(real_value_traits::to_value_ptr(to_erase));
+      return it;
+   }
+
+   static iterator s_erase_after(iterator prev)
+   {  return s_erase_after_and_dispose(prev, detail::null_disposer());  }
+
+   /// @endcond
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!

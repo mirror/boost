@@ -226,7 +226,7 @@ class set_impl
    //! <b>Precondition</b>: end_iterator must be a valid end iterator
    //!   of set.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the set associated to the end iterator
+   //! <b>Effects</b>: Returns a reference to the set associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -250,6 +250,34 @@ class set_impl
    {
       return *detail::parent_from_member<set_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
+         , &set_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static set_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &set_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const set_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
          , &set_impl::tree_);
    }
 
@@ -1086,6 +1114,12 @@ class set
 
    static const set &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const set &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static set &container_from_iterator(iterator it)
+   {  return static_cast<set &>(Base::container_from_iterator(it));   }
+
+   static const set &container_from_iterator(const_iterator it)
+   {  return static_cast<const set &>(Base::container_from_iterator(it));   }
 };
 
 #endif
@@ -1315,6 +1349,34 @@ class multiset_impl
    {
       return *detail::parent_from_member<multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
+         , &multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   static multiset_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   static const multiset_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
          , &multiset_impl::tree_);
    }
 
@@ -1932,6 +1994,21 @@ class multiset_impl
    void replace_node(iterator replace_this, reference with_this)
    {  tree_.replace_node(replace_this, with_this);   }
 
+   //! <b>Effects</b>: removes "value" from the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic time.
+   //! 
+   //! <b>Note</b>: This static function is only usable with non-constant
+   //! time size containers that have stateless comparison functors.
+   //!
+   //! If the user calls
+   //! this function with a constant time size container or stateful comparison
+   //! functor a compilation error will be issued.
+   static void remove_node(reference value)
+   {  tree_type::remove_node(value);   }
+
    /// @cond
    friend bool operator==(const multiset_impl &x, const multiset_impl &y)
    {  return x.tree_ == y.tree_;  }
@@ -2058,6 +2135,12 @@ class multiset
 
    static const multiset &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const multiset &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static multiset &container_from_iterator(iterator it)
+   {  return static_cast<multiset &>(Base::container_from_iterator(it));   }
+
+   static const multiset &container_from_iterator(const_iterator it)
+   {  return static_cast<const multiset &>(Base::container_from_iterator(it));   }
 };
 
 #endif

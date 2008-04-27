@@ -252,6 +252,34 @@ class splay_set_impl
          , &splay_set_impl::tree_);
    }
 
+   //! <b>Precondition</b>: it must be a valid iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   static splay_set_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<splay_set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &splay_set_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const splay_set_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<splay_set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &splay_set_impl::tree_);
+   }
+
    //! <b>Effects</b>: Returns the key_compare object used by the splay_set.
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1161,6 +1189,12 @@ class splay_set
 
    static const splay_set &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const splay_set &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static splay_set &container_from_iterator(iterator it)
+   {  return static_cast<splay_set &>(Base::container_from_iterator(it));   }
+
+   static const splay_set &container_from_iterator(const_iterator it)
+   {  return static_cast<const splay_set &>(Base::container_from_iterator(it));   }
 };
 
 #endif
@@ -1390,6 +1424,34 @@ class splay_multiset_impl
    {
       return *detail::parent_from_member<splay_multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
+         , &splay_multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static splay_multiset_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<splay_multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &splay_multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   static const splay_multiset_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<splay_multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
          , &splay_multiset_impl::tree_);
    }
 
@@ -2209,6 +2271,12 @@ class splay_multiset
 
    static const splay_multiset &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const splay_multiset &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static splay_multiset &container_from_iterator(iterator it)
+   {  return static_cast<splay_multiset &>(Base::container_from_iterator(it));   }
+
+   static const splay_multiset &container_from_iterator(const_iterator it)
+   {  return static_cast<const splay_multiset &>(Base::container_from_iterator(it));   }
 };
 
 #endif

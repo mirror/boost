@@ -38,7 +38,8 @@ namespace intrusive {
 //!
 //! The container supports the following options:
 //! \c base_hook<>/member_hook<>/value_traits<>,
-//! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<> .
+//! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<>
+//! \c bucket_traits<>, power_2_buckets<> and cache_begin<>.
 //!
 //! unordered_set only provides forward iterators but it provides 4 iterator types:
 //! iterator and const_iterator to navigate through the whole container and
@@ -167,8 +168,8 @@ class unordered_set_impl
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the unordered_set.
    //! 
-   //! <b>Complexity</b>: Amortized constant time.
-   //!   Worst case (empty unordered_set): O(this->bucket_count())
+   //! <b>Complexity</b>: Constant time if `cache_begin<>` is true. Amortized
+   //!   constant time with worst case (empty unordered_set) O(this->bucket_count())
    //! 
    //! <b>Throws</b>: Nothing.
    iterator begin()
@@ -177,8 +178,8 @@ class unordered_set_impl
    //! <b>Effects</b>: Returns a const_iterator pointing to the beginning
    //!   of the unordered_set.
    //!
-   //! <b>Complexity</b>: Amortized constant time.
-   //!   Worst case (empty unordered_set): O(this->bucket_count())
+   //! <b>Complexity</b>: Constant time if `cache_begin<>` is true. Amortized
+   //!   constant time with worst case (empty unordered_set) O(this->bucket_count())
    //! 
    //! <b>Throws</b>: Nothing.
    const_iterator begin() const
@@ -187,8 +188,8 @@ class unordered_set_impl
    //! <b>Effects</b>: Returns a const_iterator pointing to the beginning
    //!   of the unordered_set.
    //!
-   //! <b>Complexity</b>: Amortized constant time.
-   //!   Worst case (empty unordered_set): O(this->bucket_count())
+   //! <b>Complexity</b>: Constant time if `cache_begin<>` is true. Amortized
+   //!   constant time with worst case (empty unordered_set) O(this->bucket_count())
    //! 
    //! <b>Throws</b>: Nothing.
    const_iterator cbegin() const
@@ -236,8 +237,8 @@ class unordered_set_impl
 
    //! <b>Effects</b>: Returns true is the container is empty.
    //! 
-   //! <b>Complexity</b>: if constant-time size option is disabled, average constant time
-   //!   (worst case, with empty() == true): O(this->bucket_count()).
+   //! <b>Complexity</b>: if constant-time size and cache_last options are disabled,
+   //!   average constant time (worst case, with empty() == true: O(this->bucket_count()).
    //!   Otherwise constant.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -959,7 +960,7 @@ template<class T, class ...Options>
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
-                , class O7 = none
+                , class O7 = none, class O8 = none
                 >
 #endif
 struct make_unordered_set
@@ -967,19 +968,19 @@ struct make_unordered_set
    /// @cond
    typedef unordered_set_impl
       <  typename make_hashtable_opt
-            <T, O1, O2, O3, O4, O5, O6, O7>::type
+            <T, true, O1, O2, O3, O4, O5, O6, O7, O8>::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7>
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8>
 class unordered_set
-   :  public make_unordered_set<T, O1, O2, O3, O4, O5, O6, O7>::type
+   :  public make_unordered_set<T, O1, O2, O3, O4, O5, O6, O7, O8>::type
 {
    typedef typename make_unordered_set
-      <T, O1, O2, O3, O4, O5, O6, O7>::type   Base;
+      <T, O1, O2, O3, O4, O5, O6, O7, O8>::type   Base;
 
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename Base::value_traits::value_type, T>::value));
@@ -1032,7 +1033,8 @@ class unordered_set
 //!
 //! The container supports the following options:
 //! \c base_hook<>/member_hook<>/value_traits<>,
-//! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<> .
+//! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<>
+//! \c bucket_traits<>, power_2_buckets<> and cache_begin<>.
 //!
 //! unordered_multiset only provides forward iterators but it provides 4 iterator types:
 //! iterator and const_iterator to navigate through the whole container and
@@ -1161,8 +1163,8 @@ class unordered_multiset_impl
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the unordered_multiset.
    //! 
-   //! <b>Complexity</b>: Amortized constant time.
-   //!   Worst case (empty unordered_multiset): O(this->bucket_count())
+   //! <b>Complexity</b>: Constant time if `cache_begin<>` is true. Amortized
+   //!   constant time with worst case (empty unordered_set) O(this->bucket_count())
    //! 
    //! <b>Throws</b>: Nothing.
    iterator begin()
@@ -1171,8 +1173,8 @@ class unordered_multiset_impl
    //! <b>Effects</b>: Returns a const_iterator pointing to the beginning
    //!   of the unordered_multiset.
    //!
-   //! <b>Complexity</b>: Amortized constant time.
-   //!   Worst case (empty unordered_multiset): O(this->bucket_count())
+   //! <b>Complexity</b>: Constant time if `cache_begin<>` is true. Amortized
+   //!   constant time with worst case (empty unordered_set) O(this->bucket_count())
    //! 
    //! <b>Throws</b>: Nothing.
    const_iterator begin() const
@@ -1181,8 +1183,8 @@ class unordered_multiset_impl
    //! <b>Effects</b>: Returns a const_iterator pointing to the beginning
    //!   of the unordered_multiset.
    //!
-   //! <b>Complexity</b>: Amortized constant time.
-   //!   Worst case (empty unordered_multiset): O(this->bucket_count())
+   //! <b>Complexity</b>: Constant time if `cache_begin<>` is true. Amortized
+   //!   constant time with worst case (empty unordered_set) O(this->bucket_count())
    //! 
    //! <b>Throws</b>: Nothing.
    const_iterator cbegin() const
@@ -1230,8 +1232,8 @@ class unordered_multiset_impl
 
    //! <b>Effects</b>: Returns true is the container is empty.
    //! 
-   //! <b>Complexity</b>: if constant-time size option is disabled, average constant time
-   //!   (worst case, with empty() == true): O(this->bucket_count()).
+   //! <b>Complexity</b>: if constant-time size and cache_last options are disabled,
+   //!   average constant time (worst case, with empty() == true: O(this->bucket_count()).
    //!   Otherwise constant.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -1891,7 +1893,7 @@ template<class T, class ...Options>
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
-                , class O7 = none
+                , class O7 = none, class O8 = none
                 >
 #endif
 struct make_unordered_multiset
@@ -1899,19 +1901,19 @@ struct make_unordered_multiset
    /// @cond
    typedef unordered_multiset_impl
       <  typename make_hashtable_opt
-            <T, O1, O2, O3, O4, O5, O6, O7>::type
+            <T, false, O1, O2, O3, O4, O5, O6, O7, O8>::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7>
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8>
 class unordered_multiset
-   :  public make_unordered_multiset<T, O1, O2, O3, O4, O5, O6, O7>::type
+   :  public make_unordered_multiset<T, O1, O2, O3, O4, O5, O6, O7, O8>::type
 {
    typedef typename make_unordered_multiset
-      <T, O1, O2, O3, O4, O5, O6, O7>::type   Base;
+      <T, O1, O2, O3, O4, O5, O6, O7, O8>::type   Base;
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename Base::value_traits::value_type, T>::value));
 

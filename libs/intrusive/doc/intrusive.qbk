@@ -528,7 +528,25 @@ chapters:
    small for user classes (usually the size of two pointers). Many operations have
    constant time complexity.
 
-*  [*set/multiset]: A `std::set/std::multiset` like intrusive associative containers.
+*  [*set/multiset/rbtree]: A `std::set/std::multiset` like intrusive associative containers
+   based on red-black trees.
+   The size overhead is moderate for user classes (usually the size of three pointers).
+   Many operations have logarithmic time complexity.
+
+*  [*avl_set/avl_multiset/avltree]: A `std::set/std::multiset` like intrusive associative
+   containers based on AVL trees.
+   The size overhead is moderate for user classes (usually the size of three pointers).
+   Many operations have logarithmic time complexity.
+
+*  [*splay_set/splay_multiset/splaytree]: A `std::set/std::multiset` like intrusive associative
+   containers based on splay trees. Splay trees have no constant operations, but they  
+   have some interesting caching properties.
+   The size overhead is moderate for user classes (usually the size of three pointers).
+   Many operations have logarithmic time complexity.
+
+*  [*sg_set/sg_multiset/sgtree]: A `std::set/std::multiset` like intrusive associative
+   containers based on scapegoat trees. Scapegoat can be configured with the desired
+   balance factor to achieve the desised rebalancing frequency/search time compromise.
    The size overhead is moderate for user classes (usually the size of three pointers).
    Many operations have logarithmic time complexity.
 
@@ -539,7 +557,7 @@ chapters:
    The size overhead is moderate for user classes (an average of two pointers per element).
    Many operations have an amortized constant time complexity.
 
-Each of these intrusive containers can be configured with constant or linear time
+Most of these intrusive containers can be configured with constant or linear time
 size:
 
 *  [*Linear time size]: The intrusive container doesn't hold a size member that it's
@@ -753,7 +771,7 @@ linear time complexity, even some that usually are constant time, like
 only provides forward iterators.
 
 For most cases, a doubly linked list is preferrable because it offers more
-constant-time functions with a slightly bigger overhead.
+constant-time functions with a slightly bigger size overhead.
 However, for some applications like
 constructing more elaborated containers, singly linked lists are essential
 because of their low size overhead.
@@ -784,7 +802,8 @@ Like the rest of [*Boost.Intrusive] containers,
    it [classref boost::intrusive::slist slist]-compatible.
 
 [classref boost::intrusive::slist_base_hook slist_base_hook] and
-[classref boost::intrusive::slist_member_hook slist_member_hook] receive the same options explained in
+[classref boost::intrusive::slist_member_hook slist_member_hook]
+receive the same options explained in
 the section [link intrusive.usage How to use Boost.Intrusive]:
 
 *  [*`tag<class Tag>`] (for base hooks only): This argument serves as a tag,
@@ -807,7 +826,7 @@ the section [link intrusive.usage How to use Boost.Intrusive]:
    template <class T, class ...Options>
    class slist;
 
-[classref boost::intrusive::slist slist] receives the same options explained in
+[classref boost::intrusive::slist slist] receives the options explained in
 the section [link intrusive.usage How to use Boost.Intrusive]:
 
 *  [*`base_hook<class Hook>`] / [*`member_hook<class T, class Hook, Hook T::* PtrToMember>`] / 
@@ -819,7 +838,23 @@ the section [link intrusive.usage How to use Boost.Intrusive]:
    Default: `constant_time_size<true>`
 
 *  [*`size_type<bool Enabled>`]: To specify the type that will be used to store the size
-   of the container. Default: `size_type<std::size_t>`
+   of the container. Default: `size_type<std::size_t>`.
+
+[classref boost::intrusive::slist slist] can receive additional options:
+
+*  [*`linear<bool Enable>`]: the singly linked list is implemented as a
+   null-terminated list instead of a circular list. This allows `O(1)` swap,
+   but losses some operations like `container_from_end_iterator`.
+*  [*`cache_last<bool Enable>`]: the singly linked also stores a pointer to the
+   last element of the singly linked list. This allows `O(1)` swap,
+   `splice_after(iterator, slist &)` and makes the list offer new functions
+   like `push_back(reference)` and `back()`. Logically, the size an empty list is
+   increased in `sizeof(void_pointer)` and the the cached last node pointer must
+   be updated in every operation, and that might incur in a slight performance impact.
+
+`auto_unlink` hooks are not usable if `linear<true>` and/or `cache_last<true>` options are
+used. If `auto_unlink` hooks are used and those options are specified, a static
+assertion will be raised.
 
 [endsect]
 
@@ -1151,6 +1186,11 @@ Apart from them, these hooks offer additional options:
    rehashing is frequent or hashing the value is a slow operation.
    Default: `store_hash<false>`.
 
+*  [*`optimize_multikey<bool Enabled>`]: This option reserves additional space in
+   the hook that will be used to group equal elements in unordered multisets,
+   improving significantly the performance when many equal values are inserted
+   in these containers. Default: `optimize_multikey<false>`.
+
 [endsect]
 
 [section:unordered_set_unordered_multiset_containers unordered_set and unordered_multiset containers]
@@ -1210,7 +1250,7 @@ receive the same options explained in the section
 *  [*`size_type<bool Enabled>`]: To specify the type that will be used to store the size
    of the container. Default: `size_type<std::size_t>`
 
-And they also can receive two additional options:
+And they also can receive additional options:
 
 *  [*`equal<class Equal>`]: Equality function for the objects to be inserted
    in containers. Default: `equal< std::equal_to<T> >`
@@ -1228,7 +1268,14 @@ And they also can receive two additional options:
    modulo operations and for some applications modulo operations can impose
    a considerable overhead. In debug mode an assertion will be raised if the user
    provides a bucket length that is not power of two.
-   Default: `constant_time_size<false>`.
+   Default: `power_2_buckets<false>`.
+
+*  [*`cache_begin<bool Enabled>`]: Due to its internal structure, finding the first
+   element of an unordered container (`begin()` operation) is
+   amortized constant-time. It's possible to speed up `begin()` and other operations
+   related to it (like `clear()`) if the container caches internally the position
+   of the first element. This imposes the overhead of one pointer to the size
+   of the container. Default: `cache_begin<false>`.
 
 [endsect]
 
@@ -1301,13 +1348,13 @@ more frequently accessed than others, splay trees perform faster searches than e
 balanced binary trees (such as red-black trees).
 
 The caching effect offered by splay trees comes with a cost: the tree must be
-rebalanced when a element is searched. This disallows const versions of search
+rebalanced when an element is searched. This disallows const versions of search
 functions like `find()`, `lower_bound()`, `upper_bound()`, `equal_range()`,
 `count()`...
 
 Because of this, splay-tree based associative containers are not drop-in
 replacements of [classref boost::intrusive::set set]/
-[classref boost::intrusive::splay_set splay_set].
+[classref boost::intrusive::multiset multiset].
 
 Apart from this, if element searches are randomized, the tree will be rebalanced
 without taking advantage of the cache effect, so splay trees can offer worse
@@ -1565,22 +1612,22 @@ time, scapegoat trees have no additional per-node overhead compared to a regular
 search tree.
 
 A binary search tree is said to be weight balanced if half the nodes are on the left
-of the root, and half on the right. An α-height-balanced tree is defined with defined
+of the root, and half on the right. An a-height-balanced tree is defined with defined
 with the following equation:
 
-[*['height(tree) <= log1/α(tree.size())]]
+[*['height(tree) <= log1/a(tree.size())]]
 
-*  [*['α == 1]]: A tree forming a linked list is considered balanced.
-*  [*['α == 0.5]]: Only a perfectly balanced binary is considered balanced.
+*  [*['a == 1]]: A tree forming a linked list is considered balanced.
+*  [*['a == 0.5]]: Only a perfectly balanced binary is considered balanced.
 
-Scapegoat trees are loosely ['α-height-balanced] so:
+Scapegoat trees are loosely ['a-height-balanced] so:
 
-[*['height(tree) <= log1/α(tree.size()) + 1]]
+[*['height(tree) <= log1/a(tree.size()) + 1]]
 
-Scapegoat trees support any α between 0.5 and 1. If α is higher, the tree is rebalanced
+Scapegoat trees support any a between 0.5 and 1. If a is higher, the tree is rebalanced
 less often, obtaining quicker insertions but slower searches. Lower
-α values improve search times. Scapegoat-trees implemented in [*Boost.Intrusive] offer the possibility of
-[*changing α at run-time] taking advantage of the flexibility of scapegoat trees.
+a values improve search times. Scapegoat-trees implemented in [*Boost.Intrusive] offer the possibility of
+[*changing a at run-time] taking advantage of the flexibility of scapegoat trees.
 For more information on scapegoat trees see [@http://en.wikipedia.org/wiki/Scapegoat_tree Wikipedia entry].
 
 Scapegoat trees also have downsides:
@@ -1591,7 +1638,7 @@ Scapegoat trees also have downsides:
    tree is also considerably increased.
 
 *  The operations needed to determine if the tree is unbalanced require floating-point
-   operations like ['log1/α]. If the system has no floating point operations (like some
+   operations like ['log1/a]. If the system has no floating point operations (like some
    embedded systems), scapegoat tree operations might become slow.
 
 [*Boost.Intrusive] offers 3 containers based on scapegoat trees:
@@ -1689,9 +1736,9 @@ And they also can receive additional options:
 
 *  [*`floating_point<bool Enable>`]: 
    When this option is deactivated, the scapegoat tree loses the ability to change
-   the balance factor α at run-time, but the size of an empty container is reduced
+   the balance factor a at run-time, but the size of an empty container is reduced
    and no floating point operations are performed, normally increasing container
-   performance. The fixed α factor that is used when this option is activated
+   performance. The fixed a factor that is used when this option is activated
    is ['1/sqrt(2) ~ 0,70711]. Default: `floating_point<true>`
 
 [endsect]
@@ -2523,6 +2570,63 @@ For a complete list of functions see
 
 [endsect]
 
+[/
+/
+/[section:sgtree_algorithms Intrusive sg tree algorithms]
+/
+/
+/[classref boost::intrusive::sgtree_algorithms sgtree_algorithms] have the same
+/interface as [classref boost::intrusive::rbtree_algorithms rbtree_algorithms].
+/
+/[c++]
+/
+/   template<class NodeTraits>
+/   struct sgtree_algorithms;
+/
+/[classref boost::intrusive::sgtree_algorithms sgtree_algorithms]
+/is configured with a NodeTraits class, which encapsulates 
+/the information about the node to be manipulated. NodeTraits must support the
+/following interface:
+/
+/[*Typedefs]:
+/
+/*  `node`: The type of the node that forms the circular sgtree
+/
+/*  `node_ptr`: The type of a pointer to a node (usually node*)
+/
+/*  `const_node_ptr`: The type of a pointer to a const node (usually const node*)
+/
+/[*Static functions]:
+/
+/*  `static node_ptr get_parent(const_node_ptr n);`:
+/   Returns a pointer to the parent node stored in "n".
+/
+/*  `static void set_parent(node_ptr n, node_ptr p);`:
+/   Sets the pointer to the parent node stored in "n" to "p".
+/
+/*  `static node_ptr get_left(const_node_ptr n);`:
+/   Returns a pointer to the left node stored in "n".
+/
+/*  `static void set_left(node_ptr n, node_ptr l);`:
+/   Sets the pointer to the left node stored in "n" to "l".
+/
+/*  `static node_ptr get_right(const_node_ptr n);`:
+/   Returns a pointer to the right node stored in "n".
+/
+/*  `static void set_right(node_ptr n, node_ptr r);`:
+/   Sets the pointer to the right node stored in "n" to "r".
+/
+/Once we have a node traits configuration we can use [*Boost.Intrusive] algorithms
+/with our nodes:
+/
+/[import ../example/doc_sgtree_algorithms.cpp]
+/[doc_sgtree_algorithms_code]
+/
+/For a complete list of functions see
+/[classref boost::intrusive::sgtree_algorithms sgtree_algorithms reference].
+/
+/[endsect]
+/]
 [endsect]
 
 [section:value_traits Containers with custom ValueTraits]
@@ -3104,7 +3208,7 @@ lists need to perform the same operations.
 These are the results:
 
 [table Reverse times for Visual C++ 7.1 / Windows XP
-    [[Container]                       [Time in us/iteration (small object / big object)] [Normalized time (small object / big object) (small object / big object)]]
+    [[Container]                       [Time in us/iteration (small object / big object)] [Normalized time (small object / big object)]]
     [[`normal_link` intrusive list]     [2656 / 10625]                 [1 / 1.83]]
     [[`safe_link` intrusive list]       [2812 / 10937]                 [1.05 / 1.89]]
     [[`auto_unlink` intrusive list]     [2710 / 10781]                 [1.02 / 1.86]]
@@ -3310,18 +3414,18 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [endsect]
 
-[section:disabling_exceptions Disabling exceptions support]
+[section:release_notes Release Notes]
 
-[*Boost.Intrusive] might be useful in environments where exceptions are not available
-or recommendable (like embedded or real-time systems). [*Boost.Intrusive] uses the
-global Boost mechanism to disable exception handling, so that if the compiler
-configuration disables exceptions, `BOOST_NO_EXCEPTIONS` is defined and exception
-handling is disabled.
+[section:release_notes_boost_1_36_00 Boost 1.36 Release]
 
-This mechanism is a global mechanism to disable exceptions. If for any reason,
-the user wants to disable exception handling [*only] in [*Boost.Intrusive],
-`BOOST_INTRUSIVE_DISABLE_EXCEPTION_HANDLING` can be defined to disable
-exception handling in the library.
+*  Added `linear<>` and `cache_last<>` options to singly linked lists.
+*  Added `optimize_multikey<>` option to unordered container hooks.
+*  Optimized unordered containers when `store_hash` option is used in the hook.
+*  Implementation changed to be exception agnostic so that it can be used
+   in environments without exceptions.
+*  Added `container_from_iterator` function to tree-based containers.
+
+[endsect]
 
 [endsect]
 
@@ -3331,13 +3435,13 @@ exception handling in the library.
 
 *  Visual 7.1/WinXP
 *  Visual 8.0/WinXP
+*  Visual 9.0/WinXP
 *  GCC 4.1.1/MinGW
 *  GCC 3.4.4/Cygwin
 *  Intel 9.1/WinXP
 *  GCC 4.1.2/Linux
 *  GCC 3.4.3/Solaris 11
 *  GCC 4.0/Mac Os 10.4.1
-*  SunCC 5.8/Solaris 11
 
 [endsect]
 

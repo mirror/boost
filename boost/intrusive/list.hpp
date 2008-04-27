@@ -24,7 +24,7 @@
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/intrusive/options.hpp>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
+#include <boost/intrusive/detail/utilities.hpp>
 #include <iterator>
 #include <algorithm>
 #include <functional>
@@ -732,17 +732,13 @@ class list_impl
    void clone_from(const list_impl &src, Cloner cloner, Disposer disposer)
    {
       this->clear_and_dispose(disposer);
-      BOOST_INTRUSIVE_TRY{
-         const_iterator b(src.begin()), e(src.end());
-         for(; b != e; ++b){
-            this->push_back(*cloner(*b));
-         }
+      detail::exception_disposer<list_impl, Disposer>
+         rollback(*this, disposer);
+      const_iterator b(src.begin()), e(src.end());
+      for(; b != e; ++b){
+         this->push_back(*cloner(*b));
       }
-      BOOST_INTRUSIVE_CATCH(...){
-         this->clear_and_dispose(disposer);
-         BOOST_INTRUSIVE_RETHROW;
-      }
-      BOOST_INTRUSIVE_CATCH_END
+      rollback.release();
    }
 
    //! <b>Requires</b>: value must be an lvalue and p must be a valid iterator of *this.
