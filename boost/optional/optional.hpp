@@ -10,7 +10,7 @@
 //  fernando_cacciola@hotmail.com
 //
 // Revisions:
-// 25 Apr 2008 (improved swap) Fernando Cacciola, Niels Dekker, Thorsten Ottosen
+// 27 Apr 2008 (improved swap) Fernando Cacciola, Niels Dekker, Thorsten Ottosen
 // 
 #ifndef BOOST_OPTIONAL_OPTIONAL_FLC_19NOV2002_HPP
 #define BOOST_OPTIONAL_OPTIONAL_FLC_19NOV2002_HPP
@@ -579,7 +579,7 @@ class optional : public optional_detail::optional_base<T>
     void swap( optional & arg )
       {
         // allow for Koenig lookup
-        using std::swap ;
+        using boost::swap ;
         swap(*this, arg);
       }
 
