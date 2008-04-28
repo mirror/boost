@@ -14,6 +14,7 @@
 # include <boost/mpl/and.hpp>
 # include <boost/mpl/not.hpp>
 # include <boost/type_traits/is_same.hpp>
+# include <boost/type_traits/is_convertible.hpp>
 # include <boost/type_traits/is_reference.hpp>
 
 namespace boost { namespace parameter { namespace aux {
