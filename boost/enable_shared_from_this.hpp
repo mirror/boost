@@ -89,10 +89,9 @@ private:
         }else if( !_shared_count.empty() )
         {
             BOOST_ASSERT( owner.unique() ); // no weak_ptrs to owner should exist either, but there's no way to check that
-            typedef detail::sp_deleter_wrapper D;
-            D * pd = static_cast<D *>( _shared_count.get_deleter( BOOST_SP_TYPEID(D) ) );
+            detail::sp_deleter_wrapper * pd = detail::basic_get_deleter<detail::sp_deleter_wrapper>( _shared_count );
             BOOST_ASSERT( pd != 0 );
-            pd->set_deleter( owner );
+            pd->set_deleter( owner.get_shared_count() );
             owner.reset( _shared_count, owner.get() );
             detail::shared_count().swap( _shared_count );
         }
