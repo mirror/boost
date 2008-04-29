@@ -40,7 +40,7 @@ public:
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
-    assert(min_arg < max_arg);
+    assert(min_arg <= max_arg);
   }
 
   // compiler-generated copy ctor and assignment operator are fine
