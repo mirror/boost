@@ -293,6 +293,11 @@ BOOST_MPI_DATATYPE(unsigned long long, MPI_UNSIGNED_LONG_LONG, builtin);
 BOOST_MPI_DATATYPE(unsigned __int64, MPI_UNSIGNED_LONG_LONG, builtin); 
 #endif
 
+// Define signed char specialization of is_mpi_datatype, if possible.
+#if defined(MPI_SIGNED_CHAR) || (defined(MPI_VERSION) && MPI_VERSION >= 2)
+BOOST_MPI_DATATYPE(signed char, MPI_SIGNED_CHAR, builtin);
+#endif
+
 #endif // Doxygen
 
 namespace detail {
