@@ -44,10 +44,7 @@ protected:
 // virtual destructor because we need a vtable for dynamic_cast from base to derived to work
     virtual ~enable_shared_from_this()
     {
-// make sure no dangling shared_ptr objects were created by the
-// user calling shared_from_this() but never passing ownership of the object
-// to a shared_ptr.
-        BOOST_ASSERT( _shared_count.use_count() <= 1 );
+        BOOST_ASSERT( _shared_count.use_count() <= 1 ); // make sure no dangling shared_ptr objects exist
     }
 
 public:
@@ -92,6 +89,7 @@ private:
             detail::sp_deleter_wrapper * pd = detail::basic_get_deleter<detail::sp_deleter_wrapper>( _shared_count );
             BOOST_ASSERT( pd != 0 );
             pd->set_deleter( owner.get_shared_count() );
+
             owner.reset( _shared_count, owner.get() );
             detail::shared_count().swap( _shared_count );
         }
