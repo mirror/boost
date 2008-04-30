@@ -23,6 +23,11 @@
 
 #ifdef BOOST_NO_EXCEPTIONS
 # include <exception>
+#else
+#  ifndef BOOST_EXCEPTION_DISABLE
+#   include <boost/exception/enable_current_exception.hpp>
+#   include <boost/exception/enable_error_info.hpp>
+#  endif
 #endif
 
 namespace boost
@@ -36,7 +41,11 @@ void throw_exception(std::exception const & e); // user defined
 
 template<class E> inline void throw_exception(E const & e)
 {
+#ifndef BOOST_EXCEPTION_DISABLE
+    throw enable_current_exception(enable_error_info(e));
+#else
     throw e;
+#endif
 }
 
 #endif
