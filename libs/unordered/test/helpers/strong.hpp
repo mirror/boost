@@ -7,10 +7,10 @@
 #define BOOST_UNORDERED_TEST_HELPERS_STRONG_HEADER
 
 #include <boost/config.hpp>
-#include <vector>
 #include <iterator>
 #include "./metafunctions.hpp"
 #include "./equivalent.hpp"
+#include "./list.hpp"
 #include "../objects/exception.hpp"
 
 namespace test
@@ -18,19 +18,19 @@ namespace test
     template <class X>
     class strong
     {
-        typedef std::vector<BOOST_DEDUCED_TYPENAME non_const_value_type<X>::type> values_type;
+        typedef test::list<BOOST_DEDUCED_TYPENAME X::value_type> values_type;
         values_type values_;
     public:
         void store(X const& x) {
             DISABLE_EXCEPTIONS;
             values_.clear();
-            values_.reserve(x.size());
-            std::copy(x.cbegin(), x.cend(), std::back_inserter(values_));
+            values_.insert(x.cbegin(), x.cend());
         }
 
         void test(X const& x) const {
             if(!(x.size() == values_.size() &&
-                        std::equal(x.cbegin(), x.cend(), values_.begin(), test::equivalent)))
+                    std::equal(x.cbegin(), x.cend(), values_.begin(),
+                        test::equivalent)))
                 BOOST_ERROR("Strong exception safety failure.");
         }
     };

@@ -75,35 +75,6 @@ namespace test
             sizeof(has_unique_key_impl((Container const*)0))
                 == sizeof(no_type));
     };
-
-    // Non Const Value Type
-
-    template <bool IsMap>
-    struct non_const_value_type_impl
-    {
-        template <class Container>
-        struct apply {
-            typedef std::pair<
-                BOOST_DEDUCED_TYPENAME Container::key_type,
-                BOOST_DEDUCED_TYPENAME Container::mapped_type> type;
-        };
-    };
-
-    template<>
-    struct non_const_value_type_impl<false>
-    {
-        template <class Container>
-        struct apply {
-            typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
-        };
-    };
-    
-    template <class Container>
-    struct non_const_value_type
-        : non_const_value_type_impl< ::test::is_map<Container>::value>::
-            BOOST_NESTED_TEMPLATE apply<Container>
-    {
-    };
 }
 
 #endif

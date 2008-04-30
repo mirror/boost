@@ -18,8 +18,8 @@
 #include <functional>
 #include <memory>
 
-#include <boost/unordered/detail/hash_table.hpp>
 #include <boost/functional/hash.hpp>
+#include <boost/unordered/detail/hash_table.hpp>
 
 #if !defined(BOOST_HAS_RVALUE_REFS)
 #include <boost/unordered/detail/move.hpp>
@@ -387,6 +387,21 @@ namespace boost
         {
             base.rehash(n);
         }
+        
+        friend bool operator==(unordered_map const& m1, unordered_map const& m2)
+        {
+            return m1.base.equals(m2.base);
+        }
+
+        friend bool operator!=(unordered_map const& m1, unordered_map const& m2)
+        {
+            return !m1.base.equals(m2.base);
+        }
+
+        friend std::size_t hash_value(unordered_map const& m)
+        {
+            return m.base.hash_value();
+        }
     }; // class template unordered_map
 
     template <class K, class T, class H, class P, class A>
@@ -738,6 +753,21 @@ namespace boost
         void rehash(size_type n)
         {
             base.rehash(n);
+        }
+
+        friend bool operator==(unordered_multimap const& m1, unordered_multimap const& m2)
+        {
+            return m1.base.equals(m2.base);
+        }
+
+        friend bool operator!=(unordered_multimap const& m1, unordered_multimap const& m2)
+        {
+            return !m1.base.equals(m2.base);
+        }
+
+        friend std::size_t hash_value(unordered_multimap const& m)
+        {
+            return m.base.hash_value();
         }
     }; // class template unordered_multimap
 

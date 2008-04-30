@@ -11,7 +11,6 @@
 
 #include <set>
 #include <map>
-#include <vector>
 #include <iterator>
 #include <algorithm>
 #include <boost/mpl/if.hpp>
@@ -22,6 +21,7 @@
 #include "./metafunctions.hpp"
 #include "./helpers.hpp"
 #include "./equivalent.hpp"
+#include "./list.hpp"
 
 namespace test
 {
@@ -44,27 +44,23 @@ namespace test
     template <class X1, class X2>
     void compare_range(X1 const& x1, X2 const& x2)
     {
-        std::vector<BOOST_DEDUCED_TYPENAME non_const_value_type<X1>::type> values1, values2;
-        values1.reserve(x1.size());
-        values2.reserve(x2.size());
-        std::copy(x1.begin(), x1.end(), std::back_inserter(values1));
-        std::copy(x2.begin(), x2.end(), std::back_inserter(values2));
-        std::sort(values1.begin(), values1.end());
-        std::sort(values2.begin(), values2.end());
+        typedef test::list<BOOST_DEDUCED_TYPENAME X1::value_type> value_list;
+        value_list values1(x1.begin(), x1.end());
+        value_list values2(x2.begin(), x2.end());
+        values1.sort();
+        values2.sort();
         BOOST_CHECK(values1.size() == values2.size() &&
-                std::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
+                std::equal(values1.begin(), values1.end(), values2.begin(),
+                    test::equivalent));
     }
 
     template <class X1, class X2, class T>
     void compare_pairs(X1 const& x1, X2 const& x2, T*)
     {
-        std::vector<T> values1, values2;
-        values1.reserve(std::distance(x1.first, x1.second));
-        values2.reserve(std::distance(x2.first, x2.second));
-        std::copy(x1.first, x1.second, std::back_inserter(values1));
-        std::copy(x2.first, x2.second, std::back_inserter(values2));
-        std::sort(values1.begin(), values1.end());
-        std::sort(values2.begin(), values2.end());
+        test::list<T> values1(x1.first, x1.second);
+        test::list<T> values2(x2.first, x2.second);
+        values1.sort();
+        values2.sort();
         BOOST_CHECK(values1.size() == values2.size() &&
                 std::equal(values1.begin(), values1.end(), values2.begin(), test::equivalent));
     }
@@ -123,8 +119,7 @@ namespace test
             compare_pairs(
                 x.equal_range(get_key<X>(val)),
                 this->equal_range(get_key<X>(val)),
-                (BOOST_DEDUCED_TYPENAME non_const_value_type<X>::type*) 0
-                );
+                (BOOST_DEDUCED_TYPENAME X::value_type*) 0);
         }
 
         template <class It>

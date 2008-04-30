@@ -61,7 +61,7 @@ namespace test {
             for(registered_test_base* i = first(); i; i = i->next)
                 i->run();
         }
-    };
+    }
 }
 
 #endif

@@ -18,8 +18,8 @@
 #include <functional>
 #include <memory>
 
-#include <boost/unordered/detail/hash_table.hpp>
 #include <boost/functional/hash.hpp>
+#include <boost/unordered/detail/hash_table.hpp>
 
 #if !defined(BOOST_HAS_RVALUE_REFS)
 #include <boost/unordered/detail/move.hpp>
@@ -358,6 +358,21 @@ namespace boost
         {
             base.rehash(n);
         }
+
+        friend bool operator==(unordered_set const& m1, unordered_set const& m2)
+        {
+            return m1.base.equals(m2.base);
+        }
+
+        friend bool operator!=(unordered_set const& m1, unordered_set const& m2)
+        {
+            return !m1.base.equals(m2.base);
+        }
+
+        friend std::size_t hash_value(unordered_set const& m)
+        {
+            return m.base.hash_value();
+        }
     }; // class template unordered_set
 
     template <class T, class H, class P, class A>
@@ -694,6 +709,21 @@ namespace boost
         void rehash(size_type n)
         {
             base.rehash(n);
+        }
+
+        friend bool operator==(unordered_multiset const& m1, unordered_multiset const& m2)
+        {
+            return m1.base.equals(m2.base);
+        }
+
+        friend bool operator!=(unordered_multiset const& m1, unordered_multiset const& m2)
+        {
+            return !m1.base.equals(m2.base);
+        }
+
+        friend std::size_t hash_value(unordered_multiset const& m)
+        {
+            return m.base.hash_value();
         }
     }; // class template unordered_multiset
 

@@ -22,6 +22,9 @@ UNORDERED_AUTO_TEST(test0)
             test::minimal::copy_constructible::create());
 
     std::cout<<"Test unordered_map.\n";
+
+    boost::unordered_map<int, int> int_map;
+
     boost::unordered_map<
         test::minimal::assignable,
         test::minimal::copy_constructible,
@@ -29,9 +32,13 @@ UNORDERED_AUTO_TEST(test0)
         test::minimal::equal_to<test::minimal::assignable>,
         test::minimal::allocator<value_type> > map;
 
+    container_test(int_map, std::pair<int const, int>(0, 0));
     container_test(map, value);
 
     std::cout<<"Test unordered_multimap.\n";
+
+    boost::unordered_multimap<int, int> int_multimap;
+
     boost::unordered_multimap<
         test::minimal::assignable,
         test::minimal::copy_constructible,
@@ -39,7 +46,37 @@ UNORDERED_AUTO_TEST(test0)
         test::minimal::equal_to<test::minimal::assignable>,
         test::minimal::allocator<value_type> > multimap;
 
+    container_test(int_multimap, std::pair<int const, int>(0, 0));
     container_test(multimap, value);
+}
+
+UNORDERED_AUTO_TEST(equality_tests) {
+    typedef std::pair<test::minimal::assignable const,
+            test::minimal::copy_constructible> value_type;
+
+    boost::unordered_map<int, int> int_map;
+
+    boost::unordered_map<
+        test::minimal::assignable,
+        test::minimal::copy_constructible_equality_comparable,
+        test::minimal::hash<test::minimal::assignable>,
+        test::minimal::equal_to<test::minimal::assignable>,
+        test::minimal::allocator<value_type> > map;
+
+    equality_test(int_map);
+    equality_test(map);
+
+    boost::unordered_multimap<int, int> int_multimap;
+
+    boost::unordered_multimap<
+        test::minimal::assignable,
+        test::minimal::copy_constructible_equality_comparable,
+        test::minimal::hash<test::minimal::assignable>,
+        test::minimal::equal_to<test::minimal::assignable>,
+        test::minimal::allocator<value_type> > multimap;
+
+    equality_test(int_multimap);
+    equality_test(multimap);
 }
 
 UNORDERED_AUTO_TEST(test1) {

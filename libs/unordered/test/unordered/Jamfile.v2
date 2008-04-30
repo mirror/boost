@@ -33,5 +33,6 @@ test-suite unordered
         [ run bucket_tests.cpp ]
         [ run load_factor_tests.cpp ]
         [ run rehash_tests.cpp ]
+        [ run equality_tests.cpp ]
         [ run swap_tests.cpp : : : <define>BOOST_UNORDERED_SWAP_METHOD=2 ]
     ;

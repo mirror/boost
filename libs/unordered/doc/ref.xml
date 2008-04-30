@@ -657,6 +657,71 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </throws>
             </method>
           </method-group>
+          <free-function-group name="Equality Comparisons">
+            <function name="operator==">
+              <template>
+                <template-type-parameter name="Value">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_set&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_set&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="operator!=">
+              <template>
+                <template-type-parameter name="Value">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_set&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_set&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="hash_value">
+              <template>
+                <template-type-parameter name="Value">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_set&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>std::size_t</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+          </free-function-group>
           <free-function-group name="swap">
             <function name="swap">
               <template>
@@ -1339,6 +1404,71 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </throws>
             </method>
           </method-group>
+          <free-function-group name="Equality Comparisons">
+            <function name="operator==">
+              <template>
+                <template-type-parameter name="Value">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_multiset&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_multiset&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="operator!=">
+              <template>
+                <template-type-parameter name="Value">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_multiset&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_multiset&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="hash_value">
+              <template>
+                <template-type-parameter name="Value">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_multiset&lt;Value, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>std::size_t</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+          </free-function-group>
           <free-function-group name="swap">
             <function name="swap">
               <template>
@@ -2070,6 +2200,77 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </throws>
             </method>
           </method-group>
+          <free-function-group name="Equality Comparisons">
+            <function name="operator==">
+              <template>
+                <template-type-parameter name="Key">
+                </template-type-parameter>
+                <template-type-parameter name="Mapped">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_map&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_map&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="operator!=">
+              <template>
+                <template-type-parameter name="Key">
+                </template-type-parameter>
+                <template-type-parameter name="Mapped">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_map&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_map&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="hash_value">
+              <template>
+                <template-type-parameter name="Key">
+                </template-type-parameter>
+                <template-type-parameter name="Mapped">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_map&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>std::size_t</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+          </free-function-group>
           <free-function-group name="swap">
             <function name="swap">
               <template>
@@ -2762,6 +2963,77 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               </throws>
             </method>
           </method-group>
+          <free-function-group name="Equality Comparisons">
+            <function name="operator==">
+              <template>
+                <template-type-parameter name="Key">
+                </template-type-parameter>
+                <template-type-parameter name="Mapped">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_multimap&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_multimap&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="operator!=">
+              <template>
+                <template-type-parameter name="Key">
+                </template-type-parameter>
+                <template-type-parameter name="Mapped">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_multimap&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <parameter name="y">
+                <paramtype>unordered_multimap&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>bool</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+            <function name="hash_value">
+              <template>
+                <template-type-parameter name="Key">
+                </template-type-parameter>
+                <template-type-parameter name="Mapped">
+                </template-type-parameter>
+                <template-type-parameter name="Hash">
+                </template-type-parameter>
+                <template-type-parameter name="Pred">
+                </template-type-parameter>
+                <template-type-parameter name="Alloc">
+                </template-type-parameter>
+              </template>
+              <parameter name="x">
+                <paramtype>unordered_multimap&lt;Key, Mapped, Hash, Pred, Alloc&gt; const&amp;</paramtype>
+              </parameter>
+              <type>std::size_t</type>
+              <notes>
+                <para>This is a boost extension.</para>
+              </notes>
+            </function>
+          </free-function-group>
           <free-function-group name="swap">
             <function name="swap">
               <template>

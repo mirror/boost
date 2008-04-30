@@ -8,7 +8,7 @@
 
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
-#include <list>
+#include "../helpers/list.hpp"
 #include <set>
 #include <iostream>
 #include <iterator>
@@ -50,7 +50,7 @@ typedef boost::unordered_multimap<int, int,
     collision2_hash, std::equal_to<int>,
     test::allocator<std::pair<int const, int> > > collide_map2;
 typedef collide_map::value_type collide_value;
-typedef std::list<collide_value> collide_list;
+typedef test::list<collide_value> collide_list;
 
 UNORDERED_AUTO_TEST(empty_range_tests)
 {
@@ -108,10 +108,8 @@ UNORDERED_AUTO_TEST(two_equivalent_item_tests)
 template<class Range1, class Range2>
 bool compare(Range1 const& x, Range2 const& y)
 {
-    collide_list a;
-    collide_list b;
-    std::copy(x.begin(), x.end(), std::back_inserter(a));
-    std::copy(y.begin(), y.end(), std::back_inserter(b));
+    collide_list a(x.begin(), x.end());
+    collide_list b(y.begin(), y.end());
     a.sort();
     b.sort();
     return a == b;
@@ -120,8 +118,7 @@ bool compare(Range1 const& x, Range2 const& y)
 template <class Container>
 bool general_erase_range_test(Container& x, int start, int end)
 {
-    collide_list l;
-    std::copy(x.begin(), x.end(), std::back_inserter(l));
+    collide_list l(x.begin(), x.end());
     l.erase(boost::next(l.begin(), start), boost::next(l.begin(), end));
     x.erase(boost::next(x.begin(), start), boost::next(x.begin(), end));
     return compare(l, x);
@@ -133,8 +130,7 @@ void erase_subrange_tests(Container const& x)
     for(std::size_t length = 0; length < x.size(); ++length) {
         for(std::size_t position = 0; position < x.size() - length; ++position) {
             Container y(x);
-            collide_list init;
-            std::copy(y.begin(), y.end(), std::back_inserter(init));
+            collide_list init(y.begin(), y.end());
             if(!general_erase_range_test(y, position, position + length)) {
                 BOOST_ERROR("general_erase_range_test failed.");
                 std::cout<<"Erase: ["<<position<<","<<position + length<<")\n";

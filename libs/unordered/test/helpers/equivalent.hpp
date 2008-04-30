@@ -8,10 +8,10 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
-#include <vector>
 #include <algorithm>
 #include "./metafunctions.hpp"
 #include "./fwd.hpp"
+#include "./list.hpp"
 
 namespace test
 {
@@ -56,20 +56,17 @@ namespace test
         BOOST_DEDUCED_TYPENAME Container::key_equal key_equal_;
         float max_load_factor_;
 
-        typedef BOOST_DEDUCED_TYPENAME non_const_value_type<Container>::type value_type;
-        std::vector<value_type> values_;
+        typedef test::list<BOOST_DEDUCED_TYPENAME Container::value_type>
+            value_list;
+        value_list values_;
     public:
         unordered_equivalence_tester(Container const &x)
             : size_(x.size()),
             hasher_(x.hash_function()), key_equal_(x.key_eq()),
             max_load_factor_(x.max_load_factor()),
-            values_()
+            values_(x.begin(), x.end())
         {
-            // Can't initialise values_ straight from x because of Visual C++ 6
-            values_.reserve(x.size());
-            std::copy(x.begin(), x.end(), std::back_inserter(values_));
-            
-            std::sort(values_.begin(), values_.end());
+            values_.sort();
         }
 
         bool operator()(Container const& x) const
@@ -80,11 +77,9 @@ namespace test
                 (max_load_factor_ == x.max_load_factor()) &&
                 (values_.size() == x.size()))) return false;
 
-            std::vector<value_type> copy;
-            copy.reserve(x.size());
-            std::copy(x.begin(), x.end(), std::back_inserter(copy));
-            std::sort(copy.begin(), copy.end());
-            return(std::equal(values_.begin(), values_.end(), copy.begin()));
+            value_list copy(x.begin(), x.end());
+            copy.sort();
+            return values_ == copy;
         }
     private:
         unordered_equivalence_tester();

@@ -43,10 +43,10 @@ void find_tests1(X*, test::random_generator generator = test::default_generator)
 
             test::compare_pairs(x.equal_range(key),
                     tracker.equal_range(key),
-                    (BOOST_DEDUCED_TYPENAME test::non_const_value_type<X>::type*) 0);
+                    (BOOST_DEDUCED_TYPENAME X::value_type*) 0);
             test::compare_pairs(x_const.equal_range(key),
                     tracker.equal_range(key),
-                    (BOOST_DEDUCED_TYPENAME test::non_const_value_type<X>::type*) 0);
+                    (BOOST_DEDUCED_TYPENAME X::value_type*) 0);
         }
 
         test::random_values<X> v2(500, generator);

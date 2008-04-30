@@ -6,7 +6,7 @@
 #if !defined(BOOST_UNORDERED_TEST_HELPERS_RANDOM_VALUES_HEADER)
 #define BOOST_UNORDERED_TEST_HELPERS_RANDOM_VALUES_HEADER
 
-#include <list>
+#include "./list.hpp"
 #include <algorithm>
 #include <boost/mpl/if.hpp>
 #include "./generators.hpp"
@@ -97,7 +97,7 @@ namespace test
 
     template <class X>
     struct random_values
-        : public std::list<BOOST_DEDUCED_TYPENAME X::value_type>
+        : public test::list<BOOST_DEDUCED_TYPENAME X::value_type>
     {
         random_values(int count, test::random_generator const& generator =
             test::default_generator)

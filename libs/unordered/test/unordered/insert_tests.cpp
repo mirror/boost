@@ -318,10 +318,9 @@ void associative_insert_range_test(X*, test::random_generator generator = test::
 {
     std::cerr<<"associative_insert_range_test\n";
 
-    typedef std::list<std::pair<BOOST_DEDUCED_TYPENAME X::key_type, BOOST_DEDUCED_TYPENAME X::mapped_type> > list;
+    typedef test::list<std::pair<BOOST_DEDUCED_TYPENAME X::key_type, BOOST_DEDUCED_TYPENAME X::mapped_type> > list;
     test::random_values<X> v(1000, generator);
-    list l;
-    std::copy(v.begin(), v.end(), std::back_inserter(l));
+    list l(v.begin(), v.end());
 
     X x; x.insert(l.begin(), l.end());
 
