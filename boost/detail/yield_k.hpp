@@ -36,7 +36,7 @@ extern "C" void _mm_pause();
 
 #elif defined(__GNUC__) && ( defined(__i386__) || defined(__x86_64__) )
 
-#define BOOST_SMT_PAUSE __asm__ __volatile__( "rep; nop" ::: "memory" );
+#define BOOST_SMT_PAUSE __asm__ __volatile__( "rep; nop" : : : "memory" );
 
 #endif
 

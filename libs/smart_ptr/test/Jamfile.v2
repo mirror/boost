@@ -45,5 +45,6 @@ import testing ;
           [ run spinlock_pool_test.cpp ]
           [ run sp_accept_owner_test.cpp ]
           [ run sp_atomic_test.cpp ]
+          [ run make_shared_test.cpp ]
         ;
 }

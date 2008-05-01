@@ -242,7 +242,7 @@ BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a16,true)
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a32,true)
 }
 #endif
-#if defined(BOOST_MSVC) || (defined(BOOST_INTEL) && defined(_MSC_VER))
+#if (defined(BOOST_MSVC) || (defined(BOOST_INTEL) && defined(_MSC_VER))) && _MSC_VER >= 1300
 //
 // MSVC supports types which have alignments greater than the normal
 // maximum: these are used for example in the types __m64 and __m128
