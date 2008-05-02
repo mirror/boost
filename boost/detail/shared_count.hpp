@@ -28,6 +28,7 @@
 #include <boost/detail/bad_weak_ptr.hpp>
 #include <boost/detail/sp_counted_base.hpp>
 #include <boost/detail/sp_counted_impl.hpp>
+#include <boost/detail/workaround.hpp>
 // In order to avoid circular dependencies with Boost.TR1
 // we make sure that our include of <memory> doesn't try to
 // pull in the TR1 headers: that's why we use this header 
