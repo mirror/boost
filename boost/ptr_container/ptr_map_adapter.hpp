@@ -626,7 +626,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        iterator insert( key_type& key, std::auto_ptr<U> x )
+        iterator insert( const key_type& key, std::auto_ptr<U> x )
         {
             return insert( key, x.release() );
         }
