@@ -404,7 +404,9 @@ boost
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
 #endif</span>
     }</pre>
-</div><h4>Effects:</h4>
+</div><h4>Requirements:</h4>
+<p><tt>E</tt> must derive publicly from <tt>std::exception</tt>.</p>
+<h4>Effects:</h4>
 <div><ul><li> If <tt>BOOST_NO_EXCEPTIONS</tt> is not defined, <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e))</tt>, unless <tt>BOOST_EXCEPTION_DISABLE</tt> is defined, in which case <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw e;</tt></li>
 <li> If <tt>BOOST_NO_EXCEPTIONS</tt> is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <tt>throw_exception</tt> are allowed to assume that the function never returns; therefore, if the user-defined <tt>throw_exception</tt> returns, the behavior is undefined.</li>
 </ul></div>
