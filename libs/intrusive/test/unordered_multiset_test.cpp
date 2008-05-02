@@ -199,7 +199,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin>::test_insert(std::vector<t
          for (unsigned int j = 0; j < random_size; ++j)
             data[j].value_ = random_init[j]; 
          unordered_multiset_type testset_new(bucket_traits(single_bucket, 1));
-         testset_new.insert(&data[0], &data[max]);
+         testset_new.insert(&data[0], &data[0]+max);
          testset_new.erase(testset_new.iterator_to(data[i]));
          BOOST_TEST (testset_new.size() == (max -1));
       }
