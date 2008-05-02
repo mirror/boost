@@ -11,10 +11,11 @@
 //  boost/throw_exception.hpp
 //
 //  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2008 Emil Dotchevski and Reverge Studios, Inc.
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  http://www.boost.org/libs/utility/throw_exception.html
 //
@@ -39,8 +40,14 @@ void throw_exception(std::exception const & e); // user defined
 
 #else
 
+inline void throw_exception_assert_compatibility( std::exception const & ) { }
+
 template<class E> inline void throw_exception(E const & e)
 {
+    //All boost exceptions are required to derive std::exception,
+    //to ensure compatibility with BOOST_NO_EXCEPTIONS.
+    throw_exception_assert_compatibility(e);
+
 #ifndef BOOST_EXCEPTION_DISABLE
     throw enable_current_exception(enable_error_info(e));
 #else
