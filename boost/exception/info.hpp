@@ -37,11 +37,11 @@ boost
             virtual std::type_info const & tag_typeid() const = 0;
             virtual std::string value_as_string() const = 0;
 
-			protected:
+            protected:
 
-			~error_info_base()
-				{
-				}
+            ~error_info_base()
+                {
+                }
             };
         }
 

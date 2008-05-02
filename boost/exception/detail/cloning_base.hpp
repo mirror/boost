@@ -20,6 +20,12 @@ boost
             public:
 
             virtual clone_base const * clone() const = 0;
+
+            protected:
+
+            ~cloning_base() throw()
+                {
+                }
             };
         }
     }
