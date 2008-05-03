@@ -46,5 +46,8 @@ import testing ;
           [ run sp_accept_owner_test.cpp ]
           [ run sp_atomic_test.cpp ]
           [ run make_shared_test.cpp ]
+          [ run sp_convertible_test.cpp ]
+          [ run wp_convertible_test.cpp ]
+          [ run ip_convertible_test.cpp ]
         ;
 }

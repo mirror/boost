@@ -32,6 +32,10 @@
 #include <boost/detail/shared_count.hpp>
 #include <boost/detail/workaround.hpp>
 
+#if !defined( BOOST_NO_SFINAE )
+#include <boost/detail/sp_convertible.hpp>
+#endif
+
 #if !defined(BOOST_SP_NO_ATOMIC_ACCESS)
 #include <boost/detail/spinlock_pool.hpp>
 #include <boost/memory_order.hpp>
@@ -224,11 +228,20 @@ public:
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+#if !defined( BOOST_NO_SFINAE )
+
+    shared_ptr( shared_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+
+#else
+
+    shared_ptr( shared_ptr<Y> const & r )
+
+#endif
+    : px( r.px ), pn( r.pn ) // never throws
     {
     }
 
-    shared_ptr(detail::shared_count const & c, T * p): px(p), pn(c) // never throws
+    shared_ptr( detail::shared_count const & c, T * p ): px( p ), pn( c ) // never throws
     {
     }
 
