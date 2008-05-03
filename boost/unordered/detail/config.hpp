@@ -13,6 +13,9 @@
 #elif defined(__GNUC__) && \
     (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
 #  define BOOST_UNORDERED_NO_HAS_MOVE_ASSIGN
+#elif BOOST_WORKAROUND(BOOST_INTEL, < 900) || \
+    BOOST_WORKAROUND(__EDG_VERSION__, < 304)
+#  define BOOST_UNORDERED_NO_HAS_MOVE_ASSIGN
 #endif
 
 #endif
