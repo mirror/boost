@@ -740,7 +740,11 @@ public:
         detail::shared_count().swap( _deleter );
     }
     template<typename D>
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1300 )
+    D* get_deleter( D* ) const
+#else
     D* get_deleter() const
+#endif
     {
         return boost::detail::basic_get_deleter<D>(_deleter);
     }
@@ -752,18 +756,25 @@ template<class D, class T> D * get_deleter( shared_ptr<T> const & p )
 {
     D *del = detail::basic_get_deleter<D>( p.get_shared_count() );
 
-#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1300 )
-#else
-
     if( del == 0 )
     {
         detail::sp_deleter_wrapper *del_wrapper = detail::basic_get_deleter<detail::sp_deleter_wrapper>(p.get_shared_count());
-// The following get_deleter method call is fully qualified because
-// older versions of gcc (2.95, 3.2.3) fail to compile it when written del_wrapper->get_deleter<D>()
-        if(del_wrapper) del = del_wrapper->::boost::detail::sp_deleter_wrapper::get_deleter<D>();
-    }
+
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1300 )
+
+        if( del_wrapper ) del = del_wrapper->get_deleter( (D*)0 );
+
+#elif defined( __GNUC__ ) && BOOST_WORKAROUND( __GNUC__, < 4 )
+
+        if( del_wrapper ) del = del_wrapper->::boost::detail::sp_deleter_wrapper::get_deleter<D>();
+
+#else
+
+        if( del_wrapper ) del = del_wrapper->get_deleter<D>();
 
 #endif
+    }
+
 
     return del;
 }
