@@ -44,7 +44,7 @@
     <para>
 
       The Boost Lambda Library (BLL in the sequel) is a C++ template
-      library, which implements form of <emphasis>lambda abstractions</emphasis> for C++.
+      library, which implements a form of <emphasis>lambda abstractions</emphasis> for C++.
 The term originates from functional programming and lambda calculus, where a lambda abstraction defines an unnamed function.
       The primary motivation for the BLL is to provide flexible and
       convenient means to define unnamed function objects for STL algorithms.
