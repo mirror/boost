@@ -178,9 +178,13 @@ testwave_app::got_expected_result(std::string const& filename,
             case 'P':       // insert full path
             case 'B':       // same as 'P', but forward slashs on Windows
                 {
-                    fs::path fullpath = fs::complete(
-                        fs::path(filename, fs::native), 
-                        fs::current_path());
+                    fs::path fullpath;
+                    fs::path fn(filename, fs::native);
+                    
+                    if (!fn.is_complete())
+                        fullpath = fs::complete(fn, fs::current_path());
+                    else
+                        fullpath = fn;
                         
                     if ('(' == expected[pos1+2]) {
                     // the $P(basename) syntax is used
