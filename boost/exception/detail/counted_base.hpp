@@ -34,6 +34,10 @@ boost
 
             protected:
 
+#ifdef __GNUC__
+virtual //Disable bogus GCC warning.
+//Would someone at GCC finally get the protected, non-virtual destructor approach?
+#endif
             ~counted_base() throw()
                 {
                 }
