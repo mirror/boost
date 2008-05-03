@@ -196,6 +196,10 @@ void test()
     BOOST_TEST( cp.use_count() == 3 );
     BOOST_TEST( *cp == 87654 );
 
+#if defined( BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP )
+    using boost::swap;
+#endif
+
     boost::shared_ptr<int> cp4;
     swap( cp2, cp4 );
     BOOST_TEST( cp4.use_count() == 3 );

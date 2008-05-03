@@ -748,16 +748,23 @@ public:
 
 } // namespace detail
 
-template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
+template<class D, class T> D * get_deleter( shared_ptr<T> const & p )
 {
-    D *del = detail::basic_get_deleter<D>(p.get_shared_count());
-    if(del == 0)
+    D *del = detail::basic_get_deleter<D>( p.get_shared_count() );
+
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1300 )
+#else
+
+    if( del == 0 )
     {
         detail::sp_deleter_wrapper *del_wrapper = detail::basic_get_deleter<detail::sp_deleter_wrapper>(p.get_shared_count());
 // The following get_deleter method call is fully qualified because
 // older versions of gcc (2.95, 3.2.3) fail to compile it when written del_wrapper->get_deleter<D>()
         if(del_wrapper) del = del_wrapper->::boost::detail::sp_deleter_wrapper::get_deleter<D>();
     }
+
+#endif
+
     return del;
 }
 
