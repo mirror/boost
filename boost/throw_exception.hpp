@@ -21,6 +21,15 @@
 //
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+
+#if !defined( BOOST_EXCEPTION_DISABLE ) && defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, <= 0x551 )
+# define BOOST_EXCEPTION_DISABLE
+#endif
+
+#if !defined( BOOST_EXCEPTION_DISABLE ) && defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1310 )
+# define BOOST_EXCEPTION_DISABLE
+#endif
 
 #ifdef BOOST_NO_EXCEPTIONS
 # include <exception>

@@ -21,7 +21,9 @@
 //  spinlock_pool<2> is reserved for shared_ptr atomic access
 //
 
+#include <boost/config.hpp>
 #include <boost/detail/spinlock.hpp>
+#include <cstddef>
 
 namespace boost
 {
@@ -39,7 +41,7 @@ public:
 
     static spinlock & spinlock_for( void const * pv )
     {
-        size_t i = reinterpret_cast< size_t >( pv ) % 41;
+        std::size_t i = reinterpret_cast< std::size_t >( pv ) % 41;
         return pool_[ i ];
     }
 

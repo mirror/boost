@@ -13,9 +13,10 @@
 //  http://www.boost.org/libs/smart_ptr/enable_shared_from_this.html
 //
 
+#include <boost/config.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/assert.hpp>
-#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 namespace boost
 {
@@ -76,6 +77,12 @@ private:
             _weak_count = _shared_count;
         }
     }
+
+#if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, <= 0x551 )
+
+public:
+
+#endif
 
     template<typename U>
     void sp_accept_owner( shared_ptr<U> & owner ) const
