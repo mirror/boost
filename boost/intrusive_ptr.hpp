@@ -126,6 +126,11 @@ public:
         return *this;
     }
 
+    void reset()
+    {
+        this_type().swap( *this );
+    }
+
     void reset( T * rhs )
     {
         this_type( rhs ).swap( *this );

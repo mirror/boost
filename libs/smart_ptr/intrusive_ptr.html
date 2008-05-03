@@ -62,6 +62,8 @@
       intrusive_ptr &amp; <A href="#assignment" >operator=</A>(intrusive_ptr const &amp; r);
       template&lt;class Y&gt; intrusive_ptr &amp; <A href="#assignment" >operator=</A>(intrusive_ptr&lt;Y&gt; const &amp; r);
       intrusive_ptr &amp; <A href="#assignment" >operator=</A>(T * r);
+
+      void <a href="#reset" >reset</a>();
       void <a href="#reset" >reset</a>(T * r);
 
       T &amp; <A href="#indirection" >operator*</A>() const; // never throws
@@ -148,6 +150,10 @@ intrusive_ptr &amp; operator=(T * r);</pre>
 			<P><B>Returns:</B> <code>*this</code>.</P>
 		</BLOCKQUOTE>
 		<H3><a name="reset">reset</a></H3>
+		<pre>void reset();</pre>
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Equivalent to <code>intrusive_ptr().swap(*this)</code>.</P>
+		</BLOCKQUOTE>
 		<pre>void reset(T * r);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>intrusive_ptr(r).swap(*this)</code>.</P>
