@@ -6,6 +6,8 @@
 #ifndef UUID_274DA366004E11DCB1DDFE2E56D89593
 #define UUID_274DA366004E11DCB1DDFE2E56D89593
 
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/exception/detail/counted_base.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <typeinfo>
@@ -45,8 +47,46 @@ boost
         {
         public:
 
-        virtual ~exception() throw()=0;
-        virtual char const * what() const throw();
+		virtual
+		char const *
+		what() const throw()
+			{
+			if( data_ )
+				try
+					{
+					char const * w = data_->what(typeid(*this));
+					BOOST_ASSERT(0!=w);
+					return w;
+					}
+				catch(...)
+					{
+					}
+			return typeid(*this).name();
+			}
+
+		protected:
+
+		exception()
+			{
+			}
+
+		exception( exception const & e ):
+			data_(e.data_)
+			{
+			}
+
+#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) )
+		//Force class exception to be abstract.
+		//Otherwise, MSVC bug allows throw exception(), even though the copy constructor is protected.
+		virtual ~exception() throw()=0;
+#else
+#if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
+		virtual //Disable bogus GCC warning.
+#endif
+		~exception() throw()
+			{
+			}
+#endif
 
         private:
 
@@ -62,29 +102,13 @@ boost
         intrusive_ptr<exception_detail::error_info_container> mutable data_;
         };
 
-    inline
-    exception::
-    ~exception() throw()
-        {
-        }
-
-    inline
-    char const *
-    exception::
-    what() const throw()
-        {
-        if( data_ )
-            try
-                {
-                char const * w = data_->what(typeid(*this));
-                BOOST_ASSERT(0!=w);
-                return w;
-                }
-            catch(...)
-                {
-                }
-        return typeid(*this).name();
-        }
-    }
+#if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) ) //See above.
+	inline
+	exception::
+	~exception() throw()
+		{
+		}
+#endif
+	}
 
 #endif

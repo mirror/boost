@@ -6,6 +6,8 @@
 #ifndef UUID_DBA0D90C930911DCBA7B675A56D89593
 #define UUID_DBA0D90C930911DCBA7B675A56D89593
 
+#include <boost/detail/workaround.hpp>
+
 namespace
 boost
     {
@@ -34,9 +36,8 @@ boost
 
             protected:
 
-#ifdef __GNUC__
+#if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
 virtual //Disable bogus GCC warning.
-//Would someone at GCC finally get the protected, non-virtual destructor approach?
 #endif
             ~counted_base() throw()
                 {

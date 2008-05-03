@@ -6,6 +6,8 @@
 #ifndef UUID_F7D5662CCB0F11DCA353CAC656D89593
 #define UUID_F7D5662CCB0F11DCA353CAC656D89593
 
+#include <boost/detail/workaround.hpp>
+
 namespace
 boost
     {
@@ -23,9 +25,8 @@ boost
 
             protected:
 
-#ifdef __GNUC__
+#if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
 virtual //Disable bogus GCC warning.
-//Would someone at GCC finally get the protected, non-virtual destructor approach?
 #endif
             ~cloning_base() throw()
                 {
