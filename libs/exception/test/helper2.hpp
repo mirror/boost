@@ -7,6 +7,7 @@
 #define UUID_BC765EB4CA2A11DCBDC5828355D89593
 
 #include <boost/exception/exception.hpp>
+#include <exception>
 
 namespace
 boost
