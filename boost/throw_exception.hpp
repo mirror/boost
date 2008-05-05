@@ -22,6 +22,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include <exception>
 
 #if !defined( BOOST_EXCEPTION_DISABLE ) && defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, <= 0x551 )
 # define BOOST_EXCEPTION_DISABLE
@@ -31,13 +32,9 @@
 # define BOOST_EXCEPTION_DISABLE
 #endif
 
-#ifdef BOOST_NO_EXCEPTIONS
-# include <exception>
-#else
-#  ifndef BOOST_EXCEPTION_DISABLE
-#   include <boost/exception/enable_current_exception.hpp>
-#   include <boost/exception/enable_error_info.hpp>
-#  endif
+#if !defined( BOOST_NO_EXCEPTIONS ) && !defined( BOOST_EXCEPTION_DISABLE )
+# include <boost/exception/enable_current_exception.hpp>
+# include <boost/exception/enable_error_info.hpp>
 #endif
 
 namespace boost
@@ -45,13 +42,13 @@ namespace boost
 
 #ifdef BOOST_NO_EXCEPTIONS
 
-void throw_exception(std::exception const & e); // user defined
+void throw_exception( std::exception const & e ); // user defined
 
 #else
 
 inline void throw_exception_assert_compatibility( std::exception const & ) { }
 
-template<class E> inline void throw_exception(E const & e)
+template<class E> inline void throw_exception( E const & e )
 {
     //All boost exceptions are required to derive std::exception,
     //to ensure compatibility with BOOST_NO_EXCEPTIONS.
