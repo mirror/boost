@@ -8,8 +8,8 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-#ifndef BOOST_RANGE_DETAIL_AS_LITERAL_HPP
-#define BOOST_RANGE_DETAIL_AS_LITERAL_HPP
+#ifndef BOOST_RANGE_AS_LITERAL_HPP
+#define BOOST_RANGE_AS_LITERAL_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
@@ -107,22 +107,13 @@ namespace boost
     template< class Char, std::size_t sz >
     inline iterator_range<Char*> as_literal( Char (&arr)[sz] )
     {
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590)) && __BORLANDC__ >= 0x590
-        return boost::make_iterator_range<Char*>( arr, arr + sz - 1 );
-#else
-        return boost::make_iterator_range( arr, arr + sz - 1 );
-#endif
+        return range_detail::make_range( arr, range_detail::is_char_ptr(arr) );        
     }
-
     
     template< class Char, std::size_t sz >
     inline iterator_range<const Char*> as_literal( const Char (&arr)[sz] )
     {
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x590)) && __BORLANDC__ >= 0x590
-        return boost::make_iterator_range<const Char*>( arr, arr + sz - 1 );
-#else
-        return boost::make_iterator_range( arr, arr + sz - 1 );
-#endif
+        return range_detail::make_range( arr, range_detail::is_char_ptr(arr) );
     }
 }
 
