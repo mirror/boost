@@ -15,9 +15,11 @@ namespace boost
   namespace inspect
   {
 
-	static const string gPunct ( "_{}[]#()<>%:;.?*+-/ˆ&|˜!=,\\\"'" );
+	static const string gPunct ( "$_{}[]#()<>%:;.?*+-/ˆ&|~!=,\\\"'@^`" );
 	
-   //  Legal characters for a source file are defined in section 2.2 of the standard
+   // Legal characters for a source file are defined in section 2.2 of the standard
+   // I have added '@', '^', and '`' to the "legal" chars because they are commonly
+   //    used in comments, and they are strictly ASCII.
    struct non_ascii : public std::unary_function<char, bool> {
    public:
       non_ascii () {}
