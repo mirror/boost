@@ -31,10 +31,7 @@
 #include <boost/throw_exception.hpp>
 #include <boost/detail/shared_count.hpp>
 #include <boost/detail/workaround.hpp>
-
-#if !defined( BOOST_NO_SFINAE )
 #include <boost/detail/sp_convertible.hpp>
-#endif
 
 #if !defined(BOOST_SP_NO_ATOMIC_ACCESS)
 #include <boost/detail/spinlock_pool.hpp>
@@ -228,7 +225,7 @@ public:
     }
 
     template<class Y>
-#if !defined( BOOST_NO_SFINAE )
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
     shared_ptr( shared_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
 

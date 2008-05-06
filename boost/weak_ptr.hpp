@@ -61,7 +61,7 @@ public:
 //
 
     template<class Y>
-#if !defined( BOOST_NO_SFINAE )
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
     weak_ptr( weak_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
 
@@ -76,7 +76,7 @@ public:
     }
 
     template<class Y>
-#if !defined( BOOST_NO_SFINAE )
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
     weak_ptr( shared_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
 

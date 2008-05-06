@@ -22,10 +22,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/detail/workaround.hpp>
-
-#if !defined( BOOST_NO_SFINAE )
 #include <boost/detail/sp_convertible.hpp>
-#endif
 
 #include <functional>           // for std::less
 
@@ -78,7 +75,7 @@ public:
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
     template<class U>
-#if !defined( BOOST_NO_SFINAE )
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
     intrusive_ptr( intrusive_ptr<U> const & rhs, typename detail::sp_enable_if_convertible<U,T>::type = detail::sp_empty() )
 
