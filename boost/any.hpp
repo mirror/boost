@@ -127,6 +127,8 @@ namespace boost
 
             ValueType held;
 
+        private: // intentionally left unimplemented
+            holder & operator=(const holder &);
         };
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
