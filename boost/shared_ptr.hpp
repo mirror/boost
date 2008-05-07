@@ -349,7 +349,16 @@ public:
     }
 
     template<class Y>
-    shared_ptr( shared_ptr<Y> && r ): px( r.px ), pn() // never throws
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
+    shared_ptr( shared_ptr<Y> && r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+
+#else
+
+    shared_ptr( shared_ptr<Y> && r )
+
+#endif
+    : px( r.px ), pn() // never throws
     {
         pn.swap( r.pn );
         r.px = 0;
@@ -771,7 +780,6 @@ template<class D, class T> D * get_deleter( shared_ptr<T> const & p )
 
 #endif
     }
-
 
     return del;
 }

@@ -59,7 +59,12 @@ int g( boost::shared_ptr<incomplete> )
 
 int main()
 {
+    boost::shared_ptr<double> p1;
+    BOOST_TEST( 1 == f( p1 ) );
     BOOST_TEST( 1 == f( boost::shared_ptr<double>() ) );
+
+    boost::shared_ptr<Z> p2;
+    BOOST_TEST( 4 == g( p2 ) );
     BOOST_TEST( 4 == g( boost::shared_ptr<Z>() ) );
 
     return boost::report_errors();
