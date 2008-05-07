@@ -17,7 +17,6 @@
 #include <climits>
 #include <cstddef>
 #include <istream>
-#include <locale>
 #include <string>
 #include <typeinfo>
 #include <boost/config.hpp>
@@ -29,6 +28,10 @@
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
+
+#ifndef BOOST_NO_STD_LOCALE
+#include <locale>
+#endif
 
 #ifdef BOOST_NO_STRINGSTREAM
 #include <strstream>
@@ -485,6 +488,7 @@ namespace boost
 #endif
 
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+            // TODO: use BOOST_NO_STD_LOCALE
             std::locale loc;
             typedef std::numpunct<CharT> numpunct;
             numpunct const& np = BOOST_USE_FACET(numpunct, loc);
@@ -651,6 +655,7 @@ namespace boost
 #ifndef DISABLE_WIDE_CHAR_SUPPORT
             static void widen_and_assign(wchar_t* p, char ch)
             {
+                // TODO: use BOOST_NO_STD_LOCALE
                 std::locale loc;
                 wchar_t w = BOOST_USE_FACET(std::ctype<wchar_t>, loc).widen(ch);
                 Traits::assign(*p, w);
