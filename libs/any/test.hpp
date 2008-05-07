@@ -232,7 +232,12 @@ namespace any_tests // tester is the driver class for a sequence of tests
     template<typename test_iterator>
     bool tester<test_iterator>::operator()()
     {
-        using namespace std;
+        using std::cerr;
+        using std::endl;
+        using std::ends;
+        using std::exception;
+        using std::flush;
+        using std::string;
 
         unsigned long passed = 0, failed = 0, unimplemented = 0;
 
@@ -251,9 +256,9 @@ namespace any_tests // tester is the driver class for a sequence of tests
                     unsigned long allocated   = allocations::instance().allocated();
                     unsigned long deallocated = allocations::instance().deallocated();
 #ifdef BOOST_NO_STRINGSTREAM
-                    ostrstream report;
+                    std::ostrstream report;
 #else
-                    ostringstream report;
+                    std::ostringstream report;
 #endif
                     report << "new/delete ("
                            << allocated << " allocated, "
