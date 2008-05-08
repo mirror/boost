@@ -152,7 +152,8 @@ struct argument_pack
       , typename Parameters::deduced_list
       , tag_keyword_arg
       , mpl::false_
-    >::type type;
+    >::type result;
+    typedef typename mpl::first<result>::type type;
 };
 
 # if 1 //BOOST_WORKAROUND(BOOST_MSVC, < 1300)
