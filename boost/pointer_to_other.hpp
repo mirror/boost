@@ -4,7 +4,7 @@
 //
 //  pointer_to_other.hpp
 //
-//  (C) Copyright Ion Gaztañaga 2005.
+//  (C) Copyright Ion Gaztanaga 2005.
 //  Copyright (c) 2005 Peter Dimov.
 //
 //  Distributed under the Boost Software License, Version 1.0.
