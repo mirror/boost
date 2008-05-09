@@ -18,6 +18,9 @@
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/or.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/is_member_function_pointer.hpp>
 
 #ifndef BOOST_RESULT_OF_NUM_ARGS
 #  define BOOST_RESULT_OF_NUM_ARGS 10
@@ -33,6 +36,7 @@ namespace detail {
 BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct result_of_impl;
+template<typename F> struct result_of_decltype_impl;
 
 template<typename F>
 struct result_of_void_impl
