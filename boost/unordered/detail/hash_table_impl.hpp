@@ -304,27 +304,6 @@ namespace boost {
                     value_constructed_ = true;
                 }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
-                template <typename... Args>
-                void construct(Args&&... args)
-                {
-                    BOOST_ASSERT(!node_);
-                    value_constructed_ = false;
-                    node_base_constructed_ = false;
-
-                    node_ = allocators_.node_alloc_.allocate(1);
-
-                    allocators_.node_base_alloc_.construct(
-                            allocators_.node_base_alloc_.address(*node_),
-                            node_base());
-                    node_base_constructed_ = true;
-
-                    allocators_.value_alloc_.construct(
-                            allocators_.value_alloc_.address(node_->value_), std::forward<Args>(args)...);
-                    value_constructed_ = true;
-                }
-#endif
-
                 node_ptr get() const
                 {
                     BOOST_ASSERT(node_);
