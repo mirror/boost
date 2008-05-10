@@ -161,7 +161,7 @@ namespace test
 
         void push_front(value_type const& v) {
             data_.first_ = new node(v, data_.first_);
-            if(data_.size_) data_.last_ptr_ = &(*data_.last_ptr_)->next_;
+            if(!data_.size_) data_.last_ptr_ = &(*data_.last_ptr_)->next_;
             ++data_.size_;
         }
     
