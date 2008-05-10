@@ -118,7 +118,7 @@ namespace boost
             return *this;
         }
 #else
-        unordered_set(boost::unordered_detail::move_from<unordered_set> other)
+        unordered_set(boost::unordered_detail::move_from<unordered_set<Value, Hash, Pred, Alloc> > other)
             : base(other.base, boost::unordered_detail::move_tag())
         {
         }
@@ -473,7 +473,7 @@ namespace boost
             return *this;
         }
 #else
-        unordered_multiset(boost::unordered_detail::move_from<unordered_multiset> other)
+        unordered_multiset(boost::unordered_detail::move_from<unordered_multiset<Value, Hash, Pred, Alloc> > other)
             : base(other.base, boost::unordered_detail::move_tag())
         {
         }
