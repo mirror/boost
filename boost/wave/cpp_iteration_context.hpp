@@ -37,9 +37,9 @@ namespace iteration_context_policies {
 ///////////////////////////////////////////////////////////////////////////////
 //
 //      The iteration_context_policies templates are policies for the 
-//      boost::wave::iteration_context which allows to control, how a given input file 
-//      is to be represented by a pair of iterators pointing to the begin and 
-//      the end of the resulting input sequence.
+//      boost::wave::iteration_context which allows to control, how a given 
+//      input file is to be represented by a pair of iterators pointing to the 
+//      begin and the end of the resulting input sequence.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -85,51 +85,6 @@ namespace iteration_context_policies {
 
         private:
             std::string instring;
-        };
-    };
-    
-///////////////////////////////////////////////////////////////////////////////
-//
-//  load_file
-//
-//      The load_file policy opens a given file and returns the wrapped
-//      istreambuf_iterators.
-//
-///////////////////////////////////////////////////////////////////////////////
-    struct load_file 
-    {
-        template <typename IterContextT>
-        class inner {
-
-        public:
-            ~inner() { if (instream.is_open()) instream.close(); }
-            
-            template <typename PositionT>
-            static 
-            void init_iterators(IterContextT &iter_ctx, 
-                PositionT const &act_pos, language_support language)
-            {
-                typedef typename IterContextT::iterator_type iterator_type;
-                
-                iter_ctx.instream.open(iter_ctx.filename.c_str());
-                if (!iter_ctx.instream.is_open()) {
-                    BOOST_WAVE_THROW_CTX(iter_ctx.ctx, preprocess_exception, 
-                        bad_include_file, iter_ctx.filename.c_str(), act_pos);
-                    return;
-                }
-                iter_ctx.instream.unsetf(std::ios::skipws);
-
-                using boost::spirit::classic::make_multi_pass;
-                iter_ctx.first = iterator_type(
-                    /*make_multi_pass*/(std::istreambuf_iterator<char>(
-                        iter_ctx.instream.rdbuf())),
-                    /*make_multi_pass*/(std::istreambuf_iterator<char>()),
-                    PositionT(iter_ctx.filename), language);
-                iter_ctx.last = iterator_type();
-            }
-
-        private:
-            std::ifstream instream;
         };
     };
     
