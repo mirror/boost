@@ -169,6 +169,7 @@ private:
 #endif
 };
 
+#if BOOST_WAVE_SERIALIZATION == 0
 ///////////////////////////////////////////////////////////////////////////////
 template <typename TokenT, typename ContainerT>
 inline void
@@ -184,6 +185,7 @@ intrusive_ptr_release(macro_definition<TokenT, ContainerT>* p)
     if (--p->use_count == 0)
         delete p;
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace util
