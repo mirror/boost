@@ -47,45 +47,45 @@ boost
         {
         public:
 
-		virtual
-		char const *
-		what() const throw()
-			{
-			if( data_ )
-				try
-					{
-					char const * w = data_->what(typeid(*this));
-					BOOST_ASSERT(0!=w);
-					return w;
-					}
-				catch(...)
-					{
-					}
-			return typeid(*this).name();
-			}
+        virtual
+        char const *
+        what() const throw()
+            {
+            if( data_ )
+                try
+                    {
+                    char const * w = data_->what(typeid(*this));
+                    BOOST_ASSERT(0!=w);
+                    return w;
+                    }
+                catch(...)
+                    {
+                    }
+            return typeid(*this).name();
+            }
 
-		protected:
+        protected:
 
-		exception()
-			{
-			}
+        exception()
+            {
+            }
 
-		exception( exception const & e ):
-			data_(e.data_)
-			{
-			}
+        exception( exception const & e ):
+            data_(e.data_)
+            {
+            }
 
 #if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) )
-		//Force class exception to be abstract.
-		//Otherwise, MSVC bug allows throw exception(), even though the copy constructor is protected.
-		virtual ~exception() throw()=0;
+        //Force class exception to be abstract.
+        //Otherwise, MSVC bug allows throw exception(), even though the copy constructor is protected.
+        virtual ~exception() throw()=0;
 #else
 #if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT(4) )
-		virtual //Disable bogus GCC warning.
+        virtual //Disable bogus GCC warning.
 #endif
-		~exception() throw()
-			{
-			}
+        ~exception() throw()
+            {
+            }
 #endif
 
         private:
@@ -103,12 +103,12 @@ boost
         };
 
 #if BOOST_WORKAROUND( BOOST_MSVC, BOOST_TESTED_AT(1500) ) //See above.
-	inline
-	exception::
-	~exception() throw()
-		{
-		}
+    inline
+    exception::
+    ~exception() throw()
+        {
+        }
 #endif
-	}
+    }
 
 #endif
