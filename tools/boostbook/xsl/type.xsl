@@ -1072,7 +1072,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:with-param name="allow-synopsis-anchors" select="true()"/>
         </xsl:call-template>
         <!-- Associated free functions -->
-        <xsl:apply-templates select="ancestor-or-self::*/free-function-group"
+        <xsl:apply-templates select="free-function-group"
           mode="synopsis">
           <xsl:with-param name="indentation" select="$indentation"/>
           <xsl:with-param name="class" select="@name"/>
