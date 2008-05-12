@@ -10,7 +10,7 @@
 //  fernando_cacciola@hotmail.com
 //
 // Revisions:
-// 10 May 2008 (added more swap tests)
+// 12 May 2008 (added more swap tests)
 //
 #include<iostream>
 #include<stdexcept>
@@ -1099,50 +1099,65 @@ namespace optional_swap_test
 } // End of namespace optional_swap_test.
 
 
+namespace boost {
+
 //
 // Compile time tweaking on whether or not swap should use the default constructor:
 //
-template <> struct boost::optional_swap_should_use_default_constructor<
-  optional_swap_test::class_whose_default_ctor_should_be_used> : boost::mpl::true_ {} ;
 
-template <> struct boost::optional_swap_should_use_default_constructor<
-  optional_swap_test::class_whose_default_ctor_should_not_be_used> : boost::mpl::false_ {} ;
+template <> struct optional_swap_should_use_default_constructor<
+  optional_swap_test::class_whose_default_ctor_should_be_used> : mpl::true_ {} ;
 
-template <class T> struct boost::optional_swap_should_use_default_constructor<
-  optional_swap_test::template_whose_default_ctor_should_be_used<T> > : boost::mpl::true_ {} ;
+template <> struct optional_swap_should_use_default_constructor<
+  optional_swap_test::class_whose_default_ctor_should_not_be_used> : mpl::false_ {} ;
+
+template <class T> struct optional_swap_should_use_default_constructor<
+  optional_swap_test::template_whose_default_ctor_should_be_used<T> > : mpl::true_ {} ;
+
 
 //
-// Swap specializations:
+// Specialization of boost::swap:
 //
 template <> 
-void boost::swap(boost::optional<optional_swap_test::class_whose_explicit_ctor_should_be_used> & x, boost::optional<optional_swap_test::class_whose_explicit_ctor_should_be_used> & y)
+void swap(optional<optional_swap_test::class_whose_explicit_ctor_should_be_used> & x, optional<optional_swap_test::class_whose_explicit_ctor_should_be_used> & y)
+{
+  optional_swap_test::swap(x, y);
+}
+
+} // namespace boost
+
+
+namespace std {
+
+//
+// Specializations of std::swap:
+//
+
+template <> 
+void swap(optional_swap_test::class_whose_default_ctor_should_be_used & x, optional_swap_test::class_whose_default_ctor_should_be_used & y)
 {
   optional_swap_test::swap(x, y);
 }
 
 template <> 
-void std::swap(optional_swap_test::class_whose_default_ctor_should_be_used & x, optional_swap_test::class_whose_default_ctor_should_be_used & y)
+void swap(optional_swap_test::class_whose_default_ctor_should_not_be_used & x, optional_swap_test::class_whose_default_ctor_should_not_be_used & y)
 {
   optional_swap_test::swap(x, y);
 }
 
 template <> 
-void std::swap(optional_swap_test::class_whose_default_ctor_should_not_be_used & x, optional_swap_test::class_whose_default_ctor_should_not_be_used & y)
+void swap(optional_swap_test::class_without_default_ctor & x, optional_swap_test::class_without_default_ctor & y)
 {
   optional_swap_test::swap(x, y);
 }
 
 template <> 
-void std::swap(optional_swap_test::class_without_default_ctor & x, optional_swap_test::class_without_default_ctor & y)
+void swap(optional_swap_test::class_whose_explicit_ctor_should_be_used & x, optional_swap_test::class_whose_explicit_ctor_should_be_used & y)
 {
   optional_swap_test::swap(x, y);
 }
 
-template <> 
-void std::swap(optional_swap_test::class_whose_explicit_ctor_should_be_used & x, optional_swap_test::class_whose_explicit_ctor_should_be_used & y)
-{
-  optional_swap_test::swap(x, y);
-}
+} // namespace std
 
 
 //
