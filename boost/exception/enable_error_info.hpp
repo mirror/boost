@@ -8,6 +8,7 @@
 
 #include <boost/exception/exception.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/config.hpp>   // For BOOST_STATIC_CONSTANT.
 
 namespace
 boost
@@ -55,12 +56,12 @@ boost
             typedef error_info_injector<T> type;
             };
 
- #if BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x582))
+#if BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x582))
         template <class T>
         struct
         sizeof_dispatch
             {
-            enum e { value=sizeof(dispatch((T*)0)) };
+            BOOST_STATIC_CONSTANT(int, value = sizeof(dispatch((T*)0)) );
             };
 
         template <class T>
@@ -80,10 +81,17 @@ boost
         }
 
     template <class T>
-    typename exception_detail::enable_error_info_return_type<T>::type
+#if !BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x582))
+    typename
+#endif
+    exception_detail::enable_error_info_return_type<T>::type
     enable_error_info( T const & x )
         {
-        return typename exception_detail::enable_error_info_return_type<T>::type(x);
+        return
+#if !BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x582))
+        typename
+#endif
+        exception_detail::enable_error_info_return_type<T>::type(x);
         }
     }
 
