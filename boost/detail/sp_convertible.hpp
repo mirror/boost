@@ -25,6 +25,10 @@
 # define BOOST_SP_NO_SP_CONVERTIBLE
 #endif
 
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE ) && defined( __BORLANDC__ ) && ( __BORLANDC__ < 0x600 )
+# define BOOST_SP_NO_SP_CONVERTIBLE
+#endif
+
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
 namespace boost
