@@ -23,6 +23,8 @@
 #include <boost/detail/workaround.hpp>
 
 #ifdef _DLL_CPPLIB
+#include <memory>
+#include <string>
 //
 // This is a horrible workaround, without declaring these symbols extern we get
 // duplicate symbol errors when linking if the application is built without
