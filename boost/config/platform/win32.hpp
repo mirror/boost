@@ -52,7 +52,10 @@
 
 #ifndef BOOST_DISABLE_WIN32
 // WEK: Added
-#define BOOST_HAS_FTIME
+#ifndef _WIN32_WCE
+   // GetSystemTimeAsFileTime not present on WinCE.
+#  define BOOST_HAS_FTIME
+#endif
 #define BOOST_WINDOWS 1
 
 #endif
