@@ -8,7 +8,8 @@
 
 #include <boost/exception/exception.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/config.hpp>   // For BOOST_STATIC_CONSTANT.
+#include <boost/config.hpp>
+#include <stddef.h>
 
 namespace
 boost
