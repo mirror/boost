@@ -24,7 +24,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/detail/sp_convertible.hpp>
 
-#include <functional>           // for std::less
+#include <boost/config/no_tr1/functional.hpp>           // for std::less
 
 #if !defined(BOOST_NO_IOSTREAM)
 #if !defined(BOOST_NO_IOSFWD)
