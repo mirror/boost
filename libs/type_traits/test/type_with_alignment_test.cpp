@@ -15,7 +15,7 @@
 #endif
 
 #if defined(BOOST_MSVC) || (defined(BOOST_INTEL) && defined(_MSC_VER))
-#if _MSC_VER >= 1400
+#if (_MSC_VER >= 1400) && defined(_M_IX86)
 #include <xmmintrin.h>
 #endif
 struct __declspec(align(8)) a8 { char m[8]; };
@@ -87,7 +87,7 @@ TYPE_WITH_ALIGNMENT_TEST_EX(empty_UDT)
 TYPE_WITH_ALIGNMENT_TEST_EX(union_UDT)
 
 #if defined(BOOST_MSVC) || (defined(BOOST_INTEL) && defined(_MSC_VER))
-#if _MSC_VER >= 1400
+#if (_MSC_VER >= 1400) && defined(_M_IX86)
 TYPE_WITH_ALIGNMENT_TEST(__m128)
 TYPE_WITH_ALIGNMENT_TEST(__m64)
 #endif
