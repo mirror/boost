@@ -46,13 +46,11 @@ rule test_all
    }
    for local file2 in [ glob config/tr1_has_tr1*fail.cpp ]
    {
-      local test = [ compile-fail $(file2) ] ;
-      all_rules += $(test) : $(TR1_PROPERTIES) ;
+      all_rules += [ compile-fail $(file2) : $(TR1_PROPERTIES) ] ;
    }
    for local filec in [ glob config/tr1_has_tr1*pass.cpp ]
    {
-      local test = [ compile $(filec) ] ;
-      all_rules += $(test) : $(TR1_PROPERTIES) ;
+      all_rules += [ compile $(filec) : $(TR1_PROPERTIES) ] ;
    }
    
    for local file3 in [ glob type_traits/*.cpp ]
