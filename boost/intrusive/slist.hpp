@@ -1015,8 +1015,11 @@ class slist_impl
          iterator last_x(x.previous(x.end()));  //<- constant time if cache_last is active
          node_ptr prev_n(prev.pointed_node());
          node_ptr last_x_n(last_x.pointed_node());
-         if(cache_last && node_traits::get_next(prev_n) == this->get_end_node()){
-            this->set_last_node(last_x_n);
+         if(cache_last){
+            x.set_last_node(x.get_root_node());
+            if(node_traits::get_next(prev_n) == this->get_end_node()){
+               this->set_last_node(last_x_n);
+            }
          }
          node_algorithms::transfer_after( prev_n, x.before_begin().pointed_node(), last_x_n);
          this->priv_size_traits().set_size(this->priv_size_traits().get_size() + x.priv_size_traits().get_size());
