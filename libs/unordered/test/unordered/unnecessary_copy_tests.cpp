@@ -15,7 +15,19 @@ namespace unnecessary_copy_tests
         static int moves;
         count_copies() : tag_(0) { ++copies; }
         explicit count_copies(int tag) : tag_(tag) { ++copies; }
-        count_copies(count_copies const&, count_copies const& x) : tag_(x.tag_) { ++copies; }
+
+        // This bizarre constructor is an attempt to confuse emplace.
+        //
+        // unordered_map<count_copies, count_copies> x:
+        // x.emplace(count_copies(1), count_copies(2));
+        // x.emplace(count_copies(1), count_copies(2), count_copies(3));
+        //
+        // The first emplace should use the single argument constructor twice.
+        // The second emplace should use the single argument contructor for
+        // the key, and this constructor for the value.
+        count_copies(count_copies const&, count_copies const& x)
+            : tag_(x.tag_) { ++copies; }
+
         count_copies(count_copies const& x) : tag_(x.tag_) { ++copies; }
 #if defined(BOOST_HAS_RVALUE_REFS)
         count_copies(count_copies&& x) : tag_(x.tag_) {

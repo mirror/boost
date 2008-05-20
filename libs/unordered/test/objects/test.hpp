@@ -11,7 +11,8 @@
 #include <cstddef>
 #include <iostream>
 #include "../helpers/fwd.hpp"
-#include "memory.hpp"
+#include "../helpers/count.hpp"
+#include "./memory.hpp"
 #include <map>
 
 namespace test
@@ -25,7 +26,7 @@ namespace test
     template <class T> class allocator;
     object generate(object const*);
 
-    class object
+    class object : globally_counted_object
     {
         friend class hash;
         friend class equal_to;

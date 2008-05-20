@@ -78,7 +78,13 @@ namespace boost {
 
         // prime number list, accessor
 
-        static const std::size_t prime_list[] = {
+        template<typename T> struct prime_list_template
+        {
+            static std::size_t const value[];
+        };
+
+        template<typename T>
+        std::size_t const prime_list_template<T>::value[] = {
             53ul, 97ul, 193ul, 389ul, 769ul,
             1543ul, 3079ul, 6151ul, 12289ul, 24593ul,
             49157ul, 98317ul, 196613ul, 393241ul, 786433ul,
@@ -86,12 +92,15 @@ namespace boost {
             50331653ul, 100663319ul, 201326611ul, 402653189ul, 805306457ul,
             1610612741ul, 3221225473ul, 4294967291ul };
 
+        typedef prime_list_template<std::size_t> prime_list;
+
         // no throw
         inline std::size_t next_prime(std::size_t n) {
-            std::size_t const* const prime_list_end = prime_list +
-                sizeof(prime_list) / sizeof(*prime_list);
+            std::size_t const* const prime_list_begin = prime_list::value;
+            std::size_t const* const prime_list_end = prime_list_begin +
+                sizeof(prime_list::value) / sizeof(*prime_list::value);
             std::size_t const* bound =
-                std::lower_bound(prime_list,prime_list_end, n);
+                std::lower_bound(prime_list_begin, prime_list_end, n);
             if(bound == prime_list_end)
                 bound--;
             return *bound;
@@ -99,11 +108,12 @@ namespace boost {
 
         // no throw
         inline std::size_t prev_prime(std::size_t n) {
-            std::size_t const* const prime_list_end = prime_list +
-                sizeof(prime_list) / sizeof(*prime_list);
+            std::size_t const* const prime_list_begin = prime_list::value;
+            std::size_t const* const prime_list_end = prime_list_begin +
+                sizeof(prime_list::value) / sizeof(*prime_list::value);
             std::size_t const* bound =
-                std::upper_bound(prime_list,prime_list_end, n);
-            if(bound != prime_list)
+                std::upper_bound(prime_list_begin,prime_list_end, n);
+            if(bound != prime_list_begin)
                 bound--;
             return *bound;
         }

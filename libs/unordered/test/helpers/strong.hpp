@@ -11,7 +11,7 @@
 #include "./metafunctions.hpp"
 #include "./equivalent.hpp"
 #include "./list.hpp"
-#include "../objects/exception.hpp"
+#include "./exception_test.hpp"
 
 namespace test
 {

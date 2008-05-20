@@ -23,15 +23,15 @@ namespace move_tests
 
     template<class T>
     T create(test::random_values<T> const& v,
-            BOOST_DEDUCED_TYPENAME T::value_type const*& first) {
+            test::object_count& count) {
         T x(v.begin(), v.end());
-        first = &*x.begin();
+        count = test::global_object_count;
         return x;
     }
 
     template<class T>
     T create(test::random_values<T> const& v,
-            BOOST_DEDUCED_TYPENAME T::value_type const*& first,
+            test::object_count& count,
             BOOST_DEDUCED_TYPENAME T::hasher hf,
             BOOST_DEDUCED_TYPENAME T::key_equal eq,
             BOOST_DEDUCED_TYPENAME T::allocator_type al,
@@ -39,7 +39,7 @@ namespace move_tests
         T x(0, hf, eq, al);
         x.max_load_factor(mlf);
         x.insert(v.begin(), v.end());
-        first = &*x.begin();
+        count = test::global_object_count;
         return x;
     }
 
@@ -62,9 +62,9 @@ namespace move_tests
 
         {
             test::random_values<T> v(1000);
-            BOOST_DEDUCED_TYPENAME T::value_type const* first = 0;
-            T y(create(v, first));
-            BOOST_CHECK(first == &*y.begin());
+            test::object_count count;
+            T y(create(v, count));
+            BOOST_CHECK(count == test::global_object_count);
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -75,10 +75,10 @@ namespace move_tests
     {
         {
             test::random_values<T> v(500);
-            BOOST_DEDUCED_TYPENAME T::value_type const* first = 0;
+            test::object_count count;
             T y;
-            y = create(v, first);
-            BOOST_CHECK(first == &*y.begin());
+            y = create(v, count);
+            BOOST_CHECK(count == test::global_object_count);
             test::check_container(y, v);
             test::check_equivalent_keys(y);
         }
@@ -95,12 +95,12 @@ namespace move_tests
         BOOST_DEDUCED_TYPENAME T::allocator_type al(1);
         BOOST_DEDUCED_TYPENAME T::allocator_type al2(2);
 
-        BOOST_DEDUCED_TYPENAME T::value_type const* first;
+        test::object_count count;
 
         {
             test::random_values<T> v(500);
-            T y(create(v, first, hf, eq, al, 0.5));
-            BOOST_CHECK(first == &*y.begin());
+            T y(create(v, count, hf, eq, al, 0.5));
+            BOOST_CHECK(count == test::global_object_count);
             test::check_container(y, v);
             BOOST_CHECK(test::equivalent(y.hash_function(), hf));
             BOOST_CHECK(test::equivalent(y.key_eq(), eq));
@@ -112,8 +112,8 @@ namespace move_tests
         {
             // TODO: To do this correctly requires the fancy new allocator stuff.
             test::random_values<T> v(500);
-            T y(create(v, first, hf, eq, al, 2.0), al2);
-            BOOST_CHECK(first != &*y.begin());
+            T y(create(v, count, hf, eq, al, 2.0), al2);
+            BOOST_CHECK(count != test::global_object_count);
             test::check_container(y, v);
             BOOST_CHECK(test::equivalent(y.hash_function(), hf));
             BOOST_CHECK(test::equivalent(y.key_eq(), eq));
@@ -124,8 +124,8 @@ namespace move_tests
 
         {
             test::random_values<T> v(25);
-            T y(create(v, first, hf, eq, al, 1.0), al);
-            BOOST_CHECK(first == &*y.begin());
+            T y(create(v, count, hf, eq, al, 1.0), al);
+            BOOST_CHECK(count == test::global_object_count);
             test::check_container(y, v);
             BOOST_CHECK(test::equivalent(y.hash_function(), hf));
             BOOST_CHECK(test::equivalent(y.key_eq(), eq));
