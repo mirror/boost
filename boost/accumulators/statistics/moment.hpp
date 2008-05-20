@@ -35,6 +35,7 @@ namespace boost { namespace numeric
     template<typename T, int N>
     T pow(T const &x, mpl::int_<N>)
     {
+        using namespace operators;
         T y = numeric::pow(x, mpl::int_<N/2>());
         T z = y * y;
         return (N % 2) ? (z * x) : z;
