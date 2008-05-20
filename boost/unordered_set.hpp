@@ -123,11 +123,13 @@ namespace boost
         {
         }
 
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
         unordered_set& operator=(unordered_set x)
         {
             base.move(x.base);
             return *this;
         }
+#endif
 #endif
 
     private:
@@ -478,11 +480,13 @@ namespace boost
         {
         }
 
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
         unordered_multiset& operator=(unordered_multiset x)
         {
             base.move(x.base);
             return *this;
         }
+#endif
 #endif
 
     private:

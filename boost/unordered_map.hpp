@@ -126,11 +126,13 @@ namespace boost
         {
         }
 
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
         unordered_map& operator=(unordered_map x)
         {
             base.move(x.base);
             return *this;
         }
+#endif
 #endif
 
     private:
@@ -509,11 +511,13 @@ namespace boost
         {
         }
 
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0593)
         unordered_multimap& operator=(unordered_multimap x)
         {
             base.move(x.base);
             return *this;
         }
+#endif
 #endif
 
 
