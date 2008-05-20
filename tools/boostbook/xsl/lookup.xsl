@@ -15,12 +15,6 @@
   <xsl:template name="generate.id">
     <xsl:param name="node" select="."/>
     <xsl:apply-templates select="$node" mode="generate.id"/>
-    <xsl:if test="$node/ancestor-or-self::class-specialization|
-      $node/ancestor-or-self::struct-specialization|
-      $node/ancestor-or-self::union-specialization">
-      <xsl:text>_</xsl:text>
-      <xsl:value-of select="generate-id($node)"/>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template match="*" mode="generate.id">
@@ -126,6 +120,23 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- Build the fully-qualified id of the given node -->
+  <xsl:template name="fully-qualified-id">
+    <xsl:param name="node"/>
+    <xsl:variable name="name">
+      <xsl:apply-templates select="$node" mode="fully-qualified-name">
+        <xsl:with-param name="separator" select="'@'"/>
+      </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:value-of select="translate(normalize-space(translate($name, '.', ' ')), ' @', '_.')"/>
+    <xsl:if test="$node/ancestor-or-self::class-specialization|
+      $node/ancestor-or-self::struct-specialization|
+      $node/ancestor-or-self::union-specialization">
+      <xsl:text>_</xsl:text>
+      <xsl:value-of select="generate-id($node)"/>
+    </xsl:if>
   </xsl:template>
 
   <!-- Build the fully-qualified name of the given node -->

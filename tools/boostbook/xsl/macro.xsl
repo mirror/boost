@@ -73,5 +73,9 @@
 
   <xsl:template match="macro" mode="generate.id">
     <xsl:value-of select="@name"/>
+    <xsl:if test="count(key('named-entities', @name))!=1">
+      <xsl:text>_</xsl:text>
+      <xsl:value-of select="generate-id(.)"/>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>

@@ -28,14 +28,16 @@
     <xsl:choose>
       <xsl:when test="count(key('named-entities', $name))=1
                       and ($translated-name=$name)">
-        <xsl:call-template name="fully-qualified-name">
+        <xsl:call-template name="fully-qualified-id">
           <xsl:with-param name="node" select="."/>
-          <xsl:with-param name="separator" select="'.'"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:call-template name="fully-qualified-id">
+          <xsl:with-param name="node" select="."/>
+        </xsl:call-template>
+        <xsl:text>_</xsl:text>
         <xsl:value-of select="generate-id(.)"/>
-        <xsl:text>-bb</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

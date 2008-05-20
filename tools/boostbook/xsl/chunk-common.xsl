@@ -28,7 +28,7 @@
     <xsl:choose>
         <xsl:when test="not($recursive)">
             <!-- translate dots into directory separators, and replace illegal file path characters with underscores -->
-            <xsl:value-of select="translate(normalize-space(translate($basename, '._&lt;&gt;\:*?&quot;|', '/         ' )), ' ', '_')"/>
+            <xsl:value-of select="translate(normalize-space(translate($basename, '.&lt;&gt;\:*?&quot;|', '/        ' )), ' ', '_')"/>
             <xsl:value-of select="$html.ext"/>
         </xsl:when>
         <xsl:otherwise>
