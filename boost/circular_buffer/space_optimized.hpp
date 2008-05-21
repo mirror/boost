@@ -312,18 +312,19 @@ public:
         }
     }
 
-    //! Create an empty space optimized circular buffer with a maximum capacity.
+    //! Create an empty space optimized circular buffer with zero capacity.
     /*!
-        \post <code>capacity().%capacity() == max_size() \&\& capacity().min_capacity() == 0 \&\& size() == 0</code>
-              <br><br>There is no memory allocated in the internal buffer.
+        \post <code>capacity().%capacity() == 0 \&\& capacity().min_capacity() == 0 \&\& size() == 0</code>
         \param alloc The allocator.
         \throws Nothing.
         \par Complexity
              Constant.
+        \warning Since Boost version 1.36 the behaviour of this constructor has changed. Now it creates a space
+                 optimized circular buffer with zero capacity.
     */
     explicit circular_buffer_space_optimized(const allocator_type& alloc = allocator_type())
     : circular_buffer<T, Alloc>(0, alloc)
-    , m_capacity_ctrl(max_size()) {}
+    , m_capacity_ctrl(0) {}
 
     //! Create an empty space optimized circular buffer with the specified capacity.
     /*!

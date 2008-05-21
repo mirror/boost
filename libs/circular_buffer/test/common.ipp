@@ -769,6 +769,17 @@ void rresize_test() {
 
 void constructor_test() {
 
+    CB_CONTAINER<MyInteger> cb0;
+    BOOST_CHECK(cb0.capacity() == 0);
+    BOOST_CHECK(cb0.size() == 0);
+
+    cb0.push_back(1);
+    cb0.push_back(2);
+    cb0.push_back(3);
+
+    BOOST_CHECK(cb0.size() == 0);
+    BOOST_CHECK(cb0.capacity() == 0);
+
     CB_CONTAINER<MyInteger> cb1(3);
     CB_CONTAINER<MyInteger> cb2(3, 2);
     vector<int> v;
@@ -780,6 +791,7 @@ void constructor_test() {
     CB_CONTAINER<MyInteger> cb3(v.begin(), v.end());
     CB_CONTAINER<MyInteger> cb4(3, v.begin(), v.end());
     CB_CONTAINER<MyInteger> cb5(10, v.begin(), v.end());
+    CB_CONTAINER<MyInteger> cb6(10, 3, MyInteger(2));
 
     BOOST_CHECK(cb1.size() == 0);
     BOOST_CHECK(cb1.capacity() == 3);
@@ -803,19 +815,29 @@ void constructor_test() {
     BOOST_CHECK(!cb5.full());
     BOOST_CHECK(cb5[0] == 1);
     BOOST_CHECK(cb5[4] == 5);
+    BOOST_CHECK(cb6.size() == 3);
+    BOOST_CHECK(cb6.capacity() == 10);
+    BOOST_CHECK(!cb6.full());
+    BOOST_CHECK(cb6[0] == 2);
+    BOOST_CHECK(cb6[2] == 2);
 
     cb5.push_back(6);
+    cb6.push_back(6);
 
     BOOST_CHECK(cb5[5] == 6);
+    BOOST_CHECK(cb5[0] == 1);
     BOOST_CHECK(cb5.size() == 6);
+    BOOST_CHECK(cb6[3] == 6);
+    BOOST_CHECK(cb6.size() == 4);
+    BOOST_CHECK(cb6[0] == 2);
 
 #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
 
-    CB_CONTAINER<int> cb6(MyInputIterator(v.begin()), MyInputIterator(v.end()));
-    CB_CONTAINER<int> cb7(3, MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb7(MyInputIterator(v.begin()), MyInputIterator(v.end()));
+    CB_CONTAINER<int> cb8(3, MyInputIterator(v.begin()), MyInputIterator(v.end()));
 
-    BOOST_CHECK(cb6.capacity() == 5);
-    BOOST_CHECK(cb7.capacity() == 3);
+    BOOST_CHECK(cb7.capacity() == 5);
+    BOOST_CHECK(cb8.capacity() == 3);
 
 #endif // #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
 
@@ -824,6 +846,7 @@ void constructor_test() {
     generic_test(cb3);
     generic_test(cb4);
     generic_test(cb5);
+    generic_test(cb6);
 }
 
 void assign_test() {
@@ -894,6 +917,9 @@ void copy_constructor_and_assign_test() {
     CB_CONTAINER<MyInteger> cb2 = cb1;
 
     BOOST_CHECK(cb1 == cb2);
+    BOOST_CHECK(cb2.capacity() == 4);
+    BOOST_CHECK(cb2[0] == 2);
+    BOOST_CHECK(cb2[3] == 5);
 
     CB_CONTAINER<MyInteger> cb3(20);
     cb1.pop_back();
@@ -901,6 +927,7 @@ void copy_constructor_and_assign_test() {
     cb3 = cb2;
     cb3 = cb3;
     cb4 = cb1;
+    CB_CONTAINER<MyInteger> cb5 = cb1;
 
     BOOST_CHECK(cb3 == cb2);
     BOOST_CHECK(cb4 == cb1);
@@ -911,11 +938,16 @@ void copy_constructor_and_assign_test() {
     BOOST_CHECK(cb4.capacity() == 4);
     BOOST_CHECK(!cb4.full());
     BOOST_CHECK(*(cb4.end() - 1) == 4);
+    BOOST_CHECK(cb1 == cb5);
+    BOOST_CHECK(cb5.capacity() == 4);
+    BOOST_CHECK(cb2[0] == 2);
+    BOOST_CHECK(cb2[2] == 4);
 
     generic_test(cb1);
     generic_test(cb2);
     generic_test(cb3);
     generic_test(cb4);
+    generic_test(cb5);
 }
 
 void swap_test() {

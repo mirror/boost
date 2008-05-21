@@ -907,22 +907,23 @@ public:
 
 // Construction/Destruction
 
-    //! Create an empty <code>circular_buffer</code> with a maximum capacity.
+    //! Create an empty <code>circular_buffer</code> with zero capacity.
     /*!
-        \post <code>capacity() == max_size() \&\& size() == 0</code>
+        \post <code>capacity() == 0 \&\& size() == 0</code>
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
         \par Complexity
              Constant.
-        \warning This constructor has been defined only due to compatibility with the STL container definition. Avoid
-                 using it because it may allocate <b>very large</b> amount of memory (depending on allocator's
-                 %max_size()).
+        \warning Since Boost version 1.36 the behaviour of this constructor has changed. Now the constructor does not
+                 allocate any memory and both capacity and size are set to zero. Also note when inserting an element
+                 into a <code>circular_buffer</code> with zero capacity (e.g. by
+                 <code>\link push_back() push_back(const_reference)\endlink</code> or
+                 <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>) nothing
+                 will be inserted and the size (as well as capacity) remains zero.
     */
     explicit circular_buffer(const allocator_type& alloc = allocator_type())
-    : m_size(0), m_alloc(alloc) {
-        initialize(max_size());
-    }
+    : m_buff(0), m_end(0), m_first(0), m_last(0), m_size(0), m_alloc(alloc) {}
 
     //! Create an empty <code>circular_buffer</code> with the specified capacity.
     /*!
@@ -936,7 +937,8 @@ public:
     */
     explicit circular_buffer(capacity_type capacity, const allocator_type& alloc = allocator_type())
     : m_size(0), m_alloc(alloc) {
-        initialize(capacity);
+        initialize_buffer(capacity);
+        m_first = m_last = m_buff;
     }
 
     /*! \brief Create a full <code>circular_buffer</code> with the specified capacity and filled with <code>n</code>
@@ -954,7 +956,8 @@ public:
     */
     circular_buffer(size_type n, param_value_type item, const allocator_type& alloc = allocator_type())
     : m_size(n), m_alloc(alloc) {
-        initialize(n, item);
+        initialize_buffer(n, item);
+        m_first = m_last = m_buff;
     }
 
     /*! \brief Create a <code>circular_buffer</code> with the specified capacity and filled with <code>n</code>
@@ -976,7 +979,9 @@ public:
         const allocator_type& alloc = allocator_type())
     : m_size(n), m_alloc(alloc) {
         BOOST_CB_ASSERT(capacity >= size()); // check for capacity lower than size
-        initialize(capacity, item);
+        initialize_buffer(capacity, item);
+        m_first = m_buff;
+        m_last = capacity == n ? m_buff : m_buff + n;
     }
 
     //! The copy constructor.
@@ -992,14 +997,17 @@ public:
     */
     circular_buffer(const circular_buffer<T, Alloc>& cb)
     : m_size(cb.size()), m_alloc(cb.get_allocator()) {
-        m_first = m_last = m_buff = allocate(cb.capacity());
+        initialize_buffer(cb.capacity());
+        m_first = m_buff;
         BOOST_TRY {
-            m_end = cb_details::uninitialized_copy_with_alloc(cb.begin(), cb.end(), m_buff, m_alloc);
+            m_last = cb_details::uninitialized_copy_with_alloc(cb.begin(), cb.end(), m_buff, m_alloc);
         } BOOST_CATCH(...) {
             deallocate(m_buff, cb.capacity());
             BOOST_RETHROW
         }
         BOOST_CATCH_END
+        if (m_last == m_end)
+            m_last = m_buff;
     }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -1997,15 +2005,15 @@ private:
 #endif
     }
 
-    //! Initialize the circular buffer.
-    void initialize(capacity_type capacity) {
-        m_first = m_last = m_buff = allocate(capacity);
+    //! Initialize the internal buffer.
+    void initialize_buffer(capacity_type capacity) {
+        m_buff = allocate(capacity);
         m_end = m_buff + capacity;
     }
 
-    //! Initialize the circular buffer.
-    void initialize(capacity_type capacity, param_value_type item) {
-        initialize(capacity);
+    //! Initialize the internal buffer.
+    void initialize_buffer(capacity_type capacity, param_value_type item) {
+        initialize_buffer(capacity);
         BOOST_TRY {
             cb_details::uninitialized_fill_n_with_alloc(m_buff, size(), item, m_alloc);
         } BOOST_CATCH(...) {
@@ -2019,7 +2027,8 @@ private:
     template <class IntegralType>
     void initialize(IntegralType n, IntegralType item, const true_type&) {
         m_size = static_cast<size_type>(n);
-        initialize(size(), item);
+        initialize_buffer(size(), item);
+        m_first = m_last = m_buff;
     }
 
     //! Specialized initialize method.
@@ -2056,7 +2065,9 @@ private:
     void initialize(capacity_type capacity, IntegralType n, IntegralType item, const true_type&) {
         BOOST_CB_ASSERT(capacity >= static_cast<size_type>(n)); // check for capacity lower than n
         m_size = static_cast<size_type>(n);
-        initialize(capacity, item);
+        initialize_buffer(capacity, item);
+        m_first = m_buff;
+        m_last = capacity == size() ? m_buff : m_buff + size();
     }
 
     //! Specialized initialize method.
@@ -2076,7 +2087,8 @@ private:
         InputIterator first,
         InputIterator last,
         const std::input_iterator_tag&) {
-        initialize(capacity);
+        initialize_buffer(capacity);
+        m_first = m_last = m_buff;
         m_size = 0;
         if (capacity == 0)
             return;
@@ -2102,28 +2114,29 @@ private:
         initialize(capacity, first, last, std::distance(first, last));
     }
 
-    //! Helper initialize method.
+    //! Initialize the circular buffer.
     template <class ForwardIterator>
     void initialize(capacity_type capacity,
         ForwardIterator first,
         ForwardIterator last,
         size_type distance) {
-        initialize(capacity);
+        initialize_buffer(capacity);
+        m_first = m_buff;
         if (distance > capacity) {
             std::advance(first, distance - capacity);
             m_size = capacity;
         } else {
             m_size = distance;
-            if (distance != capacity)
-                m_last = m_buff + size();
         }
         BOOST_TRY {
-            cb_details::uninitialized_copy_with_alloc(first, last, m_buff, m_alloc);
+            m_last = cb_details::uninitialized_copy_with_alloc(first, last, m_buff, m_alloc);
         } BOOST_CATCH(...) {
             deallocate(m_buff, capacity);
             BOOST_RETHROW
         }
         BOOST_CATCH_END
+        if (m_last == m_end)
+            m_last = m_buff;
     }
 
     //! Reset the circular buffer.
