@@ -11,8 +11,7 @@
       A code block with proper indentation ;-)
     </para>
     
-<programlisting>
-<phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
+<programlisting><phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
 <phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
