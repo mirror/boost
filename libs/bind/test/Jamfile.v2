@@ -35,4 +35,7 @@ test-suite "bind"
       [ run mem_fn_dm_test.cpp ]
       [ run mem_fn_rv_test.cpp ]
       [ run ref_fn_test.cpp ]
+      [ run bind_fnobj2_test.cpp ]
+      [ run bind_fn2_test.cpp ]
+      [ run bind_mf2_test.cpp ]
     ;

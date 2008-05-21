@@ -1568,6 +1568,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 #define BOOST_BIND_MF_CC
 
 #include <boost/bind/bind_mf_cc.hpp>
+#include <boost/bind/bind_mf2_cc.hpp>
 
 #undef BOOST_BIND_MF_NAME
 #undef BOOST_BIND_MF_CC
@@ -1578,6 +1579,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 #define BOOST_BIND_MF_CC __cdecl
 
 #include <boost/bind/bind_mf_cc.hpp>
+#include <boost/bind/bind_mf2_cc.hpp>
 
 #undef BOOST_BIND_MF_NAME
 #undef BOOST_BIND_MF_CC
@@ -1590,6 +1592,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 #define BOOST_BIND_MF_CC __stdcall
 
 #include <boost/bind/bind_mf_cc.hpp>
+#include <boost/bind/bind_mf2_cc.hpp>
 
 #undef BOOST_BIND_MF_NAME
 #undef BOOST_BIND_MF_CC
@@ -1602,6 +1605,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 #define BOOST_BIND_MF_CC __fastcall
 
 #include <boost/bind/bind_mf_cc.hpp>
+#include <boost/bind/bind_mf2_cc.hpp>
 
 #undef BOOST_BIND_MF_NAME
 #undef BOOST_BIND_MF_CC
