@@ -146,7 +146,7 @@
       <listitem><ulink url="../../libs/conversion/lexical_cast.htm">boost.lexical_cast </ulink> </listitem>
       <listitem><ulink url="../../libs/smart_ptr/smart_ptr.htm">boost.smart_ptr (local time only)</ulink> </listitem>
       <listitem><ulink url="../../libs/algorithm/string/">boost::string_algorithms </ulink> </listitem>
-      <listitem><ulink url="../../libs/algorithm/serialize/">boost::serialize (serialization code only) </ulink> </listitem>
+      <listitem><ulink url="../../libs/serialization/index.html">boost::serialize (serialization code only) </ulink> </listitem>
     </itemizedlist>
     so these libraries need to be installed. 
   </para>

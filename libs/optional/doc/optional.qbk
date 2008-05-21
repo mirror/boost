@@ -22,7 +22,7 @@ Distributed under the Boost Software License, Version 1.0.
 [/ Cited Boost resources ]
 
 [def __BOOST_VARIANT__ [@../../../variant/index.html Boost.Variant]]
-[def __BOOST_TRIBOOL__ [@../../../tribool/index.html boost::tribool]]
+[def __BOOST_TRIBOOL__ [@../../../../doc/html/tribool.html boost::tribool]]
 
 [def __OPTIONAL_POINTEE__ [@../../../utility/OptionalPointee.html OptionalPointee]]
 [def __COPY_CONSTRUCTIBLE__ [@../../../utility/CopyConstructible.html Copy Constructible]]

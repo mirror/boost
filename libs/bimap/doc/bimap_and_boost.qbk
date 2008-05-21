@@ -219,7 +219,7 @@ different hash value, for the space of keys can be greater than the number of pe
 This is a statistical property depending on the typical distribution of keys in a given application, so it is not feasible to have a general-purpose hash function with excellent results in every possible scenario; the default value for this parameter uses Boost.Hash, which often provides good enough results.
 
 Boost.Hash can be
-[@http://www.boost.org/regression-logs/cs-win32_metacomm/doc/html/hash/custom.html
+[@http://www.boost.org/doc/html/hash/custom.html
 extended for custom data types],
 enabling to use the default parameter of the unordered set types with any user types.
 

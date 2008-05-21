@@ -94,7 +94,7 @@ macx:LIBS   += /usr/local/lib/libboost_signals-1_33_1.a  # ...your exact paths m
         <programlisting>#ifndef SIGNALSLIB_HPP_INCLUDED
 #define SIGNALSLIB_HPP_INCLUDED 
 
-#if defined(signals) && defined(QOBJECTDEFS_H) && \
+#if defined(signals) &amp;&amp; defined(QOBJECTDEFS_H) &amp;&amp; \
   !defined(QT_MOC_CPP)
 #  undef signals
 #  define signals signals
@@ -106,7 +106,7 @@ namespace boost
   namespace signalslib = signals;
 }
 
-#if defined(signals) && defined(QOBJECTDEFS_H) && \
+#if defined(signals) &amp;&amp; defined(QOBJECTDEFS_H) &amp;&amp; \
   !defined(QT_MOC_CPP)
 #  undef signals
 // Restore the macro definition of "signals", as it was

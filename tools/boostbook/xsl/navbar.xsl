@@ -117,12 +117,12 @@
       </xsl:variable>
       <xsl:variable name="people_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.website, '/people/people.htm' )"/> 
+            <xsl:with-param name="target" select="concat( $boost.website, '/users/people.html' )"/> 
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="faq_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.website, '/more/faq.htm' )"/> 
+            <xsl:with-param name="target" select="concat( $boost.website, '/users/faq.html' )"/> 
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="more_link">
@@ -151,7 +151,7 @@
    <xsl:template name = "header.navdata-vert">
       <xsl:variable name="home_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.root, '/index.htm' )"/>
+            <xsl:with-param name="target" select="concat( $boost.root, '/index.html' )"/>
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="libraries_link">
@@ -161,12 +161,12 @@
       </xsl:variable>
       <xsl:variable name="people_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.root, '/people/people.htm' )"/>
+            <xsl:with-param name="target" select="concat( $boost.website, '/users/people.html' )"/>
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="faq_link">
          <xsl:call-template name="href.target.relative">
-            <xsl:with-param name="target" select="concat( $boost.root, '/more/faq.htm' )"/>
+            <xsl:with-param name="target" select="concat( $boost.website, '/users/faq.html' )"/>
          </xsl:call-template>
       </xsl:variable>
       <xsl:variable name="more_link">
