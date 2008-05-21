@@ -19,6 +19,7 @@
 #include <istream>
 #include <string>
 #include <typeinfo>
+#include <exception>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/mpl/if.hpp>
@@ -28,6 +29,7 @@
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
+#include <boost/detail/workaround.hpp>
 
 #ifndef BOOST_NO_STD_LOCALE
 #include <locale>
@@ -49,6 +51,12 @@ namespace boost
 {
     // exception used to indicate runtime lexical_cast failure
     class bad_lexical_cast : public std::bad_cast
+
+#if defined(__BORLANDC__) && BOOST_WORKAROUND( __BORLANDC__, < 0x560 )
+        // under bcc32 5.5.1 bad_cast doesn't derive from exception
+        , public std::exception
+#endif
+
     {
     public:
         bad_lexical_cast() :
