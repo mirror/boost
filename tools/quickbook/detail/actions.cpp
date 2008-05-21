@@ -684,7 +684,11 @@ namespace quickbook
             {
                 boost::spirit::file_position const pos = first.get_position();
                 detail::outerr(pos.file,pos.line)
-                    << "Expanding template" << std::endl;
+                    << "Expanding template:" << template_info[0] << std::endl
+                    << "------------------begin------------------" << std::endl
+                    << body
+                    << "------------------end--------------------" << std::endl
+                    << std::endl;
                 actions.pop(); // restore the actions' states
                 --actions.template_depth;
                 return;
@@ -1061,7 +1065,7 @@ namespace quickbook
         fs::path include_search(fs::path const & current, std::string const & name)
         {
             fs::path path(name,fs::native);
-            
+
             // If the path is relative, try and resolve it.
             if (!path.is_complete())
             {
@@ -1070,7 +1074,7 @@ namespace quickbook
                 {
                     return current / path;
                 }
-                
+
                 // Search in each of the include path locations.
                 BOOST_FOREACH(std::string const & p, include_path)
                 {
@@ -1082,7 +1086,7 @@ namespace quickbook
                     }
                 }
             }
-            
+
             return path;
         }
     }

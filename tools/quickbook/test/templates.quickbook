@@ -93,4 +93,11 @@ x[super 2]
 
 [plantation [banana]]
 
+[/-------------------------------- Bugs! ]
+
+[template join1[a b] [b][a]]
+[template join2[a b] [a][b]]
+[template test[x] [join1 [join2 0 [x]] 0]]
+[test 0]
+
 [endsect]
