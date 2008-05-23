@@ -28,12 +28,12 @@
 </ul>
                    
 <dl class="page-index">
-  <dt><a href="#types">Types</a></dt>
+  <dt><a href="#types">Types and objects</a></dt>
 </dl>
                    
 <ul>
           <li><a href="#val_init"><code>template class value_initialized&lt;T&gt;</code></a></li>
-          <li><a href="#initialized_value"><code>class initialized_value</code></a></li>
+          <li><a href="#initialized_value"><code>initialized_value</code></a></li>
                    
 </ul>
               <a href="#acknowledgements">Acknowledgements</a><br>
@@ -53,7 +53,7 @@ union and class   types.
 Moreover, <code>value_initialized</code> offers a workaround to various
 compiler issues regarding value-initialization.
 
-Furthermore a convenience class, <code>initialized_value</code> is provided,
+Furthermore, a <code>const</code> object, <code>initialized_value</code> is provided,
 to avoid repeating the type name when retrieving the value from a
 <code>value_initialized&lt;T&gt;</code> object.
 <br>
@@ -123,12 +123,12 @@ constructed by the following declaration:
 </pre>
 </p>
 <p>
-The convenience class <a href="#initialized_value"><code>initialized_value</code></a>
+The <code>const</code> object <a href="#initialized_value"><code>initialized_value</code></a>
 allows value-initializing a variable as follows:
 <pre>
-  T var = initialized_value();
+  T var = initialized_value ;
 </pre>
-This form of initialization is also very similar to <code>T4 var4 = T4()</code>,
+This form of initialization is semantically equivalent to <code>T4 var4 = T4()</code>,
 but robust against the aforementioned compiler issues.
 
 </p>
@@ -249,7 +249,7 @@ offer a workaround to these issues: <code>value_initialized</code> will now clea
 its internal data, prior to constructing the object that it contains.
 </p>
                    
-<h2><a name="types"></a>Types</h2>
+<h2><a name="types"></a>Types and objects</h2>
                    
 <h2><a name="val_init"><code>template class value_initialized&lt;T&gt;</code></a></h2>
                    
@@ -312,19 +312,22 @@ the wrapped object is always performed with the <code>get()</code> idiom:</p>
                    
 <pre>value_initialized&lt;int&gt; x ;<br>get(x) = 1 ; // OK<br><br>value_initialized&lt;int const&gt; cx ;<br>get(x) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int&gt; const x_c ;<br>get(x_c) = 1 ; // ERROR: Cannot modify a const object<br><br>value_initialized&lt;int const&gt; const cx_c ;<br>get(cx_c) = 1 ; // ERROR: Cannot modify a const object<br></pre>
 
-<h2><a name="initialized_value"><code>class initialized_value</code></a></h2>
+<h2><a name="initialized_value"><code>initialized_value</code></a></h2>
 
 <pre>
 namespace boost {
-class initialized_value
+class initialized_value_t
 {
   public :
     template &lt;class T&gt; operator T() const ;
 };
+
+initialized_value_t const initialized_value = {} ;
+
 } // namespace boost
 </pre>
 
-The class <code>initialized_value</code> provides a convenient way to get
+<code>initialized_value</code> provides a convenient way to get
 an initialized value: its conversion operator provides an appropriate
 <em>value-initialized</em> object for any CopyConstructible type.
 
@@ -343,7 +346,7 @@ is rather short now (<code>T</code>), but could of course be
 more like <code>Namespace::Template&lt;Arg&gt;::Type</code>.
 Instead, one could use <code>initialized_value</code> as follows:
 <pre>
-  T var = initialized_value();
+  T var = initialized_value ;
 </pre>
                     
 <h3><a name="references">References</a></h3>
@@ -368,13 +371,15 @@ Special thanks to Bj&ouml;rn Karlsson who carefully edited and completed this do
 <p>value_initialized was reimplemented by Fernando Cacciola and Niels Dekker
 for Boost release version 1.35 (2008), offering a workaround to various compiler issues.
      </p>
+<p>initialized_value was written by Niels Dekker, and added to Boost release version 1.36 (2008).
+     </p>
 <p>Developed by <a href="mailto:fernando_cacciola@hotmail.com">Fernando Cacciola</a>,
      the latest version of this file can be found at <a
  href="http://www.boost.org">www.boost.org</a>.
      </p>
                     
 <hr>          
-<p>Revised 16 January 2008</p>
+<p>Revised 23 May 2008</p>
                    
 <p>&copy; Copyright Fernando Cacciola, 2002, 2008.</p>
                    

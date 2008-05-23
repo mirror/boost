@@ -7,7 +7,8 @@
 // Test program for "boost/utility/value_init.hpp"
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
-// 18 Feb 2008 (Added tests regarding compiler issues and initialized_value) Fernando Cacciola, Niels Dekker
+// 15 Jan 2008 (Added tests regarding compiler issues) Fernando Cacciola, Niels Dekker
+// 23 May 2008 (Added tests regarding initialized_value) Niels Dekker
 
 #include <cstring>  // For memcmp.
 #include <iostream>
@@ -183,7 +184,7 @@ struct CopyFunctionCallTester
 template<class T>
 void check_initialized_value ( T const& y )
 {
-  T initializedValue = boost::initialized_value() ;
+  T initializedValue = boost::initialized_value ;
   BOOST_CHECK ( y == initializedValue ) ;
 }
 
