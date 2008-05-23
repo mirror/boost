@@ -5,7 +5,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
-// 18 Feb 2008 (Worked around compiler bugs, added initialized_value) Fernando Cacciola, Niels Dekker
+// 24 Dec 2007 (Refactored and worked around various compiler bugs) Fernando Cacciola, Niels Dekker
+// 23 May 2008 (Fixed operator= const issue, added initialized_value) Niels Dekker, Fernando Cacciola
 //
 #ifndef BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 #define BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
@@ -110,7 +111,7 @@ T& get ( value_initialized<T>& x )
 }
 
 
-class initialized_value
+class initialized_value_t
 {
   public :
     
@@ -119,6 +120,8 @@ class initialized_value
       return get( value_initialized<T>() );
     }
 };
+
+initialized_value_t const initialized_value = {} ;
 
 
 } // namespace boost
