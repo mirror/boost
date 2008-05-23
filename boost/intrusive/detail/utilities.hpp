@@ -391,7 +391,11 @@ struct link_dispatch
 
 template<class Hook>
 void destructor_impl(Hook &hook, detail::link_dispatch<safe_link>)
-{  (void)hook; BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT(!hook.is_linked());  }
+{  //If this assertion raises, you might have destroyed an object
+   //while it was still inserted in a container that is alive.
+   //If so, remove the object from the container before destroying it.
+   (void)hook; BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT(!hook.is_linked());
+}
 
 template<class Hook>
 void destructor_impl(Hook &hook, detail::link_dispatch<auto_unlink>)

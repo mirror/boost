@@ -343,7 +343,7 @@ struct uset_defaults
 //! is used to construct intrusive unordered_set and unordered_multiset containers. The
 //! no-throw guarantee holds only, if the Equal object and Hasher don't throw.
 //!
-//! hashtable is a pseudo-intrusive container: each object to be stored in the
+//! hashtable is a semi-intrusive container: each object to be stored in the
 //! container must contain a proper hook, but the container also needs
 //! additional auxiliary memory to work: hashtable needs a pointer to an array
 //! of type `bucket_type` to be passed in the constructor. This bucket array must

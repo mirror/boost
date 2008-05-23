@@ -24,7 +24,7 @@ namespace intrusive {
 //! The class template unordered_set is an intrusive container, that mimics most of 
 //! the interface of std::tr1::unordered_set as described in the C++ TR1.
 //!
-//! unordered_set is a pseudo-intrusive container: each object to be stored in the
+//! unordered_set is a semi-intrusive container: each object to be stored in the
 //! container must contain a proper hook, but the container also needs
 //! additional auxiliary memory to work: unordered_set needs a pointer to an array
 //! of type `bucket_type` to be passed in the constructor. This bucket array must
@@ -1019,7 +1019,7 @@ class unordered_set
 //! The class template unordered_multiset is an intrusive container, that mimics most of 
 //! the interface of std::tr1::unordered_multiset as described in the C++ TR1.
 //!
-//! unordered_multiset is a pseudo-intrusive container: each object to be stored in the
+//! unordered_multiset is a semi-intrusive container: each object to be stored in the
 //! container must contain a proper hook, but the container also needs
 //! additional auxiliary memory to work: unordered_multiset needs a pointer to an array
 //! of type `bucket_type` to be passed in the constructor. This bucket array must
