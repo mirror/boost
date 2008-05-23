@@ -8,4 +8,5 @@ Take advantage of store_hash in lookups: Instead of comparing objects, just
 Improve the use of cache_begin to unordered containers:
 -> Speed up rehash
 
+Add erase(iterator, iterator, difference_type) to lists to obtain constant-time erase.
 

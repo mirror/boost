@@ -10,7 +10,6 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/unordered_set.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
