@@ -20,7 +20,7 @@ namespace load_factor_tests
 test::seed_t seed(783656);
 
 template <class X>
-void load_factor_tests(X* = 0)
+void set_load_factor_tests(X* = 0)
 {
     X x;
 
@@ -71,7 +71,7 @@ boost::unordered_multiset<int>* int_multiset_ptr;
 boost::unordered_map<int, int>* int_map_ptr;
 boost::unordered_multimap<int, int>* int_multimap_ptr;
 
-UNORDERED_TEST(load_factor_tests,
+UNORDERED_TEST(set_load_factor_tests,
     ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
 )
 

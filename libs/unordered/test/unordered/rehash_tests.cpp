@@ -55,19 +55,15 @@ void rehash_test1(X* = 0)
     tracker.compare(x);
 }
 
-template <class X>
-void rehash_tests(X* ptr = 0)
-{
-    rehash_empty_test1(ptr);
-    rehash_test1(ptr);
-}
-
 boost::unordered_set<int>* int_set_ptr;
 boost::unordered_multiset<int>* int_multiset_ptr;
 boost::unordered_map<int, int>* int_map_ptr;
 boost::unordered_multimap<int, int>* int_multimap_ptr;
 
-UNORDERED_TEST(rehash_tests,
+UNORDERED_TEST(rehash_empty_test1,
+    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+)
+UNORDERED_TEST(rehash_test1,
     ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
 )
 

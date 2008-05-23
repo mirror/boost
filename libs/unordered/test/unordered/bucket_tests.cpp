@@ -16,7 +16,7 @@ namespace bucket_tests {
 test::seed_t seed(54635);
 
 template <class X>
-void bucket_tests(X* = 0)
+void tests(X* = 0)
 {
     typedef BOOST_DEDUCED_TYPENAME X::size_type size_type;
     typedef BOOST_DEDUCED_TYPENAME X::const_local_iterator const_local_iterator;
@@ -55,7 +55,7 @@ boost::unordered_multiset<test::object, test::hash, test::equal_to, test::alloca
 boost::unordered_map<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_map;
 boost::unordered_multimap<test::object, test::object, test::hash, test::equal_to, test::allocator<test::object> >* test_multimap;
 
-UNORDERED_TEST(bucket_tests, ((test_set)(test_multiset)(test_map)(test_multimap)))
+UNORDERED_TEST(tests, ((test_set)(test_multiset)(test_map)(test_multimap)))
 
 }
 
