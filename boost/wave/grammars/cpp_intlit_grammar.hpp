@@ -83,8 +83,7 @@ struct intlit_grammar :
         definition(intlit_grammar const &self)
         {
             using namespace boost::spirit::classic;
-            using phoenix::var;
-            using phoenix::arg1;
+            namespace phx = phoenix;
  
             
             int_lit = (
@@ -93,8 +92,8 @@ struct intlit_grammar :
                         |   dec_lit
                         )
                         >> !as_lower_d[
-                                (ch_p('u')[var(self.is_unsigned) = true] || ch_p('l')) 
-                            |   (ch_p('l') || ch_p('u')[var(self.is_unsigned) = true])
+                                (ch_p('u')[phx::var(self.is_unsigned) = true] || ch_p('l')) 
+                            |   (ch_p('l') || ch_p('u')[phx::var(self.is_unsigned) = true])
                             ]
                     ,
 
@@ -102,23 +101,23 @@ struct intlit_grammar :
                             (ch_p('X') | ch_p('x'))
                         >>  uint_parser<uint_literal_type, 16>()
                             [
-                                self.val = arg1,
-                                var(self.is_unsigned) = true
+                                self.val = phx::arg1,
+                                phx::var(self.is_unsigned) = true
                             ]
                     ,
                         
                     oct_lit =
                        !uint_parser<uint_literal_type, 8>()
                         [
-                            self.val = arg1,
-                            var(self.is_unsigned) = true
+                            self.val = phx::arg1,
+                            phx::var(self.is_unsigned) = true
                         ]
                     ,
                         
                     dec_lit =
                         uint_parser<uint_literal_type, 10>()
                         [
-                            self.val = arg1
+                            self.val = phx::arg1
                         ]
                     )
                 ;
