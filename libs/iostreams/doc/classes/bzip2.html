@@ -292,6 +292,7 @@ The following code decompresses data from a file and writes it to standard outpu
 int main() 
 {
     <SPAN CLASS="keyword">using</SPAN> <SPAN CLASS="keyword">namespace</SPAN> std;
+    <SPAN CLASS="keyword">using</SPAN> <SPAN CLASS="keyword">namespace</SPAN> boost::iostreams;
 
     ifstream file(<SPAN CLASS="literal">"hello.bz2"</SPAN>, ios_base::in | ios_base::binary);
     filtering_streambuf&lt;input&gt; in;
