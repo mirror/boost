@@ -51,7 +51,7 @@
 #define BOOST_RATIONAL_HPP
 
 #include <iostream>              // for std::istream and std::ostream
-#include <iomanip>               // for std::noskipws
+#include <ios>                   // for std::noskipws
 #include <stdexcept>             // for std::domain_error
 #include <string>                // for std::string implicit constructor
 #include <boost/operators.hpp>   // for boost::addable etc
