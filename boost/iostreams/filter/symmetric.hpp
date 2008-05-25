@@ -152,7 +152,7 @@ public:
     }
 
     template<typename Sink>
-    void close(Sink& snk, BOOST_IOS::openmode which)
+    void close(Sink& snk, BOOST_IOS::openmode)
     {
         if ((state() & f_write) != 0) {
 

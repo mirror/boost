@@ -211,7 +211,7 @@ public:
     }
 
     template<typename Sink>
-    void close(Sink& dest, BOOST_IOS::openmode which)
+    void close(Sink& dest, BOOST_IOS::openmode)
     {
         typedef typename iostreams::category_of<Sink>::type category;
         if ((flags_ & f_write) != 0 && (flags_ & f_has_CR) != 0)
@@ -398,7 +398,7 @@ public:
     }
 
     template<typename Sink>
-    void close(Sink&, BOOST_IOS::openmode which)
+    void close(Sink&, BOOST_IOS::openmode)
     {
         using iostreams::newline::final_newline;
 
