@@ -314,6 +314,7 @@
         <xsl:text>typename</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="$parameter/@pack=1"><xsl:text>...</xsl:text></xsl:if>
     <xsl:text> </xsl:text>
 
     <xsl:call-template name="template.parameter.name">
@@ -388,6 +389,7 @@
         <xsl:value-of select="$parameter/type/*|$parameter/type/text()"/>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="$parameter/@pack=1"><xsl:text>...</xsl:text></xsl:if>
     <xsl:text> </xsl:text>
 
     <xsl:call-template name="template.parameter.name">
@@ -438,6 +440,9 @@
       <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:apply-templates mode="highlight"/>
+    <xsl:if test="@pack=1">
+      <xsl:text>...</xsl:text>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
 

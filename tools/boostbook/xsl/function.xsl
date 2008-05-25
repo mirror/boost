@@ -363,6 +363,9 @@
     <xsl:if test="$parameters">
       <!-- Information for this parameter -->
       <xsl:variable name="parameter" select="$parameters[position()=1]"/>
+      <xsl:variable name="pack">
+        <xsl:if test="$parameter/@pack=1"><xsl:text>...</xsl:text></xsl:if>
+      </xsl:variable>
       <xsl:variable name="name">
         <xsl:if test="$include-names and $parameter/@name != ''">
           <xsl:text> </xsl:text><xsl:value-of select="$parameter/@name"/>
@@ -393,7 +396,7 @@
         </xsl:choose>
       </xsl:variable>
 
-      <xsl:variable name="text" select="concat($type, $name, $default)"/>
+      <xsl:variable name="text" select="concat($type, $pack, $name, $default)"/>
 
       <xsl:variable name="end-column"
         select="$column + string-length($prefix) + string-length($text)"/>
@@ -410,6 +413,7 @@
                 mode="annotation">
                 <xsl:with-param name="highlight" select="true()"/>
               </xsl:apply-templates>
+              <xsl:value-of select="$pack"/>
               <xsl:value-of select="$name"/>
               <xsl:copy-of select="$default"/>
             </xsl:when>
@@ -446,6 +450,7 @@
                 mode="annotation">
                 <xsl:with-param name="highlight" select="true()"/>
               </xsl:apply-templates>
+              <xsl:value-of select="$pack"/>
               <xsl:value-of select="$name"/>
               <xsl:value-of select="$default"/>
             </xsl:when>

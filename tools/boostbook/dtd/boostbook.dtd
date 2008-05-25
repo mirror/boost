@@ -167,11 +167,13 @@
 <!ELEMENT template-type-parameter (default?, purpose?)>
 <!ATTLIST template-type-parameter
     name                     CDATA  #REQUIRED
+    pack                     CDATA  #IMPLIED 
     %boost.common.attrib;>
 
 <!ELEMENT template-nontype-parameter (type, default?, purpose?)>
 <!ATTLIST template-nontype-parameter
     name                     CDATA  #REQUIRED
+    pack                     CDATA  #IMPLIED 
     %boost.common.attrib;>
 
 <!ELEMENT template-varargs EMPTY>
@@ -181,7 +183,9 @@
 <!ATTLIST specialization %boost.common.attrib;>
 
 <!ELEMENT template-arg ANY>
-<!ATTLIST template-arg %boost.common.attrib;>
+<!ATTLIST template-arg
+    pack    CDATA  #IMPLIED 
+    %boost.common.attrib;>
 
 <!ELEMENT default ANY>
 <!ATTLIST default %boost.common.attrib;>
@@ -189,6 +193,7 @@
 <!ELEMENT inherit (type, purpose?)>
 <!ATTLIST inherit
     access  CDATA  #IMPLIED
+    pack    CDATA  #IMPLIED 
     %boost.common.attrib;>
 
 <!ELEMENT purpose ANY>
@@ -397,7 +402,8 @@
 
 <!ELEMENT parameter (paramtype, default?, description?)>
 <!ATTLIST parameter
-     name CDATA #IMPLIED>
+     name CDATA #IMPLIED
+     pack CDATA #IMPLIED>
 
 <!ELEMENT programlisting ANY>
 <!ATTLIST programlisting

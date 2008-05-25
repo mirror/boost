@@ -194,27 +194,23 @@
     <xsl:value-of select="@name"/>
   </xsl:template>
 
-  <xsl:template name="print-specialization-name">
+  <xsl:template match="template-arg" mode="print-name">
+    <xsl:if test="position() &gt; 1">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="text()"/>
+    <xsl:if test="@pack=1">
+      <xsl:text>...</xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template
+      match="struct-specialization|class-specialization|union-specialization"
+      mode="print-name">
     <xsl:value-of select="@name"/>
     <xsl:text>&lt;</xsl:text>
-    <xsl:value-of select="specialization/template-arg[position() = 1]/text()"/>
-    <xsl:for-each select="specialization/template-arg[position() &gt; 1]">
-      <xsl:text>,</xsl:text>
-      <xsl:value-of select="text()"/>
-    </xsl:for-each>
+    <xsl:apply-templates select="specialization/template-arg" mode="print-name"/>
     <xsl:text>&gt;</xsl:text>
-  </xsl:template>
-
-  <xsl:template match="struct-specialization" mode="print-name">
-    <xsl:call-template name="print-specialization-name"/>
-  </xsl:template>
-
-  <xsl:template match="class-specialization" mode="print-name">
-    <xsl:call-template name="print-specialization-name"/>
-  </xsl:template>
-
-  <xsl:template match="union-specialization" mode="print-name">
-    <xsl:call-template name="print-specialization-name"/>
   </xsl:template>
 
   <xsl:template name="name-matches-node">
