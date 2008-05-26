@@ -140,6 +140,10 @@ protected:
     chain_base(const chain_base& rhs): pimpl_(rhs.pimpl_) { }
 public:
 
+    // dual_use is a pseudo-mode to facilitate filter writing, 
+    // not a genuine mode.
+    BOOST_STATIC_ASSERT((!is_convertible<mode, dual_use>::value));
+
     //----------Buffer sizing-------------------------------------------------//
 
     // Sets the size of the buffer created for the devices to be added to this
