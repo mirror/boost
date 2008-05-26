@@ -16,10 +16,13 @@
 
 #include <boost/test/minimal.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <iostream>
 
 #define UNORDERED_AUTO_TEST(x) \
     struct BOOST_PP_CAT(x, _type) : public ::test::registered_test_base { \
-        BOOST_PP_CAT(x, _type)() { \
+        BOOST_PP_CAT(x, _type)() \
+            : ::test::registered_test_base(BOOST_PP_STRINGIZE(x)) \
+        { \
             ::test::test_list::add_test(this); \
         } \
         void run(); \
@@ -31,6 +34,8 @@
 namespace test {
     struct registered_test_base {
         registered_test_base* next;
+        char const* name;
+        explicit registered_test_base(char const* n) : name(n) {}
         virtual void run() = 0;
         virtual ~registered_test_base() {}
     };
@@ -58,8 +63,12 @@ namespace test {
         }
 
         static inline void run_tests() {
-            for(registered_test_base* i = first(); i; i = i->next)
+            for(registered_test_base* i = first(); i; i = i->next) {
+                std::cout<<"Running "<<i->name<<"\n"<<std::flush;
                 i->run();
+                std::cerr<<std::flush;
+                std::cout<<std::flush;
+            }
         }
     }
 }
