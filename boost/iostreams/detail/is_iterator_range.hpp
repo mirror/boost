@@ -8,6 +8,8 @@
 #ifndef BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED
 #define BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED       
  
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp>
 
 namespace boost { 
@@ -20,7 +22,16 @@ class iterator_range;
     
 namespace iostreams {
 
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+# pragma warning(push)
+# pragma warning(disable:6334)
+#endif
+
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iterator_range, boost::iterator_range, 1)
+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+# pragma warning(pop)
+#endif
 
 } // End namespace iostreams.
 
