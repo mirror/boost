@@ -12,6 +12,9 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp>
 
+// Must come last.
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
+
 namespace boost { 
 
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
@@ -22,16 +25,7 @@ class iterator_range;
     
 namespace iostreams {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-# pragma warning(push)
-# pragma warning(disable:6334)
-#endif
-
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iterator_range, boost::iterator_range, 1)
-
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-# pragma warning(pop)
-#endif
 
 } // End namespace iostreams.
 
@@ -49,5 +43,7 @@ namespace iostreams {
 # endif // # if !BOOST_WORKAROUND(BOOST_MSVC, < 1300) //----------------------//
 
 } // End namespace boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED

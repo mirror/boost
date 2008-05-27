@@ -42,14 +42,12 @@
 #include <boost/ref.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+// Must come last.
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
+
 namespace boost { namespace iostreams {
 
 //----------Definitions of predicates for streams and stream buffers----------//
-
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-# pragma warning(push)
-# pragma warning(disable:6334)
-#endif
 
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------------------//
 
@@ -74,10 +72,6 @@ BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iostream, std::iostream, 0)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_streambuf, std::streambuf, 0)
 
 #endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
-
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-# pragma warning(pop)
-#endif
 
 template<typename T>
 struct is_std_io
@@ -391,5 +385,7 @@ struct is_direct : detail::has_trait<T, direct_tag> { };
     /**/
 
 } } // End namespaces iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>
 
 #endif // #ifndef BOOST_IOSTREAMS_IO_TRAITS_HPP_INCLUDED
