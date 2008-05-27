@@ -7,6 +7,7 @@
 
 #include <cctype>
 #include <string>
+#include <cstring>
 #include <iostream>
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
