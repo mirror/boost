@@ -39,6 +39,7 @@
 # include <boost/range/iterator_range.hpp>
 # include <boost/range/value_type.hpp>
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#include <boost/ref.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace iostreams {
@@ -279,6 +280,16 @@ struct category_of {
             >::type type;
 };
 
+// Partial specialization for reference wrappers
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
+
+template<typename T>
+struct category_of< reference_wrapper<T> >
+    : category_of<T>
+    { };
+
+#endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
+
 //------------------Definition of get_category--------------------------------//
 
 // 
@@ -302,7 +313,7 @@ struct int_type_of {
 #endif
 };
 
-//------------------Definition of mode----------------------------------------//
+//------------------Definition of mode_of-------------------------------------//
 
 namespace detail {
 
@@ -333,6 +344,16 @@ struct io_mode_id {
 
 template<typename T> // Borland 5.6.4 requires this circumlocution.
 struct mode_of : detail::io_mode_impl< detail::io_mode_id<T>::value > { };
+
+// Partial specialization for reference wrappers
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
+
+template<typename T>
+struct mode_of< reference_wrapper<T> >
+    : mode_of<T>
+    { };
+
+#endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
                     
 //------------------Definition of is_device, is_filter and is_direct----------//
 
