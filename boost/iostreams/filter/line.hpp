@@ -196,7 +196,7 @@ private:
     void close_impl()
     {
         clear();
-        flags_ &= ~f_suppress;
+        flags_ &= f_suppress;
     }
 
     void clear()
