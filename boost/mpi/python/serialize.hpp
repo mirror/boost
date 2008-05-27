@@ -317,8 +317,8 @@ namespace detail {
     template<typename T>
     struct default_saver {
       void operator()(OArchiver& ar, const object& obj, const unsigned int) {
-        typedef typename mpl::if_<is_fundamental<T>, T, T&>::type Type;
-        ar << extract<Type>(obj)();
+        T value = extract<T>(obj)();
+        ar << value;
       }
     };
 
