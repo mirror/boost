@@ -259,18 +259,18 @@ void test_filter( grep_filter grep,
     {
         array_source  src(input.data(), input.data() + input.size());
         std::string   dest;
-        io::copy(compose(grep, src), io::back_inserter(dest));
+        io::copy(compose(boost::ref(grep), src), io::back_inserter(dest));
         BOOST_CHECK(dest == output);
-        //BOOST_CHECK(grep.count() == count);
+        BOOST_CHECK(grep.count() == count);
     }
 
     // Test as output filter
     {
         array_source  src(input.data(), input.data() + input.size());
         std::string   dest;
-        io::copy(src, compose(grep, io::back_inserter(dest)));
+        io::copy(src, compose(boost::ref(grep), io::back_inserter(dest)));
         BOOST_CHECK(dest == output);
-        //BOOST_CHECK(grep.count() == count);
+        BOOST_CHECK(grep.count() == count);
     }
 }
 
