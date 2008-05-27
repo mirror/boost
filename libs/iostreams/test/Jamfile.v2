@@ -55,6 +55,9 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams filtering_stream_test.cpp ]
           [ test-iostreams finite_state_filter_test.cpp ]
           [ test-iostreams flush_test.cpp ]
+          [ test-iostreams 
+                grep_test.cpp     
+                /boost/regex//boost_regex ]
           [ test-iostreams invert_test.cpp ]
           [ test-iostreams line_filter_test.cpp ]
           [ test-iostreams mapped_file_test.cpp 
