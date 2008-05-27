@@ -188,8 +188,8 @@
       New Defect Macros</a>
 </h3></div></div></div>
 <p>
-        When you need to add a new defect macro -either to fix a problem with an
-        existing library, or when adding a new library- distil the issue down to
+        When you need to add a new defect macro - either to fix a problem with an
+        existing library, or when adding a new library - distil the issue down to
         a simple test case; often, at this point other (possibly better) workarounds
         may become apparent. Secondly always post the test case code to the boost
         mailing list and invite comments; remember that C++ is complex and that sometimes
@@ -213,7 +213,7 @@
 <p>
         These comments are processed by the autoconf script, so make sure the format
         follows the one given. The file should be named "<code class="computeroutput"><span class="identifier">boost_no_foo</span><span class="special">.</span><span class="identifier">ipp</span></code>",
-        where foo is the defect description -try and keep the file name under the
+        where foo is the defect description - try and keep the file name under the
         Mac 30 character filename limit though. You will also need to provide a function
         prototype "<code class="computeroutput"><span class="keyword">int</span> <span class="identifier">test</span><span class="special">()</span></code>" that is declared in a namespace with
         the same name as the macro, but in all lower case, and which returns zero
@@ -250,11 +250,10 @@
           the defect, and fail with those that do.
         </li>
 <li>
-          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and <code class="computeroutput"><span class="identifier">run</span>
-          <span class="identifier">bjam</span> <span class="identifier">config_info</span>
-          <span class="identifier">config_test</span> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
-          : <code class="computeroutput"><span class="identifier">config_info</span></code> should build
-          and run cleanly for all the compilers in <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
+          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
+          <span class="identifier">config_info</span> <span class="identifier">config_test</span>
+          <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code> : <code class="computeroutput"><span class="identifier">config_info</span></code>
+          should build and run cleanly for all the compilers in <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
           while <code class="computeroutput"><span class="identifier">config_test</span></code> should
           fail for those that have the defect, and pass for those that do not.
         </li>
@@ -343,9 +342,9 @@
       </p>
 <p>
         The compiler/platform/standard library selection code is set up so that unknown
-        platforms are ignored and assumed to be fully standards compliant -this gives
-        unknown platforms a "sporting chance" of working "as is"
-        even without running the configure script.
+        platforms are ignored and assumed to be fully standards compliant - this
+        gives unknown platforms a "sporting chance" of working "as
+        is" even without running the configure script.
       </p>
 <p>
         When adding or modifying the individual mini-configs, assume that future,

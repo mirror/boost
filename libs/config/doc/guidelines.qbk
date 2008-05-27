@@ -87,8 +87,8 @@ Currently it disables the following warnings:
 
 [section Adding New Defect Macros]
 
-When you need to add a new defect macro -either to fix a problem with an
-existing library, or when adding a new library- distil the issue down to
+When you need to add a new defect macro - either to fix a problem with an
+existing library, or when adding a new library - distil the issue down to
 a simple test case; often, at this point other (possibly better) workarounds
 may become apparent. Secondly always post the test case code to the boost
 mailing list and invite comments; remember that C++ is complex and that
@@ -107,7 +107,7 @@ place the test case in a `.ipp` file with the following comments near the top:
 
 These comments are processed by the autoconf script, so make sure the format
 follows the one given. The file should be named "`boost_no_foo.ipp`", where foo
-is the defect description -try and keep the file name under the Mac 30 character
+is the defect description - try and keep the file name under the Mac 30 character
 filename limit though. You will also need to provide a function prototype
 "`int test()`" that is declared in a namespace with the same name as the macro,
 but in all lower case, and which returns zero on success:
@@ -133,7 +133,7 @@ libs/config/test/all/Jamfile.v2, `config_test.cpp` and `config_info.cpp`.
 ['MACRONAME] is the name of the new macro, and `compiler-list` is the list of
 compilers to test with.  You should see the tests pass with those compilers
 that don't have the defect, and fail with those that do.
-* cd into `libs/config/test` and `run bjam config_info config_test compiler-list` :
+* cd into `libs/config/test` and run `bjam config_info config_test compiler-list` :
 `config_info` should build and run cleanly for all the compilers in `compiler-list`
 while `config_test` should fail for those that have the defect, and pass for those
 that do not.
@@ -194,7 +194,7 @@ are included by default and should change only if support for a new
 compiler/standard library/platform is added.
 
 The compiler/platform/standard library selection code is set up so that unknown
-platforms are ignored and assumed to be fully standards compliant -this gives
+platforms are ignored and assumed to be fully standards compliant - this gives
 unknown platforms a "sporting chance" of working "as is" even without running
 the configure script.
 
