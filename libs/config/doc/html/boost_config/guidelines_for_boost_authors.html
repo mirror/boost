@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -236,14 +236,13 @@
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">tools</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span></code>
+          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">tools</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span></code>
           : this generates the <code class="computeroutput"><span class="special">.</span><span class="identifier">cpp</span></code>
-          file test cases from the <code class="computeroutput"><span class="special">.</span><span class="identifier">ipp</span></code> file, updates the Jamfile, <code class="computeroutput"><span class="identifier">config_test</span><span class="special">.</span><span class="identifier">cpp</span></code> and <code class="computeroutput"><span class="identifier">config_info</span><span class="special">.</span><span class="identifier">cpp</span></code>.
+          file test cases from the <code class="computeroutput"><span class="special">.</span><span class="identifier">ipp</span></code> file, updates the libs/config/test/all/Jamfile.v2,
+          <code class="computeroutput"><span class="identifier">config_test</span><span class="special">.</span><span class="identifier">cpp</span></code> and <code class="computeroutput"><span class="identifier">config_info</span><span class="special">.</span><span class="identifier">cpp</span></code>.
         </li>
 <li>
-          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
-          <span class="special">--</span><span class="identifier">v2</span>
+          cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">all</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
           </code><span class="emphasis"><em>MACRONAME</em></span><code class="computeroutput"> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
           : where <span class="emphasis"><em>MACRONAME</em></span> is the name of the new macro, and
           <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code> is the list of compilers to test
@@ -252,7 +251,7 @@
         </li>
 <li>
           cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and <code class="computeroutput"><span class="identifier">run</span>
-          <span class="identifier">bjam</span> <span class="special">--</span><span class="identifier">v2</span> <span class="identifier">config_info</span>
+          <span class="identifier">bjam</span> <span class="identifier">config_info</span>
           <span class="identifier">config_test</span> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
           : <code class="computeroutput"><span class="identifier">config_info</span></code> should build
           and run cleanly for all the compilers in <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>

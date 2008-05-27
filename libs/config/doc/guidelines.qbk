@@ -126,14 +126,14 @@ but in all lower case, and which returns zero on success:
 Once the test code is in place in libs/config/test, updating the configuration
 test system proceeds as:
 
-* cd into `libs/config/tools` and run `bjam --v2` : this generates the `.cpp`
-file test cases from the `.ipp` file, updates the Jamfile, `config_test.cpp` and
-`config_info.cpp`.
-* cd into `libs/config/test` and run `bjam --v2 `['MACRONAME]` compiler-list` : where
+* cd into `libs/config/tools` and run `bjam` : this generates the `.cpp`
+file test cases from the `.ipp` file, updates the 
+libs/config/test/all/Jamfile.v2, `config_test.cpp` and `config_info.cpp`.
+* cd into `libs/config/test/all` and run `bjam `['MACRONAME]` compiler-list` : where
 ['MACRONAME] is the name of the new macro, and `compiler-list` is the list of
 compilers to test with.  You should see the tests pass with those compilers
 that don't have the defect, and fail with those that do.
-* cd into `libs/config/test` and `run bjam --v2 config_info config_test compiler-list` :
+* cd into `libs/config/test` and `run bjam config_info config_test compiler-list` :
 `config_info` should build and run cleanly for all the compilers in `compiler-list`
 while `config_test` should fail for those that have the defect, and pass for those
 that do not.
