@@ -125,7 +125,13 @@ namespace move_tests
         {
             test::random_values<T> v(25);
             T y(create(v, count, hf, eq, al, 1.0), al);
+#if defined(BOOST_HAS_RVALUE_REFS)
             BOOST_CHECK(count == test::global_object_count);
+#else
+            BOOST_CHECK(test::global_object_count.constructions - count.constructions <=
+                test::is_map<T>::value ? 50 : 25);
+            BOOST_CHECK(count.instances == test::global_object_count.instances);
+#endif
             test::check_container(y, v);
             BOOST_CHECK(test::equivalent(y.hash_function(), hf));
             BOOST_CHECK(test::equivalent(y.key_eq(), eq));
