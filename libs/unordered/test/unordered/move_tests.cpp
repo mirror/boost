@@ -129,7 +129,7 @@ namespace move_tests
             BOOST_CHECK(count == test::global_object_count);
 #else
             BOOST_CHECK(test::global_object_count.constructions - count.constructions <=
-                test::is_map<T>::value ? 50 : 25);
+                (test::is_map<T>::value ? 50 : 25));
             BOOST_CHECK(count.instances == test::global_object_count.instances);
 #endif
             test::check_container(y, v);
