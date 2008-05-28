@@ -16,6 +16,7 @@
 
 #include <boost/test/minimal.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/stringize.hpp>
 #include <iostream>
 
 #define UNORDERED_AUTO_TEST(x) \
