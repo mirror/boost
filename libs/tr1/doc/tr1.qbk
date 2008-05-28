@@ -5,8 +5,7 @@
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
-        <ulink url="http://www.boost.org/LICENSE_1_0.txt">
-           http://www.boost.org/LICENSE_1_0.txt</ulink>)]
+        [@http://www.boost.org/LICENSE_1_0.txt])]
     [authors [Maddock, John]]
     [category misc]
     [last-revision $Date$]
