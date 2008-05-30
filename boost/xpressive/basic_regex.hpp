@@ -239,7 +239,7 @@ private:
     // No-op for invalid static regexes.
     /// INTERNAL ONLY
     template<typename Expr>
-    void compile_(Expr const &expr, mpl::false_)
+    void compile_(Expr const &, mpl::false_)
     {
     }
 
