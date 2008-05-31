@@ -51,6 +51,7 @@ public:
                 BOOST_IOS::openmode base_mode =
                     BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
+    bool putback(char_type c);
     std::streamsize write(const char_type* s, std::streamsize n);
     std::streampos seek( stream_offset off, BOOST_IOS::seekdir way, 
                          BOOST_IOS::openmode which = 
@@ -87,6 +88,7 @@ struct basic_file_source : private basic_file<Ch> {
           closable_tag
         { };
     using basic_file<Ch>::read;
+    using basic_file<Ch>::putback;
     using basic_file<Ch>::seek;
     using basic_file<Ch>::is_open;
     using basic_file<Ch>::close;
@@ -147,6 +149,12 @@ inline std::streamsize basic_file<Ch>::read
 { 
     std::streamsize result = pimpl_->file_.sgetn(s, n); 
     return result != 0 ? result : -1;
+}
+
+template<typename Ch>
+inline bool basic_file<Ch>::putback(char_type c)
+{ 
+    return !!pimpl_->file_.sputbackc(c); 
 }
 
 template<typename Ch>
