@@ -6,8 +6,14 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #include <string>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filter/test.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/ref.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 #include "detail/sequence.hpp"
@@ -16,18 +22,36 @@
 using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
+namespace io = boost::iostreams;
 using boost::unit_test::test_suite;     
 
 struct gzip_alloc : std::allocator<char> { };
 
-void gzip_test()
+void compression_test()
 {
-    text_sequence data;
-    BOOST_CHECK(
-        test_filter_pair( gzip_compressor(), 
-                          gzip_decompressor(), 
-                          std::string(data.begin(), data.end()) )
-    );
+    text_sequence      data;
+
+    // Test compression and decompression with metadata
+    for (int i = 0; i < 4; ++i) {
+        gzip_params params;
+        if (i & 1) {
+            params.file_name = "original file name";
+        }
+        if (i & 2) {
+            params.comment = "detailed file description";
+        }
+        gzip_compressor    out(params);
+        gzip_decompressor  in;
+        BOOST_CHECK(
+            test_filter_pair( boost::ref(out), 
+                              boost::ref(in), 
+                              std::string(data.begin(), data.end()) )
+        );
+        BOOST_CHECK(in.file_name() == params.file_name);
+        BOOST_CHECK(in.comment() == params.comment);
+    }
+
+    // Test compression and decompression with custom allocator
     BOOST_CHECK(
         test_filter_pair( basic_gzip_compressor<gzip_alloc>(), 
                           basic_gzip_decompressor<gzip_alloc>(), 
@@ -35,9 +59,34 @@ void gzip_test()
     );
 }
 
+void multiple_member_test()
+{
+    text_sequence      data;
+    std::vector<char>  temp, dest;
+
+    // Write compressed data to temp, twice in succession
+    filtering_ostream out;
+    out.push(gzip_compressor());
+    out.push(io::back_inserter(temp));
+    io::copy(make_iterator_range(data), out);
+    out.push(io::back_inserter(temp));
+    io::copy(make_iterator_range(data), out);
+
+    // Read compressed data from temp into dest
+    filtering_istream in;
+    in.push(gzip_decompressor());
+    in.push(array_source(&temp[0], temp.size()));
+    io::copy(in, io::back_inserter(dest));
+
+    // Check that dest consists of two copies of data
+    BOOST_CHECK(std::equal(data.begin(), data.end(), dest.begin()));
+    BOOST_CHECK(std::equal(data.begin(), data.end(), dest.begin() + dest.size() / 2));
+}
+
 test_suite* init_unit_test_suite(int, char* []) 
 {
     test_suite* test = BOOST_TEST_SUITE("gzip test");
-    test->add(BOOST_TEST_CASE(&gzip_test));
+    test->add(BOOST_TEST_CASE(&compression_test));
+    test->add(BOOST_TEST_CASE(&multiple_member_test));
     return test;
 }
