@@ -48,6 +48,7 @@ public:
           optimally_buffered_tag
         { };
 
+    BOOST_STATIC_ASSERT(is_device<Device>::value);
     BOOST_STATIC_ASSERT((
         is_convertible< // Using mode_of causes failures on VC6-7.0.
             BOOST_DEDUCED_TYPENAME iostreams::category_of<Device>::type, output
@@ -120,6 +121,8 @@ public:
                  output,
                  input
             >::type                                    mode;
+    BOOST_STATIC_ASSERT(is_device<Device>::value);
+    BOOST_STATIC_ASSERT(is_device<Sink>::value);
     BOOST_STATIC_ASSERT((
         is_same<
             char_type, 
