@@ -1648,6 +1648,7 @@ namespace boost {
 
 #if BOOST_UNORDERED_EQUIVALENT_KEYS
 
+#if !(defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL))
             // Insert (equivalent key containers)
 
             // if hash function throws, basic exception safety
@@ -1676,7 +1677,8 @@ namespace boost {
                 return insert_hint_impl(it, a);
             }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#else
+
             // Insert (equivalent key containers)
             // (I'm using an overloaded insert for both 'insert' and 'emplace')
 
@@ -1850,6 +1852,8 @@ namespace boost {
                 }
             }
 
+#if !(defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL))
+
             // Insert (unique keys)
 
             // if hash function throws, basic exception safety
@@ -1902,7 +1906,8 @@ namespace boost {
                     return insert(v).first;
             }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+#else
+
             // Insert (unique keys)
             // (I'm using an overloaded insert for both 'insert' and 'emplace')
             //
@@ -1949,10 +1954,8 @@ namespace boost {
 
                     // Nothing after this point can throw.
 
-                    link_ptr n = data_.link_node_in_bucket(a, bucket);
-
-                    return std::pair<iterator_base, bool>(
-                        iterator_base(bucket, n), true);
+                    return std::pair<iterator_base, bool>(iterator_base(bucket,
+                        data_.link_node_in_bucket(a, bucket)), true);
                 }
             }
 
@@ -1993,7 +1996,7 @@ namespace boost {
             // if hash function throws, basic exception safety
             // strong otherwise
             template<typename... Args>
-            iterator_base insert_hint(iterator_base const& it, Args&&... args)
+            iterator_base insert_hint(iterator_base const&, Args&&... args)
             {
                 // Life is complicated - just call the normal implementation.
                 return insert(std::forward<Args>(args)...).first;
@@ -2148,7 +2151,7 @@ private:
                 return it1 == end1 && it2 == end2;
             }
 #else
-            static inline bool group_equals(link_ptr it1, link_ptr it2,
+            static inline bool group_equals(link_ptr, link_ptr,
                     type_wrapper<key_type>*)
             {
                 return true;

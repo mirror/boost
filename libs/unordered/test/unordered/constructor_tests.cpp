@@ -253,12 +253,12 @@ void constructor_tests2(T*, test::random_generator const& generator = test::defa
 }
 
 template <class T>
-void map_constructor_test(T* = 0)
+void map_constructor_test(T* = 0, test::random_generator const& generator = test::default_generator)
 {
     std::cerr<<"map_constructor_test\n";
 
     typedef test::list<std::pair<BOOST_DEDUCED_TYPENAME T::key_type, BOOST_DEDUCED_TYPENAME T::mapped_type> > list;
-    test::random_values<T> v(1000);
+    test::random_values<T> v(1000, generator);
     list l(v.begin(), v.end());
     T x(l.begin(), l.end());
 

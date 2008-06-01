@@ -149,6 +149,8 @@ void unordered_map_test(X& r, Key const& k, T const& v)
     typedef BOOST_DEDUCED_TYPENAME X::key_type key_type;
     BOOST_MPL_ASSERT((boost::is_same<value_type, std::pair<key_type const, T> >));
 
+    r.insert(std::pair<Key const, T>(k, v));
+
 #if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
     Key k_lvalue(k);
     T v_lvalue(v);

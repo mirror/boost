@@ -63,11 +63,11 @@ won't work on other implementations of the unordered associative containers.
     [[Method] [Description]]
 
     [
-        [``hasher hash_function() const``]
+        [`hasher hash_function() const`]
         [Returns the container's hash function.]
     ]
     [
-        [``key_equal key_eq() const``]
+        [`key_equal key_eq() const`]
         [Returns the container's key equality function.]
     ]
 ]

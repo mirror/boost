@@ -34,13 +34,13 @@ void set_load_factor_tests(X* = 0)
 }
 
 template <class X>
-void insert_test(X*, float mlf)
+void insert_test(X*, float mlf, test::random_generator generator = test::default_generator)
 {
     X x;
     x.max_load_factor(mlf);
     float b = x.max_load_factor();
 
-    test::random_values<X> values(1000);
+    test::random_values<X> values(1000, generator);
 
     for(BOOST_DEDUCED_TYPENAME test::random_values<X>::const_iterator
             it = values.begin(), end = values.end(); it != end; ++it)

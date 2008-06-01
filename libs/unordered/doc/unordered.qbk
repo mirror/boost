@@ -17,6 +17,16 @@
     ]
 ]
 
+[template diagram[name]  '''<inlinemediaobject>
+<imageobject role="html">
+<imagedata align = "center" fileref="../../libs/unordered/doc/diagrams/'''[name]'''.png"></imagedata>
+</imageobject>
+<imageobject role="print">
+<imagedata align = "center" fileref="../../libs/unordered/doc/diagrams/'''[name]'''.svg"></imagedata>
+</imageobject>
+</inlinemediaobject>''']
+
+
 [include:unordered intro.qbk]
 [include:unordered buckets.qbk]
 [include:unordered hash_equality.qbk]

@@ -36,7 +36,7 @@ void copy_construct_tests1(T*, test::random_generator const& generator = test::d
     }
 
     {
-        test::random_values<T> v(1000);
+        test::random_values<T> v(1000, generator);
 
         T x(v.begin(), v.end());
         T y(x);
@@ -50,7 +50,7 @@ void copy_construct_tests1(T*, test::random_generator const& generator = test::d
         // is much lower than the load factor. The hash table is not allowed
         // to rehash, but the destination container should probably allocate
         // enough buckets to decrease the load factor appropriately.
-        test::random_values<T> v(1000);
+        test::random_values<T> v(1000, generator);
         T x(v.begin(), v.end());
         x.max_load_factor(x.load_factor() / 4);
         T y(x);
@@ -95,7 +95,7 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
     }
 
     {
-        test::random_values<T> v(1000);
+        test::random_values<T> v(1000, generator);
 
         T x(v.begin(), v.end(), 0, hf, eq, al);
         T y(x);
@@ -106,7 +106,7 @@ void copy_construct_tests2(T* ptr, test::random_generator const& generator = tes
     }
 
     {
-        test::random_values<T> v(500);
+        test::random_values<T> v(500, generator);
 
         T x(v.begin(), v.end(), 0, hf, eq, al);
         T y(x, al2);

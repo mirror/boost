@@ -1,6 +1,6 @@
-<section id="unordered.bibliography" label="Bibliography">
+<section id="unordered.bibliography">
+<title>Bibliography</title>
 <bibliography>
-  <title>Bibliography</title>
   <biblioentry>
     <biblioset relation="journal">
       <title>C/C++ Users Journal</title>

@@ -17,7 +17,7 @@ namespace move_tests
     test::seed_t seed(98624);
 
     template<class T>
-    T empty(T* ptr) {
+    T empty(T*) {
         return T();
     }
 
@@ -61,7 +61,7 @@ namespace move_tests
         }
 
         {
-            test::random_values<T> v(1000);
+            test::random_values<T> v(1000, generator);
             test::object_count count;
             T y(create(v, count));
             BOOST_CHECK(count == test::global_object_count);
@@ -71,10 +71,10 @@ namespace move_tests
     }
 
     template <class T>
-    void move_assign_tests1(T* ptr, test::random_generator const& generator = test::default_generator)
+    void move_assign_tests1(T*, test::random_generator const& generator = test::default_generator)
     {
         {
-            test::random_values<T> v(500);
+            test::random_values<T> v(500, generator);
             test::object_count count;
             T y;
             y = create(v, count);
@@ -85,11 +85,9 @@ namespace move_tests
     }
 
     template <class T>
-    void move_construct_tests2(T* ptr,
+    void move_construct_tests2(T*,
             test::random_generator const& generator = test::default_generator)
     {
-        move_construct_tests1(ptr);
-
         BOOST_DEDUCED_TYPENAME T::hasher hf(1);
         BOOST_DEDUCED_TYPENAME T::key_equal eq(1);
         BOOST_DEDUCED_TYPENAME T::allocator_type al(1);
@@ -98,7 +96,7 @@ namespace move_tests
         test::object_count count;
 
         {
-            test::random_values<T> v(500);
+            test::random_values<T> v(500, generator);
             T y(create(v, count, hf, eq, al, 0.5));
             BOOST_CHECK(count == test::global_object_count);
             test::check_container(y, v);
@@ -111,7 +109,7 @@ namespace move_tests
 
         {
             // TODO: To do this correctly requires the fancy new allocator stuff.
-            test::random_values<T> v(500);
+            test::random_values<T> v(500, generator);
             T y(create(v, count, hf, eq, al, 2.0), al2);
             BOOST_CHECK(count != test::global_object_count);
             test::check_container(y, v);
@@ -123,7 +121,7 @@ namespace move_tests
         }
 
         {
-            test::random_values<T> v(25);
+            test::random_values<T> v(25, generator);
             T y(create(v, count, hf, eq, al, 1.0), al);
 #if defined(BOOST_HAS_RVALUE_REFS)
             BOOST_CHECK(count == test::global_object_count);

@@ -153,12 +153,12 @@ namespace test
                 if(count_allocations > 0) --count_allocations;
             }
 
-            void track_construct(void* ptr, std::size_t /*size*/, int tag)
+            void track_construct(void* /*ptr*/, std::size_t /*size*/, int /*tag*/)
             {
                 ++count_constructions;
             }
 
-            void track_destroy(void* ptr, std::size_t /*size*/, int tag)
+            void track_destroy(void* /*ptr*/, std::size_t /*size*/, int /*tag*/)
             {
                 BOOST_CHECK(count_constructions > 0);
                 if(count_constructions > 0) --count_constructions;

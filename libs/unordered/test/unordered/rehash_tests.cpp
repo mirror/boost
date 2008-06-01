@@ -33,9 +33,9 @@ void rehash_empty_test1(X* = 0)
 }
 
 template <class X>
-void rehash_test1(X* = 0)
+void rehash_test1(X* = 0, test::random_generator generator = test::default_generator)
 {
-    test::random_values<X> v(1000);
+    test::random_values<X> v(1000, generator);
     test::ordered<X> tracker;
     tracker.insert_range(v.begin(), v.end());
     X x(v.begin(), v.end());

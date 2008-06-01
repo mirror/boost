@@ -210,7 +210,7 @@ namespace test {
         }
 
         template <class Test>
-        void exception_safety(Test const& f, char const* name) {
+        void exception_safety(Test const& f, char const* /*name*/) {
             test_runner<Test> runner(f);
 
             iteration = 0;

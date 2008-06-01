@@ -10,7 +10,7 @@ boost::unordered_set unordered_set] with 7 buckets containing 5 elements, `A`,
 `B`, `C`, `D` and `E` (this is just for illustration, containers will typically
 have more buckets).
 
-[$../../libs/unordered/doc/diagrams/buckets.png]
+[diagram buckets]
 
 In order to decide which bucket to place an element in, the container applies
 the hash function, `Hash`, to the element's key (for `unordered_set` and
@@ -35,37 +35,53 @@ When looking for elements in this bucket up to 2 comparisons are made, making
 the search slower. This is known as a collision. To keep things fast we try to
 keep collisions to a minimum.
 
-[table Methods for Accessing Buckets
-    [[Method] [Description]]
-
-    [
-        [``size_type bucket_count() const``]
-        [The number of buckets.]
-    ]
-    [
-        [``size_type max_bucket_count() const``]
-        [An upper bound on the number of buckets.]
-    ]
-    [
-        [``size_type bucket_size(size_type n) const``]
-        [The number of elements in bucket `n`.]
-    ]
-    [
-        [``size_type bucket(key_type const& k) const``]
-        [Returns the index of the bucket which would contain k]
-    ]
-    [
-        [``
-            local_iterator begin(size_type n);
-            local_iterator end(size_type n);
-            const_local_iterator begin(size_type n) const;
-            const_local_iterator end(size_type n) const;
-            const_local_iterator cbegin(size_type n) const;
-            const_local_iterator cend(size_type n) const;
-        ``]
-        [Return begin and end iterators for bucket `n`.]
-    ]
-]
+'''
+<table frame="all"><title>Methods for Accessing Buckets</title>
+  <tgroup cols="2">
+    <thead><row>
+      <entry><para>Method</para></entry>
+      <entry><para>Description</para></entry>
+    </row></thead>
+    <tbody>
+      <row>
+       <entry>'''`size_type bucket_count() const`'''</entry>
+       <entry>'''The number of buckets.'''</entry>
+      </row>
+      <row>
+        <entry>'''`size_type max_bucket_count() const`'''</entry>
+        <entry>'''An upper bound on the number of buckets.'''</entry>
+      </row>
+      <row>
+        <entry>'''`size_type bucket_size(size_type n) const`'''</entry>
+        <entry>'''The number of elements in bucket `n`.'''</entry>
+      </row>
+      <row>
+        <entry>'''`size_type bucket(key_type const& k) const`'''</entry>
+        <entry>'''Returns the index of the bucket which would contain k'''</entry>
+      </row>
+      <row>
+        <entry>'''`local_iterator begin(size_type n);`'''</entry>
+        <entry morerows='5'>'''Return begin and end iterators for bucket `n`.'''</entry>
+      </row>
+      <row>
+        <entry>'''`local_iterator end(size_type n);`'''</entry>
+      </row>
+      <row>
+        <entry>'''`const_local_iterator begin(size_type n) const;`'''</entry>
+      </row>
+      <row>
+        <entry>'''`const_local_iterator end(size_type n) const;`'''</entry>
+      </row>
+      <row>
+        <entry>'''`const_local_iterator cbegin(size_type n) const;`'''</entry>
+      </row>
+      <row>
+        <entry>'''`const_local_iterator cend(size_type n) const;`'''</entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
+'''
 
 [h2 Controlling the number of buckets]
 
@@ -100,19 +116,19 @@ or close to the hint - unless your hint is unreasonably small or large.
     [[Method] [Description]]
 
     [
-        [``float load_factor() const``]
+        [`float load_factor() const`]
         [The average number of elements per bucket.]
     ]
     [
-        [``float max_load_factor() const``]
+        [`float max_load_factor() const`]
         [Returns the current maximum load factor.]
     ]
     [
-        [``float max_load_factor(float z)``]
+        [`float max_load_factor(float z)`]
         [Changes the container's maximum load factor, using `z` as a hint.]
     ]
     [
-        [``void rehash(size_type n)``]
+        [`void rehash(size_type n)`]
         [Changes the number of buckets so that there at least n buckets, and
         so that the load factor is less than the maximum load factor.]
     ]
