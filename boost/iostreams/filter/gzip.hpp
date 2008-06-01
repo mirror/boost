@@ -448,6 +448,8 @@ public:
                 }
                 footer_.process(c);
                 if (footer_.done()) {
+                    if (footer_.crc() != this->crc())
+                        throw gzip_error(gzip::bad_crc);
                     int c = boost::iostreams::get(peek);
                     if (traits_type::is_eof(c)) {
                         state_ = s_done;
@@ -787,7 +789,7 @@ void gzip_footer::process(char c)
         } else {
             ++offset_;
         }
-    } else if (state_ = s_isize) {
+    } else if (state_ == s_isize) {
         isize_ += value << (offset_ * 8);
         if (offset_ == 3) {
             state_ = s_done;
@@ -802,8 +804,8 @@ void gzip_footer::process(char c)
 
 void gzip_footer::reset()
 {
+    crc_ = isize_ = offset_ = 0;
     state_ = s_crc;
-    offset_ = 0;
 }
 
 } // End namespace boost::iostreams::detail.
