@@ -17,6 +17,10 @@
 
 #include <boost/detail/yield_k.hpp>
 
+#if defined( __ia64__ ) && defined( __INTEL_COMPILER )
+# include <ia64intrin.h>
+#endif
+
 namespace boost
 {
 
