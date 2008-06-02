@@ -42,7 +42,7 @@
   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                                     \
   || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                   \
   || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))                                      \
-  || BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+  || BOOST_WORKAROUND(__DECCXX_VER, <= 60590042)
 #  define BOOST_FOREACH_NO_RVALUE_DETECTION
 # endif
 // Some compilers do not correctly implement the lvalue/rvalue conversion
