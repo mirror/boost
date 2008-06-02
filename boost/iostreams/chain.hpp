@@ -229,9 +229,9 @@ private:
     void push_impl(const T& t, int buffer_size = -1, int pback_size = -1)
     {
         typedef typename iostreams::category_of<T>::type  category;
-        typedef typename unwrap_ios<T>::type              policy_type;
+        typedef typename unwrap_ios<T>::type              component_type;
         typedef stream_buffer<
-                    policy_type,
+                    component_type,
                     BOOST_IOSTREAMS_CHAR_TRAITS(char_type),
                     Alloc, Mode
                 >                                         streambuf_t;
@@ -252,7 +252,7 @@ private:
             buf(new streambuf_t(t, buffer_size, pback_size));
         list().push_back(buf.get());
         buf.release();
-        if (is_device<policy_type>::value) {
+        if (is_device<component_type>::value) {
             pimpl_->flags_ |= f_complete | f_open;
             for ( iterator first = list().begin(),
                            last = list().end();
