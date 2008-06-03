@@ -18,6 +18,7 @@
 
 #include <boost/config.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
+#include <boost/utility/compare_pointees.hpp>
 #include <utility>
 
 namespace boost
@@ -47,6 +48,41 @@ namespace boost
             {
                 return this;
             }
+
+            friend inline bool operator==( ref_pair l, ref_pair r )
+            {
+                return l.first == r.first && 
+                       boost::equal_pointees( l.second, r.second );
+            }
+
+            friend inline bool operator!=( ref_pair l, ref_pair r )
+            {
+                return !( l == r );
+            }
+
+            friend inline bool operator<( ref_pair l, ref_pair r )
+            {
+                if( l.first == r.first )
+                    return boost::less_pointees( l.second, r.second );
+                else 
+                    return l.first < r.first;
+            }
+
+            friend inline bool operator>( ref_pair l, ref_pair r )
+            {
+                return r < l;
+            }
+
+            friend inline bool operator<=( ref_pair l, ref_pair r )
+            {
+                return !(r < l);
+            }
+
+            friend inline bool operator>=( ref_pair l, ref_pair r )
+            {
+                return !(l < r);
+            }
+
         };
     }
     

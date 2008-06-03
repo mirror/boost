@@ -38,6 +38,8 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter
                                 scoped_deleter;
 
+        typedef BOOST_DEDUCED_TYPENAME Config::container_type
+                                container_type;
     public: // typedefs
         typedef BOOST_DEDUCED_TYPENAME Config::key_type
                                 key_type;
@@ -45,6 +47,10 @@ namespace ptr_container_detail
                                 key_compare;
         typedef BOOST_DEDUCED_TYPENAME Config::value_compare
                                 value_compare;
+        typedef BOOST_DEDUCED_TYPENAME Config::hasher
+                                hasher;
+        typedef BOOST_DEDUCED_TYPENAME Config::key_equal
+                                key_equal;
         typedef BOOST_DEDUCED_TYPENAME Config::iterator
                                 iterator;
         typedef BOOST_DEDUCED_TYPENAME Config::const_iterator
@@ -53,57 +59,77 @@ namespace ptr_container_detail
                                 size_type;
 
     public: // foundation
+        associative_ptr_container()
+        { }
 
-       template< class Compare, class Allocator >
-       associative_ptr_container( const Compare& comp,
-                                  const Allocator& a )
+        template< class SizeType >
+        associative_ptr_container( SizeType n, unordered_associative_container_tag tag )
+          : base_type( n, tag )
+        { }
+
+        template< class Compare, class Allocator >
+        associative_ptr_container( const Compare& comp,
+                                   const Allocator& a )
          : base_type( comp, a )
-       { }
-                                                     
-       template< class InputIterator, class Compare, class Allocator >
-       associative_ptr_container( InputIterator first, InputIterator last,
-                                  const Compare& comp,
-                                  const Allocator& a )
+        { }
+        
+        template< class Hash, class Pred, class Allocator >
+        associative_ptr_container( const Hash& hash,
+                                   const Pred& pred,
+                                   const Allocator& a )
+         : base_type( hash, pred, a )
+        { }
+        
+        template< class InputIterator, class Compare, class Allocator >
+        associative_ptr_container( InputIterator first, InputIterator last,
+                                   const Compare& comp,
+                                   const Allocator& a )
          : base_type( first, last, comp, a )
-       { }
+        { }
+        
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        associative_ptr_container( InputIterator first, InputIterator last,
+                                   const Hash& hash,
+                                   const Pred& pred,
+                                   const Allocator& a )
+         : base_type( first, last, hash, pred, a )
+        { }
+        
+        template< class PtrContainer >
+        explicit associative_ptr_container( std::auto_ptr<PtrContainer> r )
+         : base_type( r )
+        { }
 
-       template< class PtrContainer >
-       explicit associative_ptr_container( std::auto_ptr<PtrContainer> r )
-         : base_type( r, key_compare() )
-       { }
-
-       explicit associative_ptr_container( const associative_ptr_container& r )
-         : base_type( r.begin(), r.end(), key_compare(), 
-                      BOOST_DEDUCED_TYPENAME Config::allocator_type() )
-       { }
-
-       template< class C, class V >
-       explicit associative_ptr_container( const associative_ptr_container<C,V>& r )
-         : base_type( r.begin(), r.end(), key_compare(), 
-                      BOOST_DEDUCED_TYPENAME Config::allocator_type() )
-       { }
-
-       template< class PtrContainer >
-       associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
-       {
+        explicit associative_ptr_container( const associative_ptr_container& r )
+         : base_type( r.begin(), r.end(), container_type() )
+        { }
+        
+        template< class C, class V >
+        explicit associative_ptr_container( const associative_ptr_container<C,V>& r )
+         : base_type( r.begin(), r.end(), container_type() )
+        { }
+        
+        template< class PtrContainer >
+        associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
+        {
            base_type::operator=( r );
            return *this;
-       }
-
-       template< class C, class V >
-       associative_ptr_container& operator=( const associative_ptr_container<C,V>& r ) // strong 
-       {
-           associative_ptr_container clone( r );
-           this->swap( clone );
-           return *this;   
-       }
+        }
         
-       associative_ptr_container& operator=( const associative_ptr_container& r ) // strong
-       {
+        template< class C, class V >
+        associative_ptr_container& operator=( const associative_ptr_container<C,V>& r ) // strong 
+        {
            associative_ptr_container clone( r );
            this->swap( clone );
            return *this;   
-       }
+        }
+        
+        associative_ptr_container& operator=( const associative_ptr_container& r ) // strong
+        {
+           associative_ptr_container clone( r );
+           this->swap( clone );
+           return *this;   
+        }
 
     public: // associative container interface
         key_compare key_comp() const
@@ -114,6 +140,16 @@ namespace ptr_container_detail
         value_compare value_comp() const
         {
             return this->base().value_comp();
+        }
+
+        hasher hash_function() const
+        {
+            return this->base().hash_function();
+        }
+
+        key_equal key_eq() const
+        {
+            return this->base().key_eq();
         }
 
         iterator erase( iterator before ) // nothrow
