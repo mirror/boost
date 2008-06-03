@@ -397,7 +397,7 @@ void test_map_iterators()
     //typedef map<int, int> theMapType;
     /*
     @remark: the following will not compile
-             because of the proxy (non-reference) returned by operator*()
+             because of proxy (non-reference) returned by operator*()
              of the ptr_map's iterator type.
              
     typedef boost::ptr_map<int, int> theMapType;

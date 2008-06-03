@@ -111,6 +111,7 @@ void ptr_set_test()
     BOOST_CHECK( c3.empty() == false );
     c.clear();
     unsigned long c3size = c3.size();
+    hide_warning( c3size );
     unsigned long num  = c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), 
                                                                c3.end(), 
                                                                c3 );

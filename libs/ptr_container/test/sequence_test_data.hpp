@@ -19,6 +19,13 @@ void reversible_container_test();
 template< class IntContainer >
 void algorithms_test();
 
+template< class Cont >
+struct set_capacity
+{
+    void operator()( Cont& ) const
+    { }
+};
+
 template< typename C, typename B, typename T >
 void reversible_container_test()
 {
@@ -27,6 +34,7 @@ void reversible_container_test()
     BOOST_MESSAGE( "starting reversible container test" ); 
     enum { max_cnt = 10, size = 100 };
     C  c;
+    set_capacity<C>()( c );
     BOOST_CHECK( c.size() == 0 );
     c.push_back( new T );
     BOOST_CHECK( c.size() == 1 );
@@ -50,6 +58,7 @@ void reversible_container_test()
     a_copy.clear();
     a_copy = a_copy;
     BOOST_CHECK( a_copy.empty() );
+    BOOST_CHECK( !c.empty() );
     BOOST_MESSAGE( "finished copying test" ); 
 
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
