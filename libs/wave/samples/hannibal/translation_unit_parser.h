@@ -34,8 +34,7 @@ struct trace_actor
         const char rule_type[],
         std::ostream &strm
         )
-        :rule_type_( rule_type),
-         strm_( strm)
+        : strm_( strm), rule_type_( rule_type)
     {
         // nop
     }
@@ -297,7 +296,8 @@ struct translation_unit_grammar
             HANNIBAL_REGISTER_RULE( string_literal);
             string_literal
                 =   pattern_p( StringLiteralTokenType, TokenTypeMask)
-
+                ;
+                
             HANNIBAL_REGISTER_RULE( boolean_literal);
             boolean_literal
                 =   pattern_p( BoolLiteralTokenType, TokenTypeMask)
