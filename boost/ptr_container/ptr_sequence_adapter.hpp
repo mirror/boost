@@ -325,7 +325,7 @@ namespace ptr_container_detail
         }
 
         template< class Range >
-        void assign( const Range& r )
+        void assign( const Range& r ) // strong
         {
             assign( boost::begin(r), boost::end(r ) );
         }
@@ -369,7 +369,7 @@ namespace ptr_container_detail
         }
 
 #endif
-
+        
         template< class PtrSeqAdapter >
         void transfer( iterator before, 
                        BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator first, 
@@ -457,7 +457,7 @@ namespace ptr_container_detail
 
     public: // resize
 
-        void resize( size_type size )
+        void resize( size_type size ) // basic
         {
             size_type old_size = this->size();
             if( old_size > size )
@@ -474,7 +474,7 @@ namespace ptr_container_detail
             BOOST_ASSERT( this->size() == size );
         }
 
-        void resize( size_type size, value_type to_clone )
+        void resize( size_type size, value_type to_clone ) // basic
         {
             size_type old_size = this->size();
             if( old_size > size )
@@ -489,7 +489,42 @@ namespace ptr_container_detail
 
             BOOST_ASSERT( this->size() == size );        
         }
-          
+
+        void rresize( size_type size ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( this->begin(), 
+                             boost::next( this->begin(), old_size - size ) );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_front( new BOOST_DEDUCED_TYPENAME 
+                                      boost::remove_pointer<value_type>::type ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }
+
+        void rresize( size_type size, value_type to_clone ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( this->begin(), 
+                             boost::next( this->begin(), old_size - size ) );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_front( this->null_policy_allocate_clone( to_clone ) ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }           
+                
     public: // algorithms
 
         void sort( iterator first, iterator last )

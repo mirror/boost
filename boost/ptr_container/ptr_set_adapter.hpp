@@ -17,6 +17,7 @@
 #endif
 
 #include <boost/ptr_container/detail/associative_ptr_container.hpp>
+#include <boost/ptr_container/detail/meta_functions.hpp>
 #include <boost/ptr_container/detail/void_ptr_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
 
@@ -27,7 +28,8 @@ namespace ptr_container_detail
     template
     < 
         class Key,
-        class VoidPtrSet
+        class VoidPtrSet,
+        bool  Ordered = true
     >
     struct set_config
     {
@@ -42,11 +44,32 @@ namespace ptr_container_detail
        typedef value_type 
                     key_type;
 
-       typedef BOOST_DEDUCED_TYPENAME VoidPtrSet::value_compare
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::eval_if_c<Ordered, 
+                          select_value_compare<VoidPtrSet>, 
+                          mpl::identity<void> >::type
                     value_compare;
 
        typedef value_compare 
                     key_compare;
+
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::eval_if_c<Ordered,
+                          mpl::identity<void>,
+                          select_hasher<VoidPtrSet> >::type
+                    hasher;
+
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::eval_if_c<Ordered,
+                          mpl::identity<void>,
+                          select_key_equal<VoidPtrSet> >::type
+                    key_equal;
+
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::if_c<Ordered,
+                     ptr_container_detail::ordered_associative_container_tag,
+                     ptr_container_detail::unordered_associative_container_tag>::type
+                    container_type;
 
        typedef void_ptr_iterator<
                        BOOST_DEDUCED_TYPENAME VoidPtrSet::iterator, Key > 
@@ -77,13 +100,14 @@ namespace ptr_container_detail
     < 
         class Key,
         class VoidPtrSet, 
-        class CloneAllocator = heap_clone_allocator
+        class CloneAllocator = heap_clone_allocator,
+        bool  Ordered        = true
     >
     class ptr_set_adapter_base 
-        : public ptr_container_detail::associative_ptr_container< set_config<Key,VoidPtrSet>,
+        : public ptr_container_detail::associative_ptr_container< set_config<Key,VoidPtrSet,Ordered>,
                                                       CloneAllocator >
     {
-        typedef ptr_container_detail::associative_ptr_container< set_config<Key,VoidPtrSet>,
+        typedef ptr_container_detail::associative_ptr_container< set_config<Key,VoidPtrSet,Ordered>,
                                                      CloneAllocator >
               base_type;
     public:  
@@ -95,18 +119,27 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                       size_type;
 
-    private:
+    public:
         ptr_set_adapter_base() 
-          : base_type( BOOST_DEDUCED_TYPENAME VoidPtrSet::key_compare(),
-                       BOOST_DEDUCED_TYPENAME VoidPtrSet::allocator_type() )
         { }
 
-    public:
-        
+        template< class SizeType >
+        ptr_set_adapter_base( SizeType n, 
+                              ptr_container_detail::unordered_associative_container_tag tag )
+          : base_type( n, tag )
+        { }
+                
         template< class Compare, class Allocator >
         ptr_set_adapter_base( const Compare& comp,
                               const Allocator& a ) 
          : base_type( comp, a ) 
+        { }
+
+        template< class Hash, class Pred, class Allocator >
+        ptr_set_adapter_base( const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( hash, pred, a )
         { }
         
         template< class InputIterator, class Compare, class Allocator >
@@ -115,7 +148,15 @@ namespace ptr_container_detail
                               const Allocator& a ) 
          : base_type( first, last, comp, a ) 
         { }
-        
+
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        ptr_set_adapter_base( InputIterator first, InputIterator last,
+                              const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( first, last, hash, pred, a )
+        { }
+               
         template< class U, class Set >
         explicit ptr_set_adapter_base( const ptr_set_adapter_base<U,Set>& r )
           : base_type( r )
@@ -226,12 +267,13 @@ namespace ptr_container_detail
     <
         class Key,
         class VoidPtrSet, 
-        class CloneAllocator = heap_clone_allocator
+        class CloneAllocator = heap_clone_allocator,
+        bool  Ordered        = true
     >
     class ptr_set_adapter : 
-        public ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator>
+        public ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator,Ordered>
     {
-        typedef ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator> 
+        typedef ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator,Ordered> 
             base_type;
     
     public: // typedefs
@@ -245,7 +287,7 @@ namespace ptr_container_detail
         typedef Key  key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                      auto_type;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrSet::key_compare
+        typedef BOOST_DEDUCED_TYPENAME base_type::key_compare
                      key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrSet::allocator_type
                      allocator_type;        
@@ -263,14 +305,30 @@ namespace ptr_container_detail
         }                         
 
     public:
+        ptr_set_adapter()
+        { }
+
+        template< class SizeType >
+        ptr_set_adapter( SizeType n, 
+                         ptr_container_detail::unordered_associative_container_tag tag )
+          : base_type( n, tag )
+        { }
         
-        explicit  ptr_set_adapter( const key_compare& comp = key_compare(),
-                                   const allocator_type& a = allocator_type() ) 
+        template< class Comp >
+        explicit ptr_set_adapter( const Comp& comp,
+                                  const allocator_type& a ) 
           : base_type( comp, a ) 
         {
             BOOST_ASSERT( this->empty() ); 
         }
 
+        template< class Hash, class Pred, class Allocator >
+        ptr_set_adapter( const Hash& hash,
+                         const Pred& pred,
+                         const Allocator& a )
+         : base_type( hash, pred, a )
+        { }
+                
         template< class InputIterator, class Compare, class Allocator >
         ptr_set_adapter( InputIterator first, InputIterator last, 
                          const Compare& comp = Compare(),
@@ -281,6 +339,14 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        ptr_set_adapter( InputIterator first, InputIterator last,
+                         const Hash& hash,
+                         const Pred& pred,
+                         const Allocator& a )
+          : base_type( first, last, hash, pred, a )
+        { }
+               
         template< class U, class Set >
         explicit ptr_set_adapter( const ptr_set_adapter<U,Set>& r )
           : base_type( r )
@@ -406,12 +472,13 @@ namespace ptr_container_detail
     < 
         class Key,
         class VoidPtrMultiSet, 
-        class CloneAllocator = heap_clone_allocator 
+        class CloneAllocator = heap_clone_allocator,
+        bool Ordered         = true 
     >
     class ptr_multiset_adapter : 
-        public ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator>
+        public ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator,Ordered>
     {
-         typedef ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator> base_type;
+         typedef ptr_container_detail::ptr_set_adapter_base<Key,VoidPtrMultiSet,CloneAllocator,Ordered> base_type;
     
     public: // typedefs
     
@@ -438,12 +505,28 @@ namespace ptr_container_detail
         }                         
     
     public:
+        ptr_multiset_adapter()
+        { }
 
-        ptr_multiset_adapter( const key_compare& comp = key_compare(),
-                              const allocator_type& a = allocator_type() )
+        template< class SizeType >
+        ptr_multiset_adapter( SizeType n, 
+                              ptr_container_detail::unordered_associative_container_tag tag )
+          : base_type( n, tag )
+        { }
+
+        template< class Comp >
+        explicit ptr_multiset_adapter( const Comp& comp,
+                                       const allocator_type& a )
         : base_type( comp, a ) 
         { }
-    
+
+        template< class Hash, class Pred, class Allocator >
+        ptr_multiset_adapter( const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( hash, pred, a )
+        { }
+                
         template< class InputIterator >
         ptr_multiset_adapter( InputIterator first, InputIterator last,
                               const key_compare& comp = key_compare(),
@@ -453,6 +536,14 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        ptr_multiset_adapter( InputIterator first, InputIterator last,
+                              const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( first, last, hash, pred, a )
+        { }
+                
         template< class U, class Set >
         explicit ptr_multiset_adapter( const ptr_multiset_adapter<U,Set>& r )
           : base_type( r )
