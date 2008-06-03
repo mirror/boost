@@ -66,8 +66,12 @@ namespace ptr_container_detail
 
     struct is_pointer_or_integral_tag {};
     struct is_range_tag {};
-
+    struct sequence_tag {};
+    struct associative_container_tag {};
+    struct ordered_associative_container_tag : associative_container_tag {};
+    struct unordered_associative_container_tag : associative_container_tag {};
     
+
     
     template
     < 
@@ -291,27 +295,44 @@ namespace ptr_container_detail
             clone_back_insert( first, last );
         }
 
+        template< class I >
+        void associative_constructor_impl( I first, I last ) // strong
+        {
+            if( first == last )
+                return;
+
+            scoped_deleter sd( first, last );
+            insert_clones_and_release( sd );             
+        }
+
     public: // foundation! should be protected!
-        reversible_ptr_container( const allocator_type& a = allocator_type() ) 
+        reversible_ptr_container()
+        { }
+
+        template< class SizeType >
+        reversible_ptr_container( SizeType n, unordered_associative_container_tag )
+          : c_( n )
+        { }
+        
+        explicit reversible_ptr_container( const allocator_type& a ) 
          : c_( a )
         {}
         
         template< class PtrContainer >
-        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )
-          : c_( allocator_type() )                
+        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )                
         { 
             swap( *clone ); 
         }
 
         explicit reversible_ptr_container( const reversible_ptr_container& r ) 
         {
-            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+            constructor_impl( r.begin(), r.end(), std::forward_iterator_tag() ); 
         }
 
         template< class C, class V >
         explicit reversible_ptr_container( const reversible_ptr_container<C,V>& r ) 
         {
-            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+            constructor_impl( r.begin(), r.end(), std::forward_iterator_tag() ); 
         }
 
 
@@ -336,6 +357,7 @@ namespace ptr_container_detail
             swap( clone );
             return *this;
         }
+        
         // overhead: null-initilization of container pointer (very cheap compared to cloning)
         // overhead: 1 heap allocation (very cheap compared to cloning)
         template< class InputIterator >
@@ -357,26 +379,47 @@ namespace ptr_container_detail
                                   const allocator_type& a )
         : c_( comp, a ) {}
 
+        template< class InputIterator >
+        reversible_ptr_container( InputIterator first,
+                                  InputIterator last,
+                                  associative_container_tag )
+        {
+            associative_constructor_impl( first, last );
+        }
+        
         template< class InputIterator, class Compare >
         reversible_ptr_container( InputIterator first,
                                   InputIterator last,
                                   const Compare& comp,
-                                  const allocator_type& a )
+                                  const allocator_type& a,
+                                  associative_container_tag )
         : c_( comp, a ) 
+        {
+            associative_constructor_impl( first, last );
+        }
+
+        explicit reversible_ptr_container( size_type n )
+        : c_( n ) {}
+
+        template< class Hash, class Pred >
+        reversible_ptr_container( const Hash& hash,
+                                  const Pred& pred,
+                                  const allocator_type& a )
+        : c_( hash, pred, a ) {}
+
+        template< class InputIterator, class Hash, class Pred >
+        reversible_ptr_container( InputIterator first,
+                                  InputIterator last,
+                                  const Hash& hash,
+                                  const Pred& pred,
+                                  const allocator_type& a )
+        : c_( hash, pred, a )
         {
             if( first == last )
                 return;
 
             scoped_deleter sd( first, last );
             insert_clones_and_release( sd );    
-        }
-
-        template< class PtrContainer, class Compare >
-        reversible_ptr_container( std::auto_ptr<PtrContainer> clone, 
-                                  Compare comp )
-        : c_( comp, allocator_type() )                
-        { 
-            swap( *clone ); 
         }
 
     public:        
