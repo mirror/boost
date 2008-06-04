@@ -14,6 +14,7 @@
 #include <boost/config.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/functional/hash.hpp>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -39,6 +40,8 @@ class Base
     }
     
     Base& operator=( const Base& );
+
+public: // for test reasons only
     int data1, data2, data3;
     string data;
     
@@ -149,9 +152,23 @@ inline bool operator!=( const Base& l, const Base& r )
 
 
 
+inline std::size_t hash_value( const Base& b )
+{
+    std::size_t seed = 0;
+    boost::hash_combine( seed, b.data );
+    boost::hash_combine( seed, b.data1 );
+    boost::hash_combine( seed, b.data2 );
+    boost::hash_combine( seed, b.data3 );
+    return seed;
+}
+
+
 class Derived_class : public Base
 {   
+public: // for test reasons only
     int i_;
+
+private:
         
     virtual void  do_print( ostream& out ) const
     {
@@ -180,12 +197,22 @@ public:
     }
 };
 
+
+
+inline std::size_t hash_value( const Derived_class& b )
+{
+    std::size_t seed = hash_value( static_cast<const Base&>( b ) );
+    boost::hash_combine( seed, b.i_ );
+    return seed;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Test class 2: a value class 
 //////////////////////////////////////////////////////////////////////////////
 
 class Value 
 {   
+public: // for test reasons only    
     string s_;
     
 public:
@@ -234,6 +261,13 @@ inline bool operator!=( const Value& l, const Value& r )
 inline ostream& operator<<( ostream& out, const Value& v )
 {
     return out << v.name() << " ";
+}
+
+
+
+inline std::size_t hash_value( const Value& v )
+{
+    return boost::hash_value( v.s_ );
 }
 
 //

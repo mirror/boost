@@ -35,8 +35,8 @@ test-suite ptr_container :
     [ sc-test serialization : /boost/serialization//boost_serialization ]  
     [ sc-test no_exceptions ]    
     
-    #[ sc-test ptr_unordered_set ]
-    #[ sc-test ptr_unordered_map ]        
+    [ sc-test ptr_unordered_set ]
+    [ sc-test ptr_unordered_map ]        
     #[ sc-test ptr_circular_buffer ]    
  
     ;

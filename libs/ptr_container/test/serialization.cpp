@@ -19,6 +19,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+#include <boost/functional/hash.hpp>
 #include <boost/ptr_container/ptr_container.hpp>
 #include <boost/ptr_container/serialize_ptr_container.hpp>
 #include <boost/serialization/export.hpp>
@@ -66,6 +67,16 @@ struct Base
 inline bool operator<( const Base& l, const Base& r )
 {
     return l.i < r.i;
+}
+
+inline bool operator==( const Base& l, const Base& r )
+{
+    return l.i == r.i;
+}
+
+inline std::size_t hash_value( const Base& b )
+{
+    return boost::hash_value( b.i );
 }
 
 struct Derived : Base
@@ -127,10 +138,10 @@ void test_serialization_helper()
 
     BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
     BOOST_CHECK_EQUAL( (*vec2.begin()).i, -1 );
-    BOOST_CHECK_EQUAL( (*--vec2.end()).i, 0 );
+    BOOST_CHECK_EQUAL( (*++vec2.begin()).i, 0 );
 
-    typename Cont::iterator i = vec2.end();
-    --i;
+    typename Cont::iterator i = vec2.begin();
+    ++i;
     Derived* d = dynamic_cast<Derived*>( &*i ); 
     BOOST_CHECK_EQUAL( d->i2, 1 );
 
@@ -218,7 +229,16 @@ void test_serialization()
     test_serialization_helper< boost::ptr_multiset<Base>, 
                                boost::archive::text_oarchive,
                                boost::archive::text_iarchive>();
-
+    /*test_serialization_helper< boost::ptr_unordered_set<Base>,
+                               boost::archive::text_oarchive,
+                               boost::archive::text_iarchive>();
+    test_serialization_helper< boost::ptr_unordered_multiset<Base>, 
+                               boost::archive::text_oarchive,
+                               boost::archive::text_iarchive>();
+                               
+                               @todo: fix ordernig issue here...
+  */
+  
     test_serialization_map_helper< boost::ptr_map<std::string,Base>, 
                                    boost::archive::text_oarchive,
                                    boost::archive::text_iarchive>();
@@ -230,6 +250,20 @@ void test_serialization()
                                    boost::archive::xml_oarchive,
                                    boost::archive::xml_iarchive>();
     test_serialization_map_helper< boost::ptr_multimap<std::string,Base>, 
+                                   boost::archive::xml_oarchive,
+                                   boost::archive::xml_iarchive>();
+
+    test_serialization_map_helper< boost::ptr_unordered_map<std::string,Base>, 
+                                   boost::archive::text_oarchive,
+                                   boost::archive::text_iarchive>();
+    test_serialization_map_helper< boost::ptr_unordered_multimap<std::string,Base>, 
+                                   boost::archive::text_oarchive,
+                                   boost::archive::text_iarchive>();
+
+    test_serialization_map_helper< boost::ptr_unordered_map<std::string,Base>, 
+                                   boost::archive::xml_oarchive,
+                                   boost::archive::xml_iarchive>();
+    test_serialization_map_helper< boost::ptr_unordered_multimap<std::string,Base>, 
                                    boost::archive::xml_oarchive,
                                    boost::archive::xml_iarchive>();
 

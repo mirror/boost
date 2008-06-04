@@ -38,14 +38,35 @@ void test_copy()
     base = base;
 }
 
+template< class Cont, class T >
+void test_unordered_interface()
+{
+    Cont c;
+    T* t = new T;
+    c.insert( t );
+    typename Cont::local_iterator i = c.begin( 0 );
+    typename Cont::const_local_iterator ci = i;
+    ci = c.cbegin( 0 );
+    i = c.end( 0 );
+    ci = c.cend( 0 );
+    typename Cont::size_type s = c.bucket_count();
+    s = c.max_bucket_count();
+    s = c.bucket_size( 0 );
+    s = c.bucket( *t );
+    float f = c.load_factor();
+    f       = c.max_load_factor();
+    c.max_load_factor(f);
+    c.rehash(1000);
+} 
+
 void test_set()
 {    
     srand( 0 );
-    ptr_set_test< ptr_unordered_set<Base>, Base, Derived_class >();
-/*    ptr_set_test< ptr_unordered_set<Value>, Value, Value >();
+    ptr_set_test< ptr_unordered_set<Base>, Base, Derived_class, false >();
+    ptr_set_test< ptr_unordered_set<Value>, Value, Value, false >();
 
-    ptr_set_test< ptr_unordered_multiset<Base>, Base, Derived_class >();
-    ptr_set_test< ptr_unordered_multiset<Value>, Value, Value >();
+    ptr_set_test< ptr_unordered_multiset<Base>, Base, Derived_class, false >();
+    ptr_set_test< ptr_unordered_multiset<Value>, Value, Value, false >();
 
     test_copy< ptr_unordered_set<Base>, ptr_unordered_set<Derived_class>, 
                Derived_class>();
@@ -62,8 +83,9 @@ void test_set()
     set.insert( std::auto_ptr<int>( new int(1) ) );
     BOOST_CHECK_THROW( (set.replace(set.begin(), 0 )), bad_ptr_container_operation );
     BOOST_CHECK_THROW( (set.replace(set.begin(), std::auto_ptr<int>(0) )), bad_ptr_container_operation );
-*/
 
+    test_unordered_interface< ptr_unordered_set<Base>, Derived_class >();
+    test_unordered_interface< ptr_unordered_multiset<Base>, Derived_class >();
 }
 
 using boost::unit_test::test_suite;
