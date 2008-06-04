@@ -42,6 +42,24 @@ namespace ptr_container_detail
     {
         typedef typename T::key_equal type;
     };
+
+    template< class T >
+    struct select_iterator
+    {
+        typedef typename T::iterator type;
+    };
+    
+    template< class T >
+    struct select_local_iterator
+    {
+        typedef typename T::local_iterator type;
+    };
+
+    template< class T >
+    struct select_const_local_iterator
+    {
+        typedef typename T::const_local_iterator type;
+    };
 }
 }
 

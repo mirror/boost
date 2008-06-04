@@ -1,7 +1,7 @@
 //
 // Boost.Pointer Container
 //
-//  Copyright Thorsten Ottosen 2003-2005. Use, modification and
+//  Copyright Thorsten Ottosen 2003-2008. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -22,6 +22,9 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_unordered_map.hpp>
+#include <boost/ptr_container/ptr_unordered_set.hpp>
+#include <boost/ptr_container/ptr_inserter.hpp>
 
 #endif
 

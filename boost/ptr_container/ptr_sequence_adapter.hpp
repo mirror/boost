@@ -209,9 +209,8 @@ namespace ptr_container_detail
 
         auto_type pop_back()
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
-                                                 bad_ptr_container_operation,
-                                          "'pop_back()' on empty container" );
+            BOOST_ASSERT( !this->empty() && 
+                          "'pop_back()' on empty container" );
             auto_type ptr( static_cast<value_type>( this->base().back() ) );      
                                                        // nothrow
             this->base().pop_back();                   // nothrow
@@ -220,9 +219,8 @@ namespace ptr_container_detail
 
         auto_type pop_front()
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
-                                                 bad_ptr_container_operation,
-                                         "'pop_front()' on empty container" ); 
+            BOOST_ASSERT( !this->empty() &&
+                          "'pop_front()' on empty container" ); 
             auto_type ptr( static_cast<value_type>( this->base().front() ) ); 
                                          // nothrow 
             this->base().pop_front();    // nothrow
@@ -231,38 +229,29 @@ namespace ptr_container_detail
         
         reference front()        
         { 
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
-                                                 bad_ptr_container_operation,
-                                    "accessing 'front()' on empty container" );
+            BOOST_ASSERT( !this->empty() &&
+                          "accessing 'front()' on empty container" );
+
             BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             return *this->begin(); 
         }
 
         const_reference front() const  
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
-                                                 bad_ptr_container_operation, 
-                                   "accessing 'front()' on empty container" );
-            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
-            return *this->begin(); 
+            return const_cast<ptr_sequence_adapter*>(this)->front();
         }
 
         reference back()
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
-                                                 bad_ptr_container_operation,
-                                    "accessing 'back()' on empty container" );
+            BOOST_ASSERT( !this->empty() &&
+                          "accessing 'back()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             return *--this->end(); 
         }
 
         const_reference back() const
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
-                                                 bad_ptr_container_operation,
-                                    "accessing 'back()' on empty container" );
-            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
-            return *--this->end(); 
+            return const_cast<ptr_sequence_adapter*>(this)->back();
         }
 
     public: // deque/vector inerface

@@ -16,10 +16,10 @@ namespace boost
 namespace serialization 
 {
 
-template<class Archive, class T, class VoidPtrMap, class CloneAllocator>
-void save(Archive& ar, const ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator>& c, unsigned int version)
+template<class Archive, class T, class VoidPtrMap, class CloneAllocator, bool Ordered>
+void save(Archive& ar, const ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int version)
 {
-    typedef ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator> container;
+    typedef ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator,Ordered> container;
     typedef BOOST_DEDUCED_TYPENAME container::const_iterator const_iterator;
 
     ar << boost::serialization::make_nvp( ptr_container_detail::count(), 
@@ -34,10 +34,10 @@ void save(Archive& ar, const ptr_container_detail::ptr_map_adapter_base<T, VoidP
     }
 }
 
-template<class Archive, class T, class VoidPtrMap, class CloneAllocator>
-void load(Archive& ar, ptr_map_adapter<T, VoidPtrMap, CloneAllocator>& c, unsigned int version)
+template<class Archive, class T, class VoidPtrMap, class CloneAllocator, bool Ordered>
+void load(Archive& ar, ptr_map_adapter<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int version)
 {
-    typedef ptr_map_adapter<T, VoidPtrMap, CloneAllocator> container;
+    typedef ptr_map_adapter<T, VoidPtrMap, CloneAllocator,Ordered> container;
     typedef BOOST_DEDUCED_TYPENAME container::key_type key_type;
     typedef BOOST_DEDUCED_TYPENAME container::size_type size_type;
     typedef BOOST_DEDUCED_TYPENAME container::iterator iterator;
@@ -57,10 +57,10 @@ void load(Archive& ar, ptr_map_adapter<T, VoidPtrMap, CloneAllocator>& c, unsign
     }
 }
 
-template<class Archive, class T, class VoidPtrMap, class CloneAllocator>
-void load(Archive& ar, ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator>& c, unsigned int version)
+template<class Archive, class T, class VoidPtrMap, class CloneAllocator, bool Ordered>
+void load(Archive& ar, ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int version)
 {
-    typedef ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator> container;
+    typedef ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator,Ordered> container;
     typedef BOOST_DEDUCED_TYPENAME container::key_type key_type;
     typedef BOOST_DEDUCED_TYPENAME container::size_type size_type;
     typedef BOOST_DEDUCED_TYPENAME container::iterator iterator;

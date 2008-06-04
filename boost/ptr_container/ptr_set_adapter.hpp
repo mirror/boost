@@ -29,7 +29,7 @@ namespace ptr_container_detail
     < 
         class Key,
         class VoidPtrSet,
-        bool  Ordered = true
+        bool  Ordered
     >
     struct set_config
     {
@@ -67,8 +67,8 @@ namespace ptr_container_detail
 
        typedef BOOST_DEDUCED_TYPENAME 
            mpl::if_c<Ordered,
-                     ptr_container_detail::ordered_associative_container_tag,
-                     ptr_container_detail::unordered_associative_container_tag>::type
+                     ordered_associative_container_tag,
+                     unordered_associative_container_tag>::type
                     container_type;
 
        typedef void_ptr_iterator<
@@ -79,6 +79,22 @@ namespace ptr_container_detail
                         BOOST_DEDUCED_TYPENAME VoidPtrSet::const_iterator, const Key >
                     const_iterator;
 
+       typedef void_ptr_iterator<
+           BOOST_DEDUCED_TYPENAME 
+             mpl::eval_if_c<Ordered, 
+                            select_iterator<VoidPtrSet>,
+                            select_local_iterator<VoidPtrSet> >::type,
+             Key >
+                    local_iterator;
+
+       typedef void_ptr_iterator<
+           BOOST_DEDUCED_TYPENAME 
+             mpl::eval_if_c<Ordered, 
+                            select_iterator<VoidPtrSet>,
+                            select_const_local_iterator<VoidPtrSet> >::type,
+             const Key >
+                    const_local_iterator;           
+       
        template< class Iter >
        static Key* get_pointer( Iter i )
        {
@@ -141,7 +157,12 @@ namespace ptr_container_detail
                               const Allocator& a )
          : base_type( hash, pred, a )
         { }
-        
+
+        template< class InputIterator >
+        ptr_set_adapter_base( InputIterator first, InputIterator last )
+         : base_type( first, last )
+        { }
+                
         template< class InputIterator, class Compare, class Allocator >
         ptr_set_adapter_base( InputIterator first, InputIterator last,
                               const Compare& comp,
@@ -157,18 +178,22 @@ namespace ptr_container_detail
          : base_type( first, last, hash, pred, a )
         { }
                
-        template< class U, class Set >
-        explicit ptr_set_adapter_base( const ptr_set_adapter_base<U,Set>& r )
+        template< class U, class Set, class CA, bool b >
+        explicit ptr_set_adapter_base( const ptr_set_adapter_base<U,Set,CA,b>& r )
           : base_type( r )
         { }
-        
+
+        explicit ptr_set_adapter_base( const ptr_set_adapter_base& r )
+          : base_type( r )
+        { }
+                
         template< class PtrContainer >
         explicit ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
          : base_type( clone )
         { }
 
-        template< class U, class Set >
-        ptr_set_adapter_base& operator=( const ptr_set_adapter_base<U,Set>& r ) 
+        template< class U, class Set, class CA, bool b >
+        ptr_set_adapter_base& operator=( const ptr_set_adapter_base<U,Set,CA,b>& r ) 
         {
             base_type::operator=( r );
             return *this;
@@ -253,8 +278,13 @@ namespace ptr_container_detail
                 equal_range( const_cast<key_type*>(&x) ); 
             return make_iterator_range( const_iterator( p.first ), 
                                         const_iterator( p.second ) );    
-        }                                                                            
+        }    
 
+    protected:
+        size_type bucket( const key_type& key ) const
+        {
+            return this->base().bucket( const_cast<key_type*>(&key) );
+        }
     };
 
 } // ptr_container_detail
@@ -287,8 +317,6 @@ namespace ptr_container_detail
         typedef Key  key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                      auto_type;
-        typedef BOOST_DEDUCED_TYPENAME base_type::key_compare
-                     key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrSet::allocator_type
                      allocator_type;        
     private:
@@ -328,10 +356,15 @@ namespace ptr_container_detail
                          const Allocator& a )
          : base_type( hash, pred, a )
         { }
-                
+
+        template< class InputIterator >
+        ptr_set_adapter( InputIterator first, InputIterator last )
+         : base_type( first, last )
+        { }
+
         template< class InputIterator, class Compare, class Allocator >
         ptr_set_adapter( InputIterator first, InputIterator last, 
-                         const Compare& comp = Compare(),
+                         const Compare& comp,
                          const Allocator a = Allocator() )
           : base_type( comp, a )
         {
@@ -346,9 +379,13 @@ namespace ptr_container_detail
                          const Allocator& a )
           : base_type( first, last, hash, pred, a )
         { }
-               
-        template< class U, class Set >
-        explicit ptr_set_adapter( const ptr_set_adapter<U,Set>& r )
+
+        explicit ptr_set_adapter( const ptr_set_adapter& r )
+          : base_type( r )
+        { }
+
+        template< class U, class Set, class CA, bool b >
+        explicit ptr_set_adapter( const ptr_set_adapter<U,Set,CA,b>& r )
           : base_type( r )
         { }
         
@@ -357,8 +394,8 @@ namespace ptr_container_detail
          : base_type( clone )
         { }
 
-        template< class U, class Set >
-        ptr_set_adapter& operator=( const ptr_set_adapter<U,Set>& r ) 
+        template< class U, class Set, class CA, bool b >
+        ptr_set_adapter& operator=( const ptr_set_adapter<U,Set,CA,b>& r ) 
         {
             base_type::operator=( r );
             return *this;
@@ -489,8 +526,6 @@ namespace ptr_container_detail
         typedef Key    key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                        auto_type;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMultiSet::key_compare
-                       key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMultiSet::allocator_type
                        allocator_type;        
     private:
@@ -526,10 +561,15 @@ namespace ptr_container_detail
                               const Allocator& a )
          : base_type( hash, pred, a )
         { }
-                
+
         template< class InputIterator >
+        ptr_multiset_adapter( InputIterator first, InputIterator last )
+         : base_type( first, last )
+        { }
+        
+        template< class InputIterator, class Comp >
         ptr_multiset_adapter( InputIterator first, InputIterator last,
-                              const key_compare& comp = key_compare(),
+                              const Comp& comp,
                               const allocator_type& a = allocator_type() )
         : base_type( comp, a ) 
         {
@@ -544,8 +584,8 @@ namespace ptr_container_detail
          : base_type( first, last, hash, pred, a )
         { }
                 
-        template< class U, class Set >
-        explicit ptr_multiset_adapter( const ptr_multiset_adapter<U,Set>& r )
+        template< class U, class Set, class CA, bool b >
+        explicit ptr_multiset_adapter( const ptr_multiset_adapter<U,Set,CA,b>& r )
           : base_type( r )
         { }
         
@@ -554,8 +594,8 @@ namespace ptr_container_detail
          : base_type( clone )
         { }
 
-        template< class U, class Set >
-        ptr_multiset_adapter& operator=( const ptr_multiset_adapter<U,Set>& r ) 
+        template< class U, class Set, class CA, bool b >
+        ptr_multiset_adapter& operator=( const ptr_multiset_adapter<U,Set,CA,b>& r ) 
         {
             base_type::operator=( r );
             return *this;

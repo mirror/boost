@@ -55,6 +55,10 @@ namespace ptr_container_detail
                                 iterator;
         typedef BOOST_DEDUCED_TYPENAME Config::const_iterator
                                 const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME Config::local_iterator
+                                local_iterator;
+        typedef BOOST_DEDUCED_TYPENAME Config::const_local_iterator
+                                const_local_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                                 size_type;
 
@@ -79,12 +83,17 @@ namespace ptr_container_detail
                                    const Allocator& a )
          : base_type( hash, pred, a )
         { }
-        
+
+        template< class InputIterator >
+        associative_ptr_container( InputIterator first, InputIterator last )
+         : base_type( first, last, container_type() )
+        { }
+                
         template< class InputIterator, class Compare, class Allocator >
         associative_ptr_container( InputIterator first, InputIterator last,
                                    const Compare& comp,
                                    const Allocator& a )
-         : base_type( first, last, comp, a )
+         : base_type( first, last, comp, a, container_type() )
         { }
         
         template< class InputIterator, class Hash, class Pred, class Allocator >
@@ -140,16 +149,6 @@ namespace ptr_container_detail
         value_compare value_comp() const
         {
             return this->base().value_comp();
-        }
-
-        hasher hash_function() const
-        {
-            return this->base().hash_function();
-        }
-
-        key_equal key_eq() const
-        {
-            return this->base().key_eq();
         }
 
         iterator erase( iterator before ) // nothrow
@@ -271,6 +270,113 @@ namespace ptr_container_detail
                 }
             }
             return res;
+        }
+        
+        reference front()
+        {
+            BOOST_ASSERT( !this->empty() );
+            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
+            return *this->begin(); 
+        }
+
+        const_reference front() const
+        {
+            return const_cast<associative_ptr_container*>(this)->front();
+        }
+
+        reference back()
+        {
+            BOOST_ASSERT( !this->empty() );
+            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
+            return *--this->end(); 
+        }
+
+        const_reference back() const
+        {
+            return const_cast<associative_ptr_container*>(this)->back();
+        }
+
+    protected: // unordered interface
+        hasher hash_function() const
+        {
+            return this->base().hash_function();
+        }
+
+        key_equal key_eq() const
+        {
+            return this->base().key_eq();
+        }
+        
+        size_type bucket_count() const
+        {
+            return this->base().bucket_count();
+        }
+        
+        size_type max_bucket_count() const
+        {
+            return this->base().max_bucket_count();
+        }
+        
+        size_type bucket_size( size_type n ) const
+        {
+            return this->base().bucket_size( n );
+        }
+        
+        float load_factor() const
+        {
+            return this->base().load_factor();
+        }
+        
+        float max_load_factor() const
+        {
+            return this->base().max_load_factor();
+        }
+        
+        void max_load_factor( float factor )
+        {
+            return this->base().max_load_factor( factor );
+        }
+        
+        void rehash( size_type n )
+        {
+            this->base().rehash( n );
+        }
+
+    public:
+        using base_type::begin;
+        using base_type::end;
+        using base_type::cbegin;
+        using base_type::cend;
+
+    protected:
+        local_iterator begin( size_type n )
+        {
+            return local_iterator( this->base().begin( n ) );
+        }
+        
+        const_local_iterator begin( size_type n ) const
+        {
+            return const_local_iterator( this->base().begin( n ) );
+        }
+        
+        local_iterator end( size_type n )
+        {
+            return local_iterator( this->base().end( n ) );
+        }
+        
+        const_local_iterator end( size_type n ) const
+        {
+            return const_local_iterator( this->base().end( n ) );
+        }
+        
+        const_local_iterator cbegin( size_type n ) const
+        {
+            return const_local_iterator( this->base().cbegin( n ) );
+        }
+        
+        const_local_iterator cend( size_type n )
+        {
+            return const_local_iterator( this->base().cend( n ) );
         }
 
      }; // class 'associative_ptr_container'
