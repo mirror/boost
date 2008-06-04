@@ -61,6 +61,10 @@ namespace ptr_container_detail
                                 const_local_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                                 size_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::reference
+                                reference;
+        typedef BOOST_DEDUCED_TYPENAME base_type::const_reference
+                    const_reference;
 
     public: // foundation
         associative_ptr_container()
@@ -275,7 +279,7 @@ namespace ptr_container_detail
         reference front()
         {
             BOOST_ASSERT( !this->empty() );
-            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
+            BOOST_ASSERT( *this->begin().base() != 0 );
             return *this->begin(); 
         }
 
@@ -287,7 +291,7 @@ namespace ptr_container_detail
         reference back()
         {
             BOOST_ASSERT( !this->empty() );
-            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
+            BOOST_ASSERT( *(--this->end()).base() != 0 );
             return *--this->end(); 
         }
 
