@@ -42,6 +42,7 @@
 // BOOST_IS_CONVERTIBLE(T,U) true if T is convertible to U
 // BOOST_IS_ENUM(T) true is T is an enum
 // BOOST_IS_POLYMORPHIC(T) true if T is a polymorphic type
+// BOOST_ALIGNMENT_OF(T) should evaluate to the alignment requirements of type T.
 
 #ifdef BOOST_HAS_SGI_TYPE_TRAITS
     // Hook into SGI's __type_traits class, this will pick up user supplied
@@ -104,6 +105,7 @@
 #   define BOOST_IS_ENUM(T) __is_enum(T)
 //  This one doesn't quite always do the right thing:
 //  #   define BOOST_IS_POLYMORPHIC(T) __is_polymorphic(T)
+#   define BOOST_ALIGNMENT_OF(T) __alignof(T)
 
 #   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif
@@ -146,6 +148,7 @@
 #   define BOOST_IS_CLASS(T) __is_class(T)
 #   define BOOST_IS_ENUM(T) __is_enum(T)
 #   define BOOST_IS_POLYMORPHIC(T) __is_polymorphic(T)
+#   define BOOST_ALIGNMENT_OF(T) __alignof__(T)
 
 #   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif

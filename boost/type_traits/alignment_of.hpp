@@ -12,6 +12,7 @@
 #include <boost/config.hpp>
 #include <cstddef>
 
+#include <boost/type_traits/intrinsics.hpp>
 // should be the last #include
 #include <boost/type_traits/detail/size_t_trait_def.hpp>
 
@@ -55,11 +56,21 @@ struct alignment_logic
 template< typename T >
 struct alignment_of_impl
 {
+#ifndef BOOST_ALIGNMENT_OF
     BOOST_STATIC_CONSTANT(std::size_t, value =
         (::boost::detail::alignment_logic<
             sizeof(::boost::detail::alignment_of_hack<T>) - sizeof(T),
             sizeof(T)
         >::value));
+#else
+   //
+   // We put this here, rather than in the definition of
+   // alignment_of below, because MSVC's __alignof doesn't
+   // always work in that context for some unexplained reason.
+   // (See type_with_alignment tests for test cases).
+   //
+   BOOST_STATIC_CONSTANT(std::size_t, value = BOOST_ALIGNMENT_OF(T));
+#endif
 };
 
 } // namespace detail
