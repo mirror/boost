@@ -321,7 +321,7 @@ namespace assign_detail
     operator<<( std::basic_ostream<Elem, Traits>& Os,
                 const converter<T,I>& r )
     {
-        return Os << ::boost::make_iterator_range( r.begin(),  r.end() );
+        return Os << ::boost::make_iterator_range( r.begin(), r.end() );
     }
     
     /////////////////////////////////////////////////////////////////////////
