@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -71,7 +71,7 @@
       of the following macros:
     </p>
 <div class="table">
-<a name="id498501"></a><p class="title"><b>Table 1.4. Macros for Compiler Intrinsics</b></p>
+<a name="id508277"></a><p class="title"><b>Table 1.4. Macros for Compiler Intrinsics</b></p>
 <div class="table-contents"><table class="table" summary="Macros for Compiler Intrinsics">
 <colgroup>
 <col>
@@ -217,6 +217,90 @@
 <td>
           <p>
             Should evaluate to true T has a virtual destructor
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_ABSTRACT(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is an abstract type
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_BASE_OF(T,U)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is a base class of U
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_CLASS(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is a class type
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_CONVERTIBLE(T,U)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is convertible to U
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_ENUM(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true is T is an enum
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_POLYMORPHIC(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is a polymorphic type
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_ALIGNMENT_OF(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to the alignment requirements of type T.
           </p>
           </td>
 </tr>

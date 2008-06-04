@@ -35,6 +35,14 @@ void check_call(const T& v)
 
 #define TYPE_WITH_ALIGNMENT_TEST(T)\
 {\
+std::cout << "\ntesting type " << typeid(T).name() << std::endl;\
+std::cout << "Alignment of T is " << ::tt::alignment_of< T >::value << std::endl;\
+std::cout << "Aligned type is " << typeid(::tt::type_with_alignment< ::tt::alignment_of< T >::value>::type).name() << std::endl;\
+std::cout << "Alignment of aligned type is " << ::tt::alignment_of<\
+   ::tt::type_with_alignment<\
+      ::tt::alignment_of< T >::value\
+   >::type\
+>::value << std::endl;\
 BOOST_CHECK(::tt::alignment_of<\
                ::tt::type_with_alignment<\
                   ::tt::alignment_of< T >::value\
@@ -56,10 +64,6 @@ BOOST_CHECK(::tt::is_pod<\
 
 
 TT_TEST_BEGIN(type_with_alignment)
-
-BOOST_MESSAGE(typeid(::tt::type_with_alignment<
-                  ::tt::alignment_of<char>::value
-               >::type).name());
 
 TYPE_WITH_ALIGNMENT_TEST_EX(char)
 TYPE_WITH_ALIGNMENT_TEST_EX(short)
