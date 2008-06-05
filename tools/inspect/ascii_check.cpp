@@ -6,6 +6,7 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
+//	√ -- this is a test.
 
 #include "ascii_check.hpp"
 #include <functional>
@@ -30,7 +31,8 @@ namespace boost
          if ( c >= 'a' && c <= 'z' ) return false;
          if ( c >= 'A' && c <= 'Z' ) return false;
          if ( c >= '0' && c <= '9' ) return false;
-         if ( c == '\t' || c == '\n' || c == '\r' || c == '\v' ) return false;
+      // Horizontal/Vertical tab, newline, and form feed
+         if ( c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f' ) return false;
          return gPunct.find ( c ) == string::npos;
       }
    };
