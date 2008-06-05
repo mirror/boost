@@ -1,0 +1,151 @@
+# Units documentation Jamfile
+#
+# Copyright (c) 2007-2008
+# Steven Watanabe
+#
+# Distributed under the Boost Software License, Version 1.0. (See
+# accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt
+
+import path ;
+import quickbook ;
+using boostbook ;
+using doxygen ;
+import generate_base_units ;
+
+rule run_doxygen ( target : files * : name : expand ? )
+{
+
+    expand ?= <doxygen:param>EXPAND_ONLY_PREDEF=YES ;
+
+doxygen $(target)
+  :
+    $(files)
+  :
+        <doxygen:param>EXTRACT_ALL=YES
+
+# Horribly ugly, but then macros usually are :(
+        <doxygen:param>"PREDEFINED=\"BOOST_UNITS_STATIC_CONSTANT(a,b)=static const b a\" \\
+                                   \"BOOST_UNITS_AUTO_STATIC_CONSTANT(a,b)=static const auto a = b\" \\
+                                   \"BOOST_UNITS_TYPEOF(a)=typeof(a)\" \\
+                                   \"BOOST_PREVENT_MACRO_SUBSTITUTION=\" \\
+                                   \"BOOST_UNITS_HAS_TYPEOF=1\" \\
+                                   \"BOOST_UNITS_NON_SI_UNIT(namespace_, name_, symbol_, factor, other_unit, id)= \\
+                                   namespace boost { namespace units { namespace namespace_ { \\
+                                     struct name_ ## _base_unit : boost::units::base_unit<name_ ## _base_unit, other_unit::dimension_type, id> { \\
+                                       static const char* name(); \\
+                                       static const char* symbol(); \\
+                                     }; \\
+                                   } } }\" \\
+                                   \"BOOST_UNITS_DOXYGEN=1\""
+        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
+        <doxygen:param>EXTRACT_PRIVATE=NO
+        <doxygen:param>ENABLE_PREPROCESSING=YES
+        <doxygen:param>MACRO_EXPANSION=YES
+        $(expand)
+        <doxygen:param>SEARCH_INCLUDES=NO
+        <reftitle>$(name)
+  ;
+
+}
+
+run_doxygen units_reference
+  :
+    [ glob ../../../boost/units/*.hpp ]
+  :
+    "Units Reference"
+  ;
+
+run_doxygen si_reference
+  :
+    ../../../boost/units/systems/si.hpp
+    [ path.glob-tree ../../../boost/units/systems/si : *.hpp : detail ]
+  :
+    "SI System Reference"
+  ;
+
+run_doxygen cgs_reference
+  :
+    ../../../boost/units/systems/cgs.hpp
+    [ path.glob-tree ../../../boost/units/systems/cgs : *.hpp : detail ]
+  :
+    "CGS System Reference"
+  ;
+
+rule make_base_units_doc ( directory : name ) {
+    run_doxygen $(directory)_base_units_reference
+      :
+        [ path.glob-tree ../../../boost/units/base_units/$(directory) : *.hpp : detail conversions.hpp ]
+      :
+        "$(name) Base Units Reference"
+      ;
+}
+
+make_base_units_doc angle : Angle ;
+make_base_units_doc astronomical : Astronomical ;
+make_base_units_doc cgs : CGS ;
+make_base_units_doc imperial : Imperial ;
+make_base_units_doc metric : Metric ;
+make_base_units_doc si : SI ;
+make_base_units_doc temperature : Temperature ;
+make_base_units_doc us : US ;
+
+all_base_units_doc = angle astronomical cgs imperial metric si temperature us ;
+all_base_units_doc = $(all_base_units_doc)_base_units_reference ;
+
+run_doxygen dimensions_reference
+  :
+    ../../../boost/units/physical_dimensions.hpp
+    [ path.glob-tree ../../../boost/units/physical_dimensions : *.hpp : detail ]
+  :
+    "Dimensions Reference"
+  ;
+
+run_doxygen trig_reference
+  :
+    #../../../boost/units/systems/trig.hpp
+    [ path.glob-tree ../../../boost/units/systems/angle : *.hpp : detail ]
+  :
+    "Trigonometry and Angle System Reference"
+  ;
+
+run_doxygen temperature_reference
+  :
+    [ path.glob-tree ../../../boost/units/systems/temperature : *.hpp : detail ]
+  :
+    "Temperature System Reference"
+  ;
+
+run_doxygen abstract_reference
+  :
+    ../../../boost/units/systems/abstract.hpp
+  :
+    "Abstract System Reference"
+  ;
+
+generated-qbk base_units : [ path.glob-tree ../../../boost/units/base_units : *.hpp : detail conversions.hpp ] ;
+explicit base_units ;
+
+install base_units_install : base_units : <location>. ;
+
+boostbook standalone
+  :
+    units.qbk
+  :
+    <dependency>base_units_install
+    <dependency>units_reference
+    <dependency>si_reference
+    <dependency>cgs_reference
+    <dependency>$(all_base_units_doc)
+    <dependency>dimensions_reference
+    <dependency>trig_reference
+    <dependency>temperature_reference
+    <dependency>abstract_reference
+    <xsl:param>toc.max.depth=1
+    <xsl:param>toc.section.depth=8
+    <xsl:param>chunk.section.depth=8
+    <xsl:param>fop1.extensions=1
+    <xsl:param>fop.extensions=0
+    <xsl:param>boost.root="../../../.."
+    <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
+  ;
