@@ -129,7 +129,7 @@ template<class String>
 struct append_char {
     String & contents;
     void operator()(const unsigned int char_value) const {
-        const typename String::value_type z = char_value;
+        const BOOST_DEDUCED_TYPENAME String::value_type z = char_value;
         contents += z;
     }
     append_char(String & contents_)
@@ -142,7 +142,7 @@ struct append_lit {
     String & contents;
     template<class X, class Y>
     void operator()(const X & /*x*/, const Y & /*y*/) const {
-        const typename String::value_type z = c;
+        const BOOST_DEDUCED_TYPENAME String::value_type z = c;
         contents += z;
     }
     append_lit(String & contents_)
