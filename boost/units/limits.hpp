@@ -39,7 +39,6 @@ class numeric_limits< ::boost::units::quantity<Unit, T> >
         static const bool has_infinity = std::numeric_limits<T>::has_infinity;
         static const bool has_quiet_NaN = std::numeric_limits<T>::has_quiet_NaN;
         static const bool has_signaling_NaN = std::numeric_limits<T>::has_signaling_NaN;
-        static const float_denorm_style has_denorm = std::numeric_limits<T>::has_denorm;
         static const bool has_denorm_loss = std::numeric_limits<T>::has_denorm_loss;
         static quantity_type infinity()  { return(quantity_type::from_value(std::numeric_limits<T>::infinity())); }
         static quantity_type quiet_NaN()  { return(quantity_type::from_value(std::numeric_limits<T>::quiet_NaN())); }
@@ -50,7 +49,13 @@ class numeric_limits< ::boost::units::quantity<Unit, T> >
         static const bool is_modulo = std::numeric_limits<T>::is_modulo;
         static const bool traps = std::numeric_limits<T>::traps;
         static const bool tinyness_before = std::numeric_limits<T>::tinyness_before;
+#if defined(_STLP_STATIC_CONST_INIT_BUG)
+        static const int has_denorm = std::numeric_limits<T>::has_denorm;
+        static const int round_style = std::numeric_limits<T>::round_style;
+#else
+        static const float_denorm_style has_denorm = std::numeric_limits<T>::has_denorm;
         static const float_round_style round_style = std::numeric_limits<T>::round_style;
+#endif
 };
 
 }
