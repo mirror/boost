@@ -30,7 +30,7 @@ namespace bu = boost::units;
 int main(int,char *[])
 {
 
-    bu::quantity<bu::meter_base_unit> q;
+    bu::quantity<bu::si::meter_base_unit> q;
     
 
     return 0;
