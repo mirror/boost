@@ -143,7 +143,9 @@ BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::load_override(class_name_type & t, int){
     const std::string & s = gimpl->rv.class_name;
     if(s.size() > BOOST_SERIALIZATION_MAX_KEY_SIZE - 1)
-        boost::throw_exception( archive_exception( archive_exception::invalid_class_name ) );
+        boost::throw_exception(
+            archive_exception(archive_exception::invalid_class_name)
+       );
     char * tptr = t;
     std::memcpy(tptr, s.data(), s.size());
     tptr[s.size()] = '\0';

@@ -44,7 +44,7 @@ namespace std{
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_all_extents.hpp>
-#include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 
 #include <boost/mpl/eval_if.hpp>
@@ -469,7 +469,7 @@ struct load_enum_type {
 template<class Archive, class T>
 struct load_array_type {
     static void invoke(Archive &ar, T &t){
-        typedef typename remove_all_extents<T>::type value_type;
+        typedef BOOST_DEDUCED_TYPENAME remove_all_extents<T>::type value_type;
         
         // convert integers to correct enum to load
         int current_count = sizeof(t) / (

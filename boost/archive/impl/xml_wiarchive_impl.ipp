@@ -136,7 +136,9 @@ BOOST_WARCHIVE_DECL(void)
 xml_wiarchive_impl<Archive>::load_override(class_name_type & t, int){
     const std::wstring & ws = gimpl->rv.class_name;
     if(ws.size() > BOOST_SERIALIZATION_MAX_KEY_SIZE - 1)
-        boost::throw_exception( archive_exception( archive_exception::invalid_class_name ) );
+        boost::throw_exception(
+            archive_exception(archive_exception::invalid_class_name)
+        );
     copy_to_ptr(t, ws);
 }
 

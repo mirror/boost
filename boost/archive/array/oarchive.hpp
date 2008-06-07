@@ -90,7 +90,7 @@ public:
   void save_override(std::vector<ValueType,Allocator> const &x, unsigned int version)
   {
     typedef BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type value_type;
-    typedef typename mpl::and_<
+    typedef BOOST_DEDUCED_TYPENAME mpl::and_<
       mpl::not_<is_same<value_type,bool> >,
       mpl::apply1<
         BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
@@ -103,7 +103,7 @@ public:
   template<class ValueType>
   void save_override(serialization::array<ValueType> const& x, unsigned int version)
   {
-    typedef typename mpl::apply1<
+    typedef BOOST_DEDUCED_TYPENAME mpl::apply1<
         BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
       , BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type
     >::type use_optimized;
