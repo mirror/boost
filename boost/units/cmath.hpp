@@ -13,7 +13,9 @@
 
 #include <boost/version.hpp>
 
-#if (BOOST_VERSION <= 103500)
+// The trunk still has BOOST_VERSION == 103500
+//#if (BOOST_VERSION <= 103500)
+#if 0
     #include <boost/units/detail/cmath_boost_1_35.hpp>
 #else
 
@@ -21,9 +23,10 @@
 #include <cstdlib>
 
 #include <boost/math/special_functions/fpclassify.hpp>
-#include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/hypot.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/sign.hpp>
 
 #include <boost/units/dimensionless_quantity.hpp>
 #include <boost/units/pow.hpp>
@@ -220,6 +223,8 @@ fdim BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit,Y>& q1,
     return quantity_type::from_value(fdim BOOST_PREVENT_MACRO_SUBSTITUTION (q1.value(),q2.value()));
 }
 
+#if 0
+
 template<class Unit1,class Unit2,class Unit3,class Y>
 inline 
 typename add_typeof_helper<
@@ -241,6 +246,8 @@ fma BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit1,Y>& q1,
     
     return quantity_type::from_value(fma BOOST_PREVENT_MACRO_SUBSTITUTION (q1.value(),q2.value(),q3.value()));
 }
+
+#endif
 
 template<class Unit,class Y>
 inline 
@@ -326,6 +333,8 @@ hypot BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit,Y>& q1,const quantit
 //    return quantity_type::from_value(llround BOOST_PREVENT_MACRO_SUBSTITUTION (q.value()));
 //}
 
+#if 0
+
 template<class Unit,class Y>
 inline 
 quantity<Unit,Y> 
@@ -338,29 +347,35 @@ nearbyint BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit,Y>& q)
     return quantity_type::from_value(nearbyint BOOST_PREVENT_MACRO_SUBSTITUTION (q.value()));
 }
 
+#endif
+
 template<class Unit,class Y>
 inline 
 quantity<Unit,Y> nextafter BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit,Y>& q1,
                                                              const quantity<Unit,Y>& q2)
 {
-    using namespace detail;
+    using boost::math::nextafter;
+
+    typedef quantity<Unit,Y>    quantity_type;
+    
+    return quantity_type::from_value(nextafter BOOST_PREVENT_MACRO_SUBSTITUTION (q1.value(),q2.value()));
+}
+template<class Unit,class Y>
+inline 
+quantity<Unit,Y> nexttoward BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit,Y>& q1,
+                                                              const quantity<Unit,Y>& q2)
+{
+    // the only difference between nextafter and nexttowards is
+    // in the argument types.  Since we are requiring identical
+    // argument types, there is no difference.
+    using boost::math::nextafter;
 
     typedef quantity<Unit,Y>    quantity_type;
     
     return quantity_type::from_value(nextafter BOOST_PREVENT_MACRO_SUBSTITUTION (q1.value(),q2.value()));
 }
 
-template<class Unit,class Y>
-inline 
-quantity<Unit,Y> nexttoward BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit,Y>& q1,
-                                                              const quantity<Unit,Y>& q2)
-{
-    using namespace detail;
-
-    typedef quantity<Unit,Y>    quantity_type;
-    
-    return quantity_type::from_value(nexttoward BOOST_PREVENT_MACRO_SUBSTITUTION (q1.value(),q2.value()));
-}
+#if 0
 
 template<class Unit,class Y>
 inline 
@@ -373,6 +388,8 @@ rint BOOST_PREVENT_MACRO_SUBSTITUTION (const quantity<Unit,Y>& q)
     
     return quantity_type::from_value(rint BOOST_PREVENT_MACRO_SUBSTITUTION (q.value()));
 }
+
+#endif
 
 template<class Unit,class Y>
 inline 
