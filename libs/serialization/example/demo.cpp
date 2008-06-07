@@ -20,7 +20,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
-#include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 
 /////////////////////////////////////////////////////////////
 // The intent of this program is to serve as a tutorial for
