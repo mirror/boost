@@ -96,8 +96,11 @@ namespace boost {
 namespace serialization {
 
 template <class ArchiveT>
-void save_construct_data(ArchiveT& archive, const A* p, unsigned int version)
-{
+void save_construct_data(
+    ArchiveT& archive, 
+    const A* p, 
+    const BOOST_PFTO unsigned int version
+){
     archive & boost::serialization::make_nvp("initialValue", p->value);
 }
 

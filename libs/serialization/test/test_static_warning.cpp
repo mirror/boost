@@ -62,3 +62,4 @@ int main(int /* argc */, char * /* argv */[]){
     BOOST_STATIC_WARNING(boost::is_polymorphic<non_polymorphic>::value); // Warn.
     return 0;
 }
+

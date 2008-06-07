@@ -37,7 +37,7 @@ void randomize(S &x)
         unsigned int i = std::rand() % 27;
         if(0 == i)
             break;
-        x += static_cast<typename S::value_type>('a' - 1 + i);
+        x += static_cast<BOOST_DEDUCED_TYPENAME S::value_type>('a' - 1 + i);
     }
 }
 

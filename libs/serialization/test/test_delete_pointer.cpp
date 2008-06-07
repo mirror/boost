@@ -19,6 +19,7 @@ namespace std{
 
 #include "test_tools.hpp"
 #include <boost/detail/no_exceptions_support.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -38,13 +39,8 @@ class A
     void load(Archive & ar, const unsigned int /* file_version */)
     {
         static int i = 0;
-        ++i;
-        bool b = false;
-        if(i == 2)
-            b = true;
-
         ar >> BOOST_SERIALIZATION_NVP(next_);
-        if(b)
+        if(++i == 3)
             boost::throw_exception(0);
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -127,5 +123,4 @@ test_main( int /* argc */, char* /* argv */[] )
     std::remove(testfile);
     return EXIT_SUCCESS;
 }
-
 
