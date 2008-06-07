@@ -48,7 +48,9 @@ namespace serialization {
 namespace boost {                                     \
 namespace serialization {                             \
 template<>                                            \
-struct is_abstract<const T > : boost::true_type {};   \
+struct is_abstract< T > : boost::true_type {};        \
+template<>                                            \
+struct is_abstract< const T > : boost::true_type {};  \
 }}                                                    \
 /**/
 

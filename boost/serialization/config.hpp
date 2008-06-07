@@ -69,6 +69,12 @@
     //
     #define BOOST_LIB_NAME boost_serialization
     //
+    // If we're importing code from a dll, then tell auto_link.hpp about it:
+    //
+    #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SERIALIZATION_DYN_LINK)
+    #  define BOOST_DYN_LINK
+    #endif
+    //
     // And include the header that does the work:
     //
     #include <boost/config/auto_link.hpp>

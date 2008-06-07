@@ -27,6 +27,7 @@
 #include <boost/mpl/integral_c_tag.hpp>
 
 #include <boost/cstdint.hpp>
+#include <climits> // ULONG_MAX
 #include <boost/serialization/level.hpp>
 
 #define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER(T, C)          \

@@ -33,7 +33,7 @@
     #include <boost/serialization/extended_type_info_typeid.hpp>   
 #endif 
 #include <boost/serialization/type_info_implementation.hpp>
-#include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/singleton.hpp>
 
@@ -62,14 +62,14 @@ struct export_impl
 {
     static const basic_pointer_iserializer &
     enable_load(mpl::true_){
-        return boost::serialization::singleton<
+        return /* BOOST_DEDUCED_TYPENAME */ boost::serialization::singleton<
             pointer_iserializer<Archive, Serializable> 
         >::get_const_instance();
     }
 
     static const basic_pointer_oserializer &
     enable_save(mpl::true_){
-        return boost::serialization::singleton<
+        return /* BOOST_DEDUCED_TYPENAME */ boost::serialization::singleton<
             pointer_oserializer<Archive, Serializable> 
         >::get_const_instance();
     }
@@ -90,7 +90,7 @@ struct ptr_serialization_support
 # elif defined(__INTEL_COMPILER)
     virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
 # elif defined(__BORLANDC__)   
-    static void instantiate();
+    static BOOST_DLLEXPORT void instantiate();
     enum { x = sizeof(instantiate(),3) };
 # else
     static void instantiate();
