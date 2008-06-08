@@ -76,7 +76,8 @@
 # endif
 
 //------------------Configure-------------------------------------------------//
-# if defined(__BORLANDC__) && (__BORLANDC__ >= 0x600)
+# if defined(BOOST_INTEL)
+# elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x600)
 #  define BOOST_HAS_DESCRIPTIVE_UNREFERENCED_VARIABLE_WARNING
 # elif defined(__PGI)
 #  define BOOST_HAS_DESCRIPTIVE_DIVIDE_BY_ZERO_WARNING
@@ -89,6 +90,8 @@
 # elif defined(BOOST_MSVC) // && (BOOST_MSVC < 1300)
 #  define BOOST_NO_PREDEFINED_LINE_MACRO
 #  pragma warning(disable:4094) // C4094: untagged 'struct' declared no symbols
+# else
+#  define BOOST_HAS_DESCRIPTIVE_INCOMPLETE_TYPE_WARNING
 #endif
 
 //------------------Helper templates------------------------------------------//
@@ -166,13 +169,15 @@ struct static_warning_impl<true> {
         };                                                     \
      }                                                         \
      /**/
-#else // Deletion of pointer to incomplete type.
-#    define BOOST_STATIC_WARNING_IMPL(B)                                           \
+#elif defined(BOOST_HAS_DESCRIPTIVE_INCOMPLETE_TYPE_WARNING)
+#    define BOOST_STATIC_WARNING_IMPL(B)                     \
      struct BOOST_JOIN(STATIC_WARNING, __LINE__) {           \
          ::boost::static_warning_impl<(bool)( B )>::type* p; \
          void f() { delete p; }                              \
      }                                                       \
      /**/
+#else // not defined for this compiler
+#    define BOOST_STATIC_WARNING_IMPL(B)
 #endif
 
 #ifndef BOOST_DISABLE_STATIC_WARNINGS
