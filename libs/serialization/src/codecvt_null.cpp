@@ -19,7 +19,7 @@ namespace archive {
 
 BOOST_WARCHIVE_DECL(std::codecvt_base::result)
 codecvt_null<wchar_t>::do_out(
-    std::mbstate_t & state,
+    std::mbstate_t & /*state*/,
     const wchar_t * first1, 
     const wchar_t * last1,
     const wchar_t * & next1,
