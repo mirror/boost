@@ -41,7 +41,9 @@ class A
         static int i = 0;
         ar >> BOOST_SERIALIZATION_NVP(next_);
         if(++i == 3)
-            boost::throw_exception(0);
+            boost::throw_exception(boost::archive::archive_exception(
+                boost::archive::archive_exception::no_exception
+            ));
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 public:
