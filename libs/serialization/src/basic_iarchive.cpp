@@ -225,9 +225,10 @@ basic_iarchive_impl::reset_object_address(
     const void *old_address
 ){
     object_id_type i;
+    i = moveable_objects_recent;
     // this code handles a couple of situations.
     // a) where reset_object_address is applied to an untracked object.
-    //    In such a case the call is really superfluous and its really an
+    //    In such a case the call is really superfluous and it,s really an
     //    an error.  But we don't have access to the types here so we can't
     //    know that.  However, this code will effectively turn this situation
     //    into a no-op and every thing will work fine - albeat with a small
@@ -237,28 +238,30 @@ basic_iarchive_impl::reset_object_address(
     //    but the code may work anyway.  Naturally, a bad practice on the part
     //    of the programmer but we can't detect it - as above.  So maybe we
     //    can save a few more people from themselves as above.
-    for(i = moveable_objects_recent; i < moveable_objects_end; ++i){
+    //
+    // note: this scheme fails when an untracked object contains a tracked object!!!
+    for(; i < moveable_objects_end; ++i){
         if(old_address == object_id_vector[i].address)
             break;
     }
     for(; i < moveable_objects_end; ++i){
-
+        aobject o = this->object_id_vector[i];
         // calculate displacement from this level
         // warning - pointer arithmetic on void * is in herently non-portable
         // but expected to work on all platforms in current usage
-        if(object_id_vector[i].address > old_address){
+        if(o.address > old_address){
             std::size_t member_displacement
-                = reinterpret_cast<std::size_t>(object_id_vector[i].address) 
+                = reinterpret_cast<std::size_t>(o.address) 
                 - reinterpret_cast<std::size_t>(old_address);
-            object_id_vector[i].address = reinterpret_cast<void *>(
+            o.address = reinterpret_cast<void *>(
                 reinterpret_cast<std::size_t>(new_address) + member_displacement
             );
         }
         else{
             std::size_t member_displacement
                 = reinterpret_cast<std::size_t>(old_address)
-                - reinterpret_cast<std::size_t>(object_id_vector[i].address); 
-            object_id_vector[i].address = reinterpret_cast<void *>(
+                - reinterpret_cast<std::size_t>(o.address); 
+            o.address = reinterpret_cast<void *>(
                 reinterpret_cast<std::size_t>(new_address) - member_displacement
             );
        }
