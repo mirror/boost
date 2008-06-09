@@ -66,7 +66,7 @@ public:
   // the optimized implementation for vector uses serialization::array
   template<class ValueType, class Allocator>
   void load_optimized(
-    std::vector<ValueType, Allocator> &t, unsigned int version, mpl::true_)
+    std::vector<ValueType, Allocator> &t, unsigned int /*version*/, mpl::true_)
   {
     t.clear();
     // retrieve number of elements
