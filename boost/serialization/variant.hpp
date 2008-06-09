@@ -63,7 +63,7 @@ template<class Archive, BOOST_VARIANT_ENUM_PARAMS(/* typename */ class T)>
 void save(
     Archive & ar,
     boost::variant<BOOST_VARIANT_ENUM_PARAMS(T)> const & v,
-    unsigned int version
+    unsigned int /*version*/
 ){
     int which = v.which();
     ar << BOOST_SERIALIZATION_NVP(which);
@@ -78,10 +78,10 @@ struct variant_impl {
     struct load_null {
         template<class Archive, class V>
         static void invoke(
-            Archive & ar,
-            int which,
-            V & v,
-            unsigned int version
+            Archive & /*ar*/,
+            int /*which*/,
+            V & /*v*/,
+            unsigned int /*version*/
         ){}
     };
 

@@ -37,7 +37,7 @@ namespace boost { namespace serialization {
 // valarray<T>
 
 template<class Archive, class U>
-void save( Archive & ar, const STD::valarray<U> &t, const unsigned int file_version )
+void save( Archive & ar, const STD::valarray<U> &t, const unsigned int /*file_version*/ )
 {
   const collection_size_type count(t.size());
   ar << BOOST_SERIALIZATION_NVP(count);
@@ -47,7 +47,7 @@ void save( Archive & ar, const STD::valarray<U> &t, const unsigned int file_vers
 
 
 template<class Archive, class U>
-void load( Archive & ar, STD::valarray<U> &t,  const unsigned int file_version )
+void load( Archive & ar, STD::valarray<U> &t,  const unsigned int /*file_version*/ )
 {
   collection_size_type count;
   ar >> BOOST_SERIALIZATION_NVP(count);

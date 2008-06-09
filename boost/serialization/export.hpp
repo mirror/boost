@@ -122,7 +122,7 @@ struct guid_initializer
         instantiate_ptr_serialization((T*)0, 0, adl_tag());
         return *this;
     }
-    const guid_initializer & export_guid(char const* key, mpl::true_){
+    const guid_initializer & export_guid(char const* /*key*/, mpl::true_){
         return *this;
     }
     const guid_initializer & export_guid(char const* key){

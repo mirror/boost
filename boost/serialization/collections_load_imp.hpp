@@ -67,7 +67,7 @@ struct archive_input_unique
         const unsigned int v
     ){
         typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
-        detail::stack_construct<Archive, type>t(ar, v);
+        detail::stack_construct<Archive, type> t(ar, v);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
         std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result = 

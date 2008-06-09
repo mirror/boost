@@ -42,12 +42,12 @@ private:
     // included in implementation of sets and maps.
     const unsigned int m_type_info_key;
     virtual bool
-    is_less_than(const extended_type_info &rhs) const {
+    is_less_than(const extended_type_info & /*rhs*/) const {
         assert(false);
         return false;
     };
     virtual bool
-    is_equal(const extended_type_info &rhs) const {
+    is_equal(const extended_type_info & /*rhs*/) const {
         assert(false);
         return false;
     };
@@ -75,11 +75,11 @@ public:
     }
     static const extended_type_info * find(const char *key);
     // for plugins
-    virtual void * construct(unsigned int count = 0, ...) const {
+    virtual void * construct(unsigned int /*count*/ = 0, ...) const {
         assert(false); // must be implemented if used
         return NULL;
     };
-    virtual void destroy(void const * const p) const {
+    virtual void destroy(void const * const /*p*/) const {
         assert(false); // must be implemented if used
     }
 };
