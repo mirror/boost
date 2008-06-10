@@ -68,7 +68,7 @@ inline void load(
         BOOST_STD_EXTENSION_NAMESPACE::hash_set<
             Key, HashFcn, EqualKey, Allocator
         >,
-        boost::serialization::stl::archive_input_unique<
+        boost::serialization::stl::archive_input_set<
             Archive, 
             BOOST_STD_EXTENSION_NAMESPACE::hash_set<
                 Key, HashFcn, EqualKey, Allocator
@@ -138,7 +138,7 @@ inline void load(
         BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
             Key, HashFcn, EqualKey, Allocator
         >,
-        boost::serialization::stl::archive_input_multi<
+        boost::serialization::stl::archive_input_multiset<
             Archive,
             BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
                 Key, HashFcn, EqualKey, Allocator

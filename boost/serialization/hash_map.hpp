@@ -70,7 +70,7 @@ inline void load(
         BOOST_STD_EXTENSION_NAMESPACE::hash_map<
             Key, HashFcn, EqualKey, Allocator
         >,
-        boost::serialization::stl::archive_input_unique<
+        boost::serialization::stl::archive_input_map<
             Archive, 
             BOOST_STD_EXTENSION_NAMESPACE::hash_map<
                 Key, HashFcn, EqualKey, Allocator
@@ -140,7 +140,7 @@ inline void load(
         BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<
             Key, HashFcn, EqualKey, Allocator
         >,
-        boost::serialization::stl::archive_input_multi<
+        boost::serialization::stl::archive_input_multimap<
             Archive, 
             BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<
                 Key, HashFcn, EqualKey, Allocator
