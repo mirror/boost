@@ -52,6 +52,9 @@ text_iarchive_impl<Archive>::load(std::string &s)
     #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
     if(NULL != s.data())
     #endif
+        #if  __GNUC__ > 3
+            s.clear();
+        #endif
         s.resize(size);
     if(0 < size)
         is.read(&(*s.begin()), size);
@@ -83,6 +86,9 @@ text_iarchive_impl<Archive>::load(std::wstring &ws)
     #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
     if(NULL != ws.data())
     #endif
+        #if  __GNUC__ > 3
+            s.clear();
+        #endif
         ws.resize(size);
     // skip separating space
     is.get();
