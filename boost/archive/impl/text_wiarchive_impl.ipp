@@ -90,9 +90,6 @@ text_wiarchive_impl<Archive>::load(std::wstring &ws)
     #if BOOST_WORKAROUND(_RWSTD_VER, BOOST_TESTED_AT(20101))
     if(NULL != ws.data())
     #endif
-        #if  __GNUC__ > 3
-            ws.clear();
-        #endif
         ws.resize(size);
     // note breaking a rule here - is this a problem on some platform
     is.read(const_cast<wchar_t *>(ws.data()), size);
