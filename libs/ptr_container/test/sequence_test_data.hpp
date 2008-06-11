@@ -19,13 +19,6 @@ void reversible_container_test();
 template< class IntContainer >
 void algorithms_test();
 
-template< class Cont >
-struct set_capacity
-{
-    void operator()( Cont& ) const
-    { }
-};
-
 template< typename C, typename B, typename T >
 void reversible_container_test()
 {
@@ -39,16 +32,20 @@ void reversible_container_test()
     c.push_back( new T );
     BOOST_CHECK( c.size() == 1 );
 
+    const C c2_dummy( c.begin(), c.end() );
+    BOOST_CHECK_EQUAL( c2_dummy.size(), c.size() );
     const C c2( c.clone() );
-    BOOST_CHECK( c2.size() == c.size() );
+    BOOST_CHECK_EQUAL( c2.size(), c.size() );
     
     C  c3( c.begin(), c.end() );
-    BOOST_CHECK( c.size() == c3.size() );
+    set_capacity<C>()( c3 );
+    BOOST_CHECK_EQUAL( c.size(), c3.size() );
 
     c.assign( c3.begin(), c3.end() );
-    BOOST_CHECK( c.size() == c3.size() );
+    BOOST_CHECK_EQUAL( c.size(), c3.size() );
         
     c.assign( c3 );
+    set_capacity<C>()( c );
     BOOST_MESSAGE( "finished construction test" ); 
 
     C a_copy( c );
@@ -62,7 +59,7 @@ void reversible_container_test()
     BOOST_MESSAGE( "finished copying test" ); 
 
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
-        hide_warning(alloc);
+    hide_warning(alloc);
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();
     BOOST_DEDUCED_TYPENAME C::const_iterator ci           = c2.begin();
     BOOST_DEDUCED_TYPENAME C::iterator i2                 = c.end();
@@ -101,10 +98,13 @@ void reversible_container_test()
     BOOST_MESSAGE( "finished accessors test" ); 
     
     c.push_back( new T );
+    BOOST_CHECK_EQUAL( c.size(), 4u );
 
     c.pop_back(); 
+    BOOST_CHECK( !c.empty() );
     c.insert( c.end(), new T );
     c.insert( c.end(), std::auto_ptr<T>( new T ) );
+    BOOST_CHECK_EQUAL( c.size(), 5u );
 
 #if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else
@@ -115,6 +115,7 @@ void reversible_container_test()
     c3.erase( c3.begin(), c3.end() );
     c3.erase( boost::make_iterator_range(c3) );
     BOOST_CHECK( c3.empty() );
+    BOOST_CHECK( !c.empty() );
     c.swap( c3 );
     BOOST_CHECK( !c3.empty() );
     c3.clear();
@@ -172,12 +173,17 @@ void reversible_container_test()
 template< class CDerived, class CBase, class T >
 void test_transfer()
 {
+    BOOST_MESSAGE( "starting transfer test" );
     CDerived from;
     CBase    to;
+
+    set_capacity<CDerived>()( from );
+    set_capacity<CBase>()( to );
 
     from.push_back( new T );
     from.push_back( new T );
     to. BOOST_NESTED_TEMPLATE transfer<CDerived>( to.end(), from );
+    BOOST_MESSAGE( "finished transfer test" );
 }
 
 
@@ -229,7 +235,10 @@ struct equal_to_int
 template< class IntContainer >
 void random_access_algorithms_test()
 {
+    BOOST_MESSAGE( "starting random accessors algorithms test" );
+
     IntContainer c;
+    set_capacity<IntContainer>()( c );
     assign::push_back( c )
                     ( new int(1) )
                     ( new int(3) )
@@ -274,6 +283,7 @@ void random_access_algorithms_test()
     // C = [0,2,3,6]
 
     IntContainer c2;
+    set_capacity<IntContainer>()( c2 );
     assign::push_back( c2 )
                    ( new int(-1) )
                    ( new int(1) )
@@ -285,5 +295,6 @@ void random_access_algorithms_test()
     BOOST_CHECK( c2.empty() );
     BOOST_CHECK( c.size() == 9u );
     BOOST_CHECK( is_sorted< std::less_equal<int> >( c ) ); 
+    BOOST_MESSAGE( "finished random accessors algorithms test" );
 }
 

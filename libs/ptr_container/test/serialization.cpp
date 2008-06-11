@@ -39,6 +39,25 @@ inline T const& as_const( T const& r )
 }
 
 //
+// used to customize tests for circular_buffer
+//
+template< class Cont >
+struct set_capacity
+{
+    void operator()( Cont& ) const
+    { }
+};
+
+template<class T>
+struct set_capacity< ptr_circular_buffer<T> >
+{
+    void operator()( ptr_circular_buffer<T>& c ) const
+    {
+        c.set_capacity( 100u ); 
+    }
+};
+
+//
 // class hierarchy
 // 
 struct Base
@@ -121,6 +140,7 @@ template< class Cont, class OArchive, class IArchive >
 void test_serialization_helper()
 {
     Cont vec;
+    set_capacity<Cont>()( vec );
     add( vec, new Base( -1 ), 0u );
     add( vec, new Derived( 1 ), 1u );
 
@@ -218,6 +238,12 @@ void test_serialization()
                                boost::archive::text_oarchive, 
                                boost::archive::text_iarchive>();
     test_serialization_helper< boost::ptr_vector<Base>, 
+                               boost::archive::xml_oarchive, 
+                               boost::archive::xml_iarchive>();
+    test_serialization_helper< boost::ptr_circular_buffer<Base>, 
+                               boost::archive::text_oarchive, 
+                               boost::archive::text_iarchive>();
+    test_serialization_helper< boost::ptr_circular_buffer<Base>, 
                                boost::archive::xml_oarchive, 
                                boost::archive::xml_iarchive>();
     test_serialization_helper< boost::ptr_array<Base,2>, 

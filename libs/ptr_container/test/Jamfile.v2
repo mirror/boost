@@ -37,6 +37,6 @@ test-suite ptr_container :
     
     [ sc-test ptr_unordered_set ]
     [ sc-test ptr_unordered_map ]        
-    #[ sc-test ptr_circular_buffer ]    
+    [ sc-test ptr_circular_buffer ]    
  
     ;

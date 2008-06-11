@@ -278,15 +278,27 @@ inline void hide_warning( T& r )
 { }
 
 //
+// used to customize tests for circular_buffer
+//
+template< class Cont >
+struct set_capacity
+{
+    void operator()( Cont& ) const
+    { }
+};
+
+//
 //  transfer() test
 // 
 
 template< class Cont1, class Cont2 >
 void transfer_test( Cont1& from, Cont2& to )
 {
+    BOOST_MESSAGE( "starting container transfer test" );
     BOOST_CHECK( !from.empty() );
     to. BOOST_NESTED_TEMPLATE transfer<Cont1>( from );
     BOOST_CHECK( !to.empty() );
+    BOOST_MESSAGE( "finishing container transfer test" );
 }
 
 
@@ -297,7 +309,10 @@ void transfer_test( Cont1& from, Cont2& to )
 template< class BaseContainer, class DerivedContainer, class Derived >
 void container_assignment_test()
 {
+    BOOST_MESSAGE( "starting container assignment test" );
+
     DerivedContainer derived;
+    set_capacity<DerivedContainer>()( derived );
     derived.insert( derived.begin(), new Derived );
     derived.insert( derived.begin(), new Derived );
 
@@ -311,6 +326,8 @@ void container_assignment_test()
     base2 = base;
     BOOST_CHECK_EQUAL( base2.size(), base.size() );
     base = base;
+
+    BOOST_MESSAGE( "finished container assignment test" );
 }
 
 
