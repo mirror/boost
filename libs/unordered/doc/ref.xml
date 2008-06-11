@@ -636,10 +636,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="z">
                 <paramtype>float</paramtype>
               </parameter>
-              <type>float</type>
-              <returns>
+              <type>void</type>
+              <effects>
                 <para>Changes the container's maximum load factor, using <code>z</code> as a hint.</para>
-              </returns>
+              </effects>
             </method>
             <method name="rehash">
               <parameter name="n">
@@ -1381,10 +1381,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="z">
                 <paramtype>float</paramtype>
               </parameter>
-              <type>float</type>
-              <returns>
+              <type>void</type>
+              <effects>
                 <para>Changes the container's maximum load factor, using <code>z</code> as a hint.</para>
-              </returns>
+              </effects>
             </method>
             <method name="rehash">
               <parameter name="n">
@@ -2175,10 +2175,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="z">
                 <paramtype>float</paramtype>
               </parameter>
-              <type>float</type>
-              <returns>
+              <type>void</type>
+              <effects>
                 <para>Changes the container's maximum load factor, using <code>z</code> as a hint.</para>
-              </returns>
+              </effects>
             </method>
             <method name="rehash">
               <parameter name="n">
@@ -2936,10 +2936,10 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <parameter name="z">
                 <paramtype>float</paramtype>
               </parameter>
-              <type>float</type>
-              <returns>
+              <type>void</type>
+              <effects>
                 <para>Changes the container's maximum load factor, using <code>z</code> as a hint.</para>
-              </returns>
+              </effects>
             </method>
             <method name="rehash">
               <parameter name="n">
