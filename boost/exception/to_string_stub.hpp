@@ -9,6 +9,7 @@
 #include <boost/exception/to_string.hpp>
 #include <iomanip>
 #include <typeinfo>
+#include <ios>
 
 namespace
 boost
