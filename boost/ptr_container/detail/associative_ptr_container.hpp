@@ -347,10 +347,42 @@ namespace ptr_container_detail
         }
 
     public:
-        using base_type::begin;
-        using base_type::end;
-        using base_type::cbegin;
-        using base_type::cend;
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(70190006))
+        iterator begin()
+        {
+            return base_type::begin();
+        }
+
+        const_iterator begin() const
+        {
+            return base_type::begin();
+        }
+
+        iterator end()
+        {
+            return base_type::end();
+        }
+
+        const_iterator end() const
+        {
+            return base_type::end();
+        }
+
+        const_iterator cbegin() const
+        {
+            return base_type::cbegin();
+        }
+
+        const_iterator cend() const
+        {
+            return base_type::cend();
+        }
+#else
+         using base_type::begin;
+         using base_type::end;
+         using base_type::cbegin;
+         using base_type::cend;
+#endif
 
     protected:
         local_iterator begin( size_type n )

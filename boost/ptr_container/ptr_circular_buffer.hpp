@@ -48,12 +48,65 @@ namespace boost
         typedef typename base_type::size_type      size_type;
         typedef typename base_type::allocator_type allocator_type;
         typedef typename base_type::iterator       iterator;
+        typedef typename base_type::const_iterator const_iterator;
         typedef typename base_type::auto_type      auto_type;
         
-        typedef std::pair<pointer*,size_type>                 array_range;
-        typedef std::pair<const_pointer*,size_type>           const_array_range;
+        typedef std::pair<pointer,size_type>                  array_range;
+        typedef std::pair<const_pointer,size_type>            const_array_range;
         typedef typename circular_buffer_type::capacity_type  capacity_type;
+
+    public: // constructors
+        ptr_circular_buffer()
+        { }
+
+        explicit ptr_circular_buffer( capacity_type n )
+          : base_type( n, ptr_container_detail::fixed_length_sequence_tag() )
+        { }
         
+        ptr_circular_buffer( capacity_type n,
+                             const allocator_type& alloc )
+          : base_type( n, alloc, ptr_container_detail::fixed_length_sequence_tag() )
+        { }
+
+        template< class ForwardIterator >
+        ptr_circular_buffer( ForwardIterator first, ForwardIterator last )
+          : base_type( first, last, ptr_container_detail::fixed_length_sequence_tag() )
+        { }
+
+        template< class InputIterator >
+        ptr_circular_buffer( capacity_type n, InputIterator first, InputIterator last )
+          : base_type( n, first, last, ptr_container_detail::fixed_length_sequence_tag() )
+        { }
+
+        explicit ptr_circular_buffer( const ptr_circular_buffer& r )
+          : base_type( r.size(), r.begin(), r.end(), 
+                       ptr_container_detail::fixed_length_sequence_tag() )
+        { }
+
+        template< class U >
+        explicit ptr_circular_buffer( const ptr_circular_buffer<U>& r )
+          : base_type( r.size(), r.begin(), r.end(), 
+                       ptr_container_detail::fixed_length_sequence_tag() )
+        { }
+
+        ptr_circular_buffer& operator=( const ptr_circular_buffer& r )
+        {
+            ptr_circular_buffer clone( r );
+            clone.swap( *this );
+            return *this;
+        }
+
+        template< class U >
+        ptr_circular_buffer& operator=( const ptr_circular_buffer<U>& r )
+        {
+            ptr_circular_buffer clone( r );
+            clone.swap( *this );
+            return *this;
+        }
+
+        BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_circular_buffer,
+                                                      base_type, this_type );
+            
     public: // allocators
         allocator_type& get_allocator() 
         {
@@ -69,30 +122,30 @@ namespace boost
         array_range array_one() // nothrow
         {
             typename circular_buffer_type::array_range r = this->base().array_one();
-            return array_range( static_cast<pointer>(r.first,r.second) );
+            return array_range( reinterpret_cast<pointer>(r.first), r.second );
         }
 
         const_array_range array_one() const // nothrow
         {
             typename circular_buffer_type::const_array_range r = this->base().array_one();
-            return array_range( static_cast<pointer>(r.first,r.second) );
+            return const_array_range( reinterpret_cast<const_pointer>(r.first), r.second );
         }
 
         array_range array_two() // nothrow
         {
-            typename circular_buffer_type::const_array_range r = this->base().array_two();
-            return const_array_range( static_cast<pointer>(r.first,r.second) );
+            typename circular_buffer_type::array_range r = this->base().array_two();
+            return array_range( reinterpret_cast<pointer>(r.first), r.second );
         }
 
         const_array_range array_two() const // nothrow
         {
             typename circular_buffer_type::const_array_range r = this->base().array_two();
-            return const_array_range( static_cast<pointer>(r.first,r.second) );
+            return const_array_range( reinterpret_cast<const_pointer>(r.first), r.second );
         }
 
-        pointer linearise() // nothrow
+        pointer linearize() // nothrow
         {
-            return this->base().linearise();
+            return reinterpret_cast<pointer>(this->base().linearize());
         }
 
         bool full() const // nothrow
@@ -103,6 +156,12 @@ namespace boost
         size_type reserve() const // nothrow
         {
             return this->base().reserve();
+        }
+
+        void reserve( size_type n ) // strong
+        {
+            if( capacity() < n )
+                set_capacity( n );
         }
 
         capacity_type capacity() const // nothrow
@@ -129,22 +188,99 @@ namespace boost
             this->base().rset_capacity( new_capacity );
         }
 
-        using base_type::assign;
+        void resize( size_type size ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( boost::next( this->begin(), size ), this->end() );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_back( new BOOST_DEDUCED_TYPENAME 
+                                     boost::remove_pointer<value_type>::type ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }
+
+        void resize( size_type size, value_type to_clone ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( boost::next( this->begin(), size ), this->end() );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_back( this->null_policy_allocate_clone( to_clone ) ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );        
+        }
+
+        void rresize( size_type size ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( this->begin(), 
+                             boost::next( this->begin(), old_size - size ) );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_front( new BOOST_DEDUCED_TYPENAME 
+                                      boost::remove_pointer<value_type>::type ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }
+
+        void rresize( size_type size, value_type to_clone ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( this->begin(), 
+                             boost::next( this->begin(), old_size - size ) );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_front( this->null_policy_allocate_clone( to_clone ) ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }           
+
+        template< class InputIterator >
+        void assign( InputIterator first, InputIterator last ) // strong
+        { 
+            ptr_circular_buffer temp( first, last );
+            this->swap( temp );
+        }
+
+        template< class Range >
+        void assign( const Range& r ) // strong
+        {
+            assign( boost::begin(r), boost::end(r ) );
+        }
 
         void assign( size_type n, value_type to_clone ) // strong
         {
-            base_type temp;
+            ptr_circular_buffer temp( n );
             for( size_type i = 0u; i != n; ++i )
                temp.push_back( this->null_policy_allocate_clone( to_clone ) );
-            temp->base().set_capacity( n );
             this->swap( temp ); 
         }
         
         void assign( capacity_type capacity, size_type n, 
                      value_type to_clone ) // basic
         {
-            this->assign( n, to_clone );
-            this->base().set_capacity( capacity );
+            this->assign( std::min(n,capacity), to_clone );
         }
 
         template< class InputIterator >
@@ -152,12 +288,14 @@ namespace boost
                      InputIterator first, InputIterator last ) // basic
         {
             this->assign( first, last );
-            this->base().set_capacity( capacity );
+            this->set_capacity( capacity );
         }
 
         void push_back( value_type ptr ) // nothrow
         {
-            BOOST_ASSERT( capacity() > 0 );            
+            BOOST_ASSERT( capacity() > 0 );   
+            this->enforce_null_policy( ptr, "Null pointer in 'push_back()'" );
+         
             auto_type old_ptr;
             if( full() )
                 old_ptr.reset( &*this->begin() );
@@ -173,10 +311,12 @@ namespace boost
         void push_front( value_type ptr ) // nothrow
         {
             BOOST_ASSERT( capacity() > 0 );
+            this->enforce_null_policy( ptr, "Null pointer in 'push_front()'" );
+
             auto_type old_ptr;
             if( full() )
                 old_ptr.reset( &*(--this->end()) );
-            this->base().push_back( ptr );            
+            this->base().push_front( ptr );            
         }
 
         template< class U >
@@ -188,6 +328,8 @@ namespace boost
         iterator insert( iterator pos, value_type ptr ) // nothrow
         {
             BOOST_ASSERT( capacity() > 0 );
+            this->enforce_null_policy( ptr, "Null pointer in 'insert()'" );
+
             auto_type new_ptr( ptr );
             iterator b = this->begin();
             if( full() && pos == b )
@@ -208,9 +350,10 @@ namespace boost
         }
 
         template< class InputIterator >
-        void insert( iterator pos, InputIterator first, InputIterator last )
+        void insert( iterator pos, InputIterator first, InputIterator last ) // basic
         {
-            // @todo
+            for( ; first != last; ++first, ++pos )
+                pos = insert( pos, this->null_policy_allocate_clone( &*first ) );                
         }
 
 #if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -228,6 +371,8 @@ namespace boost
         iterator rinsert( iterator pos, value_type ptr ) // nothrow
         {
             BOOST_ASSERT( capacity() > 0 );
+            this->enforce_null_policy( ptr, "Null pointer in 'rinsert()'" );
+
             auto_type new_ptr( ptr );
             iterator b = this->end();
             if (full() && pos == b)
@@ -249,9 +394,10 @@ namespace boost
 
  
         template< class InputIterator >
-        void rinsert( iterator pos, InputIterator first, InputIterator last )
+        void rinsert( iterator pos, InputIterator first, InputIterator last ) // basic
         {
-            // @todo
+            for( ; first != last; ++first, ++pos )
+                pos = rinsert( pos, this->null_policy_allocate_clone( &*first ) );                
         }
 
 #if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -266,29 +412,109 @@ namespace boost
 
 #endif
 
-        void rerase( iterator pos )
+        iterator rerase( iterator pos ) // nothrow
         {
-            // @todo
+            BOOST_ASSERT( !this->empty() );
+            BOOST_ASSERT( pos != this->end() );
+
+            this->remove( pos );
+            return iterator( this->base().rerase( pos.base() ) );
         }
 
-        void rerase( iterator first, iterator last )
+        iterator rerase( iterator first, iterator last ) // nothrow
         {
-            // @todo
+            this->remove( first, last );
+            return iterator( this->base().rerase( first.base(),
+                                                  last.base() ) );
         }
 
-     
-    public: // constructors
-        
-        BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_circular_buffer, 
-                                                      base_type,
-                                                      this_type );
-        
-        explicit ptr_circular_buffer( capacity_type n,
-                                      const allocator_type& alloc = allocator_type() )
-          : base_type(alloc)
+        template< class Range >
+        iterator rerase( const Range& r ) // nothrow
         {
-            this->base().set_capacity( n );
-        }        
+            return rerase( boost::begin(r), boost::end(r) );
+        }
+
+        void rotate( const_iterator new_begin ) // nothrow
+        {
+            this->base().rotate( new_begin.base() );
+        }
+
+    public: // transfer        
+        template< class PtrSeqAdapter >
+        void transfer( iterator before, 
+                       BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator first, 
+                       BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator last, 
+                       PtrSeqAdapter& from ) // nothrow
+        {
+            BOOST_ASSERT( (void*)&from != (void*)this );
+            if( from.empty() )
+                return;
+            for( BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator begin = first; 
+                 begin != last;  ++begin, ++before )
+                before = insert( before, &*begin );          // nothrow
+            from.base().erase( first.base(), last.base() );  // nothrow
+        }
+
+        template< class PtrSeqAdapter >
+        void transfer( iterator before, 
+                       BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator object, 
+                       PtrSeqAdapter& from ) // nothrow
+        {
+            BOOST_ASSERT( (void*)&from != (void*)this );
+            if( from.empty() )
+                return;
+            insert( before, &*object );          // nothrow 
+            from.base().erase( object.base() );  // nothrow 
+        }
+
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#else
+        
+        template< class PtrSeqAdapter, class Range >
+        BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
+                      BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator > >::type
+        transfer( iterator before, const Range& r, PtrSeqAdapter& from ) // nothrow
+        {
+            transfer( before, boost::begin(r), boost::end(r), from );
+        }
+
+#endif
+        template< class PtrSeqAdapter >
+        void transfer( iterator before, PtrSeqAdapter& from ) // nothrow
+        {
+            transfer( before, from.begin(), from.end(), from );            
+        }
+
+    public: // C-array support
+    
+        void transfer( iterator before, value_type* from, 
+                       size_type size, bool delete_from = true ) // nothrow 
+        {
+            BOOST_ASSERT( from != 0 );
+            if( delete_from )
+            {
+                BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
+                    deleter( from, size );                         // nothrow
+                for( size_type i = 0u; i != size; ++i, ++before )
+                    before = insert( before, *(from+i) );          // nothrow
+                deleter.release();                                 // nothrow
+            }
+            else
+            {
+                for( size_type i = 0u; i != size; ++i, ++before )
+                    before = insert( before, *(from+i) );          // nothrow
+           }
+        }
+
+        value_type* c_array() // nothrow
+        {
+            if( this->empty() )
+                return 0;
+            this->linearize();
+            T** res = reinterpret_cast<T**>( &this->begin().base()[0] );
+            return res;
+        }
+
     };
 
     //////////////////////////////////////////////////////////////////////////////

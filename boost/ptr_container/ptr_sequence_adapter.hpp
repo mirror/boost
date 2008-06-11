@@ -134,24 +134,89 @@ namespace ptr_container_detail
                                                     CloneAllocator >
              base_type;
         
-        typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
-
         typedef ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator>                         
             this_type;
+
+    protected:
+        typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
          
     public:
         typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type; 
         typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference; 
+        typedef BOOST_DEDUCED_TYPENAME base_type::const_reference 
+                                                              const_reference;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::clone_allocator_type
                                                               clone_allocator_type;
-         
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
-                                                 base_type )
+        typedef BOOST_DEDUCED_TYPENAME base_type::iterator    iterator;          
+        typedef BOOST_DEDUCED_TYPENAME base_type::size_type   size_type;  
+        typedef BOOST_DEDUCED_TYPENAME base_type::allocator_type  
+                                                              allocator_type;
+                
+        ptr_sequence_adapter()
+        { }
 
-        template< class U >
-        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq>& r )
+        template< class Allocator >
+        explicit ptr_sequence_adapter( const Allocator& a )
+          : base_type( a )
+        { }
+
+        template< class SizeType >
+        ptr_sequence_adapter( SizeType n, 
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( n, tag )
+        { }
+
+        template< class SizeType, class Allocator >
+        ptr_sequence_adapter( SizeType n, const Allocator& a, 
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( n, a, tag )
+        { }
+
+        template< class InputIterator >
+        ptr_sequence_adapter( InputIterator first, InputIterator last )
+          : base_type( first, last )
+        { }
+
+        template< class InputIterator, class Allocator >
+        ptr_sequence_adapter( InputIterator first, InputIterator last,
+                              const Allocator& a )
+          : base_type( first, last, a )
+        { }
+
+        template< class ForwardIterator >
+        ptr_sequence_adapter( ForwardIterator first,
+                              ForwardIterator last,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( first, last,  tag )
+        { }
+
+        template< class SizeType, class ForwardIterator >
+        ptr_sequence_adapter( SizeType n,
+                              ForwardIterator first,
+                              ForwardIterator last,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( n, first, last,  tag )
+        { }
+
+        explicit ptr_sequence_adapter( const ptr_sequence_adapter& r )
           : base_type( r )
+        { }
+        
+        template< class U >
+        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r )
+          : base_type( r )
+        { }
+        
+        explicit ptr_sequence_adapter( const ptr_sequence_adapter& r,
+                                       ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( r, tag )
+        { }
+        
+        template< class U >
+        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r,
+                                       ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( r, tag )
         { }
         
         template< class PtrContainer >
@@ -159,8 +224,14 @@ namespace ptr_container_detail
           : base_type( clone )
         { }
 
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter& r )
+        {
+            base_type::operator=( r );
+            return *this; 
+        }
+        
         template< class U >
-        ptr_sequence_adapter& operator=( const ptr_sequence_adapter<U,VoidPtrSeq>& r ) 
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r ) 
         {
             base_type::operator=( r );
             return *this;

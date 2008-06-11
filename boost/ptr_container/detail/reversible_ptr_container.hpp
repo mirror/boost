@@ -67,6 +67,7 @@ namespace ptr_container_detail
     struct is_pointer_or_integral_tag {};
     struct is_range_tag {};
     struct sequence_tag {};
+    struct fixed_length_sequence_tag : sequence_tag {};
     struct associative_container_tag {};
     struct ordered_associative_container_tag : associative_container_tag {};
     struct unordered_associative_container_tag : associative_container_tag {};
@@ -313,10 +314,21 @@ namespace ptr_container_detail
         reversible_ptr_container( SizeType n, unordered_associative_container_tag )
           : c_( n )
         { }
+
+        template< class SizeType >
+        reversible_ptr_container( SizeType n, fixed_length_sequence_tag )
+          : c_( n )
+        { }
+
+        template< class SizeType >
+        reversible_ptr_container( SizeType n, const allocator_type& a, 
+                                  fixed_length_sequence_tag )
+          : c_( n, a )
+        { }
         
         explicit reversible_ptr_container( const allocator_type& a ) 
          : c_( a )
-        {}
+        { }
         
         template< class PtrContainer >
         explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )                
@@ -334,7 +346,6 @@ namespace ptr_container_detail
         {
             constructor_impl( r.begin(), r.end(), std::forward_iterator_tag() ); 
         }
-
 
         template< class PtrContainer >
         reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
@@ -379,6 +390,31 @@ namespace ptr_container_detail
                                   const allocator_type& a )
         : c_( comp, a ) {}
 
+        template< class ForwardIterator >
+        reversible_ptr_container( ForwardIterator first,
+                                  ForwardIterator last,
+                                  fixed_length_sequence_tag )
+          : c_( std::distance(first,last) )
+        {
+            constructor_impl( first, last, 
+                              std::forward_iterator_tag() );
+        }
+
+        template< class SizeType, class InputIterator >
+        reversible_ptr_container( SizeType n,
+                                  InputIterator first,
+                                  InputIterator last,
+                                  fixed_length_sequence_tag )
+          : c_( n )
+        {
+            constructor_impl( first, last, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#else
+                              BOOST_DEDUCED_TYPENAME
+#endif                              
+                              iterator_category<InputIterator>::type() );
+        }
+                
         template< class InputIterator >
         reversible_ptr_container( InputIterator first,
                                   InputIterator last,
@@ -661,7 +697,6 @@ namespace ptr_container_detail
 
 #define BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type ) \
                                                                       \
-    template< class U >                                               \
     explicit PC( const PC& r ) : base_type( r ) { }                   \
                                                                       \
     template< class U >                                               \

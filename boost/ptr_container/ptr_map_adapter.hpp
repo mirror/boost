@@ -227,7 +227,7 @@ namespace ptr_container_detail
 
         template< class Compare, class Allocator >
         ptr_map_adapter_base( const Compare& comp,
-                              const allocator_type& a ) 
+                              const Allocator& a ) 
         : base_type( comp, a ) 
         { }
 

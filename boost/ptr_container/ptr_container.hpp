@@ -24,6 +24,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_unordered_map.hpp>
 #include <boost/ptr_container/ptr_unordered_set.hpp>
+#include <boost/ptr_container/ptr_circular_buffer.hpp>
 #include <boost/ptr_container/ptr_inserter.hpp>
 
 #endif

@@ -14,5 +14,6 @@
 #include <boost/ptr_container/serialize_ptr_vector.hpp>
 #include <boost/ptr_container/serialize_ptr_unordered_set.hpp>
 #include <boost/ptr_container/serialize_ptr_unordered_map.hpp>
+#include <boost/ptr_container/serialize_ptr_circular_buffer.hpp>
 
 #endif
