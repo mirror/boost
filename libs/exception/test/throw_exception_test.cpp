@@ -8,7 +8,7 @@
 #include <boost/exception_ptr.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-typedef boost::error_info<struct tag_test_int,int> test_int;
+typedef boost::error_info<struct tag_test_int,int> test_data;
 
 void
 throw_fwd( void (*thrower)(int) )
@@ -20,7 +20,7 @@ throw_fwd( void (*thrower)(int) )
     catch(
     boost::exception & x )
         {
-        x << test_int(42);
+        x << test_data(42);
         throw;
         }
     }
@@ -46,7 +46,9 @@ tester()
         catch(
         T & y )
             {
-            BOOST_TEST(*boost::get_error_info<test_int>(y)==42);
+            BOOST_TEST(boost::get_error_info<test_data>(y));
+            if( boost::shared_ptr<int const> d=boost::get_error_info<test_data>(y) )
+                BOOST_TEST(*d==42);
             BOOST_TEST(y.x_==42);
             }
         catch(
@@ -60,7 +62,8 @@ tester()
 int
 main()
     {
-    tester<boost::exception_test::some_boost_exception>();
-    tester<boost::exception_test::some_std_exception>();
+    tester<boost::exception_test::derives_boost_exception>();
+    tester<boost::exception_test::derives_boost_exception_virtually>();
+    tester<boost::exception_test::derives_std_exception>();
     return boost::report_errors();
     }

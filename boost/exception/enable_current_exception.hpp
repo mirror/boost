@@ -64,6 +64,9 @@ boost
             clone_impl( T const & x ):
                 T(x)
                 {
+                if( boost::exception * be1=dynamic_cast<boost::exception *>(this) )
+                    if( boost::exception const * be2=dynamic_cast<T const *>(&x) )
+                        *be1 = *be2;
                 }
 
             private:
@@ -88,6 +91,9 @@ boost
                 T(x),
                 count_(0)
                 {
+                if( boost::exception * be1=dynamic_cast<boost::exception *>(this) )
+                    if( boost::exception const * be2=dynamic_cast<T const *>(&x) )
+                        *be1 = *be2;
                 }
 
             private:
