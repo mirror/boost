@@ -826,6 +826,20 @@ private:
 
     /// INTERNAL ONLY
     ///
+    template<typename OutputIterator, typename Char>
+    OutputIterator format2_(OutputIterator out, Char const *const &result) const
+    {
+        Char const *tmp = result;
+        BOOST_ASSERT(0 != tmp);
+        for(; 0 != *tmp; ++tmp, ++out)
+        {
+            *out = *tmp;
+        }
+        return out;
+    }
+
+    /// INTERNAL ONLY
+    ///
     template<typename OutputIterator, typename ForwardRange>
     OutputIterator format_
     (
