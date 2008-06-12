@@ -49,9 +49,9 @@ struct set_capacity
 };
 
 template<class T>
-struct set_capacity< ptr_circular_buffer<T> >
+struct set_capacity< boost::ptr_circular_buffer<T> >
 {
-    void operator()( ptr_circular_buffer<T>& c ) const
+    void operator()( boost::ptr_circular_buffer<T>& c ) const
     {
         c.set_capacity( 100u ); 
     }
@@ -68,7 +68,7 @@ struct Base
 
     
     template< class Archive >
-    void serialize( Archive& ar, const unsigned int version )
+    void serialize( Archive& ar, const unsigned int /*version*/ )
     {
         ar & boost::serialization::make_nvp( "i", i );
     }
@@ -103,7 +103,7 @@ struct Derived : Base
     int i2;
 
     template< class Archive >
-    void serialize( Archive& ar, const unsigned int version )
+    void serialize( Archive& ar, const unsigned int /*version*/ )
     {
         ar & boost::serialization::make_nvp( "Base",  
                  boost::serialization::base_object<Base>( *this ) );
@@ -125,7 +125,7 @@ BOOST_CLASS_EXPORT_GUID( Derived, "Derived" )
 // 
 
 template< class C, class T >
-void add( C& c, T* r, unsigned n )
+void add( C& c, T* r, unsigned /*n*/ )
 {
     c.insert( c.end(), r ); 
 }

@@ -70,7 +70,7 @@ public:
     Base*    clone() const                { return do_clone(); }
     void     foo()                        { do_foo(); }
     
-    virtual bool less_than( const Base& b ) const
+    virtual bool less_than( const Base& /*b*/ ) const
     {
         return true;
     }
@@ -95,9 +95,9 @@ public:
 #endif    
     
 private:
-    virtual void  do_print( ostream& out ) const   { };
-    virtual Base* do_clone() const                 { return new Base( *this ); }; 
-    virtual void  do_foo()                         { };
+    virtual void  do_print( ostream& /*out*/ ) const   { };
+    virtual Base* do_clone() const                     { return new Base( *this ); }; 
+    virtual void  do_foo()                             { };
 };
 
 #ifdef PTR_CONTAINER_DEBUG
@@ -274,7 +274,7 @@ inline std::size_t hash_value( const Value& v )
 // used to hide "unused variable" warnings
 //
 template< class T >
-inline void hide_warning( T& r )
+inline void hide_warning( T& /*r*/ )
 { }
 
 //
