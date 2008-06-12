@@ -185,7 +185,7 @@ namespace boost
                 m_Begin(Begin), m_End(End)
                 #ifndef NDEBUG
             , singular(false) 
-                 #endif
+                #endif
             {}
 
             //! Constructor from a Range
@@ -210,7 +210,7 @@ namespace boost
             template< class Range >
             iterator_range( const Range& r, iterator_range_detail::const_range_tag ) : 
                 m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) )
-                 #ifndef NDEBUG
+                #ifndef NDEBUG
             , singular(false) 
                 #endif
             {}
@@ -219,7 +219,7 @@ namespace boost
             template< class Range >
             iterator_range( Range& r, iterator_range_detail::range_tag ) : 
                 m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) )
-                 #ifndef NDEBUG
+                #ifndef NDEBUG
             , singular(false) 
                 #endif
             {}
@@ -390,13 +390,15 @@ namespace boost
             bool      singular;
             #endif
 
-            #ifndef NDEBUG
         public:
             bool is_singular() const
             {
+                 #ifndef NDEBUG
                  return singular;
+                 #else
+                 return false;
+                 #endif
             }
-            #endif
 
         protected:
             //
