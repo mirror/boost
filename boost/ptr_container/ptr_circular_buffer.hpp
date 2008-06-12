@@ -78,29 +78,20 @@ namespace boost
           : base_type( n, first, last, ptr_container_detail::fixed_length_sequence_tag() )
         { }
 
-        explicit ptr_circular_buffer( const ptr_circular_buffer& r )
+        ptr_circular_buffer( const ptr_circular_buffer& r )
           : base_type( r.size(), r.begin(), r.end(), 
                        ptr_container_detail::fixed_length_sequence_tag() )
         { }
 
         template< class U >
-        explicit ptr_circular_buffer( const ptr_circular_buffer<U>& r )
+        ptr_circular_buffer( const ptr_circular_buffer<U>& r )
           : base_type( r.size(), r.begin(), r.end(), 
                        ptr_container_detail::fixed_length_sequence_tag() )
         { }
 
-        ptr_circular_buffer& operator=( const ptr_circular_buffer& r )
+        ptr_circular_buffer& operator=( ptr_circular_buffer r )
         {
-            ptr_circular_buffer clone( r );
-            clone.swap( *this );
-            return *this;
-        }
-
-        template< class U >
-        ptr_circular_buffer& operator=( const ptr_circular_buffer<U>& r )
-        {
-            ptr_circular_buffer clone( r );
-            clone.swap( *this );
+            this->swap( r );
             return *this;
         }
 

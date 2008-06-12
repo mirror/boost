@@ -20,6 +20,12 @@ namespace boost
         inline const char* item()   { return "item"; }
         inline const char* first()  { return "first"; }
         inline const char* second() { return "second"; }
+
+        template<class T>
+        inline T const& serialize_as_const(T const& r)
+        {
+            return r;
+        }
     }
 }
 #endif

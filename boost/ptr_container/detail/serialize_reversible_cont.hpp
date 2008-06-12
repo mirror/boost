@@ -16,12 +16,6 @@ namespace boost
 namespace ptr_container_detail
 {
 
-template<class T>
-inline T const& serialize_as_const(T const& r)
-{
-    return r;
-}
-
 template<class Archive, class Config, class CloneAllocator>
 void save_helper(Archive& ar, const ptr_container_detail::reversible_ptr_container<Config, CloneAllocator>& c)
 {

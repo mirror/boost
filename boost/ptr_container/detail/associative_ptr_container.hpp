@@ -78,7 +78,7 @@ namespace ptr_container_detail
         template< class Compare, class Allocator >
         associative_ptr_container( const Compare& comp,
                                    const Allocator& a )
-         : base_type( comp, a )
+         : base_type( comp, a, container_type() )
         { }
         
         template< class Hash, class Pred, class Allocator >
@@ -88,11 +88,6 @@ namespace ptr_container_detail
          : base_type( hash, pred, a )
         { }
 
-        template< class InputIterator >
-        associative_ptr_container( InputIterator first, InputIterator last )
-         : base_type( first, last, container_type() )
-        { }
-                
         template< class InputIterator, class Compare, class Allocator >
         associative_ptr_container( InputIterator first, InputIterator last,
                                    const Compare& comp,
@@ -113,12 +108,12 @@ namespace ptr_container_detail
          : base_type( r )
         { }
 
-        explicit associative_ptr_container( const associative_ptr_container& r )
+        associative_ptr_container( const associative_ptr_container& r )
          : base_type( r.begin(), r.end(), container_type() )
         { }
         
         template< class C, class V >
-        explicit associative_ptr_container( const associative_ptr_container<C,V>& r )
+        associative_ptr_container( const associative_ptr_container<C,V>& r )
          : base_type( r.begin(), r.end(), container_type() )
         { }
         
@@ -129,18 +124,9 @@ namespace ptr_container_detail
            return *this;
         }
         
-        template< class C, class V >
-        associative_ptr_container& operator=( const associative_ptr_container<C,V>& r ) // strong 
+        associative_ptr_container& operator=( associative_ptr_container r ) // strong
         {
-           associative_ptr_container clone( r );
-           this->swap( clone );
-           return *this;   
-        }
-        
-        associative_ptr_container& operator=( const associative_ptr_container& r ) // strong
-        {
-           associative_ptr_container clone( r );
-           this->swap( clone );
+           this->swap( r );
            return *this;   
         }
 

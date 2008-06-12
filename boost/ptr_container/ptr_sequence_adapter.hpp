@@ -199,23 +199,23 @@ namespace ptr_container_detail
           : base_type( n, first, last,  tag )
         { }
 
-        explicit ptr_sequence_adapter( const ptr_sequence_adapter& r )
+        ptr_sequence_adapter( const ptr_sequence_adapter& r )
           : base_type( r )
         { }
         
         template< class U >
-        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r )
+        ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r )
           : base_type( r )
         { }
         
-        explicit ptr_sequence_adapter( const ptr_sequence_adapter& r,
-                                       ptr_container_detail::fixed_length_sequence_tag tag )
+        ptr_sequence_adapter( const ptr_sequence_adapter& r,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
           : base_type( r, tag )
         { }
         
         template< class U >
-        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r,
-                                       ptr_container_detail::fixed_length_sequence_tag tag )
+        ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
           : base_type( r, tag )
         { }
         
@@ -224,17 +224,10 @@ namespace ptr_container_detail
           : base_type( clone )
         { }
 
-        ptr_sequence_adapter& operator=( const ptr_sequence_adapter& r )
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter r )
         {
-            base_type::operator=( r );
+            this->swap( r );
             return *this; 
-        }
-        
-        template< class U >
-        ptr_sequence_adapter& operator=( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r ) 
-        {
-            base_type::operator=( r );
-            return *this;
         }
         
         template< class PtrContainer >
@@ -634,6 +627,7 @@ namespace ptr_container_detail
             }
         };
 
+    protected:
         template< class Fun, class Arg1 >
         class void_ptr_delete_if 
         {
@@ -659,9 +653,9 @@ namespace ptr_container_detail
             }
         };
 
+    private:
         void compact_and_erase_nulls( iterator first, iterator last ) // nothrow
         {
-            
             typename base_type::ptr_iterator p = std::stable_partition( 
                                                     first.base(), 
                                                     last.base(), 

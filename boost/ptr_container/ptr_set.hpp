@@ -65,6 +65,7 @@ namespace boost
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_set,
                                                       base_type,
                                                       this_type )
+        
         BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( ptr_set, base_type )
                 
     };
@@ -113,8 +114,9 @@ namespace boost
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multiset, 
                                                       base_type,
                                                       this_type )
+        
         BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( ptr_multiset, 
-                                                      base_type );     
+                                                      base_type )     
 
     };
 

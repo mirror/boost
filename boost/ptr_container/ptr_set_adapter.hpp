@@ -158,11 +158,6 @@ namespace ptr_container_detail
          : base_type( hash, pred, a )
         { }
 
-        template< class InputIterator >
-        ptr_set_adapter_base( InputIterator first, InputIterator last )
-         : base_type( first, last )
-        { }
-                
         template< class InputIterator, class Compare, class Allocator >
         ptr_set_adapter_base( InputIterator first, InputIterator last,
                               const Compare& comp,
@@ -179,11 +174,11 @@ namespace ptr_container_detail
         { }
                
         template< class U, class Set, class CA, bool b >
-        explicit ptr_set_adapter_base( const ptr_set_adapter_base<U,Set,CA,b>& r )
+        ptr_set_adapter_base( const ptr_set_adapter_base<U,Set,CA,b>& r )
           : base_type( r )
         { }
 
-        explicit ptr_set_adapter_base( const ptr_set_adapter_base& r )
+        ptr_set_adapter_base( const ptr_set_adapter_base& r )
           : base_type( r )
         { }
                 
@@ -191,11 +186,10 @@ namespace ptr_container_detail
         explicit ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
          : base_type( clone )
         { }
-
-        template< class U, class Set, class CA, bool b >
-        ptr_set_adapter_base& operator=( const ptr_set_adapter_base<U,Set,CA,b>& r ) 
+        
+        ptr_set_adapter_base& operator=( ptr_set_adapter_base r ) 
         {
-            base_type::operator=( r );
+            this->swap( r );
             return *this;
         }
         

@@ -67,10 +67,9 @@ namespace boost
         ptr_map( const ptr_map<Key,U>& r ) : base_type( r )
         { }
 
-        template< class U >
-        ptr_map& operator=( const ptr_map<Key,U>& r )
+        ptr_map& operator=( ptr_map r )
         {
-            base_type::operator=( r );
+            this->swap( r );
             return *this;
         }
     };
@@ -123,10 +122,9 @@ namespace boost
         ptr_multimap( const ptr_multimap<Key,U>& r ) : base_type( r )
         { }
 
-        template< class U >
-        ptr_multimap& operator=( const ptr_multimap<Key,U>& r )
+        ptr_multimap& operator=( ptr_multimap r )
         {
-            base_type::operator=( r );
+            this->swap( r );
             return *this;
         }
     };
