@@ -43,7 +43,7 @@ namespace boost
     public:
         BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_list, 
                                                       base_class,
-                                                      this_type );
+                                                      this_type )
         
     public:
         using base_class::merge;

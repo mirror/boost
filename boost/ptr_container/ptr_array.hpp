@@ -36,12 +36,12 @@ namespace boost
         public:
             typedef Allocator allocator_type;
 
-            ptr_array_impl( Allocator a = Allocator() )
+            ptr_array_impl( Allocator /*a*/ = Allocator() )
             {
                 this->assign( 0 );
             }
 
-            ptr_array_impl( size_t, T*, Allocator a = Allocator() )
+            ptr_array_impl( size_t, T*, Allocator /*a*/ = Allocator() )
             {
                 this->assign( 0 );
             }

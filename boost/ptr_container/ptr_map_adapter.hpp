@@ -195,6 +195,9 @@ namespace ptr_container_detail
             }
 
             void release() { released_ = true; }
+
+        private:  
+            eraser& operator=(const eraser&);  
         };
 
         mapped_reference insert_lookup( const key_type& key )

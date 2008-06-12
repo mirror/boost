@@ -17,7 +17,7 @@ namespace serialization
 {
 
 template<class Archive, class T, class VoidPtrMap, class CloneAllocator, bool Ordered>
-void save(Archive& ar, const ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int version)
+void save(Archive& ar, const ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int /*version*/)
 {
     typedef ptr_container_detail::ptr_map_adapter_base<T, VoidPtrMap, CloneAllocator,Ordered> container;
     typedef BOOST_DEDUCED_TYPENAME container::const_iterator const_iterator;
@@ -35,7 +35,7 @@ void save(Archive& ar, const ptr_container_detail::ptr_map_adapter_base<T, VoidP
 }
 
 template<class Archive, class T, class VoidPtrMap, class CloneAllocator, bool Ordered>
-void load(Archive& ar, ptr_map_adapter<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int version)
+void load(Archive& ar, ptr_map_adapter<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int /*version*/)
 {
     typedef ptr_map_adapter<T, VoidPtrMap, CloneAllocator,Ordered> container;
     typedef BOOST_DEDUCED_TYPENAME container::key_type key_type;
@@ -58,7 +58,7 @@ void load(Archive& ar, ptr_map_adapter<T, VoidPtrMap, CloneAllocator,Ordered>& c
 }
 
 template<class Archive, class T, class VoidPtrMap, class CloneAllocator, bool Ordered>
-void load(Archive& ar, ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int version)
+void load(Archive& ar, ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator,Ordered>& c, unsigned int /*version*/)
 {
     typedef ptr_multimap_adapter<T, VoidPtrMap, CloneAllocator,Ordered> container;
     typedef BOOST_DEDUCED_TYPENAME container::key_type key_type;

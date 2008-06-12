@@ -105,7 +105,7 @@ namespace boost
         }
 
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_circular_buffer,
-                                                      base_type, this_type );
+                                                      base_type, this_type )
             
     public: // allocators
         allocator_type& get_allocator() 

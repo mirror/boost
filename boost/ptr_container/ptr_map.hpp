@@ -61,7 +61,7 @@ namespace boost
         { }
 
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_map, base_type, 
-                                                      this_type );
+                                                      this_type )
 
         template< class U >
         ptr_map( const ptr_map<Key,U>& r ) : base_type( r )
@@ -117,7 +117,7 @@ namespace boost
 
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_multimap, 
                                                       base_type,
-                                                      this_type );
+                                                      this_type )
 
         template< class U >
         ptr_multimap( const ptr_multimap<Key,U>& r ) : base_type( r )

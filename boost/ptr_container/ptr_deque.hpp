@@ -44,7 +44,7 @@ namespace boost
 
       BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_deque,
                                                     base_class,
-                                                    this_type );
+                                                    this_type )
     };
 
     //////////////////////////////////////////////////////////////////////////////

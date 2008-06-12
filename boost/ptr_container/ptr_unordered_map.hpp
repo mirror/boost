@@ -101,7 +101,7 @@ namespace boost
 
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_unordered_map, 
                                                       base_type, 
-                                                      this_type );
+                                                      this_type )
 
         template< class U >
         ptr_unordered_map( const ptr_unordered_map<Key,U>& r ) : base_type( r )
@@ -196,7 +196,7 @@ namespace boost
 
         BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( ptr_unordered_multimap, 
                                                       base_type, 
-                                                      this_type );
+                                                      this_type )
 
         template< class U >
         ptr_unordered_multimap( const ptr_unordered_multimap<Key,U>& r ) : base_type( r )

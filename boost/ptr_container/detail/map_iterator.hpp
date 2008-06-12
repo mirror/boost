@@ -21,6 +21,11 @@
 #include <boost/utility/compare_pointees.hpp>
 #include <utility>
 
+#if defined(BOOST_MSVC)  
+# pragma warning(push)  
+# pragma warning(disable:4512)    // Assignment operator could not be generated.  
+#endif 
+
 namespace boost
 { 
     namespace ptr_container_detail
@@ -119,5 +124,9 @@ namespace boost
    }; // class 'ptr_map_iterator'
 
 }
+
+#if defined(BOOST_MSVC)  
+# pragma warning(pop)  
+#endif 
 
 #endif
