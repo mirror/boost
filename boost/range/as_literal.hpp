@@ -25,7 +25,9 @@
 #include <boost/detail/workaround.hpp>
 
 #include <cstring>
+#ifndef BOOST_NO_CWCHAR 
 #include <cwchar>
+#endif
 
 namespace boost
 {
@@ -36,10 +38,12 @@ namespace boost
             return strlen( s );
         }
 
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T 
         inline std::size_t length( const wchar_t* s )
         {
             return wcslen( s );
         }
+#endif        
 
         //
         // Remark: the compiler cannot choose between T* and T[sz]
@@ -57,7 +61,7 @@ namespace boost
             return true;
         }
 
-        
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T 
         inline bool is_char_ptr( wchar_t* )
         {
             return true;
@@ -67,6 +71,7 @@ namespace boost
         {
             return true;
         }
+#endif
         
         template< class T >
         inline long is_char_ptr( T /* r */ )
