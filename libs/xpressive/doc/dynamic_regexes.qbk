@@ -20,7 +20,7 @@ are late-bound so you can specify them at run-time.
 There are two ways to create a dynamic regex: with the _regex_compile_
 function or with the _regex_compiler_ class template. Use _regex_compile_
 if you want the default locale. Use _regex_compiler_ if you need to
-specify a different locale. In the section on 
+specify a different locale. In the section on
 [link boost_xpressive.user_s_guide.grammars_and_nested_matches regex grammars],
 we'll see another use for _regex_compiler_.
 

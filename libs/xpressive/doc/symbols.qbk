@@ -9,7 +9,7 @@
 
 [h2 Overview]
 
-Symbol tables can be built into xpressive regular expressions with just a 
+Symbol tables can be built into xpressive regular expressions with just a
 `std::map<>`. The map keys are the strings to be matched and the map values are
 the data to be returned to your semantic action. Xpressive attributes, named
 `a1`, `a2`, through `a9`, hold the value corresponding to a matching key so
@@ -83,7 +83,7 @@ who contributed this example.]. It translates number names up to "nine hundred
 ninety nine million nine hundred ninety nine thousand nine hundred ninety nine"
 along with some special number names like "dozen".
 
-Symbol table matches are case sensitive by default, but they can be made 
+Symbol table matches are case sensitive by default, but they can be made
 case-insensitive by enclosing the expression in `icase()`.
 
 [h2 Attributes]

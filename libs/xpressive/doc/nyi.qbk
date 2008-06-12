@@ -10,7 +10,7 @@
 The following features are planned for xpressive 2.X:
 
 * `syntax_option_type::collate`
-* Collation sequences such as [^'''[.a.]'''] 
+* Collation sequences such as [^'''[.a.]''']
 * Equivalence classes like [^'''[=a=]''']
 * Control of nested results generation with `syntax_option_type::nosubs`,
   and a `nosubs()` modifier for static xpressive.

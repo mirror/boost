@@ -15,7 +15,7 @@ xpressive is a regular expression template library. Regular expressions
 [@http://www.osl.iu.edu/~tveldhui/papers/Expression-Templates/exprtmpl.html
 Expression Templates]] that are parsed at compile-time (static regexes).
 Dynamic regexes have the advantage that they can be accepted from the user
-as input at runtime or read from an initialization file. Static regexes 
+as input at runtime or read from an initialization file. Static regexes
 have several advantages. Since they are C++ expressions instead of
 strings, they can be syntax-checked at compile-time. Also, they can naturally
 refer to code and data elsewhere in your program, giving you the ability to call

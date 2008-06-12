@@ -23,8 +23,8 @@ want to search through the string looking for sub-strings that the regex matches
 algorithm.]
 
 The input can be a bidirectional range such as `std::string`, a C-style null-terminated string or a pair of
-iterators. In all cases, the type of the iterator used to traverse the input sequence must match the iterator 
-type used to declare the regex object. (You can use the table in the 
+iterators. In all cases, the type of the iterator used to traverse the input sequence must match the iterator
+type used to declare the regex object. (You can use the table in the
 [link boost_xpressive.user_s_guide.quick_start.know_your_iterator_type Quick Start] to find the correct regex
 type for your iterator.)
 
@@ -78,8 +78,8 @@ sequence until it either finds a match or exhausts the sequence.
 
 In all other regards, _regex_search_ behaves like _regex_match_ ['(see above)]. In particular, it can operate
 on a bidirectional range such as `std::string`, C-style null-terminated strings or iterator ranges. The same
-care must be taken to ensure that the iterator type of your regex matches the iterator type of your input 
-sequence. As with _regex_match_, you can optionally provide a _match_results_ struct to receive the results 
+care must be taken to ensure that the iterator type of your regex matches the iterator type of your input
+sequence. As with _regex_match_, you can optionally provide a _match_results_ struct to receive the results
 of the search, and a _match_flag_type_ bitmask to control how the match is evaluated.
 
 Click [link boost_xpressive.user_s_guide.examples.see_if_a_string_contains_a_sub_string_that_matches_a_regex here]
