@@ -199,6 +199,14 @@ namespace boost { namespace xpressive { namespace detail
         BOOST_MPL_ASSERT_RELATION(0, !=, (width_of<Expr, Char>::value));
     };
 
+    template<typename Expr, typename Char>
+    struct use_simple_repeat<Expr &, Char>
+      : use_simple_repeat_<Expr, Char>
+    {
+        // should never try to repeat something of 0-width
+        BOOST_MPL_ASSERT_RELATION(0, !=, (width_of<Expr, Char>::value));
+    };
+
 }}} // namespace boost::xpressive::detail
 
 #endif
