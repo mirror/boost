@@ -122,5 +122,11 @@ and dynamic.
 
 [include perf.qbk]
 
+[section Appendix 5: Implementation Notes]
+
+[include tracking_ptr.qbk]
+
+[endsect]
+
 [endsect]
 
