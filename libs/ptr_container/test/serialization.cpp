@@ -143,6 +143,7 @@ void test_serialization_helper()
     set_capacity<Cont>()( vec );
     add( vec, new Base( -1 ), 0u );
     add( vec, new Derived( 1 ), 1u );
+    BOOST_CHECK_EQUAL( vec.size(), 2u );
 
     std::ofstream ofs("filename");
     OArchive oa(ofs);
@@ -165,6 +166,32 @@ void test_serialization_helper()
     Derived* d = dynamic_cast<Derived*>( &*i ); 
     BOOST_CHECK_EQUAL( d->i2, 1 );
 
+}
+
+template< class Cont, class OArchive, class IArchive >
+void test_serialization_unordered_set_helper()
+{
+    Cont vec;
+    set_capacity<Cont>()( vec );
+    add( vec, new Base( -1 ), 0u );
+    add( vec, new Derived( 1 ), 1u );
+    BOOST_CHECK_EQUAL( vec.size(), 2u );
+
+    std::ofstream ofs("filename");
+    OArchive oa(ofs);
+    oa << boost::serialization::make_nvp( "container", as_const(vec) );
+    ofs.close();
+
+    
+    std::ifstream ifs("filename", std::ios::binary);
+    IArchive ia(ifs);
+    Cont vec2;
+    ia >> boost::serialization::make_nvp( "container", vec2 );
+    ifs.close();
+
+    BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
+    BOOST_CHECK_EQUAL( (*vec2.begin()).i, 0 );
+    BOOST_CHECK_EQUAL( (*++vec2.begin()).i, -1 );
 }
 
 template< class Map, class OArchive, class IArchive >
@@ -255,16 +282,14 @@ void test_serialization()
     test_serialization_helper< boost::ptr_multiset<Base>, 
                                boost::archive::text_oarchive,
                                boost::archive::text_iarchive>();
-    /*test_serialization_helper< boost::ptr_unordered_set<Base>,
-                               boost::archive::text_oarchive,
-                               boost::archive::text_iarchive>();
-    test_serialization_helper< boost::ptr_unordered_multiset<Base>, 
-                               boost::archive::text_oarchive,
-                               boost::archive::text_iarchive>();
+    
+    test_serialization_unordered_set_helper< boost::ptr_unordered_set<Base>,
+                                             boost::archive::text_oarchive,
+                                             boost::archive::text_iarchive>();
+   test_serialization_unordered_set_helper<boost::ptr_unordered_multiset<Base>, 
+                                           boost::archive::text_oarchive,
+                                           boost::archive::text_iarchive>();
                                
-                               @todo: fix ordernig issue here...
-  */
-  
     test_serialization_map_helper< boost::ptr_map<std::string,Base>, 
                                    boost::archive::text_oarchive,
                                    boost::archive::text_iarchive>();
