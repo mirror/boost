@@ -1,5 +1,5 @@
 
-[/ Copyright 2005-2007 Daniel James.
+[/ Copyright 2005-2008 Daniel James.
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
 
@@ -11,10 +11,13 @@
 [def __tr1__
     [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf
     TR1]]
+[def __unordered__ [link unordered Boost.Unordered]]
+[def __intrusive__ [link intrusive.unordered_set_unordered_multiset Boost.Intrusive]]
 [def __multi-index__ [@../../libs/multi_index/doc/index.html
     Boost Multi-Index Containers Library]]
 [def __multi-index-short__ [@../../libs/multi_index/doc/index.html
     Boost.MultiIndex]]
+[def __bimap__ [@../../libs/bimap/index.html Boost.Bimap]]
 [def __issues__
     [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1837.pdf
     Library Extension Technical Report Issues List]]
@@ -22,8 +25,9 @@
 [def __hash-table__ [@http://en.wikipedia.org/wiki/Hash_table hash table]]
 
 [classref boost::hash] is an implementation of the __hash-function__ object
-specified by the __tr1-full__ (TR1). It is intended for use as the default hash function
-for unordered associative containers, and the __multi-index__'s hash indexes.
+specified by the __tr1-full__ (TR1). It is the default hash function for
+__unordered__, __intrusive__'s unordered associative containers, and
+__multi-index-short__'s hash indicies and __bimap__'s `unordered_set_of`.
 
 As it is compliant with __tr1__, it will work with:
 

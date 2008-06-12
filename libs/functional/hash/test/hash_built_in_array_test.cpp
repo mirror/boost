@@ -1,5 +1,5 @@
 
-// Copyright 2005-2007 Daniel James.
+// Copyright 2005-2008 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,7 +13,7 @@
 #  endif
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -37,11 +37,11 @@ void array_int_test()
     int array3[2] = {2, 3};
     HASH_NAMESPACE::hash<int[2]> hasher3;
 
-    BOOST_TEST(hasher1(array1)
+    BOOST_CHECK(hasher1(array1)
             == HASH_NAMESPACE::hash_range(array1, array1 + length1));
-    BOOST_TEST(hasher2(array2)
+    BOOST_CHECK(hasher2(array2)
             == HASH_NAMESPACE::hash_range(array2, array2 + length2));
-    BOOST_TEST(hasher3(array3)
+    BOOST_CHECK(hasher3(array3)
             == HASH_NAMESPACE::hash_range(array3, array3 + length3));
 }
 
@@ -59,17 +59,17 @@ void two_dimensional_array_test()
         HASH_NAMESPACE::hash_combine(seed1, seed2);
     }
 
-    BOOST_TEST(hasher(array) == seed1);
-    BOOST_TEST(hasher(array) == HASH_NAMESPACE::hash_range(array, array + 3));
+    BOOST_CHECK(hasher(array) == seed1);
+    BOOST_CHECK(hasher(array) == HASH_NAMESPACE::hash_range(array, array + 3));
 }
 
 #endif // TEST_EXTENSIONS
 
-int main()
+int test_main(int, char**)
 {
 #ifdef TEST_EXTENSIONS
     array_int_test();
     two_dimensional_array_test();
 #endif
-    return boost::report_errors();
+    return 0;
 }

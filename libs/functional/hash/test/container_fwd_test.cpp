@@ -1,5 +1,5 @@
 
-// Copyright 2005-2007 Daniel James.
+// Copyright 2005-2008 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -77,7 +77,7 @@ static void test(std::pair<X, Y> const&)
 #include <complex>
 #include <utility>
 
-int main()
+int main(int, char**)
 {
     std::deque<int> x1;
     std::list<std::string> x2;

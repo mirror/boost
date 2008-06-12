@@ -1,5 +1,5 @@
 
-// Copyright 2005-2007 Daniel James.
+// Copyright 2005-2008 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -41,17 +41,17 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
         HASH_NAMESPACE::hash<T> hasher;
 
         for(int i2 = 0; i2 < number_of_containers; ++i2) {
-            BOOST_TEST(hasher(containers[i2]) == hasher(containers[i2]));
+            BOOST_CHECK(hasher(containers[i2]) == hasher(containers[i2]));
 
-            BOOST_TEST(hasher(containers[i2]) ==
+            BOOST_CHECK(hasher(containers[i2]) ==
                     HASH_NAMESPACE::hash_value(containers[i2]));
 
-            BOOST_TEST(hasher(containers[i2])
+            BOOST_CHECK(hasher(containers[i2])
                     == HASH_NAMESPACE::hash_range(
                         containers[i2].begin(), containers[i2].end()));
 
             for(int j2 = i2 + 1; j2 < number_of_containers; ++j2) {
-                BOOST_TEST(
+                BOOST_CHECK(
                         (containers[i2] == containers[j2]) ==
                         (hasher(containers[i2]) == hasher(containers[j2]))
                         );

@@ -1,5 +1,5 @@
 
-// Copyright 2006-2007 Daniel James.
+// Copyright 2006-2008 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -48,7 +48,7 @@ namespace boost
 #  endif
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -59,13 +59,13 @@ namespace boost
 void custom_tests()
 {
     HASH_NAMESPACE::hash<custom> custom_hasher;
-    BOOST_TEST(custom_hasher(10) == 100u);
+    BOOST_CHECK(custom_hasher(10) == 100u);
     custom x(55);
-    BOOST_TEST(custom_hasher(x) == 550u);
+    BOOST_CHECK(custom_hasher(x) == 550u);
 
     {
         using namespace HASH_NAMESPACE;
-        BOOST_TEST(custom_hasher(x) == hash_value(x));
+        BOOST_CHECK(custom_hasher(x) == hash_value(x));
     }
 
     std::vector<custom> custom_vector;
@@ -83,19 +83,19 @@ void custom_tests()
     HASH_NAMESPACE::hash_combine(seed2, 250u);
     HASH_NAMESPACE::hash_combine(seed2, 350u);
 
-    BOOST_TEST(seed ==
+    BOOST_CHECK(seed ==
             HASH_NAMESPACE::hash_range(custom_vector.begin(), custom_vector.end()));
-    BOOST_TEST(seed == seed2);
+    BOOST_CHECK(seed == seed2);
 }
 
 #endif // TEST_EXTENSIONS
 
 
-int main()
+int test_main(int, char**)
 {
 #ifdef TEST_EXTENSIONS
     custom_tests();
 #endif
-    return boost::report_errors();
+    return 0;
 }
 

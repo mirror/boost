@@ -1,17 +1,17 @@
 
-// Copyright 2006-2007 Daniel James.
+// Copyright 2006-2008 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define HASH_NAMESPACE boost
 #include <boost/functional/hash.hpp>
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 #include <vector>
 
 int f(std::size_t hash1, int* x1) {
     // Check that HASH_NAMESPACE::hash<int*> works in both files.
     HASH_NAMESPACE::hash<int*> ptr_hasher;
-    BOOST_TEST(hash1 == ptr_hasher(x1));
+    BOOST_CHECK(hash1 == ptr_hasher(x1));
 
     // Check that std::vector<std::size_t> is avaiable in this file.
     std::vector<std::size_t> x;

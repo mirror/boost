@@ -1,5 +1,5 @@
 
-// Copyright 2005-2007 Daniel James.
+// Copyright 2005-2008 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,7 +13,7 @@
 #  endif
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -25,11 +25,11 @@ using std::list;
 
 #endif // TEST_EXTENSIONS
 
-int main()
+int test_main(int, char**)
 {
 #ifdef TEST_EXTENSIONS
     list_tests::list_hash_integer_tests();
 #endif
 
-    return boost::report_errors();
+    return 0;
 }

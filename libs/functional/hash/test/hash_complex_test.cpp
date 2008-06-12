@@ -1,5 +1,5 @@
 
-// Copyright 2005-2007 Daniel James.
+// Copyright 2005-2008 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -13,7 +13,7 @@
 #  endif
 #endif
 
-#include <boost/detail/lightweight_test.hpp>
+#include <boost/test/minimal.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -41,13 +41,13 @@ void generic_complex_tests(std::complex<T> v)
 {
     HASH_NAMESPACE::hash<std::complex<T> > complex_hasher;
 
-    BOOST_TEST(complex_hasher(v) == complex_hasher(v));
+    BOOST_CHECK(complex_hasher(v) == complex_hasher(v));
 
     HASH_NAMESPACE::hash<T> real_hasher;
     T real = v.real();
     T imag = v.imag();
 
-    BOOST_TEST(real_hasher(real) == complex_hasher(std::complex<T>(real)));
+    BOOST_CHECK(real_hasher(real) == complex_hasher(std::complex<T>(real)));
 
     if(imag != 0 && real_hasher(real) == complex_hasher(v)) {
         std::ostringstream os;
@@ -90,7 +90,7 @@ void complex_integral_tests(Integer*)
     }
 }
 
-int main()
+int test_main(int, char**)
 {
     complex_float_tests((float*) 0);
     complex_float_tests((double*) 0);
@@ -102,7 +102,7 @@ int main()
     complex_integral_tests((unsigned int*) 0);
     complex_integral_tests((unsigned long*) 0);
 
-    return boost::report_errors();
+    return 0;
 }
 
 #endif
