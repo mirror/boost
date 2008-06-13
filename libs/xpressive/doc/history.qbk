@@ -7,6 +7,27 @@
 
 [section Appendix 1: History]
 
+[h2 Version 2.1.0 6/12/2008]
+
+New Features:
+
+* `skip()` primitive for static regexes, which allows you to specify parts of
+  the input string to ignore during regex matching.
+* Range-based `regex_replace()` algorithm interface.
+* `regex_replace()` accepts formatter objects and formatter lambda expressions
+  in addition to format strings.
+
+Bugs Fixed:
+
+* Semantic actions in look-aheads, look-behinds and independent sub-expressions
+  execute eagerly instead of causing a crash.
+
+[h2 Version 2.0.1 10/23/2007]
+
+Bugs Fixed:
+
+* `sub_match<>` constructor copies singular iterator causing debug assert.
+
 [h2 Version 2.0.0, 10/12/2007]
 
 New Features:

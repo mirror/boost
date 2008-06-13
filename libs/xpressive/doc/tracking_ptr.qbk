@@ -28,10 +28,10 @@ Our solution must meet the following design constraints:
 [h2 Handle-Body Idiom]
 
 To use `tracking_ptr<>`, you must separate your type into a handle and a body. In the case of
-xpressive, the handle type is called basic_regex<> and the body is called regex_impl<>. The
+xpressive, the handle type is called `basic_regex<>` and the body is called `regex_impl<>`. The
 handle will store a `tracking_ptr<>` to the body.
 
-The body type must inherit from enable_reference_tracking<>. This gives the body the bookkeeping
+The body type must inherit from `enable_reference_tracking<>`. This gives the body the bookkeeping
 data structures that `tracking_ptr<>` will use. In particular, it gives the body:
 
 # `std::set<shared_ptr<body> > refs_` : collection of bodies to which this body refers, and
