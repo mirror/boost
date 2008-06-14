@@ -113,6 +113,7 @@ private:
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_oarchive)
+BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::mpi::packed_oarchive)
 
 
 

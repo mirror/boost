@@ -13,7 +13,6 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/mpi/detail/forward_skeleton_oarchive.hpp>
 #include <boost/mpi/detail/ignore_oprimitive.hpp>
-#include <boost/archive/array/oarchive.hpp>
 
 namespace boost { namespace mpi {
 
