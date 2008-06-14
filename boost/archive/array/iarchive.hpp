@@ -10,14 +10,7 @@
 #include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/serialization/array.hpp>
-#include <boost/serialization/collection_size_type.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/detail/get_data.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/mpl/apply.hpp>
-#include <boost/mpl/bool.hpp>
 #include <boost/pfto.hpp>
-//#include <boost/archive/archive_exception.hpp>
 
 namespace boost { namespace archive { namespace array {
 
@@ -38,6 +31,11 @@ namespace boost { namespace archive { namespace array {
   //     mpl::true_ iff array elements of type T can be serialized
   //     with the load_array member function, and to mpl::false_ if
   //     the unoptimized procedure must be used. 
+  //
+  //  *  declare your archive to make use of array optimization
+  //     by setting the appropriate trait with the 
+  //     BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION macro
+
 
 template <class Archive>
 class iarchive
@@ -63,20 +61,6 @@ public:
     Base::load_override(t, version);
   }
 
-  // the optimized implementation for vector uses serialization::array
-  template<class ValueType, class Allocator>
-  void load_optimized(
-    std::vector<ValueType, Allocator> &t, unsigned int /*version*/, mpl::true_)
-  {
-    t.clear();
-    // retrieve number of elements
-    serialization::collection_size_type count;
-    *this->This() >> BOOST_SERIALIZATION_NVP(count);
-    t.resize(count);
-    if (!t.empty())
-      * this->This() >> serialization::make_array(serialization::detail::get_data(t),t.size());
-  }
-
   // the optimized implementation for serialization::array uses save_array
   template<class ValueType>
   void load_optimized(
@@ -85,30 +69,13 @@ public:
     this->This()->load_array(t,version);
   }
 
-  // to load a vector:
-  // if the value type is trivially constructable or an optimized array save exists, 
-  // then we can use the optimized version
-
-  template<class ValueType, class Allocator>
-  void load_override(std::vector<ValueType,Allocator> &x, unsigned int version)
-  {
-    typedef BOOST_DEDUCED_TYPENAME mpl::and_<
-      mpl::not_<is_same<ValueType,bool> >,
-      mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , ValueType>
-    >::type use_optimized;
-    load_optimized(x,version, use_optimized() );   
-  }
-  
   // dispatch loading of arrays to the optimized version where supported
   template<class ValueType>
   void load_override(serialization::array<ValueType> const& x, unsigned int version)
   {
-    typedef BOOST_DEDUCED_TYPENAME mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , ValueType
-    >::type use_optimized;
+    typedef BOOST_DEDUCED_TYPENAME serialization
+                              ::use_array_optimization<Archive>
+	                      ::template apply<ValueType>::type use_optimized;
     load_optimized(const_cast<serialization::array<ValueType>&>(x),version,use_optimized());
   }
 

@@ -37,7 +37,7 @@
 #include <boost/type_traits/is_const.hpp>
 //#include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
-#include <boost/type_traits/remove_all_extents.hpp>
+#include <boost/type_traits/remove_extent.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 
 #include <boost/mpl/eval_if.hpp>
@@ -464,7 +464,7 @@ template<class Archive, class T>
 struct save_array_type
 {
     static void invoke(Archive &ar, const T &t){
-        typedef BOOST_DEDUCED_TYPENAME remove_all_extents<T>::type value_type;
+        typedef BOOST_DEDUCED_TYPENAME boost::remove_extent<T>::type value_type;
         
         save_access::end_preamble(ar);
         // consider alignment

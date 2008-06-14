@@ -10,14 +10,7 @@
 #include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
 #include <boost/serialization/array.hpp>
-#include <boost/serialization/collection_size_type.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/detail/get_data.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/mpl/apply.hpp>
-#include <boost/mpl/bool.hpp>
 #include <boost/pfto.hpp>
-#include <boost/type_traits/remove_const.hpp>
 
 namespace boost { namespace archive { namespace array {
 
@@ -38,6 +31,11 @@ namespace boost { namespace archive { namespace array {
   //     mpl::true_ iff array elements of type T can be serialized
   //     with the load_array member function, and to mpl::false_ if
   //     the unoptimized procedure must be used. 
+  //
+  //  *  declare your archive to make use of array optimization
+  //     by setting the appropriate trait with the 
+  //     BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION macro
+  
 
 template <class Archive>
 class oarchive
@@ -50,7 +48,7 @@ public:
    : archive::detail::common_oarchive<Archive>(flags)
   {}
   
-  // save_override for std::vector and serialization::array dispatches to 
+  // save_override for serialization::array dispatches to 
   // save_optimized with an additional argument.
   // 
   // If that argument is of type mpl::true_, an optimized serialization is provided
@@ -63,17 +61,6 @@ public:
     Base::save_override(t, version);
   }
 
-  // the optimized implementation for vector uses serialization::array
-  template<class ValueType, class Allocator>
-  void save_optimized(
-    const std::vector<ValueType, Allocator> &t, unsigned int, mpl::true_)
-  {
-    const serialization::collection_size_type count(t.size());
-    * this->This() << BOOST_SERIALIZATION_NVP(count);
-    if (!t.empty())
-      * this->This() << serialization::make_array(serialization::detail::get_data(t),t.size());
-  }
-
   // the optimized implementation for serialization::array uses save_array
   template<class ValueType>
   void save_optimized(
@@ -82,31 +69,13 @@ public:
     this->This()->save_array(t,version);
   }
 
-  // to save a vector:
-  // if the value type is trivially constructable or an optimized array save exists, 
-  // then we can use the optimized version
-
-  template<class ValueType, class Allocator>
-  void save_override(std::vector<ValueType,Allocator> const &x, unsigned int version)
-  {
-    typedef BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type value_type;
-    typedef BOOST_DEDUCED_TYPENAME mpl::and_<
-      mpl::not_<is_same<value_type,bool> >,
-      mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , value_type>
-    >::type use_optimized;
-    save_optimized(x,version,use_optimized() );   
-  }
-  
   // dispatch saving of arrays to the optimized version where supported
   template<class ValueType>
   void save_override(serialization::array<ValueType> const& x, unsigned int version)
   {
-    typedef BOOST_DEDUCED_TYPENAME mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type
-    >::type use_optimized;
+    typedef BOOST_DEDUCED_TYPENAME serialization
+                              ::use_array_optimization<Archive>
+	                      ::template apply<ValueType>::type use_optimized;
     save_optimized(x,version,use_optimized());
   }
 
