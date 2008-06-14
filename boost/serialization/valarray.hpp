@@ -7,7 +7,7 @@
 #endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// vector.hpp: serialization for stl vector templates
+// valarray.hpp: serialization for stl vector templates
 
 // (C) Copyright 2005 Matthias Troyer . 
 // Use, modification and distribution is subject to the Boost Software
