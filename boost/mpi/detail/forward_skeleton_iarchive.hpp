@@ -14,22 +14,21 @@
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
-#include <boost/archive/array/iarchive.hpp>
+#include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/serialization/collection_size_type.hpp>
-#include <boost/archive/array/iarchive.hpp>
 
 namespace boost { namespace mpi { namespace detail {
 
 template<class Archive, class ImplementationArchive>
 class forward_skeleton_iarchive 
-  : public archive::array::iarchive<Archive>
+  : public archive::detail::common_iarchive<Archive>
 {
 public:
 
     typedef ImplementationArchive implementation_archive_type;
 	
     forward_skeleton_iarchive(implementation_archive_type& ar) 
-	  : archive::array::iarchive<Archive>(archive::no_header),
+	  : archive::detail::common_iarchive<Archive>(archive::no_header),
 	    implementation_archive(ar)
 	{
 	}
