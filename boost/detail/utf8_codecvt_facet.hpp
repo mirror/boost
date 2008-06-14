@@ -79,10 +79,8 @@
 // specialized on those types for this to work.
 
 #include <locale>
-// for mbstate_t
-#include <wchar.h>
-// for std::size_t
-#include <cstddef>
+#include <cwchar>  // for mbstate_t
+#include <cstddef> // for std::size_t
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
