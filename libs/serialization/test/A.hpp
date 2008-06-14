@@ -143,7 +143,6 @@ public:
     // hash function for class A
     operator std::size_t () const;
     friend std::ostream & operator<<(std::ostream & os, A const & a);
-    friend std::istream & operator>>(std::istream & is, A & a);
 };
 
 #endif // BOOST_SERIALIZATION_TEST_A_HPP
