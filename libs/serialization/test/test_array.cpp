@@ -57,19 +57,25 @@ int test_array(T)
 
     // test array of objects
     const T a_array[10]={T(),T(),T(),T(),T(),T(),T(),T(),T(),T()};
+	const T b_array[2][3]={{T(),T(),T()},{T(),T(),T()}};
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os, TEST_ARCHIVE_FLAGS);
         oa << boost::serialization::make_nvp("a_array", a_array);
+		oa << boost::serialization::make_nvp("b_array", b_array);
     }
     {
         T a_array1[10];
+		T b_array1[2][3];
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is, TEST_ARCHIVE_FLAGS);
         ia >> boost::serialization::make_nvp("a_array", a_array1);
+		ia >> boost::serialization::make_nvp("b_array", b_array1);
 
         array_equal_to/*<A[10]>*/ Compare;
         BOOST_CHECK(Compare(a_array, a_array1));
+		BOOST_CHECK(Compare(b_array[0], b_array1[0]));
+		BOOST_CHECK(Compare(b_array[1], b_array1[1]));
     }
     {
         T a_array1[9];
