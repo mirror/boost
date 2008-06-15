@@ -13,6 +13,21 @@
 #include "../objects/minimal.hpp"
 #include "./compile_tests.hpp"
 
+// Explicit instantiation to catch compile-time errors
+
+template class boost::unordered_map<
+    test::minimal::assignable,
+    test::minimal::default_copy_constructible,
+    test::minimal::hash<test::minimal::assignable>,
+    test::minimal::equal_to<test::minimal::assignable>,
+    test::minimal::allocator<test::minimal::assignable> >;
+template class boost::unordered_multimap<
+    test::minimal::assignable,
+    test::minimal::copy_constructible,
+    test::minimal::hash<test::minimal::assignable>,
+    test::minimal::equal_to<test::minimal::assignable>,
+    test::minimal::allocator<test::minimal::assignable> >;
+
 UNORDERED_AUTO_TEST(test0)
 {
     typedef std::pair<test::minimal::assignable const,

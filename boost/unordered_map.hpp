@@ -122,7 +122,7 @@ namespace boost
         }
 #else
         unordered_map(boost::unordered_detail::move_from<unordered_map<Key, T, Hash, Pred, Alloc> > other)
-            : base(other.base, boost::unordered_detail::move_tag())
+            : base(other.source.base, boost::unordered_detail::move_tag())
         {
         }
 
@@ -507,7 +507,7 @@ namespace boost
         }
 #else
         unordered_multimap(boost::unordered_detail::move_from<unordered_multimap<Key, T, Hash, Pred, Alloc> > other)
-            : base(other.base, boost::unordered_detail::move_tag())
+            : base(other.source.base, boost::unordered_detail::move_tag())
         {
         }
 
