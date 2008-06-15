@@ -85,17 +85,10 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-namespace std {
-    #if defined(__LIBCOMO__)
-        using ::mbstate_t;
-    #elif defined(BOOST_DINKUMWARE_STDLIB) && !defined(__BORLANDC__)
-        using ::mbstate_t;
-    #elif defined(__SGI_STL_PORT)
-    #elif defined(BOOST_NO_STDC_NAMESPACE)
-        using ::mbstate_t;
-        using ::codecvt;
-    #endif
-} // namespace std
+#if defined(BOOST_NO_STDC_NAMESPACE)
+    using ::codecvt;
+    using ::mbstate_t;
+#endif
 
 #if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
     #define BOOST_CODECVT_DO_LENGTH_CONST const
