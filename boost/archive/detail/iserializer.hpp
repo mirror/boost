@@ -67,6 +67,7 @@ namespace std{
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/archive_pointer_iserializer.hpp>
+#include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
