@@ -17,6 +17,7 @@
 <attpurpose name="filename">The name of the file associated with this element</attpurpose>
 <attpurpose name="specifiers">The specifiers for this function, e.g., <code>inline</code>, <code>static</code>, etc.</attpurpose>
 <attpurpose name="cv">cv-qualifiers for this method, e.g., <code>const volatile</code></attpurpose>
+<attpurpose name="pack">Set to '1' if the parameter is a parameter pack.</attpurpose>
 
 <entity name="boost.class.content"
         type="param"
@@ -533,8 +534,13 @@
 <attlist name="template-type-parameter">
 <attdecl>
     name                     CDATA  #REQUIRED
+    pack                     CDATA  #IMPLIED 
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="pack"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
@@ -825,6 +831,7 @@
 <attlist name="inherit">
 <attdecl>
     access  CDATA  #REQUIRED
+    pack    CDATA  #IMPLIED 
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
            type="#IMPLIED"
@@ -840,6 +847,12 @@
            type="#IMPLIED"
            value="CDATA"
            default=""/>
+<attribute name="pack"
+           type="#IMPLIED"
+           value="CDATA"
+           default="">
+  <purpose>Set to '1' if this is a pack exapansion.</purpose>
+</attribute>
 <attribute name="xml:base"
            type="#IMPLIED"
            value="CDATA"
@@ -1656,7 +1669,9 @@
 </element>
 
 <attlist name="template-arg">
-<attdecl> %boost.common.attrib;</attdecl>
+<attdecl>
+    pack    CDATA  #IMPLIED 
+    %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
            type="#IMPLIED"
            value="CDATA"
@@ -1665,6 +1680,12 @@
            type="#IMPLIED"
            value="CDATA"
            default=""/>
+<attribute name="pack"
+           type="#IMPLIED"
+           value="CDATA"
+           default="">
+  <purpose>Set to '1' if this is a pack exapansion.</purpose>
+</attribute>
 <attribute name="xml:base"
            type="#IMPLIED"
            value="CDATA"
@@ -2159,8 +2180,13 @@
 
 <attlist name="parameter">
 <attdecl>
-     name CDATA #IMPLIED</attdecl>
+     name CDATA #IMPLIED
+     pack CDATA #IMPLIED</attdecl>
 <attribute name="name"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="pack"
            type="#IMPLIED"
            value="CDATA"
            default=""/>
@@ -2709,8 +2735,13 @@
 <attlist name="template-nontype-parameter">
 <attdecl>
     name                     CDATA  #REQUIRED
+    pack                     CDATA  #IMPLIED 
     %boost.common.attrib;</attdecl>
 <attribute name="last-revision"
+           type="#IMPLIED"
+           value="CDATA"
+           default=""/>
+<attribute name="pack"
            type="#IMPLIED"
            value="CDATA"
            default=""/>

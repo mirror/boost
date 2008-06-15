@@ -533,6 +533,8 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         </xsl:otherwise>
       </xsl:choose>
 
+      <xsl:if test="@pack=1"><xsl:text>...</xsl:text></xsl:if>
+
       <!-- Output a comma if not at the end -->
       <xsl:if test="position() &lt; $n">
         <xsl:text>,</xsl:text>
@@ -626,6 +628,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:apply-templates mode="annotation">
       <xsl:with-param name="highlight" select="true()"/>
     </xsl:apply-templates>
+    <xsl:if test="@pack=1"><xsl:text>...</xsl:text></xsl:if>
   </xsl:template>
 
   <!-- Find the maximum length of the types in typedefs -->
@@ -1058,7 +1061,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
           <xsl:with-param name="allow-synopsis-anchors" select="true()"/>
         </xsl:call-template>
         <!-- Associated free functions -->
-        <xsl:apply-templates select="ancestor-or-self::*/free-function-group"
+        <xsl:apply-templates select="free-function-group"
           mode="synopsis">
           <xsl:with-param name="indentation" select="$indentation"/>
           <xsl:with-param name="class" select="@name"/>
