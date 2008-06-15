@@ -119,7 +119,7 @@ namespace boost
         }
 #else
         unordered_set(boost::unordered_detail::move_from<unordered_set<Value, Hash, Pred, Alloc> > other)
-            : base(other.base, boost::unordered_detail::move_tag())
+            : base(other.source.base, boost::unordered_detail::move_tag())
         {
         }
 
@@ -476,7 +476,7 @@ namespace boost
         }
 #else
         unordered_multiset(boost::unordered_detail::move_from<unordered_multiset<Value, Hash, Pred, Alloc> > other)
-            : base(other.base, boost::unordered_detail::move_tag())
+            : base(other.source.base, boost::unordered_detail::move_tag())
         {
         }
 

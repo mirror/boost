@@ -13,6 +13,19 @@
 #include "../objects/minimal.hpp"
 #include "./compile_tests.hpp"
 
+// Explicit instantiation to catch compile-time errors
+
+template class boost::unordered_set<
+    test::minimal::assignable,
+    test::minimal::hash<test::minimal::assignable>,
+    test::minimal::equal_to<test::minimal::assignable>,
+    test::minimal::allocator<test::minimal::assignable> >;
+template class boost::unordered_multiset<
+    test::minimal::assignable,
+    test::minimal::hash<test::minimal::assignable>,
+    test::minimal::equal_to<test::minimal::assignable>,
+    test::minimal::allocator<test::minimal::assignable> >;
+
 UNORDERED_AUTO_TEST(test0)
 {
     test::minimal::assignable assignable = test::minimal::assignable::create();
