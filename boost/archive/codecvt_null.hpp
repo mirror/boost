@@ -18,26 +18,14 @@
 
 #include <locale>
 #include <cstddef>
-#include <wchar.h>   // for mbstate_t
-
+#include <cwchar>   // for mbstate_t
 #include <boost/config.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
 
-namespace std{
-    #if defined(__LIBCOMO__)
-        using ::mbstate_t;
-    #elif defined(__QNXNTO__)
-        //using std::mbstate_t;
-    #elif defined(BOOST_DINKUMWARE_STDLIB) && BOOST_DINKUMWARE_STDLIB == 1
-        using ::mbstate_t;
-    #elif defined(__SGI_STL_PORT)
-    #elif defined(BOOST_NO_STDC_NAMESPACE)
-        using ::codecvt;
-        using ::mbstate_t;
-    #elif defined(BOOST_RWSTD_VER)
-        using ::mbstate_t;
-   #endif
-} // namespace std
+#if defined(BOOST_NO_STDC_NAMESPACE)
+    using ::codecvt;
+    using ::mbstate_t;
+#endif
 
 namespace boost {
 namespace archive {
