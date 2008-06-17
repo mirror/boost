@@ -102,7 +102,7 @@
 struct simple_finder
 {
     template&lt;typename ForwardIteratorT&gt;
-    boost::iterator_range&lt;ForwardIterator&gt; operator()(
+    boost::iterator_range&lt;ForwardIteratorT&gt; operator()(
         ForwardIteratorT Begin,
         ForwardIteratorT End )
     {
