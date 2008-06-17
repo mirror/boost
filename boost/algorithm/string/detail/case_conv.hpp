@@ -21,6 +21,11 @@ namespace boost {
 
 //  case conversion functors -----------------------------------------------//
 
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#pragma warning(push)
+#pragma warning(disable:4512) //assignment operator could not be generated
+#endif
+
             // a tolower functor
             template<typename CharT>
             struct to_lowerF : public std::unary_function<CharT, CharT>
@@ -60,6 +65,10 @@ namespace boost {
             private:
                 const std::locale& m_Loc;
             };
+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#pragma warning(pop)
+#endif
 
 // algorithm implementation -------------------------------------------------------------------------
 

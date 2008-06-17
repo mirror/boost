@@ -29,6 +29,10 @@ namespace boost {
 
 //  classification functors -----------------------------------------------//
 
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#pragma warning(push)
+#pragma warning(disable:4512) //assignment operator could not be generated
+#endif
             // is_classified functor
             struct is_classifiedF :
                 public predicate_facade<is_classifiedF>
@@ -59,6 +63,10 @@ namespace boost {
                 const std::ctype_base::mask m_Type;
                 const std::locale m_Locale;
             };
+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#pragma warning(pop)
+#endif
 
             // is_any_of functor
             /*
