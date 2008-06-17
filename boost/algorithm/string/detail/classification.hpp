@@ -74,7 +74,7 @@ namespace boost {
                 // Constructor
                 template<typename RangeT>
                 is_any_ofF( const RangeT& Range ) :
-                    m_Set( begin(Range), end(Range) ) {}
+                    m_Set( ::boost::begin(Range), ::boost::end(Range) ) {}
 
                 // Operation
                 template<typename Char2T>

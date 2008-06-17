@@ -24,7 +24,7 @@
 #include <boost/algorithm/string/detail/find_iterator.hpp>
 
 /*! \file
-    Defines find iterator classes. Find iterator repeatly applies a Finder
+    Defines find iterator classes. Find iterator repeatedly applies a Finder
     to the specified input string to search for matches. Dereferencing
     the iterator yields the current match or a range between the last and the current
     match depending on the iterator used.
@@ -114,8 +114,8 @@ namespace boost {
                 detail::find_iterator_base<IteratorT>(Finder,0)
             {
                 iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_col(as_literal(Col));
-                m_Match=make_iterator_range(begin(lit_col), begin(lit_col));
-                m_End=end(lit_col);
+                m_Match=make_iterator_range(::boost::begin(lit_col), ::boost::begin(lit_col));
+                m_End=::boost::end(lit_col);
 
                 increment();
             }
@@ -274,9 +274,9 @@ namespace boost {
                 m_bEof(false)
             {
                 iterator_range<BOOST_STRING_TYPENAME range_iterator<RangeT>::type> lit_col(as_literal(Col));
-                m_Match=make_iterator_range(begin(lit_col), begin(lit_col));
-                m_Next=begin(lit_col);
-                m_End=end(lit_col);
+                m_Match=make_iterator_range(::boost::begin(lit_col), ::boost::begin(lit_col));
+                m_Next=::boost::begin(lit_col);
+                m_End=::boost::end(lit_col);
 
                 increment();
             }

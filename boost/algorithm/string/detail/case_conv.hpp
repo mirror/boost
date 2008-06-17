@@ -71,8 +71,8 @@ namespace boost {
                 FunctorT Functor)
             {
                 return std::transform( 
-                    begin(Input), 
-                    end(Input), 
+                    ::boost::begin(Input), 
+                    ::boost::end(Input), 
                     Output,
                     Functor);
             }
@@ -84,9 +84,9 @@ namespace boost {
                 FunctorT Functor)
             {
                 std::transform( 
-                    begin(Input), 
-                    end(Input), 
-                    begin(Input),
+                    ::boost::begin(Input), 
+                    ::boost::end(Input), 
+                    ::boost::begin(Input),
                     Functor);
             }
 
@@ -97,10 +97,10 @@ namespace boost {
             {
                 return SequenceT(
                     make_transform_iterator(
-                        begin(Input),
+                        ::boost::begin(Input),
                         Functor),
                     make_transform_iterator(
-                        end(Input), 
+                        ::boost::end(Input), 
                         Functor));
             }
 
