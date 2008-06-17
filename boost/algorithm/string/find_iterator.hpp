@@ -58,12 +58,6 @@ namespace boost {
             // facade support
             friend class ::boost::iterator_core_access;
 
-            // base type
-            typedef iterator_facade<
-                find_iterator<IteratorT>,
-                const iterator_range<IteratorT>,
-                forward_traversal_tag> facade_type;
-
         private:
         // typedefs
 
@@ -219,12 +213,6 @@ namespace boost {
         private:
             // facade support
             friend class ::boost::iterator_core_access;
-
-            // base type
-            typedef iterator_facade<
-                find_iterator<IteratorT>,
-                iterator_range<IteratorT>,
-                forward_traversal_tag> facade_type;
 
         private:
         // typedefs
