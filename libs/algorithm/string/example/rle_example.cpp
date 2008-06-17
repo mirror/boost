@@ -114,10 +114,13 @@ public:
     result_type operator()( const ReplaceT& Replace ) const
     {
         SeqT r;
-        r.push_back( repeat_mark<value_type>() );
-        r.push_back( *(Replace.begin()) );
-        r.push_back( value_type( Replace.size() ) );
-        
+        if(!Replace.empty())
+        {
+            r.push_back( repeat_mark<value_type>() );
+            r.push_back( *(Replace.begin()) );
+            r.push_back( value_type( Replace.size() ) );
+        }
+
         return r;
     }
 };
@@ -183,14 +186,18 @@ public:
     template< typename ReplaceT >
     result_type operator()( const ReplaceT& Replace ) const
     {
-        // extract info
-        typename ReplaceT::const_iterator It=Replace.begin();
-
-        value_type Value=*(++It);
-        value_type Repeat=*(++It);
-        
         SeqT r;
-        for( value_type Index=0; Index<Repeat; Index++ ) r.push_back( Value );
+
+        if(!Replace.empty())
+        {
+            // extract info
+            typename ReplaceT::const_iterator It=Replace.begin();
+
+            value_type Value=*(++It);
+            value_type Repeat=*(++It);
+
+            for( value_type Index=0; Index<Repeat; Index++ ) r.push_back( Value );
+        }
 
         return r;
     }
