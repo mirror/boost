@@ -6,8 +6,9 @@
 //
 // Test program for "boost/utility/value_init.hpp"
 //
-// 21 Agu 2002 (Created) Fernando Cacciola
+// 21 Ago 2002 (Created) Fernando Cacciola
 // 15 Jan 2008 (Added tests regarding compiler issues) Fernando Cacciola, Niels Dekker
+// 23 May 2008 (Added tests regarding initialized_value) Niels Dekker
 
 #include <cstring>  // For memcmp.
 #include <iostream>
@@ -52,7 +53,7 @@ struct NonPODBase
 struct NonPOD : NonPODBase
 {
   NonPOD () : id() {}
-  NonPOD ( std::string const& id_) : id(id_) {}
+  explicit NonPOD ( std::string const& id_) : id(id_) {}
 
   friend std::ostream& operator << ( std::ostream& os, NonPOD const& npod )
     { return os << '(' << npod.id << ')' ; }
@@ -180,6 +181,32 @@ struct CopyFunctionCallTester
 };
 
 
+template<class T>
+void check_initialized_value ( T const& y )
+{
+  T initializedValue = boost::initialized_value ;
+  BOOST_CHECK ( y == initializedValue ) ;
+}
+
+#ifdef  __BORLANDC__
+#if __BORLANDC__ == 0x582
+void check_initialized_value( NonPOD const& )
+{
+  // The initialized_value check is skipped for Borland 5.82
+  // and this type (NonPOD), because the following statement
+  // won't compile on this particular compiler version:
+  //   NonPOD initializedValue = boost::initialized_value() ;
+//
+  // This is caused by a compiler bug, that is fixed with a newer version
+  // of the Borland compiler.  The Release Notes for Delphi(R) 2007 for
+  // Win32(R) and C++Builder(R) 2007 (http://dn.codegear.com/article/36575)
+  // say about similar statements:
+  //   both of these statements now compile but under 5.82 got the error:
+  //   Error E2015: Ambiguity between 'V::V(const A &)' and 'V::V(const V &)'
+}
+#endif
+#endif
+
 //
 // This test function tests boost::value_initialized<T> for a specific type T.
 // The first argument (y) is assumed have the value of a value-initialized object.
@@ -189,9 +216,13 @@ template<class T>
 bool test ( T const& y, T const& z )
 {
   const boost::unit_test::counter_t counter_before_test = boost::minimal_test::errors_counter();
+
+  check_initialized_value(y);
+
   boost::value_initialized<T> x ;
   BOOST_CHECK ( y == x ) ;
   BOOST_CHECK ( y == boost::get(x) ) ;
+
   static_cast<T&>(x) = z ;
   boost::get(x) = z ;
   BOOST_CHECK ( x == z ) ;
@@ -274,6 +305,10 @@ int test_main(int, char **)
   ArrayOfBytes zeroInitializedArrayOfBytes = { 0 };
   boost::value_initialized<ArrayOfBytes> valueInitializedArrayOfBytes;
   BOOST_CHECK (std::memcmp(get(valueInitializedArrayOfBytes), zeroInitializedArrayOfBytes, sizeof(ArrayOfBytes)) == 0);
+
+  boost::value_initialized<ArrayOfBytes> valueInitializedArrayOfBytes2;
+  valueInitializedArrayOfBytes2 = valueInitializedArrayOfBytes;
+  BOOST_CHECK (std::memcmp(get(valueInitializedArrayOfBytes), get(valueInitializedArrayOfBytes2), sizeof(ArrayOfBytes)) == 0);
 
   boost::value_initialized<CopyFunctionCallTester> copyFunctionCallTester1;
   BOOST_CHECK ( ! get(copyFunctionCallTester1).is_copy_constructed);
