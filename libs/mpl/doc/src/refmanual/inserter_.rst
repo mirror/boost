@@ -101,6 +101,4 @@ See also
 
 
 .. |+inserter+| replace:: inserter
-.. |inserter| replace:: |``inserter``|__
-.. |``inserter``| replace:: :refentry:`inserter`
-__ `inserter_`_
+.. |inserter| replace:: ':refentry:`inserter` <|inserter_ link|>'__

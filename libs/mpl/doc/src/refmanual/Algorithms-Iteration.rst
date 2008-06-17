@@ -1,9 +1,9 @@
 
-
 .. Copyright Aleksey Gurtovoy, David Abrahams 2007.
 .. Distributed under the Boost
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 Iteration algorithms are the basic building blocks behind many of the 
 MPL's algorithms, and are usually the first place to look at when 
 starting to build a new one. Abstracting away the details of sequence 

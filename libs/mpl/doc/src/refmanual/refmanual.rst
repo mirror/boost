@@ -1,9 +1,9 @@
 
-
 .. Copyright Aleksey Gurtovoy, David Abrahams 2007.
 .. Distributed under the Boost
 .. Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 The MPL Reference Manual
 ************************
 
@@ -29,11 +29,8 @@ __ http://www.boost.org/LICENSE_1_0.txt
 .. contents:: Table of Contents
     :depth: 3
 
-.. |Boost.Bind| replace:: `Boost.Bind`__
-__ http://www.boost.org/libs/bind/bind.html
-
-.. |Boost.Lambda| replace:: `Boost.Lambda`__
-__ http://www.boost.org/libs/lambda/doc/index.html
+.. |Boost.Bind| replace:: `Boost.Bind <http://www.boost.org/libs/bind/bind.html>`__
+.. |Boost.Lambda| replace:: `Boost.Lambda <http://www.boost.org/libs/lambda/doc/index.html>`__
 
 .. role:: refentry(literal)
 
@@ -87,24 +84,19 @@ __ http://www.boost.org/libs/lambda/doc/index.html
 
 .. |O(1)| replace:: *O(1)*
 
-.. |_1| replace:: |``_1``|__
-.. |_2| replace:: |``_2``|__
-.. |_3| replace:: |``_3``|__
-.. |_4| replace:: |``_4``|__
-.. |_5| replace:: |``_5``|__
-.. |``_1``| replace:: :refentry:`_1`
-.. |``_2``| replace:: :refentry:`_2`
-.. |``_3``| replace:: :refentry:`_3`
-.. |``_4``| replace:: :refentry:`_4`
-.. |``_5``| replace:: :refentry:`_5`
-__ `Placeholders`_
-__ `Placeholders`_
-__ `Placeholders`_
-__ `Placeholders`_
-__ `Placeholders`_
+.. |_1| replace:: `|_1 refentry| <|Placeholders|>`__
+.. |_2| replace:: `|_2 refentry| <|Placeholders|>`__
+.. |_3| replace:: `|_3 refentry| <|Placeholders|>`__
+.. |_4| replace:: `|_4 refentry| <|Placeholders|>`__
+.. |_5| replace:: `|_5 refentry| <|Placeholders|>`__
 
-.. |placeholder| replace:: `placeholder`__
-__ `Placeholders`_
+.. |_1 refentry| replace:: :refentry:`_1`
+.. |_2 refentry| replace:: :refentry:`_2`
+.. |_3 refentry| replace:: :refentry:`_3`
+.. |_4 refentry| replace:: :refentry:`_4`
+.. |_5 refentry| replace:: :refentry:`_5`
+
+.. |placeholder| replace:: `placeholder <|Placeholders|>`__
 
 .. |_1,_2,..._n| replace:: |_1|, |_2|, |_3|,\ |...|
 
@@ -130,12 +122,12 @@ __ `Placeholders`_
 
 
 .. |preprocessed headers disclaimer| replace:: [*Note:* Overriding will take effect 
-   *only* if the library is configured not to use `preprocessed headers`__. See 
-   |+BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS+|__ for more information. |--| *end note*\]
+   *only* if the library is configured not to use `preprocessed headers 
+   <|BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_link|>`__. See 
+   |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_ref| for more information. |--| *end note*\]
 
-.. |+BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS+| replace:: :refentry:`BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`
-__ `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
-__ `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
+.. |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_ref| replace:: `:refentry:`BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS` <|BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_link|>`__
+.. |BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS_link| replace:: `BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS`_
 
 
 .. |transformation algorithm disclaimer| replace:: 

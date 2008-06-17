@@ -114,8 +114,8 @@ See also
 |Sequences|, |Extensible Associative Sequence|, |has_key|, |count|, |order|, |at|, |key_type|, |value_type|
 
 
-.. |key| replace:: `key`__
-__ `key-part`_
+.. |key| replace:: `key <|key-part_link|>`__
+.. |key-part_link| replace:: `key-part`_
 
-.. |value| replace:: `value`__
-__ `value-part`_
+.. |value| replace:: `value <|value-part_link|>`__
+.. |value-part_link| replace:: `value-part`_

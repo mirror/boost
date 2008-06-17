@@ -141,5 +141,5 @@ See also
 
 |Runtime Algorithms|, |Views|, |transform_view|
 
-.. |unary function object| replace:: `unary function object <http://www.sgi.com/tech/stl/UnaryFunction.html>`_
-.. |value_initialized| replace:: `value_initialized <http://www.boost.org/libs/utility/value_init.htm>`_
+.. |unary function object| replace:: `unary function object <http://www.sgi.com/tech/stl/UnaryFunction.html>`__
+.. |value_initialized| replace:: `value_initialized <http://www.boost.org/libs/utility/value_init.htm>`__

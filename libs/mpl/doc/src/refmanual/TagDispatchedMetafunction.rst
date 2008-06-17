@@ -161,8 +161,5 @@ See also
 |Metafunction|, |Metafunction Class|, |Numeric Metafunction|
 
 
-.. |tag-metafunction| replace:: `tag metafunction`__
-__ `tag-metafunction`_
-
-.. |tag dispatched| replace:: `tag dispatched`__
-__ `Tag Dispatched Metafunction`_
+.. |tag-metafunction| replace:: `tag metafunction <|tag-metafunction link|>`__
+.. |tag dispatched| replace:: `tag dispatched <|Tag Dispatched Metafunction link|>`__

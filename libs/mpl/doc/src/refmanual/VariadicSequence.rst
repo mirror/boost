@@ -113,11 +113,7 @@ See also
 
 |Sequences|, |Configuration|, |Integral Sequence Wrapper|
 
-.. |variadic| replace:: `variadic`__
-__ `Variadic Sequence`_
-
-.. |variadic forms| replace:: `variadic forms`__
-__ `Variadic Sequence`_
-
-.. |numbered forms| replace:: `numbered forms`__
-__ `Variadic Sequence`_
+.. |variadic| replace:: `variadic <|Variadic Sequence link|>`__
+.. |variadic forms| replace:: `variadic forms <|Variadic Sequence link|>`__
+.. |numbered forms| replace:: `numbered forms <|Variadic Sequence link|>`__
+.. |Variadic Sequence link| replace:: `Variadic Sequence`_
