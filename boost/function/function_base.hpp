@@ -432,7 +432,7 @@ namespace boost {
             // can't do the static_cast that we should do.
             const functor_wrapper_type* f =
               (const functor_wrapper_type*)(in_buffer.obj_ptr);
-            wrapper_allocator_type wrapper_allocator(static_cast<wrapper_allocator_type const &>(*f));
+            wrapper_allocator_type wrapper_allocator(static_cast<Allocator const &>(*f));
             wrapper_allocator_pointer_type copy = wrapper_allocator.allocate(1);
             wrapper_allocator.construct(copy, *f);
 
@@ -443,7 +443,7 @@ namespace boost {
             /* Cast from the void pointer to the functor_wrapper_type */
             functor_wrapper_type* victim =
               static_cast<functor_wrapper_type*>(in_buffer.obj_ptr);
-            wrapper_allocator_type wrapper_allocator(static_cast<wrapper_allocator_type const &>(*victim));
+            wrapper_allocator_type wrapper_allocator(static_cast<Allocator const &>(*victim));
             wrapper_allocator.destroy(victim);
             wrapper_allocator.deallocate(victim,1);
             out_buffer.obj_ptr = 0;
