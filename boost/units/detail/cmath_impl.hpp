@@ -25,6 +25,7 @@
     #include <boost/units/detail/cmath_msvc_impl.hpp>
 # endif
 
+#include <boost/config.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
 namespace boost {
@@ -32,48 +33,48 @@ namespace units {
 namespace detail {
 
 template<class Y> 
-inline bool isgreater(const Y& v1,const Y& v2)
+inline bool isgreater BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1) || (boost::math::isnan)(v2)) return false;
     else return v1 > v2;
 }
 
 template<class Y> 
-inline bool isgreaterequal(const Y& v1,const Y& v2)
+inline bool isgreaterequal BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1) || (boost::math::isnan)(v2)) return false;
     else return v1 >= v2;
 }
 
 template<class Y> 
-inline bool isless(const Y& v1,const Y& v2)
+inline bool isless BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1) || (boost::math::isnan)(v2)) return false;
     else return v1 < v2;
 }
 
 template<class Y> 
-inline bool islessequal(const Y& v1,const Y& v2)
+inline bool islessequal BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1) || (boost::math::isnan)(v2)) return false;
     else return v1 <= v2;
 }
 
 template<class Y> 
-inline bool islessgreater(const Y& v1,const Y& v2)
+inline bool islessgreater BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1) || (boost::math::isnan)(v2)) return false;
     else return v1 < v2 || v1 > v2;
 }
 
 template<class Y> 
-inline bool isunordered(const Y& v1,const Y& v2)
+inline bool isunordered BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     return (boost::math::isnan)(v1) || (boost::math::isnan)(v2);
 }
 
 template<class Y>
-inline Y fdim(const Y& v1,const Y& v2)
+inline Y fdim BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1)) return v1;
     else if((boost::math::isnan)(v2)) return v2;
@@ -101,7 +102,7 @@ inline Y fma(const Y& v1,const Y& v2,const Y& v3)
 #endif
 
 template<class Y>
-inline Y fmax(const Y& v1,const Y& v2)
+inline Y fmax BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1)) return(v2);
     else if((boost::math::isnan)(v2)) return(v1);
@@ -110,7 +111,7 @@ inline Y fmax(const Y& v1,const Y& v2)
 }
 
 template<class Y>
-inline Y fmin(const Y& v1,const Y& v2)
+inline Y fmin BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& v1,const Y& v2)
 {
     if((boost::math::isnan)(v1)) return(v2);
     else if((boost::math::isnan)(v2)) return(v1);
@@ -153,7 +154,7 @@ inline Y rint(const Y& val)
 #endif
 
 template<class Y>
-inline Y trunc(const Y& val)
+inline Y trunc BOOST_PREVENT_MACRO_SUBSTITUTION(const Y& val)
 {
     if(val > 0) return std::floor(val);
     else if(val < 0) return std::ceil(val);
