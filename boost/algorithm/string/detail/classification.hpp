@@ -166,7 +166,7 @@ namespace boost {
                     else
                     {
                         // Use dynamic storage
-                        m_Storage.m_dynSet=new set_value_type[Size];
+                        m_Storage.m_dynSet=new set_value_type[m_Size];
                         DestStorage=m_Storage.m_dynSet;
                         SrcStorage=Other.m_Storage.m_dynSet;
                     }
@@ -190,9 +190,6 @@ namespace boost {
                 }
 
             private:
-                // set cannot operate on const value-type
-                typedef typename remove_const<CharT>::type set_value_type;
-
                 // storage
                 // The actual used storage is selected on the type
                 union
@@ -205,47 +202,6 @@ namespace boost {
                 // storage size
                 ::std::size_t m_Size;
             };
-
-            // fixed size is_any_of functor
-            /*
-               returns true if the value is from the specified set
-               works on the fixed size set
-             */
-            template<typename CharT, unsigned int Size>
-            struct is_any_of_fixedF :
-                public predicate_facade<is_any_of_fixedF<CharT, Size> >
-            {
-                // Boost.Lambda support
-                template <class Args> struct sig { typedef bool type; };
-
-                // Constructor
-                template<typename RangeT>
-                is_any_of_fixedF( const RangeT& Range )
-                {
-                    BOOST_ASSERT(::boost::distance(Range)==Size);
-                    // Copy up-to Size elements
-                    ::std::size_t nIndex=0;
-                    ::boost::range_const_iterator<RangeT>::type It=::boost::begin(Range);
-                    while(nIndex<Size && It!=::boost::end(Range))
-                    {
-                        m_Set[nIndex]=*It;
-                    }
-                    ::std::sort(&m_Set[0], &m_Set[Size]);
-                }
-
-                // Operation
-                template<typename Char2T>
-                bool operator()( Char2T Ch ) const
-                {
-                    return ::std::binary_search(&m_Set[0], &m_Set[Size], Ch);
-                }
-
-            private:
-                // set cannot operate on const value-type
-                typedef typename remove_const<CharT>::type set_value_type;
-                set_value_type m_Set[Size];
-            };
-
 
             // is_from_range functor
             /*
