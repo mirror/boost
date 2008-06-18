@@ -76,7 +76,7 @@ namespace boost {
                 Output,
                 lit_input,
                 Formatter,
-				Finder( ::boost::begin(lit_input), ::boost::end(lit_input) ) );
+                Finder( ::boost::begin(lit_input), ::boost::end(lit_input) ) );
         }
 
         //! Generic replace algorithm
