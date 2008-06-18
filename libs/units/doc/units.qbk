@@ -1050,6 +1050,14 @@ Relatively complete SI and CGS unit systems are provided in [headerref boost/uni
 
 [endsect]
 
+[section Library Interoperability]
+
+The header [headerref boost/lambda/lambda.hpp] provides overloads
+and specializations needed to make Boost.Units usable with the
+Boost.Lambda library.
+
+[endsect]
+
 [section:Reference Reference]
 
 [xinclude units_reference.xml]
@@ -1203,6 +1211,7 @@ Thanks to:
 * Janek Kozicki, 
 * Andy Little,
 * Kevin Lynch,
+* Torsten Maehne
 * Noah Roberts,
 * Andrey Semashev,
 * David Walthall,
