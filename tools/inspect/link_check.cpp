@@ -20,21 +20,27 @@ namespace
     "\\s*=\\s*(['\"])(.*?)\\1",
     boost::regbase::normal | boost::regbase::icase);
 
+  // Regular expression for parsing URLS from:
+  // http://tools.ietf.org/html/rfc3986#appendix-B
+  boost::regex url_decompose_regex(
+    "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$",
+    boost::regbase::normal);
+
   // Decode percent encoded characters and html escapsed ampersands,
   // returns an empty string if there's an error.
   // The urls should really be fully HTML decoded at the beginning.
-  std::string decode_url(std::string const& path) {
+  std::string decode_url(std::string const& url_path) {
     std::string::size_type pos = 0, next;
     std::string result;
-    result.reserve(path.length());
+    result.reserve(url_path.length());
 
-    while((next = path.find_first_of("&%", pos)) != std::string::npos) {
-      result.append(path, pos, next - pos);
+    while((next = url_path.find_first_of("&%", pos)) != std::string::npos) {
+      result.append(url_path, pos, next - pos);
       pos = next;
-      switch(path[pos]) {
+      switch(url_path[pos]) {
         case '%': {
-          if(path.length() - next < 3) return "";
-          char hex[3] = { path[next + 1], path[next + 2], '\0' };
+          if(url_path.length() - next < 3) return "";
+          char hex[3] = { url_path[next + 1], url_path[next + 2], '\0' };
           char* end_ptr;
           result += (char) std::strtol(hex, &end_ptr, 16);
           if(*end_ptr) return "";
@@ -42,7 +48,7 @@ namespace
           break;
         }
         case '&': {
-          if(path.substr(pos, 5) == "&amp;") {
+          if(url_path.substr(pos, 5) == "&amp;") {
             result += '&'; pos += 5;
           }
           else {
@@ -53,7 +59,7 @@ namespace
       }
     }
 
-    result.append(path, pos, path.length());
+    result.append(url_path, pos, url_path.length());
 
     return result;
   }
@@ -121,66 +127,111 @@ namespace boost
       const path & source_path, bool no_link_errors )
         // precondition: source_path.is_complete()
     {
-      if ( url[0] == '#'
-        || url.find( "mailto:" ) == 0
-        || url.find( "http:" ) == 0
-        || url.find( "https:" ) == 0
-        || url.find( "ftp:" ) == 0
-        || url.find( "news:" ) == 0
-        || url.find( "javascript:" ) == 0
-        ) return;
-
-      if ( url.find( "file:" ) == 0 )
-      {
+      boost::smatch m;
+      if(!boost::regex_match(url, m, url_decompose_regex)) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + url );
+          error( library_name, source_path, string(name()) + " invalid URL: " + url );
         }
         return;
       }
 
-      // detect characters banned by RFC2396:
+      bool scheme_matched = m[2].matched,
+        authority_matched = m[4].matched,
+        //query_matched = m[7].matched,
+        fragment_matched = m[9].matched;
+
+      std::string scheme(m[2]),
+        authority(m[4]),
+        url_path(m[5]),
+        //query(m[7]),
+        fragment(m[9]);
+
+      // Protocol checks
+      if(scheme_matched) {
+        if(scheme == "http" || scheme == "https") {
+          if(!authority_matched) {
+            if(!no_link_errors) {
+              ++m_invalid_errors;
+              error( library_name, source_path, string(name()) + " http protocol without hostname: " + url );
+            }
+          }
+
+          return;
+        }
+        else if(scheme == "file") {
+          if(!no_link_errors) {
+            ++m_invalid_errors;
+            error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + url );
+          }
+        }
+        else if(!(scheme == "mailto" || scheme == "ftp" || scheme == "news" || scheme == "javascript")) {
+          if(!no_link_errors) {
+            ++m_invalid_errors;
+            error( library_name, source_path, string(name()) + " unknown protocol: " + url );
+          }
+        }
+
+        return;
+      }
+
+      // Hostname without protocol.
+      if(authority_matched) {
+        if(!no_link_errors) {
+          ++m_invalid_errors;
+          error( library_name, source_path, string(name()) + " invalid URL (hostname without protocol): " + url );
+        }
+      }
+
+      // Check the fragment identifier
+      if(fragment_matched) {
+        if ( !no_link_errors && fragment.find( '#' ) != string::npos )
+        {
+          ++m_bookmark_errors;
+          error( library_name, source_path, string(name()) + " invalid bookmark: " + url );
+        }
+
+        // No more to do if it's just a fragment identifier
+        if(url_path.empty()) return;
+      }
+
+      // Detect characters banned by RFC2396:
       if ( !no_link_errors && url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
       {
         ++m_invalid_errors;
         error( library_name, source_path, string(name()) + " invalid character in URL: " + url );
       }
 
-      // strip url of bookmarks
-      string plain_url( url );
-      string::size_type pos( plain_url.find( '#' ) );
-      if ( pos != string::npos )
-      {
-        plain_url.erase( pos );
-        // detect characters banned by RFC2396 in bookmark:
-        if ( !no_link_errors && url.find( '#', pos+1 ) != string::npos )
-        {
-          ++m_bookmark_errors;
-          error( library_name, source_path, string(name()) + " invalid bookmark: " + url );
+      // Check that we actually have a path.
+      if(url_path.empty()) {
+        if(!no_link_errors) {
+          ++m_invalid_errors;
+          error( library_name, source_path, string(name()) + " invalid URL (empty path in relative url): " + url );
         }
       }
 
-      string decoded_url = decode_url(plain_url);
-      if(decoded_url.empty()) {
+      // Decode percent and ampersand encoded characters.
+      string decoded_path = decode_url(url_path);
+      if(decoded_path.empty()) {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL: " + url );
+          error( library_name, source_path, string(name()) + " invalid URL (invalid character encodings): " + url );
         }
         return;
       }
 
       // strip url of references to current dir
-      if ( decoded_url[0]=='.' && decoded_url[1]=='/' ) decoded_url.erase( 0, 2 );
+      if ( decoded_path[0]=='.' && decoded_path[1]=='/' ) decoded_path.erase( 0, 2 );
 
       // url is relative source_path.branch()
       // convert to target_path, which is_complete()
       path target_path;
-      try { target_path = source_path.branch_path() /= path( decoded_url, fs::no_check ); }
+      try { target_path = source_path.branch_path() /= path( decoded_path, fs::no_check ); }
       catch ( const fs::filesystem_error & )
       {
         if(!no_link_errors) {
           ++m_invalid_errors;
-          error( library_name, source_path, string(name()) + " invalid URL: " + url );
+          error( library_name, source_path, string(name()) + " invalid URL (error resolving path): " + url );
         }
         return;
       }
