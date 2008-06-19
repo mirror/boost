@@ -488,7 +488,7 @@ typedef *implementation_defined*<0> extent_gen;
 <formalpara><title>Methods and Types</title>
 <variablelist>
 <varlistentry>
-<term><function>template gen_type::&lt;Ranges&gt;::type</function></term>
+<term><function>template gen_type&lt;Ranges&gt;::type</function></term>
 <listitem>
 <para>This type generator is used to specify the result of 
 <literal>Ranges</literal> chained calls to
