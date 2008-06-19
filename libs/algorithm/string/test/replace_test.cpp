@@ -120,6 +120,7 @@ void replace_all_test()
 {
     // replace all
     TEST_ALGO( replace_all, "1abc3abc2", string("abc") C_ string("YYY"), string("1YYY3YYY2") );
+    TEST_ALGO( replace_all, string("1abc3abc2"), "/" C_ "\\", string("1abc3abc2") );
     TEST_ALGO( ireplace_all, "1aBc3AbC2", "abC" C_ "YYY", string("1YYY3YYY2") );
     TEST_ALGO( replace_all, "1abc3abc2", string("abc") C_ string("Z"), string("1Z3Z2") );
     TEST_ALGO( replace_all, "1abc3abc2", string("abc") C_ string("XXXX"), string("1XXXX3XXXX2") );

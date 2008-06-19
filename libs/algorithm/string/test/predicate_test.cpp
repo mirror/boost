@@ -121,6 +121,14 @@ void classification_test()
 
     TEST_CLASS( !is_classified(std::ctype_base::space), "...", "..\n\r\t " );
     TEST_CLASS( ( !is_any_of("abc") && is_from_range('a','e') ) || is_space(), "d e", "abcde" );
+
+    // is_any_of test
+//  TEST_CLASS( !is_any_of(""), "", "aaa" )
+    TEST_CLASS( is_any_of("a"), "a", "ab" )
+    TEST_CLASS( is_any_of("ba"), "ab", "abc" )
+    TEST_CLASS( is_any_of("cba"), "abc", "abcd" )
+    TEST_CLASS( is_any_of("hgfedcba"), "abcdefgh", "abcdefghi" )
+    TEST_CLASS( is_any_of("qponmlkjihgfedcba"), "abcdefghijklmnopq", "zzz" )
 }
 
 #undef TEST_CLASS

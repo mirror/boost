@@ -52,8 +52,8 @@ namespace boost {
             typedef typename range_const_iterator<SequenceSequenceT>::type InputIteratorT;
 
             // Parse input
-            InputIteratorT itBegin=begin(Input);
-            InputIteratorT itEnd=end(Input);
+            InputIteratorT itBegin=::boost::begin(Input);
+            InputIteratorT itEnd=::boost::end(Input);
 
             // Construct container to hold the result
             ResultT Result;
@@ -61,16 +61,16 @@ namespace boost {
             // Append first element
             if(itBegin!=itEnd)
             {
-                detail::insert(Result, end(Result), *itBegin);
+                detail::insert(Result, ::boost::end(Result), *itBegin);
                 ++itBegin;
             }
 
             for(;itBegin!=itEnd; ++itBegin)
             {
                 // Add separator
-                detail::insert(Result, end(Result), as_literal(Separator));
+                detail::insert(Result, ::boost::end(Result), as_literal(Separator));
                 // Add element
-                detail::insert(Result, end(Result), *itBegin);
+                detail::insert(Result, ::boost::end(Result), *itBegin);
             }
 
             return Result;
@@ -103,8 +103,8 @@ namespace boost {
             typedef typename range_const_iterator<SequenceSequenceT>::type InputIteratorT;
 
             // Parse input
-            InputIteratorT itBegin=begin(Input);
-            InputIteratorT itEnd=end(Input);
+            InputIteratorT itBegin=::boost::begin(Input);
+            InputIteratorT itEnd=::boost::end(Input);
 
             // Construct container to hold the result
             ResultT Result;
@@ -114,7 +114,7 @@ namespace boost {
             // Add this element
             if(itBegin!=itEnd)
             {
-                detail::insert(Result, end(Result), *itBegin);
+                detail::insert(Result, ::boost::end(Result), *itBegin);
                 ++itBegin;
             }
 
@@ -123,9 +123,9 @@ namespace boost {
                 if(Pred(*itBegin))
                 {
                     // Add separator
-                    detail::insert(Result, end(Result), as_literal(Separator));
+                    detail::insert(Result, ::boost::end(Result), as_literal(Separator));
                     // Add element
-                    detail::insert(Result, end(Result), *itBegin);
+                    detail::insert(Result, ::boost::end(Result), *itBegin);
                 }
             }
 
