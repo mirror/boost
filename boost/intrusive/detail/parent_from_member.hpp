@@ -16,6 +16,11 @@
 #include <boost/static_assert.hpp>
 #include <cstddef>
 
+#if defined(BOOST_MSVC) || (defined (BOOST_WINDOWS) && defined(BOOST_INTEL))
+#define BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT
+#include <boost/cstdint.hpp> 
+#endif
+
 namespace boost {
 namespace intrusive {
 namespace detail {
@@ -23,11 +28,10 @@ namespace detail {
 template<class Parent, class Member>
 inline std::size_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)
 {
-   //BOOST_STATIC_ASSERT(( sizeof(std::ptrdiff_t) == sizeof(ptr_to_member) ));
    //The implementation of a pointer to member is compiler dependent.
-   #if defined(BOOST_MSVC) || (defined (BOOST_WINDOWS) && defined(BOOST_INTEL))
+   #if defined(BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT)
    //This works with gcc, msvc, ac++, ibmcpp
-   return *(const std::ptrdiff_t*)(void*)&ptr_to_member;
+   return *(const boost::int32_t*)(void*)&ptr_to_member;
    #elif defined(__GNUC__) || defined(__HP_aCC) || defined(BOOST_INTEL) || defined (__IBMCPP__) || defined (__DECCXX)
    const Parent * const parent = 0;
    const char *const member = reinterpret_cast<const char*>(&(parent->*ptr_to_member));
@@ -55,6 +59,10 @@ inline const Parent *parent_from_member(const Member *member, const Member Paren
 }  //namespace detail {
 }  //namespace intrusive {
 }  //namespace boost {
+
+#ifdef BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT
+#undef BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT
+#endif
 
 #include <boost/intrusive/detail/config_end.hpp>
 
