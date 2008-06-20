@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <algorithm>
+#include <boost/ref.hpp>
+#include <boost/bind.hpp>
 #include <boost/array.hpp>
 #include <boost/foreach.hpp>
 #include <boost/accumulators/accumulators.hpp>
@@ -47,6 +49,11 @@ void example1()
     // time, and returns a copy of the accumulator.
     acc = std::for_each(data.begin(), data.end(), acc);
 
+    // The following would be equivalent, and could be more efficient
+    // because it doesn't pass and return the entire accumulator set
+    // by value.
+    //std::for_each(data.begin(), data.end(), bind<void>(ref(acc), _1));
+
     std::cout << "  min(acc)        = " << (min)(acc) << std::endl;
     std::cout << "  mean(acc)       = " << mean(acc) << std::endl;
 
@@ -59,7 +66,7 @@ void example1()
 ///////////////////////////////////////////////////////////////////////////////
 // example2
 //
-//  Calculate some tail statistics. This demonstrates how to specify 
+//  Calculate some tail statistics. This demonstrates how to specify
 //  constructor and accumulator parameters. Note that the tail statistics
 //  return multiple values, which are returned in an iterator_range.
 //
