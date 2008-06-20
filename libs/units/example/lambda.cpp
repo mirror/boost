@@ -49,6 +49,7 @@
 
 #include <boost/lambda/bind.hpp>
 
+//[lambda_snippet_1
 
 int main(int argc, char **argv) {
 
@@ -151,3 +152,4 @@ int main(int argc, char **argv) {
 
    return 0;
 }
+//]

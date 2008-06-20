@@ -125,7 +125,7 @@ in the following :
 *  *Quantity* : A quantity represents a concrete amount of a unit. Thus, while the meter is the base 
    unit of length in the SI system, 5.5 meters is a quantity of length in that system.
 
-To begin, we present two short tutorials. [@../../tutorial/tutorial_1.cpp Tutorial1] demonstrates the use of 
+To begin, we present two short tutorials. [@../../libs/units/tutorial/tutorial_1.cpp Tutorial1] demonstrates the use of 
 [@http://en.wikipedia.org/wiki/SI_units SI] units. After including the appropriate system headers 
 and the headers for the various SI units we will need (all SI units can be included with  
 [headerref boost/units/systems/si.hpp]) and for quantity I/O ([headerref boost/units/io.hpp]), we define 
@@ -183,23 +183,23 @@ In the following discussion we view dimensional analysis as an abstraction in wh
 [@http://en.wikipedia.org/wiki/Fundamental_units units] obey the rules of a specific algebra. 
 We will refer to a pair of a base dimension and a rational exponent as a *fundamental dimension*, 
 and a list composed of an arbitrary number of fundamental dimensions as a *composite dimension* or, simply,
-*dimension*. In particular, given a set of [$../../../units/images/form_0.png] fundamental dimensions
-denoted by [$../../../units/images/form_1.png] and a set of [$../../../units/images/form_0.png]
-rational exponents [$../../../units/images/form_2.png], any possible (composite) dimension can be written
-as [$../../../units/images/form_3.png].  
+*dimension*. In particular, given a set of [$../../libs/units/images/form_0.png] fundamental dimensions
+denoted by [$../../libs/units/images/form_1.png] and a set of [$../../libs/units/images/form_0.png]
+rational exponents [$../../libs/units/images/form_2.png], any possible (composite) dimension can be written
+as [$../../libs/units/images/form_3.png].  
 
 Composite dimensions obey the algebraic rules for dimensional analysis. In particular, for any scalar value,
-[$../../../units/images/form_4.png], 
-and composite dimensions [$../../../units/images/form_5.png]
-and [$../../../units/images/form_6.png], where 
-[$../../../units/images/form_7.png], we have:
+[$../../libs/units/images/form_4.png], 
+and composite dimensions [$../../libs/units/images/form_5.png]
+and [$../../libs/units/images/form_6.png], where 
+[$../../libs/units/images/form_7.png], we have:
 
-[$../../../units/images/form_8.png]
+[$../../libs/units/images/form_8.png]
 
 Users of a dimensional analysis library should be able to specify an arbitrary list of base dimensions to 
 produce a composite dimension. This potentially includes repeated tags. For example, 
-it should be possible to express energy as [$../../../units/images/form_9.png], [$../../../units/images/form_10.png], 
-[$../../../units/images/form_11.png], or any other permutation of mass, length, and time having aggregate exponents of 
+it should be possible to express energy as [$../../libs/units/images/form_9.png], [$../../libs/units/images/form_10.png], 
+[$../../libs/units/images/form_11.png], or any other permutation of mass, length, and time having aggregate exponents of 
 1, 2, and -2, respectively.
 In order to be able to perform computations on arbitrary sets of dimensions, 
 all composite dimensions must be reducible to an unambiguous final composite dimension, which we will refer to as a 
@@ -207,7 +207,7 @@ all composite dimensions must be reducible to an unambiguous final composite dim
 
 # fundamental dimensions are consistently ordered
 # dimensions with zero exponent are elided. Note that reduced dimensions never have more than 
-  [$../../../units/images/form_0.png] base dimensions, one for each distinct fundamental dimension, but may have fewer.
+  [$../../libs/units/images/form_0.png] base dimensions, one for each distinct fundamental dimension, but may have fewer.
 
 In our implementation, base dimensions are associated with tag types. As we will ultimately 
 represent composite dimensions as typelists, we must provide some mechanism for  sorting
@@ -389,10 +389,10 @@ are instances where this is not the case. A simple example is given by the [@htt
 natural numbers] where the operator arithmetic obeys the following rules (using the standard notation for 
 [@http://en.wikipedia.org/wiki/Number number systems]):
 
-* [$../../../units/images/form_12.png]
-* [$../../../units/images/form_13.png]
-* [$../../../units/images/form_14.png]
-* [$../../../units/images/form_15.png]
+* [$../../libs/units/images/form_12.png]
+* [$../../libs/units/images/form_13.png]
+* [$../../libs/units/images/form_14.png]
+* [$../../libs/units/images/form_15.png]
 
 This library is designed to support arbitrary value type algebra for addition, subtraction, multiplication, division, and 
 rational powers and roots.  It uses Boost.Typeof to deduce the result of these operators.  For compilers that
@@ -493,7 +493,7 @@ the underlying value type or types that are convertible to/from that value type.
 
 [section:DimensionExample Dimension Example]
 
-([@../../example/dimension.cpp dimension.cpp])
+([@../../libs/units/example/dimension.cpp dimension.cpp])
 
 By using MPL metafunctions and the template specializations for operations on composite dimensions
 (defined in [headerref boost/units/dimension.hpp]) it is possible to perform compile time arithmetic
@@ -512,7 +512,7 @@ outputting (with symbol demangling, implemented in [headerref boost/units/detail
 
 [section:UnitExample Unit Example]
 
-([@../../example/unit.cpp unit.cpp])
+([@../../libs/units/example/unit.cpp unit.cpp])
 
 This example demonstrates the use of the simple but functional unit system implemented in 
 [headerref libs/units/example/test_system.hpp] :
@@ -529,7 +529,7 @@ We can perform various algebraic operations on these units, resulting in the fol
 
 [section:QuantityExample Quantity Example]
 
-([@../../example/quantity.cpp quantity.cpp])
+([@../../libs/units/example/quantity.cpp quantity.cpp])
 
 This example demonstrates how to use quantities of our toy unit system :
 
@@ -556,7 +556,7 @@ to `std::complex<double>` and performing the appropriate dimensional analysis :
 
 [section:KitchenSinkExample Kitchen Sink Example]
 
-([@../../example/kitchen_sink.cpp kitchen_sink.cpp])
+([@../../libs/units/example/kitchen_sink.cpp kitchen_sink.cpp])
 
 This example provides a fairly extensive set of tests covering most of the [___quantity] functionality.
 It uses the SI unit system defined in [headerref boost/units/systems/si.hpp].
@@ -675,7 +675,7 @@ then we can also compute rational powers of measurement quantities :
 
 [section:ConversionExample Conversion Example]
 
-([@../../example/conversion.cpp conversion.cpp])
+([@../../libs/units/example/conversion.cpp conversion.cpp])
 
 This example demonstrates the various allowed conversions between SI and CGS units. Defining some
 quantities
@@ -713,7 +713,7 @@ which produces the following output:
 
 [section:UDTExample User Defined Types]
 
-([@../../example/quaternion.cpp quaternion.cpp])
+([@../../libs/units/example/quaternion.cpp quaternion.cpp])
 
 This example demonstrates the use of `boost::math::quaternion` as a value type for  [___quantity] and the converse.
 For the first case, we first define specializations of [___power_typeof_helper] and [___root_typeof_helper] for 
@@ -758,7 +758,7 @@ giving:
 
 [section:ComplexExample Complex Example]
 
-([@../../example/complex.cpp complex.cpp])
+([@../../libs/units/example/complex.cpp complex.cpp])
 
 This example demonstrates how to implement a replacement `complex` class that functions correctly both as a 
 quantity value type and as a quantity container class, including heterogeneous multiplication and division 
@@ -792,7 +792,7 @@ gives
 
 [section:PerformanceExample Performance Example]
 
-([@../../example/performance.cpp performance.cpp])
+([@../../libs/units/example/performance.cpp performance.cpp])
 
 This example provides an ad hoc performance test to verify that zero runtime overhead 
 is incurred when using [___quantity] in place of `double`. Note that performance 
@@ -806,7 +806,7 @@ using msvc 8.0 on Windows XP.
 
 [section:RadarBeamHeightExample Radar Beam Height]
 
-([@../../example/radar_beam_height.cpp radar_beam_height.cpp])
+([@../../libs/units/example/radar_beam_height.cpp radar_beam_height.cpp])
 
 [import ../example/radar_beam_height.cpp]
 
@@ -850,7 +850,7 @@ giving
 
 [section:HeterogeneousUnitExample Heterogeneous Unit Example]
 
-([@../../example/heterogeneous_unit.cpp heterogeneous_unit.cpp])
+([@../../libs/units/example/heterogeneous_unit.cpp heterogeneous_unit.cpp])
 
 [import ../example/heterogeneous_unit.cpp]
 
@@ -876,7 +876,7 @@ yielding
 
 [section:AbsoluteRelativeTemperatureExample Absolute and Relative Temperature Example]
 
-([@../../example/temperature.cpp temperature.cpp])
+([@../../libs/units/example/temperature.cpp temperature.cpp])
 
 [import ../example/temperature.cpp]
 
@@ -902,7 +902,7 @@ Note the use of [___absolute] to wrap a unit. The resulting output is:
 
 [section:RuntimeConversionFactorExample Runtime Conversion Factor Example]
 
-([@../../example/runtime_conversion_factor.cpp runtime_conversion_factor.cpp])
+([@../../libs/units/example/runtime_conversion_factor.cpp runtime_conversion_factor.cpp])
 
 [import ../example/runtime_conversion_factor.cpp]
 
@@ -915,7 +915,7 @@ as is demonstrated in this example:
 
 [section:UnitsWithNonbaseDimensions Units with Non-base Dimensions]
 
-([@../../example/non_base_dimension.cpp non_base_dimension.cpp])
+([@../../libs/units/example/non_base_dimension.cpp non_base_dimension.cpp])
 
 [import ../example/non_base_dimension.cpp]
 
@@ -927,7 +927,7 @@ It is also possible to define base units that have derived rather than base dime
 
 [section:OutputForCompositeUnits Output for Composite Units]
 
-([@../../example/composite_output.cpp composite_output.cpp])
+([@../../libs/units/example/composite_output.cpp composite_output.cpp])
 
 [import ../example/composite_output.cpp]
 
@@ -960,7 +960,7 @@ unit is also done correctly.
 This code demonstrates the use of the `conversion_factor` free function to determine
 the scale factor between two units.
 
-([@../../example/conversion_factor.cpp conversion_factor.cpp])
+([@../../libs/units/example/conversion_factor.cpp conversion_factor.cpp])
 
 [import ../example/conversion_factor.cpp]
 
@@ -974,7 +974,7 @@ Produces
 
 [section:RuntimeUnits Runtime Units]
 
-([@../../example/runtime_unit.cpp runtime_unit.cpp])
+([@../../libs/units/example/runtime_unit.cpp runtime_unit.cpp])
 
 [import ../example/runtime_unit.cpp]
 
@@ -983,6 +983,20 @@ allow different units at runtime while still maintaining
 type safety for internal calculations.
 
 [runtime_unit_snippet_1]
+
+[endsect]
+
+[section:lambda Interoperability with Boost.Lambda]
+
+([@../../libs/units/example/lambda.cpp lambda.cpp])
+
+[import ../example/lambda.cpp]
+
+The header [headerref boost/units/lambda.hpp] provides overloads
+and specializations needed to make Boost.Units usable with the
+Boost.Lambda library.
+
+[lambda_snippet_1]
 
 [endsect]
 
@@ -1047,14 +1061,6 @@ Relatively complete SI and CGS unit systems are provided in [headerref boost/uni
     template<class System,class Y> struct is_dimensionless_quantity< quantity<unit<dimensionless_type,System>,Y> >; 
 
 [endsect]
-
-[endsect]
-
-[section Library Interoperability]
-
-The header [headerref boost/lambda/lambda.hpp] provides overloads
-and specializations needed to make Boost.Units usable with the
-Boost.Lambda library.
 
 [endsect]
 
@@ -1266,7 +1272,7 @@ the design and implementation of this library.
 * added abstract units in [headerref boost/units/systems/abstract.hpp] to allow abstract dimensional
   analysis
 * new example demonstrating implementation of code based on requirements from 
-  Michael Fawcett ([@../../libs/units/example/radar_beam_height.hpp radar_beam_height.cpp])
+  Michael Fawcett ([@../../libs/units/example/radar_beam_height.cpp radar_beam_height.cpp])
 
 0.6.1 (February 13, 2007) :
 
