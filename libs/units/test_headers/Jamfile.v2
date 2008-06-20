@@ -1,0 +1,43 @@
+# Jamfile.v2
+#
+# Copyright (c) 2007
+# Steven Watanabe
+#
+# Distributed under the Boost Software License, Version 1.0. (See
+# accomanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt
+
+import testing ;
+import path ;
+import regex ;
+import print ;
+import generate_header ;
+
+project test_headers :
+    requirements <include>$(BOOST_ROOT) <include>../../..
+;
+
+headers = ;
+
+rule setup ( ) {
+  for local file in [ path.glob-tree ../../../boost/units : *.hpp : cmath_*_impl*.hpp ] {
+
+    headers += $(file) ;
+    result += [ compile test.cpp : <define>BOOST_UNITS_HEADER_NAME=$(file) <dependency>$(file) : [ regex.replace [ path.relative-to ../../.. $(file) ] "/" "_" ] ] ;
+
+  }
+  return $(result) ;
+}
+
+tests = [ setup ] ;
+
+generate-include-all-cpp include_all1 : $(headers) ;
+generate-include-all-cpp include_all2 : $(headers) ;
+
+import testing ;
+
+test-suite units_headers :
+  $(tests)
+# this ought to catch non-inlined functions and other duplicate definitions
+  [ link include_all1 include_all2 main.cpp : <include>. : include_all_headers ]
+  ;
