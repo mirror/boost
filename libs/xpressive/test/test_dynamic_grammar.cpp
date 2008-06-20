@@ -68,7 +68,7 @@ void test_dynamic_grammar2()
             compiler["factor"]  = compiler.compile( "\\d+ | (? $group ) ", x);
             compiler["term"]    = compiler.compile( "(? $factor ) (?: \\* (? $factor ) | / (? $factor ) )* ", x);
             compiler["expr"]    = compiler.compile( "(? $term )   (?: \\+ (? $term )   | - (? $term )   )* ", x);
-            
+
             expr = compiler["expr"];
         }
 

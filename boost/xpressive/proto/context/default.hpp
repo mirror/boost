@@ -5,7 +5,7 @@
     /// proto::eval() that uses Boost.Typeof to deduce return types
     /// of the built-in operators.
     //
-    //  Copyright 2007 Eric Niebler. Distributed under the Boost
+    //  Copyright 2008 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
     //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -14,33 +14,30 @@
 
     #include <boost/xpressive/proto/detail/prefix.hpp> // must be first include
     #include <boost/config.hpp>
-    #include <boost/detail/workaround.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/enum_shifted.hpp>
-    #include <boost/preprocessor/repetition/enum_params.hpp>
-    #include <boost/preprocessor/repetition/enum_trailing.hpp>
-    #include <boost/preprocessor/arithmetic/inc.hpp>
-    #include <boost/preprocessor/tuple/elem.hpp>
+    #include <boost/preprocessor/selection/max.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/typeof/typeof.hpp>
     #include <boost/utility/result_of.hpp>
     #include <boost/type_traits/is_const.hpp>
     #include <boost/type_traits/is_function.hpp>
-    #include <boost/type_traits/remove_cv.hpp>
+    #include <boost/type_traits/remove_reference.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/eval.hpp>
     #include <boost/xpressive/proto/traits.hpp> // for proto::arg_c()
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
+    namespace boost { namespace proto
+    {
     // If we're generating doxygen documentation, hide all the nasty
     // Boost.Typeof gunk.
     #ifndef BOOST_PROTO_DOXYGEN_INVOKED
         #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_(Nested, Expr)\
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(BOOST_PP_CAT(nested_and_hidden_, Nested), Expr)\
-            static int const sz = sizeof(detail::check_reference(Expr));  \
+            static int const sz = sizeof(proto::detail::check_reference(Expr));\
             struct Nested\
               : mpl::if_c<\
                     1==sz\
@@ -62,8 +59,10 @@
             typedef detail::unspecified Type;
     #endif
 
-    namespace boost { namespace proto
-    {
+    /// INTERNAL ONLY
+    ///
+    #define UNREF(x) typename boost::remove_reference<x>::type
+
         namespace detail
         {
             template<typename T> T make();
@@ -77,7 +76,7 @@
             template<typename A0, typename A1>
             struct comma_result
             {
-                BOOST_PROTO_DECLTYPE_((detail::make<A0>(), detail::make<A1>()), type)
+                BOOST_PROTO_DECLTYPE_((proto::detail::make<A0>(), proto::detail::make<A1>()), type)
             };
 
             template<typename A0>
@@ -129,18 +128,16 @@
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const &)()>::type>));
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>));
 
-        #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
-            template<typename T> T &make_ref_(T &t);
-            template<typename T> T const &make_ref_(T const &t);
-            #define BOOST_PROTO_REF(x) detail::make_ref_(x)
-        #else
-            #define BOOST_PROTO_REF(x) x
-        #endif
-        }
+        } // namespace detail
 
         namespace context
         {
-            template<typename Expr, typename Context, typename Tag, long Arity>
+            template<
+                typename Expr
+              , typename Context
+              , typename Tag        BOOST_PROTO_FOR_DOXYGEN_ONLY(= typename Expr::proto_tag)
+              , long Arity          BOOST_PROTO_FOR_DOXYGEN_ONLY(= Expr::proto_arity::value)
+            >
             struct default_eval
             {};
 
@@ -151,11 +148,11 @@
             struct default_eval<Expr, Context, Tag, 1>                                              \
             {                                                                                       \
             private:                                                                                \
-                static Expr &sexpr;                                                                 \
-                static Context &sctx;                                                               \
+                typedef typename proto::result_of::arg_c<Expr, 0>::type e0;                         \
+                typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;               \
             public:                                                                                 \
-                BOOST_PROTO_DECLTYPE_(Op proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx), result_type)\
-                result_type operator()(Expr &expr, Context &ctx) const                              \
+                BOOST_PROTO_DECLTYPE_(Op proto::detail::make<r0>(), result_type)                    \
+                result_type operator ()(Expr &expr, Context &ctx) const                             \
                 {                                                                                   \
                     return Op proto::eval(proto::arg_c<0>(expr), ctx);                              \
                 }                                                                                   \
@@ -169,11 +166,13 @@
             struct default_eval<Expr, Context, Tag, 2>                                              \
             {                                                                                       \
             private:                                                                                \
-                static Expr &sexpr;                                                                 \
-                static Context &sctx;                                                               \
+                typedef typename proto::result_of::arg_c<Expr, 0>::type e0;                         \
+                typedef typename proto::result_of::arg_c<Expr, 1>::type e1;                         \
+                typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;               \
+                typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;               \
             public:                                                                                 \
-                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) Op proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx), result_type)\
-                result_type operator()(Expr &expr, Context &ctx) const                              \
+                BOOST_PROTO_DECLTYPE_(proto::detail::make<r0>() Op proto::detail::make<r1>(), result_type)\
+                result_type operator ()(Expr &expr, Context &ctx) const                             \
                 {                                                                                   \
                     return proto::eval(proto::arg_c<0>(expr), ctx) Op proto::eval(proto::arg_c<1>(expr), ctx);\
                 }                                                                                   \
@@ -221,6 +220,9 @@
             BOOST_PROTO_BINARY_OP_RESULT(|=, proto::tag::bitwise_or_assign)
             BOOST_PROTO_BINARY_OP_RESULT(^=, proto::tag::bitwise_xor_assign)
 
+        #undef BOOST_PROTO_UNARY_OP_RESULT
+        #undef BOOST_PROTO_BINARY_OP_RESULT
+
             template<typename Expr, typename Context>
             struct default_eval<Expr, Context, proto::tag::terminal, 0>
             {
@@ -232,7 +234,7 @@
                     >::type
                 result_type;
 
-                result_type operator()(Expr &expr, Context &) const
+                result_type operator ()(Expr &expr, Context &) const
                 {
                     return proto::arg(expr);
                 }
@@ -243,11 +245,11 @@
             struct default_eval<Expr, Context, proto::tag::post_inc, 1>
             {
             private:
-                static Expr &sexpr;
-                static Context &sctx;
+                typedef typename proto::result_of::arg_c<Expr, 0>::type e0;
+                typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
             public:
-                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) ++, result_type)
-                result_type operator()(Expr &expr, Context &ctx) const
+                BOOST_PROTO_DECLTYPE_(proto::detail::make<r0>() ++, result_type)
+                result_type operator ()(Expr &expr, Context &ctx) const
                 {
                     return proto::eval(proto::arg_c<0>(expr), ctx) ++;
                 }
@@ -258,11 +260,11 @@
             struct default_eval<Expr, Context, proto::tag::post_dec, 1>
             {
             private:
-                static Expr &sexpr;
-                static Context &sctx;
+                typedef typename proto::result_of::arg_c<Expr, 0>::type e0;
+                typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
             public:
-                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) --, result_type)
-                result_type operator()(Expr &expr, Context &ctx) const
+                BOOST_PROTO_DECLTYPE_(proto::detail::make<r0>() --, result_type)
+                result_type operator ()(Expr &expr, Context &ctx) const
                 {
                     return proto::eval(proto::arg_c<0>(expr), ctx) --;
                 }
@@ -273,11 +275,13 @@
             struct default_eval<Expr, Context, proto::tag::subscript, 2>
             {
             private:
-                static Expr &sexpr;
-                static Context &sctx;
+                typedef typename proto::result_of::arg_c<Expr, 0>::type e0;
+                typedef typename proto::result_of::arg_c<Expr, 1>::type e1;
+                typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
+                typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
             public:
-                BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)[proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)], result_type)
-                result_type operator()(Expr &expr, Context &ctx) const
+                BOOST_PROTO_DECLTYPE_(proto::detail::make<r0>()[proto::detail::make<r1>()], result_type)
+                result_type operator ()(Expr &expr, Context &ctx) const
                 {
                     return proto::eval(proto::arg_c<0>(expr), ctx)[proto::eval(proto::arg_c<1>(expr), ctx)];
                 }
@@ -288,16 +292,20 @@
             struct default_eval<Expr, Context, proto::tag::if_else_, 3>
             {
             private:
-                static Expr &sexpr;
-                static Context &sctx;
+                typedef typename proto::result_of::arg_c<Expr, 0>::type e0;
+                typedef typename proto::result_of::arg_c<Expr, 1>::type e1;
+                typedef typename proto::result_of::arg_c<Expr, 2>::type e2;
+                typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
+                typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
+                typedef typename proto::result_of::eval<UNREF(e2), Context>::type r2;
             public:
                 BOOST_PROTO_DECLTYPE_(
-                    proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)
-                  ? proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)
-                  : proto::eval(BOOST_PROTO_REF(proto::arg_c<2>(sexpr)), sctx)
+                    proto::detail::make<r0>()
+                  ? proto::detail::make<r1>()
+                  : proto::detail::make<r2>()
                   , result_type
                 )
-                result_type operator()(Expr &expr, Context &ctx) const
+                result_type operator ()(Expr &expr, Context &ctx) const
                 {
                     return proto::eval(proto::arg_c<0>(expr), ctx)
                          ? proto::eval(proto::arg_c<1>(expr), ctx)
@@ -309,29 +317,34 @@
             template<typename Expr, typename Context>
             struct default_eval<Expr, Context, proto::tag::comma, 2>
             {
-                typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 0>::type, Context>::type proto_arg0;
-                typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 1>::type, Context>::type proto_arg1;
-                typedef typename detail::comma_result<proto_arg0, proto_arg1>::type result_type;
-                result_type operator()(Expr &expr, Context &ctx) const
+            private:
+                typedef typename proto::result_of::arg_c<Expr, 0>::type e0;
+                typedef typename proto::result_of::arg_c<Expr, 1>::type e1;
+                typedef typename proto::result_of::eval<UNREF(e0), Context>::type r0;
+                typedef typename proto::result_of::eval<UNREF(e1), Context>::type r1;
+            public:
+                typedef typename proto::detail::comma_result<r0, r1>::type result_type;
+                result_type operator ()(Expr &expr, Context &ctx) const
                 {
                     return proto::eval(proto::arg_c<0>(expr), ctx), proto::eval(proto::arg_c<1>(expr), ctx);
                 }
             };
 
-        #define BOOST_PROTO_EVAL_N_TYPE(Z, N, Data)\
-            typename proto::result_of::eval<\
-                typename proto::result_of::arg_c<BOOST_PP_TUPLE_ELEM(2, 0, Data), N>::type\
-              , BOOST_PP_TUPLE_ELEM(2, 1, Data)\
-            >::type
+            // Handle function specially
+            #define EVAL_TYPE(Z, N, DATA)                                                           \
+                typename proto::result_of::eval<                                                    \
+                    typename remove_reference<typename proto::result_of::arg_c<DATA, N>::type>::type\
+                  , Context                                                                         \
+                >::type
 
-        #define BOOST_PROTO_EVAL_N(Z, N, Data)\
-            proto::eval(proto::arg_c<N>(BOOST_PP_TUPLE_ELEM(2, 0, Data)), BOOST_PP_TUPLE_ELEM(2, 1, Data))
+            #define EVAL(Z, N, DATA)                                                                \
+                proto::eval(proto::arg_c<N>(DATA), context)
 
-        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/context/default.hpp>))
-        #include BOOST_PP_ITERATE()
+            #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/context/default.hpp>))
+            #include BOOST_PP_ITERATE()
 
-        #undef BOOST_PROTO_EVAL_N_TYPE
-        #undef BOOST_PROTO_EVAL_N
+            #undef EVAL_TYPE
+            #undef EVAL
 
             /// default_context
             ///
@@ -349,8 +362,7 @@
 
     }} // namespace boost::proto
 
-    #undef BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_
-    #undef BOOST_PROTO_DECLTYPE_
+    #undef UNREF
 
     #endif
 
@@ -358,29 +370,22 @@
 
     #define N BOOST_PP_ITERATION()
 
-        // Handle function specially
         template<typename Expr, typename Context>
         struct default_eval<Expr, Context, proto::tag::function, N>
         {
             typedef
-                typename detail::result_of_fixup<
-                    BOOST_PROTO_EVAL_N_TYPE(1, 0, (Expr, Context))
-                >::type
+                typename proto::detail::result_of_fixup<EVAL_TYPE(~, 0, Expr)>::type
             function_type;
 
             typedef
                 typename boost::result_of<
-                    function_type(
-                        BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_EVAL_N_TYPE, (Expr, Context))
-                    )
+                    function_type(BOOST_PP_ENUM_SHIFTED(BOOST_PP_MAX(N, 1), EVAL_TYPE, Expr))
                 >::type
             result_type;
 
             result_type operator ()(Expr &expr, Context &context) const
             {
-                return BOOST_PROTO_EVAL_N(1, 0, (expr, context))(
-                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_EVAL_N, (expr, context))
-                );
+                return EVAL(~, 0, expr)(BOOST_PP_ENUM_SHIFTED(BOOST_PP_MAX(N, 1), EVAL, expr));
             }
         };
 

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_non_char.cpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -80,6 +80,12 @@ void test_dynamic()
         BOOST_CHECK_EQUAL(3, what.position());
         BOOST_CHECK_EQUAL(3, what.length());
     }
+
+    // test for range-based regex_replace
+    std::vector<UChar> output = regex_replace(str, urx, pattern_);
+    std::string output_(output.begin(), output.end());
+    std::string expected("foob.*rboo");
+    BOOST_CHECK_EQUAL(output_, expected);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

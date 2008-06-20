@@ -1,13 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_symbols.cpp
 //
-//  Copyright 2007 David Jenkins.
-//  Copyright 2007 Eric Niebler.
+//  Copyright 2008 David Jenkins.
+//  Copyright 2008 Eric Niebler.
 //
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
+#include <string>
 #include <map>
 #include <boost/version.hpp>
 #include <boost/xpressive/xpressive_static.hpp>
@@ -25,14 +26,16 @@ void test1()
 {
     using namespace boost::xpressive;
 
-    std::string result;
+    local<std::string> result;
     std::string str("foo bar baz foo bar baz");
     std::map<std::string,std::string> map1;
     map1["foo"] = "1";
     map1["bar"] = "2";
     map1["baz"] = "3";
 
-    sregex rx = (a1=map1)[ xp::ref(result) = a1 ] >> *(' ' >> (a1=map1)[ xp::ref(result) += ',' + a1 ]);
+    sregex rx = skip(_s) (+(a1=map1)
+        [ result += if_else(length(result) > 0, ",", "") + a1 ]
+    );
 
     if(!regex_match(str, rx))
     {
@@ -40,7 +43,7 @@ void test1()
     }
     else
     {
-        BOOST_CHECK_EQUAL(result, "1,2,3,1,2,3");
+        BOOST_CHECK_EQUAL(result.get(), "1,2,3,1,2,3");
     }
 }
 
@@ -51,7 +54,7 @@ void test2()
 {
     using namespace boost::xpressive;
 
-    std::string result;
+    local<std::string> result;
     std::string str("foobarbazfoobazbazfoobazbar");
     std::map<std::string,std::string> map1;
     map1["foo"] = "1";
@@ -60,8 +63,9 @@ void test2()
     map1["foobaz"] = "4";
     map1["foobazbaz"] = "5";
 
-    sregex rx = (a1=map1)[ xp::ref(result) = a1 ] 
-        >> *((a1=map1)[ xp::ref(result) += ',', xp::ref(result) += a1 ]);
+    sregex rx = skip(_s) (+(a1=map1)
+        [ result += if_else(length(result) > 0, ",", "") + a1 ]
+    );
 
     if(!regex_match(str, rx))
     {
@@ -69,7 +73,7 @@ void test2()
     }
     else
     {
-        BOOST_CHECK_EQUAL(result, "1,2,3,5,4,2");
+        BOOST_CHECK_EQUAL(result.get(), "1,2,3,5,4,2");
     }
 }
 
@@ -89,11 +93,13 @@ void test3()
     map1["bop"] = 7890;
 
 #if BOOST_VERSION >= 103500
-    sregex rx = (a1=map1)[ xp::ref(result)->*push_back( a1 ) ] 
-        >> *(' ' >> (a1=map1)[ xp::ref(result)->*push_back( a1 ) ]);
+    sregex rx = skip(_s) (+(a1=map1)
+        [ xp::ref(result)->*push_back( a1 ) ]
+    );
 #else
-    sregex rx = (a1=map1)[ push_back(xp::ref(result), a1 ) ] 
-        >> *(' ' >> (a1=map1)[ push_back(xp::ref(result), a1 ) ]);
+    sregex rx = skip(_s) (+(a1=map1)
+        [ push_back(xp::ref(result), a1 ) ]
+    );
 #endif
 
     if(!regex_match(str, rx))
@@ -155,7 +161,7 @@ void test5()
 {
     using namespace boost::xpressive;
 
-    int result = 0;
+    local<int> result(0);
     std::string str("abcdefghi");
     std::map<std::string,int> map1;
     std::map<std::string,int> map2;
@@ -176,16 +182,16 @@ void test5()
     map8["h"] = 8;
     map9["i"] = 9;
 
-    sregex rx = 
-           (a1=map1)[ xp::ref(result) += a1 ]
-        >> (a2=map2)[ xp::ref(result) += a2 ]
-        >> (a3=map3)[ xp::ref(result) += a3 ] 
-        >> (a4=map4)[ xp::ref(result) += a4 ] 
-        >> (a5=map5)[ xp::ref(result) += a5 ] 
-        >> (a6=map6)[ xp::ref(result) += a6 ] 
-        >> (a7=map7)[ xp::ref(result) += a7 ] 
-        >> (a8=map8)[ xp::ref(result) += a8 ] 
-        >> (a9=map9)[ xp::ref(result) += a9 ];
+    sregex rx =
+           (a1=map1)[ result += a1 ]
+        >> (a2=map2)[ result += a2 ]
+        >> (a3=map3)[ result += a3 ]
+        >> (a4=map4)[ result += a4 ]
+        >> (a5=map5)[ result += a5 ]
+        >> (a6=map6)[ result += a6 ]
+        >> (a7=map7)[ result += a7 ]
+        >> (a8=map8)[ result += a8 ]
+        >> (a9=map9)[ result += a9 ];
 
     if(!regex_match(str, rx))
     {
@@ -193,7 +199,7 @@ void test5()
     }
     else
     {
-        BOOST_CHECK_EQUAL(result, 45);
+        BOOST_CHECK_EQUAL(result.get(), 45);
     }
 }
 
@@ -204,23 +210,25 @@ void test6()
 {
     using namespace boost::xpressive;
 
-    std::string result;
+    local<std::string> result;
     std::map<std::string,std::string> map1;
     map1["a"] = "1";
     map1["A"] = "2";
     map1["b"] = "3";
     map1["B"] = "4";
     std::string str("a A b B a A b B");
-    sregex rx = icase(a1= map1) [ xp::ref(result) = a1 ] 
-        >> repeat<3>( (' ' >> icase(a1= map1) [ xp::ref(result) += ',', xp::ref(result) += a1 ]) )
-        >> repeat<4>( (' ' >>      (a1= map1) [ xp::ref(result) += ',', xp::ref(result) += a1 ]) );
+    sregex rx = skip(_s)(
+        icase(a1= map1) [ result = a1 ]
+        >> repeat<3>( (icase(a1= map1) [ result += ',' + a1 ]) )
+        >> repeat<4>( ((a1= map1) [ result += ',' + a1 ]) )
+        );
     if(!regex_match(str, rx))
     {
         BOOST_ERROR("oops");
     }
     else
     {
-        BOOST_CHECK_EQUAL(result, "1,1,3,3,1,2,3,4");
+        BOOST_CHECK_EQUAL(result.get(), "1,1,3,3,1,2,3,4");
     }
 }
 
@@ -231,7 +239,7 @@ void test7()
 {
     using namespace boost::xpressive;
 
-    std::string result;
+    local<std::string> result;
     std::map<std::string,std::string> map1;
     map1["a"] = "1";
     map1["b"] = "2";
@@ -239,14 +247,14 @@ void test7()
     map2["c"] = "3";
     map2["d"] = "4";
     std::string str("abcde");
-    sregex rx = *((a1= map1) | (a1= map2) | 'e') [ xp::ref(result) += (a1 | "9") ];
+    sregex rx = *((a1= map1) | (a1= map2) | 'e') [ result += (a1 | "9") ];
     if(!regex_match(str, rx))
     {
         BOOST_ERROR("oops");
     }
     else
     {
-        BOOST_CHECK_EQUAL(result, "12349");
+        BOOST_CHECK_EQUAL(result.get(), "12349");
     }
 }
 
@@ -281,17 +289,17 @@ void test8()
     }
 
     std::wstring str(L"Chicago \u041c\u043E\u0441\u043A\u0432\u0430");
-    City result1, result2;
-    wsregex rx = (a1= map1)[ xp::ref(result1) = a1 ] >> +_s
-        >> (a1= map1)[ xp::ref(result2) = a1 ];
+    local<City> result1, result2;
+    wsregex rx = (a1= map1)[ result1 = a1 ] >> +_s
+        >> (a1= map1)[ result2 = a1 ];
     if(!regex_match(str, rx))
     {
         BOOST_ERROR("oops");
     }
     else
     {
-        BOOST_CHECK_EQUAL(result1.nickname, "The Windy City");
-        BOOST_CHECK_EQUAL(result2.nickname, "Moscow");
+        BOOST_CHECK_EQUAL(result1.get().nickname, "The Windy City");
+        BOOST_CHECK_EQUAL(result2.get().nickname, "Moscow");
     }
 }
 #else
@@ -312,8 +320,8 @@ void test9()
     std::string str("foobar");
     std::map<std::string,int> map1;
     map1["foo"] = 1;
-    int xx = 0;
-    sregex rx = ~before((a1=map1)[xp::ref(xx)=a1]) >> (s1=*_w)[ xp::ref(result) = s1 ];
+    sregex rx = ~before((a1=map1)[a1]) >>
+        (s1=*_w)[ xp::ref(result) = s1 ];
     if(!regex_match(str, rx))
     {
         BOOST_CHECK_EQUAL(result, "");

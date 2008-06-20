@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // set.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -30,12 +30,12 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // set_matcher
 //
-template<typename Traits, int Size>
+template<typename Traits, typename Size>
 struct set_matcher
   : quant_style_fixed_width<1>
 {
     typedef typename Traits::char_type char_type;
-    char_type set_[ Size ];
+    char_type set_[ Size::value ];
     bool not_;
     bool icase_;
 
@@ -55,7 +55,7 @@ struct set_matcher
     {
         this->icase_ = true;
 
-        for(int i = 0; i < Size; ++i)
+        for(int i = 0; i < Size::value; ++i)
         {
             this->set_[i] = traits.translate_nocase(this->set_[i]);
         }
@@ -63,7 +63,7 @@ struct set_matcher
 
     bool in_set(Traits const &traits, char_type ch) const
     {
-        char_type const *begin = &this->set_[0], *end = begin + Size;
+        char_type const *begin = &this->set_[0], *end = begin + Size::value;
         ch = this->icase_ ? traits.translate_nocase(ch) : traits.translate(ch);
         return end != std::find(begin, end, ch);
     }

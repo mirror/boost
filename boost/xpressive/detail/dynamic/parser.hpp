@@ -3,7 +3,7 @@
 /// Contains the definition of regex_compiler, a factory for building regex objects
 /// from strings.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -21,6 +21,7 @@
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/xpressive/detail/dynamic/dynamic.hpp>
 
 // The Regular Expression grammar, in pseudo BNF:
@@ -57,12 +58,12 @@ inline sequence<BidiIter> make_char_xpression
 {
     if(0 != (regex_constants::icase_ & flags))
     {
-        literal_matcher<Traits, true, false> matcher(ch, traits);
+        literal_matcher<Traits, mpl::true_, mpl::false_> matcher(ch, traits);
         return make_dynamic<BidiIter>(matcher);
     }
     else
     {
-        literal_matcher<Traits, false, false> matcher(ch, traits);
+        literal_matcher<Traits, mpl::false_, mpl::false_> matcher(ch, traits);
         return make_dynamic<BidiIter>(matcher);
     }
 }
@@ -79,8 +80,8 @@ inline sequence<BidiIter> make_any_xpression
 {
     using namespace regex_constants;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef set_matcher<Traits, 2> set_matcher;
-    typedef literal_matcher<Traits, false, true> literal_matcher;
+    typedef detail::set_matcher<Traits, mpl::int_<2> > set_matcher;
+    typedef literal_matcher<Traits, mpl::false_, mpl::true_> literal_matcher;
 
     char_type const newline = traits.widen('\n');
     set_matcher s;
@@ -123,12 +124,12 @@ inline sequence<BidiIter> make_literal_xpression
 
     if(0 != (regex_constants::icase_ & flags))
     {
-        string_matcher<Traits, true> matcher(literal, traits);
+        string_matcher<Traits, mpl::true_> matcher(literal, traits);
         return make_dynamic<BidiIter>(matcher);
     }
     else
     {
-        string_matcher<Traits, false> matcher(literal, traits);
+        string_matcher<Traits, mpl::false_> matcher(literal, traits);
         return make_dynamic<BidiIter>(matcher);
     }
 }
@@ -148,14 +149,14 @@ inline sequence<BidiIter> make_backref_xpression
     {
         return make_dynamic<BidiIter>
         (
-            mark_matcher<Traits, true>(mark_nbr, traits)
+            mark_matcher<Traits, mpl::true_>(mark_nbr, traits)
         );
     }
     else
     {
         return make_dynamic<BidiIter>
         (
-            mark_matcher<Traits, false>(mark_nbr, traits)
+            mark_matcher<Traits, mpl::false_>(mark_nbr, traits)
         );
     }
 }
@@ -171,6 +172,7 @@ inline void merge_charset
   , Traits const &traits
 )
 {
+    detail::ignore_unused(traits);
     if(0 != compound.posix_yes())
     {
         typename Traits::char_class_type mask = compound.posix_yes();
@@ -226,13 +228,13 @@ inline sequence<BidiIter> make_charset_xpression
         charset_type charset(chset.base());
         if(icase)
         {
-            charset_matcher<Traits, true, charset_type> matcher(charset);
+            charset_matcher<Traits, mpl::true_, charset_type> matcher(charset);
             merge_charset(matcher.charset_, chset, traits);
             return make_dynamic<BidiIter>(matcher);
         }
         else
         {
-            charset_matcher<Traits, false, charset_type> matcher(charset);
+            charset_matcher<Traits, mpl::false_, charset_type> matcher(charset);
             merge_charset(matcher.charset_, chset, traits);
             return make_dynamic<BidiIter>(matcher);
         }
@@ -251,12 +253,12 @@ inline sequence<BidiIter> make_charset_xpression
     {
         if(icase)
         {
-            charset_matcher<Traits, true> matcher(chset);
+            charset_matcher<Traits, mpl::true_> matcher(chset);
             return make_dynamic<BidiIter>(matcher);
         }
         else
         {
-            charset_matcher<Traits, false> matcher(chset);
+            charset_matcher<Traits, mpl::false_> matcher(chset);
             return make_dynamic<BidiIter>(matcher);
         }
     }
@@ -331,6 +333,22 @@ inline sequence<BidiIter> make_assert_word(Cond, Traits const &traits)
     (
         detail::assert_word_matcher<Cond, Traits>(traits)
     );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// make_independent_end_xpression
+//
+template<typename BidiIter>
+inline sequence<BidiIter> make_independent_end_xpression(bool pure)
+{
+    if(pure)
+    {
+        return detail::make_dynamic<BidiIter>(detail::true_matcher());
+    }
+    else
+    {
+        return detail::make_dynamic<BidiIter>(detail::independent_end_matcher());
+    }
 }
 
 }}} // namespace boost::xpressive::detail

@@ -53,3 +53,18 @@ exe mixed
         mixed.cpp
     ;
 
+exe futures
+    :
+        futures.cpp
+    ;
+
+exe map_assign
+    :
+        map_assign.cpp
+    ;
+
+exe lambda
+    :
+        lambda.cpp
+    ;
+

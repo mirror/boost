@@ -1,8 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file proto.hpp
-/// The proto expression template compiler and supporting utilities.
+/// Includes the core of Proto. Not included are the contexts, transforms and
+/// debugging utilities.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -18,6 +19,7 @@
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/domain.hpp>
+#include <boost/xpressive/proto/fusion.hpp>
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/extends.hpp>
 #include <boost/xpressive/proto/literal.hpp>

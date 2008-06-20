@@ -8,56 +8,55 @@ import quickbook ;
 
 wave-command = [ path.native ../../../../dist/bin/wave ] ;
 
-## Generate reference section using Doxygen
-#doxygen protodoc
-#    :
-#        ../../../../boost/xpressive/proto/args.hpp
-#        ../../../../boost/xpressive/proto/context.hpp
-#        ../../../../boost/xpressive/proto/debug.hpp
-#        ../../../../boost/xpressive/proto/deep_copy.hpp
-#        ../../../../boost/xpressive/proto/domain.hpp
-#        ../../../../boost/xpressive/proto/eval.hpp
-#        ../../../../boost/xpressive/proto/expr.hpp
-#        ../../../../boost/xpressive/proto/extends.hpp
-#        ../../../../boost/xpressive/proto/fusion.hpp
-#        ../../../../boost/xpressive/proto/generate.hpp
-#        ../../../../boost/xpressive/proto/literal.hpp
-#        ../../../../boost/xpressive/proto/make_expr.hpp
-#        ../../../../boost/xpressive/proto/matches.hpp
-#        ../../../../boost/xpressive/proto/operators.hpp
-#        ../../../../boost/xpressive/proto/proto.hpp
-#        ../../../../boost/xpressive/proto/proto_fwd.hpp
-##        ../../../../boost/xpressive/proto/proto_typeof.hpp
-#        ../../../../boost/xpressive/proto/ref.hpp
-#        ../../../../boost/xpressive/proto/tags.hpp
-#        ../../../../boost/xpressive/proto/traits.hpp
-#        ../../../../boost/xpressive/proto/transform.hpp
-#        ../../../../boost/xpressive/proto/context/callable.hpp
-#        ../../../../boost/xpressive/proto/context/default.hpp
-#        ../../../../boost/xpressive/proto/context/null.hpp
-#        ../../../../boost/xpressive/proto/transform/arg.hpp
-#        ../../../../boost/xpressive/proto/transform/apply.hpp
-#        ../../../../boost/xpressive/proto/transform/branch.hpp
-#        ../../../../boost/xpressive/proto/transform/compose.hpp
-#        ../../../../boost/xpressive/proto/transform/construct.hpp
-#        ../../../../boost/xpressive/proto/transform/fold.hpp
-#        ../../../../boost/xpressive/proto/transform/fold_tree.hpp
-#        ../../../../boost/xpressive/proto/transform/function.hpp
-#        ../../../../boost/xpressive/proto/transform/list.hpp
-#        ../../../../boost/xpressive/proto/transform/pass_through.hpp
-#    :
-#        <doxygen:param>EXTRACT_ALL=YES
-#        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
-#        # Use Boost.Wave to preprocess Proto's source
-#        <doxygen:param>"INPUT_FILTER=\"$(wave-command) \\
-#                                        -S ../../../.. \\
-#                                        -S \\\"C:\\Program Files\\Microsoft Visual Studio .NET 2003\\vc7\\include\\\" \\
-#                                        -D _WIN32 \\
-#                                        -D BOOST_PROTO_DOXYGEN_INVOKED \\
-#                                        -p 1 \""
-#        # This ensures that Wave is actually built before we try to execute it
-#        <dependency>../../../../tools/wave/build release
-#    ;
+# Generate reference section using Doxygen
+doxygen protodoc
+    :
+        ../../../../boost/xpressive/proto/args.hpp
+        ../../../../boost/xpressive/proto/context.hpp
+        ../../../../boost/xpressive/proto/debug.hpp
+        ../../../../boost/xpressive/proto/deep_copy.hpp
+        ../../../../boost/xpressive/proto/domain.hpp
+        ../../../../boost/xpressive/proto/eval.hpp
+        ../../../../boost/xpressive/proto/expr.hpp
+        ../../../../boost/xpressive/proto/extends.hpp
+        ../../../../boost/xpressive/proto/fusion.hpp
+        ../../../../boost/xpressive/proto/generate.hpp
+        ../../../../boost/xpressive/proto/literal.hpp
+        ../../../../boost/xpressive/proto/make_expr.hpp
+        ../../../../boost/xpressive/proto/matches.hpp
+        ../../../../boost/xpressive/proto/operators.hpp
+        ../../../../boost/xpressive/proto/proto.hpp
+        ../../../../boost/xpressive/proto/proto_fwd.hpp
+#        ../../../../boost/xpressive/proto/proto_typeof.hpp
+        ../../../../boost/xpressive/proto/ref.hpp
+        ../../../../boost/xpressive/proto/tags.hpp
+        ../../../../boost/xpressive/proto/traits.hpp
+        ../../../../boost/xpressive/proto/transform.hpp
+        ../../../../boost/xpressive/proto/context/callable.hpp
+        ../../../../boost/xpressive/proto/context/default.hpp
+        ../../../../boost/xpressive/proto/context/null.hpp
+        ../../../../boost/xpressive/proto/transform/arg.hpp
+        ../../../../boost/xpressive/proto/transform/bind.hpp
+        ../../../../boost/xpressive/proto/transform/call.hpp
+        ../../../../boost/xpressive/proto/transform/fold.hpp
+        ../../../../boost/xpressive/proto/transform/fold_tree.hpp
+        ../../../../boost/xpressive/proto/transform/make.hpp
+        ../../../../boost/xpressive/proto/transform/pass_through.hpp
+        ../../../../boost/xpressive/proto/transform/when.hpp
+    :
+        <doxygen:param>EXTRACT_ALL=YES
+        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
+        # Use Boost.Wave to preprocess Proto's source
+#        <doxygen:param>INPUT_FILTER=./wave.sh
+        <doxygen:param>"INPUT_FILTER=\"$(wave-command) \\
+                                        -S ../../../.. \\
+                                        -S \\\"C:\\Program Files\\Microsoft Visual Studio .NET 2003\\vc7\\include\\\" \\
+                                        -D _WIN32 \\
+                                        -D BOOST_PROTO_DOXYGEN_INVOKED \\
+                                        -p 1 \""
+        # This ensures that Wave is actually built before we try to execute it
+        <dependency>../../../../tools/wave/build release
+    ;
 
 xml proto
     :
@@ -82,28 +81,29 @@ boostbook standalone
         # How far down we go with TOC's
         <xsl:param>generate.section.toc.level=10
         # Set the path to the boost-root so we find our graphics:
-        #<xsl:param>boost.root=../../../../..
+        #<xsl:param>boost.root=$(BOOST_ROOT)
         # location of the main index file so our links work:
-        #<xsl:param>boost.libraries=../../../../../libs/libraries.htm
+        #<xsl:param>boost.libraries=$(BOOST_ROOT)/libs/libraries.htm
 
         # PDF Options:
         # TOC Generation: this is needed for FOP-0.9 and later:
         # <xsl:param>fop1.extensions=1
-        <xsl:param>xep.extensions=1
+        <format>pdf:<xsl:param>fop1.extensions=0
+        <format>pdf:<xsl:param>xep.extensions=1
         # TOC generation: this is needed for FOP 0.2, but must not be set to zero for FOP-0.9!
-        <xsl:param>fop.extensions=0
+        <format>pdf:<xsl:param>fop.extensions=0
         # No indent on body text:
-        <xsl:param>body.start.indent=0pt
+        <format>pdf:<xsl:param>body.start.indent=0pt
         # Margin size:
-        <xsl:param>page.margin.inner=0.5in
+        <format>pdf:<xsl:param>page.margin.inner=0.5in
         # Margin size:
-        <xsl:param>page.margin.outer=0.5in
+        <format>pdf:<xsl:param>page.margin.outer=0.5in
         # Yes, we want graphics for admonishments:
-        <xsl:param>admon.graphics=1
+        <format>pdf:<xsl:param>admon.graphics=1
         # Set this one for PDF generation *only*:
-        # default pnd graphics are awful in PDF form,
+        # default png graphics are awful in PDF form,
         # better use SVG's instead:
-        # <xsl:param>admon.graphics.extension=".svg"
+        # <format>pdf:<xsl:param>admon.graphics.extension=".svg"
 
 #        <dependency>protodoc
     ;

@@ -1,6 +1,6 @@
 //[ LazyVector
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -22,13 +22,13 @@ using namespace boost;
 using proto::_;
 
 // This grammar describes which lazy vector expressions
-// are allowed; namely, vector terminals and addition 
+// are allowed; namely, vector terminals and addition
 // and subtraction of lazy vector expressions.
 struct LazyVectorGrammar
   : proto::or_<
         proto::terminal< std::vector<_> >
-      , proto::plus< LazyVectorGrammar, LazyVectorGrammar>
-      , proto::minus< LazyVectorGrammar, LazyVectorGrammar>
+      , proto::plus< LazyVectorGrammar, LazyVectorGrammar >
+      , proto::minus< LazyVectorGrammar, LazyVectorGrammar >
     >
 {};
 
@@ -57,7 +57,7 @@ struct lazy_subscript_context
     {
         typedef typename proto::result_of::arg<Expr>::type::value_type result_type;
 
-        result_type operator()( Expr const & expr, lazy_subscript_context & ctx ) const
+        result_type operator ()( Expr const & expr, lazy_subscript_context & ctx ) const
         {
             return proto::arg( expr )[ ctx.subscript_ ];
         }
@@ -67,7 +67,7 @@ struct lazy_subscript_context
 };
 
 // Here is the domain-specific expression wrapper, which overrides
-// operator[] to evaluate the expression using the lazy_subscript_context.
+// operator [] to evaluate the expression using the lazy_subscript_context.
 template<typename Expr>
 struct lazy_vector_expr
   : proto::extends<Expr, lazy_vector_expr<Expr>, lazy_vector_domain>

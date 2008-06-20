@@ -2,7 +2,7 @@
 /// \file regex_actions.hpp
 /// Defines the syntax elements of xpressive's action expressions.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -14,6 +14,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
@@ -40,7 +41,7 @@
 
 // Doxygen can't handle proto :-(
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
-# include <boost/xpressive/proto/transform/fold.hpp>
+# include <boost/xpressive/proto/transform.hpp>
 # include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #endif
 
@@ -51,6 +52,13 @@
 /// INTERNAL ONLY
 ///
 #define UNCVREF(x)  typename remove_cv<typename remove_reference<x>::type>::type
+
+#if BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4510) // default constructor could not be generated
+#pragma warning(disable : 4512) // assignment operator could not be generated
+#pragma warning(disable : 4610) // can never be instantiated - user defined constructor required
+#endif
 
 namespace boost { namespace xpressive
 {
@@ -86,21 +94,15 @@ namespace boost { namespace xpressive
         struct check_tag
         {};
 
-        template<typename Grammar>
-        struct BindArg
-          : Grammar
+        struct BindArg : proto::callable
         {
-            template<typename Expr, typename State, typename Visitor>
-            struct apply
-            {
-                typedef State type;
-            };
+            typedef int result_type;
 
-            template<typename Expr, typename State, typename Visitor>
-            static State call(Expr const &expr, State const &state, Visitor &visitor)
+            template<typename Visitor, typename Expr>
+            int operator ()(Visitor &visitor, Expr const &expr) const
             {
                 visitor.let(expr);
-                return state;
+                return 0;
             }
         };
 
@@ -108,10 +110,15 @@ namespace boost { namespace xpressive
         {};
 
         struct BindArgs
-          : boost::proto::transform::fold<
-                boost::proto::function<
-                    boost::proto::transform::state<boost::proto::terminal<let_tag> >
-                  , boost::proto::vararg< BindArg< boost::proto::assign<boost::proto::_, boost::proto::_> > > 
+          : proto::when<
+                // let(_a = b, _c = d)
+                proto::function<
+                    proto::terminal<let_tag>
+                  , proto::vararg<proto::assign<proto::_, proto::_> >
+                >
+              , proto::function<
+                    proto::_state   // no-op
+                  , proto::vararg<proto::call<BindArg(proto::_visitor, proto::_)> >
                 >
             >
         {};
@@ -130,8 +137,56 @@ namespace boost { namespace xpressive
         template<typename Args, typename BidiIter>
         void bind_args(let_<Args> const &args, match_results<BidiIter> &what)
         {
-            BindArgs::call(args, 0, what);
+            BindArgs()(args, 0, what);
         }
+
+        template<typename BidiIter>
+        struct replacement_context
+          : proto::callable_context<replacement_context<BidiIter> const>
+        {
+            replacement_context(match_results<BidiIter> const &what)
+              : what_(what)
+            {}
+
+            template<typename Sig>
+            struct result;
+
+            template<typename This>
+            struct result<This(proto::tag::terminal, mark_placeholder const &)>
+            {
+                typedef sub_match<BidiIter> const &type;
+            };
+
+            template<typename This>
+            struct result<This(proto::tag::terminal, any_matcher const &)>
+            {
+                typedef sub_match<BidiIter> const &type;
+            };
+
+            template<typename This, typename T>
+            struct result<This(proto::tag::terminal, reference_wrapper<T> const &)>
+            {
+                typedef T &type;
+            };
+
+            sub_match<BidiIter> const &operator ()(proto::tag::terminal, mark_placeholder m) const
+            {
+                return this->what_[m.mark_number_];
+            }
+
+            sub_match<BidiIter> const &operator ()(proto::tag::terminal, any_matcher) const
+            {
+                return this->what_[0];
+            }
+
+            template<typename T>
+            T &operator ()(proto::tag::terminal, reference_wrapper<T> r) const
+            {
+                return r;
+            }
+        private:
+            match_results<BidiIter> const &what_;
+        };
     }
 
     namespace op
@@ -818,5 +873,9 @@ namespace boost { namespace xpressive
 
 #undef UNREF
 #undef UNCVREF
+
+#if BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_XPRESSIVE_ACTIONS_HPP_EAN_03_22_2007

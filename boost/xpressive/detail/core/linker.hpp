@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // linker.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -145,6 +145,7 @@ struct xpression_linker
       : back_stack_()
       , traits_(&traits)
       , traits_type_(&typeid(Traits))
+      , has_backrefs_(false)
     {
     }
 
@@ -154,12 +155,30 @@ struct xpression_linker
         // no-op
     }
 
+    template<typename Traits, typename ICase>
+    void accept(mark_matcher<Traits, ICase> const &, void const *)
+    {
+        this->has_backrefs_ = true;
+    }
+
+    template<typename Action>
+    void accept(action_matcher<Action> const &, void const *)
+    {
+        this->has_backrefs_ = true;
+    }
+
+    template<typename Predicate>
+    void accept(predicate_matcher<Predicate> const &, void const *)
+    {
+        this->has_backrefs_ = true;
+    }
+
     void accept(repeat_begin_matcher const &, void const *next)
     {
         this->back_stack_.push(next);
     }
 
-    template<bool Greedy>
+    template<typename Greedy>
     void accept(repeat_end_matcher<Greedy> const &matcher, void const *)
     {
         matcher.back_ = this->back_stack_.top();
@@ -179,14 +198,14 @@ struct xpression_linker
         this->back_stack_.pop();
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     void accept(optional_matcher<Xpr, Greedy> const &matcher, void const *next)
     {
         this->back_stack_.push(next);
         matcher.xpr_.link(*this);
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     void accept(optional_mark_matcher<Xpr, Greedy> const &matcher, void const *next)
     {
         this->back_stack_.push(next);
@@ -211,10 +230,16 @@ struct xpression_linker
         matcher.xpr_.link(*this);
     }
 
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     void accept(simple_repeat_matcher<Xpr, Greedy> const &matcher, void const *)
     {
         matcher.xpr_.link(*this);
+    }
+
+    // accessors
+    bool has_backrefs() const
+    {
+        return this->has_backrefs_;
     }
 
     // for use by alt_link_pred below
@@ -292,6 +317,7 @@ private:
     std::stack<void const *> back_stack_;
     void const *traits_;
     std::type_info const *traits_type_;
+    bool has_backrefs_;
 };
 
 }}} // namespace boost::xpressive::detail

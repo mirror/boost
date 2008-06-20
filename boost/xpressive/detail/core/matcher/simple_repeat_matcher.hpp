@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // simple_repeat_matcher.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/next_prior.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
@@ -55,22 +56,24 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // simple_repeat_matcher
     //
-    template<typename Xpr, bool Greedy>
+    template<typename Xpr, typename Greedy>
     struct simple_repeat_matcher
       : quant_style_variable_width
     {
         typedef Xpr xpr_type;
-        typedef mpl::bool_<Greedy> greedy_type;
+        typedef Greedy greedy_type;
 
         Xpr xpr_;
         unsigned int min_, max_;
         std::size_t width_;
+        mutable bool leading_;
 
         simple_repeat_matcher(Xpr const &xpr, unsigned int min, unsigned int max, std::size_t width)
           : xpr_(xpr)
           , min_(min)
           , max_(max)
           , width_(width)
+          , leading_(false)
         {
             // it is the job of the parser to make sure this never happens
             BOOST_ASSERT(min <= max);
@@ -101,6 +104,16 @@ namespace boost { namespace xpressive { namespace detail
                 ++matches;
             }
 
+            // If this repeater is at the front of the pattern, note
+            // how much of the input we consumed so that a repeated search
+            // doesn't have to cover the same ground again.
+            if(this->leading_)
+            {
+                state.next_search_ = (matches && matches < this->max_)
+                                   ? state.cur_
+                                   : (tmp == state.end_) ? tmp : boost::next(tmp);
+            }
+
             if(this->min_ > matches)
             {
                 state.cur_ = tmp;
@@ -126,6 +139,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Next>
         bool match_(match_state<BidiIter> &state, Next const &next, non_greedy_tag) const
         {
+            BOOST_ASSERT(!this->leading_);
             BidiIter const tmp = state.cur_;
             unsigned int matches = 0;
 
@@ -161,11 +175,23 @@ namespace boost { namespace xpressive { namespace detail
             // is there enough room?
             if(this->min_ > diff_to_end)
             {
+                if(this->leading_)
+                {
+                    // BUGBUG
+                    state.next_search_ = boost::next(tmp);
+                }
                 return false;
             }
 
             BidiIter const min_iter = tmp + this->min_;
             state.cur_ += (std::min)((std::size_t)this->max_, diff_to_end);
+
+            if(this->leading_)
+            {
+                state.next_search_ = (diff_to_end && diff_to_end < this->max_)
+                                   ? state.cur_
+                                   : (tmp == state.end_) ? tmp : boost::next(tmp);
+            }
 
             for(;; --state.cur_)
             {

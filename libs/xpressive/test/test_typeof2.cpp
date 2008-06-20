@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_typeof2.cpp
 //
-//  Copyright 2007 David Jenkins. Distributed under the Boost
+//  Copyright 2008 David Jenkins. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -43,13 +43,13 @@ void test_actions()
     TYPEOF_TEST((+_w)[ xp::ref(result) += _ ] >> *(' ' >> (+_w)[ xp::ref(result) += ',' + _ ]));
     TYPEOF_TEST((+_w)[ xp::ref(result) += _ ] >> *(' ' >> (+_w)[ xp::ref(result) += ',' + _ ]) >> repeat<4>(_));
     std::list<int> result2;
-    TYPEOF_TEST((+_d)[ xp::ref(result2)->*push_back( as<int>(_) ) ] 
+    TYPEOF_TEST((+_d)[ xp::ref(result2)->*push_back( as<int>(_) ) ]
         >> *(' ' >> (+_d)[ xp::ref(result2)->*push_back( as<int>(_) ) ]));
     std::map<std::string, int> result3;
     TYPEOF_TEST(( (s1= +_w) >> "=>" >> (s2= +_d) )[ xp::ref(result3)[s1] = as<int>(s2) ]);
     placeholder< std::map<std::string, int> > const _map5 = {{}};
     TYPEOF_TEST(( (s1= +_w) >> "=>" >> (s2= +_d) )[ _map5[s1] = as<int>(s2) ]);
- 
+
     smatch what;
     placeholder< std::map<std::string, int> > const _map6 = {{}};
     std::map<std::string, int> result6;
@@ -101,11 +101,11 @@ void test_symbols()
     std::string result;
     std::map<std::string,std::string> map10;
     TYPEOF_TEST((a1=map10)[ xp::ref(result) = a1 ] >> *(' ' >> (a1=map10)[ xp::ref(result) += ',' + a1 ]));
-    TYPEOF_TEST((a1=map10)[ xp::ref(result) = a1 ] 
+    TYPEOF_TEST((a1=map10)[ xp::ref(result) = a1 ]
         >> *((a1=map10)[ xp::ref(result) += ',', xp::ref(result) += a1 ]));
     std::list<int> result12;
     std::map<std::string,int> map12;
-    TYPEOF_TEST((a1=map12)[ xp::ref(result12)->*push_back( a1 ) ] 
+    TYPEOF_TEST((a1=map12)[ xp::ref(result12)->*push_back( a1 ) ]
         >> *(' ' >> (a1=map12)[ xp::ref(result12)->*push_back( a1 ) ]));
 
     placeholder< std::map<std::string, int> > const _map13 = {};
@@ -121,10 +121,10 @@ void test_symbols()
     std::map<std::string,int> map3a;
     TYPEOF_TEST((a1=map1a)[ xp::ref(result14) += a1 ]
         >> (a2=map2a)[ xp::ref(result) += a2 ]
-        >> (a3=map3a)[ xp::ref(result) += a3 ] 
+        >> (a3=map3a)[ xp::ref(result) += a3 ]
         );
         {
-    TYPEOF_TEST(icase(a1= map10) [ xp::ref(result) = a1 ] 
+    TYPEOF_TEST(icase(a1= map10) [ xp::ref(result) = a1 ]
         >> repeat<3>( (' ' >> icase(a1= map10) [ xp::ref(result) += ',', xp::ref(result) += a1 ]) )
         );
     TYPEOF_TEST(*((a1= map1a) | (a1= map2a) | 'e') [ xp::ref(result) += (a1 | "9") ]);

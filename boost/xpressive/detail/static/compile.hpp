@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // compile.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -41,7 +41,7 @@ namespace boost { namespace xpressive { namespace detail
         // "compile" the regex and wrap it in an xpression_adaptor.
         xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, impl);
         intrusive_ptr<matchable_ex<BidiIter> const> adxpr = make_adaptor<matchable_ex<BidiIter> >(
-            Grammar<char_type>::call(xpr, end_xpression(), visitor)
+            Grammar<char_type>()(xpr, end_xpression(), visitor)
         );
 
         // Link and optimize the regex

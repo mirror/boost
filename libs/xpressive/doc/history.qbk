@@ -1,11 +1,32 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
 [section Appendix 1: History]
+
+[h2 Version 2.1.0 6/12/2008]
+
+New Features:
+
+* `skip()` primitive for static regexes, which allows you to specify parts of
+  the input string to ignore during regex matching.
+* Range-based `regex_replace()` algorithm interface.
+* `regex_replace()` accepts formatter objects and formatter lambda expressions
+  in addition to format strings.
+
+Bugs Fixed:
+
+* Semantic actions in look-aheads, look-behinds and independent sub-expressions
+  execute eagerly instead of causing a crash.
+
+[h2 Version 2.0.1 10/23/2007]
+
+Bugs Fixed:
+
+* `sub_match<>` constructor copies singular iterator causing debug assert.
 
 [h2 Version 2.0.0, 10/12/2007]
 
@@ -66,7 +87,7 @@ New Features:
 
 [h2 Version 0.0.1, November 16, 2003]
 
-Announcement of xpressive: 
+Announcement of xpressive:
 [@http://lists.boost.org/Archives/boost/2003/11/56312.php]
 
 [endsect]

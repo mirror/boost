@@ -4,11 +4,11 @@
 /// The match_results type holds the results of a regex_match() or
 /// regex_search() operation.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// Acknowledgements: Thanks to Markus Sch\:opflin for helping to track down
+// Acknowledgements: Thanks to Markus Schoepflin for helping to track down
 // a tricky formatting bug on HP Tru64, and to Steven Watanabe for suggesting
 // the fix.
 
@@ -21,6 +21,7 @@
 #endif
 
 #include <map>
+#include <string>
 #include <vector>
 #include <utility>
 #include <iterator>
@@ -29,11 +30,21 @@
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/integer.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/not.hpp>
+#include <boost/mpl/size_t.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/iterator_adaptors.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/numeric/conversion/converter.hpp>
+#include <boost/range/end.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/as_literal.hpp>
+#include <boost/range/const_iterator.hpp>
+#include <boost/type_traits/is_function.hpp>
 #if BOOST_ITERATOR_ADAPTORS_VERSION >= 0x0200
 # include <boost/iterator/filter_iterator.hpp>
 #endif
@@ -46,6 +57,8 @@
 #include <boost/xpressive/detail/utility/literals.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
+#include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/proto/eval.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -212,6 +225,111 @@ struct noop_output_iterator
     }
 };
 
+struct any_type { any_type(...); };
+typedef char no_type;
+typedef char (&unary_type)[2];
+typedef char (&binary_type)[3];
+typedef char (&ternary_type)[4];
+
+no_type check_is_formatter(unary_type, binary_type, ternary_type);
+
+template<typename T>
+unary_type check_is_formatter(T const &, binary_type, ternary_type);
+
+template<typename T>
+binary_type check_is_formatter(unary_type, T const &, ternary_type);
+
+template<typename T, typename U>
+binary_type check_is_formatter(T const &, U const &, ternary_type);
+
+template<typename T>
+ternary_type check_is_formatter(unary_type, binary_type, T const &);
+
+template<typename T, typename U>
+ternary_type check_is_formatter(T const &, binary_type, U const &);
+
+template<typename T, typename U>
+ternary_type check_is_formatter(unary_type, T const &, U const &);
+
+template<typename T, typename U, typename V>
+ternary_type check_is_formatter(T const &, U const &, V const &);
+
+struct unary_binary_ternary
+{
+    typedef unary_type (*unary_fun)(any_type);
+    typedef binary_type (*binary_fun)(any_type, any_type);
+    typedef ternary_type (*ternary_fun)(any_type, any_type, any_type);
+    operator unary_fun();
+    operator binary_fun();
+    operator ternary_fun();
+};
+
+template<typename Formatter, bool IsFunction = is_function<Formatter>::value>
+struct formatter_wrapper
+  : Formatter
+  , unary_binary_ternary
+{
+    formatter_wrapper();
+};
+
+template<typename Formatter>
+struct formatter_wrapper<Formatter, true>
+  : unary_binary_ternary
+{
+    operator Formatter *();
+};
+
+template<typename Formatter>
+struct formatter_wrapper<Formatter *, false>
+  : unary_binary_ternary
+{
+    operator Formatter *();
+};
+
+template<typename Formatter, typename What, typename Out, typename Void = void>
+struct formatter_arity
+{
+    static formatter_wrapper<Formatter> &formatter;
+    static What &what;
+    static Out &out;
+    BOOST_STATIC_CONSTANT(
+        std::size_t
+      , value = sizeof(
+            check_is_formatter(
+                formatter(what)
+              , formatter(what, out)
+              , formatter(what, out, regex_constants::format_default)
+            )
+        ) - 1
+    );
+    typedef mpl::size_t<value> type;
+};
+
+template<typename Formatter, typename What, typename Out>
+struct formatter_arity<Formatter, What, Out, typename Formatter::proto_is_expr_>
+  : mpl::size_t<4>
+{};
+
+template<typename T>
+struct is_char_ptr
+  : mpl::false_
+{};
+
+template<typename T>
+struct is_char_ptr<T *>
+  : mpl::not_<is_function<T> >
+{};
+
+#if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
+// work around gcc-4.0.1 compiler bug wrt function references
+template<typename T>
+typename mpl::if_<is_function<T>, T *, T const &>::type
+as_callable(T const &t)
+{
+    return t;
+}
+#endif
+
 } // detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -324,8 +442,8 @@ public:
         return *this;
     }
 
-    /// Returns one plus the number of marked sub-expressions in the regular 
-    /// expression that was matched if *this represents the result of a 
+    /// Returns one plus the number of marked sub-expressions in the regular
+    /// expression that was matched if *this represents the result of a
     /// successful match. Otherwise returns 0.
     size_type size() const
     {
@@ -432,50 +550,95 @@ public:
         return this->nested_results_;
     }
 
-    /// Copies the character sequence [fmt.begin(), fmt.end()) to OutputIterator out. For each format
-    /// specifier or escape sequence in fmt, replace that sequence with either the character(s) it
-    /// represents, or the sequence within *this to which it refers. The bitmasks specified in flags
-    /// determines what format specifiers or escape sequences are recognized, by default this is the
+    /// If \c Format models \c ForwardRange or is a null-terminated string, this function
+    /// copies the character sequence in \c fmt to \c OutputIterator \c out. For each format
+    /// specifier or escape sequence in \c fmt, replace that sequence with either the character(s) it
+    /// represents, or the sequence within <tt>*this</tt> to which it refers. The bitmasks specified in flags
+    /// determines what format specifiers or escape sequences are recognized. By default, this is the
     /// format used by ECMA-262, ECMAScript Language Specification, Chapter 15 part 5.4.11 String.prototype.replace.
+    ///
+    /// Otherwise, if \c Format models <tt>Callable\<match_results\<BidiIter\>, OutputIterator, regex_constants::match_flag_type\></tt>,
+    /// this function returns <tt>fmt(*this, out, flags)</tt>.
+    ///
+    /// Otherwise, if \c Format models <tt>Callable\<match_results\<BidiIter\>, OutputIterator\></tt>, this function
+    /// returns <tt>fmt(*this, out)</tt>.
+    ///
+    /// Otherwise, if \c Format models <tt>Callable\<match_results\<BidiIter\> \></tt>, this function
+    /// returns <tt>std::copy(x.begin(), x.end(), out)</tt>, where \c x is the result of
+    /// calling <tt>fmt(*this)</tt>.
+    template<typename Format, typename OutputIterator>
+    OutputIterator format
+    (
+        OutputIterator out
+      , Format const &fmt
+      , regex_constants::match_flag_type flags = regex_constants::format_default
+      , typename disable_if<detail::is_char_ptr<Format> >::type * = 0
+    ) const
+    {
+        // Is this a formatter object, or a format string?
+        typedef
+            typename detail::formatter_arity<
+                Format
+              , match_results<BidiIter>
+              , OutputIterator
+            >::type
+        arity;
+
+        return this->format_(out, fmt, flags, arity());
+    }
+
+    /// \overload
+    ///
     template<typename OutputIterator>
     OutputIterator format
     (
         OutputIterator out
-      , const string_type &fmt
+      , char_type const *fmt
       , regex_constants::match_flag_type flags = regex_constants::format_default
     ) const
     {
-        typename string_type::const_iterator cur = fmt.begin(), end = fmt.end();
-
-        if(0 != (regex_constants::format_literal & flags))
-        {
-            return std::copy(cur, end, out);
-        }
-        else if(0 != (regex_constants::format_perl & flags))
-        {
-            return this->format_perl_(cur, end, out);
-        }
-        else if(0 != (regex_constants::format_sed & flags))
-        {
-            return this->format_sed_(cur, end, out);
-        }
-        else if(0 != (regex_constants::format_all & flags))
-        {
-            return this->format_all_(cur, end, out);
-        }
-
-        return this->format_ecma_262_(cur, end, out);
+        return this->format_(out, boost::as_literal(fmt), flags, mpl::size_t<0>());
     }
 
-    /// Returns a copy of the string fmt. For each format specifier or escape sequence in fmt,
+    /// If \c Format models \c ForwardRange or is a null-terminated string, this function
+    /// returns a copy of the character sequence \c fmt. For each format specifier or escape sequence in \c fmt,
     /// replace that sequence with either the character(s) it represents, or the sequence within
-    /// *this to which it refers. The bitmasks specified in flags determines what format specifiers
-    /// or escape sequences are recognized, by default this is the format used by ECMA-262,
+    /// <tt>*this</tt> to which it refers. The bitmasks specified in \c flags determines what format specifiers
+    /// or escape sequences are recognized. By default this is the format used by ECMA-262,
     /// ECMAScript Language Specification, Chapter 15 part 5.4.11 String.prototype.replace.
-    string_type format(string_type const &fmt, regex_constants::match_flag_type flags = regex_constants::format_default) const
+    ///
+    /// Otherwise, if \c Format models <tt>Callable\<match_results\<BidiIter\>, OutputIterator, regex_constants::match_flag_type\></tt>,
+    /// this function returns a \c string_type object \c x populated by calling <tt>fmt(*this, out, flags)</tt>,
+    /// where \c out is a \c back_insert_iterator into \c x.
+    ///
+    /// Otherwise, if \c Format models <tt>Callable\<match_results\<BidiIter\>, OutputIterator\></tt>, this function
+    /// returns a \c string_type object \c x populated by calling <tt>fmt(*this, out)</tt>,
+    /// where \c out is a \c back_insert_iterator into \c x.
+    ///
+    /// Otherwise, if \c Format models <tt>Callable\<match_results\<BidiIter\> \></tt>, this function
+    /// returns <tt>fmt(*this)</tt>.
+    template<typename Format, typename OutputIterator>
+    string_type format
+    (
+        Format const &fmt
+      , regex_constants::match_flag_type flags = regex_constants::format_default
+      , typename disable_if<detail::is_char_ptr<Format> >::type * = 0
+    ) const
     {
         string_type result;
-        result.reserve(fmt.length() * 2);
+        this->format(std::back_inserter(result), fmt, flags);
+        return result;
+    }
+
+    /// \overload
+    ///
+    string_type format
+    (
+        char_type const *fmt
+      , regex_constants::match_flag_type flags = regex_constants::format_default
+    ) const
+    {
+        string_type result;
         this->format(std::back_inserter(result), fmt, flags);
         return result;
     }
@@ -655,6 +818,131 @@ private:
 
     /// INTERNAL ONLY
     ///
+    template<typename OutputIterator, typename ForwardRange>
+    OutputIterator format2_(OutputIterator out, ForwardRange const &result) const
+    {
+        return std::copy(boost::begin(result), boost::end(result), out);
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator, typename Char>
+    OutputIterator format2_(OutputIterator out, Char const *const &result) const
+    {
+        Char const *tmp = result;
+        BOOST_ASSERT(0 != tmp);
+        for(; 0 != *tmp; ++tmp, ++out)
+        {
+            *out = *tmp;
+        }
+        return out;
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator, typename ForwardRange>
+    OutputIterator format_
+    (
+        OutputIterator out
+      , ForwardRange const &format
+      , regex_constants::match_flag_type flags
+      , mpl::size_t<0>
+    ) const
+    {
+        typedef typename range_const_iterator<ForwardRange>::type iterator;
+        iterator cur = boost::begin(format), end = boost::end(format);
+
+        if(0 != (regex_constants::format_literal & flags))
+        {
+            return std::copy(cur, end, out);
+        }
+        else if(0 != (regex_constants::format_perl & flags))
+        {
+            return this->format_perl_(cur, end, out);
+        }
+        else if(0 != (regex_constants::format_sed & flags))
+        {
+            return this->format_sed_(cur, end, out);
+        }
+        else if(0 != (regex_constants::format_all & flags))
+        {
+            return this->format_all_(cur, end, out);
+        }
+
+        return this->format_ecma_262_(cur, end, out);
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator, typename Callable1>
+    OutputIterator format_
+    (
+        OutputIterator out
+      , Callable1 const &format
+      , regex_constants::match_flag_type
+      , mpl::size_t<1>
+    ) const
+    {
+        #if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
+        return this->format2_(out, detail::as_callable(format)(*this));
+        #else
+        return this->format2_(out, format(*this));
+        #endif
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator, typename Callable2>
+    OutputIterator format_
+    (
+        OutputIterator out
+      , Callable2 const &format
+      , regex_constants::match_flag_type
+      , mpl::size_t<2>
+    ) const
+    {
+        #if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
+        return detail::as_callable(format)(*this, out);
+        #else
+        return format(*this, out);
+        #endif
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator, typename Callable3>
+    OutputIterator format_
+    (
+        OutputIterator out
+      , Callable3 const &format
+      , regex_constants::match_flag_type flags
+      , mpl::size_t<3>
+    ) const
+    {
+        #if BOOST_WORKAROUND(__GNUC__, == 4) && (__GNUC_MINOR__ == 0)
+        return detail::as_callable(format)(*this, out, flags);
+        #else
+        return format(*this, out, flags);
+        #endif
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator, typename Expr>
+    OutputIterator format_
+    (
+        OutputIterator out
+      , Expr const &format
+      , regex_constants::match_flag_type flags
+      , mpl::size_t<4>
+    ) const
+    {
+        detail::replacement_context<BidiIter> ctx(*this);
+        return this->format2_(out, proto::eval(format, ctx));
+    }
+
+    /// INTERNAL ONLY
+    ///
     template<typename ForwardIterator, typename OutputIterator>
     OutputIterator format_ecma_262_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
     {
@@ -822,11 +1110,11 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename OutputIterator>
+    template<typename ForwardIterator, typename OutputIterator>
     OutputIterator format_backref_
     (
-        typename string_type::const_iterator &cur
-      , typename string_type::const_iterator end
+        ForwardIterator &cur
+      , ForwardIterator end
       , OutputIterator out
     ) const
     {
@@ -872,16 +1160,16 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename OutputIterator>
+    template<typename ForwardIterator, typename OutputIterator>
     OutputIterator format_escape_
     (
-        typename string_type::const_iterator &cur
-      , typename string_type::const_iterator end
+        ForwardIterator &cur
+      , ForwardIterator end
       , OutputIterator out
     ) const
     {
         using namespace regex_constants;
-        typename string_type::const_iterator tmp;
+        ForwardIterator tmp;
         // define an unsigned type the same size as char_type
         typedef typename boost::uint_t<CHAR_BIT * sizeof(char_type)>::least uchar_t;
         BOOST_MPL_ASSERT_RELATION(sizeof(uchar_t), ==, sizeof(char_type));
@@ -1013,18 +1301,18 @@ private:
 
     /// INTERNAL ONLY
     ///
-    template<typename OutputIterator>
+    template<typename ForwardIterator, typename OutputIterator>
     OutputIterator format_named_backref_
     (
-        typename string_type::const_iterator &cur
-      , typename string_type::const_iterator end
+        ForwardIterator &cur
+      , ForwardIterator end
       , OutputIterator out
     ) const
     {
         using namespace regex_constants;
         detail::ensure(cur != end && BOOST_XPR_CHAR_(char_type, '<') == *cur++
             , error_badmark, "invalid named back-reference");
-        typename string_type::const_iterator begin = cur;
+        ForwardIterator begin = cur;
         for(; cur != end && BOOST_XPR_CHAR_(char_type, '>') != *cur; ++cur)
         {}
         detail::ensure(cur != begin && cur != end && BOOST_XPR_CHAR_(char_type, '>') == *cur

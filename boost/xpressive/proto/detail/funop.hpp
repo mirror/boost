@@ -2,7 +2,7 @@
 // funop.hpp
 // Contains definition of funop[n]\<\> class template.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -10,10 +10,12 @@
 #error Do not include this file directly
 #endif
 
+    /// \brief A helper metafunction for computing the
+    /// return type of \c proto::expr\<\>::operator().
     template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A)>
     struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     {
-        typedef expr<
+        typedef proto::expr<
             tag::function
           , BOOST_PP_CAT(args, BOOST_PP_INC(BOOST_PP_ITERATION()))<
                 ref_<Expr>
@@ -38,6 +40,8 @@
         }
     };
 
+    /// \brief A helper metafunction for computing the
+    /// return type of \c proto::expr\<\>::operator().
     template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A), typename This>
     struct funop<Expr(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), A)), This>
       : BOOST_PP_CAT(funop, BOOST_PP_ITERATION())<
@@ -50,6 +54,8 @@
         >
     {};
 
+    /// \brief A helper metafunction for computing the
+    /// return type of \c proto::expr\<\>::operator().
     template<typename Expr BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename A), typename This>
     struct funop<Expr const(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), A)), This>
       : BOOST_PP_CAT(funop, BOOST_PP_ITERATION())<

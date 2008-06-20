@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // range_matcher.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -26,12 +26,12 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // range_matcher
     //
-    template<typename Traits, bool ICase>
+    template<typename Traits, typename ICase>
     struct range_matcher
       : quant_style_fixed_width<1>
     {
         typedef typename Traits::char_type char_type;
-        typedef mpl::bool_<ICase> icase_type;
+        typedef ICase icase_type;
         char_type ch_min_;
         char_type ch_max_;
         bool not_;

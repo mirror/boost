@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // literal_matcher.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -24,18 +24,17 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // literal_matcher
     //
-    template<typename Traits, bool ICase, bool Not>
+    template<typename Traits, typename ICase, typename Not>
     struct literal_matcher
       : quant_style_fixed_width<1>
     {
         typedef typename Traits::char_type char_type;
-        typedef mpl::bool_<Not> not_type;
-        typedef mpl::bool_<ICase> icase_type;
+        typedef Not not_type;
+        typedef ICase icase_type;
         char_type ch_;
 
-        typedef literal_matcher<Traits, ICase, !Not> inverse_type;
-        explicit literal_matcher(inverse_type that)
-          : ch_(that.ch_)
+        explicit literal_matcher(char_type ch)
+          : ch_(ch)
         {}
 
         literal_matcher(char_type ch, Traits const &traits)
@@ -45,7 +44,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIter, typename Next>
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
-            if(state.eos() || Not ==
+            if(state.eos() || Not::value ==
                 (detail::translate(*state.cur_, traits_cast<Traits>(state), icase_type()) == this->ch_))
             {
                 return false;

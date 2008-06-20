@@ -2,7 +2,7 @@
 /// \file tags.hpp
 /// Contains the tags for all the overloadable operators in C++
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -20,7 +20,7 @@ namespace boost { namespace proto { namespace tag
     struct terminal {};
 
     /// Tag type for the unary + operator.
-    struct posit {};        
+    struct posit {};
 
     /// Tag type for the unary - operator.
     struct negate {};

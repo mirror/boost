@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // dynamic.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -213,12 +213,12 @@ make_simple_repeat(quant_spec const &spec, sequence<BidiIter> &seq, Xpr const &x
 {
     if(spec.greedy_)
     {
-        simple_repeat_matcher<Xpr, true> quant(xpr, spec.min_, spec.max_, seq.width().value());
+        simple_repeat_matcher<Xpr, mpl::true_> quant(xpr, spec.min_, spec.max_, seq.width().value());
         seq = make_dynamic<BidiIter>(quant);
     }
     else
     {
-        simple_repeat_matcher<Xpr, false> quant(xpr, spec.min_, spec.max_, seq.width().value());
+        simple_repeat_matcher<Xpr, mpl::false_> quant(xpr, spec.min_, spec.max_, seq.width().value());
         seq = make_dynamic<BidiIter>(quant);
     }
 }
@@ -243,12 +243,12 @@ make_optional(quant_spec const &spec, sequence<BidiIter> &seq)
     seq += make_dynamic<BidiIter>(alternate_end_matcher());
     if(spec.greedy_)
     {
-        optional_matcher<xpr_type, true> opt(seq.xpr());
+        optional_matcher<xpr_type, mpl::true_> opt(seq.xpr());
         seq = make_dynamic<BidiIter>(opt);
     }
     else
     {
-        optional_matcher<xpr_type, false> opt(seq.xpr());
+        optional_matcher<xpr_type, mpl::false_> opt(seq.xpr());
         seq = make_dynamic<BidiIter>(opt);
     }
 }
@@ -263,12 +263,12 @@ make_optional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
     seq += make_dynamic<BidiIter>(alternate_end_matcher());
     if(spec.greedy_)
     {
-        optional_mark_matcher<xpr_type, true> opt(seq.xpr(), mark_nbr);
+        optional_mark_matcher<xpr_type, mpl::true_> opt(seq.xpr(), mark_nbr);
         seq = make_dynamic<BidiIter>(opt);
     }
     else
     {
-        optional_mark_matcher<xpr_type, false> opt(seq.xpr(), mark_nbr);
+        optional_mark_matcher<xpr_type, mpl::false_> opt(seq.xpr(), mark_nbr);
         seq = make_dynamic<BidiIter>(opt);
     }
 }
@@ -313,13 +313,13 @@ make_repeat(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
         repeat_begin_matcher repeat_begin(mark_nbr);
         if(spec.greedy_)
         {
-            repeat_end_matcher<true> repeat_end(mark_nbr, min, spec.max_);
+            repeat_end_matcher<mpl::true_> repeat_end(mark_nbr, min, spec.max_);
             seq = make_dynamic<BidiIter>(repeat_begin) + seq
                 + make_dynamic<BidiIter>(repeat_end);
         }
         else
         {
-            repeat_end_matcher<false> repeat_end(mark_nbr, min, spec.max_);
+            repeat_end_matcher<mpl::false_> repeat_end(mark_nbr, min, spec.max_);
             seq = make_dynamic<BidiIter>(repeat_begin) + seq
                 + make_dynamic<BidiIter>(repeat_end);
         }

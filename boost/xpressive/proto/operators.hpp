@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file operators.hpp
 /// Contains all the overloaded operators that make it possible to build
-/// expression templates using proto components
+/// Proto expression trees. 
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -35,17 +35,17 @@ namespace boost { namespace proto
         struct as_expr_if2<Tag, Left, Right, typename Left::proto_is_expr_, void>
           : generate_if<
                 typename Left::proto_domain
-              , expr<
+              , proto::expr<
                     Tag
                   , args2<
                         ref_<Left>
-                      , typename Left::proto_domain::template apply<expr<tag::terminal, args0<Right &> > >::type
+                      , typename Left::proto_domain::template apply<proto::expr<tag::terminal, args0<Right &> > >::type
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args0<Right &> > term_type;
-            typedef expr<Tag, args2<ref_<Left>, typename Left::proto_domain::template apply<term_type>::type> > expr_type;
+            typedef proto::expr<tag::terminal, args0<Right &> > term_type;
+            typedef proto::expr<Tag, args2<ref_<Left>, typename Left::proto_domain::template apply<term_type>::type> > expr_type;
 
             static typename Left::proto_domain::template apply<expr_type>::type
             make(Left &left, Right &right)
@@ -60,17 +60,17 @@ namespace boost { namespace proto
         struct as_expr_if2<Tag, Left, Right, void, typename Right::proto_is_expr_>
           : generate_if<
                 typename Right::proto_domain
-              , expr<
+              , proto::expr<
                     Tag
                   , args2<
-                        typename Right::proto_domain::template apply<expr<tag::terminal, args0<Left &> > >::type
+                        typename Right::proto_domain::template apply<proto::expr<tag::terminal, args0<Left &> > >::type
                       , ref_<Right>
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args0<Left &> > term_type;
-            typedef expr<Tag, args2<typename Right::proto_domain::template apply<term_type>::type, ref_<Right> > > expr_type;
+            typedef proto::expr<tag::terminal, args0<Left &> > term_type;
+            typedef proto::expr<Tag, args2<typename Right::proto_domain::template apply<term_type>::type, ref_<Right> > > expr_type;
 
             static typename Right::proto_domain::template apply<expr_type>::type
             make(Left &left, Right &right)
@@ -90,10 +90,10 @@ namespace boost { namespace proto
         struct as_expr_if<Tag, Left, Right, typename Left::proto_is_expr_, typename Right::proto_is_expr_>
           : generate_if<
                 typename Left::proto_domain
-              , expr<Tag, args2<ref_<Left>, ref_<Right> > >
+              , proto::expr<Tag, args2<ref_<Left>, ref_<Right> > >
             >
         {
-            typedef expr<Tag, args2<ref_<Left>, ref_<Right> > > expr_type;
+            typedef proto::expr<Tag, args2<ref_<Left>, ref_<Right> > > expr_type;
             BOOST_MPL_ASSERT((is_same<typename Left::proto_domain, typename Right::proto_domain>));
 
             static typename Left::proto_domain::template apply<expr_type>::type
@@ -119,7 +119,7 @@ namespace boost { namespace proto
         template<typename Domain, typename Trait, typename Arg, typename Expr>
         struct enable_unary
           : boost::enable_if<
-                boost::mpl::and_<Trait, boost::proto::matches<Expr, typename Domain::grammar> >
+                boost::mpl::and_<Trait, boost::proto::matches<Expr, typename Domain::proto_grammar> >
               , Expr
             >
         {};
@@ -129,7 +129,7 @@ namespace boost { namespace proto
           : boost::enable_if<
                 boost::mpl::and_<
                     Trait
-                  , boost::proto::matches<Expr, typename domain_of<Arg>::type::grammar>
+                  , boost::proto::matches<Expr, typename domain_of<Arg>::type::proto_grammar>
                 >
               , Expr
             >
@@ -145,7 +145,7 @@ namespace boost { namespace proto
           : boost::enable_if<
                 boost::mpl::and_<
                     mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
-                  , boost::proto::matches<Expr, typename Domain::grammar>
+                  , boost::proto::matches<Expr, typename Domain::proto_grammar>
                 >
               , Expr
             >
@@ -156,7 +156,7 @@ namespace boost { namespace proto
           : boost::enable_if<
                 boost::mpl::and_<
                     mpl::bool_<(3 <= (arg_weight<Arg1, Trait1>::value + arg_weight<Arg2, Trait2>::value))>
-                  , boost::proto::matches<Expr, typename deduce_domain_<typename domain_of<Arg1>::type, Arg2>::type::grammar>
+                  , boost::proto::matches<Expr, typename deduce_domain_<typename domain_of<Arg1>::type, Arg2>::type::proto_grammar>
                 >
               , Expr
             >
@@ -179,22 +179,22 @@ namespace boost { namespace proto
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > >                                  \
+      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > >                           \
     >::type const                                                                                   \
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
-        typedef expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > > that_type;               \
+        typedef proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr> > > that_type;        \
         that_type that = {{arg}};                                                                   \
         return Arg::proto_domain::make(that);                                                       \
     }                                                                                               \
     template<typename Arg>                                                                          \
     typename detail::generate_if<                                                                   \
         typename Arg::proto_domain                                                                  \
-      , expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > >                            \
+      , proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > >                     \
     >::type const                                                                                   \
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \
-        typedef expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > > that_type;         \
+        typedef proto::expr<TAG, args1<ref_<typename Arg::proto_derived_expr const> > > that_type;  \
         that_type that = {{arg}};                                                                   \
         return Arg::proto_domain::make(that);                                                       \
     }                                                                                               \
@@ -291,58 +291,54 @@ namespace boost { namespace proto
 #define BOOST_PROTO_DEFINE_UNARY_OPERATOR(OP, TAG, TRAIT, DOMAIN, POST)                             \
     template<typename Arg>                                                                          \
     typename boost::proto::detail::enable_unary<DOMAIN, TRAIT<Arg>, Arg                             \
-        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Arg>::type                       \
+        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Arg &>::type                     \
     >::type const                                                                                   \
     operator OP(Arg &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                                  \
     {                                                                                               \
-        return boost::proto::result_of::make_expr<TAG, DOMAIN, Arg>::call(arg);                     \
+        return boost::proto::make_expr<TAG, DOMAIN>(boost::ref(arg));                               \
     }                                                                                               \
     template<typename Arg>                                                                          \
     typename boost::proto::detail::enable_unary<DOMAIN, TRAIT<Arg>, Arg                             \
-        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Arg const>::type                 \
+        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Arg const &>::type               \
     >::type const                                                                                   \
     operator OP(Arg const &arg BOOST_PROTO_UNARY_OP_IS_POSTFIX_ ## POST)                            \
     {                                                                                               \
-        return boost::proto::result_of::make_expr<TAG, DOMAIN, Arg const>::call(arg);               \
+        return boost::proto::make_expr<TAG, DOMAIN>(boost::ref(arg));                               \
     }                                                                                               \
     /**/
 
 #define BOOST_PROTO_DEFINE_BINARY_OPERATOR(OP, TAG, TRAIT, DOMAIN)                                  \
     template<typename Left, typename Right>                                                         \
     typename boost::proto::detail::enable_binary<DOMAIN, TRAIT<Left>, Left, TRAIT<Right>, Right     \
-        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left, Right>::type               \
+        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left &, Right &>::type           \
     >::type const                                                                                   \
     operator OP(Left &left, Right &right)                                                           \
     {                                                                                               \
-        return boost::proto::result_of::make_expr<TAG, DOMAIN, Left, Right>                         \
-            ::call(left, right);                                                                    \
+        return boost::proto::make_expr<TAG, DOMAIN>(boost::ref(left), boost::ref(right));           \
     }                                                                                               \
     template<typename Left, typename Right>                                                         \
     typename boost::proto::detail::enable_binary<DOMAIN, TRAIT<Left>, Left, TRAIT<Right>, Right     \
-        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left, Right const>::type         \
+        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left &, Right const &>::type     \
     >::type const                                                                                   \
     operator OP(Left &left, Right const &right)                                                     \
     {                                                                                               \
-        return boost::proto::result_of::make_expr<TAG, DOMAIN, Left, Right const>                   \
-            ::call(left, right);                                                                    \
+        return boost::proto::make_expr<TAG, DOMAIN>(boost::ref(left), boost::ref(right));           \
     }                                                                                               \
     template<typename Left, typename Right>                                                         \
     typename boost::proto::detail::enable_binary<DOMAIN, TRAIT<Left>, Left, TRAIT<Right>, Right     \
-        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left const, Right>::type         \
+        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left const &, Right &>::type     \
     >::type const                                                                                   \
     operator OP(Left const &left, Right &right)                                                     \
     {                                                                                               \
-        return boost::proto::result_of::make_expr<TAG, DOMAIN, Left const, Right>                   \
-            ::call(left, right);                                                                    \
+        return boost::proto::make_expr<TAG, DOMAIN>(boost::ref(left), boost::ref(right));           \
     }                                                                                               \
     template<typename Left, typename Right>                                                         \
     typename boost::proto::detail::enable_binary<DOMAIN, TRAIT<Left>, Left, TRAIT<Right>, Right     \
-        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left const, Right const>::type   \
+        , typename boost::proto::result_of::make_expr<TAG, DOMAIN, Left const &, Right const &>::type\
     >::type const                                                                                   \
     operator OP(Left const &left, Right const &right)                                               \
     {                                                                                               \
-        return boost::proto::result_of::make_expr<TAG, DOMAIN, Left const, Right const>             \
-            ::call(left, right);                                                                    \
+        return boost::proto::make_expr<TAG, DOMAIN>(boost::ref(left), boost::ref(right));           \
     }                                                                                               \
     /**/
 

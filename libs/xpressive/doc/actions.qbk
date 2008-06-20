@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,7 +10,7 @@
 [h2 Overview]
 
 Imagine you want to parse an input string and build a `std::map<>` from it. For
-something like that, matching a regular expression isn't enough. You want to 
+something like that, matching a regular expression isn't enough. You want to
 /do something/ when parts of your regular expression match. Xpressive lets
 you attach semantic actions to parts of your static regular expressions. This
 section shows you how.
@@ -31,12 +31,12 @@ described below.
     {
         std::map<std::string, int> result;
         std::string str("aaa=>1 bbb=>23 ccc=>456");
-        
+
         // Match a word and an integer, separated by =>,
         // and then stuff the result into a std::map<>
         sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )
             [ ref(result)[s1] = as<int>(s2) ];
-        
+
         // Match one or more word/integer pairs, separated
         // by whitespace.
         sregex rx = pair >> *(+_s >> pair);
@@ -47,7 +47,7 @@ described below.
             std::cout << result["bbb"] << '\n';
             std::cout << result["ccc"] << '\n';
         }
-        
+
         return 0;
     }
 
@@ -59,7 +59,7 @@ This program prints the following:
 456
 ]
 
-The regular expression `pair` has two parts: the pattern and the action. The 
+The regular expression `pair` has two parts: the pattern and the action. The
 pattern says to match a word, capturing it in sub-match 1, and an integer,
 capturing it in sub-match 2, separated by `"=>"`. The action is the part in
 square brackets: `[ ref(result)[s1] = as<int>(s2) ]`. It says to take sub-match
@@ -73,15 +73,15 @@ How does this work? Just as the rest of the static regular expression, the part
 between brackets is an expression template. It encodes the action and executes
 it later. The expression `ref(result)` creates a lazy reference to the `result`
 object. The larger expression `ref(result)[s1]` is a lazy map index operation.
-Later, when this action is getting executed, `s1` gets replaced with the 
+Later, when this action is getting executed, `s1` gets replaced with the
 first _sub_match_. Likewise, when `as<int>(s2)` gets executed, `s2` is replaced
-with the second _sub_match_. The `as<>` action converts its argument to the 
+with the second _sub_match_. The `as<>` action converts its argument to the
 requested type using Boost.Lexical_cast. The effect of the whole action is to
 insert a new word/integer pair into the map.
 
 [note There is an important difference between the function `boost::ref()` in
-`<boost/ref.hpp>` and `boost::xpressive::ref()` in 
-`<boost/xpressive/regex_actions.hpp>`. The first returns a plain 
+`<boost/ref.hpp>` and `boost::xpressive::ref()` in
+`<boost/xpressive/regex_actions.hpp>`. The first returns a plain
 `reference_wrapper<>` which behaves in many respects like an ordinary
 reference. By contrast, `boost::xpressive::ref()` returns a /lazy/ reference
 that you can use in expressions that are executed lazily. That is why we can
@@ -137,7 +137,7 @@ So far, we've seen how to write semantic actions consisting of variables and
 operators. But what if you want to be able to call a function from a semantic
 action? Xpressive provides a mechanism to do this.
 
-The first step is to define a function object type. Here, for instance, is a 
+The first step is to define a function object type. Here, for instance, is a
 function object type that calls `push()` on its argument:
 
     struct push_impl
@@ -158,7 +158,7 @@ object named `push`:
     // Global "push" function object.
     function<push_impl>::type const push = {{}};
 
-The initialization looks a bit odd, but this is because `push` is being 
+The initialization looks a bit odd, but this is because `push` is being
 statically initialized. That means it doesn't need to be constructed
 at runtime. We can use `push` in semantic actions as follows:
 
@@ -182,7 +182,7 @@ arguments, you can use a `result<>` member template instead of the
 `result_type` typedef. Here, for example, is a `first` function object
 that returns the `first` member of a `std::pair<>` or _sub_match_:
 
-    // Function object that returns the 
+    // Function object that returns the
     // first element of a pair.
     struct first_impl
     {
@@ -204,7 +204,7 @@ that returns the `first` member of a `std::pair<>` or _sub_match_:
     };
 
     // OK, use as first(s1) to get the begin iterator
-    // of the sub-match referred to by s1.    
+    // of the sub-match referred to by s1.
     function<first_impl>::type const first = {{}};
 
 [h3 Referring to Local Variables]
@@ -238,7 +238,7 @@ variables shared pointers that are held by the regex by value.
     }
 
 In the above code, we use `xpressive::val()` to hold the shared pointer by
-value. That's not normally necessary because local variables appearing in 
+value. That's not normally necessary because local variables appearing in
 actions are held by value by default, but in this case, it is necessary. Had
 we written the action as `++*pi`, it would have executed immediately. That's
 because `++*pi` is not an expression template, but `++*val(pi)` is.
@@ -263,7 +263,7 @@ sregex rex = +( _d [ ++*vpi ] >> '!' );``]]
 
 As you can see, when using `reference<>`, you need to first declare a local
 variable and then declare a `reference<>` to it. These two steps can be combined
-into one using `local<>`. 
+into one using `local<>`.
 
 [table local<> vs. reference<>
 [[This ...][... is equivalent to this ...]]
@@ -301,15 +301,15 @@ the regex object. What we can do instead is define a placeholder and use
 that in the semantic action instead of the map itself. Later, when we
 call one of the regex algorithms, we can bind the reference to an actual
 map object. The following code shows how.
-    
+
     // Define a placeholder for a map object:
     placeholder<std::map<std::string, int> > _map;
-    
+
     // Match a word and an integer, separated by =>,
     // and then stuff the result into a std::map<>
     sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )
         [ _map[s1] = as<int>(s2) ];
-    
+
     // Match one or more word/integer pairs, separated
     // by whitespace.
     sregex rx = pair >> *(+_s >> pair);
@@ -319,7 +319,7 @@ map object. The following code shows how.
 
     // Here is the actual map to fill in:
     std::map<std::string, int> result;
-    
+
     // Bind the _map placeholder to the actual map
     smatch what;
     what.let( _map = result );
@@ -340,10 +340,10 @@ This program displays:
 456
 ]
 
-We use `placeholder<>` here to define `_map`, which stands in for a 
+We use `placeholder<>` here to define `_map`, which stands in for a
 `std::map<>` variable. We can use the placeholder in the semantic action as if
 it were a map. Then, we define a _match_results_ struct and bind an actual map
-to the placeholder with "`what.let( _map = result );`". The _regex_match_ call 
+to the placeholder with "`what.let( _map = result );`". The _regex_match_ call
 behaves as if the placeholder in the semantic action had been replaced with a
 reference to `result`.
 
@@ -360,27 +360,27 @@ The following code demonstrates how.
 
     // Define a placeholder for a map object:
     placeholder<std::map<std::string, int> > _map;
-    
+
     // Match a word and an integer, separated by =>,
     // and then stuff the result into a std::map<>
     sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )
         [ _map[s1] = as<int>(s2) ];
-    
+
     // The string to parse
     std::string str("aaa=>1 bbb=>23 ccc=>456");
-    
+
     // Here is the actual map to fill in:
     std::map<std::string, int> result;
-    
+
     // Create a regex_iterator to find all the matches
     sregex_iterator it(str.begin(), str.end(), pair, let(_map=result));
     sregex_iterator end;
-    
+
     // step through all the matches, and fill in
     // the result map
     while(it != end)
         ++it;
-    
+
     std::cout << result["aaa"] << '\n';
     std::cout << result["bbb"] << '\n';
     std::cout << result["ccc"] << '\n';
@@ -397,7 +397,7 @@ This program displays:
 
 You are probably already familiar with regular expression /assertions/. In
 Perl, some examples are the [^^] and [^$] assertions, which you can use to
-match the beginning and end of a string, respectively. Xpressive lets you 
+match the beginning and end of a string, respectively. Xpressive lets you
 define your own assertions. A custom assertion is a contition which must be
 true at a point in the match in order for the match to succeed. You can check
 a custom assertion with xpressive's _check_ function.
@@ -438,7 +438,7 @@ semantic actions. Below is the same custom assertion written inline:
     sregex rx = (bow >> +_w >> eow)[ check(length(_)==3 || length(_)==6) ] ;
 
 In the above, `length()` is a lazy function that calls the `length()` member
-function of its argument, and `_` is a placeholder that receives the 
+function of its argument, and `_` is a placeholder that receives the
 `sub_match`.
 
 Once you get the hang of writing custom assertions inline, they can be
@@ -451,7 +451,7 @@ term ["valid]).
 
     mark_tag month(1), day(2);
     // find a valid date of the form month/day/year.
-    sregex date = 
+    sregex date =
         (
             // Month must be between 1 and 12 inclusive
             (month= _d >> !_d)     [ check(as<int>(_) >= 1

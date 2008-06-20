@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // assert_word_matcher.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -24,7 +25,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // word_boundary
     //
-    template<bool IsBoundary>
+    template<typename IsBoundary>
     struct word_boundary
     {
         template<typename BidiIter>
@@ -32,10 +33,10 @@ namespace boost { namespace xpressive { namespace detail
         {
             if((state.flags_.match_not_bow_ && state.bos()) || (state.flags_.match_not_eow_ && state.eos()))
             {
-                return !IsBoundary;
+                return !IsBoundary::value;
             }
 
-            return IsBoundary == (prevword != thisword);
+            return IsBoundary::value == (prevword != thisword);
         }
     };
 
@@ -95,6 +96,7 @@ namespace boost { namespace xpressive { namespace detail
 
         bool is_word(Traits const &traits, char_type ch) const
         {
+            detail::ignore_unused(traits);
             return traits.isctype(traits.translate(ch), this->word_);
         }
 

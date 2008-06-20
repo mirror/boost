@@ -1,12 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 // toy_spirit.hpp
 //
-//  Copyright 2006 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cctype>
 #include <string>
+#include <cstring>
 #include <iostream>
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
@@ -339,95 +340,86 @@ namespace boost { namespace spirit2
         bool in_skip_;
     };
 
-    // remove_case
-    template<typename Grammar>
-    struct remove_case;
-
-    template<>
-    struct remove_case<CharParser>
+    struct as_ichar_parser : proto::callable
     {
         typedef proto::function<
             ianychar_p
           , proto::terminal<char>::type
           , proto::terminal<char>::type
-        >::type type;
+        >::type result_type;
 
         template<typename Expr>
-        static type call(Expr const &expr)
+        result_type operator()(Expr const &expr) const
         {
             char lo = std::tolower(proto::arg(proto::arg_c<1>(expr)));
             char hi = std::toupper(proto::arg(proto::arg_c<1>(expr)));
-            type that = {ichar_, {lo}, {hi}};
+            result_type that = {ichar_, {lo}, {hi}};
             return that;
         }
     };
 
-    template<>
-    struct remove_case<CharRangeParser>
+    struct as_ichar_range_parser : proto::callable
     {
         typedef proto::function<
             ianychar_range_p
           , proto::terminal<char>::type
           , proto::terminal<char>::type
-        >::type type;
+        >::type result_type;
 
         template<typename Expr>
-        static type call(Expr const &expr)
+        result_type operator()(Expr const &expr) const
         {
             char lo = proto::arg(proto::arg_c<1>(expr));
             char hi = proto::arg(proto::arg_c<2>(expr));
-            type that = {ichar_range_, {lo}, {hi}};
+            result_type that = {ichar_range_, {lo}, {hi}};
             return that;
         }
     };
 
-    template<>
-    struct remove_case<CharLiteral>
+    struct as_ichar_literal : proto::callable
     {
         typedef proto::function<
             ianychar_p
           , proto::terminal<char>::type
           , proto::terminal<char>::type
-        >::type type;
+        >::type result_type;
 
         template<typename Expr>
-        static type call(Expr const &expr)
+        result_type operator()(Expr const &expr) const
         {
             char lo = std::tolower(proto::arg(expr));
             char hi = std::toupper(proto::arg(expr));
-            type that = {ichar_, {lo}, {hi}};
+            result_type that = {ichar_, {lo}, {hi}};
             return that;
         }
     };
 
-    template<>
-    struct remove_case<NTBSLiteral>
+    struct as_intbs_literal : proto::callable
     {
         typedef proto::function<
             ianystr_p
           , proto::terminal<std::string>::type
-        >::type type;
+        >::type result_type;
 
         template<typename Expr>
-        static type call(Expr const &expr)
+        result_type operator()(Expr const &expr) const
         {
-            type that = {istr_, {utility::to_istr(proto::arg(expr))}};
+            result_type that = {istr_, {utility::to_istr(proto::arg(expr))}};
             return that;
         }
     };
 
-    template<>
-    struct remove_case<StdStringLiteral>
+    struct as_istdstring_literal : proto::callable
     {
         typedef proto::function<
             ianystr_p
           , proto::terminal<std::string>::type
-        >::type type;
+        >::type result_type;
 
         template<typename Expr>
-        static type call(Expr const &expr)
+        result_type operator()(Expr const &expr) const
         {
-            type that = {istr_, {utility::to_istr(proto::arg(expr).c_str())}};
+            result_type that = {istr_, {utility::to_istr(proto::arg(expr).c_str())}};
             return that;
         }
     };
@@ -436,31 +428,13 @@ namespace boost { namespace spirit2
     // Transforms
     ///////////////////////////////////////////////////////////////////////////
 
-    template<typename Grammar>
-    struct case_sensitive
-      : Grammar
+    struct skip_primitives : proto::callable
     {
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : remove_case<Grammar>
-        {};
+        template<typename Sig>
+        struct result;
 
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
-        {
-            return apply<Expr, State, Visitor>::call(expr);
-        }
-    };
-
-    template<typename Grammar>
-    struct skip_primitives
-      : Grammar
-    {
-        skip_primitives();
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
+        template<typename This, typename Expr, typename State, typename Visitor>
+        struct result<This(Expr, State, Visitor)>
         {
             typedef typename proto::shift_right<
                 typename proto::dereference<State>::type
@@ -469,10 +443,10 @@ namespace boost { namespace spirit2
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
+        typename result<void(Expr, State, Visitor)>::type
+        operator()(Expr const &expr, State const &state, Visitor &visitor) const
         {
-            typedef typename apply<Expr, State, Visitor>::type type;
+            typedef typename result<void(Expr, State, Visitor)>::type type;
             type that = {{state}, expr};
             return that;
         }
@@ -481,16 +455,17 @@ namespace boost { namespace spirit2
     ///////////////////////////////////////////////////////////////////////////
     // Grammar
     ///////////////////////////////////////////////////////////////////////////
+    using proto::_;
 
     struct SpiritGrammar;
 
     struct SpiritCaseSensitivePrimitives
       : proto::or_<
-            case_sensitive<CharParser>
-          , case_sensitive<CharLiteral>
-          , case_sensitive<NTBSLiteral>
-          , case_sensitive<CharRangeParser>
-          , case_sensitive<StdStringLiteral>
+            proto::when<CharParser, as_ichar_parser(_)>
+          , proto::when<CharLiteral, as_ichar_literal(_)>
+          , proto::when<NTBSLiteral, as_intbs_literal(_)>
+          , proto::when<CharRangeParser, as_ichar_range_parser(_)>
+          , proto::when<StdStringLiteral, as_istdstring_literal(_)>
         >
     {};
 
@@ -535,7 +510,7 @@ namespace boost { namespace spirit2
     struct SkipperGrammar
       : proto::or_<
             SpiritComposites<SkipperGrammar>
-          , skip_primitives<SpiritPrimitives>
+          , proto::when<SpiritPrimitives, skip_primitives>
         >
     {};
 
@@ -546,11 +521,11 @@ namespace boost { namespace spirit2
     struct no_case_directive
     {
         template<typename Expr>
-        typename SpiritGrammar::apply<Expr, mpl::void_, mpl::void_>::type const
+        typename SpiritGrammar::result<void(Expr, mpl::void_, mpl::void_)>::type const
         operator [](Expr const &expr) const
         {
             mpl::void_ null;
-            return SpiritGrammar::call(expr, null, null);
+            return SpiritGrammar()(expr, null, null);
         }
     };
 
@@ -565,11 +540,11 @@ namespace boost { namespace spirit2
         {}
 
         template<typename Expr>
-        typename SkipperGrammar::apply<Expr, Skipper, mpl::void_>::type const
+        typename SkipperGrammar::result<void(Expr, Skipper, mpl::void_)>::type const
         operator [](Expr const &expr) const
         {
             mpl::void_ null;
-            return SkipperGrammar::call(expr, this->skip_, null);
+            return SkipperGrammar()(expr, this->skip_, null);
         }
     private:
         Skipper skip_;

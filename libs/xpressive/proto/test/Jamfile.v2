@@ -19,13 +19,15 @@ project
 
 test-suite "proto"
     :
+        [ run calculator.cpp ]
+        [ run deep_copy.cpp ]
+        [ run examples.cpp ]
+        [ run lambda.cpp ]
+        [ run make_expr.cpp ]
+        [ run matches.cpp ]
         [ run proto_fusion.cpp : : : <toolset>gcc:<cxxflags>-ftemplate-depth-1024 ]
         [ run proto_fusion_s.cpp ]
         [ run toy_spirit.cpp ]
         [ run toy_spirit2.cpp ]
-        [ run calculator.cpp ]
-        [ run lambda.cpp ]
-        [ run matches.cpp ]
-        [ run examples.cpp ]
     ;
 

@@ -3,7 +3,7 @@
 /// Contains the definition of the basic_regex\<\> class template and its
 /// associated helper functions.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -152,7 +152,7 @@ public:
     /// \return A basic_regex object corresponding to the regular expression
     ///         represented by the character range.
     /// \pre    [begin,end) is a valid range.
-    /// \pre    The range of characters specified by [begin,end) contains a 
+    /// \pre    The range of characters specified by [begin,end) contains a
     ///         valid string-based representation of a regular expression.
     /// \throw  regex_error when the range of characters has invalid regular
     ///         expression syntax.
@@ -239,7 +239,7 @@ private:
     // No-op for invalid static regexes.
     /// INTERNAL ONLY
     template<typename Expr>
-    void compile_(Expr const &expr, mpl::false_)
+    void compile_(Expr const &, mpl::false_)
     {
     }
 

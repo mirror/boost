@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file debug.hpp
-/// Utilities for debugging proto expression trees
+/// Utilities for debugging Proto expression trees
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -54,17 +54,19 @@ namespace boost { namespace proto
             {};
         }
 
+        /// INTERNAL ONLY
         template<typename Tag>
         inline typename hidden_detail_::printable_tag<Tag>::type proto_tag_name(Tag)
         {
             return hidden_detail_::printable_tag<Tag>::call();
         }
 
-    #define BOOST_PROTO_DEFINE_TAG_NAME(Tag)\
-        inline char const *proto_tag_name(tag::Tag)\
-        {\
-            return #Tag;\
-        }\
+    #define BOOST_PROTO_DEFINE_TAG_NAME(Tag)                                    \
+        /** \brief INTERNAL ONLY */                                             \
+        inline char const *proto_tag_name(tag::Tag)                             \
+        {                                                                       \
+            return #Tag;                                                        \
+        }                                                                       \
         /**/
 
         BOOST_PROTO_DEFINE_TAG_NAME(posit)
@@ -117,17 +119,30 @@ namespace boost { namespace proto
 
     namespace functional
     {
-        // Display a proto expression tree
+        /// \brief Pretty-print a Proto expression tree.
+        ///
+        /// A PolymorphicFunctionObject which accepts a Proto expression
+        /// tree and pretty-prints it to an \c ostream for debugging
+        /// purposes.
         struct display_expr
         {
+            typedef void result_type;
+
+            /// \param depth The starting indentation depth for this node.
+            ///              Children nodes will be displayed at a starting
+            ///              depth of <tt>depth+4</tt>.
+            /// \param sout  The \c ostream to which the expression tree
+            ///              will be written.
             display_expr(int depth = 0, std::ostream &sout = std::cout)
               : depth_(depth)
               , first_(true)
               , sout_(sout)
             {}
 
+            /// \brief Pretty-print the current node in a Proto expression
+            /// tree.
             template<typename Args>
-            void operator()(expr<tag::terminal, Args, 0> const &expr) const
+            void operator()(proto::expr<tag::terminal, Args, 0> const &expr) const
             {
                 this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
                     << "terminal(" << proto::arg(expr) << ")\n";
@@ -139,8 +154,9 @@ namespace boost { namespace proto
             /**/
 
         #define BOOST_PP_LOCAL_MACRO(N)                                                             \
+            /** \overload */                                                                        \
             template<typename Tag, typename Args>                                                   \
-            void operator()(expr<Tag, Args, N> const &expr) const                                   \
+            void operator()(proto::expr<Tag, Args, N> const &expr) const                            \
             {                                                                                       \
                 using namespace tag;                                                                \
                 this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")                 \
@@ -156,6 +172,8 @@ namespace boost { namespace proto
         #include BOOST_PP_LOCAL_ITERATE()
         #undef BOOST_PROTO_ARG
 
+            /// \overload
+            ///
             template<typename T>
             void operator()(T const &t) const
             {
@@ -163,22 +181,32 @@ namespace boost { namespace proto
             }
 
         private:
+            display_expr &operator =(display_expr const &);
             int depth_;
             mutable bool first_;
             std::ostream &sout_;
         };
     }
 
-    template<typename Expr>
-    void display_expr(Expr const &expr)
-    {
-        functional::display_expr()(expr);
-    }
-
+    /// \brief Pretty-print a Proto expression tree.
+    ///
+    /// \note Equivalent to <tt>functional::display_expr(0, sout)(expr)</tt>
+    /// \param expr The Proto expression tree to pretty-print
+    /// \param sout The \c ostream to which the output should be
+    ///             written. If not specified, defaults to
+    ///             <tt>std::cout</tt>.
     template<typename Expr>
     void display_expr(Expr const &expr, std::ostream &sout)
     {
         functional::display_expr(0, sout)(expr);
+    }
+
+    /// \overload
+    ///
+    template<typename Expr>
+    void display_expr(Expr const &expr)
+    {
+        functional::display_expr()(expr);
     }
 
 }}

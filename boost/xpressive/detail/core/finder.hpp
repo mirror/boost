@@ -1,6 +1,6 @@
 /// Contains the definition of the basic_regex\<\> class template and its associated helper functions.
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -188,6 +188,28 @@ private:
     line_start_finder &operator =(line_start_finder const &);
 
     bool bits_[256];
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// leading_simple_repeat_finder
+//
+template<typename BidiIter>
+struct leading_simple_repeat_finder
+  : finder<BidiIter>
+{
+    leading_simple_repeat_finder()
+      : finder<BidiIter>()
+    {}
+
+    bool operator ()(match_state<BidiIter> &state) const
+    {
+        state.cur_ = state.next_search_;
+        return true;
+    }
+
+private:
+    leading_simple_repeat_finder(leading_simple_repeat_finder const &);
+    leading_simple_repeat_finder &operator =(leading_simple_repeat_finder const &);
 };
 
 }}}

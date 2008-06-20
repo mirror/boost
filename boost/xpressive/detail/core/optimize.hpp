@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // optimize.hpp
 //
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -37,6 +37,13 @@ intrusive_ptr<finder<BidiIter> > optimize_regex
         return intrusive_ptr<finder<BidiIter> >
         (
             new line_start_finder<BidiIter, Traits>(traits)
+        );
+    }
+    else if(peeker.leading_simple_repeat())
+    {
+        return intrusive_ptr<finder<BidiIter> >
+        (
+            new leading_simple_repeat_finder<BidiIter>()
         );
     }
     else if(256 != peeker.bitset().count())
@@ -96,7 +103,7 @@ void common_compile
 
     // "peek" into the compiled regex to see if there are optimization opportunities
     hash_peek_bitset<char_type> bset;
-    xpression_peeker<char_type> peeker(bset, traits);
+    xpression_peeker<char_type> peeker(bset, traits, linker.has_backrefs());
     regex->peek(peeker);
 
     // optimization: get the peek chars OR the boyer-moore search string

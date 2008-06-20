@@ -1,6 +1,6 @@
 //[ Vector
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -42,7 +42,7 @@ struct VectorSubscriptCtx
     {
         typedef T result_type;
 
-        T operator()(Expr &expr, VectorSubscriptCtx const &ctx) const
+        T operator ()(Expr &expr, VectorSubscriptCtx const &ctx) const
         {
             return proto::arg(expr)[ctx.i_];
         }
@@ -73,11 +73,11 @@ struct VectorSizeCtx
     {
         typedef void result_type;
 
-        result_type operator()(Expr &expr, VectorSizeCtx const &ctx) const
+        result_type operator ()(Expr &expr, VectorSizeCtx const &ctx) const
         {
             if(ctx.size_ != proto::arg(expr).size())
             {
-                throw std::invalid_argument("LHS and RHS are not compatible");
+                throw std::runtime_error("LHS and RHS are not compatible");
             }
         }
     };
@@ -109,7 +109,7 @@ struct AssignOpsCases
 };
 
 // A vector grammar is a terminal or some op that is not an
-// assignment op. (Assignment will be handles specially.)
+// assignment op. (Assignment will be handled specially.)
 struct VectorGrammar
   : proto::or_<
         proto::terminal<_>
@@ -124,7 +124,7 @@ struct VectorDomain
 {};
 
 // Here is VectorExpr, which extends a proto expr type by
-// giving it an operator[] which uses the VectorSubscriptCtx 
+// giving it an operator [] which uses the VectorSubscriptCtx
 // to evaluate an expression with a given index.
 template<typename Expr>
 struct VectorExpr

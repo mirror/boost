@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -16,7 +16,7 @@ follow the ["Download] link.
 The second way is by downloading xpressive.zip at the
 [@http://www.boost-consulting.com/vault/index.php?directory=Strings%20-%20Text%20Processing
 Boost File Vault] in the ["Strings - Text Processing] directory. In addition to
-the source code and the Boost license, this archive contains a copy of this 
+the source code and the Boost license, this archive contains a copy of this
 documentation in PDF format. This version will always be stable and at least as
 current as the version in the latest Boost release. It may be more recent. The
 version in the File Vault is always guaranteed to work with the latest official

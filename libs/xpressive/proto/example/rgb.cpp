@@ -1,6 +1,6 @@
 //[ RGB
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -11,9 +11,7 @@
 
 #include <iostream>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/transform/arg.hpp>
-#include <boost/xpressive/proto/transform/apply.hpp>
-#include <boost/xpressive/proto/transform/compose.hpp>
+#include <boost/xpressive/proto/transform.hpp>
 using namespace boost::proto;
 
 struct RedTag
@@ -40,35 +38,49 @@ struct GreenTag
     }
 };
 
-typedef terminal<RedTag>::type Red;
-typedef terminal<BlueTag>::type Blue;
-typedef terminal<GreenTag>::type Green;
+typedef terminal<RedTag>::type RedT;
+typedef terminal<BlueTag>::type BlueT;
+typedef terminal<GreenTag>::type GreenT;
+
+struct Red;
+struct Blue;
+struct Green;
 
 ///////////////////////////////////////////////////////////////////////////////
 // A transform that produces new colors according to some arbitrary rules:
 // red & green give blue, red & blue give green, blue and green give red.
+struct Red
+  : or_<
+        plus<Green, Blue>
+      , plus<Blue, Green>
+      , plus<Red, Red>
+      , terminal<RedTag>
+    >
+{};
+
+struct Green
+  : or_<
+        plus<Red, Blue>
+      , plus<Blue, Red>
+      , plus<Green, Green>
+      , terminal<GreenTag>
+    >
+{};
+
+struct Blue
+  : or_<
+        plus<Red, Green>
+      , plus<Green, Red>
+      , plus<Blue, Blue>
+      , terminal<BlueTag>
+    >
+{};
+
 struct RGB
   : or_<
-        // leave terminals as they are
-        terminal<_>
-      , transform::compose<
-            // Match binary nodes, convert left and right to terminals
-            plus<RGB, RGB>
-            // Forward resulting binary expression to the following transform
-          , or_<
-                // Green + Blue -> Red
-                transform::always<plus<Green, Blue>, Red>
-              , transform::always<plus<Blue, Green>, Red>
-                // Red + Green -> Blue
-              , transform::always<plus<Red, Green>, Blue>
-              , transform::always<plus<Green, Red>, Blue>
-                // Red + Blue -> Green
-              , transform::always<plus<Red, Blue>, Green>
-              , transform::always<plus<Blue, Red>, Green>
-                // else (both same color), select the left operand
-              , transform::left<_>
-            >
-        >
+        when< Red, RedTag() >
+      , when< Blue, BlueTag() >
+      , when< Green, GreenTag() >
     >
 {};
 
@@ -76,14 +88,14 @@ template<typename Expr>
 void printColor(Expr const & expr)
 {
     int i = 0; // dummy state and visitor parameter, not used
-    std::cout << arg(RGB::call(expr, i, i)) << std::endl;
+    std::cout << RGB()(expr, i, i) << std::endl;
 }
 
 int main()
 {
-    printColor(Red() + Green());
-    printColor(Red() + Green() + Blue());
-    printColor(Red() + (Green() + Blue()));
+    printColor(RedT() + GreenT());
+    printColor(RedT() + GreenT() + BlueT());
+    printColor(RedT() + (GreenT() + BlueT()));
 
     return 0;
 }

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_actions.cpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -70,10 +70,10 @@ void test3()
     std::list<int> result;
     std::string str("1 23 456 7890");
 #if BOOST_VERSION >= 103500
-    sregex rx = (+_d)[ xp::ref(result)->*push_back( as<int>(_) ) ] 
+    sregex rx = (+_d)[ xp::ref(result)->*push_back( as<int>(_) ) ]
         >> *(' ' >> (+_d)[ xp::ref(result)->*push_back( as<int>(_) ) ]);
 #else
-    sregex rx = (+_d)[ push_back(xp::ref(result), as<int>(_) ) ] 
+    sregex rx = (+_d)[ push_back(xp::ref(result), as<int>(_) ) ]
         >> *(' ' >> (+_d)[ push_back(xp::ref(result), as<int>(_) ) ]);
 #endif
 

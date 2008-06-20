@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2006 Eric Niebler
+ / Copyright (c) 2008 Eric Niebler
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -268,8 +268,9 @@ The _not_ template is the simplest. It takes a grammar as a template parameter
 and logically negates it; `not_<Grammar>` will match any expression that
 `Grammar` does /not/ match.
 
-The _if_ template is used together with an MPL lambda expression, which is
-evaluated against expression types to find matches.
+The _if_ template is used together with a Proto transform that is evaluated
+against expression types to find matches. (Proto transforms will be described
+later.)
 
 The _and_ template is like _or_, except that each argument of the _and_ must
 match in order for the _and_ to match. As an example, consider the definition
@@ -279,34 +280,19 @@ _exact_ as follows:
     struct CharString
       : and_<
             terminal< _ >
-          , if_< is_same< result_of::arg< mpl::_ >, char const * > >
+          , if_< is_same< _arg, char const * >() >
         >
     {};
 
 This says that a `CharString` must be a terminal, /and/ its argument must be
 the same as `char const *`. Notice the template argument of _if_:
-`is_same< result_of::arg< mpl::_ >, char const * >`. This is an MPL lambda
-expression because it has the MPL placeholder `mpl::_` in it.
-
-[warning Do not confuse `mpl::_` with `proto::_`. The first is only useful in
-MPL lambda expressions. The second is Proto's grammar wildcard. The only place
-`mpl::_` should appear in your grammars is in an _if_, or in tranform::applyN<>,
-as we'll see later. Elsewhere in your grammars you should be using `proto::_`.]
+`is_same< _arg, char const * >()`. This is Proto transform that compares the
+argument of a terminal to `char const *`.
 
 The _if_ template has a couple of variants. In additon to `if_<Condition>` you
 can also say `if_<Condition, ThenGrammar>` and
 `if_<Condition, ThenGrammar, ElseGrammar>`. These let you select one sub-grammar
-or another based on the `Condition`. The following table shows their
-equivalencies:
-
-[table If-Then-Else Equivalencies
-[[Short-Cut Grammar][Equivalent Grammar]]
-[[`if_<Condition, ThenGrammar>`][`and_<if_<Condition>, ThenGrammar>`]]
-[[`if_<Condition, ThenGrammar, ElseGrammar>`][``or_<
-    and_<if_<Condition>, ThenGrammar>
-  , and_<not_<if_<Condition> >, ElseGrammar>
->``]]
-]
+or another based on the `Condition`.
 
 [endsect]
 

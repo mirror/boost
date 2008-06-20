@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_assert.cpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -53,7 +53,7 @@ void test3()
 
     mark_tag month(1), day(2);
     // find a valid date of the form month/day/year.
-    sregex date = 
+    sregex date =
         (
             // Month must be between 1 and 12 inclusive
             (month= _d >> !_d)     [ check(as<int>(_) >= 1

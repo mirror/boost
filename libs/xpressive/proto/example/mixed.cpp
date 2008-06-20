@@ -1,6 +1,6 @@
 //[ Mixed
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -18,12 +18,14 @@
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/debug.hpp>
 #include <boost/xpressive/proto/context.hpp>
+#include <boost/xpressive/proto/transform.hpp>
 #include <boost/typeof/std/list.hpp>
 #include <boost/typeof/std/vector.hpp>
 #include <boost/typeof/std/complex.hpp>
 
-using namespace boost;
-using proto::_;
+namespace proto = boost::proto;
+namespace mpl = boost::mpl;
+using namespace proto;
 
 template<typename Expr>
 struct MixedExpr;
@@ -38,30 +40,24 @@ struct iterator_wrapper
     Iter it;
 };
 
-template<typename Cont>
-iterator_wrapper<typename Cont::const_iterator> cbegin(Cont const &cont)
+struct begin : proto::callable
 {
-    return iterator_wrapper<typename Cont::const_iterator>(cont.begin());
-}
+    template<class Sig>
+    struct result;
 
-template<typename Grammar>
-struct begin
-  : Grammar
-{
-    template<typename Expr, typename State, typename Visitor>
-    struct apply
-      : proto::terminal<
-            iterator_wrapper<
-                typename proto::result_of::arg<Expr>::type::const_iterator
-            >
+    template<class This, class Cont>
+    struct result<This(Cont)>
+      : proto::result_of::as_expr<
+            iterator_wrapper<typename boost::remove_reference<Cont>::type::const_iterator>
         >
     {};
 
-    template<typename Expr, typename State, typename Visitor>
-    static typename apply<Expr, State, Visitor>::type
-    call(Expr const &expr, State const &state, Visitor &visitor)
+    template<typename Cont>
+    typename result<begin(Cont const &)>::type
+    operator ()(Cont const &cont) const
     {
-        return proto::as_expr(cbegin(proto::arg(expr)));
+        iterator_wrapper<typename Cont::const_iterator> it(cont.begin());
+        return proto::as_expr(it);
     }
 };
 
@@ -69,10 +65,10 @@ struct begin
 // begin iterators
 struct Begin
   : proto::or_<
-        begin< proto::terminal< std::vector<_, _> > >
-      , begin< proto::terminal< std::list<_, _> > >
-      , proto::terminal<_>
-      , proto::nary_expr<_, proto::vararg<Begin> >
+        when< proto::terminal< std::vector<_, _> >, begin(_arg) >
+      , when< proto::terminal< std::list<_, _> >, begin(_arg) >
+      , when< proto::terminal<_> >
+      , when< proto::nary_expr<_, proto::vararg<Begin> > >
     >
 {};
 
@@ -80,20 +76,20 @@ struct Begin
 // terminals.
 struct DereferenceCtx
 {
-    // Unless this is a vector terminal, use the
+    // Unless this is an iterator terminal, use the
     // default evaluation context
     template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
     struct eval
       : proto::default_eval<Expr, DereferenceCtx const>
     {};
 
-    // Index vector terminals with our subscript.
+    // Dereference iterator terminals.
     template<typename Expr, typename Iter>
     struct eval<Expr, iterator_wrapper<Iter> >
     {
         typedef typename std::iterator_traits<Iter>::reference result_type;
 
-        result_type operator()(Expr &expr, DereferenceCtx const &) const
+        result_type operator ()(Expr &expr, DereferenceCtx const &) const
         {
             return *proto::arg(expr).it;
         }
@@ -104,20 +100,20 @@ struct DereferenceCtx
 // terminals.
 struct IncrementCtx
 {
-    // Unless this is a vector terminal, use the
+    // Unless this is an iterator terminal, use the
     // default evaluation context
     template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
     struct eval
       : proto::null_eval<Expr, IncrementCtx const>
     {};
 
-    // Index vector terminals with our subscript.
+    // advance iterator terminals.
     template<typename Expr, typename Iter>
     struct eval<Expr, iterator_wrapper<Iter> >
     {
         typedef void result_type;
 
-        result_type operator()(Expr &expr, IncrementCtx const &) const
+        result_type operator ()(Expr &expr, IncrementCtx const &) const
         {
             ++proto::arg(expr).it;
         }
@@ -148,11 +144,14 @@ struct AssignOpsCases
 };
 
 // A vector grammar is a terminal or some op that is not an
-// assignment op. (Assignment will be handles specially.)
+// assignment op. (Assignment will be handled specially.)
 struct MixedGrammar
   : proto::or_<
         proto::terminal<_>
-      , proto::and_<proto::nary_expr<_, proto::vararg<MixedGrammar> >, proto::not_<AssignOps> >
+      , proto::and_<
+            proto::nary_expr<_, proto::vararg<MixedGrammar> >
+          , proto::not_<AssignOps>
+        >
     >
 {};
 
@@ -172,7 +171,7 @@ struct MixedExpr
     {}
 private:
     // hide this:
-    using proto::extends<Expr, MixedExpr<Expr>, MixedDomain>::operator[];
+    using proto::extends<Expr, MixedExpr<Expr>, MixedDomain>::operator [];
 };
 
 // Define a trait type for detecting vector and list terminals, to
@@ -192,7 +191,7 @@ struct IsMixed<std::vector<T, A> >
   : mpl::true_
 {};
 
-namespace VectorOps
+namespace MixedOps
 {
     // This defines all the overloads to make expressions involving
     // std::vector to build expression templates.
@@ -201,7 +200,7 @@ namespace VectorOps
     struct assign_op
     {
         template<typename T, typename U>
-        void operator()(T &t, U const &u) const
+        void operator ()(T &t, U const &u) const
         {
             t = u;
         }
@@ -210,7 +209,7 @@ namespace VectorOps
     struct plus_assign_op
     {
         template<typename T, typename U>
-        void operator()(T &t, U const &u) const
+        void operator ()(T &t, U const &u) const
         {
             t += u;
         }
@@ -219,7 +218,7 @@ namespace VectorOps
     struct minus_assign_op
     {
         template<typename T, typename U>
-        void operator()(T &t, U const &u) const
+        void operator ()(T &t, U const &u) const
         {
             t -= u;
         }
@@ -227,26 +226,31 @@ namespace VectorOps
 
     struct sin_
     {
-        template<typename Sig> struct result {};
+        template<typename Sig>
+        struct result;
+
         template<typename This, typename Arg>
         struct result<This(Arg)>
-          : remove_const<typename remove_reference<Arg>::type>
+          : boost::remove_const<typename boost::remove_reference<Arg>::type>
         {};
 
         template<typename Arg>
-        Arg operator()(Arg const &arg) const
+        Arg operator ()(Arg const &arg) const
         {
             return std::sin(arg);
         }
     };
 
-    BOOST_PROTO_DEFINE_FUNCTION_TEMPLATE(
-        1
-      , sin
+    template<typename A>
+    typename proto::result_of::make_expr<
+        proto::tag::function
       , MixedDomain
-      , (boost::proto::tag::function)
-      , ((sin_))
-    )
+      , sin_ const
+      , A const &
+    >::type sin(A const &a)
+    {
+        return proto::make_expr<proto::tag::function, MixedDomain>(sin_(), boost::ref(a));
+    }
 
     template<typename FwdIter, typename Expr, typename Op>
     void evaluate(FwdIter begin, FwdIter end, Expr const &expr, Op op)
@@ -254,7 +258,7 @@ namespace VectorOps
         int i = 0;
         IncrementCtx const inc = {};
         DereferenceCtx const deref = {};
-        typename Begin::apply<Expr, int, int>::type expr2 = Begin::call(expr, i, i);
+        typename boost::result_of<Begin(Expr, int, int)>::type expr2 = Begin()(expr, i, i);
         for(; begin != end; ++begin)
         {
             op(*begin, proto::eval(expr2, deref));
@@ -313,7 +317,7 @@ namespace VectorOps
 
 int main()
 {
-    using namespace VectorOps;
+    using namespace MixedOps;
 
     int n = 10;
     std::vector<int> a,b,c,d;
@@ -331,11 +335,11 @@ int main()
         f.push_back(std::complex<double>(1.0, 1.0));
     }
 
-    VectorOps::assign(b, 2);
-    VectorOps::assign(d, a + b * c);
+    MixedOps::assign(b, 2);
+    MixedOps::assign(d, a + b * c);
     a += if_else(d < 30, b, c);
 
-    VectorOps::assign(e, c);
+    MixedOps::assign(e, c);
     e += e - 4 / (c + 1);
 
     f -= sin(0.1 * e * std::complex<double>(0.2, 1.2));

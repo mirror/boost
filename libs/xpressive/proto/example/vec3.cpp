@@ -1,6 +1,6 @@
 //[ Vec3
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright 2007 Eric Niebler. Distributed under the Boost
+//  Copyright 2008 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -16,12 +16,11 @@
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/proto_typeof.hpp>
-#include <boost/xpressive/proto/transform/arg.hpp>
-#include <boost/xpressive/proto/transform/fold.hpp>
-#include <boost/xpressive/proto/transform/apply.hpp>
-#include <boost/xpressive/proto/transform/function.hpp>
-using namespace boost::proto;
+#include <boost/xpressive/proto/transform.hpp>
+
 namespace mpl = boost::mpl;
+namespace proto = boost::proto;
+using namespace proto;
 
 // Here is an evaluation context that indexes into a Vec3
 // expression, and combines the result.
@@ -36,7 +35,7 @@ struct Vec3SubscriptCtx
 
     // Index array terminals with our subscript. Everything
     // else will be handled by the default evaluation context.
-    int operator()(tag::terminal, int const (&arr)[3]) const
+    int operator ()(tag::terminal, int const (&arr)[3]) const
     {
         return arr[this->i_];
     }
@@ -45,41 +44,40 @@ struct Vec3SubscriptCtx
 };
 
 // Here is an evaluation context that counts the number
-// of Vec3 terminals in an expression. 
+// of Vec3 terminals in an expression.
 struct CountLeavesCtx
   : callable_context< CountLeavesCtx, null_context >
 {
     CountLeavesCtx()
       : count(0)
       {}
-      
+
       typedef void result_type;
-      
-      void operator()(tag::terminal, int const(&)[3])
+
+      void operator ()(tag::terminal, int const(&)[3])
       {
           ++this->count;
       }
-      
+
       int count;
 };
 
+struct iplus : std::plus<int>, callable {};
+
 // Here is a transform that does the same thing as the above context.
 // It demonstrates the use of the std::plus<> function object
-// with the function2 transform. With minor modifications, this
+// with the fold transform. With minor modifications, this
 // transform could be used to calculate the leaf count at compile
-// time, rather at runtime.
+// time, rather than at runtime.
 struct CountLeaves
   : or_<
         // match a Vec3 terminal, return 1
-        transform::always<terminal<int[3]>, mpl::int_<1> >
+        when<terminal<int[3]>, mpl::int_<1>() >
         // match a terminal, return int() (which is 0)
-      , transform::always<terminal<_>, int>
+      , when<terminal<_>, int() >
         // fold everything else, using std::plus<> to add
         // the leaf count of each child to the accumulated state.
-      , transform::fold<
-            nary_expr<_, vararg<transform::function2<CountLeaves, std::plus<int> > > >
-          , int // initial state of the fold is int() (which is 0)
-        >
+      , otherwise< fold<_, int(), iplus(CountLeaves, _state) > >
     >
 {};
 
@@ -94,17 +92,17 @@ struct Vec3
         (*this)[2] = k;
     }
 
-    int &operator[](int i)
+    int &operator [](int i)
     {
-        return arg(*this)[i];
+        return proto::arg(*this)[i];
     }
 
-    int const &operator[](int i) const
+    int const &operator [](int i) const
     {
-        return arg(*this)[i];
+        return proto::arg(*this)[i];
     }
 
-    // Here we define a operator= for Vec3 terminals that
+    // Here we define a operator = for Vec3 terminals that
     // takes a Vec3 expression.
     template< typename Expr >
     Vec3 &operator =(Expr const & expr)
@@ -134,10 +132,10 @@ int count_leaves(Expr const &expr)
     // CountLeavesCtx evaluation context.
     CountLeavesCtx ctx;
     eval(expr, ctx);
-    
+
     // This is another way to count the leaves using a transform.
     int i = 0;
-    assert( CountLeaves::call(expr, i, i) == ctx.count );
+    assert( CountLeaves()(expr, i, i) == ctx.count );
 
     return ctx.count;
 }
