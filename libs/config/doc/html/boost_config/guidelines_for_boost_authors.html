@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Guidelines for Boost Authors</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="boost_macro_reference.html" title="Boost Macro Reference">
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_config.guidelines_for_boost_authors"></a><a href="guidelines_for_boost_authors.html" title="Guidelines for Boost Authors">Guidelines for
+<a name="boost_config.guidelines_for_boost_authors"></a><a class="link" href="guidelines_for_boost_authors.html" title="Guidelines for Boost Authors">Guidelines for
     Boost Authors</a>
 </h2></div></div></div>
 <div class="toc"><dl>
@@ -105,7 +105,7 @@
 </ul></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.warnings"></a><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings" title="Disabling Compiler Warnings">
+<a name="boost_config.guidelines_for_boost_authors.warnings"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.warnings" title="Disabling Compiler Warnings">
       Disabling Compiler Warnings</a>
 </h3></div></div></div>
 <p>
@@ -184,7 +184,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.adding_new_defect_macros"></a><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros" title="Adding New Defect Macros">Adding
+<a name="boost_config.guidelines_for_boost_authors.adding_new_defect_macros"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_defect_macros" title="Adding New Defect Macros">Adding
       New Defect Macros</a>
 </h3></div></div></div>
 <p>
@@ -243,17 +243,18 @@
         </li>
 <li>
           cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">all</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
-          </code><span class="emphasis"><em>MACRONAME</em></span><code class="computeroutput"> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
+          </code><span class="emphasis"><em>MACRONAME<code class="computeroutput"> <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>
           : where <span class="emphasis"><em>MACRONAME</em></span> is the name of the new macro, and
-          <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code> is the list of compilers to test
-          with. You should see the tests pass with those compilers that don't have
-          the defect, and fail with those that do.
+          <span class="emphasis"><em><code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span> is a space separated
+          list of compilers to test with. You should see the tests pass with those
+          compilers that don't have the defect, and fail with those that do.
         </li>
 <li>
           cd into <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">config</span><span class="special">/</span><span class="identifier">test</span></code> and run <code class="computeroutput"><span class="identifier">bjam</span>
           <span class="identifier">config_info</span> <span class="identifier">config_test</span>
-          <span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code> : <code class="computeroutput"><span class="identifier">config_info</span></code>
-          should build and run cleanly for all the compilers in <code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code>
+          </code><span class="emphasis"><em><code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>
+          : <code class="computeroutput"><span class="identifier">config_info</span></code> should build
+          and run cleanly for all the compilers in <span class="emphasis"><em><code class="computeroutput"><span class="identifier">compiler</span><span class="special">-</span><span class="identifier">list</span></code></em></span>
           while <code class="computeroutput"><span class="identifier">config_test</span></code> should
           fail for those that have the defect, and pass for those that do not.
         </li>
@@ -282,7 +283,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros"></a><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros" title="Adding New Feature Test Macros">Adding
+<a name="boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.adding_new_feature_test_macros" title="Adding New Feature Test Macros">Adding
       New Feature Test Macros</a>
 </h3></div></div></div>
 <p>
@@ -306,7 +307,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers"></a><a href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers" title="Modifying the Boost Configuration Headers">Modifying
+<a name="boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers"></a><a class="link" href="guidelines_for_boost_authors.html#boost_config.guidelines_for_boost_authors.modifying_the_boost_configuration_headers" title="Modifying the Boost Configuration Headers">Modifying
       the Boost Configuration Headers</a>
 </h3></div></div></div>
 <p>

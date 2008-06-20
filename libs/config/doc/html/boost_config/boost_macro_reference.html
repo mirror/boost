@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
 <link rel="start" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
@@ -24,15 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_config.boost_macro_reference"></a><a href="boost_macro_reference.html" title="Boost Macro Reference">Boost Macro Reference</a>
+<a name="boost_config.boost_macro_reference"></a><a class="link" href="boost_macro_reference.html" title="Boost Macro Reference">Boost Macro Reference</a>
 </h2></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects">Macros
       that describe defects</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features">Macros
       that describe optional features</a></span></dt>
-<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features">Macros
-      that describe C++0x features</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features">Macros
+      that describe possible C++0x features</a></span></dt>
+<dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported">Macros
+      that describe C++0x features not supported</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros">Boost
       Helper Macros</a></span></dt>
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros">Boost
@@ -44,7 +46,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_defects"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects" title="Macros that describe defects">Macros
+<a name="boost_config.boost_macro_reference.macros_that_describe_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_defects" title="Macros that describe defects">Macros
       that describe defects</a>
 </h3></div></div></div>
 <p>
@@ -1202,7 +1204,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_optional_features"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features" title="Macros that describe optional features">Macros
+<a name="boost_config.boost_macro_reference.macros_that_describe_optional_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features" title="Macros that describe optional features">Macros
       that describe optional features</a>
 </h3></div></div></div>
 <p>
@@ -2110,12 +2112,13 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_that_describe_c__0x_features"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features" title="Macros that describe C++0x features">Macros
-      that describe C++0x features</a>
+<a name="boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c__0x_features" title="Macros that describe possible C++0x features">Macros
+      that describe possible C++0x features</a>
 </h3></div></div></div>
 <p>
         The following macros describe features that are likely to be included in
-        the upcoming ISO C++ standard, C++0x.
+        the upcoming ISO C++ standard, C++0x, but have not yet been approved for
+        inclusion in the language.
       </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -2134,8 +2137,7 @@
               </p>
               </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>
               <p>
                 <code class="computeroutput"><span class="identifier">BOOST_HAS_CONCEPTS</span></code>
@@ -2143,68 +2145,222 @@
               </td>
 <td>
               <p>
-                The compiler supports concepts. Note: concepts have been proposed
-                for C++0x, but have not yet been approved for inclusion in the language.
+                The compiler supports concepts.
+              </p>
+              </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__0x_features_not_supported" title="Macros that describe C++0x features not supported">Macros
+      that describe C++0x features not supported</a>
+</h3></div></div></div>
+<p>
+        The following macros describe features in the upcoming ISO C++ standard,
+        C++0x, that are not yet supported by a particular compiler.
+      </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Macro
+              </p>
+              </th>
+<th>
+              <p>
+                Description
+              </p>
+              </th>
+<td class="auto-generated"> </td>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR16_T</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support type <code class="computeroutput"><span class="identifier">char16_t</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR32_T</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support type <code class="computeroutput"><span class="identifier">char32_t</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_CONSTEXPR</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support <code class="computeroutput"><span class="identifier">constexpr</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_DECLTYPE</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support <code class="computeroutput"><span class="identifier">decltype</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_DEFAULTED_FUNCTIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support defaulted (<code class="computeroutput"><span class="special">=</span>
+                <span class="keyword">default</span></code>) functions. [[<code class="computeroutput"><span class="identifier">BOOST_NO_DELETED_FUNCTIONS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support deleted (<code class="computeroutput"><span class="special">=</span>
+                <span class="keyword">delete</span></code>) functions.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_DECLTYPE</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_EXPLICIT_CONVERSION_OPERATIONS</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports decltype.
+                The compiler does not support explicit conversion operators (<code class="computeroutput"><span class="keyword">explicit</span> <span class="keyword">operator</span>
+                <span class="identifier">T</span><span class="special">()</span></code>).
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_LONG_LONG</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_EXTERN_TEMPLATE</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports the long long data type.
+                The compiler does not support explicit instantiation declarations
+                for templates (<code class="computeroutput"><span class="keyword">explicit</span> <span class="keyword">template</span></code>).
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_RVALUE_REFS</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_LONG_LONG</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports rvalue references.
+                The compiler does not support <code class="computeroutput"><span class="keyword">long</span>
+                <span class="keyword">long</span></code>.
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_STATIC_ASSERT</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_RAW_LITERALS</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports static assertions.
+                The compiler does not support raw string literals.
               </p>
               </td>
+<td class="auto-generated"> </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">BOOST_HAS_VARIADIC_TMPL</span></code>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_RVALUE_REFERENCES</span></code>
               </p>
               </td>
 <td>
               <p>
-                The compiler supports variadic templates.
+                The compiler does not support r-value references.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_SCOPED_ENUMS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support scoped enumerations (<code class="computeroutput"><span class="keyword">enum</span> <span class="keyword">class</span></code>).
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_STATIC_ASSERT</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support <code class="computeroutput"><span class="identifier">static_assert</span></code>.
+              </p>
+              </td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <code class="computeroutput"><span class="identifier">BOOST_NO_UNICODE_LITERALS</span></code>
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support Unicode (<code class="computeroutput"><span class="identifier">u8</span></code>,
+                <code class="computeroutput"><span class="identifier">u</span></code>, <code class="computeroutput"><span class="identifier">U</span>#<span class="special">)</span> <span class="identifier">literals</span><span class="special">.</span>
+                <span class="special">]]</span> <span class="special">[[</span></code>BOOST_NO_VARIADIC_TEMPLATES`
+              </p>
+              </td>
+<td>
+              <p>
+                The compiler does not support variadic templates.
               </p>
               </td>
 </tr>
@@ -2215,7 +2371,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
+<a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
       Helper Macros</a>
 </h3></div></div></div>
 <p>
@@ -2508,7 +2664,7 @@
     </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.boost_informational_macros"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros" title="Boost Informational Macros">Boost
+<a name="boost_config.boost_macro_reference.boost_informational_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros" title="Boost Informational Macros">Boost
       Informational Macros</a>
 </h3></div></div></div>
 <p>
@@ -2747,7 +2903,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code" title="Macros for libraries with separate source code">Macros
+<a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code" title="Macros for libraries with separate source code">Macros
       for libraries with separate source code</a>
 </h3></div></div></div>
 <div class="toc"><dl>
@@ -2764,7 +2920,7 @@
       </p>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing" title="ABI Fixing">ABI
+<a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing" title="ABI Fixing">ABI
         Fixing</a>
 </h4></div></div></div>
 <p>
@@ -2822,7 +2978,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection"></a><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection" title="Automatic library selection">Automatic
+<a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection" title="Automatic library selection">Automatic
         library selection</a>
 </h4></div></div></div>
 <p>

@@ -487,36 +487,75 @@ standard).
 
 [endsect]
 
-[section Macros that describe C++0x features]
+[section Macros that describe possible C++0x features]
 
 The following macros describe features that are likely to be included in the
-upcoming ISO C++ standard, C++0x.
+upcoming ISO C++ standard, C++0x, but have not yet been approved for inclusion
+in the language.
 
 
 [table
 [[Macro     ][Description     ]]
 
 [[`BOOST_HAS_CONCEPTS`][
-The compiler supports  concepts. Note: concepts have been proposed for C++0x,
-but have not yet been approved for inclusion in the language.
-]]
-[[`BOOST_HAS_DECLTYPE`][
-The compiler supports decltype.
-]]
-[[`BOOST_HAS_LONG_LONG`][
-The compiler supports the long long data type.
-]]
-[[`BOOST_HAS_RVALUE_REFS`][
-The compiler supports  rvalue references.
-]]
-[[`BOOST_HAS_STATIC_ASSERT`][
-The compiler supports  static assertions.
-]]
-[[`BOOST_HAS_VARIADIC_TMPL`][
-The compiler supports  variadic templates. 
+The compiler supports  concepts.
 ]]
 ]
 
+[endsect]
+
+[section Macros that describe C++0x features not supported]
+
+The following macros describe features in the upcoming ISO C++ standard, C++0x,
+that are not yet supported by a particular compiler.
+
+[table
+[[Macro     ][Description     ]]
+
+[[`BOOST_NO_CHAR16_T`][The compiler does not support
+type `char16_t`. 
+]]                       
+[[`BOOST_NO_CHAR32_T`][The compiler does not support 
+type `char32_t`. 
+]]                       
+[[`BOOST_NO_CONSTEXPR`][The compiler does not support 
+`constexpr`. 
+]]                      
+[[`BOOST_NO_DECLTYPE`][The compiler does not support 
+`decltype`. 
+]]                       
+[[`BOOST_NO_DEFAULTED_FUNCTIONS`][The compiler does not support 
+defaulted (`= default`) functions.              
+[[`BOOST_NO_DELETED_FUNCTIONS`][The compiler does not support 
+deleted (`= delete`) functions.              
+]]              
+[[`BOOST_NO_EXPLICIT_CONVERSION_OPERATIONS`][The compiler does not support 
+explicit conversion operators (`explicit operator T()`).              
+]] 
+[[`BOOST_NO_EXTERN_TEMPLATE`][The compiler does not support 
+explicit instantiation declarations for templates (`explicit template`).
+]]
+[[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
+]]                
+[[`BOOST_NO_RAW_LITERALS`][The compiler does not support
+raw string literals. 
+]]                   
+[[`BOOST_NO_RVALUE_REFERENCES`][The compiler does not support
+r-value references. 
+]]              
+[[`BOOST_NO_SCOPED_ENUMS`][The compiler does not support
+scoped enumerations (`enum class`). 
+]]                   
+[[`BOOST_NO_STATIC_ASSERT`][The compiler does not support
+`static_assert`. 
+]]                  
+[[`BOOST_NO_UNICODE_LITERALS`][The compiler does not support
+Unicode (`u8`, `u`, `U') literals. 
+]]               
+[[`BOOST_NO_VARIADIC_TEMPLATES`][The compiler does not support
+variadic templates. 
+]]
+]
 
 [endsect]
 
