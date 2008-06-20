@@ -12,14 +12,11 @@
 #include <boost/test/minimal.hpp>
 #include <boost/foreach.hpp>
 
-#ifdef BOOST_FOREACH_NO_CONST_RVALUE_DETECTION
-// ignore error during Microsoft Code Analysis
-#if !defined(_PREFAST_)
-# error Expected failure : const rvalues disallowed
-#endif
+#ifdef BOOST_FOREACH_NO_RVALUE_DETECTION
+# error Expected failure : rvalues disallowed
 #else
 
-std::vector<int> const get_vector()
+std::vector<int> get_vector()
 {
     return std::vector<int>(4, 4);
 }
@@ -31,7 +28,7 @@ int test_main( int, char*[] )
 {
     int counter = 0;
 
-    BOOST_FOREACH(int i, get_vector())
+    BOOST_REVERSE_FOREACH(int i, get_vector())
     {
         counter += i;
     }

@@ -42,7 +42,7 @@
   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))                                     \
   || (BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 700) && defined(_MSC_VER))                   \
   || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))                                      \
-  || BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+  || BOOST_WORKAROUND(__DECCXX_VER, <= 60590042)
 #  define BOOST_FOREACH_NO_RVALUE_DETECTION
 # endif
 // Some compilers do not correctly implement the lvalue/rvalue conversion
@@ -69,7 +69,10 @@
 #include <boost/noncopyable.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/begin.hpp>
+#include <boost/range/rend.hpp>
+#include <boost/range/rbegin.hpp>
 #include <boost/range/iterator.hpp>
+#include <boost/range/reverse_iterator.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_abstract.hpp>
@@ -202,15 +205,6 @@ namespace foreach_detail_
 ///////////////////////////////////////////////////////////////////////////////
 // Define some utilities for assessing the properties of expressions
 //
-typedef char yes_type;
-typedef char (&no_type)[2];
-yes_type is_true(boost::mpl::true_ *);
-no_type is_true(boost::mpl::false_ *);
-
-// Extracts the desired property from the expression without evaluating it
-#define BOOST_FOREACH_PROTECT(expr)                                                             \
-    (static_cast<boost::mpl::bool_<1 == sizeof(boost::foreach_detail_::is_true(expr))> *>(0))
-
 template<typename Bool1, typename Bool2>
 inline boost::mpl::and_<Bool1, Bool2> *and_(Bool1 *, Bool2 *) { return 0; }
 
@@ -368,6 +362,37 @@ struct foreach_iterator
     >::type type;
 };
 
+
+template<typename T, typename C = boost::mpl::false_>
+struct foreach_reverse_iterator
+{
+    // **** READ THIS IF YOUR COMPILE BREAKS HERE ****
+    //
+    // There is an ambiguity about how to iterate over arrays of char and wchar_t. 
+    // Should the last array element be treated as a null terminator to be skipped, or
+    // is it just like any other element in the array? To fix the problem, you must
+    // say which behavior you want.
+    //
+    // To treat the container as a null-terminated string, merely cast it to a
+    // char const *, as in BOOST_FOREACH( char ch, (char const *)"hello" ) ...
+    //
+    // To treat the container as an array, use boost::as_array() in <boost/range/as_array.hpp>,
+    // as in BOOST_FOREACH( char ch, boost::as_array("hello") ) ...
+    #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+    BOOST_MPL_ASSERT_MSG( (!is_char_array<T>::value), IS_THIS_AN_ARRAY_OR_A_NULL_TERMINATED_STRING, (T&) );
+    #endif
+
+    // If the type is a pointer to a null terminated string (as opposed 
+    // to an array type), there is no ambiguity.
+    typedef BOOST_DEDUCED_TYPENAME wrap_cstr<T>::type container;
+
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<
+        C
+      , range_reverse_iterator<container const>
+      , range_reverse_iterator<container>
+    >::type type;
+};
+
 template<typename T, typename C = boost::mpl::false_>
 struct foreach_reference
   : iterator_reference<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
@@ -386,7 +411,11 @@ inline type2type<T, const_> *encode_type(T const &, boost::mpl::true_ *) { retur
 ///////////////////////////////////////////////////////////////////////////////
 // set_false
 //
-inline bool set_false(bool &b) { return b = false; }
+inline bool set_false(bool &b)
+{
+    b = false;
+    return false;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // to_ptr
@@ -441,17 +470,20 @@ struct rvalue_probe
     typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
         boost::mpl::or_<boost::is_abstract<T>, boost::is_array<T> >, private_type_, T
     >::type value_type;
-    operator value_type();
-    operator T &() const;
+    operator value_type() { return *reinterpret_cast<value_type *>(this); } // never called
+    operator T &() const { return *reinterpret_cast<T *>(const_cast<rvalue_probe *>(this)); } // never called
 };
 
 template<typename T>
-rvalue_probe<T> const make_probe(T const &t);
+rvalue_probe<T> const make_probe(T const &)
+{
+    return rvalue_probe<T>();
+}
 
 # define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
     boost::foreach_detail_::and_(                                                               \
         boost::foreach_detail_::not_(boost::foreach_detail_::is_array_(COL))                    \
-      , BOOST_FOREACH_PROTECT(boost::foreach_detail_::is_rvalue_(                               \
+      , (true ? 0 : boost::foreach_detail_::is_rvalue_(                                         \
             (true ? boost::foreach_detail_::make_probe(COL) : (COL)), 0)))
 
 #elif defined(BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION)
@@ -717,8 +749,123 @@ deref(auto_any_t cur, type2type<T, C> *)
     return *auto_any_cast<iter_t, boost::mpl::false_>(cur);
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// rbegin
+//
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rbegin(auto_any_t col, type2type<T, C> *, boost::mpl::true_ *) // rvalue
+{
+    return boost::rbegin(auto_any_cast<T, C>(col));
+}
+
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rbegin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
+{
+    typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iterator;
+    return iterator(boost::rbegin(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
+}
+
+#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
+template<typename T>
+auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, const_>::type>
+rbegin(auto_any_t col, type2type<T, const_> *, bool *)
+{
+    return boost::rbegin(*auto_any_cast<simple_variant<T>, boost::mpl::false_>(col).get());
+}
+#endif
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+template<typename T, typename C>
+inline auto_any<reverse_iterator<T *> >
+rbegin(auto_any_t col, type2type<T *, C> *, boost::mpl::true_ *) // null-terminated C-style strings
+{
+    T *p = auto_any_cast<T *, boost::mpl::false_>(col);
+    while(0 != *p)
+        ++p;
+    return reverse_iterator<T *>(p);
+}
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// rend
+//
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rend(auto_any_t col, type2type<T, C> *, boost::mpl::true_ *) // rvalue
+{
+    return boost::rend(auto_any_cast<T, C>(col));
+}
+
+template<typename T, typename C>
+inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+rend(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
+{
+    typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iterator;
+    return iterator(boost::rend(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
+}
+
+#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
+template<typename T>
+auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, const_>::type>
+rend(auto_any_t col, type2type<T, const_> *, bool *)
+{
+    return boost::rend(*auto_any_cast<simple_variant<T>, boost::mpl::false_>(col).get());
+}
+#endif
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+template<typename T, typename C>
+inline auto_any<reverse_iterator<T *> >
+rend(auto_any_t col, type2type<T *, C> *, boost::mpl::true_ *) // null-terminated C-style strings
+{
+    return reverse_iterator<T *>(auto_any_cast<T *, boost::mpl::false_>(col));
+}
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// rdone
+//
+template<typename T, typename C>
+inline bool rdone(auto_any_t cur, auto_any_t end, type2type<T, C> *)
+{
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iter_t;
+    return auto_any_cast<iter_t, boost::mpl::false_>(cur) == auto_any_cast<iter_t, boost::mpl::false_>(end);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// rnext
+//
+template<typename T, typename C>
+inline void rnext(auto_any_t cur, type2type<T, C> *)
+{
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iter_t;
+    ++auto_any_cast<iter_t, boost::mpl::false_>(cur);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// rderef
+//
+template<typename T, typename C>
+inline BOOST_DEDUCED_TYPENAME foreach_reference<T, C>::type
+rderef(auto_any_t cur, type2type<T, C> *)
+{
+    typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iter_t;
+    return *auto_any_cast<iter_t, boost::mpl::false_>(cur);
+}
+
 } // namespace foreach_detail_
 } // namespace boost
+
+// Suppress a bogus code analysis warning on vc8+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+# define BOOST_FOREACH_SUPPRESS_WARNINGS() __pragma(warning(suppress:6001))
+#else
+# define BOOST_FOREACH_SUPPRESS_WARNINGS()
+#endif
 
 // A sneaky way to get the type of the collection without evaluating the expression
 #define BOOST_FOREACH_TYPEOF(COL)                                                               \
@@ -745,7 +892,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // No variable is needed to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
-    /**/
+    BOOST_FOREACH_SUPPRESS_WARNINGS()
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
@@ -763,6 +910,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // Declare a variable to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
+    BOOST_FOREACH_SUPPRESS_WARNINGS()                                                           \
     if (bool _foreach_is_rvalue = false) {} else
 
 // Evaluate the collection expression, and detect if it is an lvalue or and rvalue
@@ -788,7 +936,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // No variable is needed to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
-    /**/
+    BOOST_FOREACH_SUPPRESS_WARNINGS()
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
@@ -808,7 +956,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // No variable is needed to track the rvalue-ness of the collection expression
 # define BOOST_FOREACH_PREAMBLE()                                                               \
-    /**/
+    BOOST_FOREACH_SUPPRESS_WARNINGS()
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
@@ -853,6 +1001,34 @@ deref(auto_any_t cur, type2type<T, C> *)
         _foreach_cur                                                                            \
       , BOOST_FOREACH_TYPEOF(COL))
 
+#define BOOST_FOREACH_RBEGIN(COL)                                                               \
+    boost::foreach_detail_::rbegin(                                                             \
+        _foreach_col                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL)                                                               \
+      , BOOST_FOREACH_SHOULD_COPY(COL))
+
+#define BOOST_FOREACH_REND(COL)                                                                 \
+    boost::foreach_detail_::rend(                                                               \
+        _foreach_col                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL)                                                               \
+      , BOOST_FOREACH_SHOULD_COPY(COL))
+
+#define BOOST_FOREACH_RDONE(COL)                                                                \
+    boost::foreach_detail_::rdone(                                                              \
+        _foreach_cur                                                                            \
+      , _foreach_end                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL))
+
+#define BOOST_FOREACH_RNEXT(COL)                                                                \
+    boost::foreach_detail_::rnext(                                                              \
+        _foreach_cur                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL))
+
+#define BOOST_FOREACH_RDEREF(COL)                                                               \
+    boost::foreach_detail_::rderef(                                                             \
+        _foreach_cur                                                                            \
+      , BOOST_FOREACH_TYPEOF(COL))
+
 ///////////////////////////////////////////////////////////////////////////////
 // BOOST_FOREACH
 //
@@ -889,5 +1065,23 @@ deref(auto_any_t cur, type2type<T, C> *)
               _foreach_continue ? BOOST_FOREACH_NEXT(COL) : (void)0)                            \
         if  (boost::foreach_detail_::set_false(_foreach_continue)) {} else                      \
         for (VAR = BOOST_FOREACH_DEREF(COL); !_foreach_continue; _foreach_continue = true)
+
+///////////////////////////////////////////////////////////////////////////////
+// BOOST_REVERSE_FOREACH
+//
+//   For iterating over collections in reverse order. In
+//   all other respects, BOOST_REVERSE_FOREACH is like
+//   BOOST_FOREACH.
+//
+#define BOOST_REVERSE_FOREACH(VAR, COL)                                                         \
+    BOOST_FOREACH_PREAMBLE()                                                                    \
+    if (boost::foreach_detail_::auto_any_t _foreach_col = BOOST_FOREACH_CONTAIN(COL)) {} else   \
+    if (boost::foreach_detail_::auto_any_t _foreach_cur = BOOST_FOREACH_RBEGIN(COL)) {} else    \
+    if (boost::foreach_detail_::auto_any_t _foreach_end = BOOST_FOREACH_REND(COL)) {} else      \
+    for (bool _foreach_continue = true;                                                         \
+              _foreach_continue && !BOOST_FOREACH_RDONE(COL);                                   \
+              _foreach_continue ? BOOST_FOREACH_RNEXT(COL) : (void)0)                           \
+        if  (boost::foreach_detail_::set_false(_foreach_continue)) {} else                      \
+        for (VAR = BOOST_FOREACH_RDEREF(COL); !_foreach_continue; _foreach_continue = true)
 
 #endif
