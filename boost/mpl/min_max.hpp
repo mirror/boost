@@ -1,8 +1,8 @@
 
-#ifndef BOOST_MPL_MAX_HPP_INCLUDED
-#define BOOST_MPL_MAX_HPP_INCLUDED
+#ifndef BOOST_MPL_MIN_MAX_HPP_INCLUDED
+#define BOOST_MPL_MIN_MAX_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -43,4 +43,4 @@ BOOST_MPL_AUX_NA_SPEC(2, max)
 
 }}
 
-#endif // BOOST_MPL_MAX_HPP_INCLUDED
+#endif // BOOST_MPL_MIN_MAX_HPP_INCLUDED
