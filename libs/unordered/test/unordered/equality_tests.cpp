@@ -25,118 +25,118 @@ namespace equality_tests
     };
 
 #define UNORDERED_EQUALITY_SET_TEST(seq1, op, seq2) \
-	do { \
-		boost::unordered_set<int, mod_compare, mod_compare> set1, set2; \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
-		BOOST_CHECK(set1 op set2); \
-	} while(false)
+    do { \
+        boost::unordered_set<int, mod_compare, mod_compare> set1, set2; \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
+        BOOST_CHECK(set1 op set2); \
+    } while(false)
 
 #define UNORDERED_EQUALITY_MULTISET_TEST(seq1, op, seq2) \
-	do { \
-		boost::unordered_multiset<int, mod_compare, mod_compare> set1, set2; \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
-		BOOST_CHECK(set1 op set2); \
-	} while(false)
+    do { \
+        boost::unordered_multiset<int, mod_compare, mod_compare> set1, set2; \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set1, seq1) \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_SET_INSERT, set2, seq2) \
+        BOOST_CHECK(set1 op set2); \
+    } while(false)
 
 #define UNORDERED_EQUALITY_MAP_TEST(seq1, op, seq2) \
-	do { \
-		boost::unordered_map<int, int, mod_compare, mod_compare> map1, map2; \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
-		BOOST_CHECK(map1 op map2); \
-	} while(false)
+    do { \
+        boost::unordered_map<int, int, mod_compare, mod_compare> map1, map2; \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
+        BOOST_CHECK(map1 op map2); \
+    } while(false)
 
 #define UNORDERED_EQUALITY_MULTIMAP_TEST(seq1, op, seq2) \
-	do { \
-		boost::unordered_multimap<int, int, mod_compare, mod_compare> map1, map2; \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
-		BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
-		BOOST_CHECK(map1 op map2); \
-	} while(false)
+    do { \
+        boost::unordered_multimap<int, int, mod_compare, mod_compare> map1, map2; \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map1, seq1) \
+        BOOST_PP_SEQ_FOR_EACH(UNORDERED_MAP_INSERT, map2, seq2) \
+        BOOST_CHECK(map1 op map2); \
+    } while(false)
 
 #define UNORDERED_SET_INSERT(r, set, item) set.insert(item);
 #define UNORDERED_MAP_INSERT(r, map, item) \
-	map.insert(std::pair<int const, int> BOOST_PP_SEQ_TO_TUPLE(item));
+    map.insert(std::pair<int const, int> BOOST_PP_SEQ_TO_TUPLE(item));
 
-	UNORDERED_AUTO_TEST(equality_size_tests)
-	{
-		boost::unordered_set<int> x1, x2;
-		BOOST_CHECK(x1 == x2);
-		BOOST_CHECK(!(x1 != x2));
+    UNORDERED_AUTO_TEST(equality_size_tests)
+    {
+        boost::unordered_set<int> x1, x2;
+        BOOST_CHECK(x1 == x2);
+        BOOST_CHECK(!(x1 != x2));
 
-		x1.insert(1);
-		BOOST_CHECK(x1 != x2);
-		BOOST_CHECK(!(x1 == x2));
-		BOOST_CHECK(x2 != x1);
-		BOOST_CHECK(!(x2 == x1));
-		
-		x2.insert(1);
-		BOOST_CHECK(x1 == x2);
-		BOOST_CHECK(!(x1 != x2));
-		
-		x2.insert(2);
-		BOOST_CHECK(x1 != x2);
-		BOOST_CHECK(!(x1 == x2));
-		BOOST_CHECK(x2 != x1);
-		BOOST_CHECK(!(x2 == x1));
-	}
-	
-	UNORDERED_AUTO_TEST(equality_key_value_tests)
-	{
-		UNORDERED_EQUALITY_MULTISET_TEST((1), !=, (2));
-		UNORDERED_EQUALITY_SET_TEST((2), ==, (2));
-		UNORDERED_EQUALITY_MAP_TEST(((1)(1))((2)(1)), !=, ((1)(1))((3)(1)));
-	}
-	
+        x1.insert(1);
+        BOOST_CHECK(x1 != x2);
+        BOOST_CHECK(!(x1 == x2));
+        BOOST_CHECK(x2 != x1);
+        BOOST_CHECK(!(x2 == x1));
+        
+        x2.insert(1);
+        BOOST_CHECK(x1 == x2);
+        BOOST_CHECK(!(x1 != x2));
+        
+        x2.insert(2);
+        BOOST_CHECK(x1 != x2);
+        BOOST_CHECK(!(x1 == x2));
+        BOOST_CHECK(x2 != x1);
+        BOOST_CHECK(!(x2 == x1));
+    }
+    
+    UNORDERED_AUTO_TEST(equality_key_value_tests)
+    {
+        UNORDERED_EQUALITY_MULTISET_TEST((1), !=, (2));
+        UNORDERED_EQUALITY_SET_TEST((2), ==, (2));
+        UNORDERED_EQUALITY_MAP_TEST(((1)(1))((2)(1)), !=, ((1)(1))((3)(1)));
+    }
+    
     UNORDERED_AUTO_TEST(equality_collision_test)
     {
-    	UNORDERED_EQUALITY_MULTISET_TEST(
-    		(1), !=, (501));
-    	UNORDERED_EQUALITY_MULTISET_TEST(
-    		(1)(251), !=, (1)(501));
-    	UNORDERED_EQUALITY_MULTIMAP_TEST(
-    		((251)(1))((1)(1)), !=, ((501)(1))((1)(1)));
-    	UNORDERED_EQUALITY_MULTISET_TEST(
-    		(1)(501), ==, (1)(501));
-    	UNORDERED_EQUALITY_SET_TEST(
-    		(1)(501), ==, (501)(1));
+        UNORDERED_EQUALITY_MULTISET_TEST(
+            (1), !=, (501));
+        UNORDERED_EQUALITY_MULTISET_TEST(
+            (1)(251), !=, (1)(501));
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((251)(1))((1)(1)), !=, ((501)(1))((1)(1)));
+        UNORDERED_EQUALITY_MULTISET_TEST(
+            (1)(501), ==, (1)(501));
+        UNORDERED_EQUALITY_SET_TEST(
+            (1)(501), ==, (501)(1));
     }
 
-	UNORDERED_AUTO_TEST(equality_group_size_test)
-	{
-    	UNORDERED_EQUALITY_MULTISET_TEST(
-    		(10)(20)(20), !=, (10)(10)(20));
-    	UNORDERED_EQUALITY_MULTIMAP_TEST(
-    		((10)(1))((20)(1))((20)(1)), !=,
-    		((10)(1))((20)(1))((10)(1)));
-    	UNORDERED_EQUALITY_MULTIMAP_TEST(
-    		((20)(1))((10)(1))((10)(1)), ==,
-    		((10)(1))((20)(1))((10)(1)));
+    UNORDERED_AUTO_TEST(equality_group_size_test)
+    {
+        UNORDERED_EQUALITY_MULTISET_TEST(
+            (10)(20)(20), !=, (10)(10)(20));
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((10)(1))((20)(1))((20)(1)), !=,
+            ((10)(1))((20)(1))((10)(1)));
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((20)(1))((10)(1))((10)(1)), ==,
+            ((10)(1))((20)(1))((10)(1)));
     }
     
     UNORDERED_AUTO_TEST(equality_map_value_test)
     {
-    	UNORDERED_EQUALITY_MAP_TEST(
-    		((1)(1)), !=, ((1)(2)));
-    	UNORDERED_EQUALITY_MAP_TEST(
-    		((1)(1)), ==, ((1)(1)));
-    	UNORDERED_EQUALITY_MULTIMAP_TEST(
-    		((1)(1)), !=, ((1)(2)));
-    	UNORDERED_EQUALITY_MULTIMAP_TEST(
-    		((1)(1))((1)(1)), !=, ((1)(1))((1)(2)));
-    	UNORDERED_EQUALITY_MULTIMAP_TEST(
-    		((1)(2))((1)(1)), !=, ((1)(1))((1)(2)));
-	}
+        UNORDERED_EQUALITY_MAP_TEST(
+            ((1)(1)), !=, ((1)(2)));
+        UNORDERED_EQUALITY_MAP_TEST(
+            ((1)(1)), ==, ((1)(1)));
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((1)(1)), !=, ((1)(2)));
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((1)(1))((1)(1)), !=, ((1)(1))((1)(2)));
+        UNORDERED_EQUALITY_MULTIMAP_TEST(
+            ((1)(2))((1)(1)), !=, ((1)(1))((1)(2)));
+    }
 
     UNORDERED_AUTO_TEST(equality_predicate_test)
     {
-    	UNORDERED_EQUALITY_SET_TEST(
-    		(1), ==, (1001));
-    	UNORDERED_EQUALITY_MAP_TEST(
-    		((1)(2))((1001)(1)), ==, ((1001)(2))((1)(1)));
-	}
+        UNORDERED_EQUALITY_SET_TEST(
+            (1), ==, (1001));
+        UNORDERED_EQUALITY_MAP_TEST(
+            ((1)(2))((1001)(1)), ==, ((1001)(2))((1)(1)));
+    }
 
 }
 
