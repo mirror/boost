@@ -13,12 +13,11 @@
 #define BOOST_INTRUSIVE_PARENT_FROM_MEMBER_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <boost/static_assert.hpp>
 #include <cstddef>
 
 #if defined(BOOST_MSVC) || (defined (BOOST_WINDOWS) && defined(BOOST_INTEL))
-#define BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT
-#include <boost/cstdint.hpp> 
+#define BOOST_INTRUSIVE_MSVC_COMPLIANT_PTR_TO_MEMBER
+#include <boost/cstdint.hpp>
 #endif
 
 namespace boost {
@@ -26,16 +25,18 @@ namespace intrusive {
 namespace detail {
 
 template<class Parent, class Member>
-inline std::size_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)
+inline std::ptrdiff_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)
 {
    //The implementation of a pointer to member is compiler dependent.
-   #if defined(BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT)
-   //This works with gcc, msvc, ac++, ibmcpp
+   #if defined(BOOST_INTRUSIVE_MSVC_COMPLIANT_PTR_TO_MEMBER)
+   //msvc compliant compilers use their the first 32 bits as offset (even in 64 bit mode)
    return *(const boost::int32_t*)(void*)&ptr_to_member;
-   #elif defined(__GNUC__) || defined(__HP_aCC) || defined(BOOST_INTEL) || defined (__IBMCPP__) || defined (__DECCXX)
+   //This works with gcc, msvc, ac++, ibmcpp
+   #elif defined(__GNUC__)   || defined(__HP_aCC) || defined(BOOST_INTEL) || \
+         defined(__IBMCPP__) || defined(__DECCXX)
    const Parent * const parent = 0;
    const char *const member = reinterpret_cast<const char*>(&(parent->*ptr_to_member));
-   return std::size_t(member - reinterpret_cast<const char*>(parent));
+   return std::ptrdiff_t(member - reinterpret_cast<const char*>(parent));
    #else
    //This is the traditional C-front approach: __MWERKS__, __DMC__, __SUNPRO_CC
    return (*(const std::ptrdiff_t*)(void*)&ptr_to_member) - 1;
@@ -60,8 +61,8 @@ inline const Parent *parent_from_member(const Member *member, const Member Paren
 }  //namespace intrusive {
 }  //namespace boost {
 
-#ifdef BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT
-#undef BOOST_INTRUSIVE_OFFSET_FROM_PTR2MEMBER_MSVC_COMPLIANT
+#ifdef BOOST_INTRUSIVE_MSVC_COMPLIANT_PTR_TO_MEMBER
+#undef BOOST_INTRUSIVE_MSVC_COMPLIANT_PTR_TO_MEMBER
 #endif
 
 #include <boost/intrusive/detail/config_end.hpp>

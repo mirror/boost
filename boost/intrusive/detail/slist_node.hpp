@@ -18,7 +18,6 @@
 #include <iterator>
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
-#include <boost/intrusive/circular_slist_algorithms.hpp>
 
 namespace boost {
 namespace intrusive {

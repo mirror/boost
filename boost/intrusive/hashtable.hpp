@@ -83,9 +83,8 @@ struct get_slist_impl
 };
 
 template<class SupposedValueTraits>
-struct unordered_bucket_impl
+struct real_from_supposed_value_traits
 {
-   /// @cond
    typedef typename detail::eval_if_c
       < detail::external_value_traits_is_true
          <SupposedValueTraits>::value
@@ -93,15 +92,33 @@ struct unordered_bucket_impl
          <SupposedValueTraits>
       , detail::identity
          <SupposedValueTraits>
-      >::type                                   real_value_traits;
+      >::type  type;
+};
 
+template<class SupposedValueTraits>
+struct get_slist_impl_from_supposed_value_traits
+{
+   typedef typename
+      real_from_supposed_value_traits
+         < SupposedValueTraits>::type           real_value_traits;
    typedef typename detail::get_node_traits
       <real_value_traits>::type                 node_traits;
    typedef typename get_slist_impl
       <typename reduced_slist_node_traits
          <node_traits>::type
-      >::type                                   slist_impl;
+      >::type                                   type;
+};
+
+
+template<class SupposedValueTraits>
+struct unordered_bucket_impl
+{
+   /// @cond
+   typedef typename 
+      get_slist_impl_from_supposed_value_traits
+         <SupposedValueTraits>::type            slist_impl;
    typedef detail::bucket_impl<slist_impl>      implementation_defined;
+   /// @endcond
    typedef implementation_defined               type;
 };
 
@@ -109,15 +126,6 @@ template<class SupposedValueTraits>
 struct unordered_bucket_ptr_impl
 {
    /// @cond
-
-   typedef typename detail::eval_if_c
-      < detail::external_value_traits_is_true
-         <SupposedValueTraits>::value
-      , detail::eval_value_traits
-         <SupposedValueTraits>
-      , detail::identity
-         <SupposedValueTraits>
-      >::type                                   real_value_traits;
    typedef typename detail::get_node_traits
       <SupposedValueTraits>::type::node_ptr     node_ptr;
    typedef typename unordered_bucket_impl
@@ -127,36 +135,6 @@ struct unordered_bucket_ptr_impl
    /// @endcond
    typedef implementation_defined               type;
 };
-
-}  //namespace detail {
-
-/// @endcond
-
-template<class ValueTraitsOrHookOption>
-struct unordered_bucket
-{
-   /// @cond
-   typedef typename ValueTraitsOrHookOption::
-      template pack<none>::value_traits            supposed_value_traits;
-   /// @endcond
-   typedef typename detail::unordered_bucket_impl
-      <supposed_value_traits>::type                type;
-};
-
-template<class ValueTraitsOrHookOption>
-struct unordered_bucket_ptr
-{
-   /// @cond
-   typedef typename ValueTraitsOrHookOption::
-      template pack<none>::value_traits         supposed_value_traits;
-   /// @endcond
-   typedef typename detail::unordered_bucket_ptr_impl
-      <supposed_value_traits>::type             type;
-};
-
-/// @cond
-
-namespace detail{
 
 template <class T>
 struct store_hash_bool
@@ -275,14 +253,55 @@ struct insert_commit_data_impl
    std::size_t hash;
 };
 
-}  //namespace detail {
-
 template <class T>
 struct internal_default_uset_hook
 {
    template <class U> static detail::one test(...);
    template <class U> static detail::two test(typename U::default_uset_hook* = 0);
    static const bool value = sizeof(test<T>(0)) == sizeof(detail::two);
+};
+
+}  //namespace detail {
+
+//!This metafunction will obtain the type of a bucket
+//!from the value_traits or hook option to be used with
+//!a hash container.
+template<class ValueTraitsOrHookOption>
+struct unordered_bucket
+   : public detail::unordered_bucket_impl
+      <typename ValueTraitsOrHookOption::
+         template pack<none>::value_traits
+      >
+{};
+
+//!This metafunction will obtain the type of a bucket pointer
+//!from the value_traits or hook option to be used with
+//!a hash container.
+template<class ValueTraitsOrHookOption>
+struct unordered_bucket_ptr
+   :  public detail::unordered_bucket_ptr_impl
+         <typename ValueTraitsOrHookOption::
+          template pack<none>::value_traits
+         >
+{};
+
+//!This metafunction will obtain the type of the default bucket traits
+//!(when the user does not specify the bucket_traits<> option) from the
+//!value_traits or hook option to be used with
+//!a hash container.
+template<class ValueTraitsOrHookOption>
+struct unordered_default_bucket_traits
+{
+   /// @cond
+   typedef typename ValueTraitsOrHookOption::
+      template pack<none>::value_traits         supposed_value_traits;
+   typedef typename detail::
+      get_slist_impl_from_supposed_value_traits
+         <supposed_value_traits>::type          slist_impl;
+   typedef detail::bucket_traits_impl
+      <slist_impl>                              implementation_defined;
+   /// @endcond
+   typedef implementation_defined               type;
 };
 
 template <class T>
@@ -300,6 +319,7 @@ template < class  ValueTraits
          , class  BucketTraits
          , bool   Power2Buckets
          , bool   CacheBegin
+         , bool   CompareHash
          >
 struct usetopt
 {
@@ -312,6 +332,7 @@ struct usetopt
    static const bool power_2_buckets = Power2Buckets;
    static const bool unique_keys = UniqueKeys;
    static const bool cache_begin = CacheBegin;
+   static const bool compare_hash = CompareHash;
 };
 
 struct default_bucket_traits;
@@ -322,7 +343,7 @@ struct uset_defaults
       < none
       , base_hook
          <  typename detail::eval_if_c
-               < internal_default_uset_hook<T>::value
+               < detail::internal_default_uset_hook<T>::value
                , get_default_uset_hook<T>
                , detail::identity<none>
                >::type
@@ -334,6 +355,7 @@ struct uset_defaults
       , bucket_traits<default_bucket_traits>
       , power_2_buckets<false>
       , cache_begin<false>
+      , compare_hash<false>
       >::type
 {};
 
@@ -441,17 +463,21 @@ class hashtable_impl
       = detail::optimize_multikey_is_true<node_traits>::value && !unique_keys;
    static const bool power_2_buckets = Config::power_2_buckets;
    static const bool cache_begin     = Config::cache_begin;
+   static const bool compare_hash    = Config::compare_hash;
 
    /// @cond
    private:
+   //Configuration error: compare_hash<> can't be specified without store_hash<>
+   //See documentation for more explanations
+   BOOST_STATIC_ASSERT((!compare_hash || store_hash));
+
    typedef typename slist_impl::node_ptr                             slist_node_ptr;
    typedef typename boost::pointer_to_other
          <slist_node_ptr, void>::type                                void_pointer;
    //We'll define group traits, but these won't be instantiated if
    //optimize_multikey is not true
-   typedef unordered_group_node_traits<void_pointer, node>           group_traits;
+   typedef unordered_group_adapter<node_traits>                      group_traits;
    typedef circular_slist_algorithms<group_traits>                   group_algorithms;
-
    typedef detail::bool_<store_hash>                                 store_hash_t;
    typedef detail::bool_<optimize_multikey>                          optimize_multikey_t;
    typedef detail::bool_<cache_begin>                                cache_begin_t;
@@ -831,7 +857,11 @@ class hashtable_impl
       if(!found_equal){
          it = b.before_begin();
       }
-      this->priv_insert_in_group(found_equal ? dcast_bucket_ptr(it.pointed_node()) : node_ptr(0), n, optimize_multikey_t());
+      if(optimize_multikey){
+         node_ptr first_in_group = found_equal ?
+            dcast_bucket_ptr(it.pointed_node()) : node_ptr(0);
+         this->priv_insert_in_group(first_in_group, n, optimize_multikey_t());
+      }
       priv_insertion_update_cache(bucket_num);
       this->priv_size_traits().increment();
       return iterator(b.insert_after(it, *n), this);
@@ -1136,10 +1166,10 @@ class hashtable_impl
                               ,KeyValueEqual equal_func, Disposer disposer)
    {
       size_type bucket_num;
-      std::size_t hash;
+      std::size_t h;
       siterator prev;
       siterator it =
-         this->priv_find(key, hash_func, equal_func, bucket_num, hash, prev);
+         this->priv_find(key, hash_func, equal_func, bucket_num, h, prev);
       bool success = it != priv_invalid_local_it();
       size_type count(0);
       if(!success){
@@ -1156,7 +1186,14 @@ class hashtable_impl
          bucket_type &b = this->priv_buckets()[bucket_num];
          for(siterator end = b.end(); it != end; ++count, ++it){
             slist_node_ptr n(it.pointed_node());
-            if(!equal_func(key, priv_value_from_slist_node(n))){
+            const value_type &v = priv_value_from_slist_node(n);
+            if(compare_hash){
+               std::size_t vh = this->priv_stored_hash(v, store_hash_t());
+               if(h != vh || !equal_func(key, v)){
+                  break;
+               }
+            }
+            else if(!equal_func(key, v)){
                break;
             }
             this->priv_size_traits().decrement();
@@ -1657,7 +1694,7 @@ class hashtable_impl
       BOOST_INTRUSIVE_INVARIANT_ASSERT
       (!power_2_buckets || (0 == (new_buckets_len & (new_buckets_len-1u))));
 
-      size_type n = this->priv_get_cache() - this->priv_buckets();
+      size_type n = priv_get_cache_bucket_num();
       const bool same_buffer = old_buckets == new_buckets;
       //If the new bucket length is a common factor
       //of the old one we can avoid hash calculations.
@@ -1665,8 +1702,10 @@ class hashtable_impl
          (power_2_buckets ||(old_buckets_len % new_buckets_len) == 0);
       //If we are shrinking the same bucket array and it's
       //is a fast shrink, just rehash the last nodes
-      if(same_buffer && fast_shrink){
+      size_type new_first_bucket_num = new_buckets_len;
+      if(same_buffer && fast_shrink && (n < new_buckets_len)){
          n = new_buckets_len;
+         new_first_bucket_num = priv_get_cache_bucket_num();
       }
 
       //Anti-exception stuff: they destroy the elements if something goes wrong
@@ -1696,6 +1735,8 @@ class hashtable_impl
                const value_type &v = priv_value_from_slist_node(i.pointed_node());
                const std::size_t hash_value = this->priv_stored_hash(v, store_hash_t());
                const size_type new_n = priv_hash_to_bucket(hash_value, new_buckets_len);
+               if(cache_begin && new_n < new_first_bucket_num)
+                  new_first_bucket_num = new_n;
                siterator last = bucket_type::s_iterator_to
                   (*priv_get_last_in_group(dcast_bucket_ptr(i.pointed_node())));
                if(same_buffer && new_n == n){
@@ -1710,6 +1751,8 @@ class hashtable_impl
          }
          else{
             const size_type new_n = priv_hash_to_bucket(n, new_buckets_len);
+            if(cache_begin && new_n < new_first_bucket_num)
+               new_first_bucket_num = new_n;
             bucket_type &new_b = new_buckets[new_n];
             if(!old_bucket.empty()){
                new_b.splice_after( new_b.before_begin()
@@ -1723,8 +1766,8 @@ class hashtable_impl
       this->priv_size_traits().set_size(size_backup);
       this->priv_real_bucket_traits() = new_bucket_traits;
       priv_initialize_cache();
-      priv_insertion_update_cache(size_type(0u));
-      priv_erasure_update_cache();
+      priv_insertion_update_cache(new_first_bucket_num);
+      //priv_erasure_update_cache();
       rollback1.release();
       rollback2.release();
    }
@@ -1912,16 +1955,16 @@ class hashtable_impl
    static node_ptr dcast_bucket_ptr(typename slist_impl::node_ptr p)
    {  return node_ptr(&static_cast<node&>(*p));   }
 
-   std::size_t priv_stored_hash(const value_type &v, detail::true_)
+   std::size_t priv_stored_hash(const value_type &v, detail::true_) const
    {  return node_traits::get_hash(this->get_real_value_traits().to_node_ptr(v));  }
 
-   std::size_t priv_stored_hash(const value_type &v, detail::false_)
+   std::size_t priv_stored_hash(const value_type &v, detail::false_) const
    {  return priv_hasher()(v);   }
 
-   std::size_t priv_stored_hash(slist_node_ptr n, detail::true_)
+   std::size_t priv_stored_hash(slist_node_ptr n, detail::true_) const
    {  return node_traits::get_hash(dcast_bucket_ptr(n));  }
 
-   std::size_t priv_stored_hash(slist_node_ptr, detail::false_)
+   std::size_t priv_stored_hash(slist_node_ptr, detail::false_) const
    {
       //This code should never be reached!
       BOOST_INTRUSIVE_INVARIANT_ASSERT(0);
@@ -2414,7 +2457,13 @@ class hashtable_impl
 
       while(it != b.end()){
          const value_type &v = priv_value_from_slist_node(it.pointed_node());
-         if(equal_func(key, v)){
+         if(compare_hash){
+            std::size_t vh = this->priv_stored_hash(v, store_hash_t());
+            if(h == vh && equal_func(key, v)){
+               return it;
+            }
+         }
+         else if(equal_func(key, v)){
             return it;
          }
          if(optimize_multikey){
@@ -2470,7 +2519,15 @@ class hashtable_impl
          ++it;
          while(it != b.end()){
             const value_type &v = priv_value_from_slist_node(it.pointed_node());
-            if(!equal_func(key, v)){
+            if(compare_hash){
+               std::size_t hv = this->priv_stored_hash(v, store_hash_t());
+               if(hv != h || !equal_func(key, v)){
+                  to_return.second = it;
+                  bucket_number_second = bucket_number_first;
+                  return to_return;
+               }
+            }
+            else if(!equal_func(key, v)){
                to_return.second = it;
                bucket_number_second = bucket_number_first;
                return to_return;
@@ -2505,11 +2562,12 @@ template < class T
          , class O3 = none, class O4 = none
          , class O5 = none, class O6 = none
          , class O7 = none, class O8 = none
+         , class O9 = none
          >
 struct make_hashtable_opt
 {
    typedef typename pack_options
-      < uset_defaults<T>, O1, O2, O3, O4, O5, O6, O7, O8>::type packed_options;
+      < uset_defaults<T>, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type packed_options;
 
    //Real value traits must be calculated from options
    typedef typename detail::get_value_traits
@@ -2529,10 +2587,7 @@ struct make_hashtable_opt
    typedef typename detail::get_slist_impl
       <typename detail::reduced_slist_node_traits
          <typename real_value_traits::node_traits>::type
-      >::type                                               slist_impl;
-
-   typedef typename detail::reduced_slist_node_traits
-      <typename real_value_traits::node_traits>::type       node_traits;
+      >::type                                            slist_impl;
 
    typedef typename
       detail::if_c< detail::is_same
@@ -2553,6 +2608,7 @@ struct make_hashtable_opt
       , real_bucket_traits
       , packed_options::power_2_buckets
       , packed_options::cache_begin
+      , packed_options::compare_hash
       > type;
 };
 /// @endcond
@@ -2566,6 +2622,7 @@ template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
                 , class O7 = none, class O8 = none
+                , class O9 = none
                 >
 #endif
 struct make_hashtable
@@ -2573,7 +2630,7 @@ struct make_hashtable
    /// @cond
    typedef hashtable_impl
       <  typename make_hashtable_opt
-            <T, false, O1, O2, O3, O4, O5, O6, O7, O8>::type
+            <T, false, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
       > implementation_defined;
 
    /// @endcond
@@ -2581,12 +2638,12 @@ struct make_hashtable
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8>
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9>
 class hashtable
-   :  public make_hashtable<T, O1, O2, O3, O4, O5, O6, O7, O8>::type
+   :  public make_hashtable<T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
 {
    typedef typename make_hashtable
-      <T, O1, O2, O3, O4, O5, O6, O7, O8>::type   Base;
+      <T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type   Base;
 
    public:
    typedef typename Base::value_traits       value_traits;

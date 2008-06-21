@@ -104,13 +104,13 @@ class hashtable_iterator
             <typename Container::value_type, IsConst>::type
          >
 {
-   typedef typename Container::real_value_traits               real_value_traits;
-   typedef typename Container::siterator                       siterator;
-   typedef typename Container::const_siterator                 const_siterator;
-   typedef typename Container::bucket_type                     bucket_type;
+   typedef typename Container::real_value_traits                  real_value_traits;
+   typedef typename Container::siterator                          siterator;
+   typedef typename Container::const_siterator                    const_siterator;
+   typedef typename Container::bucket_type                        bucket_type;
    typedef typename boost::pointer_to_other
-      < typename Container::pointer, const Container>::type    const_cont_ptr;
-   typedef typename Container::size_type                       size_type;
+      < typename Container::pointer, const Container>::type       const_cont_ptr;
+   typedef typename Container::size_type                          size_type;
 
    static typename Container::node_ptr downcast_bucket(typename bucket_type::node_ptr p)
    {  return typename Container::node_ptr(&static_cast<typename Container::node&>(*p));   }

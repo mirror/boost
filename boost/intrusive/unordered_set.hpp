@@ -961,6 +961,7 @@ template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
                 , class O7 = none, class O8 = none
+                , class O9 = none
                 >
 #endif
 struct make_unordered_set
@@ -968,19 +969,19 @@ struct make_unordered_set
    /// @cond
    typedef unordered_set_impl
       <  typename make_hashtable_opt
-            <T, true, O1, O2, O3, O4, O5, O6, O7, O8>::type
+            <T, true, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8>
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9>
 class unordered_set
-   :  public make_unordered_set<T, O1, O2, O3, O4, O5, O6, O7, O8>::type
+   :  public make_unordered_set<T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
 {
    typedef typename make_unordered_set
-      <T, O1, O2, O3, O4, O5, O6, O7, O8>::type   Base;
+      <T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type   Base;
 
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename Base::value_traits::value_type, T>::value));
@@ -1894,6 +1895,7 @@ template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
                 , class O7 = none, class O8 = none
+                , class O9 = none
                 >
 #endif
 struct make_unordered_multiset
@@ -1901,19 +1903,19 @@ struct make_unordered_multiset
    /// @cond
    typedef unordered_multiset_impl
       <  typename make_hashtable_opt
-            <T, false, O1, O2, O3, O4, O5, O6, O7, O8>::type
+            <T, false, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
       > implementation_defined;
    /// @endcond
    typedef implementation_defined type;
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8>
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9>
 class unordered_multiset
-   :  public make_unordered_multiset<T, O1, O2, O3, O4, O5, O6, O7, O8>::type
+   :  public make_unordered_multiset<T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
 {
    typedef typename make_unordered_multiset
-      <T, O1, O2, O3, O4, O5, O6, O7, O8>::type   Base;
+      <T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type   Base;
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename Base::value_traits::value_type, T>::value));
 

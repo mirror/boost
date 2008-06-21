@@ -49,21 +49,68 @@ struct eval_bucket_traits
    typedef typename BucketTraits::bucket_traits type;
 };
 
+template <class T, class BaseHook>
+struct concrete_hook_base_value_traits
+{
+   typedef typename BaseHook::boost_intrusive_tags tags;
+   typedef detail::base_hook_traits
+      < T
+      , typename tags::node_traits
+      , tags::link_mode
+      , typename tags::tag
+      , tags::hook_type> type;
+};
+
+template <class BaseHook>
+struct concrete_hook_base_node_traits
+{  typedef typename BaseHook::boost_intrusive_tags::node_traits type;  };
+
+template <class T, class BaseHook>
+struct any_hook_base_value_traits
+{
+   typedef typename BaseHook::boost_intrusive_tags tags;
+   typedef detail::base_hook_traits
+      < T
+      , typename BaseHook::node_traits
+      , tags::link_mode
+      , typename tags::tag
+      , tags::hook_type> type;
+};
+
+template <class BaseHook>
+struct any_hook_base_node_traits
+{  typedef typename BaseHook::node_traits type; };
+
 template<class T, class BaseHook>
 struct get_base_value_traits
 {
-   typedef detail::base_hook_traits
-      < T
-      , typename BaseHook::boost_intrusive_tags::node_traits
-      , BaseHook::boost_intrusive_tags::link_mode
-      , typename BaseHook::boost_intrusive_tags::tag
-      , BaseHook::boost_intrusive_tags::hook_type> type;
+   typedef typename detail::eval_if_c
+      < internal_any_hook_bool_is_true<BaseHook>::value
+      , any_hook_base_value_traits<T, BaseHook>
+      , concrete_hook_base_value_traits<T, BaseHook>
+      >::type type;
+};
+
+template<class BaseHook>
+struct get_base_node_traits
+{
+   typedef typename detail::eval_if_c
+      < internal_any_hook_bool_is_true<BaseHook>::value
+      , any_hook_base_node_traits<BaseHook>
+      , concrete_hook_base_node_traits<BaseHook>
+      >::type type;
 };
 
 template<class T, class MemberHook>
 struct get_member_value_traits
 {
    typedef typename MemberHook::member_value_traits type;
+};
+
+template<class MemberHook>
+struct get_member_node_traits
+{
+   typedef typename MemberHook::member_value_traits::node_traits type;
 };
 
 template<class T, class SupposedValueTraits>
@@ -86,24 +133,11 @@ struct get_value_traits
       >::type type;
 };
 
-template<class BaseHook>
-struct get_base_node_traits
-{
-   typedef typename BaseHook::boost_intrusive_tags::node_traits type;
-};
-
-template<class MemberHook>
-struct get_member_node_traits
-{
-   typedef typename MemberHook::member_value_traits::node_traits type;
-};
-
 template<class ValueTraits>
 struct get_explicit_node_traits
 {
    typedef typename ValueTraits::node_traits type;
 };
-
 
 template<class SupposedValueTraits>
 struct get_node_traits
@@ -124,7 +158,6 @@ struct get_node_traits
          >
       >::type type;
 };
-
 
 }  //namespace detail{
 
@@ -258,7 +291,6 @@ template< typename Parent
 struct member_hook
 {
 /// @cond
-   typedef char Parent::* GenericPtrToMember;
    typedef detail::member_hook_traits
       < Parent
       , MemberHook
@@ -271,6 +303,7 @@ struct member_hook
    };
 /// @endcond
 };
+
 
 //!This option setter specifies that the container
 //!must use the specified base hook
@@ -453,6 +486,25 @@ struct cache_begin
    struct pack : Base
    {
       static const bool cache_begin = Enabled;
+   };
+/// @endcond
+};
+
+
+//!This option setter specifies if the container will compare the hash value
+//!before comparing objects. This option can't be specified if store_hash<>
+//!is not true.
+//!This is specially helpful when we have containers with a high load factor.
+//!and the comparison function is much more expensive that comparing already
+//!stored hash values.
+template<bool Enabled>
+struct compare_hash
+{
+/// @cond
+   template<class Base>
+   struct pack : Base
+   {
+      static const bool compare_hash = Enabled;
    };
 /// @endcond
 };

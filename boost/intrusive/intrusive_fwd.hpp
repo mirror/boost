@@ -294,6 +294,7 @@ template
    , class O6  = none
    , class O7  = none
    , class O8  = none
+   , class O9  = none
    >
 class hashtable;
 
@@ -307,6 +308,7 @@ template
    , class O6  = none
    , class O7  = none
    , class O8  = none
+   , class O9  = none
    >
 class unordered_set;
 
@@ -320,6 +322,7 @@ template
    , class O6  = none
    , class O7  = none
    , class O8  = none
+   , class O9  = none
    >
 class unordered_multiset;
 
@@ -338,6 +341,20 @@ template
    , class O4  = none
    >
 class unordered_set_member_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class any_base_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class any_member_hook;
 
 }  //namespace intrusive {
 }  //namespace boost {

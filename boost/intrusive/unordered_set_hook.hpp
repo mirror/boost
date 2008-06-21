@@ -35,7 +35,6 @@ struct unordered_node
       < VoidPointer
       , unordered_node<VoidPointer, StoreHash, OptimizeMultiKey>
       >::type   node_ptr;
-//   node_ptr    next_;
    node_ptr    prev_in_group_;
    std::size_t hash_;
 };
@@ -48,7 +47,6 @@ struct unordered_node<VoidPointer, false, true>
       < VoidPointer
       , unordered_node<VoidPointer, false, true>
       >::type   node_ptr;
-//   node_ptr    next_;
    node_ptr    prev_in_group_;
 };
 
@@ -60,7 +58,6 @@ struct unordered_node<VoidPointer, true, false>
       < VoidPointer
       , unordered_node<VoidPointer, true, false>
       >::type   node_ptr;
-//   node_ptr    next_;
    std::size_t hash_;
 };
 
@@ -97,34 +94,26 @@ struct unordered_node_traits
    {  n->hash_ = h;  }  
 };
 
-template<class VoidPointer, class Node>
-struct unordered_group_node_traits
+template<class NodeTraits>
+struct unordered_group_adapter
 {
-   typedef Node node;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, node>::type          node_ptr;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, const node>::type    const_node_ptr;
+   typedef typename NodeTraits::node            node;
+   typedef typename NodeTraits::node_ptr        node_ptr;
+   typedef typename NodeTraits::const_node_ptr  const_node_ptr;
 
    static node_ptr get_next(const_node_ptr n)
-   {  return n->prev_in_group_;  }
+   {  return NodeTraits::get_prev_in_group(n);  }
 
    static void set_next(node_ptr n, node_ptr next)
-   {  n->prev_in_group_ = next;  }
+   {  NodeTraits::set_prev_in_group(n, next);   }
 };
 
 template<class NodeTraits>
 struct unordered_algorithms
    : public circular_slist_algorithms<NodeTraits>
 {
-   typedef circular_slist_algorithms<NodeTraits> base_type;
-   typedef unordered_group_node_traits
-      < typename boost::pointer_to_other
-         < typename NodeTraits::node_ptr
-         , void
-         >::type
-      , typename NodeTraits::node
-      > group_traits;
+   typedef circular_slist_algorithms<NodeTraits>   base_type;
+   typedef unordered_group_adapter<NodeTraits> group_traits;
    typedef circular_slist_algorithms<group_traits> group_algorithms;
 
    static void init(typename base_type::node_ptr n)

@@ -94,13 +94,8 @@ namespace detail {
 template<class NodeTraits>
 class tree_algorithms
 {
-   /// @cond
-   private:
-
-   typedef typename NodeTraits::node            node;
-   /// @endcond
-
    public:
+   typedef typename NodeTraits::node            node;
    typedef NodeTraits                           node_traits;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;

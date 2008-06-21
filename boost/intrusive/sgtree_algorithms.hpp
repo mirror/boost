@@ -58,6 +58,7 @@ template<class NodeTraits>
 class sgtree_algorithms
 {
    public:
+   typedef typename NodeTraits::node            node;
    typedef NodeTraits                           node_traits;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
@@ -65,7 +66,6 @@ class sgtree_algorithms
    /// @cond
    private:
 
-   typedef typename NodeTraits::node            node;
    typedef detail::tree_algorithms<NodeTraits>  tree_algorithms;
 
    static node_ptr uncast(const_node_ptr ptr)
