@@ -25,6 +25,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/detail/signed_unsigned_tools.hpp>
+#include <boost/type_traits/make_unsigned.hpp>
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #include <boost/type_traits/is_float.hpp>
 #endif
@@ -38,7 +39,7 @@ class uniform_int
 public:
   typedef IntType input_type;
   typedef IntType result_type;
-  typedef typename random::detail::make_unsigned<result_type>::type range_type;
+  typedef typename make_unsigned<result_type>::type range_type;
 
   explicit uniform_int(IntType min_arg = 0, IntType max_arg = 9)
     : _min(min_arg), _max(max_arg)
@@ -61,7 +62,7 @@ public:
   {
     typedef typename Engine::result_type base_result;
     // ranges are always unsigned
-    typedef typename random::detail::make_unsigned<base_result>::type base_unsigned;
+    typedef typename make_unsigned<base_result>::type base_unsigned;
     const base_result bmin = (eng.min)();
     const base_unsigned brange =
       random::detail::subtract<base_result>()((eng.max)(), (eng.min)());
