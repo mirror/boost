@@ -127,7 +127,7 @@ way to make user classes compatible with those containers.
 
 [section:properties_of_intrusive Properties of Boost.Intrusive containers]
 
-Semantically, a [*Boost.Intrusive] container is similar to an STL container 
+Semantically, a [*Boost.Intrusive] container is similar to a STL container 
 holding pointers to objects. That is, if you have an intrusive list holding
 objects of type `T`, then `std::list<T*>` would allow you to do quite the
 same operations (maintaining and navigating a set of objects of type T and
@@ -584,7 +584,7 @@ Apart from that, [*Boost.Intrusive] offers additional features:
    safe state and intrusive containers check that state before inserting a value in the
    container. When erasing an element from the container, the container puts the hook
    in the safe state again. This allows a safer use mode and it can be used to detect
-   programming errors. It implies an slight performance overhead in some operations
+   programming errors. It implies a slight performance overhead in some operations
    and can convert some constant time operations to linear time operations.
 
 *  [*Auto-unlink hooks]: The hook destructor removes the object from the container
@@ -596,7 +596,7 @@ Apart from that, [*Boost.Intrusive] offers additional features:
    be configured to use any type of pointer. This configuration information is also
    transmitted to the containers, so all the internal pointers used by intrusive containers
    configured with these hooks will be smart pointers. As an example,
-   [*Boost.Interprocess] defines an smart pointer compatible with shared memory,
+   [*Boost.Interprocess] defines an mart pointer compatible with shared memory,
    called `offset_ptr`. [*Boost.Intrusive] can be configured to use this smart pointer
    to allow shared memory intrusive containers.
 
@@ -718,7 +718,7 @@ Let's see an example of an auto-unlink hook:
 
 As explained, [*Boost.Intrusive] auto-unlink hooks are incompatible with containers
 that have constant-time `size()`, so if you try to define such container with an
-auto-unlink hook's value_traits, you will get an static assertion:
+auto-unlink hook's value_traits, you will get a static assertion:
 
 [c++]
    
@@ -860,7 +860,7 @@ assertion will be raised.
 
 [section:slist_example Example]
 
-Now let's see an small example using both hooks:
+Now let's see a small example using both hooks:
 
 [import ../example/doc_slist.cpp]
 [doc_slist_code]
@@ -946,7 +946,7 @@ the section [link intrusive.usage How to use Boost.Intrusive]:
 
 [section:list_example Example]
 
-Now let's see an small example using both hooks:
+Now let's see a small example using both hooks:
 
 [import ../example/doc_list.cpp]
 [doc_list_code]
@@ -1075,7 +1075,7 @@ And they also can receive an additional option:
 
 [section:set_multiset_example Example]
 
-Now let's see an small example using both hooks and both containers:
+Now let's see a small example using both hooks and both containers:
 
 [import ../example/doc_set.cpp]
 [doc_set_code]
@@ -1277,11 +1277,22 @@ And they also can receive additional options:
    of the first element. This imposes the overhead of one pointer to the size
    of the container. Default: `cache_begin<false>`.
 
+*  [*`compare_hash<bool Enabled>`]:
+   [*Note: this option requires `store_hash<true>` option in the hook].
+   When the comparison function is expensive,
+   (e.g. strings with a long common predicate) sometimes (specially when the
+   load factor is high or we have many equivalent elements in an
+   [classref boost::intrusive::unordered_multiset unordered_multiset] and
+   no `optimize_multikey<>` is activatedin the hook)
+   the equality function is a performance problem. Two equal values must have
+   equal hashes, so comparing the hash values of two elements before using the
+   comparison functor can speed up some implementations.
+
 [endsect]
 
 [section:unordered_set_unordered_multiset_example Example]
 
-Now let's see an small example using both hooks and both containers:
+Now let's see a small example using both hooks and both containers:
 
 [import ../example/doc_unordered_set.cpp]
 [doc_unordered_set_code]
@@ -1450,9 +1461,9 @@ intrusive scapegoat containers
 [classref boost::intrusive::sg_set sg_set] and
 [classref boost::intrusive::sg_multiset sg_multiset]. A programmer
 might prefer using a binary search tree hook so that the same type
-can be inserted in some situations in an splay container but
+can be inserted in some situations in a splay container but
 also inserted in other compatible containers when
-the hook is not being used in an splay container.
+the hook is not being used in a splay container.
 
 [classref boost::intrusive::bs_set_base_hook bs_set_base_hook] and
 [classref boost::intrusive::bs_set_base_hook bs_set_member_hook] admit
@@ -1462,7 +1473,7 @@ the same options as [classref boost::intrusive::splay_set_base_hook splay_set_ba
 
 [section:splay_set_multiset_example Example]
 
-Now let's see an small example using both splay hooks,
+Now let's see a small example using both splay hooks,
 binary search tree hooks and
 [classref boost::intrusive::splay_set splay_set]/
 [classref boost::intrusive::splay_multiset splay_multiset]
@@ -1590,7 +1601,7 @@ And they also can receive an additional option:
 
 [section:avl_set_multiset_example Example]
 
-Now let's see an small example using both hooks and
+Now let's see a small example using both hooks and
 [classref boost::intrusive::avl_set avl_set]/
 [classref boost::intrusive::avl_multiset avl_multiset]
 containers:
@@ -1745,7 +1756,7 @@ And they also can receive additional options:
 
 [section:sg_set_multiset_example Example]
 
-Now let's see an small example using both hooks and
+Now let's see a small example using both hooks and
 [classref boost::intrusive::sg_set sg_set]/
 [classref boost::intrusive::sg_multiset sg_multiset]
 containers:
@@ -1923,7 +1934,7 @@ more functions taking a disposer function object as argument, like `erase_and_di
 
 Note that the disposing function does not need to just destroy the object. It can
 implement any other operation like inserting the remove object in another container.
-Let's see an small example:
+Let's see a small example:
 
 [import ../example/doc_erasing_and_disposing.cpp]
 [doc_erasing_and_disposing]
@@ -1940,11 +1951,11 @@ that erase an element from the container.
 As previously mentioned, [*Boost.Intrusive] containers are [*non-copyable and non-assignable], because
 intrusive containers don't allocate memory at all. To implement a copy-constructor or assignment operator,
 the user must clone one by one all the elements of the container and insert them in another intrusive container.
-However, cloning by hand is usually more inefficient than a member cloning function and an specialized cloning
+However, cloning by hand is usually more inefficient than a member cloning function and a specialized cloning
 function can offer more guarantees than the manual cloning (better exception safety guarantees, for example).
 
 To ease the implementation of copy constructors and assignment operators of classes containing [*Boost.Intrusive]
-containers, all [*Boost.Intrusive] containers offer an special cloning function called `clone_from`.
+containers, all [*Boost.Intrusive] containers offer a special cloning function called `clone_from`.
 
 Apart from the container to be cloned, `clone_from` takes two function objects as arguments. For example, consider the
 `clone_from` member function of [classref boost::intrusive::list list]:
@@ -1981,9 +1992,9 @@ Here's an example of `clone_from`:
 [section:using_smart_pointers Using smart pointers with Boost.Intrusive containers]
 
 [*Boost.Intrusive] hooks can be configured to use other pointers than raw pointers.
-When a [*Boost.Intrusive] hook is configured with an smart pointer as an argument,
+When a [*Boost.Intrusive] hook is configured with a smart pointer as an argument,
 this pointer configuration is passed to the containers. For example, if the following
-hook is configured with an smart pointer (for example, an offset pointer from
+hook is configured with a smart pointer (for example, an offset pointer from
 [*Boost.Interprocess]):
 
 [import ../example/doc_offset_ptr.cpp]
@@ -2060,11 +2071,56 @@ explained in the [link intrusive.value_traits.stateful_value_traits Stateful val
 if the programmer uses hooks provided by [*Boost.Intrusive], those functions
 will be available.
 
-Let's see an small function that shows the use of `iterator_to` and 
+Let's see a small function that shows the use of `iterator_to` and 
 `local_iterator_to`:
 
 [import ../example/doc_iterator_from_value.cpp]
 [doc_iterator_from_value]
+
+[endsect]
+
+[section:any_hooks Any Hooks: A single hook for any Intrusive container]
+
+Sometimes, a class programmer wants to place a class in several intrusive
+containers but no at the same time. In this case, the programmer might
+decide to insert two hooks in the same class.
+
+[c++]
+
+   class MyClass
+      : public list_base_hook<>, public slist_base_hook<> //...
+   {};
+
+However, there is a more size-efficient alternative in [*Boost.Intrusive]: "any" hooks
+([classref boost::intrusive::any_base_hook any_base_hook] and
+[classref boost::intrusive::any_member_hook any_member_hook].
+These hooks can be used to store a type in several containers
+offered by [*Boost.Intrusive] minimizing the size of the class.
+
+These hooks support these options:
+
+*  [*`tag<class Tag>`] (for base hooks only): This argument serves as a tag,
+   so you can derive from more than one slist hook.
+   Default: `tag<default_tag>`.
+
+*  [*`link_mode<link_mode_type LinkMode>`]: The linking policy.
+   `link_mode<auto_unlink>` is [*not] supported and `link_mode<safe_mode>`
+   might offer weaker error detection in any hooks than in other hooks.
+   Default: `link_mode<safe_link>`.
+
+*  [*`void_pointer<class VoidPointer>`]: The pointer type to be used
+   internally in the hook and propagated to the container.
+   Default: `void_pointer<void*>`.
+
+`auto_unlink` can't be supported because the hook does not know in which type of might
+be inserted container. Additionally, these hooks don't support `unlink()` and
+`swap_nodes()` operations for the same reason.
+
+Here's an example that creates a class with two any hooks, and uses one to insert the
+class in a [classref slist] and the other one in a [classref list].
+
+[import ../example/doc_any_hook.cpp]
+[doc_any_hook]
 
 [endsect]
 
@@ -2187,7 +2243,7 @@ before explaining the customization options of [*Boost.Intrusive].
       int value_;
    };
 
-*  [*Intrusive Container]: A container that offers an STL-like interface to store
+*  [*Intrusive Container]: A container that offers a STL-like interface to store
    user objects. An intrusive container can be templatized to store different
    value types that use different hooks. An intrusive container is also more elaborate
    than a group of nodes: it can store the number of elements to achieve constant-time
@@ -2642,7 +2698,7 @@ used in node algorithms, since these types can be different. Apart from this,
 
 Instead of using [*Boost.Intrusive] predefined hooks
 a user might want to develop customized containers, for example, using nodes that are
-optimized for an specific
+optimized for a specific
 application or that are compatible with a a legacy ABI. A user might want
 to have only two additional pointers in his class and insert the class in a doubly
 linked list sometimes and in a singly linked list in other situations. You can't
@@ -2804,7 +2860,7 @@ In the previous example, `legacy_node_traits::node` type and
 to have several `ValueTraits` defining the same `node_traits` type (and thus, the same `node_traits::node`).
 This reduces the number of node algorithm instantiations, but 
 now `ValueTraits::to_node_ptr` and `ValueTraits::to_value_ptr` functions need to offer
-conversions between both types. Let's see an small example:
+conversions between both types. Let's see a small example:
 
 First, we'll define the node to be used in the algorithms. For a linked list,
 we just need a node that stores two pointers:

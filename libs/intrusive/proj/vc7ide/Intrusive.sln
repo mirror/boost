@@ -79,6 +79,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sg_set", "sg_set\sg_set.vcp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "any_hook", "any_test\any_test.vcproj", "{97B61B24-4C97-9681-50BF-243175A813B6}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -167,6 +171,10 @@ Global
 		{1690A9E7-DB57-971C-F24A-09B752A942F7}.Debug.Build.0 = Debug|Win32
 		{1690A9E7-DB57-971C-F24A-09B752A942F7}.Release.ActiveCfg = Release|Win32
 		{1690A9E7-DB57-971C-F24A-09B752A942F7}.Release.Build.0 = Release|Win32
+		{97B61B24-4C97-9681-50BF-243175A813B6}.Debug.ActiveCfg = Debug|Win32
+		{97B61B24-4C97-9681-50BF-243175A813B6}.Debug.Build.0 = Debug|Win32
+		{97B61B24-4C97-9681-50BF-243175A813B6}.Release.ActiveCfg = Release|Win32
+		{97B61B24-4C97-9681-50BF-243175A813B6}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

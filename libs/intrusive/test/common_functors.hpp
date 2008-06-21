@@ -41,6 +41,14 @@ class new_cloner
    {  return new T(t);  }
 };
 
+template<class T>
+class new_default_factory
+{
+   public:
+      T *operator()()
+   {  return new T();  }
+};
+
 }  //namespace test       {
 }  //namespace intrusive  {
 }  //namespace boost      {

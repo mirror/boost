@@ -106,6 +106,9 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
+				RelativePath="..\..\..\..\..\boost\intrusive\any_hook.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\boost\intrusive\avl_set.hpp">
 			</File>
 			<File
@@ -207,6 +210,9 @@
 			<Filter
 				Name="detail"
 				Filter="">
+				<File
+					RelativePath="..\..\..\..\..\boost\intrusive\detail\any_node_and_algorithms.hpp">
+				</File>
 				<File
 					RelativePath="..\..\..\..\..\boost\intrusive\detail\assert.hpp">
 				</File>
@@ -315,6 +321,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_advanced_value_traits2.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\example\doc_any_hook.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\example\doc_assoc_optimized_code.cpp">

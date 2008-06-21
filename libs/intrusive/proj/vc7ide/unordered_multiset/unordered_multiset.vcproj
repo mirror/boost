@@ -122,16 +122,6 @@
 				RelativePath="..\..\..\test\unordered_multiset_test.cpp">
 			</File>
 		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{99954380-9C8D-084c-4b04-62E52E6FBBFB}">
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{6A181B76-FDA6800-8E8B-0A66-813A3BB1AD01}">
-		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

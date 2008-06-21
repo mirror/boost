@@ -26,7 +26,7 @@ using namespace boost::intrusive;
 
 static const std::size_t BucketSize = 11;
 
-template<class ValueTraits, bool CacheBegin>
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
 struct test_unordered_set 
 {
    typedef typename ValueTraits::value_type value_type;
@@ -40,8 +40,8 @@ struct test_unordered_set
    static void test_clone(std::vector<value_type>& values);
 };
 
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>::test_all(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>::test_all(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_set
@@ -49,6 +49,7 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_all(std::vector<typename 
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
    {
@@ -76,8 +77,8 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_all(std::vector<typename 
 }
 
 //test case due to an error in tree implementation:
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>::test_impl()
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>::test_impl()
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_set
@@ -85,6 +86,7 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_impl()
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
@@ -105,8 +107,8 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_impl()
 }
 
 //test: constructor, iterator, clear, reverse_iterator, front, back, size:
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>::test_sort(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>::test_sort(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_set
@@ -114,6 +116,7 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_sort(std::vector<typename
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
@@ -129,8 +132,8 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_sort(std::vector<typename
 }  
   
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>::test_insert(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>::test_insert(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_set
@@ -138,6 +141,7 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_insert(std::vector<typena
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
@@ -165,8 +169,8 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_insert(std::vector<typena
 }  
 
 //test: insert (seq-version), swap, erase (seq-version), size:
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>::test_swap(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>::test_swap(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_set
@@ -174,6 +178,7 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_swap(std::vector<typename
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
@@ -197,8 +202,8 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_swap(std::vector<typename
 }  
 
 //test: rehash:
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>::test_rehash(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>::test_rehash(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_set
@@ -206,6 +211,7 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_rehash(std::vector<typena
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
@@ -243,8 +249,8 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_rehash(std::vector<typena
 
 
 //test: find, equal_range (lower_bound, upper_bound):
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>::test_find(std::vector<typename ValueTraits::value_type>& values)
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>::test_find(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
    typedef unordered_set
@@ -252,6 +258,7 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_find(std::vector<typename
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
@@ -274,8 +281,8 @@ void test_unordered_set<ValueTraits, CacheBegin>::test_find(std::vector<typename
    BOOST_TEST (testset.find (cmp_val) == testset.end());
 }
 
-template<class ValueTraits, bool CacheBegin>
-void test_unordered_set<ValueTraits, CacheBegin>
+template<class ValueTraits, bool CacheBegin, bool CompareHash>
+void test_unordered_set<ValueTraits, CacheBegin, CompareHash>
    ::test_clone(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type value_type;
@@ -284,6 +291,7 @@ void test_unordered_set<ValueTraits, CacheBegin>
       , value_traits<ValueTraits>
       , constant_time_size<value_type::constant_time_size>
       , cache_begin<CacheBegin>
+      , compare_hash<CompareHash>
       > unordered_set_type;
    typedef typename unordered_set_type::bucket_traits bucket_traits;
    {
@@ -356,6 +364,7 @@ class test_main_template
                   , typename value_type::unordered_set_base_hook_t
                   >::type
                 , true
+                , false
                 >::test_all(data);
       test_unordered_set < typename detail::get_member_value_traits
                   < value_type
@@ -364,6 +373,7 @@ class test_main_template
                                , &value_type::unordered_set_node_
                                >
                   >::type
+                , false
                 , false
                 >::test_all(data);
 
@@ -388,6 +398,7 @@ class test_main_template<VoidPointer, false>
                   , typename value_type::unordered_set_base_hook_t
                   >::type
                 , true
+                , false
                 >::test_all(data);
 
       test_unordered_set < typename detail::get_member_value_traits
@@ -398,12 +409,14 @@ class test_main_template<VoidPointer, false>
                                >
                   >::type
                 , false
+                , false
                 >::test_all(data);
 
       test_unordered_set < typename detail::get_base_value_traits
                   < value_type
                   , typename value_type::unordered_set_auto_base_hook_t
                   >::type
+                , true
                 , true
                 >::test_all(data);
 
@@ -415,6 +428,7 @@ class test_main_template<VoidPointer, false>
                                >
                   >::type
                 , false
+                , true
                 >::test_all(data);
       return 0;
    }
