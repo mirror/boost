@@ -31,6 +31,37 @@ namespace boost
         class Hash = hash<Value>,
         class Pred = std::equal_to<Value>,
         class Alloc = std::allocator<Value> >
+    class unordered_set;
+    template <class T, class H, class P, class A>
+    bool operator==(unordered_set<T, H, P, A> const&,
+        unordered_set<T, H, P, A> const&);
+    template <class T, class H, class P, class A>
+    bool operator!=(unordered_set<T, H, P, A> const&,
+        unordered_set<T, H, P, A> const&);
+    template <class T, class H, class P, class A>
+    std::size_t hash_value(unordered_set<T, H, P, A> const& m);
+    template <class T, class H, class P, class A>
+    void swap(unordered_set<T, H, P, A> &m1,
+            unordered_set<T, H, P, A> &m2);
+
+    template <class Value,
+        class Hash = hash<Value>,
+        class Pred = std::equal_to<Value>,
+        class Alloc = std::allocator<Value> >
+    class unordered_multiset;
+    template <class T, class H, class P, class A>
+    bool operator==(unordered_multiset<T, H, P, A> const&,
+        unordered_multiset<T, H, P, A> const&);
+    template <class T, class H, class P, class A>
+    bool operator!=(unordered_multiset<T, H, P, A> const&,
+        unordered_multiset<T, H, P, A> const&);
+    template <class T, class H, class P, class A>
+    std::size_t hash_value(unordered_multiset<T, H, P, A> const& m);
+    template <class T, class H, class P, class A>
+    void swap(unordered_multiset<T, H, P, A> &m1,
+            unordered_multiset<T, H, P, A> &m2);
+
+    template <class Value, class Hash, class Pred, class Alloc>
     class unordered_set
     {
         typedef boost::unordered_detail::hash_types_unique_keys<
@@ -361,33 +392,39 @@ namespace boost
             base.rehash(n);
         }
 
-        friend bool operator==(unordered_set const& m1, unordered_set const& m2)
-        {
-            return m1.base.equals(m2.base);
-        }
-
-        friend bool operator!=(unordered_set const& m1, unordered_set const& m2)
-        {
-            return !m1.base.equals(m2.base);
-        }
-
-        friend std::size_t hash_value(unordered_set const& m)
-        {
-            return m.base.hash_value();
-        }
+        friend bool operator==<>(unordered_set const&, unordered_set const&);
+        friend bool operator!=<>(unordered_set const&, unordered_set const&);
+        friend std::size_t hash_value<>(unordered_set const&);
     }; // class template unordered_set
 
     template <class T, class H, class P, class A>
-    void swap(unordered_set<T, H, P, A> &m1,
+    inline bool operator==(unordered_set<T, H, P, A> const& m1,
+        unordered_set<T, H, P, A> const& m2)
+    {
+        return m1.base.equals(m2.base);
+    }
+
+    template <class T, class H, class P, class A>
+    inline bool operator!=(unordered_set<T, H, P, A> const& m1,
+        unordered_set<T, H, P, A> const& m2)
+    {
+        return !m1.base.equals(m2.base);
+    }
+
+    template <class T, class H, class P, class A>
+    inline std::size_t hash_value(unordered_set<T, H, P, A> const& m)
+    {
+        return m.base.hash_value();
+    }
+
+    template <class T, class H, class P, class A>
+    inline void swap(unordered_set<T, H, P, A> &m1,
             unordered_set<T, H, P, A> &m2)
     {
         m1.swap(m2);
     }
 
-    template <class Value,
-        class Hash = hash<Value>,
-        class Pred = std::equal_to<Value>,
-        class Alloc = std::allocator<Value> >
+    template <class Value, class Hash, class Pred, class Alloc>
     class unordered_multiset
     {
         typedef boost::unordered_detail::hash_types_equivalent_keys<
@@ -715,24 +752,33 @@ namespace boost
             base.rehash(n);
         }
 
-        friend bool operator==(unordered_multiset const& m1, unordered_multiset const& m2)
-        {
-            return m1.base.equals(m2.base);
-        }
-
-        friend bool operator!=(unordered_multiset const& m1, unordered_multiset const& m2)
-        {
-            return !m1.base.equals(m2.base);
-        }
-
-        friend std::size_t hash_value(unordered_multiset const& m)
-        {
-            return m.base.hash_value();
-        }
+        friend bool operator==<>(unordered_multiset const&, unordered_multiset const&);
+        friend bool operator!=<>(unordered_multiset const&, unordered_multiset const&);
+        friend std::size_t hash_value<>(unordered_multiset const&);
     }; // class template unordered_multiset
 
     template <class T, class H, class P, class A>
-    void swap(unordered_multiset<T, H, P, A> &m1,
+    inline bool operator==(unordered_multiset<T, H, P, A> const& m1,
+        unordered_multiset<T, H, P, A> const& m2)
+    {
+        return m1.base.equals(m2.base);
+    }
+
+    template <class T, class H, class P, class A>
+    inline bool operator!=(unordered_multiset<T, H, P, A> const& m1,
+        unordered_multiset<T, H, P, A> const& m2)
+    {
+        return !m1.base.equals(m2.base);
+    }
+
+    template <class T, class H, class P, class A>
+    inline std::size_t hash_value(unordered_multiset<T, H, P, A> const& m)
+    {
+        return m.base.hash_value();
+    }
+
+    template <class T, class H, class P, class A>
+    inline void swap(unordered_multiset<T, H, P, A> &m1,
             unordered_multiset<T, H, P, A> &m2)
     {
         m1.swap(m2);
