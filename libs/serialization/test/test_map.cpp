@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <vector>
 #include <fstream>
-#include <cstddef> // size_t
+#include <cstddef> // size_t, NULL
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>

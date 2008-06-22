@@ -8,6 +8,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // NULL
+
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/basic_oserializer.hpp>
 

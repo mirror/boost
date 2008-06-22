@@ -9,8 +9,10 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
 #include <cstring>
+#include <cstddef> // NULL
+
+#include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ using ::strcmp; }
 #endif

@@ -8,6 +8,7 @@
 
 // test implementation level "primitive_type"
 
+#include <cstddef> // NULL
 #include <fstream>
 
 #include "test_tools.hpp"

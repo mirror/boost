@@ -8,11 +8,13 @@
 
 // should pass compilation and execution
 
-#include <algorithm>
-#include <vector>
+#include <cstddef> // NULL
+#include <cstdio> // remove
 #include <fstream>
 
-#include <cstdio> // remove
+#include <algorithm>
+#include <vector>
+
 #include <boost/config.hpp>
 
 #include <boost/detail/workaround.hpp>

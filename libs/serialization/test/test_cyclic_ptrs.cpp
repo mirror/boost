@@ -8,6 +8,7 @@
 
 // should pass compilation and execution
 
+#include <cstddef> // NULL
 #include <fstream>
 
 #include <cstdio> // remove

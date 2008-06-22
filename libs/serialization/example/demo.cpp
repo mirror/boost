@@ -7,6 +7,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 
+#include <cstddef> // NULL
 #include <iomanip>
 #include <iostream>
 #include <fstream>

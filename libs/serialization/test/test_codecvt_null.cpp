@@ -16,7 +16,7 @@
 #include <iterator>
 #include <locale>
 #include <vector>
-#include <cstddef>
+#include <cstddef> // NULL
 
 #include <cstdio> // remove
 #include <boost/config.hpp>

@@ -8,11 +8,12 @@
 
 // should pass compilation and execution
 
-#include <fstream>
+#include <cstdlib> // for rand(), NULL
 
-#include <cstdlib> // for rand()
-#include <cstdio> // remove
+#include <fstream>
 #include <boost/config.hpp>
+
+#include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::rand; 

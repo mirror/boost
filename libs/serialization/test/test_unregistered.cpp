@@ -10,6 +10,7 @@
 
 #include <fstream>
 
+#include <cstddef> // NULL
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)

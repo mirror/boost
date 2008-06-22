@@ -12,9 +12,10 @@
 // a) non-intrusive method of implementing serialization
 // b) usage of a non-default constructor
 
+#include <cstddef> // NULL
+#include <cstdio>  // remove()
 #include <fstream>
 #include <cstdlib> // for rand()
-#include <cstdio>  // remove()
 #include <cmath> // for fabs()
 #include <limits> 
 

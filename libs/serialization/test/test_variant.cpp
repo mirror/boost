@@ -15,8 +15,9 @@
 // thanks to Robert Ramey and Peter Dimov.
 //
 
-#include <fstream>
+#include <cstddef> // NULL
 #include <cstdio> // remove
+#include <fstream>
 #include <cmath> // for fabs()
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)

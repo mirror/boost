@@ -13,6 +13,7 @@
 #include <set>
 #include <cassert>
 #include <typeinfo>
+#include <cstddef> // NULL
 
 #include <boost/detail/no_exceptions_support.hpp>
 

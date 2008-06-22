@@ -16,6 +16,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // NULL
+
 #include "test_tools.hpp"
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/throw_exception.hpp>

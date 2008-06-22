@@ -8,6 +8,7 @@
 //
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // NULL
 #include <fstream>
 
 #include <cstdio> // remove

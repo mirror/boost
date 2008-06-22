@@ -16,6 +16,7 @@
 #include <set>
 #include <utility>
 #include <cassert>
+#include <cstddef> // NULL
 
 #include <boost/config.hpp> // msvc needs this to suppress warning
 

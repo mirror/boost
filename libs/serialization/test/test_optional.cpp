@@ -8,10 +8,12 @@
 
 // should pass compilation and execution
 
+#include <cstddef> // NULL
+#include <cstdio> // remove
 #include <fstream>
+
 #include <boost/config.hpp>
 
-#include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::remove;

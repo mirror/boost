@@ -14,7 +14,7 @@
 #include <set>
 #include <list>
 #include <vector>
-#include <cstddef> // size_t
+#include <cstddef> // size_t, NULL
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)

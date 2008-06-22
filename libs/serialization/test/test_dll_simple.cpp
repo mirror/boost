@@ -10,6 +10,7 @@
 
 // invoke header for a custom archive test.
 
+#include <cstddef> // NULL
 #include <fstream>
 
 #include <cstdio> // remove

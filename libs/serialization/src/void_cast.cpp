@@ -14,6 +14,7 @@
 #endif
 
 #include <cassert>
+#include <cstddef> // NULL
 
 // STL
 #include <vector>

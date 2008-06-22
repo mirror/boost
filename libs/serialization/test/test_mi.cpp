@@ -9,11 +9,12 @@
 // test of serialization of base classes with multiple inheritance
 // contributed by Peter Dimov
 
+#include <cstddef>
 #include <iostream>
 #include <fstream>
 
-#include <cstdio> // remove
 #include <boost/config.hpp>
+#include <cstdio> // remove
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::remove;

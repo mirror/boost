@@ -12,6 +12,7 @@
 
 #include <cassert>
 #include <set>
+#include <cstddef> // NULL
 
 #include <boost/limits.hpp>
 #include <boost/state_saver.hpp>
