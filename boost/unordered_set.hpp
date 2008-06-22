@@ -401,20 +401,20 @@ namespace boost
     inline bool operator==(unordered_set<T, H, P, A> const& m1,
         unordered_set<T, H, P, A> const& m2)
     {
-        return m1.base.equals(m2.base);
+        return boost::unordered_detail::equals(m1.base, m2.base);
     }
 
     template <class T, class H, class P, class A>
     inline bool operator!=(unordered_set<T, H, P, A> const& m1,
         unordered_set<T, H, P, A> const& m2)
     {
-        return !m1.base.equals(m2.base);
+        return !boost::unordered_detail::equals(m1.base, m2.base);
     }
 
     template <class T, class H, class P, class A>
     inline std::size_t hash_value(unordered_set<T, H, P, A> const& m)
     {
-        return m.base.hash_value();
+        return boost::unordered_detail::hash_value(m.base);
     }
 
     template <class T, class H, class P, class A>
@@ -761,20 +761,20 @@ namespace boost
     inline bool operator==(unordered_multiset<T, H, P, A> const& m1,
         unordered_multiset<T, H, P, A> const& m2)
     {
-        return m1.base.equals(m2.base);
+        return boost::unordered_detail::equals(m1.base, m2.base);
     }
 
     template <class T, class H, class P, class A>
     inline bool operator!=(unordered_multiset<T, H, P, A> const& m1,
         unordered_multiset<T, H, P, A> const& m2)
     {
-        return !m1.base.equals(m2.base);
+        return !boost::unordered_detail::equals(m1.base, m2.base);
     }
 
     template <class T, class H, class P, class A>
     inline std::size_t hash_value(unordered_multiset<T, H, P, A> const& m)
     {
-        return m.base.hash_value();
+        return boost::unordered_detail::hash_value(m.base);
     }
 
     template <class T, class H, class P, class A>
