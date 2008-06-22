@@ -18,3 +18,16 @@
 //R #line 20 "t_1_023.cpp"
 //R EAT_1...
 EAT(1)...
+
+//H 10: t_1_023.cpp(13): #define
+//H 08: t_1_023.cpp(13): PRIMITIVE_CAT(a, b)=a ## b
+//H 10: t_1_023.cpp(15): #define
+//H 08: t_1_023.cpp(15): EAT(n)=PRIMITIVE_CAT(EAT_, n)
+//H 10: t_1_023.cpp(16): #define
+//H 08: t_1_023.cpp(16): EAT_1(a)=
+//H 00: t_1_023.cpp(20): EAT(1), [t_1_023.cpp(15): EAT(n)=PRIMITIVE_CAT(EAT_, n)]
+//H 02: PRIMITIVE_CAT(EAT_, 1)
+//H 00: t_1_023.cpp(15): PRIMITIVE_CAT(EAT_, 1), [t_1_023.cpp(13): PRIMITIVE_CAT(a, b)=a ## b]
+//H 02: EAT_1
+//H 03: EAT_1
+//H 03: EAT_1

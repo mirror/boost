@@ -14,3 +14,9 @@
 //R // bool;
 #define _VARIANT_BOOL    /##/
 _VARIANT_BOOL bool;
+
+//H 10: t_1_037.cpp(15): #define
+//H 08: t_1_037.cpp(15): _VARIANT_BOOL=/##/
+//H 01: t_1_037.cpp(15): _VARIANT_BOOL
+//H 02: //
+//H 03: //

@@ -12,8 +12,8 @@
 #if !defined(HANNIBAL_TRANSLATION_UNIT_SKIPPER_H_INCLUDED)
 #define HANNIBAL_TRANSLATION_UNIT_SKIPPER_H_INCLUDED
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/confix.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
@@ -21,14 +21,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 struct translation_unit_skipper
-:   public boost::spirit::grammar<translation_unit_skipper>
+:   public boost::spirit::classic::grammar<translation_unit_skipper>
 {
     template <typename ScannerT>
     struct definition
     {
         definition(translation_unit_skipper const& /*self*/)
         {
-            using namespace boost::spirit;
+            using namespace boost::spirit::classic;
             using namespace boost::wave;
             using boost::wave::util::pattern_p;
             
@@ -41,9 +41,9 @@ struct translation_unit_skipper
                 ;
         }
 
-        boost::spirit::rule<ScannerT> skip;
+        boost::spirit::classic::rule<ScannerT> skip;
 
-        boost::spirit::rule<ScannerT> const&
+        boost::spirit::classic::rule<ScannerT> const&
         start() const { return skip; }
     };
 };

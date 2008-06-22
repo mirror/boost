@@ -13,3 +13,8 @@
 //E t_9_018.cpp(15): warning: illegal macro redefinition: M1
 #define M1 1
 #define M1
+
+//H 10: t_9_018.cpp(14): #define
+//H 08: t_9_018.cpp(14): M1=1
+//H 10: t_9_018.cpp(15): #define
+//H 18: boost::wave::macro_handling_exception

@@ -17,6 +17,7 @@
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
+#include <boost/wave/util/unput_queue_iterator.hpp>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -63,13 +64,21 @@ namespace impl {
         typename StringT::size_type pos1 = value.find_first_of ("\\", 0);
         if (StringT::npos != pos1) {
             do {
-                if ('\\' == value[pos1+1] || '\"' == value[pos1+1] || 
-                    '?' == value[pos1+1])
-                {
+                switch (value[pos1+1]) {
+                case '\\':
+                case '\"':
+                case '?':
                     result = result + value.substr(pos, pos1-pos);
                     pos1 = value.find_first_of ("\\", (pos = pos1+1)+1);
-                }
-                else {
+                    break;
+                    
+                case 'n':
+                    result = result + value.substr(pos, pos1-pos) + "\n";
+                    pos1 = value.find_first_of ("\\", pos = pos1+1);
+                    ++pos;
+                    break;
+                    
+                default:
                     result = result + value.substr(pos, pos1-pos+1);
                     pos1 = value.find_first_of ("\\", pos = pos1+1);
                 }
@@ -244,6 +253,40 @@ namespace impl {
         }
     }
 #endif
+
+    // Skip all whitespace characters and queue the skipped characters into the
+    // given container
+    template <typename IteratorT>
+    inline boost::wave::token_id 
+    skip_whitespace(IteratorT &first, IteratorT const &last)
+    {
+        token_id id = util::impl::next_token<IteratorT>::peek(first, last, false);
+        if (IS_CATEGORY(id, WhiteSpaceTokenType)) {
+            do {
+                ++first;
+                id = util::impl::next_token<IteratorT>::peek(first, last, false);
+            } while (IS_CATEGORY(id, WhiteSpaceTokenType));
+        }
+        ++first;
+        return id;
+    }
+    
+    template <typename IteratorT, typename ContainerT>
+    inline boost::wave::token_id 
+    skip_whitespace(IteratorT &first, IteratorT const &last, ContainerT &queue)
+    {
+        queue.push_back (*first);       // queue up the current token
+        
+        token_id id = util::impl::next_token<IteratorT>::peek(first, last, false);
+        if (IS_CATEGORY(id, WhiteSpaceTokenType)) {
+            do {
+                queue.push_back(*++first);  // queue up the next whitespace 
+                id = util::impl::next_token<IteratorT>::peek(first, last, false);
+            } while (IS_CATEGORY(id, WhiteSpaceTokenType));
+        }
+        ++first;
+        return id;
+    }
 
 }   // namespace impl
 

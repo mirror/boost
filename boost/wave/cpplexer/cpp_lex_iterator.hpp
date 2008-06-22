@@ -14,13 +14,13 @@
 #define CPP_LEX_ITERATOR_HPP_AF0C37E3_CBD8_4F33_A225_51CF576FA61F_INCLUDED
 
 #include <string>
-#include <iostream>
 
 #include <boost/assert.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/spirit/iterator/multi_pass.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 #include <boost/wave/wave_config.hpp>
+#include <boost/spirit/include/support_multi_pass.hpp>
+
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/util/functor_input.hpp>
 #include <boost/wave/cpplexer/cpp_lex_interface_generator.hpp>
@@ -32,7 +32,7 @@
 #include BOOST_ABI_PREFIX
 #endif
 
-#if 0 != __COMO_VERSION__
+#if 0 != __COMO_VERSION__ || !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 #define BOOST_WAVE_EOF_PREFIX static
 #else
 #define BOOST_WAVE_EOF_PREFIX 
@@ -56,45 +56,55 @@ class lex_iterator_functor_shim
     typedef typename TokenT::position_type  position_type;
 
 public:
-    template <typename IteratorT>
-    lex_iterator_functor_shim(IteratorT const &first, IteratorT const &last, 
-            position_type const &pos, boost::wave::language_support language)
-    :   functor_ptr(lex_input_interface_generator<TokenT>
-            ::new_lexer(first, last, pos, language)) 
-#if 0 != __DECCXX_VER || BOOST_INTEL_CXX_VERSION > 900 || defined(__PGI)
-      , eof()
-#endif // 0 != __DECCXX_VER
+    lex_iterator_functor_shim() 
+#if /*0 != __DECCXX_VER || */defined(__PGI)
+      : eof()
+#endif
     {}
 
-// interface to the boost::spirit::multi_pass_policies::functor_input policy
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+    lex_iterator_functor_shim& operator= (lex_iterator_functor_shim const& rhs)
+        { return *this; }   // nothing to do here
+#endif
+
+// interface to the multi_pass_policies::split_functor_input policy
     typedef TokenT result_type;
+    typedef lex_iterator_functor_shim unique;
+    typedef lex_input_interface<TokenT>* shared;
 
     BOOST_WAVE_EOF_PREFIX result_type const eof;
     
-    result_type operator()() 
+    template <typename MultiPass>
+    static result_type& get_next(MultiPass& mp, result_type& result)
     { 
-        BOOST_ASSERT(0 != functor_ptr.get());
-        return functor_ptr->get(); 
+        return mp.shared->ftor->get(result); 
     }
-    void set_position(position_type const &pos)
+    
+    // this will be called whenever the last reference to a multi_pass will
+    // be released
+    template <typename MultiPass>
+    static void destroy(MultiPass& mp)
+    { 
+        delete mp.shared->ftor; 
+    }
+
+    template <typename MultiPass>
+    static void set_position(MultiPass& mp, position_type const &pos)
     {
-        BOOST_ASSERT(0 != functor_ptr.get());
-        functor_ptr->set_position(pos);
+        mp.shared->ftor->set_position(pos);
     }
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    bool has_include_guards(std::string& guard_name) const
+    template <typename MultiPass>
+    static bool has_include_guards(MultiPass& mp, std::string& guard_name) 
     {
-        return functor_ptr->has_include_guards(guard_name);
+        return mp.shared->ftor->has_include_guards(guard_name);
     }
 #endif    
-    
-private:
-    boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //  eof token
-#if 0 != __COMO_VERSION__
+#if 0 != __COMO_VERSION__ || !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 template <typename TokenT>
 typename lex_iterator_functor_shim<TokenT>::result_type const
     lex_iterator_functor_shim<TokenT>::eof;
@@ -127,18 +137,45 @@ typename lex_iterator_functor_shim<TokenT>::result_type const
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
+//  Divide the given functor type into its components (unique and shared) 
+//  and build a std::pair from these parts
+template <typename FunctorData>
+struct make_multi_pass
+{
+    typedef  
+        std::pair<typename FunctorData::unique, typename FunctorData::shared> 
+    functor_data_type;
+    typedef typename FunctorData::result_type result_type;
+
+    typedef boost::spirit::multi_pass_policies::split_functor_input input_policy;
+    typedef boost::spirit::multi_pass_policies::ref_counted ownership_policy;
+#if defined(BOOST_WAVE_DEBUG)
+    typedef boost::spirit::multi_pass_policies::buf_id_check check_policy;
+#else
+    typedef boost::spirit::multi_pass_policies::no_check check_policy;
+#endif
+    typedef boost::spirit::multi_pass_policies::split_std_deque storage_policy;
+    
+    typedef boost::spirit::multi_pass_policies::default_policy<
+            ownership_policy, check_policy, input_policy, storage_policy>
+        policy_type;
+    typedef boost::spirit::multi_pass<functor_data_type, policy_type> type;
+};
+
+///////////////////////////////////////////////////////////////////////////////
 template <typename TokenT>
 class lex_iterator 
-:   public boost::spirit::multi_pass<
-        impl::lex_iterator_functor_shim<TokenT>,
-        boost::wave::util::functor_input
-    >
+:   public make_multi_pass<impl::lex_iterator_functor_shim<TokenT> >::type
 {
     typedef impl::lex_iterator_functor_shim<TokenT> input_policy_type;
-    typedef 
-        boost::spirit::multi_pass<input_policy_type, 
-                boost::wave::util::functor_input>
-        base_type;
+    
+    typedef typename make_multi_pass<input_policy_type>::type base_type;
+    typedef typename make_multi_pass<input_policy_type>::functor_data_type 
+        functor_data_type;
+
+    typedef typename input_policy_type::unique unique_functor_type;
+    typedef typename input_policy_type::shared shared_functor_type;
     
 public:
     typedef TokenT token_type;
@@ -150,7 +187,13 @@ public:
     lex_iterator(IteratorT const &first, IteratorT const &last, 
             typename TokenT::position_type const &pos, 
             boost::wave::language_support language)
-    :   base_type(input_policy_type(first, last, pos, language))
+    :   base_type(
+            functor_data_type(
+                unique_functor_type(),
+                lex_input_interface_generator<TokenT>
+                    ::new_lexer(first, last, pos, language)
+            )
+        )
     {}
 
     void set_position(typename TokenT::position_type const &pos)
@@ -158,7 +201,7 @@ public:
         typedef typename TokenT::position_type position_type;
         
     // set the new position in the current token
-    token_type& currtoken = base_type::get_input();
+    token_type& currtoken = this->base_type::dereference(*this);
     position_type currpos = currtoken.get_position();
 
         currpos.set_file(pos.get_file());
@@ -171,7 +214,7 @@ public:
         {
             currpos.set_line(pos.get_line() + 1);
         }
-        base_type::get_functor().set_position(currpos);
+        unique_functor_type::set_position(*this, currpos);
     }
     
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
@@ -180,7 +223,7 @@ public:
     // completely
     bool has_include_guards(std::string& guard_name) const
     {
-        return base_type::get_functor().has_include_guards(guard_name);
+        return unique_functor_type::has_include_guards(*this, guard_name);
     }
 #endif    
 };

@@ -13,3 +13,9 @@
 
 //R #line 15 "t_1_036.cpp"
 OBJECT      //R ab 
+
+//H 10: t_1_036.cpp(12): #define
+//H 08: t_1_036.cpp(12): OBJECT=a ## b
+//H 01: t_1_036.cpp(12): OBJECT
+//H 02: ab
+//H 03: ab

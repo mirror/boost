@@ -20,7 +20,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  debug rules, subrules and grammars only, for possible flags see 
-//  spirit/debug.hpp
+//  spirit/include/classic_debug.hpp
 #if defined(BOOST_SPIRIT_DEBUG)
 
 #define BOOST_SPIRIT_DEBUG_FLAGS ( \

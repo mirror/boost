@@ -11,10 +11,10 @@
 #if !defined(CPP_PREDEF_MACROS_GRAMMAR_HPP_53858C9A_C202_4D60_AD92_DC9CAE4DBB43_INCLUDED)
 #define CPP_PREDEF_MACROS_GRAMMAR_HPP_53858C9A_C202_4D60_AD92_DC9CAE4DBB43_INCLUDED
 
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/tree/parse_tree.hpp>
-#include <boost/spirit/utility/confix.hpp>
-#include <boost/spirit/utility/lists.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_parse_tree.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
+#include <boost/spirit/include/classic_lists.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
@@ -40,13 +40,14 @@ namespace grammars {
 ///////////////////////////////////////////////////////////////////////////////
 // Encapsulation of the grammar for command line driven predefined macros.
 struct predefined_macros_grammar : 
-    public boost::spirit::grammar<predefined_macros_grammar>
+    public boost::spirit::classic::grammar<predefined_macros_grammar>
 {
     template <typename ScannerT>
     struct definition
     {
     // 'normal' (parse_tree generating) rule type
-        typedef boost::spirit::rule<ScannerT, boost::spirit::dynamic_parser_tag> 
+        typedef boost::spirit::classic::rule<
+                ScannerT, boost::spirit::classic::dynamic_parser_tag> 
             rule_type;
 
         rule_type plain_define, macro_definition, macro_parameters;
@@ -54,7 +55,7 @@ struct predefined_macros_grammar :
         definition(predefined_macros_grammar const &/*self*/) 
         {
         // import the spirit and cpplexer namespaces here
-            using namespace boost::spirit;
+            using namespace boost::spirit::classic;
             using namespace boost::wave;
             using namespace boost::wave::util;
             
@@ -150,12 +151,12 @@ struct predefined_macros_grammar :
 
 template <typename LexIteratorT>
 BOOST_WAVE_PREDEF_MACROS_GRAMMAR_GEN_INLINE 
-boost::spirit::tree_parse_info<LexIteratorT>
+boost::spirit::classic::tree_parse_info<LexIteratorT>
 predefined_macros_grammar_gen<LexIteratorT>::parse_predefined_macro (
     LexIteratorT const &first, LexIteratorT const &last)
 {
     predefined_macros_grammar g;
-    return boost::spirit::pt_parse (first, last, g);
+    return boost::spirit::classic::pt_parse (first, last, g);
 }
 
 #undef BOOST_WAVE_PREDEF_MACROS_GRAMMAR_GEN_INLINE

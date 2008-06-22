@@ -33,3 +33,29 @@ true
 #else
 false
 #endif
+
+//H 10: t_4_004.cpp(12): #define
+//H 08: t_4_004.cpp(12): USHRT_MAX=0xffffU
+//H 10: t_4_004.cpp(15): # if
+//H 11: t_4_004.cpp(15): # if !defined (SIZEOF_SHORT): 1
+//H 10: t_4_004.cpp(16): #   if
+//H 01: t_4_004.cpp(12): USHRT_MAX
+//H 02: 0xffffU
+//H 03: 0xffffU
+//H 11: t_4_004.cpp(16): #   if (USHRT_MAX) == 255U: 0
+//H 10: t_4_004.cpp(18): #   elif
+//H 01: t_4_004.cpp(12): USHRT_MAX
+//H 02: 0xffffU
+//H 03: 0xffffU
+//H 11: t_4_004.cpp(18): #   elif (USHRT_MAX) == 65535U: 1
+//H 10: t_4_004.cpp(19): #define
+//H 08: t_4_004.cpp(19): SIZEOF_SHORT=2
+//H 10: t_4_004.cpp(20): #   elif
+//H 10: t_4_004.cpp(22): #   elif
+//H 10: t_4_004.cpp(27): # endif
+//H 10: t_4_004.cpp(31): #if
+//H 01: t_4_004.cpp(19): SIZEOF_SHORT
+//H 02: 2
+//H 03: 2
+//H 11: t_4_004.cpp(31): #if SIZEOF_SHORT == 2: 1
+//H 10: t_4_004.cpp(33): #else

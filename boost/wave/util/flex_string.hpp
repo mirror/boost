@@ -1430,7 +1430,6 @@ class flex_string : private Storage
 
     struct Invariant;
     friend struct Invariant;
-    
     struct Invariant
     {
         Invariant(const flex_string& s) : s_(s)

@@ -388,10 +388,18 @@ public:
             break;
 
         case T_GREATER:
-            if (T_MINUS == prev)
-                return true;    // prevent ->
-            // fall through
+            if (T_MINUS == prev || T_GREATER == prev)
+                return true;    // prevent -> or >>
+            if (!impl::handle_parens(prev))
+                return false;
+            if (T_QUESTION_MARK == prev && T_QUESTION_MARK == beforeprev)
+                return true;
+            break;
+
         case T_LESS:
+            if (T_LESS == prev)
+                return true;    // prevent <<
+            // fall through
         case T_CHARLIT:
         case T_NOT:
         case T_NOTEQUAL:

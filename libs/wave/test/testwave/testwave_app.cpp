@@ -20,6 +20,10 @@
 #include <boost/detail/workaround.hpp>
 
 //  include Wave 
+
+// always use new hooks
+#define BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 0
+
 #include <boost/wave.hpp>
 
 //  include the lexer related stuff
@@ -29,6 +33,7 @@
 //  test application related headers
 #include "cmd_line_utils.hpp"
 #include "testwave_app.hpp"
+#include "collect_hooks_information.hpp"
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -36,26 +41,8 @@ namespace fs = boost::filesystem;
 ///////////////////////////////////////////////////////////////////////////////
 // testwave version definitions
 #define TESTWAVE_VERSION_MAJOR           0
-#define TESTWAVE_VERSION_MINOR           4
+#define TESTWAVE_VERSION_MINOR           5
 #define TESTWAVE_VERSION_SUBMINOR        0
-
-///////////////////////////////////////////////////////////////////////////////
-// workaround for missing ostringstream
-#ifdef BOOST_NO_STRINGSTREAM
-#include <strstream>
-#define BOOST_WAVETEST_OSSTREAM std::ostrstream
-std::string BOOST_WAVETEST_GETSTRING(std::ostrstream& ss)
-{
-    ss << ends;
-    std::string rval = ss.str();
-    ss.freeze(false);
-    return rval;
-}
-#else
-#include <sstream>
-#define BOOST_WAVETEST_GETSTRING(ss) ss.str()
-#define BOOST_WAVETEST_OSSTREAM std::ostringstream
-#endif
 
 namespace {
 
@@ -86,19 +73,6 @@ namespace {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    template <typename String>
-    String const& handle_filepath(String &name)
-    {
-        using boost::wave::util::impl::unescape_lit;
-        
-        String unesc_name = unescape_lit(name);
-        fs::path p (unesc_name.c_str(), fs::native);
-
-        name = p.leaf().c_str();
-        return name;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
     template <typename Iterator>
     bool handle_line_directive(Iterator &it, Iterator const& end, 
         std::string &result)
@@ -123,15 +97,34 @@ namespace {
         result = result + name.c_str();
         return true;
     }
+
+    template <typename T>
+    inline T const&
+    variables_map_as(po::variable_value const& v, T*)
+    {
+#if (__GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)) || \
+    BOOST_WORKAROUND(__MWERKS__, < 0x3200)
+// gcc 3.2.x and  3.3.x choke on vm[...].as<...>()
+// CW 8.3 has problems with the v.as<T>() below
+        T const* r = boost::any_cast<T>(&v.value());
+        if (!r)
+            boost::throw_exception(boost::bad_any_cast());
+        return *r;
+#else
+        return v.as<T>();
+#endif
+    }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
 //
 //  This function compares the real result and the expected one but first 
-//  replaces all occurences in the expected result of 
+//  replaces all occurrences in the expected result of 
 //      $E: to the result of preprocessing the given expression
 //      $F: to the passed full filepath 
 //      $P: to the full path
+//      $B: to the full path (same as $P, but using forward slash '/' on Windows)
 //      $V: to the current Boost version number
 //
 ///////////////////////////////////////////////////////////////////////////
@@ -159,9 +152,9 @@ testwave_app::got_expected_result(std::string const& filename,
                             return false;
                         }
                         std::string source = expected.substr(pos1+3, p-pos1-3);
-                        std::string result, error;
+                        std::string result, error, hooks;
                         bool pp_result = preprocess_file(filename, source, 
-                            result, error, true);
+                            result, error, hooks, true);
                         if (!pp_result) {
                             std::cerr 
                                 << "testwave: preprocessing error in $E directive: " 
@@ -183,10 +176,13 @@ testwave_app::got_expected_result(std::string const& filename,
                 break;
 
             case 'P':       // insert full path
+            case 'B':       // same as 'P', but forward slashs on Windows
                 {
-                    fs::path fullpath = fs::complete(
-                        fs::path(filename, fs::native), 
-                        fs::current_path());
+                    fs::path fullpath (
+                        fs::complete(
+                            fs::path(filename, fs::native), fs::current_path())
+                        );
+                        
                     if ('(' == expected[pos1+2]) {
                     // the $P(basename) syntax is used
                         std::size_t p = expected.find_first_of(")", pos1+1);
@@ -199,17 +195,29 @@ testwave_app::got_expected_result(std::string const& filename,
                         std::string base = expected.substr(pos1+3, p-pos1-3);
                         fullpath = fullpath.branch_path() / 
                             fs::path(base, fs::native);
-                        full_result = full_result + 
-                            expected.substr(pos, pos1-pos) + 
-                            escape_lit(fullpath.normalize().native_file_string());
+                        full_result += expected.substr(pos, pos1-pos);
+                        if ('P' == expected[pos1+1]) {
+                            full_result += 
+                                escape_lit(fullpath.normalize().native_file_string());
+                        }
+                        else {
+                            full_result += 
+                                escape_lit(fullpath.normalize().string());
+                        }
                         pos1 = expected.find_first_of ("$", 
                             pos = pos1 + 4 + base.size());
                     }
                     else {
                     // the $P is used on its own
-                        full_result = full_result + 
-                            expected.substr(pos, pos1-pos) + 
-                            escape_lit(fullpath.native_file_string());
+                        full_result += expected.substr(pos, pos1-pos);
+                        if ('P' == expected[pos1+1]) {
+                            full_result += 
+                                escape_lit(fullpath.native_file_string());
+                        }
+                        else {
+                            full_result += 
+                                escape_lit(fullpath.string());
+                        }
                         pos1 = expected.find_first_of ("$", pos = pos1 + 2);
                     }
                 }
@@ -273,7 +281,8 @@ testwave_app::testwave_app(po::variables_map const& vm)
 //
 //  Test the given file (i.e. preprocess the file and compare the result 
 //  against the embedded 'R' comments, if an error occurs compare the error
-//  message against the given 'E' comments).
+//  message against the given 'E' comments, if no error occurred, compare the
+//  generated hooks result against the given 'H' comments).
 //
 ///////////////////////////////////////////////////////////////////////////////
 bool 
@@ -284,12 +293,17 @@ testwave_app::test_a_file(std::string filename)
     if (!read_file(filename, instr)) 
         return false;     // error was reported already
 
+    bool test_hooks = true;
+    if (global_vm.count("hooks"))
+        test_hooks = variables_map_as(global_vm["hooks"], (bool *)NULL);
+    
 // extract expected output, preprocess the data and compare results
-    std::string expected;
-    if (extract_expected_output(filename, instr, expected)) {
+    std::string expected, expected_hooks;
+    if (extract_expected_output(filename, instr, expected, expected_hooks)) {
         bool retval = true;   // assume success
-        std::string result, error;
-        bool pp_result = preprocess_file(filename, instr, result, error);
+        bool printed_result = false;
+        std::string result, error, hooks;
+        bool pp_result = preprocess_file(filename, instr, result, error, hooks);
         if (pp_result || !result.empty()) {
         // did we expect an error?
             std::string expected_error;
@@ -332,13 +346,42 @@ testwave_app::test_a_file(std::string filename)
                 }
                 retval = false;
             }
-            else if (debuglevel > 4) {
-                std::cerr 
-                    << filename << ": succeeded" << std::endl
-                    << "result: " << std::endl << result << std::endl;
+            else {
+            // preprocessing succeeded, check hook information, if appropriate
+                if (test_hooks && !expected_hooks.empty() &&
+                    !got_expected_result(filename, hooks, expected_hooks)) 
+                {
+                    if (debuglevel > 2) {
+                        std::cerr << filename << ": failed" << std::endl
+                                  << "hooks result: " << std::endl << hooks 
+                                  << std::endl;
+                        std::cerr << "expected hooks result: " << std::endl 
+                                  << expected_hooks << std::endl;
+                    }
+                    else if (debuglevel > 1) {
+                        std::cerr << filename << ": failed" << std::endl;
+                    }
+                    retval = false;
+                }
             }
-            else if (debuglevel > 3) {
-                std::cerr << filename << ": succeeded" << std::endl;
+            
+            // print success message, if appropriate
+            if (retval) {
+                if (debuglevel > 5) {
+                    std::cerr 
+                        << filename << ": succeeded" << std::endl
+                        << "result: " << std::endl << result << std::endl
+                        << "hooks result: " << std::endl << hooks << std::endl;
+                }
+                else if (debuglevel > 4) {
+                    std::cerr 
+                        << filename << ": succeeded" << std::endl
+                        << "result: " << std::endl << result << std::endl;
+                }
+                else if (debuglevel > 3) {
+                    std::cerr << filename << ": succeeded" << std::endl;
+                }
+                printed_result = true;
             }
         }
         
@@ -356,7 +399,7 @@ testwave_app::test_a_file(std::string filename)
 
                     if (!expected_error.empty()) {
                         std::cerr 
-                            << "result: " << std::endl << error << std::endl
+                            << "error result: " << std::endl << error << std::endl
                             << "expected error: " << std::endl
                             << expected_error << std::endl;
                     }
@@ -369,14 +412,30 @@ testwave_app::test_a_file(std::string filename)
                 }
                 retval = false;
             }
-            else if (debuglevel > 4) {
-                std::cerr 
-                    << filename << ": succeeded" << std::endl
-                    << "result: " << std::endl << error << std::endl;
-            }
-            else if (debuglevel > 3) {
-            // caught the expected error message
-                std::cerr << filename << ": succeeded" << std::endl;
+            
+            if (retval) {
+                if (debuglevel > 5) {
+                    std::cerr 
+                        << filename << ": succeeded (caught expected error)" 
+                        << std::endl << "error result: " << std::endl << error 
+                        << std::endl;
+                        
+                    if (!printed_result) {
+                        std::cerr 
+                            << "hooks result: " << std::endl << hooks 
+                            << std::endl;
+                    }
+                }
+                else if (debuglevel > 4) {
+                    std::cerr 
+                        << filename << ": succeeded (caught expected error)" 
+                        << std::endl << "error result: " << std::endl << error 
+                        << std::endl;
+                }
+                else if (debuglevel > 3) {
+                // caught the expected error message
+                    std::cerr << filename << ": succeeded" << std::endl;
+                }
             }
         }
         return retval;
@@ -552,9 +611,9 @@ testwave_app::extract_special_information(std::string const& filename,
                             return false;
                         }
                         std::string source = value.substr(4, p-4);
-                        std::string result, error;
+                        std::string result, error, hooks;
                         bool pp_result = preprocess_file(filename, source, 
-                            result, error, true);
+                            result, error, hooks, true);
                         if (!pp_result) {
                             std::cerr 
                                 << "testwave: preprocessing error in '" << flag
@@ -598,9 +657,9 @@ testwave_app::extract_special_information(std::string const& filename,
                             return false;
                         }
                         std::string source = value.substr(4, p-4);
-                        std::string result, error;
+                        std::string result, error, hooks;
                         bool pp_result = preprocess_file(filename, source, 
-                            result, error, true);
+                            result, error, hooks, true);
                         if (!pp_result) {
                             std::cerr 
                                 << "testwave: preprocessing error in '" << flag
@@ -660,9 +719,10 @@ testwave_app::extract_special_information(std::string const& filename,
 ///////////////////////////////////////////////////////////////////////////////
 inline bool 
 testwave_app::extract_expected_output(std::string const& filename, 
-    std::string const& instr, std::string& expected)
+    std::string const& instr, std::string& expected, std::string& expectedhooks)
 {
-    return extract_special_information(filename, instr, 'R', expected);
+    return extract_special_information(filename, instr, 'R', expected) &&
+           extract_special_information(filename, instr, 'H', expectedhooks);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -707,26 +767,6 @@ testwave_app::extract_options(std::string const& filename,
     }
 
     return true;
-}
-
-namespace {
-
-    template <typename T>
-    inline T const&
-    variables_map_as(po::variable_value const& v, T*)
-    {
-#if (__GNUC__ == 3 && (__GNUC_MINOR__ == 2 || __GNUC_MINOR__ == 3)) || \
-    BOOST_WORKAROUND(__MWERKS__, < 0x3200)
-// gcc 3.2.x and  3.3.x choke on vm[...].as<...>()
-// CW 8.3 has problems with the v.as<T>() below
-        T const* r = boost::any_cast<T>(&v.value());
-        if (!r)
-            boost::throw_exception(boost::bad_any_cast());
-        return *r;
-#else
-        return v.as<T>();
-#endif
-    }
 }
 
 template <typename Context>
@@ -873,7 +913,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
                 std::cerr << "initialise_options: option: -D" << *cit 
                           << std::endl;
             }
-            ctx.add_macro_definition(*cit);
+            ctx.add_macro_definition(*cit, true);
         }
     }
 
@@ -889,7 +929,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
                 std::cerr << "initialise_options: option: -P" << *cit 
                           << std::endl;
             }
-            ctx.add_macro_definition(*cit);
+            ctx.add_macro_definition(*cit, true);
         }
     }
 
@@ -941,7 +981,7 @@ testwave_app::add_sizeof_definition(Context& ctx, char const *name, int value)
     strm << "__TESTWAVE_SIZEOF_" << name << "__=" << value;
 
     std::string macro(BOOST_WAVETEST_GETSTRING(strm));
-    if (!ctx.add_macro_definition(macro)) {
+    if (!ctx.add_macro_definition(macro, true)) {
         std::cerr << "testwave: failed to predefine macro: " << macro 
                   << std::endl;
         return false;
@@ -970,7 +1010,7 @@ testwave_app::add_min_definition(Context& ctx, char const *name)
     }
     
     std::string macro(BOOST_WAVETEST_GETSTRING(strm));
-    if (!ctx.add_macro_definition(macro)) {
+    if (!ctx.add_macro_definition(macro, true)) {
         std::cerr << "testwave: failed to predefine macro: " << macro 
                   << std::endl;
         return false;
@@ -999,7 +1039,7 @@ testwave_app::add_max_definition(Context& ctx, char const *name)
     }
     
     std::string macro(BOOST_WAVETEST_GETSTRING(strm));
-    if (!ctx.add_macro_definition(macro)) {
+    if (!ctx.add_macro_definition(macro, true)) {
         std::cerr << "testwave: failed to predefine macro: " << macro 
                   << std::endl;
         return false;
@@ -1017,7 +1057,7 @@ inline bool
 testwave_app::add_strict_lexer_definition(Context& ctx)
 {
     std::string macro("__TESTWAVE_HAS_STRICT_LEXER__=1");
-    if (!ctx.add_macro_definition(macro)) {
+    if (!ctx.add_macro_definition(macro, true)) {
         std::cerr << "testwave: failed to predefine macro: " << macro 
                   << std::endl;
         return false;
@@ -1106,14 +1146,18 @@ testwave_app::add_predefined_macros(Context& ctx)
 ///////////////////////////////////////////////////////////////////////////////
 bool 
 testwave_app::preprocess_file(std::string filename, std::string const& instr, 
-    std::string& result, std::string& error, bool single_line)
+    std::string& result, std::string& error, std::string& hooks,
+    bool single_line)
 {
 //  create the wave::context object and initialize it from the file to 
 //  preprocess (may contain options inside of special comments)
     typedef boost::wave::cpplexer::lex_token<> token_type;
     typedef boost::wave::cpplexer::lex_iterator<token_type> lexer_type;
-    typedef boost::wave::context<std::string::const_iterator, lexer_type> 
-        context_type;
+    typedef boost::wave::context<
+        std::string::const_iterator, lexer_type,
+        boost::wave::iteration_context_policies::load_file_to_string,
+        collect_hooks_information<token_type> > 
+    context_type;
 
     if (9 == debuglevel) {
         std::cerr << "preprocess_file: preprocessing input file: " << filename 
@@ -1122,7 +1166,8 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
 
     try {    
     //  create preprocessing context
-        context_type ctx(instr.begin(), instr.end(), filename.c_str());
+        context_type ctx(instr.begin(), instr.end(), filename.c_str(),
+            collect_hooks_information<token_type>(hooks));
 
     //  initialize the context from the options given on the command line
         if (!initialise_options(ctx, global_vm, single_line))

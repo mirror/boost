@@ -328,7 +328,7 @@ bool include_paths::find_include_file (std::string &s, std::string &dir,
         
         if (fs::exists(currpath)) {
             fs::path dirpath (s, fs::native);
-            if (!dirpath.has_root_name()) {
+            if (!dirpath.has_root_directory()) {
                 dirpath = fs::path((*it).second, fs::native);
                 dirpath /= fs::path(s, fs::native);
             }
@@ -364,7 +364,7 @@ include_paths::find_include_file (std::string &s, std::string &dir,
             // if 0 != current_path (#include_next handling) it can't be
             // the file in the current directory
                 fs::path dirpath (s, fs::native);
-                if (!dirpath.has_root_name()) {
+                if (!dirpath.has_root_directory()) {
                     dirpath = fs::path(current_rel_dir.string(), fs::native);
                     dirpath /= fs::path(s, fs::native);
                 }

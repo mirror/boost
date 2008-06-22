@@ -16,3 +16,7 @@ true
 #else
 false
 #endif
+
+//H 10: t_4_001.cpp(14): #if
+//H 11: t_4_001.cpp(14): #if 1 / 10 == 0: 1
+//H 10: t_4_001.cpp(16): #else

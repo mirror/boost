@@ -77,6 +77,22 @@ public:
         return (lhs.id == rhs.id && lhs.value == rhs.value) ? true : false;
     }
     
+    void init(token_id id_, string_type const &value_, position_type const &pos_)
+    {
+        BOOST_ASSERT(refcnt == 1);
+        id = id_;
+        value = value_; 
+        pos = pos_;
+    }
+    
+    void init(token_data const& rhs)
+    {
+        BOOST_ASSERT(refcnt == 1);
+        id = rhs.id;
+        value = rhs.value; 
+        pos = rhs.pos;
+    }
+    
     static void *operator new(std::size_t size);
     static void operator delete(void *p, std::size_t size);
     
@@ -167,24 +183,29 @@ class lex_token
 public:
     typedef BOOST_WAVE_STRINGTYPE   string_type;
     typedef PositionT               position_type;
+
+private:
+    typedef impl::token_data<string_type, position_type> data_type;
     
+public:
     lex_token()
-    :   data(new impl::token_data<string_type, position_type>())
+    :   data(0)
     {}
     
     lex_token(lex_token const& rhs)
     :   data(rhs.data)
     {
-        data->addref();
+        if (0 != data) 
+            data->addref();
     }
 
     lex_token(token_id id_, string_type const &value_, PositionT const &pos_)
-    :   data(new impl::token_data<string_type, position_type>(id_, value_, pos_))
+    :   data(new data_type(id_, value_, pos_))
     {}
 
     ~lex_token()
     {
-        if (0 == data->release()) 
+        if (0 != data && 0 == data->release()) 
             delete data;
         data = 0;
     }
@@ -192,20 +213,21 @@ public:
     lex_token& operator=(lex_token const& rhs)
     {
         if (&rhs != this) {
-            if (0 == data->release()) 
+            if (0 != data && 0 == data->release()) 
                 delete data;
             
             data = rhs.data;
-            data->addref();
+            if (0 != data) 
+                data->addref();
         }
         return *this;
     }
     
 // accessors
-    operator token_id() const { return token_id(*data); }
+    operator token_id() const { return 0 != data ? token_id(*data) : T_EOI; }
     string_type const &get_value() const { return data->get_value(); }
     position_type const &get_position() const { return data->get_position(); }
-    bool is_eoi() const { return token_id(*data) == T_EOI; }
+    bool is_eoi() const { return 0 == data || token_id(*data) == T_EOI; }
     
     void set_token_id (token_id id_) { make_unique(); data->set_token_id(id_); }
     void set_value (string_type const &value_) { make_unique(); data->set_value(value_); }
@@ -213,6 +235,10 @@ public:
 
     friend bool operator== (lex_token const& lhs, lex_token const& rhs)
     {
+        if (0 == rhs.data)
+            return 0 == lhs.data;
+        if (0 == lhs.data)
+            return false;
         return *(lhs.data) == *(rhs.data);
     }
     
@@ -249,14 +275,13 @@ private:
         if (1 == data->get_refcnt())
             return;
         
-        impl::token_data<string_type, position_type> *newdata = 
-            new impl::token_data<string_type, position_type>(*data);
+        data_type* newdata = new data_type(*data) ;
 
         data->release();          // release this reference, can't get zero 
         data = newdata;
     }
     
-    impl::token_data<string_type, position_type> *data;
+    data_type* data;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

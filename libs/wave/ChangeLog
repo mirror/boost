@@ -24,6 +24,30 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.36
+- Wave Version 2.0
+- Added an additional template parameter to the context object, allowing to 
+  specify any possibly derived type. This change propagates to the preprocessing
+  hooks, which now get passed the most derived context type as its first 
+  argument allowing to access protected members in the original context type.
+  This fixes ticket #1752.
+- Fixed a problem during parsing of #pragma wave directive, where the value 
+  sequence contained a closing parenthesis. This caused a premature end of the
+  pragma value parsing.
+- Fixed handling of support_option_single_line, which was ignored under certain 
+  circumstances.
+- Fixed ticket #1766: Wrong evaluation of conditional preprocessor directives 
+  with predefined macros __FILE__, __LINE__ and __INCLUDE_LEVEL__. This bug 
+  triggered an error in constructs like #ifndef __FILE__. Thanks to Daniel 
+  Wadehn for reporting and supplying a patch. Added corresponding regression
+  test: t_2_018.cpp.
+- Fixed a bug which reported a valid macro redefinition as invalid if the macro
+  replacement text referred to a second or higher parameter of this macro.
+- Fixed a problem in the wave tool to allow two errors to occur while 
+  preprocessing two consecutive tokens.
+- Adjusted Spirit header includes to point to conform to the new directory 
+  structure, removed support for Spirit versions earlier than V1.7.
+  
 Boost V1.35.0
 - Wave Version 1.3
 - Changed the return value of the 'evaluated_conditional_expression()' pp hook
@@ -159,7 +183,18 @@ Boost V1.35.0
 - Fixed a bug in the pp hook expanding_function_like_macro(), where the seqend
   parameter was set to the first token after the closing parenthesis instead of
   pointing at it.
-  
+- Added the BOOST_WAVE_SUPPORT_THREADING allowing to explicitely control 
+  whether the Wave library is built with threading support enabled. If not 
+  defined the build settings will be picked up from the Boost build environment
+  (BOOST_HAS_THREADS).
+- Fixed a whitespace insertion glitch, where whitespace got inserted 
+  unconditionally between two operators even if one of these was a comma.
+- Fixed #line directive after a macro invocation containing newlines to 
+  correctly reference the line number.
+- Positions of macros defined on the command line now get properly reported as 
+  "<command line>":1:...
+- Added testing of the preprocessor hooks.
+
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
@@ -319,10 +354,6 @@ Boost V1.34.0
 - Worked around a linker issue for the True64/CXX compiler, complaining about
   multiple defined symbols when using the flex_string class.
 - Added missing documentation for the context::get_macro_definition function.
-- Added the BOOST_WAVE_SUPPORT_THREADING allowing to explicitely control 
-  whether the Wave library is built with threading support enabled. If not 
-  defined the build settings will be picked up from the Boost build environment
-  (BOOST_HAS_THREADS).
 
 Sat Feb 18 2005
 - Version 1.2.3

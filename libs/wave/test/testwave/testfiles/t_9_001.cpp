@@ -18,3 +18,6 @@
     void exposed() {}   //R void exposed() {} 
 #endif
 
+//H 10: t_9_001.cpp(16): #if
+//H 11: t_9_001.cpp(16): #if 1: 1
+//H 10: t_9_001.cpp(19): #endif

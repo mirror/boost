@@ -15,8 +15,8 @@
 #include <map>
 
 #include <boost/assert.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/confix.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_confix.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
@@ -34,8 +34,7 @@ struct trace_actor
         const char rule_type[],
         std::ostream &strm
         )
-        :rule_type_( rule_type),
-         strm_( strm)
+        : strm_( strm), rule_type_( rule_type)
     {
         // nop
     }
@@ -99,7 +98,7 @@ struct dump_actor {
 
 ///////////////////////////////////////////////////////////////////////////////
 struct translation_unit_grammar 
-:   public boost::spirit::grammar<translation_unit_grammar>
+:   public boost::spirit::classic::grammar<translation_unit_grammar>
 {
 #if HANNIBAL_DUMP_PARSE_TREE != 0
 //
@@ -110,7 +109,9 @@ struct translation_unit_grammar
 // Please Note: the lifetime of the rule map should at least extend beyond the 
 // call of the definition constructor...
 //
-    typedef std::map<boost::spirit::parser_id, std::string> rule_map_type;
+    typedef std::map<boost::spirit::classic::parser_id, std::string> 
+        rule_map_type;
+
     translation_unit_grammar(rule_map_type *rule_map_ptr_ = 0)
     :   rule_map_ptr(rule_map_ptr_)
 #else
@@ -125,7 +126,7 @@ struct translation_unit_grammar
     struct definition
     {
         // declare non-terminals
-        typedef boost::spirit::rule<ScannerT> rule_type;
+        typedef boost::spirit::classic::rule<ScannerT> rule_type;
 
         rule_type constant_expression;
         rule_type logical_or_exp, logical_and_exp;
@@ -135,8 +136,8 @@ struct translation_unit_grammar
         rule_type add_exp, multiply_exp;
         rule_type unary_exp, primary_exp, constant;
 
-        boost::spirit::subrule<0> const_exp_subrule;
-        boost::spirit::subrule<1> shift_exp_clos;
+        boost::spirit::classic::subrule<0> const_exp_subrule;
+        boost::spirit::classic::subrule<1> shift_exp_clos;
 
         rule_type simple_type_name, class_keywords;
         rule_type storage_class_specifier, cv_qualifier, function_specifier;
@@ -250,7 +251,7 @@ struct translation_unit_grammar
 
         definition(translation_unit_grammar const& self)
         {
-            using namespace boost::spirit;
+            using namespace boost::spirit::classic;
             using namespace boost::wave;
             using boost::wave::util::pattern_p;
             
@@ -295,7 +296,8 @@ struct translation_unit_grammar
             HANNIBAL_REGISTER_RULE( string_literal);
             string_literal
                 =   pattern_p( StringLiteralTokenType, TokenTypeMask)
-
+                ;
+                
             HANNIBAL_REGISTER_RULE( boolean_literal);
             boolean_literal
                 =   pattern_p( BoolLiteralTokenType, TokenTypeMask)

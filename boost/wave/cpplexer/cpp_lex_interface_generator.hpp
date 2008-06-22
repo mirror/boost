@@ -76,6 +76,7 @@ struct lex_input_interface_generator
 {
     typedef typename lex_input_interface<TokenT>::position_type position_type;
     
+    lex_input_interface_generator() {}
     ~lex_input_interface_generator() {}
     
 //  The new_lexer function allows the opaque generation of a new lexer object.

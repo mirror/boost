@@ -17,3 +17,10 @@
 #if defined (_MSC_VER) && (_MSC_VER >= 1020)
 true
 #endif
+
+//H 10: t_2_016.cpp(17): #if
+//H 01: <command line>(1): _MSC_VER
+//H 02: 1200
+//H 03: 1200
+//H 11: t_2_016.cpp(17): #if defined (_MSC_VER) && (_MSC_VER >= 1020): 1
+//H 10: t_2_016.cpp(19): #endif

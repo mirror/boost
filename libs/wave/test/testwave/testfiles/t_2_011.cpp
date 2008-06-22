@@ -13,3 +13,9 @@
 #if 1
 #endif
 #endif
+
+//H 10: t_2_011.cpp(13): #if
+//H 11: t_2_011.cpp(13): #if 1: 1
+//H 10: t_2_011.cpp(14): #endif
+//H 10: t_2_011.cpp(15): #endif
+//H 18: boost::wave::preprocess_exception

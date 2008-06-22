@@ -14,25 +14,18 @@
 #include <boost/wave/wave_config.hpp>
 
 #include <boost/assert.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/attribute/closure.hpp>
-#if SPIRIT_VERSION >= 0x1700
-#include <boost/spirit/actor/assign_actor.hpp>
-#include <boost/spirit/actor/push_back_actor.hpp>
-#endif // SPIRIT_VERSION >= 0x1700
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_closure.hpp>
+#include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_push_back_actor.hpp>
 
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/util/pattern_parser.hpp>
 #include <boost/wave/grammars/cpp_defined_grammar_gen.hpp>
 
 #if !defined(spirit_append_actor)
-#if SPIRIT_VERSION >= 0x1700
-#define spirit_append_actor(actor) boost::spirit::push_back_a(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign_a(actor)
-#else
-#define spirit_append_actor(actor) boost::spirit::append(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign(actor)
-#endif // SPIRIT_VERSION >= 0x1700
+#define spirit_append_actor(actor) boost::spirit::classic::push_back_a(actor)
+#define spirit_assign_actor(actor) boost::spirit::classic::assign_a(actor)
 #endif // !defined(spirit_append_actor)
 
 // this must occur after all of the includes and before any code appears
@@ -53,7 +46,7 @@ namespace grammars {
 
 template <typename ContainerT>
 struct defined_grammar :
-    public boost::spirit::grammar<defined_grammar<ContainerT> >
+    public boost::spirit::classic::grammar<defined_grammar<ContainerT> >
 {
     defined_grammar(ContainerT &result_seq_)
     :   result_seq(result_seq_)
@@ -65,14 +58,14 @@ struct defined_grammar :
     template <typename ScannerT>
     struct definition
     {
-        typedef boost::spirit::rule<ScannerT> rule_t;
+        typedef boost::spirit::classic::rule<ScannerT> rule_t;
 
         rule_t defined_op;
         rule_t identifier;
 
         definition(defined_grammar const &self)
         {
-            using namespace boost::spirit;
+            using namespace boost::spirit::classic;
             using namespace boost::wave;
             using namespace boost::wave::util;
 
@@ -144,35 +137,35 @@ struct defined_grammar :
 
 template <typename LexIteratorT>
 BOOST_WAVE_DEFINED_GRAMMAR_GEN_INLINE 
-boost::spirit::parse_info<
-    typename defined_grammar_gen<LexIteratorT>::iterator1_t
+boost::spirit::classic::parse_info<
+    typename defined_grammar_gen<LexIteratorT>::iterator1_type
 >
 defined_grammar_gen<LexIteratorT>::parse_operator_defined (
-    iterator1_t const &first, iterator1_t const &last,
+    iterator1_type const &first, iterator1_type const &last,
     token_sequence_type &found_qualified_name)
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     using namespace boost::wave;
     
     defined_grammar<token_sequence_type> g(found_qualified_name);
-    return boost::spirit::parse (
+    return boost::spirit::classic::parse (
         first, last, g, ch_p(T_SPACE) | ch_p(T_CCOMMENT));
 }
 
 template <typename LexIteratorT>
 BOOST_WAVE_DEFINED_GRAMMAR_GEN_INLINE 
-boost::spirit::parse_info<
-    typename defined_grammar_gen<LexIteratorT>::iterator2_t
+boost::spirit::classic::parse_info<
+    typename defined_grammar_gen<LexIteratorT>::iterator2_type
 >
 defined_grammar_gen<LexIteratorT>::parse_operator_defined (
-    iterator2_t const &first, iterator2_t const &last,
+    iterator2_type const &first, iterator2_type const &last,
     token_sequence_type &found_qualified_name)
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     using namespace boost::wave;
     
     defined_grammar<token_sequence_type> g(found_qualified_name);
-    return boost::spirit::parse (
+    return boost::spirit::classic::parse (
         first, last, g, ch_p(T_SPACE) | ch_p(T_CCOMMENT));
 }
 

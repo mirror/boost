@@ -47,6 +47,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// if you want to use another iterator type for the underlying input stream
+// a corresponding explicit template instantiation needs to be added below
 template struct boost::wave::cpplexer::new_lexer_gen<
     BOOST_WAVE_STRINGTYPE::iterator>;
 template struct boost::wave::cpplexer::new_lexer_gen<

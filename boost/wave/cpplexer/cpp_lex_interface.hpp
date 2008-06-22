@@ -46,9 +46,10 @@ struct lex_input_interface
 {
     typedef typename TokenT::position_type position_type;
     
+    lex_input_interface() {}
     virtual ~lex_input_interface() {}
     
-    virtual TokenT get() = 0;
+    virtual TokenT& get(TokenT&) = 0;
     virtual void set_position(position_type const &pos) = 0;
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     virtual bool has_include_guards(std::string& guard_name) const = 0;

@@ -20,3 +20,15 @@
 //R B() 
 A()   // not 'anything'!
 
+//H 10: t_1_020.cpp(14): #define
+//H 08: t_1_020.cpp(14): NIL=
+//H 10: t_1_020.cpp(16): #define
+//H 08: t_1_020.cpp(16): A=B NIL
+//H 10: t_1_020.cpp(17): #define
+//H 08: t_1_020.cpp(17): B()=anything
+//H 01: t_1_020.cpp(16): A
+//H 02: B NIL
+//H 01: t_1_020.cpp(14): NIL
+//H 02: 
+//H 03: _
+//H 03: B_

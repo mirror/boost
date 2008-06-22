@@ -7,7 +7,10 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-// Test error reproting during redefinition of 'defined'
+// Test error reporting during redefinition of 'defined'
 
 //E t_9_008.cpp(13): warning: #undef may not be used on this predefined name: defined
 #undef defined 
+
+//H 10: t_9_008.cpp(13): #undef
+//H 18: boost::wave::preprocess_exception

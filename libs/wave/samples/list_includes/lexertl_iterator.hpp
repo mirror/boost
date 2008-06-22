@@ -17,7 +17,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/spirit/iterator/multi_pass.hpp>
+#include <boost/spirit/include/classic_multi_pass.hpp>
 
 #include <boost/wave/language_support.hpp>
 #include <boost/wave/util/file_position.hpp>
@@ -25,7 +25,7 @@
 
 #include "lexertl_interface.hpp"
 
-#if 0 != __COMO_VERSION__
+#if 0 != __COMO_VERSION__ || !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 #define BOOST_WAVE_EOF_PREFIX static
 #else
 #define BOOST_WAVE_EOF_PREFIX 
@@ -54,12 +54,13 @@ public:
             wave::language_support language)
     :   functor_ptr(lexertl_input_interface<TokenT>
             ::new_lexer(first, last, pos, language)) 
-#if 0 != __DECCXX_VER
+#if 0 != __DECCXX_VER || defined(__PGI)
       , eof()
 #endif // 0 != __DECCXX_VER
     {}
 
-// interface to the boost::spirit::multi_pass_policies::functor_input policy
+// interface to the boost::spirit::classic::multi_pass_policies::functor_input 
+// policy
     typedef TokenT result_type;
 
     BOOST_WAVE_EOF_PREFIX result_type const eof;
@@ -87,7 +88,7 @@ private:
     boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
 };
 
-#if 0 != __COMO_VERSION__
+#if 0 != __COMO_VERSION__ || !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 ///////////////////////////////////////////////////////////////////////////////
 //  eof token
 template <typename TokenT>
@@ -122,14 +123,14 @@ typename iterator_functor_shim<TokenT>::result_type const
 
 template <typename TokenT>
 class lex_iterator 
-:   public boost::spirit::multi_pass<
+:   public boost::spirit::classic::multi_pass<
         impl::iterator_functor_shim<TokenT>,
         boost::wave::util::functor_input
     >
 {
     typedef impl::iterator_functor_shim<TokenT> input_policy_type;
     typedef 
-        boost::spirit::multi_pass<input_policy_type, 
+        boost::spirit::classic::multi_pass<input_policy_type, 
                 boost::wave::util::functor_input>
         base_type;
     typedef lex_iterator<TokenT> self_type;

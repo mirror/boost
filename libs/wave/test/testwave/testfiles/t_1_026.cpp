@@ -14,3 +14,6 @@
            // ^  ^ this is illegal
 
 MACRO(1, 2)
+
+//H 10: t_1_026.cpp(13): #define
+//H 18: boost::wave::macro_handling_exception

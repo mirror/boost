@@ -16,7 +16,7 @@
 // Tests error reporting: Trailing junk of #else, #endif.
 
 // 16.1: Trailing junk of #else.
-//E t_6_023.cpp(22): error: ill formed preprocessor directive: #else
+//E t_6_023.cpp(22): error: ill formed preprocessor directive: #else   MACRO_0
 #define MACRO_0     0
 #if     MACRO_0
 #else   MACRO_0

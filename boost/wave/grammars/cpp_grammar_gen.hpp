@@ -14,8 +14,8 @@
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/language_support.hpp>
 
-#include <boost/spirit/core/nil.hpp>
-#include <boost/spirit/tree/parse_tree.hpp>
+#include <boost/spirit/include/classic_nil.hpp>
+#include <boost/spirit/include/classic_parse_tree.hpp>
 
 #include <boost/pool/pool_alloc.hpp>
 
@@ -81,13 +81,13 @@ struct BOOST_WAVE_DECL cpp_grammar_gen
     typedef typename LexIteratorT::token_type     token_type;
     typedef TokenContainerT                       token_container_type;
     typedef typename token_type::position_type    position_type;
-    typedef boost::spirit::node_val_data_factory<
+    typedef boost::spirit::classic::node_val_data_factory<
 //             boost::spirit::nil_t,
 //             boost::pool_allocator<boost::spirit::nil_t> 
         > node_factory_type;
     
 //  parse the cpp_grammar and return the resulting parse tree    
-    static boost::spirit::tree_parse_info<iterator_type, node_factory_type> 
+    static boost::spirit::classic::tree_parse_info<iterator_type, node_factory_type> 
     parse_cpp_grammar (iterator_type const &first, iterator_type const &last,
         position_type const &act_pos, bool &found_eof, 
         token_type &found_directive, token_container_type &found_eoltokens);

@@ -10,7 +10,7 @@
 //O --c99
 
 // Tests correctness of macro expansion inside #pragma directives
-// Note: in C99 mode the STDC prefix in pragmas supresses macro expansion
+// Note: in C99 mode the STDC prefix in pragma's suppresses macro expansion
 
 #define PRAGMA_BODY preprocessed pragma body
 
@@ -26,3 +26,13 @@
 //R #line 28 "t_2_007.cpp"
 //R #pragma STDC PRAGMA_BODY
 #pragma STDC PRAGMA_BODY
+
+//H 10: t_2_007.cpp(15): #define
+//H 08: t_2_007.cpp(15): PRAGMA_BODY=preprocessed pragma body
+//H 10: t_2_007.cpp(19): #pragma
+//H 10: t_2_007.cpp(22): #pragma
+//H 01: t_2_007.cpp(15): PRAGMA_BODY
+//H 02: preprocessed pragma body
+//H 03: preprocessed pragma body
+//H 10: t_2_007.cpp(25): #pragma
+//H 10: t_2_007.cpp(28): #pragma

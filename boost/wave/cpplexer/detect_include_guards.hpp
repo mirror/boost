@@ -51,7 +51,7 @@ public:
         current_state(true), if_depth(0)
     {}
 
-    Token const& detect_guard(Token const& t) 
+    Token& detect_guard(Token& t) 
         { return current_state ? (this->*state)(t) : t; }
     bool detected(std::string& guard_name_) const 
     {
@@ -63,7 +63,7 @@ public:
     }
     
 private:
-    typedef Token const& state_type(Token const& t);
+    typedef Token& state_type(Token& t);
     state_type include_guards::* state;
 
     bool detected_guards;
@@ -85,8 +85,8 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 //  state 0: beginning of a file, tries to recognize #ifndef or #if tokens
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_0(Token const& t)
+inline Token& 
+include_guards<Token>::state_0(Token& t)
 {
     token_id id = token_id(t);
     if (T_PP_IFNDEF == id)
@@ -101,8 +101,8 @@ include_guards<Token>::state_0(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 1: found #ifndef, looking for T_IDENTIFIER
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_1(Token const& t)
+inline Token& 
+include_guards<Token>::state_1(Token& t)
 {
     token_id id = token_id(t);
     if (T_IDENTIFIER == id) {
@@ -117,8 +117,8 @@ include_guards<Token>::state_1(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 1a: found T_PP_IF, looking for T_NOT ("!")
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_1a(Token const& t)
+inline Token& 
+include_guards<Token>::state_1a(Token& t)
 {
     token_id id = token_id(t);
     if (T_NOT == BASE_TOKEN(id)) 
@@ -131,8 +131,8 @@ include_guards<Token>::state_1a(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 1b: found T_NOT, looking for 'defined'
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_1b(Token const& t)
+inline Token& 
+include_guards<Token>::state_1b(Token& t)
 {
     token_id id = token_id(t);
     if (T_IDENTIFIER == id && t.get_value() == "defined") 
@@ -145,8 +145,8 @@ include_guards<Token>::state_1b(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 1c: found 'defined', looking for (optional) T_LEFTPAREN
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_1c(Token const& t)
+inline Token& 
+include_guards<Token>::state_1c(Token& t)
 {
     token_id id = token_id(t);
     if (T_LEFTPAREN == id) 
@@ -163,8 +163,8 @@ include_guards<Token>::state_1c(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 1d: found T_LEFTPAREN, looking for T_IDENTIFIER guard
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_1d(Token const& t)
+inline Token& 
+include_guards<Token>::state_1d(Token& t)
 {
     token_id id = token_id(t);
     if (T_IDENTIFIER == id) {
@@ -179,8 +179,8 @@ include_guards<Token>::state_1d(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 1e: found T_IDENTIFIER guard, looking for T_RIGHTPAREN
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_1e(Token const& t)
+inline Token& 
+include_guards<Token>::state_1e(Token& t)
 {
     token_id id = token_id(t);
     if (T_RIGHTPAREN == id) 
@@ -193,8 +193,8 @@ include_guards<Token>::state_1e(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 2: found T_IDENTIFIER, looking for #define
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_2(Token const& t)
+inline Token& 
+include_guards<Token>::state_2(Token& t)
 {
     token_id id = token_id(t);
     if (T_PP_DEFINE == id) 
@@ -207,8 +207,8 @@ include_guards<Token>::state_2(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 3: found #define, looking for T_IDENTIFIER as recognized by state 1
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_3(Token const& t)
+inline Token& 
+include_guards<Token>::state_3(Token& t)
 {
     token_id id = token_id(t);
     if (T_IDENTIFIER == id && t.get_value() == guard_name)
@@ -221,8 +221,8 @@ include_guards<Token>::state_3(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 4: found guard T_IDENTIFIER, looking for #endif
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_4(Token const& t)
+inline Token& 
+include_guards<Token>::state_4(Token& t)
 {
     token_id id = token_id(t);
     if (T_PP_IF == id || T_PP_IFDEF == id || T_PP_IFNDEF == id)
@@ -239,8 +239,8 @@ include_guards<Token>::state_4(Token const& t)
 ///////////////////////////////////////////////////////////////////////////////
 //  state 5: found final #endif, looking for T_EOF
 template <typename Token>
-inline Token const& 
-include_guards<Token>::state_5(Token const& t)
+inline Token& 
+include_guards<Token>::state_5(Token& t)
 {
     token_id id = token_id(t);
     if (T_EOF == id) 

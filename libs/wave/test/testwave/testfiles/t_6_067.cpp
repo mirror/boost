@@ -22,6 +22,11 @@
 //R #line 19 "t_6_067.hpp"
 //R int dummy = 0;
 
+//H 10: t_6_067.cpp(20): #include "t_6_067.hpp"
+//H 04: "t_6_067.hpp"
+//H 05: $B(t_6_067.hpp) ($B(t_6_067.hpp))
+//H 18: boost::wave::lexing_exception
+
 /*-
  * Copyright (c) 1998, 2002-2005 Kiyoshi Matsui <kmatsui@t3.rim.or.jp>
  * All rights reserved.

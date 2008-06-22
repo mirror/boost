@@ -22,7 +22,7 @@
 
 #include <boost/concept_check.hpp>
 #include <boost/assert.hpp>
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/language_support.hpp>
@@ -70,7 +70,7 @@ public:
         PositionT const &pos, boost::wave::language_support language_);
     ~lexer();
 
-    lex_token<PositionT> get();
+    lex_token<PositionT>& get(lex_token<PositionT>&);
     void set_position(PositionT const &pos)
     {
         // set position has to change the file name and line number only
@@ -157,11 +157,11 @@ lexer<IteratorT, PositionT>::~lexer()
 ///////////////////////////////////////////////////////////////////////////////
 //  get the next token from the input stream
 template <typename IteratorT, typename PositionT>
-inline lex_token<PositionT> 
-lexer<IteratorT, PositionT>::get()
+inline lex_token<PositionT>&
+lexer<IteratorT, PositionT>::get(lex_token<PositionT>& result)
 {
     if (at_eof) 
-        return lex_token<PositionT>();  // return T_EOI
+        return result = lex_token<PositionT>();  // return T_EOI
 
     unsigned int actline = scanner.line;
     token_id id = token_id(scan(&scanner));
@@ -280,12 +280,12 @@ lexer<IteratorT, PositionT>::get()
 //     std::cerr << boost::wave::get_token_name(id) << ": " << value << std::endl;
 
     // the re2c lexer reports the new line number for newline tokens
+    result = token_type(id, value, PositionT(filename, actline, scanner.column));
+
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    return guards.detect_guard(lex_token<PositionT>(id, value, 
-        PositionT(filename, actline, scanner.column)));
+    return guards.detect_guard(result);
 #else
-    return lex_token<PositionT>(id, value, 
-        PositionT(filename, actline, scanner.column));
+    return result;
 #endif
 }
 
@@ -324,8 +324,7 @@ class lex_functor
     >
 {    
 public:
-
-    typedef typename lexer<IteratorT, PositionT>::token_type   token_type;
+    typedef typename lexer<IteratorT, PositionT>::token_type token_type;
     
     lex_functor(IteratorT const &first, IteratorT const &last, 
             PositionT const &pos, boost::wave::language_support language)
@@ -334,7 +333,7 @@ public:
     virtual ~lex_functor() {}
     
 // get the next token from the input stream
-    token_type get() { return re2c_lexer.get(); }
+    token_type& get(token_type& result) { return re2c_lexer.get(result); }
     void set_position(PositionT const &pos) { re2c_lexer.set_position(pos); }
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     bool has_include_guards(std::string& guard_name) const 

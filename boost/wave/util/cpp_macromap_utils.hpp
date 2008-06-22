@@ -100,7 +100,8 @@ namespace on_exit {
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename IteratorT, typename UnputIteratorT>
-    class assign {
+    class assign
+    {
     public:
         assign(IteratorT &it_, UnputIteratorT const &uit_) 
         :   it(it_), uit(uit_) {}
@@ -170,13 +171,7 @@ token_equals(TokenT const &left, TokenT const &right)
 {
     using namespace boost::wave;
     
-#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-    if (T_PARAMETERBASE == token_id(left) || 
-        T_EXTPARAMETERBASE == token_id(left)) 
-#else
-    if (T_PARAMETERBASE == token_id(left))
-#endif 
-    {
+    if (IS_CATEGORY(left, ParameterTokenType)) {
     //  if the existing token is of type T_PARAMETERBASE, then the right token 
     //  must be of type T_IDENTIFIER or a keyword
     token_id id = token_id(right);
@@ -500,7 +495,51 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Convert a string of an arbitrary string compatible type to a internal 
+//  string (BOOST_WAVE_STRING)
+template <typename Target, typename Src>
+struct to_string_helper
+{
+    typedef Target type;
+    
+    static Target call(Src const& str)
+    {
+        return Target(str.c_str());
+    }
+};
+
+// do nothing if types are equal
+template <typename Src>
+struct to_string_helper<Src, Src>
+{
+    typedef Src const& type;
+
+    static Src const& call(Src const& str)
+    {
+        return str;
+    }
+};
+
+template <typename Target>
+struct to_string_helper<Target, char const*>
+{
+    typedef Target type;
+
+    static Target call(char const* str)
+    {
+        return Target(str);
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl
+
+template <typename Target, typename Src>
+inline typename impl::to_string_helper<Target, Src>::type
+to_string(Src const& src)
+{
+    return impl::to_string_helper<Target, Src>::call(src);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace util

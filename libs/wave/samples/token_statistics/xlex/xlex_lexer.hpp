@@ -22,7 +22,7 @@
 
 #include <boost/concept_check.hpp>
 #include <boost/assert.hpp>
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/language_support.hpp>

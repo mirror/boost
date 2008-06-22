@@ -9,7 +9,13 @@
 
 // Tests error reporting for missing #endif
 
-//E t_2_010.cpp(16): error: detected at least one missing #endif directive
+//E t_2_010.cpp(22): error: detected at least one missing #endif directive
 #if 1
 #if 0
 #endif
+
+//H 10: t_2_010.cpp(13): #if
+//H 11: t_2_010.cpp(13): #if 1: 1
+//H 10: t_2_010.cpp(14): #if
+//H 11: t_2_010.cpp(14): #if 0: 0
+//H 18: boost::wave::preprocess_exception

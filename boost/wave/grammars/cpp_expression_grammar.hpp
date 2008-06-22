@@ -14,19 +14,17 @@
 #include <boost/wave/wave_config.hpp>
 
 #include <boost/assert.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/attribute/closure.hpp>
-#include <boost/spirit/dynamic/if.hpp>
-#if SPIRIT_VERSION >= 0x1700
-#include <boost/spirit/actor/assign_actor.hpp>
-#include <boost/spirit/actor/push_back_actor.hpp>
-#endif // SPIRIT_VERSION >= 0x1700
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_closure.hpp>
+#include <boost/spirit/include/classic_if.hpp>
+#include <boost/spirit/include/classic_assign_actor.hpp>
+#include <boost/spirit/include/classic_push_back_actor.hpp>
 
-#include <boost/spirit/phoenix/functions.hpp>
-#include <boost/spirit/phoenix/operators.hpp>
-#include <boost/spirit/phoenix/primitives.hpp>
-#include <boost/spirit/phoenix/statements.hpp>
-#include <boost/spirit/phoenix/casts.hpp>
+#include <boost/spirit/include/phoenix1_functions.hpp>
+#include <boost/spirit/include/phoenix1_operators.hpp>
+#include <boost/spirit/include/phoenix1_primitives.hpp>
+#include <boost/spirit/include/phoenix1_statements.hpp>
+#include <boost/spirit/include/phoenix1_casts.hpp>
 
 #include <boost/wave/token_ids.hpp>
 
@@ -38,13 +36,8 @@
 #include <boost/wave/util/macro_helpers.hpp>
 
 #if !defined(spirit_append_actor)
-#if SPIRIT_VERSION >= 0x1700
-#define spirit_append_actor(actor) boost::spirit::push_back_a(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign_a(actor)
-#else
-#define spirit_append_actor(actor) boost::spirit::append(actor)
-#define spirit_assign_actor(actor) boost::spirit::assign(actor)
-#endif // SPIRIT_VERSION >= 0x1700
+#define spirit_append_actor(actor) boost::spirit::classic::push_back_a(actor)
+#define spirit_assign_actor(actor) boost::spirit::classic::assign_a(actor)
 #endif // !defined(spirit_append_actor)
 
 // this must occur after all of the includes and before any code appears
@@ -73,7 +66,7 @@ namespace closures {
 //
 ///////////////////////////////////////////////////////////////////////////////
     struct cpp_expr_closure 
-    :   boost::spirit::closure<cpp_expr_closure, closure_value> 
+    :   boost::spirit::classic::closure<cpp_expr_closure, closure_value> 
     {
         member1 val;
     };
@@ -276,7 +269,7 @@ namespace impl {
     /**/
 
 struct expression_grammar :
-    public boost::spirit::grammar<
+    public boost::spirit::classic::grammar<
         expression_grammar, 
         closures::cpp_expr_closure::context_t
     >
@@ -295,8 +288,8 @@ struct expression_grammar :
     struct definition
     {
         typedef closures::cpp_expr_closure closure_type;
-        typedef boost::spirit::rule<ScannerT, closure_type::context_t> rule_t;
-        typedef boost::spirit::rule<ScannerT> simple_rule_t;
+        typedef boost::spirit::classic::rule<ScannerT, closure_type::context_t> rule_t;
+        typedef boost::spirit::classic::rule<ScannerT> simple_rule_t;
 
         simple_rule_t pp_expression;
         
@@ -316,11 +309,11 @@ struct expression_grammar :
         rule_t add_exp_nocalc, multiply_exp_nocalc;
         rule_t unary_exp_nocalc, primary_exp_nocalc, constant_nocalc;
 
-        boost::spirit::subrule<0, closure_type::context_t> const_exp_subrule;
+        boost::spirit::classic::subrule<0, closure_type::context_t> const_exp_subrule;
 
         definition(expression_grammar const &self)
         {
-            using namespace boost::spirit;
+            using namespace boost::spirit::classic;
             using namespace phoenix;
             using namespace boost::wave;
             using boost::wave::util::pattern_p;
@@ -750,7 +743,7 @@ expression_grammar_gen<TokenT>::evaluate(
     typename token_type::position_type const &act_pos,
     bool if_block_status, value_error &status)
 {
-    using namespace boost::spirit;
+    using namespace boost::spirit::classic;
     using namespace boost::wave;
     using namespace boost::wave::grammars::closures;
     
