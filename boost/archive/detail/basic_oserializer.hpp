@@ -16,7 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cstdlib> // NULL
+#include <cstddef> // NULL
 #include <boost/config.hpp>
 
 #include <boost/archive/detail/auto_link_archive.hpp>

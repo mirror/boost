@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cassert>
+#include <cstddef> // NULL
 
 #include <boost/noncopyable.hpp>
 #include <boost/config.hpp>

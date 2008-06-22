@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
+#include <cstddef> // NULL
 #include <boost/type_traits/broken_compiler_spec.hpp>
 
 // can't use this - much as I'd like to as borland doesn't support it

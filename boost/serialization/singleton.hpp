@@ -67,7 +67,9 @@ namespace serialization {
 // make a singleton to lock/unlock all singletons for alteration.
 // The intent is that all singletons created/used by this code
 // are to be initialized before main is called. A test program
-// can lock all the single
+// can lock all the singletons when main is entereed.  This any
+// attempt to retieve a mutable instances while locked will
+// generate a assertion if compiled for debug.
 
 class singleton_module  : public boost::noncopyable
 {
@@ -98,7 +100,7 @@ private:
     BOOST_DLLEXPORT static T & instance;
     // include this to provoke instantiation at pre-execution time
     static void use(T const &) {}
-    static T & get_instance(){
+    BOOST_DLLEXPORT static T & get_instance() BOOST_USED {
         static T t;
         // refer to instance, causing it to be instantiated (and
         // initialized at startup on working compilers)

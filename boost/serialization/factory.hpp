@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstdarg>
+#include <cstddef> // NULL
 
 #include <boost/preprocessor/control/if.hpp> 
 #include <boost/preprocessor/comparison/greater.hpp>

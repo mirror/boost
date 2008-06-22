@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <locale>
-#include <cstddef>
+#include <cstddef> // NULL
 #include <cwchar>   // for mbstate_t
 #include <boost/config.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>

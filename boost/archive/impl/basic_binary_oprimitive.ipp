@@ -9,6 +9,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <ostream>
+#include <cstddef> // NULL
 #include <cstring>
 
 #include <boost/config.hpp>

@@ -10,6 +10,7 @@
 
 #include <boost/config.hpp>
 #include <cstring> // memcpy
+#include <cstddef> // NULL
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::memcpy;

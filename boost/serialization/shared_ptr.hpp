@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <map>
+#include <cstddef> // NULL
 
 #include <boost/config.hpp>
 #include <boost/mpl/integral_c.hpp>

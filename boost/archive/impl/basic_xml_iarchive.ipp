@@ -9,6 +9,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cassert>
+#include <cstddef> // NULL
 #include <algorithm>
 
 #include <boost/throw_exception.hpp>

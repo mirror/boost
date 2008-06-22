@@ -22,6 +22,7 @@
 // that are to be serialized through pointers.
 
 #include <utility>
+#include <cstddef> // NULL
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>

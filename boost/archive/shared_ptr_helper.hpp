@@ -18,6 +18,7 @@
 
 #include <map>
 #include <list>
+#include <cstddef> // NULL
 
 #include <boost/config.hpp>
 #include <boost/shared_ptr.hpp>

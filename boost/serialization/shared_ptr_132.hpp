@@ -23,6 +23,7 @@
 #include <boost/config.hpp>
 
 #include <list>
+#include <cstddef> // NULL
 
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/split_free.hpp>

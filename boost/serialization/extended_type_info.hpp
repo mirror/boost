@@ -20,6 +20,7 @@
 // this could change in the future.
 #include <cstdarg>
 #include <cassert>
+#include <cstddef> // NULL
 #include <boost/config.hpp>
 #include <boost/serialization/config.hpp>
 
