@@ -53,6 +53,11 @@ namespace test {
     struct globally_counted_object
         : counted_object<globally_counted_object> {};
 
+    // This won't be a problem as I'm only using a single compile unit
+    // in each test (this is actually require by the minimal test
+    // framework).
+    // 
+    // boostinspect:nounnamed
     namespace {
         object_count& global_object_count = globally_counted_object::count_;
     }

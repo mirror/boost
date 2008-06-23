@@ -44,6 +44,11 @@ namespace test
         }
     };
 
+    // This won't be a problem as I'm only using a single compile unit
+    // in each test (this is actually require by the minimal test
+    // framework).
+    // 
+    // boostinspect:nounnamed
     namespace {
         equivalent_type equivalent;
     }

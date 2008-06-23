@@ -84,12 +84,11 @@ namespace unnecessary_copy_tests
     template <class T>
     void unnecessary_copy_insert_test(T*)
     {
-        reset();
         T x;
         BOOST_DEDUCED_TYPENAME T::value_type a;
-        COPY_COUNT(1);
+        reset();
         x.insert(a);
-        COPY_COUNT(2);
+        COPY_COUNT(1);
     }
 
     boost::unordered_set<count_copies>* set;

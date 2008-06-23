@@ -12,7 +12,7 @@
 #include <iostream>
 #include "../helpers/fwd.hpp"
 #include "../helpers/count.hpp"
-#include "./memory.hpp"
+#include "../helpers/memory.hpp"
 #include <map>
 
 namespace test
@@ -156,6 +156,11 @@ namespace test
 
     namespace detail
     {
+        // This won't be a problem as I'm only using a single compile unit
+        // in each test (this is actually require by the minimal test
+        // framework).
+        // 
+        // boostinspect:nounnamed
         namespace {
             test::detail::memory_tracker<std::allocator<int> > tracker;
         }
