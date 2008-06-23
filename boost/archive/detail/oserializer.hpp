@@ -105,16 +105,16 @@ private:
     // private constructor to inhibit any existence other than the 
     // static one
 public:
-    explicit oserializer() :
+    explicit BOOST_DLLEXPORT oserializer() :
         basic_oserializer(
             boost::serialization::type_info_implementation<T>::type
                 ::get_const_instance()
         )
     {}
-    virtual void save_object_data(
+    virtual BOOST_DLLEXPORT void save_object_data(
         basic_oarchive & ar,    
         const void *x
-    ) const ;
+    ) const BOOST_USED;
     virtual bool class_info() const {
         return boost::serialization::implementation_level<T>::value 
             >= boost::serialization::object_class_info;
@@ -134,7 +134,7 @@ public:
 };
 
 template<class Archive, class T>
-void oserializer<Archive, T>::save_object_data(
+BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
     basic_oarchive & ar,    
     const void *x
 ) const {
@@ -154,12 +154,12 @@ class pointer_oserializer
 {
     const basic_oserializer & get_basic_serializer() const;
 private:
-    virtual void save_object_ptr(
+    virtual BOOST_DLLEXPORT void save_object_ptr(
         basic_oarchive & ar,
         const void * x
-    ) const ;
+    ) const BOOST_USED;
 public:
-    explicit pointer_oserializer();
+    explicit BOOST_DLLEXPORT pointer_oserializer() BOOST_USED;
 };
 
 template<class Archive, class T>
@@ -171,7 +171,7 @@ pointer_oserializer<Archive, T>::get_basic_serializer() const {
 }
 
 template<class Archive, class T>
-void pointer_oserializer<Archive, T>::save_object_ptr(
+BOOST_DLLEXPORT void pointer_oserializer<Archive, T>::save_object_ptr(
     basic_oarchive & ar,
     const void * x
 ) const {
@@ -190,7 +190,7 @@ void pointer_oserializer<Archive, T>::save_object_ptr(
 }
 
 template<class Archive, class T>
-pointer_oserializer<Archive, T>::pointer_oserializer() :
+BOOST_DLLEXPORT pointer_oserializer<Archive, T>::pointer_oserializer() :
     archive_pointer_oserializer<Archive>(
         boost::serialization::type_info_implementation<T>::type
             ::get_const_instance()
@@ -352,7 +352,8 @@ struct save_pointer_type {
             Archive &ar, 
             T & t
         ){
-            BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type 
+            BOOST_DEDUCED_TYPENAME 
+            boost::serialization::type_info_implementation<T>::type 
                 const & i = boost::serialization::type_info_implementation<T>::type
                     ::get_const_instance();
 

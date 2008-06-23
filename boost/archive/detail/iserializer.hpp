@@ -116,11 +116,11 @@ public:
                 ::get_const_instance()
         )
     {}
-    virtual void load_object_data(
+    virtual BOOST_DLLEXPORT void load_object_data(
         basic_iarchive & ar,
         void *x, 
         const unsigned int file_version
-    ) const;
+    ) const BOOST_USED;
     virtual bool class_info() const {
         return boost::serialization::implementation_level<T>::value 
             >= boost::serialization::object_class_info;
@@ -142,7 +142,7 @@ public:
 };
 
 template<class Archive, class T>
-void iserializer<Archive, T>::load_object_data(
+BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
     basic_iarchive & ar,
     void *x, 
     const unsigned int file_version
@@ -166,11 +166,11 @@ private:
             iserializer<Archive, T>
         >::get_const_instance();
     }
-    virtual void load_object_ptr(
+    BOOST_DLLEXPORT virtual void load_object_ptr(
         basic_iarchive & ar, 
         void * & x,
         const unsigned int file_version
-    ) const ;
+    ) const BOOST_USED;
 public:
     pointer_iserializer();
 };
@@ -246,7 +246,7 @@ private:
 };
 
 template<class Archive, class T>
-void pointer_iserializer<Archive, T>::load_object_ptr(
+BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
     basic_iarchive & ar, 
     void * & x,
     const unsigned int file_version

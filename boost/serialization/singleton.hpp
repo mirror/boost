@@ -108,14 +108,13 @@ private:
         return t;
     }
 public:
-    static T & get_mutable_instance(){
+    BOOST_DLLEXPORT static T & get_mutable_instance(){
         assert(! is_locked());
         return get_instance();
     }
-    static const T & get_const_instance(){
+    BOOST_DLLEXPORT static const T & get_const_instance(){
         return get_instance();
     }
-
 };
 
 template<class T>

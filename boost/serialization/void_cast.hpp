@@ -22,6 +22,7 @@
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/config.hpp>
+#include <boost/serialization/force_include.hpp>
 #include <boost/config/abi_prefix.hpp> // must be the last header
 
 #ifdef BOOST_MSVC
@@ -32,7 +33,7 @@
 namespace boost { 
 namespace serialization { 
 
-class extended_type_info;
+BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY()) class extended_type_info;
 
 // Given a void *, assume that it really points to an instance of one type
 // and alter it so that it would point to an instance of a related type.
@@ -138,12 +139,12 @@ class void_caster_primitive :
         return b;
     }
 public:
-    void_caster_primitive();
+    BOOST_DLLEXPORT void_caster_primitive() BOOST_USED;
     ~void_caster_primitive();
 };
 
 template <class Derived, class Base>
-void_caster_primitive<Derived, Base>::void_caster_primitive() :
+BOOST_DLLEXPORT void_caster_primitive<Derived, Base>::void_caster_primitive() :
     void_caster( 
         type_info_implementation<Derived>::type::get_const_instance(), 
         type_info_implementation<Base>::type::get_const_instance()

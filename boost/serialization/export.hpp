@@ -63,14 +63,14 @@ struct export_impl
 {
     static const basic_pointer_iserializer &
     enable_load(mpl::true_){
-        return /* BOOST_DEDUCED_TYPENAME */ boost::serialization::singleton<
+        return boost::serialization::singleton<
             pointer_iserializer<Archive, Serializable> 
         >::get_const_instance();
     }
 
     static const basic_pointer_oserializer &
     enable_save(mpl::true_){
-        return /* BOOST_DEDUCED_TYPENAME */ boost::serialization::singleton<
+        return boost::serialization::singleton<
             pointer_oserializer<Archive, Serializable> 
         >::get_const_instance();
     }
@@ -87,9 +87,9 @@ template <class Archive, class Serializable>
 struct ptr_serialization_support
 {
 # if defined(BOOST_MSVC)
-    virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
+    BOOST_DLLEXPORT static void instantiate() BOOST_USED;
 # elif defined(__INTEL_COMPILER)
-    virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
+    BOOST_DLLEXPORT static void instantiate() BOOST_USED;
 # elif defined(__BORLANDC__)   
     static BOOST_DLLEXPORT void instantiate();
     enum { x = sizeof(instantiate(),3) };
@@ -102,7 +102,8 @@ struct ptr_serialization_support
 };
 
 template <class Archive, class Serializable>
-BOOST_DLLEXPORT void ptr_serialization_support<Archive,Serializable>::instantiate()
+BOOST_DLLEXPORT void 
+ptr_serialization_support<Archive,Serializable>::instantiate()
 {
     export_impl<Archive,Serializable>::enable_save(
         BOOST_DEDUCED_TYPENAME Archive::is_saving()
