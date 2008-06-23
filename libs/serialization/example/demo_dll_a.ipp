@@ -62,7 +62,7 @@ private:
         #endif
         #if BOOST_WORKAROUND(__BORLANDC__,  <= 0x551 )
             int i;
-            if(Archive::is_saving::value){
+            if(BOOST_DEDUCED_TYPENAME Archive::is_saving::value){
                 i = l;
                 ar & BOOST_SERIALIZATION_NVP(i);
             }
