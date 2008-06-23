@@ -18,7 +18,6 @@
 #include <iterator>
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
-#include <boost/intrusive/circular_slist_algorithms.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -78,7 +77,7 @@ class slist_iterator
    typedef value_type * pointer;
 
    slist_iterator()
-      : members_ (0, 0)
+      : members_ (node_ptr(0), 0)
    {}
 
    explicit slist_iterator(node_ptr node, const Container *cont_ptr)

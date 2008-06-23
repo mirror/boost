@@ -17,7 +17,6 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <cstddef>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
 
 namespace boost {
@@ -95,12 +94,8 @@ namespace detail {
 template<class NodeTraits>
 class tree_algorithms
 {
-   /// @cond
-   private:
-   typedef typename NodeTraits::node            node;
-   /// @endcond
-
    public:
+   typedef typename NodeTraits::node            node;
    typedef NodeTraits                           node_traits;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
@@ -123,6 +118,26 @@ class tree_algorithms
 
    /// @cond
    private:
+   template<class Disposer>
+   struct dispose_subtree_disposer
+   {
+      dispose_subtree_disposer(Disposer &disp, node_ptr subtree)
+         : disposer_(&disp), subtree_(subtree)
+      {}
+
+      void release()
+      {  disposer_ = 0;  }
+
+      ~dispose_subtree_disposer()
+      {
+         if(disposer_){
+            dispose_subtree(subtree_, *disposer_);
+         }
+      }
+      Disposer *disposer_;
+      node_ptr subtree_;
+   };
+
    static node_ptr uncast(const_node_ptr ptr)
    {
       return node_ptr(const_cast<node*>(::boost::intrusive::detail::get_pointer(ptr)));
@@ -505,9 +520,21 @@ class tree_algorithms
    //! <b>Nodes</b>: If node is inserted in a tree, this function corrupts the tree.
    static void init(node_ptr node)
    {
-      NodeTraits::set_parent(node, 0);
-      NodeTraits::set_left(node, 0);
-      NodeTraits::set_right(node, 0); 
+      NodeTraits::set_parent(node, node_ptr(0));
+      NodeTraits::set_left(node, node_ptr(0));
+      NodeTraits::set_right(node, node_ptr(0)); 
+   };
+
+   //! <b>Effects</b>: Returns true if node is in the same state as if called init(node)
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static bool inited(const_node_ptr node)
+   {
+      return !NodeTraits::get_parent(node) && 
+             !NodeTraits::get_left(node)   &&
+             !NodeTraits::get_right(node)  ;
    };
 
    //! <b>Requires</b>: node must not be part of any tree.
@@ -522,7 +549,7 @@ class tree_algorithms
    //! <b>Nodes</b>: If node is inserted in a tree, this function corrupts the tree.
    static void init_header(node_ptr header)
    {
-      NodeTraits::set_parent(header, 0);
+      NodeTraits::set_parent(header, node_ptr(0));
       NodeTraits::set_left(header, header);
       NodeTraits::set_right(header, header); 
    }
@@ -565,7 +592,7 @@ class tree_algorithms
    {
       node_ptr leftmost = NodeTraits::get_left(header);
       if (leftmost == header)
-         return 0;
+         return node_ptr(0);
       node_ptr leftmost_parent(NodeTraits::get_parent(leftmost));
       node_ptr leftmost_right (NodeTraits::get_right(leftmost));
       bool is_root = leftmost_parent == header;
@@ -580,12 +607,12 @@ class tree_algorithms
             NodeTraits::set_left(NodeTraits::get_parent(header), leftmost_right);
       }
       else if (is_root){
-         NodeTraits::set_parent(header, 0);
+         NodeTraits::set_parent(header, node_ptr(0));
          NodeTraits::set_left(header,  header);
          NodeTraits::set_right(header, header);
       }
       else{
-         NodeTraits::set_left(leftmost_parent, 0);
+         NodeTraits::set_left(leftmost_parent, node_ptr(0));
          NodeTraits::set_left(header, leftmost_parent);
       }
       return leftmost;
@@ -1143,58 +1170,54 @@ class tree_algorithms
          node_ptr rightmost = target_sub_root;
 
          //First set the subroot
-         NodeTraits::set_left(target_sub_root, 0);
-         NodeTraits::set_right(target_sub_root, 0);
+         NodeTraits::set_left(target_sub_root, node_ptr(0));
+         NodeTraits::set_right(target_sub_root, node_ptr(0));
          NodeTraits::set_parent(target_sub_root, target_parent);
 
-         try {
-            while(true) {
-               //First clone left nodes
-               if( NodeTraits::get_left(current) &&
-                  !NodeTraits::get_left(insertion_point)) {
-                  current = NodeTraits::get_left(current);
-                  node_ptr temp = insertion_point;
-                  //Clone and mark as leaf
-                  insertion_point = cloner(current);
-                  NodeTraits::set_left  (insertion_point, 0);
-                  NodeTraits::set_right (insertion_point, 0);
-                  //Insert left
-                  NodeTraits::set_parent(insertion_point, temp);
-                  NodeTraits::set_left  (temp, insertion_point);
-                  //Update leftmost
-                  if(rightmost == target_sub_root)
-                     leftmost = insertion_point;
-               }
-               //Then clone right nodes
-               else if( NodeTraits::get_right(current) && 
-                       !NodeTraits::get_right(insertion_point)){
-                  current = NodeTraits::get_right(current);
-                  node_ptr temp = insertion_point;
-                  //Clone and mark as leaf
-                  insertion_point = cloner(current);
-                  NodeTraits::set_left  (insertion_point, 0);
-                  NodeTraits::set_right (insertion_point, 0);
-                  //Insert right
-                  NodeTraits::set_parent(insertion_point, temp);
-                  NodeTraits::set_right (temp, insertion_point);
-                  //Update rightmost
-                  rightmost = insertion_point;
-               }
-               //If not, go up
-               else if(current == source_root){
-                  break;
-               }
-               else{
-                  //Branch completed, go up searching more nodes to clone
-                  current = NodeTraits::get_parent(current);
-                  insertion_point = NodeTraits::get_parent(insertion_point);
-               }
+         dispose_subtree_disposer<Disposer> rollback(disposer, target_sub_root);
+         while(true) {
+            //First clone left nodes
+            if( NodeTraits::get_left(current) &&
+               !NodeTraits::get_left(insertion_point)) {
+               current = NodeTraits::get_left(current);
+               node_ptr temp = insertion_point;
+               //Clone and mark as leaf
+               insertion_point = cloner(current);
+               NodeTraits::set_left  (insertion_point, node_ptr(0));
+               NodeTraits::set_right (insertion_point, node_ptr(0));
+               //Insert left
+               NodeTraits::set_parent(insertion_point, temp);
+               NodeTraits::set_left  (temp, insertion_point);
+               //Update leftmost
+               if(rightmost == target_sub_root)
+                  leftmost = insertion_point;
+            }
+            //Then clone right nodes
+            else if( NodeTraits::get_right(current) && 
+                     !NodeTraits::get_right(insertion_point)){
+               current = NodeTraits::get_right(current);
+               node_ptr temp = insertion_point;
+               //Clone and mark as leaf
+               insertion_point = cloner(current);
+               NodeTraits::set_left  (insertion_point, node_ptr(0));
+               NodeTraits::set_right (insertion_point, node_ptr(0));
+               //Insert right
+               NodeTraits::set_parent(insertion_point, temp);
+               NodeTraits::set_right (temp, insertion_point);
+               //Update rightmost
+               rightmost = insertion_point;
+            }
+            //If not, go up
+            else if(current == source_root){
+               break;
+            }
+            else{
+               //Branch completed, go up searching more nodes to clone
+               current = NodeTraits::get_parent(current);
+               insertion_point = NodeTraits::get_parent(insertion_point);
             }
          }
-         catch(...) {
-            dispose_subtree(target_sub_root, disposer);
-            throw;
-         }
+         rollback.release();
          leftmost_out   = leftmost;
          rightmost_out  = rightmost;
       }
@@ -1321,8 +1344,8 @@ class tree_algorithms
              NodeTraits::set_right(header, z);
       }
       NodeTraits::set_parent(z, par);
-      NodeTraits::set_right(z, 0);
-      NodeTraits::set_left(z, 0);
+      NodeTraits::set_right(z, node_ptr(0));
+      NodeTraits::set_left(z, node_ptr(0));
    }
 
    static void erase(node_ptr header, node_ptr z)
@@ -1384,7 +1407,7 @@ class tree_algorithms
    {
       std::size_t len;
       len = 0;
-      if(!old_root)   return 0;
+      if(!old_root)   return node_ptr(0);
 
       //To avoid irregularities in the algorithm (old_root can be a
       //left or right child or even the root of the tree) just put the 
@@ -1392,8 +1415,8 @@ class tree_algorithms
       //information to restore the original relationship after
       //the algorithm is applied.
       node_ptr super_root = NodeTraits::get_parent(old_root);
-      assert(super_root);
-      
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(super_root);
+
       //Get info
       node_ptr super_root_right_backup = NodeTraits::get_right(super_root);
       bool super_root_is_header   = is_header(super_root);
@@ -1464,7 +1487,7 @@ class tree_algorithms
       //information to restore the original relationship after
       //the algorithm is applied.
       node_ptr super_root = NodeTraits::get_parent(old_root);
-      assert(super_root);
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(super_root);
 
       //Get info
       node_ptr super_root_right_backup = NodeTraits::get_right(super_root);
@@ -1509,6 +1532,28 @@ class tree_algorithms
          NodeTraits::set_right(super_root, super_root_right_backup);
       }
       return new_root;
+   }
+
+   //! <b>Requires</b>: "n" must be a node inserted in a tree.
+   //!
+   //! <b>Effects</b>: Returns a pointer to the header node of the tree.
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static node_ptr get_root(node_ptr node)
+   {
+      BOOST_INTRUSIVE_INVARIANT_ASSERT((!inited(node)));
+      node_ptr x = NodeTraits::get_parent(node);
+      if(x){
+         while(!is_header(x)){
+            x = NodeTraits::get_parent(x);
+         }
+         return x;
+      }
+      else{
+         return node;
+      }
    }
 
    private:
@@ -1569,7 +1614,6 @@ class tree_algorithms
       info.x_parent = x_parent;
       info.y = y;
    }
-
 };
 
 }  //namespace detail {

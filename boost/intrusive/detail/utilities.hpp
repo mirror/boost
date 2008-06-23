@@ -25,6 +25,7 @@
 #include <climits>
 #include <iterator>
 #include <boost/cstdint.hpp>
+#include <boost/static_assert.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -54,6 +55,24 @@ struct internal_base_hook_bool_is_true
 {
    static const bool value = internal_base_hook_bool<T>::value > sizeof(one)*2;
 };
+
+template <class T>
+struct internal_any_hook_bool
+{
+   template<bool Add>
+   struct two_or_three {one _[2 + Add];};
+   template <class U> static one test(...);
+   template <class U> static two_or_three<U::is_any_hook>
+      test (detail::bool_<U::is_any_hook>* = 0);
+   static const std::size_t value = sizeof(test<T>(0));
+};
+
+template <class T>
+struct internal_any_hook_bool_is_true
+{
+   static const bool value = internal_any_hook_bool<T>::value > sizeof(one)*2;
+};
+
 
 template <class T>
 struct external_value_traits_bool
@@ -235,16 +254,9 @@ struct node_cloner
    node_cloner(F f, const Container *cont)
       :  base_t(f), cont_(cont)
    {}
-   
+
    node_ptr operator()(node_ptr p)
-   {
-      node_ptr n = cont_->get_real_value_traits().to_node_ptr
-         (*base_t::get()(*cont_->get_real_value_traits().to_value_ptr(p)));
-      //Cloned node must be in default mode if the linking mode requires it
-      if(safemode_or_autounlink)
-         BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(n));
-      return n;
-   }
+   {  return this->operator()(*p); }
 
    node_ptr operator()(const node &to_clone)
    {
@@ -396,16 +408,20 @@ template <link_mode_type LinkMode>
 struct link_dispatch
 {};
 
-template<class Container>
-void destructor_impl(Container &cont, detail::link_dispatch<safe_link>)
-{  (void)cont; BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT(!cont.is_linked());  }
+template<class Hook>
+void destructor_impl(Hook &hook, detail::link_dispatch<safe_link>)
+{  //If this assertion raises, you might have destroyed an object
+   //while it was still inserted in a container that is alive.
+   //If so, remove the object from the container before destroying it.
+   (void)hook; BOOST_INTRUSIVE_SAFE_HOOK_DESTRUCTOR_ASSERT(!hook.is_linked());
+}
 
-template<class Container>
-void destructor_impl(Container &cont, detail::link_dispatch<auto_unlink>)
-{  cont.unlink();  }
+template<class Hook>
+void destructor_impl(Hook &hook, detail::link_dispatch<auto_unlink>)
+{  hook.unlink();  }
 
-template<class Container>
-void destructor_impl(Container &, detail::link_dispatch<normal_link>)
+template<class Hook>
+void destructor_impl(Hook &, detail::link_dispatch<normal_link>)
 {}
 
 template<class T, class NodeTraits, link_mode_type LinkMode, class Tag, int HookType>
@@ -547,6 +563,62 @@ inline std::size_t sqrt2_pow_2xplus1 (std::size_t x)
    const std::size_t pow   = (std::size_t)sqrt2_pow_max<std::size_t>::pow;
    return (value >> (pow - x)) + 1;
 }
+
+template<class Container, class Disposer>
+class exception_disposer
+{
+   Container *cont_;
+   Disposer  &disp_;
+
+   exception_disposer(const exception_disposer&);
+   exception_disposer &operator=(const exception_disposer&);
+
+   public:
+   exception_disposer(Container &cont, Disposer &disp)
+      :  cont_(&cont), disp_(disp)
+   {}
+
+   void release()
+   {  cont_ = 0;  }
+
+   ~exception_disposer()
+   {
+      if(cont_){
+         cont_->clear_and_dispose(disp_);
+      }
+   }
+};
+
+template<class Container, class Disposer>
+class exception_array_disposer
+{
+   Container *cont_;
+   Disposer  &disp_;
+   typename Container::size_type  &constructed_;
+
+   exception_array_disposer(const exception_array_disposer&);
+   exception_array_disposer &operator=(const exception_array_disposer&);
+
+   public:
+   typedef typename Container::size_type size_type;
+   exception_array_disposer
+      (Container &cont, Disposer &disp, size_type &constructed)
+      :  cont_(&cont), disp_(disp), constructed_(constructed)
+   {}
+
+   void release()
+   {  cont_ = 0;  }
+
+   ~exception_array_disposer()
+   {
+      size_type n = constructed_;
+      if(cont_){
+         while(n--){
+            cont_[n].clear_and_dispose(disp_);
+         }
+      }
+   }
+};
 
 } //namespace detail
 } //namespace intrusive 

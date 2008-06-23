@@ -240,7 +240,7 @@ class avl_set_impl
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
    //!   of avl_set.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the avl_set associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the set associated to the end iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
@@ -249,6 +249,34 @@ class avl_set_impl
    {
       return *detail::parent_from_member<avl_set_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
+         , &avl_set_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static avl_set_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<avl_set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &avl_set_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const avl_set_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<avl_set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
          , &avl_set_impl::tree_);
    }
 
@@ -1085,6 +1113,12 @@ class avl_set
 
    static const avl_set &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const avl_set &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static avl_set &container_from_iterator(iterator end_iterator)
+   {  return static_cast<avl_set &>(Base::container_from_iterator(end_iterator));   }
+
+   static const avl_set &container_from_iterator(const_iterator end_iterator)
+   {  return static_cast<const avl_set &>(Base::container_from_iterator(end_iterator));   }
 };
 
 #endif
@@ -1314,6 +1348,34 @@ class avl_multiset_impl
    {
       return *detail::parent_from_member<avl_multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
+         , &avl_multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static avl_multiset_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<avl_multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &avl_multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const avl_multiset_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<avl_multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
          , &avl_multiset_impl::tree_);
    }
 
@@ -2057,6 +2119,12 @@ class avl_multiset
 
    static const avl_multiset &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const avl_multiset &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static avl_multiset &container_from_iterator(iterator end_iterator)
+   {  return static_cast<avl_multiset &>(Base::container_from_iterator(end_iterator));   }
+
+   static const avl_multiset &container_from_iterator(const_iterator end_iterator)
+   {  return static_cast<const avl_multiset &>(Base::container_from_iterator(end_iterator));   }
 };
 
 #endif

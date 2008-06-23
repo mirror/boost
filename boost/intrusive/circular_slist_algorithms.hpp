@@ -54,6 +54,7 @@ class circular_slist_algorithms
    typedef detail::common_slist_algorithms<NodeTraits> base_t;
    /// @endcond
    public:
+   typedef typename NodeTraits::node            node;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef NodeTraits                           node_traits;
@@ -305,12 +306,12 @@ class circular_slist_algorithms
    static node_ptr move_backwards(node_ptr p, std::size_t n)
    {
       //Null shift, nothing to do
-      if(!n) return 0;
+      if(!n) return node_ptr(0);
       node_ptr first  = NodeTraits::get_next(p);
 
       //count() == 1 or 2, nothing to do
       if(NodeTraits::get_next(first) == p)
-         return 0;
+         return node_ptr(0);
 
       bool end_found = false;
       node_ptr new_last(0);
@@ -326,7 +327,7 @@ class circular_slist_algorithms
             //Shortcut the shift with the modulo of the size of the list
             n %= i;
             if(!n)
-               return 0;
+               return node_ptr(0);
             i = 0;
             //Unlink p and continue the new first node search
             first = NodeTraits::get_next(p);
@@ -357,11 +358,11 @@ class circular_slist_algorithms
    static node_ptr move_forward(node_ptr p, std::size_t n)
    {
       //Null shift, nothing to do
-      if(!n) return 0;
+      if(!n) return node_ptr(0);
       node_ptr first  = node_traits::get_next(p);
 
       //count() == 1 or 2, nothing to do
-      if(node_traits::get_next(first) == p) return 0;
+      if(node_traits::get_next(first) == p) return node_ptr(0);
 
       //Iterate until p is found to know where the current last node is.
       //If the shift count is less than the size of the list, we can also obtain
@@ -380,7 +381,7 @@ class circular_slist_algorithms
          //Shortcut the shift with the modulo of the size of the list
          std::size_t new_before_last_pos = (distance - (n % distance))% distance;
          //If the shift is a multiple of the size there is nothing to do
-         if(!new_before_last_pos)   return 0;
+         if(!new_before_last_pos)   return node_ptr(0);
          
          for( new_last = p
             ; new_before_last_pos--

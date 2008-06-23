@@ -50,6 +50,7 @@ const std::size_t prime_list_holder<Dummy>::prime_list_size
 template <class Slist>
 struct bucket_impl : public Slist
 {
+   typedef Slist slist_type;
    bucket_impl()
    {}
 
@@ -68,28 +69,6 @@ struct bucket_impl : public Slist
       BOOST_INTRUSIVE_INVARIANT_ASSERT(Slist::empty());
       //Slist::clear();
       return *this;
-   }
-
-   static typename Slist::difference_type get_bucket_num
-      ( typename Slist::const_iterator it
-      , const bucket_impl<Slist> &first_bucket
-      , const bucket_impl<Slist> &last_bucket)
-   {
-      typename Slist::const_iterator
-         first(first_bucket.cend()), last(last_bucket.cend());
-
-      //The end node is embedded in the singly linked list:
-      //iterate until we reach it.
-      while(!(first.pointed_node() <= it.pointed_node() &&
-              it.pointed_node() <= last.pointed_node())){
-         ++it;
-      }
-      //Now get the bucket_impl from the iterator
-      const bucket_impl &b = static_cast<const bucket_impl&>
-         (Slist::container_from_end_iterator(it));
-
-      //Now just calculate the index b has in the bucket array
-      return &b - &first_bucket;
    }
 };
 
@@ -125,13 +104,16 @@ class hashtable_iterator
             <typename Container::value_type, IsConst>::type
          >
 {
-   typedef typename Container::real_value_traits               real_value_traits;
-   typedef typename Container::siterator                       siterator;
-   typedef typename Container::const_siterator                 const_siterator;
-   typedef typename Container::bucket_type                     bucket_type;
+   typedef typename Container::real_value_traits                  real_value_traits;
+   typedef typename Container::siterator                          siterator;
+   typedef typename Container::const_siterator                    const_siterator;
+   typedef typename Container::bucket_type                        bucket_type;
    typedef typename boost::pointer_to_other
-      < typename Container::pointer, const Container>::type    const_cont_ptr;
-   typedef typename Container::size_type                       size_type;
+      < typename Container::pointer, const Container>::type       const_cont_ptr;
+   typedef typename Container::size_type                          size_type;
+
+   static typename Container::node_ptr downcast_bucket(typename bucket_type::node_ptr p)
+   {  return typename Container::node_ptr(&static_cast<typename Container::node&>(*p));   }
 
    public:
    typedef typename detail::add_const_if_c
@@ -172,7 +154,7 @@ class hashtable_iterator
    { return *this->operator ->(); }
 
    value_type* operator->() const
-   { return detail::get_pointer(this->get_real_value_traits()->to_value_ptr(slist_it_.pointed_node())); }
+   { return detail::get_pointer(this->get_real_value_traits()->to_value_ptr(downcast_bucket(slist_it_.pointed_node()))); }
 
    const Container *get_container() const
    {  return detail::get_pointer(cont_);  }
@@ -186,17 +168,19 @@ class hashtable_iterator
       const Container *cont =  detail::get_pointer(cont_);
       bucket_type* buckets = detail::get_pointer(cont->bucket_pointer());
       size_type   buckets_len    = cont->bucket_count();
-      const_siterator first(buckets[0].cend());
-      const_siterator last (buckets[buckets_len].cend());
 
       ++slist_it_;
-      if(first.pointed_node()    <= slist_it_.pointed_node() && 
-         slist_it_.pointed_node()<= last.pointed_node()      ){
-         size_type n_bucket = (size_type)
-               bucket_type::get_bucket_num(slist_it_, buckets[0], buckets[buckets_len]);
+      if(buckets[0].cend().pointed_node()    <= slist_it_.pointed_node() && 
+         slist_it_.pointed_node()<= buckets[buckets_len].cend().pointed_node()      ){
+         //Now get the bucket_impl from the iterator
+         const bucket_type &b = static_cast<const bucket_type&>
+            (bucket_type::slist_type::container_from_end_iterator(slist_it_));
+
+         //Now just calculate the index b has in the bucket array
+         size_type n_bucket = static_cast<size_type>(&b - &buckets[0]);
          do{
             if (++n_bucket == buckets_len){
-               slist_it_ = buckets->end();
+               slist_it_ = (&buckets[0] + buckets_len)->end();
                break;
             }
             slist_it_ = buckets[n_bucket].begin();

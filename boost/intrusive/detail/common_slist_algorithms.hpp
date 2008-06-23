@@ -26,6 +26,7 @@ template<class NodeTraits>
 class common_slist_algorithms
 {
    public:
+   typedef typename NodeTraits::node            node;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef NodeTraits                           node_traits;
@@ -47,13 +48,13 @@ class common_slist_algorithms
    {  NodeTraits::set_next(this_node, this_node);  }  
 
    static void init(node_ptr this_node)  
-   {  NodeTraits::set_next(this_node, 0);  }  
+   {  NodeTraits::set_next(this_node, node_ptr(0));  }  
 
    static bool unique(const_node_ptr this_node)
    {
       node_ptr next = NodeTraits::get_next(this_node);
       return !next || next == this_node;
-   }  
+   }
 
    static bool inited(const_node_ptr this_node)  
    {  return !NodeTraits::get_next(this_node); }

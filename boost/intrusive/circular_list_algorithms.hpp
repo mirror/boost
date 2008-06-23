@@ -50,6 +50,7 @@ template<class NodeTraits>
 class circular_list_algorithms
 {
    public:
+   typedef typename NodeTraits::node            node;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef NodeTraits                           node_traits;
@@ -62,8 +63,8 @@ class circular_list_algorithms
    //! <b>Throws</b>: Nothing.
    static void init(node_ptr this_node)
    {
-      NodeTraits::set_next(this_node, 0);
-      NodeTraits::set_previous(this_node, 0);
+      NodeTraits::set_next(this_node, node_ptr(0));
+      NodeTraits::set_previous(this_node, node_ptr(0));
    }
 
    //! <b>Effects</b>: Returns true is "this_node" is in a non-used state

@@ -16,7 +16,6 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/slist_hook.hpp>
@@ -25,6 +24,7 @@
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/options.hpp>
+#include <boost/intrusive/detail/utilities.hpp>
 #include <iterator>
 #include <functional>
 #include <algorithm>
@@ -183,10 +183,12 @@ class slist_impl
    BOOST_STATIC_ASSERT(!(cache_last && ((int)real_value_traits::link_mode == (int)auto_unlink)));
 
    node_ptr get_end_node()
-   {  return node_ptr(linear ? 0 : this->get_root_node());  }
+   {  return node_ptr(linear ? node_ptr(0) : this->get_root_node());  }
 
    const_node_ptr get_end_node() const
-   {  return const_node_ptr(linear ? 0 : this->get_root_node());  }
+   {
+      return const_node_ptr
+         (linear ? const_node_ptr(0) : this->get_root_node());  }
 
    node_ptr get_root_node()
    {  return node_ptr(&data_.root_plus_size_.root_);  }
@@ -203,13 +205,10 @@ class slist_impl
    void set_last_node(node_ptr n)
    {  return this->set_last_node(n, detail::bool_<cache_last>());  }
 
-   node_ptr get_last_node(detail::bool_<false>)
+   static node_ptr get_last_node(detail::bool_<false>)
    {  return node_ptr(0);  }
 
-   const_node_ptr get_last_node(detail::bool_<false>) const
-   {  return const_node_ptr(0);  }
-
-   void set_last_node(node_ptr, detail::bool_<false>)
+   static void set_last_node(node_ptr, detail::bool_<false>)
    {}
 
    node_ptr get_last_node(detail::bool_<true>)
@@ -667,18 +666,14 @@ class slist_impl
    void clone_from(const slist_impl &src, Cloner cloner, Disposer disposer)
    {
       this->clear_and_dispose(disposer);
-      BOOST_INTRUSIVE_TRY{
-         iterator prev(this->before_begin());
-         const_iterator b(src.begin()), e(src.end());
-         for(; b != e; ++b){
-            prev = this->insert_after(prev, *cloner(*b));
-         }
+      detail::exception_disposer<slist_impl, Disposer>
+         rollback(*this, disposer);
+      iterator prev(this->before_begin());
+      const_iterator b(src.begin()), e(src.end());
+      for(; b != e; ++b){
+         prev = this->insert_after(prev, *cloner(*b));
       }
-      BOOST_INTRUSIVE_CATCH(...){
-         this->clear_and_dispose(disposer);
-         BOOST_INTRUSIVE_RETHROW;
-      }
-      BOOST_INTRUSIVE_CATCH_END
+      rollback.release();
    }
 
    //! <b>Requires</b>: value must be an lvalue and prev_p must point to an element
@@ -783,12 +778,64 @@ class slist_impl
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
-   //! <b>Complexity</b>: Lineal to the elements (last - before_first + 1).
+   //! <b>Complexity</b>: Linear to the number of erased elements if it's a safe-mode
+   //!   , auto-unlink value or constant-time size is activated. Constant time otherwise.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the
    //!   erased element.
    iterator erase_after(iterator before_first, iterator last)
-   {  return this->erase_after_and_dispose(before_first, last, detail::null_disposer()); }
+   {
+      if(safemode_or_autounlink || constant_time_size){
+         return this->erase_after_and_dispose(before_first, last, detail::null_disposer());
+      }
+      else{
+         node_ptr bfp = before_first.pointed_node();
+         node_ptr lp = last.pointed_node();
+         if(cache_last){
+            if((lp == this->get_end_node())){
+               this->set_last_node(bfp);
+            }
+         }
+         node_algorithms::unlink_after(bfp, lp);
+         return last;
+      }
+   }
+
+   //! <b>Effects</b>: Erases the range (before_first, last) from
+   //!   the list. n must be std::distance(before_first, last) - 1.
+   //!   No destructors are called.
+   //!
+   //! <b>Returns</b>: the first element remaining beyond the removed elements,
+   //!   or end() if no such element exists.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: constant-time if link_mode is normal_link. 
+   //!   Linear to the elements (last - before_first) otherwise.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references) to the
+   //!   erased element.
+   iterator erase_after(iterator before_first, iterator last, difference_type n)
+   {
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(std::distance(++iterator(before_first), last) == difference_type(n));
+      if(safemode_or_autounlink){
+         return this->erase_after(before_first, last);
+      }
+      else{
+         node_ptr bfp = before_first.pointed_node();
+         node_ptr lp = last.pointed_node();
+         if(cache_last){
+            if((lp == this->get_end_node())){
+               this->set_last_node(bfp);
+            }
+         }
+         node_algorithms::unlink_after(bfp, lp);
+         if(constant_time_size){
+            this->priv_size_traits().set_size(this->priv_size_traits().get_size() - n);
+         }
+         return last;
+      }
+   }
 
    //! <b>Effects</b>: Erases the element pointed by i of the list. 
    //!   No destructors are called.
@@ -815,13 +862,29 @@ class slist_impl
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
-   //! <b>Complexity</b>: Linear to the number of elements erased plus linear
-   //!   to the elements before first.
+   //! <b>Complexity</b>: Linear to the elements before last.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the
    //!   erased elements.
    iterator erase(iterator first, iterator last)
    {  return this->erase_after(this->previous(first), last);  }
+
+   //! <b>Effects</b>: Erases the range [first, last) from
+   //!   the list. n must be std::distance(first, last).
+   //!   No destructors are called.
+   //!
+   //! <b>Returns</b>: the first element remaining beyond the removed elements,
+   //!   or end() if no such element exists.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: linear to the elements before first if link_mode is normal_link
+   //!   and constant_time_size is activated. Linear to the elements before last otherwise.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references) to the
+   //!   erased element.
+   iterator erase(iterator first, iterator last, difference_type n)
+   {  return this->erase_after(this->previous(first), last, n);  }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -849,12 +912,35 @@ class slist_impl
       if(cache_last && (to_erase == this->get_last_node())){
          this->set_last_node(prev_n);
       }
-      this->priv_size_traits().decrement();
       if(safemode_or_autounlink)
          node_algorithms::init(to_erase);
       disposer(get_real_value_traits().to_value_ptr(to_erase));
+      this->priv_size_traits().decrement();
       return it;
    }
+
+   /// @cond
+
+   template<class Disposer>
+   static iterator s_erase_after_and_dispose(iterator prev, Disposer disposer)
+   {
+      BOOST_STATIC_ASSERT(((!cache_last)&&(!constant_time_size)&&(!stateful_value_traits)));
+      iterator it(prev);
+      ++it;
+      node_ptr to_erase(it.pointed_node());
+      ++it;
+      node_ptr prev_n(prev.pointed_node());
+      node_algorithms::unlink_after(prev_n);
+      if(safemode_or_autounlink)
+         node_algorithms::init(to_erase);
+      disposer(real_value_traits::to_value_ptr(to_erase));
+      return it;
+   }
+
+   static iterator s_erase_after(iterator prev)
+   {  return s_erase_after_and_dispose(prev, detail::null_disposer());  }
+
+   /// @endcond
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!
@@ -867,7 +953,7 @@ class slist_impl
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
-   //! <b>Complexity</b>: Lineal to the elements (last - before_first).
+   //! <b>Complexity</b>: Lineal to the elements (last - before_first + 1).
    //! 
    //! <b>Note</b>: Invalidates the iterators to the erased element.
    template<class Disposer>
@@ -921,7 +1007,7 @@ class slist_impl
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
-   //! <b>Complexity</b>: Linear to the number of elements erased plus linear
+   //! <b>Complexity</b>: Linear to the number of erased elements plus linear
    //!   to the elements before first.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the
@@ -997,8 +1083,11 @@ class slist_impl
          iterator last_x(x.previous(x.end()));  //<- constant time if cache_last is active
          node_ptr prev_n(prev.pointed_node());
          node_ptr last_x_n(last_x.pointed_node());
-         if(cache_last && node_traits::get_next(prev_n) == this->get_end_node()){
-            this->set_last_node(last_x_n);
+         if(cache_last){
+            x.set_last_node(x.get_root_node());
+            if(node_traits::get_next(prev_n) == this->get_end_node()){
+               this->set_last_node(last_x_n);
+            }
          }
          node_algorithms::transfer_after( prev_n, x.before_begin().pointed_node(), last_x_n);
          this->priv_size_traits().set_size(this->priv_size_traits().get_size() + x.priv_size_traits().get_size());
@@ -1026,10 +1115,7 @@ class slist_impl
    void splice_after(iterator prev_pos, slist_impl &x, iterator prev_ele)
    {
       iterator elem = prev_ele;
-      ++elem;
-      if (elem != prev_pos && prev_ele != prev_pos){
-         this->splice_after(prev_pos, x, prev_ele, elem, 1);
-      }
+      this->splice_after(prev_pos, x, prev_ele, ++elem, 1);
    }
 
    //! <b>Requires</b>: prev_pos must be a dereferenceable iterator in *this or be
@@ -1567,15 +1653,18 @@ class slist_impl
    private:
    void priv_splice_after(node_ptr prev_pos_n, slist_impl &x, node_ptr before_first_n, node_ptr before_last_n)
    {
-      if(cache_last){
-         if(node_traits::get_next(prev_pos_n) == this->get_end_node()){
-            this->set_last_node(before_last_n);
+	   if (before_first_n != before_last_n && prev_pos_n != before_first_n && prev_pos_n != before_last_n)
+      {
+         if(cache_last){
+            if(node_traits::get_next(prev_pos_n) == this->get_end_node()){
+               this->set_last_node(before_last_n);
+            }
+            if(node_traits::get_next(before_last_n) == x.get_end_node()){
+               x.set_last_node(before_first_n);
+            }
          }
-         if(node_traits::get_next(before_last_n) == x.get_end_node()){
-            x.set_last_node(before_first_n);
-         }
+         node_algorithms::transfer_after(prev_pos_n, before_first_n, before_last_n);
       }
-      node_algorithms::transfer_after(prev_pos_n, before_first_n, before_last_n);
    }
 
    void priv_reverse(detail::bool_<false>)

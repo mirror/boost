@@ -24,7 +24,7 @@
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/intrusive/options.hpp>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
+#include <boost/intrusive/detail/utilities.hpp>
 #include <iterator>
 #include <algorithm>
 #include <functional>
@@ -586,7 +586,7 @@ class list_impl
    iterator erase(iterator i)
    {  return this->erase_and_dispose(i, detail::null_disposer());  }
 
-   //! <b>Requires</b>: first and last must be valid iterator to elements in *this.
+   //! <b>Requires</b>: b and e must be valid iterators to elements in *this.
    //!
    //! <b>Effects</b>: Erases the element range pointed by b and e
    //! No destructors are called.
@@ -596,8 +596,8 @@ class list_impl
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
-   //! <b>Complexity</b>: Linear to the number of elements erased if it's a safe-mode
-   //!   or auto-unlink value. Constant time otherwise.
+   //! <b>Complexity</b>: Linear to the number of erased elements if it's a safe-mode
+   //!   or auto-unlink value, or constant-time size is enabled. Constant-time otherwise.
    //! 
    //! <b>Note</b>: Invalidates the iterators (but not the references) to the 
    //!   erased elements.
@@ -607,6 +607,37 @@ class list_impl
          return this->erase_and_dispose(b, e, detail::null_disposer());
       }
       else{
+         node_algorithms::unlink(b.pointed_node(), e.pointed_node());
+         return e;
+      }
+   }
+
+   //! <b>Requires</b>: b and e must be valid iterators to elements in *this.
+   //!   n must be std::distance(b, e).
+   //!
+   //! <b>Effects</b>: Erases the element range pointed by b and e
+   //! No destructors are called.
+   //!
+   //! <b>Returns</b>: the first element remaining beyond the removed elements,
+   //!   or end() if no such element exists.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Linear to the number of erased elements if it's a safe-mode
+   //!   or auto-unlink value is enabled. Constant-time otherwise.
+   //! 
+   //! <b>Note</b>: Invalidates the iterators (but not the references) to the 
+   //!   erased elements.
+   iterator erase(iterator b, iterator e, difference_type n)
+   {
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(std::distance(b, e) == difference_type(n));
+      if(safemode_or_autounlink || constant_time_size){
+         return this->erase_and_dispose(b, e, detail::null_disposer());
+      }
+      else{
+         if(constant_time_size){
+            this->priv_size_traits().set_size(this->priv_size_traits().get_size() - n);
+         }
          node_algorithms::unlink(b.pointed_node(), e.pointed_node());
          return e;
       }
@@ -732,17 +763,13 @@ class list_impl
    void clone_from(const list_impl &src, Cloner cloner, Disposer disposer)
    {
       this->clear_and_dispose(disposer);
-      BOOST_INTRUSIVE_TRY{
-         const_iterator b(src.begin()), e(src.end());
-         for(; b != e; ++b){
-            this->push_back(*cloner(*b));
-         }
+      detail::exception_disposer<list_impl, Disposer>
+         rollback(*this, disposer);
+      const_iterator b(src.begin()), e(src.end());
+      for(; b != e; ++b){
+         this->push_back(*cloner(*b));
       }
-      BOOST_INTRUSIVE_CATCH(...){
-         this->clear_and_dispose(disposer);
-         BOOST_INTRUSIVE_RETHROW;
-      }
-      BOOST_INTRUSIVE_CATCH_END
+      rollback.release();
    }
 
    //! <b>Requires</b>: value must be an lvalue and p must be a valid iterator of *this.

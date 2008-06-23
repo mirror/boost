@@ -53,6 +53,7 @@ class linear_slist_algorithms
    typedef detail::common_slist_algorithms<NodeTraits> base_t;
    /// @endcond
    public:
+   typedef typename NodeTraits::node            node;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef NodeTraits                           node_traits;
@@ -136,7 +137,7 @@ class linear_slist_algorithms
    //! 
    //! <b>Throws</b>: Nothing.
    static void init_header(node_ptr this_node)
-   {  NodeTraits::set_next(this_node, 0);  }
+   {  NodeTraits::set_next(this_node, node_ptr(0));  }
 
    //! <b>Requires</b>: this_node and prev_init_node must be in the same linear list.
    //! 
@@ -195,7 +196,7 @@ class linear_slist_algorithms
    //! <b>Complexity</b>: This function is linear to the contained elements.
    static node_ptr reverse(node_ptr p)
    {
-      if(!p) return 0;
+      if(!p) return node_ptr(0);
       node_ptr i = NodeTraits::get_next(p); 
       node_ptr first(p);
       while(i){
@@ -218,7 +219,7 @@ class linear_slist_algorithms
    //! <b>Complexity</b>: Linear to the number of elements plus the number moved positions.
    static std::pair<node_ptr, node_ptr> move_first_n_backwards(node_ptr p, std::size_t n)
    {
-      std::pair<node_ptr, node_ptr> ret(0, 0);
+      std::pair<node_ptr, node_ptr> ret(node_ptr(0), node_ptr(0));
       //Null shift, or count() == 0 or 1, nothing to do
       if(!n || !p || !NodeTraits::get_next(p)){
          return ret;
@@ -252,12 +253,12 @@ class linear_slist_algorithms
       //If the p has not been found in the previous loop, find it
       //starting in the new first node and unlink it
       if(!end_found){
-         old_last = base_t::get_previous_node(first, 0);
+         old_last = base_t::get_previous_node(first, node_ptr(0));
       }
       
       //Now link p after the new last node
       NodeTraits::set_next(old_last, p);
-      NodeTraits::set_next(new_last, 0);
+      NodeTraits::set_next(new_last, node_ptr(0));
       ret.first   = first;
       ret.second  = new_last;
       return ret;
@@ -273,7 +274,7 @@ class linear_slist_algorithms
    //! <b>Complexity</b>: Linear to the number of elements plus the number moved positions.
    static std::pair<node_ptr, node_ptr> move_first_n_forward(node_ptr p, std::size_t n)
    {
-      std::pair<node_ptr, node_ptr> ret(0, 0);
+      std::pair<node_ptr, node_ptr> ret(node_ptr(0), node_ptr(0));
       //Null shift, or count() == 0 or 1, nothing to do
       if(!n || !p || !NodeTraits::get_next(p))
          return ret;
@@ -311,7 +312,7 @@ class linear_slist_algorithms
       node_ptr new_first(node_traits::get_next(new_last));
       //Now put the old beginning after the old end
       NodeTraits::set_next(old_last, p);
-      NodeTraits::set_next(new_last, 0);
+      NodeTraits::set_next(new_last, node_ptr(0));
       ret.first   = new_first;
       ret.second  = new_last;
       return ret;

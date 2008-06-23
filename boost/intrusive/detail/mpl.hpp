@@ -13,6 +13,8 @@
 #ifndef BOOST_INTRUSIVE_DETAIL_MPL_HPP
 #define BOOST_INTRUSIVE_DETAIL_MPL_HPP
 
+#include <cstddef>
+
 namespace boost {
 namespace intrusive {
 namespace detail {
@@ -288,6 +290,24 @@ class is_empty_class
 
    public:
    static const bool value = sizeof(empty_helper_t1<Class>) == sizeof(empty_helper_t2);
+};
+
+template<std::size_t S>
+struct ls_zeros
+{
+   static const std::size_t value = (S & std::size_t(1)) ? 0 : (1 + ls_zeros<(S>>1u)>::value);
+};
+
+template<>
+struct ls_zeros<0>
+{
+   static const std::size_t value = 0;
+};
+
+template<>
+struct ls_zeros<1>
+{
+   static const std::size_t value = 0;
 };
 
 } //namespace detail 

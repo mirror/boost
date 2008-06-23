@@ -315,7 +315,7 @@ void test_slist<ValueTraits, Linear, CacheLast>
    testlist.erase (++testlist.begin(), testlist.end());
    BOOST_TEST (testlist.size() == 1);
    BOOST_TEST (testlist.front().value_ == 3);
-}  
+}
 
 template<class ValueTraits, bool Linear, bool CacheLast>
 void test_slist<ValueTraits, Linear, CacheLast>

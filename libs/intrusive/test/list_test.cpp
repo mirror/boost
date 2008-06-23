@@ -229,6 +229,7 @@ void test_list<ValueTraits>
       TEST_INTRUSIVE_SEQUENCE( init_values, const_testlist.begin() );  }
 }
 
+
 template<class ValueTraits>
 void test_list<ValueTraits>
    ::test_shift(std::vector<typename ValueTraits::value_type>& values)

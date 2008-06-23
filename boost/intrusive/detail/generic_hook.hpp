@@ -18,6 +18,7 @@
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
+#include <boost/intrusive/detail/mpl.hpp>
 #include <boost/static_assert.hpp>
 
 namespace boost {
@@ -35,6 +36,7 @@ enum
 ,  SplaySetBaseHook
 ,  AvlSetBaseHook
 ,  BsSetBaseHook
+,  AnyBaseHook
 };
 
 struct no_default_definer{};
@@ -70,6 +72,10 @@ template <class Hook>
 struct default_definer<Hook, BsSetBaseHook>
 {  typedef Hook default_bs_set_hook;  };
 
+template <class Hook>
+struct default_definer<Hook, AnyBaseHook>
+{  typedef Hook default_any_hook;  };
+
 template <class Hook, unsigned int BaseHookType>
 struct make_default_definer
 {
@@ -90,11 +96,11 @@ struct make_node_holder
    typedef typename detail::if_c
       <!detail::is_same<Tag, member_tag>::value
       , detail::node_holder
-         < typename GetNodeAlgorithms::type::node_traits::node
+         < typename GetNodeAlgorithms::type::node
          , Tag
          , LinkMode
          , HookType>
-      , typename GetNodeAlgorithms::type::node_traits::node
+      , typename GetNodeAlgorithms::type::node
       >::type type;
 };
 
@@ -122,38 +128,38 @@ class generic_hook
    , public make_node_holder<GetNodeAlgorithms, Tag, LinkMode, HookType>::type
    /// @endcond
 {
-   public:
    /// @cond
+   typedef typename GetNodeAlgorithms::type           node_algorithms;
+   typedef typename node_algorithms::node             node;
+   typedef typename node_algorithms::node_ptr         node_ptr;
+   typedef typename node_algorithms::const_node_ptr   const_node_ptr;
+
+   public:
    struct boost_intrusive_tags
    {
       static const int hook_type = HookType;
       static const link_mode_type link_mode = LinkMode;
-      typedef Tag                                     tag;
-      typedef typename GetNodeAlgorithms::type        node_algorithms;
-      typedef typename node_algorithms::node_traits   node_traits;
-      typedef typename node_traits::node              node;
-      typedef typename node_traits::node_ptr          node_ptr;
-      typedef typename node_traits::const_node_ptr    const_node_ptr;
+      typedef Tag                                           tag;
+      typedef typename GetNodeAlgorithms::type::node_traits node_traits;
       static const bool is_base_hook = !detail::is_same<Tag, member_tag>::value;
-      enum { safemode_or_autounlink = 
-               (int)link_mode == (int)auto_unlink   ||
-               (int)link_mode == (int)safe_link     };
+      static const bool safemode_or_autounlink = 
+         (int)link_mode == (int)auto_unlink || (int)link_mode == (int)safe_link;
    };
+
+   public:
    /// @endcond
 
    generic_hook()
    {
       if(boost_intrusive_tags::safemode_or_autounlink){
-         boost_intrusive_tags::node_algorithms::init
-            (static_cast<typename boost_intrusive_tags::node*>(this));
+         node_algorithms::init(static_cast<node*>(this));
       }
    }
 
    generic_hook(const generic_hook& ) 
    {
       if(boost_intrusive_tags::safemode_or_autounlink){
-         boost_intrusive_tags::node_algorithms::init
-            (static_cast<typename boost_intrusive_tags::node*>(this));
+         node_algorithms::init(static_cast<node*>(this));
       }
    }
 
@@ -168,26 +174,23 @@ class generic_hook
 
    void swap_nodes(generic_hook &other) 
    {
-      boost_intrusive_tags::node_algorithms::swap_nodes
-         ( static_cast<typename boost_intrusive_tags::node*>(this)
-         , static_cast<typename boost_intrusive_tags::node*>(&other));
+      node_algorithms::swap_nodes
+         ( static_cast<node*>(this), static_cast<node*>(&other));
    }
 
    bool is_linked() const 
    {
       //is_linked() can be only used in safe-mode or auto-unlink
       BOOST_STATIC_ASSERT(( boost_intrusive_tags::safemode_or_autounlink ));
-      return !boost_intrusive_tags::node_algorithms::unique
-         (static_cast<const typename boost_intrusive_tags::node*>(this));
+      return !node_algorithms::unique
+         (static_cast<const node*>(this));
    }
 
    void unlink()
    {
       BOOST_STATIC_ASSERT(( (int)boost_intrusive_tags::link_mode == (int)auto_unlink ));
-      boost_intrusive_tags::node_algorithms::unlink
-         (static_cast<typename boost_intrusive_tags::node*>(this));
-      boost_intrusive_tags::node_algorithms::init
-         (static_cast<typename boost_intrusive_tags::node*>(this));
+      node_algorithms::unlink(static_cast<node*>(this));
+      node_algorithms::init(static_cast<node*>(this));
    }
 };
 

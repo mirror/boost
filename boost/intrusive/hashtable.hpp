@@ -14,15 +14,15 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 //std C++
-#include <functional>
-#include <utility>
-#include <algorithm>
-#include <cstddef>
+#include <functional>   //std::equal_to
+#include <utility>      //std::pair
+#include <algorithm>    //std::swap, std::lower_bound, std::upper_bound
+#include <cstddef>      //std::size_t
+#include <iterator>     //std::iterator_traits
 //boost
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/functional/hash.hpp>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
 //General intrusive utilities
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
@@ -34,13 +34,107 @@
 #include <boost/intrusive/trivial_value_traits.hpp>
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/intrusive/slist.hpp>
+#include <boost/intrusive/detail/mpl.hpp>
 
 namespace boost {
 namespace intrusive {
 
 /// @cond
 
-namespace detail{
+namespace detail {
+
+template <class NodeTraits>
+struct hash_reduced_slist_node_traits
+{
+   template <class U> static detail::one test(...);
+   template <class U> static detail::two test(typename U::reduced_slist_node_traits* = 0);
+   static const bool value = sizeof(test<NodeTraits>(0)) == sizeof(detail::two);
+};
+
+template <class NodeTraits>
+struct apply_reduced_slist_node_traits
+{
+   typedef typename NodeTraits::reduced_slist_node_traits type;
+};
+
+template <class NodeTraits>
+struct reduced_slist_node_traits
+{
+   typedef typename detail::eval_if_c
+      < hash_reduced_slist_node_traits<NodeTraits>::value
+      , apply_reduced_slist_node_traits<NodeTraits>
+      , detail::identity<NodeTraits>
+      >::type type;
+};
+
+template<class NodeTraits>
+struct get_slist_impl
+{
+   typedef trivial_value_traits<NodeTraits, normal_link> trivial_traits;
+
+   //Reducing symbol length
+   struct type : make_slist
+      < typename NodeTraits::node
+      , boost::intrusive::value_traits<trivial_traits>
+      , boost::intrusive::constant_time_size<false>
+      , boost::intrusive::size_type<std::size_t>
+      >::type
+   {};
+};
+
+template<class SupposedValueTraits>
+struct real_from_supposed_value_traits
+{
+   typedef typename detail::eval_if_c
+      < detail::external_value_traits_is_true
+         <SupposedValueTraits>::value
+      , detail::eval_value_traits
+         <SupposedValueTraits>
+      , detail::identity
+         <SupposedValueTraits>
+      >::type  type;
+};
+
+template<class SupposedValueTraits>
+struct get_slist_impl_from_supposed_value_traits
+{
+   typedef typename
+      real_from_supposed_value_traits
+         < SupposedValueTraits>::type           real_value_traits;
+   typedef typename detail::get_node_traits
+      <real_value_traits>::type                 node_traits;
+   typedef typename get_slist_impl
+      <typename reduced_slist_node_traits
+         <node_traits>::type
+      >::type                                   type;
+};
+
+
+template<class SupposedValueTraits>
+struct unordered_bucket_impl
+{
+   /// @cond
+   typedef typename 
+      get_slist_impl_from_supposed_value_traits
+         <SupposedValueTraits>::type            slist_impl;
+   typedef detail::bucket_impl<slist_impl>      implementation_defined;
+   /// @endcond
+   typedef implementation_defined               type;
+};
+
+template<class SupposedValueTraits>
+struct unordered_bucket_ptr_impl
+{
+   /// @cond
+   typedef typename detail::get_node_traits
+      <SupposedValueTraits>::type::node_ptr     node_ptr;
+   typedef typename unordered_bucket_impl
+      <SupposedValueTraits>::type               bucket_type;
+   typedef typename boost::pointer_to_other
+      <node_ptr, bucket_type>::type             implementation_defined;
+   /// @endcond
+   typedef implementation_defined               type;
+};
 
 template <class T>
 struct store_hash_bool
@@ -57,6 +151,23 @@ template <class T>
 struct store_hash_is_true
 {
    static const bool value = store_hash_bool<T>::value > sizeof(one)*2;
+};
+
+template <class T>
+struct optimize_multikey_bool
+{
+   template<bool Add>
+   struct two_or_three {one _[2 + Add];};
+   template <class U> static one test(...);
+   template <class U> static two_or_three<U::optimize_multikey>
+      test (detail::bool_<U::optimize_multikey>* = 0);
+   static const std::size_t value = sizeof(test<T>(0));
+};
+
+template <class T>
+struct optimize_multikey_is_true
+{
+   static const bool value = optimize_multikey_bool<T>::value > sizeof(one)*2;
 };
 
 template<class Config>
@@ -92,7 +203,7 @@ struct bucket_hash_t : public detail::ebo_functor_holder<typename Config::hash>
    bucket_plus_size<Config> bucket_plus_size_;
 };
 
-template<class Config>
+template<class Config, bool>
 struct bucket_hash_equal_t : public detail::ebo_functor_holder<typename Config::equal>
 {
    typedef typename Config::equal         equal;
@@ -105,22 +216,42 @@ struct bucket_hash_equal_t : public detail::ebo_functor_holder<typename Config::
    bucket_hash_t<Config> bucket_hash;
 };
 
+template<class Config>  //cache_begin == true version
+struct bucket_hash_equal_t<Config, true>
+   : public detail::ebo_functor_holder<typename Config::equal>
+{
+   typedef typename Config::equal               equal;
+   typedef typename Config::hash                hasher;
+   typedef typename Config::bucket_traits       bucket_traits;
+   typedef typename unordered_bucket_ptr_impl
+      <typename Config::value_traits>::type     bucket_ptr;
+
+   bucket_hash_equal_t(const bucket_traits &b_traits, const hasher & h, const equal &e)
+      :  detail::ebo_functor_holder<typename Config::equal>(e), bucket_hash(b_traits, h)
+   {}
+   bucket_hash_t<Config> bucket_hash;
+   bucket_ptr cached_begin_;
+};
+
 template<class Config>
-struct data_t : public Config::value_traits
+struct hashtable_data_t : public Config::value_traits
 {
    typedef typename Config::value_traits  value_traits;
    typedef typename Config::equal         equal;
    typedef typename Config::hash          hasher;
    typedef typename Config::bucket_traits bucket_traits;
 
-   data_t( const bucket_traits &b_traits, const hasher & h
-         , const equal &e, const value_traits &val_traits)
+   hashtable_data_t( const bucket_traits &b_traits, const hasher & h
+                   , const equal &e, const value_traits &val_traits)
       :  Config::value_traits(val_traits), bucket_hash_equal_(b_traits, h, e)
    {}
-   bucket_hash_equal_t<Config> bucket_hash_equal_;
+   bucket_hash_equal_t<Config, Config::cache_begin> bucket_hash_equal_;
 };
 
-}  //namespace detail {
+struct insert_commit_data_impl
+{
+   std::size_t hash;
+};
 
 template <class T>
 struct internal_default_uset_hook
@@ -130,6 +261,49 @@ struct internal_default_uset_hook
    static const bool value = sizeof(test<T>(0)) == sizeof(detail::two);
 };
 
+}  //namespace detail {
+
+//!This metafunction will obtain the type of a bucket
+//!from the value_traits or hook option to be used with
+//!a hash container.
+template<class ValueTraitsOrHookOption>
+struct unordered_bucket
+   : public detail::unordered_bucket_impl
+      <typename ValueTraitsOrHookOption::
+         template pack<none>::value_traits
+      >
+{};
+
+//!This metafunction will obtain the type of a bucket pointer
+//!from the value_traits or hook option to be used with
+//!a hash container.
+template<class ValueTraitsOrHookOption>
+struct unordered_bucket_ptr
+   :  public detail::unordered_bucket_ptr_impl
+         <typename ValueTraitsOrHookOption::
+          template pack<none>::value_traits
+         >
+{};
+
+//!This metafunction will obtain the type of the default bucket traits
+//!(when the user does not specify the bucket_traits<> option) from the
+//!value_traits or hook option to be used with
+//!a hash container.
+template<class ValueTraitsOrHookOption>
+struct unordered_default_bucket_traits
+{
+   /// @cond
+   typedef typename ValueTraitsOrHookOption::
+      template pack<none>::value_traits         supposed_value_traits;
+   typedef typename detail::
+      get_slist_impl_from_supposed_value_traits
+         <supposed_value_traits>::type          slist_impl;
+   typedef detail::bucket_traits_impl
+      <slist_impl>                              implementation_defined;
+   /// @endcond
+   typedef implementation_defined               type;
+};
+
 template <class T>
 struct get_default_uset_hook
 {
@@ -137,12 +311,15 @@ struct get_default_uset_hook
 };
 
 template < class  ValueTraits
+         , bool   UniqueKeys
          , class  Hash
          , class  Equal
          , class  SizeType
          , bool   ConstantTimeSize
          , class  BucketTraits
          , bool   Power2Buckets
+         , bool   CacheBegin
+         , bool   CompareHash
          >
 struct usetopt
 {
@@ -153,6 +330,9 @@ struct usetopt
    typedef BucketTraits bucket_traits;
    static const bool constant_time_size = ConstantTimeSize;
    static const bool power_2_buckets = Power2Buckets;
+   static const bool unique_keys = UniqueKeys;
+   static const bool cache_begin = CacheBegin;
+   static const bool compare_hash = CompareHash;
 };
 
 struct default_bucket_traits;
@@ -163,7 +343,7 @@ struct uset_defaults
       < none
       , base_hook
          <  typename detail::eval_if_c
-               < internal_default_uset_hook<T>::value
+               < detail::internal_default_uset_hook<T>::value
                , get_default_uset_hook<T>
                , detail::identity<none>
                >::type
@@ -174,80 +354,18 @@ struct uset_defaults
       , hash<boost::hash<T> >
       , bucket_traits<default_bucket_traits>
       , power_2_buckets<false>
+      , cache_begin<false>
+      , compare_hash<false>
       >::type
 {};
 
-template<class NodeTraits>
-struct get_slist_impl
-{
-   typedef trivial_value_traits<NodeTraits, normal_link> trivial_traits;
-
-   //Reducing symbol length
-   struct type : make_slist
-      < typename NodeTraits::node
-      , boost::intrusive::value_traits<trivial_traits>
-      , boost::intrusive::constant_time_size<false>
-      , boost::intrusive::size_type<std::size_t>
-      >::type
-   {};
-};
-
 /// @endcond
-
-template<class ValueTraitsOrHookOption>
-struct unordered_bucket
-{
-   /// @cond
-   typedef typename ValueTraitsOrHookOption::
-      template pack<none>::value_traits         supposed_value_traits;
-
-   typedef typename detail::eval_if_c
-      < detail::external_value_traits_is_true
-         <supposed_value_traits>::value
-      , detail::eval_value_traits
-         <supposed_value_traits>
-      , detail::identity
-         <supposed_value_traits>
-      >::type                                   real_value_traits;
-
-   typedef typename detail::get_node_traits
-      <real_value_traits>::type                 node_traits;
-   typedef typename get_slist_impl
-      <node_traits>::type                       slist_impl;
-   typedef detail::bucket_impl<slist_impl>      implementation_defined;
-   /// @endcond
-   typedef implementation_defined               type;
-};
-
-template<class ValueTraitsOrHookOption>
-struct unordered_bucket_ptr
-{
-   /// @cond
-   typedef typename ValueTraitsOrHookOption::
-      template pack<none>::value_traits         supposed_value_traits;
-   typedef typename detail::eval_if_c
-      < detail::external_value_traits_is_true
-         <supposed_value_traits>::value
-      , detail::eval_value_traits
-         <supposed_value_traits>
-      , detail::identity
-         <supposed_value_traits>
-      >::type                                   real_value_traits;
-   typedef typename detail::get_node_traits
-      <supposed_value_traits>::type::node_ptr   node_ptr;
-   typedef typename unordered_bucket
-      <ValueTraitsOrHookOption>::type           bucket_type;
-   typedef typename boost::pointer_to_other
-      <node_ptr, bucket_type>::type             implementation_defined;
-   /// @endcond
-   typedef implementation_defined               type;
-};
 
 //! The class template hashtable is an intrusive hash table container, that
 //! is used to construct intrusive unordered_set and unordered_multiset containers. The
 //! no-throw guarantee holds only, if the Equal object and Hasher don't throw.
 //!
-//! hashtable is a pseudo-intrusive container: each object to be stored in the
+//! hashtable is a semi-intrusive container: each object to be stored in the
 //! container must contain a proper hook, but the container also needs
 //! additional auxiliary memory to work: hashtable needs a pointer to an array
 //! of type `bucket_type` to be passed in the constructor. This bucket array must
@@ -261,7 +379,8 @@ struct unordered_bucket_ptr
 //!
 //! The container supports the following options:
 //! \c base_hook<>/member_hook<>/value_traits<>,
-//! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<> .
+//! \c constant_time_size<>, \c size_type<>, \c hash<> and \c equal<>
+//! \c bucket_traits<>, power_2_buckets<> and cache_begin<>.
 //!
 //! hashtable only provides forward iterators but it provides 4 iterator types:
 //! iterator and const_iterator to navigate through the whole container and
@@ -284,13 +403,12 @@ template<class T, class ...Options>
 template<class Config>
 #endif
 class hashtable_impl
-   :  private detail::data_t<Config>
+   :  private detail::hashtable_data_t<Config>
 {
    public:
    typedef typename Config::value_traits                             value_traits;
 
    /// @cond
-
    static const bool external_value_traits =
       detail::external_value_traits_is_true<value_traits>::value;
    typedef typename detail::eval_if_c
@@ -306,8 +424,10 @@ class hashtable_impl
       , detail::eval_bucket_traits<bucket_traits>
       , detail::identity<bucket_traits>
       >::type                                                        real_bucket_traits;
-   typedef typename get_slist_impl
-      <typename real_value_traits::node_traits>::type                slist_impl;
+   typedef typename detail::get_slist_impl
+      <typename detail::reduced_slist_node_traits
+         <typename real_value_traits::node_traits>::type
+      >::type                                                        slist_impl;
    /// @endcond
 
    typedef typename real_value_traits::pointer                       pointer;
@@ -327,7 +447,7 @@ class hashtable_impl
    typedef typename slist_impl::const_iterator                       const_siterator;
    typedef detail::hashtable_iterator<hashtable_impl, false>         iterator;
    typedef detail::hashtable_iterator<hashtable_impl, true>          const_iterator;
-   typedef typename real_value_traits::node_traits                        node_traits;
+   typedef typename real_value_traits::node_traits                   node_traits;
    typedef typename node_traits::node                                node;
    typedef typename boost::pointer_to_other
       <pointer, node>::type                                          node_ptr;
@@ -338,19 +458,71 @@ class hashtable_impl
    static const bool constant_time_size = Config::constant_time_size;
    static const bool stateful_value_traits = detail::store_cont_ptr_on_it<hashtable_impl>::value;
    static const bool store_hash = detail::store_hash_is_true<node_traits>::value;
+   static const bool unique_keys = Config::unique_keys;
+   static const bool optimize_multikey
+      = detail::optimize_multikey_is_true<node_traits>::value && !unique_keys;
+   static const bool power_2_buckets = Config::power_2_buckets;
+   static const bool cache_begin     = Config::cache_begin;
+   static const bool compare_hash    = Config::compare_hash;
 
    /// @cond
    private:
-   typedef detail::bool_<store_hash>                                 store_hash_t;
-   typedef detail::size_holder<constant_time_size, size_type>        size_traits;
-   typedef detail::data_t<Config>                                    base_type;
-   typedef detail::transform_iterator
-      < typename slist_impl::iterator
-      , detail::node_to_value<hashtable_impl, false> >               local_iterator_impl;
-   typedef detail::transform_iterator
-      < typename slist_impl::iterator
-      , detail::node_to_value<hashtable_impl, true> >                const_local_iterator_impl;
+   //Configuration error: compare_hash<> can't be specified without store_hash<>
+   //See documentation for more explanations
+   BOOST_STATIC_ASSERT((!compare_hash || store_hash));
 
+   typedef typename slist_impl::node_ptr                             slist_node_ptr;
+   typedef typename boost::pointer_to_other
+         <slist_node_ptr, void>::type                                void_pointer;
+   //We'll define group traits, but these won't be instantiated if
+   //optimize_multikey is not true
+   typedef unordered_group_adapter<node_traits>                      group_traits;
+   typedef circular_slist_algorithms<group_traits>                   group_algorithms;
+   typedef detail::bool_<store_hash>                                 store_hash_t;
+   typedef detail::bool_<optimize_multikey>                          optimize_multikey_t;
+   typedef detail::bool_<cache_begin>                                cache_begin_t;
+   typedef detail::bool_<power_2_buckets>                            power_2_buckets_t;
+   typedef detail::size_holder<constant_time_size, size_type>        size_traits;
+   typedef detail::hashtable_data_t<Config>                          base_type;
+
+   template<bool IsConst>
+   struct downcast_node_to_value
+      :  public detail::node_to_value<hashtable_impl, IsConst>
+   {
+      typedef detail::node_to_value<hashtable_impl, IsConst> base_t;
+      typedef typename base_t::result_type               result_type;
+      typedef typename detail::add_const_if_c
+            <typename slist_impl::node, IsConst>::type  &first_argument_type;
+      typedef typename detail::add_const_if_c
+            <node, IsConst>::type                       &intermediate_argument_type;
+
+      downcast_node_to_value(const hashtable_impl *cont)
+         :  base_t(cont)
+      {}
+
+      result_type operator()(first_argument_type arg) const
+      {  return this->base_t::operator()(static_cast<intermediate_argument_type>(arg)); }
+   };
+
+   template<class F>
+   struct node_cast_adaptor
+      :  private detail::ebo_functor_holder<F>
+   {
+      typedef detail::ebo_functor_holder<F> base_t;
+
+      template<class ConvertibleToF>
+      node_cast_adaptor(const ConvertibleToF &c2f, const hashtable_impl *cont)
+         :  base_t(base_t(c2f, cont))
+      {}
+      
+      typename base_t::node_ptr operator()(const typename slist_impl::node &to_clone)
+      {  return base_t::operator()(static_cast<const node &>(to_clone));   }
+
+      void operator()(typename slist_impl::node_ptr to_clone)
+      {  base_t::operator()(node_ptr(&static_cast<node &>(*to_clone)));   }
+   };
+
+   private:
    //noncopyable
    hashtable_impl (const hashtable_impl&);
    hashtable_impl operator =(const hashtable_impl&);
@@ -362,103 +534,23 @@ class hashtable_impl
    //Constant-time size is incompatible with auto-unlink hooks!
    BOOST_STATIC_ASSERT(!(constant_time_size && ((int)real_value_traits::link_mode == (int)auto_unlink)));
 
-   static const bool power_2_buckets = Config::power_2_buckets;
+   template<class Disposer>
+   node_cast_adaptor<detail::node_disposer<Disposer, hashtable_impl> >
+      make_node_disposer(const Disposer &disposer) const
+   {  return node_cast_adaptor<detail::node_disposer<Disposer, hashtable_impl> >(disposer, this);   }
 
-   std::size_t from_hash_to_bucket(std::size_t hash_value) const
-   {  return from_hash_to_bucket(hash_value, detail::bool_<power_2_buckets>());  }
-
-   std::size_t from_hash_to_bucket(std::size_t hash_value, detail::bool_<false>) const
-   {  return hash_value % this->get_real_bucket_traits().bucket_count();  }
-
-   std::size_t from_hash_to_bucket(std::size_t hash_value, detail::bool_<true>) const
-   {  return hash_value & (this->get_real_bucket_traits().bucket_count() - 1);   }
-
-   const key_equal &priv_equal() const
-   {  return static_cast<const key_equal&>(this->bucket_hash_equal_.get());  }
-
-   key_equal &priv_equal()
-   {  return static_cast<key_equal&>(this->bucket_hash_equal_.get());  }
-
-   const real_bucket_traits &get_real_bucket_traits(detail::bool_<false>) const
-   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_;  }
-
-   const real_bucket_traits &get_real_bucket_traits(detail::bool_<true>) const
-   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_.get_bucket_traits(*this);  }
-
-   real_bucket_traits &get_real_bucket_traits(detail::bool_<false>)
-   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_;  }
-
-   real_bucket_traits &get_real_bucket_traits(detail::bool_<true>)
-   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_.get_bucket_traits(*this);  }
-
-   const real_bucket_traits &get_real_bucket_traits() const
-   {  return this->get_real_bucket_traits(detail::bool_<external_bucket_traits>());  }
-
-   real_bucket_traits &get_real_bucket_traits()
-   {  return this->get_real_bucket_traits(detail::bool_<external_bucket_traits>());  }
-
-   const hasher &priv_hasher() const
-   {  return static_cast<const hasher&>(this->bucket_hash_equal_.bucket_hash.get());  }
-
-   hasher &priv_hasher()
-   {  return static_cast<hasher&>(this->bucket_hash_equal_.bucket_hash.get());  }
-
-   bucket_ptr priv_buckets() const
-   {  return this->get_real_bucket_traits().bucket_begin();  }
-
-   size_type priv_buckets_len() const
-   {  return this->get_real_bucket_traits().bucket_count();  }
-
-   static node_ptr uncast(const_node_ptr ptr)
-   {
-      return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));
-   }
-
-   node &from_value_to_node(value_type &v)
-   {  return *this->get_real_value_traits().to_node_ptr(v);  }
-
-   const node &from_value_to_node(const value_type &v) const
-   {  return *this->get_real_value_traits().to_node_ptr(v);  }
-
-   size_traits &priv_size_traits()
-   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_;  }
-
-   const size_traits &priv_size_traits() const
-   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_;  }
-
-   struct insert_commit_data_impl
-   {
-      size_type hash;
-   };
    /// @endcond
 
    public:
+   typedef detail::insert_commit_data_impl insert_commit_data;
 
-   class local_iterator
-      :  public local_iterator_impl
-   {
-      public:
-      local_iterator()
-      {}
+   typedef detail::transform_iterator
+      < typename slist_impl::iterator
+      , downcast_node_to_value<false> >                              local_iterator;
 
-      local_iterator(siterator sit, const hashtable_impl *cont)
-         :  local_iterator_impl(sit, cont)
-      {}
-   };
-
-   class const_local_iterator
-      :  public const_local_iterator_impl
-   {
-      public:
-      const_local_iterator()
-      {}
-
-      const_local_iterator(siterator sit, const hashtable_impl *cont)
-         :  const_local_iterator_impl(sit, cont)
-      {}
-   };
-
-   typedef insert_commit_data_impl insert_commit_data;
+   typedef detail::transform_iterator
+      < typename slist_impl::iterator
+      , downcast_node_to_value<true> >                               const_local_iterator;
 
    /// @cond
 
@@ -503,7 +595,7 @@ class hashtable_impl
                   , const value_traits &v_traits = value_traits()) 
       :  base_type(b_traits, hash_func, equal_func, v_traits)
    {
-      priv_clear_buckets();
+      priv_initialize_buckets();
       this->priv_size_traits().set_size(size_type(0));
       BOOST_INTRUSIVE_INVARIANT_ASSERT(this->priv_buckets_len() != 0);
       //Check power of two bucket array if the option is activated
@@ -562,7 +654,7 @@ class hashtable_impl
    //! 
    //! <b>Throws</b>: Nothing.
    iterator end()
-   {  return iterator(invalid_local_it(this->get_real_bucket_traits()), 0);   }
+   {  return iterator(priv_invalid_local_it(), 0);   }
 
    //! <b>Effects</b>: Returns a const_iterator pointing to the end of the unordered_set.
    //! 
@@ -578,7 +670,7 @@ class hashtable_impl
    //! 
    //! <b>Throws</b>: Nothing.
    const_iterator cend() const
-   {  return const_iterator(invalid_local_it(this->get_real_bucket_traits()), 0);  }
+   {  return const_iterator(priv_invalid_local_it(), 0);  }
 
    //! <b>Effects</b>: Returns the hasher object used by the unordered_set.
    //! 
@@ -598,8 +690,8 @@ class hashtable_impl
 
    //! <b>Effects</b>: Returns true is the container is empty.
    //! 
-   //! <b>Complexity</b>: if constant_time_size is false, average constant time
-   //!   (worst case, with empty() == true): O(this->bucket_count()).
+   //! <b>Complexity</b>: if constant-time size and cache_last options are disabled,
+   //!   average constant time (worst case, with empty() == true: O(this->bucket_count()).
    //!   Otherwise constant.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -607,6 +699,9 @@ class hashtable_impl
    {
       if(constant_time_size){
          return !this->size();
+      }
+      else if(cache_begin){
+         return this->begin() == this->end();
       }
       else{
          size_type buckets_len = this->priv_buckets_len();
@@ -658,7 +753,8 @@ class hashtable_impl
       swap(this->priv_equal(), other.priv_equal());
       swap(this->priv_hasher(), other.priv_hasher());
       //These can't throw
-      swap(this->get_real_bucket_traits(), other.get_real_bucket_traits());
+      swap(this->priv_real_bucket_traits(), other.priv_real_bucket_traits());
+      priv_swap_cache(cache_begin_t(), other);
       if(constant_time_size){
          size_type backup = this->priv_size_traits().get_size();
          this->priv_size_traits().set_size(other.priv_size_traits().get_size());
@@ -698,75 +794,75 @@ class hashtable_impl
             const bucket_ptr src_buckets = src.priv_buckets();
             const bucket_ptr dst_buckets = this->priv_buckets();
             size_type constructed;
-            BOOST_INTRUSIVE_TRY{
-               for( constructed = 0
-                  ; constructed < dst_bucket_count
+            typedef node_cast_adaptor<detail::node_disposer<Disposer, hashtable_impl> > NodeDisposer;
+            typedef node_cast_adaptor<detail::node_cloner<Cloner, hashtable_impl> > NodeCloner;
+            NodeDisposer node_disp(disposer, this);
+   
+            detail::exception_array_disposer<bucket_type, NodeDisposer>
+               rollback(dst_buckets[0], node_disp, constructed);
+            for( constructed = 0
+               ; constructed < dst_bucket_count
+               ; ++constructed){
+               dst_buckets[constructed].clone_from
+                  ( src_buckets[constructed]
+                  , NodeCloner(cloner, this), node_disp);
+            }
+            if(src_bucket_count != dst_bucket_count){
+               //Now insert the remaining ones using the modulo trick
+               for(//"constructed" comes from the previous loop
+                  ; constructed < src_bucket_count
                   ; ++constructed){
-                  dst_buckets[constructed].clone_from
-                     ( src_buckets[constructed]
-                     , detail::node_cloner<Cloner, hashtable_impl>(cloner, this)
-                     , detail::node_disposer<Disposer, hashtable_impl>(disposer, this)
-                     );
-               }
-               if(src_bucket_count != dst_bucket_count){
-                  //Now insert the remaining ones using the modulo trick
-                  for(//"constructed" comes from the previous loop
-                     ; constructed < src_bucket_count
-                     ; ++constructed){
-                     bucket_type &dst_b = (power_2_buckets)
-                        ?  dst_buckets[constructed & (dst_bucket_count-1)]
-                        :  dst_buckets[constructed % dst_bucket_count];
-                     bucket_type &src_b = src_buckets[constructed];
-                     for( siterator b(src_b.begin()), e(src_b.end())
-                        ; b != e
-                        ; ++b){
-                        dst_b.push_front(*detail::node_cloner<Cloner, hashtable_impl>
-                              (cloner, this)(b.pointed_node()));
-                     }
+                  bucket_type &dst_b =
+                     dst_buckets[priv_hash_to_bucket(constructed, dst_bucket_count)];
+                  bucket_type &src_b = src_buckets[constructed];
+                  for( siterator b(src_b.begin()), e(src_b.end())
+                     ; b != e
+                     ; ++b){
+                     dst_b.push_front(*(NodeCloner(cloner, this)(*b.pointed_node())));
                   }
                }
             }
-            BOOST_INTRUSIVE_CATCH(...){
-               while(constructed--){
-                  dst_buckets[constructed].clear_and_dispose
-                  (detail::node_disposer<Disposer, hashtable_impl>(disposer, this));
-               }
-               BOOST_INTRUSIVE_RETHROW;
-            }
-            BOOST_INTRUSIVE_CATCH_END
+            rollback.release();
             this->priv_size_traits().set_size(src.priv_size_traits().get_size());
+            priv_insertion_update_cache(0u);
+            priv_erasure_update_cache();
          }
          else{
             //Unlike previous cloning algorithm, this can throw
             //if cloner, the hasher or comparison functor throw
             const_iterator b(src.begin()), e(src.end());
-            BOOST_INTRUSIVE_TRY{
-               for(; b != e; ++b){
-                  this->insert_equal(*cloner(*b));
-               }
+            detail::exception_disposer<hashtable_impl, Disposer>
+               rollback(*this, disposer);
+            for(; b != e; ++b){
+               this->insert_equal(*cloner(*b));
             }
-            BOOST_INTRUSIVE_CATCH(...){
-               this->clear_and_dispose(disposer);
-               BOOST_INTRUSIVE_RETHROW;
-            }
-            BOOST_INTRUSIVE_CATCH_END
+            rollback.release();
          }
       }
    }
 
    iterator insert_equal(reference value)
    {
-      size_type bucket_num, hash_value;
+      size_type bucket_num;
+      std::size_t hash_value;
+      siterator prev;
       siterator it = this->priv_find
-         (value, this->priv_hasher(), this->priv_equal(), bucket_num, hash_value);
+         (value, this->priv_hasher(), this->priv_equal(), bucket_num, hash_value, prev);
       bucket_type &b = this->priv_buckets()[bucket_num];
-      if(it == invalid_local_it(this->get_real_bucket_traits())){
-         it = b.before_begin();
-      }
-      node_ptr n = node_ptr(&from_value_to_node(value));
+      bool found_equal = it != priv_invalid_local_it();
+      node_ptr n = node_ptr(&priv_value_to_node(value));
       this->priv_store_hash(n, hash_value, store_hash_t());
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(n));
+      if(!found_equal){
+         it = b.before_begin();
+      }
+      if(optimize_multikey){
+         node_ptr first_in_group = found_equal ?
+            dcast_bucket_ptr(it.pointed_node()) : node_ptr(0);
+         this->priv_insert_in_group(first_in_group, n, optimize_multikey_t());
+      }
+      priv_insertion_update_cache(bucket_num);
       this->priv_size_traits().increment();
       return iterator(b.insert_after(it, *n), this);
    }
@@ -867,9 +963,10 @@ class hashtable_impl
       , insert_commit_data &commit_data)
    {
       size_type bucket_num;
+      siterator prev;
       siterator prev_pos =
-         this->priv_find(key, hash_func, equal_func, bucket_num, commit_data.hash);
-      bool success = prev_pos == invalid_local_it(this->get_real_bucket_traits());
+         this->priv_find(key, hash_func, equal_func, bucket_num, commit_data.hash, prev);
+      bool success = prev_pos == priv_invalid_local_it();
       if(success){
          prev_pos = this->priv_buckets()[bucket_num].before_begin();
       }
@@ -897,14 +994,16 @@ class hashtable_impl
    //!   After a successful rehashing insert_commit_data remains valid.
    iterator insert_unique_commit(reference value, const insert_commit_data &commit_data)
    {
-      size_type bucket_num = from_hash_to_bucket(commit_data.hash);
+      size_type bucket_num = priv_hash_to_bucket(commit_data.hash);
       bucket_type &b = this->priv_buckets()[bucket_num];
       this->priv_size_traits().increment();
-      node_ptr n = node_ptr(&from_value_to_node(value));
+      node_ptr n = node_ptr(&priv_value_to_node(value));
       this->priv_store_hash(n, commit_data.hash, store_hash_t());
       if(safemode_or_autounlink)
          BOOST_INTRUSIVE_SAFE_HOOK_DEFAULT_ASSERT(node_algorithms::unique(n));
-      return iterator( b.insert_after(b.before_begin(), *n), this);
+      priv_insertion_update_cache(bucket_num);
+      this->priv_insert_in_group(node_ptr(0), n, optimize_multikey_t());
+      return iterator(b.insert_after(b.before_begin(), *n), this);
    }
 
    //! <b>Effects</b>: Erases the element pointed to by i. 
@@ -983,12 +1082,9 @@ class hashtable_impl
    template<class Disposer>
    void erase_and_dispose(const_iterator i, Disposer disposer)
    {
-      siterator to_erase(i.slist_it());
-      bucket_ptr f(priv_buckets()), l(f + priv_buckets_len());
-      bucket_type &b = this->priv_buckets()[bucket_type::get_bucket_num(to_erase, *f, *l)];
-      b.erase_after_and_dispose
-         (b.previous(to_erase), detail::node_disposer<Disposer, hashtable_impl>(disposer, this));
+      priv_erase(i, disposer, optimize_multikey_t());
       this->priv_size_traits().decrement();
+      priv_erasure_update_cache();
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -1009,66 +1105,26 @@ class hashtable_impl
       if(b == e)  return;
 
       //Get the bucket number and local iterator for both iterators
-      bucket_ptr f(priv_buckets()), l(f + priv_buckets_len());
-      size_type first_bucket_num = bucket_type::get_bucket_num(b.slist_it(), *f, *l);
+      siterator first_local_it(b.slist_it());
+      size_type first_bucket_num = this->priv_get_bucket_num(first_local_it);
 
       siterator before_first_local_it
-         = priv_buckets()[first_bucket_num].previous(b.slist_it());
+         = priv_get_previous(priv_buckets()[first_bucket_num], first_local_it);
       size_type last_bucket_num;
       siterator last_local_it;
 
       //For the end iterator, we will assign the end iterator
       //of the last bucket
-      if(e == end()){
+      if(e == this->end()){
          last_bucket_num   = this->bucket_count() - 1;
          last_local_it     = priv_buckets()[last_bucket_num].end();
       }
       else{
          last_local_it     = e.slist_it();
-         last_bucket_num  = bucket_type::get_bucket_num(last_local_it, *f, *l);
+         last_bucket_num = this->priv_get_bucket_num(last_local_it);
       }
-
-      const bucket_ptr buckets = priv_buckets();
-      //First erase the nodes of the first bucket
-      {
-         bucket_type &first_b = buckets[first_bucket_num];
-         siterator nxt(before_first_local_it); ++nxt;
-         siterator end = first_b.end();
-         while(nxt != end){
-            nxt = first_b.erase_after_and_dispose
-               ( before_first_local_it
-               , detail::node_disposer<Disposer, hashtable_impl>(disposer, this));
-            this->priv_size_traits().decrement();
-         }
-      }
-
-      //Now fully clear the intermediate buckets
-      for(size_type i = first_bucket_num+1; i < last_bucket_num; ++i){
-         bucket_type &b = buckets[i];
-         if(b.empty())
-            continue;
-         siterator b_begin(b.before_begin());
-         siterator nxt(b_begin); ++nxt;
-         siterator end = b.end();
-         while(nxt != end){
-            nxt = b.erase_after_and_dispose
-               (b_begin, detail::node_disposer<Disposer, hashtable_impl>(disposer, this));
-            this->priv_size_traits().decrement();
-         }
-      }
-
-      //Now erase nodes from the last bucket
-      {
-         bucket_type &last_b = buckets[last_bucket_num];
-         siterator b_begin(last_b.before_begin());
-         siterator nxt(b_begin); ++nxt;
-         while(nxt != last_local_it){
-            nxt = last_b.erase_after_and_dispose
-               (b_begin, detail::node_disposer<Disposer, hashtable_impl>
-                              (disposer, this));
-            this->priv_size_traits().decrement();
-         }
-      }
+      priv_erase_range(before_first_local_it, first_bucket_num, last_local_it, last_bucket_num, disposer);
+      priv_erasure_update_cache(first_bucket_num, last_bucket_num);
    }
 
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
@@ -1109,40 +1165,42 @@ class hashtable_impl
    size_type erase_and_dispose(const KeyType& key, KeyHasher hash_func
                               ,KeyValueEqual equal_func, Disposer disposer)
    {
+      size_type bucket_num;
+      std::size_t h;
+      siterator prev;
+      siterator it =
+         this->priv_find(key, hash_func, equal_func, bucket_num, h, prev);
+      bool success = it != priv_invalid_local_it();
       size_type count(0);
-
-      if(constant_time_size && this->empty()){
+      if(!success){
          return 0;
       }
-
-      bucket_type &b = this->priv_buckets()[from_hash_to_bucket(hash_func(key))];
-      siterator it    = b.begin();
-      siterator prev  = b.before_begin();
-
-      bool found = false;
-      //Find equal value
-      while(it != b.end()){
-         const value_type &v = 
-            *this->get_real_value_traits().to_value_ptr(it.pointed_node());
-         if(equal_func(key, v)){
-            found = true;
-            break;
+      else if(optimize_multikey){
+         siterator last = bucket_type::s_iterator_to
+            (*node_traits::get_next(priv_get_last_in_group
+               (dcast_bucket_ptr(it.pointed_node()))));
+         this->priv_erase_range_impl(bucket_num, prev, last, disposer, count);
+      }
+      else{
+         //If found erase all equal values
+         bucket_type &b = this->priv_buckets()[bucket_num];
+         for(siterator end = b.end(); it != end; ++count, ++it){
+            slist_node_ptr n(it.pointed_node());
+            const value_type &v = priv_value_from_slist_node(n);
+            if(compare_hash){
+               std::size_t vh = this->priv_stored_hash(v, store_hash_t());
+               if(h != vh || !equal_func(key, v)){
+                  break;
+               }
+            }
+            else if(!equal_func(key, v)){
+               break;
+            }
+            this->priv_size_traits().decrement();
          }
-         ++prev;
-         ++it;
+         b.erase_after_and_dispose(prev, it, make_node_disposer(disposer));
       }
-   
-      if(!found)
-         return 0;
-
-      //If found erase all equal values
-      for(siterator end = b.end(); it != end && 
-           equal_func(key, *this->get_real_value_traits().to_value_ptr(it.pointed_node()))
-         ; ++count){
-         it = b.erase_after_and_dispose
-            (prev, detail::node_disposer<Disposer, hashtable_impl>(disposer, this));
-         this->priv_size_traits().decrement();
-      }
+      priv_erasure_update_cache();
       return count;
    }
 
@@ -1179,11 +1237,11 @@ class hashtable_impl
          size_type num_buckets = this->bucket_count();
          bucket_ptr b = this->priv_buckets();
          for(; num_buckets--; ++b){
-            b->clear_and_dispose
-               (detail::node_disposer<Disposer, hashtable_impl>(disposer, this));
+            b->clear_and_dispose(make_node_disposer(disposer));
          }
          this->priv_size_traits().set_size(size_type(0));
       }
+      priv_initialize_cache();
    }
 
    //! <b>Effects</b>: Returns the number of contained elements with the given value
@@ -1246,8 +1304,10 @@ class hashtable_impl
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    iterator find(const KeyType &key, KeyHasher hash_func, KeyValueEqual equal_func)
    {
-      size_type bucket_n, hash;
-      siterator local_it = this->priv_find(key, hash_func, equal_func, bucket_n, hash);
+      size_type bucket_n;
+      std::size_t hash;
+      siterator prev;
+      siterator local_it = this->priv_find(key, hash_func, equal_func, bucket_n, hash, prev);
       return iterator(local_it, this);
    }
 
@@ -1283,8 +1343,10 @@ class hashtable_impl
    const_iterator find
       (const KeyType &key, KeyHasher hash_func, KeyValueEqual equal_func) const
    {
-      size_type bucket_n, hash_value;
-      siterator sit = this->priv_find(key, hash_func, equal_func, bucket_n, hash_value);
+      size_type bucket_n;
+      std::size_t hash_value;
+      siterator prev;
+      siterator sit = this->priv_find(key, hash_func, equal_func, bucket_n, hash_value, prev);
       return const_iterator(sit, this);
    }
 
@@ -1382,7 +1444,7 @@ class hashtable_impl
    //! <b>Throws</b>: If the internal hash function throws.
    iterator iterator_to(reference value)
    {
-      return iterator(bucket_type::s_iterator_to(from_value_to_node(value)), this);
+      return iterator(bucket_type::s_iterator_to(priv_value_to_node(value)), this);
    }
 
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
@@ -1396,11 +1458,8 @@ class hashtable_impl
    //! <b>Throws</b>: If the internal hash function throws.
    const_iterator iterator_to(const_reference value) const
    {
-      return const_iterator(bucket_type::s_iterator_to(from_value_to_node(const_cast<reference>(value))), this);
+      return const_iterator(bucket_type::s_iterator_to(priv_value_to_node(const_cast<reference>(value))), this);
    }
-
-
-
 
    //! <b>Requires</b>: value must be an lvalue and shall be in a unordered_set of
    //!   appropriate type. Otherwise the behavior is undefined.
@@ -1417,7 +1476,7 @@ class hashtable_impl
    static local_iterator s_local_iterator_to(reference value)
    {
       BOOST_STATIC_ASSERT((!stateful_value_traits));
-      siterator sit = bucket_type::s_iterator_to(((hashtable_impl*)0)->from_value_to_node(value));
+      siterator sit = bucket_type::s_iterator_to(((hashtable_impl*)0)->priv_value_to_node(value));
       return local_iterator(sit, (hashtable_impl*)0);  
    }
 
@@ -1436,7 +1495,7 @@ class hashtable_impl
    static const_local_iterator s_local_iterator_to(const_reference value)
    {
       BOOST_STATIC_ASSERT((!stateful_value_traits));
-      siterator sit = bucket_type::s_iterator_to(((hashtable_impl*)0)->from_value_to_node(const_cast<value_type&>(value)));
+      siterator sit = bucket_type::s_iterator_to(((hashtable_impl*)0)->priv_value_to_node(const_cast<value_type&>(value)));
       return const_local_iterator(sit, (hashtable_impl*)0);  
    }
 
@@ -1451,7 +1510,7 @@ class hashtable_impl
    //! <b>Throws</b>: Nothing.
    local_iterator local_iterator_to(reference value)
    {
-      siterator sit = bucket_type::s_iterator_to(this->from_value_to_node(value));
+      siterator sit = bucket_type::s_iterator_to(this->priv_value_to_node(value));
       return local_iterator(sit, this);  
    }
 
@@ -1467,7 +1526,7 @@ class hashtable_impl
    const_local_iterator local_iterator_to(const_reference value) const
    {
       siterator sit = bucket_type::s_iterator_to
-         (const_cast<node &>(this->from_value_to_node(value)));
+         (const_cast<node &>(this->priv_value_to_node(value)));
       return const_local_iterator(sit, this);  
    }
 
@@ -1515,7 +1574,7 @@ class hashtable_impl
    //! <b>Note</b>: the return value is in the range [0, this->bucket_count()).
    template<class KeyType, class KeyHasher>
    size_type bucket(const KeyType& k, const KeyHasher &hash_func)  const
-   {  return from_hash_to_bucket(hash_func(k));   }
+   {  return priv_hash_to_bucket(hash_func(k));   }
 
    //! <b>Effects</b>: Returns the bucket array pointer passed in the constructor
    //!   or the last rehash function.
@@ -1630,75 +1689,87 @@ class hashtable_impl
       size_type  new_buckets_len = new_bucket_traits.bucket_count();
       bucket_ptr old_buckets     = this->priv_buckets();
       size_type  old_buckets_len = this->priv_buckets_len();
+
       //Check power of two bucket array if the option is activated      
       BOOST_INTRUSIVE_INVARIANT_ASSERT
       (!power_2_buckets || (0 == (new_buckets_len & (new_buckets_len-1u))));
 
-      BOOST_INTRUSIVE_TRY{
-         size_type n = 0;
-         const bool same_buffer = old_buckets == new_buckets;
-         //If the new bucket length is a common factor
-         //of the old one we can avoid hash calculations.
-         const bool fast_shrink = (old_buckets_len > new_buckets_len) && 
-            (power_2_buckets ||(old_buckets_len % new_buckets_len) == 0);
-         //If we are shrinking the same bucket array and it's
-         //is a fast shrink, just rehash the last nodes
-         if(same_buffer && fast_shrink){
-            n = new_buckets_len;
-         }
+      size_type n = priv_get_cache_bucket_num();
+      const bool same_buffer = old_buckets == new_buckets;
+      //If the new bucket length is a common factor
+      //of the old one we can avoid hash calculations.
+      const bool fast_shrink = (old_buckets_len > new_buckets_len) && 
+         (power_2_buckets ||(old_buckets_len % new_buckets_len) == 0);
+      //If we are shrinking the same bucket array and it's
+      //is a fast shrink, just rehash the last nodes
+      size_type new_first_bucket_num = new_buckets_len;
+      if(same_buffer && fast_shrink && (n < new_buckets_len)){
+         n = new_buckets_len;
+         new_first_bucket_num = priv_get_cache_bucket_num();
+      }
 
-         //Iterate through nodes
-         for(; n < old_buckets_len; ++n){
-            bucket_type &old_bucket = old_buckets[n];
+      //Anti-exception stuff: they destroy the elements if something goes wrong
+      typedef detail::init_disposer<node_algorithms> NodeDisposer;
+      NodeDisposer node_disp;
+      detail::exception_array_disposer<bucket_type, NodeDisposer>
+         rollback1(new_buckets[0], node_disp, new_buckets_len);
+      detail::exception_array_disposer<bucket_type, NodeDisposer>
+         rollback2(old_buckets[0], node_disp, old_buckets_len);
 
-            if(!fast_shrink){
-               siterator before_i(old_bucket.before_begin());
-               siterator end(old_bucket.end());
-               siterator i(old_bucket.begin());
-               for(;i != end; ++i){
-                  const value_type &v = *this->get_real_value_traits().to_value_ptr(i.pointed_node());
-                  const std::size_t hash_value = this->priv_hash_when_rehashing(v, store_hash_t());
-                  const size_type new_n = (power_2_buckets)
-                     ? (hash_value & (new_buckets_len-1)) : (hash_value % new_buckets_len);
-                  //If this is a buffer expansion don't move if it's not necessary
-                  if(same_buffer && new_n == n){
-                     ++before_i;
-                  }
-                  else{
-                     bucket_type &new_b = new_buckets[new_n];
-                     new_b.splice_after(new_b.before_begin(), old_bucket, before_i);
-                     i = before_i;
-                  }
+      //Put size in a safe value for rollback exception
+      size_type size_backup = this->priv_size_traits().get_size();
+      this->priv_size_traits().set_size(0);
+      //Put cache to safe position
+      priv_initialize_cache();
+      priv_insertion_update_cache(size_type(0u));
+
+      //Iterate through nodes
+      for(; n < old_buckets_len; ++n){
+         bucket_type &old_bucket = old_buckets[n];
+
+         if(!fast_shrink){
+            siterator before_i(old_bucket.before_begin());
+            siterator end(old_bucket.end());
+            siterator i(old_bucket.begin());
+            for(;i != end; ++i){
+               const value_type &v = priv_value_from_slist_node(i.pointed_node());
+               const std::size_t hash_value = this->priv_stored_hash(v, store_hash_t());
+               const size_type new_n = priv_hash_to_bucket(hash_value, new_buckets_len);
+               if(cache_begin && new_n < new_first_bucket_num)
+                  new_first_bucket_num = new_n;
+               siterator last = bucket_type::s_iterator_to
+                  (*priv_get_last_in_group(dcast_bucket_ptr(i.pointed_node())));
+               if(same_buffer && new_n == n){
+                  before_i = last;
                }
-            }
-            else{
-               const size_type new_n = (power_2_buckets)
-                  ?  (n & (new_buckets_len-1))
-                  :  (n % new_buckets_len);
-               bucket_type &new_b = new_buckets[new_n];
-               new_b.splice_after(new_b.before_begin(), old_bucket);
+               else{
+                  bucket_type &new_b = new_buckets[new_n];
+                  new_b.splice_after(new_b.before_begin(), old_bucket, before_i, last);
+               }
+               i = before_i;
             }
          }
+         else{
+            const size_type new_n = priv_hash_to_bucket(n, new_buckets_len);
+            if(cache_begin && new_n < new_first_bucket_num)
+               new_first_bucket_num = new_n;
+            bucket_type &new_b = new_buckets[new_n];
+            if(!old_bucket.empty()){
+               new_b.splice_after( new_b.before_begin()
+                                 , old_bucket
+                                 , old_bucket.before_begin()
+                                 , priv_get_last(old_bucket));
+            }
+         }
+      }
 
-         this->get_real_bucket_traits()= new_bucket_traits;
-      }
-      BOOST_INTRUSIVE_CATCH(...){
-         for(size_type n = 0; n < new_buckets_len; ++n){
-            if(safemode_or_autounlink){
-               new_buckets[n].clear_and_dispose
-                  (detail::init_disposer<node_algorithms>());
-               old_buckets[n].clear_and_dispose
-                  (detail::init_disposer<node_algorithms>());
-            }
-            else{
-               new_buckets[n].clear();
-               old_buckets[n].clear();
-            }
-         }
-         this->priv_size_traits().set_size(size_type(0));
-         BOOST_INTRUSIVE_RETHROW;
-      }
-      BOOST_INTRUSIVE_CATCH_END
+      this->priv_size_traits().set_size(size_backup);
+      this->priv_real_bucket_traits() = new_bucket_traits;
+      priv_initialize_cache();
+      priv_insertion_update_cache(new_first_bucket_num);
+      //priv_erasure_update_cache();
+      rollback1.release();
+      rollback2.release();
    }
 
    //! <b>Effects</b>: Returns the nearest new bucket count optimized for
@@ -1714,8 +1785,7 @@ class hashtable_impl
    {
       const std::size_t *primes     = &detail::prime_list_holder<0>::prime_list[0];
       const std::size_t *primes_end = primes + detail::prime_list_holder<0>::prime_list_size;
-      size_type const* bound =
-            std::lower_bound(primes, primes_end, n);
+      size_type const* bound = std::lower_bound(primes, primes_end, n);
       if(bound == primes_end)
             bound--;
       return size_type(*bound);
@@ -1734,8 +1804,7 @@ class hashtable_impl
    {
       const std::size_t *primes     = &detail::prime_list_holder<0>::prime_list[0];
       const std::size_t *primes_end = primes + detail::prime_list_holder<0>::prime_list_size;
-      size_type const* bound =
-            std::upper_bound(primes, primes_end, n);
+      size_type const* bound = std::upper_bound(primes, primes_end, n);
       if(bound != primes_end)
             bound--;
       return size_type(*bound);
@@ -1743,72 +1812,672 @@ class hashtable_impl
 
    /// @cond
    private:
+   std::size_t priv_hash_to_bucket(std::size_t hash_value) const
+   {  return priv_hash_to_bucket(hash_value, power_2_buckets_t());  }
 
-   std::size_t priv_hash_when_rehashing(const value_type &v, detail::true_)
-   {  return node_traits::get_hash(this->get_real_value_traits().to_node_ptr(v));  }
+   std::size_t priv_hash_to_bucket(std::size_t hash_value, detail::bool_<false>) const
+   {  return hash_value % this->priv_real_bucket_traits().bucket_count();  }
 
-   std::size_t priv_hash_when_rehashing(const value_type &v, detail::false_)
-   {  return priv_hasher()(v);   }
+   std::size_t priv_hash_to_bucket(std::size_t hash_value, detail::bool_<true>) const
+   {  return hash_value & (this->priv_real_bucket_traits().bucket_count() - 1);   }
 
-   void priv_store_hash(node_ptr p, std::size_t h, detail::true_)
-   {  return node_traits::set_hash(p, h); }
+   std::size_t priv_hash_to_bucket(std::size_t hash_value, std::size_t bucket_len) const
+   {  return priv_hash_to_bucket(hash_value, bucket_len, power_2_buckets_t());  }
 
-   void priv_store_hash(node_ptr, std::size_t, detail::false_)
-   {}
-   
-   static siterator invalid_local_it(const real_bucket_traits &b)
-   {  return b.bucket_begin()->end();  }
+   std::size_t priv_hash_to_bucket(std::size_t hash_value, std::size_t bucket_len, detail::bool_<false>) const
+   {  return hash_value % bucket_len;  }
 
-   siterator priv_begin(size_type &bucket_num) const
+   std::size_t priv_hash_to_bucket(std::size_t hash_value, std::size_t bucket_len, detail::bool_<true>) const
+   {  return hash_value & (bucket_len - 1);   }
+
+   const key_equal &priv_equal() const
+   {  return static_cast<const key_equal&>(this->bucket_hash_equal_.get());  }
+
+   key_equal &priv_equal()
+   {  return static_cast<key_equal&>(this->bucket_hash_equal_.get());  }
+
+   value_type &priv_value_from_slist_node(slist_node_ptr n)
+   {  return *this->get_real_value_traits().to_value_ptr(dcast_bucket_ptr(n)); }
+
+   const value_type &priv_value_from_slist_node(slist_node_ptr n) const
+   {  return *this->get_real_value_traits().to_value_ptr(dcast_bucket_ptr(n)); }
+
+   const real_bucket_traits &priv_real_bucket_traits(detail::bool_<false>) const
+   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_;  }
+
+   const real_bucket_traits &priv_real_bucket_traits(detail::bool_<true>) const
+   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_.get_bucket_traits(*this);  }
+
+   real_bucket_traits &priv_real_bucket_traits(detail::bool_<false>)
+   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_;  }
+
+   real_bucket_traits &priv_real_bucket_traits(detail::bool_<true>)
+   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_.bucket_traits_.get_bucket_traits(*this);  }
+
+   const real_bucket_traits &priv_real_bucket_traits() const
+   {  return this->priv_real_bucket_traits(detail::bool_<external_bucket_traits>());  }
+
+   real_bucket_traits &priv_real_bucket_traits()
+   {  return this->priv_real_bucket_traits(detail::bool_<external_bucket_traits>());  }
+
+   const hasher &priv_hasher() const
+   {  return static_cast<const hasher&>(this->bucket_hash_equal_.bucket_hash.get());  }
+
+   hasher &priv_hasher()
+   {  return static_cast<hasher&>(this->bucket_hash_equal_.bucket_hash.get());  }
+
+   bucket_ptr priv_buckets() const
+   {  return this->priv_real_bucket_traits().bucket_begin();  }
+
+   size_type priv_buckets_len() const
+   {  return this->priv_real_bucket_traits().bucket_count();  }
+
+   static node_ptr uncast(const_node_ptr ptr)
+   {  return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));  }
+
+   node &priv_value_to_node(value_type &v)
+   {  return *this->get_real_value_traits().to_node_ptr(v);  }
+
+   const node &priv_value_to_node(const value_type &v) const
+   {  return *this->get_real_value_traits().to_node_ptr(v);  }
+
+   size_traits &priv_size_traits()
+   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_;  }
+
+   const size_traits &priv_size_traits() const
+   {  return this->bucket_hash_equal_.bucket_hash.bucket_plus_size_;  }
+
+   template<class Disposer>
+   void priv_erase_range_impl
+      (size_type bucket_num, siterator before_first_it, siterator end, Disposer disposer, size_type &num_erased)
    {
-      size_type buckets_len = this->priv_buckets_len();
-      for (bucket_num = 0; bucket_num < buckets_len; ++bucket_num){
-         bucket_type &b = this->priv_buckets()[bucket_num];
-         if(!b.empty())
-            return b.begin();
+      const bucket_ptr buckets = priv_buckets();
+      bucket_type &b = buckets[bucket_num];
+
+      if(before_first_it == b.before_begin() && end == b.end()){
+         priv_erase_range_impl(bucket_num, 1, disposer, num_erased);
       }
-      return invalid_local_it(this->get_real_bucket_traits());
+      else{
+         num_erased = 0;
+         siterator to_erase(before_first_it);
+         ++to_erase;
+         slist_node_ptr end_ptr = end.pointed_node();
+         while(to_erase != end){
+            priv_erase_from_group(end_ptr, dcast_bucket_ptr(to_erase.pointed_node()), optimize_multikey_t());
+            to_erase = b.erase_after_and_dispose(before_first_it, make_node_disposer(disposer));
+            ++num_erased;
+         }
+         this->priv_size_traits().set_size(this->priv_size_traits().get_size()-num_erased);
+      }
    }
 
-   void priv_clear_buckets()
-   {  priv_clear_buckets(this->priv_buckets(), this->priv_buckets_len());  }
+   template<class Disposer>
+   void priv_erase_range_impl
+      (size_type first_bucket_num, size_type num_buckets, Disposer disposer, size_type &num_erased)
+   {
+      //Now fully clear the intermediate buckets
+      const bucket_ptr buckets = priv_buckets();
+      num_erased = 0;
+      for(size_type i = first_bucket_num; i < (num_buckets + first_bucket_num); ++i){
+         bucket_type &b = buckets[i];
+         siterator b_begin(b.before_begin());
+         siterator nxt(b_begin);
+         ++nxt;
+         siterator end(b.end());
+         while(nxt != end){
+            priv_init_group(nxt.pointed_node(), optimize_multikey_t());
+            nxt = b.erase_after_and_dispose
+               (b_begin, make_node_disposer(disposer));
+            this->priv_size_traits().decrement();
+            ++num_erased;
+         }
+      }
+   }
 
-   static void priv_clear_buckets(bucket_ptr buckets_ptr, size_type buckets_len)
+   template<class Disposer>
+   void priv_erase_range( siterator before_first_it,  size_type first_bucket
+                        , siterator last_it,          size_type last_bucket
+                        , Disposer disposer)
+   {
+      size_type num_erased;
+      if (first_bucket == last_bucket){
+         priv_erase_range_impl(first_bucket, before_first_it, last_it, disposer, num_erased);
+      }
+      else {
+         bucket_type *b = (&this->priv_buckets()[0]);
+         priv_erase_range_impl(first_bucket, before_first_it, b[first_bucket].end(), disposer, num_erased);
+         if(size_type n = (last_bucket - first_bucket - 1))
+            priv_erase_range_impl(first_bucket + 1, n, disposer, num_erased);
+         priv_erase_range_impl(last_bucket, b[last_bucket].before_begin(), last_it, disposer, num_erased);
+      }
+   }
+
+   static node_ptr dcast_bucket_ptr(typename slist_impl::node_ptr p)
+   {  return node_ptr(&static_cast<node&>(*p));   }
+
+   std::size_t priv_stored_hash(const value_type &v, detail::true_) const
+   {  return node_traits::get_hash(this->get_real_value_traits().to_node_ptr(v));  }
+
+   std::size_t priv_stored_hash(const value_type &v, detail::false_) const
+   {  return priv_hasher()(v);   }
+
+   std::size_t priv_stored_hash(slist_node_ptr n, detail::true_) const
+   {  return node_traits::get_hash(dcast_bucket_ptr(n));  }
+
+   std::size_t priv_stored_hash(slist_node_ptr, detail::false_) const
+   {
+      //This code should never be reached!
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(0);
+      return 0;
+   }
+
+   static void priv_store_hash(node_ptr p, std::size_t h, detail::true_)
+   {  return node_traits::set_hash(p, h); }
+
+   static void priv_store_hash(node_ptr, std::size_t, detail::false_)
+   {}
+
+   static void priv_clear_group_nodes(bucket_type &b, detail::true_)
+   {
+      siterator it(b.begin()), itend(b.end());
+      while(it != itend){
+         node_ptr to_erase(dcast_bucket_ptr(it.pointed_node()));
+         ++it;
+         group_algorithms::init(to_erase);
+      }
+   }
+
+   static void priv_clear_group_nodes(bucket_type &, detail::false_)
+   {}
+
+   std::size_t priv_get_bucket_num(siterator it)
+   {  return priv_get_bucket_num_hash_dispatch(it, store_hash_t());  }
+
+   std::size_t priv_get_bucket_num_hash_dispatch(siterator it, detail::true_)
+   {
+      return this->priv_hash_to_bucket
+         (this->priv_stored_hash(it.pointed_node(), store_hash_t()));
+   }
+
+   std::size_t priv_get_bucket_num_hash_dispatch(siterator it, detail::false_)
+   {  return priv_get_bucket_num_no_hash_store(it, optimize_multikey_t());  }
+
+   std::size_t priv_get_bucket_num_no_hash_store( siterator it, detail::true_)
+   {
+      bucket_ptr f(priv_buckets()), l(f + priv_buckets_len() - 1);
+      slist_node_ptr bb = priv_get_bucket_before_begin
+         ( f->end().pointed_node()
+         , l->end().pointed_node()
+         , dcast_bucket_ptr(it.pointed_node()));
+      //Now get the bucket_impl from the iterator
+      const bucket_type &b = static_cast<const bucket_type&>
+         (bucket_type::slist_type::container_from_end_iterator(bucket_type::s_iterator_to(*bb)));
+      //Now just calculate the index b has in the bucket array
+      return static_cast<size_type>(&b - &*f);
+   }
+
+   std::size_t priv_get_bucket_num_no_hash_store( siterator it, detail::false_)
+   {
+      bucket_ptr f(priv_buckets()), l(f + priv_buckets_len() - 1);
+      slist_node_ptr first_ptr(f->cend().pointed_node())
+                   , last_ptr(l->cend().pointed_node());
+
+      //The end node is embedded in the singly linked list:
+      //iterate until we reach it.
+      while(!(first_ptr <= it.pointed_node() && it.pointed_node() <= last_ptr)){
+         ++it;
+      }
+      //Now get the bucket_impl from the iterator
+      const bucket_type &b = static_cast<const bucket_type&>
+         (bucket_type::container_from_end_iterator(it));
+
+      //Now just calculate the index b has in the bucket array
+      return static_cast<std::size_t>(&b - &*f);
+   }
+
+   void priv_erase_from_group(slist_node_ptr end_ptr, node_ptr to_erase_ptr, detail::true_)
+   {
+      node_ptr nxt_ptr(node_traits::get_next(to_erase_ptr));
+      node_ptr prev_in_group_ptr(group_traits::get_next(to_erase_ptr));
+      bool last_in_group = (end_ptr == nxt_ptr) ||
+         (group_traits::get_next(nxt_ptr) != to_erase_ptr);
+      bool first_in_group = node_traits::get_next(prev_in_group_ptr) != to_erase_ptr;
+
+      if(first_in_group && last_in_group){
+         group_algorithms::init(to_erase_ptr);
+      }
+      else if(first_in_group){
+         group_algorithms::unlink_after(nxt_ptr);
+      }
+      else if(last_in_group){
+         node_ptr first_in_group = //possible_first_in_group ? possible_first_in_group :
+            priv_get_first_in_group_of_last_in_group(to_erase_ptr);
+         group_algorithms::unlink_after(first_in_group);
+         //possible_first_in_group = 0;
+      }
+      else{
+         group_algorithms::unlink_after(nxt_ptr);
+      }
+   }
+
+   void priv_erase_from_group(slist_node_ptr, node_ptr, detail::false_)
+   {}
+
+   void priv_init_group(slist_node_ptr n, detail::true_)
+   {  group_algorithms::init(dcast_bucket_ptr(n)); }
+
+   void priv_init_group(slist_node_ptr, detail::false_)
+   {}
+
+   void priv_insert_in_group(node_ptr first_in_group, node_ptr n, detail::true_)
+   {
+      if(first_in_group){
+         if(group_algorithms::unique(first_in_group))
+            group_algorithms::link_after(first_in_group, n);
+         else{
+            group_algorithms::link_after(node_traits::get_next(first_in_group), n);
+         }
+      }
+      else{
+         group_algorithms::init_header(n);
+      }
+   }
+
+   static slist_node_ptr priv_get_bucket_before_begin
+      (slist_node_ptr bucket_beg, slist_node_ptr bucket_end, node_ptr p)
+   {
+      //First find the last node of p's group.
+      //This requires checking the first node of the next group or
+      //the bucket node.
+      node_ptr prev_node = p;
+      node_ptr nxt(node_traits::get_next(p));
+      while(!(bucket_beg <= nxt && nxt <= bucket_end) &&
+             (group_traits::get_next(nxt) == prev_node)){
+         prev_node = nxt;
+         nxt = node_traits::get_next(nxt);
+      }
+
+      //If we've reached the bucket node just return it.
+      if(bucket_beg <= nxt && nxt <= bucket_end){
+         return nxt;
+      }
+
+      //Otherwise, iterate using group links until the bucket node
+      node_ptr first_node_of_group  = nxt;
+      node_ptr last_node_group      = group_traits::get_next(first_node_of_group);
+      slist_node_ptr possible_end   = node_traits::get_next(last_node_group);
+
+      while(!(bucket_beg <= possible_end && possible_end <= bucket_end)){
+         first_node_of_group = dcast_bucket_ptr(possible_end);
+         last_node_group   = group_traits::get_next(first_node_of_group);
+         possible_end      = node_traits::get_next(last_node_group);
+      }
+      return possible_end;
+   }
+
+   static node_ptr priv_get_prev_to_first_in_group(slist_node_ptr bucket_node, node_ptr first_in_group)
+   {
+      //Just iterate using group links and obtain the node
+      //before "first_in_group)"
+      node_ptr prev_node = dcast_bucket_ptr(bucket_node);
+      node_ptr nxt(node_traits::get_next(prev_node));
+      while(nxt != first_in_group){
+         prev_node = group_traits::get_next(nxt);
+         nxt = node_traits::get_next(prev_node);
+      }
+      return prev_node;
+   }
+
+   static node_ptr priv_get_first_in_group_of_last_in_group(node_ptr last_in_group)
+   {
+      //Just iterate using group links and obtain the node
+      //before "last_in_group"
+      node_ptr possible_first = group_traits::get_next(last_in_group);
+      node_ptr possible_first_prev = group_traits::get_next(possible_first);
+      // The deleted node is at the end of the group, so the
+      // node in the group pointing to it is at the beginning
+      // of the group. Find that to change its pointer.
+      while(possible_first_prev != last_in_group){
+         possible_first = possible_first_prev;
+         possible_first_prev = group_traits::get_next(possible_first);
+      }
+      return possible_first;
+   }
+
+   void priv_insert_in_group(node_ptr, node_ptr, detail::false_)
+   {}
+
+   static node_ptr priv_get_last_in_group(node_ptr first_in_group)
+   {  return priv_get_last_in_group(first_in_group, optimize_multikey_t());  }
+
+   static node_ptr priv_get_last_in_group(node_ptr first_in_group, detail::true_)
+   {  return group_traits::get_next(first_in_group);  }
+
+   static node_ptr priv_get_last_in_group(node_ptr n, detail::false_)
+   {  return n;  }
+
+   siterator priv_get_previous
+      (bucket_type &b, siterator i)
+   {  return priv_get_previous(b, i, optimize_multikey_t());   }
+
+   siterator priv_get_previous
+      (bucket_type &b, siterator i, detail::true_)
+   {
+      node_ptr elem(dcast_bucket_ptr(i.pointed_node()));
+      node_ptr prev_in_group(group_traits::get_next(elem));
+      bool first_in_group = node_traits::get_next(prev_in_group) != elem;
+      
+      typename bucket_type::node &n = first_in_group
+         ? *priv_get_prev_to_first_in_group(b.end().pointed_node(), elem)
+         : *group_traits::get_next(elem)
+         ;
+      return bucket_type::s_iterator_to(n);
+   }
+
+   siterator priv_get_previous
+      (bucket_type &b, siterator i, detail::false_)
+   {  return b.previous(i);   }
+
+   static siterator priv_get_last(bucket_type &b)
+   {  return priv_get_last(b, optimize_multikey_t());  }
+
+   static siterator priv_get_last(bucket_type &b, detail::true_)
+   {
+      //First find the last node of p's group.
+      //This requires checking the first node of the next group or
+      //the bucket node.
+      slist_node_ptr end_ptr(b.end().pointed_node());
+      node_ptr possible_end(node_traits::get_next( dcast_bucket_ptr(end_ptr)));
+      node_ptr last_node_group(possible_end);
+
+      while(end_ptr != possible_end){
+         last_node_group   = group_traits::get_next(dcast_bucket_ptr(possible_end));
+         possible_end      = node_traits::get_next(last_node_group);
+      }
+      return bucket_type::s_iterator_to(*last_node_group);
+   }
+
+   static siterator priv_get_last(bucket_type &b, detail::false_)
+   {  return b.previous(b.end());   }
+
+   siterator priv_get_previous_and_next_in_group
+      (siterator i, node_ptr &nxt_in_group)
+   {
+      siterator prev;
+      node_ptr elem(dcast_bucket_ptr(i.pointed_node()));
+      bucket_ptr f(priv_buckets()), l(f + priv_buckets_len() - 1);
+
+      slist_node_ptr first_end_ptr(f->cend().pointed_node());
+      slist_node_ptr last_end_ptr (l->cend().pointed_node());
+
+      node_ptr nxt(node_traits::get_next(elem));
+      node_ptr prev_in_group(group_traits::get_next(elem));
+      bool last_in_group = (first_end_ptr <= nxt && nxt <= last_end_ptr) ||
+                            (group_traits::get_next(nxt) != elem);
+      bool first_in_group = node_traits::get_next(prev_in_group) != elem;
+      
+      if(first_in_group){
+         node_ptr start_pos;
+         if(last_in_group){
+            start_pos = elem;
+            nxt_in_group = 0;
+         }
+         else{
+            start_pos = prev_in_group;
+            nxt_in_group = node_traits::get_next(elem);
+         }
+         slist_node_ptr bucket_node;
+         if(store_hash){
+            bucket_node = this->priv_buckets()
+               [this->priv_hash_to_bucket
+                  (this->priv_stored_hash(elem, store_hash_t()))
+               ].before_begin().pointed_node();
+         }
+         else{
+            bucket_node = priv_get_bucket_before_begin
+                  (first_end_ptr, last_end_ptr, start_pos);
+         }
+         prev = bucket_type::s_iterator_to
+            (*priv_get_prev_to_first_in_group(bucket_node, elem));
+      }
+      else{
+         if(last_in_group){
+            nxt_in_group = priv_get_first_in_group_of_last_in_group(elem);
+         }
+         else{
+            nxt_in_group = node_traits::get_next(elem);
+         }
+         prev = bucket_type::s_iterator_to(*group_traits::get_next(elem));
+      }
+      return prev;
+   }
+
+   template<class Disposer>
+   void priv_erase(const_iterator i, Disposer disposer, detail::true_)
+   {
+      siterator elem(i.slist_it());
+      node_ptr nxt_in_group;
+      siterator prev = priv_get_previous_and_next_in_group(elem, nxt_in_group);
+      bucket_type::s_erase_after_and_dispose(prev, make_node_disposer(disposer));
+      if(nxt_in_group)
+         group_algorithms::unlink_after(nxt_in_group);
+      if(safemode_or_autounlink)
+         group_algorithms::init(dcast_bucket_ptr(elem.pointed_node()));
+   }
+
+   template <class Disposer>
+   void priv_erase(const_iterator i, Disposer disposer, detail::false_)
+   {
+      siterator to_erase(i.slist_it());
+      bucket_type &b = this->priv_buckets()[this->priv_get_bucket_num(to_erase)];
+      siterator prev(priv_get_previous(b, to_erase));
+      b.erase_after_and_dispose(prev, make_node_disposer(disposer));
+   }
+
+   bucket_ptr priv_invalid_bucket() const
+   {
+      const real_bucket_traits &rbt = this->priv_real_bucket_traits();
+      return rbt.bucket_begin() + rbt.bucket_count();
+   }
+   
+   siterator priv_invalid_local_it() const
+   {  return priv_invalid_bucket()->end();  }
+
+   siterator priv_begin(size_type &bucket_num) const
+   {  return priv_begin(bucket_num, cache_begin_t()); }
+
+   siterator priv_begin(size_type &bucket_num, detail::bool_<false>) const
+   {
+      size_type n = 0;
+      size_type buckets_len = this->priv_buckets_len();
+      for (n = 0; n < buckets_len; ++n){
+         bucket_type &b = this->priv_buckets()[n];
+         if(!b.empty()){
+            bucket_num = n;
+            return b.begin();
+         }
+      }
+      bucket_num = n;
+      return priv_invalid_local_it();
+   }
+
+   siterator priv_begin(size_type &bucket_num, detail::bool_<true>) const
+   {
+      bucket_num = this->bucket_hash_equal_.cached_begin_ - this->priv_buckets();
+      if(this->bucket_hash_equal_.cached_begin_ == priv_invalid_bucket()){
+         return priv_invalid_local_it();
+      }
+      else{
+         return this->bucket_hash_equal_.cached_begin_->begin();
+      }
+   }
+
+   void priv_initialize_cache()
+   {  priv_initialize_cache(cache_begin_t());   }
+
+   void priv_initialize_cache(detail::bool_<true>)
+   {  this->bucket_hash_equal_.cached_begin_ = priv_invalid_bucket();  }
+
+   void priv_initialize_cache(detail::bool_<false>)
+   {}
+
+   void priv_insertion_update_cache(size_type insertion_bucket)
+   {  priv_insertion_update_cache(insertion_bucket, cache_begin_t()); }
+
+   void priv_insertion_update_cache(size_type insertion_bucket, detail::bool_<true>)
+   {
+      bucket_ptr p = priv_buckets() + insertion_bucket;
+      if(p < this->bucket_hash_equal_.cached_begin_){
+         this->bucket_hash_equal_.cached_begin_ = p;
+      }
+   }
+
+   void priv_insertion_update_cache(size_type, detail::bool_<false>)
+   {}
+
+   void priv_erasure_update_cache(size_type first_bucket, size_type last_bucket)
+   {  priv_erasure_update_cache(first_bucket, last_bucket, cache_begin_t()); }
+
+   void priv_erasure_update_cache(size_type first_bucket_num, size_type last_bucket_num, detail::bool_<true>)
+   {
+      //If the last bucket is the end, the cache must be updated
+      //to the last position if all
+      if(priv_get_cache_bucket_num() == first_bucket_num   &&
+         priv_buckets()[first_bucket_num].empty()          ){
+         priv_set_cache(priv_buckets() + last_bucket_num);
+         priv_erasure_update_cache();
+      }
+   }
+
+   void priv_erasure_update_cache(size_type, size_type, detail::bool_<false>)
+   {}
+
+   void priv_erasure_update_cache()
+   {  priv_erasure_update_cache(cache_begin_t()); }
+
+   void priv_erasure_update_cache(detail::bool_<true>)
+   {
+      if(constant_time_size && !size()){
+         priv_initialize_cache();
+      }
+      else{
+         size_type current_n = this->bucket_hash_equal_.cached_begin_ - priv_buckets();
+         for( const size_type num_buckets = this->priv_buckets_len()
+            ; current_n < num_buckets
+            ; ++current_n, ++this->bucket_hash_equal_.cached_begin_){
+            if(!this->bucket_hash_equal_.cached_begin_->empty()){
+               return;
+            }
+         }
+         priv_initialize_cache();
+      }
+   }
+
+   void priv_erasure_update_cache(detail::bool_<false>)
+   {}
+
+   void priv_swap_cache(detail::bool_<true>, hashtable_impl &other)
+   {
+      std::swap( this->bucket_hash_equal_.cached_begin_
+               , other.bucket_hash_equal_.cached_begin_);
+   }
+
+   void priv_swap_cache(detail::bool_<false>, hashtable_impl &)
+   {}
+
+   bucket_ptr priv_get_cache()
+   {  return priv_get_cache(cache_begin_t());   }
+
+   bucket_ptr priv_get_cache(detail::bool_<true>)
+   {  return this->bucket_hash_equal_.cached_begin_;  }
+
+   bucket_ptr priv_get_cache(detail::bool_<false>)
+   {  return this->priv_buckets();  }
+
+   void priv_set_cache(bucket_ptr p)
+   {  priv_set_cache(p, cache_begin_t());   }
+
+   void priv_set_cache(bucket_ptr p, detail::bool_<true>)
+   {  this->bucket_hash_equal_.cached_begin_ = p;  }
+
+   void priv_set_cache(bucket_ptr, detail::bool_<false>)
+   {}
+
+   size_type priv_get_cache_bucket_num()
+   {  return priv_get_cache_bucket_num(cache_begin_t());   }
+
+   size_type priv_get_cache_bucket_num(detail::bool_<true>)
+   {  return this->bucket_hash_equal_.cached_begin_ - this->priv_buckets();  }
+
+   size_type priv_get_cache_bucket_num(detail::bool_<false>)
+   {  return 0u;  }
+
+   void priv_clear_buckets()
+   {
+      this->priv_clear_buckets
+         ( priv_get_cache()
+         , this->priv_buckets_len() - (priv_get_cache() - priv_buckets()));
+   }
+
+   void priv_initialize_buckets()
+   {
+      this->priv_clear_buckets
+         ( priv_buckets(), this->priv_buckets_len());
+   }
+
+   void priv_clear_buckets(bucket_ptr buckets_ptr, size_type buckets_len)
    {
       for(; buckets_len--; ++buckets_ptr){
          if(safemode_or_autounlink){
+            priv_clear_group_nodes(*buckets_ptr, optimize_multikey_t());
             buckets_ptr->clear_and_dispose(detail::init_disposer<node_algorithms>());
          }
          else{
             buckets_ptr->clear();
          }
       }
+      priv_initialize_cache();
    }
 
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    siterator priv_find
       ( const KeyType &key,  KeyHasher hash_func
-      , KeyValueEqual equal_func, size_type &bucket_number, size_type &h) const
+      , KeyValueEqual equal_func, size_type &bucket_number, std::size_t &h, siterator &previt) const
    {
-      bucket_number = from_hash_to_bucket((h = hash_func(key)));
+      bucket_number = priv_hash_to_bucket((h = hash_func(key)));
 
       if(constant_time_size && this->empty()){
-         return invalid_local_it(this->get_real_bucket_traits());
+         return priv_invalid_local_it();
       }
       
       bucket_type &b = this->priv_buckets()[bucket_number];
-      siterator it = b.begin();
+      previt = b.before_begin();
+      siterator it = previt;
+      ++it;
 
       while(it != b.end()){
-         const value_type &v = 
-            *this->get_real_value_traits().to_value_ptr(it.pointed_node());
-         if(equal_func(key, v)){
+         const value_type &v = priv_value_from_slist_node(it.pointed_node());
+         if(compare_hash){
+            std::size_t vh = this->priv_stored_hash(v, store_hash_t());
+            if(h == vh && equal_func(key, v)){
+               return it;
+            }
+         }
+         else if(equal_func(key, v)){
             return it;
+         }
+         if(optimize_multikey){
+            previt = bucket_type::s_iterator_to
+               (*priv_get_last_in_group(dcast_bucket_ptr(it.pointed_node())));
+            it = previt;
+         }
+         else{
+            previt = it;
          }
          ++it;
       }
 
-      return invalid_local_it(this->get_real_bucket_traits());
+      return priv_invalid_local_it();
    }
 
    template<class KeyType, class KeyHasher, class KeyValueEqual>
@@ -1820,33 +2489,52 @@ class hashtable_impl
       , size_type &bucket_number_second
       , size_type &count) const
    {
-      size_type h;
+      std::size_t h;
       count = 0;
+      siterator prev;
       //Let's see if the element is present
       std::pair<siterator, siterator> to_return
-         ( priv_find(key, hash_func, equal_func, bucket_number_first, h)
-         , invalid_local_it(this->get_real_bucket_traits()));
+         ( priv_find(key, hash_func, equal_func, bucket_number_first, h, prev)
+         , priv_invalid_local_it());
       if(to_return.first == to_return.second){
          bucket_number_second = bucket_number_first;
          return to_return;
       }
-      ++count;
       //If it's present, find the first that it's not equal in
       //the same bucket
       bucket_type &b = this->priv_buckets()[bucket_number_first];
       siterator it = to_return.first;
-      ++it;
-
-      while(it != b.end()){
-         const value_type &v = 
-            *this->get_real_value_traits().to_value_ptr(it.pointed_node());
-         if(!equal_func(key, v)){
-            to_return.second = it;
+      if(optimize_multikey){
+         to_return.second = bucket_type::s_iterator_to
+            (*node_traits::get_next(priv_get_last_in_group
+               (dcast_bucket_ptr(it.pointed_node()))));
+         count = std::distance(it, to_return.second);
+         if(to_return.second !=  b.end()){
             bucket_number_second = bucket_number_first;
             return to_return;
          }
-         ++it;
+      }
+      else{
          ++count;
+         ++it;
+         while(it != b.end()){
+            const value_type &v = priv_value_from_slist_node(it.pointed_node());
+            if(compare_hash){
+               std::size_t hv = this->priv_stored_hash(v, store_hash_t());
+               if(hv != h || !equal_func(key, v)){
+                  to_return.second = it;
+                  bucket_number_second = bucket_number_first;
+                  return to_return;
+               }
+            }
+            else if(!equal_func(key, v)){
+               to_return.second = it;
+               bucket_number_second = bucket_number_first;
+               return to_return;
+            }
+            ++it;
+            ++count;
+         }
       }
    
       //If we reached the end, find the first, non-empty bucket
@@ -1861,22 +2549,25 @@ class hashtable_impl
       }
 
       //Otherwise, return the end node
-      to_return.second = invalid_local_it(this->get_real_bucket_traits());
+      to_return.second = priv_invalid_local_it();
       return to_return;
    }
    /// @endcond
 };
 
 /// @cond
-template<class T, class O1 = none, class O2 = none
-                , class O3 = none, class O4 = none
-                , class O5 = none, class O6 = none
-                , class O7 = none
-                >
+template < class T
+         , bool UniqueKeys
+         , class O1 = none, class O2 = none
+         , class O3 = none, class O4 = none
+         , class O5 = none, class O6 = none
+         , class O7 = none, class O8 = none
+         , class O9 = none
+         >
 struct make_hashtable_opt
 {
    typedef typename pack_options
-      < uset_defaults<T>, O1, O2, O3, O4, O5, O6, O7>::type packed_options;
+      < uset_defaults<T>, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type packed_options;
 
    //Real value traits must be calculated from options
    typedef typename detail::get_value_traits
@@ -1891,9 +2582,13 @@ struct make_hashtable_opt
       >::type                                            real_value_traits;
    typedef typename packed_options::bucket_traits        specified_bucket_traits;   
    /// @endcond
-   //Real bucket traits must be calculated from options and calculated valute_traits
-   typedef typename get_slist_impl
-      <typename real_value_traits::node_traits>::type    slist_impl;
+
+   //Real bucket traits must be calculated from options and calculated value_traits
+   typedef typename detail::get_slist_impl
+      <typename detail::reduced_slist_node_traits
+         <typename real_value_traits::node_traits>::type
+      >::type                                            slist_impl;
+
    typedef typename
       detail::if_c< detail::is_same
                      < specified_bucket_traits
@@ -1905,12 +2600,15 @@ struct make_hashtable_opt
 
    typedef usetopt
       < value_traits
+      , UniqueKeys
       , typename packed_options::hash
       , typename packed_options::equal
       , typename packed_options::size_type
       , packed_options::constant_time_size
       , real_bucket_traits
       , packed_options::power_2_buckets
+      , packed_options::cache_begin
+      , packed_options::compare_hash
       > type;
 };
 /// @endcond
@@ -1923,7 +2621,8 @@ template<class T, class ...Options>
 template<class T, class O1 = none, class O2 = none
                 , class O3 = none, class O4 = none
                 , class O5 = none, class O6 = none
-                , class O7 = none
+                , class O7 = none, class O8 = none
+                , class O9 = none
                 >
 #endif
 struct make_hashtable
@@ -1931,7 +2630,7 @@ struct make_hashtable
    /// @cond
    typedef hashtable_impl
       <  typename make_hashtable_opt
-            <T, O1, O2, O3, O4, O5, O6, O7>::type
+            <T, false, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
       > implementation_defined;
 
    /// @endcond
@@ -1939,12 +2638,12 @@ struct make_hashtable
 };
 
 #ifndef BOOST_INTRUSIVE_DOXYGEN_INVOKED
-template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7>
+template<class T, class O1, class O2, class O3, class O4, class O5, class O6, class O7, class O8, class O9>
 class hashtable
-   :  public make_hashtable<T, O1, O2, O3, O4, O5, O6, O7>::type
+   :  public make_hashtable<T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type
 {
    typedef typename make_hashtable
-      <T, O1, O2, O3, O4, O5, O6, O7>::type   Base;
+      <T, O1, O2, O3, O4, O5, O6, O7, O8, O9>::type   Base;
 
    public:
    typedef typename Base::value_traits       value_traits;

@@ -379,13 +379,35 @@ class rbtree_impl
    //! <b>Precondition</b>: end_iterator must be a valid end const_iterator
    //!   of rbtree.
    //! 
-   //! <b>Effects</b>: Returns a const reference to the rbtree associated to the end iterator
+   //! <b>Effects</b>: Returns a const reference to the rbtree associated to the iterator
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
    //! <b>Complexity</b>: Constant.
    static const rbtree_impl &container_from_end_iterator(const_iterator end_iterator)
    {  return priv_container_from_end_iterator(end_iterator);   }
+
+   //! <b>Precondition</b>: it must be a valid iterator
+   //!   of rbtree.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the tree associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static rbtree_impl &container_from_iterator(iterator it)
+   {  return priv_container_from_iterator(it);   }
+
+   //! <b>Precondition</b>: it must be a valid end const_iterator
+   //!   of rbtree.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the tree associated to the end iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const rbtree_impl &container_from_iterator(const_iterator it)
+   {  return priv_container_from_iterator(it);   }
 
    //! <b>Effects</b>: Returns the value_compare object used by the tree.
    //! 
@@ -1176,33 +1198,26 @@ class rbtree_impl
    static void init_node(reference value)
    { node_algorithms::init(value_traits::to_node_ptr(value)); }
 
-/*
-   //! <b>Effects</b>: removes x from a tree of the appropriate type. It has no effect,
-   //! if x is not in such a tree. 
+   //! <b>Effects</b>: removes "value" from the container.
    //! 
    //! <b>Throws</b>: Nothing.
    //! 
-   //! <b>Complexity</b>: Constant time.
+   //! <b>Complexity</b>: Logarithmic time.
    //! 
-   //! <b>Note</b>: This static function is only usable with the "safe mode"
-   //! hook and non-constant time size lists. Otherwise, the user must use
-   //! the non-static "erase(reference )" member. If the user calls
-   //! this function with a non "safe mode" or constant time size list
-   //! a compilation error will be issued.
-   template<class T>
-   static void remove_node(T& value)
+   //! <b>Note</b>: This static function is only usable with non-constant
+   //! time size containers that have stateless comparison functors.
+   //!
+   //! If the user calls
+   //! this function with a constant time size container or stateful comparison
+   //! functor a compilation error will be issued.
+   static void remove_node(reference value)
    {
-      //This function is only usable for safe mode hooks and non-constant
-      //time lists. 
-      //BOOST_STATIC_ASSERT((!(safemode_or_autounlink && constant_time_size)));
       BOOST_STATIC_ASSERT((!constant_time_size));
-      BOOST_STATIC_ASSERT((boost::is_convertible<T, value_type>::value));
       node_ptr to_remove(value_traits::to_node_ptr(value));
-      node_algorithms::unlink_and_rebalance(to_remove);
+      node_algorithms::unlink(to_remove);
       if(safemode_or_autounlink)
          node_algorithms::init(to_remove);
    }
-*/
 
    /// @cond
    private:
@@ -1233,6 +1248,9 @@ class rbtree_impl
       rbtree_impl *rb  = detail::parent_from_member<rbtree_impl, data_t>(d, &rbtree_impl::data_);
       return *rb;
    }
+
+   static rbtree_impl &priv_container_from_iterator(const const_iterator &it)
+   {  return priv_container_from_end_iterator(it.end_iterator_from_it());   }
 };
 
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
@@ -1426,6 +1444,12 @@ class rbtree
 
    static const rbtree &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const rbtree &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static rbtree &container_from_it(iterator it)
+   {  return static_cast<rbtree &>(Base::container_from_iterator(it));   }
+
+   static const rbtree &container_from_it(const_iterator it)
+   {  return static_cast<const rbtree &>(Base::container_from_iterator(it));   }
 };
 
 #endif

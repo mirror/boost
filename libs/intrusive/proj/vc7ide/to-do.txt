@@ -1,0 +1,37 @@
+Implement incremental hashing:
+
+bucket_len is power of two
+cur_idx is always at least, half of bucket_len
+
+find bucket from value:
+   size_type bucket_num = hash(val) &(bucket_len - 1);
+   if (bucket_num >= cur_idx)
+	   bucket_num -= bucket_len/2;
+
+incremental_rehash:
+
+      iterator _Plist, _Where;
+      if (load_factor > LoadFactorLimit)
+      {	// too dense, need to grow hash table
+         if (cur_idx >= (bucket_len - 1))
+         {	// table full, request doubling
+            return false;
+         }
+         else if (cur_idx >= bucket_len)
+            bucket_len*=2;
+
+         size_type bucket_num = cur_idx - bucket_len/2;
+         // rehash elements from bucket_num
+         ++cur_idx;
+       }
+
+insert from value:
+
+   size_type bucket_num = hash(val) & (bucket_len - 1);
+   if (bucket_num >= cur_idx)
+	   bucket_num -= bucket_len/2;
+   insert in bucket
+
+rehash:
+
+

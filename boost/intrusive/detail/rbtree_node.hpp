@@ -18,7 +18,7 @@
 #include <iterator>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/rbtree_algorithms.hpp>
-#include <boost/intrusive/pointer_plus_bit.hpp>
+#include <boost/intrusive/pointer_plus_bits.hpp>
 #include <boost/intrusive/detail/mpl.hpp>
 
 namespace boost {
@@ -110,7 +110,7 @@ struct compact_rbtree_node_traits_impl
    typedef typename boost::pointer_to_other
       <VoidPointer, const node>::type    const_node_ptr;
 
-   typedef pointer_plus_bit<node_ptr> ptr_bit;
+   typedef pointer_plus_bits<node_ptr, 1> ptr_bit;
 
    typedef typename node::color color;
 
@@ -133,10 +133,10 @@ struct compact_rbtree_node_traits_impl
    {  n->right_ = r;  }
 
    static color get_color(const_node_ptr n)
-   {  return (color)ptr_bit::get_bit(n->parent_);  }
+   {  return (color)ptr_bit::get_bits(n->parent_);  }
 
    static void set_color(node_ptr n, color c)
-   {  ptr_bit::set_bit(n->parent_, c != 0);  }
+   {  ptr_bit::set_bits(n->parent_, c != 0);  }
 
    static color black()
    {  return node::black_t;  }
@@ -146,7 +146,7 @@ struct compact_rbtree_node_traits_impl
 };
 
 //Dispatches the implementation based on the boolean
-template<class VoidPointer, bool compact>
+template<class VoidPointer, bool Compact>
 struct rbtree_node_traits_dispatch
    :  public default_rbtree_node_traits_impl<VoidPointer>
 {};
@@ -161,11 +161,11 @@ template<class VoidPointer, bool OptimizeSize = false>
 struct rbtree_node_traits
    :  public rbtree_node_traits_dispatch
          < VoidPointer
-         , OptimizeSize &&
-            has_pointer_plus_bit
+         ,  OptimizeSize &&
+           (max_pointer_plus_bits
             < VoidPointer
             , detail::alignment_of<compact_rbtree_node<VoidPointer> >::value 
-            >::value
+            >::value >= 1)
          >
 {};
 

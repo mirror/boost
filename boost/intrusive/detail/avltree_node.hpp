@@ -17,7 +17,7 @@
 #include <iterator>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/avltree_algorithms.hpp>
-#include <boost/intrusive/pointer_plus_2_bits.hpp>
+#include <boost/intrusive/pointer_plus_bits.hpp>
 #include <boost/intrusive/detail/mpl.hpp>
 
 namespace boost {
@@ -111,7 +111,7 @@ struct compact_avltree_node_traits_impl
       <VoidPointer, const node>::type    const_node_ptr;
    typedef typename node::balance balance;
 
-   typedef pointer_plus_2_bits<node_ptr> ptr_bit;
+   typedef pointer_plus_bits<node_ptr, 2> ptr_bit;
 
    static node_ptr get_parent(const_node_ptr n)
    {  return ptr_bit::get_pointer(n->parent_);  }
@@ -148,7 +148,7 @@ struct compact_avltree_node_traits_impl
 };
 
 //Dispatches the implementation based on the boolean
-template<class VoidPointer, bool compact>
+template<class VoidPointer, bool Compact>
 struct avltree_node_traits_dispatch
    :  public default_avltree_node_traits_impl<VoidPointer>
 {};
@@ -164,10 +164,10 @@ struct avltree_node_traits
    :  public avltree_node_traits_dispatch
          < VoidPointer
          , OptimizeSize &&
-            has_pointer_plus_2_bits
+            max_pointer_plus_bits
             < VoidPointer
             , detail::alignment_of<compact_avltree_node<VoidPointer> >::value 
-            >::value
+            >::value >= 2u
          >
 {};
 

@@ -387,6 +387,28 @@ class avltree_impl
    static const avltree_impl &container_from_end_iterator(const_iterator end_iterator)
    {  return priv_container_from_end_iterator(end_iterator);   }
 
+   //! <b>Precondition</b>: it must be a valid iterator
+   //!   of rbtree.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the tree associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static avltree_impl &container_from_iterator(iterator it)
+   {  return priv_container_from_iterator(it);   }
+
+   //! <b>Precondition</b>: it must be a valid end const_iterator
+   //!   of rbtree.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the tree associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const avltree_impl &container_from_iterator(const_iterator it)
+   {  return priv_container_from_iterator(it);   }
+
    //! <b>Effects</b>: Returns the value_compare object used by the tree.
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1233,6 +1255,9 @@ class avltree_impl
       avltree_impl *avl  = detail::parent_from_member<avltree_impl, data_t>(d, &avltree_impl::data_);
       return *avl;
    }
+
+   static avltree_impl &priv_container_from_iterator(const const_iterator &it)
+   {  return priv_container_from_end_iterator(it.end_iterator_from_it());   }
 };
 
 #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
@@ -1426,6 +1451,12 @@ class avltree
 
    static const avltree &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const avltree &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static avltree &container_from_iterator(iterator it)
+   {  return static_cast<avltree &>(Base::container_from_iterator(it));   }
+
+   static const avltree &container_from_iterator(const_iterator it)
+   {  return static_cast<const avltree &>(Base::container_from_iterator(it));   }
 };
 
 #endif

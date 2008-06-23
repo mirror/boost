@@ -50,12 +50,47 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <cstddef>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
 #include <boost/intrusive/detail/tree_algorithms.hpp>
 
 namespace boost {
 namespace intrusive {
+
+/// @cond
+namespace detail {
+
+template<class NodeTraits>
+struct splaydown_rollback
+{
+   typedef typename NodeTraits::node_ptr node_ptr;
+   splaydown_rollback( const node_ptr *pcur_subtree, node_ptr header
+                     , node_ptr leftmost           , node_ptr rightmost)
+      : pcur_subtree_(pcur_subtree)  , header_(header)
+      , leftmost_(leftmost)   , rightmost_(rightmost)
+   {}
+
+   void release()
+   {  pcur_subtree_ = 0;  }
+
+   ~splaydown_rollback()
+   {
+      if(pcur_subtree_){
+         //Exception can only be thrown by comp, but
+         //tree invariants still hold. *pcur_subtree is the current root
+         //so link it to the header.
+         NodeTraits::set_parent(*pcur_subtree_, header_);
+         NodeTraits::set_parent(header_, *pcur_subtree_);
+         //Recover leftmost/rightmost pointers
+         NodeTraits::set_left (header_, leftmost_);
+         NodeTraits::set_right(header_, rightmost_);
+      }
+   }
+   const node_ptr *pcur_subtree_;
+   node_ptr header_, leftmost_, rightmost_;
+};
+
+}  //namespace detail {
+/// @endcond
 
 //!   A splay tree is an implementation of a binary search tree. The tree is
 //!   self balancing using the splay algorithm as described in
@@ -95,11 +130,11 @@ class splaytree_algorithms
 {
    /// @cond
    private:
-   typedef typename NodeTraits::node            node;
    typedef detail::tree_algorithms<NodeTraits>  tree_algorithms;
    /// @endcond
 
    public:
+   typedef typename NodeTraits::node            node;
    typedef NodeTraits                           node_traits;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
@@ -656,7 +691,8 @@ class splaytree_algorithms
       node_ptr leftmost    = NodeTraits::get_left(header);
       node_ptr rightmost   = NodeTraits::get_right(header);
 
-      try{
+      {
+         detail::splaydown_rollback<NodeTraits> rollback(&t, header, leftmost, rightmost);
          node_ptr null = header;
          node_ptr l = null;
          node_ptr r = null;
@@ -712,18 +748,9 @@ class splaytree_algorithms
          }
 
          assemble(t, l, r, null);
+         rollback.release();
       }
-      catch(...){
-         //Exception can only be thrown by comp, but
-         //tree invariants still hold. t is the current root
-         //so link it to the header.
-         NodeTraits::set_parent(t, header);
-         NodeTraits::set_parent(header, t);
-         //Recover leftmost/rightmost pointers
-         NodeTraits::set_left (header, leftmost);
-         NodeTraits::set_right(header, rightmost);
-         throw;
-      }
+
       //t is the current root
       NodeTraits::set_parent(header, t);
       NodeTraits::set_parent(t, header);
@@ -754,6 +781,17 @@ class splaytree_algorithms
    //! <b>Complexity</b>: Linear.
    static node_ptr rebalance_subtree(node_ptr old_root)
    {  return tree_algorithms::rebalance_subtree(old_root); }
+
+
+   //! <b>Requires</b>: "n" must be a node inserted in a tree.
+   //!
+   //! <b>Effects</b>: Returns a pointer to the header node of the tree.
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static node_ptr get_header(node_ptr n)
+   {  return tree_algorithms::get_header(n);   }
 
    private:
 

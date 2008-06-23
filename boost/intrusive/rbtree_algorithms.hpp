@@ -54,7 +54,6 @@
 #include <boost/intrusive/intrusive_fwd.hpp>
 
 #include <boost/intrusive/detail/assert.hpp>
-#include <boost/intrusive/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
 #include <boost/intrusive/detail/tree_algorithms.hpp>
 
@@ -117,6 +116,7 @@ class rbtree_algorithms
 {
    public:
    typedef NodeTraits                           node_traits;
+   typedef typename NodeTraits::node            node;
    typedef typename NodeTraits::node_ptr        node_ptr;
    typedef typename NodeTraits::const_node_ptr  const_node_ptr;
    typedef typename NodeTraits::color           color;
@@ -124,7 +124,6 @@ class rbtree_algorithms
    /// @cond
    private:
 
-   typedef typename NodeTraits::node            node;
    typedef detail::tree_algorithms<NodeTraits>  tree_algorithms;
 
    template<class F>
@@ -694,6 +693,16 @@ class rbtree_algorithms
       tree_algorithms::insert_unique_commit(header, new_value, commit_data);
       rebalance_after_insertion(header, new_value);
    }
+
+   //! <b>Requires</b>: "n" must be a node inserted in a tree.
+   //!
+   //! <b>Effects</b>: Returns a pointer to the header node of the tree.
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   static node_ptr get_header(node_ptr n)
+   {  return tree_algorithms::get_header(n);   }
 
    /// @cond
    private:

@@ -168,6 +168,11 @@ class tree_iterator
          return 0;
    }
 
+   tree_iterator end_iterator_from_it() const
+   {
+      return tree_iterator(node_algorithms::get_header(this->pointed_node()), this->get_container());
+   }
+
    private:
    struct members
       :  public detail::select_constptr

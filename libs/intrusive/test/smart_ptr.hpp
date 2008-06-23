@@ -12,8 +12,7 @@
 #define BOOST_INTRUSIVE_SMART_PTR_HPP
 
 #include <boost/iterator.hpp>
-#include <boost/intrusive/pointer_plus_bit.hpp>
-#include <boost/intrusive/pointer_plus_2_bits.hpp>
+#include <boost/intrusive/pointer_plus_bits.hpp>
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -109,7 +108,7 @@ class smart_ptr
    public:   //Public Functions
 
    //!Constructor from raw pointer (allows "0" pointer conversion). Never throws.
-   smart_ptr(pointer ptr = 0)
+   explicit smart_ptr(pointer ptr = 0)
       :  m_ptr(ptr)
    {}
 
@@ -351,67 +350,34 @@ namespace boost{
 //for intrusive containers, saving space
 namespace intrusive {
 
-template<std::size_t N>
-struct has_pointer_plus_bit<smart_ptr<void>, N>
+template<std::size_t Alignment>
+struct max_pointer_plus_bits<smart_ptr<void>, Alignment>
 {
-   static const bool value = has_pointer_plus_bit<void*, N>::value;
+   static const std::size_t value = max_pointer_plus_bits<void*, Alignment>::value;
 };
 
-//Specialization
-template<class T>
-struct pointer_plus_bit<smart_ptr<T> >
+template<class T, std::size_t NumBits>
+struct pointer_plus_bits<smart_ptr<T>, NumBits>
 {
    typedef smart_ptr<T>         pointer;
 
    static pointer get_pointer(const pointer &n)
-   {  return pointer_plus_bit<T*>::get_pointer(n.get());  }
+   {  return pointer_plus_bits<T*, NumBits>::get_pointer(n.get());  }
 
    static void set_pointer(pointer &n, pointer p)
    {
       T *raw_n = n.get();
-      pointer_plus_bit<T*>::set_pointer(raw_n, p.get());
-      n = raw_n;
-   }
-
-   static bool get_bit(const pointer &n)
-   {  return pointer_plus_bit<T*>::get_bit(n.get());  }
-
-   static void set_bit(pointer &n, bool c)
-   {
-      T *raw_n = n.get();
-      pointer_plus_bit<T*>::set_bit(raw_n, c);
-      n = raw_n;
-   }
-};
-
-template<std::size_t N>
-struct has_pointer_plus_2_bits<smart_ptr<void>, N>
-{
-   static const bool value = has_pointer_plus_2_bits<void*, N>::value;
-};
-
-template<class T>
-struct pointer_plus_2_bits<smart_ptr<T> >
-{
-   typedef smart_ptr<T>         pointer;
-
-   static pointer get_pointer(const pointer &n)
-   {  return pointer_plus_2_bits<T*>::get_pointer(n.get());  }
-
-   static void set_pointer(pointer &n, pointer p)
-   {
-      T *raw_n = n.get();
-      pointer_plus_2_bits<T*>::set_pointer(raw_n, p.get());
+      pointer_plus_bits<T*, NumBits>::set_pointer(raw_n, p.get());
       n = raw_n;
    }
 
    static std::size_t get_bits(const pointer &n)
-   {  return pointer_plus_2_bits<T*>::get_bits(n.get());  }
+   {  return pointer_plus_bits<T*, NumBits>::get_bits(n.get());  }
 
    static void set_bits(pointer &n, std::size_t c)
    {
       T *raw_n = n.get();
-      pointer_plus_2_bits<T*>::set_bits(raw_n, c);
+      pointer_plus_bits<T*, NumBits>::set_bits(raw_n, c);
       n = raw_n;
    }
 };

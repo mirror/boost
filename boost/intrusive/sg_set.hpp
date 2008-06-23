@@ -252,6 +252,34 @@ class sg_set_impl
          , &sg_set_impl::tree_);
    }
 
+   //! <b>Precondition</b>: it must be a valid iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static sg_set_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<sg_set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &sg_set_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of set.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the set associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Logarithmic.
+   static const sg_set_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<sg_set_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &sg_set_impl::tree_);
+   }
+
    //! <b>Effects</b>: Returns the key_compare object used by the sg_set.
    //! 
    //! <b>Complexity</b>: Constant.
@@ -1124,6 +1152,12 @@ class sg_set
 
    static const sg_set &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const sg_set &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static sg_set &container_from_iterator(iterator it)
+   {  return static_cast<sg_set &>(Base::container_from_iterator(it));   }
+
+   static const sg_set &container_from_iterator(const_iterator it)
+   {  return static_cast<const sg_set &>(Base::container_from_iterator(it));   }
 };
 
 #endif
@@ -1353,6 +1387,34 @@ class sg_multiset_impl
    {
       return *detail::parent_from_member<sg_multiset_impl, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
+         , &sg_multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   static sg_multiset_impl &container_from_iterator(iterator it)
+   {
+      return *detail::parent_from_member<sg_multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
+         , &sg_multiset_impl::tree_);
+   }
+
+   //! <b>Precondition</b>: it must be a valid const_iterator of multiset.
+   //! 
+   //! <b>Effects</b>: Returns a const reference to the multiset associated to the iterator
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   static const sg_multiset_impl &container_from_iterator(const_iterator it)
+   {
+      return *detail::parent_from_member<sg_multiset_impl, tree_type>
+         ( &tree_type::container_from_iterator(it)
          , &sg_multiset_impl::tree_);
    }
 
@@ -2135,6 +2197,12 @@ class sg_multiset
 
    static const sg_multiset &container_from_end_iterator(const_iterator end_iterator)
    {  return static_cast<const sg_multiset &>(Base::container_from_end_iterator(end_iterator));   }
+
+   static sg_multiset &container_from_iterator(iterator it)
+   {  return static_cast<sg_multiset &>(Base::container_from_iterator(it));   }
+
+   static const sg_multiset &container_from_iterator(const_iterator it)
+   {  return static_cast<const sg_multiset &>(Base::container_from_iterator(it));   }
 };
 
 #endif

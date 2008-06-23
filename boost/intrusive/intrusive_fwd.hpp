@@ -283,8 +283,7 @@ template
    >
 class bs_set_member_hook;
 
-//hash/unordered
-//rbtree/set/multiset
+//hashtable/unordered_set/unordered_multiset
 template
    < class T
    , class O1  = none
@@ -294,6 +293,8 @@ template
    , class O5  = none
    , class O6  = none
    , class O7  = none
+   , class O8  = none
+   , class O9  = none
    >
 class hashtable;
 
@@ -306,6 +307,8 @@ template
    , class O5  = none
    , class O6  = none
    , class O7  = none
+   , class O8  = none
+   , class O9  = none
    >
 class unordered_set;
 
@@ -318,6 +321,8 @@ template
    , class O5  = none
    , class O6  = none
    , class O7  = none
+   , class O8  = none
+   , class O9  = none
    >
 class unordered_multiset;
 
@@ -336,6 +341,20 @@ template
    , class O4  = none
    >
 class unordered_set_member_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class any_base_hook;
+
+template
+   < class O1  = none
+   , class O2  = none
+   , class O3  = none
+   >
+class any_member_hook;
 
 }  //namespace intrusive {
 }  //namespace boost {
