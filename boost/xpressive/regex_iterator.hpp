@@ -40,13 +40,13 @@ struct regex_iterator_impl
       , BidiIter cur
       , BidiIter end
       , BidiIter next_search
-      , basic_regex<BidiIter> const *rex
+      , basic_regex<BidiIter> const &rex
       , regex_constants::match_flag_type flags
       , bool not_null = false
     )
-      : what_()
-      , state_(begin, end, what_, *access::get_regex_impl(*rex), flags)
-      , rex_(rex)
+      : rex_(rex)
+      , what_()
+      , state_(begin, end, what_, *access::get_regex_impl(rex_), flags)
       , flags_(flags)
       , not_null_(not_null)
     {
@@ -56,8 +56,8 @@ struct regex_iterator_impl
 
     bool next()
     {
-        this->state_.reset(this->what_, *access::get_regex_impl(*this->rex_));
-        if(!regex_search_impl(this->state_, *this->rex_, this->not_null_))
+        this->state_.reset(this->what_, *access::get_regex_impl(this->rex_));
+        if(!regex_search_impl(this->state_, this->rex_, this->not_null_))
         {
             return false;
         }
@@ -73,17 +73,17 @@ struct regex_iterator_impl
 
     bool equal_to(regex_iterator_impl<BidiIter> const &that) const
     {
-        return this->rex_           == that.rex_
-            && this->state_.begin_  == that.state_.begin_
-            && this->state_.cur_    == that.state_.cur_
-            && this->state_.end_    == that.state_.end_
-            && this->flags_         == that.flags_
+        return this->rex_.regex_id()    == that.rex_.regex_id()
+            && this->state_.begin_      == that.state_.begin_
+            && this->state_.cur_        == that.state_.cur_
+            && this->state_.end_        == that.state_.end_
+            && this->flags_             == that.flags_
             ;
     }
 
+    basic_regex<BidiIter> rex_;
     match_results<BidiIter> what_;
     match_state<BidiIter> state_;
-    basic_regex<BidiIter> const *const rex_;
     regex_constants::match_flag_type const flags_;
     bool not_null_;
 };
@@ -118,7 +118,7 @@ struct regex_iterator
       , basic_regex<BidiIter> const &rex
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, begin, &rex, flags))
+      : impl_(new impl_type_(begin, begin, end, begin, rex, flags))
     {
         this->next_();
     }
@@ -132,7 +132,7 @@ struct regex_iterator
       , detail::let_<LetExpr> const &args
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, begin, &rex, flags))
+      : impl_(new impl_type_(begin, begin, end, begin, rex, flags))
     {
         detail::bind_args(args, this->impl_->what_);
         this->next_();
