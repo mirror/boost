@@ -16,7 +16,7 @@
 # pragma once
 #endif
 
-#include <boost/assign/assignment_exception.hpp>
+#include <boost/assign/list_of.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>
@@ -41,7 +41,9 @@ namespace assign_detail
     /////////////////////////////////////////////////////////////////////////    
 
     template< class T > 
-    class generic_ptr_list       
+    class generic_ptr_list : 
+        public converter< generic_ptr_list<T>,
+                          BOOST_DEDUCED_TYPENAME boost::ptr_vector<T>::iterator >      
     {
     protected:
         typedef boost::ptr_vector<T>       impl_type;
@@ -50,7 +52,7 @@ namespace assign_detail
         
     public:
         typedef BOOST_DEDUCED_TYPENAME impl_type::iterator         iterator;
-        typedef BOOST_DEDUCED_TYPENAME impl_type::const_iterator   const_iterator;
+        typedef iterator                                           const_iterator;
         typedef BOOST_DEDUCED_TYPENAME impl_type::value_type       value_type;
         typedef BOOST_DEDUCED_TYPENAME impl_type::size_type        size_type;
         typedef BOOST_DEDUCED_TYPENAME impl_type::difference_type  difference_type;
@@ -58,12 +60,6 @@ namespace assign_detail
         generic_ptr_list() : values_( 32u )
         { }
 
-        /*
-        generic_ptr_list( const generic_ptr_list& r )
-        {
-            values_.swap(r.values_);
-        }*/
-        
         generic_ptr_list( release_type r ) : values_(r)
         { }
 
