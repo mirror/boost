@@ -224,7 +224,44 @@ void test_list_of()
 */
 }
 
+//
+// @remark: ADL is required here, but it is a bit wierd to
+//          open up namespace std. Perhaps Boost.Test needs a
+//          better configuration option. 
+//
+namespace std
+{
+    template< class T, class Elem, class Traits >
+    inline std::basic_ostream<Elem,Traits>& 
+    operator<<( std::basic_ostream<Elem, Traits>& Os,
+                const std::vector<T>& r )
+    {
+        return Os << ::boost::make_iterator_range( r.begin(),  r.end() );
+    }
+}
 
+template <class Seq>
+inline std::vector<int> as_seq( const Seq& s )
+{
+    std::vector<int> c;
+    return s.to_container( c );
+}
+
+void test_comparison_operations()
+{
+    BOOST_CHECK_EQUAL( ba::list_of(0)(1)(2), as_seq(ba::list_of(0)(1)(2)) );
+    BOOST_CHECK_NE( ba::list_of(0)(1)(2), as_seq(ba::list_of(-1)(1)(2)) );
+    BOOST_CHECK_LT( ba::list_of(0)(1)(2), as_seq(ba::list_of(0)(1)(3)) );
+    BOOST_CHECK_LE( ba::list_of(0)(1)(2), as_seq(ba::list_of(0)(1)(2)) );
+    BOOST_CHECK_GT( ba::list_of(0)(1)(3), as_seq(ba::list_of(0)(1)(2)) );
+    BOOST_CHECK_GE( ba::list_of(0)(1)(2), as_seq(ba::list_of(0)(1)(2)) );
+    BOOST_CHECK_EQUAL( as_seq(ba::list_of(0)(1)(2)), ba::list_of(0)(1)(2) );
+    BOOST_CHECK_NE( as_seq(ba::list_of(0)(1)(2)), ba::list_of(-1)(1)(2) );
+    BOOST_CHECK_LT( as_seq(ba::list_of(0)(1)(2)), ba::list_of(0)(1)(3) );
+    BOOST_CHECK_LE( as_seq(ba::list_of(0)(1)(2)), ba::list_of(0)(1)(2) );
+    BOOST_CHECK_GT( as_seq(ba::list_of(0)(1)(3)), ba::list_of(0)(1)(2) );
+    BOOST_CHECK_GE( as_seq(ba::list_of(0)(1)(2)), ba::list_of(0)(1)(2) );
+}
 
 void check_list_of()
 {
@@ -242,9 +279,8 @@ void check_list_of()
     
     std::stack<std::string> s = ba::list_of( "Foo" )( "Bar" )( "FooBar" ).to_adapter( s );
     test_list_of();
-    
     test_vector_matrix();
-
+    test_comparison_operations();
 }
 
 

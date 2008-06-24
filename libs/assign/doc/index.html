@@ -23,7 +23,7 @@
   </p>
   <p>
   Use, modification and distribution is subject to the Boost Software License, Version 1.0
-  (see <a href=http://www.boost.org/LICENSE_1_0.txt>
+  (see <a href="http://www.boost.org/LICENSE_1_0.txt">
    http://www.boost.org/LICENSE_1_0.txt</a>).
   </p>
   <h3>Table of Contents</h3>
@@ -706,7 +706,7 @@ object does the insertion or assignment by overloading <code>operator,()</code>
   All forwarding is done by passing objects by <code>const</code> reference. 
 Originally arguments were passed by value (and still is in 
 <code>tuple_list_of()</code>). One thing to remember is that references
-  can be passed by using <code>boost::<a href=http://www.boost.org/doc/html/ref.html>ref</a></code>.
+  can be passed by using <code>boost::<a href="http://www.boost.org/doc/html/ref.html">ref</a></code>.
   </p>
   
   <p>
@@ -871,7 +871,7 @@ be thrown by the proxy returned by <code>list_of()</code>
     <p>  
   These two functions are used to construct anonymous    
   list which can be converted to any standard container
-  and <code>boost::<a href=../../array/index.html>array</a>&lt;T,sz>.</code> 
+  and <code>boost::<a href="../../array/index.html">array</a>&lt;T,sz>.</code> 
 The object returned by the two
   functions is guaranteed to have the interface described below. 
   </p>
@@ -1292,9 +1292,9 @@ where <code>call_push_back</code> is defined as
   Here is a list libraries has been tested with Boost.Assign:
   
   <ol>
-      <li> <code>boost::<a href=../../array/index.html>array</a></code>
-      <li> <code>boost::<a href=../../multi_index/index.html>multi_index_container</a></code>
-      <li> <code>Boost.<a href=../../ptr_container/index.html>Pointer Container</code> </ol> <p>
+      <li> <code>boost::<a href="../../array/index.html">array</a></code>
+      <li> <code>boost::<a href="../../multi_index/index.html">multi_index_container</a></code>
+      <li> <code>Boost.<a href="../../ptr_container/index.html">Pointer Container</code> </ol> <p>
 
   </p>
   
@@ -1357,9 +1357,9 @@ The solution is to use <code>map_list_of()</code> instead:
   library is non-intrusive and puts only a minimum of requirements 
   on its supported classes.
  Overloading operator comma is sometimes viewed as a bad practice <a 
-href=#meyers>[1]</A>. However, it has been done
+href="#meyers">[1]</A>. However, it has been done
   with success in eg. the Generative Matrix Computation Library  and Blitz to initialize matrices 
-      (see <a href=#gmcl>[2]</A>) and <a href=#blitz>[3]</A>). The 
+      (see <a href="#gmcl">[2]</A>) and <a href="#blitz">[3]</A>). The 
 Initialization Library overloads
       the comma operator in a safe manner by letting free standing functions
  return an object that is responsible for the initialization. Therefore it takes 
@@ -1388,10 +1388,10 @@ support better initialization (see <a href="#initializer">[4]</a>).
   <ol>
       <li> <a name="meyers">     Scott. Meyers, "More Effective C++", Item 7, Addison Wesley, 1996       
       <li> <a name="gmcl">       K. Czarnecki and U.W. Eisenecker, "Generative programming", Addison-Wesley, 2000        
-      <li> <a name="blitz">      <a href=http://www.oonumerics.org/blitz/> http://www.oonumerics.org/blitz/ </A>     
+      <li> <a name="blitz">      <a href="http://www.oonumerics.org/blitz/"> http://www.oonumerics.org/blitz/ </A>     
       <li> <a name="initializer"> 
           Gabriel Dos Reis and Bjarne Stroustrup, 
-          <a href=http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1509.pdf> "Generalized Initializer
+          <a href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1509.pdf"> "Generalized Initializer
             Lists"</a>, 2003  </a>
  </OL> 
  </p>
