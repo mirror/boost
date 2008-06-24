@@ -40,7 +40,7 @@ struct regex_token_iterator_impl
       , BidiIter cur
       , BidiIter end
       , BidiIter next_search
-      , basic_regex<BidiIter> const *rex
+      , basic_regex<BidiIter> const &rex
       , regex_constants::match_flag_type flags = regex_constants::match_default
       , std::vector<int> subs = std::vector<int>(1, 0)
       , int n = -2
@@ -159,7 +159,7 @@ struct regex_token_iterator
       , BidiIter end
       , basic_regex<BidiIter> const &rex
     )
-      : impl_(new impl_type_(begin, begin, end, begin, &rex))
+      : impl_(new impl_type_(begin, begin, end, begin, rex))
     {
         this->next_();
     }
@@ -177,7 +177,7 @@ struct regex_token_iterator
       , basic_regex<BidiIter> const &rex
       , detail::let_<LetExpr> const &args
     )
-      : impl_(new impl_type_(begin, begin, end, begin, &rex))
+      : impl_(new impl_type_(begin, begin, end, begin, rex))
     {
         detail::bind_args(args, this->impl_->iter_.what_);
         this->next_();
@@ -199,7 +199,7 @@ struct regex_token_iterator
       , Subs const &subs
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, begin, &rex, flags, detail::to_vector(subs)))
+      : impl_(new impl_type_(begin, begin, end, begin, rex, flags, detail::to_vector(subs)))
     {
         this->next_();
     }
@@ -222,7 +222,7 @@ struct regex_token_iterator
       , detail::let_<LetExpr> const &args
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, begin, &rex, flags, detail::to_vector(subs)))
+      : impl_(new impl_type_(begin, begin, end, begin, rex, flags, detail::to_vector(subs)))
     {
         detail::bind_args(args, this->impl_->iter_.what_);
         this->next_();
