@@ -18,7 +18,13 @@
 
 #include <boost/config.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
+#include <boost/utility/compare_pointees.hpp>
 #include <utility>
+
+#if defined(BOOST_MSVC)  
+# pragma warning(push)  
+# pragma warning(disable:4512)    // Assignment operator could not be generated.  
+#endif 
 
 namespace boost
 { 
@@ -47,6 +53,41 @@ namespace boost
             {
                 return this;
             }
+
+            friend inline bool operator==( ref_pair l, ref_pair r )
+            {
+                return l.first == r.first && 
+                       boost::equal_pointees( l.second, r.second );
+            }
+
+            friend inline bool operator!=( ref_pair l, ref_pair r )
+            {
+                return !( l == r );
+            }
+
+            friend inline bool operator<( ref_pair l, ref_pair r )
+            {
+                if( l.first == r.first )
+                    return boost::less_pointees( l.second, r.second );
+                else 
+                    return l.first < r.first;
+            }
+
+            friend inline bool operator>( ref_pair l, ref_pair r )
+            {
+                return r < l;
+            }
+
+            friend inline bool operator<=( ref_pair l, ref_pair r )
+            {
+                return !(r < l);
+            }
+
+            friend inline bool operator>=( ref_pair l, ref_pair r )
+            {
+                return !(l < r);
+            }
+
         };
     }
     
@@ -83,5 +124,9 @@ namespace boost
    }; // class 'ptr_map_iterator'
 
 }
+
+#if defined(BOOST_MSVC)  
+# pragma warning(pop)  
+#endif 
 
 #endif

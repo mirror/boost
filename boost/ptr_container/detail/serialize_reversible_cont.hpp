@@ -16,12 +16,6 @@ namespace boost
 namespace ptr_container_detail
 {
 
-template<class T>
-inline T const& serialize_as_const(T const& r)
-{
-    return r;
-}
-
 template<class Archive, class Config, class CloneAllocator>
 void save_helper(Archive& ar, const ptr_container_detail::reversible_ptr_container<Config, CloneAllocator>& c)
 {
@@ -66,7 +60,7 @@ namespace serialization
 {
 
 template<class Archive, class Config, class CloneAllocator>
-void save(Archive& ar, const ptr_container_detail::reversible_ptr_container<Config, CloneAllocator>& c, unsigned int version)
+void save(Archive& ar, const ptr_container_detail::reversible_ptr_container<Config, CloneAllocator>& c, unsigned int /*version*/)
 {   
     ar << boost::serialization::make_nvp( ptr_container_detail::count(), 
                                           ptr_container_detail::serialize_as_const(c.size()) );
@@ -74,7 +68,7 @@ void save(Archive& ar, const ptr_container_detail::reversible_ptr_container<Conf
 }
 
 template<class Archive, class Config, class CloneAllocator>
-void load(Archive& ar, ptr_container_detail::reversible_ptr_container<Config, CloneAllocator>& c, unsigned int version)
+void load(Archive& ar, ptr_container_detail::reversible_ptr_container<Config, CloneAllocator>& c, unsigned int /*version*/)
 {
     typedef ptr_container_detail::reversible_ptr_container<Config, CloneAllocator> container_type;
     typedef BOOST_DEDUCED_TYPENAME container_type::size_type size_type;

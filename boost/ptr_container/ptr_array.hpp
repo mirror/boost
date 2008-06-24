@@ -36,12 +36,12 @@ namespace boost
         public:
             typedef Allocator allocator_type;
 
-            ptr_array_impl( Allocator a = Allocator() )
+            ptr_array_impl( Allocator /*a*/ = Allocator() )
             {
                 this->assign( 0 );
             }
 
-            ptr_array_impl( size_t, T*, Allocator a = Allocator() )
+            ptr_array_impl( size_t, T*, Allocator /*a*/ = Allocator() )
             {
                 this->assign( 0 );
             }
@@ -83,41 +83,30 @@ namespace boost
         ptr_array() : base_class()
         { }
 
-        explicit ptr_array( const ptr_array& r )
+        ptr_array( const ptr_array& r )
         {
             size_t i = 0;
             for( ; i != N; ++i )
                 this->base()[i] = this->null_policy_allocate_clone( 
-                                        static_cast<T*>( r.base()[i] ) ); 
+                                        static_cast<const T*>( &r[i] ) ); 
         }
 
         template< class U >
-        explicit ptr_array( const ptr_array<U,N>& r )
+        ptr_array( const ptr_array<U,N>& r )
         {
             size_t i = 0;
             for( ; i != N; ++i )
                 this->base()[i] = this->null_policy_allocate_clone( 
-                                        static_cast<U*>( r.base()[i] ) ); 
+                                        static_cast<const T*>( &r[i] ) ); 
         }
 
         explicit ptr_array( std::auto_ptr<this_type> r )
         : base_class( r ) { }
 
-        ptr_array& operator=( const ptr_array& r )
+        ptr_array& operator=( ptr_array r )
         {
-            ptr_array clone( r );
-            this->swap( clone );
-            return *this;
-            
-        }
-
-        template< class U >
-        ptr_array& operator=( const ptr_array<U,N>& r )
-        {
-            ptr_array clone( r );
-            this->swap( clone );
-            return *this;
-            
+            this->swap( r );
+            return *this;            
         }
 
         ptr_array& operator=( std::auto_ptr<this_type> r )

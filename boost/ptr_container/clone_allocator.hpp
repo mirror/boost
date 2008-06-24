@@ -70,11 +70,11 @@ namespace boost
         template< class U >
         static U* allocate_clone( const U& r )
         {
-            return const_cast<U*>( &r );
+            return const_cast<U*>(&r);
         }
 
         template< class U >
-        static void deallocate_clone( const U* r )
+        static void deallocate_clone( const U* /*r*/ )
         {
             // do nothing
         }

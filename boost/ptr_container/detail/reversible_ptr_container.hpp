@@ -66,8 +66,13 @@ namespace ptr_container_detail
 
     struct is_pointer_or_integral_tag {};
     struct is_range_tag {};
-
+    struct sequence_tag {};
+    struct fixed_length_sequence_tag : sequence_tag {};
+    struct associative_container_tag {};
+    struct ordered_associative_container_tag : associative_container_tag {};
+    struct unordered_associative_container_tag : associative_container_tag {};
     
+
     
     template
     < 
@@ -135,6 +140,7 @@ namespace ptr_container_detail
 
     public:
         Cont&       base()               { return c_; }
+    protected: // having this public could break encapsulation
         const Cont& base() const         { return c_; }        
         
     public: // typedefs
@@ -157,7 +163,7 @@ namespace ptr_container_detail
                                    size_type;
         typedef  BOOST_DEDUCED_TYPENAME Config::allocator_type
                                    allocator_type;
-
+        typedef CloneAllocator     clone_allocator_type;
         typedef ptr_container_detail::static_move_ptr<Ty_,Deleter> 
                                    auto_type;
             
@@ -291,29 +297,56 @@ namespace ptr_container_detail
             clone_back_insert( first, last );
         }
 
+        template< class I >
+        void associative_constructor_impl( I first, I last ) // strong
+        {
+            if( first == last )
+                return;
+
+            scoped_deleter sd( first, last );
+            insert_clones_and_release( sd );             
+        }
+
     public: // foundation! should be protected!
-        reversible_ptr_container( const allocator_type& a = allocator_type() ) 
+        reversible_ptr_container()
+        { }
+
+        template< class SizeType >
+        reversible_ptr_container( SizeType n, unordered_associative_container_tag )
+          : c_( n )
+        { }
+
+        template< class SizeType >
+        reversible_ptr_container( SizeType n, fixed_length_sequence_tag )
+          : c_( n )
+        { }
+
+        template< class SizeType >
+        reversible_ptr_container( SizeType n, const allocator_type& a, 
+                                  fixed_length_sequence_tag )
+          : c_( n, a )
+        { }
+        
+        explicit reversible_ptr_container( const allocator_type& a ) 
          : c_( a )
-        {}
+        { }
         
         template< class PtrContainer >
-        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )
-          : c_( allocator_type() )                
+        explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )                
         { 
             swap( *clone ); 
         }
 
-        explicit reversible_ptr_container( const reversible_ptr_container& r ) 
+        reversible_ptr_container( const reversible_ptr_container& r ) 
         {
-            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+            constructor_impl( r.begin(), r.end(), std::forward_iterator_tag() ); 
         }
 
         template< class C, class V >
-        explicit reversible_ptr_container( const reversible_ptr_container<C,V>& r ) 
+        reversible_ptr_container( const reversible_ptr_container<C,V>& r ) 
         {
-            constructor_impl( r.begin(), r.end(),  std::forward_iterator_tag() ); 
+            constructor_impl( r.begin(), r.end(), std::forward_iterator_tag() ); 
         }
-
 
         template< class PtrContainer >
         reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
@@ -322,27 +355,19 @@ namespace ptr_container_detail
             return *this;
         }
 
-        reversible_ptr_container& operator=( const reversible_ptr_container& r ) // strong 
+        reversible_ptr_container& operator=( reversible_ptr_container r ) // strong 
         {
-            reversible_ptr_container clone( r );
-            swap( clone );
+            swap( r );
             return *this;
         }
-
-        template< class C, class V >
-        reversible_ptr_container& operator=( const reversible_ptr_container<C,V>& r ) // strong 
-        {
-            reversible_ptr_container clone( r );
-            swap( clone );
-            return *this;
-        }
+        
         // overhead: null-initilization of container pointer (very cheap compared to cloning)
         // overhead: 1 heap allocation (very cheap compared to cloning)
         template< class InputIterator >
         reversible_ptr_container( InputIterator first, 
                                   InputIterator last,
                                   const allocator_type& a = allocator_type() ) // basic, strong
-        : c_( a )
+          : c_( a )
         { 
             constructor_impl( first, last, 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -355,28 +380,77 @@ namespace ptr_container_detail
         template< class Compare >
         reversible_ptr_container( const Compare& comp,
                                   const allocator_type& a )
-        : c_( comp, a ) {}
+          : c_( comp, a ) {}
 
+        template< class ForwardIterator >
+        reversible_ptr_container( ForwardIterator first,
+                                  ForwardIterator last,
+                                  fixed_length_sequence_tag )
+          : c_( std::distance(first,last) )
+        {
+            constructor_impl( first, last, 
+                              std::forward_iterator_tag() );
+        }
+
+        template< class SizeType, class InputIterator >
+        reversible_ptr_container( SizeType n,
+                                  InputIterator first,
+                                  InputIterator last,
+                                  fixed_length_sequence_tag )
+          : c_( n )
+        {
+            constructor_impl( first, last, 
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#else
+                              BOOST_DEDUCED_TYPENAME
+#endif                              
+                              iterator_category<InputIterator>::type() );
+        }
+
+        template< class Compare >
+        reversible_ptr_container( const Compare& comp,
+                                  const allocator_type& a,
+                                  associative_container_tag )
+          : c_( comp, a )
+        { }
+                
+        template< class InputIterator >
+        reversible_ptr_container( InputIterator first,
+                                  InputIterator last,
+                                  associative_container_tag )
+        {
+            associative_constructor_impl( first, last );
+        }
+        
         template< class InputIterator, class Compare >
         reversible_ptr_container( InputIterator first,
                                   InputIterator last,
                                   const Compare& comp,
-                                  const allocator_type& a )
-        : c_( comp, a ) 
+                                  const allocator_type& a,
+                                  associative_container_tag )
+          : c_( comp, a ) 
         {
-            if( first == last )
-                return;
-
-            scoped_deleter sd( first, last );
-            insert_clones_and_release( sd );    
+            associative_constructor_impl( first, last );
         }
 
-        template< class PtrContainer, class Compare >
-        reversible_ptr_container( std::auto_ptr<PtrContainer> clone, 
-                                  Compare comp )
-        : c_( comp, allocator_type() )                
-        { 
-            swap( *clone ); 
+        explicit reversible_ptr_container( size_type n )
+          : c_( n ) {}
+
+        template< class Hash, class Pred >
+        reversible_ptr_container( const Hash& hash,
+                                  const Pred& pred,
+                                  const allocator_type& a )
+          : c_( hash, pred, a ) {}
+
+        template< class InputIterator, class Hash, class Pred >
+        reversible_ptr_container( InputIterator first,
+                                  InputIterator last,
+                                  const Hash& hash,
+                                  const Pred& pred,
+                                  const allocator_type& a )
+          : c_( hash, pred, a )
+        {
+            associative_constructor_impl( first, last );
         }
 
     public:        
@@ -410,7 +484,17 @@ namespace ptr_container_detail
             { return reverse_iterator( this->begin() ); } 
         const_reverse_iterator rend() const       
             { return const_reverse_iterator( this->begin() ); } 
- 
+
+        const_iterator cbegin() const      
+            { return const_iterator( c_.begin() ); }
+        const_iterator cend() const             
+            { return const_iterator( c_.end() ); }
+
+        const_reverse_iterator crbegin() const      
+            { return const_reverse_iterator( this->end() ); }
+        const_reverse_iterator crend() const             
+            { return const_reverse_iterator( this->begin() ); }
+
         void swap( reversible_ptr_container& r ) // nothrow
         { 
             c_.swap( r.c_ );
@@ -613,25 +697,27 @@ namespace ptr_container_detail
 #define BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type ) \
                                                                       \
     template< class U >                                               \
-    explicit PC( const PC<U>& r ) : base_type( r ) { }                \
+    PC( const PC<U>& r ) : base_type( r ) { }                         \
                                                                       \
-    template< class U >                                               \
-    PC& operator=( const PC<U>& r )                                   \
+    PC& operator=( PC r )                                             \
     {                                                                 \
-        base_type::operator=( r );                                    \
+        this->swap( r );                                              \
         return *this;                                                 \
-    }                                               
-     
+    }                                                                 \
+                                                                           
 
 #define BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                       \
     typedef BOOST_DEDUCED_TYPENAME base_type::iterator        iterator;                \
     typedef BOOST_DEDUCED_TYPENAME base_type::size_type       size_type;               \
     typedef BOOST_DEDUCED_TYPENAME base_type::const_reference const_reference;         \
     typedef BOOST_DEDUCED_TYPENAME base_type::allocator_type  allocator_type;          \
-    explicit PC( const allocator_type& a = allocator_type() ) : base_type(a) {}                 \
+    PC() {}                                                                            \
+    explicit PC( const allocator_type& a ) : base_type(a) {}                           \
+    template< class InputIterator >                                                    \
+    PC( InputIterator first, InputIterator last ) : base_type( first, last ) {}        \
     template< class InputIterator >                                                    \
     PC( InputIterator first, InputIterator last,                                       \
-        const allocator_type& a = allocator_type() ) : base_type( first, last, a ) {}  
+        const allocator_type& a ) : base_type( first, last, a ) {}  
                  
 #define BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )           \
    BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                                    \

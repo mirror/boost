@@ -44,7 +44,7 @@ namespace boost
 
         BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_vector, 
                                                       base_class,
-                                                      this_type );
+                                                      this_type )
         
         explicit ptr_vector( size_type n,
                              const allocator_type& alloc = allocator_type() )

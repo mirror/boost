@@ -18,6 +18,7 @@
 
 #include <boost/ptr_container/detail/map_iterator.hpp>
 #include <boost/ptr_container/detail/associative_ptr_container.hpp>
+#include <boost/ptr_container/detail/meta_functions.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/range/iterator_range.hpp>
 
@@ -29,7 +30,8 @@ namespace ptr_container_detail
     template
     < 
         class T,
-        class VoidPtrMap
+        class VoidPtrMap,
+        bool  Ordered
     >
     struct map_config
     {
@@ -41,11 +43,35 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::allocator_type
                      allocator_type;
         
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::key_compare
-                     key_compare;
-        
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::value_compare
-                     value_compare;
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::eval_if_c<Ordered, 
+                          select_value_compare<VoidPtrMap>, 
+                          mpl::identity<void> >::type
+                    value_compare;
+
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::eval_if_c<Ordered, 
+                          select_key_compare<VoidPtrMap>, 
+                          mpl::identity<void> >::type
+                    key_compare;
+
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::eval_if_c<Ordered,
+                          mpl::identity<void>,
+                          select_hasher<VoidPtrMap> >::type
+                    hasher;
+
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::eval_if_c<Ordered,
+                          mpl::identity<void>,
+                          select_key_equal<VoidPtrMap> >::type
+                    key_equal;
+
+       typedef BOOST_DEDUCED_TYPENAME 
+           mpl::if_c<Ordered,
+                     ptr_container_detail::ordered_associative_container_tag,
+                     ptr_container_detail::unordered_associative_container_tag>::type
+                    container_type;
         
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type
                      key_type;
@@ -57,7 +83,23 @@ namespace ptr_container_detail
         
         typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator, key_type, const U* const>
                      const_iterator;
-  
+        
+        typedef ptr_map_iterator<
+           BOOST_DEDUCED_TYPENAME 
+             mpl::eval_if_c<Ordered, 
+                            select_iterator<VoidPtrMap>,
+                            select_local_iterator<VoidPtrMap> >::type,
+             key_type, U* const >
+                    local_iterator;
+
+       typedef ptr_map_iterator<
+           BOOST_DEDUCED_TYPENAME 
+             mpl::eval_if_c<Ordered, 
+                            select_iterator<VoidPtrMap>,
+                            select_const_local_iterator<VoidPtrMap> >::type,
+             key_type, const U* const >
+                    const_local_iterator;  
+       
         template< class Iter >
         static U* get_pointer( Iter i )
         {
@@ -79,19 +121,19 @@ namespace ptr_container_detail
     < 
         class T,
         class VoidPtrMap, 
-        class CloneAllocator
+        class CloneAllocator,
+        bool  Ordered
     >
     class ptr_map_adapter_base : 
-        public ptr_container_detail::associative_ptr_container< map_config<T,VoidPtrMap>,
+        public ptr_container_detail::associative_ptr_container< map_config<T,VoidPtrMap,Ordered>,
                                                     CloneAllocator >
     {
-        typedef ptr_container_detail::associative_ptr_container< map_config<T,VoidPtrMap>,
+        typedef ptr_container_detail::associative_ptr_container< map_config<T,VoidPtrMap,Ordered>,
                                                      CloneAllocator > 
             base_type;
 
-        typedef map_config<T,VoidPtrMap>                           config;
-
-        typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>  this_type;
+        typedef map_config<T,VoidPtrMap,Ordered>                           config;
+        typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator,Ordered>  this_type;
         
     public:
 
@@ -153,6 +195,9 @@ namespace ptr_container_detail
             }
 
             void release() { released_ = true; }
+
+        private:  
+            eraser& operator=(const eraser&);  
         };
 
         mapped_reference insert_lookup( const key_type& key )
@@ -174,18 +219,48 @@ namespace ptr_container_detail
         
     public:
 
-        template< class InputIterator >
-        ptr_map_adapter_base( InputIterator first, InputIterator last,
-                              const allocator_type& a = allocator_type() )
-        : base_type( first, last, a )
+        ptr_map_adapter_base()
         { }
- 
+
+        template< class SizeType >
+        explicit ptr_map_adapter_base( SizeType n, 
+                                       ptr_container_detail::unordered_associative_container_tag tag )
+        : base_type( n, tag )
+        { }
+
         template< class Compare, class Allocator >
         ptr_map_adapter_base( const Compare& comp,
                               const Allocator& a ) 
         : base_type( comp, a ) 
         { }
-              
+
+        template< class Hash, class Pred, class Allocator >
+        ptr_map_adapter_base( const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( hash, pred, a )
+        { }
+                
+        template< class InputIterator >
+        ptr_map_adapter_base( InputIterator first, InputIterator last )
+         : base_type( first, last )
+        { }
+                
+        template< class InputIterator, class Comp >
+        ptr_map_adapter_base( InputIterator first, InputIterator last,
+                              const Comp& comp,
+                              const allocator_type& a = allocator_type() )
+        : base_type( first, last, comp, a )
+        { }
+
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        ptr_map_adapter_base( InputIterator first, InputIterator last,
+                              const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( first, last, hash, pred, a )
+        { }
+                
         template< class PtrContainer >
         explicit ptr_map_adapter_base( std::auto_ptr<PtrContainer> clone ) 
         : base_type( clone )
@@ -287,6 +362,12 @@ namespace ptr_container_detail
         {
             return replace( where, x.release() );
         }
+
+    protected:
+        size_type bucket( const key_type& key ) const
+        {
+            return this->base().bucket( key );
+        }
     };
     
 } // ptr_container_detail
@@ -299,12 +380,13 @@ namespace ptr_container_detail
     < 
         class T,
         class VoidPtrMap, 
-        class CloneAllocator = heap_clone_allocator
+        class CloneAllocator = heap_clone_allocator,
+        bool  Ordered        = true
     >
     class ptr_map_adapter : 
-        public ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>
+        public ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator,Ordered>
     {
-        typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator> 
+        typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator,Ordered> 
             base_type;
     
     public:    
@@ -320,8 +402,6 @@ namespace ptr_container_detail
                     const_reference;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                     auto_type;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::key_compare 
-                    key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::allocator_type 
                     allocator_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::mapped_type
@@ -356,29 +436,53 @@ namespace ptr_container_detail
         }
     
     public:
+        ptr_map_adapter( )
+        { }
 
-        explicit ptr_map_adapter( const key_compare& comp = key_compare(),
-                                  const allocator_type& a = allocator_type() ) 
+        template< class Comp >
+        explicit ptr_map_adapter( const Comp& comp,
+                                  const allocator_type& a ) 
           : base_type( comp, a ) { }
-    
+
+        template< class Hash, class Pred, class Allocator >
+        ptr_map_adapter( const Hash& hash,
+                         const Pred& pred,
+                         const Allocator& a )
+         : base_type( hash, pred, a )
+        { }
+                
         template< class InputIterator >
+        ptr_map_adapter( InputIterator first, InputIterator last )
+        {
+            map_basic_clone_and_insert( first, last ); 
+        }
+               
+        template< class InputIterator, class Comp >
         ptr_map_adapter( InputIterator first, InputIterator last, 
-                         const key_compare& comp = key_compare(),
+                         const Comp& comp,
                          const allocator_type& a = allocator_type() )
           : base_type( comp, a ) 
         {
             map_basic_clone_and_insert( first, last );
         }
 
-        explicit ptr_map_adapter( const ptr_map_adapter& r )
-          : base_type( key_compare(), allocator_type() )
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        ptr_map_adapter( InputIterator first, InputIterator last,
+                         const Hash& hash,
+                         const Pred& pred,
+                         const Allocator& a )
+          : base_type( hash, pred, a )
+        {
+            map_basic_clone_and_insert( first, last ); 
+        }
+                
+        ptr_map_adapter( const ptr_map_adapter& r )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
         }
         
-        template< class Key, class U >
-        explicit ptr_map_adapter( const ptr_map_adapter<Key,U>& r )
-          : base_type( key_compare(), allocator_type() )
+        template< class Key, class U, class CA, bool b >
+        ptr_map_adapter( const ptr_map_adapter<Key,U,CA,b>& r )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
         }
@@ -387,18 +491,9 @@ namespace ptr_container_detail
         ptr_map_adapter( std::auto_ptr<U> r ) : base_type( r )
         { }
 
-        ptr_map_adapter& operator=( const ptr_map_adapter& r )
+        ptr_map_adapter& operator=( ptr_map_adapter r )
         {
-            ptr_map_adapter clone( r );
-            this->swap( clone );
-            return *this;
-        }
-
-        template< class Key, class U >
-        ptr_map_adapter& operator=( const ptr_map_adapter<Key,U>& r ) 
-         {
-            ptr_map_adapter clone( r );
-            this->swap( clone );
+            this->swap( r );
             return *this;
         }
 
@@ -435,6 +530,18 @@ namespace ptr_container_detail
                 ptr.release();                                          // nothrow
             return std::make_pair( iterator( res.first ), res.second ); // nothrow        
         }
+
+        iterator insert_impl( iterator before, const key_type& key, mapped_type x ) // strong
+        {
+            this->enforce_null_policy( x, 
+                  "Null pointer in 'ptr_map_adapter::insert()'" );
+            auto_type ptr( x );         // nothrow
+            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
+                res = this->base().insert( before.base(), std::make_pair( key, x ) );
+                                        // strong, commit        
+            ptr.release();              // notrow
+            return iterator( res );                       
+        }
         
     public:
         
@@ -449,6 +556,33 @@ namespace ptr_container_detail
             return insert_impl( key, x.release() );
         }
 
+        template< class F, class S >
+        iterator insert( iterator before, ptr_container_detail::ref_pair<F,S> p ) // strong
+        {
+            this->enforce_null_policy( p.second, 
+                  "Null pointer in 'ptr_map_adapter::insert()'" );
+ 
+            auto_type ptr( this->null_policy_allocate_clone( p.second ) ); 
+            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
+                result = this->base().insert( before.base(), 
+                                     std::make_pair(p.first,ptr.get()) ); // strong
+            if( ptr.get() == result->second )
+                ptr.release();
+    
+            return iterator( result );
+        }
+
+        iterator insert( iterator before, key_type& key, mapped_type x ) // strong
+        {
+            return insert_impl( before, key, x );
+        }
+
+        template< class U >
+        iterator insert( iterator before, const key_type& key, std::auto_ptr<U> x ) // strong
+        {
+            return insert_impl( before, key, x.release() );
+        }
+        
         template< class PtrMapAdapter >
         bool transfer( BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator object, 
                        PtrMapAdapter& from ) // strong
@@ -493,12 +627,13 @@ namespace ptr_container_detail
     < 
         class T,
         class VoidPtrMultiMap, 
-        class CloneAllocator = heap_clone_allocator
+        class CloneAllocator = heap_clone_allocator,
+        bool  Ordered        = true
     >
     class ptr_multimap_adapter : 
-        public ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
+        public ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator,Ordered>
     {
-        typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
+        typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator,Ordered>
              base_type;
 
     public: // typedefs
@@ -516,8 +651,6 @@ namespace ptr_container_detail
                     mapped_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                     auto_type;            
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMultiMap::key_compare 
-                    key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMultiMap::allocator_type 
                     allocator_type;
     private:
@@ -545,29 +678,60 @@ namespace ptr_container_detail
         }
         
     public:
-        
-        explicit ptr_multimap_adapter( const key_compare& comp = key_compare(),
-                                       const allocator_type& a = allocator_type() )
+
+        ptr_multimap_adapter()
+        { }
+
+        template< class SizeType >
+        ptr_multimap_adapter( SizeType n, 
+                              ptr_container_detail::unordered_associative_container_tag tag )
+          : base_type( n, tag )
+        { }
+
+        template< class Comp >
+        explicit ptr_multimap_adapter( const Comp& comp,
+                                       const allocator_type& a )
           : base_type( comp, a ) { }
-        
+
+        template< class Hash, class Pred, class Allocator >
+        ptr_multimap_adapter( const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( hash, pred, a )
+        { }
+
         template< class InputIterator >
+        ptr_multimap_adapter( InputIterator first, InputIterator last )
+        {
+            map_basic_clone_and_insert( first, last );
+        }
+        
+        template< class InputIterator, class Comp >
         ptr_multimap_adapter( InputIterator first, InputIterator last,
-                              const key_compare& comp = key_compare(),
-                              const allocator_type& a = allocator_type() )
+                              const Comp& comp,
+                              const allocator_type& a )
           : base_type( comp, a )
         {
             map_basic_clone_and_insert( first, last );
         }
 
-        explicit ptr_multimap_adapter( const ptr_multimap_adapter& r )
-          : base_type( key_compare(), allocator_type() )
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        ptr_multimap_adapter( InputIterator first, InputIterator last,
+                              const Hash& hash,
+                              const Pred& pred,
+                              const Allocator& a )
+         : base_type( hash, pred, a )
+        {
+            map_basic_clone_and_insert( first, last ); 
+        }
+
+        ptr_multimap_adapter( const ptr_multimap_adapter& r )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
         }
         
-        template< class Key, class U >
-        explicit ptr_multimap_adapter( const ptr_multimap_adapter<Key,U>& r )
-          : base_type( key_compare(), allocator_type() )
+        template< class Key, class U, class CA, bool b >
+        ptr_multimap_adapter( const ptr_multimap_adapter<Key,U,CA,b>& r )
         {
             map_basic_clone_and_insert( r.begin(), r.end() );      
         }
@@ -576,21 +740,12 @@ namespace ptr_container_detail
         explicit ptr_multimap_adapter( std::auto_ptr<U> r ) : base_type( r )
         { }
 
-        ptr_multimap_adapter& operator=( const ptr_multimap_adapter& r )
+        ptr_multimap_adapter& operator=( ptr_multimap_adapter r )
         {
-            ptr_multimap_adapter clone( r );
-            this->swap( clone );
+            this->swap( r );
             return *this;
         }
 
-        template< class Key, class U >
-        ptr_multimap_adapter& operator=( const ptr_multimap_adapter<Key,U>& r ) 
-         {
-            ptr_multimap_adapter clone( r );
-            this->swap( clone );
-            return *this;
-        }
-        
         template< class U >
         ptr_multimap_adapter& operator=( std::auto_ptr<U> r )
         {  
@@ -599,7 +754,34 @@ namespace ptr_container_detail
         }
 
         using base_type::release;
-        
+
+    private:
+        iterator insert_impl( const key_type& key, mapped_type x ) // strong
+        {
+            this->enforce_null_policy( x, 
+                  "Null pointer in 'ptr_multimap_adapter::insert()'" );
+            auto_type ptr( x );         // nothrow
+            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
+                res = this->base().insert( std::make_pair( key, x ) );
+                                        // strong, commit        
+            ptr.release();              // notrow
+            return iterator( res );           
+        }
+
+        iterator insert_impl( iterator before, const key_type& key, mapped_type x ) // strong
+        {
+            this->enforce_null_policy( x, 
+                  "Null pointer in 'ptr_multimap_adapter::insert()'" );
+            auto_type ptr( x );         // nothrow
+            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
+                res = this->base().insert( before.base(), 
+                                           std::make_pair( key, x ) );
+                                        // strong, commit        
+            ptr.release();              // notrow
+            return iterator( res );                       
+        }
+
+    public:
         template< typename InputIterator >
         void insert( InputIterator first, InputIterator last ) // basic
         {
@@ -614,23 +796,36 @@ namespace ptr_container_detail
 
         iterator insert( key_type& key, mapped_type x ) // strong
         {
-            this->enforce_null_policy( x, 
-                  "Null pointer in 'ptr_multimap_adapter::insert()'" );
-
-            auto_type ptr( x );         // nothrow
-            BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
-                res = this->base().insert( std::make_pair( key, x ) );
-                                        // strong, commit        
-            ptr.release();              // notrow
-            return iterator( res );           
+            return insert_impl( key, x );
         }
 
         template< class U >
-        iterator insert( key_type& key, std::auto_ptr<U> x )
+        iterator insert( const key_type& key, std::auto_ptr<U> x )
         {
-            return insert( key, x.release() );
+            return insert_impl( key, x.release() );
         }
 
+        template< class F, class S >
+        iterator insert( iterator before, ptr_container_detail::ref_pair<F,S> p ) // strong
+        {
+            this->enforce_null_policy( p.second, 
+                  "Null pointer in 'ptr_multimap_adapter::insert()'" );
+            iterator res = insert_impl( before, p.first, 
+                                        this->null_policy_allocate_clone( p.second ) );
+            return res;
+        }
+
+        iterator insert( iterator before, key_type& key, mapped_type x ) // strong
+        {
+            return insert_impl( before, key, x );
+        }
+
+        template< class U >
+        iterator insert( iterator before, const key_type& key, std::auto_ptr<U> x ) // strong
+        {
+            return insert_impl( before, key, x.release() );
+        }
+        
         template< class PtrMapAdapter >
         void transfer( BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator object, 
                        PtrMapAdapter& from ) // strong

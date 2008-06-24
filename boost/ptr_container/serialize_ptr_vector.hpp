@@ -16,7 +16,7 @@ namespace serialization
 {
 
 template<class Archive, class T, class CloneAllocator, class Allocator>
-void load(Archive& ar, ptr_vector<T, CloneAllocator, Allocator>& c, unsigned int version)
+void load(Archive& ar, ptr_vector<T, CloneAllocator, Allocator>& c, unsigned int /*version*/)
 {
     typedef ptr_vector<T, CloneAllocator, Allocator> container_type;
     typedef BOOST_DEDUCED_TYPENAME container_type::size_type size_type;

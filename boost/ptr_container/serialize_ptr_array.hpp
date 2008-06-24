@@ -16,13 +16,13 @@ namespace serialization
 {
 
 template<class Archive, class T, std::size_t N, class CloneAllocator>
-void save(Archive& ar, const ptr_array<T, N, CloneAllocator>& c, unsigned int version)
+void save(Archive& ar, const ptr_array<T, N, CloneAllocator>& c, unsigned int /*version*/)
 {
     ptr_container_detail::save_helper(ar, c);
 }
 
 template<class Archive, class T, std::size_t N, class CloneAllocator>
-void load(Archive& ar, ptr_array<T, N, CloneAllocator>& c, unsigned int version)
+void load(Archive& ar, ptr_array<T, N, CloneAllocator>& c, unsigned int /*version*/)
 {
     typedef ptr_array<T, N, CloneAllocator> container_type;
     typedef BOOST_DEDUCED_TYPENAME container_type::size_type size_type;

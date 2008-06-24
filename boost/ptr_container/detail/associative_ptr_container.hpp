@@ -38,6 +38,8 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter
                                 scoped_deleter;
 
+        typedef BOOST_DEDUCED_TYPENAME Config::container_type
+                                container_type;
     public: // typedefs
         typedef BOOST_DEDUCED_TYPENAME Config::key_type
                                 key_type;
@@ -45,65 +47,88 @@ namespace ptr_container_detail
                                 key_compare;
         typedef BOOST_DEDUCED_TYPENAME Config::value_compare
                                 value_compare;
+        typedef BOOST_DEDUCED_TYPENAME Config::hasher
+                                hasher;
+        typedef BOOST_DEDUCED_TYPENAME Config::key_equal
+                                key_equal;
         typedef BOOST_DEDUCED_TYPENAME Config::iterator
                                 iterator;
         typedef BOOST_DEDUCED_TYPENAME Config::const_iterator
                                 const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME Config::local_iterator
+                                local_iterator;
+        typedef BOOST_DEDUCED_TYPENAME Config::const_local_iterator
+                                const_local_iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                                 size_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::reference
+                                reference;
+        typedef BOOST_DEDUCED_TYPENAME base_type::const_reference
+                    const_reference;
 
     public: // foundation
+        associative_ptr_container()
+        { }
 
-       template< class Compare, class Allocator >
-       associative_ptr_container( const Compare& comp,
-                                  const Allocator& a )
-         : base_type( comp, a )
-       { }
-                                                     
-       template< class InputIterator, class Compare, class Allocator >
-       associative_ptr_container( InputIterator first, InputIterator last,
-                                  const Compare& comp,
-                                  const Allocator& a )
-         : base_type( first, last, comp, a )
-       { }
+        template< class SizeType >
+        associative_ptr_container( SizeType n, unordered_associative_container_tag tag )
+          : base_type( n, tag )
+        { }
 
-       template< class PtrContainer >
-       explicit associative_ptr_container( std::auto_ptr<PtrContainer> r )
-         : base_type( r, key_compare() )
-       { }
+        template< class Compare, class Allocator >
+        associative_ptr_container( const Compare& comp,
+                                   const Allocator& a )
+         : base_type( comp, a, container_type() )
+        { }
+        
+        template< class Hash, class Pred, class Allocator >
+        associative_ptr_container( const Hash& hash,
+                                   const Pred& pred,
+                                   const Allocator& a )
+         : base_type( hash, pred, a )
+        { }
 
-       explicit associative_ptr_container( const associative_ptr_container& r )
-         : base_type( r.begin(), r.end(), key_compare(), 
-                      BOOST_DEDUCED_TYPENAME Config::allocator_type() )
-       { }
+        template< class InputIterator, class Compare, class Allocator >
+        associative_ptr_container( InputIterator first, InputIterator last,
+                                   const Compare& comp,
+                                   const Allocator& a )
+         : base_type( first, last, comp, a, container_type() )
+        { }
+        
+        template< class InputIterator, class Hash, class Pred, class Allocator >
+        associative_ptr_container( InputIterator first, InputIterator last,
+                                   const Hash& hash,
+                                   const Pred& pred,
+                                   const Allocator& a )
+         : base_type( first, last, hash, pred, a )
+        { }
+        
+        template< class PtrContainer >
+        explicit associative_ptr_container( std::auto_ptr<PtrContainer> r )
+         : base_type( r )
+        { }
 
-       template< class C, class V >
-       explicit associative_ptr_container( const associative_ptr_container<C,V>& r )
-         : base_type( r.begin(), r.end(), key_compare(), 
-                      BOOST_DEDUCED_TYPENAME Config::allocator_type() )
-       { }
-
-       template< class PtrContainer >
-       associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
-       {
+        associative_ptr_container( const associative_ptr_container& r )
+         : base_type( r.begin(), r.end(), container_type() )
+        { }
+        
+        template< class C, class V >
+        associative_ptr_container( const associative_ptr_container<C,V>& r )
+         : base_type( r.begin(), r.end(), container_type() )
+        { }
+        
+        template< class PtrContainer >
+        associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
+        {
            base_type::operator=( r );
            return *this;
-       }
-
-       template< class C, class V >
-       associative_ptr_container& operator=( const associative_ptr_container<C,V>& r ) // strong 
-       {
-           associative_ptr_container clone( r );
-           this->swap( clone );
-           return *this;   
-       }
+        }
         
-       associative_ptr_container& operator=( const associative_ptr_container& r ) // strong
-       {
-           associative_ptr_container clone( r );
-           this->swap( clone );
+        associative_ptr_container& operator=( associative_ptr_container r ) // strong
+        {
+           this->swap( r );
            return *this;   
-       }
+        }
 
     public: // associative container interface
         key_compare key_comp() const
@@ -235,6 +260,145 @@ namespace ptr_container_detail
                 }
             }
             return res;
+        }
+        
+        reference front()
+        {
+            BOOST_ASSERT( !this->empty() );
+            BOOST_ASSERT( *this->begin().base() != 0 );
+            return *this->begin(); 
+        }
+
+        const_reference front() const
+        {
+            return const_cast<associative_ptr_container*>(this)->front();
+        }
+
+        reference back()
+        {
+            BOOST_ASSERT( !this->empty() );
+            BOOST_ASSERT( *(--this->end()).base() != 0 );
+            return *--this->end(); 
+        }
+
+        const_reference back() const
+        {
+            return const_cast<associative_ptr_container*>(this)->back();
+        }
+
+    protected: // unordered interface
+        hasher hash_function() const
+        {
+            return this->base().hash_function();
+        }
+
+        key_equal key_eq() const
+        {
+            return this->base().key_eq();
+        }
+        
+        size_type bucket_count() const
+        {
+            return this->base().bucket_count();
+        }
+        
+        size_type max_bucket_count() const
+        {
+            return this->base().max_bucket_count();
+        }
+        
+        size_type bucket_size( size_type n ) const
+        {
+            return this->base().bucket_size( n );
+        }
+        
+        float load_factor() const
+        {
+            return this->base().load_factor();
+        }
+        
+        float max_load_factor() const
+        {
+            return this->base().max_load_factor();
+        }
+        
+        void max_load_factor( float factor )
+        {
+            return this->base().max_load_factor( factor );
+        }
+        
+        void rehash( size_type n )
+        {
+            this->base().rehash( n );
+        }
+
+    public:
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(70190006))
+        iterator begin()
+        {
+            return base_type::begin();
+        }
+
+        const_iterator begin() const
+        {
+            return base_type::begin();
+        }
+
+        iterator end()
+        {
+            return base_type::end();
+        }
+
+        const_iterator end() const
+        {
+            return base_type::end();
+        }
+
+        const_iterator cbegin() const
+        {
+            return base_type::cbegin();
+        }
+
+        const_iterator cend() const
+        {
+            return base_type::cend();
+        }
+#else
+         using base_type::begin;
+         using base_type::end;
+         using base_type::cbegin;
+         using base_type::cend;
+#endif
+
+    protected:
+        local_iterator begin( size_type n )
+        {
+            return local_iterator( this->base().begin( n ) );
+        }
+        
+        const_local_iterator begin( size_type n ) const
+        {
+            return const_local_iterator( this->base().begin( n ) );
+        }
+        
+        local_iterator end( size_type n )
+        {
+            return local_iterator( this->base().end( n ) );
+        }
+        
+        const_local_iterator end( size_type n ) const
+        {
+            return const_local_iterator( this->base().end( n ) );
+        }
+        
+        const_local_iterator cbegin( size_type n ) const
+        {
+            return const_local_iterator( this->base().cbegin( n ) );
+        }
+        
+        const_local_iterator cend( size_type n )
+        {
+            return const_local_iterator( this->base().cend( n ) );
         }
 
      }; // class 'associative_ptr_container'

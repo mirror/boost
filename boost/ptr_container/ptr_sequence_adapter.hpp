@@ -134,22 +134,89 @@ namespace ptr_container_detail
                                                     CloneAllocator >
              base_type;
         
-        typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
-
         typedef ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator>                         
             this_type;
+
+    protected:
+        typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
          
     public:
         typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type; 
         typedef BOOST_DEDUCED_TYPENAME base_type::reference   reference; 
+        typedef BOOST_DEDUCED_TYPENAME base_type::const_reference 
+                                                              const_reference;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type   auto_type;
-         
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_sequence_adapter, 
-                                                 base_type )
+        typedef BOOST_DEDUCED_TYPENAME base_type::clone_allocator_type
+                                                              clone_allocator_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::iterator    iterator;          
+        typedef BOOST_DEDUCED_TYPENAME base_type::size_type   size_type;  
+        typedef BOOST_DEDUCED_TYPENAME base_type::allocator_type  
+                                                              allocator_type;
+                
+        ptr_sequence_adapter()
+        { }
 
-        template< class U >
-        explicit ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq>& r )
+        template< class Allocator >
+        explicit ptr_sequence_adapter( const Allocator& a )
+          : base_type( a )
+        { }
+
+        template< class SizeType >
+        ptr_sequence_adapter( SizeType n, 
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( n, tag )
+        { }
+
+        template< class SizeType, class Allocator >
+        ptr_sequence_adapter( SizeType n, const Allocator& a, 
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( n, a, tag )
+        { }
+
+        template< class InputIterator >
+        ptr_sequence_adapter( InputIterator first, InputIterator last )
+          : base_type( first, last )
+        { }
+
+        template< class InputIterator, class Allocator >
+        ptr_sequence_adapter( InputIterator first, InputIterator last,
+                              const Allocator& a )
+          : base_type( first, last, a )
+        { }
+
+        template< class ForwardIterator >
+        ptr_sequence_adapter( ForwardIterator first,
+                              ForwardIterator last,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( first, last,  tag )
+        { }
+
+        template< class SizeType, class ForwardIterator >
+        ptr_sequence_adapter( SizeType n,
+                              ForwardIterator first,
+                              ForwardIterator last,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( n, first, last,  tag )
+        { }
+
+        ptr_sequence_adapter( const ptr_sequence_adapter& r )
           : base_type( r )
+        { }
+        
+        template< class U >
+        ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r )
+          : base_type( r )
+        { }
+        
+        ptr_sequence_adapter( const ptr_sequence_adapter& r,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( r, tag )
+        { }
+        
+        template< class U >
+        ptr_sequence_adapter( const ptr_sequence_adapter<U,VoidPtrSeq,CloneAllocator>& r,
+                              ptr_container_detail::fixed_length_sequence_tag tag )
+          : base_type( r, tag )
         { }
         
         template< class PtrContainer >
@@ -157,11 +224,10 @@ namespace ptr_container_detail
           : base_type( clone )
         { }
 
-        template< class U >
-        ptr_sequence_adapter& operator=( const ptr_sequence_adapter<U,VoidPtrSeq>& r ) 
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter r )
         {
-            base_type::operator=( r );
-            return *this;
+            this->swap( r );
+            return *this; 
         }
         
         template< class PtrContainer >
@@ -207,9 +273,8 @@ namespace ptr_container_detail
 
         auto_type pop_back()
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
-                                                 bad_ptr_container_operation,
-                                          "'pop_back()' on empty container" );
+            BOOST_ASSERT( !this->empty() && 
+                          "'pop_back()' on empty container" );
             auto_type ptr( static_cast<value_type>( this->base().back() ) );      
                                                        // nothrow
             this->base().pop_back();                   // nothrow
@@ -218,9 +283,8 @@ namespace ptr_container_detail
 
         auto_type pop_front()
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
-                                                 bad_ptr_container_operation,
-                                         "'pop_front()' on empty container" ); 
+            BOOST_ASSERT( !this->empty() &&
+                          "'pop_front()' on empty container" ); 
             auto_type ptr( static_cast<value_type>( this->base().front() ) ); 
                                          // nothrow 
             this->base().pop_front();    // nothrow
@@ -229,38 +293,29 @@ namespace ptr_container_detail
         
         reference front()        
         { 
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
-                                                 bad_ptr_container_operation,
-                                    "accessing 'front()' on empty container" );
+            BOOST_ASSERT( !this->empty() &&
+                          "accessing 'front()' on empty container" );
+
             BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             return *this->begin(); 
         }
 
         const_reference front() const  
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
-                                                 bad_ptr_container_operation, 
-                                   "accessing 'front()' on empty container" );
-            BOOST_ASSERT( !::boost::is_null( this->begin() ) );
-            return *this->begin(); 
+            return const_cast<ptr_sequence_adapter*>(this)->front();
         }
 
         reference back()
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
-                                                 bad_ptr_container_operation,
-                                    "accessing 'back()' on empty container" );
+            BOOST_ASSERT( !this->empty() &&
+                          "accessing 'back()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             return *--this->end(); 
         }
 
         const_reference back() const
         {
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
-                                                 bad_ptr_container_operation,
-                                    "accessing 'back()' on empty container" );
-            BOOST_ASSERT( !::boost::is_null( --this->end() ) );
-            return *--this->end(); 
+            return const_cast<ptr_sequence_adapter*>(this)->back();
         }
 
     public: // deque/vector inerface
@@ -323,7 +378,7 @@ namespace ptr_container_detail
         }
 
         template< class Range >
-        void assign( const Range& r )
+        void assign( const Range& r ) // strong
         {
             assign( boost::begin(r), boost::end(r ) );
         }
@@ -367,7 +422,7 @@ namespace ptr_container_detail
         }
 
 #endif
-
+        
         template< class PtrSeqAdapter >
         void transfer( iterator before, 
                        BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator first, 
@@ -455,7 +510,7 @@ namespace ptr_container_detail
 
     public: // resize
 
-        void resize( size_type size )
+        void resize( size_type size ) // basic
         {
             size_type old_size = this->size();
             if( old_size > size )
@@ -472,7 +527,7 @@ namespace ptr_container_detail
             BOOST_ASSERT( this->size() == size );
         }
 
-        void resize( size_type size, value_type to_clone )
+        void resize( size_type size, value_type to_clone ) // basic
         {
             size_type old_size = this->size();
             if( old_size > size )
@@ -487,7 +542,42 @@ namespace ptr_container_detail
 
             BOOST_ASSERT( this->size() == size );        
         }
-          
+
+        void rresize( size_type size ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( this->begin(), 
+                             boost::next( this->begin(), old_size - size ) );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_front( new BOOST_DEDUCED_TYPENAME 
+                                      boost::remove_pointer<value_type>::type ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }
+
+        void rresize( size_type size, value_type to_clone ) // basic
+        {
+            size_type old_size = this->size();
+            if( old_size > size )
+            {
+                this->erase( this->begin(), 
+                             boost::next( this->begin(), old_size - size ) );  
+            }
+            else if( size > old_size )
+            {
+                for( ; old_size != size; ++old_size )
+                    this->push_front( this->null_policy_allocate_clone( to_clone ) ); 
+            }
+
+            BOOST_ASSERT( this->size() == size );
+        }           
+                
     public: // algorithms
 
         void sort( iterator first, iterator last )
@@ -537,9 +627,35 @@ namespace ptr_container_detail
             }
         };
 
+    protected:
+        template< class Fun, class Arg1 >
+        class void_ptr_delete_if 
+        {
+            Fun fun;
+        public:
+        
+            void_ptr_delete_if() : fun(Fun())
+            { }
+        
+            void_ptr_delete_if( Fun f ) : fun(f)
+            { }
+        
+            bool operator()( void* r ) const
+            {
+               BOOST_ASSERT( r != 0 );
+               Arg1 arg1 = static_cast<Arg1>(r);
+               if( fun( *arg1 ) )
+               { 
+                   clone_allocator_type::deallocate_clone( arg1 );
+                   return true;
+               }
+               return false;
+            }
+        };
+
+    private:
         void compact_and_erase_nulls( iterator first, iterator last ) // nothrow
         {
-            
             typename base_type::ptr_iterator p = std::stable_partition( 
                                                     first.base(), 
                                                     last.base(), 
@@ -605,19 +721,9 @@ namespace ptr_container_detail
         void erase_if( iterator first, iterator last, Pred pred )
         {
             range_check(first,last);
-
-            iterator next = first; 
-            for( ; next != last; ++next )
-            {
-                BOOST_ASSERT( !::boost::is_null(next) );
-                if( pred( *next ) )
-                {
-                    this->remove( next ); // delete object
-                    *next.base() = 0;     // mark pointer as deleted
-                }
-            }
-
-            compact_and_erase_nulls( first, last );
+            this->base().erase( std::remove_if( first.base(), last.base(), 
+                                                void_ptr_delete_if<Pred,value_type>(pred) ),
+                                this->base().end() );  
         }
         
         template< class Pred >
