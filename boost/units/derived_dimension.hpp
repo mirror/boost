@@ -11,8 +11,6 @@
 #ifndef BOOST_UNITS_DERIVED_DIMENSION_HPP
 #define BOOST_UNITS_DERIVED_DIMENSION_HPP
 
-#include <boost/mpl/list.hpp>
-
 #include <boost/units/dim.hpp>
 #include <boost/units/dimension.hpp>
 #include <boost/units/static_rational.hpp>
@@ -38,14 +36,14 @@ struct derived_dimension
     typedef detail::unspecified type;
 #else
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> >,
-                                    dim< DT2,static_rational<E2> >,
-                                    dim< DT3,static_rational<E3> >,
-                                    dim< DT4,static_rational<E4> >,
-                                    dim< DT5,static_rational<E5> >,
-                                    dim< DT6,static_rational<E6> >,
-                                    dim< DT7,static_rational<E7> >,
-                                    dim< DT8,static_rational<E8> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >,
+                         list< dim< DT2,static_rational<E2> >,
+                         list< dim< DT3,static_rational<E3> >,
+                         list< dim< DT4,static_rational<E4> >,
+                         list< dim< DT5,static_rational<E5> >,
+                         list< dim< DT6,static_rational<E6> >,
+                         list< dim< DT7,static_rational<E7> >,
+                         list< dim< DT8,static_rational<E8> >, dimensionless_type > > > > > > > > >::type type;
 #endif
 };
 
@@ -62,7 +60,7 @@ struct derived_dimension<
     dimensionless_type,0>
 {
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >, dimensionless_type > >::type type;
 };
 
 /// INTERNAL ONLY
@@ -79,8 +77,8 @@ struct derived_dimension<
     dimensionless_type,0>
 {
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> >,
-                                    dim< DT2,static_rational<E2> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >,
+                         list< dim< DT2,static_rational<E2> >, dimensionless_type > > >::type type;
 };
 
 /// INTERNAL ONLY
@@ -98,9 +96,9 @@ struct derived_dimension<
     dimensionless_type,0>
 {
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> >,
-                                    dim< DT2,static_rational<E2> >,
-                                    dim< DT3,static_rational<E3> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >,
+                         list< dim< DT2,static_rational<E2> >,
+                         list< dim< DT3,static_rational<E3> >, dimensionless_type > > > >::type type;
 };
 
 /// INTERNAL ONLY
@@ -119,10 +117,10 @@ struct derived_dimension<
     dimensionless_type,0>
 {
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> >,
-                                    dim< DT2,static_rational<E2> >,
-                                    dim< DT3,static_rational<E3> >,
-                                    dim< DT4,static_rational<E4> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >,
+                         list< dim< DT2,static_rational<E2> >,
+                         list< dim< DT3,static_rational<E3> >,
+                         list< dim< DT4,static_rational<E4> >, dimensionless_type > > > > >::type type;
 };
 
 /// INTERNAL ONLY
@@ -142,11 +140,11 @@ struct derived_dimension<
     dimensionless_type,0>
 {
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> >,
-                                    dim< DT2,static_rational<E2> >,
-                                    dim< DT3,static_rational<E3> >,
-                                    dim< DT4,static_rational<E4> >,
-                                    dim< DT5,static_rational<E5> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >,
+                         list< dim< DT2,static_rational<E2> >,
+                         list< dim< DT3,static_rational<E3> >,
+                         list< dim< DT4,static_rational<E4> >,
+                         list< dim< DT5,static_rational<E5> >, dimensionless_type > > > > > >::type type;
 };
 
 /// INTERNAL ONLY
@@ -167,12 +165,12 @@ struct derived_dimension<
     dimensionless_type,0>
 {
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> >,
-                                    dim< DT2,static_rational<E2> >,
-                                    dim< DT3,static_rational<E3> >,
-                                    dim< DT4,static_rational<E4> >,
-                                    dim< DT5,static_rational<E5> >,
-                                    dim< DT6,static_rational<E6> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >,
+                         list< dim< DT2,static_rational<E2> >,
+                         list< dim< DT3,static_rational<E3> >,
+                         list< dim< DT4,static_rational<E4> >,
+                         list< dim< DT5,static_rational<E5> >,
+                         list< dim< DT6,static_rational<E6> >, dimensionless_type > > > > > > >::type type;
 };
 
 /// INTERNAL ONLY
@@ -194,13 +192,13 @@ struct derived_dimension<
     dimensionless_type,0>
 {
     typedef typename 
-    make_dimension_list< mpl::list< dim< DT1,static_rational<E1> >,
-                                    dim< DT2,static_rational<E2> >,
-                                    dim< DT3,static_rational<E3> >,
-                                    dim< DT4,static_rational<E4> >,
-                                    dim< DT5,static_rational<E5> >,
-                                    dim< DT6,static_rational<E6> >,
-                                    dim< DT7,static_rational<E7> > > >::type type;
+    make_dimension_list< list< dim< DT1,static_rational<E1> >,
+                         list< dim< DT2,static_rational<E2> >,
+                         list< dim< DT3,static_rational<E3> >,
+                         list< dim< DT4,static_rational<E4> >,
+                         list< dim< DT5,static_rational<E5> >,
+                         list< dim< DT6,static_rational<E6> >,
+                         list< dim< DT7,static_rational<E7> >, dimensionless_type > > > > > > > >::type type;
 };
 
 } // namespace units

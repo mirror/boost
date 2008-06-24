@@ -208,10 +208,10 @@ struct symbol_string_impl
     template<class Begin>
     struct apply
     {
-        typedef typename symbol_string_impl<N-1>::template apply<typename mpl::next<Begin>::type> next;
+        typedef typename symbol_string_impl<N-1>::template apply<typename Begin::next> next;
         static void value(std::string& str)
         {
-            str += base_unit_symbol_string(typename mpl::deref<Begin>::type()) + ' ';
+            str += base_unit_symbol_string(typename Begin::item()) + ' ';
             next::value(str);
         }
     };
@@ -225,7 +225,7 @@ struct symbol_string_impl<1>
     {
         static void value(std::string& str)
         {
-            str += base_unit_symbol_string(typename mpl::deref<Begin>::type());
+            str += base_unit_symbol_string(typename Begin::item());
         };
     };
 };
@@ -252,8 +252,8 @@ struct scale_symbol_string_impl
     {
         static void value(std::string& str) 
         {
-            str += mpl::deref<Begin>::type::symbol();
-            scale_symbol_string_impl<N - 1>::template apply<typename mpl::next<Begin>::type>::value(str);
+            str += Begin::item::symbol();
+            scale_symbol_string_impl<N - 1>::template apply<typename Begin::next>::value(str);
         }
     };
 };
@@ -275,10 +275,10 @@ struct name_string_impl
     template<class Begin>
     struct apply
     {
-        typedef typename name_string_impl<N-1>::template apply<typename mpl::next<Begin>::type> next;
+        typedef typename name_string_impl<N-1>::template apply<typename Begin::next> next;
         static void value(std::string& str)
         {
-            str += base_unit_name_string(typename mpl::deref<Begin>::type()) + ' ';
+            str += base_unit_name_string(typename Begin::item()) + ' ';
             next::value(str);
         }
     };
@@ -292,7 +292,7 @@ struct name_string_impl<1>
     {
         static void value(std::string& str)
         {
-            str += base_unit_name_string(typename mpl::deref<Begin>::type());
+            str += base_unit_name_string(typename Begin::item());
         };
     };
 };
@@ -318,8 +318,8 @@ struct scale_name_string_impl
     {
         static void value(std::string& str) 
         {
-            str += mpl::deref<Begin>::type::name();
-            scale_name_string_impl<N - 1>::template apply<typename mpl::next<Begin>::type>::value(str);
+            str += Begin::item::name();
+            scale_name_string_impl<N - 1>::template apply<typename Begin::next>::value(str);
         }
     };
 };
@@ -476,13 +476,11 @@ to_string_impl(const unit<Dimension, heterogeneous_system<heterogeneous_system_i
 struct format_raw_symbol_impl {
     template<class Units>
     void append_units_to(std::string& str) {
-        detail::symbol_string_impl<mpl::size<Units>::value>::template apply<
-            typename mpl::begin<Units>::type>::value(str);
+        detail::symbol_string_impl<Units::size::value>::template apply<Units>::value(str);
     }
     template<class Scale>
     void append_scale_to(std::string& str) {
-        detail::scale_symbol_string_impl<mpl::size<Scale>::value>::template apply<
-            typename mpl::begin<Scale>::type>::value(str);
+        detail::scale_symbol_string_impl<Scale::size::value>::template apply<Scale>::value(str);
     }
     template<class Unit>
     std::string operator()(const Unit& unit) {
@@ -508,13 +506,11 @@ struct format_symbol_impl : format_raw_symbol_impl {
 struct format_raw_name_impl {
     template<class Units>
     void append_units_to(std::string& str) {
-        detail::name_string_impl<mpl::size<Units>::value>::template apply<
-            typename mpl::begin<Units>::type>::value(str);
+        detail::name_string_impl<(Units::size::value)>::template apply<Units>::value(str);
     }
     template<class Scale>
     void append_scale_to(std::string& str) {
-        detail::scale_name_string_impl<mpl::size<Scale>::value>::template apply<
-            typename mpl::begin<Scale>::type>::value(str);
+        detail::scale_name_string_impl<Scale::size::value>::template apply<Scale>::value(str);
     }
     template<class Unit>
     std::string operator()(const Unit& unit) {
