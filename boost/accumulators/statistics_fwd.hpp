@@ -127,8 +127,8 @@ namespace tag
     struct absolute_tail_variate_means;
     template<typename LeftRight, typename VariateType, typename VariateTag>
     struct relative_tail_variate_means;
+    struct lazy_variance;
     struct variance;
-    struct immediate_variance;
     template<typename VariateType, typename VariateTag>
     struct weighted_covariance;
     struct weighted_density;
@@ -175,8 +175,8 @@ namespace tag
     struct absolute_weighted_tail_variate_means;
     template<typename LeftRight, typename VariateType, typename VariateTag>
     struct relative_weighted_tail_variate_means;
+    struct lazy_weighted_variance;
     struct weighted_variance;
-    struct immediate_weighted_variance;
     struct weighted_sum;
     template<typename VariateType, typename VariateTag>
     struct weighted_sum_of_variates;
@@ -273,10 +273,10 @@ namespace impl
     struct tail_variate_means_impl;
 
     template<typename Sample, typename MeanFeature>
-    struct variance_impl;
+    struct lazy_variance_impl;
 
     template<typename Sample, typename MeanFeature, typename Tag>
-    struct immediate_variance_impl;
+    struct variance_impl;
 
     template<typename Sample, typename Weight, typename VariateType, typename VariateTag>
     struct weighted_covariance_impl;
@@ -339,10 +339,10 @@ namespace impl
     struct weighted_tail_variate_means_impl;
 
     template<typename Sample, typename Weight, typename MeanFeature>
-    struct weighted_variance_impl;
+    struct lazy_weighted_variance_impl;
 
     template<typename Sample, typename Weight, typename MeanFeature, typename Tag>
-    struct immediate_weighted_variance_impl;
+    struct weighted_variance_impl;
 
 
 } // namespace impl

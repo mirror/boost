@@ -27,8 +27,8 @@ void test_stat()
     // >> sum(samples .* samples) / length(samples) - mean(samples)^2
     // ans = 2
 
-    // basic lazy variance
-    accumulator_set<int, stats<tag::variance > > acc1;
+    // lazy variance, now lazy with syntactic sugar, thanks to Eric
+    accumulator_set<int, stats<tag::variance(lazy)> > acc1;
 
     acc1(1);
     acc1(2);
@@ -41,8 +41,8 @@ void test_stat()
     BOOST_CHECK_CLOSE(11., moment<2>(acc1), 1e-5);
     BOOST_CHECK_CLOSE(2., variance(acc1), 1e-5);
 
-    // immediate variance, now immediate with syntactic sugar, thanks to Eric
-    accumulator_set<int, stats<tag::variance(immediate) > > acc2;
+    // immediate variance
+    accumulator_set<int, stats<tag::variance> > acc2;
 
     acc2(1);
     acc2(2);

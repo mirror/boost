@@ -2338,20 +2338,20 @@ For more implementation details, see
 
 [section:variance variance ['and variants]]
 
-Lazy or iterative calculation of the variance. The lazy calculation is associated with the `tag::variance`
-feature, and the iterative calculation with the `tag::immediate_variance` feature. Both can be extracted
+Lazy or iterative calculation of the variance. The lazy calculation is associated with the `tag::lazy_variance`
+feature, and the iterative calculation with the `tag::variance` feature. Both can be extracted
 using the `tag::variance()` extractor. For more implementation details, see
-[classref boost::accumulators::impl::variance_impl [^variance_impl]] and
-[classref boost::accumulators::impl::immediate_variance_impl [^immediate_variance_impl]]
+[classref boost::accumulators::impl::lazy_variance_impl [^lazy_variance_impl]] and
+[classref boost::accumulators::impl::variance_impl [^variance_impl]]
 
 [variablelist
     [[Result Type] [``
                     numeric::functional::average<_sample_type_, std::size_t>::result_type
                     ``]]
-    [[Depends On] [`tag::variance` depends on `tag::moment<2>` and `tag::mean` \n
-                   `tag::immediate_variance` depends on `tag::count` and `tag::immediate_mean`]]
-    [[Variants] [`tag::variance` (a.k.a. `tag::variance(lazy))` \n
-                 `tag::immediate_variance` (a.k.a. `tag::variance(immediate)`)]]
+    [[Depends On] [`tag::lazy_variance` depends on `tag::moment<2>` and `tag::mean` \n
+                   `tag::variance` depends on `tag::count` and `tag::immediate_mean`]]
+    [[Variants] [`tag::lazy_variance` (a.k.a. `tag::variance(lazy))` \n
+                 `tag::variance` (a.k.a. `tag::variance(immediate)`)]]
     [[Initialization Parameters] [['none]]]
     [[Accumulator Parameters] [['none]]]
     [[Extractor Parameters] [['none]]]
@@ -2361,8 +2361,8 @@ using the `tag::variance()` extractor. For more implementation details, see
 
 [*Example]
 
-    // basic lazy variance
-    accumulator_set<int, stats<tag::variance > > acc1;
+    // lazy variance
+    accumulator_set<int, stats<tag::variance(lazy)> > acc1;
 
     acc1(1);
     acc1(2);
@@ -2376,7 +2376,7 @@ using the `tag::variance()` extractor. For more implementation details, see
     BOOST_CHECK_CLOSE(2., variance(acc1), 1e-5);
 
     // immediate variance
-    accumulator_set<int, stats<tag::variance(immediate) > > acc2;
+    accumulator_set<int, stats<tag::variance> > acc2;
 
     acc2(1);
     acc2(2);
@@ -2388,11 +2388,10 @@ using the `tag::variance()` extractor. For more implementation details, see
     BOOST_CHECK_CLOSE(3., mean(acc2), 1e-5);
     BOOST_CHECK_CLOSE(2., variance(acc2), 1e-5);
 
-
 [*See also]
 
+* [classref boost::accumulators::impl::lazy_variance_impl [^lazy_variance_impl]]
 * [classref boost::accumulators::impl::variance_impl [^variance_impl]]
-* [classref boost::accumulators::impl::immediate_variance_impl [^immediate_variance_impl]]
 * [link accumulators.user_s_guide.the_statistical_accumulators_library.count [^count]]
 * [link accumulators.user_s_guide.the_statistical_accumulators_library.mean [^mean]]
 * [link accumulators.user_s_guide.the_statistical_accumulators_library.moment [^moment]]
@@ -3095,11 +3094,11 @@ can be extracted with the `weighted_sum_of_variates()` extractor.
 
 [section:weighted_variance weighted_variance ['and variants]]
 
-Lazy or iterative calculation of the weighted variance. The lazy calculation is associated with the `tag::weighted_variance`
-feature, and the iterative calculation with the `tag::immediate_weighted_variance` feature. Both can be extracted
+Lazy or iterative calculation of the weighted variance. The lazy calculation is associated with the `tag::lazy_weighted_variance`
+feature, and the iterative calculation with the `tag::weighted_variance` feature. Both can be extracted
 using the `tag::weighted_variance()` extractor. For more implementation details, see
-[classref boost::accumulators::impl::weighted_variance_impl [^weighted_variance_impl]] and
-[classref boost::accumulators::impl::immediate_weighted_variance_impl [^immediate_weighted_variance_impl]]
+[classref boost::accumulators::impl::lazy_weighted_variance_impl [^lazy_weighted_variance_impl]] and
+[classref boost::accumulators::impl::weighted_variance_impl [^weighted_variance_impl]]
 
 [variablelist
     [[Result Type] [``
@@ -3108,10 +3107,10 @@ using the `tag::weighted_variance()` extractor. For more implementation details,
                       , std::size_t
                     >::result_type
                     ``]]
-    [[Depends On] [`tag::weighted_variance` depends on `tag::weighted_moment<2>` and `tag::weighted_mean` \n
-                   `tag::immediate_weighted_variance` depends on `tag::count` and `tag::immediate_weighted_mean`]]
-    [[Variants] [`tag::weighted_variance` (a.k.a. `tag::weighted_variance(lazy))` \n
-                 `tag::immediate_weighted_variance` (a.k.a. `tag::weighted_variance(immediate)`)]]
+    [[Depends On] [`tag::lazy_weighted_variance` depends on `tag::weighted_moment<2>` and `tag::weighted_mean` \n
+                   `tag::weighted_variance` depends on `tag::count` and `tag::immediate_weighted_mean`]]
+    [[Variants] [`tag::lazy_weighted_variance` (a.k.a. `tag::weighted_variance(lazy))` \n
+                 `tag::weighted_variance` (a.k.a. `tag::weighted_variance(immediate)`)]]
     [[Initialization Parameters] [['none]]]
     [[Accumulator Parameters] [`weight`]]
     [[Extractor Parameters] [['none]]]
@@ -3121,8 +3120,8 @@ using the `tag::weighted_variance()` extractor. For more implementation details,
 
 [*Example]
 
-    // basic lazy weighted_variance
-    accumulator_set<int, stats<tag::weighted_variance>, int> acc1;
+    // lazy weighted_variance
+    accumulator_set<int, stats<tag::weighted_variance(lazy)>, int> acc1;
 
     acc1(1, weight = 2);    //  2
     acc1(2, weight = 3);    //  6
@@ -3137,7 +3136,8 @@ using the `tag::weighted_variance()` extractor. For more implementation details,
     BOOST_CHECK_CLOSE(10.1818182, weighted_moment<2>(acc1), 1e-5);
     BOOST_CHECK_CLOSE(1.7190083, weighted_variance(acc1), 1e-5);
 
-    accumulator_set<int, stats<tag::weighted_variance(immediate)>, int> acc2;
+    // immediate weighted_variance
+    accumulator_set<int, stats<tag::weighted_variance>, int> acc2;
 
     acc2(1, weight = 2);
     acc2(2, weight = 3);
@@ -3171,8 +3171,8 @@ using the `tag::weighted_variance()` extractor. For more implementation details,
 
 [*See also]
 
+* [classref boost::accumulators::impl::lazy_weighted_variance_impl [^lazy_weighted_variance_impl]]
 * [classref boost::accumulators::impl::weighted_variance_impl [^weighted_variance_impl]]
-* [classref boost::accumulators::impl::immediate_weighted_variance_impl [^immediate_weighted_variance_impl]]
 * [link accumulators.user_s_guide.the_statistical_accumulators_library.count [^count]]
 * [link accumulators.user_s_guide.the_statistical_accumulators_library.weighted_mean [^weighted_mean]]
 * [link accumulators.user_s_guide.the_statistical_accumulators_library.weighted_moment [^weighted_moment]]
