@@ -137,14 +137,7 @@ void check_char()
     BOOST_CHECK_EQUAL( str_end( char_s ), str_end1 );
     BOOST_CHECK_EQUAL( str_empty( char_s ), (char_s == 0 || char_s[0] == char()) );
     BOOST_CHECK_EQUAL( sz, std::char_traits<char>::length( char_s ) );
-/*    
-    BOOST_CHECK_EQUAL( str_begin( char_s2 ), char_s2 );
-    std::size_t sz2 = size( char_s2 );
-    const char* str_end12 = str_begin( char_s2 ) + sz;
-    BOOST_CHECK_EQUAL( str_end( char_s2 ), str_end12 );
-    BOOST_CHECK_EQUAL( empty( char_s2 ), (char_s2 == 0 || char_s2[0] == char()) );
-    BOOST_CHECK_EQUAL( sz2, std::char_traits<char>::length( char_s2 ) );
-*/
+
     BOOST_CHECK_EQUAL( str_begin( my_string ), my_string );
     range_iterator<char_array_t>::type str_end2 = str_begin( my_string ) + str_size(my_string);
     range_iterator<char_array_t>::type str_end3 = str_end(my_string);
@@ -165,6 +158,20 @@ void check_char()
 
     BOOST_CHECK( find_const( as_array( my_string ), to_search ) != str_end(my_string) );
     BOOST_CHECK( find_const( as_array( my_const_string ), to_search ) != str_end(my_string) );
+
+    //
+    // Test that as_literal() always scan for null terminator
+    //
+    char an_array[] = "foo\0bar";
+    BOOST_CHECK_EQUAL( str_begin( an_array ), an_array );
+    BOOST_CHECK_EQUAL( str_end( an_array ), an_array + 3 );
+    BOOST_CHECK_EQUAL( str_size( an_array ), 3 );
+
+    const char a_const_array[] = "foobar\0doh";
+    BOOST_CHECK_EQUAL( str_begin( a_const_array ), a_const_array );
+    BOOST_CHECK_EQUAL( str_end( a_const_array ), a_const_array + 6 );
+    BOOST_CHECK_EQUAL( str_size( a_const_array ), 6 );
+
 }
 
 
@@ -172,9 +179,6 @@ void check_char()
 void check_string()
 {
     check_char();
-//    check_char<volatile char>();
-//    check_char<const char>();
-//    check_char<const volatile char>();
     
 #ifndef BOOST_NO_STD_WSTRING
     typedef wchar_t*               wchar_iterator_t;          
@@ -197,13 +201,7 @@ void check_string()
     BOOST_CHECK_EQUAL( str_end(char_ws), (str_begin( char_ws ) + sz) );
     BOOST_CHECK_EQUAL( str_empty( char_ws ), (char_ws == 0 || char_ws[0] == wchar_t()) );
     BOOST_CHECK_EQUAL( sz, std::char_traits<wchar_t>::length( char_ws ) );
- /*       
-    std::size_t sz2 = size( char_ws2 );
-    BOOST_CHECK_EQUAL( str_begin( char_ws2 ), char_ws2 );
-    BOOST_CHECK_EQUAL( str_end( char_ws2 ), (begin( char_ws2 ) + sz2) );
-    BOOST_CHECK_EQUAL( empty( char_ws2 ), (char_ws2 == 0 || char_ws2[0] == wchar_t()) );
-    BOOST_CHECK_EQUAL( sz2, std::char_traits<wchar_t>::length( char_ws2 ) );
-   */ 
+
     wchar_t to_search = L'n';
     BOOST_CHECK( find( char_ws, to_search ) != str_end(char_ws) );    
 

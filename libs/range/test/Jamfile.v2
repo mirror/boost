@@ -12,9 +12,9 @@ rule range-test ( name : includes * )
 {
     return [
         run $(name).cpp /boost/test//boost_unit_test_framework/<link>static
+        :
         : 
-        : 
-        : $(includes)
+        : <toolset>gcc:<cxxflags>"-Wall -Wunused "
         ] ;
 }
 
