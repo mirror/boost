@@ -38,12 +38,12 @@ using namespace boost::system::posix_error;
 
 namespace
 {
-  //  standard error categories  -------------------------------------------//
+  //  standard error categories  ---------------------------------------------//
 
-  class posix_error_category : public error_category
+  class generic_error_category : public error_category
   {
   public:
-    posix_error_category(){}
+    generic_error_category(){}
     const char *   name() const;
     std::string    message( int ev ) const;
   };
@@ -57,14 +57,14 @@ namespace
     error_condition     default_error_condition( int ev ) const;
   };
 
-  //  posix_error_category implementation  ---------------------------------//
+  //  generic_error_category implementation  ---------------------------------//
 
-  const char * posix_error_category::name() const
+  const char * generic_error_category::name() const
   {
-    return "POSIX";
+    return "GENERIC";
   }
 
-  std::string posix_error_category::message( int ev ) const
+  std::string generic_error_category::message( int ev ) const
   {
   // strerror_r is preferred because it is always thread safe,
   // however, we fallback to strerror in certain cases because:
@@ -318,7 +318,7 @@ namespace
 
   std::string system_error_category::message( int ev ) const
   {
-    return posix_category.message( ev );
+    return generic_category.message( ev );
   }
 # else
 // TODO:
@@ -402,10 +402,10 @@ namespace boost
       return system_category_const;
     }
 
-    BOOST_SYSTEM_DECL const error_category & get_posix_category()
+    BOOST_SYSTEM_DECL const error_category & get_generic_category()
     {
-      static const posix_error_category posix_category_const;
-      return posix_category_const;
+      static const generic_error_category generic_category_const;
+      return generic_category_const;
     }
 
   } // namespace system
