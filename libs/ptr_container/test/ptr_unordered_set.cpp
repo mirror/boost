@@ -11,7 +11,7 @@
  
 #include <boost/test/unit_test.hpp>
 #include "associative_test_data.hpp"
-#include <boost/ptr_container/ptr_set.hpp>
+#include <boost/ptr_container/ptr_unordered_set.hpp>
 
 template< class SetDerived, class SetBase, class T >
 void test_transfer()
@@ -38,24 +38,45 @@ void test_copy()
     base = base;
 }
 
+template< class Cont, class T >
+void test_unordered_interface()
+{
+    Cont c;
+    T* t = new T;
+    c.insert( t );
+    typename Cont::local_iterator i = c.begin( 0 );
+    typename Cont::const_local_iterator ci = i;
+    ci = c.cbegin( 0 );
+    i = c.end( 0 );
+    ci = c.cend( 0 );
+    typename Cont::size_type s = c.bucket_count();
+    s = c.max_bucket_count();
+    s = c.bucket_size( 0 );
+    s = c.bucket( *t );
+    float f = c.load_factor();
+    f       = c.max_load_factor();
+    c.max_load_factor(f);
+    c.rehash(1000);
+} 
+
 void test_set()
 {    
     srand( 0 );
-    ptr_set_test< ptr_set<Base>, Base, Derived_class, true >();
-    ptr_set_test< ptr_set<Value>, Value, Value, true >();
+    ptr_set_test< ptr_unordered_set<Base>, Base, Derived_class, false >();
+    ptr_set_test< ptr_unordered_set<Value>, Value, Value, false >();
 
-    ptr_set_test< ptr_multiset<Base>, Base, Derived_class, true >();
-    ptr_set_test< ptr_multiset<Value>, Value, Value, true >();
+    ptr_set_test< ptr_unordered_multiset<Base>, Base, Derived_class, false >();
+    ptr_set_test< ptr_unordered_multiset<Value>, Value, Value, false >();
 
-    test_copy< ptr_set<Base>, ptr_set<Derived_class>, 
+    test_copy< ptr_unordered_set<Base>, ptr_unordered_set<Derived_class>, 
                Derived_class>();
-    test_copy< ptr_multiset<Base>, ptr_multiset<Derived_class>, 
+    test_copy< ptr_unordered_multiset<Base>, ptr_unordered_multiset<Derived_class>, 
                Derived_class>();
 
-    test_transfer< ptr_set<Derived_class>, ptr_set<Base>, Derived_class>();
-    test_transfer< ptr_multiset<Derived_class>, ptr_multiset<Base>, Derived_class>();
+    test_transfer< ptr_unordered_set<Derived_class>, ptr_unordered_set<Base>, Derived_class>();
+    test_transfer< ptr_unordered_multiset<Derived_class>, ptr_unordered_multiset<Base>, Derived_class>();
     
-    ptr_set<int> set;
+    ptr_unordered_set<int> set;
 
     BOOST_CHECK_THROW( set.insert( 0 ), bad_ptr_container_operation );
     set.insert( new int(0) );
@@ -63,7 +84,8 @@ void test_set()
     BOOST_CHECK_THROW( (set.replace(set.begin(), 0 )), bad_ptr_container_operation );
     BOOST_CHECK_THROW( (set.replace(set.begin(), std::auto_ptr<int>(0) )), bad_ptr_container_operation );
 
-
+    test_unordered_interface< ptr_unordered_set<Base>, Derived_class >();
+    test_unordered_interface< ptr_unordered_multiset<Base>, Derived_class >();
 }
 
 using boost::unit_test::test_suite;

@@ -14,6 +14,7 @@
 #include <boost/config.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/functional/hash.hpp>
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -39,6 +40,8 @@ class Base
     }
     
     Base& operator=( const Base& );
+
+public: // for test reasons only
     int data1, data2, data3;
     string data;
     
@@ -67,7 +70,7 @@ public:
     Base*    clone() const                { return do_clone(); }
     void     foo()                        { do_foo(); }
     
-    virtual bool less_than( const Base& b ) const
+    virtual bool less_than( const Base& /*b*/ ) const
     {
         return true;
     }
@@ -92,9 +95,9 @@ public:
 #endif    
     
 private:
-    virtual void  do_print( ostream& out ) const   { };
-    virtual Base* do_clone() const                 { return new Base( *this ); }; 
-    virtual void  do_foo()                         { };
+    virtual void  do_print( ostream& /*out*/ ) const   { };
+    virtual Base* do_clone() const                     { return new Base( *this ); }; 
+    virtual void  do_foo()                             { };
 };
 
 #ifdef PTR_CONTAINER_DEBUG
@@ -149,9 +152,23 @@ inline bool operator!=( const Base& l, const Base& r )
 
 
 
+inline std::size_t hash_value( const Base& b )
+{
+    std::size_t seed = 0;
+    boost::hash_combine( seed, b.data );
+    boost::hash_combine( seed, b.data1 );
+    boost::hash_combine( seed, b.data2 );
+    boost::hash_combine( seed, b.data3 );
+    return seed;
+}
+
+
 class Derived_class : public Base
 {   
+public: // for test reasons only
     int i_;
+
+private:
         
     virtual void  do_print( ostream& out ) const
     {
@@ -180,12 +197,22 @@ public:
     }
 };
 
+
+
+inline std::size_t hash_value( const Derived_class& b )
+{
+    std::size_t seed = hash_value( static_cast<const Base&>( b ) );
+    boost::hash_combine( seed, b.i_ );
+    return seed;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Test class 2: a value class 
 //////////////////////////////////////////////////////////////////////////////
 
 class Value 
 {   
+public: // for test reasons only    
     string s_;
     
 public:
@@ -236,12 +263,29 @@ inline ostream& operator<<( ostream& out, const Value& v )
     return out << v.name() << " ";
 }
 
+
+
+inline std::size_t hash_value( const Value& v )
+{
+    return boost::hash_value( v.s_ );
+}
+
 //
 // used to hide "unused variable" warnings
 //
 template< class T >
-inline void hide_warning( T& r )
+inline void hide_warning( T& /*r*/ )
 { }
+
+//
+// used to customize tests for circular_buffer
+//
+template< class Cont >
+struct set_capacity
+{
+    void operator()( Cont& ) const
+    { }
+};
 
 //
 //  transfer() test
@@ -250,9 +294,11 @@ inline void hide_warning( T& r )
 template< class Cont1, class Cont2 >
 void transfer_test( Cont1& from, Cont2& to )
 {
+    BOOST_MESSAGE( "starting container transfer test" );
     BOOST_CHECK( !from.empty() );
     to. BOOST_NESTED_TEMPLATE transfer<Cont1>( from );
     BOOST_CHECK( !to.empty() );
+    BOOST_MESSAGE( "finishing container transfer test" );
 }
 
 
@@ -263,7 +309,10 @@ void transfer_test( Cont1& from, Cont2& to )
 template< class BaseContainer, class DerivedContainer, class Derived >
 void container_assignment_test()
 {
+    BOOST_MESSAGE( "starting container assignment test" );
+
     DerivedContainer derived;
+    set_capacity<DerivedContainer>()( derived );
     derived.insert( derived.begin(), new Derived );
     derived.insert( derived.begin(), new Derived );
 
@@ -277,6 +326,8 @@ void container_assignment_test()
     base2 = base;
     BOOST_CHECK_EQUAL( base2.size(), base.size() );
     base = base;
+
+    BOOST_MESSAGE( "finished container assignment test" );
 }
 
 

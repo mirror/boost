@@ -1,7 +1,7 @@
 //
 // Boost.Pointer Container
 //
-//  Copyright Thorsten Ottosen 2003-2005. Use, modification and
+//  Copyright Thorsten Ottosen 2008. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -57,6 +57,11 @@ inline abstract_base* new_clone( const abstract_base& r )
     return r.clone();
 }
 
+inline std::size_t hash_value( const abstract_base& b )
+{
+    return boost::hash_value( &b );
+}
+
 //
 // ptr_map test
 // 
@@ -78,6 +83,7 @@ std::string get_next_key<std::string>( const std::string& )
 {
     return boost::lexical_cast<std::string>( rand() );
 }
+
 
 
 template< typename C, typename B, typename T >
@@ -102,10 +108,8 @@ void ptr_map_test()
     BOOST_DEDUCED_TYPENAME C::const_iterator ci           = c2.begin();
     BOOST_DEDUCED_TYPENAME C::iterator i2                 = c.end();
     BOOST_DEDUCED_TYPENAME C::const_iterator ci2          = c2.begin();
-    BOOST_DEDUCED_TYPENAME C::reverse_iterator ri         = c.rbegin();
-    BOOST_DEDUCED_TYPENAME C::const_reverse_iterator cri  = c2.rbegin();
-    BOOST_DEDUCED_TYPENAME C::reverse_iterator rv2        = c.rend();
-    BOOST_DEDUCED_TYPENAME C::const_reverse_iterator cvr2 = c2.rend();
+    ci = c.cbegin();
+    ci = c.cend();
 
     BOOST_DEDUCED_TYPENAME C::key_type a_key;
 
@@ -187,10 +191,6 @@ void ptr_map_test()
     i  = c.find( get_next_key( a_key ) );
     ci = c2.find( get_next_key( a_key ) );
     c2.count( get_next_key( a_key ) );
-    i  = c.lower_bound( get_next_key( a_key ) );
-    ci = c2.lower_bound( get_next_key( a_key ) );
-    i  = c.upper_bound( get_next_key( a_key ) );
-    ci = c2.upper_bound( get_next_key( a_key ) );
     sub  = c.equal_range( get_next_key( a_key ) );
     csub = c2.equal_range( get_next_key( a_key ) );
 
@@ -216,25 +216,7 @@ void ptr_map_test()
         std::cout << "\n mapped value = " << *it->second << " key = " << it->first;
         //std::cout << "\n mapped value = " << it.value() << " key = " << it.key();
     }
-    
-    typename C::reverse_iterator rit = c.rbegin(), re = c.rend();
-    for( ; rit != re; ++rit )
-    {
-        std::cout << "\n mapped value = " << *rit->second << " key = " << rit->first;
-        //std::cout << "\n mapped value = " << rit.value() << " key = " << rit.key();    
-        //std::cout << "\n mapped value (base) = " 
-        //          << rit.base().value() << " key = " << rit.base().key();   
-    }
-    
-    typename C::const_reverse_iterator crit = c2.rbegin(), cre = c2.rend();
-    for( ; crit != cre; ++crit )
-    {
-        std::cout << "\n mapped value = " << *(*crit).second << " key = " << (*crit).first;
-        //std::cout << "\n mapped value = " << crit.value() << " key = " << crit.key();    
-        //std::cout << "\n mapped value (base) = " 
-        //          << crit.base().value() << " key = " << crit.base().key();   
-    }
-    
+        
     BOOST_MESSAGE( "finished iterator test" );
 
     a_key = get_next_key( a_key );
@@ -285,51 +267,73 @@ void map_container_assignment_test()
 
 
 
-#include <boost/ptr_container/ptr_map.hpp>
+template< class Cont, class Key, class T >
+void test_unordered_interface()
+{
+    Cont c;
+    T* t = new T;
+    Key key = get_next_key( key );
+    c.insert( key, t );
+    typename Cont::local_iterator i = c.begin( 0 );
+    typename Cont::const_local_iterator ci = i;
+    ci = c.cbegin( 0 );
+    i = c.end( 0 );
+    ci = c.cend( 0 );
+    typename Cont::size_type s = c.bucket_count();
+    s = c.max_bucket_count();
+    s = c.bucket_size( 0 );
+    s = c.bucket( key );
+    float f = c.load_factor();
+    f       = c.max_load_factor();
+    c.max_load_factor(f);
+    c.rehash(1000);
+} 
+
+#include <boost/ptr_container/ptr_unordered_map.hpp>
 
 using namespace std;
 
 void test_map()
 {
-    ptr_map_test< ptr_map<int, Base>, Base, Derived_class >();
-    ptr_map_test< ptr_map<int, Value>, Value, Value >();
-    ptr_map_test< ptr_map<int, nullable<Base> >, Base, Derived_class >();
-    ptr_map_test< ptr_map<int, nullable<Value> >, Value, Value >();
-    ptr_map_test< ptr_map<int, abstract_base>, abstract_base, implementation >();
+    ptr_map_test< ptr_unordered_map<int, Base>, Base, Derived_class >();
+    ptr_map_test< ptr_unordered_map<int, Value>, Value, Value >();
+    ptr_map_test< ptr_unordered_map<int, nullable<Base> >, Base, Derived_class >();
+    ptr_map_test< ptr_unordered_map<int, nullable<Value> >, Value, Value >();
+    ptr_map_test< ptr_unordered_map<int, abstract_base>, abstract_base, implementation >();
 
-    ptr_map_test< ptr_multimap<int,Base>, Base, Derived_class >();
-    ptr_map_test< ptr_multimap<int,Value>, Value, Value >();    
-    ptr_map_test< ptr_multimap<int, nullable<Base> >, Base, Derived_class >();
-    ptr_map_test< ptr_multimap<int, nullable<Value> >, Value, Value >();
+    ptr_map_test< ptr_unordered_multimap<int,Base>, Base, Derived_class >();
+    ptr_map_test< ptr_unordered_multimap<int,Value>, Value, Value >();    
+    ptr_map_test< ptr_unordered_multimap<int, nullable<Base> >, Base, Derived_class >();
+    ptr_map_test< ptr_unordered_multimap<int, nullable<Value> >, Value, Value >();
 
-    map_container_assignment_test< ptr_map<std::string,Base>,
-                                   ptr_map<std::string,Derived_class>,
+    map_container_assignment_test< ptr_unordered_map<std::string,Base>,
+                                   ptr_unordered_map<std::string,Derived_class>,
                                    Derived_class>();
-    map_container_assignment_test< ptr_map<std::string, nullable<Base> >,
-                                   ptr_map<std::string,Derived_class>,
+    map_container_assignment_test< ptr_unordered_map<std::string, nullable<Base> >,
+                                   ptr_unordered_map<std::string,Derived_class>,
                                    Derived_class>();                            
-    map_container_assignment_test< ptr_map<std::string, nullable<Base> >,
-                                   ptr_map<std::string, nullable<Derived_class> >, 
+    map_container_assignment_test< ptr_unordered_map<std::string, nullable<Base> >,
+                                   ptr_unordered_map<std::string, nullable<Derived_class> >, 
                                    Derived_class>();                               
-   map_container_assignment_test< ptr_multimap<std::string,Base>,
-                                   ptr_multimap<std::string,Derived_class>,
+   map_container_assignment_test< ptr_unordered_multimap<std::string,Base>,
+                                   ptr_unordered_multimap<std::string,Derived_class>,
                                    Derived_class>();
-    map_container_assignment_test< ptr_multimap<std::string, nullable<Base> >,
-                                   ptr_multimap<std::string,Derived_class>,
+    map_container_assignment_test< ptr_unordered_multimap<std::string, nullable<Base> >,
+                                   ptr_unordered_multimap<std::string,Derived_class>,
                                    Derived_class>();                            
-    map_container_assignment_test< ptr_multimap<std::string, nullable<Base> >,
-                                   ptr_multimap<std::string, nullable<Derived_class> >, 
+    map_container_assignment_test< ptr_unordered_multimap<std::string, nullable<Base> >,
+                                   ptr_unordered_multimap<std::string, nullable<Derived_class> >, 
                                    Derived_class>();                               
 
                                       
-    test_transfer< ptr_map<int,Derived_class>, ptr_map<int,Base>, Derived_class >();
-    test_transfer< ptr_multimap<int,Derived_class>, ptr_multimap<int,Base>, Derived_class >();
+    test_transfer< ptr_unordered_map<int,Derived_class>, ptr_unordered_map<int,Base>, Derived_class >();
+    test_transfer< ptr_unordered_multimap<int,Derived_class>, ptr_unordered_multimap<int,Base>, Derived_class >();
     
     string joe   = "joe";
     string brian = "brian";
     string kenny = "kenny"; 
     
-    ptr_map<string,int> m;
+    ptr_unordered_map<string,int> m;
     m.insert( joe, new int( 4 ) );
     m.insert( brian, new int( 6 ) );
     BOOST_CHECK( m[ "foo" ] == 0 );
@@ -342,7 +346,7 @@ void test_map()
     BOOST_CHECK_THROW( (m.replace(m.begin(), 0 )), bad_ptr_container_operation ); 
     BOOST_CHECK_THROW( (m.at("not there")), bad_ptr_container_operation );
 
-    for( ptr_map<string,int>::iterator i = m.begin();
+    for( ptr_unordered_map<string,int>::iterator i = m.begin();
          i != m.end(); ++i )
     {
         if( is_null(i) )
@@ -353,7 +357,7 @@ void test_map()
         ref2++;
     }
 
-    typedef ptr_map<string,Derived_class> map_type;
+    typedef ptr_unordered_map<string,Derived_class> map_type;
     map_type m2;
     m2.insert( joe, new Derived_class );
     //
@@ -379,37 +383,9 @@ void test_map()
     //a_cpointer->second->foo();
     //const_begin(m2)->second->foo();
 
+    test_unordered_interface< ptr_unordered_map<string,Base>, string, Derived_class >();
+    test_unordered_interface< ptr_unordered_map<string,Base>, string, Derived_class >();
 }
-
-#include <boost/tuple/tuple.hpp>
-#include <boost/iterator/zip_iterator.hpp>
-#include <map>
-#include <boost/ptr_container/ptr_map.hpp>
-
-void test_map_iterators()
-{
-    using boost::zip_iterator;
-    using boost::tuple;
-    using boost::make_tuple;
-    using boost::ptr_map;
-    using std::map;
-
-    //typedef map<int, int> theMapType;
-    /*
-    @remark: the following will not compile
-             because of the proxy (non-reference) returned by operator*()
-             of the ptr_map's iterator type.
-             
-    typedef boost::ptr_map<int, int> theMapType;
-    typedef zip_iterator
-        <tuple<theMapType::iterator, theMapType::iterator> > zipIter;
-    theMapType map1;
-    theMapType map2;
-    zipIter zip(make_tuple(map1.begin(), map2.begin()));
-    */
-}
-
-
 
 using boost::unit_test::test_suite;
 
@@ -418,7 +394,6 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test_suite* test = BOOST_TEST_SUITE( "Pointer Container Test Suite" );
 
     test->add( BOOST_TEST_CASE( &test_map ) );
-    test->add( BOOST_TEST_CASE( &test_map_iterators ) );
 
     return test;
 }

@@ -18,11 +18,13 @@ rule sc-test ( name : extra-sources * )
 
 
 test-suite ptr_container :
+    [ sc-test ptr_inserter ]
     [ sc-test ptr_vector ]
     [ sc-test ptr_list ]
     [ sc-test ptr_deque ]
     [ sc-test ptr_set ]  
     [ sc-test ptr_map ]
+    [ sc-test ptr_map_adapter ]
     [ sc-test ptr_array ]
     [ sc-test tree_test ]   
     [ sc-test incomplete_type_test ]
@@ -32,5 +34,9 @@ test-suite ptr_container :
     [ sc-test indirect_fun ]  
     [ sc-test serialization : /boost/serialization//boost_serialization ]  
     [ sc-test no_exceptions ]    
-
+    
+    [ sc-test ptr_unordered_set ]
+    [ sc-test ptr_unordered_map ]        
+    [ sc-test ptr_circular_buffer ]    
+ 
     ;

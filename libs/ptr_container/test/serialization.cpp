@@ -19,6 +19,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+#include <boost/functional/hash.hpp>
 #include <boost/ptr_container/ptr_container.hpp>
 #include <boost/ptr_container/serialize_ptr_container.hpp>
 #include <boost/serialization/export.hpp>
@@ -38,6 +39,25 @@ inline T const& as_const( T const& r )
 }
 
 //
+// used to customize tests for circular_buffer
+//
+template< class Cont >
+struct set_capacity
+{
+    void operator()( Cont& ) const
+    { }
+};
+
+template<class T>
+struct set_capacity< boost::ptr_circular_buffer<T> >
+{
+    void operator()( boost::ptr_circular_buffer<T>& c ) const
+    {
+        c.set_capacity( 100u ); 
+    }
+};
+
+//
 // class hierarchy
 // 
 struct Base
@@ -48,7 +68,7 @@ struct Base
 
     
     template< class Archive >
-    void serialize( Archive& ar, const unsigned int version )
+    void serialize( Archive& ar, const unsigned int /*version*/ )
     {
         ar & boost::serialization::make_nvp( "i", i );
     }
@@ -68,12 +88,22 @@ inline bool operator<( const Base& l, const Base& r )
     return l.i < r.i;
 }
 
+inline bool operator==( const Base& l, const Base& r )
+{
+    return l.i == r.i;
+}
+
+inline std::size_t hash_value( const Base& b )
+{
+    return boost::hash_value( b.i );
+}
+
 struct Derived : Base
 {
     int i2;
 
     template< class Archive >
-    void serialize( Archive& ar, const unsigned int version )
+    void serialize( Archive& ar, const unsigned int /*version*/ )
     {
         ar & boost::serialization::make_nvp( "Base",  
                  boost::serialization::base_object<Base>( *this ) );
@@ -95,7 +125,7 @@ BOOST_CLASS_EXPORT_GUID( Derived, "Derived" )
 // 
 
 template< class C, class T >
-void add( C& c, T* r, unsigned n )
+void add( C& c, T* r, unsigned /*n*/ )
 {
     c.insert( c.end(), r ); 
 }
@@ -110,8 +140,10 @@ template< class Cont, class OArchive, class IArchive >
 void test_serialization_helper()
 {
     Cont vec;
+    set_capacity<Cont>()( vec );
     add( vec, new Base( -1 ), 0u );
     add( vec, new Derived( 1 ), 1u );
+    BOOST_CHECK_EQUAL( vec.size(), 2u );
 
     std::ofstream ofs("filename");
     OArchive oa(ofs);
@@ -127,13 +159,39 @@ void test_serialization_helper()
 
     BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
     BOOST_CHECK_EQUAL( (*vec2.begin()).i, -1 );
-    BOOST_CHECK_EQUAL( (*--vec2.end()).i, 0 );
+    BOOST_CHECK_EQUAL( (*++vec2.begin()).i, 0 );
 
-    typename Cont::iterator i = vec2.end();
-    --i;
+    typename Cont::iterator i = vec2.begin();
+    ++i;
     Derived* d = dynamic_cast<Derived*>( &*i ); 
     BOOST_CHECK_EQUAL( d->i2, 1 );
 
+}
+
+template< class Cont, class OArchive, class IArchive >
+void test_serialization_unordered_set_helper()
+{
+    Cont vec;
+    set_capacity<Cont>()( vec );
+    add( vec, new Base( -1 ), 0u );
+    add( vec, new Derived( 1 ), 1u );
+    BOOST_CHECK_EQUAL( vec.size(), 2u );
+
+    std::ofstream ofs("filename");
+    OArchive oa(ofs);
+    oa << boost::serialization::make_nvp( "container", as_const(vec) );
+    ofs.close();
+
+    
+    std::ifstream ifs("filename", std::ios::binary);
+    IArchive ia(ifs);
+    Cont vec2;
+    ia >> boost::serialization::make_nvp( "container", vec2 );
+    ifs.close();
+
+    BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
+    BOOST_CHECK_EQUAL( (*vec2.begin()).i, 0 );
+    BOOST_CHECK_EQUAL( (*++vec2.begin()).i, -1 );
 }
 
 template< class Map, class OArchive, class IArchive >
@@ -209,6 +267,12 @@ void test_serialization()
     test_serialization_helper< boost::ptr_vector<Base>, 
                                boost::archive::xml_oarchive, 
                                boost::archive::xml_iarchive>();
+    test_serialization_helper< boost::ptr_circular_buffer<Base>, 
+                               boost::archive::text_oarchive, 
+                               boost::archive::text_iarchive>();
+    test_serialization_helper< boost::ptr_circular_buffer<Base>, 
+                               boost::archive::xml_oarchive, 
+                               boost::archive::xml_iarchive>();
     test_serialization_helper< boost::ptr_array<Base,2>, 
                                boost::archive::text_oarchive,
                                boost::archive::text_iarchive>();
@@ -218,7 +282,14 @@ void test_serialization()
     test_serialization_helper< boost::ptr_multiset<Base>, 
                                boost::archive::text_oarchive,
                                boost::archive::text_iarchive>();
-
+    
+    test_serialization_unordered_set_helper< boost::ptr_unordered_set<Base>,
+                                             boost::archive::text_oarchive,
+                                             boost::archive::text_iarchive>();
+   test_serialization_unordered_set_helper<boost::ptr_unordered_multiset<Base>, 
+                                           boost::archive::text_oarchive,
+                                           boost::archive::text_iarchive>();
+                               
     test_serialization_map_helper< boost::ptr_map<std::string,Base>, 
                                    boost::archive::text_oarchive,
                                    boost::archive::text_iarchive>();
@@ -230,6 +301,20 @@ void test_serialization()
                                    boost::archive::xml_oarchive,
                                    boost::archive::xml_iarchive>();
     test_serialization_map_helper< boost::ptr_multimap<std::string,Base>, 
+                                   boost::archive::xml_oarchive,
+                                   boost::archive::xml_iarchive>();
+
+    test_serialization_map_helper< boost::ptr_unordered_map<std::string,Base>, 
+                                   boost::archive::text_oarchive,
+                                   boost::archive::text_iarchive>();
+    test_serialization_map_helper< boost::ptr_unordered_multimap<std::string,Base>, 
+                                   boost::archive::text_oarchive,
+                                   boost::archive::text_iarchive>();
+
+    test_serialization_map_helper< boost::ptr_unordered_map<std::string,Base>, 
+                                   boost::archive::xml_oarchive,
+                                   boost::archive::xml_iarchive>();
+    test_serialization_map_helper< boost::ptr_unordered_multimap<std::string,Base>, 
                                    boost::archive::xml_oarchive,
                                    boost::archive::xml_iarchive>();
 
