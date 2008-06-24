@@ -19,8 +19,8 @@ using namespace accumulators;
 //
 void test_stat()
 {
-    // basic lazy weighted_variance
-    accumulator_set<int, stats<tag::weighted_variance>, int> acc1;
+    // lazy weighted_variance
+    accumulator_set<int, stats<tag::weighted_variance(lazy)>, int> acc1;
 
     acc1(1, weight = 2);    //  2
     acc1(2, weight = 3);    //  6
@@ -35,7 +35,7 @@ void test_stat()
     BOOST_CHECK_CLOSE(10.1818182, weighted_moment<2>(acc1), 1e-5);
     BOOST_CHECK_CLOSE(1.7190083, weighted_variance(acc1), 1e-5);
 
-    accumulator_set<int, stats<tag::weighted_variance(immediate)>, int> acc2;
+    accumulator_set<int, stats<tag::weighted_variance>, int> acc2;
 
     acc2(1, weight = 2);
     acc2(2, weight = 3);
@@ -54,8 +54,8 @@ void test_stat()
     boost::normal_distribution<> mean_sigma(0,1);
     boost::variate_generator<boost::lagged_fibonacci607&, boost::normal_distribution<> > normal(rng, mean_sigma);
 
-    accumulator_set<double, stats<tag::weighted_variance>, double > acc_lazy;
-    accumulator_set<double, stats<tag::weighted_variance(immediate)>, double > acc_immediate;
+    accumulator_set<double, stats<tag::weighted_variance(lazy)>, double > acc_lazy;
+    accumulator_set<double, stats<tag::weighted_variance>, double > acc_immediate;
 
     for (std::size_t i=0; i<10000; ++i)
     {

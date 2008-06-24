@@ -36,14 +36,14 @@ namespace impl
         where \f$n\f$ is the number of samples.
     */
     template<typename Sample, typename Weight, typename MeanFeature>
-    struct weighted_variance_impl
+    struct lazy_weighted_variance_impl
       : accumulator_base
     {
         typedef typename numeric::functional::multiplies<Sample, Weight>::result_type weighted_sample;
         // for boost::result_of
         typedef typename numeric::functional::average<weighted_sample, Weight>::result_type result_type;
 
-        weighted_variance_impl(dont_care) {}
+        lazy_weighted_variance_impl(dont_care) {}
 
         template<typename Args>
         result_type result(Args const &args) const
@@ -68,7 +68,7 @@ namespace impl
         \f$n <= 1\f$.
     */
     template<typename Sample, typename Weight, typename MeanFeature, typename Tag>
-    struct immediate_weighted_variance_impl
+    struct weighted_variance_impl
       : accumulator_base
     {
         typedef typename numeric::functional::multiplies<Sample, Weight>::result_type weighted_sample;
@@ -76,7 +76,7 @@ namespace impl
         typedef typename numeric::functional::average<weighted_sample, Weight>::result_type result_type;
 
         template<typename Args>
-        immediate_weighted_variance_impl(Args const &args)
+        weighted_variance_impl(Args const &args)
           : weighted_variance(numeric::average(args[sample | Sample()], numeric::one<Weight>::value))
         {
         }
@@ -115,19 +115,20 @@ namespace impl
 //
 namespace tag
 {
-    struct weighted_variance
+    struct lazy_weighted_variance
       : depends_on<weighted_moment<2>, weighted_mean>
     {
         /// INTERNAL ONLY
         ///
-        typedef accumulators::impl::weighted_variance_impl<mpl::_1, mpl::_2, weighted_mean> impl;
+        typedef accumulators::impl::lazy_weighted_variance_impl<mpl::_1, mpl::_2, weighted_mean> impl;
     };
-    struct immediate_weighted_variance
+
+    struct weighted_variance
       : depends_on<count, immediate_weighted_mean>
     {
         /// INTERNAL ONLY
         ///
-        typedef accumulators::impl::immediate_weighted_variance_impl<mpl::_1, mpl::_2, immediate_weighted_mean, sample> impl;
+        typedef accumulators::impl::weighted_variance_impl<mpl::_1, mpl::_2, immediate_weighted_mean, sample> impl;
     };
 }
 
@@ -137,25 +138,25 @@ namespace tag
 //
 namespace extract
 {
+    extractor<tag::lazy_weighted_variance> const lazy_weighted_variance = {};
     extractor<tag::weighted_variance> const weighted_variance = {};
-    extractor<tag::immediate_weighted_variance> const immediate_weighted_variance = {};
 }
 
+using extract::lazy_weighted_variance;
 using extract::weighted_variance;
-using extract::immediate_weighted_variance;
 
-// weighted_variance(lazy) -> weighted_variance
+// weighted_variance(lazy) -> lazy_weighted_variance
 template<>
 struct as_feature<tag::weighted_variance(lazy)>
 {
-    typedef tag::weighted_variance type;
+    typedef tag::lazy_weighted_variance type;
 };
 
-// weighted_variance(immediate) -> immediate_weighted_variance
+// weighted_variance(immediate) -> weighted_variance
 template<>
 struct as_feature<tag::weighted_variance(immediate)>
 {
-    typedef tag::immediate_weighted_variance type;
+    typedef tag::weighted_variance type;
 };
 
 ////////////////////////////////////////////////////////////////////////////

@@ -25,7 +25,7 @@ namespace boost { namespace accumulators
 
 namespace impl
 {
-    //! Lazy calculaation of variance.
+    //! Lazy calculation of variance.
     /*!
         Default sample variance implementation based on the second moment \f$ M_n^{(2)} \f$ moment<2>, mean and count.
         \f[
@@ -38,13 +38,13 @@ namespace impl
         is the estimate of the sample mean and \f$n\f$ is the number of samples.
     */
     template<typename Sample, typename MeanFeature>
-    struct variance_impl
+    struct lazy_variance_impl
       : accumulator_base
     {
         // for boost::result_of
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type result_type;
 
-        variance_impl(dont_care) {}
+        lazy_variance_impl(dont_care) {}
 
         template<typename Args>
         result_type result(Args const &args) const
@@ -81,14 +81,14 @@ namespace impl
         can be non-negligible.
     */
     template<typename Sample, typename MeanFeature, typename Tag>
-    struct immediate_variance_impl
+    struct variance_impl
       : accumulator_base
     {
         // for boost::result_of
         typedef typename numeric::functional::average<Sample, std::size_t>::result_type result_type;
 
         template<typename Args>
-        immediate_variance_impl(Args const &args)
+        variance_impl(Args const &args)
           : variance(numeric::average(args[sample | Sample()], numeric::one<std::size_t>::value))
         {
         }
@@ -125,53 +125,54 @@ namespace impl
 //
 namespace tag
 {
-    struct variance
+    struct lazy_variance
       : depends_on<moment<2>, mean>
     {
         /// INTERNAL ONLY
         ///
-        typedef accumulators::impl::variance_impl<mpl::_1, mean> impl;
+        typedef accumulators::impl::lazy_variance_impl<mpl::_1, mean> impl;
     };
-    struct immediate_variance
+
+    struct variance
       : depends_on<count, immediate_mean>
     {
         /// INTERNAL ONLY
         ///
-        typedef accumulators::impl::immediate_variance_impl<mpl::_1, mean, sample> impl;
+        typedef accumulators::impl::variance_impl<mpl::_1, mean, sample> impl;
     };
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// extract::lazy_variance
 // extract::variance
-// extract::immediate_variance
 //
 namespace extract
 {
+    extractor<tag::lazy_variance> const lazy_variance = {};
     extractor<tag::variance> const variance = {};
-    extractor<tag::immediate_variance> const immediate_variance = {};
 }
 
+using extract::lazy_variance;
 using extract::variance;
-using extract::immediate_variance;
 
-// variance(lazy) -> variance
+// variance(lazy) -> lazy_variance
 template<>
 struct as_feature<tag::variance(lazy)>
 {
-    typedef tag::variance type;
+    typedef tag::lazy_variance type;
 };
 
-// variance(immediate) -> immediate_variance
+// variance(immediate) -> variance
 template<>
 struct as_feature<tag::variance(immediate)>
 {
-    typedef tag::immediate_variance type;
+    typedef tag::variance type;
 };
 
 // for the purposes of feature-based dependency resolution,
 // immediate_variance provides the same feature as variance
 template<>
-struct feature_of<tag::immediate_variance>
+struct feature_of<tag::lazy_variance>
   : feature_of<tag::variance>
 {
 };
@@ -195,16 +196,16 @@ struct feature_of<tag::weighted_variance>
 // So that immediate_variance can be automatically substituted with
 // immediate_weighted_variance when the weight parameter is non-void.
 template<>
-struct as_weighted_feature<tag::immediate_variance>
+struct as_weighted_feature<tag::lazy_variance>
 {
-    typedef tag::immediate_weighted_variance type;
+    typedef tag::lazy_weighted_variance type;
 };
 
 // for the purposes of feature-based dependency resolution,
 // immediate_weighted_variance provides the same feature as immediate_variance
 template<>
-struct feature_of<tag::immediate_weighted_variance>
-  : feature_of<tag::immediate_variance>
+struct feature_of<tag::lazy_weighted_variance>
+  : feature_of<tag::lazy_variance>
 {
 };
 

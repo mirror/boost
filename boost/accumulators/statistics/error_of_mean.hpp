@@ -51,20 +51,20 @@ namespace tag
 {
     template<>
     struct error_of<mean>
+      : depends_on<lazy_variance, count>
+    {
+        /// INTERNAL ONLY
+        ///
+        typedef accumulators::impl::error_of_mean_impl<mpl::_1, lazy_variance> impl;
+    };
+
+    template<>
+    struct error_of<immediate_mean>
       : depends_on<variance, count>
     {
         /// INTERNAL ONLY
         ///
         typedef accumulators::impl::error_of_mean_impl<mpl::_1, variance> impl;
-    };
-
-    template<>
-    struct error_of<immediate_mean>
-      : depends_on<immediate_variance, count>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::error_of_mean_impl<mpl::_1, immediate_variance> impl;
     };
 }
 
