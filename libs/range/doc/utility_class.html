@@ -31,7 +31,6 @@
         <li>
             Class <a href="#sub_range"><code>sub_range</code></a>
     </ul>
-    </ul>
 
     The <code>iterator_range</code> class is templated on a <a
     href="../../iterator/doc/new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">Forward 
@@ -84,7 +83,7 @@ corresponding <code>const_iterator</code> is. </p>
         </span><span class=keyword>typedef </span><span class=identifier>ForwardTraversalIterator             </span><span class=identifier>const_iterator</span><span class=special>;</span>
         <span class=keyword>typedef </span><span class=identifier>iterator_difference</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>&gt;::</span><span class=identifier>type  </span><span class=identifier>difference_type</span><span class=special>;</span>
  
-    </span><span class=keyword>public</span><span class=special>: </span><span class=comment>// construction, assignment
+    <span class=keyword>public</span><span class=special>: </span><span class=comment>// construction, assignment
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator2 </span><span class=special>&gt;
         </span><span class=identifier>iterator_range</span><span class=special>( </span><span class=identifier>ForwardTraversalIterator2 </span><span class=identifier>Begin</span><span class=special>, </span><span class=identifier>ForwardTraversalIterator2 </span><span class=identifier>End </span><span class=special>);
                     
@@ -110,7 +109,7 @@ corresponding <code>const_iterator</code> is. </p>
         </span><span class=keyword>operator        </span><a href="#unspecified_bool"><span class=identifier>unspecified_bool_type</span></a><span class=special>() </span><span class=keyword>const</span><span class=special>;
     </span>    <span class=keyword>bool</span>            <span 
 class=identifier><a href="#equal">equal</a></span><span
-class=special>( </span><span class=keyword>const</span> <span class=identifier>iterator_range</span><span class=special>& ) </span><span 
+class=special>( </span><span class=keyword>const</span> <span class=identifier>iterator_range</span><span class=special>&amp; ) </span><span 
 class=keyword>const;</span>
         <span class=identifier>reference       </span><span class=identifier>front</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>
         <span class=identifier>reference       </span><span class=identifier>back</span><span class=special>() </span><span class=keyword>const</span><span class=special>;</span>
@@ -119,7 +118,7 @@ class=keyword>const;</span>
         <span class=comment>// for Random Access Range only: </span>
         <span class=identifier>reference       </span><span class=keyword>operator</span><span class=special>[]( </span><span class=identifier>difference_type </span><span class=identifier>at </span><span class=special>) </span><span class=keyword>const</span><span class=special>;</span>
         <span class=identifier>value_type</span>      <span class=keyword>operator</span><span class=special>()( </span><span class=identifier>difference_type </span><span class=identifier>at </span><span class=special>) </span><span class=keyword>const</span><span class=special>;</span>
-    </span><span class=special>};
+    <span class=special>};
     
     </span><span class=comment>// stream output
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>T</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>Traits </span><span class=special>&gt;
@@ -164,7 +163,7 @@ class=keyword>const;</span>
     </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>&lt;( </span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>,
                     </span><span class=keyword>const </span><span class=identifier>iterator_range</span><span class=special>&lt;</span><span class=identifier>ForwardTraversalIterator</span><span class=special>&gt;&amp; </span><span class=identifier>r </span><span class=special>);</span>
  
-    </span><span class=comment>// external construction
+    <span class=comment>// external construction
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;
     </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=identifier>ForwardTraversalIterator </span><span class=special>&gt;
     </span><span class=identifier>make_iterator_range</span><span class=special>( </span><span class=identifier>ForwardTraversalIterator </span><span class=identifier>Begin</span><span class=special>, 
@@ -190,7 +189,7 @@ class=keyword>const;</span>
                          </span><span class=keyword>typename </span><span class=identifier>range_difference</span><span class=special>&lt;</span><span class=identifier>Range</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>advance_begin</span><span class=special>,
                          </span><span class=keyword>typename </span><span class=identifier>range_difference</span><span class=special>&lt;</span><span class=identifier>Range</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>advance_end </span><span class=special>);</span>
     
-    </span><span class=comment>// convenience
+    <span class=comment>// convenience
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Sequence</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>ForwardRange </span><span class=special>&gt;
     </span><span class=identifier>Sequence </span><a href="#copy_range"><span 
 class=identifier>copy_range</span></a><span class=special>( </span><span 
@@ -226,9 +225,9 @@ non-const iterators from the same container. </p>
      
 <p>
 <a name="equal"></a>      
-<code>bool equal( iterator_range& r ) const;</code>
+<code>bool equal( iterator_range&amp; r ) const;</code>
 <blockquote>
-    <i>Returns</i> <code>begin() == r.begin() && end() == r.end();</code>
+    <i>Returns</i> <code>begin() == r.begin() &amp;&amp; end() == r.end();</code>
 </blockquote>
 </p>      
 
@@ -236,21 +235,21 @@ non-const iterators from the same container. </p>
 
 <p> 
 <a name="comparison"></a>
-<code>bool operator==( const ForwardRange1& l, const ForwardRange2& r );</code>
+<code>bool operator==( const ForwardRange1&amp; l, const ForwardRange2&amp; r );</code>
 <blockquote>
     <i>Returns</i> <code>size(l) != size(r) ? false : std::equal( begin(l), end(l), begin(r) );</code> </blockquote> </p>
-<code>bool operator!=( const ForwardRange1& l, const ForwardRange2& r );</code>
+<code>bool operator!=( const ForwardRange1&amp; l, const ForwardRange2&amp; r );</code>
 <blockquote>
     <i>Returns</i> <code>!( l == r );</code>
 </blockquote>
-<code>bool operator<( const ForwardRange1& l, const ForwardRange2& r );</code>
+<code>bool operator<( const ForwardRange1&amp; l, const ForwardRange2&amp; r );</code>
 <blockquote>
     <i>Returns</i> <code>std::lexicographical_compare( begin(l), end(l), begin(r), end(r) );</code> </blockquote>
     
 <p>    
 <a name="make_iterator_range"></a>
 <pre>
-iterator_range make_iterator_range( Range& r, 
+iterator_range make_iterator_range( Range&amp; r, 
                                     typename range_difference&lt;Range>::type advance_begin, 
                                     typename range_difference&lt;Range>::type advance_end );
 </pre>
@@ -266,7 +265,7 @@ return make_iterator_range( new_begin, new_end );
 </blockquote>
 <p> 
 <a name="copy_range"></a> 
-<code>Sequence copy_range( const ForwardRange& r );</code>
+<code>Sequence copy_range( const ForwardRange&amp; r );</code>
 <blockquote>
     <i>Returns</i> <code>Sequence( begin(r), end(r) );</code>
 </blockquote>
@@ -292,7 +291,7 @@ class can propagate constness since it knows what a corresponding
     </span><span class=keyword>class </span><span class=identifier>sub_range </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>iterator_range</span><span class=special>&lt; </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=special>&gt;
     </span><span class=special>{
     </span><span class=keyword>public</span><span class=special>: </span>
-        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><spanclass=special>&gt;::</span><span class=identifier>type </span><span class=identifier>iterator</span><span class=special>;</span>
+        <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type </span><span class=identifier>iterator</span><span class=special>;</span>
         <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>range_iterator</span><span class=special>&lt;</span><span class=keyword>const </span><span class=identifier>ForwardRange</span><span class=special>&gt;::</span><span class=identifier>type  </span><span class=identifier>const_iterator</span><span class=special>;</span>
         <span class=keyword>typedef </span><span class=keyword>typename </span><span class=identifier>iterator_difference</span><span class=special>&lt;</span><span class=identifier>iterator</span><span class=special>&gt;::</span><span class=identifier>type       </span><span class=identifier>difference_type</span><span class=special>;</span>
     
