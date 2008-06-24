@@ -11,18 +11,20 @@
 #ifndef BOOST_RANGE_SUB_RANGE_HPP
 #define BOOST_RANGE_SUB_RANGE_HPP
 
-#include <boost/detail/workaround.hpp>
-
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || BOOST_WORKAROUND(BOOST_MSVC, == 1400) 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500)) 
+    #pragma warning( push )
     #pragma warning( disable : 4996 )
 #endif
 
+#include <boost/detail/workaround.hpp>
 #include <boost/range/config.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/value_type.hpp>
 #include <boost/range/size_type.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/assert.hpp>
+#include <boost/type_traits/is_reference.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 
 namespace boost
 {
@@ -41,12 +43,18 @@ namespace boost
         typedef BOOST_DEDUCED_TYPENAME range_difference<ForwardRange>::type       difference_type;
         typedef BOOST_DEDUCED_TYPENAME range_size<ForwardRange>::type             size_type;
         typedef BOOST_DEDUCED_TYPENAME base::reference                            reference;
+        
+    public: // for return value of front/back
+        typedef BOOST_DEDUCED_TYPENAME 
+                boost::mpl::if_< boost::is_reference<reference>,
+                                 const BOOST_DEDUCED_TYPENAME boost::remove_reference<reference>::type&, 
+                                 reference >::type const_reference;
 
     public:
         sub_range() : base() 
         { }
         
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1310) || BOOST_WORKAROUND(BOOST_MSVC, == 1400) 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500) ) 
         sub_range( const sub_range& r ) 
             : base( static_cast<const base&>( r ) )  
         { }  
@@ -112,7 +120,7 @@ namespace boost
             return base::front();
         }
 
-        const value_type& front() const
+        const_reference front() const
         {
             return base::front();
         }
@@ -122,7 +130,7 @@ namespace boost
             return base::back();
         }
 
-        const value_type& back() const
+        const_reference back() const
         {
             return base::back();
         }
@@ -132,7 +140,7 @@ namespace boost
             return base::operator[](sz);
         }
 
-        const value_type& operator[]( difference_type sz ) const
+        const_reference operator[]( difference_type sz ) const
         {
             return base::operator[](sz);
         }
@@ -162,6 +170,10 @@ namespace boost
 
 
 } // namespace 'boost'
+
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1500)) 
+    #pragma warning( pop )
+#endif
 
 #endif
 
