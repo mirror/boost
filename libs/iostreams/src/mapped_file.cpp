@@ -150,7 +150,7 @@ mapped_file_source::operator mapped_file_source::safe_bool() const
 }
 
 bool mapped_file_source::operator!() const
-{ return !!pimpl_ || pimpl_->error_; }
+{ return !pimpl_ || pimpl_->error_; }
 
 BOOST_IOS::openmode mapped_file_source::mode() const { return pimpl_->mode_; }
 
