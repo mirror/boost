@@ -22,7 +22,7 @@
         <li  >
             <i>Why is there no difference between <code  >range_iterator&lt;C&gt;::type</code>
             and <code  >range_const_iterator&lt;C&gt;::type</code> for <code>std::pair&lt;iterator, iterator&gt;</code></i>.
-        </li>
+
         <p  >
         In general it is not possible nor desirable to find a corresponding <code  >const_iterator</code>.
         When it is possible to come up with one, the client might choose to construct a <code  >std::pair&lt;const_iterator,const_iterator&gt;</code>
@@ -33,7 +33,7 @@
         is somewhat more convenient than a <code>pair</code> and that a <a
         href="utility_class.html#sub_range"><code>sub_range</code></a> does
        propagate const-ness. </p>
-
+        </li>
         <li  >
             <i>Why is there not supplied more types or more functions?</i>
             <p  >
