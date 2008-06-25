@@ -91,7 +91,7 @@ struct ptr_serialization_support
 # elif defined(__INTEL_COMPILER)
     BOOST_DLLEXPORT static void instantiate() BOOST_USED;
 # elif defined(__BORLANDC__)   
-    static BOOST_DLLEXPORT void instantiate();
+    static BOOST_DLLEXPORT void instantiate() BOOST_USED;
     enum { x = sizeof(instantiate(),3) };
 # else
     static void instantiate();
