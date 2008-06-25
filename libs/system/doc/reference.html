@@ -689,7 +689,10 @@ application program interfaces.</p>
     {
     public:
       system_error( error_code ec );
+      system_error( error_code ec, const char * what_arg );
       system_error( error_code ec, const std::string &amp; what_arg );
+      system_error( error_code::value_type ev, const error_category &amp; ecat,
+                    const char * what_arg );
       system_error( error_code::value_type ev, const error_category &amp; ecat,
                     const std::string &amp; what_arg );
       system_error( error_code::value_type ev, const error_category &amp; ecat);
@@ -706,11 +709,24 @@ application program interfaces.</p>
   <p><i>Postcondition:</i> <code>code() == ec <br>
 &nbsp; &amp;&amp; std::strcmp( this-&gt;runtime_error::what(), &quot;&quot; ) == 0</code></p>
 </blockquote>
+<pre>system_error( error_code ec, const char * what_arg );</pre>
+<blockquote>
+  <p><i>Effects:</i> Constructs an object of class <code>system_error</code>.</p>
+  <p><i>Postcondition:</i> <code>code() == ec <br>
+&nbsp; &amp;&amp; std::strcmp( this-&gt;runtime_error::what(), what_arg ) == 0</code></p>
+</blockquote>
 <pre>system_error( error_code ec, const std::string &amp; what_arg );</pre>
 <blockquote>
   <p><i>Effects:</i> Constructs an object of class <code>system_error</code>.</p>
   <p><i>Postcondition:</i> <code>code() == ec <br>
 &nbsp; &amp;&amp; std::strcmp( this-&gt;runtime_error::what(), what_arg.c_str() ) == 0</code></p>
+</blockquote>
+<pre>system_error( error_code::value_type ev, const error_category &amp; ecat,
+             const char * what_arg );</pre>
+<blockquote>
+  <p><i>Effects:</i> Constructs an object of class <code>system_error</code>.</p>
+  <p><i>Postcondition:</i> <code>code() == error_code( ev, ecat )<br>
+&nbsp; &amp;&amp; std::strcmp( this-&gt;runtime_error::what(), what_arg ) == 0</code></p>
 </blockquote>
 <pre>system_error( error_code::value_type ev, const error_category &amp; ecat,
              const std::string &amp; what_arg );</pre>
@@ -743,7 +759,7 @@ Distributed under the Boost Software License, Version 1.0. See
 <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a></p>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->June 24, 2008<!--webbot bot="Timestamp" endspan i-checksum="14232" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->June 25, 2008<!--webbot bot="Timestamp" endspan i-checksum="14296" --> </font>
 </p>
 
 </body>
