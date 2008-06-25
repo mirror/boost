@@ -369,6 +369,8 @@ void file_descriptor::open(const char* path, BOOST_IOS::openmode mode)
 
 bool file_descriptor::is_open() const { return pimpl_->is_open(); }
 
+void file_descriptor::close() { pimpl_->close(); }
+
 std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
 { return pimpl_->read(s, n); }
 
@@ -377,8 +379,6 @@ std::streamsize file_descriptor::write(const char_type* s, std::streamsize n)
 
 std::streampos file_descriptor::seek(stream_offset off, BOOST_IOS::seekdir way)
 { return pimpl_->seek(off, way); }
-
-void file_descriptor::close() { pimpl_->close(); }
 
 detail::file_handle file_descriptor::handle() const { return pimpl_->handle_; }
 
@@ -393,6 +393,8 @@ std::time_t file_descriptor::last_write_time() const
 
 void file_descriptor::set_last_write_time(std::time_t tm) const
 { pimpl_->set_last_write_time(tm); }
+
+void file_descriptor::init() { pimpl_.reset(new impl_type); }
 
 void file_descriptor::open(
     const detail::path& path, 

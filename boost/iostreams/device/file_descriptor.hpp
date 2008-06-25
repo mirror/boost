@@ -74,7 +74,10 @@ public:
     explicit file_descriptor( const Path& path,
                               BOOST_IOS::openmode mode =
                                   BOOST_IOS::in | BOOST_IOS::out )
-    { open(detail::path(path), mode); }
+    { 
+        init();
+        open(detail::path(path), mode); 
+    }
 
     // Copy constructor
     file_descriptor(const file_descriptor& other);
@@ -113,6 +116,7 @@ public:
     std::time_t last_write_time() const;
     void set_last_write_time(std::time_t) const;
 private:
+    void init();
 
     // open overload taking a detail::path
     void open( const detail::path& path, 
