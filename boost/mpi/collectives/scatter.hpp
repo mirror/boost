@@ -131,7 +131,7 @@ scatter(const communicator& comm, const T* in_values, T* out_values, int n,
         int root)
 {
   if (comm.rank() == root)
-    detail::scatter_impl(comm, in_values, n, out_values, root, 
+    detail::scatter_impl(comm, in_values, out_values, n, root,
                          is_mpi_datatype<T>());
   else
     detail::scatter_impl(comm, out_values, n, root, is_mpi_datatype<T>());
