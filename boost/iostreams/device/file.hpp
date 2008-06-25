@@ -5,14 +5,6 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-//
-// Contains wrappers for standard file buffers, together
-// with convenience typedefs:
-//      - basic_file_source
-//      - basic_file_sink
-//      - basic_file
-//
-
 #ifndef BOOST_IOSTREAMS_FILE_HPP_INCLUDED
 #define BOOST_IOSTREAMS_FILE_HPP_INCLUDED
 
