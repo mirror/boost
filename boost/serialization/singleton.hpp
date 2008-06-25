@@ -100,7 +100,7 @@ private:
     BOOST_DLLEXPORT static T & instance;
     // include this to provoke instantiation at pre-execution time
     static void use(T const &) {}
-    BOOST_DLLEXPORT static T & get_instance() BOOST_USED {
+    BOOST_DLLEXPORT static T & get_instance() {
         static T t;
         // refer to instance, causing it to be instantiated (and
         // initialized at startup on working compilers)
