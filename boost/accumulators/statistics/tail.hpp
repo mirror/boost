@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <functional>
+#include <boost/assert.hpp>
 #include <boost/range.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
@@ -167,7 +168,7 @@ namespace impl
           , indices(that.indices)
           , samples(that.samples)
         {
-            this->indices.reserve(that.indices.capacity());
+            this->indices.reserve(this->samples.size());
         }
 
         // This just stores the heap and the samples.
@@ -185,7 +186,7 @@ namespace impl
         template<typename Args>
         void operator ()(Args const &args)
         {
-            if(this->indices.size() < this->indices.capacity())
+            if(this->indices.size() < this->samples.size())
             {
                 this->indices.push_back(this->indices.size());
                 this->assign(args, this->indices.back());
@@ -232,6 +233,7 @@ namespace impl
         template<typename Args>
         void assign(Args const &args, std::size_t index)
         {
+            BOOST_ASSERT(index < this->samples.size());
             this->samples[index] = args[sample];
             std::push_heap(this->indices.begin(), this->indices.end(), indirect_cmp(this->samples));
             this->is_sorted = false;
