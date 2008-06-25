@@ -59,6 +59,7 @@ public:
         narrow_ = p.narrow_;
         wide_ = p.wide_;
         is_wide_ = p.is_wide_;
+        return *this;
     }
 
     // Assignment operator taking a std::string
@@ -67,6 +68,7 @@ public:
         narrow_ = p;
         wide_.clear();
         is_wide_ = false;
+        return *this;
     }
 
     // Assignment operator taking a C-style string
@@ -75,6 +77,7 @@ public:
         narrow_.assign(p);
         wide_.clear();
         is_wide_ = false;
+        return *this;
     }
 
     // Assignment operator taking a Boost.Filesystem path
