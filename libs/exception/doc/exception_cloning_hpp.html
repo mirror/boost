@@ -19,9 +19,34 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<h3>boost/exception_ptr.hpp</h3>
-<p>This header file contains the following definitions/declarations:</p>
-<div class="RenoPageList"><a href="copy_exception.html">copy_exception<br/>
+<div class="RenoIncludeDIV"><h2>boost/exception_ptr.hpp</h2>
+<h3>Synopsis</h3>
+<div class="RenoIncludeDIV"><pre>#include &lt;<span class="RenoLink"><a href="exception_exception_hpp.html">boost/exception/exception.hpp</a></span>&gt;
+
+namespace
+boost
+    {
+<span class="RenoIncludeSPAN">    <span class="RenoIncludeSPAN">class
+    <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span>:
+        public std::exception
+        public boost::<span class="RenoLink"><a href="exception.html">exception</a></span>
+        {
+        ---unspecified---
+        };</span>    
+    
+    <span class="RenoIncludeSPAN">typedef ---unspecified--- <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span>;</span>    
+    
+    <span class="RenoIncludeSPAN">template &lt;class T&gt;
+    <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> <span class="RenoLink"><a href="copy_exception.html">copy_exception</a></span>( T const &amp; e );</span>    
+    
+    <span class="RenoIncludeSPAN"><span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> <span class="RenoLink"><a href="current_exception.html">current_exception</a></span>();</span>    
+    
+    <span class="RenoIncludeSPAN">void <span class="RenoLink"><a href="rethrow_exception.html">rethrow_exception</a></span>( <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> const &amp; ep );</span></span>
+    }</pre>
+</div></div><h3>See also:</h3>
+<div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="exception_hpp.html">boost/exception.hpp<br/>
+</a><a href="copy_exception.html">copy_exception<br/>
 </a><a href="current_exception.html">current_exception<br/>
 </a><a href="exception_ptr.html">exception_ptr<br/>
 </a><a href="rethrow_exception.html">rethrow_exception<br/>

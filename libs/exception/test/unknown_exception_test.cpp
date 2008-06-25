@@ -50,7 +50,10 @@ main()
         catch(
         boost::unknown_exception & x )
             {
-            BOOST_TEST( 42==*boost::get_error_info<test>(x) );
+            if( boost::shared_ptr<int const> d=boost::get_error_info<test>(x) )
+                BOOST_TEST( 42==*d );
+            else
+                BOOST_TEST(false);
             }
         catch(
         ... )
@@ -64,7 +67,10 @@ main()
         catch(
         boost::exception & x )
             {
-            BOOST_TEST( 42==*boost::get_error_info<test>(x) );
+            if( boost::shared_ptr<int const> d=boost::get_error_info<test>(x) )
+                BOOST_TEST( 42==*d );
+            else
+                BOOST_TEST(false);
             }
         catch(
         ... )

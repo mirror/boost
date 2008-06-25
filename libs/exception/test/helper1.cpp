@@ -16,7 +16,7 @@ boost
         void
         throw_length_error()
             {
-            throw enable_error_info( std::length_error("my length error") );
+            throw enable_error_info( std::length_error("exception test length error") );
             }
         }
     }

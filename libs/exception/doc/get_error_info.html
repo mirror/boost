@@ -19,8 +19,8 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>get_error_info()</h3>
-<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</tt></p>
+<div class="RenoIncludeDIV"><h3>get_error_info</h3>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
     {
@@ -28,13 +28,14 @@ boost
     <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span>&lt;typename ErrorInfo::value_type const&gt; <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>( E const &amp; x );</span>
     }</pre>
 </div><h4>Requirements:</h4>
-<p>The type of the <tt>x</tt> object must derive from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>; <tt>ErrorInfo</tt> must be an instance of the <tt><span class="RenoLink"><a href="error_info.html">error_info</a></span></tt> template.</p>
+<p>The type of the x object must derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>; ErrorInfo must be an instance of the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template.</p>
 <h4>Returns:</h4>
-<p>If <tt>x</tt> does not store an object of type <tt>ErrorInfo</tt>, returns an empty <tt><span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span></tt>; otherwise returns pointer to the stored value. Use <tt><span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>()</tt> to store values in exception objects.</p>
+<p>If x does not store an object of type ErrorInfo, returns an empty <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span>; otherwise returns pointer to the stored value. Use <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to store values in exception objects.</p>
 <h4>Throws:</h4>
 <p>Nothing.</p>
 </div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="exception_error_info_hpp.html">boost/exception/info.hpp<br/>
 </a><a href="error_info.html">error_info<br/>
 </a><a href="exception.html">exception<br/>
 </a></div>

@@ -19,28 +19,33 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>throw_exception()</h3>
-<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;</tt></p>
+<div class="RenoIncludeDIV"><h3>throw_exception</h3>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">#ifdef BOOST_NO_EXCEPTIONS
+<span class="RenoIncludeSPAN">    #ifdef BOOST_NO_EXCEPTIONS
+    
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( std::exception const &amp; e ); // user defined
-#else
+    
+    #else
+    
     template &lt;class E&gt;
     void <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( E const &amp; e );
-#endif</span>
+    
+    #endif</span>
     }</pre>
 </div><h4>Requirements:</h4>
-<p><tt>E</tt> must derive publicly from <tt>std::exception</tt>.</p>
+<p>E must derive publicly from std::exception.</p>
 <h4>Effects:</h4>
-<div><ul><li> If <tt>BOOST_NO_EXCEPTIONS</tt> is not defined, <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e))</tt>, unless <tt>BOOST_EXCEPTION_DISABLE</tt> is defined, in which case <tt>boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e)</tt> is equivalent to <tt>throw e;</tt></li>
-<li> If <tt>BOOST_NO_EXCEPTIONS</tt> is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <tt>throw_exception</tt> are allowed to assume that the function never returns; therefore, if the user-defined <tt>throw_exception</tt> returns, the behavior is undefined.</li>
+<div><ul><li> If BOOST_NO_EXCEPTIONS is not defined, boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e)), unless BOOST_EXCEPTION_DISABLE is defined, in which case boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw e;</li>
+<li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of throw_exception are allowed to assume that the function never returns; therefore, if the user-defined throw_exception returns, the behavior is undefined.</li>
 </ul></div>
 </div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="throw_exception_hpp.html">boost/throw_exception.hpp<br/>
 </a><a href="enable_current_exception.html">enable_current_exception<br/>
-</a><a href="cloning.html">Tutorial: Transporting of Exceptions between Threads<br/>
+</a><a href="tutorial_exception_ptr.html">Tutorial: Transporting of Exceptions between Threads<br/>
 </a></div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->

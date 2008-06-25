@@ -19,39 +19,33 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>operator&lt;&lt;()</h3>
-<div class="RenoIncludeDIV"><p><tt>#include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</tt><span class="RenoBR">&nbsp;</span><br/><tt>#include &lt;<span class="RenoLink"><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp</a></span>&gt;</tt></p>
+<div class="RenoIncludeDIV"><h3>operator&lt;&lt;, error_info overload</h3>
+<div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
 <pre>namespace
 boost
     {
-<span class="RenoIncludeSPAN">    template &lt;class E, class Tag1, class T1&gt;
-    E const &amp; operator&lt;&lt;( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt; const &amp; v );
-
-    template &lt;class E, class Tag1, class T1, ..., class TagN, class TN&gt;
-    E const &amp; operator&lt;&lt;( E const &amp; x,
-        <span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span>&lt;
-            <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt;,
-            ...,
-            <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;TagN,TN&gt; &gt; const &amp; v );</span>
+<span class="RenoIncludeSPAN">    template &lt;class E, class Tag, class T&gt;
+    E const &amp; <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>( E const &amp; x, <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; const &amp; v );</span>
     }</pre>
 </div><h4>Requirements:</h4>
-<p><tt>E</tt> must be <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>, or a type that derives (indirectly) from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>.</p>
+<p>E must be boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, or a type that derives (indirectly) from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
 <h4>Effects:</h4>
-<div><ul><li> The first overload stores a copy of <tt>v</tt> into <tt>x</tt>. If <tt>x</tt> already contains data of type <tt><span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt;</tt>, that data is overwritten.</li>
-<li> The <tt>boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span></tt> overload is equivalent to <tt>x &lt;&lt; v.<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html#accessing_elements">get</a></span>&lt;0&gt;() &lt;&lt; ... &lt;&lt; v.<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html#accessing_elements">get</a></span>&lt;N&gt;()</tt>.</li>
-</ul></div>
+<p>Stores a copy of v into x. If x already contains data of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt;, that data is overwritten.</p>
 <h4>Returns:</h4>
-<p><tt>x</tt>.</p>
+<p>x.</p>
 <div class="RenoIncludeDIV"><h4>Throws:</h4>
-<p><tt>std::bad_alloc</tt>, or any exception emitted by <tt>T1..TN</tt> copy constructor.</p>
+<p>std::bad_alloc, or any exception emitted by the T copy constructor.</p>
 </div></div><h3>See also:</h3>
 <div class="RenoPageList"><a href="BOOST_ERROR_INFO.html">BOOST_ERROR_INFO<br/>
 </a><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="exception_error_info_hpp.html">boost/exception/info.hpp<br/>
 </a><a href="error_info.html">error_info<br/>
 </a><a href="exception.html">exception<br/>
+</a><a href="exception_diagnostic_information.html">exception::diagnostic_information<br/>
+</a><a href="exception_constructors.html">exception::exception<br/>
 </a><a href="get_error_info.html">get_error_info<br/>
-</a><a href="using_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
-</a><a href="logging.html">Tutorial: Logging of boost::exception Objects<br/>
+</a><a href="tutorial_diagnostic_information.html">Tutorial: Diagnostic Information<br/>
+</a><a href="tutorial_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
 </a></div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->

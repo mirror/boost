@@ -5,6 +5,7 @@
 
 #include "helper1.hpp"
 #include <boost/exception/info.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
 namespace
@@ -24,6 +25,11 @@ namespace
             x << test_int(42);
             throw;
             }
+        catch(
+        ... )
+            {
+            BOOST_TEST(false);
+            }
         }
     }
 
@@ -39,6 +45,8 @@ main()
     std::exception & x )
         {
         BOOST_TEST( 42==*boost::get_error_info<test_int>(x) );
+        BOOST_TEST( std::string(x.what())==std::string("exception test length error") );
+        BOOST_TEST( std::string(x.what())!=std::string(boost::diagnostic_information(x)) );
         }
     catch(
     ... )

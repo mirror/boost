@@ -85,13 +85,6 @@ virtual //Disable bogus GCC warning.
         value_type const value_;
         };
 
-    template <class ErrorInfo>
-    struct
-    error_info_type
-        {
-        typedef typename ErrorInfo::value_type value_type;
-        };
-
     template <class E,class Tag,class T>
     E const &
     operator<<( E const & x, error_info<Tag,T> const & v )
@@ -155,11 +148,18 @@ virtual //Disable bogus GCC warning.
                 }
 
             char const *
-            what( std::type_info const & exception_type ) const
+            diagnostic_information( char const * std_what, std::type_info const & exception_type ) const
                 {
                 if( what_.empty() )
                     {
-                    std::string tmp(exception_type.name());
+                    std::string tmp;
+                    if( std_what )
+                        {
+                        tmp += std_what;
+                        tmp += '\n';
+                        }
+                    tmp += "Dynamic exception type: ";
+                    tmp += exception_type.name();
                     tmp += '\n';
                     for( error_info_map::const_iterator i=info_.begin(),end=info_.end(); i!=end; ++i )
                         {

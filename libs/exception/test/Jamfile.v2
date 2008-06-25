@@ -7,7 +7,10 @@
 
 import testing ;
 
+project : requirements <exception-handling>on ;
+
 #to_string
+
 run is_output_streamable_test.cpp ;
 run has_to_string_test.cpp ;
 run to_string_test.cpp ;
@@ -15,6 +18,7 @@ run to_string_stub_test.cpp ;
 compile-fail to_string_fail.cpp ;
 
 #exception
+
 run cloning_test.cpp ;
 run copy_exception_test.cpp ;
 run unknown_exception_test.cpp ;
@@ -24,11 +28,15 @@ run enable_error_info_test.cpp helper1.cpp ;
 run throw_exception_test.cpp helper2.cpp ;
 run errno_test.cpp ;
 run error_info_test.cpp ;
+run diagnostic_information_test.cpp ;
 run what_test.cpp ;
 compile-fail exception_fail.cpp ;
 compile-fail throw_exception_fail.cpp ;
 
 #headers
+
+compile exception_ptr_hpp_test.cpp ;
+compile diagnostic_information_hpp_test.cpp ;
 compile enable_current_exception_hpp_test.cpp ;
 compile enable_error_info_hpp_test.cpp ;
 compile error_info_hpp_test.cpp ;

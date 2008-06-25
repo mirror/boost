@@ -92,7 +92,7 @@ boost
                 count_(0)
                 {
                 if( boost::exception * be1=dynamic_cast<boost::exception *>(this) )
-					if( boost::exception const * be2=dynamic_cast<boost::exception const *>(&x) )
+                    if( boost::exception const * be2=dynamic_cast<boost::exception const *>(&x) )
                         *be1 = *be2;
                 }
 

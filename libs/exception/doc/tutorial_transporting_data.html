@@ -20,9 +20,9 @@
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 <div class="RenoIncludeDIV"><h2>Transporting of Arbitrary Data to the Catch Site</h2>
-<p>All exception types that derive from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> can be used as type-safe containers of arbitrary data objects, while complying with the no-throw requirements (15.5.1) of the ANSI C++ standard for exception classes. Data can be added to a <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> at the time of the throw, or at a later time.</p>
+<p>All exception types that derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> can be used as type-safe containers of arbitrary data objects, while complying with the no-throw requirements (15.5.1) of the ANSI C++ standard for exception types. Data can be added to a boost::<span class="RenoLink"><a href="exception.html">exception</a></span> at the time of the throw, or at a later time.</p>
 <div class="RenoIncludeDIV"><h3>Adding of Arbitrary Data at the Point of the Throw</h3>
-<p>The following example demonstrates how <tt>errno</tt> can be stored in exception objects using Boost Exception:</p>
+<p>The following example demonstrates how errno can be stored in exception objects using Boost Exception:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;errno.h&gt;
 #include &lt;iostream&gt;
@@ -37,10 +37,10 @@ f()
     throw my_error() &lt;&lt; errno_info(errno); //(3)
     }
 </pre>
-<p>First, we instantiate the <tt><span class="RenoLink"><a href="error_info.html">error_info</a></span></tt> template using a unique identifier -- <tt>tag_errno</tt>, and the type of the info it identifies -- <tt>int</tt>. This provides compile-time type safety for the various values stored in exception objects.</p>
-<p>Second, we define class <tt>my_error</tt>, which derives from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>.</p>
-<p>Finally, (3) illustrates how the <tt>typedef</tt> from (1) can be used with <tt><span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>()</tt> to store values in exception objects at the point of the throw.</p>
-<p>The stored <tt>errno</tt> value can be recovered at a later time like this:</p>
+<p>First, we instantiate the <span class="RenoLink"><a href="error_info.html">error_info</a></span> template using a unique identifier -- tag_errno, and the type of the info it identifies -- int. This provides compile-time type safety for the various values stored in exception objects.</p>
+<p>Second, we define class my_error, which derives from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
+<p>Finally, (3) illustrates how the typedef from (1) can be used with <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to store values in exception objects at the point of the throw.</p>
+<p>The stored errno value can be recovered at a later time like this:</p>
 <pre>// ...continued
 
 void
@@ -57,7 +57,7 @@ g()
             std::cerr &lt;&lt; "Error code: " &lt;&lt; *err;
         }
     }</pre>
-<p>The <tt><span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>()</tt> function template is instantiated with the <tt>typedef</tt> from (1), and is passed an exception object of any type that derives publicly from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>. If the exception object contains the requested value, the returned <tt><span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span></tt> will point to it; otherwise an empty <tt><span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span></tt> is returned.</p>
+<p>The <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span> function template is instantiated with the typedef from (1), and is passed an exception object of any type that derives publicly from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>. If the exception object contains the requested value, the returned <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> will point to it; otherwise an empty <span class="RenoLink"><a href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">shared_ptr</a></span> is returned.</p>
 </div><div class="RenoIncludeDIV"><h3>Adding of Arbitrary Data to Active Exception Objects</h3>
 <p>Sometimes the throw site does not have all the information that is needed at the catch site to make sense of what went wrong. Here is an example:</p>
 <pre>#include &lt;stdio.h&gt;
@@ -91,9 +91,9 @@ file_read( FILE * f, void * buffer, size_t size )
     if( size!=fread(buffer,1,size,f) )
         throw file_read_error("????");
     }</pre>
-<p>We have defined an exception class <tt>file_read_error</tt> which can store a file name, so that when we catch a <tt>file_read_error</tt> object, we know which file the failure is related to. However, the <tt>file_read</tt> function does not have the file name at the time of the throw; all it has is a <tt>FILE</tt> handle.</p>
-<p>One possible solution is to not use <tt>FILE</tt> handles directly. We could have our own <tt>class file</tt> which stores both a <tt>FILE</tt> handle and a file name, and pass that to <tt>file_read()</tt>. However, this could be problematic if we communicate with 3rd party code that does not use our <tt>class file</tt> (probably because they have their own similar class.)</p>
-<p>A better solution is to make class <tt>file_read_error</tt> derive (possibly indirectly) from <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt>, and free the <tt>file_read()</tt> function from the burden of storing the file name in exceptions it throws:</p>
+<p>We have defined an exception class file_read_error which can store a file name, so that when we catch a file_read_error object, we know which file the failure is related to. However, the file_read function does not have the file name at the time of the throw; all it has is a FILE handle.</p>
+<p>One possible solution is to not use FILE handles directly. We could have our own class file which stores both a FILE handle and a file name, and pass that to file_read. However, this could be problematic if we communicate with 3rd party code that does not use our class file (probably because they have their own similar class.)</p>
+<p>A better solution is to make class file_read_error derive (possibly indirectly) from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, and free the file_read function from the burden of storing the file name in exceptions it throws:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;stdio.h&gt;
 #include &lt;errno.h&gt;
@@ -108,7 +108,7 @@ file_read( FILE * f, void * buffer, size_t size )
     if( size!=fread(buffer,1,size,f) )
         throw file_read_error() &lt;&lt; errno_info(errno);
     }</pre>
-<p>If <tt>file_read()</tt> detects a failure, it throws an exception which contains the information that is available at the time, namely the <tt>errno</tt>. Other relevant information, such as the file name, can be added in a context higher up the call stack, where it is known naturally:</p>
+<p>If file_read detects a failure, it throws an exception which contains the information that is available at the time, namely the errno. Other relevant information, such as the file name, can be added in a context higher up the call stack, where it is known naturally:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;boost/shared_ptr.hpp&gt;
 #include &lt;stdio.h&gt;
@@ -136,10 +136,10 @@ parse_file( char const * file_name )
         throw;
         }
     }</pre>
-<p>The above function is (almost) exception-neutral -- if an exception is emitted by any function call within the <tt>try</tt> block, <tt>parse_file()</tt> does not need to do any real work, but it intercepts any <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> object, stores the file name, and re-throws using a throw-expression with no operand (15.1.6). The rationale for catching any <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> object is that the file name is relevant to any failure that occurs in <tt>parse_file()</tt>, <i>even if the failure is unrelated to file I/O</i>.</p>
-<p>As usual, the stored data can be retrieved using <tt><span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>()</tt>.</p>
+<p>The above function is (almost) exception-neutral -- if an exception is emitted by any function call within the try block, parse_file does not need to do any real work, but it intercepts any boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object, stores the file name, and re-throws using a throw-expression with no operand (15.1.6). The rationale for catching any boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object is that the file name is relevant to any failure that occurs in parse_file, <i>even if the failure is unrelated to file I/O</i>.</p>
+<p>As usual, the stored data can be retrieved using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>.</p>
 </div><div class="RenoIncludeDIV"><h3>Adding Grouped Data to Exceptions</h3>
-<p>The code snippet below demonstrates how <tt>boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span></tt> can be used to bundle the name of the function that failed, together with the reported <tt>errno</tt> so that they can be added to exception objects more conveniently together:</p>
+<p>The code snippet below demonstrates how boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span> can be used to bundle the name of the function that failed, together with the reported errno so that they can be added to exception objects more conveniently together:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_error_info_group_hpp.html">boost/exception/info_tuple.hpp</a></span>&gt;
 #include &lt;boost/shared_ptr.hpp&gt;
 #include &lt;stdio.h&gt;
@@ -163,10 +163,10 @@ file_open( char const * name, char const * mode )
             file_name_info(name) &lt;&lt;
             clib_failure("fopen",errno);
     }</pre>
-<p>Note that the members of a <tt>boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span></tt> are stored separately in exception objects; they can only be retrieved individually, using <tt><span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>()</tt>.</p>
+<p>Note that the members of a boost::<span class="RenoLink"><a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html">tuple</a></span> are stored separately in exception objects; they can only be retrieved individually, using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>.</p>
 </div></div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
-</a><a href="using_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
+</a><a href="tutorial_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
 </a></div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->

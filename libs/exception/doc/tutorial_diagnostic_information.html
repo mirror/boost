@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>Tutorial: Logging of boost::exception Objects</title>
+	<title>Tutorial: Diagnostic Information</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,8 +19,8 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h2>Logging of boost::exception Objects</h2>
-<p>Class <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> provides a virtual member function <tt><span class="RenoLink"><a href="exception_what.html">what</a></span>()</tt>, with a signature identical to the familiar <tt>std::exception::what()</tt> function. The default implementation returns a string value that is not presentable as a friendly user message, but because it is generated automatically, it is useful for debugging or logging purposes. Here is an example:</p>
+<div class="RenoIncludeDIV"><h2>Diagnostic Information</h2>
+<p>Class boost::<span class="RenoLink"><a href="exception.html">exception</a></span> provides a virtual member function <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>, with a signature similar to the familiar std::exception::what function. The default implementation returns a string value that is not presentable as a friendly user message, but because it is generated automatically, it is useful for debugging or logging purposes. Here is an example:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;iostream&gt;
 
@@ -36,15 +36,16 @@ g()
     catch(
     boost::<span class="RenoLink"><a href="exception.html">exception</a></span> &amp; e )
         {
-        std::cerr &lt;&lt; e.<span class="RenoLink"><a href="exception_what.html">what</a></span>();
+        std::cerr &lt;&lt; e.<span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>();
         }
     }</pre>
-<p>The <tt><span class="RenoLink"><a href="exception_what.html">what</a></span>()</tt> member function iterates over all data objects stored in the <tt>boost::<span class="RenoLink"><a href="exception.html">exception</a></span></tt> through <tt><span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>()</tt>. The returned string is constructed by converting each data object to string and then concatenating these strings together.</p>
-<p>When the <tt><span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt;</tt> template is instantiated, the system attempts overload resolution for an unqualified call to <tt>to_string(x)</tt>, where <tt>x</tt> is of type <tt>T</tt>. If this is successful, the <tt>to_string()</tt> overload is used to convert objects of type <tt>T</tt> to string.</p>
-<p>Otherwise, the system attempts overload resolution for <tt>s &lt;&lt; x</tt>, where <tt>s</tt> is a <tt>std::ostringstream</tt> and <tt>x</tt> is of type <tt>T</tt>. If this is successful, the <tt>operator&lt;&lt;</tt> overload is used to convert objects of type <tt>T</tt> to string.</p>
-<p>Otherwise the system is unable to convert objects of type <tt>T</tt> to string, and an unspecified stub string value is used without issuing a compile error.</p>
+<p>The <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span> member function iterates over all data objects stored in the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> through <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>. The returned string is constructed by converting each data object to string and then concatenating these strings together.</p>
+<p>When the <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; template is instantiated, the system attempts overload resolution for an unqualified call to to_string(x), where x is of type T. If this is successful, the to_string overload is used to convert objects of type T to string.</p>
+<p>Otherwise, the system attempts overload resolution for s &lt;&lt; x, where s is a std::ostringstream and x is of type T. If this is successful, the operator&lt;&lt; overload is used to convert objects of type T to string.</p>
+<p>Otherwise the system is unable to convert objects of type T to string, and an unspecified stub string value is used without issuing a compile error.</p>
 </div><h3>See also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
+</a><a href="exception_diagnostic_information.html">exception::diagnostic_information<br/>
 </a></div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->

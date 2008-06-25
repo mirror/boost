@@ -18,7 +18,7 @@ typedef boost::error_info<struct tag_test_6,non_printable> test_6;
 
 struct
 test_exception:
-    public boost::exception
+    boost::exception
     {
     };
 
@@ -110,6 +110,11 @@ test_empty()
         BOOST_TEST( dynamic_cast<test_exception *>(&x) );
         BOOST_TEST( !boost::get_error_info<test_1>(x) );
         }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
+        }
 
     try
         {
@@ -120,6 +125,11 @@ test_empty()
     test_exception & x )
         {
         BOOST_TEST( dynamic_cast<boost::exception *>(&x) );
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
         }
     }
 
@@ -136,6 +146,12 @@ test_basic_throw_catch()
         {
         BOOST_TEST(*boost::get_error_info<test_5>(x)==std::string("test"));
         }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
+        }
+
     try
         {
         throw_test_2();
@@ -145,6 +161,11 @@ test_basic_throw_catch()
     boost::exception & x )
         {
         BOOST_TEST(boost::get_error_info<test_6>(x));
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
         }
     }
 
@@ -160,6 +181,11 @@ test_catch_add_info()
     boost::exception & x )
         {
         BOOST_TEST(*boost::get_error_info<test_5>(x)==std::string("test"));
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
         }
     }
 
@@ -179,6 +205,11 @@ test_add_tuple()
         BOOST_TEST( *boost::get_error_info<test_1>(x)==42 );
         BOOST_TEST( *boost::get_error_info<test_2>(x)==42u );
         }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
+        }
     try
         {
         throw test_exception() << test_123(42,42u,42.0f);
@@ -189,6 +220,11 @@ test_add_tuple()
         BOOST_TEST( *boost::get_error_info<test_1>(x)==42 );
         BOOST_TEST( *boost::get_error_info<test_2>(x)==42u );
         BOOST_TEST( *boost::get_error_info<test_3>(x)==42.0f );
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
         }
     try
         {
@@ -201,6 +237,11 @@ test_add_tuple()
         BOOST_TEST( *boost::get_error_info<test_2>(x)==42u );
         BOOST_TEST( *boost::get_error_info<test_3>(x)==42.0f );
         BOOST_TEST( *boost::get_error_info<test_5>(x)=="42" );
+        }
+    catch(
+    ... )
+        {
+        BOOST_TEST(false);
         }
     }
 
