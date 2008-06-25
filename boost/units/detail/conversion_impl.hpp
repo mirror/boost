@@ -123,42 +123,22 @@ struct base_unit_converter : base_unit_converter_base<Source, Dest> { };
 
 namespace detail {
 
-template<bool is_defined>
-struct do_call_base_unit_converter_impl;
-
-template<>
-struct do_call_base_unit_converter_impl<true>
-{
-    template<class Source, class Dest>
-    struct apply : base_unit_converter<Source, Dest> { };
-};
-
-template<>
-struct do_call_base_unit_converter_impl<false>
-{
-    template<class Source, class Dest>
-    struct apply {
-        typedef select_base_unit_converter<typename unscale<Source>::type, typename unscale<Dest>::type> selector;
-        typedef typename selector::source_type source_type;
-        typedef typename selector::destination_type destination_type;
-        typedef base_unit_converter<source_type, destination_type> converter;
-        typedef typename mpl::divides<typename get_scale_list<Source>::type, typename get_scale_list<source_type>::type>::type source_factor;
-        typedef typename mpl::divides<typename get_scale_list<Dest>::type, typename get_scale_list<destination_type>::type>::type destination_factor;
-        typedef typename mpl::divides<source_factor, destination_factor>::type factor;
-        typedef eval_scale_list<factor> eval_factor;
-        typedef typename multiply_typeof_helper<typename converter::type, typename eval_factor::type>::type type;
-        static type value()
-        {
-            return(converter::value() * eval_factor::value());
-        }
-    };
-};
-
 template<class Source, class Dest>
-struct do_call_base_unit_converter :
-    do_call_base_unit_converter_impl<
-        base_unit_converter<Source, Dest>::is_defined
-    >::template apply<Source, Dest> {};
+struct do_call_base_unit_converter {
+    typedef select_base_unit_converter<typename unscale<Source>::type, typename unscale<Dest>::type> selector;
+    typedef typename selector::source_type source_type;
+    typedef typename selector::destination_type destination_type;
+    typedef base_unit_converter<source_type, destination_type> converter;
+    typedef typename mpl::divides<typename get_scale_list<Source>::type, typename get_scale_list<source_type>::type>::type source_factor;
+    typedef typename mpl::divides<typename get_scale_list<Dest>::type, typename get_scale_list<destination_type>::type>::type destination_factor;
+    typedef typename mpl::divides<source_factor, destination_factor>::type factor;
+    typedef eval_scale_list<factor> eval_factor;
+    typedef typename multiply_typeof_helper<typename converter::type, typename eval_factor::type>::type type;
+    static type value()
+    {
+        return(converter::value() * eval_factor::value());
+    }
+};
 
 template<bool forward_is_defined, bool reverse_is_defined>
 struct call_base_unit_converter_base_unit_impl;
@@ -167,7 +147,8 @@ template<>
 struct call_base_unit_converter_base_unit_impl<true, true>
 {
     template<class Source, class Dest>
-    struct apply : do_call_base_unit_converter<Source, typename Dest::unit_type>
+    struct apply
+        : do_call_base_unit_converter<Source, typename Dest::unit_type> 
     {
     };
 };
@@ -176,7 +157,8 @@ template<>
 struct call_base_unit_converter_base_unit_impl<true, false>
 {
     template<class Source, class Dest>
-    struct apply : do_call_base_unit_converter<Source, typename Dest::unit_type>
+    struct apply
+        : do_call_base_unit_converter<Source, typename Dest::unit_type> 
     {
     };
 };
@@ -263,7 +245,8 @@ template<>
 struct call_base_unit_converter_impl<true>
 {
     template<class Source, class Dest>
-    struct apply : do_call_base_unit_converter<Source, Dest>
+    struct apply
+        : do_call_base_unit_converter<Source, Dest> 
     {
     };
 };
