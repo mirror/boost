@@ -16,7 +16,6 @@
 #include <boost/mpl/divides.hpp>
 #include <boost/preprocessor/seq/enum.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
 
 #include <boost/units/heterogeneous_system.hpp>
 #include <boost/units/homogeneous_system.hpp>
@@ -46,10 +45,14 @@ struct call_base_unit_converter;
 }
 
 /// INTERNAL ONLY
-struct undefined_base_unit_converter_base { };
+struct undefined_base_unit_converter_base {
+    static const bool is_defined = false;
+};
 
 /// INTERNAL ONLY
-struct no_default_conversion { };
+struct no_default_conversion {
+    static const bool is_defined = false;
+};
 
 /// INTERNAL ONLY
 template<class BaseUnit>
@@ -86,7 +89,7 @@ template<class BaseUnit>
 struct get_default_conversion
 {
     typedef typename unscaled_get_default_conversion_impl<
-        !boost::is_base_and_derived<no_default_conversion, unscaled_get_default_conversion<typename unscale<BaseUnit>::type> >::value
+        unscaled_get_default_conversion<typename unscale<BaseUnit>::type>::is_defined
     >::template apply<BaseUnit>::type type;
 };
 
@@ -100,12 +103,14 @@ struct select_base_unit_converter
 
 /// INTERNAL ONLY
 template<class Source, class Dest>
-struct base_unit_converter_base : undefined_base_unit_converter_base { };
+struct base_unit_converter_base : undefined_base_unit_converter_base {
+};
 
 /// INTERNAL ONLY
 template<class Source>
 struct base_unit_converter_base<Source, BOOST_UNITS_MAKE_HETEROGENEOUS_UNIT(Source, typename Source::dimension_type)>
 {
+    static const bool is_defined = true;
     typedef one type;
     static type value() {
         return(one());
@@ -152,10 +157,7 @@ struct do_call_base_unit_converter_impl<false>
 template<class Source, class Dest>
 struct do_call_base_unit_converter :
     do_call_base_unit_converter_impl<
-        !boost::is_base_and_derived<
-            undefined_base_unit_converter_base,
-            base_unit_converter<Source, Dest>
-        >::value
+        base_unit_converter<Source, Dest>::is_defined
     >::template apply<Source, Dest> {};
 
 template<bool forward_is_defined, bool reverse_is_defined>
@@ -290,36 +292,22 @@ struct call_base_unit_converter_impl<false>
     };
 };
 
-template<class Source, class Dest>
-struct base_unit_converter_scaled_is_undefined :
-    boost::is_base_and_derived<
-        undefined_base_unit_converter_base,
-        base_unit_converter<
-            typename select_base_unit_converter<typename unscale<Source>::type, typename unscale<Dest>::type>::source_type,
-            typename select_base_unit_converter<typename unscale<Source>::type, typename unscale<Dest>::type>::destination_type
-        >
-    > {};
+#define BOOST_UNITS_DETAIL_BASE_UNIT_CONVERTER_IS_DEFINED(Source, Dest)\
+    base_unit_converter<\
+        typename select_base_unit_converter<typename unscale<Source>::type, typename unscale<Dest>::type>::source_type,\
+        typename select_base_unit_converter<typename unscale<Source>::type, typename unscale<Dest>::type>::destination_type\
+    >::is_defined
 
 template<class Source, class Dest>
-struct base_unit_converter_is_undefined : 
-    mpl::and_<
-        boost::is_base_and_derived<
-            undefined_base_unit_converter_base,
-            base_unit_converter<Source, Dest>
-        >,
-        base_unit_converter_scaled_is_undefined<Source, Dest>
-    > {};
-
-template<class Source, class Dest>
-struct call_base_unit_converter : call_base_unit_converter_impl<!base_unit_converter_is_undefined<Source, Dest>::value>::template apply<Source, Dest>
+struct call_base_unit_converter : call_base_unit_converter_impl<BOOST_UNITS_DETAIL_BASE_UNIT_CONVERTER_IS_DEFINED(Source, Dest)>::template apply<Source, Dest>
 {
 };
 
 template<class Source, class Dest>
 struct call_base_unit_converter<Source, BOOST_UNITS_MAKE_HETEROGENEOUS_UNIT(Dest, typename Source::dimension_type)> :
     call_base_unit_converter_base_unit_impl<
-        !base_unit_converter_is_undefined<Source, typename Dest::unit_type>::value,
-        !base_unit_converter_is_undefined<Dest, typename Source::unit_type>::value
+        BOOST_UNITS_DETAIL_BASE_UNIT_CONVERTER_IS_DEFINED(Source, typename Dest::unit_type),
+        BOOST_UNITS_DETAIL_BASE_UNIT_CONVERTER_IS_DEFINED(Dest, typename Source::unit_type)
     >::template apply<Source, Dest>
 {
 };
