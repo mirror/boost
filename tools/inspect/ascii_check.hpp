@@ -1,7 +1,7 @@
 //  ascii_check header  --------------------------------------------------------//
 
 //  Copyright Marshall Clow 2007.
-//	Based on the tab-check checker by Beman Dawes
+//  Based on the tab-check checker by Beman Dawes
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
