@@ -85,6 +85,20 @@ namespace
   typedef std::vector< error_msg > error_msg_vector;
   error_msg_vector msgs;
 
+  struct lib_error_count
+  {
+    int     error_count;
+    string  library;
+
+    bool operator<( const lib_error_count & rhs ) const
+    {
+      return error_count > rhs.error_count;
+    }
+  };
+
+  typedef std::vector< lib_error_count > lib_error_count_vector;
+  lib_error_count_vector libs;
+
 //  get info (as a string) if inspect_root is svn working copy  --------------//
 
   string info( const fs::path & inspect_root )
@@ -412,6 +426,86 @@ namespace
       std::cout << "</pre>\n";
     }
   }
+
+
+//  hall_of_shame_count_helper  --------------------------------------------------//
+
+  void hall_of_shame_count_helper( const string & current_library, int err_count )
+  {
+        lib_error_count lec;
+        lec.library = current_library;
+        lec.error_count = err_count;
+        libs.push_back( lec );
+  }
+//  hall_of_shame_count  -----------------------------------------------------//
+
+  void hall_of_shame_count()
+  {
+    string current_library( msgs.begin()->library );
+    int err_count = 0;
+    for ( error_msg_vector::iterator itr ( msgs.begin() );
+      itr != msgs.end(); ++itr )
+    {
+      if ( current_library != itr->library )
+      {
+        hall_of_shame_count_helper( current_library, err_count );
+        current_library = itr->library;
+        err_count = 0;
+      }
+      ++err_count;
+    }
+    hall_of_shame_count_helper( current_library, err_count );
+  }
+
+//  display_hall_of_shame  ---------------------------------------------------//
+
+  void display_hall_of_shame()
+  {
+    if (display_text == display_format)
+    {
+      std::cout << "Hall of Shame:\n";
+    }
+    else
+    {
+      std::cout
+        << "</pre>\n"
+        "<h2>Hall of Shame</h2>\n"
+        "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
+        "  <tr>\n"
+        "    <td><b>Library</b></td>\n"
+        "    <td><b>Problems</b></td>\n"
+        "  </tr>\n"
+        ;
+    }
+
+    for ( lib_error_count_vector::iterator itr ( libs.begin() );
+      itr != libs.end(); ++itr )
+    {
+      if (display_text == display_format)
+      {
+        std::cout << itr->library << " " << itr->error_count << "\n";
+      }
+      else
+      {
+        std::cout
+          << "  <tr><td><a href=\"#"
+          << itr->library
+          << "\">" << itr->library
+          << "</a></td><td align=\"center\">"
+          << itr->error_count << "</td></tr>\n";
+      }
+    }
+
+    if (display_text == display_format)
+    {
+      std::cout << "\n";
+    }
+    else
+    {
+      std::cout << "</table>\n";
+    }
+  }
+
 
   const char * options()
   {
@@ -789,6 +883,12 @@ int cpp_main( int argc_param, char * argv_param[] )
   }
 
   std::sort( msgs.begin(), msgs.end() );
+
+  hall_of_shame_count();
+  std::stable_sort( libs.begin(), libs.end() );
+
+  if ( !libs.empty() )
+    display_hall_of_shame();
 
   if ( !msgs.empty() )
   {
