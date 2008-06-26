@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -87,9 +87,10 @@ function initialize() {
     <dt><img style="display:none" src="plus.gif" id="release_notes"><a target="detail" href="release.html">Release Notes</a></dt>
     <dd><div id="release_notes_detail"><dl class="page-index">
       <dt><img style="display:none" src="dot.gif"><a target="detail"  href="release.html#requirements">Requirements</a></dt>
+      <dt><img style="display:none" src="dot.gif"><a target="detail"  href="release.html#difference_1_35">Differences from version 1.35</a></dt>
+      <dt><img style="display:none" src="dot.gif"><a target="detail"  href="release.html#difference_1_34">Differences from version 1.34</a></dt>
       <dt><img style="display:none" src="dot.gif"><a target="detail"  href="release.html#difference_1_32">Differences from version 1.32</a></dt>
       <dt><img style="display:none" src="dot.gif"><a target="detail"  href="release.html#difference_1_33">Differences from version 1.33</a></dt>
-      <dt><img style="display:none" src="dot.gif"><a target="detail"  href="release.html#difference_1_34">Differences from version 1.34</a></dt>
       <dt><img style="display:none" src="dot.gif"><a target="detail"  href="release.html#todo">Pending Issues</a></dt>
     </dl></div></dd>
     <dt><img style="display:none" src="plus.gif" id="overview"><a target="detail" href="overview.html">Overview</a></dt>
@@ -148,6 +149,7 @@ function initialize() {
           <dt><img style="display:none" src="plus.gif" id="derivedpointers"><a target="detail" href="serialization.html#derivedpointers">Pointers to Objects of Derived Classes</a>
           <dd><div id="derivedpointers_detail"><dl class="page-index">
             <dt><img style="display:none" src="dot.gif"><a target="detail" href="serialization.html#registration">Registration</a>
+            <dt><img style="display:none" src="dot.gif"><a target="detail" href="serialization.html#export">Export</a>
             <dt><img style="display:none" src="dot.gif"><a target="detail" href="serialization.html#instantiation">Instantiation</a>
             <dt><img style="display:none" src="dot.gif"><a target="detail" href="serialization.html#selectivetracking">Selective Tracking</a>
             <dt><img style="display:none" src="dot.gif"><a target="detail" href="serialization.html#runtimecasting">Runtime Casting</a>
@@ -179,7 +181,6 @@ function initialize() {
       <dt><img style="display:none" src="plus.gif" id="special"><a target="detail" href="special.html">Special Considerations</a>
       <dd><div id="special_detail"><dl class="page-index">
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#objecttracking">Object Tracking</a>
-        <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#export">Exporting Class Serialization</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#classinfo">Class Information</a>
         <dt><img style="display:none" src="plus.gif" id="portability"><a target="detail" href="special.html#portability">Archive Portability</a>
         <dd><div id="portability_detail"><dl class="page-index">
@@ -188,7 +189,9 @@ function initialize() {
         </dl></div></dd>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#binary_archives">Binary Archives</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#xml_archives">XML Archives</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#export">Exporting Class Serialization</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#dlls">DLLS - Serialization and Runtime Linking</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#plugins">Plugins</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#multi_threading">Multi-Threading</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#optimizations">Optimzations</a>
         <dt><img style="display:none" src="plus.gif" id="exceptions"><a target="detail" href="exceptions.html">Archive Exceptions</a>
@@ -262,8 +265,8 @@ function initialize() {
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="pimpl.html">PIMPL</a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="derivation.html">Derivation from an Existing Archive Class</a>
     </dl></div></dd>
-    <dt><img style="display:none" src="plus.gif" id="miscellaneous">Miscellaneous
-    <dd><div id="miscellaneous_detail"><dl class="page-index">
+    <dt><img style="display:none" src="plus.gif" id="otherclasses">Other Classes
+    <dd><div id="otherclasses_detail"><dl class="page-index">
       <dt><img style="display:none" src="plus.gif" id="extended_type_info"><a target="detail" href="extended_type_info.html"><code>extended_type_info</code></a>
       <dd><div id="extended_type_info_detail"><dl class="page-index">
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="extended_type_info.html#motivation">Motivation</a>
@@ -272,12 +275,21 @@ function initialize() {
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="extended_type_info.html#models">Models</a>
       </dl></div></dd>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="void_cast.html"><code>void_cast</code></a>
-      <dt><img style="display:none" src="dot.gif"><a target="detail" href="codecvt.html">utf-8 code_cvt</a>
+      <dt><img style="display:none" src="dot.gif"><a target="detail" href="codecvt.html"><code>utf8_codecvt_facet</code></a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="strong_typedef.html"><code>BOOST_STRONG_TYPEDEF</code></a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="state_saver.html"><code>state_saver</code></a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="dataflow.html">Dataflow Iterators</a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="smart_cast.html"><code>smart_cast</code></a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="static_warning.html"><code>BOOST_STATIC_WARNING</code></a>
+      <dt><img style="display:none" src="plus.gif" id="singleton"><a target="detail" href="singleton.html"><code>singleton</code></a>
+      <dd><div id="singleton_detail"><dl class="page-index">
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="singleton.html#motivation">Motivation</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="singleton.html#features">Features</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="singleton.html#classinterface">Class Interface</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="singleton.html#requirements">Requirements</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="singleton.html#examples">Examples</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="singleton.html#multithreading">Multi-Threading</a>
+      </dl></div></dd>
     </dl></div></dd>
     <!--
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="configuration.html">Configuration Information</a></dt>
@@ -289,6 +301,23 @@ function initialize() {
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="rationale.html#typeid"><code style="white-space: normal">typeid</code> information is not included in archives</a></dt>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="rationale.html#trap">Compile time trap when saving a non-const value</a></dt>
     </dl></div></dd>
+
+    <dt><img style="display:none" src="plus.gif" id="todo"><a target="detail" href="todo.html">To Do</a></dt>
+    <dd><div id="todo_detail"><dl class="page-index">
+      <dt><img style="display:none" src="dot.gif"><a target="detail" href="todo.html#portablebinaryarchive">Portable Binary Archive</a></dt>
+      <dt><img style="display:none" src="dot.gif"><a target="detail" href="todo.html#performancetesting">Performance Testing and Profiling</a></dt>
+      <dt><img style="display:none" src="dot.gif"><a target="detail" href="todo.html#backversioning">Back Versioning</a></dt>
+      <dt><img style="display:none" src="dot.gif"><a target="detail" href="todo.html#nortti">Environments without RTTI</a></dt>
+
+      <dt><img style="display:none" src="plus.gif" id="newcasestudies"><a target="detail" href="new_case_studies.html">Proposed Case Studies</a></dt>
+      <dd><div id="newcasestudies_detail"><dl class="page-index">
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="new_case_studies.html#functionobject">Serializing a Function Object</a></dt>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="new_case_studies.html#archiveadaptor">Archive Adaptors</a></dt>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="new_case_studies.html#archivehelper">Archive Helpers</a></dt>
+      </dl></div></dd>
+
+    </dl></div></dd>
+
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="history.html">History</a>
     <!--
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="definitions.html">Definitions</a></dt>

@@ -8,27 +8,45 @@
 
 project boost/serialization
     : source-location ../src
-    ;
+    : requirements <dependency>../../config/test//BOOST_NO_STD_LOCALE
+      <conditional>@include-spirit
+;
 
+SPIRIT_ROOT = [ modules.peek : SPIRIT_ROOT ] ;
 rule include-spirit ( properties * )
 {
-    local result ;
-    local SPIRIT_ROOT = [ modules.peek : SPIRIT_ROOT ] ;
-    for local tset in borland { # vc iw
-        if ( <toolset>$(tset) in $(properties) ) {
-            if ( $(SPIRIT_ROOT) ) {
-                result = <cxxflags>-I$(SPIRIT_ROOT) ;
-            }
-            else {
-                echo **** spirit 1.6x required to build library with this compiler **** ;
-                result = <build>no ;
-
-            }
-        }
+    local old-compiler ;
+    if <toolset>borland in $(properties)
+    {
+        old-compiler = true ;
     }
+    else if <toolset>msvc in $(properties)
+    {
+        if <toolset-msvc:version>6.5 in $(properties)
+          || <toolset-msvc:version>7.0 in $(properties)
+        {            
+            old-compiler = true ;
+        }        
+    }
+        
+    local result ;
+    if $(old-compiler)
+    {        
+        if $(SPIRIT_ROOT)
+        {
+            # note - we can't use <include>$(SPIRIT_ROOT) because 
+            # it puts -I$(SPIRIT_ROOT) AFTER the "../../.." in the command line.
+            # so use these instead 
+            result = <cxxflags>-I$(SPIRIT_ROOT) ;
+        }
+        else 
+        {
+            echo **** spirit 1.6x required to build library with this compiler **** ;
+            result = <build>no ;
+        }
+    }    
     return $(result) ;
 }
-
 
 SOURCES = 
     basic_archive
@@ -44,10 +62,9 @@ SOURCES =
     basic_xml_archive
     binary_iarchive
     binary_oarchive
-    codecvt_null
     extended_type_info
-    extended_type_info_no_rtti
     extended_type_info_typeid
+    extended_type_info_no_rtti
     polymorphic_iarchive
     polymorphic_oarchive
     stl_port
@@ -62,28 +79,29 @@ SOURCES =
 WSOURCES = 
     basic_text_wiprimitive
     basic_text_woprimitive
-    binary_wiarchive
-    binary_woarchive
     text_wiarchive
     text_woarchive
     utf8_codecvt_facet
     xml_wgrammar
     xml_wiarchive
     xml_woarchive
+    codecvt_null
 ;
 
+
 lib boost_serialization 
-        : $(SOURCES).cpp
-	: <toolset>msvc:<cxxflags>/Gy 
-	  <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
-          <conditional>@include-spirit
-	;
+    : $(SOURCES).cpp
+    : 
+    <toolset>msvc:<cxxflags>/Gy
+    <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
+    ;
 
 lib boost_wserialization 
-        : $(WSOURCES).cpp boost_serialization 
-        : <toolset>msvc:<cxxflags>/Gy 
-	  <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1	
-          <conditional>@include-spirit
-	;
+    : $(WSOURCES).cpp boost_serialization 
+    :     
+    <toolset>msvc:<cxxflags>/Gy 
+    <dependency>../../config/test//BOOST_NO_STD_WSTREAMBUF
+    <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
+    ;
 
 boost-install boost_serialization boost_wserialization ;

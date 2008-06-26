@@ -14,5 +14,6 @@ namespace boost { namespace archive { namespace detail {
 // explicitly instantiate all required template functions
 
 template class archive_pointer_oserializer<mpi::detail::content_oarchive> ;
-
+template class archive_pointer_oserializer<boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::content_oarchive> >;
+template class archive_pointer_oserializer<boost::mpi::detail::ignore_skeleton_oarchive<boost::mpi::detail::mpi_datatype_oarchive> >;
 } } }

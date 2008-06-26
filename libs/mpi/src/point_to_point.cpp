@@ -32,7 +32,7 @@ packed_archive_send(MPI_Comm comm, int dest, int tag,
   BOOST_MPI_CHECK_RESULT(MPI_Send,
                          (const_cast<void*>(size), 1, 
                           get_mpi_datatype<std::size_t>(ar.size()), 
-						  dest, tag, comm));
+                          dest, tag, comm));
   BOOST_MPI_CHECK_RESULT(MPI_Send,
                          (const_cast<void*>(ar.address()), ar.size(),
                           MPI_PACKED,

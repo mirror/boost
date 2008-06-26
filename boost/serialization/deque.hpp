@@ -42,7 +42,7 @@ template<class Archive, class U, class Allocator>
 inline void load(
     Archive & ar,
     std::deque<U, Allocator> &t,
-    const unsigned int file_version
+    const unsigned int /*file_version*/
 ){
     boost::serialization::stl::load_collection<
         Archive,

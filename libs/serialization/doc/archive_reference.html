@@ -34,30 +34,41 @@ http://www.boost.org/LICENSE_1_0.txt)
 <h3><a name="implementation">Implementation</a></h3>
 The <a href="archives.html"><strong>Archive</strong></a> concept specifies the functions that a
 class must implement to in order to be used to serialize 
-<a href="serialization.html"><strong>Serializable</strong></a> types. 
+<a href="serialization.html"><strong>Serializable</strong></a> types.
+
+ 
 The library implements a family of archives appropriate for different purposes.  
-This section describes how they have been implemented and how one can implement his own archive class.
+This section describes how they have been implemented and one way one 
+can implement his own archive class.
+
 Our discussion will focus on archives used for loading as the hierarchy is exactly analogous
 for archives used for saving data.
+
+
 <p>
 Our archives have been factored in to a tree of classes in order to minimize
 repetition of code.  This is shown in the accompanying 
 <a target="class_diagram" href="class_diagram.html">class diagram</a>.
-All input archives should be derived from the following template:
+
+Any class which fullfills the following requirements will function as
+a loading archive.
+
+
+<h4>Minimum Requirments</h4>
+The archive class is derived from:
 <pre><code>
 template&lt;class Archive&gt;
 detail::common_iarchive;
 </code></pre>
-<h4>Minimum Requirments</h4>
 An instance of the this template handles all the "bookkeeping" associated
 with serialization. In order to be a functional only the following additional
-functions <strong>must</strong> be defined:
+functions <strong>must</strong> be declared:
 <dl>
 <dt><h4><code>void load(T &t);</code></h4></dt>
 <dd>
 This function must be implemented for all primitive data types.  This can be
-accomplished through the use of a member template or explict declarations
-for all prmititive types.
+accomplished through the use of a member template or explicit declarations
+for all primitive types.
 </dd>
 
 <dt><h4><code>void load_binary(void *address, std::size_t size);</code></h4></dt>
@@ -81,13 +92,12 @@ So, the most trivial implementation of an input archive would look like this:
 <a href="../../../boost/archive/detail/common_iarchive.hpp" target="common_iarchive_hpp">
 #include &lt;boost/archive/detail/common_iarchive.hpp&gt;
 </a>
-
 /////////////////////////////////////////////////////////////////////////
 // class trivial_iarchive - read serialized objects from a input text stream
 class trivial_iarchive : 
     public boost::archive::detail::common_iarchive&lt;trivial_iarchive&gt;
 {
-    // permit serialization system priviledged access to permit
+    // permit serialization system privileged access to permit
     // implementation of inline templates for maximum speed.
     friend class boost::archive::load_access;
 
@@ -143,7 +153,7 @@ by XML archive to inject "&lt;/name&gt;" after data.
 <dd>
 <strong>Default</strong>:Does nothing.<br>
 <strong>Purpose</strong>:Called <strong>each time</strong> user data is saved. 
-Its not called when archive book keeping data is saved.  This is used by XML archives 
+It's not called when archive book keeping data is saved.  This is used by XML archives 
 to determine  when to inject a "&gt;" character at end of XML header. XML output archives 
 keep their own internal flag indicating that data being written is header data. This
 internal flag is reset when an object start tag is written. When 
@@ -226,7 +236,9 @@ One or more of the following issues may need to be addressed:
     all data objects.
     <li>Addressing any of the above may generate more issues to be addressed.
     <li>The archives included with library are all templates which use a
-    <code style="white-space: normal">stream</code> as a template parameter rather than simple classes.
+    <code style="white-space: normal">stream</code> or
+    <code style="white-space: normal">streambuf</code>
+    as a template parameter rather than simple classes.
     Combined with the above, even more issues arise with non-conforming compilers.
 </ul>
 The attached <a target="class_diagram" href="class_diagram.html">class diagram</a>
@@ -241,17 +253,15 @@ EXCEPT for one special case.
 <ul>
     <li>Instances of a derived class are serialized through a base class pointer.
     <li>Such instances are not "registered" neither implicitly nor explicitly. That
-    is, the macro <code style="white-space: normal">BOOT_CLASS_EXPORT</code> is used to instantiate the serialization
-    code for the included archives.
+    is, the macro <code style="white-space: normal">BOOT_CLASS_EXPORT</code> is used 
+    to instantiate the serialization code for the included archives.
 </ul>
-The problem here is that BOOT_CLASS_EXPORT only generates code for those archives
-included with the library - not those added subsequently.  To generate code for
-newly created archive classes, the following should be used.
+
+To make this work, the following should be included after the archive
+class definition.
 <pre><code>
-#define BOOST_ARCHIVE_CUSTOM_OARCHIVE_TYPES trivial_oarchive
-#define BOOST_ARCHIVE_CUSTOM_IARCHIVE_TYPES trivial_iarchive
+#define BOOST_SERIALIZATION_REGISTER_ARCHIVE(Archive)
 </code></pre>
-before <code style="white-space: normal">BOOST_CLASS_EXPORT</code> is invoked for any serializable class.
 Failure to do this will not inhibit the program from compiling, linking
 and executing properly - except in one case.  If an instance of a derived
 class is serialized through a pointer to its base class, the program
@@ -259,8 +269,7 @@ will throw an
 <a href="exceptions.html#unregistered_class"><code style="white-space: normal">unregistered_class</code></a>
 exception.
 <p>
-Only one of the above statements is permitted, However, any number of new archive
-classes can be specified as list separated by commas.
+
 
 <h4><a name="testing">Testing</h4>
 Exhaustive testing of the library requires testing the different aspects of object
@@ -302,16 +311,16 @@ typedef std::ifstream test_istream;
 #define TEST_STREAM_FLAGS (std::ios_base::openmode)0
 </code></pre>
 
-To test a new archive, for example, portable binary archives, make a
-header file <code style="white-space: normal">portable_binary_archive.hpp</code>
+To test a new archive, for example, portable binary archives, with the gcc compiler, 
+make a header file <code style="white-space: normal">portable_binary_archive.hpp</code>
 and invoke <code style="white-space: normal">bjam</code> with
 <pre><code> 
 -sBOOST_ARCHIVE_LIST=portable_binary_archive.hpp
 </code></pre>
-This process in encapsulated in the shell script 
-<code style="white-space: normal">run_archive_test</code> whose command line is
+This process in encapsulated in the shell or cmd script 
+<code style="white-space: normal">library_test</code> whose command line is
 <pre><code>
-run_archive_test &lt;test header file&gt; &lt;toolset&gt; [&lt;boost root&gt;] [&lt;target directory&gt;]
+library_test --toolset=gcc -sBOOST_ARCHIVE_LIST=portable_binary_archive.hpp
 </code></pre>
 <h3><a name="polymorphic">Polymorphic Archives</a></h3>
 
@@ -367,9 +376,9 @@ As can be seen in the
 and the header files, this implementation is just a composition of the polymorphic
 interface and the standard template driven implementation.  This composition is
 accomplished by the templates
-<a target=polymorphic_iarchive_dispatch_hpp href="../../../boost/archive/detail/polymorphic_iarchive_dispatch.hpp"><code style="white-space: normal">polymorphic_iarchive_dispatch.hpp</code></a>
+<a target=polymorphic_iarchive_route_hpp href="../../../boost/archive/detail/polymorphic_iarchive_route.hpp"><code style="white-space: normal">polymorphic_iarchive_route.hpp</code></a>
 and
-<a target=polymorphic_oarchive_dispatch_hpp href="../../../boost/archive/detail/polymorphic_oarchive_dispatch.hpp"><code style="white-space: normal">polymorphic_oarchive_dispatch.hpp</code></a>.
+<a target=polymorphic_oarchive_route_hpp href="../../../boost/archive/detail/polymorphic_oarchive_route.hpp"><code style="white-space: normal">polymorphic_oarchive_route.hpp</code></a>.
 As these contain no code specific to the particular implementation archive, they can be used to create
 a polymorphic archive implementation from any functioning templated archive implementation.
 <p>

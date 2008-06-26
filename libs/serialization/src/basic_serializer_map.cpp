@@ -14,8 +14,6 @@
 
 #include <stdlib.h> // for NULL
 
-#include <set>
-
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/basic_serializer.hpp>
 #include <boost/archive/detail/basic_serializer_map.hpp>
@@ -27,6 +25,7 @@ namespace boost {
 namespace archive {
 namespace detail {
 
+#if 0
 BOOST_ARCHIVE_DECL(bool) 
 type_info_pointer_compare::operator()(
     const basic_serializer * lhs, const basic_serializer * rhs
@@ -34,11 +33,37 @@ type_info_pointer_compare::operator()(
     return *lhs < *rhs;
 }
 
+class basic_serializer_arg : public basic_serializer {
+public:
+    basic_serializer_arg(const serialization::extended_type_info & eti) :
+        basic_serializer(eti)
+    {}
+};
+#endif
+
+} // namespace detail
+} // namespace archive
+} // namespace boost
+
+#if 0
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_serializer_map::basic_serializer_map(bool & deleted) :
     m_deleted(deleted)
 {
     m_deleted = false;
+}
+
+BOOST_ARCHIVE_DECL(const basic_serializer *) 
+basic_serializer_map::tfind(
+    const boost::serialization::extended_type_info & eti
+) const {
+    const basic_serializer_arg bs(eti);
+    map_type::const_iterator it;
+    boost::serialization::singleton<basic_serializer_map>::lease l;
+    it = l->m_map.find(& bs);
+    if(it == l->m_map.end())
+        return NULL;
+    return *it;
 }
 
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY())
@@ -48,33 +73,13 @@ basic_serializer_map::~basic_serializer_map(){
 
 BOOST_ARCHIVE_DECL(bool) 
 basic_serializer_map::insert(const basic_serializer * bs){
-    return m_map.insert(bs).second;
+    boost::serialization::singleton<basic_serializer_map>::lease l;
+    return l->m_map.insert(bs).second;
 }
 
 BOOST_ARCHIVE_DECL(void) 
 basic_serializer_map::erase(basic_serializer * bs){
-    m_map.erase(bs);
+    boost::serialization::singleton<basic_serializer_map>::lease l;
+    l->m_map.erase(bs);
 }
-
-class basic_serializer_arg : public basic_serializer {
-public:
-    basic_serializer_arg(const serialization::extended_type_info & eti) :
-        basic_serializer(eti)
-    {}
-};
-
-BOOST_ARCHIVE_DECL(const basic_serializer *) 
-basic_serializer_map::tfind(
-    const boost::serialization::extended_type_info & eti
-) const {
-    const basic_serializer_arg bs(eti);
-    map_type::const_iterator it;
-    it = m_map.find(& bs);
-    if(it == m_map.end())
-        return NULL;
-    return *it;
-}
-
-} // namespace detail
-} // namespace archive
-} // namespace boost
+#endif

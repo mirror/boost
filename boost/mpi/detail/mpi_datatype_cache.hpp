@@ -69,12 +69,12 @@ public:
 
     // check whether the type already exists
     std::type_info const* t = &typeid(T);
-	MPI_Datatype datatype = get(t);
-	if (datatype == MPI_DATATYPE_NULL) {
+    MPI_Datatype datatype = get(t);
+    if (datatype == MPI_DATATYPE_NULL) {
       // need to create a type
       mpi_datatype_oarchive ar(x);
-	  datatype = ar.get_mpi_datatype();
-	  set(t, datatype);
+      datatype = ar.get_mpi_datatype();
+      set(t, datatype);
     }
 
     return datatype;

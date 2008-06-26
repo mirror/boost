@@ -30,9 +30,8 @@ extern const char* exception_result_code_docstring;
 
 str exception_str(const exception& e)
 {
-  return str("MPI routine `"  + std::string(e.routine()) + 
-             "' returned error code " + 
-             lexical_cast<std::string>(e.result_code()));
+  return str(std::string(e.what()) + 
+             " (code " + lexical_cast<std::string>(e.result_code())+")");
 }
 
 void export_exception()
@@ -42,10 +41,10 @@ void export_exception()
   
   object type = 
     class_<exception>
-      ("exception", exception_docstring, no_init)
+      ("Exception", exception_docstring, no_init)
       .add_property("what", &exception::what, exception_what_docstring)
       .add_property("routine", &exception::what, exception_routine_docstring)
-      .add_property("result_code", &exception::what, 
+      .add_property("result_code", &exception::result_code, 
                     exception_result_code_docstring)
       .def("__str__", &exception_str)
     ;

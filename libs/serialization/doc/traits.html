@@ -179,7 +179,7 @@ Default tracking traits are:
   That is, addresses of addresses are not tracked by default.
   <li>All current serialization wrappers such as <code style="white-space: normal">boost::serialization::nvp</code>,
   <code style="white-space: normal">track_never</code>.
-  <li>For all other types, <code style="white-space: normal">track_selectivly</code>.
+  <li>For all other types, <code style="white-space: normal">track_selectively</code>.
   That is addresses of serialized objects are tracked if and only if
   one or more of the following is true:
   <ul>
@@ -242,23 +242,20 @@ BOOST_CLASS_EXPORT_GUID(my_class, "my_class")
 </code></pre>
 If the an external name is required somewhere in the program and none
 has been assigned, a static assertion will be invoked.
+
 <h3><a name="abstract">Abstract</a></h3>
-When serializing an object through a pointer to its base class
-and that base class is abstract (i.e. has at least one virtual function
-assigned a value of 0), A compile error will be emitted.  This is
-addressable in one over several ways:
-<ul>
-  <li>remove the =0 in the base classes so that the base class is no
-  longer abstract.
-  <li>implement is_abstract for your compiler. (code written according to
-  the C++ standard is included with this library.  But it is known to fail
-  on several compilers.
-  <li>use the macro <code style="white-space: normal">BOOST_IS_ABSTRACT(my_class)</code> to indicate
-  that the class is an abstract base class.  This will cause the compiler
-  to avoid generating code that causes this error.
-  This macro must be used in the global namespace, with full namespace 
-  qualification of the argument class. 
-</ul>
+When serializing an object through a pointer to its base class,
+the library needs to determine whether or not the bas is abstract
+(i.e. has at least one virtual function).  The library uses the
+type trait macro <code style="white-space: normal">BOOST_IS_ABSTRACT(T)</code>
+to do this.  Not all compilers support this type trait and corresponding
+macro.  To address this, the macro <code style="white-space: normal">
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(T)</code> has been
+implemented to permit one to explicitly indicate that a specified
+type is in fact abstract.  This will guarentee that
+<code style="white-space: normal">BOOST_IS_ABSTRACT</code>
+will return the correct value for all compilers.
+
 <h3><a name="typeinfo">Type Information Implementation</a></h3>
 This last trait is also related to the serialization of objects
 through a base class pointer.  The implementation of this facility
@@ -471,6 +468,34 @@ and template parameters should be assigned according to the following table:
 <tr><td><code>IsWrapper</code></td><td><code></code>is the type a wrapper?</td><td><code>mpl::false_<br>mpl::true_</code></td><td><code>mpl::false_</code></td></tr>
 </table>
 
+<<<<<<< .working
+
+<h3><a name="tracking">Bitwise serialization</a></h3>
+Some simple classes could be serialized just by directly copying all bits
+of the class. This is, in particular, the case for POD data types containing
+no pointer members, and which are neither versioned nor tracked. Some archives, 
+such as non-portable binary archives can make us of this information to 
+substantially speed up serialization.
+
+To indicate the possibility of bitwise serialization the type trait defined 
+in the header
+file <a href="../../../boost/serialization/is_bitwise_serializable.hpp" target="is_bitwise_serializable">is_bitwise_serializable.hpp</a>
+is used:
+<pre><code>
+namespace boost { namespace serialization {
+    template<class T>
+    struct is_bitwise_serializable
+     : public is_arithmetic<T>
+    {};
+} }
+</code></pre>
+is used, and can be specialized for other classes. The specialization
+is made easy by the corresponding macro:
+<pre><code>
+BOOST_IS_BITWISE_SERIALIZABLE(my_class)
+</code></pre>
+
+=======
 
 <h3><a name="tracking">Bitwise serialization</a></h3>
 Some simple classes could be serialized just by directly copying all bits
@@ -497,6 +522,7 @@ is made easy by the corresponding macro:
 BOOST_IS_BITWISE_SERIALIZABLE(my_class)
 </code></pre>
 
+>>>>>>> .merge-right.r41077
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004 and Matthias Troyer 2006. 
 Distributed under the Boost Software License, Version 1.0. (See

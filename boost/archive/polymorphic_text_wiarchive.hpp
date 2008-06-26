@@ -22,12 +22,12 @@
 #else
 
 #include <boost/archive/text_wiarchive.hpp>
-#include <boost/archive/detail/polymorphic_iarchive_dispatch.hpp>
+#include <boost/archive/detail/polymorphic_iarchive_route.hpp>
 
 namespace boost { 
 namespace archive {
 
-typedef detail::polymorphic_iarchive_dispatch<
+typedef detail::polymorphic_iarchive_route<
         text_wiarchive_impl<naked_text_wiarchive> 
 > polymorphic_text_wiarchive;
 

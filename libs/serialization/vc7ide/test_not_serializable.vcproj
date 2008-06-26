@@ -30,7 +30,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				ObjectFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/$(InputName).obj"
+				ObjectFile="$(ProjectDir)../example/bin.v2/$(InputName).exe/vc7/$(OutDir)/link-static/$(InputName).obj"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"/>
@@ -84,7 +84,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				ObjectFile="$(ProjectDir)../example/bin/$(InputName).exe/vc7/$(OutDir)/runtime-link-static/$(InputName).obj"
+				ObjectFile="$(ProjectDir)../example/bin.v2/$(InputName).exe/vc7/$(OutDir)/link-static/$(InputName).obj"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"/>
@@ -99,6 +99,36 @@
 				OptimizeReferences="1"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug runtime-dynamic threading-multi|Win32"
+			ConfigurationType="1">
+			<Tool
+				Name="VCCLCompilerTool"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool

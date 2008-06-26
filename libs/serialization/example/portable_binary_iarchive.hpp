@@ -6,31 +6,42 @@
 # pragma once
 #endif
 
+#if defined(_MSC_VER)
+#pragma warning( push )
+#pragma warning( disable : 4244 )
+#endif
+
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // portable_binary_iarchive.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002-7 Robert Ramey - http://www.rrsd.com . 
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <ostream>
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/detail/endian.hpp>
+#include <istream>
+#include <boost/serialization/string.hpp>
+#include <boost/archive/archive_exception.hpp>
+#include <boost/archive/basic_binary_iprimitive.hpp>
+#include <boost/archive/detail/common_iarchive.hpp>
+#include <boost/archive/shared_ptr_helper.hpp>
+#include <boost/archive/detail/register_archive.hpp>
+
+#include "portable_binary_archive.hpp"
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // exception to be thrown if integer read from archive doesn't fit
 // variable being loaded
-class portable_binary_archive_exception : 
+class portable_binary_iarchive_exception : 
     public virtual boost::archive::archive_exception
 {
 public:
     typedef enum {
         incompatible_integer_size 
     } exception_code;
-    portable_binary_archive_exception(exception_code c = incompatible_integer_size )
+    portable_binary_iarchive_exception(exception_code c = incompatible_integer_size )
     {}
     virtual const char *what( ) const throw( )
     {
@@ -46,128 +57,132 @@ public:
 };
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// "Portable" input binary archive.  This is a variation of the native binary 
-// archive. it addresses integer size and endienness so that binary archives can
-// be passed across systems. Note:floating point types not addressed here
+// "Portable" input binary archive.  It addresses integer size and endienness so 
+// that binary archives can be passed across systems. Note:floating point types
+// not addressed here
 class portable_binary_iarchive :
-    // don't derive from binary_iarchive !!!
-    public boost::archive::binary_iarchive_impl<
-        portable_binary_iarchive, 
+    public boost::archive::basic_binary_iprimitive<
+        portable_binary_iarchive,
         std::istream::char_type, 
         std::istream::traits_type
     >,
+    public boost::archive::detail::common_iarchive<
+        portable_binary_iarchive
+    >
+	,
     public boost::archive::detail::shared_ptr_helper
-{
-    typedef boost::archive::binary_iarchive_impl<
-        portable_binary_iarchive, 
+	{
+    typedef boost::archive::basic_binary_iprimitive<
+        portable_binary_iarchive,
         std::istream::char_type, 
         std::istream::traits_type
-    > archive_base_t;
-    typedef boost::archive::basic_binary_iprimitive<
-        portable_binary_iarchive, 
-        std::ostream::char_type, 
-        std::ostream::traits_type
     > primitive_base_t;
+    typedef boost::archive::detail::common_iarchive<
+        portable_binary_iarchive
+    > archive_base_t;
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend archive_base_t;
     friend primitive_base_t; // since with override load below
-    friend class boost::archive::basic_binary_iarchive<portable_binary_iarchive>;
+    friend class boost::archive::detail::interface_iarchive<
+        portable_binary_iarchive
+    >;
     friend class boost::archive::load_access;
+protected:
 #endif
-    void load_impl(long & l, char maxsize){
-        char size;
-        this->archive_base_t::load(size);
-        if(size > maxsize)
-            throw portable_binary_archive_exception() ;
-        l = 0;
-        load_binary(& l, size);
-        // we choose to use litle endian
-        #ifdef BOOST_BIG_ENDIAN
-            char * first = static_cast<char *>(static_cast<void *>(& l));
-            char * last = first + sizeof(l) - 1;
-            for(;first < last;++first, --last){
-                char x = *last;
-                *last = *first;
-                *first = x;
-            }
-        #endif
+    unsigned int m_flags;
+    void load_impl(boost::intmax_t & l, char maxsize);
 
-        // extend sign if necessary
-        if((l >> (size - 1) * 8) & 0x80){
-            l |= (-1 << (size * 8));
-        }
-    }
     // default fall through for any types not specified here
     template<class T>
     void load(T & t){
+        boost::intmax_t l;
+        load_impl(l, sizeof(T));
+        // use cast to avoid compile time warning
+        t = static_cast<T>(l);
+    }
+    void load(std::string & t){
         this->primitive_base_t::load(t);
     }
-    void load(unsigned short & t){
-        long l;
-        load_impl(l, sizeof(unsigned short));
-        t = l;
+    #ifndef BOOST_NO_STD_WSTRING
+    void load(std::wstring & t){
+        this->primitive_base_t::load(t);
     }
-    void load(short & t){
-        long l;
-        load_impl(l, sizeof(short));
-        t = l;
+    #endif
+    void load(float & t){
+        this->primitive_base_t::load(t);
+        // floats not supported
+        //BOOST_STATIC_ASSERT(false);
     }
-    void load(unsigned int & t){
-        long l;
-        load_impl(l, sizeof(unsigned int));
-        t = l;
+    void load(double & t){
+        this->primitive_base_t::load(t);
+        // doubles not supported
+        //BOOST_STATIC_ASSERT(false);
     }
-    void load(int & t){
-        long l;
-        load_impl(l, sizeof(int));
-        t = l;
+    void load(char & t){
+        this->primitive_base_t::load(t);
     }
-    void load(unsigned long & t){
-        long l;
-        load_impl(l, sizeof(unsigned long));
-        t = l;
+    void load(unsigned char & t){
+        this->primitive_base_t::load(t);
     }
-    void load(long & t){
-        long l;
-        load_impl(l, sizeof(long));
-        t = l;
+    // intermediate level to support override of operators
+    // fot templates in the absence of partial function 
+    // template ordering
+    typedef boost::archive::detail::common_iarchive<portable_binary_iarchive> 
+        detail_common_iarchive;
+    template<class T>
+    void load_override(T & t, BOOST_PFTO int){
+        this->detail_common_iarchive::load_override(t, 0);
     }
+    void load_override(boost::archive::class_name_type & t, int);
+    // binary files don't include the optional information 
+    void load_override(
+        boost::archive::class_id_optional_type & /* t */, 
+        int
+    ){}
+
+    void init(unsigned int flags);
 public:
     portable_binary_iarchive(std::istream & is, unsigned flags = 0) :
-        archive_base_t(
-            is, 
-            flags | boost::archive::no_header // skip default header checking 
-        )
+        primitive_base_t(
+            * is.rdbuf(), 
+            0 != (flags & boost::archive::no_codecvt)
+        ),
+        archive_base_t(flags),
+        m_flags(0)
     {
-        // use our own header checking
-        if(0 != (flags & boost::archive::no_header)){
-            this->archive_base_t::init(flags);
-            // skip the following for "portable" binary archives
-            // boost::archive::basic_binary_oprimitive<derived_t, std::ostream>::init();
-        }
+        init(flags);
+    }
+
+    portable_binary_iarchive(
+        std::basic_streambuf<
+            std::istream::char_type, 
+            std::istream::traits_type
+        > & bsb, 
+        unsigned int flags
+    ) :
+        primitive_base_t(
+            bsb, 
+            0 != (flags & boost::archive::no_codecvt)
+        ),
+        archive_base_t(flags),
+        m_flags(0)
+    {
+        init(flags);
     }
 };
 
-// explicitly instantiate for this type of text stream
-#include <boost/archive/impl/basic_binary_iarchive.ipp>
-#include <boost/archive/impl/archive_pointer_iserializer.ipp>
-#include <boost/archive/impl/basic_binary_iprimitive.ipp>
+// required by export in boost version > 1.34
+#ifdef BOOST_SERIALIZATION_REGISTER_ARCHIVE
+    BOOST_SERIALIZATION_REGISTER_ARCHIVE(portable_binary_iarchive)
+#endif
 
-namespace boost {
-namespace archive {
-
-template class binary_iarchive_impl<
-    portable_binary_iarchive, 
-    std::istream::char_type, 
-    std::istream::traits_type
->;
-template class detail::archive_pointer_iserializer<portable_binary_iarchive> ;
-
-} // namespace archive
-} // namespace boost
-
+// required by export in boost <= 1.34
 #define BOOST_ARCHIVE_CUSTOM_IARCHIVE_TYPES portable_binary_iarchive
+
+#if defined(_MSC_VER)
+#pragma warning( pop )
+#endif
 
 #endif // PORTABLE_BINARY_IARCHIVE_HPP

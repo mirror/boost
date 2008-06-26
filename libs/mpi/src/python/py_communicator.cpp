@@ -14,6 +14,7 @@
 #include <boost/python.hpp>
 #include <boost/mpi.hpp>
 #include <boost/mpi/python/serialize.hpp>
+#include "request_with_value.hpp"
 
 using namespace boost::python;
 using namespace boost::mpi;
@@ -49,14 +50,12 @@ communicator_recv(const communicator& comm, int source, int tag,
     return result;
 }
 
-object 
+request_with_value 
 communicator_irecv(const communicator& comm, int source, int tag)
 {
-  using boost::python::make_tuple;
-
-  object result;
-  object req(comm.irecv(source, tag, result));
-  req.attr("value") = result;
+  boost::shared_ptr<object> result(new object());
+  request_with_value req(comm.irecv(source, tag, *result));
+  req.m_internal_value = result;
   return req;
 }
 
@@ -76,7 +75,7 @@ void export_communicator()
   using boost::python::arg;
   using boost::python::object;
   
-  class_<communicator> comm("communicator", communicator_docstring);
+  class_<communicator> comm("Communicator", communicator_docstring);
   comm
     .def(init<>())
     .add_property("rank", &communicator::rank, communicator_rank_docstring)

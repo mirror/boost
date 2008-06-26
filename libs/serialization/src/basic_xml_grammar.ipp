@@ -29,6 +29,7 @@
 #include <boost/io/ios_state.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/archive/impl/basic_xml_grammar.hpp>
+#include <boost/archive/xml_archive_exception.hpp>
 #include <boost/archive/basic_xml_archive.hpp>
 #include <boost/archive/iterators/xml_unescape.hpp>
 
@@ -128,7 +129,7 @@ template<class String>
 struct append_char {
     String & contents;
     void operator()(const unsigned int char_value) const {
-        const typename String::value_type z = char_value;
+        const BOOST_DEDUCED_TYPENAME String::value_type z = char_value;
         contents += z;
     }
     append_char(String & contents_)
@@ -141,7 +142,7 @@ struct append_lit {
     String & contents;
     template<class X, class Y>
     void operator()(const X & /*x*/, const Y & /*y*/) const {
-        const typename String::value_type z = c;
+        const BOOST_DEDUCED_TYPENAME String::value_type z = c;
         contents += z;
     }
     append_lit(String & contents_)
@@ -269,7 +270,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     // refactoring to workaround template depth on darwin
-    CharDataChars = *(anychar_p - chset_p(L"&<"));
+    CharDataChars = +(anychar_p - chset_p(L"&<"));
     CharData =  
         CharDataChars [
             xml::append_string<
@@ -305,7 +306,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 
     content = 
         L"<" // should be end_p
-        | (Reference | CharData) >> content
+        | +(Reference | CharData) >> L"<"
     ;
 
     ClassIDAttribute = 
@@ -368,7 +369,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         Name
         >> Eq
         >> L'"'
-        >> CharData
+        >> !CharData
         >> L'"'
     ;
 

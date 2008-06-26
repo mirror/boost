@@ -9,8 +9,10 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
 #include <cstring>
+#include <cstddef> // NULL
+
+#include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ using ::strcmp; }
 #endif
@@ -18,21 +20,42 @@ namespace std{ using ::strcmp; }
 #define BOOST_SERIALIZATION_SOURCE
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
 
+#define EXTENDED_TYPE_INFO_NO_RTTI_KEY 2
+
 namespace boost { 
 namespace serialization { 
 namespace detail { 
 
-BOOST_SERIALIZATION_DECL(bool)
-extended_type_info_no_rtti_0::less_than(
-    const boost::serialization::extended_type_info &rhs) const 
-{
-    return std::strcmp(m_key, rhs.get_key()) < 0;
-}
-
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())  
 extended_type_info_no_rtti_0::extended_type_info_no_rtti_0() :
-    boost::serialization::extended_type_info("extended_type_info_no_rtti")
+    extended_type_info(EXTENDED_TYPE_INFO_NO_RTTI_KEY)
 {}
+
+BOOST_SERIALIZATION_DECL(bool)
+extended_type_info_no_rtti_0::is_less_than(
+    const boost::serialization::extended_type_info &rhs) const 
+{
+    const char * l = m_key;
+    const char * r = rhs.get_key();
+    assert(NULL != l);
+    assert(NULL != r);
+    return std::strcmp(l, r) < 0;
+}
+
+BOOST_SERIALIZATION_DECL(bool)
+extended_type_info_no_rtti_0::is_equal(
+    const boost::serialization::extended_type_info &rhs) const 
+{
+    const char * l = m_key;
+    const char * r = rhs.get_key();
+    if(l == r)
+        return true;
+    if(NULL == l)
+        return false;
+    if(NULL == r)
+        return false;
+    return 0 == std::strcmp(l, r);
+}
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())  
 extended_type_info_no_rtti_0::~extended_type_info_no_rtti_0()

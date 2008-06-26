@@ -28,26 +28,26 @@ public:
 
     /// the type of the archive to which the loading of primitive types will be forwarded
     typedef ImplementationArchive implementation_archive_type;
-	
-	/// the constructor takes a reference to the implementation archive used for loading primitve types
+
+    /// the constructor takes a reference to the implementation archive used for loading primitve types
     forward_iprimitive(implementation_archive_type& ar)
-	 : implementation_archive(ar)
+     : implementation_archive(ar)
     {}
 
-	/// binary loading is forwarded to the implementation archive
+    /// binary loading is forwarded to the implementation archive
     void load_binary(void * address, std::size_t count )
-	{
-	  implementation_archive.load_binary(address,count);
-	}
-	
-	/// loading of arrays is forwarded to the implementation archive
+    {
+      implementation_archive.load_binary(address,count);
+    }
+    
+    /// loading of arrays is forwarded to the implementation archive
     template<class T>
     void load_array(serialization::array<T> & x, unsigned int file_version )
     {
-	  implementation_archive.load_array(x,file_version);
+      implementation_archive.load_array(x,file_version);
     }
 
-    typedef typename ImplementationArchive::use_array_optimization use_array_optimization;	
+    typedef typename ImplementationArchive::use_array_optimization use_array_optimization;    
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     friend class archive::load_access;
@@ -60,9 +60,9 @@ public:
     template<class T>
     void load(T & t)
     {
-	  implementation_archive >> t;
+      implementation_archive >> t;
     }
-	
+
 private:
     implementation_archive_type& implementation_archive;
 };

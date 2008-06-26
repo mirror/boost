@@ -16,7 +16,14 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <boost/config.hpp>
+#include <cstddef> // size_t
+#include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #ifdef BOOST_HAS_SLIST
 #include BOOST_SLIST_HEADER
 

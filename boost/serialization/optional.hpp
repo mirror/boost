@@ -20,6 +20,7 @@
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/version.hpp>
 #include <boost/serialization/detail/stack_constructor.hpp>
 
 // function specializations must be defined in the appropriate
@@ -53,7 +54,7 @@ void load(
     bool tflag;
     ar >> boost::serialization::make_nvp("initialized", tflag);
     if (tflag){
-        unsigned int v;
+        unsigned int v = 0;
         if(3 < ar.get_library_version()){
             ar >> make_nvp("item_version", v);
         }

@@ -23,9 +23,16 @@
 #include <boost/archive/basic_binary_iarchive.hpp>
 #include <boost/archive/shared_ptr_helper.hpp>
 #include <boost/mpi/detail/packed_iprimitive.hpp>
+#include <boost/mpi/detail/binary_buffer_iprimitive.hpp>
 #include <boost/assert.hpp>
 
 namespace boost { namespace mpi {
+
+#ifdef BOOST_MPI_HOMOGENEOUS
+  typedef binary_buffer_iprimitive iprimitive;
+#else
+  typedef packed_iprimitive iprimitive;
+#endif
 
 /** @brief An archive that packs binary data into an MPI buffer.
  *
@@ -36,7 +43,7 @@ namespace boost { namespace mpi {
  *  implementation to perform serialization.
  */
 class BOOST_MPI_DECL packed_iarchive
-  : public packed_iprimitive
+  : public iprimitive
   , public archive::basic_binary_iarchive<packed_iarchive>
   , public archive::detail::shared_ptr_helper
 {
@@ -59,7 +66,7 @@ public:
    *  deserialization will begin.
    */
   packed_iarchive(MPI_Comm const & comm, buffer_type & b, unsigned int flags = boost::archive::no_header, int position = 0)
-        : packed_iprimitive(b,comm,position),
+        : iprimitive(b,comm,position),
           archive::basic_binary_iarchive<packed_iarchive>(flags)
         {}
 
@@ -70,15 +77,43 @@ public:
    *  @param comm The communicator over which this archive will be
    *  sent.
    *
+   *  @param s The size of the buffer to be received.
+   *
    *  @param flags Control the serialization of the data types. Refer
    *  to the Boost.Serialization documentation before changing the
    *  default flags.
    */
   packed_iarchive
-          ( MPI_Comm const & comm , unsigned int flags = boost::archive::no_header)
-         : packed_iprimitive(internal_buffer_,comm),
-           archive::basic_binary_iarchive<packed_iarchive>(flags)
+          ( MPI_Comm const & comm , std::size_t s=0, 
+           unsigned int flags = boost::archive::no_header)
+         : iprimitive(internal_buffer_,comm)
+         , archive::basic_binary_iarchive<packed_iarchive>(flags)
+         , internal_buffer_(s)
         {}
+
+  // Load everything else in the usual way, forwarding on to the Base class
+  template<class T>
+  void load_override(T& x, int version, mpl::false_)
+  {
+    archive::basic_binary_iarchive<packed_iarchive>::load_override(x,version);
+  }
+
+  // Load it directly using the primnivites
+  template<class T>
+  void load_override(T& x, int version, mpl::true_)
+  {
+    iprimitive::load(x);
+  }
+
+  // Load all supported datatypes directly
+  template<class T>
+  void load_override(T& x, int version)
+  {
+    typedef typename mpl::apply1<use_array_optimization
+      , BOOST_DEDUCED_TYPENAME remove_const<T>::type
+    >::type use_optimized;
+    load_override(x, version, use_optimized());
+  }
 
 private:
   /// An internal buffer to be used when the user does not supply his
@@ -90,5 +125,6 @@ private:
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::mpi::packed_iarchive)
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_iarchive)
+BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::mpi::packed_iarchive)
 
 #endif // BOOST_MPI_PACKED_IARCHIVE_HPP

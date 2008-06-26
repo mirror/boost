@@ -13,7 +13,6 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/mpi/detail/forward_skeleton_oarchive.hpp>
 #include <boost/mpi/detail/ignore_oprimitive.hpp>
-#include <boost/archive/array/oarchive.hpp>
 
 namespace boost { namespace mpi {
 
@@ -25,9 +24,9 @@ class text_skeleton_oarchive
 {
 public:
     text_skeleton_oarchive(std::ostream & s, unsigned int flags = 0) 
-	 : detail::forward_skeleton_oarchive<text_skeleton_oarchive,boost::archive::text_oarchive>(skeleton_archive_)
+     : detail::forward_skeleton_oarchive<text_skeleton_oarchive,boost::archive::text_oarchive>(skeleton_archive_)
      , skeleton_archive_(s,flags)
-	{}
+    {}
 
 private:
     boost::archive::text_oarchive skeleton_archive_;

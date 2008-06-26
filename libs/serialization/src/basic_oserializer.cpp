@@ -8,6 +8,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // NULL
+
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/detail/basic_oserializer.hpp>
 
@@ -20,7 +22,7 @@ basic_oserializer::basic_oserializer(
         const boost::serialization::extended_type_info & eti
 ) :
     basic_serializer(eti), 
-    bpos(NULL)
+    m_bpos(NULL)
 {}
 
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 

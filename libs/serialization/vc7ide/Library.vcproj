@@ -13,7 +13,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="4"
 			CharacterSet="0">
@@ -43,7 +43,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization-vc71-mt-gd-1_35.lib"/>
+				OutputFile="$(OutDir)/boost_serialization-vc71-mt-gd-1_34_1.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -65,7 +65,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-dynamic|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/threading-multi/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="4"
 			CharacterSet="0">
@@ -80,7 +80,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BOOST_TEST_NO_AUTO_LINK=1 "
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BOOST_ALL_DYN_LINK=1"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
@@ -96,7 +96,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization.lib"/>
+				OutputFile="$(OutDir)/boost_serialization-vc71-mt-1_34_1.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -118,7 +118,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-static/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="4"
 			CharacterSet="0">
@@ -147,7 +147,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-sgd-1_34_1.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -169,7 +169,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-static/threading-multi&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/link-static&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="4"
 			CharacterSet="0">
@@ -198,7 +198,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-mt-sgd-1_34_1.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -220,7 +220,60 @@
 		</Configuration>
 		<Configuration
 			Name="Release runtime-static|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-static/&quot;"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/link-static&quot;"
+			IntermediateDirectory="$(OutDir)"
+			ConfigurationType="4"
+			CharacterSet="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800"
+				Optimization="2"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				ImproveFloatingPointConsistency="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BOOST_TEST_NO_AUTO_LINK=1 "
+				RuntimeLibrary="4"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="TRUE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="1"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/libboost_serialization-vc71-s-1_34_1.lib"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release runtime-static threading-multi|Win32"
+			OutputDirectory="&quot;$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/release/threading-multi/link-static&quot;"
 			IntermediateDirectory="$(OutDir)"
 			ConfigurationType="4"
 			CharacterSet="0">
@@ -251,7 +304,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-msvc71-mt-s-1_34_1.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -272,24 +325,22 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="Release runtime-static threading-multi|Win32"
-			OutputDirectory="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-static/threading-multi&quot;"
-			IntermediateDirectory="$(OutDir)"
-			ConfigurationType="4"
+			Name="Debug runtime-dynamic threading-multi|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
 			CharacterSet="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zm800"
-				Optimization="2"
-				GlobalOptimizations="TRUE"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
+				AdditionalOptions="/Zm800 /Ob0"
+				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;BOOST_TEST_NO_AUTO_LINK=1 "
-				RuntimeLibrary="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;BOOST_LIB_DIAGNOSTIC=1;BOOST_ALL_DYN_LINK=1"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				SmallerTypeCheck="FALSE"
+				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -298,13 +349,15 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="0"
+				DebugInformationFormat="1"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization.lib"/>
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)/boost_serialization-vc71-mt-gd-1_34_1.dll"
+				GenerateDebugInformation="TRUE"
+				ImportLibrary="$(OutDir)/$(TargetName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -319,6 +372,8 @@
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
@@ -388,6 +443,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\collections_save_imp.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\complex.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\deque.hpp">
@@ -479,6 +537,9 @@
 				RelativePath="..\..\..\boost\archive\basic_binary_oprimitive.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\basic_streambuf_locale_saver.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\basic_text_iarchive.hpp">
 			</File>
 			<File
@@ -498,6 +559,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\basic_xml_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\detail\polymorphic_iarchive_route.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\detail\polymorphic_oarchive_route.hpp">
 			</File>
 		</Filter>
 		<Filter
@@ -543,13 +610,7 @@
 				RelativePath="..\..\..\boost\archive\detail\common_oarchive.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\archive\detail\dynamically_initialized.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\boost\archive\array\iarchive.hpp">
-			</File>
-			<File
-				RelativePath=".\iarray_serializer.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\interface_iarchive.hpp">
@@ -561,19 +622,10 @@
 				RelativePath="..\..\..\boost\archive\detail\iserializer.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\archive\detail\known_archive_types.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\boost\archive\array\oarchive.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\oserializer.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\detail\polymorphic_iarchive_dispatch.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\detail\polymorphic_oarchive_dispatch.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\register_archive.hpp">
@@ -616,10 +668,16 @@
 				RelativePath="..\..\..\boost\serialization\extended_type_info_typeid.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\factory.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\force_include.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\pfto.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\singleton.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\smart_cast.hpp">
@@ -724,9 +782,6 @@
 			</File>
 			<File
 				RelativePath="..\src\basic_pointer_oserializer.cpp">
-			</File>
-			<File
-				RelativePath="..\src\basic_serializer_map.cpp">
 			</File>
 			<File
 				RelativePath="..\src\basic_text_iprimitive.cpp">
@@ -848,6 +903,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\text_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\xml_archive_exception.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\xml_iarchive.hpp">

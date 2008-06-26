@@ -82,6 +82,7 @@ libraries += boost_mpi ;
         python/datatypes.cpp
         python/documentation.cpp
         python/py_environment.cpp
+        python/py_nonblocking.cpp
         python/py_exception.cpp
         python/module.cpp
         python/py_request.cpp

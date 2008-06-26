@@ -12,7 +12,7 @@
 #include <boost/pfto.hpp>
 
 #include <boost/archive/detail/auto_link_archive.hpp>
-#include <boost/archive/array/oarchive.hpp>
+#include <boost/archive/detail/common_oarchive.hpp>
 #include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/oserializer.hpp>
 #include <boost/serialization/collection_size_type.hpp>
@@ -21,15 +21,14 @@ namespace boost { namespace mpi { namespace detail {
 
 template<class Archive>
 class ignore_skeleton_oarchive 
-  : public archive::array::oarchive<Archive>
+  : public archive::detail::common_oarchive<Archive>
 {
 public:
-	
     ignore_skeleton_oarchive()
-	  : archive::array::oarchive<Archive>(archive::no_header)
-	{
-	}
-		
+      : archive::detail::common_oarchive<Archive>(archive::no_header)
+    {
+    }
+
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
@@ -46,10 +45,10 @@ protected:
     {
         archive::save(* this->This(), t);
     }
-	
+
 #define BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(T) \
     void save_override(T const & , int)        \
-	{}
+    {}
 
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::class_id_optional_type)
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::version_type)

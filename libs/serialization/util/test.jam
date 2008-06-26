@@ -94,7 +94,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             # both stlport and msvc6 define iswspace
             <toolset>msvc,<stdlib>stlport:<linkflags>"-force:multiple"
             <dependency>$(save-test)
-            <dependency>../../config/test/all//BOOST_NO_STD_WSTREAMBUF
+            <dependency>../../config/test//BOOST_NO_STD_WSTREAMBUF
     ] ;
     return $(tests) ;
 }

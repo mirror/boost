@@ -23,6 +23,7 @@
 #include <boost/config.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/or.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/mpi/detail/mpi_datatype_cache.hpp>
 #include <boost/mpl/assert.hpp>
 #include <utility> // for std::pair
@@ -199,6 +200,9 @@ template<>                                                              \
 {}
 
 /// INTERNAL ONLY
+BOOST_MPI_DATATYPE(packed, MPI_PACKED, builtin);
+
+/// INTERNAL ONLY
 BOOST_MPI_DATATYPE(char, MPI_CHAR, builtin);
 
 /// INTERNAL ONLY
@@ -251,6 +255,13 @@ BOOST_MPI_DATATYPE(std::pair<BOOST_MPI_LIST2(short, int>), MPI_SHORT_INT,
 /// INTERNAL ONLY
 BOOST_MPI_DATATYPE(std::pair<BOOST_MPI_LIST2(int, int>), MPI_2INT, builtin);
 #undef BOOST_MPI_LIST2
+
+/// specialization of is_mpi_datatype for pairs
+template <class T, class U>
+struct is_mpi_datatype<std::pair<T,U> >
+ : public mpl::and_<is_mpi_datatype<T>,is_mpi_datatype<U> >
+{
+};
 
 // Define wchar_t specialization of is_mpi_datatype, if possible.
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T) && \
@@ -314,11 +325,16 @@ struct is_mpi_datatype<bool>
   : boost::mpl::bool_<true>
 {};
 
-/// INTERNAL ONLY
-template<typename T, typename U>
-struct is_mpi_datatype<std::pair<T, U> >
-  : mpl::and_<is_mpi_datatype<T>, is_mpi_datatype<U> > { };
-
 } } // end namespace boost::mpi
+
+// define a macro to make explicit designation of this more transparent
+#define BOOST_IS_MPI_DATATYPE(T)              \
+namespace boost {                             \
+namespace mpi {                               \
+template<>                                    \
+struct is_mpi_datatype< T > : mpl::true_ {};  \
+}}                                            \
+/**/
+
 
 #endif // BOOST_MPI_MPI_DATATYPE_HPP

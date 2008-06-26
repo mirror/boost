@@ -10,7 +10,6 @@
 // should pass compilation and execution
 #include <sstream>
 
-#define BOOST_ARCHIVE_SOURCE
 #include "portable_binary_oarchive.hpp"
 #include "portable_binary_iarchive.hpp"
 
@@ -20,30 +19,36 @@
 namespace std{ using ::rand; }
 #endif
 
-// the following is required to be sure the "EXPORT" works if it is used
-#define CUSTOM_ARCHIVE_TYPES portable_binary_oarchive,portable_binary_iarchive
-
 class A
 {
     friend class boost::serialization::access;
+    char c;
     int i;
+    int i2; // special tricky case to check sign extension
     unsigned int ui;
     long l;
     unsigned long ul;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /* version */){
-        ar & i & ui & l & ul ;
+        ar & c & i & i2 & ui & l & ul ;
     }
 public:
     bool operator==(const A & rhs) const {
         return
-            i == rhs.i && ui == rhs.ui && l == rhs.l && ul == rhs.ul
+            c == rhs.c
+            && i == rhs.i
+            && i2 == rhs.i2
+            && ui == rhs.ui 
+            && l == rhs.l 
+            && ul == rhs.ul
         ;
     }
     A() :
+        c(std::rand()),
         i(std::rand()),
+        i2(0x80),
         ui(std::rand()),
-        l(std::rand()),
+        l(std::rand() * std::rand()),
         ul(std::rand())
     {}
 };
@@ -62,6 +67,31 @@ int main( int /* argc */, char* /* argv */[] )
         portable_binary_iarchive pbia(ss);
         pbia >> a1;
     }
+    if(! (a == a1))
+        return 1;
+
+    ss.clear();
+    {   
+        portable_binary_oarchive pboa(ss, endian_big);
+        pboa << a;
+    }
+    {
+        portable_binary_iarchive pbia(ss, endian_big);
+        pbia >> a1;
+    }
+    if(! (a == a1))
+        return 1;
+
+    ss.clear();
+    {   
+        portable_binary_oarchive pboa(ss, endian_big);
+        pboa << a;
+    }
+    {
+        portable_binary_iarchive pbia(ss, endian_big);
+        pbia >> a1;
+    }
+
     return !(a == a1);
 }
 

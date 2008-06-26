@@ -23,6 +23,7 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/is_bitwise_serializable.hpp>
+#include <boost/mpl/and.hpp>
 
 namespace boost { 
 namespace serialization {

@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cstdlib> // getenv
+#include <cstddef> // NULL
 #include <cassert>
 
 #include <boost/config.hpp>

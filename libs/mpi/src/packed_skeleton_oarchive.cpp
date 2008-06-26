@@ -18,6 +18,9 @@ namespace boost { namespace archive {
 // explicitly instantiate all required templates
 
 template class detail::archive_pointer_oserializer<mpi::packed_skeleton_oarchive> ;
+template class detail::archive_pointer_oserializer<
+  mpi::detail::forward_skeleton_oarchive<
+    boost::mpi::packed_skeleton_oarchive, boost::mpi::packed_oarchive> > ;
 template class basic_binary_oarchive<mpi::packed_skeleton_oarchive> ;
 //template class binary_oarchive_impl<mpi_packed_oarchive> ;
 

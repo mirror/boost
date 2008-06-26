@@ -91,7 +91,7 @@ public:
     virtual ~bus_stop(){}
 };
 
-BOOST_IS_ABSTRACT(bus_stop)
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(bus_stop)
 
 std::ostream & operator<<(std::ostream &os, const bus_stop &bs)
 {

@@ -22,8 +22,15 @@
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/basic_binary_oarchive.hpp>
 #include <boost/mpi/detail/packed_oprimitive.hpp>
+#include <boost/mpi/detail/binary_buffer_oprimitive.hpp>
 
 namespace boost { namespace mpi {
+
+#ifdef BOOST_MPI_HOMOGENEOUS
+  typedef binary_buffer_oprimitive oprimitive;
+#else
+  typedef packed_oprimitive oprimitive;
+#endif
 
 /** @brief An archive that unpacks binary data from an MPI buffer.
  *
@@ -33,8 +40,9 @@ namespace boost { namespace mpi {
  *  type and will use the @c MPI_Unpack function of the underlying MPI
  *  implementation to perform deserialization.
  */
+  
 class BOOST_MPI_DECL packed_oarchive
-  : public packed_oprimitive,
+  : public oprimitive,
     public archive::basic_binary_oarchive<packed_oarchive>
 {
 public:
@@ -53,7 +61,7 @@ public:
    *  default flags.
    */
   packed_oarchive( MPI_Comm const & comm, buffer_type & b, unsigned int flags = boost::archive::no_header)
-         : packed_oprimitive(b,comm),
+         : oprimitive(b,comm),
            archive::basic_binary_oarchive<packed_oarchive>(flags)
         {}
 
@@ -69,10 +77,31 @@ public:
    *  default flags.
    */
   packed_oarchive ( MPI_Comm const & comm, unsigned int flags =  boost::archive::no_header)
-         : packed_oprimitive(internal_buffer_,comm),
+         : oprimitive(internal_buffer_,comm),
            archive::basic_binary_oarchive<packed_oarchive>(flags)
         {}
 
+  // Save everything else in the usual way, forwarding on to the Base class
+  template<class T>
+  void save_override(T const& x, int version, mpl::false_)
+  {
+    archive::basic_binary_oarchive<packed_oarchive>::save_override(x,version);
+  }
+
+  // Save it directly using the primnivites
+  template<class T>
+  void save_override(T const& x, int version, mpl::true_)
+  {
+    oprimitive::save(x);
+  }
+
+  // Save all supported datatypes directly
+  template<class T>
+  void save_override(T const& x, int version)
+  {
+    typedef typename mpl::apply1<use_array_optimization,T>::type use_optimized;
+    save_override(x, version, use_optimized());
+  }
 
 private:
   /// An internal buffer to be used when the user does not supply his
@@ -84,6 +113,8 @@ private:
 
 // required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_oarchive)
+BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::mpi::packed_oarchive)
+
 
 
 #endif // BOOST_MPI_PACKED_OARCHIVE_HPP

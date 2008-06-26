@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <cstddef> // NULL
 #include <fstream>
 #include <string>
 

@@ -48,12 +48,13 @@ http://www.boost.org/LICENSE_1_0.txt)
         <dt><a href="#splittingfreefunctions">Free Functions</a>
       </dl>
   </dl>
-  <dt><a href="#pointers">Pointers</a>
+  <dt><a href="#pointeroperators">Pointers</a>
     <dl class="page-index">
       <dt><a href="#constructors">Non-Default Constructors</a>
       <dt><a href="#derivedpointers">Pointers to Objects of Derived Classes</a>
       <dl class="page-index">
         <dt><a href="#registration">Registration</a>
+        <dt><a href="#export">Export</a>
         <dt><a href="#instantiation">Instantiation</a>
         <dt><a href="#selectivetracking">Selective Tracking</a>
         <dt><a href="#runtimecasting">Runtime Casting</a>
@@ -77,14 +78,15 @@ if and only if one of the following is true:
     <a target="detail" href="traits.html#Traits">serialization traits</a>,
     any user type can also be designated as "primitive"
     so that it is handled in this way.
-  <li>It is a class type and one of the following has been declared:
+  <li>It is a class type and one of the following has been declared according
+    to the prototypes detailed below:
     <ul>
     <li>a class member function <code style="white-space: normal">serialize</code>
     <li>a global function <code style="white-space: normal">serialize</code>
     </ul>
   <li>it is a pointer to a <strong>Serializable</strong> type.
   <li>it is a reference to a <strong>Serializable</strong> type.
-  <li>it is an native C++ Array of <strong>Serializable</strong> type.
+  <li>it is a native C++ Array of <strong>Serializable</strong> type.
 </ul>
 
 <h2><a name="primitiveoperators">Primitive Types</a></h2>
@@ -675,8 +677,9 @@ main(){
 Note that if the serialization function is split between save and load, both
 functions must include the registration.  This is required to keep the save
 and corresponding load in syncronization.
-<p>
-This will work but may be inconvenient.  We don't always know which derived
+
+<h4><a name="export">Export</a></h4>
+The above will work but may be inconvenient.  We don't always know which derived
 classes we are going to serialize when we write the code to serialize through
 a base class pointer.  Every time a new derived class is written we have to
 go back to all the places where the base class is serialized and update the
@@ -791,8 +794,8 @@ class derived : public base {
         boost::serialization::base_object&lt;base&gt;(*this);
         // method 2 : explicitly register base/derived relationship
         boost::serialization::void_cast_register&lt;derived, base&gt;(
-            static_cast&lt;base *&gt;(NULL),
-            static_cast&lt;derived *&gt;(NULL)
+            static_cast&lt;derived *&gt;(NULL),
+            static_cast&lt;base *&gt;(NULL)
         )
     }
 };
@@ -919,7 +922,7 @@ As of this writing, the library contains serialization of the following boost cl
   <li>auto_ptr (demo)
 </ul>
 Others are being added to the list so check the boost files section and headers for
-new implmentations!
+new implementations!
 <hr>
 <p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 2002-2004. 
 Distributed under the Boost Software License, Version 1.0. (See

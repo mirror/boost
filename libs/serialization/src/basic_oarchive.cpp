@@ -12,6 +12,7 @@
 
 #include <cassert>
 #include <set>
+#include <cstddef> // NULL
 
 #include <boost/limits.hpp>
 #include <boost/state_saver.hpp>
@@ -20,12 +21,14 @@
 // including this here to work around an ICC in intel 7.0
 // normally this would be part of basic_oarchive.hpp below.
 #define BOOST_ARCHIVE_SOURCE
-#include <boost/archive/basic_archive.hpp>
+#define BOOST_SERIALIZATION_SOURCE
 
+#include <boost/archive/basic_archive.hpp>
 #include <boost/archive/detail/basic_oserializer.hpp>
 #include <boost/archive/detail/basic_pointer_oserializer.hpp>
 #include <boost/archive/detail/basic_oarchive.hpp>
 #include <boost/archive/archive_exception.hpp>
+#include <boost/serialization/extended_type_info.hpp>
 
 #ifdef BOOST_MSVC
 #  pragma warning(push)
@@ -35,9 +38,6 @@
 using namespace boost::serialization;
 
 namespace boost {
-namespace serialization {
-    class extended_type_info;
-}
 namespace archive {
 namespace detail {
 
@@ -164,7 +164,7 @@ class basic_oarchive_impl {
 };
 
 //////////////////////////////////////////////////////////////////////
-// implementation of basic_oarchive implementation functions
+// basic_oarchive implementation functions
 
 // given a type_info - find its bos
 // return NULL if not found
@@ -385,8 +385,16 @@ basic_oarchive_impl::save_pointer(
     stored_pointers.insert(oid);
 }
 
+} // namespace detail
+} // namespace archive
+} // namespace boost
+
 //////////////////////////////////////////////////////////////////////
 // implementation of basic_oarchive functions
+
+namespace boost {
+namespace archive {
+namespace detail {
 
 BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
 basic_oarchive::basic_oarchive(unsigned int flags)

@@ -32,7 +32,7 @@ void export_timer()
   using boost::python::arg;
   using boost::python::object;
   
-  class_<timer>("timer", timer_docstring)
+  class_<timer>("Timer", timer_docstring)
     .def(init<>())
     .def("restart", &timer::restart, timer_restart_docstring)
     .add_property("elapsed", &timer::elapsed, timer_elapsed_docstring)

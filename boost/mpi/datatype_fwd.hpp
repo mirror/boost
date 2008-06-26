@@ -27,6 +27,8 @@ template<typename T> struct is_mpi_byte_datatype;
 template<typename T> struct is_mpi_datatype;
 template<typename T> MPI_Datatype get_mpi_datatype(const T& x = T());
 
+/// a dummy data type giving MPI_PACKED as its MPI_Datatype
+struct packed {};
 } } // end namespace boost::mpi
 
 #endif // BOOST_MPI_MPI_DATATYPE_FWD_HPP

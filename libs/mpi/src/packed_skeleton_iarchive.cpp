@@ -8,7 +8,6 @@
 
 #define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
-#include <boost/archive/impl/archive_pointer_oserializer.ipp>
 #include <boost/mpi/skeleton_and_content.hpp>
 
 #include <boost/archive/binary_iarchive.hpp>
@@ -21,6 +20,9 @@ namespace boost { namespace archive {
 
 template class basic_binary_iarchive<mpi::packed_skeleton_iarchive> ;
 template class detail::archive_pointer_iserializer<mpi::packed_skeleton_iarchive> ;
+template class detail::archive_pointer_iserializer<
+  mpi::detail::forward_skeleton_iarchive<
+    boost::mpi::packed_skeleton_iarchive, boost::mpi::packed_iarchive> > ;
 //template class binary_iarchive_impl<packed_skeleton_iarchive> ;
 
 } } // end namespace boost::archive
