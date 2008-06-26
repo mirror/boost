@@ -75,7 +75,7 @@ public:
     {
       ar.load_array(*this,version);
     }
-
+    
     // default implementation
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
