@@ -16,9 +16,9 @@
 #include <iterator>
 #include <locale>
 #include <vector>
-#include <cstddef> // NULL
-
 #include <cstdio> // remove
+#include <cstddef> // NULL, size_t
+
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 

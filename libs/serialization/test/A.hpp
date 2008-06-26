@@ -16,18 +16,16 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cstddef> // size_t
 #include <ostream> // for friend output operators
-
+#include <cstddef> // size_t
 #include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
-
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
     using ::size_t;
 }
 #endif
 
+#include <boost/detail/workaround.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
 
