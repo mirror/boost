@@ -269,6 +269,14 @@ class any_algorithms
    static bool unique(const_node_ptr node)
    {  return 0 == node->node_ptr_1; }
 
+
+#if defined(__EDG__) && defined(__STD_STRICT_ANSI)
+   // For compilers checking the full source code at compile time, regardless
+   // of whether the code is instantiated or not, we turn the compile error
+   // below into a link error.
+   static void unlink(node_ptr);
+   static void swap_nodes(node_ptr l, node_ptr r);
+#else
    static void unlink(node_ptr)
    {
       //Auto-unlink hooks and unlink() call for safe hooks are not
@@ -282,6 +290,7 @@ class any_algorithms
       //what algorithm they must use from unlink them from the container
       any_algorithms<VoidPointer>::swap_nodes_not_available_for_any_hooks();
    }
+#endif
 };
 
 } //namespace intrusive 
