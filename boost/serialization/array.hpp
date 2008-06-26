@@ -59,30 +59,30 @@ public:
     template<class Archive>
     void serialize_optimized(Archive &ar, const unsigned int version, mpl::true_ )
     {
-	  boost::serialization::split_member(ar, *this, version);
+      boost::serialization::split_member(ar, *this, version);
     }
 
     // default implementation
     template<class Archive>
     void save(Archive &ar, const unsigned int version) const
     {
-	  ar.save_array(*this,version);
+      ar.save_array(*this,version);
     }
 
     // default implementation
     template<class Archive>
     void load(Archive &ar, const unsigned int version)
     {
-	  ar.load_array(*this,version);
+      ar.load_array(*this,version);
     }
-	
+
     // default implementation
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
       typedef BOOST_DEDUCED_TYPENAME serialization::use_array_optimization<Archive>
-	            ::template apply<BOOST_DEDUCED_TYPENAME remove_const<T>::type 
-			>::type use_optimized;
+                ::template apply<BOOST_DEDUCED_TYPENAME remove_const<T>::type 
+            >::type use_optimized;
       serialize_optimized(ar,version,use_optimized());
     }
     

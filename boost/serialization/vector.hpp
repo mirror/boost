@@ -77,9 +77,9 @@ inline void save(
 ){
     const collection_size_type count(t.size());
     ar << BOOST_SERIALIZATION_NVP(count);
-	if(3 < ar.get_library_version()) {
-	  const unsigned int item_version = version<U>::value;
-	  ar << BOOST_SERIALIZATION_NVP(item_version);
+    if(3 < ar.get_library_version()) {
+      const unsigned int item_version = version<U>::value;
+      ar << BOOST_SERIALIZATION_NVP(item_version);
     }
    if (!t.empty())
       ar << make_array(detail::get_data(t),t.size());
