@@ -161,13 +161,14 @@ boost/serialization/export.hpp
 </a>
 <dd>For serialization of pointers to derived classes via key export.</dd>
 
-<dt><a target="is_abstract" href="../../../boost/serialization/is_abstract.hpp">
-boost/serialization/is_abstract.hpp
+<dt><a target="assume_abstract" href="../../../boost/serialization/assume_abstract.hpp">
+boost/serialization/assume_abstract.hpp
 </a>
-<dd>For serialization of pointers to abstract base classes.  A generic implementation
-of this is functional only on the most modern compilers.  This one is just
-a thin wrapper which permits one to specify "by hand" whether or not a base class
-is abstract or not.</dd>
+<dd>This is just a thin wrapper which permits one to explicitly specify that a 
+particular type is an abstract base class.  It is necessary to use this
+for compilers which don't support the boost type traits implementation of
+is_abstact.
+</dd>
 
 </dl>
 
