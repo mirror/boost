@@ -115,15 +115,15 @@ struct load_filepos
 //
 //      Any directories specified with the 'add_include_path()' function before 
 //      the function 'set_sys_include_delimiter()' is called are searched only 
-//      for the case of '#include "file"' directives, they are not searched for 
-//      '#include <file>' directives. If additional directories are specified 
+//      for the case of '#include "file"' directives, they are not searched for 
+//      '#include <file>' directives. If additional directories are specified 
 //      with the 'add_include_path()' function after a call to the function 
 //      'set_sys_include_delimiter()', these directories are searched for all 
 //      '#include' directives. 
 //
 //      In addition, a call to the function 'set_sys_include_delimiter()' 
 //      inhibits the use of the current directory as the first search directory 
-//      for '#include "file"' directives. Therefore, the current directory is 
+//      for '#include "file"' directives. Therefore, the current directory is 
 //      searched only if it is requested explicitly with a call to the function
 //      'add_include_path(".")'. 
 //

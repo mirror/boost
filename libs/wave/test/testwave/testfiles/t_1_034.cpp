@@ -35,3 +35,5 @@ STR()         //R ""
 //H 00: t_1_034.cpp(21): STR(§), [t_1_034.cpp(16): STR(...)=#__VA_ARGS__]
 //H 02: ""
 //H 03: ""
+
+// boostinspect:noascii    this file needs to contain non-ASCII characters
