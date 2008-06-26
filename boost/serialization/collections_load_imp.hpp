@@ -23,13 +23,20 @@
 // helper function templates for serialization of collections
 
 #include <cassert>
-#include <boost/config.hpp>
+#include <cstddef> // size_t
+#include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
 #include <boost/detail/workaround.hpp>
 
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/detail/stack_constructor.hpp>
 #include <boost/serialization/collection_size_type.hpp>
+
 
 namespace boost{
 namespace serialization {

@@ -38,6 +38,13 @@
 #include <typeinfo>         // std::type_info in get_deleter
 #include <cstddef>          // std::size_t
 
+#include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #ifdef __BORLANDC__
 # pragma warn -8026     // Functions with excep. spec. are not expanded inline
 # pragma warn -8027     // Functions containing try are not expanded inline

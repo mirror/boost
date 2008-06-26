@@ -16,11 +16,9 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cstddef>
 #include <string>
 #include <ostream>
-#include <boost/noncopyable.hpp>
-#include <boost/cstdint.hpp>
+#include <cstddef>
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -29,6 +27,8 @@ namespace std{
 } // namespace std
 #endif
 
+#include <boost/noncopyable.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/archive/polymorphic_iarchive.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 

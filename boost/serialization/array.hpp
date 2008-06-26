@@ -16,14 +16,21 @@
 #include <boost/array.hpp>
 #include <iostream>
 
-namespace boost { namespace serialization {
+#include <cstddef> // std::size_t
+#include <cstddef>
+#include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
 
+namespace boost { namespace serialization {
 
 // traits to specify whether to use  an optimized array serialization
 
 template <class Archive>
 struct use_array_optimization : boost::mpl::always<boost::mpl::false_> {};
-
 
 template<class T>
 class array

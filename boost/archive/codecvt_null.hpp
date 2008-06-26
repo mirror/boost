@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <locale>
-#include <cstddef> // NULL
+#include <cstddef> // NULL, size_t
 #include <cwchar>   // for mbstate_t
 #include <boost/config.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
@@ -25,6 +25,7 @@
 #if defined(BOOST_NO_STDC_NAMESPACE)
     using ::codecvt;
     using ::mbstate_t;
+    using ::size_t
 #endif
 
 namespace boost {

@@ -26,9 +26,9 @@
 
 #include <iomanip>
 #include <locale>
-#include <cstddef> // size_t
 #include <cmath> // isnan
 #include <cassert>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>

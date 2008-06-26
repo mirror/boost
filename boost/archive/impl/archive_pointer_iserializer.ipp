@@ -10,8 +10,13 @@
 
 #include <utility>
 #include <cassert>
-
+#include <cstddef>
 #include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
 
 #include <boost/serialization/singleton.hpp>
 #include <boost/archive/detail/basic_serializer_map.hpp>
@@ -65,9 +70,7 @@ archive_pointer_iserializer<Archive>::find(
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 archive_pointer_iserializer<Archive>::~archive_pointer_iserializer(){
-    // note: we need to check that the map still exists as we can't depend
-    // on static variables being constructed in a specific sequence
-    unsigned int count;
+    std::size_t count;
     count = serialization::singleton<
             iserializer_map<Archive> 
         >::get_mutable_instance().erase(this);
