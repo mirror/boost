@@ -186,7 +186,7 @@ void mapped_file_impl::open_file(param_type p)
             FILE_ATTRIBUTE_TEMPORARY;
     handle_ = p.path.is_wide() ?
         ::CreateFileW( 
-            p.path.to_wstring().c_str(),
+            p.path.c_wstr(),
             dwDesiredAccess,
             FILE_SHARE_READ,
             NULL,
@@ -194,7 +194,7 @@ void mapped_file_impl::open_file(param_type p)
             dwFlagsandAttributes,
             NULL ) :
         ::CreateFileA( 
-            p.path.to_string().c_str(),
+            p.path.c_str(),
             dwDesiredAccess,
             FILE_SHARE_READ,
             NULL,
@@ -265,7 +265,7 @@ void mapped_file_impl::open_file(param_type p)
         oflag |= O_LARGEFILE;
     #endif
     errno = 0;
-    handle_ = ::open(p.path.to_string().c_str(), flags, S_IRWXU);
+    handle_ = ::open(p.path.c_str(), flags, S_IRWXU);
     if (errno != 0)
         cleanup_and_throw("failed opening file");
 
@@ -323,8 +323,8 @@ void mapped_file_impl::try_map_file(param_type p)
         ::MapViewOfFileEx( 
             mapped_handle_,
             access,
-            (DWORD) (params_.offset >> 32),
-            (DWORD) (params_.offset & 0xffffffff),
+            (DWORD) (p.offset >> 32),
+            (DWORD) (p.offset & 0xffffffff),
             size_ != max_length ? size_ : 0, 
             (LPVOID) p.hint );
     if (!data)
@@ -332,12 +332,12 @@ void mapped_file_impl::try_map_file(param_type p)
 #else
     void* data = 
         ::BOOST_IOSTREAMS_FD_MMAP( 
-            p.hint_, 
+            const_cast<char*>(p.hint), 
             size_,
             readonly ? PROT_READ : (PROT_READ | PROT_WRITE),
             priv ? MAP_PRIVATE : MAP_SHARED,
             handle_, 
-            params_.offset );
+            p.offset );
     if (data == MAP_FAILED)
         cleanup_and_throw("failed mapping file");
 #endif

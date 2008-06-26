@@ -34,9 +34,12 @@
 # include <sys/types.h>     // struct stat.
 #endif
 
+// Must come last
+#include <boost/iostreams/detail/config/disable_warnings.hpp>
+
 namespace boost { namespace iostreams { namespace detail {
 
-time_t last_read_time(file_handle h)
+std::time_t last_read_time(file_handle h)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
     FILETIME ft_access;
@@ -55,7 +58,7 @@ time_t last_read_time(file_handle h)
     return std::mktime(&tm);
 #else    
     struct stat info;
-    if (::fstat(handle_, &info) == -1)
+    if (::fstat(h, &info) == -1)
         throw_system_failure("failed querying last access time");
     return info.st_atime;
 #endif
@@ -81,19 +84,19 @@ void set_last_read_time(file_handle h, time_t tm)
         throw_system_failure("failed settting last access time");
 #else
     struct stat info;
-    if (::fstat(handle_, &info) == -1)
+    if (::fstat(h, &info) == -1)
         throw_system_failure("failed settting last access time");
     struct timeval tv[2];
     tv[0].tv_sec = tm;
     tv[0].tv_usec = 0;
     tv[1].tv_sec = info.st_mtime;
     tv[1].tv_usec = 0;
-    if (futimes(handle_, tv) != 0)
+    if (futimes(h, tv) != 0)
         throw_system_failure("failed settting last access time");
 #endif
 }
 
-time_t last_write_time(file_handle h)
+std::time_t last_write_time(file_handle h)
 {
 #ifdef BOOST_IOSTREAMS_WINDOWS
     FILETIME ft_modification;
@@ -112,7 +115,7 @@ time_t last_write_time(file_handle h)
     return std::mktime(&tm);
 #else
     struct stat info;
-    if (::fstat(handle_, &info) == -1)
+    if (::fstat(h, &info) == -1)
         throw_system_failure("failed querying last modification time");
     return info.st_mtime;
 #endif
@@ -138,16 +141,18 @@ void set_last_write_time(file_handle h, time_t tm)
         throw_system_failure("failed settting last modification time");
 #else
     struct stat info;
-    if (::fstat(handle_, &info) == -1)
+    if (::fstat(h, &info) == -1)
         throw_system_failure("failed settting last modification time");
     struct timeval tv[2];
     tv[0].tv_sec = info.st_atime;
     tv[0].tv_usec = 0;
     tv[1].tv_sec = tm;
     tv[1].tv_usec = 0;
-    if (futimes(handle_, tv) != 0)
+    if (futimes(h, tv) != 0)
         throw_system_failure("failed settting last modification time");
 #endif
 }
 
 } } } // End namespaces detail, iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp>

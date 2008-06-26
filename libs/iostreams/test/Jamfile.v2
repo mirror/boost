@@ -40,7 +40,8 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams close_test.cpp ]
           [ test-iostreams 
                 code_converter_test.cpp    
-                detail/utf8_codecvt_facet.cpp : <link>static ]
+                detail/utf8_codecvt_facet.cpp 
+                ../src/file_times.cpp : <link>static ]
           [ test-iostreams combine_test.cpp ]
           [ test-iostreams compose_test.cpp ]
           [ test-iostreams component_access_test.cpp ]
@@ -51,7 +52,8 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams execute_test.cpp ]
           [ test-iostreams file_test.cpp ]
           [ test-iostreams file_descriptor_test.cpp
-                ../src/file_descriptor.cpp : <link>static ]
+                ../src/file_descriptor.cpp 
+                ../src/file_times.cpp : <link>static ]
           [ test-iostreams filtering_stream_test.cpp ]
           [ test-iostreams finite_state_filter_test.cpp ]
           [ test-iostreams flush_test.cpp ]
@@ -61,7 +63,8 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams invert_test.cpp ]
           [ test-iostreams line_filter_test.cpp ]
           [ test-iostreams mapped_file_test.cpp 
-                ../src/mapped_file.cpp : <link>static ]
+                ../src/mapped_file.cpp 
+                ../src/file_times.cpp : <link>static ]
           [ test-iostreams newline_test.cpp ]
           [ test-iostreams null_test.cpp ]
           [ test-iostreams operation_sequence_test.cpp ]
@@ -90,6 +93,7 @@ rule test-iostreams ( sources * : requirements * ) {
                     large_file_test.cpp 
                     ../src/file_descriptor.cpp
                     ../src/mapped_file.cpp
+                    ../src/file_times.cpp
                   : <define>LARGE_FILE_KEEP=$(LARGE_FILE_KEEP)
                     <link>static ] ;
       }
@@ -100,6 +104,7 @@ rule test-iostreams ( sources * : requirements * ) {
                     large_file_test.cpp 
                     ../src/file_descriptor.cpp
                     ../src/mapped_file.cpp
+                    ../src/file_times.cpp
                   : <define>LARGE_FILE_TEMP=$(LARGE_FILE_TEMP)
                     <link>static ] ;
       }

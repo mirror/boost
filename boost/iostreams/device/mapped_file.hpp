@@ -19,6 +19,7 @@
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/ios.hpp>     // openmode, failure
 #include <boost/iostreams/detail/path.hpp>
 #include <boost/iostreams/operations_fwd.hpp>
@@ -108,8 +109,10 @@ struct basic_mapped_file_params
     typedef detail::mapped_file_params_base base_type;
 
     // For wide paths, instantiate basic_mapped_file_params 
-    // with boost::filesystem::wpath 
+    // with boost::filesystem::wpath
+#ifndef BOOST_IOSTREAMS_NO_WIDE_STREAMS
     BOOST_STATIC_ASSERT((!is_same<Path, std::wstring>::value));
+#endif
 
     // Default constructor
     basic_mapped_file_params() { }
@@ -147,7 +150,7 @@ private:
     typedef detail::mapped_file_impl                impl_type;
     typedef basic_mapped_file_params<detail::path>  param_type;
     friend class mapped_file;
-    friend class impl_type;
+    friend class detail::mapped_file_impl;
     friend struct boost::iostreams::operations<mapped_file_source>;
 public:
     typedef char                                    char_type;

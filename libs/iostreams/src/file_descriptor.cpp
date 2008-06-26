@@ -127,14 +127,14 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
     }
 
     HANDLE handle = p.is_wide() ?
-        ::CreateFileW( p.to_wstring().c_str(),
+        ::CreateFileW( p.c_wstr(),
                        dwDesiredAccess,
                        FILE_SHARE_READ | FILE_SHARE_WRITE,
                        NULL,                   // lpSecurityAttributes
                        dwCreationDisposition,
                        FILE_ATTRIBUTE_NORMAL,
                        NULL ) :                // hTemplateFile
-        ::CreateFileA( p.to_string().c_str(),
+        ::CreateFileA( p.c_str(),
                        dwDesiredAccess,
                        FILE_SHARE_READ | FILE_SHARE_WRITE,
                        NULL,                   // lpSecurityAttributes
@@ -182,9 +182,9 @@ void file_descriptor_impl::open(const detail::path& p, BOOST_IOS::openmode mode)
 
         // Open file.
 
-    int fd = BOOST_IOSTREAMS_FD_OPEN(path.c_str(), oflag, pmode);
+    int fd = BOOST_IOSTREAMS_FD_OPEN(p.c_str(), oflag, pmode);
     if (fd == -1) {
-        throw throw_system_failure("failed opening file");
+        throw system_failure("failed opening file");
     } else {
         handle_ = fd;
         flags_ = close_on_exit;
