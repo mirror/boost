@@ -29,26 +29,26 @@ public:
 
     /// the type of the archive to which the saving of primitive types will be forwarded
     typedef ImplementationArchive implementation_archive_type;
-	
-	/// the constructor takes a reference to the implementation archive used for saving primitve types
+    
+    /// the constructor takes a reference to the implementation archive used for saving primitve types
     forward_oprimitive(implementation_archive_type& ar)
-	 : implementation_archive(ar)
+     : implementation_archive(ar)
     {}
 
-	/// binary saving is forwarded to the implementation archive
+    /// binary saving is forwarded to the implementation archive
     void save_binary(const void * address, std::size_t count)
-	{
-	  implementation_archive.save_binary(address,count);
-	}
-	
-	/// saving of arrays is forwarded to the implementation archive
+    {
+      implementation_archive.save_binary(address,count);
+    }
+    
+    /// saving of arrays is forwarded to the implementation archive
     template<class T>
     void save_array(serialization::array<T> const& x, unsigned int file_version )
     {
-	  implementation_archive.save_array(x,file_version);
+      implementation_archive.save_array(x,file_version);
     }
 
-    typedef typename ImplementationArchive::use_array_optimization use_array_optimization;	
+    typedef typename ImplementationArchive::use_array_optimization use_array_optimization;
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     friend class archive::save_access;
@@ -61,9 +61,9 @@ public:
     template<class T>
     void save(const T & t)
     {
-	  implementation_archive << t;
+      implementation_archive << t;
     }
-	
+
 private:
     implementation_archive_type& implementation_archive;
 };

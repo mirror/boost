@@ -24,12 +24,11 @@ class ignore_skeleton_oarchive
   : public archive::detail::common_oarchive<Archive>
 {
 public:
-	
     ignore_skeleton_oarchive()
-	  : archive::detail::common_oarchive<Archive>(archive::no_header)
-	{
-	}
-		
+      : archive::detail::common_oarchive<Archive>(archive::no_header)
+    {
+    }
+
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
@@ -46,10 +45,10 @@ protected:
     {
         archive::save(* this->This(), t);
     }
-	
+
 #define BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(T) \
     void save_override(T const & , int)        \
-	{}
+    {}
 
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::class_id_optional_type)
 BOOST_ARCHIVE_IGNORE_IMPLEMENTATION(archive::version_type)

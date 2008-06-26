@@ -26,13 +26,13 @@ class forward_skeleton_oarchive
 public:
 
     typedef ImplementationArchive implementation_archive_type;
-	
+
     forward_skeleton_oarchive(implementation_archive_type& ar) 
-	  : archive::detail::common_oarchive<Archive>(archive::no_header),
-		implementation_archive(ar)
-	{
-	}
-		
+      : archive::detail::common_oarchive<Archive>(archive::no_header),
+        implementation_archive(ar)
+    {
+    }
+
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
@@ -49,12 +49,12 @@ protected:
     {
         archive::save(* this->This(), t);
     }
-	
+
 #define BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(T) \
     void save_override(T const & t , int)       \
-	{                                           \
-	  implementation_archive << t;              \
-	}
+    {                                           \
+      implementation_archive << t;              \
+    }
 
 BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(archive::class_id_optional_type)
 BOOST_ARCHIVE_FORWARD_IMPLEMENTATION(archive::version_type)
