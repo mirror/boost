@@ -462,11 +462,11 @@ objects to which <code>*this</code> and <code>x</code> belong, respectively.<br>
 
 <h4><a name="iterators">Iterators</a></h4>
 
-<code>iterator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iterator_to(const value_type&amp; x);</br>
+<code>iterator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iterator_to(const value_type&amp; x);<br>
 const_iterator iterator_to(const value_type&amp; x)const;</code>
   
 <blockquote>
-<b>Requires:</b> <code>x</code> is a reference to an element of the container.</br>
+<b>Requires:</b> <code>x</code> is a reference to an element of the container.<br>
 <b>Returns:</b> An iterator to <code>x</code>.<br>
 <b>Complexity:</b> Constant.<br>
 <b>Exception safety:</b> <code>nothrow</code>.<br>
@@ -497,7 +497,7 @@ one element can be causing insertion not to be allowed.<br>
 <code>iterator insert(iterator position,const value_type&amp; x);</code>
 
 <blockquote>
-<b>Requires:</b> <code>position</code> is a valid iterator of the index.</br>
+<b>Requires:</b> <code>position</code> is a valid iterator of the index.<br>
 <b>Effects:</b> Inserts <code>x</code> into the <code>multi_index_container</code> to which
 the index belongs if
 <ul>
@@ -526,7 +526,7 @@ void insert(InputIterator first,InputIterator last);</code>
 <code>value_type</code> or a type convertible to <code>value_type</code>.
 <code>first</code> and <code>last</code> are not iterators into any
 index of the <code>multi_index_container</code> to which this index belongs.
-<code>last</code> is reachable from <code>first</code>.</br>
+<code>last</code> is reachable from <code>first</code>.<br>
 <b>Effects:</b>
 <blockquote><pre>
 <span class=identifier>iterator</span> <span class=identifier>hint</span><span class=special>=</span><span class=identifier>end</span><span class=special>();</span>
@@ -542,7 +542,7 @@ index of the <code>multi_index_container</code> to which this index belongs.
 
 <blockquote>
 <b>Requires:</b> <code>position</code> is a valid dereferenceable  iterator
-of the index.</br>
+of the index.<br>
 <b>Effects:</b> Deletes the element pointed to by <code>position</code>.<br>
 <b>Returns:</b> An iterator pointing to the element immediately following
 the one that was deleted, or <code>end()</code>
@@ -577,7 +577,7 @@ the number of elements in [<code>first</code>,<code>last</code>).<br>
 
 <blockquote>
 <b>Requires:</b> <code>position</code> is a valid dereferenceable  iterator
-of the index.</br>
+of the index.<br>
 <b>Effects:</b> Assigns the value <code>x</code> to the element pointed
 to by <code>position</code> into the <code>multi_index_container</code> to which
 the index belongs if, for the value <code>x</code>
@@ -588,7 +588,8 @@ the index belongs if, for the value <code>x</code>
     <code>multi_index_container</code>.</li>
 </ul>
 <b>Postconditions:</b> Validity of <code>position</code> is preserved
-in all cases.<br>
+in all cases. If the key of the new value is equivalent to that of the
+replaced value, the position of the element does not change.<br>
 <b>Returns:</b> <code>true</code> if the replacement took place,
 <code>false</code> otherwise.<br>
 <b>Complexity:</b> <code>O(R(n))</code>.<br>
@@ -605,7 +606,7 @@ belongs remains in its original state.
 <a href="http://www.sgi.com/tech/stl/UnaryFunction.html">
 <code>Unary Function</code></a> accepting arguments of type
 <code>value_type&amp;</code>. <code>position</code> is a valid dereferenceable
-iterator of the index.</br>
+iterator of the index.<br>
 <b>Effects:</b> Calls <code>mod(e)</code> where <code>e</code> is the element
 pointed to by <code>position</code> and rearranges <code>*position</code> into
 all the indices of the <code>multi_index_container</code>. Rearrangement is successful if
@@ -617,7 +618,8 @@ all the indices of the <code>multi_index_container</code>. Rearrangement is succ
 </ul>
 If the rearrangement fails, the element is erased.<br>
 <b>Postconditions:</b> Validity of <code>position</code> is preserved if the
-operation succeeds.<br>
+operation succeeds. If the key of the modified value is equivalent to that of the
+original value, the position of the element does not change.<br>
 <b>Returns:</b> <code>true</code> if the operation succeeded, <code>false</code>
 otherwise.<br>
 <b>Complexity:</b> <code>O(M(n))</code>.<br>
@@ -637,7 +639,7 @@ bool modify(iterator position,Modifier mod,Rollback back);</code>
 iterator of the index. The sequence of operations <code>mod(e)</code>,
 <code>back(e)</code>, where <code>e</code> is the element
 pointed to by <code>position</code>, restores all keys of the element
-to their original state.</br>
+to their original state.<br>
 <b>Effects:</b> Calls <code>mod(e)</code> where <code>e</code> is the element
 pointed to by <code>position</code> and tries to rearrange <code>*position</code> into
 all the indices of the <code>multi_index_container</code>. Rearrangement is successful if
@@ -650,7 +652,9 @@ all the indices of the <code>multi_index_container</code>. Rearrangement is succ
 If the rearrangement fails, <code>back(e)</code> is invoked and the
 element is kept at its original position in all indices.<br>
 <b>Postconditions:</b> Validity of <code>position</code> is preserved except if
-the element is erased under the conditions described below.<br>
+the element is erased under the conditions described below.
+If the key of the modified value is equivalent to that of the
+original value, the position of the element does not change.<br>
 <b>Returns:</b> <code>true</code> if the operation succeeded, <code>false</code>
 otherwise.<br>
 <b>Complexity:</b> <code>O(M(n))</code>.<br>
@@ -671,7 +675,7 @@ from <code>value_type</code>. <code>Modifier</code> is a model of
 <a href="http://www.sgi.com/tech/stl/UnaryFunction.html">
 <code>Unary Function</code></a> accepting arguments of type
 <code>key_type&amp;</code>. <code>position</code> is a valid dereferenceable
-iterator of the index.</br>
+iterator of the index.<br>
 <b>Effects:</b> Equivalent to <code>modify(position,mod')</code>,
 with <code>mod'</code> defined in such a way that
 <code>mod'(x)</code> is the same as <code>mod(key(x))</code>, where
@@ -691,7 +695,7 @@ are models of <a href="http://www.sgi.com/tech/stl/UnaryFunction.html">
 iterator of the index.
 The sequence of operations <code>mod(k)</code>,
 <code>back(k)</code>, where <code>k</code> is the key of the element
-pointed to by <code>position</code>, restores k to its original state.</br>
+pointed to by <code>position</code>, restores k to its original state.<br>
 <b>Effects:</b> Equivalent to <code>modify(position,mod',back')</code>,
 with <code>mod'</code> and <code>back</code> defined in such a way that
 <code>mod'(x)</code> is the same as <code>mod(key(x))</code> and
@@ -779,7 +783,7 @@ interpretations.
 
 <blockquote>
 <b>Requires:</b> <code>CompatibleKey</code> is a compatible key of
-<code>key_compare</code>.</br>
+<code>key_compare</code>.<br>
 <b>Effects:</b> Returns a pointer to an element whose key is equivalent to
 <code>x</code>, or <code>end()</code> if such an element does not exist.<br>
 <b>Complexity:</b> <code>O(log(n))</code>.<br>
@@ -791,7 +795,7 @@ iterator find(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const
 
 <blockquote>
 <b>Requires:</b> (<code>CompatibleKey</code>, <code>CompatibleCompare</code>)
-is a compatible extension of <code>key_compare</code>.</br>
+is a compatible extension of <code>key_compare</code>.<br>
 <b>Effects:</b> Returns a pointer to an element whose key is equivalent to
 <code>x</code>, or <code>end()</code> if such an element does not exist.<br>
 <b>Complexity:</b> <code>O(log(n))</code>.<br>
@@ -803,7 +807,7 @@ count(const CompatibleKey&amp; x)const;
 
 <blockquote>
 <b>Requires:</b> <code>CompatibleKey</code> is a compatible key of
-<code>key_compare</code>.</br>
+<code>key_compare</code>.<br>
 <b>Effects:</b> Returns the number of elements with key equivalent to <code>x</code>.<br>
 <b>Complexity:</b> <code>O(log(n) + count(x))</code>.<br>
 </blockquote>
@@ -814,7 +818,7 @@ size_type count(const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)con
 
 <blockquote>
 <b>Requires:</b> (<code>CompatibleKey</code>, <code>CompatibleCompare</code>)
-is a compatible extension of <code>key_compare</code>.</br>
+is a compatible extension of <code>key_compare</code>.<br>
 <b>Effects:</b> Returns the number of elements with key equivalent to <code>x</code>.<br>
 <b>Complexity:</b> <code>O(log(n) + count(x,comp))</code>.<br>
 </blockquote>
@@ -825,7 +829,7 @@ iterator lower_bound(const CompatibleKey&amp; x)const;
 
 <blockquote>
 <b>Requires:</b> <code>CompatibleKey</code> is a compatible key of
-<code>key_compare</code>.</br>
+<code>key_compare</code>.<br>
 <b>Effects:</b> Returns an iterator pointing to the first element with
 key not less than <code>x</code>, or <code>end()</code> if such an element does
 not exist.<br>
@@ -838,7 +842,7 @@ iterator lower_bound(const CompatibleKey&amp; x,const CompatibleCompare&amp; com
 
 <blockquote>
 <b>Requires:</b> (<code>CompatibleKey</code>, <code>CompatibleCompare</code>)
-is a compatible extension of <code>key_compare</code>.</br>
+is a compatible extension of <code>key_compare</code>.<br>
 <b>Effects:</b> Returns an iterator pointing to the first element with
 key not less than <code>x</code>, or <code>end()</code> if such an element does
 not exist.<br>
@@ -851,7 +855,7 @@ iterator upper_bound(const CompatibleKey&amp; x)const;
 
 <blockquote>
 <b>Requires:</b> <code>CompatibleKey</code> is a compatible key of
-<code>key_compare</code>.</br>
+<code>key_compare</code>.<br>
 <b>Effects:</b> Returns an iterator pointing to the first element with
 key greater than <code>x</code>, or <code>end()</code> if such an element does
 not exist.<br>
@@ -864,7 +868,7 @@ iterator upper_bound(const CompatibleKey&amp; x,const CompatibleCompare&amp; com
 
 <blockquote>
 <b>Requires:</b> (<code>CompatibleKey</code>, <code>CompatibleCompare</code>)
-is a compatible extension of <code>key_compare</code>.</br>
+is a compatible extension of <code>key_compare</code>.<br>
 <b>Effects:</b> Returns an iterator pointing to the first element with
 key greater than <code>x</code>, or <code>end()</code> if such an element does
 not exist.<br>
@@ -878,19 +882,19 @@ std::pair&lt;iterator,iterator> equal_range(<br>
 
 <blockquote>
 <b>Requires:</b> <code>CompatibleKey</code> is a compatible key of
-<code>key_compare</code>.</br>
+<code>key_compare</code>.<br>
 <b>Effects:</b> Equivalent to <code>make_pair(lower_bound(x),upper_bound(x))</code>.<br>
 <b>Complexity:</b> <code>O(log(n))</code>.<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey,typename CompatibleCompare><br>
-std::pair&lt;iterator,iterator> equal_range(</br>
+std::pair&lt;iterator,iterator> equal_range(<br>
 &nbsp;&nbsp;const CompatibleKey&amp; x,const CompatibleCompare&amp; comp)const;
 </code>
 
 <blockquote>
 <b>Requires:</b> (<code>CompatibleKey</code>, <code>CompatibleCompare</code>)
-is a compatible extension of <code>key_compare</code>.</br>
+is a compatible extension of <code>key_compare</code>.<br>
 <b>Effects:</b> Equivalent to
 <code>make_pair(lower_bound(x,comp),upper_bound(x,comp))</code>.<br>
 <b>Complexity:</b> <code>O(log(n))</code>.<br>
@@ -942,7 +946,7 @@ std::pair&lt;iterator,iterator> range(<br>
 
 <blockquote>
 <b>Requires:</b> <code>LowerBounder</code> and <code>UpperBounder</code> are
-a lower and upper bounder of <code>key_compare</code>, respectively.</br>
+a lower and upper bounder of <code>key_compare</code>, respectively.<br>
 <b>Effects:</b> Returns a pair of iterators pointing to the beginning and one
 past the end of the subsequence of elements satisfying <code>lower</code> and
 <code>upper</code> simultaneously. If no such elements exist, the iterators
@@ -1018,9 +1022,9 @@ Hashed indices
 
 <br>
 
-<p>Revised July 2nd 2007</p>
+<p>Revised June 25th 2008</p>
 
-<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

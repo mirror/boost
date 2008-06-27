@@ -454,7 +454,7 @@ void assign(InputIterator first,InputIterator last);</code>
 <code>value_type</code> or a type convertible to <code>value_type</code>.
 <code>first</code> and <code>last</code> are not iterators into any
 index of the <code>multi_index_container</code> to which this index belongs.
-<code>last</code> is reachable from <code>first</code>.</br>
+<code>last</code> is reachable from <code>first</code>.<br>
 <b>Effects:</b>
 <blockquote><pre>
 <span class=identifier>clear</span><span class=special>();</span>
@@ -474,11 +474,11 @@ index of the <code>multi_index_container</code> to which this index belongs.
 
 <h4><a name="iterators">Iterators</a></h4>
 
-<code>iterator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iterator_to(const value_type&amp; x);</br>
+<code>iterator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iterator_to(const value_type&amp; x);<br>
 const_iterator iterator_to(const value_type&amp; x)const;</code>
   
 <blockquote>
-<b>Requires:</b> <code>x</code> is a reference to an element of the container.</br>
+<b>Requires:</b> <code>x</code> is a reference to an element of the container.<br>
 <b>Returns:</b> An iterator to <code>x</code>.<br>
 <b>Complexity:</b> Constant.<br>
 <b>Exception safety:</b> <code>nothrow</code>.<br>
@@ -555,7 +555,7 @@ Note that more than one element can be causing insertion not to be allowed.<br>
 <code>std::pair&lt;iterator,bool> insert(iterator position,const value_type&amp; x);</code>
 
 <blockquote>
-<b>Requires:</b> <code>position</code> is a valid iterator of the index.</br>
+<b>Requires:</b> <code>position</code> is a valid iterator of the index.<br>
 <b>Effects:</b> Inserts <code>x</code> before <code>position</code> if insertion
 is allowed by all other indices of the <code>multi_index_container</code>.<br>
 <b>Returns:</b> The return value is a pair <code>p</code>. <code>p.second</code>
@@ -570,7 +570,7 @@ Note that more than one element can be causing insertion not to be allowed.<br>
 <code>void insert(iterator position,size_type m,const value_type&amp; x);</code>
 
 <blockquote>
-<b>Requires:</b> <code>position</code> is a valid iterator of the index.</br>
+<b>Requires:</b> <code>position</code> is a valid iterator of the index.<br>
 <b>Effects:</b>
 <blockquote><pre>
 <span class=keyword>for</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>i</span><span class=special>=</span><span class=number>0</span><span class=special>;</span><span class=identifier>i</span><span class=special>&lt;</span><span class=identifier>m</span><span class=special>;++</span><span class=identifier>i</span><span class=special>)</span><span class=identifier>insert</span><span class=special>(</span><span class=identifier>position</span><span class=special>,</span><span class=identifier>x</span><span class=special>);</span>
@@ -589,7 +589,7 @@ void insert(iterator position,InputIterator first,InputIterator last);</code>
 <code>value_type</code> or a type convertible to <code>value_type</code>.
 <code>first</code> and <code>last</code> are not iterators into any
 index of the <code>multi_index_container</code> to which this index belongs.
-<code>last</code> is reachable from <code>first</code>.</br>
+<code>last</code> is reachable from <code>first</code>.<br>
 <b>Effects:</b>
 <blockquote><pre>
 <span class=keyword>while</span><span class=special>(</span><span class=identifier>first</span><span class=special>!=</span><span class=identifier>last</span><span class=special>)</span><span class=identifier>insert</span><span class=special>(</span><span class=identifier>position</span><span class=special>,*</span><span class=identifier>first</span><span class=special>++);</span>
@@ -604,7 +604,7 @@ where <code>m</code> is the number of elements in
 
 <blockquote>
 <b>Requires:</b> <code>position</code> is a valid dereferenceable iterator
-of the index.</br>
+of the index.<br>
 <b>Effects:</b> Deletes the element pointed to by <code>position</code>.<br>
 <b>Returns:</b> An iterator pointing to the element immediately following
 the one that was deleted, or <code>end()</code>
@@ -629,7 +629,7 @@ the number of elements in [<code>first</code>,<code>last</code>).<br>
 
 <blockquote>
 <b>Requires:</b> <code>position</code> is a valid dereferenceable  iterator
-of the index.</br>
+of the index.<br>
 <b>Effects:</b> Assigns the value <code>x</code> to the element pointed
 to by <code>position</code> into the <code>multi_index_container</code> to which
 the index belongs if replacing is allowed by all other indices of the
@@ -652,7 +652,7 @@ belongs remains in its original state.
 <a href="http://www.sgi.com/tech/stl/UnaryFunction.html">
 <code>Unary Function</code></a> accepting arguments of type
 <code>value_type&amp;</code>. <code>position</code> is a valid dereferenceable
-iterator of the index.</br>
+iterator of the index.<br>
 <b>Effects:</b> Calls <code>mod(e)</code> where <code>e</code> is the element
 pointed to by <code>position</code> and rearranges <code>*position</code> into
 all the indices of the <code>multi_index_container</code>. Rearrangement on
@@ -680,7 +680,7 @@ bool modify(iterator position,Modifier mod,Rollback back);</code>
 iterator of the index. The sequence of operations <code>mod(e)</code>,
 <code>back(e)</code>, where <code>e</code> is the element
 pointed to by <code>position</code>, restores all keys of the element
-to their original state.</br>
+to their original state.<br>
 <b>Effects:</b> Calls <code>mod(e)</code> where <code>e</code> is the element
 pointed to by <code>position</code> and tries to rearrange <code>*position</code> into
 all the indices of the <code>multi_index_container</code>. Rearrangement on
@@ -713,7 +713,7 @@ of sequenced indices, but the associated complexity bounds differ in general.
 
 <blockquote>
 <b>Requires:</b> <code>position</code> is a valid iterator of the index.
-<code>&amp;x!=this</code>.</br>
+<code>&amp;x!=this</code>.<br>
 <b>Effects:</b> Inserts the contents of <code>x</code> before <code>position</code>,
 in the same order as they were in <code>x</code>. Those elements succesfully
 inserted are erased from <code>x</code>.<br>
@@ -999,9 +999,9 @@ Key extraction
 
 <br>
 
-<p>Revised July 2nd 2007</p>
+<p>Revised June 25th 2008</p>
 
-<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

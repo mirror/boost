@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example of use of hashed indices.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2008 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -66,6 +66,8 @@ typedef boost::tokenizer<boost::char_separator<char> > text_tokenizer;
 
 int main()
 {
+  /* boostinspect:noascii */
+
   std::string text=
     "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha "
     "mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga "

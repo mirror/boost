@@ -1012,7 +1012,7 @@ Consider a typical instantiation of <code>multi_index_container</code>:
 </pre></blockquote>
 
 <p>
-Then, for instance, the type <code>employee_set::nth_type&lt;0&gt;::type</code>
+Then, for instance, the type <code>employee_set::nth_index&lt;0&gt;::type</code>
 resolves to the following in GCC:
 </p>
 
@@ -1075,7 +1075,7 @@ in the final type by encapsulating it into another, shorter-named construct:
 <code>employee_set_indices</code> works as a conventional <code>typedef</code>
 in all respects, save for a detail: its name does not explicitly
 include the information contained in the <code>indexed_by</code> instantiation.
-Applying this technique, <code>employee_set::nth_type&lt;0&gt;::type</code>
+Applying this technique, <code>employee_set::nth_index&lt;0&gt;::type</code>
 now becomes:
 </p>
 
@@ -1121,7 +1121,7 @@ Performance
 
 <br>
 
-<p>Revised February 7th 2008</p>
+<p>Revised May 26th 2008</p>
 
 <p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

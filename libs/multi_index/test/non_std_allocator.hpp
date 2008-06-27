@@ -1,6 +1,6 @@
 /* Used in Boost.MultiIndex tests.
  *
- * Copyright 2003-2007 Joaquín M López Muñoz.
+ * Copyright 2003-2008 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -121,16 +121,6 @@ public:
   {
     return false;
   }
-};
-
-template<>
-class non_std_allocator<void>
-{
-public:
-  typedef non_raw_pointer<void>       pointer;
-  typedef non_raw_pointer<const void> const_pointer;
-  typedef void                        value_type;
-  template<class U>struct rebind{typedef non_std_allocator<U> other;};
 };
 
 #endif
