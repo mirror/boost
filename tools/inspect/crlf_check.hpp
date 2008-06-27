@@ -23,7 +23,7 @@ namespace boost
     public:
 
       crlf_check();
-      virtual const char * name() const { return "*R*"; }
+      virtual const char * name() const { return "*EOL*"; }
       virtual const char * desc() const { return "invalid (cr only) line-ending"; }
 
       virtual void inspect(
@@ -32,7 +32,7 @@ namespace boost
         const std::string & contents );
 
       virtual ~crlf_check()
-        { std::cout << "  " << m_files_with_errors << " files with invalid line endings\n"; }
+        { std::cout << "  " << m_files_with_errors << " files with invalid line endings" << line_break(); }
     };
   }
 }

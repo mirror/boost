@@ -20,7 +20,7 @@ namespace boost
     public:
 
       tab_check();
-      virtual const char * name() const { return "*T*"; }
+      virtual const char * name() const { return "*Tab*"; }
       virtual const char * desc() const { return "tabs in file"; }
 
       virtual void inspect(
@@ -29,7 +29,7 @@ namespace boost
         const std::string & contents );
 
       virtual ~tab_check()
-        { std::cout << "  " << m_files_with_errors << " files with tabs\n"; }
+        { std::cout << "  " << m_files_with_errors << " files with tabs" << line_break(); }
     };
   }
 }

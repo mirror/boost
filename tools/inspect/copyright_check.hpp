@@ -31,7 +31,7 @@ namespace boost
         const std::string & contents );
 
       virtual ~copyright_check()
-        { std::cout << "  " << m_files_with_errors << " files " << desc() << '\n'; }
+        { std::cout << "  " << m_files_with_errors << " files " << desc() << line_break(); }
     };
   }
 }

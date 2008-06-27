@@ -46,6 +46,8 @@
 
 namespace fs = boost::filesystem;
 
+using namespace boost::inspect;
+
 namespace
 {
   class inspector_element
@@ -63,6 +65,7 @@ namespace
   long file_count = 0;
   long directory_count = 0;
   long error_count = 0;
+  const int max_offenders = 5;  // maximum "worst offenders" to display 
 
   boost::inspect::string_set content_signatures;
 
@@ -277,11 +280,11 @@ namespace
     else
     {
       std::cout
-        << "  <tr><td><a href=\"#"
+        << "  <a href=\"#"
         << current_library          // what about malformed for URI refs? [gps]
         << "\">" << current_library
-        << "</a></td><td align=\"center\">"
-        << err_count << "</td></tr>\n";
+        << "</a> ("
+        << err_count << ")<br>\n";
     }
   }
 
@@ -295,14 +298,9 @@ namespace
     }
     else
     {
-      std::cout
-        << "</pre>\n"
+      std::cout <<
         "<h2>Summary</h2>\n"
-        "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
-        "  <tr>\n"
-        "    <td><b>Library</b></td>\n"
-        "    <td><b>Problems</b></td>\n"
-        "  </tr>\n"
+        "<blockquote>\n"
         ;
     }
 
@@ -322,13 +320,9 @@ namespace
     display_summary_helper( current_library, err_count );
 
     if (display_text == display_format)
-    {
       std::cout << "\n";
-    }
     else
-    {
-      std::cout << "</table>\n";
-    }
+      std::cout << "</blockquote>\n"; 
   }
 
 
@@ -428,18 +422,18 @@ namespace
   }
 
 
-//  hall_of_shame_count_helper  --------------------------------------------------//
+//  worst_offenders_count_helper  --------------------------------------------------//
 
-  void hall_of_shame_count_helper( const string & current_library, int err_count )
+  void worst_offenders_count_helper( const string & current_library, int err_count )
   {
         lib_error_count lec;
         lec.library = current_library;
         lec.error_count = err_count;
         libs.push_back( lec );
   }
-//  hall_of_shame_count  -----------------------------------------------------//
+//  worst_offenders_count  -----------------------------------------------------//
 
-  void hall_of_shame_count()
+  void worst_offenders_count()
   {
     string current_library( msgs.begin()->library );
     int err_count = 0;
@@ -448,38 +442,38 @@ namespace
     {
       if ( current_library != itr->library )
       {
-        hall_of_shame_count_helper( current_library, err_count );
+        worst_offenders_count_helper( current_library, err_count );
         current_library = itr->library;
         err_count = 0;
       }
       ++err_count;
     }
-    hall_of_shame_count_helper( current_library, err_count );
+    worst_offenders_count_helper( current_library, err_count );
   }
 
-//  display_hall_of_shame  ---------------------------------------------------//
+//  display_worst_offenders  -------------------------------------------------//
 
-  void display_hall_of_shame()
+  void display_worst_offenders()
   {
     if (display_text == display_format)
     {
-      std::cout << "Hall of Shame:\n";
+      std::cout << "Worst Offenders:\n";
     }
     else
     {
-      std::cout
-        << "</pre>\n"
-        "<h2>Hall of Shame</h2>\n"
-        "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
-        "  <tr>\n"
-        "    <td><b>Library</b></td>\n"
-        "    <td><b>Problems</b></td>\n"
-        "  </tr>\n"
+      std::cout <<
+        "<h2>Worst Offenders</h2>\n"
+        "<blockquote>\n"
         ;
     }
 
+    int display_count = 0;
+    int last_error_count = 0;
     for ( lib_error_count_vector::iterator itr ( libs.begin() );
-      itr != libs.end(); ++itr )
+          itr != libs.end()
+            && (display_count < max_offenders
+                || itr->error_count == last_error_count);
+          ++itr, ++display_count )
     {
       if (display_text == display_format)
       {
@@ -488,22 +482,19 @@ namespace
       else
       {
         std::cout
-          << "  <tr><td><a href=\"#"
+          << "  <a href=\"#"
           << itr->library
           << "\">" << itr->library
-          << "</a></td><td align=\"center\">"
-          << itr->error_count << "</td></tr>\n";
+          << "</a> ("
+          << itr->error_count << ")<br>\n";
       }
+      last_error_count = itr->error_count;
     }
 
     if (display_text == display_format)
-    {
       std::cout << "\n";
-    }
     else
-    {
-      std::cout << "</table>\n";
-    }
+      std::cout << "</blockquote>\n"; 
   }
 
 
@@ -547,6 +538,14 @@ namespace boost
 {
   namespace inspect
   {
+
+//  line_break  --------------------------------------------------------------//
+
+    const char * line_break()
+    {
+      return display_format ? "\n" : "<br>\n";
+    }
+
 
 //  register_signature  ------------------------------------------------------//
 
@@ -752,9 +751,9 @@ int cpp_main( int argc_param, char * argv_param[] )
   fs::initial_path();
   
 
-  {
+  { // begin reporting block
 
-  // note how this is in its own block; reporting will happen
+  // since this is in its own block; reporting will happen
   // automatically, from each registered inspector, when
   // leaving, due to destruction of the inspector_list object
   inspector_list inspectors;
@@ -825,6 +824,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     std::cout
       << "<html>\n"
       "<head>\n"
+      "<style> body { font-family: sans-serif; } </style>\n"
       "<title>Boost Inspection Report</title>\n"
       "</head>\n"
 
@@ -852,43 +852,42 @@ int cpp_main( int argc_param, char * argv_param[] )
 
 
     std::cout
-      << "<h2>Totals</h2>\n<pre>"
-      << file_count << " files scanned\n"
-      << directory_count << " directories scanned (including root)\n"
-      << error_count << " problems reported\n";
+      << "<h2>Totals</h2>\n"
+      << file_count << " files scanned<br>\n"
+      << directory_count << " directories scanned (including root)<br>\n"
+      << error_count << " problems reported\n<p>";
   }
 
   for ( inspector_list::iterator itr = inspectors.begin();
         itr != inspectors.end(); ++itr )
   {
-    const string line_break (
-        display_text == display_format? "\n" : "<br>\n"); // gps
 
     inspector_keys += static_cast<string>("  ")
         + itr->inspector->name()
         + ' ' + itr->inspector->desc()
-        + line_break
+        + line_break()
         ;
   }
 
-  
-  std::cout
-      << "\nProblem counts:\n";
+  if (display_text == display_format)
+     std::cout << "\nProblem counts:\n";
+  else
+    std::cout << "\n<h2>Problem counts</h2>\n<blockquote><p>\n" ;
 
   } // end of block: starts reporting
 
   if (display_text == display_format)
-  {
     std::cout << "\n" ;
-  }
+  else
+    std::cout << "</blockquote>\n";
 
   std::sort( msgs.begin(), msgs.end() );
 
-  hall_of_shame_count();
+  worst_offenders_count();
   std::stable_sort( libs.begin(), libs.end() );
 
   if ( !libs.empty() )
-    display_hall_of_shame();
+    display_worst_offenders();
 
   if ( !msgs.empty() )
   {

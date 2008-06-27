@@ -21,7 +21,7 @@ namespace boost
     public:
 
       ascii_check();
-      virtual const char * name() const { return "*A*"; }
+      virtual const char * name() const { return "*ASCII*"; }
       virtual const char * desc() const { return "non-ASCII chars in file"; }
 
       virtual void inspect(
@@ -30,7 +30,7 @@ namespace boost
         const std::string & contents );
 
       virtual ~ascii_check()
-        { std::cout << "  " << m_files_with_errors << " files with non-ASCII chars\n"; }
+        { std::cout << "  " << m_files_with_errors << " files with non-ASCII chars" << line_break(); }
     };
   }
 }

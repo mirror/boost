@@ -102,7 +102,7 @@ namespace boost
 
     file_name_check::~file_name_check()
     {
-      std::cout << "  " << m_name_errors << " " << desc() << '\n';
+      std::cout << "  " << m_name_errors << " " << desc() << line_break();
     }
 
 

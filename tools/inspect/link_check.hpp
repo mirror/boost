@@ -36,7 +36,7 @@ namespace boost
     public:
 
       link_check();
-      virtual const char * name() const { return "*A*"; }
+      virtual const char * name() const { return "*HTML*"; }
       virtual const char * desc() const { return "invalid bookmarks, invalid urls, broken links, unlinked files"; }
 
       virtual void inspect(
@@ -52,10 +52,10 @@ namespace boost
 
       virtual ~link_check()
         {
-          std::cout << "  " << m_bookmark_errors << " bookmarks with invalid characters\n";
-          std::cout << "  " << m_invalid_errors << " invalid urls\n";
-          std::cout << "  " << m_broken_errors << " broken links\n";
-          std::cout << "  " << m_unlinked_errors << " unlinked files\n";
+          std::cout << "  " << m_bookmark_errors << " bookmarks with invalid characters" << line_break();
+          std::cout << "  " << m_invalid_errors << " invalid urls" << line_break();
+          std::cout << "  " << m_broken_errors << " broken links" << line_break();
+          std::cout << "  " << m_unlinked_errors << " unlinked files" << line_break();
         }
     };
   }
