@@ -1,12 +1,12 @@
 //  ascii_check implementation  ------------------------------------------------//
 
 //  Copyright Marshall Clow 2007.
-//	Based on the tab-check checker by Beman Dawes
+//  Based on the tab-check checker by Beman Dawes
 //
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
-//	√ -- this is a test.
+//  √ -- this is a test.
 
 #include "ascii_check.hpp"
 #include <functional>
@@ -16,8 +16,8 @@ namespace boost
   namespace inspect
   {
 
-	static const string gPunct ( "$_{}[]#()<>%:;.?*+-/ˆ&|~!=,\\\"'@^`" );
-	
+   static const string gPunct ( "$_{}[]#()<>%:;.?*+-/ˆ&|~!=,\\\"'@^`" );
+
    // Legal characters for a source file are defined in section 2.2 of the standard
    // I have added '@', '^', and '`' to the "legal" chars because they are commonly
    //    used in comments, and they are strictly ASCII.
