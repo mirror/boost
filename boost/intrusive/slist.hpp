@@ -1653,7 +1653,7 @@ class slist_impl
    private:
    void priv_splice_after(node_ptr prev_pos_n, slist_impl &x, node_ptr before_first_n, node_ptr before_last_n)
    {
-	   if (before_first_n != before_last_n && prev_pos_n != before_first_n && prev_pos_n != before_last_n)
+      if (before_first_n != before_last_n && prev_pos_n != before_first_n && prev_pos_n != before_last_n)
       {
          if(cache_last){
             if(node_traits::get_next(prev_pos_n) == this->get_end_node()){
