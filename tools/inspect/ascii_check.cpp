@@ -16,7 +16,7 @@ namespace boost
   namespace inspect
   {
 
-   static const string gPunct ( "$_{}[]#()<>%:;.?*+-/ˆ&|~!=,\\\"'@^`" );
+   static const string gPunct ( "$_{}[]#()<>%:;.?*+-/^&|~!=,\\\"'@^`" );
 
    // Legal characters for a source file are defined in section 2.2 of the standard
    // I have added '@', '^', and '`' to the "legal" chars because they are commonly
