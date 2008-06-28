@@ -549,6 +549,28 @@ struct add_typeof_helper< quantity<Unit1,X>,quantity<Unit2,Y> >
     typedef quantity<unit_type,value_type>                  type;
 };
 
+/// for sun CC we need to invoke SFINAE at
+/// the top level, otherwise it will silently
+/// return int.
+template<class Dim1, class System1,
+         class Dim2, class System2,
+         class X,
+         class Y>
+struct add_typeof_helper< quantity<unit<Dim1, System1>,X>,quantity<unit<Dim2, System2>,Y> >
+{
+};
+
+template<class Dim,
+         class System,
+         class X,
+         class Y>
+struct add_typeof_helper< quantity<unit<Dim, System>,X>,quantity<unit<Dim, System>,Y> >
+{
+    typedef typename add_typeof_helper<X,Y>::type  value_type;
+    typedef unit<Dim, System>                      unit_type;
+    typedef quantity<unit_type,value_type>         type;
+};
+
 /// specialize subtract typeof helper
 /// INTERNAL ONLY
 template<class Unit1,
@@ -560,6 +582,26 @@ struct subtract_typeof_helper< quantity<Unit1,X>,quantity<Unit2,Y> >
     typedef typename subtract_typeof_helper<X,Y>::type          value_type;
     typedef typename subtract_typeof_helper<Unit1,Unit2>::type  unit_type;
     typedef quantity<unit_type,value_type>                      type;
+};
+
+// Force adding different units to fail on sun.
+template<class Dim1, class System1,
+         class Dim2, class System2,
+         class X,
+         class Y>
+struct subtract_typeof_helper< quantity<unit<Dim1, System1>,X>,quantity<unit<Dim2, System2>,Y> >
+{
+};
+
+template<class Dim,
+         class System,
+         class X,
+         class Y>
+struct subtract_typeof_helper< quantity<unit<Dim, System>,X>,quantity<unit<Dim, System>,Y> >
+{
+    typedef typename subtract_typeof_helper<X,Y>::type  value_type;
+    typedef unit<Dim, System>                           unit_type;
+    typedef quantity<unit_type,value_type>              type;
 };
 
 /// scalar times unit typeof helper
