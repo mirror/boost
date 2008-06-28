@@ -8,7 +8,7 @@
 # http://www.boost.org/LICENSE_1_0.txt
 
 project units_test :
-    requirements <include>$(BOOST_ROOT) <include>../../.. <warnings>all <toolset>msvc:<asynch-exceptions>on
+    requirements <include>$(BOOST_ROOT) <include>../../.. <toolset>msvc:<asynch-exceptions>on
 ;
 
 check-conversion-dependencies = [ path.glob-tree ../../../boost/units/systems/base_units : *.hpp ] ;
