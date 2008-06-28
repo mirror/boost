@@ -56,7 +56,7 @@ namespace units {
 
     template<typename System, typename Dim, typename Arg>
     struct multiply_typeof_helper<boost::units::unit<Dim, System>, boost::lambda::lambda_functor<Arg> > {
-        typename boost::lambda::lambda_functor<
+        typedef boost::lambda::lambda_functor<
           boost::lambda::lambda_functor_base<
               boost::lambda::arithmetic_action<boost::lambda::multiply_action>,
               tuple<typename boost::lambda::const_copy_argument<const boost::units::unit<Dim, System> >::type, boost::lambda::lambda_functor<Arg> >
