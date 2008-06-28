@@ -314,6 +314,7 @@ class quantity<BOOST_UNITS_DIMENSIONLESS_UNIT(System),Y>
                 
             return *this; 
         }
+        
         #ifndef BOOST_NO_SFINAE
 
         /// implicit conversion between value types is allowed if allowed for value types themselves
@@ -358,14 +359,24 @@ class quantity<BOOST_UNITS_DIMENSIONLESS_UNIT(System),Y>
             return *this;
         }
 
-        #ifndef BOOST_NO_SFINAE
+        #if 1
 
         /// implicit conversion between different unit systems is allowed
         template<class System2, class Y2> 
         quantity(const quantity<unit<dimensionless_type, System2>,Y2>& source,
-            typename boost::enable_if<detail::is_non_narrowing_conversion<Y2, Y>,
-            typename detail::disable_if_is_same<System, System2>::type>::type* = 0,
-            typename boost::enable_if<detail::is_dimensionless_system<System2> >::type* = 0) :
+        #ifdef __SUNPRO_CC
+            typename boost::enable_if<
+                boost::mpl::and_<
+                    detail::is_non_narrowing_conversion<Y2, Y>,
+                    detail::is_dimensionless_system<System2>
+                > 
+            >::type* = 0
+        #else
+            typename boost::enable_if<detail::is_non_narrowing_conversion<Y2, Y> >::type* = 0,
+            typename detail::disable_if_is_same<System, System2>::type* = 0,
+            typename boost::enable_if<detail::is_dimensionless_system<System2> >::type* = 0
+        #endif
+            ) :
             val_(source.value()) 
         {
             BOOST_UNITS_CHECK_LAYOUT_COMPATIBILITY(this_type, Y);
@@ -374,9 +385,19 @@ class quantity<BOOST_UNITS_DIMENSIONLESS_UNIT(System),Y>
         /// implicit conversion between different unit systems is allowed
         template<class System2, class Y2> 
         explicit quantity(const quantity<unit<dimensionless_type, System2>,Y2>& source,
-            typename boost::disable_if<detail::is_non_narrowing_conversion<Y2, Y>,
-            typename detail::disable_if_is_same<System, System2>::type>::type* = 0,
-            typename boost::enable_if<detail::is_dimensionless_system<System2> >::type* = 0) :
+        #ifdef __SUNPRO_CC
+            typename boost::enable_if<
+                boost::mpl::and_<
+                    boost::mpl::not_<detail::is_non_narrowing_conversion<Y2, Y> >,
+                    detail::is_dimensionless_system<System2>
+                > 
+            >::type* = 0
+        #else
+            typename boost::disable_if<detail::is_non_narrowing_conversion<Y2, Y> >::type* = 0,
+            typename detail::disable_if_is_same<System, System2>::type* = 0,
+            typename boost::enable_if<detail::is_dimensionless_system<System2> >::type* = 0
+        #endif
+            ) :
             val_(static_cast<Y>(source.value())) 
         {
             BOOST_UNITS_CHECK_LAYOUT_COMPATIBILITY(this_type, Y);
@@ -404,6 +425,8 @@ class quantity<BOOST_UNITS_DIMENSIONLESS_UNIT(System),Y>
         {
             BOOST_UNITS_CHECK_LAYOUT_COMPATIBILITY(this_type, Y);
         }
+        
+        #ifndef __SUNPRO_CC
 
         /// implicit assignment between different unit systems is allowed
         template<class System2>
@@ -413,6 +436,8 @@ class quantity<BOOST_UNITS_DIMENSIONLESS_UNIT(System),Y>
             
             return *this;
         }
+        
+        #endif
         
         /// implicit conversion to @c value_type is allowed
         operator value_type() const                         { return val_; }
