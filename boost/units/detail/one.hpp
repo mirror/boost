@@ -86,7 +86,8 @@ inline T operator/(const one&, const T& t)
 
 inline one operator/(const one&, const one&)
 {
-    return(one());
+    one result;
+    return(result);
 }
 
 } // namespace units

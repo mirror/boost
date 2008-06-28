@@ -39,13 +39,13 @@ struct ordinal_has_already_been_defined<false>  { typedef void type; };
 template<class T>
 detail::no 
 boost_units_is_registered(const T&) 
-{ return(detail::no()); }
+{ detail::no result; return(result); }
 
 /// INTERNAL ONLY
 template<class T>
 detail::no 
 boost_units_unit_is_registered(const T&) 
-{ return(detail::no()); }
+{ detail::no result; return(result); }
 
 } // namespace units
 

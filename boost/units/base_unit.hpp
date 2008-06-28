@@ -98,13 +98,13 @@ class base_unit :
         /// INTERNAL ONLY
         friend detail::yes 
         boost_units_unit_is_registered(const units::base_unit_ordinal<N>&) 
-        { return(detail::yes()); }
+        { detail::yes result; return(result); }
         
         /// But make sure we can identify the current instantiation!
         /// INTERNAL ONLY
         friend detail::yes 
         boost_units_unit_is_registered(const units::base_unit_pair<Derived, N>&) 
-        { return(detail::yes()); }
+        { detail::yes result; return(result); }
 };
 
 } // namespace units
