@@ -107,6 +107,12 @@ class quantity
             BOOST_UNITS_CHECK_LAYOUT_COMPATIBILITY(this_type, Y);
         }
         
+        #ifdef __SUNPRO_CC
+        ~quantity() {
+            unit_type force_unit_instantiation;
+        }
+        #endif
+        
         //~quantity() { }
         
         this_type& operator=(const this_type& source) 

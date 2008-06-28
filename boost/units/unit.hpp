@@ -48,9 +48,16 @@ class unit
        
         this_type& operator=(const this_type&) { }
         
+        #ifdef __SUNPRO_CC
+        ~unit() {
+            BOOST_MPL_ASSERT((detail::check_system<System, Dim>));
+            BOOST_MPL_ASSERT((is_dimension_list<Dim>));
+        }
+        #else
     private:
-        BOOST_STATIC_ASSERT((detail::check_system<System, Dim>::value == true));
-        BOOST_STATIC_ASSERT((is_dimension_list<Dim>::value == true));
+        BOOST_MPL_ASSERT((detail::check_system<System, Dim>));
+        BOOST_MPL_ASSERT((is_dimension_list<Dim>));
+        #endif
 };
 
 }
