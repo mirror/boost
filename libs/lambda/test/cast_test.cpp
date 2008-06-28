@@ -1,6 +1,6 @@
 //  cast_tests.cpp  -- The Boost Lambda Library ------------------
 //
-// Copyright (C) 2000-2003 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+// Copyright (C) 2000-2003 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 // Copyright (C) 2000-2003 Gary Powell (powellg@amazon.com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See

@@ -1,6 +1,6 @@
 // Boost Lambda Library -- loops.hpp ----------------------------------------
 
-// Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+// Copyright (C) 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 // Copyright (C) 2000 Gary Powell (powellg@amazon.com)
 // Copyright (c) 2001-2002 Joel de Guzman
 //
