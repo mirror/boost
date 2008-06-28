@@ -24,8 +24,6 @@
 <p>It supports transporting of arbitrary data to the catch site, which is otherwise tricky due to the no-throw requirements (15.5.1) for exception classes. Data can be added to any exception object, either directly in the throw-expression (15.1), or at a later time as the exception object propagates up the call stack.</p>
 <p>The ability to add data to exception objects after they have been passed to throw is important, because often some of the information needed to handle an exception is unavailable in the context where the failure is detected. </p>
 <p>Boost Exception also supports <span class="RenoLink"><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2179.html">N2179</a></span>-style <span class="RenoLink"><a href="tutorial_exception_ptr.html">copying</a></span> of exception objects, implemented non-intrusively and automatically by the boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> function.</p>
-<h4>Note:</h4>
-<p>Boost Exception was accepted as a Boost library on November 7 2007, however it has not yet been part of an official Boost release. Current version can be downloaded from <span class="RenoLink"><a href="http://svn.boost.org/svn/boost/trunk"> Boost SVN</a></span>.</p>
 <h2>Contents</h2>
 <div><ol><li>Tutorial<div><ol><li><span class="RenoLink"><a href="tutorial_transporting_data.html">Tutorial: Transporting of Arbitrary Data to the Catch Site</a></span></li>
 <li><span class="RenoLink"><a href="tutorial_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies</a></span></li>
