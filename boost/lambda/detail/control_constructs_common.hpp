@@ -1,6 +1,6 @@
 // Boost Lambda Library -- control_constructs_common.hpp -------------------
 
-// Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+// Copyright (C) 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 // Copyright (C) 2000 Gary Powell (powellg@amazon.com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See

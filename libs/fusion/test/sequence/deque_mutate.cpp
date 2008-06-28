@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 1999-2003 Jaakko Järvi
+    Copyright (c) 1999-2003 Jaakko Jarvi
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2006
 
