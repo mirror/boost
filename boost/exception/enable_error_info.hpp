@@ -42,7 +42,7 @@ boost
             char const *
             diagnostic_information() const throw()
                 {
-                return exception::_diagnostic_information(T::what());
+                return boost::exception::_diagnostic_information(T::what());
                 }
             };
 
