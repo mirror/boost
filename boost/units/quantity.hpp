@@ -107,6 +107,9 @@ class quantity
             BOOST_UNITS_CHECK_LAYOUT_COMPATIBILITY(this_type, Y);
         }
         
+        // Need to make sure that the destructor of
+        // Unit which contains the checking is instantiated,
+        // on sun.
         #ifdef __SUNPRO_CC
         ~quantity() {
             unit_type force_unit_instantiation;

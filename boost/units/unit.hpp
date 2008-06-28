@@ -48,6 +48,10 @@ class unit
        
         this_type& operator=(const this_type&) { }
         
+        // sun will ignore errors resulting from templates
+        // instantiated in the return type of a function.
+        // Make sure that we get an error anyway by putting.
+        // the check in the destructor.
         #ifdef __SUNPRO_CC
         ~unit() {
             BOOST_MPL_ASSERT((detail::check_system<System, Dim>));
