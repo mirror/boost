@@ -112,7 +112,7 @@ namespace impl {
             if (IS_CATEGORY(*it, WhiteSpaceTokenType) || T_NEWLINE == id) {
                 if (!was_whitespace) {
                 // C++ standard 16.3.2.2 [cpp.stringize]
-                // Each occurrence of white space between the argument’s 
+                // Each occurrence of white space between the argument's 
                 // preprocessing tokens becomes a single space character in the 
                 // character string literal.
                     result += " ";
@@ -126,7 +126,7 @@ namespace impl {
             }
             else 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-                if (T_PLACEMARKER != id) 
+            if (T_PLACEMARKER != id) 
 #endif 
             {
             // now append this token to the string
@@ -169,7 +169,7 @@ namespace impl {
                 if (IS_CATEGORY(*it, WhiteSpaceTokenType) || T_NEWLINE == id) {
                     if (!was_whitespace) {
                     // C++ standard 16.3.2.2 [cpp.stringize]
-                    // Each occurrence of white space between the argument’s 
+                    // Each occurrence of white space between the argument's 
                     // preprocessing tokens becomes a single space character in the 
                     // character string literal.
                         result += " ";

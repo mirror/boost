@@ -45,3 +45,5 @@ PASTE2(1, , , 4)  //R 14
 //H 00: t_1_035.cpp(24): PASTE2(1, §, §, 4), [t_1_035.cpp(15): PASTE2(a, b, c, d)=a##b##c##d]
 //H 02: 14
 //H 03: 14
+
+// boostinspect:noascii    this file needs to contain non-ASCII characters
