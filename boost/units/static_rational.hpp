@@ -63,26 +63,28 @@ template<integer_type N,integer_type D = 1>
 class static_rational
 {
     private:
+        typedef static_rational self_type;
+
         static const integer_type   nabs = static_abs<N>::value,
                                     dabs = static_abs<D>::value;
         
         /// greatest common divisor of N and D
         // need cast to signed because static_gcd returns unsigned long
         static const integer_type   den = 
-            static_cast<integer_type>(boost::math::static_gcd<nabs,dabs>::value) * ((D < 0) ? -1 : 1);
+            static_cast<integer_type>(boost::math::static_gcd<self_type::nabs,self_type::dabs>::value) * ((D < 0) ? -1 : 1);
         
     public: 
         // for mpl arithmetic support
         typedef detail::static_rational_tag tag;
         
-        static const integer_type   Numerator = N/den,
-                                    Denominator = D/den;
+        static const integer_type   Numerator = N/self_type::den,
+            Denominator = D/self_type::den;
         
         /// INTERNAL ONLY
         typedef static_rational<N,D>    this_type;
         
         /// static_rational<N,D> reduced by GCD
-        typedef static_rational<Numerator,Denominator>  type;
+        typedef static_rational<self_type::Numerator,self_type::Denominator>  type;
                                  
         static integer_type numerator()      { return Numerator; }
         static integer_type denominator()    { return Denominator; }
