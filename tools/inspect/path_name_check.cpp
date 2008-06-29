@@ -1,4 +1,4 @@
-//  long_name_check implementation  ------------------------------------------//
+//  path_name_check implementation  ------------------------------------------//
 
 //  Copyright Beman Dawes 2002.
 //  Copyright Gennaro Prota 2006.
@@ -7,7 +7,7 @@
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-#include "long_name_check.hpp"
+#include "path_name_check.hpp"
 
 #include "boost/filesystem/operations.hpp"
 #include "boost/lexical_cast.hpp"

@@ -34,7 +34,7 @@
 #include "crlf_check.hpp"
 #include "license_check.hpp"
 #include "link_check.hpp"
-#include "long_name_check.hpp"
+#include "path_name_check.hpp"
 #include "tab_check.hpp"
 #include "ascii_check.hpp"
 #include "minmax_check.hpp"
@@ -505,7 +505,7 @@ namespace
          "  -copyright\n"
          "  -crlf\n"
          "  -link\n"
-         "  -long_name\n"
+         "  -path_name\n"
          "  -tab\n"
          "  -ascii\n"
          "  -minmax\n"
@@ -674,7 +674,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool copyright_ck = true;
   bool crlf_ck = true;
   bool link_ck = true;
-  bool long_name_ck = true;
+  bool path_name_ck = true;
   bool tab_ck = true;
   bool ascii_ck = true;
   bool minmax_ck = true;
@@ -705,7 +705,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     copyright_ck = false;
     crlf_ck = false;
     link_ck = false;
-    long_name_ck = false;
+    path_name_ck = false;
     tab_ck = false;
     ascii_ck = false;
     minmax_ck = false;
@@ -723,10 +723,8 @@ int cpp_main( int argc_param, char * argv_param[] )
         crlf_ck = true;
     else if ( std::strcmp( argv[1], "-link" ) == 0 )
       link_ck = true;
-    else if ( std::strcmp( argv[1], "-long_name" ) == 0 )
-      long_name_ck = true;
-    else if ( std::strcmp( argv[1], "-long-name" ) == 0 )
-      long_name_ck = true;
+    else if ( std::strcmp( argv[1], "-path_name" ) == 0 )
+      path_name_ck = true;
     else if ( std::strcmp( argv[1], "-tab" ) == 0 )
       tab_ck = true;
     else if ( std::strcmp( argv[1], "-ascii" ) == 0 )
@@ -766,7 +764,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     inspectors.push_back( inspector_element( new boost::inspect::crlf_check ) );
   if ( link_ck )
     inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
-  if ( long_name_ck )
+  if ( path_name_ck )
     inspectors.push_back( inspector_element( new boost::inspect::file_name_check ) );
   if ( tab_ck )
       inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
