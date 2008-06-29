@@ -12,33 +12,23 @@
 #include "boost/filesystem/operations.hpp"
 #include "boost/lexical_cast.hpp"
 
-#include <locale>
+#include <string>
 #include <algorithm>
+#include <cctype>
 
-namespace { namespace aux {
+using std::string;
 
-bool starts_with_nonalnum( path const & p )
+namespace
 {
-  const string & x = p.string();
-  assert(!x.empty());
-
-  const string::value_type first = x[0];
-
-  return !std::isalnum( first, std::locale::classic() )
-      && first != '_'
-      && x != ".cvsignore"
-      && x != ".svn"
-      ;
+  const char allowable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-.";
+  const char initial_char[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 }
-
-}}
-
 
 namespace boost
 {
   namespace inspect
   {
-    const char file_name_check::limits::name[] = "ISO 9660:1999 Level 3";
+
 
     file_name_check::file_name_check() : m_name_errors(0) {}
 
@@ -46,31 +36,60 @@ namespace boost
       const string & library_name,
       const path & full_path )
     {
-      std::string const leaf( full_path.leaf() );
+      string::size_type pos;
+      
+      //  called for each file and directory, so only the leaf need be tested
+      string const leaf( full_path.leaf() );
 
-      if ( *leaf.rbegin() == '.' )
+      //  includes only allowable characters
+      if ( (pos = leaf.find_first_not_of( allowable )) != string::npos )
       {
         ++m_name_errors;
         error( library_name, full_path, string(name())
-            + " filename ends with the dot character ('.')" );
+            + " file or directory name contains unacceptable character '"
+            + leaf[pos] + "'" );
       }
 
-      path const relative_path(
-          relative_to( full_path, filesystem::initial_path() )
-          , &filesystem::no_check );
-
-
-      // checks on the directory name --------------------------- //
-
-      if( aux::starts_with_nonalnum( path(leaf)) )
+      //  begins with an alphabetic character
+      if ( std::strchr( initial_char, leaf[0] ) == 0 )
       {
         ++m_name_errors;
         error( library_name, full_path, string(name())
-            + " leading character of \""
-            + leaf + "\""
-            + " is not alphanumeric" );
+            + " file or directory name begins with an unacceptable character" );
       }
 
+      //  rules for dot characters differ slightly for directories and files
+      if ( filesystem::is_directory( full_path ) )
+      {
+        if ( std::strchr( leaf.c_str(), '.' ) )
+        {
+          ++m_name_errors;
+          error( library_name, full_path, string(name())
+              + " directory name contains a dot character ('.')" );
+        }
+      }
+      else // not a directory
+      {
+        //  includes at most one dot character
+        const char * first_dot = std::strchr( leaf.c_str(), '.' );
+        if ( first_dot && std::strchr( first_dot+1, '.' ) )
+        {
+          ++m_name_errors;
+          error( library_name, full_path, string(name())
+              + " file name with more than one dot character ('.')" );
+        }
+
+        //  does not end with a dot character
+        if ( *leaf.rbegin() == '.' )
+        {
+          ++m_name_errors;
+          error( library_name, full_path, string(name())
+              + " file name ends with a dot character ('.')" );
+        }
+      }
+
+      //  the path, including a presumed root, does not exceed the maximum size
+      path const relative_path( relative_to( full_path, filesystem::initial_path() ) );
       const unsigned max_relative_path = 207; // ISO 9660:1999 sets this limit
       const string generic_root( "boost_X_XX_X/" );
       if ( relative_path.string().size() >
@@ -79,25 +98,13 @@ namespace boost
         ++m_name_errors;
         error( library_name, full_path,
             string(name())
-            + " file path will exceed "
+            + " path will exceed "
             + boost::lexical_cast<string>(max_relative_path)
-            + " characters in a directory tree with a root of the form "
+            + " characters in a directory tree with a root in the form "
             + generic_root + ", and this exceeds ISO 9660:1999 limit of 207"  )
             ;
       }
 
-      if (relative_path.leaf() != ".cvsignore" && relative_path.leaf() != ".svn")
-      {
-        try
-        {
-          path const check_portability( relative_path.string(), &filesystem::portable_name );
-        }
-        catch ( filesystem::filesystem_error const& )
-        {
-          ++m_name_errors;
-          error( library_name, full_path, string(name()) + " nonportable path" );
-        }
-      }
     }
 
     file_name_check::~file_name_check()

@@ -21,22 +21,13 @@ namespace boost
     {
       long m_name_errors;
 
-      // ISO 9660 Level 3
-      //
-      struct iso_9660_limits
-      {
-          static const char name[];
-      };
-
     public:
-
-      typedef iso_9660_limits limits;
 
       file_name_check();
       virtual ~file_name_check();
 
       virtual const char * name() const { return "*N*"; }
-      virtual const char * desc() const { return "file/directory names issues"; }
+      virtual const char * desc() const { return "file and directory name issues"; }
 
       virtual void inspect(
         const string & library_name,
