@@ -353,8 +353,14 @@ struct save_pointer_type {
             T & t
         ){
             BOOST_DEDUCED_TYPENAME 
-            boost::serialization::type_info_implementation<T>::type 
-                const & i = boost::serialization::type_info_implementation<T>::type
+            // Borland complains if "const" is applied to something that
+            // is already "const"
+            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
+            const boost::serialization::type_info_implementation<T>::type 
+            #else
+            boost::serialization::type_info_implementation<T>::type const
+            #endif
+            & i = boost::serialization::type_info_implementation<T>::type
                     ::get_const_instance();
 
             boost::serialization::extended_type_info const * const this_type = & i;
