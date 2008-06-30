@@ -30,7 +30,7 @@ namespace impl
     /*!
         The default implementation of the variance of weighted samples is based on the second moment
         \f$\widehat{m}_n^{(2)}\f$ (weighted_moment<2>) and the mean\f$ \hat{\mu}_n\f$ (weighted_mean):
-        \f{
+        \f[
             \hat{\sigma}_n^2 = \widehat{m}_n^{(2)}-\hat{\mu}_n^2,
         \f]
         where \f$n\f$ is the number of samples.
