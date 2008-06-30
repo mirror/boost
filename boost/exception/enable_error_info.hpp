@@ -34,12 +34,6 @@ boost
                 }
 
             char const *
-            what() const throw()
-                {
-                return T::what();
-                }
-
-            char const *
             diagnostic_information() const throw()
                 {
                 return boost::exception::_diagnostic_information(T::what());

@@ -46,7 +46,6 @@ main()
         {
         BOOST_TEST( 42==*boost::get_error_info<test_int>(x) );
         BOOST_TEST( std::string(x.what())==std::string("exception test length error") );
-        BOOST_TEST( std::string(x.what())!=std::string(boost::diagnostic_information(x)) );
         }
     catch(
     ... )

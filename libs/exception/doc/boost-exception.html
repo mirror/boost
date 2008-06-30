@@ -77,7 +77,6 @@ boost
         public:
     
     <span class="RenoIncludeSPAN">    virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</span>    
-    <span class="RenoIncludeSPAN">    virtual char const * <span class="RenoLink"><a href="exception_what.html">what</a></span>() const throw();</span>    
     
         protected:
     
@@ -167,7 +166,6 @@ boost
         public:
     
     <span class="RenoIncludeSPAN">    virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</span>    
-    <span class="RenoIncludeSPAN">    virtual char const * <span class="RenoLink"><a href="exception_what.html">what</a></span>() const throw();</span>    
     
         protected:
     
@@ -198,14 +196,6 @@ boost
 <div class="RenoIncludeDIV"><pre>virtual char const * <span class="RenoLink"><a href="exception_diagnostic_information.html">diagnostic_information</a></span>() const throw();</pre>
 </div><h4>Returns:</h4>
 <p>An string representation of all data stored in the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> object by the <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> function. See "<span class="RenoLink"><a href="tutorial_diagnostic_information.html">Tutorial: Diagnostic Information</a></span>" for details.</p>
-<h4>Throws:</h4>
-<p>Nothing.</p>
-<h4>Note:</h4>
-<p>The return value remains valid until the exception object from which it is obtained is destroyed or modified.</p>
-</div><div class="RenoIncludeDIV"><h3>exception::what</h3>
-<div class="RenoIncludeDIV"><pre>virtual char const * <span class="RenoLink"><a href="exception_what.html">what</a></span>() const throw();</pre>
-</div><h4>Returns:</h4>
-<p>The default implementation is equivalent to return <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span>(). The signature of boost::<span class="RenoLink"><a href="exception_what.html">exception::what</a></span> is identical to the familiar std::exception::what function, so that when an exception type that derives both std::exception and boost::<span class="RenoLink"><a href="exception.html">exception</a></span> overrides the what function, it overrides both std::exception::what and boost::<span class="RenoLink"><a href="exception_what.html">exception::what</a></span>.</p>
 <h4>Throws:</h4>
 <p>Nothing.</p>
 <h4>Note:</h4>
