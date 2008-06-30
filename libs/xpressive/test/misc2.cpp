@@ -11,7 +11,8 @@
 #include <boost/xpressive/regex_actions.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace boost::xpressive;
+namespace xpr = boost::xpressive;
+using namespace xpr;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -34,7 +35,7 @@ void test_static_actions_in_dynamic_keep()
     std::string str("foo");
 
     sregex_compiler compiler;
-    compiler["rx0"] = (s1="foo")[ ref(result) = s1 ];
+    compiler["rx0"] = (s1="foo")[ xpr::ref(result) = s1 ];
     sregex rx = compiler.compile("(?>(?$rx0))");
 
     bool ok = regex_match(str, rx);
@@ -49,7 +50,7 @@ void test_static_actions_in_static_keep()
     std::string result;
     std::string str("foo");
 
-    sregex rx0 = (s1="foo")[ ref(result) = s1 ];
+    sregex rx0 = (s1="foo")[ xpr::ref(result) = s1 ];
     sregex rx = keep(rx0);
 
     bool ok = regex_match(str, rx);
@@ -69,7 +70,7 @@ void test_replace_with_lambda()
     std::string expected("\"this\" has the value \"that\"");
     sregex rx = "$(" >> (s1= +~as_xpr(')')) >> ')';
 
-    output = regex_replace(input, rx, ref(replacements)[s1]);
+    output = regex_replace(input, rx, xpr::ref(replacements)[s1]);
     BOOST_CHECK_EQUAL(output, expected);
 }
 
