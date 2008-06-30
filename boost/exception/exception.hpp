@@ -49,13 +49,6 @@ boost
 
         virtual
         char const *
-        what() const throw()
-            {
-            return diagnostic_information();
-            }
-
-        virtual
-        char const *
         diagnostic_information() const throw()
             {
             return _diagnostic_information(0);

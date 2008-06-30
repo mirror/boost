@@ -44,26 +44,20 @@ get_diagnostic_information( std::exception const & x )
     return boost::diagnostic_information(x);
     }
 
-std::string
-get_what( std::exception const & x )
-    {
-    return x.what();
-    }
-
 int
 main()
     {
     using namespace boost;
         {
         error1 x;
-        BOOST_TEST(get_what(x)=="error1");
+		BOOST_TEST(x.what()==std::string("error1"));
         std::string di=get_diagnostic_information(x);
         BOOST_TEST(di.find("type:")!=std::string::npos);
         BOOST_TEST(di.find("error1")!=std::string::npos);
         }
         {
         error2 x; x << tag_int(42);
-        BOOST_TEST(get_what(x)=="error2");
+		BOOST_TEST(x.what()==std::string("error2"));
         std::string di=get_diagnostic_information(x);
         BOOST_TEST(di.find("type:")!=std::string::npos);
         BOOST_TEST(di.find("error2")!=std::string::npos);
