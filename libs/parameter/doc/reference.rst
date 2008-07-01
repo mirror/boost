@@ -803,8 +803,8 @@ Expands to:
             return ##\ *tag-name*;
         }
 
-        typedef *implementation defined* _;
-        typedef *implementation defined* _1;
+        typedef *unspecified* _;
+        typedef *unspecified* _1;
     };
   }
 
@@ -824,8 +824,8 @@ Expands to:
             return ##\ *name*;
         }
 
-        typedef *implementation defined* _;
-        typedef *implementation defined* _1;
+        typedef *unspecified* _;
+        typedef *unspecified* _1;
     };
   }
 

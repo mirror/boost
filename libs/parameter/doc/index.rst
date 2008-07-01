@@ -86,7 +86,12 @@ __ ../../../../index.htm
 
 -------------------------------------
 
+[Note: this tutorial does not cover all details of the library.  Please see also the `reference documentation`__\ ]
+
+__ reference.html
+
 .. contents:: **Table of Contents**
+   :depth: 2
 
 .. role:: concept
    :class: concept
