@@ -89,9 +89,10 @@ public:
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-      typedef BOOST_DEDUCED_TYPENAME serialization::use_array_optimization<Archive>
-                ::template apply<BOOST_DEDUCED_TYPENAME remove_const<T>::type 
-            >::type use_optimized;
+      typedef BOOST_DEDUCED_TYPENAME 
+          boost::serialization::use_array_optimization<Archive>::template apply<
+                    BOOST_DEDUCED_TYPENAME remove_const<T>::type 
+                >::type use_optimized;
       serialize_optimized(ar,version,use_optimized());
     }
     
@@ -144,6 +145,6 @@ template <> struct use_array_optimization<Archive> {                  \
       , BOOST_DEDUCED_TYPENAME boost::remove_const<ValueType>::type   \
     >::type {};                                                       \
 }; }}
-
+#endif // __BORLANDC__
 
 #endif //BOOST_SERIALIZATION_ARRAY_HPP
