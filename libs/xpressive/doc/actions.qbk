@@ -107,7 +107,7 @@ repeated sub-expression, does the action execute once or many times? And if the
 sub-expression initially matches, but ultimately fails because the rest of the
 regular expression fails to match, is the action executed at all?
 
-The answers are that actions are executed /lazily/. When a sub-expression
+The answer is that by default, actions are executed /lazily/. When a sub-expression
 matches a string, its action is placed on a queue, along with the current
 values of any sub-matches to which the action refers. If the match algorithm
 must backtrack, actions are popped off the queue as necessary. Only after the
@@ -124,12 +124,39 @@ it finds a digit.
     // questionable ones.
     sregex rex = +( _d [ ++ref(i) ] >> '!' );
     regex_search(str, rex);
-    assert( i  == 2 );
+    assert( i == 2 );
 
 The action `++ref(i)` is queued three times: once for each found digit. But
 it is only /executed/ twice: once for each digit that precedes a `'!'`
 character. When the `'?'` character is encountered, the match algorithm
 backtracks, removing the final action from the queue.
+
+[h3 Immediate Action Execution]
+
+When you want semantic actions to execute immediately, you can wrap the
+sub-expression containing the action in a [^[funcref boost::xpressive::keep keep()]].
+`keep()` turns off back-tracking for its sub-expression, but it also causes
+any actions queued by the sub-expression to execute at the end of the `keep()`.
+It is as if the sub-expression in the `keep()` were compiled into an
+independent regex object, and matching the `keep()` is like a separate invocation
+of `regex_search()`. It matches characters and executes actions but never backtracks
+or unwinds. For example, imagine the above example had been written as follows:
+
+    int i = 0;
+    std::string str("1!2!3?");
+    // count all the digits.
+    sregex rex = +( keep( _d [ ++ref(i) ] ) >> '!' );
+    regex_search(str, rex);
+    assert( i == 3 );
+
+We have wrapped the sub-expression `_d [ ++ref(i) ]` in `keep()`. Now, whenever
+this regex matches a digit, the action will be queued and then immediately
+executed before we try to match a `'!'` character. In this case, the action
+executes three times.
+
+[note Like `keep()`, actions within [^[funcref boost::xpressive::before before()]]
+and [^[funcref boost::xpressive::after after()]] are also executed early when their
+sub-expressions have matched.]
 
 [h3 Lazy Functions]
 
