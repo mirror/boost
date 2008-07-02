@@ -451,7 +451,7 @@ struct cpp_regex_traits
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
     /// then v.transform(G1, G2) \< v.transform(H1, H2).
     ///
-    /// \attention Not used in xpressive 1.0
+    /// \attention Not currently used
     template<typename FwdIter>
     string_type transform(FwdIter begin, FwdIter end) const
     {
@@ -467,7 +467,7 @@ struct cpp_regex_traits
     /// when character case is not considered then
     /// v.transform_primary(G1, G2) \< v.transform_primary(H1, H2).
     ///
-    /// \attention Not used in xpressive 1.0
+    /// \attention Not currently used
     template<typename FwdIter>
     string_type transform_primary(FwdIter begin, FwdIter end) const
     {
@@ -479,7 +479,7 @@ struct cpp_regex_traits
     /// consisting of the character sequence designated by the iterator range [F1, F2).
     /// Returns an empty string if the character sequence is not a valid collating element.
     ///
-    /// \attention Not used in xpressive 1.0
+    /// \attention Not currently used
     template<typename FwdIter>
     string_type lookup_collatename(FwdIter begin, FwdIter end) const
     {
