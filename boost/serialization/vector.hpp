@@ -29,9 +29,9 @@
 #include <boost/serialization/detail/get_data.hpp>
 #include <boost/mpl/bool.hpp>
 
-// default is being compatible with version 1.35 files, not 1.34.1 files
+// default is being compatible with version 1.34.1 files, not 1.35 files
 #ifndef BOOST_SERIALIZATION_VECTOR_VERSION
-#define BOOST_SERIALIZATION_VECTOR_VERSION 4
+#define BOOST_SERIALIZATION_VECTOR_VERSION 3
 #endif
 
 
