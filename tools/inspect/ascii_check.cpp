@@ -16,8 +16,8 @@ namespace boost
   namespace inspect
   {
 
-   static const string gPunct ( "$_{}[]#()<>%:;.?*+-/^&|~!=,\\\"'@^`" );
-
+    static const string gPunct ( "$_{}[]#()<>%:;.?*+-/ˆ&|~!=,\\\"'@^`" );
+    
    // Legal characters for a source file are defined in section 2.2 of the standard
    // I have added '@', '^', and '`' to the "legal" chars because they are commonly
    //    used in comments, and they are strictly ASCII.
@@ -37,6 +37,38 @@ namespace boost
       }
    };
 
+   struct is_CRLF : public std::unary_function<char, bool> {
+   public:
+      is_CRLF () {}
+      ~is_CRLF () {}
+      bool operator () ( char c ) const
+      {
+         return c == '\015' || c == '\012';
+      }
+   };
+
+   const char *kCRLF = "\012\015";
+   
+// Given a position in the file, extract and return the line
+   std::string find_line ( const std::string &contents, std::string::const_iterator iter_pos )
+   {
+      std::size_t pos = iter_pos - contents.begin ();
+      
+   // Search backwards for a CR or LR
+      std::size_t start_pos = contents.find_last_of ( kCRLF, pos );
+      std::string::const_iterator line_start = contents.begin () + ( start_pos == std::string::npos ? 0 : start_pos + 1 );
+      
+
+   // Search forwards for a CR or LF
+      std::size_t end_pos = contents.find_first_of ( kCRLF, pos + 1 );
+      std::string::const_iterator line_end;
+      if ( end_pos == std::string::npos )
+         line_end = contents.end ();
+      else
+         line_end = contents.begin () + end_pos - 1;
+
+      return std::string ( line_start, line_end );
+   }
 
    ascii_check::ascii_check() : m_files_with_errors(0)
    {
@@ -55,11 +87,12 @@ namespace boost
       const string & contents )     // contents of file to be inspected
     {
       if (contents.find( "boostinspect:" "noascii" ) != string::npos) return;
-
-      if ( std::find_if ( contents.begin (), contents.end (), non_ascii ()) != contents.end ())
+      string::const_iterator bad_char = std::find_if ( contents.begin (), contents.end (), non_ascii ());
+      if ( bad_char != contents.end ())
       {
         ++m_files_with_errors;
-        error( library_name, full_path, name() );
+        string the_line = find_line ( contents, bad_char );
+        error( library_name, full_path, string ( name()) + " non-ASCII: " + the_line );
       }
     }
   } // namespace inspect
