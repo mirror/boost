@@ -51,7 +51,8 @@ inline T operator*(const T& t, const one&)
 
 inline one operator*(const one&, const one&)
 {
-    return(one());
+    one result;
+    return(result);
 }
 
 template<class T>
