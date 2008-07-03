@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for copying and assignment.
  *
- * Copyright 2003-2007 Joaquín M López Muñoz.
+ * Copyright 2003-2008 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -107,7 +107,7 @@ void test_copy_assignment()
   BOOST_CHECK(get<3>(es2)==get<3>(es3));
   BOOST_CHECK(get<5>(es2)==get<5>(es3));
 
-  employee_set es4;
+  employee_set es4=employee_set(non_std_allocator<employee>());
   employee_set_by_name& i1=get<name>(es4);
   i1=get<1>(es2);
 

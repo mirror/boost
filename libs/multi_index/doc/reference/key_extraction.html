@@ -1228,7 +1228,7 @@ bool operator==(<br>
 <blockquote>
 <b>Requires:</b> <code>length(x)==length(y)</code>. The expression
 <code>x<sub>i</sub>==y<sub>i</sub></code> is valid for all <code>i</code>
-in <code>[0,length(x))</code>.</br>
+in <code>[0,length(x))</code>.<br>
 <b>Returns:</b> <code>true</code> if and only if
 <blockquote>
 <code>x<sub>i</sub>==y<sub>i</sub></code> for all <code>i</code>
@@ -1258,7 +1258,7 @@ bool operator<(<br>
 <b>Requires:</b> The expressions
 <code>x<sub>i</sub>&lt;y<sub>i</sub></code> and
 <code>y<sub>i</sub>&lt;x<sub>i</sub></code> are valid for all <code>i</code>
-in <code>[0,min(length(x),length(y)))</code>.</br>
+in <code>[0,min(length(x),length(y)))</code>.<br>
 <b>Returns:</b> <code>true</code> if and only if there exists some
 <code>j</code> in the range <code>[0,min(length(x),length(y)))</code>
 such that
@@ -1294,7 +1294,7 @@ bool operator <b><i>OP</i></b>(<br>
 
 <blockquote>
 <b>Requires:</b> The expressions given below are valid (for the particular
-<code><b><i>OP</i></b></code> considered.)</br>
+<code><b><i>OP</i></b></code> considered.)<br>
 <b>Returns:</b> <code>true</code> if and only if
 <blockquote>
 <code>!(x==y)</code> (<code><b><i>OP</i></b></code> is <code>!=</code>),<br>
@@ -1435,7 +1435,7 @@ bool operator()(<br>
 <b>Requires:</b> <code>length(x)==length(y)</code>. The expressions
 <code>key_eqs().get&lt;i>()(x<sub>i</sub>,y<sub>i</sub>)</code> and
 <code>key_eqs().get&lt;i>()(y<sub>i</sub>,x<sub>i</sub>)</code>
-are valid for all <code>i</code> in <code>[0,length(x))</code>.</br>
+are valid for all <code>i</code> in <code>[0,length(x))</code>.<br>
 <b>Returns:</b> <code>true</code> if and only 
 <blockquote>
 <code>key_eqs().get&lt;i>()(x<sub>i</sub>,y<sub>i</sub>)</code>
@@ -1683,7 +1683,7 @@ bool operator()(<br>
 <code>key_comps().get&lt;i>()(x<sub>i</sub>,y<sub>i</sub>)</code> and
 <code>key_comps().get&lt;i>()(y<sub>i</sub>,x<sub>i</sub>)</code>
 are valid for all <code>i</code>
-in <code>[0,min(length(x),length(y)))</code>.</br>
+in <code>[0,min(length(x),length(y)))</code>.<br>
 <b>Returns:</b> <code>true</code> if and only if there exists some
 <code>j</code> in the range <code>[0,min(length(x),length(y)))</code>
 such that
@@ -2263,9 +2263,9 @@ Compiler specifics
 
 <br>
 
-<p>Revised August 2nd 2007</p>
+<p>Revised June 25th 2008</p>
 
-<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

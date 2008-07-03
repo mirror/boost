@@ -278,6 +278,7 @@ operators and functions associated with the index (vg. comparison and
   <span class=keyword>explicit</span> <span class=identifier>multi_index_container</span><span class=special>(
     </span><span class=keyword>const</span> <span class=identifier>ctor_args_list</span><span class=special>&amp;</span> <span class=identifier>args_list</span><span class=special>=</span><span class=identifier>ctor_args_list</span><span class=special>(),
     </span><span class=keyword>const</span> <span class=identifier>allocator_type</span><span class=special>&amp;</span> <span class=identifier>al</span><span class=special>=</span><span class=identifier>allocator_type</span><span class=special>());</span>
+  <span class=keyword>explicit</span> <span class=identifier>multi_index_container</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>allocator_type</span><span class=special>&amp;</span> <span class=identifier>al</span><span class=special>);</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>InputIterator</span><span class=special>&gt;</span>
   <span class=identifier>multi_index_container</span><span class=special>(</span>
     <span class=identifier>InputIterator</span> <span class=identifier>first</span><span class=special>,</span><span class=identifier>InputIterator</span> <span class=identifier>last</span><span class=special>,</span>
@@ -609,7 +610,7 @@ the same order as they were specified.<br>
 
 <blockquote>
 <code>index&lt;Tag>::type</code> yields the type of the index which
-has <code>Tag</code> as an associated <a href="indices.html#tags">tag type</a>.</br>
+has <code>Tag</code> as an associated <a href="indices.html#tags">tag type</a>.<br>
 <b>Requires:</b> Some index of the <code>multi_index_container</code> has <code>Tag</code>
 as an associated tag type.
 </blockquote>
@@ -645,12 +646,20 @@ as an associated tag type.
 <h4><a name="constructors">Constructors, copy and assignment</a></h4>
 
 <code>explicit multi_index_container(<br>
-&nbsp;&nbsp;const ctor_args_list&amp; comp=ctor_args_list(),<br>
+&nbsp;&nbsp;const ctor_args_list&amp; args_list=ctor_args_list(),<br>
 &nbsp;&nbsp;const allocator_type&amp; al=allocator_type());</code>
 
 <blockquote>
 <b>Effects:</b> Constructs an empty <code>multi_index_container</code> using the
 specified argument list and allocator.<br>
+<b>Complexity:</b> Constant.
+</blockquote>
+
+<code>explicit multi_index_container(const allocator_type&amp; al);</code>
+
+<blockquote>
+<b>Effects:</b> Constructs an empty <code>multi_index_container</code> using the
+specified allocator and the default value of <code>ctor_args_list</code>.<br>
 <b>Complexity:</b> Constant.
 </blockquote>
 
@@ -665,7 +674,7 @@ multi_index_container(<br>
 <a href="http://www.sgi.com/tech/stl/InputIterator.html">
 <code>Input Iterator</code></a> over elements of type
 <code>Value</code> or a type convertible to <code>Value</code>.
-<code>last</code> is reachable from <code>first</code>.</br> 
+<code>last</code> is reachable from <code>first</code>.<br> 
 <b>Effects:</b> Constructs and empty <code>multi_index_container</code> using the
 specified argument list and allocator and fills it with
 the elements in the range [<code>first</code>,<code>last</code>).
@@ -902,9 +911,9 @@ Index reference
 
 <br>
 
-<p>Revised July 17th 2007</p>
+<p>Revised June 25th 2008</p>
 
-<p>&copy; Copyright 2003-2007 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2008 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">

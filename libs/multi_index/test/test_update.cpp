@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for replace(), modify() and modify_key().
  *
- * Copyright 2003-2007 Joaquín M López Muñoz.
+ * Copyright 2003-2008 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -12,11 +12,50 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
+#include <cstddef>
 #include "pre_multi_index.hpp"
 #include "employee.hpp"
 #include "pair_of_ints.hpp"
 #include <boost/next_prior.hpp>
 #include <boost/test/test_tools.hpp>
+
+struct do_nothing
+{
+  template<typename T>
+  void operator()(const T&)const{}
+};
+
+struct null_hash
+{
+  template<typename T>
+  std::size_t operator()(const T&)const{return 0;}
+};
+
+template<class MultiIndexContainer>
+void test_stable_update(BOOST_EXPLICIT_TEMPLATE_TYPE(MultiIndexContainer))
+{
+  typedef typename MultiIndexContainer::iterator  iterator;
+  typedef typename MultiIndexContainer::size_type size_type;
+
+  MultiIndexContainer c;
+  c.insert(0);c.insert(0);c.insert(0);c.insert(0);
+  c.insert(1);c.insert(1);c.insert(1);
+  c.insert(2);c.insert(2);
+  c.insert(3);
+
+  for(size_type n=c.size();n--;){
+    iterator it=boost::next(c.begin(),n);
+
+    c.replace(it,*it);
+    BOOST_CHECK((size_type)std::distance(c.begin(),it)==n);
+
+    c.modify(it,do_nothing());
+    BOOST_CHECK((size_type)std::distance(c.begin(),it)==n);
+
+    c.modify(it,do_nothing(),do_nothing());
+    BOOST_CHECK((size_type)std::distance(c.begin(),it)==n);
+  }
+}
 
 using namespace boost::multi_index;
 
@@ -166,5 +205,57 @@ void test_update()
 
     BOOST_CHECK(!ii1.modify(boost::prior(ii1.end()),increment_second));
     BOOST_CHECK(ii1.size()==2);
+  }
+  {
+    typedef multi_index_container<
+      int,
+      indexed_by<
+        ordered_non_unique<identity<int> >
+      >
+    > int_set;
+
+    /* MSVC++ 6.0 needs this out-of-template definition */ 
+    int_set dummy1;
+    test_stable_update<int_set>();
+
+    typedef multi_index_container<
+      int,
+      indexed_by<
+        hashed_unique<identity<int> >
+      >
+    > int_hashed_set;
+
+    int_hashed_set dummy2;
+    test_stable_update<int_hashed_set>();
+
+    typedef multi_index_container<
+      int,
+      indexed_by<
+        hashed_unique<identity<int> >
+      >
+    > int_hashed_multiset;
+
+    int_hashed_multiset dummy3;
+    test_stable_update<int_hashed_multiset>();
+
+    typedef multi_index_container<
+      int,
+      indexed_by<
+        hashed_unique<identity<int>,null_hash>
+      >
+    > degenerate_int_hashed_set;
+
+    degenerate_int_hashed_set dummy4;
+    test_stable_update<degenerate_int_hashed_set>();
+
+    typedef multi_index_container<
+      int,
+      indexed_by<
+        hashed_non_unique<identity<int>,null_hash>
+      >
+    > degenerate_int_hashed_multiset;
+
+    degenerate_int_hashed_multiset dummy5;
+    test_stable_update<degenerate_int_hashed_multiset>();
   }
 }
