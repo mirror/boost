@@ -262,7 +262,7 @@ void mapped_file_impl::open_file(param_type p)
     if (p.new_file_size != 0 && !readonly)
         flags |= (O_CREAT | O_TRUNC);
     #ifdef _LARGEFILE64_SOURCE
-        oflag |= O_LARGEFILE;
+        flags |= O_LARGEFILE;
     #endif
     errno = 0;
     handle_ = ::open(p.path.c_str(), flags, S_IRWXU);
