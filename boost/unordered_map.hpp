@@ -422,9 +422,15 @@ namespace boost
             base.rehash(n);
         }
         
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        friend bool operator==(unordered_map const&, unordered_map const&);
+        friend bool operator!=(unordered_map const&, unordered_map const&);
+        friend std::size_t hash_value(unordered_map const&);
+#else
         friend bool operator==<>(unordered_map const&, unordered_map const&);
         friend bool operator!=<>(unordered_map const&, unordered_map const&);
         friend std::size_t hash_value<>(unordered_map const&);
+#endif
     }; // class template unordered_map
 
     template <class K, class T, class H, class P, class A>
@@ -796,9 +802,15 @@ namespace boost
             base.rehash(n);
         }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        friend bool operator==(unordered_multimap const&, unordered_multimap const&);
+        friend bool operator!=(unordered_multimap const&, unordered_multimap const&);
+        friend std::size_t hash_value(unordered_multimap const&);
+#else
         friend bool operator==<>(unordered_multimap const&, unordered_multimap const&);
         friend bool operator!=<>(unordered_multimap const&, unordered_multimap const&);
         friend std::size_t hash_value<>(unordered_multimap const&);
+#endif
     }; // class template unordered_multimap
 
     template <class K, class T, class H, class P, class A>

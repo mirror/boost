@@ -392,9 +392,15 @@ namespace boost
             base.rehash(n);
         }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        friend bool operator==(unordered_set const&, unordered_set const&);
+        friend bool operator!=(unordered_set const&, unordered_set const&);
+        friend std::size_t hash_value(unordered_set const&);
+#else
         friend bool operator==<>(unordered_set const&, unordered_set const&);
         friend bool operator!=<>(unordered_set const&, unordered_set const&);
         friend std::size_t hash_value<>(unordered_set const&);
+#endif
     }; // class template unordered_set
 
     template <class T, class H, class P, class A>
@@ -752,9 +758,15 @@ namespace boost
             base.rehash(n);
         }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        friend bool operator==(unordered_multiset const&, unordered_multiset const&);
+        friend bool operator!=(unordered_multiset const&, unordered_multiset const&);
+        friend std::size_t hash_value(unordered_multiset const&);
+#else
         friend bool operator==<>(unordered_multiset const&, unordered_multiset const&);
         friend bool operator!=<>(unordered_multiset const&, unordered_multiset const&);
         friend std::size_t hash_value<>(unordered_multiset const&);
+#endif
     }; // class template unordered_multiset
 
     template <class T, class H, class P, class A>
