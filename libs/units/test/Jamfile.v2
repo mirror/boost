@@ -32,6 +32,7 @@ alias test_framework : $(BOOST_ROOT)/libs/test/build//boost_unit_test_framework 
     [ compile test_dimensionless_ice2.cpp : : ]
     [ compile test_mixed_value_types.cpp : : ]
     [ compile test_complicated_system.cpp : : ]
+    [ compile test_reduce_unit.cpp ]
     [ run test_dimensionless_quantity.cpp : : : : ]
     [ run test_implicit_conversion.cpp : : : : ]
     [ run test_quantity.cpp : : : : ]
