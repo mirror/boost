@@ -15,6 +15,11 @@
 #include <boost/mpl/less.hpp>
 #include <boost/mpl/arithmetic.hpp>
 
+#ifdef __BORLANDC__
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/integral_c.hpp>
+#endif
+
 #include <boost/units/config.hpp>
 #include <boost/units/operators.hpp>
 
@@ -62,29 +67,43 @@ values.
 template<integer_type N,integer_type D = 1>
 class static_rational
 {
+#ifdef __BORLANDC__
     private:
-        typedef static_rational self_type;
 
-        static const integer_type   nabs = static_abs<N>::value,
-                                    dabs = static_abs<D>::value;
-        
-        /// greatest common divisor of N and D
-        // need cast to signed because static_gcd returns unsigned long
-        static const integer_type   den = 
-            static_cast<integer_type>(boost::math::static_gcd<self_type::nabs,self_type::dabs>::value) * ((D < 0) ? -1 : 1);
+        typedef boost::mpl::integral_c<integer_type, N> N_type;
+        typedef boost::mpl::integral_c<integer_type, D> D_type;
+
+        typedef boost::mpl::integral_c<integer_type,
+            (::boost::math::static_gcd<
+                ::boost::units::static_abs<N>::value,
+                ::boost::units::static_abs<D>::value
+            >::value)> gcd_type;
+        typedef typename boost::mpl::eval_if<
+            boost::mpl::less<
+                D_type,
+                boost::mpl::integral_c<integer_type, 0>
+            >,
+            boost::mpl::negate<gcd_type>,
+            gcd_type
+        >::type den_type;
         
     public: 
         // for mpl arithmetic support
         typedef detail::static_rational_tag tag;
         
-        static const integer_type   Numerator = N/self_type::den,
-            Denominator = D/self_type::den;
+        BOOST_STATIC_CONSTANT(integer_type, Numerator =
+            (::boost::mpl::divides<N_type, den_type>::value));
+        BOOST_STATIC_CONSTANT(integer_type, Denominator =
+            (::boost::mpl::divides<D_type, den_type>::value));
         
         /// INTERNAL ONLY
         typedef static_rational<N,D>    this_type;
         
         /// static_rational<N,D> reduced by GCD
-        typedef static_rational<self_type::Numerator,self_type::Denominator>  type;
+        typedef static_rational<
+            (::boost::mpl::divides<N_type, den_type>::value),
+            (::boost::mpl::divides<D_type, den_type>::value)
+        >  type;
                                  
         static integer_type numerator()      { return Numerator; }
         static integer_type denominator()    { return Denominator; }
@@ -92,6 +111,37 @@ class static_rational
         // INTERNAL ONLY
         static_rational() { }
         //~static_rational() { }
+#else
+    private:
+
+        static const integer_type   nabs = static_abs<N>::value,
+                                    dabs = static_abs<D>::value;
+        
+        /// greatest common divisor of N and D
+        // need cast to signed because static_gcd returns unsigned long
+        static const integer_type   den = 
+            static_cast<integer_type>(boost::math::static_gcd<nabs,dabs>::value) * ((D < 0) ? -1 : 1);
+        
+    public: 
+        // for mpl arithmetic support
+        typedef detail::static_rational_tag tag;
+        
+        static const integer_type   Numerator = N/den,
+            Denominator = D/den;
+        
+        /// INTERNAL ONLY
+        typedef static_rational<N,D>    this_type;
+        
+        /// static_rational<N,D> reduced by GCD
+        typedef static_rational<Numerator,Denominator>  type;
+                                 
+        static integer_type numerator()      { return Numerator; }
+        static integer_type denominator()    { return Denominator; }
+        
+        // INTERNAL ONLY
+        static_rational() { }
+        //~static_rational() { }
+#endif
         
 };
 
