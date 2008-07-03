@@ -21,7 +21,7 @@ using std::string;
 namespace
 {
   const char allowable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-.";
-  const char initial_char[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const char initial_char[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
 }
 
 namespace boost
@@ -50,7 +50,7 @@ namespace boost
             + leaf[pos] + "'" );
       }
 
-      //  begins with an alphabetic character
+      //  allowable initial character
       if ( std::strchr( initial_char, leaf[0] ) == 0 )
       {
         ++m_name_errors;
@@ -68,25 +68,17 @@ namespace boost
               + " directory name contains a dot character ('.')" );
         }
       }
-      else // not a directory
-      {
-        //  includes at most one dot character
-        const char * first_dot = std::strchr( leaf.c_str(), '.' );
-        if ( first_dot && std::strchr( first_dot+1, '.' ) )
-        {
-          ++m_name_errors;
-          error( library_name, full_path, string(name())
-              + " file name with more than one dot character ('.')" );
-        }
-
-        //  does not end with a dot character
-        if ( *leaf.rbegin() == '.' )
-        {
-          ++m_name_errors;
-          error( library_name, full_path, string(name())
-              + " file name ends with a dot character ('.')" );
-        }
-      }
+      //else // not a directory
+      //{
+      //  //  includes at most one dot character
+      //  const char * first_dot = std::strchr( leaf.c_str(), '.' );
+      //  if ( first_dot && std::strchr( first_dot+1, '.' ) )
+      //  {
+      //    ++m_name_errors;
+      //    error( library_name, full_path, string(name())
+      //        + " file name with more than one dot character ('.')" );
+      //  }
+      //}
 
       //  the path, including a presumed root, does not exceed the maximum size
       path const relative_path( relative_to( full_path, filesystem::initial_path() ) );
