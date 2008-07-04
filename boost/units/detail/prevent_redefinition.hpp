@@ -19,7 +19,7 @@ namespace units {
 
 namespace detail {
 
-typedef char no;
+struct no { no() {} char dummy; };
 struct yes { no dummy[2]; };
 
 template<bool> struct ordinal_has_already_been_defined;

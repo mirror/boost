@@ -17,7 +17,7 @@ namespace boost {
 
 namespace units {
 
-struct one { };
+struct one { one() {} };
 
 template<class T>
 struct multiply_typeof_helper<one, T>
