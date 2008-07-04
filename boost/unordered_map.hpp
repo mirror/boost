@@ -107,8 +107,7 @@ namespace boost
         {
         }
 
-        // TODO: Should this be explicit?
-        unordered_map(allocator_type const& a)
+        explicit unordered_map(allocator_type const& a)
             : base(boost::unordered_detail::default_initial_bucket_count,
                 hasher(), key_equal(), a)
         {
@@ -504,7 +503,7 @@ namespace boost
         {
         }
 
-        unordered_multimap(allocator_type const& a)
+        explicit unordered_multimap(allocator_type const& a)
             : base(boost::unordered_detail::default_initial_bucket_count,
                 hasher(), key_equal(), a)
         {

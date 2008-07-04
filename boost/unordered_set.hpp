@@ -104,8 +104,7 @@ namespace boost
         {
         }
 
-        // TODO: Should this be explicit?
-        unordered_set(allocator_type const& a)
+        explicit unordered_set(allocator_type const& a)
             : base(boost::unordered_detail::default_initial_bucket_count,
                 hasher(), key_equal(), a)
         {
@@ -473,8 +472,7 @@ namespace boost
         {
         }
 
-        // TODO: Should this be explicit?
-        unordered_multiset(allocator_type const& a)
+        explicit unordered_multiset(allocator_type const& a)
             : base(boost::unordered_detail::default_initial_bucket_count,
                 hasher(), key_equal(), a)
         {
