@@ -29,6 +29,12 @@
 #include <boost/serialization/detail/get_data.hpp>
 #include <boost/mpl/bool.hpp>
 
+// default is being compatible with version 1.34.1 files, not 1.35 files
+#ifndef BOOST_SERIALIZATION_VECTOR_VERSION
+#define BOOST_SERIALIZATION_VECTOR_VERSION 3
+#endif
+
+
 namespace boost { 
 namespace serialization {
 
@@ -77,7 +83,7 @@ inline void save(
 ){
     const collection_size_type count(t.size());
     ar << BOOST_SERIALIZATION_NVP(count);
-    if(3 < ar.get_library_version()) {
+    if(BOOST_SERIALIZATION_VECTOR_VERSION < ar.get_library_version()) {
       const unsigned int item_version = version<U>::value;
       ar << BOOST_SERIALIZATION_NVP(item_version);
     }
@@ -96,7 +102,7 @@ inline void load(
     ar >> BOOST_SERIALIZATION_NVP(count);
     t.resize(count);
     unsigned int item_version=0;
-    if(3 < ar.get_library_version())
+    if(BOOST_SERIALIZATION_VECTOR_VERSION < ar.get_library_version())
         ar >> BOOST_SERIALIZATION_NVP(item_version);
     if (!t.empty())
       ar >> make_array(detail::get_data(t),t.size());
@@ -110,7 +116,7 @@ inline void save(
     const std::vector<U, Allocator> &t,
     const unsigned int file_version
 ){
-    save(ar,t,file_version, typename use_array_optimization<Archive>::template apply<U>::type());
+    save(ar,t,file_version, BOOST_DEDUCED_TYPENAME use_array_optimization<Archive>::template apply<U>::type());
 }
 
 template<class Archive, class U, class Allocator>
@@ -119,7 +125,7 @@ inline void load(
     std::vector<U, Allocator> &t,
     const unsigned int file_version
 ){
-    load(ar,t,file_version, typename use_array_optimization<Archive>::template apply<U>::type());
+    load(ar,t,file_version, BOOST_DEDUCED_TYPENAME use_array_optimization<Archive>::template apply<U>::type());
 }
 
 // split non-intrusive serialization function member into separate

@@ -54,9 +54,13 @@ ARCHIVE_SIGNATURE(){
 // 3 - numerous changes - can't guarentee compatibility with previous versions
 // 4 - Boost 1.34
 //     added register_version to properly support versioning for collections 
+// 5 - Boost 1.36
+//     changed serialization of collections: adding version even for primitive
+//     types caused backwards compatibility breaking change in 1.35
+
 BOOST_ARCHIVE_DECL(unsigned char)
 ARCHIVE_VERSION(){
-    return 4;
+    return 5;
 }
 
 } // namespace archive

@@ -29,8 +29,17 @@ namespace boost { namespace serialization {
 
 // traits to specify whether to use  an optimized array serialization
 
+#ifdef __BORLANDC__
+// workaround for Borland compiler
+template <class Archive>
+struct use_array_optimization {
+  template <class T> struct apply : boost::mpl::false_ {};
+};
+
+#else
 template <class Archive>
 struct use_array_optimization : boost::mpl::always<boost::mpl::false_> {};
+#endif
 
 template<class T>
 class array
@@ -75,14 +84,15 @@ public:
     {
       ar.load_array(*this,version);
     }
-
+    
     // default implementation
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-      typedef BOOST_DEDUCED_TYPENAME serialization::use_array_optimization<Archive>
-                ::template apply<BOOST_DEDUCED_TYPENAME remove_const<T>::type 
-            >::type use_optimized;
+      typedef BOOST_DEDUCED_TYPENAME 
+          boost::serialization::use_array_optimization<Archive>::template apply<
+                    BOOST_DEDUCED_TYPENAME remove_const<T>::type 
+                >::type use_optimized;
       serialize_optimized(ar,version,use_optimized());
     }
     
@@ -123,7 +133,10 @@ void serialize(Archive& ar, boost::array<T,N>& a, const unsigned int version)
 
 } } // end namespace boost::serialization
 
-
+#ifdef __BORLANDC__
+// ignore optimizations for Borland
+#define BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(Archive)      
+#else
 #define BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(Archive)           \
 namespace boost { namespace serialization {                           \
 template <> struct use_array_optimization<Archive> {                  \
@@ -132,6 +145,6 @@ template <> struct use_array_optimization<Archive> {                  \
       , BOOST_DEDUCED_TYPENAME boost::remove_const<ValueType>::type   \
     >::type {};                                                       \
 }; }}
-
+#endif // __BORLANDC__
 
 #endif //BOOST_SERIALIZATION_ARRAY_HPP
