@@ -30,7 +30,7 @@ namespace std{
 
 template<class Archive>
 void polymorphic_base::serialize(
-    Archive &ar,
+    Archive & /* ar */,
     const unsigned int /* file_version */){
 }
 
@@ -38,7 +38,7 @@ class polymorphic_derived1 : public polymorphic_base
 {
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int /* file_version */){
+    void serialize(Archive & ar, const unsigned int /* file_version */){
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(polymorphic_base);
     }
 public:
