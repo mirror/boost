@@ -3935,7 +3935,7 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:::)();@]&#10;</string>
+													<string> mod="m":)();@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -4585,7 +4585,7 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:::)() const throw();@]&#10;</string>
+													<string> mod="m":)() const throw();@]&#10;</string>
 												</container>
 											</pair>
 											<pair>
@@ -4607,7 +4607,7 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:::)();&#10;(:link </string>
+													<string> mod="m":)();&#10;(:link </string>
 													<variant>1</variant>
 													<weak_ptr>
 														<expired>0</expired>
@@ -4616,7 +4616,7 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:::)( (:link </string>
+													<string> mod="m":)( (:link </string>
 													<variant>1</variant>
 													<weak_ptr>
 														<expired>0</expired>
@@ -4789,7 +4789,7 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:::), with a signature similar to the familiar std::exception::what function. The default implementation returns a string value that is not presentable as a friendly user message, but because it is generated automatically, it is useful for debugging or logging purposes. Here is an example:&#10;&#10;[@#include &lt;(:link </string>
+													<string> mod="m":), with a signature similar to the familiar std::exception::what function. The default implementation returns a string value that is not presentable as a friendly user message, but because it is generated automatically, it is useful for debugging or logging purposes. Here is an example:&#10;&#10;[@#include &lt;(:link </string>
 													<variant>1</variant>
 													<weak_ptr>
 														<expired>0</expired>
@@ -4825,7 +4825,7 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:::)();&#10;        }&#10;    }@]&#10;&#10;The (:link </string>
+													<string> mod="m":)();&#10;        }&#10;    }@]&#10;&#10;The (:link </string>
 													<variant>1</variant>
 													<weak_ptr>
 														<expired>0</expired>
@@ -4834,7 +4834,7 @@
 														</shared_ptr>
 													</weak_ptr>
 													<variant>2</variant>
-													<string>:::) member function iterates over all data objects stored in the boost::(:link </string>
+													<string> mod="m":) member function iterates over all data objects stored in the boost::(:link </string>
 													<variant>1</variant>
 													<weak_ptr>
 														<expired>0</expired>
