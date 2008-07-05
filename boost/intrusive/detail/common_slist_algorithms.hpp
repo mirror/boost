@@ -76,7 +76,7 @@ class common_slist_algorithms
 
    static void transfer_after(node_ptr p, node_ptr b, node_ptr e)
    {
-      if (p != b && p != e) {
+      if (p != b && p != e && b != e) {
          node_ptr next_b = NodeTraits::get_next(b);
          node_ptr next_e = NodeTraits::get_next(e);
          node_ptr next_p = NodeTraits::get_next(p);
