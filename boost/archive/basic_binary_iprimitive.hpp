@@ -120,11 +120,11 @@ public:
     ~basic_binary_iprimitive();
 public:
     // we provide an optimized load for all fundamental types
-    //typedef serialization::is_bitwise_serializable<mpl::_1> 
-    //  use_array_optimization;
+    // typedef serialization::is_bitwise_serializable<mpl::_1> 
+    // use_array_optimization;
     struct use_array_optimization {
-      template <class T>
-      struct apply : public serialization::is_bitwise_serializable<T> {};
+        template <class T>
+        struct apply : public serialization::is_bitwise_serializable<T> {};
     };
 
     // the optimized load_array dispatches to load_binary 

@@ -353,13 +353,7 @@ struct save_pointer_type {
             T & t
         ){
             BOOST_DEDUCED_TYPENAME 
-            // Borland complains if "const" is applied to something that
-            // is already "const"
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
-            const boost::serialization::type_info_implementation<T>::type 
-            #else
             boost::serialization::type_info_implementation<T>::type const
-            #endif
             & i = boost::serialization::type_info_implementation<T>::type
                     ::get_const_instance();
 
@@ -389,7 +383,11 @@ struct save_pointer_type {
             }
             // convert pointer to more derived type. if this is thrown
             // it means that the base/derived relationship hasn't be registered
-            vp = serialization::void_downcast(*true_type, *this_type, &t);
+            vp = serialization::void_downcast(
+                *true_type, 
+                *this_type, 
+                static_cast<const void *>(&t)
+            );
             if(NULL == vp){
                 boost::throw_exception(
                     archive_exception(archive_exception::unregistered_cast)
