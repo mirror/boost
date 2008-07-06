@@ -29,10 +29,6 @@
 [def _LAM_          [@http://www.lam-mpi.org/ LAM/MPI]]
 [def _MPICH_        [@http://www-unix.mcs.anl.gov/mpi/mpich/ MPICH]]
 [def _OpenMPI_      [@http://www.open-mpi.org OpenMPI]]
-[def _boost_cvs_    [@http://sourceforge.net/cvs/?group_id=7586  
-                     Boost CVS Repository]]
-[def _sandbox_cvs_  [@http://sourceforge.net/cvs/?group_id=53513 
-                     Boost Sandbox CVS Repository]]
 [def _accumulate_   [@http://www.sgi.com/tech/stl/accumulate.html
                      `accumulate`]]
 
@@ -161,21 +157,6 @@ Rank Rank 1 OK!
 
 If your output looks something like the above, your MPI implementation
 appears to be working with a C++ compiler and we're ready to move on.
-[endsect]
-
-[section:getting Getting Boost.MPI]
-
-Boost.MPI is not available in any version of Boost prior to the 1.35.x
-series. You may need to retrieve the 
-latest version of Boost from CVS using the commands below. When CVS
-asks for a password, just hit "enter".
-
-[pre
-cvs -d:pserver:anonymous@boost.cvs.sourceforge.net:/cvsroot/boost login
-cvs -z3 -d:pserver:anonymous@boost.cvs.sourceforge.net:/cvsroot/boost \
-  co -P boost
-]
-
 [endsect]
 
 [section:config Configure and Build]
