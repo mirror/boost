@@ -9,4 +9,10 @@ test-suite integer
         [ run integer_test.cpp ]
         [ run integer_traits_test.cpp
             /boost/test//boost_test_exec_monitor/<link>static ]
+        [ run integer_mask_test.cpp
+            /boost/test//boost_test_exec_monitor/<link>static ]
+        [ run static_log2_test.cpp
+            /boost/test//boost_test_exec_monitor/<link>static ]
+        [ run static_min_max_test.cpp
+            /boost/test//boost_test_exec_monitor/<link>static ]
     ;
