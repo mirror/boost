@@ -39,6 +39,7 @@ boost
         }
 
     template <class T>
+	inline
     typename enable_if<is_output_streamable<T>,std::string>::type
     to_string( T const & x )
         {
@@ -55,6 +56,7 @@ boost
         };
 
     template <class T,class U>
+	inline
     std::string
     to_string( std::pair<T,U> const & x )
         {

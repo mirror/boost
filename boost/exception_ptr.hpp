@@ -68,6 +68,7 @@ boost
             };
 
         template <class T>
+		inline
         exception_ptr
         current_exception_std_exception( T const & e1 )
             {
@@ -170,6 +171,7 @@ boost
         }
 
     template <class T>
+	inline
     exception_ptr
     copy_exception( T const & e )
         {
