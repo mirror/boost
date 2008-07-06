@@ -3,6 +3,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// This code is also released into the public domain.
+
 // Algorithm from: http://www.isthe.com/chongo/tech/comp/fnv/
 
 #include <string>
@@ -43,29 +45,22 @@ namespace hash
         }
     };
 
-    // TODO: Select Basis & Prime base on the size of std::size_t.
-    //
-    // 32 bit FNV_prime = 16777619
-    // 64 bit FNV_prime = 1099511628211
-    // 128 bit FNV_prime = 309485009821345068724781401
-    // 256 bit FNV_prime = 374144419156711147060143317175368453031918731002211
-    //
-    // 32 bit offset_basis = 2166136261
-    // 64 bit offset_basis = 14695981039346656037
-    // 128 bit offset_basis = 275519064689413815358837431229664493455
-    // 256 bit offset_basis = 100029257958052580907070968620625704837092796014241193945225284501741471925557
-
-    const std::size_t fnv_prime = 16777619;
-    // 64 bit FNV_prime = 1099511628211
-    // 128 bit FNV_prime = 309485009821345068724781401
-    // 256 bit FNV_prime = 374144419156711147060143317175368453031918731002211
-
+    // For 32 bit machines:
+    const std::size_t fnv_prime = 16777619u;
     const std::size_t fnv_offset_basis = 2166136261u;
-    // 64 bit offset_basis = 14695981039346656037
-    // 128 bit offset_basis = 275519064689413815358837431229664493455
-    // 256 bit offset_basis = 100029257958052580907070968620625704837092796014241193945225284501741471925557
+
+    // For 64 bit machines:
+    // const std::size_t fnv_prime = 1099511628211u;
+    // const std::size_t fnv_offset_basis = 14695981039346656037u;
+
+    // For 128 bit machines:
+    // const std::size_t fnv_prime = 309485009821345068724781401u;
+    // const std::size_t fnv_offset_basis = 275519064689413815358837431229664493455u;
+
+    // For 256 bit machines:
+    // const std::size_t fnv_prime = 374144419156711147060143317175368453031918731002211u;
+    // const std::size_t fnv_offset_basis = 100029257958052580907070968620625704837092796014241193945225284501741471925557u;
 
     typedef basic_fnv_1<fnv_prime, fnv_offset_basis> fnv_1;
     typedef basic_fnv_1a<fnv_prime, fnv_offset_basis> fnv_1a;
-
 }
