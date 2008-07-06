@@ -1424,6 +1424,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_scalar_unary<E, F> self_type;
     public:
         typedef typename F::result_type value_type;
+        typedef typename E::difference_type difference_type;
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef unknown_storage_tag storage_category;
@@ -1555,6 +1556,7 @@ namespace boost { namespace numeric { namespace ublas {
     public:
         static const unsigned complexity = 1;
         typedef typename F::result_type value_type;
+        typedef typename E1::difference_type difference_type;
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef unknown_storage_tag storage_category;
