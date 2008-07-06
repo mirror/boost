@@ -6,7 +6,7 @@
 #include <boost/unordered_map.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include "../../examples/hash_functions/fnv-1.hpp"
+#include "../../examples/fnv1.hpp"
 
 //[case_insensitive_functions
     struct iequal_to

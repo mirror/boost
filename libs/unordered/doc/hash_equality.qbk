@@ -23,8 +23,8 @@ but not the equality predicate. For example, if you wanted to use the
 [import src_code/dictionary.cpp]
 [case_sensitive_dictionary_fnv]
 
-An example implementation of FNV-1, and some other hash functions are supplied
-in the examples directory.
+There is an [@../../libs/unordered/examples/fnv1.hpp implementation
+of FNV-1] in the examples directory.
 
 If you wish to use a different equality function,
 you will also need to use a matching hash function. For

@@ -181,7 +181,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
           </constructor>
-          <constructor>
+          <constructor specifiers="explicit">
             <parameter name="a">
               <paramtype>Allocator const&amp;</paramtype>
             </parameter>
@@ -928,7 +928,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
           </constructor>
-          <constructor>
+          <constructor specifiers="explicit">
             <parameter name="a">
               <paramtype>Allocator const&amp;</paramtype>
             </parameter>
@@ -1685,7 +1685,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
           </constructor>
-          <constructor>
+          <constructor specifiers="explicit">
             <parameter name="a">
               <paramtype>Allocator const&amp;</paramtype>
             </parameter>
@@ -2483,7 +2483,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
               <para>The copy constructor. Copies the contained elements, hash function, predicate, maximum load factor and allocator.</para>
             </description>
           </constructor>
-          <constructor>
+          <constructor specifiers="explicit">
             <parameter name="a">
               <paramtype>Allocator const&amp;</paramtype>
             </parameter>
