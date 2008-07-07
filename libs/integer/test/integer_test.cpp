@@ -12,11 +12,12 @@
 //   10 Mar 01  Boost Test Library now used for tests (Beman Dawes)
 //   31 Aug 99  Initial version
 
-#include <boost/test/minimal.hpp>  // for main, BOOST_CHECK
+#define BOOST_TEST_MODULE  "Integer size-selection tests"
+
+#include <boost/test/unit_test.hpp>  // unit testing framework
 
 #include <boost/config.hpp>   // for BOOST_NO_USING_TEMPLATE
-#include <boost/cstdlib.hpp>  // for boost::exit_success
-#include <boost/integer.hpp>  // for boost::int_t, boost::uint_t
+#include <boost/integer.hpp>  // for boost::int_t, boost::uint_t, etc.
 
 #include <climits>   // for ULONG_MAX, LONG_MAX, LONG_MIN
 #include <iostream>  // for std::cout (std::endl indirectly)
@@ -128,7 +129,7 @@ namespace boost
 
 
 // Test if a constant can fit within a certain type
-#define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < Number > :: Type ( Value ) == Value )
+#define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < Number > :: Type ( Value ) , Value )
 
 #if ULONG_MAX > 0xFFFFFFFFL
 #define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
@@ -186,7 +187,7 @@ namespace boost
  PRIVATE_FIT_TEST(Template, 1, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 0, Type, v); } while ( false )
 #endif
 
-#define PRIVATE_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < (ULONG_MAX >> Number) > :: Type ( Value ) == Value )
+#define PRIVATE_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < (ULONG_MAX >> Number) > :: Type ( Value ) , Value )
 
 #define PRIVATE_SHIFTED_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
  PRIVATE_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
@@ -206,7 +207,7 @@ namespace boost
  PRIVATE_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
  PRIVATE_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
 
-#define PRIVATE_POS_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < (LONG_MAX >> Number) > :: Type ( Value ) == Value )
+#define PRIVATE_POS_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < (LONG_MAX >> Number) > :: Type ( Value ) , Value )
 
 #define PRIVATE_POS_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
  PRIVATE_POS_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
@@ -226,7 +227,7 @@ namespace boost
  PRIVATE_POS_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
  PRIVATE_POS_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
 
-#define PRIVATE_NEG_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < (LONG_MIN >> Number) > :: Type ( Value ) == Value )
+#define PRIVATE_NEG_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK_EQUAL( Template < (LONG_MIN >> Number) > :: Type ( Value ) , Value )
 
 #define PRIVATE_NEG_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
  PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
@@ -247,17 +248,56 @@ namespace boost
  PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
 
 
-// Test program
-int
-test_main
-(
-    int,
-    char*[]
-)
+// Check if given types can support given size parameters
+BOOST_AUTO_TEST_SUITE( show_type_tests )
+
+// Check size parameters given by bit length
+BOOST_AUTO_TEST_CASE( show_bit_length_type_test )
+{
+    SHOW_TYPES( boost::int_t, least );
+    SHOW_TYPES( boost::int_t, fast );
+    SHOW_TYPES( boost::uint_t, least );
+    SHOW_TYPES( boost::uint_t, fast );
+}
+
+// Check size parameters given by maximum or minimum (i.e. extreme) value
+BOOST_AUTO_TEST_CASE( show_extreme_type_test )
+{
+    SHOW_POS_SHIFTED_TYPES( boost::int_max_value_t, least );
+    SHOW_POS_SHIFTED_TYPES( boost::int_max_value_t, fast );
+
+    SHOW_NEG_SHIFTED_TYPES( boost::int_min_value_t, least );
+    SHOW_NEG_SHIFTED_TYPES( boost::int_min_value_t, fast );
+
+    SHOW_SHIFTED_TYPES( boost::uint_value_t, least );
+    SHOW_SHIFTED_TYPES( boost::uint_value_t, fast );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+// Check if given constants can fit in given types
+BOOST_AUTO_TEST_SUITE( fit_type_tests )
+
+// Check against large initial value
+BOOST_AUTO_TEST_CASE( show_bit_length_type_test )
 {
 #ifndef BOOST_NO_USING_TEMPLATE
     using boost::int_t;
     using boost::uint_t;
+#else
+    using namespace boost;
+#endif
+
+    PRIVATE_FIT_TESTS( int_t, least, long, LONG_MAX );
+    PRIVATE_FIT_TESTS( int_t, fast, long, LONG_MAX );
+    PRIVATE_FIT_TESTS( uint_t, least, unsigned long, ULONG_MAX );
+    PRIVATE_FIT_TESTS( uint_t, fast, unsigned long, ULONG_MAX );
+}
+
+// Check against (absolutely) large initial value
+BOOST_AUTO_TEST_CASE( show_extreme_type_test )
+{
+#ifndef BOOST_NO_USING_TEMPLATE
     using boost::int_max_value_t;
     using boost::int_min_value_t;
     using boost::uint_value_t;
@@ -265,27 +305,14 @@ test_main
     using namespace boost;
 #endif
 
-    SHOW_TYPES( int_t, least );
-    SHOW_TYPES( int_t, fast );
-    SHOW_TYPES( uint_t, least );
-    SHOW_TYPES( uint_t, fast );
-    SHOW_POS_SHIFTED_TYPES( int_max_value_t, least );
-    SHOW_POS_SHIFTED_TYPES( int_max_value_t, fast );
-    SHOW_NEG_SHIFTED_TYPES( int_min_value_t, least );
-    SHOW_NEG_SHIFTED_TYPES( int_min_value_t, fast );
-    SHOW_SHIFTED_TYPES( uint_value_t, least );
-    SHOW_SHIFTED_TYPES( uint_value_t, fast );
-     
-    PRIVATE_FIT_TESTS( int_t, least, long, LONG_MAX );
-    PRIVATE_FIT_TESTS( int_t, fast, long, LONG_MAX );
-    PRIVATE_FIT_TESTS( uint_t, least, unsigned long, ULONG_MAX );
-    PRIVATE_FIT_TESTS( uint_t, fast, unsigned long, ULONG_MAX );
     PRIVATE_POS_FIT_TESTS( int_max_value_t, least, long, LONG_MAX );
     PRIVATE_POS_FIT_TESTS( int_max_value_t, fast, long, LONG_MAX );
+
     PRIVATE_NEG_FIT_TESTS( int_min_value_t, least, long, LONG_MIN );
     PRIVATE_NEG_FIT_TESTS( int_min_value_t, fast, long, LONG_MIN );
+
     PRIVATE_SHIFTED_FIT_TESTS( uint_value_t, least, unsigned long, ULONG_MAX );
     PRIVATE_SHIFTED_FIT_TESTS( uint_value_t, fast, unsigned long, ULONG_MAX );
-        
-    return boost::exit_success;
 }
+
+BOOST_AUTO_TEST_SUITE_END()
