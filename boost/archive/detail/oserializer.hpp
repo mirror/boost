@@ -353,8 +353,8 @@ struct save_pointer_type {
             T & t
         ){
             BOOST_DEDUCED_TYPENAME 
-            boost::serialization::type_info_implementation<T>::type 
-                const & i = boost::serialization::type_info_implementation<T>::type
+            boost::serialization::type_info_implementation<T>::type const
+            & i = boost::serialization::type_info_implementation<T>::type
                     ::get_const_instance();
 
             boost::serialization::extended_type_info const * const this_type = & i;
@@ -383,7 +383,11 @@ struct save_pointer_type {
             }
             // convert pointer to more derived type. if this is thrown
             // it means that the base/derived relationship hasn't be registered
-            vp = serialization::void_downcast(*true_type, *this_type, &t);
+            vp = serialization::void_downcast(
+                *true_type, 
+                *this_type, 
+                static_cast<const void *>(&t)
+            );
             if(NULL == vp){
                 boost::throw_exception(
                     archive_exception(archive_exception::unregistered_cast)

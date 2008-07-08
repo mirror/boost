@@ -166,7 +166,7 @@ xml_wiarchive_impl<Archive>::xml_wiarchive_impl(
         archive_locale.reset(
             add_facet(
                 std::locale::classic(),
-                new detail::utf8_codecvt_facet
+                new boost::archive::detail::utf8_codecvt_facet
             )
         );
         is.imbue(* archive_locale);

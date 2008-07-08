@@ -54,7 +54,7 @@ struct null_deleter {
 // a common class for holding various types of shared pointers
 
 class shared_ptr_helper {
-    typedef std::map<void*, shared_ptr<void> > collection_type;
+    typedef std::map<const void *, shared_ptr<void> > collection_type;
     typedef collection_type::const_iterator iterator_type;
     // list of shared_pointers create accessable by raw pointer. This
     // is used to "match up" shared pointers loaded at different
@@ -86,7 +86,7 @@ public:
 
     // return a void pointer to the most derived type
     template<class T>
-    void * object_identifier(T * t) const {
+    const void * object_identifier(T * t) const {
         const boost::serialization::extended_type_info * true_type 
             = boost::serialization::type_info_implementation<T>::type
                 ::get_const_instance().get_derived_extended_type_info(*t);
@@ -101,7 +101,11 @@ public:
         const boost::serialization::extended_type_info * this_type
             = & boost::serialization::type_info_implementation<T>::type
                     ::get_const_instance();
-        void * vp = void_downcast(*true_type, *this_type, t);
+        const void * vp = void_downcast(
+            *true_type, 
+            *this_type, 
+            static_cast<const void *>(t)
+        );
         return vp;
     }
 public:
@@ -113,7 +117,7 @@ public:
         }
         // get pointer to the most derived object.  This is effectively
         // the object identifer
-        void * od = object_identifier(r);
+        const void * od = object_identifier(r);
 
         if(NULL == m_pointers)
             m_pointers = new collection_type;

@@ -22,3 +22,8 @@ After each test is built, it is run and the ouput is shown in the IDE Output win
 
 Note that the fact that all configurations are not valid for all tests precludes building 
 the all the tests from withing the IDE in one batch.
+
+(C) Copyright 2008 Robert Ramey - http://www.rrsd.com . 
+Use, modification and distribution is subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt)

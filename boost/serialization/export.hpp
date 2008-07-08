@@ -104,18 +104,24 @@ BOOST_DLLEXPORT void
 ptr_serialization_support<Archive,Serializable>::instantiate()
 {
     export_impl<Archive,Serializable>::enable_save(
-        BOOST_DEDUCED_TYPENAME Archive::is_saving()
+        #if ! defined(__BORLANDC__)
+        BOOST_DEDUCED_TYPENAME 
+        #endif
+        Archive::is_saving()
     );
 
     export_impl<Archive,Serializable>::enable_load(
-        BOOST_DEDUCED_TYPENAME Archive::is_loading()
+        #if ! defined(__BORLANDC__)
+        BOOST_DEDUCED_TYPENAME 
+        #endif
+        Archive::is_loading()
     );
 }
 
 template<class T>
 struct guid_initializer
 {  
-    const guid_initializer & export_guid(char const* key, mpl::false_){
+    const guid_initializer & export_guid(char const* /* key */, mpl::false_){
         // generates the statically-initialized objects whose constructors
         // register the information allowing serialization of T objects
         // through pointers to their base classes.
