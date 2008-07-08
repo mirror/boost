@@ -34,7 +34,7 @@
 #include "crlf_check.hpp"
 #include "license_check.hpp"
 #include "link_check.hpp"
-#include "long_name_check.hpp"
+#include "path_name_check.hpp"
 #include "tab_check.hpp"
 #include "ascii_check.hpp"
 #include "minmax_check.hpp"
@@ -45,6 +45,8 @@
 #include "boost/test/included/prg_exec_monitor.hpp"
 
 namespace fs = boost::filesystem;
+
+using namespace boost::inspect;
 
 namespace
 {
@@ -63,6 +65,7 @@ namespace
   long file_count = 0;
   long directory_count = 0;
   long error_count = 0;
+  const int max_offenders = 5;  // maximum "worst offenders" to display 
 
   boost::inspect::string_set content_signatures;
 
@@ -84,6 +87,20 @@ namespace
 
   typedef std::vector< error_msg > error_msg_vector;
   error_msg_vector msgs;
+
+  struct lib_error_count
+  {
+    int     error_count;
+    string  library;
+
+    bool operator<( const lib_error_count & rhs ) const
+    {
+      return error_count > rhs.error_count;
+    }
+  };
+
+  typedef std::vector< lib_error_count > lib_error_count_vector;
+  lib_error_count_vector libs;
 
 //  get info (as a string) if inspect_root is svn working copy  --------------//
 
@@ -263,11 +280,11 @@ namespace
     else
     {
       std::cout
-        << "  <tr><td><a href=\"#"
+        << "  <a href=\"#"
         << current_library          // what about malformed for URI refs? [gps]
         << "\">" << current_library
-        << "</a></td><td align=\"center\">"
-        << err_count << "</td></tr>\n";
+        << "</a> ("
+        << err_count << ")<br>\n";
     }
   }
 
@@ -281,14 +298,9 @@ namespace
     }
     else
     {
-      std::cout
-        << "</pre>\n"
+      std::cout <<
         "<h2>Summary</h2>\n"
-        "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
-        "  <tr>\n"
-        "    <td><b>Library</b></td>\n"
-        "    <td><b>Problems</b></td>\n"
-        "  </tr>\n"
+        "<blockquote>\n"
         ;
     }
 
@@ -308,13 +320,9 @@ namespace
     display_summary_helper( current_library, err_count );
 
     if (display_text == display_format)
-    {
       std::cout << "\n";
-    }
     else
-    {
-      std::cout << "</table>\n";
-    }
+      std::cout << "</blockquote>\n"; 
   }
 
 
@@ -413,6 +421,83 @@ namespace
     }
   }
 
+
+//  worst_offenders_count_helper  --------------------------------------------------//
+
+  void worst_offenders_count_helper( const string & current_library, int err_count )
+  {
+        lib_error_count lec;
+        lec.library = current_library;
+        lec.error_count = err_count;
+        libs.push_back( lec );
+  }
+//  worst_offenders_count  -----------------------------------------------------//
+
+  void worst_offenders_count()
+  {
+    string current_library( msgs.begin()->library );
+    int err_count = 0;
+    for ( error_msg_vector::iterator itr ( msgs.begin() );
+      itr != msgs.end(); ++itr )
+    {
+      if ( current_library != itr->library )
+      {
+        worst_offenders_count_helper( current_library, err_count );
+        current_library = itr->library;
+        err_count = 0;
+      }
+      ++err_count;
+    }
+    worst_offenders_count_helper( current_library, err_count );
+  }
+
+//  display_worst_offenders  -------------------------------------------------//
+
+  void display_worst_offenders()
+  {
+    if (display_text == display_format)
+    {
+      std::cout << "Worst Offenders:\n";
+    }
+    else
+    {
+      std::cout <<
+        "<h2>Worst Offenders</h2>\n"
+        "<blockquote>\n"
+        ;
+    }
+
+    int display_count = 0;
+    int last_error_count = 0;
+    for ( lib_error_count_vector::iterator itr ( libs.begin() );
+          itr != libs.end()
+            && (display_count < max_offenders
+                || itr->error_count == last_error_count);
+          ++itr, ++display_count )
+    {
+      if (display_text == display_format)
+      {
+        std::cout << itr->library << " " << itr->error_count << "\n";
+      }
+      else
+      {
+        std::cout
+          << "  <a href=\"#"
+          << itr->library
+          << "\">" << itr->library
+          << "</a> ("
+          << itr->error_count << ")<br>\n";
+      }
+      last_error_count = itr->error_count;
+    }
+
+    if (display_text == display_format)
+      std::cout << "\n";
+    else
+      std::cout << "</blockquote>\n"; 
+  }
+
+
   const char * options()
   {
     return
@@ -420,7 +505,7 @@ namespace
          "  -copyright\n"
          "  -crlf\n"
          "  -link\n"
-         "  -long_name\n"
+         "  -path_name\n"
          "  -tab\n"
          "  -ascii\n"
          "  -minmax\n"
@@ -453,6 +538,14 @@ namespace boost
 {
   namespace inspect
   {
+
+//  line_break  --------------------------------------------------------------//
+
+    const char * line_break()
+    {
+      return display_format ? "\n" : "<br>\n";
+    }
+
 
 //  register_signature  ------------------------------------------------------//
 
@@ -581,7 +674,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool copyright_ck = true;
   bool crlf_ck = true;
   bool link_ck = true;
-  bool long_name_ck = true;
+  bool path_name_ck = true;
   bool tab_ck = true;
   bool ascii_ck = true;
   bool minmax_ck = true;
@@ -612,7 +705,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     copyright_ck = false;
     crlf_ck = false;
     link_ck = false;
-    long_name_ck = false;
+    path_name_ck = false;
     tab_ck = false;
     ascii_ck = false;
     minmax_ck = false;
@@ -630,10 +723,8 @@ int cpp_main( int argc_param, char * argv_param[] )
         crlf_ck = true;
     else if ( std::strcmp( argv[1], "-link" ) == 0 )
       link_ck = true;
-    else if ( std::strcmp( argv[1], "-long_name" ) == 0 )
-      long_name_ck = true;
-    else if ( std::strcmp( argv[1], "-long-name" ) == 0 )
-      long_name_ck = true;
+    else if ( std::strcmp( argv[1], "-path_name" ) == 0 )
+      path_name_ck = true;
     else if ( std::strcmp( argv[1], "-tab" ) == 0 )
       tab_ck = true;
     else if ( std::strcmp( argv[1], "-ascii" ) == 0 )
@@ -658,9 +749,9 @@ int cpp_main( int argc_param, char * argv_param[] )
   fs::initial_path();
   
 
-  {
+  { // begin reporting block
 
-  // note how this is in its own block; reporting will happen
+  // since this is in its own block; reporting will happen
   // automatically, from each registered inspector, when
   // leaving, due to destruction of the inspector_list object
   inspector_list inspectors;
@@ -673,7 +764,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     inspectors.push_back( inspector_element( new boost::inspect::crlf_check ) );
   if ( link_ck )
     inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
-  if ( long_name_ck )
+  if ( path_name_ck )
     inspectors.push_back( inspector_element( new boost::inspect::file_name_check ) );
   if ( tab_ck )
       inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
@@ -731,6 +822,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     std::cout
       << "<html>\n"
       "<head>\n"
+      "<style> body { font-family: sans-serif; } </style>\n"
       "<title>Boost Inspection Report</title>\n"
       "</head>\n"
 
@@ -758,37 +850,42 @@ int cpp_main( int argc_param, char * argv_param[] )
 
 
     std::cout
-      << "<h2>Totals</h2>\n<pre>"
-      << file_count << " files scanned\n"
-      << directory_count << " directories scanned (including root)\n"
-      << error_count << " problems reported\n";
+      << "<h2>Totals</h2>\n"
+      << file_count << " files scanned<br>\n"
+      << directory_count << " directories scanned (including root)<br>\n"
+      << error_count << " problems reported\n<p>";
   }
 
   for ( inspector_list::iterator itr = inspectors.begin();
         itr != inspectors.end(); ++itr )
   {
-    const string line_break (
-        display_text == display_format? "\n" : "<br>\n"); // gps
 
     inspector_keys += static_cast<string>("  ")
         + itr->inspector->name()
         + ' ' + itr->inspector->desc()
-        + line_break
+        + line_break()
         ;
   }
 
-  
-  std::cout
-      << "\nProblem counts:\n";
+  if (display_text == display_format)
+     std::cout << "\nProblem counts:\n";
+  else
+    std::cout << "\n<h2>Problem counts</h2>\n<blockquote><p>\n" ;
 
   } // end of block: starts reporting
 
   if (display_text == display_format)
-  {
     std::cout << "\n" ;
-  }
+  else
+    std::cout << "</blockquote>\n";
 
   std::sort( msgs.begin(), msgs.end() );
+
+  worst_offenders_count();
+  std::stable_sort( libs.begin(), libs.end() );
+
+  if ( !libs.empty() )
+    display_worst_offenders();
 
   if ( !msgs.empty() )
   {

@@ -16,6 +16,8 @@
 #include <string>
 #include <ctime>
 
+#include <boost/config/warning_disable.hpp>
+
 namespace boost {
 
 // Many of the boost tools just need a quick way to obtain

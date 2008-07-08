@@ -36,7 +36,7 @@ namespace boost
 
       virtual ~minmax_check()
       {
-        std::cout << "  " << m_errors << " violations of the Boost min/max guidelines\n";
+        std::cout << "  " << m_errors << " violations of the Boost min/max guidelines" << line_break();
       }
     };
   }
