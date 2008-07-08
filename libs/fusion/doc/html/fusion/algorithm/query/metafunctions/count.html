@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>count</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="find_if.html" title="find_if">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,19 +24,18 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.query.metafunctions.count"></a><a class="link" href="count.html" title="count">count</a>
-</h5></div></div></div>
+<a name="fusion.algorithm.query.metafunctions.count"></a><a href="count.html" title="count">count</a></h5></div></div></div>
 <a name="fusion.algorithm.query.metafunctions.count.description"></a><h6>
-<a name="id2763848"></a>
-            <a class="link" href="count.html#fusion.algorithm.query.metafunctions.count.description">Description</a>
+<a name="id600032"></a>
+            <a href="count.html#fusion.algorithm.query.metafunctions.count.description">Description</a>
           </h6>
 <p>
-            A metafunction that returns the result type of <code class="computeroutput"><span class="identifier">count</span></code>
+            A metafunction that returns the result type of <tt class="computeroutput"><span class="identifier">count</span></tt>
             given the sequence and search types.
           </p>
 <a name="fusion.algorithm.query.metafunctions.count.synopsis"></a><h6>
-<a name="id2763886"></a>
-            <a class="link" href="count.html#fusion.algorithm.query.metafunctions.count.synopsis">Synopsis</a>
+<a name="id600075"></a>
+            <a href="count.html#fusion.algorithm.query.metafunctions.count.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
@@ -49,8 +48,8 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id2763993"></a><p class="title"><b>Table 1.51. Parameters</b></p>
-<div class="table-contents"><table class="table" summary="Parameters">
+<a name="id600196"></a><p class="title"><b>Table 1.51. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -77,12 +76,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
                   Sequence</a>
                 </p>
                 </td>
@@ -95,7 +95,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">T</span></code>
+                  <tt class="computeroutput"><span class="identifier">T</span></tt>
                 </p>
                 </td>
 <td>
@@ -110,34 +110,34 @@
                 </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="fusion.algorithm.query.metafunctions.count.expression_semantics"></a><h6>
-<a name="id2764118"></a>
-            <a class="link" href="count.html#fusion.algorithm.query.metafunctions.count.expression_semantics">Expression
+<a name="fusion.algorithm.query.metafunctions.count.expression_semantics"></a><h6>
+<a name="id600334"></a>
+            <a href="count.html#fusion.algorithm.query.metafunctions.count.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a class="link" href="count.html" title="count"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">count</span></code></a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="count.html" title="count"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">count</span></tt></a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: <code class="computeroutput"><span class="keyword">int</span></code>.
+            <span class="bold"><b>Return type</b></span>: <tt class="computeroutput"><span class="keyword">int</span></tt>.
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns the return type of
-            <a class="link" href="../functions/count.html" title="count"><code class="computeroutput"><span class="identifier">count</span></code></a>. The return type is always
-            <code class="computeroutput"><span class="keyword">int</span></code>.
+            <span class="bold"><b>Semantics</b></span>: Returns the return type of
+            <a href="../functions/count.html" title="count"><tt class="computeroutput"><span class="identifier">count</span></tt></a>. The return type is always
+            <tt class="computeroutput"><span class="keyword">int</span></tt>.
           </p>
 <a name="fusion.algorithm.query.metafunctions.count.complexity"></a><h6>
-<a name="id2764246"></a>
-            <a class="link" href="count.html#fusion.algorithm.query.metafunctions.count.complexity">Complexity</a>
+<a name="id600478"></a>
+            <a href="count.html#fusion.algorithm.query.metafunctions.count.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.query.metafunctions.count.header"></a><h6>
-<a name="id2764273"></a>
-            <a class="link" href="count.html#fusion.algorithm.query.metafunctions.count.header">Header</a>
+<a name="id600507"></a>
+            <a href="count.html#fusion.algorithm.query.metafunctions.count.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">count</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>

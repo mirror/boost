@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>make_map</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="MetaFunctions">
 <link rel="prev" href="make_set.html" title="make_set">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,18 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.container.generation.metafunctions.make_map"></a><a class="link" href="make_map.html" title="make_map">make_map</a>
-</h5></div></div></div>
+<a name="fusion.container.generation.metafunctions.make_map"></a><a href="make_map.html" title="make_map">make_map</a></h5></div></div></div>
 <a name="fusion.container.generation.metafunctions.make_map.description"></a><h6>
-<a name="id2721045"></a>
-            <a class="link" href="make_map.html#fusion.container.generation.metafunctions.make_map.description">Description</a>
+<a name="id552320"></a>
+            <a href="make_map.html#fusion.container.generation.metafunctions.make_map.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a class="link" href="../functions/make_map.html" title="make_map"><code class="computeroutput"><span class="identifier">make_map</span></code></a>.
+            Returns the result type of <a href="../functions/make_map.html" title="make_map"><tt class="computeroutput"><span class="identifier">make_map</span></tt></a>.
           </p>
 <a name="fusion.container.generation.metafunctions.make_map.synopsis"></a><h6>
-<a name="id2721089"></a>
-            <a class="link" href="make_map.html#fusion.container.generation.metafunctions.make_map.synopsis">Synopsis</a>
+<a name="id552370"></a>
+            <a href="make_map.html#fusion.container.generation.metafunctions.make_map.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span>
@@ -44,20 +43,20 @@
 <span class="keyword">struct</span> <span class="identifier">make_map</span><span class="special">;</span>
 </pre>
 <p>
-            The variadic function accepts <code class="computeroutput"><span class="number">0</span></code>
-            to <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
-            <sup>[<a name="id2721258" href="#ftn.id2721258" class="footnote">12</a>]</sup>
-            elements, where <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
-            is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>. You may define the preprocessor constant
-            <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
+            The variadic function accepts <tt class="computeroutput"><span class="number">0</span></tt>
+            to <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
+            <sup>[<a name="id552558" href="#ftn.id552558">12</a>]</sup>
+            elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
+            is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>. You may define the preprocessor constant
+            <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
             before including any Fusion header to change the default. Example:
           </p>
 <pre class="programlisting">
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_map.parameters"></a><h6>
-<a name="id2721357"></a>
-            <a class="link" href="make_map.html#fusion.container.generation.metafunctions.make_map.parameters">Parameters</a>
+<a name="id552665"></a>
+            <a href="make_map.html#fusion.container.generation.metafunctions.make_map.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -86,9 +85,9 @@
 <tr>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">K0</span><span class="special">,</span>
+                    <tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span>
                     <span class="identifier">K1</span><span class="special">,...</span>
-                    <span class="identifier">KN</span></code>
+                    <span class="identifier">KN</span></tt>
                   </p>
                   </td>
 <td>
@@ -98,16 +97,16 @@
                   </td>
 <td>
                   <p>
-                    Keys associated with <code class="computeroutput"><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span></code>
+                    Keys associated with <tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span></tt>
                   </p>
                   </td>
 </tr>
 <tr>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">T0</span><span class="special">,</span>
+                    <tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span>
                     <span class="identifier">T1</span><span class="special">,...</span>
-                    <span class="identifier">TN</span></code>
+                    <span class="identifier">TN</span></tt>
                   </p>
                   </td>
 <td>
@@ -117,60 +116,60 @@
                   </td>
 <td>
                   <p>
-                    Data associated with keys <code class="computeroutput"><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span></code>
+                    Data associated with keys <tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span></tt>
                   </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.container.generation.metafunctions.make_map.expression_semantics"></a><h6>
-<a name="id2721585"></a>
-            <a class="link" href="make_map.html#fusion.container.generation.metafunctions.make_map.expression_semantics">Expression
+<a name="id552922"></a>
+            <a href="make_map.html#fusion.container.generation.metafunctions.make_map.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
 <span class="identifier">resulf_of</span><span class="special">::</span><span class="identifier">make_map</span><span class="special">&lt;</span><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span><span class="special">,</span> <span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">;</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: <a class="link" href="make_map.html" title="make_map"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_map</span></code></a><code class="computeroutput"><span class="special">&lt;</span><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K0</span><span class="special">,...</span> <span class="identifier">KN</span><span class="special">,</span> <span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+            <span class="bold"><b>Return type</b></span>: <a href="make_map.html" title="make_map"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_map</span></tt></a><tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K0</span><span class="special">,...</span> <span class="identifier">KN</span><span class="special">,</span> <span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: A <a class="link" href="../../map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a> with <a class="link" href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a> elements where the <code class="computeroutput"><span class="identifier">second_type</span></code> is converted following
-            the rules for <a class="link" href="../../../notes.html#fusion.notes.element_conversion"><span class="emphasis"><em>element
+            <span class="bold"><b>Semantics</b></span>: A <a href="../../map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a> with <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></tt></a> elements where the <tt class="computeroutput"><span class="identifier">second_type</span></tt> is converted following
+            the rules for <a href="../../../notes.html#fusion.notes.element_conversion"><span class="emphasis"><em>element
             conversion</em></span></a>.
           </p>
 <p>
-            <span class="bold"><strong>Precondition</strong></span>: There may be no duplicate
+            <span class="bold"><b>Precondition</b></span>: There may be no duplicate
             key types.
           </p>
 <a name="fusion.container.generation.metafunctions.make_map.header"></a><h6>
-<a name="id2721890"></a>
-            <a class="link" href="make_map.html#fusion.container.generation.metafunctions.make_map.header">Header</a>
+<a name="id553261"></a>
+            <a href="make_map.html#fusion.container.generation.metafunctions.make_map.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">make_map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_map.example"></a><h6>
-<a name="id2722042"></a>
-            <a class="link" href="make_map.html#fusion.container.generation.metafunctions.make_map.example">Example</a>
+<a name="id553432"></a>
+            <a href="make_map.html#fusion.container.generation.metafunctions.make_map.example">Example</a>
           </h6>
 <pre class="programlisting">
 <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_map</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.make_map.see_also"></a><h6>
-<a name="id2722135"></a>
-            <a class="link" href="make_map.html#fusion.container.generation.metafunctions.make_map.see_also">See
+<a name="id553537"></a>
+            <a href="make_map.html#fusion.container.generation.metafunctions.make_map.see_also">See
             also</a>
           </h6>
 <p>
-            <a class="link" href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a>
+            <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></tt></a>
           </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id2721258" href="#id2721258" class="para">12</a>] </sup>
-                <code class="computeroutput"><span class="identifier">map</span></code> is implemented
-                in terms of the vector. That is why we reuse <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
+<div class="footnote"><p><sup>[<a name="ftn.id552558" href="#id552558">12</a>] </sup>
+                <tt class="computeroutput"><span class="identifier">map</span></tt> is implemented
+                in terms of the vector. That is why we reuse <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
               </p></div>
 </div>
 </div>

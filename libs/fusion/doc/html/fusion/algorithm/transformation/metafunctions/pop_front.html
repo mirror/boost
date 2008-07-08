@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>pop_front</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="pop_back.html" title="pop_back">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,19 +24,18 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.transformation.metafunctions.pop_front"></a><a class="link" href="pop_front.html" title="pop_front">pop_front</a>
-</h5></div></div></div>
+<a name="fusion.algorithm.transformation.metafunctions.pop_front"></a><a href="pop_front.html" title="pop_front">pop_front</a></h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.pop_front.description"></a><h6>
-<a name="id2795049"></a>
-            <a class="link" href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.description">Description</a>
+<a name="id635044"></a>
+            <a href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a class="link" href="../functions/pop_front.html" title="pop_front"><code class="computeroutput"><span class="identifier">pop_front</span></code></a>, given the input sequence
+            Returns the result type of <a href="../functions/pop_front.html" title="pop_front"><tt class="computeroutput"><span class="identifier">pop_front</span></tt></a>, given the input sequence
             type.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.pop_front.synopsis"></a><h6>
-<a name="id2795092"></a>
-            <a class="link" href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.synopsis">Synopsis</a>
+<a name="id635094"></a>
+            <a href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
@@ -48,8 +47,8 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id2795184"></a><p class="title"><b>Table 1.88. Parameters</b></p>
-<div class="table-contents"><table class="table" summary="Parameters">
+<a name="id635197"></a><p class="title"><b>Table 1.88. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -75,12 +74,13 @@
 <tbody><tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
                   Sequence</a>
                 </p>
                 </td>
@@ -90,28 +90,29 @@
                 </p>
                 </td>
 </tr></tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="fusion.algorithm.transformation.metafunctions.pop_front.expression_semantics"></a><h6>
-<a name="id2795276"></a>
-            <a class="link" href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.expression_semantics">Expression
+<a name="fusion.algorithm.transformation.metafunctions.pop_front.expression_semantics"></a><h6>
+<a name="id635300"></a>
+            <a href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a class="link" href="pop_front.html" title="pop_front"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">pop_front</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="pop_front.html" title="pop_front"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">pop_front</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence with all
-            the elements of <code class="computeroutput"><span class="identifier">Sequence</span></code>
+            <span class="bold"><b>Semantics</b></span>: Returns a sequence with all
+            the elements of <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
             except the first element.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.pop_front.complexity"></a><h6>
-<a name="id2795389"></a>
-            <a class="link" href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.complexity">Complexity</a>
+<a name="id635427"></a>
+            <a href="pop_front.html#fusion.algorithm.transformation.metafunctions.pop_front.complexity">Complexity</a>
           </h6>
 <p>
             Constant.

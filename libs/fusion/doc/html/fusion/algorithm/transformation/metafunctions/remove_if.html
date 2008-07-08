@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>remove_if</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="remove.html" title="remove">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,20 +24,19 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.transformation.metafunctions.remove_if"></a><a class="link" href="remove_if.html" title="remove_if">remove_if</a>
-</h5></div></div></div>
+<a name="fusion.algorithm.transformation.metafunctions.remove_if"></a><a href="remove_if.html" title="remove_if">remove_if</a></h5></div></div></div>
 <a name="fusion.algorithm.transformation.metafunctions.remove_if.description"></a><h6>
-<a name="id2788904"></a>
-            <a class="link" href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.description">Description</a>
+<a name="id628121"></a>
+            <a href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a class="link" href="../functions/remove_if.html" title="remove_if"><code class="computeroutput"><span class="identifier">remove_if</span></code></a>, given the input sequence
+            Returns the result type of <a href="../functions/remove_if.html" title="remove_if"><tt class="computeroutput"><span class="identifier">remove_if</span></tt></a>, given the input sequence
             and unary <a href="http://www.boost.org/libs/mpl/doc/refmanual/lambda-expression.html" target="_top">MPL
             Lambda Expression</a> predicate types.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.remove_if.synopsis"></a><h6>
-<a name="id2788955"></a>
-            <a class="link" href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.synopsis">Synopsis</a>
+<a name="id628179"></a>
+            <a href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
@@ -50,8 +49,8 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id2789062"></a><p class="title"><b>Table 1.80. Parameters</b></p>
-<div class="table-contents"><table class="table" summary="Parameters">
+<a name="id628299"></a><p class="title"><b>Table 1.80. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -78,12 +77,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
                   Sequence</a>
                 </p>
                 </td>
@@ -96,7 +96,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Pred</span></code>
+                  <tt class="computeroutput"><span class="identifier">Pred</span></tt>
                 </p>
                 </td>
 <td>
@@ -107,41 +107,42 @@
                 </td>
 <td>
                 <p>
-                  Remove elements which evaluate to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code>
+                  Remove elements which evaluate to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>
                 </p>
                 </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="fusion.algorithm.transformation.metafunctions.remove_if.expression_semantics"></a><h6>
-<a name="id2789222"></a>
-            <a class="link" href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.expression_semantics">Expression
+<a name="fusion.algorithm.transformation.metafunctions.remove_if.expression_semantics"></a><h6>
+<a name="id628477"></a>
+            <a href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a class="link" href="remove_if.html" title="remove_if"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">remove_if</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Pred</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="remove_if.html" title="remove_if"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">remove_if</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Pred</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence containing
-            the elements of <code class="computeroutput"><span class="identifier">Sequence</span></code>
-            for which <code class="computeroutput"><span class="identifier">Pred</span></code> evaluates
-            to <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></code>.
+            <span class="bold"><b>Semantics</b></span>: Returns a sequence containing
+            the elements of <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
+            for which <tt class="computeroutput"><span class="identifier">Pred</span></tt> evaluates
+            to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></tt>.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.remove_if.complexity"></a><h6>
-<a name="id2789385"></a>
-            <a class="link" href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.complexity">Complexity</a>
+<a name="id628662"></a>
+            <a href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithm.transformation.metafunctions.remove_if.header"></a><h6>
-<a name="id2789411"></a>
-            <a class="link" href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.header">Header</a>
+<a name="id628692"></a>
+            <a href="remove_if.html#fusion.algorithm.transformation.metafunctions.remove_if.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">remove_if</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>

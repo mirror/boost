@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>boost::array</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../adapted.html" title="Adapted">
 <link rel="prev" href="mpl_sequence.html" title="mpl sequence">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,45 +24,46 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.adapted.boost__array"></a><a class="link" href="boost__array.html" title="boost::array">boost::array</a>
-</h3></div></div></div>
+<a name="fusion.adapted.boost__array"></a><a href="boost__array.html" title="boost::array">boost::array</a></h3></div></div></div>
 <p>
-        This module provides adapters for <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code>.
-        Including the module header makes <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code>
-        a fully conforming <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
+        This module provides adapters for <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></tt>.
+        Including the module header makes <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></tt>
+        a fully conforming <a href="../sequence/concepts/random_access_sequence.html" title="Random
+        Access Sequence">Random
         Access Sequence</a>.
       </p>
-<a name="fusion.adapted.boost__array.header"></a><h5>
-<a name="id2741960"></a>
-        <a class="link" href="boost__array.html#fusion.adapted.boost__array.header">Header</a>
-      </h5>
+<a name="fusion.adapted.boost__array.header"></a><h4>
+<a name="id575685"></a>
+        <a href="boost__array.html#fusion.adapted.boost__array.header">Header</a>
+      </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">array</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">array</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<a name="fusion.adapted.boost__array.model_of"></a><h5>
-<a name="id2742102"></a>
-        <a class="link" href="boost__array.html#fusion.adapted.boost__array.model_of">Model of</a>
-      </h5>
-<div class="itemizedlist"><ul type="disc"><li><a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
+<a name="fusion.adapted.boost__array.model_of"></a><h4>
+<a name="id575843"></a>
+        <a href="boost__array.html#fusion.adapted.boost__array.model_of">Model of</a>
+      </h4>
+<div class="itemizedlist"><ul type="disc"><li><a href="../sequence/concepts/random_access_sequence.html" title="Random
+        Access Sequence">Random
           Access Sequence</a></li></ul></div>
-<a name="fusion.adapted.boost__array.example"></a><h5>
-<a name="id2742139"></a>
-        <a class="link" href="boost__array.html#fusion.adapted.boost__array.example">Example</a>
-      </h5>
+<a name="fusion.adapted.boost__array.example"></a><h4>
+<a name="id575884"></a>
+        <a href="boost__array.html#fusion.adapted.boost__array.example">Example</a>
+      </h4>
 <pre class="programlisting">
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="number">3</span><span class="special">&gt;</span> <span class="identifier">arr</span> <span class="special">=</span> <span class="special">{{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">}};</span>
 
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a class="link" href="../sequence/intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">arr</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a class="link" href="../iterator/functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a class="link" href="../sequence/intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">arr</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a class="link" href="../iterator/functions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="number">2</span><span class="special">&gt;(</span><a class="link" href="../sequence/intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">arr</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a class="link" href="../iterator/functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a class="link" href="../sequence/intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">arr</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/functions/at_c.html" title="at_c"><code class="computeroutput"><span class="identifier">at_c</span></code></a><span class="special">&lt;</span><span class="number">2</span><span class="special">&gt;(</span><span class="identifier">arr</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a href="../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">arr</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a href="../iterator/functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">arr</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a href="../iterator/functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="number">2</span><span class="special">&gt;(</span><a href="../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">arr</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><a href="../iterator/functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="../sequence/intrinsic/functions/end.html" title="end"><tt class="computeroutput"><span class="identifier">end</span></tt></a><span class="special">(</span><span class="identifier">arr</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_c.html" title="at_c"><tt class="computeroutput"><span class="identifier">at_c</span></tt></a><span class="special">&lt;</span><span class="number">2</span><span class="special">&gt;(</span><span class="identifier">arr</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
-<a name="fusion.adapted.boost__array.see_also"></a><h5>
-<a name="id2742699"></a>
-        <a class="link" href="boost__array.html#fusion.adapted.boost__array.see_also">See also</a>
-      </h5>
+<a name="fusion.adapted.boost__array.see_also"></a><h4>
+<a name="id576504"></a>
+        <a href="boost__array.html#fusion.adapted.boost__array.see_also">See also</a>
+      </h4>
 <p>
         <a href="http://www.boost.org/doc/html/array.html" target="_top">Boost.Array Library</a>
       </p>

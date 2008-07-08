@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Change log</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="prev" href="notes.html" title="Notes">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,18 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.change_log"></a><a class="link" href="change_log.html" title="Change log">Change log</a>
-</h2></div></div></div>
+<a name="fusion.change_log"></a><a href="change_log.html" title="Change log">Change log</a></h2></div></div></div>
 <p>
       This section summarizes significant changes to the Fusion library.
     </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-        Sep 27, 2006: Added <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tuple</span></code>
+        Sep 27, 2006: Added <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tuple</span></tt>
         support. (Joel de Guzman)
       </li>
 <li>
-        Nov 17, 2006: Added <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></code>
+        Nov 17, 2006: Added <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></tt>
         support. (Joel de Guzman)
       </li>
 <li>
@@ -48,12 +47,12 @@
         May 8, 2007: Added associative struct adapter. (Dan Marsden)
       </li>
 <li>
-        Dec 20, 2007: Removed <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></code>
+        Dec 20, 2007: Removed <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">variant</span></tt>
         support. After thorough investigation, I think now that the move to make
         variant a fusion sequence is rather quirky. A variant will always have a
         size==1 regardless of the number of types it can contain and there's no way
         to know at compile time what it contains. Iterating over its types is simply
-        wrong. All these imply that the variant is <span class="bold"><strong>not</strong></span>
+        wrong. All these imply that the variant is <span class="bold"><b>not</b></span>
         a fusion sequence. (Joel de Guzman)
       </li>
 </ul></div>

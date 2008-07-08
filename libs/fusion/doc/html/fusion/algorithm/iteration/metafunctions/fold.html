@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>fold</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="../metafunctions.html" title="Metafunctions">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,18 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.iteration.metafunctions.fold"></a><a class="link" href="fold.html" title="fold">fold</a>
-</h5></div></div></div>
+<a name="fusion.algorithm.iteration.metafunctions.fold"></a><a href="fold.html" title="fold">fold</a></h5></div></div></div>
 <a name="fusion.algorithm.iteration.metafunctions.fold.description"></a><h6>
-<a name="id2749599"></a>
-            <a class="link" href="fold.html#fusion.algorithm.iteration.metafunctions.fold.description">Description</a>
+<a name="id584198"></a>
+            <a href="fold.html#fusion.algorithm.iteration.metafunctions.fold.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a class="link" href="../functions/fold.html" title="fold"><code class="computeroutput"><span class="identifier">fold</span></code></a>.
+            Returns the result type of <a href="../functions/fold.html" title="fold"><tt class="computeroutput"><span class="identifier">fold</span></tt></a>.
           </p>
 <a name="fusion.algorithm.iteration.metafunctions.fold.synopsis"></a><h6>
-<a name="id2749642"></a>
-            <a class="link" href="fold.html#fusion.algorithm.iteration.metafunctions.fold.synopsis">Synopsis</a>
+<a name="id584248"></a>
+            <a href="fold.html#fusion.algorithm.iteration.metafunctions.fold.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
@@ -48,8 +47,8 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id2749763"></a><p class="title"><b>Table 1.36. Parameters</b></p>
-<div class="table-contents"><table class="table" summary="Parameters">
+<a name="id584383"></a><p class="title"><b>Table 1.36. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -76,12 +75,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">Sequence</span></code>
+                  <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
                   Sequence</a>
                 </p>
                 </td>
@@ -94,7 +94,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">State</span></code>
+                  <tt class="computeroutput"><span class="identifier">State</span></tt>
                 </p>
                 </td>
 <td>
@@ -104,21 +104,21 @@
                 </td>
 <td>
                 <p>
-                  The initial state for the first application of <code class="computeroutput"><span class="identifier">F</span></code>
+                  The initial state for the first application of <tt class="computeroutput"><span class="identifier">F</span></tt>
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">F</span></code>
+                  <tt class="computeroutput"><span class="identifier">F</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></code></a><span class="special">&lt;</span><span class="identifier">F</span><span class="special">(</span><span class="identifier">E</span><span class="special">,</span><span class="identifier">S</span><span class="special">)&gt;::</span><span class="identifier">type</span></code> is the return type of <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">,</span><span class="identifier">s</span><span class="special">)</span></code>
-                  for each element <code class="computeroutput"><span class="identifier">e</span></code>
-                  of type <code class="computeroutput"><span class="identifier">E</span></code> in <code class="computeroutput"><span class="identifier">seq</span></code>, and current state <code class="computeroutput"><span class="identifier">s</span></code> of type <code class="computeroutput"><span class="identifier">S</span></code>
+                  <tt class="computeroutput"><a href="http://www.boost.org/libs/utility/utility.htm#result_of" target="_top"><tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">result_of</span></tt></a><span class="special">&lt;</span><span class="identifier">F</span><span class="special">(</span><span class="identifier">E</span><span class="special">,</span><span class="identifier">S</span><span class="special">)&gt;::</span><span class="identifier">type</span></tt> is the return type of <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">,</span><span class="identifier">s</span><span class="special">)</span></tt>
+                  for each element <tt class="computeroutput"><span class="identifier">e</span></tt>
+                  of type <tt class="computeroutput"><span class="identifier">E</span></tt> in <tt class="computeroutput"><span class="identifier">seq</span></tt>, and current state <tt class="computeroutput"><span class="identifier">s</span></tt> of type <tt class="computeroutput"><span class="identifier">S</span></tt>
                 </p>
                 </td>
 <td>
@@ -128,36 +128,36 @@
                 </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="fusion.algorithm.iteration.metafunctions.fold.expression_semantics"></a><h6>
-<a name="id2750080"></a>
-            <a class="link" href="fold.html#fusion.algorithm.iteration.metafunctions.fold.expression_semantics">Expression
+<a name="fusion.algorithm.iteration.metafunctions.fold.expression_semantics"></a><h6>
+<a name="id584733"></a>
+            <a href="fold.html#fusion.algorithm.iteration.metafunctions.fold.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a class="link" href="fold.html" title="fold"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">fold</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">State</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="fold.html" title="fold"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">fold</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">State</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: Any type
+            <span class="bold"><b>Return type</b></span>: Any type
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns the result of applying
-            <code class="computeroutput"><span class="identifier">fold</span></code> to a sequence of
-            type <code class="computeroutput"><span class="identifier">Sequence</span></code>, with an
-            initial state of type <code class="computeroutput"><span class="identifier">State</span></code>
-            and binary function object or function pointer of type <code class="computeroutput"><span class="identifier">F</span></code>.
+            <span class="bold"><b>Semantics</b></span>: Returns the result of applying
+            <tt class="computeroutput"><span class="identifier">fold</span></tt> to a sequence of
+            type <tt class="computeroutput"><span class="identifier">Sequence</span></tt>, with an
+            initial state of type <tt class="computeroutput"><span class="identifier">State</span></tt>
+            and binary function object or function pointer of type <tt class="computeroutput"><span class="identifier">F</span></tt>.
           </p>
 <a name="fusion.algorithm.iteration.metafunctions.fold.complexity"></a><h6>
-<a name="id2750237"></a>
-            <a class="link" href="fold.html#fusion.algorithm.iteration.metafunctions.fold.complexity">Complexity</a>
+<a name="id584907"></a>
+            <a href="fold.html#fusion.algorithm.iteration.metafunctions.fold.complexity">Complexity</a>
           </h6>
 <p>
-            Linear, exactly <code class="computeroutput"><a class="link" href="../../../sequence/intrinsic/metafunctions/size.html" title="size"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></code> applications of <code class="computeroutput"><span class="identifier">F</span></code>.
+            Linear, exactly <tt class="computeroutput"><a href="../../../sequence/intrinsic/metafunctions/size.html" title="size"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> applications of <tt class="computeroutput"><span class="identifier">F</span></tt>.
           </p>
 <a name="fusion.algorithm.iteration.metafunctions.fold.header"></a><h6>
-<a name="id2750322"></a>
-            <a class="link" href="fold.html#fusion.algorithm.iteration.metafunctions.fold.header">Header</a>
+<a name="id585003"></a>
+            <a href="fold.html#fusion.algorithm.iteration.metafunctions.fold.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">iteration</span><span class="special">/</span><span class="identifier">fold</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>

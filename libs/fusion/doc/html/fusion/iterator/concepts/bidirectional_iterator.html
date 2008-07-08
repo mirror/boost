@@ -1,21 +1,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Bidirectional Iterator</title>
+<title>Bidirectional
+        Iterator</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
-<link rel="prev" href="forward_iterator.html" title="Forward Iterator">
-<link rel="next" href="random_access_iterator.html" title="Random Access Iterator">
+<link rel="prev" href="forward_iterator.html" title="Forward
+        Iterator">
+<link rel="next" href="random_access_iterator.html" title="Random
+        Access Iterator">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,54 +27,56 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.iterator.concepts.bidirectional_iterator"></a><a class="link" href="bidirectional_iterator.html" title="Bidirectional Iterator">Bidirectional
-        Iterator</a>
-</h4></div></div></div>
-<a name="fusion.iterator.concepts.bidirectional_iterator.description"></a><h6>
-<a name="id2648726"></a>
-          <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.description">Description</a>
-        </h6>
+<a name="fusion.iterator.concepts.bidirectional_iterator"></a><a href="bidirectional_iterator.html" title="Bidirectional
+        Iterator">Bidirectional
+        Iterator</a></h4></div></div></div>
+<a name="fusion.iterator.concepts.bidirectional_iterator.description"></a><h5>
+<a name="id471561"></a>
+          <a href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.description">Description</a>
+        </h5>
 <p>
-          A Bidirectional Iterator traverses a <a class="link" href="../../sequence.html" title="Sequence">Sequence</a>
+          A Bidirectional Iterator traverses a <a href="../../sequence.html" title="Sequence">Sequence</a>
           allowing movement in either direction one element at a time.
         </p>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">i</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">i</span></tt></span></dt>
 <dd><p>
               A Bidirectional Iterator
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">I</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">I</span></tt></span></dt>
 <dd><p>
               A Bidirectional Iterator type
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">M</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">M</span></tt></span></dt>
 <dd><p>
               An <a href="http://www.boost.org/libs/mpl/index.html" target="_top">MPL</a>
               integral constant
             </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">N</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">N</span></tt></span></dt>
 <dd><p>
               An integral constant
             </p></dd>
 </dl>
 </div>
-<a name="fusion.iterator.concepts.bidirectional_iterator.refinement_of"></a><h6>
-<a name="id2648858"></a>
-          <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.refinement_of">Refinement
+<a name="fusion.iterator.concepts.bidirectional_iterator.refinement_of"></a><h5>
+<a name="id471709"></a>
+          <a href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.refinement_of">Refinement
           of</a>
-        </h6>
+        </h5>
 <p>
-          <a class="link" href="forward_iterator.html" title="Forward Iterator">Forward Iterator</a>
+          <a href="forward_iterator.html" title="Forward
+        Iterator">Forward Iterator</a>
         </p>
-<a name="fusion.iterator.concepts.bidirectional_iterator.expression_requirements"></a><h6>
-<a name="id2648892"></a>
-          <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.expression_requirements">Expression
+<a name="fusion.iterator.concepts.bidirectional_iterator.expression_requirements"></a><h5>
+<a name="id471749"></a>
+          <a href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.expression_requirements">Expression
           requirements</a>
-        </h6>
+        </h5>
 <p>
-          In addition to the requirements defined in <a class="link" href="forward_iterator.html" title="Forward Iterator">Forward
+          In addition to the requirements defined in <a href="forward_iterator.html" title="Forward
+        Iterator">Forward
           Iterator</a>, the following expressions must be valid:
         </p>
 <div class="informaltable"><table class="table">
@@ -101,12 +106,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  <a class="link" href="bidirectional_iterator.html" title="Bidirectional Iterator">Bidirectional
+                  <a href="bidirectional_iterator.html" title="Bidirectional
+        Iterator">Bidirectional
                   Iterator</a>
                 </p>
                 </td>
@@ -119,12 +125,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  <a class="link" href="bidirectional_iterator.html" title="Bidirectional Iterator">Bidirectional
+                  <a href="bidirectional_iterator.html" title="Bidirectional
+        Iterator">Bidirectional
                   Iterator</a>
                 </p>
                 </td>
@@ -137,12 +144,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../functions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  <a class="link" href="bidirectional_iterator.html" title="Bidirectional Iterator">Bidirectional
+                  <a href="bidirectional_iterator.html" title="Bidirectional
+        Iterator">Bidirectional
                   Iterator</a>
                 </p>
                 </td>
@@ -155,12 +163,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../functions/advance.html" title="advance"><code class="computeroutput"><span class="identifier">advance</span></code></a><span class="special">&lt;</span><span class="identifier">M</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><a href="../functions/advance.html" title="advance"><tt class="computeroutput"><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">M</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  <a class="link" href="bidirectional_iterator.html" title="Bidirectional Iterator">Bidirectional
+                  <a href="bidirectional_iterator.html" title="Bidirectional
+        Iterator">Bidirectional
                   Iterator</a>
                 </p>
                 </td>
@@ -172,11 +181,11 @@
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.iterator.concepts.bidirectional_iterator.meta_expressions"></a><h6>
-<a name="id2649235"></a>
-          <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.meta_expressions">Meta
+<a name="fusion.iterator.concepts.bidirectional_iterator.meta_expressions"></a><h5>
+<a name="id472132"></a>
+          <a href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.meta_expressions">Meta
           Expressions</a>
-        </h6>
+        </h5>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -197,7 +206,7 @@
 <tbody><tr>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../metafunctions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
+                  <tt class="computeroutput"><a href="../metafunctions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
                 </p>
                 </td>
 <td>
@@ -207,14 +216,15 @@
                 </td>
 </tr></tbody>
 </table></div>
-<a name="fusion.iterator.concepts.bidirectional_iterator.expression_semantics"></a><h6>
-<a name="id2649356"></a>
-          <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.expression_semantics">Expression
+<a name="fusion.iterator.concepts.bidirectional_iterator.expression_semantics"></a><h5>
+<a name="id472268"></a>
+          <a href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.expression_semantics">Expression
           Semantics</a>
-        </h6>
+        </h5>
 <p>
           The semantics of an expression are defined only where they differ from,
-          or are not defined in <a class="link" href="forward_iterator.html" title="Forward Iterator">Forward
+          or are not defined in <a href="forward_iterator.html" title="Forward
+        Iterator">Forward
           Iterator</a>
         </p>
 <div class="informaltable"><table class="table">
@@ -237,60 +247,63 @@
 <tbody><tr>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>
+                  <tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  An iterator to the element preceding <code class="computeroutput"><span class="identifier">i</span></code>
+                  An iterator to the element preceding <tt class="computeroutput"><span class="identifier">i</span></tt>
                 </p>
                 </td>
 </tr></tbody>
 </table></div>
-<a name="fusion.iterator.concepts.bidirectional_iterator.invariants"></a><h6>
-<a name="id2649483"></a>
-          <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.invariants">Invariants</a>
-        </h6>
+<a name="fusion.iterator.concepts.bidirectional_iterator.invariants"></a><h5>
+<a name="id472413"></a>
+          <a href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.invariants">Invariants</a>
+        </h5>
 <p>
-          In addition to the invariants of <a class="link" href="forward_iterator.html" title="Forward Iterator">Forward
+          In addition to the invariants of <a href="forward_iterator.html" title="Forward
+        Iterator">Forward
           Iterator</a>, the following invariants always hold:
         </p>
 <div class="itemizedlist"><ul type="disc">
-<li><code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">i</span> <span class="special">&amp;&amp;</span> <a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <a class="link" href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span></code></li>
-<li><code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a class="link" href="../functions/advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">advance_c</span></code></a><span class="special">&lt;-</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></code></li>
+<li><tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">i</span> <span class="special">&amp;&amp;</span> <a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span></tt></li>
+<li><tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;-</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt></li>
 <li>
-            Using <code class="computeroutput"><a class="link" href="../functions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a></code> to traverse a sequence
+            Using <tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a></tt> to traverse a sequence
             will never return a previously seen position
           </li>
 </ul></div>
-<a name="fusion.iterator.concepts.bidirectional_iterator.models"></a><h6>
-<a name="id2649787"></a>
-          <a class="link" href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.models">Models</a>
-        </h6>
+<a name="fusion.iterator.concepts.bidirectional_iterator.models"></a><h5>
+<a name="id472752"></a>
+          <a href="bidirectional_iterator.html#fusion.iterator.concepts.bidirectional_iterator.models">Models</a>
+        </h5>
 <div class="itemizedlist"><ul type="disc">
 <li>
-<a class="link" href="../../adapted/std__pair.html" title="std::pair"><code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code></a>
+<a href="../../adapted/std__pair.html" title="std::pair"><tt class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></tt></a>
             iterator
           </li>
 <li>
-<a class="link" href="../../adapted/boost__array.html" title="boost::array"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code></a>
+<a href="../../adapted/boost__array.html" title="boost::array"><tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></tt></a>
             iterator
           </li>
 <li>
-<a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
+<a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a>
             iterator
           </li>
 <li>
-<a class="link" href="../../view/iterator_range.html" title="iterator_range"><code class="computeroutput"><span class="identifier">iterator_range</span></code></a>
-            (where adapted sequence is a <a class="link" href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+<a href="../../view/iterator_range.html" title="iterator_range"><tt class="computeroutput"><span class="identifier">iterator_range</span></tt></a>
+            (where adapted sequence is a <a href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
+        Sequence">Bidirectional
             Sequence</a>)
           </li>
 <li>
-<a class="link" href="../../view/transform_view.html" title="transform_view"><code class="computeroutput"><span class="identifier">transform_view</span></code></a>
-            (where adapted sequence is a <a class="link" href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional Sequence">Bidirectional
+<a href="../../view/transform_view.html" title="transform_view"><tt class="computeroutput"><span class="identifier">transform_view</span></tt></a>
+            (where adapted sequence is a <a href="../../sequence/concepts/bidirectional_sequence.html" title="Bidirectional
+        Sequence">Bidirectional
             Sequence</a>)
           </li>
-<li><a class="link" href="../../view/reverse_view.html" title="reverse_view"><code class="computeroutput"><span class="identifier">reverse_view</span></code></a></li>
+<li><a href="../../view/reverse_view.html" title="reverse_view"><tt class="computeroutput"><span class="identifier">reverse_view</span></tt></a></li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

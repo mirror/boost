@@ -3,19 +3,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Intrinsic</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../sequence.html" title="Sequence">
-<link rel="prev" href="concepts/associative_sequence.html" title="Associative Sequence">
+<link rel="prev" href="concepts/associative_sequence.html" title="Associative
+        Sequence">
 <link rel="next" href="intrinsic/functions.html" title="Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,33 +25,32 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.sequence.intrinsic"></a><a class="link" href="intrinsic.html" title="Intrinsic">Intrinsic</a>
-</h3></div></div></div>
+<a name="fusion.sequence.intrinsic"></a><a href="intrinsic.html" title="Intrinsic">Intrinsic</a></h3></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="intrinsic/functions.html">Functions</a></span></dt>
 <dt><span class="section"><a href="intrinsic/metafunctions.html">Metafunctions</a></span></dt>
 </dl></div>
 <p>
-        Intrinsic form the essential interface of every Fusion <a class="link" href="../sequence.html" title="Sequence">Sequence</a>.
+        Intrinsic form the essential interface of every Fusion <a href="../sequence.html" title="Sequence">Sequence</a>.
         <a href="http://en.wikipedia.org/wiki/Standard_Template_Library" target="_top">STL</a>
         counterparts of these functions are usually implemented as member functions.
-        Intrinsic functions, unlike <a class="link" href="../algorithm.html" title="Algorithm">Algorithms</a>,
-        are not generic across the full <a class="link" href="../sequence.html" title="Sequence">Sequence</a>
-        repertoire. They need to be implemented for each Fusion <a class="link" href="../sequence.html" title="Sequence">Sequence</a>
-        <sup>[<a name="id2672096" href="#ftn.id2672096" class="footnote">4</a>]</sup>
+        Intrinsic functions, unlike <a href="../algorithm.html" title="Algorithm">Algorithms</a>,
+        are not generic across the full <a href="../sequence.html" title="Sequence">Sequence</a>
+        repertoire. They need to be implemented for each Fusion <a href="../sequence.html" title="Sequence">Sequence</a>
+        <sup>[<a name="id497665" href="#ftn.id497665">4</a>]</sup>
         .
       </p>
-<a name="fusion.sequence.intrinsic.header"></a><h5>
-<a name="id2672113"></a>
-        <a class="link" href="intrinsic.html#fusion.sequence.intrinsic.header">Header</a>
-      </h5>
+<a name="fusion.sequence.intrinsic.header"></a><h4>
+<a name="id497685"></a>
+        <a href="intrinsic.html#fusion.sequence.intrinsic.header">Header</a>
+      </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id2672096" href="#id2672096" class="para">4</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id497665" href="#id497665">4</a>] </sup>
             In practice, many of intrinsic functions have default implementations
             that will work in majority of cases
           </p></div>

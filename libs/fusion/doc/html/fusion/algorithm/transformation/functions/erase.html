@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>erase</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="clear.html" title="clear">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,26 +24,25 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.algorithm.transformation.functions.erase"></a><a class="link" href="erase.html" title="erase">erase</a>
-</h5></div></div></div>
+<a name="fusion.algorithm.transformation.functions.erase"></a><a href="erase.html" title="erase">erase</a></h5></div></div></div>
 <a name="fusion.algorithm.transformation.functions.erase.description"></a><h6>
-<a name="id2774274"></a>
-            <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.description">Description</a>
+<a name="id611719"></a>
+            <a href="erase.html#fusion.algorithm.transformation.functions.erase.description">Description</a>
           </h6>
 <p>
             Returns a new sequence, containing all the elements of the original except
             those at a specified iterator, or between two iterators.
           </p>
 <a name="fusion.algorithm.transformation.functions.erase.synposis"></a><h6>
-<a name="id2774301"></a>
-            <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.synposis">Synposis</a>
+<a name="id611752"></a>
+            <a href="erase.html#fusion.algorithm.transformation.functions.erase.synposis">Synposis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">First</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a class="link" href="../metafunctions/erase.html" title="erase"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">First</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">erase</span><span class="special">(</span>
+<span class="keyword">typename</span> <a href="../metafunctions/erase.html" title="erase"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">First</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">erase</span><span class="special">(</span>
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">First</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it1</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span>
@@ -51,12 +50,12 @@
     <span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Last</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a class="link" href="../metafunctions/erase.html" title="erase"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">First</span><span class="special">,</span> <span class="identifier">Last</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">erase</span><span class="special">(</span>
+<span class="keyword">typename</span> <a href="../metafunctions/erase.html" title="erase"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">erase</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">First</span><span class="special">,</span> <span class="identifier">Last</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">erase</span><span class="special">(</span>
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">First</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it1</span><span class="special">,</span> <span class="identifier">Last</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it2</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id2774716"></a><p class="title"><b>Table 1.63. Parameters</b></p>
-<div class="table-contents"><table class="table" summary="Parameters">
+<a name="id612214"></a><p class="title"><b>Table 1.63. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -83,12 +82,13 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">seq</span></code>
+                  <tt class="computeroutput"><span class="identifier">seq</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+                  A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
                   Sequence</a>
                 </p>
                 </td>
@@ -101,95 +101,99 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">it1</span></code>
+                  <tt class="computeroutput"><span class="identifier">it1</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../iterator/concepts/forward_iterator.html" title="Forward Iterator">Forward
+                  A model of <a href="../../../iterator/concepts/forward_iterator.html" title="Forward
+        Iterator">Forward
                   Iterator</a>
                 </p>
                 </td>
 <td>
                 <p>
-                  Iterator into <code class="computeroutput"><span class="identifier">seq</span></code>
+                  Iterator into <tt class="computeroutput"><span class="identifier">seq</span></tt>
                 </p>
                 </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">it2</span></code>
+                  <tt class="computeroutput"><span class="identifier">it2</span></tt>
                 </p>
                 </td>
 <td>
                 <p>
-                  A model of <a class="link" href="../../../iterator/concepts/forward_iterator.html" title="Forward Iterator">Forward
+                  A model of <a href="../../../iterator/concepts/forward_iterator.html" title="Forward
+        Iterator">Forward
                   Iterator</a>
                 </p>
                 </td>
 <td>
                 <p>
-                  Iterator into <code class="computeroutput"><span class="identifier">seq</span></code>
-                  after <code class="computeroutput"><span class="identifier">it1</span></code>
+                  Iterator into <tt class="computeroutput"><span class="identifier">seq</span></tt>
+                  after <tt class="computeroutput"><span class="identifier">it1</span></tt>
                 </p>
                 </td>
 </tr>
 </tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="fusion.algorithm.transformation.functions.erase.expression_semantics"></a><h6>
-<a name="id2774920"></a>
-            <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.expression_semantics">Expression
+<a name="fusion.algorithm.transformation.functions.erase.expression_semantics"></a><h6>
+<a name="id612441"></a>
+            <a href="erase.html#fusion.algorithm.transformation.functions.erase.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a class="link" href="erase.html" title="erase"><code class="computeroutput"><span class="identifier">erase</span></code></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">pos</span><span class="special">);</span>
+<a href="erase.html" title="erase"><tt class="computeroutput"><span class="identifier">erase</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">pos</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, containing
-            all the elements of <code class="computeroutput"><span class="identifier">seq</span></code>
-            except the element at <code class="computeroutput"><span class="identifier">pos</span></code>.
+            <span class="bold"><b>Semantics</b></span>: Returns a new sequence, containing
+            all the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>
+            except the element at <tt class="computeroutput"><span class="identifier">pos</span></tt>.
           </p>
 <pre class="programlisting">
-<a class="link" href="erase.html" title="erase"><code class="computeroutput"><span class="identifier">erase</span></code></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">);</span>
+<a href="erase.html" title="erase"><tt class="computeroutput"><span class="identifier">erase</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">last</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: A model of <a class="link" href="../../../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
+            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, with
-            all the elements of <code class="computeroutput"><span class="identifier">seq</span></code>,
-            in their original order, except those in the range [<code class="computeroutput"><span class="identifier">first</span></code>,<code class="computeroutput"><span class="identifier">last</span></code>).
+            <span class="bold"><b>Semantics</b></span>: Returns a new sequence, with
+            all the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>,
+            in their original order, except those in the range [<tt class="computeroutput"><span class="identifier">first</span></tt>,<tt class="computeroutput"><span class="identifier">last</span></tt>).
           </p>
 <a name="fusion.algorithm.transformation.functions.erase.complexity"></a><h6>
-<a name="id2775154"></a>
-            <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.complexity">Complexity</a>
+<a name="id612699"></a>
+            <a href="erase.html#fusion.algorithm.transformation.functions.erase.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithm.transformation.functions.erase.header"></a><h6>
-<a name="id2775180"></a>
-            <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.header">Header</a>
+<a name="id612730"></a>
+            <a href="erase.html#fusion.algorithm.transformation.functions.erase.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">erase</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">erase</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithm.transformation.functions.erase.example"></a><h6>
-<a name="id2775332"></a>
-            <a class="link" href="erase.html#fusion.algorithm.transformation.functions.erase.example">Example</a>
+<a name="id612899"></a>
+            <a href="erase.html#fusion.algorithm.transformation.functions.erase.example">Example</a>
           </h6>
 <pre class="programlisting">
-<span class="keyword">const</span> <a class="link" href="../../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2.0</span><span class="special">,</span> <span class="char">'c'</span><span class="special">);</span>
-<span class="identifier">assert</span><span class="special">(</span><a class="link" href="erase.html" title="erase"><code class="computeroutput"><span class="identifier">erase</span></code></a><span class="special">(</span><span class="identifier">vec</span><span class="special">,</span> <a class="link" href="../../../iterator/functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a class="link" href="../../../sequence/intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">vec</span><span class="special">)))</span> <span class="special">==</span> <a class="link" href="../../../container/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'c'</span><span class="special">));</span>
-<span class="identifier">assert</span><span class="special">(</span><a class="link" href="erase.html" title="erase"><code class="computeroutput"><span class="identifier">erase</span></code></a><span class="special">(</span><span class="identifier">vec</span><span class="special">,</span> <a class="link" href="../../../iterator/functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a class="link" href="../../../sequence/intrinsic/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">vec</span><span class="special">)),</span> <a class="link" href="../../../sequence/intrinsic/functions/end.html" title="end"><code class="computeroutput"><span class="identifier">end</span></code></a><span class="special">(</span><span class="identifier">vec</span><span class="special">))</span> <span class="special">==</span> <a class="link" href="../../../container/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">));</span>
+<span class="keyword">const</span> <a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2.0</span><span class="special">,</span> <span class="char">'c'</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="erase.html" title="erase"><tt class="computeroutput"><span class="identifier">erase</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">,</span> <a href="../../../iterator/functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">)))</span> <span class="special">==</span> <a href="../../../container/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'c'</span><span class="special">));</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="erase.html" title="erase"><tt class="computeroutput"><span class="identifier">erase</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">,</span> <a href="../../../iterator/functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../../sequence/intrinsic/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">)),</span> <a href="../../../sequence/intrinsic/functions/end.html" title="end"><tt class="computeroutput"><span class="identifier">end</span></tt></a><span class="special">(</span><span class="identifier">vec</span><span class="special">))</span> <span class="special">==</span> <a href="../../../container/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

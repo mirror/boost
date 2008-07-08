@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>set</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../container.html" title="Container">
 <link rel="prev" href="list.html" title="list">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,34 +24,34 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="fusion.container.set"></a><a class="link" href="set.html" title="set">set</a>
-</h3></div></div></div>
-<a name="fusion.container.set.description"></a><h5>
-<a name="id2704927"></a>
-        <a class="link" href="set.html#fusion.container.set.description">Description</a>
-      </h5>
+<a name="fusion.container.set"></a><a href="set.html" title="set">set</a></h3></div></div></div>
+<a name="fusion.container.set.description"></a><h4>
+<a name="id534310"></a>
+        <a href="set.html#fusion.container.set.description">Description</a>
+      </h4>
 <p>
-        set is an <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+        set is an <a href="../sequence/concepts/associative_sequence.html" title="Associative
+        Sequence">Associative
         Sequence</a> of heteregenous typed data elements. Type identity is used
         to impose an equivalence relation on keys. The element's type is its key.
         A set may contain at most one element for each key. Membership testing and
-        element key lookup has constant runtime complexity (see <a class="link" href="../notes.html#fusion.notes.overloaded_functions">Overloaded
+        element key lookup has constant runtime complexity (see <a href="../notes.html#fusion.notes.overloaded_functions">Overloaded
         Functions</a>).
       </p>
-<a name="fusion.container.set.header"></a><h5>
-<a name="id2704974"></a>
-        <a class="link" href="set.html#fusion.container.set.header">Header</a>
-      </h5>
+<a name="fusion.container.set.header"></a><h4>
+<a name="id534365"></a>
+        <a href="set.html#fusion.container.set.header">Header</a>
+      </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">set</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">set</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">set_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">set_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<a name="fusion.container.set.synopsis"></a><h5>
-<a name="id2705229"></a>
-        <a class="link" href="set.html#fusion.container.set.synopsis">Synopsis</a>
-      </h5>
+<a name="fusion.container.set.synopsis"></a><h4>
+<a name="id534648"></a>
+        <a href="set.html#fusion.container.set.synopsis">Synopsis</a>
+      </h4>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">T0</span> <span class="special">=</span> <span class="emphasis"><em>unspecified</em></span>
@@ -63,26 +63,26 @@
 <span class="keyword">struct</span> <span class="identifier">set</span><span class="special">;</span>
 </pre>
 <p>
-        The variadic class interface accepts <code class="computeroutput"><span class="number">0</span></code>
-        to <code class="computeroutput"><span class="identifier">FUSION_MAX_SET_SIZE</span></code> elements,
-        where <code class="computeroutput"><span class="identifier">FUSION_MAX_SET_SIZE</span></code>
-        is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>.
+        The variadic class interface accepts <tt class="computeroutput"><span class="number">0</span></tt>
+        to <tt class="computeroutput"><span class="identifier">FUSION_MAX_SET_SIZE</span></tt> elements,
+        where <tt class="computeroutput"><span class="identifier">FUSION_MAX_SET_SIZE</span></tt>
+        is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>.
         Example:
       </p>
 <pre class="programlisting">
 <span class="identifier">set</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span>
 </pre>
 <p>
-        You may define the preprocessor constant <code class="computeroutput"><span class="identifier">FUSION_MAX_SET_SIZE</span></code>
+        You may define the preprocessor constant <tt class="computeroutput"><span class="identifier">FUSION_MAX_SET_SIZE</span></tt>
         before including any Fusion header to change the default. Example:
       </p>
 <pre class="programlisting">
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_SET_SIZE</span> <span class="number">20</span>
 </pre>
-<a name="fusion.container.set.template_parameters"></a><h5>
-<a name="id2705527"></a>
-        <a class="link" href="set.html#fusion.container.set.template_parameters">Template parameters</a>
-      </h5>
+<a name="fusion.container.set.template_parameters"></a><h4>
+<a name="id534980"></a>
+        <a href="set.html#fusion.container.set.template_parameters">Template parameters</a>
+      </h4>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -109,7 +109,7 @@
 <tbody><tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
+                <tt class="computeroutput"><span class="identifier">T0</span></tt>...<tt class="computeroutput"><span class="identifier">TN</span></tt>
               </p>
               </td>
 <td>
@@ -124,44 +124,49 @@
               </td>
 </tr></tbody>
 </table></div>
-<a name="fusion.container.set.model_of"></a><h5>
-<a name="id2705634"></a>
-        <a class="link" href="set.html#fusion.container.set.model_of">Model of</a>
-      </h5>
+<a name="fusion.container.set.model_of"></a><h4>
+<a name="id535099"></a>
+        <a href="set.html#fusion.container.set.model_of">Model of</a>
+      </h4>
 <div class="itemizedlist"><ul type="disc">
-<li><a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+<li><a href="../sequence/concepts/associative_sequence.html" title="Associative
+        Sequence">Associative
           Sequence</a></li>
-<li><a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a></li>
+<li><a href="../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward Sequence</a></li>
 </ul></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">S</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">S</span></tt></span></dt>
 <dd><p>
-            A <code class="computeroutput"><span class="identifier">set</span></code> type
+            A <tt class="computeroutput"><span class="identifier">set</span></tt> type
           </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
 <dd><p>
-            An instance of <code class="computeroutput"><span class="identifier">set</span></code>
+            An instance of <tt class="computeroutput"><span class="identifier">set</span></tt>
           </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt></span></dt>
 <dd><p>
             Heterogeneous values
           </p></dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">fs</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">fs</span></tt></span></dt>
 <dd><p>
-            A <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward Sequence</a>
+            A <a href="../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward Sequence</a>
           </p></dd>
 </dl>
 </div>
-<a name="fusion.container.set.expression_semantics"></a><h5>
-<a name="id2705808"></a>
-        <a class="link" href="set.html#fusion.container.set.expression_semantics">Expression Semantics</a>
-      </h5>
+<a name="fusion.container.set.expression_semantics"></a><h4>
+<a name="id535294"></a>
+        <a href="set.html#fusion.container.set.expression_semantics">Expression Semantics</a>
+      </h4>
 <p>
         Semantics of an expression is defined only where it differs from, or is not
-        defined in <a class="link" href="../sequence/concepts/random_access_sequence.html" title="Random Access Sequence">Random
-        Access Sequence</a> and <a class="link" href="../sequence/concepts/associative_sequence.html" title="Associative Sequence">Associative
+        defined in <a href="../sequence/concepts/random_access_sequence.html" title="Random
+        Access Sequence">Random
+        Access Sequence</a> and <a href="../sequence/concepts/associative_sequence.html" title="Associative
+        Sequence">Associative
         Sequence</a>.
       </p>
 <div class="informaltable"><table class="table">
@@ -185,7 +190,7 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">S</span><span class="special">()</span></code>
+                <tt class="computeroutput"><span class="identifier">S</span><span class="special">()</span></tt>
               </p>
               </td>
 <td>
@@ -197,56 +202,58 @@
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
-                <span class="identifier">en</span><span class="special">)</span></code>
+                <tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
+                <span class="identifier">en</span><span class="special">)</span></tt>
               </p>
               </td>
 <td>
               <p>
-                Creates a set with elements <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.
-              </p>
-              </td>
-</tr>
-<tr>
-<td>
-              <p>
-                <code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">fs</span><span class="special">)</span></code>
-              </p>
-              </td>
-<td>
-              <p>
-                Copy constructs a set from a <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">fs</span></code>.
+                Creates a set with elements <tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt>.
               </p>
               </td>
 </tr>
 <tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
-                <span class="identifier">fs</span></code>
+                <tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">fs</span><span class="special">)</span></tt>
               </p>
               </td>
 <td>
               <p>
-                Assigns to a set, <code class="computeroutput"><span class="identifier">s</span></code>,
-                from a <a class="link" href="../sequence/concepts/forward_sequence.html" title="Forward Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">fs</span></code>.
+                Copy constructs a set from a <a href="../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
+                Sequence</a> <tt class="computeroutput"><span class="identifier">fs</span></tt>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
+                <span class="identifier">fs</span></tt>
+              </p>
+              </td>
+<td>
+              <p>
+                Assigns to a set, <tt class="computeroutput"><span class="identifier">s</span></tt>,
+                from a <a href="../sequence/concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
+                Sequence</a> <tt class="computeroutput"><span class="identifier">fs</span></tt>.
               </p>
               </td>
 </tr>
 </tbody>
 </table></div>
-<a name="fusion.container.set.example"></a><h5>
-<a name="id2706122"></a>
-        <a class="link" href="set.html#fusion.container.set.example">Example</a>
-      </h5>
+<a name="fusion.container.set.example"></a><h4>
+<a name="id535643"></a>
+        <a href="set.html#fusion.container.set.example">Example</a>
+      </h4>
 <pre class="programlisting">
 <span class="keyword">typedef</span> <span class="identifier">set</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">S</span><span class="special">;</span>
 <span class="identifier">S</span> <span class="identifier">s</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="number">5.5f</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/functions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/functions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a class="link" href="../sequence/intrinsic/metafunctions/has_key.html" title="has_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">has_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../sequence/intrinsic/metafunctions/has_key.html" title="has_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">has_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

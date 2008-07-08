@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Functional</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="prev" href="extension/iterator_facade.html" title="Iterator Facade">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.functional"></a><a class="link" href="functional.html" title="Functional">Functional</a>
-</h2></div></div></div>
+<a name="fusion.functional"></a><a href="functional.html" title="Functional">Functional</a></h2></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="functional/concepts.html">Concepts</a></span></dt>
 <dd><dl>
@@ -65,11 +64,11 @@
 <p>
       /functional.hpp&gt;
     </p>
-<a name="fusion.functional.fused_and_unfused_forms"></a><h4>
-<a name="id2812051"></a>
-      <a class="link" href="functional.html#fusion.functional.fused_and_unfused_forms">Fused and unfused
+<a name="fusion.functional.fused_and_unfused_forms"></a><h3>
+<a name="id653898"></a>
+      <a href="functional.html#fusion.functional.fused_and_unfused_forms">Fused and unfused
       forms</a>
-    </h4>
+    </h3>
 <p>
       What is a function call?
     </p>
@@ -80,33 +79,33 @@
       It is a name and a tuple written next to each other, left-to-right.
     </p>
 <p>
-      Although the C++ syntax does not allow to replace <code class="literal">(a,b,c)</code>
-      with some Fusion <a class="link" href="sequence.html" title="Sequence">Sequence</a>, introducing
+      Although the C++ syntax does not allow to replace <tt class="literal">(a,b,c)</tt>
+      with some Fusion <a href="sequence.html" title="Sequence">Sequence</a>, introducing
       yet another function provides a solution:
     </p>
 <pre class="programlisting">
 <span class="identifier">invoke</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span><span class="identifier">my_sequence</span><span class="special">)</span>
 </pre>
 <p>
-      Alternatively it is possible to apply a simple transformation to <code class="literal">f</code>
+      Alternatively it is possible to apply a simple transformation to <tt class="literal">f</tt>
       in order to achieve the same effect:
     </p>
 <pre class="programlisting">
 <span class="identifier">f</span> <span class="identifier">tuple</span> <span class="special">&lt;=&gt;</span> f' <span class="special">(</span><span class="identifier">tuple</span><span class="special">)</span>
 </pre>
 <p>
-      Now, <code class="literal">f'</code> is an unary function that takes the arguments to
-      <code class="computeroutput"><span class="identifier">f</span></code> as a tuple; <code class="literal">f'</code>
-      is the <span class="emphasis"><em>fused</em></span> form of <code class="computeroutput"><span class="identifier">f</span></code>.
+      Now, <tt class="literal">f'</tt> is an unary function that takes the arguments to
+      <tt class="computeroutput"><span class="identifier">f</span></tt> as a tuple; <tt class="literal">f'</tt>
+      is the <span class="emphasis"><em>fused</em></span> form of <tt class="computeroutput"><span class="identifier">f</span></tt>.
       Reading the above equivalence right-to-left to get the inverse transformation,
-      <code class="computeroutput"><span class="identifier">f</span></code> is the <span class="emphasis"><em>unfused</em></span>
-      form of <code class="literal">f'</code>.
+      <tt class="computeroutput"><span class="identifier">f</span></tt> is the <span class="emphasis"><em>unfused</em></span>
+      form of <tt class="literal">f'</tt>.
     </p>
-<a name="fusion.functional.calling_functions_and_function_objects"></a><h4>
-<a name="id2812292"></a>
-      <a class="link" href="functional.html#fusion.functional.calling_functions_and_function_objects">Calling
+<a name="fusion.functional.calling_functions_and_function_objects"></a><h3>
+<a name="id654164"></a>
+      <a href="functional.html#fusion.functional.calling_functions_and_function_objects">Calling
       functions and function objects</a>
-    </h4>
+    </h3>
 <p>
       Having generic C++ code call back arbitrary functions provided by the client
       used to be a heavily repetitive task, as different functions can differ in
@@ -119,8 +118,9 @@
     </p>
 <p>
       Transforming an unfused function into its fused counterpart allows n-ary calls
-      from an algorithm that invokes an unary <a class="link" href="functional/concepts/poly.html" title="Polymorphic Function Object">Polymorphic
-      Function Object</a> with <a class="link" href="sequence.html" title="Sequence">Sequence</a>
+      from an algorithm that invokes an unary <a href="functional/concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic
+      Function Object</a> with <a href="sequence.html" title="Sequence">Sequence</a>
       arguments.
     </p>
 <p>
@@ -129,11 +129,11 @@
       variant has a corresponding generator function template that returns an adapter
       instance for the given argument.
     </p>
-<a name="fusion.functional.making_fusion_code_callable_through_a_function_object_interface"></a><h4>
-<a name="id2812358"></a>
-      <a class="link" href="functional.html#fusion.functional.making_fusion_code_callable_through_a_function_object_interface">Making
+<a name="fusion.functional.making_fusion_code_callable_through_a_function_object_interface"></a><h3>
+<a name="id654240"></a>
+      <a href="functional.html#fusion.functional.making_fusion_code_callable_through_a_function_object_interface">Making
       Fusion code callable through a function object interface</a>
-    </h4>
+    </h3>
 <p>
       Transforming a fused function into its unfused counterpart allows to create
       function objects to accept arbitrary calls. In other words, an unary function

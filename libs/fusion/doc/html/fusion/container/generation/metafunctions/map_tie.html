@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>map_tie</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="MetaFunctions">
 <link rel="prev" href="vector_tie.html" title="vector_tie">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,37 +24,36 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.container.generation.metafunctions.map_tie"></a><a class="link" href="map_tie.html" title="map_tie">map_tie</a>
-</h5></div></div></div>
+<a name="fusion.container.generation.metafunctions.map_tie"></a><a href="map_tie.html" title="map_tie">map_tie</a></h5></div></div></div>
 <a name="fusion.container.generation.metafunctions.map_tie.description"></a><h6>
-<a name="id2723752"></a>
-            <a class="link" href="map_tie.html#fusion.container.generation.metafunctions.map_tie.description">Description</a>
+<a name="id555353"></a>
+            <a href="map_tie.html#fusion.container.generation.metafunctions.map_tie.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a class="link" href="../functions/vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">map_tie</span></code></a>.
+            Returns the result type of <a href="../functions/vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">map_tie</span></tt></a>.
           </p>
 <a name="fusion.container.generation.metafunctions.map_tie.synopsis"></a><h6>
-<a name="id2723795"></a>
-            <a class="link" href="map_tie.html#fusion.container.generation.metafunctions.map_tie.synopsis">Synopsis</a>
+<a name="id555403"></a>
+            <a href="map_tie.html#fusion.container.generation.metafunctions.map_tie.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">K0</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="keyword">typename</span> <span class="identifier">KN</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">D0</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">D1</span><span class="special">,...</span> <span class="keyword">typename</span> <span class="identifier">DN</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">map_tie</span><span class="special">;</span>
 </pre>
 <p>
-            The variadic function accepts <code class="computeroutput"><span class="number">0</span></code>
-            to <code class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></code>
-            elements, where <code class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></code>
-            is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>. You may define the preprocessor constant
-            <code class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></code> before
+            The variadic function accepts <tt class="computeroutput"><span class="number">0</span></tt>
+            to <tt class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></tt>
+            elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></tt>
+            is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>. You may define the preprocessor constant
+            <tt class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></tt> before
             including any Fusion header to change the default. Example:
           </p>
 <pre class="programlisting">
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_MAP_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.map_tie.parameters"></a><h6>
-<a name="id2724032"></a>
-            <a class="link" href="map_tie.html#fusion.container.generation.metafunctions.map_tie.parameters">Parameters</a>
+<a name="id555665"></a>
+            <a href="map_tie.html#fusion.container.generation.metafunctions.map_tie.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -83,9 +82,9 @@
 <tr>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">K0</span><span class="special">,</span>
+                    <tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span>
                     <span class="identifier">K1</span><span class="special">,...</span>
-                    <span class="identifier">KN</span></code>
+                    <span class="identifier">KN</span></tt>
                   </p>
                   </td>
 <td>
@@ -95,16 +94,16 @@
                   </td>
 <td>
                   <p>
-                    The key types for <code class="computeroutput"><span class="identifier">map_tie</span></code>
+                    The key types for <tt class="computeroutput"><span class="identifier">map_tie</span></tt>
                   </p>
                   </td>
 </tr>
 <tr>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">D0</span><span class="special">,</span>
+                    <tt class="computeroutput"><span class="identifier">D0</span><span class="special">,</span>
                     <span class="identifier">D1</span><span class="special">,...</span>
-                    <span class="identifier">DN</span></code>
+                    <span class="identifier">DN</span></tt>
                   </p>
                   </td>
 <td>
@@ -114,39 +113,39 @@
                   </td>
 <td>
                   <p>
-                    The arguments types for <code class="computeroutput"><span class="identifier">map_tie</span></code>
+                    The arguments types for <tt class="computeroutput"><span class="identifier">map_tie</span></tt>
                   </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.container.generation.metafunctions.map_tie.expression_semantics"></a><h6>
-<a name="id2724219"></a>
-            <a class="link" href="map_tie.html#fusion.container.generation.metafunctions.map_tie.expression_semantics">Expression
+<a name="id555877"></a>
+            <a href="map_tie.html#fusion.container.generation.metafunctions.map_tie.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
 <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">map_tie</span><span class="special">&lt;</span><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span><span class="special">,</span> <span class="identifier">D0</span><span class="special">,</span> <span class="identifier">D1</span><span class="special">,...</span> <span class="identifier">DN</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">;</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: <a class="link" href="../../map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a>&lt;<a class="link" href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a>&lt;K0, D0&amp;&gt;, <a class="link" href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a>&lt;K1,
-            D1&amp;&gt;,... <a class="link" href="../../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a>&lt;KN,
+            <span class="bold"><b>Return type</b></span>: <a href="../../map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a>&lt;<a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a>&lt;K0, D0&amp;&gt;, <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a>&lt;K1,
+            D1&amp;&gt;,... <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a>&lt;KN,
             DN&amp;&gt; &gt;
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Create a <a class="link" href="../../map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a> of references from <code class="computeroutput"><span class="identifier">D0</span><span class="special">,</span> <span class="identifier">D1</span><span class="special">,...</span> <span class="identifier">DN</span></code> with keys <code class="computeroutput"><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span></code>
+            <span class="bold"><b>Semantics</b></span>: Create a <a href="../../map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a> of references from <tt class="computeroutput"><span class="identifier">D0</span><span class="special">,</span> <span class="identifier">D1</span><span class="special">,...</span> <span class="identifier">DN</span></tt> with keys <tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span></tt>
           </p>
 <a name="fusion.container.generation.metafunctions.map_tie.header"></a><h6>
-<a name="id2724493"></a>
-            <a class="link" href="map_tie.html#fusion.container.generation.metafunctions.map_tie.header">Header</a>
+<a name="id556182"></a>
+            <a href="map_tie.html#fusion.container.generation.metafunctions.map_tie.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">map_tie</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">map_tie</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.container.generation.metafunctions.map_tie.example"></a><h6>
-<a name="id2724646"></a>
-            <a class="link" href="map_tie.html#fusion.container.generation.metafunctions.map_tie.example">Example</a>
+<a name="id556353"></a>
+            <a href="map_tie.html#fusion.container.generation.metafunctions.map_tie.example">Example</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">struct</span> <span class="identifier">int_key</span><span class="special">;</span>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>empty</title>
 <link rel="stylesheet" href="../../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="end.html" title="end">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,29 +24,28 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.sequence.intrinsic.functions.empty"></a><a class="link" href="empty.html" title="empty">empty</a>
-</h5></div></div></div>
+<a name="fusion.sequence.intrinsic.functions.empty"></a><a href="empty.html" title="empty">empty</a></h5></div></div></div>
 <a name="fusion.sequence.intrinsic.functions.empty.description"></a><h6>
-<a name="id2674050"></a>
-            <a class="link" href="empty.html#fusion.sequence.intrinsic.functions.empty.description">Description</a>
+<a name="id499854"></a>
+            <a href="empty.html#fusion.sequence.intrinsic.functions.empty.description">Description</a>
           </h6>
 <p>
-            Returns a type convertible to <code class="computeroutput"><span class="keyword">bool</span></code>
-            that evaluates to <code class="computeroutput"><span class="keyword">true</span></code> if
-            the sequence is empty, else, evaluates to <code class="computeroutput"><span class="keyword">false</span></code>.
+            Returns a type convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>
+            that evaluates to <tt class="computeroutput"><span class="keyword">true</span></tt> if
+            the sequence is empty, else, evaluates to <tt class="computeroutput"><span class="keyword">false</span></tt>.
           </p>
 <a name="fusion.sequence.intrinsic.functions.empty.synopsis"></a><h6>
-<a name="id2674110"></a>
-            <a class="link" href="empty.html#fusion.sequence.intrinsic.functions.empty.synopsis">Synopsis</a>
+<a name="id499920"></a>
+            <a href="empty.html#fusion.sequence.intrinsic.functions.empty.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
-<span class="keyword">typename</span> <a class="link" href="../metafunctions/empty.html" title="empty"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">empty</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="keyword">typename</span> <a href="../metafunctions/empty.html" title="empty"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">empty</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">empty</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequence.intrinsic.functions.empty.parameters"></a><h6>
-<a name="id2674248"></a>
-            <a class="link" href="empty.html#fusion.sequence.intrinsic.functions.empty.parameters">Parameters</a>
+<a name="id500076"></a>
+            <a href="empty.html#fusion.sequence.intrinsic.functions.empty.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -74,12 +73,13 @@
 <tbody><tr>
 <td>
                   <p>
-                    <code class="computeroutput"><span class="identifier">seq</span></code>
+                    <tt class="computeroutput"><span class="identifier">seq</span></tt>
                   </p>
                   </td>
 <td>
                   <p>
-                    Model of <a class="link" href="../../concepts/forward_sequence.html" title="Forward Sequence">Forward
+                    Model of <a href="../../concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
                     Sequence</a>
                   </p>
                   </td>
@@ -91,34 +91,34 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.sequence.intrinsic.functions.empty.expression_semantics"></a><h6>
-<a name="id2674351"></a>
-            <a class="link" href="empty.html#fusion.sequence.intrinsic.functions.empty.expression_semantics">Expression
+<a name="id500191"></a>
+            <a href="empty.html#fusion.sequence.intrinsic.functions.empty.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
 <span class="identifier">empty</span><span class="special">(</span><span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: Convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
+            <span class="bold"><b>Return type</b></span>: Convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Evaluates to <code class="computeroutput"><span class="keyword">true</span></code> if the sequence is empty, else, evaluates
-            to <code class="computeroutput"><span class="keyword">false</span></code>.
+            <span class="bold"><b>Semantics</b></span>: Evaluates to <tt class="computeroutput"><span class="keyword">true</span></tt> if the sequence is empty, else, evaluates
+            to <tt class="computeroutput"><span class="keyword">false</span></tt>.
           </p>
 <a name="fusion.sequence.intrinsic.functions.empty.header"></a><h6>
-<a name="id2674454"></a>
-            <a class="link" href="empty.html#fusion.sequence.intrinsic.functions.empty.header">Header</a>
+<a name="id500306"></a>
+            <a href="empty.html#fusion.sequence.intrinsic.functions.empty.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">empty</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">empty</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequence.intrinsic.functions.empty.example"></a><h6>
-<a name="id2674604"></a>
-            <a class="link" href="empty.html#fusion.sequence.intrinsic.functions.empty.example">Example</a>
+<a name="id500475"></a>
+            <a href="empty.html#fusion.sequence.intrinsic.functions.empty.example">Example</a>
           </h6>
 <pre class="programlisting">
-<a class="link" href="../../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">);</span>
+<a href="../../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">empty</span><span class="special">(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">false</span><span class="special">);</span>
 </pre>
 </div>

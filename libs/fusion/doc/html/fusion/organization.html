@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Organization</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="prev" href="quick_start.html" title="Quick Start">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,8 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="fusion.organization"></a><a class="link" href="organization.html" title="Organization">Organization</a>
-</h2></div></div></div>
+<a name="fusion.organization"></a><a href="organization.html" title="Organization">Organization</a></h2></div></div></div>
 <p>
       The library is organized into layers of modules, with each module addressing
       a particular area of responsibility. A module may not depend on modules in
@@ -34,10 +33,10 @@
 <p>
       The library is organized in three layers:
     </p>
-<a name="fusion.organization.layers"></a><h4>
-<a name="id2638179"></a>
-      <a class="link" href="organization.html#fusion.organization.layers">Layers</a>
-    </h4>
+<a name="fusion.organization.layers"></a><h3>
+<a name="id459044"></a>
+      <a href="organization.html#fusion.organization.layers">Layers</a>
+    </h3>
 <div class="blockquote"><blockquote class="blockquote">
 <p>
         </p>
@@ -48,15 +47,15 @@
       </p>
 </blockquote></div>
 <p>
-      The entire library is found in the <code class="computeroutput"><span class="string">"boost/fusion"</span></code>
+      The entire library is found in the <tt class="computeroutput"><span class="string">"boost/fusion"</span></tt>
       directory. Modules are organized in directories. Each module has its own header
       file placed in the same directory with the actual module-directory. For example,
-      there exists <code class="computeroutput"><span class="string">"boost/fusion/support.hpp"</span></code>
+      there exists <tt class="computeroutput"><span class="string">"boost/fusion/support.hpp"</span></tt>
       in the same directory as "boost/fusion/support". Everything, except
       those found inside "detail" directories, is public.
     </p>
 <p>
-      There is also a <code class="computeroutput"><span class="string">"boost/fusion/include/"</span></code>
+      There is also a <tt class="computeroutput"><span class="string">"boost/fusion/include/"</span></tt>
       directory that contains all the headers to all the components and modules.
       If you are unsure where to find a specific component or module, or don't want
       to fuss with hierarchy and nesting, use this.
@@ -65,10 +64,10 @@
       The library is header-only. There is no need to build object files to link
       against.
     </p>
-<a name="fusion.organization.directory"></a><h4>
-<a name="id2638267"></a>
-      <a class="link" href="organization.html#fusion.organization.directory">Directory</a>
-    </h4>
+<a name="fusion.organization.directory"></a><h3>
+<a name="id459143"></a>
+      <a href="organization.html#fusion.organization.directory">Directory</a>
+    </h3>
 <div class="itemizedlist"><ul type="disc">
 <li>
         tuple
@@ -186,12 +185,12 @@
         support
       </li>
 </ul></div>
-<a name="fusion.organization.example"></a><h4>
-<a name="id2638428"></a>
-      <a class="link" href="organization.html#fusion.organization.example">Example</a>
-    </h4>
+<a name="fusion.organization.example"></a><h3>
+<a name="id459322"></a>
+      <a href="organization.html#fusion.organization.example">Example</a>
+    </h3>
 <p>
-      If, for example, you want to use <code class="computeroutput"><span class="identifier">list</span></code>,
+      If, for example, you want to use <tt class="computeroutput"><span class="identifier">list</span></tt>,
       depending on the granularity that you desire, you may do so by including one
       of
     </p>
@@ -202,13 +201,13 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">list</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
-      The first includes all containers The second includes only <code class="computeroutput"><span class="identifier">list</span></code>
-      <sup>[<a name="id2638670" href="#ftn.id2638670" class="footnote">3</a>]</sup>
+      The first includes all containers The second includes only <tt class="computeroutput"><span class="identifier">list</span></tt>
+      <sup>[<a name="id459620" href="#ftn.id459620">3</a>]</sup>
       .
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id2638670" href="#id2638670" class="para">3</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id459620" href="#id459620">3</a>] </sup>
           Modules may contain smaller components. Header file information for each
           component will be provided as part of the component's documentation.
         </p></div>

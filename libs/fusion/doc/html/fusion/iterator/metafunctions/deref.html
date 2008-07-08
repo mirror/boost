@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>deref</title>
 <link rel="stylesheet" href="../../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="value_of.html" title="value_of">
@@ -12,10 +12,10 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../../index.htm">Home</a></td>
 <td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
 <td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,19 +24,18 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="fusion.iterator.metafunctions.deref"></a><a class="link" href="deref.html" title="deref">deref</a>
-</h4></div></div></div>
-<a name="fusion.iterator.metafunctions.deref.description"></a><h6>
-<a name="id2659233"></a>
-          <a class="link" href="deref.html#fusion.iterator.metafunctions.deref.description">Description</a>
-        </h6>
+<a name="fusion.iterator.metafunctions.deref"></a><a href="deref.html" title="deref">deref</a></h4></div></div></div>
+<a name="fusion.iterator.metafunctions.deref.description"></a><h5>
+<a name="id483305"></a>
+          <a href="deref.html#fusion.iterator.metafunctions.deref.description">Description</a>
+        </h5>
 <p>
           Returns the type that will be returned by dereferencing an iterator.
         </p>
-<a name="fusion.iterator.metafunctions.deref.synposis"></a><h6>
-<a name="id2659260"></a>
-          <a class="link" href="deref.html#fusion.iterator.metafunctions.deref.synposis">Synposis</a>
-        </h6>
+<a name="fusion.iterator.metafunctions.deref.synposis"></a><h5>
+<a name="id483336"></a>
+          <a href="deref.html#fusion.iterator.metafunctions.deref.synposis">Synposis</a>
+        </h5>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span>
@@ -47,8 +46,8 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id2659349"></a><p class="title"><b>Table 1.12. Parameters</b></p>
-<div class="table-contents"><table class="table" summary="Parameters">
+<a name="id483436"></a><p class="title"><b>Table 1.12. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -74,12 +73,13 @@
 <tbody><tr>
 <td>
               <p>
-                <code class="computeroutput"><span class="identifier">I</span></code>
+                <tt class="computeroutput"><span class="identifier">I</span></tt>
               </p>
               </td>
 <td>
               <p>
-                Model of <a class="link" href="../concepts/forward_iterator.html" title="Forward Iterator">Forward
+                Model of <a href="../concepts/forward_iterator.html" title="Forward
+        Iterator">Forward
                 Iterator</a>
               </p>
               </td>
@@ -89,46 +89,46 @@
               </p>
               </td>
 </tr></tbody>
-</table></div>
+</table>
 </div>
-<br class="table-break"><a name="fusion.iterator.metafunctions.deref.expression_semantics"></a><h6>
-<a name="id2659440"></a>
-          <a class="link" href="deref.html#fusion.iterator.metafunctions.deref.expression_semantics">Expression
+<a name="fusion.iterator.metafunctions.deref.expression_semantics"></a><h5>
+<a name="id483538"></a>
+          <a href="deref.html#fusion.iterator.metafunctions.deref.expression_semantics">Expression
           Semantics</a>
-        </h6>
+        </h5>
 <pre class="programlisting">
-<a class="link" href="deref.html" title="deref"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-          <span class="bold"><strong>Return type</strong></span>: Any type
+          <span class="bold"><b>Return type</b></span>: Any type
         </p>
 <p>
-          <span class="bold"><strong>Semantics</strong></span>: Returns the result of dereferencing
-          an iterator of type <code class="computeroutput"><span class="identifier">I</span></code>.
+          <span class="bold"><b>Semantics</b></span>: Returns the result of dereferencing
+          an iterator of type <tt class="computeroutput"><span class="identifier">I</span></tt>.
         </p>
-<a name="fusion.iterator.metafunctions.deref.header"></a><h6>
-<a name="id2659540"></a>
-          <a class="link" href="deref.html#fusion.iterator.metafunctions.deref.header">Header</a>
-        </h6>
+<a name="fusion.iterator.metafunctions.deref.header"></a><h5>
+<a name="id483653"></a>
+          <a href="deref.html#fusion.iterator.metafunctions.deref.header">Header</a>
+        </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">include</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<a name="fusion.iterator.metafunctions.deref.example"></a><h6>
-<a name="id2659682"></a>
-          <a class="link" href="deref.html#fusion.iterator.metafunctions.deref.example">Example</a>
-        </h6>
+<a name="fusion.iterator.metafunctions.deref.example"></a><h5>
+<a name="id483811"></a>
+          <a href="deref.html#fusion.iterator.metafunctions.deref.example">Example</a>
+        </h5>
 <pre class="programlisting">
-<span class="keyword">typedef</span> <a class="link" href="../../container/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../container/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="keyword">const</span> <span class="identifier">vec</span> <span class="identifier">const_vec</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a class="link" href="../../sequence/intrinsic/metafunctions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a class="link" href="next.html" title="next"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></code></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../sequence/intrinsic/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
 
-<span class="keyword">typedef</span> <a class="link" href="../../sequence/intrinsic/metafunctions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">const_vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">const_first</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a class="link" href="next.html" title="next"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></code></a><span class="special">&lt;</span><span class="identifier">const_first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">const_second</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../sequence/intrinsic/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">const_vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">const_first</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">const_first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">const_second</span><span class="special">;</span>
 
-<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a class="link" href="deref.html" title="deref"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></code></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&amp;&gt;));</span>
-<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a class="link" href="deref.html" title="deref"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></code></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&amp;&gt;));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&amp;&gt;));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&amp;&gt;));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
