@@ -81,7 +81,7 @@ set(result_type min_arg, result_type max_arg)
 {
   _min = min_arg;
   _max = max_arg;
-  assert(min_arg < max_arg);
+  assert(min_arg <= max_arg);
 
   _range = static_cast<base_result>(_max-_min)+1;
   _factor = 1;
@@ -122,7 +122,7 @@ public:
     BOOST_STATIC_ASSERT(!std::numeric_limits<typename base_type::result_type>::is_integer);
 #endif
 
-    assert(min_arg < max_arg);
+    assert(min_arg <= max_arg);
     set(min_arg, max_arg);
   }
 
