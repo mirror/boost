@@ -214,12 +214,12 @@ struct make_heterogeneous_system_impl
     template<class UnitsBegin, class ExponentsBegin>
     struct apply
     {
-        typedef typename push_front_if<!(is_zero<typename mpl::deref<ExponentsBegin>::type>::value)>::template apply<
+        typedef typename push_front_if<!(is_zero<typename ExponentsBegin::item>::value)>::template apply<
             typename make_heterogeneous_system_impl<N-1>::template apply<
-                typename mpl::next<UnitsBegin>::type,
-                typename mpl::next<ExponentsBegin>::type
+                typename UnitsBegin::next,
+                typename ExponentsBegin::next
             >::type,
-            heterogeneous_system_dim<typename mpl::deref<UnitsBegin>::type, typename mpl::deref<ExponentsBegin>::type>
+            heterogeneous_system_dim<typename UnitsBegin::item, typename ExponentsBegin::item>
         >::type type;
     };
 };
@@ -239,9 +239,9 @@ struct make_heterogeneous_system
 {
     typedef typename calculate_base_unit_exponents<typename System::type, Dimensions>::type exponents;
     BOOST_MPL_ASSERT_MSG((!boost::is_same<exponents, inconsistent>::value), the_specified_dimension_is_not_representible_in_the_given_system, (types<Dimensions, System>));
-    typedef typename make_heterogeneous_system_impl<mpl::size<typename System::type>::value>::template apply<
-        typename mpl::begin<typename System::type>::type,
-        typename mpl::begin<exponents>::type
+    typedef typename make_heterogeneous_system_impl<System::type::size::value>::template apply<
+        typename System::type,
+        exponents
     >::type unit_list;
     typedef heterogeneous_system<heterogeneous_system_impl<unit_list, Dimensions, no_scale> > type;
 };
@@ -314,9 +314,9 @@ struct unscale_heterogeneous_system_impl
     {
         typedef typename push_front_or_add<
             typename unscale_heterogeneous_system_impl<N-1>::template apply<
-                typename mpl::next<Begin>::type
+                typename Begin::next
             >::type,
-            typename unscale<typename mpl::deref<Begin>::type>::type
+            typename unscale<typename Begin::item>::type
         >::type type;
     };
 };
@@ -343,9 +343,9 @@ struct unscale<heterogeneous_system<T> >
     typedef heterogeneous_system<
         heterogeneous_system_impl<
             typename detail::unscale_heterogeneous_system_impl<
-                mpl::size<typename T::type>::value
+                T::type::size::value
             >::template apply<
-                typename mpl::begin<typename T::type>::type
+                typename T::type
             >::type,
             typename T::dimensions,
             no_scale
@@ -370,9 +370,9 @@ struct get_scale_list_of_heterogeneous_system_impl
     {
         typedef typename mpl::times<
             typename get_scale_list_of_heterogeneous_system_impl<N-1>::template apply<
-                typename mpl::next<Begin>::type
+                typename Begin::next
             >::type,
-            typename get_scale_list<typename mpl::deref<Begin>::type>::type
+            typename get_scale_list<typename Begin::item>::type
         >::type type;
     };
 };
@@ -395,7 +395,7 @@ struct get_scale_list<heterogeneous_system<T> >
 {
     typedef typename mpl::times<
         typename detail::get_scale_list_of_heterogeneous_system_impl<
-            mpl::size<typename T::type>::value
+            T::type::size::value
         >::template apply<typename T::type>::type,
         typename T::scale
     >::type type;

@@ -11,8 +11,6 @@
 #ifndef BOOST_UNITS_MAKE_SYSTEM_HPP
 #define BOOST_UNITS_MAKE_SYSTEM_HPP
 
-#include <boost/mpl/list/list10.hpp>
-
 #include <boost/units/config.hpp>
 #include <boost/units/dimensionless_type.hpp>
 #include <boost/units/homogeneous_system.hpp>
@@ -77,55 +75,55 @@ struct make_system<T0, na, na, na, na, na, na, na, na, na>
 template<class T0, class T1>
 struct make_system<T0, T1, na, na, na, na, na, na, na, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list2<T0, T1> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, dimensionless_type> > >::type> type;
 };
 
 template<class T0, class T1, class T2>
 struct make_system<T0, T1, T2, na, na, na, na, na, na, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list3<T0, T1, T2> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, dimensionless_type> > > >::type> type;
 };
 
 template<class T0, class T1, class T2, class T3>
 struct make_system<T0, T1, T2, T3, na, na, na, na, na, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list4<T0, T1, T2, T3> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, list<T3, dimensionless_type> > > > >::type> type;
 };
 
 template<class T0, class T1, class T2, class T3, class T4>
 struct make_system<T0, T1, T2, T3, T4, na, na, na, na, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list5<T0, T1, T2, T3, T4> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, list<T3, list<T4, dimensionless_type> > > > > >::type> type;
 };
 
 template<class T0, class T1, class T2, class T3, class T4, class T5>
 struct make_system<T0, T1, T2, T3, T4, T5, na, na, na, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list6<T0, T1, T2, T3, T4, T5> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, list<T3, list<T4, list<T5, dimensionless_type> > > > > > >::type> type;
 };
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6>
 struct make_system<T0, T1, T2, T3, T4, T5, T6, na, na, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list7<T0, T1, T2, T3, T4, T5, T6> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, list<T3, list<T4, list<T5, list<T6, dimensionless_type> > > > > > > >::type> type;
 };
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6, class T7>
 struct make_system<T0, T1, T2, T3, T4, T5, T6, T7, na, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list8<T0, T1, T2, T3, T4, T5, T6, T7> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, list<T3, list<T4, list<T5, list<T6, list<T7, dimensionless_type> > > > > > > > >::type> type;
 };
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8>
 struct make_system<T0, T1, T2, T3, T4, T5, T6, T7, T8, na>
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list9<T0, T1, T2, T3, T4, T5, T6, T7, T8> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, list<T3, list<T4, list<T5, list<T6, list<T7, list<T8, dimensionless_type> > > > > > > > > >::type> type;
 };
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6, class T7, class T8, class T9>
 struct make_system
 {
-    typedef homogeneous_system<typename detail::bubble_sort<mpl::list10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >::type> type;
+    typedef homogeneous_system<typename detail::insertion_sort<list<T0, list<T1, list<T2, list<T3, list<T4, list<T5, list<T6, list<T7, list<T8, list<T9, dimensionless_type> > > > > > > > > > >::type> type;
 };
 
 #endif

@@ -133,6 +133,7 @@ namespace units {
         reduce_unit<From::unit_type>::type,                             \
         reduce_unit<To::unit_type>::type>                               \
     {                                                                   \
+        static const bool is_defined = true;                            \
         typedef type_ type;                                             \
         static type value() { return(value_); }                         \
     };                                                                  \

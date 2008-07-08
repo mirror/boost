@@ -16,7 +16,6 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/next.hpp>
-#include <boost/mpl/push_front.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/less.hpp>
 
@@ -37,118 +36,102 @@ namespace units {
 
 namespace detail {
 
-template<bool second_is_less>
-struct sort_dims_conditional_swap;
+template<int N>
+struct insertion_sort_dims_insert;
 
+template<bool is_greater>
+struct insertion_sort_dims_comparison_impl;
+
+// have to recursively add the element to the next sequence.
 template<>
-struct sort_dims_conditional_swap<true>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        typedef T1 first;
-        typedef T0 second;
+struct insertion_sort_dims_comparison_impl<true> {
+    template<class Begin, int N, class T>
+    struct apply {
+        typedef list<
+            typename Begin::item,
+            typename insertion_sort_dims_insert<N - 1>::template apply<
+                typename Begin::next,
+                T
+            >::type
+        > type;
     };
 };
 
+// either prepend the current element or join it to
+// the first remaining element of the sequence.
 template<>
-struct sort_dims_conditional_swap<false>
-{
-    template<class T0, class T1>
-    struct apply
-    {
-        typedef T0 first;
-        typedef T1 second;
+struct insertion_sort_dims_comparison_impl<false> {
+    template<class Begin, int N, class T>
+    struct apply {
+        typedef typename push_front_or_add<Begin, T>::type type;
     };
 };
 
 template<int N>
-struct sort_dims_pass_impl
-{
-    template<class Begin, class Current>
-    struct apply
-    {
-        typedef typename mpl::deref<Begin>::type val;
-        typedef typename sort_dims_conditional_swap<mpl::less<val, Current>::value>::template apply<Current, val> pair;
-        typedef typename sort_dims_pass_impl<N-1>::template apply<typename mpl::next<Begin>::type, typename pair::second> next;
-        typedef typename push_front_or_add<typename next::type, typename pair::first>::type type;
-        enum { value = next::value || mpl::less<val, Current>::value };
+struct insertion_sort_dims_insert {
+    template<class Begin, class T>
+    struct apply {
+        typedef typename insertion_sort_dims_comparison_impl<mpl::less<typename Begin::item, T>::value>::template apply<
+            Begin,
+            N,
+            T
+        >::type type;
     };
 };
 
 template<>
-struct sort_dims_pass_impl<0>
-{
-    template<class Begin, class Current>
-    struct apply
-    {
-        typedef typename mpl::push_front<dimensionless_type, Current>::type type;
-        enum { value = false };
-    };
-};
-
-template<bool>
-struct sort_dims_impl;
-
-template<>
-struct sort_dims_impl<true>
-{
-    template<class T>
-    struct apply
-    {
-        typedef typename mpl::begin<T>::type begin;
-        typedef typename sort_dims_pass_impl<mpl::size<T>::value - 1>::template apply<
-            typename mpl::next<begin>::type,
-            typename mpl::deref<begin>::type
-        > single_pass;
-        typedef typename sort_dims_impl<(single_pass::value)>::template apply<typename single_pass::type>::type type;
-    };
-};
-
-template<>
-struct sort_dims_impl<false>
-{
-    template<class T>
-    struct apply
-    {
-        typedef T type;
+struct insertion_sort_dims_insert<0> {
+    template<class Begin, class T>
+    struct apply {
+        typedef list<T, dimensionless_type> type;
     };
 };
 
 template<int N>
-struct sort_dims_one_or_zero
-{
-    template<class T>
-    struct apply
-    {
-        typedef typename sort_dims_impl<true>::template apply<T>::type type;
+struct insertion_sort_dims_mpl_sequence {
+    template<class Begin>
+    struct apply {
+        typedef typename insertion_sort_dims_mpl_sequence<N - 1>::template apply<typename mpl::next<Begin>::type>::type next;
+        typedef typename insertion_sort_dims_insert<(next::size::value)>::template apply<next, typename mpl::deref<Begin>::type>::type type;
     };
 };
 
 template<>
-struct sort_dims_one_or_zero<0>
-{
-    template<class T>
-    struct apply
-    {
+struct insertion_sort_dims_mpl_sequence<0> {
+    template<class Begin>
+    struct apply {
         typedef dimensionless_type type;
     };
 };
 
+template<int N>
+struct insertion_sort_dims_impl {
+    template<class Begin>
+    struct apply {
+        typedef typename insertion_sort_dims_impl<N - 1>::template apply<typename Begin::next>::type next;
+        typedef typename insertion_sort_dims_insert<(next::size::value)>::template apply<next, typename Begin::item>::type type;
+    };
+};
+
 template<>
-struct sort_dims_one_or_zero<1>
-{
-    template<class T>
-    struct apply
-    {
-        typedef typename mpl::push_front<dimensionless_type, typename mpl::front<T>::type>::type type;
+struct insertion_sort_dims_impl<0> {
+    template<class Begin>
+    struct apply {
+        typedef dimensionless_type type;
     };
 };
 
 template<class T>
 struct sort_dims
 {
-    typedef typename sort_dims_one_or_zero<mpl::size<T>::value>::template apply<T>::type type;
+    typedef typename insertion_sort_dims_mpl_sequence<mpl::size<T>::value>::template apply<typename mpl::begin<T>::type>::type type;
+};
+
+
+template<class T, class Next>
+struct sort_dims<list<T, Next> >
+{
+    typedef typename insertion_sort_dims_impl<list<T, Next>::size::value>::template apply<list<T, Next> >::type type;
 };
 
 /// sorted sequences can be merged in linear time
@@ -164,13 +147,13 @@ struct merge_dimensions_func<true, false>
     template<typename Begin1, typename Begin2, int N1, int N2>
     struct apply
     {
-        typedef typename mpl::push_front<
+        typedef list<
+            typename Begin1::item,
             typename merge_dimensions_impl<N1 - 1, N2>::template apply<
-                typename boost::mpl::next<Begin1>::type,
+                typename Begin1::next,
                 Begin2
-            >::type,
-            typename boost::mpl::deref<Begin1>::type
-        >::type type;
+            >::type
+        > type;
     };
 };
 
@@ -179,13 +162,13 @@ struct merge_dimensions_func<false, true> {
     template<typename Begin1, typename Begin2, int N1, int N2>
     struct apply
     {
-        typedef typename mpl::push_front<
+        typedef list<
+            typename Begin2::item,
             typename merge_dimensions_impl<N2 - 1, N1>::template apply<
-                typename boost::mpl::next<Begin2>::type,
+                typename Begin2::next,
                 Begin1
-            >::type,
-            typename boost::mpl::deref<Begin2>::type
-        >::type type;
+            >::type
+        > type;
     };
 };
 
@@ -194,11 +177,11 @@ struct merge_dimensions_func<false, false> {
     template<typename Begin1, typename Begin2, int N1, int N2>
     struct apply
     {
-        typedef typename mpl::plus<typename boost::mpl::deref<Begin1>::type, typename boost::mpl::deref<Begin2>::type>::type combined;
+        typedef typename mpl::plus<typename Begin1::item, typename Begin2::item>::type combined;
         typedef typename push_front_if<!is_empty_dim<combined>::value>::template apply<
             typename merge_dimensions_impl<N1 - 1, N2 - 1>::template apply<
-                typename boost::mpl::next<Begin1>::type,
-                typename boost::mpl::next<Begin2>::type
+                typename Begin1::next,
+                typename Begin2::next
             >::type,
             combined
         >::type type;
@@ -210,8 +193,8 @@ struct merge_dimensions_impl {
     template<typename Begin1, typename Begin2>
     struct apply
     {
-        typedef typename boost::mpl::deref<Begin1>::type dim1;
-        typedef typename boost::mpl::deref<Begin2>::type dim2;
+        typedef typename Begin1::item dim1;
+        typedef typename Begin2::item dim2;
 
         typedef typename merge_dimensions_func<(mpl::less<dim1,dim2>::value == true),
                 (mpl::less<dim2,dim1>::value == true)>::template apply<
@@ -226,11 +209,11 @@ struct merge_dimensions_impl {
 template<typename Sequence1, typename Sequence2>
 struct merge_dimensions
 {
-    typedef typename detail::merge_dimensions_impl<boost::mpl::size<Sequence1>::value, 
-                                                   boost::mpl::size<Sequence2>::value>::template 
+    typedef typename detail::merge_dimensions_impl<Sequence1::size::value, 
+                                                   Sequence2::size::value>::template 
         apply<
-            typename boost::mpl::begin<Sequence1>::type,
-            typename boost::mpl::begin<Sequence2>::type
+            Sequence1,
+            Sequence2
         >::type type;
 };
 
@@ -240,12 +223,12 @@ struct iterator_to_list
     template<typename Begin>
     struct apply
     {
-        typedef typename mpl::push_front<
+        typedef list<
+            typename Begin::item,
             typename iterator_to_list<N - 1>::template apply<
-                typename boost::mpl::next<Begin>::type
-            >::type,
-            typename boost::mpl::deref<Begin>::type
-        >::type type;
+                typename Begin::next
+            >::type
+        > type;
     };
 };
 
@@ -293,12 +276,12 @@ struct static_inverse_impl
 {
     template<typename Begin>
     struct apply {
-        typedef typename boost::mpl::push_front<
+        typedef list<
+            typename mpl::negate<typename Begin::item>::type,
             typename static_inverse_impl<N - 1>::template apply<
-                typename boost::mpl::next<Begin>::type
-            >::type,
-            typename mpl::negate<typename boost::mpl::deref<Begin>::type>::type
-        >::type type;
+                typename Begin::next
+            >::type
+        > type;
     };
 };
 
@@ -318,10 +301,10 @@ struct static_power_impl
     template<typename Begin, typename Ex>
     struct apply
     {
-        typedef typename mpl::push_front<
-            typename detail::static_power_impl<N - 1>::template apply<typename mpl::next<Begin>::type, Ex>::type,
-            typename mpl::times<typename mpl::deref<Begin>::type, Ex>::type
-        >::type type;
+        typedef list<
+            typename mpl::times<typename Begin::item, Ex>::type,
+            typename detail::static_power_impl<N - 1>::template apply<typename Begin::next, Ex>::type
+        > type;
     };
 };
 
@@ -339,10 +322,10 @@ template<int N>
 struct static_root_impl {
     template<class Begin, class Ex>
     struct apply {
-        typedef typename mpl::push_front<
-            typename detail::static_root_impl<N - 1>::template apply<typename mpl::next<Begin>::type, Ex>::type,
-            typename mpl::divides<typename mpl::deref<Begin>::type, Ex>::type
-        >::type type;
+        typedef list<
+            typename mpl::divides<typename Begin::item, Ex>::type,
+            typename detail::static_root_impl<N - 1>::template apply<typename Begin::next, Ex>::type
+        > type;
     };
 };
 

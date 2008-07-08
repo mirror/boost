@@ -11,11 +11,12 @@
 #ifndef BOOST_UNITS_DETAIL_PUSH_FRONT_IF_HPP
 #define BOOST_UNITS_DETAIL_PUSH_FRONT_IF_HPP
 
-#include <boost/mpl/push_front.hpp>
-
 namespace boost {
 
 namespace units {
+
+template<class T, class Next>
+struct list;
 
 namespace detail {
 
@@ -26,7 +27,7 @@ template<>
 struct push_front_if<true> {
     template<class L, class T>
     struct apply {
-        typedef typename mpl::push_front<L, T>::type type;
+        typedef list<T, L> type;
     };
 };
 

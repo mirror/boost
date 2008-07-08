@@ -13,6 +13,7 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 #include <boost/units/config.hpp>
@@ -47,9 +48,20 @@ class unit
        
         this_type& operator=(const this_type&) { }
         
+        // sun will ignore errors resulting from templates
+        // instantiated in the return type of a function.
+        // Make sure that we get an error anyway by putting.
+        // the check in the destructor.
+        #ifdef __SUNPRO_CC
+        ~unit() {
+            BOOST_MPL_ASSERT((detail::check_system<System, Dim>));
+            BOOST_MPL_ASSERT((is_dimension_list<Dim>));
+        }
+        #else
     private:
-        BOOST_STATIC_ASSERT((detail::check_system<System, Dim>::value == true));
-        BOOST_STATIC_ASSERT((is_dimension_list<Dim>::value == true));
+        BOOST_MPL_ASSERT((detail::check_system<System, Dim>));
+        BOOST_MPL_ASSERT((is_dimension_list<Dim>));
+        #endif
 };
 
 }
@@ -105,28 +117,20 @@ struct unary_minus_typeof_helper< unit<Dim,System> >
 
 /// unit add typeof helper
 /// INTERNAL ONLY
-template<class Dim1,
-         class Dim2,
+template<class Dim,
          class System>
-struct add_typeof_helper< unit<Dim1,System>,unit<Dim2,System> >
+struct add_typeof_helper< unit<Dim,System>,unit<Dim,System> >
 {
-    // ensure dimension lists are commensurate
-    BOOST_STATIC_ASSERT((is_same<Dim1,Dim2>::value == true));
-
-    typedef unit<Dim1,System>   type;
+    typedef unit<Dim,System> type;
 };
 
 /// unit subtract typeof helper
 /// INTERNAL ONLY
-template<class Dim1,
-         class Dim2,
+template<class Dim,
          class System>
-struct subtract_typeof_helper< unit<Dim1,System>,unit<Dim2,System> >
+struct subtract_typeof_helper< unit<Dim,System>,unit<Dim,System> >
 {
-    // ensure dimension lists are commensurate
-    BOOST_STATIC_ASSERT((is_same<Dim1,Dim2>::value == true));
-
-    typedef unit<Dim1,System>   type;
+    typedef unit<Dim,System>   type;
 };
 
 /// unit multiply typeof helper for two identical homogeneous systems

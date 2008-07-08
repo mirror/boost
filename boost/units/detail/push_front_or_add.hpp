@@ -24,6 +24,9 @@ namespace boost {
 
 namespace units {
 
+template<class Item, class Next>
+struct list;
+
 namespace detail {
 
 template<class T>
@@ -39,9 +42,9 @@ struct push_front_or_add_impl<true>
     template<typename Sequence, typename T>
     struct apply
     {
-        typedef typename mpl::plus<T, typename mpl::front<Sequence>::type>::type item;
+        typedef typename mpl::plus<T, typename Sequence::item>::type item;
         typedef typename push_front_if<!is_empty_dim<item>::value>::template apply<
-            typename mpl::pop_front<Sequence>::type,
+            typename Sequence::next,
             item
         > type;
     };
@@ -53,14 +56,14 @@ struct push_front_or_add_impl<false>
     template<typename Sequence, typename T>
     struct apply
     {
-        typedef typename mpl::push_front<Sequence, T>::type type;
+        typedef list<T, Sequence> type;
     };
 };
 
 template<typename Sequence, typename T>
 struct push_front_or_add
 {
-    typedef typename push_front_or_add_impl<boost::is_same<typename T::tag_type, typename mpl::front<Sequence>::type::tag_type>::value>::template apply<
+    typedef typename push_front_or_add_impl<boost::is_same<typename T::tag_type, typename Sequence::item::tag_type>::value>::template apply<
         Sequence,
         T
     >::type type;
@@ -69,7 +72,7 @@ struct push_front_or_add
 template<typename T>
 struct push_front_or_add<dimensionless_type, T>
 {
-    typedef typename mpl::push_front<dimensionless_type, T>::type type;
+    typedef list<T, dimensionless_type> type;
 };
 
 } // namespace detail

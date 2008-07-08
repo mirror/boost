@@ -141,11 +141,11 @@ struct eval_scale_list_impl
     template<class Begin>
     struct apply
     {
-        typedef typename eval_scale_list_impl<N-1>::template apply<typename mpl::next<Begin>::type> next_iteration;
-        typedef typename multiply_typeof_helper<typename next_iteration::type, typename mpl::deref<Begin>::type::value_type>::type type;
+        typedef typename eval_scale_list_impl<N-1>::template apply<typename Begin::next> next_iteration;
+        typedef typename multiply_typeof_helper<typename next_iteration::type, typename Begin::item::value_type>::type type;
         static type value()
         {
-            return(next_iteration::value() * mpl::deref<Begin>::type::value());
+            return(next_iteration::value() * Begin::item::value());
         }
     };
 };
@@ -168,7 +168,7 @@ struct eval_scale_list_impl<0>
 
 /// INTERNAL ONLY
 template<class T>
-struct eval_scale_list : detail::eval_scale_list_impl<mpl::size<T>::value>::template apply<typename mpl::begin<T>::type> {};
+struct eval_scale_list : detail::eval_scale_list_impl<T::size::value>::template apply<T> {};
 
 } // namespace units
 

@@ -13,8 +13,6 @@
 
 #include <iosfwd>
 
-#include <boost/type_traits/is_base_and_derived.hpp>
-
 #include <boost/units/config.hpp>
 #include <boost/units/conversion.hpp>
 #include <boost/units/heterogeneous_system.hpp>
@@ -33,7 +31,9 @@ struct reduce_unit<absolute<unit<D, S> > >
 
 namespace detail {
 
-struct undefined_affine_conversion_base { };
+struct undefined_affine_conversion_base {
+    static const bool is_defined = false;
+};
 
 } // namespace detail
 
@@ -89,14 +89,8 @@ struct conversion_helper<quantity<absolute<Unit1>, T1>, quantity<absolute<Unit2>
         return(
             to_quantity_type::from_value(
                 detail::affine_conversion_impl<
-                    !boost::is_base_and_derived<
-                        detail::undefined_affine_conversion_base, 
-                        affine_conversion_helper<typename reduce_unit<Unit1>::type, typename reduce_unit<Unit2>::type>
-                    >::value,
-                    !boost::is_base_and_derived<
-                        detail::undefined_affine_conversion_base,
-                        affine_conversion_helper<typename reduce_unit<Unit2>::type, typename reduce_unit<Unit1>::type>
-                    >::value
+                    affine_conversion_helper<typename reduce_unit<Unit1>::type, typename reduce_unit<Unit2>::type>::is_defined,
+                    affine_conversion_helper<typename reduce_unit<Unit2>::type, typename reduce_unit<Unit1>::type>::is_defined
                 >::template apply<Unit1, Unit2, T1, T2>::value(source.value())
             )
         );

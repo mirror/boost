@@ -16,8 +16,6 @@
 #include <boost/type_traits/is_same.hpp>
 
 #include <boost/mpl/arithmetic.hpp>
-#include <boost/mpl/begin.hpp>
-#include <boost/mpl/size.hpp>
 
 #include <boost/units/static_rational.hpp>
 #include <boost/units/detail/dimension_list.hpp>
@@ -62,8 +60,8 @@ struct make_dimension_list
 template<typename DL,typename Ex> 
 struct static_power
 {
-    typedef typename detail::static_power_impl<mpl::size<DL>::value>::template apply<
-        typename mpl::begin<DL>::type,
+    typedef typename detail::static_power_impl<DL::size::value>::template apply<
+        DL,
         Ex
     >::type type;    
 };
@@ -72,8 +70,8 @@ struct static_power
 template<typename DL,typename Rt> 
 struct static_root
 {
-    typedef typename detail::static_root_impl<mpl::size<DL>::value>::template apply<
-        typename mpl::begin<DL>::type,
+    typedef typename detail::static_root_impl<DL::size::value>::template apply<
+        DL,
         Rt
     >::type type;    
 };
@@ -125,9 +123,9 @@ struct divides_impl<boost::units::detail::dimension_list_tag,boost::units::detai
         typedef typename boost::units::detail::merge_dimensions<
             T0,
             typename boost::units::detail::static_inverse_impl<
-                mpl::size<T1>::value
+                T1::size::value
             >::template apply<
-                typename mpl::begin<T1>::type
+                T1
             >::type
         >::type type;
     };

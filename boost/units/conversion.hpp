@@ -70,6 +70,7 @@ struct conversion_helper
     template<>                                                              \
     struct base_unit_converter<Source, reduce_unit<Destination::unit_type>::type>   \
     {                                                                       \
+        static const bool is_defined = true;                                \
         typedef type_ type;                                                 \
         static type value() { return(value_); }                             \
     };                                                                      \
@@ -95,6 +96,7 @@ struct conversion_helper
         BOOST_UNITS_MAKE_HETEROGENEOUS_UNIT(Destination, typename Source::dimension_type)\
     >                                                                       \
     {                                                                       \
+        static const bool is_defined = true;                                \
         typedef type_ type;                                                 \
         static type value() { return(value_); }                             \
     };                                                                      \
@@ -112,6 +114,7 @@ struct conversion_helper
     template<>                                                      \
     struct unscaled_get_default_conversion<unscale<Source>::type>   \
     {                                                               \
+        static const bool is_defined = true;                        \
         typedef Dest type;                                          \
     };                                                              \
     }                                                               \
@@ -130,6 +133,7 @@ struct conversion_helper
     template<BOOST_PP_SEQ_ENUM(Params)>                                 \
     struct unscaled_get_default_conversion<Source>                      \
     {                                                                   \
+        static const bool is_defined = true;                            \
         typedef Dest type;                                              \
     };                                                                  \
     }                                                                   \
