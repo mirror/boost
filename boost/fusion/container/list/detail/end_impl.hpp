@@ -39,7 +39,7 @@ namespace boost { namespace fusion
                 type;
     
                 static type
-                call(Sequence& t)
+                call(Sequence&)
                 {
                     return type();
                 }

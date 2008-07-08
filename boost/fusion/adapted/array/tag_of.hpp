@@ -25,7 +25,7 @@ namespace boost { namespace fusion
     namespace traits
     {
         template<typename T, std::size_t N>
-#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+#if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
         struct tag_of<boost::array<T,N>, void >
 #else
         struct tag_of<boost::array<T,N> >

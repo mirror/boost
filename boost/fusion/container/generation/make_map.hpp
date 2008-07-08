@@ -78,7 +78,7 @@ namespace boost { namespace fusion
             BOOST_PP_ENUM_PARAMS(N, typename K)
           , BOOST_PP_ENUM_PARAMS(N, typename D)
         >
-#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+#if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
          #define TEXT(z, n, text) , text
          struct make_map<BOOST_PP_ENUM_PARAMS(N, K), BOOST_PP_ENUM_PARAMS(N, D) BOOST_PP_REPEAT_FROM_TO(N, FUSION_MAX_VECTOR_SIZE, TEXT, void_) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_VECTOR_SIZE, TEXT, void_)>
          #undef TEXT

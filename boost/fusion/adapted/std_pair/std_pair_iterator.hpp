@@ -14,7 +14,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/minus.hpp>
-#include <utility>
+#include <boost/config/no_tr1/utility.hpp>
 
 namespace boost { namespace fusion
 {

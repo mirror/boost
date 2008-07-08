@@ -22,7 +22,7 @@ namespace boost { namespace fusion
         };
 
         template <typename Sequence, typename F>
-#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+#if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
         struct transform<Sequence, F, void_>
 #else
         struct transform<Sequence, F>

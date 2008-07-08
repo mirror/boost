@@ -11,7 +11,7 @@
 #include <boost/fusion/support/tag_of_fwd.hpp>
 #include <boost/fusion/adapted/struct.hpp>
 #include <boost/mpl/int.hpp>
-#include <utility>
+#include <boost/config/no_tr1/utility.hpp>
 
 namespace boost { namespace fusion
 {
@@ -20,7 +20,7 @@ namespace boost { namespace fusion
     namespace traits
     {
         template <typename T1, typename T2>
-#if defined(BOOST_PARTIAL_SPECIALIZATION_EXPLICT_ARGS)
+#if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
         struct tag_of<std::pair<T1, T2>, void >
 #else
         struct tag_of<std::pair<T1, T2> >

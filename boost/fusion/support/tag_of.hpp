@@ -16,7 +16,7 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
-#include <utility>
+#include <boost/config/no_tr1/utility.hpp>
 
 namespace boost
 {
