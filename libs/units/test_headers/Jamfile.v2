@@ -1,6 +1,6 @@
 # Jamfile.v2
 #
-# Copyright (c) 2007
+# Copyright (c) 2007-2008
 # Steven Watanabe
 #
 # Distributed under the Boost Software License, Version 1.0. (See
@@ -11,19 +11,21 @@ import testing ;
 import path ;
 import regex ;
 import print ;
-import generate_header ;
 
 project test_headers :
     requirements <include>$(BOOST_ROOT) <include>../../..
 ;
 
-headers = ;
+headers = [ path.glob-tree ../../../boost/units : *.hpp : detail ] ;
 
 rule setup ( ) {
-  for local file in [ path.glob-tree ../../../boost/units : *.hpp : cmath_*_impl*.hpp ] {
+  for local file in $(headers) {
 
-    headers += $(file) ;
-    result += [ compile test.cpp : <define>BOOST_UNITS_HEADER_NAME=$(file) <dependency>$(file) : [ regex.replace [ path.relative-to ../../.. $(file) ] "/" "_" ] ] ;
+    result += [ compile test.cpp :
+                 <define>BOOST_UNITS_HEADER_NAME=$(file)
+                 <dependency>$(file)
+               : 
+                 [ regex.replace [ path.relative-to ../../.. $(file) ] "/" "_" ] ] ;
 
   }
   return $(result) ;
@@ -31,13 +33,24 @@ rule setup ( ) {
 
 tests = [ setup ] ;
 
-generate-include-all-cpp include_all1 : $(headers) ;
-generate-include-all-cpp include_all2 : $(headers) ;
+rule generate-include-all ( target : sources * : properties * ) {
+
+    print.output $(target) ;
+
+    for local file in $(sources) {
+        print.text "#include <$(file:G=)>
+" : overwrite ;
+    }
+
+}
+
+make include_all1.cpp : $(headers) : @generate-include-all ;
+make include_all2.cpp : $(headers) : @generate-include-all ;
 
 import testing ;
 
 test-suite units_headers :
   $(tests)
 # this ought to catch non-inlined functions and other duplicate definitions
-  [ link include_all1 include_all2 main.cpp : <include>. : include_all_headers ]
+  [ link include_all1.cpp include_all2.cpp main.cpp : <include>. : include_all_headers ]
   ;

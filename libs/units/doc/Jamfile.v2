@@ -11,7 +11,9 @@ import path ;
 import quickbook ;
 using boostbook ;
 using doxygen ;
-import generate_base_units ;
+import print ;
+import regex ;
+import sequence ;
 
 path-constant here : . ;
 
@@ -32,7 +34,7 @@ doxygen $(target)
                                    \"BOOST_UNITS_TYPEOF(a)=typeof(a)\" \\
                                    \"BOOST_PREVENT_MACRO_SUBSTITUTION=\" \\
                                    \"BOOST_UNITS_HAS_TYPEOF=1\" \\
-                                   \"BOOST_UNITS_NON_SI_UNIT(namespace_, name_, symbol_, factor, other_unit, id)= \\
+                                   \"BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(namespace_, name_, name_string, symbol_, factor, other_unit, id)= \\
                                    namespace boost { namespace units { namespace namespace_ { \\
                                      struct name_ ## _base_unit : boost::units::base_unit<name_ ## _base_unit, other_unit::dimension_type, id> { \\
                                        static const char* name(); \\
@@ -125,10 +127,47 @@ run_doxygen abstract_reference
     "Abstract System Reference"
   ;
 
-generated-qbk base_units : [ path.glob-tree $(here)/../../../boost/units/base_units : *.hpp : detail conversions.hpp ] ;
+rule less ( a b ) {
+    if [ path.basename $(a) ]  < [ path.basename $(b) ]  {
+        return true ;
+    }
+}
+
+rule generate-qbk ( target : sources * : properties * ) {
+    print.output $(target) ;
+    local as-path = [ sequence.transform path.make : $(sources:G=) ] ;
+    local known = ;
+    local duplicated = ;
+    for local file in $(as-path) {
+        local base = [ path.basename $(file) ] ;
+        if $(base) in $(known) {
+            if ! $(base) in $(duplicated) {
+                duplicated += $(base) ;
+            }
+        } else {
+            known += $(base) ;
+        }
+    }
+    for local file in [ sequence.insertion-sort $(as-path) : less ] {
+        local output_filename = [ path.relative-to [ path.make $(here)/../../.. ] $(file) ] ;
+        local base_filename = [ path.basename $(file) ] ;
+        local base_unit = [ regex.replace $(base_filename) "\\.hpp" "" ] ;
+        if $(base_filename) in $(duplicated) {
+            # tack the directory name onto the end
+            local dir-name = [ path.basename [ path.parent $(file) ] ] ;
+            base_unit = "$(base_unit) ($(dir-name))" ;
+        }
+# this looks better, but it won't work until my boostbook patch for
+# annotation.xsl gets applied.
+#        print.text "[headerref $(output_filename) $(base_unit)]\\n" : overwrite ;
+        print.text "[headerref $(output_filename)]\\n" : overwrite ;
+    }
+}
+
+make base_units.qbk : [ path.glob-tree $(here)/../../../boost/units/base_units : *.hpp : detail conversions.hpp ] : @generate-qbk ;
 explicit base_units ;
 
-install base_units_install : base_units : <location>. ;
+install base_units_install : base_units.qbk : <location>. ;
 
 xml units
   :

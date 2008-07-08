@@ -49,6 +49,8 @@
 
 #include <boost/lambda/bind.hpp>
 
+static const double pi = 3.14159265358979323846;
+
 //[lambda_snippet_1
 
 int main(int argc, char **argv) {
@@ -105,7 +107,7 @@ int main(int argc, char **argv) {
    boost::function<bu::quantity<si::current> (bu::quantity<si::time>) >
        i = iamp
            * bl::bind(static_cast<bu::dimensionless_quantity<si::system, double>::type (*)(const bu::quantity<si::plane_angle>&)>(bu::sin),
-                      2.0 * M_PI * si::radian * f * bl::_1)
+                      2.0 * pi * si::radian * f * bl::_1)
            + i0;
 
    cout << "Oscillating current:" << endl
