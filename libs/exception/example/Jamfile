@@ -9,7 +9,7 @@ exe example_io : example_io.cpp ;
 obj error_info_1 : error_info_1.cpp ;
 obj error_info_2 : error_info_2.cpp ;
 obj cloning_1 : cloning_1.cpp ;
-obj cloning_2 : cloning_2.cpp ;
+obj cloning_2 : cloning_2.cpp : <threading>multi ;
 obj info_tuple : info_tuple.cpp ;
 obj enable_error_info : enable_error_info.cpp ;
 obj logging : logging.cpp ;

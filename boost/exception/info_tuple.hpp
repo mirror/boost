@@ -16,7 +16,7 @@ boost
         class E,
         class Tag1,class T1,
         class Tag2,class T2 >
-	inline
+    inline
     E const &
     operator<<(
         E const & x,
@@ -32,7 +32,7 @@ boost
         class Tag1,class T1,
         class Tag2,class T2,
         class Tag3,class T3 >
-	inline
+    inline
     E const &
     operator<<(
         E const & x,
@@ -50,7 +50,7 @@ boost
         class Tag2,class T2,
         class Tag3,class T3,
         class Tag4,class T4 >
-	inline
+    inline
     E const &
     operator<<(
         E const & x,

@@ -86,7 +86,7 @@ virtual //Disable bogus GCC warning.
         };
 
     template <class E,class Tag,class T>
-	inline
+    inline
     E const &
     operator<<( E const & x, error_info<Tag,T> const & v )
         {
@@ -96,7 +96,7 @@ virtual //Disable bogus GCC warning.
         }
 
     template <class ErrorInfo,class E>
-	inline
+    inline
     shared_ptr<typename ErrorInfo::value_type const>
     get_error_info( E const & some_exception )
         {

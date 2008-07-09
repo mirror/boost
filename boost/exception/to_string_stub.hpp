@@ -63,7 +63,7 @@ boost
         to_string_dispatch
             {
             template <class T,class Stub>
-			inline
+            inline
             std::string
             dispatch( T const & x, Stub s )
                 {
@@ -72,7 +72,7 @@ boost
             }
 
         template <class T>
-		inline
+        inline
         std::string
         string_stub_dump( T const & x )
             {
@@ -81,7 +81,7 @@ boost
         }
 
     template <class T>
-	inline
+    inline
     std::string
     to_string_stub( T const & x )
         {
@@ -89,7 +89,7 @@ boost
         }
 
     template <class T,class Stub>
-	inline
+    inline
     std::string
     to_string_stub( T const & x, Stub s )
         {

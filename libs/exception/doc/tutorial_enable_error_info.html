@@ -3,7 +3,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-	<title>Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies</title>
+	<title>tutorial: integrating boost exception in existing exception class hierarchies</title>
 	<link href='reno.css' type='text/css' rel='stylesheet'/>
 </head>
 <body>
@@ -19,8 +19,9 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h2>Integrating Boost Exception in Existing Exception Class Hierarchies</h2>
-<p>Some exception hierarchies can not be modified to make boost::<span class="RenoLink"><a href="exception.html">exception</a></span> a base type. For this case, the <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span> function template can be used to make exception objects derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> anyway. Here is an example:</p>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h2>Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies</h2>
+</div>
+<p>Some exception hierarchies can not be modified to make boost::<span class="RenoLink"><a href="exception.html">exception</a></span> a base type. In this case, the <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span> function template can be used to make exception objects derive from boost::<span class="RenoLink"><a href="exception.html">exception</a></span> anyway. Here is an example:</p>
 <pre>#include &lt;<span class="RenoLink"><a href="exception_hpp.html">boost/exception.hpp</a></span>&gt;
 #include &lt;stdexcept&gt;
 
@@ -49,9 +50,11 @@ my_container
     };
 </pre>
 <p>The call to <span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>&lt;T&gt; gets us an object of <i>unspecified type</i> which is guaranteed to derive from both boost::<span class="RenoLink"><a href="exception.html">exception</a></span> and T. This makes it possible to use <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to store additional information in the exception object. The exception can be intercepted as T &amp;, so existing exception handling will not break. It can also be intercepted as boost::<span class="RenoLink"><a href="exception.html">exception</a></span> &amp;, so that <span class="RenoLink"><a href="tutorial_transporting_data.html">more information can be added to the exception at a later time</a></span>.</p>
-</div><h3>See also:</h3>
+</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
 </a></div>
+</div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->

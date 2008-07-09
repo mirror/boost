@@ -19,7 +19,7 @@ boost
     exception_detail
         {
         template <class T>
-		inline
+        inline
         std::string
         object_hex_dump( T const & x, size_t max_size=16 )
             {
