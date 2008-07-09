@@ -19,7 +19,8 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>diagnostic_information</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>diagnostic_information</h3>
+</div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
@@ -27,11 +28,14 @@ boost
 <span class="RenoIncludeSPAN">    std::string <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>( std::exception const &amp; x );</span>
     }</pre>
 </div><h4>Returns:</h4>
-<p>If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> *&gt;(&amp;x) is not null, the returned string is initialized by a call to <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span>; otherwise, the returned string combines the output of x.what() and typeid(x).name().</p>
-</div><h3>See also:</h3>
+<p>If dynamic_cast&lt;boost::<span class="RenoLink"><a href="exception.html">exception</a></span> const *&gt;(&amp;x) is not null, the returned string is initialized by a call to <span class="RenoLink"><a href="exception_diagnostic_information.html">exception::diagnostic_information</a></span>; otherwise, the returned string combines the output of x.what() and typeid(x).name().</p>
+</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="boost_exception_diagnostic_information_hpp.html">boost/exception/diagnostic_information.hpp<br/>
+</a><a href="exception_diagnostic_information.html">exception::diagnostic_information<br/>
 </a></div>
+</div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->

@@ -88,6 +88,7 @@ boost
         }
 
     template <class T>
+    inline
 #if !BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x582))
     typename
 #endif

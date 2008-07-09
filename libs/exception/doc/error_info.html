@@ -19,7 +19,8 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>error_info</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>error_info</h3>
+</div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
@@ -36,7 +37,7 @@ boost
         };</span>
     }</pre>
 </div><h4>Requirements:</h4>
-<p>T must have accessible copy constructor and must not be a reference.</p>
+<p>T must have accessible copy constructor and must not be a reference (there is no requirement that T's copy constructor does not throw.)</p>
 <h4>Description:</h4>
 <p>This class template is used to associate a Tag type with a value type T. Objects of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt; can be passed to <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span> to be stored in objects of type boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
 <h4>Note:</h4>
@@ -44,8 +45,9 @@ boost
 <pre>#include &lt;<span class="RenoLink"><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp</a></span>&gt;
 
 typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;struct tag_errno,int&gt; errno_info;</pre>
-<p>Of course, to actually add an errno_info object to exceptions using <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>, or to retrieve it using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>, you must first #include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;.</p>
-</div><h3>See also:</h3>
+<p>Of course, to actually add an <span class="RenoLink"><a href="error_info.html">error_info</a></span> object to <span class="RenoLink"><a href="exception.html">exceptions</a></span> using <span class="RenoLink"><a href="operator_shl_exception.html">operator&lt;&lt;</a></span>, or to retrieve it using <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>, you must first #include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;.</p>
+</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>See Also:</h3>
 <div class="RenoPageList"><a href="BOOST_ERROR_INFO.html">BOOST_ERROR_INFO<br/>
 </a><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="exception_error_info_value_hpp.html">boost/exception/error_info.hpp<br/>
@@ -57,6 +59,7 @@ typedef boost::<span class="RenoLink"><a href="error_info.html">error_info</a></
 </a><a href="tutorial_diagnostic_information.html">Tutorial: Diagnostic Information<br/>
 </a><a href="tutorial_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
 </a></div>
+</div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->

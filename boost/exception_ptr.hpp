@@ -32,9 +32,9 @@ boost
             {
             }
 
-		~unknown_exception() throw()
-			{
-			}
+        ~unknown_exception() throw()
+            {
+            }
         };
 
     typedef intrusive_ptr<exception_detail::clone_base const> exception_ptr;
@@ -62,12 +62,13 @@ boost
                 {
                 }
 
-			~current_exception_std_exception_wrapper() throw()
-				{
-				}
+            ~current_exception_std_exception_wrapper() throw()
+                {
+                }
             };
 
         template <class T>
+        inline
         exception_ptr
         current_exception_std_exception( T const & e1 )
             {
@@ -170,6 +171,7 @@ boost
         }
 
     template <class T>
+    inline
     exception_ptr
     copy_exception( T const & e )
         {

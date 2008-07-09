@@ -19,7 +19,8 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>operator&lt;&lt;, error_info overload</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>operator&lt;&lt;/exception</h3>
+</div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_error_info_hpp.html">boost/exception/info.hpp</a></span>&gt;<span class="RenoBR">&nbsp;</span><br/></p>
 <pre>namespace
 boost
@@ -30,12 +31,13 @@ boost
 </div><h4>Requirements:</h4>
 <p>E must be boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, or a type that derives (indirectly) from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>.</p>
 <h4>Effects:</h4>
-<p>Stores a copy of v into x. If x already contains data of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag1,T1&gt;, that data is overwritten.</p>
+<p>Stores a copy of v into x. If x already contains data of type <span class="RenoLink"><a href="error_info.html">error_info</a></span>&lt;Tag,T&gt;, that data is overwritten.</p>
 <h4>Returns:</h4>
 <p>x.</p>
 <div class="RenoIncludeDIV"><h4>Throws:</h4>
 <p>std::bad_alloc, or any exception emitted by the T copy constructor.</p>
-</div></div><h3>See also:</h3>
+</div></div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>See Also:</h3>
 <div class="RenoPageList"><a href="BOOST_ERROR_INFO.html">BOOST_ERROR_INFO<br/>
 </a><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="exception_error_info_hpp.html">boost/exception/info.hpp<br/>
@@ -47,6 +49,7 @@ boost
 </a><a href="tutorial_diagnostic_information.html">Tutorial: Diagnostic Information<br/>
 </a><a href="tutorial_enable_error_info.html">Tutorial: Integrating Boost Exception in Existing Exception Class Hierarchies<br/>
 </a></div>
+</div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->

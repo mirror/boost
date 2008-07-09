@@ -19,7 +19,8 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>current_exception</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>current_exception</h3>
+</div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
@@ -36,16 +37,17 @@ boost
 <p>Nothing.</p>
 <h4>Notes:</h4>
 <div><ul><li> It is unspecified whether the return values of two successive calls to <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> refer to the same exception object.</li>
-<li> Correct implementation of <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> may require compiler support, unless <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span> is used at the time the currently handled exception object was passed to throw. If <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span> is not used, and if the compiler does not provide the necessary support, then <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> may return an <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> that refers to an instance of <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span>. In this case, if the original exception object derives from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, then the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> sub-object of the <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span> object is initialized by the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> copy constructor.</li>
+<li> Correct implementation of <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> may require compiler support, unless <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span> was used at the time the currently handled exception object was passed to throw. If <span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span> was not used, and if the compiler does not provide the necessary support, then <span class="RenoLink"><a href="current_exception.html">current_exception</a></span> may return an <span class="RenoLink"><a href="exception_ptr.html">exception_ptr</a></span> that refers to an instance of <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span>. In this case, if the original exception object derives from boost::<span class="RenoLink"><a href="exception.html">exception</a></span>, then the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> sub-object of the <span class="RenoLink"><a href="unknown_exception.html">unknown_exception</a></span> object is initialized by the boost::<span class="RenoLink"><a href="exception.html">exception</a></span> copy constructor.</li>
 </ul></div>
-</div><h3>See also:</h3>
+</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="exception_cloning_hpp.html">boost/exception_ptr.hpp<br/>
 </a><a href="copy_exception.html">copy_exception<br/>
 </a><a href="enable_current_exception.html">enable_current_exception<br/>
-</a><a href="exception_ptr.html">exception_ptr<br/>
 </a><a href="unknown_exception.html">unknown_exception<br/>
 </a></div>
+</div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->

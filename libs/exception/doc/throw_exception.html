@@ -19,7 +19,8 @@
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="RenoIncludeDIV"><h3>throw_exception</h3>
+<div class="RenoIncludeDIV"><div class="RenoAutoDIV"><h3>throw_exception</h3>
+</div>
 <div class="RenoIncludeDIV"><p><span class="RenoEscape">&#35;<!--<wiki>`&#35;</wiki>--></span>include &lt;<span class="RenoLink"><a href="throw_exception_hpp.html">boost/throw_exception.hpp</a></span>&gt;</p>
 <pre>namespace
 boost
@@ -39,14 +40,16 @@ boost
 <p>E must derive publicly from std::exception.</p>
 <h4>Effects:</h4>
 <div><ul><li> If BOOST_NO_EXCEPTIONS is not defined, boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw boost::<span class="RenoLink"><a href="enable_current_exception.html">enable_current_exception</a></span>(boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(e)), unless BOOST_EXCEPTION_DISABLE is defined, in which case boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(e) is equivalent to throw e;</li>
-<li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of throw_exception are allowed to assume that the function never returns; therefore, if the user-defined throw_exception returns, the behavior is undefined.</li>
+<li> If BOOST_NO_EXCEPTIONS is defined, the function is left undefined, and the user is expected to supply an appropriate definition. Callers of <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> are allowed to assume that the function never returns; therefore, if the user-defined <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span> returns, the behavior is undefined.</li>
 </ul></div>
-</div><h3>See also:</h3>
+</div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
+<h3>See Also:</h3>
 <div class="RenoPageList"><a href="boost-exception.html">Boost Exception<br/>
 </a><a href="throw_exception_hpp.html">boost/throw_exception.hpp<br/>
 </a><a href="enable_current_exception.html">enable_current_exception<br/>
-</a><a href="tutorial_exception_ptr.html">Tutorial: Transporting of Exceptions between Threads<br/>
+</a><a href="tutorial_exception_ptr.html">Tutorial: Transporting of Exceptions Between Threads<br/>
 </a></div>
+</div>
 <!-- Copyright (c) 2006-2008 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
