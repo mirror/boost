@@ -755,7 +755,10 @@ expression_grammar_gen<TokenT>::evaluate(
     parse_info<iterator_type> hit(first);
     closure_value result;             // expression result
     
-    try {
+#if !defined(BOOST_NO_EXCEPTIONS)
+    try 
+#endif
+    {
         expression_grammar g;             // expression grammar
         hit = parse (first, last, g[spirit_assign_actor(result)], 
                      ch_p(T_SPACE) | ch_p(T_CCOMMENT) | ch_p(T_CPPCOMMENT));
@@ -768,6 +771,7 @@ expression_grammar_gen<TokenT>::evaluate(
                     expression = "<empty expression>";
                 BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
                     expression.c_str(), act_pos);
+                return false;
             }
             else {
             //  as the if_block_status is false no errors will be reported
@@ -775,17 +779,20 @@ expression_grammar_gen<TokenT>::evaluate(
             }
         }
     }
+#if !defined(BOOST_NO_EXCEPTIONS)
     catch (boost::wave::preprocess_exception const& e) {
     // expression is illformed
         if (if_block_status) {
             boost::throw_exception(e);
+            return false;
         }
-        else {
+        else         {
         //  as the if_block_status is false no errors will be reported
             return false;
         }
     }
-        
+#endif
+
     if (!hit.full) {
     // The token list starts with a valid expression, but there remains 
     // something. If the remainder consists out of whitespace only, the 
@@ -812,6 +819,7 @@ expression_grammar_gen<TokenT>::evaluate(
                         expression = "<empty expression>";
                     BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
                         expression.c_str(), act_pos);
+                    return false;
                 }
                 else {
                 //  as the if_block_status is false no errors will be reported

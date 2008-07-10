@@ -21,6 +21,7 @@
 #include <boost/wave/token_ids.hpp>  
 #include <boost/wave/language_support.hpp>
 
+#include <boost/throw_exception.hpp>
 #include <boost/pool/singleton_pool.hpp>
 
 // this must occur after all of the includes and before any code appears
@@ -147,7 +148,7 @@ token_data<StringTypeT, PositionT>::operator new(std::size_t size)
         
     void *ret = pool_type::malloc();
     if (0 == ret)
-        throw std::bad_alloc();
+        boost::throw_exception(std::bad_alloc());
     return ret;
 }
 
