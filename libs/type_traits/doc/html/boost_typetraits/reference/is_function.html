@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>is_function</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../reference.html" title="Alphabetical Reference">
 <link rel="prev" href="is_floating_point.html" title="is_floating_point">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,21 +24,19 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.is_function"></a><a class="link" href="is_function.html" title="is_function"> is_function</a>
+<a name="boost_typetraits.reference.is_function"></a><a href="is_function.html" title="is_function"> is_function</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">is_function</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">is_function</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> If T is a (possibly cv-qualified)
-        function type then inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise inherits from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
+        function type then inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>,
+        otherwise inherits from <a href="integral_constant.html" title="integral_constant">false_type</a>.
         Note that this template does not detect <span class="emphasis"><em>pointers to functions</em></span>,
-        or <span class="emphasis"><em>references to functions</em></span>, these are detected by <a class="link" href="is_pointer.html" title="is_pointer">is_pointer</a> and <a class="link" href="is_reference.html" title="is_reference">is_reference</a> respectively:
+        or <span class="emphasis"><em>references to functions</em></span>, these are detected by <a href="is_pointer.html" title="is_pointer">is_pointer</a> and <a href="is_reference.html" title="is_reference">is_reference</a> respectively:
       </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="keyword">int</span> <span class="identifier">f1</span><span class="special">();</span>      <span class="comment">// f1 is of function type.
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">int</span> <span class="identifier">f1</span><span class="special">();</span>      <span class="comment">// f1 is of function type.
 </span><span class="keyword">typedef</span> <span class="keyword">int</span> <span class="special">(</span><span class="identifier">f2</span><span class="special">*)();</span>   <span class="comment">// f2 is a pointer to a function.
 </span><span class="keyword">typedef</span> <span class="keyword">int</span> <span class="special">(</span><span class="identifier">f3</span><span class="special">&amp;)();</span>   <span class="comment">// f3 is a reference to a function.
 </span></pre>
@@ -58,7 +56,7 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">is_function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">void</span><span class="special">)&gt;</span></code>
-            inherits from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>
@@ -67,7 +65,7 @@
 <p>
           </p>
 <p>
-            <code class="computeroutput"><span class="identifier">is_function</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            <code class="computeroutput"><span class="identifier">is_function</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>
@@ -163,11 +161,11 @@
           If you want to detect whether some type is a pointer-to-function then use:
         </p>
 <p>
-          <code class="computeroutput"><a class="link" href="is_function.html" title="is_function">is_function</a><span class="special">&lt;</span><a class="link" href="remove_pointer.html" title="remove_pointer">remove_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span>
-          <span class="special">&amp;&amp;</span> <a class="link" href="is_pointer.html" title="is_pointer">is_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
+          <code class="computeroutput"><a href="is_function.html" title="is_function">is_function</a><span class="special">&lt;</span><a href="remove_pointer.html" title="remove_pointer">remove_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">value</span>
+          <span class="special">&amp;&amp;</span> <a href="is_pointer.html" title="is_pointer">is_pointer</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
         </p>
 <p>
-          or for pointers to member functions you can just use <a class="link" href="is_member_function_pointer.html" title="is_member_function_pointer">is_member_function_pointer</a>
+          or for pointers to member functions you can just use <a href="is_member_function_pointer.html" title="is_member_function_pointer">is_member_function_pointer</a>
           directly.
         </p>
 </td></tr>

@@ -48,12 +48,15 @@
 //              to degrade gracefully, rather than trash the compiler (John Maddock).
 //
 
+#include <boost/type_traits/intrinsics.hpp>
+#ifndef BOOST_IS_ABSTRACT
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/detail/ice_and.hpp>
 #ifdef BOOST_NO_IS_ABSTRACT
 #include <boost/type_traits/is_polymorphic.hpp>
+#endif
 #endif
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
@@ -62,7 +65,13 @@
 namespace boost {
 namespace detail{
 
-#ifndef BOOST_NO_IS_ABSTRACT
+#ifdef BOOST_IS_ABSTRACT
+template <class T>
+struct is_abstract_imp
+{
+   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_ABSTRACT(T));
+};
+#elif !defined(BOOST_NO_IS_ABSTRACT)
 template<class T>
 struct is_abstract_imp2
 {

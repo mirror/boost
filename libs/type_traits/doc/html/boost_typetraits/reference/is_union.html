@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>is_union</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../reference.html" title="Alphabetical Reference">
 <link rel="prev" href="is_reference.html" title="is_reference">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,16 +24,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.is_union"></a><a class="link" href="is_union.html" title="is_union"> is_union</a>
+<a name="boost_typetraits.reference.is_union"></a><a href="is_union.html" title="is_union"> is_union</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">is_union</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">is_union</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> If T is a (possibly cv-qualified)
-        union type then inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise inherits from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
+        union type then inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>,
+        otherwise inherits from <a href="integral_constant.html" title="integral_constant">false_type</a>.
         Currently requires some kind of compiler support, otherwise unions are identified
         as classes.
       </p>
@@ -44,11 +43,11 @@
         <span class="bold"><strong>Compiler Compatibility:</strong></span> Without (some as
         yet unspecified) help from the compiler, we cannot distinguish between union
         and class types using only standard C++, as a result this type will never
-        inherit from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
+        inherit from <a href="integral_constant.html" title="integral_constant">true_type</a>,
         unless the user explicitly specializes the template for their user-defined
         union types, or unless the compiler supplies some unspecified intrinsic that
         implements this functionality. Currently (May 2005) only Visual C++ 8 has
-        the necessary compiler <a class="link" href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
+        the necessary compiler <a href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
         to make this trait "just work" without user intervention.
       </p>
 <p>
@@ -64,7 +63,7 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;</span></code>
-            inherits from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>
@@ -74,7 +73,7 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">is_union</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">void</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>An improved Version of std::iter_swap</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../examples.html" title="Examples">
 <link rel="prev" href="destruct.html" title="An Example that Omits Destructor Calls For Types with Trivial Destructors">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.examples.iter"></a><a class="link" href="iter.html" title="An improved Version of std::iter_swap"> An improved Version
+<a name="boost_typetraits.examples.iter"></a><a href="iter.html" title="An improved Version of std::iter_swap"> An improved Version
       of std::iter_swap</a>
 </h3></div></div></div>
 <p>
@@ -36,8 +36,7 @@
         the swap to ensure that the algorithm works correctly for both proxying iterators,
         and even iterators of different types (see <a href="../../../../examples/iter_swap_example.cpp" target="_top">iter_swap_example.cpp</a>):
       </p>
-<pre class="programlisting">
-<span class="comment">//
+<pre class="programlisting"><span class="comment">//
 </span><span class="comment">// iter_swap:
 </span><span class="comment">// tests whether iterator is a proxying iterator or not, and
 </span><span class="comment">// uses optimal form accordingly:
@@ -45,7 +44,7 @@
 </span><span class="keyword">namespace</span> <span class="identifier">detail</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">I</span><span class="special">&gt;</span>
-<span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">do_swap</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">one</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">two</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a class="link" href="../reference/integral_constant.html" title="integral_constant">false_type</a><span class="special">&amp;)</span>
+<span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">do_swap</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">one</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">two</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/integral_constant.html" title="integral_constant">false_type</a><span class="special">&amp;)</span>
 <span class="special">{</span>
    <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">value_type</span> <span class="identifier">v_t</span><span class="special">;</span>
    <span class="identifier">v_t</span> <span class="identifier">v</span> <span class="special">=</span> <span class="special">*</span><span class="identifier">one</span><span class="special">;</span>
@@ -53,7 +52,7 @@
    <span class="special">*</span><span class="identifier">two</span> <span class="special">=</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="special">}</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">I</span><span class="special">&gt;</span>
-<span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">do_swap</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">one</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">two</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a class="link" href="../reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">&amp;)</span>
+<span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">do_swap</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">one</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">two</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">&amp;)</span>
 <span class="special">{</span>
    <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">swap</span><span class="special">;</span>
    <span class="identifier">swap</span><span class="special">(*</span><span class="identifier">one</span><span class="special">,</span> <span class="special">*</span><span class="identifier">two</span><span class="special">);</span>
@@ -71,10 +70,10 @@
 </span>   <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">I1</span><span class="special">&gt;::</span><span class="identifier">reference</span> <span class="identifier">r1_t</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">I2</span><span class="special">&gt;::</span><span class="identifier">reference</span> <span class="identifier">r2_t</span><span class="special">;</span>
 
-   <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><a class="link" href="../reference/integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span>
-      <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><a class="link" href="../reference/is_reference.html" title="is_reference">is_reference</a><span class="special">&lt;</span><span class="identifier">r1_t</span><span class="special">&gt;::</span><span class="identifier">value</span>
-      <span class="special">&amp;&amp;</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><a class="link" href="../reference/is_reference.html" title="is_reference">is_reference</a><span class="special">&lt;</span><span class="identifier">r2_t</span><span class="special">&gt;::</span><span class="identifier">value</span>
-      <span class="special">&amp;&amp;</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><a class="link" href="../reference/is_same.html" title="is_same">is_same</a><span class="special">&lt;</span><span class="identifier">r1_t</span><span class="special">,</span> <span class="identifier">r2_t</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&gt;</span> <span class="identifier">truth_type</span><span class="special">;</span>
+   <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><a href="../reference/integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span>
+      <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><a href="../reference/is_reference.html" title="is_reference">is_reference</a><span class="special">&lt;</span><span class="identifier">r1_t</span><span class="special">&gt;::</span><span class="identifier">value</span>
+      <span class="special">&amp;&amp;</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><a href="../reference/is_reference.html" title="is_reference">is_reference</a><span class="special">&lt;</span><span class="identifier">r2_t</span><span class="special">&gt;::</span><span class="identifier">value</span>
+      <span class="special">&amp;&amp;</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><a href="../reference/is_same.html" title="is_same">is_same</a><span class="special">&lt;</span><span class="identifier">r1_t</span><span class="special">,</span> <span class="identifier">r2_t</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&gt;</span> <span class="identifier">truth_type</span><span class="special">;</span>
 
    <span class="identifier">detail</span><span class="special">::</span><span class="identifier">do_swap</span><span class="special">(</span><span class="identifier">one</span><span class="special">,</span> <span class="identifier">two</span><span class="special">,</span> <span class="identifier">truth_type</span><span class="special">());</span>
 <span class="special">}</span>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>User Defined Specializations</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="prev" href="category/function.html" title="Decomposing Function Types">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,18 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_typetraits.user_defined"></a><a class="link" href="user_defined.html" title="User Defined Specializations"> User Defined Specializations</a>
+<a name="boost_typetraits.user_defined"></a><a href="user_defined.html" title="User Defined Specializations"> User Defined Specializations</a>
 </h2></div></div></div>
 <p>
       Occationally the end user may need to provide their own specialization for
       one of the type traits - typically where intrinsic compiler support is required
       to implement a specific trait fully. These specializations should derive from
-      boost::<a class="link" href="reference/integral_constant.html" title="integral_constant">true_type</a>
-      or boost::<a class="link" href="reference/integral_constant.html" title="integral_constant">false_type</a>
+      boost::<a href="reference/integral_constant.html" title="integral_constant">true_type</a>
+      or boost::<a href="reference/integral_constant.html" title="integral_constant">false_type</a>
       as appropriate:
     </p>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_pod</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_pod</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_class</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_traits</span><span class="special">/</span><span class="identifier">is_union</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -49,16 +48,16 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span>
 <span class="special">{</span>
    <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-   <span class="keyword">struct</span> <a class="link" href="reference/is_pod.html" title="is_pod">is_pod</a><span class="special">&lt;</span><span class="identifier">my_pod</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a class="link" href="reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">{};</span>
+   <span class="keyword">struct</span> <a href="reference/is_pod.html" title="is_pod">is_pod</a><span class="special">&lt;</span><span class="identifier">my_pod</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a href="reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">{};</span>
       
    <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-   <span class="keyword">struct</span> <a class="link" href="reference/is_pod.html" title="is_pod">is_pod</a><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a class="link" href="reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">{};</span>
+   <span class="keyword">struct</span> <a href="reference/is_pod.html" title="is_pod">is_pod</a><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a href="reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">{};</span>
    
    <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-   <span class="keyword">struct</span> <a class="link" href="reference/is_union.html" title="is_union">is_union</a><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a class="link" href="reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">{};</span>
+   <span class="keyword">struct</span> <a href="reference/is_union.html" title="is_union">is_union</a><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a href="reference/integral_constant.html" title="integral_constant">true_type</a><span class="special">{};</span>
    
    <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-   <span class="keyword">struct</span> <a class="link" href="reference/is_class.html" title="is_class">is_class</a><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a class="link" href="reference/integral_constant.html" title="integral_constant">false_type</a><span class="special">{};</span>
+   <span class="keyword">struct</span> <a href="reference/is_class.html" title="is_class">is_class</a><span class="special">&lt;</span><span class="identifier">my_union</span><span class="special">&gt;</span> <span class="special">:</span> <span class="keyword">public</span> <a href="reference/integral_constant.html" title="integral_constant">false_type</a><span class="special">{};</span>
 <span class="special">}</span>
 </pre>
 </div>

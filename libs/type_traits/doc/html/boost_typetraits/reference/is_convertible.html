@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>is_convertible</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../reference.html" title="Alphabetical Reference">
 <link rel="prev" href="is_const.html" title="is_const">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,17 +24,16 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.is_convertible"></a><a class="link" href="is_convertible.html" title="is_convertible"> is_convertible</a>
+<a name="boost_typetraits.reference.is_convertible"></a><a href="is_convertible.html" title="is_convertible"> is_convertible</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">From</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">To</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">is_convertible</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">From</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">To</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">is_convertible</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> If an imaginary lvalue of type
         <code class="computeroutput"><span class="identifier">From</span></code> is convertible to type
-        <code class="computeroutput"><span class="identifier">To</span></code> then inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise inherits from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
+        <code class="computeroutput"><span class="identifier">To</span></code> then inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>,
+        otherwise inherits from <a href="integral_constant.html" title="integral_constant">false_type</a>.
       </p>
 <p>
         Type From must not be an incomplete type.
@@ -59,8 +58,7 @@
         This template will also produce compiler errors if the conversion is ambiguous,
         for example:
       </p>
-<pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">A</span> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">A</span> <span class="special">{};</span>
 <span class="keyword">struct</span> <span class="identifier">B</span> <span class="special">:</span> <span class="identifier">A</span> <span class="special">{};</span>
 <span class="keyword">struct</span> <span class="identifier">C</span> <span class="special">:</span> <span class="identifier">A</span> <span class="special">{};</span>
 <span class="keyword">struct</span> <span class="identifier">D</span> <span class="special">:</span> <span class="identifier">B</span><span class="special">,</span> <span class="identifier">C</span> <span class="special">{};</span>
@@ -74,7 +72,7 @@
         <span class="bold"><strong>Compiler Compatibility:</strong></span> This template is
         currently broken with Borland C++ Builder 5 (and earlier), for constructor-based
         conversions, and for the Metrowerks 7 (and earlier) compiler in all cases.
-        If the compiler does not support <code class="computeroutput"><a class="link" href="is_abstract.html" title="is_abstract">is_abstract</a></code>,
+        If the compiler does not support <code class="computeroutput"><a href="is_abstract.html" title="is_abstract">is_abstract</a></code>,
         then the template parameter <code class="computeroutput"><span class="identifier">To</span></code>
         must not be an abstract type.
       </p>
@@ -91,7 +89,7 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">is_convertible</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span></code>
-            inherits from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>
@@ -101,7 +99,7 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">is_convertible</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
-            is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">true_type</a></code>.
+            is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">true_type</a></code>.
           </p>
 <p>
         </p>

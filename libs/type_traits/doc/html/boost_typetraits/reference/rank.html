@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>rank</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../reference.html" title="Alphabetical Reference">
 <link rel="prev" href="promote.html" title="promote">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,15 +24,14 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.rank"></a><a class="link" href="rank.html" title="rank"> rank</a>
+<a name="boost_typetraits.reference.rank"></a><a href="rank.html" title="rank"> rank</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">rank</span> <span class="special">:</span> <span class="keyword">public</span> <a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">RANK</span><span class="special">(</span><span class="identifier">T</span><span class="special">)&gt;</span> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">rank</span> <span class="special">:</span> <span class="keyword">public</span> <a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">RANK</span><span class="special">(</span><span class="identifier">T</span><span class="special">)&gt;</span> <span class="special">{};</span>
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> Class template rank inherits from
-        <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">RANK</span><span class="special">(</span><span class="identifier">T</span><span class="special">)&gt;</span></code>,
+        <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">RANK</span><span class="special">(</span><span class="identifier">T</span><span class="special">)&gt;</span></code>,
         where <code class="computeroutput"><span class="identifier">RANK</span><span class="special">(</span><span class="identifier">T</span><span class="special">)</span></code> is the
         number of array dimensions in type <code class="computeroutput"><span class="identifier">T</span></code>.
       </p>
@@ -53,7 +52,7 @@
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">rank</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">[]&gt;</span></code>
-            inherits from <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span></code>.
+            inherits from <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span></code>.
           </p>
 <p>
         </p>
@@ -62,7 +61,7 @@
 <p>
           </p>
 <p>
-            <code class="computeroutput"><span class="identifier">rank</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">[</span><span class="number">2</span><span class="special">][</span><span class="number">3</span><span class="special">][</span><span class="number">4</span><span class="special">]&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a class="link" href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span></code>.
+            <code class="computeroutput"><span class="identifier">rank</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">[</span><span class="number">2</span><span class="special">][</span><span class="number">3</span><span class="special">][</span><span class="number">4</span><span class="special">]&gt;::</span><span class="identifier">type</span></code> is the type <code class="computeroutput"><a href="integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;</span></code>.
           </p>
 <p>
         </p>

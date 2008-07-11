@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>is_stateless</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../reference.html" title="Alphabetical Reference">
 <link rel="prev" href="is_signed.html" title="is_signed">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,16 +24,15 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.is_stateless"></a><a class="link" href="is_stateless.html" title="is_stateless"> is_stateless</a>
+<a name="boost_typetraits.reference.is_stateless"></a><a href="is_stateless.html" title="is_stateless"> is_stateless</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">is_stateless</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">is_stateless</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> Ff T is a stateless type then
-        inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
+        inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>,
+        otherwise from <a href="integral_constant.html" title="integral_constant">false_type</a>.
       </p>
 <p>
         Type T must be a complete type.
@@ -41,11 +40,10 @@
 <p>
         A stateless type is a type that has no storage and whose constructors and
         destructors are trivial. That means that <code class="computeroutput"><span class="identifier">is_stateless</span></code>
-        only inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>
+        only inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>
         if the following expression is <code class="computeroutput"><span class="keyword">true</span></code>:
       </p>
-<pre class="programlisting">
-<span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_trivial_constructor</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span>
+<pre class="programlisting"><span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_trivial_constructor</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span>
 <span class="special">&amp;&amp;</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_trivial_copy</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span>
 <span class="special">&amp;&amp;</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_trivial_destructor</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span>
 <span class="special">&amp;&amp;</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_class</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span>
@@ -68,7 +66,7 @@
         Without some (as yet unspecified) help from the compiler, is_stateless will
         never report that a class or struct is stateless; this is always safe, if
         possibly sub-optimal. Currently (May 2005) only MWCW 9 and Visual C++ 8 have
-        the necessary compiler <a class="link" href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
+        the necessary compiler <a href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
         to make this template work automatically.
       </p>
 </div>

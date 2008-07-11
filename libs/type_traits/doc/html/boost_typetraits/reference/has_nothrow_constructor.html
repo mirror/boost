@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>has_nothrow_constructor</title>
 <link rel="stylesheet" href="../../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../reference.html" title="Alphabetical Reference">
 <link rel="prev" href="has_nothrow_assign.html" title="has_nothrow_assign">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,20 +24,19 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_typetraits.reference.has_nothrow_constructor"></a><a class="link" href="has_nothrow_constructor.html" title="has_nothrow_constructor">
+<a name="boost_typetraits.reference.has_nothrow_constructor"></a><a href="has_nothrow_constructor.html" title="has_nothrow_constructor">
       has_nothrow_constructor</a>
 </h3></div></div></div>
-<pre class="programlisting">
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">has_nothrow_constructor</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">has_nothrow_constructor</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">has_nothrow_default_constructor</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a class="link" href="integral_constant.html" title="integral_constant">true_type</a>-or-<a class="link" href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
+<span class="keyword">struct</span> <span class="identifier">has_nothrow_default_constructor</span> <span class="special">:</span> <span class="keyword">public</span> <em class="replaceable"><code><a href="integral_constant.html" title="integral_constant">true_type</a>-or-<a href="integral_constant.html" title="integral_constant">false_type</a></code></em> <span class="special">{};</span>
 </pre>
 <p>
         <span class="bold"><strong>Inherits:</strong></span> If T is a (possibly cv-qualified)
-        type with a non-throwing default-constructor then inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>,
-        otherwise inherits from <a class="link" href="integral_constant.html" title="integral_constant">false_type</a>.
+        type with a non-throwing default-constructor then inherits from <a href="integral_constant.html" title="integral_constant">true_type</a>,
+        otherwise inherits from <a href="integral_constant.html" title="integral_constant">false_type</a>.
         Type <code class="computeroutput"><span class="identifier">T</span></code> must be a complete
         type.
       </p>
@@ -53,7 +52,7 @@
         Without some (as yet unspecified) help from the compiler, <code class="computeroutput"><span class="identifier">has_nothrow_constructor</span></code>
         will never report that a class or struct has a non-throwing default-constructor;
         this is always safe, if possibly sub-optimal. Currently (May 2005) only Visual
-        C++ 8 has the necessary compiler <a class="link" href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
+        C++ 8 has the necessary compiler <a href="../intrinsics.html" title="Support for Compiler Intrinsics">intrinsics</a>
         to ensure that this trait "just works".
       </p>
 <p>

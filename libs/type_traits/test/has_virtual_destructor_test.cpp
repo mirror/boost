@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <new>
 
 class polymorphic_no_virtual_destructor
 {

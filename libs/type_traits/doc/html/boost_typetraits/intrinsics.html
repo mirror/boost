@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Support for Compiler Intrinsics</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="prev" href="user_defined.html" title="User Defined Specializations">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,30 +24,30 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_typetraits.intrinsics"></a><a class="link" href="intrinsics.html" title="Support for Compiler Intrinsics"> Support for Compiler Intrinsics</a>
+<a name="boost_typetraits.intrinsics"></a><a href="intrinsics.html" title="Support for Compiler Intrinsics"> Support for Compiler Intrinsics</a>
 </h2></div></div></div>
 <p>
       There are some traits that can not be implemented within the current C++ language:
       to make these traits "just work" with user defined types, some kind
-      of additional help from the compiler is required. Currently (May 2005) MWCW
-      9 and Visual C++ 8 provide the necessary intrinsics, and other compilers will
-      no doubt follow in due course.
+      of additional help from the compiler is required. Currently (April 2008) Visual
+      C++ 8 and 9, GNU GCC 4.3 and MWCW 9 provide the necessary intrinsics, and other
+      compilers will no doubt follow in due course.
     </p>
 <p>
       The Following traits classes always need compiler support to do the right thing
       for all types (but all have safe fallback positions if this support is unavailable):
     </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a class="link" href="reference/is_union.html" title="is_union">is_union</a></li>
-<li><a class="link" href="reference/is_pod.html" title="is_pod">is_pod</a></li>
-<li><a class="link" href="reference/has_trivial_constructor.html" title="has_trivial_constructor">has_trivial_constructor</a></li>
-<li><a class="link" href="reference/has_trivial_copy.html" title="has_trivial_copy">has_trivial_copy</a></li>
-<li><a class="link" href="reference/has_trivial_assign.html" title="has_trivial_assign">has_trivial_assign</a></li>
-<li><a class="link" href="reference/has_trivial_destructor.html" title="has_trivial_destructor">has_trivial_destructor</a></li>
-<li><a class="link" href="reference/has_nothrow_constructor.html" title="has_nothrow_constructor">has_nothrow_constructor</a></li>
-<li><a class="link" href="reference/has_nothrow_copy.html" title="has_nothrow_copy">has_nothrow_copy</a></li>
-<li><a class="link" href="reference/has_nothrow_assign.html" title="has_nothrow_assign">has_nothrow_assign</a></li>
-<li><a class="link" href="reference/has_virtual_destructor.html" title="has_virtual_destructor">has_virtual_destructor</a></li>
+<li><a href="reference/is_union.html" title="is_union">is_union</a></li>
+<li><a href="reference/is_pod.html" title="is_pod">is_pod</a></li>
+<li><a href="reference/has_trivial_constructor.html" title="has_trivial_constructor">has_trivial_constructor</a></li>
+<li><a href="reference/has_trivial_copy.html" title="has_trivial_copy">has_trivial_copy</a></li>
+<li><a href="reference/has_trivial_assign.html" title="has_trivial_assign">has_trivial_assign</a></li>
+<li><a href="reference/has_trivial_destructor.html" title="has_trivial_destructor">has_trivial_destructor</a></li>
+<li><a href="reference/has_nothrow_constructor.html" title="has_nothrow_constructor">has_nothrow_constructor</a></li>
+<li><a href="reference/has_nothrow_copy.html" title="has_nothrow_copy">has_nothrow_copy</a></li>
+<li><a href="reference/has_nothrow_assign.html" title="has_nothrow_assign">has_nothrow_assign</a></li>
+<li><a href="reference/has_virtual_destructor.html" title="has_virtual_destructor">has_virtual_destructor</a></li>
 </ul></div>
 <p>
       The following traits classes can't be portably implemented in the C++ language,
@@ -55,15 +55,15 @@
       all the compilers we know about:
     </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a class="link" href="reference/is_empty.html" title="is_empty">is_empty</a></li>
-<li><a class="link" href="reference/is_polymorphic.html" title="is_polymorphic">is_polymorphic</a></li>
+<li><a href="reference/is_empty.html" title="is_empty">is_empty</a></li>
+<li><a href="reference/is_polymorphic.html" title="is_polymorphic">is_polymorphic</a></li>
 </ul></div>
 <p>
       The following traits classes are dependent on one or more of the above:
     </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a class="link" href="reference/is_class.html" title="is_class">is_class</a></li>
-<li><a class="link" href="reference/is_stateless.html" title="is_stateless">is_stateless</a></li>
+<li><a href="reference/is_class.html" title="is_class">is_class</a></li>
+<li><a href="reference/is_stateless.html" title="is_stateless">is_stateless</a></li>
 </ul></div>
 <p>
       The hooks for compiler-intrinsic support are defined in <a href="../../../../../boost/type_traits/intrinsics.hpp" target="_top">boost/type_traits/intrinsics.hpp</a>,
@@ -71,7 +71,7 @@
       of the following macros:
     </p>
 <div class="table">
-<a name="id2642766"></a><p class="title"><b>Table 1.4. Macros for Compiler Intrinsics</b></p>
+<a name="id508277"></a><p class="title"><b>Table 1.4. Macros for Compiler Intrinsics</b></p>
 <div class="table-contents"><table class="table" summary="Macros for Compiler Intrinsics">
 <colgroup>
 <col>
@@ -217,6 +217,90 @@
 <td>
           <p>
             Should evaluate to true T has a virtual destructor
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_ABSTRACT(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is an abstract type
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_BASE_OF(T,U)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is a base class of U
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_CLASS(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is a class type
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_CONVERTIBLE(T,U)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is convertible to U
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_ENUM(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true is T is an enum
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_IS_POLYMORPHIC(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to true if T is a polymorphic type
+          </p>
+          </td>
+</tr>
+<tr>
+<td>
+          <p>
+            BOOST_ALIGNMENT_OF(T)
+          </p>
+          </td>
+<td>
+          <p>
+            Should evaluate to the alignment requirements of type T.
           </p>
           </td>
 </tr>

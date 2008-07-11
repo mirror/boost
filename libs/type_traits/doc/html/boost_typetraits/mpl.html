@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>MPL Interoperability</title>
 <link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_2006-12-17_0120">
 <link rel="start" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="up" href="../index.html" title="Chapter 1. Boost.TypeTraits">
 <link rel="prev" href="intrinsics.html" title="Support for Compiler Intrinsics">
@@ -14,8 +14,8 @@
 <td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
 <td align="center"><a href="../../../../../index.html">Home</a></td>
 <td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
-<td align="center"><a href="http://www.boost.org/people/people.htm">People</a></td>
-<td align="center"><a href="http://www.boost.org/more/faq.htm">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
 <td align="center"><a href="../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_typetraits.mpl"></a><a class="link" href="mpl.html" title="MPL Interoperability"> MPL Interoperability</a>
+<a name="boost_typetraits.mpl"></a><a href="mpl.html" title="MPL Interoperability"> MPL Interoperability</a>
 </h2></div></div></div>
 <p>
       All the value based traits in this library conform to MPL's requirements for
@@ -33,11 +33,11 @@
       for broken compilers.
     </p>
 <p>
-      Purely as an implementation detail, this means that <code class="computeroutput"><a class="link" href="reference/integral_constant.html" title="integral_constant">true_type</a></code>
+      Purely as an implementation detail, this means that <code class="computeroutput"><a href="reference/integral_constant.html" title="integral_constant">true_type</a></code>
       inherits from <a href="../../../../../libs/mpl/doc/refmanual/bool.html" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code></a>,
-      <code class="computeroutput"><a class="link" href="reference/integral_constant.html" title="integral_constant">false_type</a></code>
+      <code class="computeroutput"><a href="reference/integral_constant.html" title="integral_constant">false_type</a></code>
       inherits from <a href="../../../../../libs/mpl/doc/refmanual/bool.html" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></code></a>,
-      and <code class="computeroutput"><a class="link" href="reference/integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span>
+      and <code class="computeroutput"><a href="reference/integral_constant.html" title="integral_constant">integral_constant</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span>
       <span class="identifier">v</span><span class="special">&gt;</span></code>
       inherits from <a href="../../../../../libs/mpl/doc/refmanual/integral-c.html" target="_top"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">integral_c</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span><span class="identifier">v</span><span class="special">&gt;</span></code></a>
       (provided <code class="computeroutput"><span class="identifier">T</span></code> is not <code class="computeroutput"><span class="keyword">bool</span></code>)
