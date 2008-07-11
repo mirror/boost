@@ -9,14 +9,7 @@
 
 //----------------------------------------------------------------------------// 
 
-//  VC++ 8.0 warns on usage of certain Standard Library and API functions that
-//  can cause buffer overruns or other possible security issues if misused.
-//  See http://msdn.microsoft.com/msdnmag/issues/05/05/SafeCandC/default.aspx
-//  But the wording of the warning is misleading and unsettling, there are no
-//  portable altersystem functions, and VC++ 8.0's own libraries use the
-//  functions in question. So turn off the warnings.
-#define _CRT_SECURE_NO_DEPRECATE
-#define _SCL_SECURE_NO_DEPRECATE
+#include <boost/config/warning_disable.hpp>
 
 #define BOOST_ERROR_CODE_HEADER_ONLY
 

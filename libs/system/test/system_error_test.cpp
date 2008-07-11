@@ -9,18 +9,12 @@
 
 //----------------------------------------------------------------------------// 
 
-//  VC++ 8.0 warns on usage of certain Standard Library and API functions that
-//  can cause buffer overruns or other possible security issues if misused.
-//  See http://msdn.microsoft.com/msdnmag/issues/05/05/SafeCandC/default.aspx
-//  But the wording of the warning is misleading and unsettling, there are no
-//  portable alternative functions, and VC++ 8.0's own libraries use the
-//  functions in question. So turn off the warnings.
-#define _CRT_SECURE_NO_DEPRECATE
-#define _SCL_SECURE_NO_DEPRECATE
+#include <boost/config/warning_disable.hpp>
 
 #include <boost/test/minimal.hpp>
 #include <boost/system/system_error.hpp>
 #include <iostream>
+#include <string>
 
 #ifdef BOOST_WINDOWS_API
 #include <windows.h>
@@ -29,6 +23,7 @@
 using boost::system::system_error;
 using boost::system::error_code;
 using boost::system::system_category;
+using std::string;
 
 #define TEST(x,v,w) test(#x,x,v,w)
 
@@ -58,29 +53,52 @@ namespace
 # endif
   }
 
-  const boost::uint_least32_t uvalue = 1u;
+  const boost::uint_least32_t uvalue = 2u;
 }
 
 int test_main( int, char *[] )
 {
-  // all combinations of constructors:
+  // all constructors, in the same order as they appear in the header:
 
-  system_error se_0_m( error_code(0, system_category), "se_0_m" ); 
-  system_error se_1_m( 1, system_category, "se_1_m" ); 
-  system_error se_0_nm( error_code(0, system_category), "" ); 
-  system_error se_1_nm( 1, system_category, "" ); 
-  system_error se_0_nmx( error_code(0, system_category), "" ); 
-  system_error se_1_nmx( 1, system_category, "" ); 
-  system_error se_1u_m( uvalue, system_category, "se_1u_m" );
+  system_error c1_0( error_code(0, system_category) ); 
+  system_error c1_1( error_code(1, system_category) );
+  system_error c1_2u( error_code(uvalue, system_category) );
 
-  TEST( se_0_m, 0, "se_0_m" );
-  TEST( se_1_m, 1, "se_1_m: Incorrect function" );
-  TEST( se_0_nm, 0, "" );
-  TEST( se_1_nm, 1, "Incorrect function" );
-  TEST( se_0_nmx, 0, "" );
-  TEST( se_1_nmx, 1, "Incorrect function" );
-  TEST( se_1u_m, 1, "se_1u_m: Incorrect function" );
+  system_error c2_0( error_code(0, system_category), string("c2_0") ); 
+  system_error c2_1( error_code(1, system_category), string("c2_1") );
 
+  system_error c3_0( error_code(0, system_category), "c3_0" ); 
+  system_error c3_1( error_code(1, system_category), "c3_1" );
+
+  system_error c4_0( 0, system_category ); 
+  system_error c4_1( 1, system_category );
+  system_error c4_2u( uvalue, system_category );
+
+  system_error c5_0( 0, system_category, string("c5_0") ); 
+  system_error c5_1( 1, system_category, string("c5_1") );
+
+  system_error c6_0( 0, system_category, "c6_0" ); 
+  system_error c6_1( 1, system_category, "c6_1" );
+
+  TEST( c1_0, 0, "" );
+  TEST( c1_1, 1, "Incorrect function" );
+  TEST( c1_2u, 2, "The system cannot find the file specified" );
+
+  TEST( c2_0, 0, "c2_0" );
+  TEST( c2_1, 1, "c2_1: Incorrect function" );
+
+  TEST( c3_0, 0, "c3_0" );
+  TEST( c3_1, 1, "c3_1: Incorrect function" );
+
+  TEST( c4_0, 0, "" );
+  TEST( c4_1, 1, "Incorrect function" );
+  TEST( c4_2u, 2, "The system cannot find the file specified" );
+
+  TEST( c5_0, 0, "c5_0" );
+  TEST( c5_1, 1, "c5_1: Incorrect function" );
+
+  TEST( c6_0, 0, "c6_0" );
+  TEST( c6_1, 1, "c6_1: Incorrect function" );
 
   return 0;
 }
