@@ -1064,10 +1064,7 @@ dynamic_bitset <a name=
 <b>Returns:</b> a copy of <tt>*this</tt> shifted to the left by
 <tt>n</tt> bits. For each bit in the returned bitset, the bit at
 position pos takes on the value of the bit at position <tt>pos -
-n</tt> of this bitset, or zero if no such bit exists. Note that
-the expression <tt>b &lt;&lt; n</tt> is equivalent to
-constructing a temporary copy of <tt>b</tt> and then using
-<tt>operator&lt;&lt;=</tt>.<br>
+n</tt> of this bitset, or zero if no such bit exists.<br>
  <b>Throws:</b> An allocation error if memory is exhausted
 (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
 
@@ -1080,10 +1077,7 @@ dynamic_bitset <a name=
 <b>Returns:</b> a copy of <tt>*this</tt> shifted to the right by
 <tt>n</tt> bits. For each bit in the returned bitset, the bit at
 position pos takes on the value of the bit at position <tt>pos +
-n</tt> of this bitset, or zero if no such bit exists. Note that
-the expression <tt>b &gt;&gt; n</tt> is equivalent to
-constructing a temporary copy of <tt>b</tt> and then using
-<tt>operator&gt;&gt;=</tt>.<br>
+n</tt> of this bitset, or zero if no such bit exists.<br>
  <b>Throws:</b> An allocation error if memory is exhausted
 (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
 
@@ -1396,10 +1390,7 @@ dynamic_bitset <a name=
 
 <b>Requires:</b> <tt>a.size() == b.size()</tt><br>
 <b>Returns:</b> A new bitset that is the bitwise-AND of the
-bitsets <tt>a</tt> and <tt>b</tt>. Note that the expression
-<tt>b1 &amp; b2</tt> is equivalent to creating a temporary copy
-of <tt>b1</tt>, using <tt>operator&amp;=</tt>, and returning the
-temporary copy.<br>
+bitsets <tt>a</tt> and <tt>b</tt>.<br>
 <b>Throws:</b> An allocation error if memory is exhausted
 (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
 
@@ -1411,10 +1402,7 @@ dynamic_bitset <a name=
 
 <b>Requires:</b> <tt>a.size() == b.size()</tt><br>
 <b>Returns:</b> A new bitset that is the bitwise-OR of the
-bitsets <tt>a</tt> and <tt>b</tt>. Note that the expression
-<tt>b1 &amp; b2</tt> is equivalent to creating a temporary copy
-of <tt>b1</tt>, using <tt>operator&amp;=</tt>, and returning the
-temporary copy.<br>
+bitsets <tt>a</tt> and <tt>b</tt>.<br>
 <b>Throws:</b> An allocation error if memory is exhausted
 (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
 
@@ -1426,10 +1414,7 @@ dynamic_bitset <a name=
 
 <b>Requires:</b> <tt>a.size() == b.size()</tt><br>
 <b>Returns:</b> A new bitset that is the bitwise-XOR of the
-bitsets <tt>a</tt> and <tt>b</tt>. Note that the expression
-<tt>b1 &amp; b2</tt> is equivalent to creating a temporary copy
-of <tt>b1</tt>, using <tt>operator&amp;=</tt>, and returning the
-temporary copy.<br>
+bitsets <tt>a</tt> and <tt>b</tt>.<br>
 <b>Throws:</b> An allocation error if memory is exhausted
 (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
 
@@ -1441,10 +1426,7 @@ dynamic_bitset <a name=
 
 <b>Requires:</b> <tt>a.size() == b.size()</tt><br>
 <b>Returns:</b> A new bitset that is the set difference of the
-bitsets <tt>a</tt> and <tt>b</tt>. Note that the expression
-<tt>b1 - b2</tt> is equivalent to creating a temporary copy of
-<tt>b1</tt>, using <tt>operator-=</tt>, and returning the
-temporary copy.<br>
+bitsets <tt>a</tt> and <tt>b</tt>.<br>
 <b>Throws:</b> An allocation error if memory is exhausted
 (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
 
